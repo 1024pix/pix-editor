@@ -151,6 +151,13 @@ export async function listBySkillId(skillId) {
   return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
+export async function listActiveOrDraftByCompetenceId(competenceId) {
+  const challengeDTOs = await challengeDatasource.listActiveOrDraftByCompetenceId(competenceId);
+  if (!challengeDTOs) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
+}
+
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
   return loadTranslationsAndLocalizedChallengesForChallengeIds(
     challengeDtos.map(({ id }) => id),

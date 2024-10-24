@@ -3,7 +3,7 @@ import { findRecords, stringValue } from '../../airtable.js';
 import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
 // Cet import m'embête un peu qu'en pensez-vous ?
-import { Challenge } from '../../../domain/models/index.js';
+import { Challenge, Skill } from '../../../domain/models/index.js';
 
 export const challengeDatasource = datasource.extend({
 
@@ -185,6 +185,15 @@ export const challengeDatasource = datasource.extend({
   async filterBySkillId(skillId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
+  async listActiveOrDraftByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `AND({Compétences (via tube) (id persistant)} = ${stringValue(competenceId)}, {acquis} != ${stringValue(Skill.WORKBENCH_NAME)}, OR({Statut} = ${stringValue(Challenge.STATUSES.PROPOSE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)}))`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
