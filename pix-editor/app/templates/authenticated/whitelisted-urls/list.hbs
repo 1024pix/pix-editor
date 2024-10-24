@@ -1,0 +1,125 @@
+<header class="page-header">
+  <h1 class="page-title">Whitelist de la moulinette des URLs cassées</h1>
+  <div class="page-actions">
+    <PixTooltip
+      @id='create-whitelisted-url-tooltip'
+      @position="bottom-left"
+      @hide={{this.model.mayCreateWhitelistedUrl}}
+    >
+      <:triggerElement>
+        <PixButtonLink
+          @backgroundColor="blue"
+          @isDisabled={{not this.model.mayCreateWhitelistedUrl}}
+          aria-describedby='create-whitelisted-url-tooltip'
+          class="pix-button-link-with-icon white-font"
+        >
+          <FaIcon @icon="plus" @prefix="fas">
+          </FaIcon>
+          Ajouter une nouvelle URL
+        </PixButtonLink>
+      </:triggerElement>
+
+      <:tooltip>
+        Vous n'avez pas les droits suffisants pour ajouter une URL.
+      </:tooltip>
+    </PixTooltip>
+  </div>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <form {{on "submit" this.submitFilters}} class="new-mission-form">
+      <PixFilterBanner
+        @title="Filtres"
+        class="table-filter-banner"
+        @clearFiltersLabel="Réinitialiser les filtres"
+        @onClearFilters={{this.clearFilters}}
+        @isClearFilterButtonDisabled={{false}}
+      >
+        <PixInput
+          @id="whitelisted-url-filter-ids"
+          placeholder="IDs"
+          @screenReaderOnly={{true}}
+          @value={{this.searchIds}}
+          {{on "change" this.updateSearchIds}}
+        >
+          <:label>IDs</:label>
+        </PixInput>
+        <PixInput
+          @id="whitelisted-url-filter-url"
+          placeholder="URL"
+          @screenReaderOnly={{true}}
+          @value={{this.searchUrl}}
+          {{on "change" this.updateSearchUrl}}
+        >
+          <:label>URL</:label>
+        </PixInput>
+        <PixButton
+          @type="submit"
+        >
+          Filtrer
+        </PixButton>
+      </PixFilterBanner>
+    </form>
+    <div class="panel-table-v2">
+      <table class="content-text content-text--small">
+        <colgroup class="table__column">
+          <col class="table__column--small" />
+          <col class="table__column--wide" />
+          <col class="table__column--wide" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>IDs des entités concernées</th>
+            <th>URL</th>
+            <th>Commentaire</th>
+            <th>Créé le</th>
+            <th>Modifié le</th>
+          </tr>
+        </thead>
+        <tbody>
+        {{#each this.model.whitelistedUrls as |whitelistedUrl|}}
+          <tr class="tr--clickable">
+            <td>
+              {{whitelistedUrl.relatedEntityIds}}
+            </td>
+            <td>
+              {{whitelistedUrl.url}}
+            </td>
+            <td>
+              {{whitelistedUrl.comment}}
+            </td>
+            <td>
+              {{this.formatCreationString whitelistedUrl}}
+            </td>
+            <td>
+              {{this.formatUpdateString whitelistedUrl}}
+            </td>
+            <td class="actions">
+              <PixTooltip
+                @id='copy-static-course-link-tooltip'
+                @position="top"
+                @isInline={{true}}
+              >
+                <:triggerElement>
+                  <PixIconButton
+                    @triggerAction={{fn this.copyUrl whitelistedUrl}}
+                    @iconName="copy"
+                    @iconPrefix="far"
+                    @ariaLabel="copier l'URL whitelisée"
+                    class="icon"
+                    aria-describedby='copy-whitelisted-url-link-tooltip'
+                  >
+                  </PixIconButton>
+                </:triggerElement>
+                <:tooltip>Copier l’URL whitelistée</:tooltip>
+              </PixTooltip>
+            </td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

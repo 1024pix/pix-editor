@@ -30,6 +30,7 @@ module.exports = function() {
       'plus',
       'power-off',
       'question-circle',
+      'recycle',
       'search',
       'share',
       'share-square',
