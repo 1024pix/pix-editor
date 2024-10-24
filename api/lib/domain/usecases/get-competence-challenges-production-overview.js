@@ -6,7 +6,7 @@ import {
 } from '../../infrastructure/repositories/index.js';
 import { CompetenceOverview } from '../readmodels/index.js';
 
-export async function getCompetenceChallengesProductionOverview({ competenceId }) {
+export async function getCompetenceChallengesProductionOverview({ competenceId, locale }) {
   const [
     thematics,
     tubes,
@@ -18,5 +18,5 @@ export async function getCompetenceChallengesProductionOverview({ competenceId }
     skillRepository.listActiveByCompetenceId(competenceId),
     challengeRepository.listActiveOrDraftByCompetenceId(competenceId),
   ]);
-  return CompetenceOverview.buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges });
+  return CompetenceOverview.buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges, locale });
 }
