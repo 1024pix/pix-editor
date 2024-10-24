@@ -6,7 +6,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a unique WhitelistedUrl', () => {
       // Given
-      const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+      const whitelistedUrl = domainBuilder.buildReadWhitelistedUrl({
         id: 123,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -39,7 +39,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
     });
     it('should serialize several WhitelistedUrls', () => {
       // Given
-      const whitelistedUrl1 = domainBuilder.buildWhitelistedUrl({
+      const whitelistedUrl1 = domainBuilder.buildReadWhitelistedUrl({
         id: 123,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -49,7 +49,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
       });
-      const whitelistedUrl2 = domainBuilder.buildWhitelistedUrl({
+      const whitelistedUrl2 = domainBuilder.buildReadWhitelistedUrl({
         id: 456,
         createdAt: new Date('2020-12-12'),
         updatedAt: new Date('2022-08-08'),
