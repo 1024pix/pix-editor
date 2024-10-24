@@ -272,5 +272,137 @@ describe('Acceptance | Route | competence-overviews', () => {
         expect(airtableChallengesScope.isDone()).toBe(true);
       });
     });
+
+    describe('with language filter set to english', () => {
+      it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: `/api/competences/${competenceId}/overviews/challenges-production?locale=en`,
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data:{
+            type: 'competence-overviews',
+            id: `${competenceId}-challenges-production-fr`,
+            attributes: {
+              'thematic-overviews': [
+                {
+                  airtableId: 'recAirtableThematic2',
+                  name: 'Thématique 2',
+                  tubeOverviews: [
+                    {
+                      airtableId: 'recAirtableTube4',
+                      name: '@tube4',
+                      skillOverviews: [
+                        {
+                          airtableId: 'recAirtableSkill4',
+                          name: '@tube41',
+                          prototypeId: 'recChallenge4',
+                          validatedChallengesCount: 0,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: true,
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                      ],
+                    },
+                    {
+                      airtableId: 'recAirtableTube5',
+                      name: '@tube5',
+                      skillOverviews: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                          airtableId: 'recAirtableSkill5',
+                          name: '@tube56',
+                          prototypeId: 'recChallenge5',
+                          validatedChallengesCount: 0,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: false,
+                        },
+                        null,
+                      ],
+                    },
+                  ],
+                },
+                {
+                  airtableId: 'recAirtableThematic1',
+                  name: 'Thématique 1',
+                  tubeOverviews: [
+                    {
+                      airtableId: 'recAirtableTube2',
+                      name: '@tube2',
+                      skillOverviews: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                          airtableId: 'recAirtableSkill3',
+                          name: '@tube27',
+                          prototypeId: 'recChallenge3',
+                          validatedChallengesCount: 0,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: true,
+                        },
+                      ],
+                    },
+                    {
+                      airtableId: 'recAirtableTube1',
+                      name: '@tube1',
+                      skillOverviews: [
+                        null,
+                        null,
+                        {
+                          airtableId: 'recAirtableSkill2',
+                          name: '@tube13',
+                          prototypeId: 'recChallenge2',
+                          validatedChallengesCount: 0,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: false,
+                        },
+                        {
+                          airtableId: 'recAirtableSkill1',
+                          name: '@tube14',
+                          prototypeId: 'recChallenge1',
+                          validatedChallengesCount: 1,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: true,
+                        },
+                        null,
+                        null,
+                        null,
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        });
+
+        expect(airtableThematicsScope.isDone()).toBe(true);
+        expect(airtableTubesScope.isDone()).toBe(true);
+        expect(airtableSkillsScope.isDone()).toBe(true);
+        expect(airtableChallengesScope.isDone()).toBe(true);
+      });
+    });
   });
 });

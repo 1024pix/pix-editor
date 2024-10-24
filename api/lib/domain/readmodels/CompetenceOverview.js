@@ -9,12 +9,12 @@ export class CompetenceOverview {
     this.thematicOverviews = thematicOverviews;
   }
 
-  static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges }) {
+  static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges, locale }) {
     return new CompetenceOverview({
       id: `${competenceId}-challenges-production-fr`,
       thematicOverviews: thematics
         .sort(byIndex)
-        .map((thematic) => ThematicOverview.buildForChallengesProduction({ thematic, tubes, skills, challenges }))
+        .map((thematic) => ThematicOverview.buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }))
         .filter((thematicOverview) => !thematicOverview.isEmpty),
     });
   }
@@ -31,7 +31,7 @@ class ThematicOverview {
     this.tubeOverviews = tubeOverviews;
   }
 
-  static buildForChallengesProduction({ thematic, tubes, skills, challenges }) {
+  static buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }) {
     const tubesById = Object.fromEntries(tubes.map((tube) => [tube.id, tube]));
 
     return new ThematicOverview({
@@ -40,7 +40,7 @@ class ThematicOverview {
       tubeOverviews: thematic.tubeIds
         ?.map((tubeId) => tubesById[tubeId])
         .sort(byIndex)
-        .map((tube) => TubeOverview.buildForChallengesProduction({ tube, skills, challenges }))
+        .map((tube) => TubeOverview.buildForChallengesProduction({ tube, skills, challenges, locale }))
         .filter((tubeOverview) => !tubeOverview.isEmpty)
     });
   }
@@ -61,14 +61,14 @@ class TubeOverview {
     this.skillOverviews = skillOverviews;
   }
 
-  static buildForChallengesProduction({ tube, skills, challenges }) {
+  static buildForChallengesProduction({ tube, skills, challenges, locale }) {
     const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(skills);
 
     return new TubeOverview({
       airtableId: tube.airtableId,
       name: tube.name,
       skillOverviews: skillsByTubeIdAndLevel[tube.id]
-        ?.map((skill) => SkillOverview.buildForChallengesProduction({ skill, challenges })),
+        ?.map((skill) => SkillOverview.buildForChallengesProduction({ skill, challenges, locale })),
     });
   }
 
@@ -94,11 +94,15 @@ class SkillOverview {
     this.validatedChallengesCount = validatedChallengesCount;
   }
 
-  static buildForChallengesProduction({ skill, challenges }) {
+  static buildForChallengesProduction({ skill, challenges, locale }) {
     if (!skill) return null;
 
     const prototype = challenges.find(isProductionPrototypeOf(skill));
-    const skillChallenges = challenges.filter(challengeBelongsTo(prototype));
+    let skillChallenges = challenges.filter(challengeBelongsTo(prototype));
+
+    if (locale) {
+      skillChallenges = skillChallenges.filter((challenge) => challenge.locale === locale);
+    }
 
     return new SkillOverview({
       airtableId: skill.airtableId,
