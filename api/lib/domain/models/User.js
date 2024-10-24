@@ -16,4 +16,18 @@ export class User {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
+
+  static get ROLES() {
+    return {
+      READPIXONLY: 'readpixonly',
+      READONLY: 'readonly',
+      REPLICATOR: 'replicator',
+      EDITOR: 'editor',
+      ADMIN: 'admin',
+    };
+  };
+
+  get isAdmin() {
+    return this.access === User.ROLES.ADMIN;
+  }
 }
