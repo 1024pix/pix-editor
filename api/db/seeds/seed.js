@@ -2,17 +2,18 @@ import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-b
 import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
+import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
-  databaseBuilder.factory.buildUser({
+  const adminId = databaseBuilder.factory.buildUser({
     trigram: 'DEV',
     name: 'Utilisateur pour le développement',
     access: 'admin',
     apiKey: process.env.REVIEW_APP_ADMIN_USER_API_KEY || adminUserApiKey,
-  });
+  }).id;
 
   databaseBuilder.factory.buildUser({
     trigram: 'EDI',
@@ -44,6 +45,8 @@ export async function seed(knex) {
   staticCoursesBuilder(databaseBuilder);
 
   buildMissions(databaseBuilder);
+
+  whitelistedUrlsBuilder(databaseBuilder, adminId);
 
   return databaseBuilder.commit();
 }
