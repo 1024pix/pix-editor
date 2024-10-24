@@ -1,3 +1,5 @@
+import { Challenge } from '../models';
+
 export class CompetenceOverview {
   constructor({
     id,
@@ -7,7 +9,7 @@ export class CompetenceOverview {
     this.thematicOverviews = thematicOverviews;
   }
 
-  static buildForChallengesProduction({ competenceId, thematics, tubes, skills }) {
+  static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges }) {
     const tubesById = Object.fromEntries(tubes.map((tube) => [tube.id, tube]));
     const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(skills);
 
@@ -25,10 +27,7 @@ export class CompetenceOverview {
               airtableId: tube.airtableId,
               name: tube.name,
               skillOverviews: skillsByTubeIdAndLevel[tube.id]
-                ?.map((skill) => skill && new SkillOverview({
-                  airtableId: skill.airtableId,
-                  name: skill.name,
-                })),
+                ?.map((skill) => SkillOverview.buildForChallengesProduction({ skill, challenges })),
             }))
             .filter((tubeOverview) => tubeOverview.skillOverviews)
         }))
@@ -65,9 +64,31 @@ class SkillOverview {
   constructor({
     airtableId,
     name,
+    prototypeId,
+    isPrototypeDeclinable,
+    proposedChallengesCount,
+    validatedChallengesCount,
   }) {
     this.airtableId = airtableId;
     this.name = name;
+    this.prototypeId = prototypeId;
+    this.isPrototypeDeclinable = isPrototypeDeclinable;
+    this.proposedChallengesCount = proposedChallengesCount;
+    this.validatedChallengesCount = validatedChallengesCount;
+  }
+
+  static buildForChallengesProduction({ skill, challenges }) {
+    if (!skill) return null;
+    const prototype = challenges.find(isProductionPrototypeOf(skill));
+    const skillChallenges = challenges.filter(challengeBelongsTo(prototype));
+    return new SkillOverview({
+      airtableId: skill.airtableId,
+      name: skill.name,
+      prototypeId: prototype?.id,
+      isPrototypeDeclinable: prototype?.isDeclinable,
+      proposedChallengesCount: countByStatus(skillChallenges, Challenge.STATUSES.PROPOSE),
+      validatedChallengesCount: countByStatus(skillChallenges, Challenge.STATUSES.VALIDE),
+    });
   }
 }
 
@@ -86,4 +107,20 @@ function arrangeSkillsByTubeIdAndLevel(skills) {
   }
 
   return skillsByTubeIdAndLevel;
+}
+
+function isProductionPrototypeOf(skill) {
+  return (challenge) => {
+    return challenge.skillId === skill.id
+      && challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE
+      && challenge.status === Challenge.STATUSES.VALIDE;
+  };
+}
+
+function challengeBelongsTo({ skillId, version } = {}) {
+  return (challenge) => challenge.skillId === skillId && challenge.version === version;
+}
+
+function countByStatus(items, status) {
+  return items.reduce((count, item) => item.status === status ? count + 1 : count, 0);
 }
