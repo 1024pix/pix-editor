@@ -1,6 +1,5 @@
 import {  beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
-import _ from 'lodash';
 import {
   airtableBuilder,
   databaseBuilder,
@@ -8,7 +7,12 @@ import {
   generateAuthorizationHeader,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { thematicDatasource, tubeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import {
+  skillDatasource,
+  thematicDatasource,
+  tubeDatasource
+} from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { Skill } from '../../../../lib/domain/models/Skill.js';
 
 describe('Acceptance | Route | competence-overviews', () => {
 
@@ -28,6 +32,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2', 'recTube3'] })),
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube4', 'recTube5'] })),
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: [] })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic4', airtableId: 'recAirtableThematic4', index: 4, tubeIds: ['recTube6'] })),
       ];
 
       const airtableThematicsScope = nock('https://api.airtable.com')
@@ -58,6 +63,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3 })),
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1 })),
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube6', airtableId: 'recAirtableTube6', competenceId, name: '@tube6', index: 1 })),
       ];
 
       const airtableTubesScope = nock('https://api.airtable.com')
@@ -71,7 +77,25 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableTubes });
 
-      // FIXME skills
+      const airtableSkills = [
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube41', level: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube4' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube56', level: 6, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube5' })),
+      ];
+
+      const airtableSkillsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis')
+        .query({
+          fields: {
+            '': skillDatasource.usedFields,
+          },
+          filterByFormula: `{Compétence (via Tube) (id persistant)} = "${competenceId}"`
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableSkills });
+
       // FIXME challenges
 
       await databaseBuilder.commit();
@@ -101,10 +125,34 @@ describe('Acceptance | Route | competence-overviews', () => {
                   {
                     airtableId: 'recAirtableTube4',
                     name: '@tube4',
+                    skillOverviews: [
+                      {
+                        airtableId: 'recAirtableSkill4',
+                        name: '@tube41',
+                      },
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                    ],
                   },
                   {
                     airtableId: 'recAirtableTube5',
                     name: '@tube5',
+                    skillOverviews: [
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      {
+                        airtableId: 'recAirtableSkill5',
+                        name: '@tube56',
+                      },
+                      null,
+                    ],
                   },
                 ],
               },
@@ -115,14 +163,37 @@ describe('Acceptance | Route | competence-overviews', () => {
                   {
                     airtableId: 'recAirtableTube2',
                     name: '@tube2',
+                    skillOverviews: [
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null,
+                      {
+                        airtableId: 'recAirtableSkill3',
+                        name: '@tube27',
+                      },
+                    ],
                   },
                   {
                     airtableId: 'recAirtableTube1',
                     name: '@tube1',
-                  },
-                  {
-                    airtableId: 'recAirtableTube3',
-                    name: '@tube3',
+                    skillOverviews: [
+                      null,
+                      null,
+                      {
+                        airtableId: 'recAirtableSkill2',
+                        name: '@tube13',
+                      },
+                      {
+                        airtableId: 'recAirtableSkill1',
+                        name: '@tube14',
+                      },
+                      null,
+                      null,
+                      null,
+                    ],
                   },
                 ],
               },
@@ -165,6 +236,7 @@ describe('Acceptance | Route | competence-overviews', () => {
 
       expect(airtableThematicsScope.isDone()).toBe(true);
       expect(airtableTubesScope.isDone()).toBe(true);
+      expect(airtableSkillsScope.isDone()).toBe(true);
     });
   });
 });
