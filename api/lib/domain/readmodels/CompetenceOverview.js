@@ -1,4 +1,4 @@
-import { Challenge } from '../models/index.js';
+import { Challenge, LocalizedChallenge } from '../models/index.js';
 
 export class CompetenceOverview {
   constructor({
@@ -101,7 +101,7 @@ class SkillOverview {
     let skillChallenges = challenges.filter(challengeBelongsTo(prototype));
 
     if (locale) {
-      skillChallenges = skillChallenges.filter((challenge) => challenge.locale === locale);
+      skillChallenges = skillChallenges.reduce(filterChallengeByLocale(locale), []);
     }
 
     return new SkillOverview({
@@ -113,6 +113,26 @@ class SkillOverview {
       validatedChallengesCount: countByStatus(skillChallenges, Challenge.STATUSES.VALIDE),
     });
   }
+}
+
+function filterChallengeByLocale(locale) {
+  return (filteredChallenges, challenge) => {
+    if (challenge.locales.includes(locale)) filteredChallenges.push({
+      status: challenge.status,
+    });
+    if (challenge.alternativeLocales.includes(locale)) {
+      const localizedChallengeStatus = challenge.localizedChallenges.find((localizedChallenge) => localizedChallenge.locale === locale).status;
+      filteredChallenges.push({
+        status: computedChallengeAndLocalizedStatuses(challenge.status, localizedChallengeStatus),
+      });
+    }
+    return filteredChallenges;
+  };
+}
+
+function computedChallengeAndLocalizedStatuses(challengeStatus, localizedChallengeStatus) {
+  if (challengeStatus === Challenge.STATUSES.PROPOSE) return Challenge.STATUSES.PROPOSE;
+  return localizedChallengeStatus !== LocalizedChallenge.STATUSES.PLAY ? Challenge.STATUSES.PROPOSE : Challenge.STATUSES.VALIDE;
 }
 
 function byIndex({ index: index1 }, { index: index2 }) {
