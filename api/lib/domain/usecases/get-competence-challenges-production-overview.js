@@ -13,7 +13,7 @@ export async function getCompetenceChallengesProductionOverview({ competenceId }
   ] = await Promise.all([
     thematicRepository.listByCompetenceId(competenceId),
     tubeRepository.listByCompetenceId(competenceId),
-    skillRepository.listByCompetenceId(competenceId),
+    skillRepository.listActiveByCompetenceId(competenceId),
   ]);
   return CompetenceOverview.buildForChallengesProduction({ competenceId, thematics, tubes, skills });
 }

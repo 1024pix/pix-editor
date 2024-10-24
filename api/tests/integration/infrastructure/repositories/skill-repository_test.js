@@ -125,7 +125,7 @@ describe('Integration | Repository | skill-repository', () => {
     });
   });
 
-  describe('#listByCompetenceId', () => {
+  describe('#listActiveByCompetenceId', () => {
     it('should retrieve all skills by competence Id', async () => {
       // given
       const skill1 = {
@@ -138,7 +138,7 @@ describe('Integration | Repository | skill-repository', () => {
         learningMoreTutorialIds: ['tuto3', 'tuto4'],
         pixValue: 2.5,
         competenceId: 'competence1',
-        status: Skill.STATUSES.PERIME,
+        status: Skill.STATUSES.ACTIF,
         tubeId: 'tube1',
         level: 4,
         internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
@@ -159,7 +159,7 @@ describe('Integration | Repository | skill-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
-        if (options?.filterByFormula !== `{Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`) expect.unreachable('Wrong filterByFormula');
         return [{
           id: skill1.airtableId,
           fields: {
@@ -183,7 +183,7 @@ describe('Integration | Repository | skill-repository', () => {
       });
 
       // when
-      const skills = await skillRepository.listByCompetenceId('competence1');
+      const skills = await skillRepository.listActiveByCompetenceId('competence1');
 
       // then
 
@@ -202,7 +202,7 @@ describe('Integration | Repository | skill-repository', () => {
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           pixValue: 2.5,
           competenceId: 'competence1',
-          status: Skill.STATUSES.PERIME,
+          status: Skill.STATUSES.ACTIF,
           tubeId: 'tube1',
           level: 4,
           internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,

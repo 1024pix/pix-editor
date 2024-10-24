@@ -91,7 +91,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           fields: {
             '': skillDatasource.usedFields,
           },
-          filterByFormula: `{Compétence (via Tube) (id persistant)} = "${competenceId}"`
+          filterByFormula: `AND({Compétence (via Tube) (id persistant)} = "${competenceId}", {Status} = "${Skill.STATUSES.ACTIF}")`
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableSkills });
