@@ -3,6 +3,7 @@ import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as whitelistedUrlRepository from '../../infrastructure/repositories/whitelisted-url-repository.js';
 import * as whitelistedUrlSerializer from '../../infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
 import Boom from '@hapi/boom';
+import { WhitelistedUrl } from '../../domain/models/index.js';
 
 const whitelistedUrlIdentifierType = Joi.number().integer().min(1);
 
@@ -43,6 +44,31 @@ export async function register(server) {
           whitelistedUrlToDelete.delete(authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToDelete);
           return h.response().code(204);
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/whitelisted-urls',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        handler: async function(request, h) {
+          const authenticatedUser = request.auth.credentials.user;
+          const attributes = request.payload.data.attributes;
+          const creationCommand = {
+            url: attributes['url'] ?? null,
+            relatedEntityIds: attributes['related-entity-ids'] ?? null,
+            comment: attributes['comment'] ?? null,
+          };
+          const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
+          const canCreate = WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
+          if (canCreate.cannot) {
+            return Boom.badData(canCreate.errorMessage);
+          }
+          const whitelistedUrlToCreate = WhitelistedUrl.create(creationCommand, authenticatedUser);
+          const id = await whitelistedUrlRepository.save(whitelistedUrlToCreate);
+          const createdWhitelistedUrl = await whitelistedUrlRepository.findRead(id);
+          return h.response(whitelistedUrlSerializer.serialize(createdWhitelistedUrl)).created();
         },
       },
     },

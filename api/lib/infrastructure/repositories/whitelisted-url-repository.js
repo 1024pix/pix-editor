@@ -22,6 +22,28 @@ export async function listRead() {
   return toDomainReadList(whitelistedUrlDtos);
 }
 
+export async function findRead(id) {
+  const whitelistedUrlDto = await knex('whitelisted_urls')
+    .select({
+      id: 'whitelisted_urls.id',
+      createdAt: 'whitelisted_urls.createdAt',
+      updatedAt: 'whitelisted_urls.updatedAt',
+      url: 'whitelisted_urls.url',
+      relatedEntityIds: 'whitelisted_urls.relatedEntityIds',
+      comment: 'whitelisted_urls.comment',
+      creatorName: 'users_for_creation.name',
+      latestUpdatorName: 'users_for_update.name',
+    })
+    .leftJoin('users as users_for_creation', 'users_for_creation.id', 'whitelisted_urls.createdBy')
+    .leftJoin('users as users_for_update', 'users_for_update.id', 'whitelisted_urls.latestUpdatedBy')
+    .whereNull('deletedAt')
+    .where('whitelisted_urls.id', id)
+    .first();
+
+  if (!whitelistedUrlDto) return null;
+  return toDomainRead(whitelistedUrlDto);
+}
+
 export async function find(id) {
   const whitelistedUrlDto = await knex('whitelisted_urls')
     .select(['id', 'createdBy', 'latestUpdatedBy', 'deletedBy', 'createdAt', 'updatedAt', 'deletedAt', 'url', 'relatedEntityIds', 'comment'])
@@ -34,7 +56,16 @@ export async function find(id) {
 
 export async function save(whitelistedUrl) {
   const dataToSave = adaptModelToDB(whitelistedUrl);
-  await knex('whitelisted_urls').update(dataToSave).where({ id: whitelistedUrl.id });
+  let id;
+  if (whitelistedUrl.id) {
+    id = whitelistedUrl.id;
+    await knex('whitelisted_urls').update(dataToSave).where({ id });
+  } else {
+    const dataInserted = await knex('whitelisted_urls')
+      .insert(dataToSave, ['id']);
+    id = dataInserted[0].id;
+  }
+  return id;
 }
 
 function toDomainReadList(whitelistedUrlDtos) {
