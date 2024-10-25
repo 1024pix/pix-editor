@@ -31,7 +31,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@morse2,@saumon5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -44,7 +44,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -57,7 +57,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@truite2',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -111,7 +111,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
               'creator-name': null,
               'latest-updator-name': null,
               'url': 'https://www.editor.pix.fr',
-              'related-entity-ids': null,
+              'related-skill-names': null,
               'comment': 'Mon site préféré',
               'check-type': 'exact_match',
             },
@@ -125,7 +125,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
               'creator-name': 'Madame Admin',
               'latest-updator-name': 'Madame Admin',
               'url': 'https://www.google.com',
-              'related-entity-ids': 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+              'related-skill-names': '@morse2,@saumon5',
               'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
               'check-type': 'starts_with',
             },
@@ -147,7 +147,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@morse2,@saumon5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -160,7 +160,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -173,7 +173,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@truite2',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -284,7 +284,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@morse2,@saumon5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -297,7 +297,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -310,7 +310,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@truite2',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -320,7 +320,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         data: {
           attributes: {
             url: 'https://super-casserole.com',
-            'related-entity-ids': 'rec123,rec789',
+            'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',
             'check-type': WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
           },
@@ -396,7 +396,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             'creator-name': 'Madame Admin',
             'latest-updator-name': 'Madame Admin',
             url: 'https://super-casserole.com',
-            'related-entity-ids': 'rec123,rec789',
+            'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',
             'check-type': 'exact_match',
           },
@@ -417,7 +417,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@morse2,@saumon5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -430,7 +430,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -443,7 +443,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@truite2',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -453,7 +453,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         data: {
           attributes: {
             url: 'https://super-casserole.com',
-            'related-entity-ids': 'rec123,rec789',
+            'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',
             'check-type': 'starts_with',
           },
@@ -528,7 +528,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             'creator-name': null,
             'latest-updator-name': 'Madame Admin',
             url: 'https://super-casserole.com',
-            'related-entity-ids': 'rec123,rec789',
+            'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',
             'check-type': 'starts_with',
           },

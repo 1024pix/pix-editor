@@ -8,7 +8,7 @@ export function buildReadWhitelistedUrl({
   creatorName = 'Ma maman',
   latestUpdatorName = 'Ma maman',
   url = 'http://pipeau-la-grenouille.fr',
-  relatedEntityIds = 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+  relatedSkillNames = '@bidule4,@chose6',
   comment = 'Les grenouilles sont jolies',
   checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
 } = {}) {
@@ -19,7 +19,7 @@ export function buildReadWhitelistedUrl({
     creatorName,
     latestUpdatorName,
     url,
-    relatedEntityIds,
+    relatedSkillNames,
     comment,
     checkType,
   });
@@ -34,7 +34,7 @@ export function buildWhitelistedUrl({
   updatedAt = new Date('2022-01-01'),
   deletedAt = null,
   url = 'http://pipeau-la-grenouille.fr',
-  relatedEntityIds = 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+  relatedSkillNames = '@bidule4,@chose6',
   comment = 'Les grenouilles sont jolies',
   checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
 } = {}) {
@@ -47,7 +47,7 @@ export function buildWhitelistedUrl({
     updatedAt,
     deletedAt,
     url,
-    relatedEntityIds,
+    relatedSkillNames,
     comment,
     checkType,
   });

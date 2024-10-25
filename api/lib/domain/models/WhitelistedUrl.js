@@ -10,7 +10,7 @@ export class WhitelistedUrl {
     updatedAt,
     deletedAt,
     url,
-    relatedEntityIds,
+    relatedSkillNames,
     comment,
     checkType,
   }) {
@@ -22,7 +22,7 @@ export class WhitelistedUrl {
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
     this.url = url;
-    this.relatedEntityIds = relatedEntityIds;
+    this.relatedSkillNames = relatedSkillNames;
     this.comment = comment;
     this.checkType = checkType;
   }
@@ -37,7 +37,7 @@ export class WhitelistedUrl {
   static canCreate(creationCommand, user, existingReadWhitelistedUrls) {
     if (!user.isAdmin) return CanExecute.cannot('L\'utilisateur n\'a pas les droits pour créer une URL whitelistée');
     if (!isUrlValid(creationCommand.url)) return CanExecute.cannot('URL invalide');
-    if (!isRelatedEntityIdsValid(creationCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+    if (!isRelatedSkillNamesValid(creationCommand.relatedSkillNames)) return CanExecute.cannot('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
     if (!isCommentValid(creationCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
     if (!isCheckTypeValid(creationCommand.checkType)) return CanExecute.cannot(`Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`);
     if (!isUrlUnique(creationCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
@@ -56,7 +56,7 @@ export class WhitelistedUrl {
       updatedAt: operationDate,
       deletedAt: null,
       url: creationCommand.url,
-      relatedEntityIds: creationCommand.relatedEntityIds,
+      relatedSkillNames: creationCommand.relatedSkillNames,
       comment: creationCommand.comment,
       checkType: creationCommand.checkType,
     });
@@ -80,7 +80,7 @@ export class WhitelistedUrl {
     if (!user.isAdmin) return CanExecute.cannot('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée');
     if (this.deletedAt) return CanExecute.cannot('L\'URL whitelistée n\'existe pas');
     if (!isUrlValid(updateCommand.url)) return CanExecute.cannot('URL invalide');
-    if (!isRelatedEntityIdsValid(updateCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+    if (!isRelatedSkillNamesValid(updateCommand.relatedSkillNames)) return CanExecute.cannot('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
     if (!isCommentValid(updateCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
     if (!isCheckTypeValid(updateCommand.checkType)) return CanExecute.cannot(`Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`);
     if (!isUrlUnique(updateCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
@@ -93,7 +93,7 @@ export class WhitelistedUrl {
     this.latestUpdatedBy = user.id;
     this.updatedAt = operationDate;
     this.url = updateCommand.url;
-    this.relatedEntityIds = updateCommand.relatedEntityIds;
+    this.relatedSkillNames = updateCommand.relatedSkillNames;
     this.comment = updateCommand.comment;
     this.checkType = updateCommand.checkType;
   }
@@ -109,10 +109,10 @@ function isUrlValid(url) {
   return true;
 }
 
-function isRelatedEntityIdsValid(relatedEntityIds) {
-  const idsSeparatedByCommaRegex = /^[A-Za-z0-9]+(,[A-Za-z0-9]+)*[A-Za-z0-9]+$/;
-  if (!relatedEntityIds) return true;
-  return idsSeparatedByCommaRegex.test(relatedEntityIds);
+function isRelatedSkillNamesValid(relatedSkillNames) {
+  const skillsSeparatedByCommaRegex = /^(@[A-Za-z]+[0-9])(,(@[A-Za-z]+[0-9]))*/;
+  if (!relatedSkillNames) return true;
+  return skillsSeparatedByCommaRegex.test(relatedSkillNames);
 }
 
 function isCommentValid(comment) {

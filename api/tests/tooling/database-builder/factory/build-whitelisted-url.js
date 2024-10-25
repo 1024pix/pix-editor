@@ -9,14 +9,14 @@ export function buildWhitelistedUrl({
   updatedAt = new Date(),
   deletedAt = null,
   url = 'https://mon-petit-chien.com',
-  relatedEntityIds = null,
+  relatedSkillNames = null,
   comment = null,
   checkType = 'exact_match',
 } = {}) {
   if (createdBy && !latestUpdatedBy) {
     latestUpdatedBy = createdBy;
   }
-  const values = { id, createdBy, latestUpdatedBy, deletedBy, createdAt, updatedAt, deletedAt, url, relatedEntityIds, comment, checkType };
+  const values = { id, createdBy, latestUpdatedBy, deletedBy, createdAt, updatedAt, deletedAt, url, relatedSkillNames, comment, checkType };
 
   return databaseBuffer.pushInsertable({
     tableName: 'whitelisted_urls',

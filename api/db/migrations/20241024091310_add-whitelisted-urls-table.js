@@ -11,7 +11,7 @@ export function up(knex) {
     t.dateTime('deletedAt').defaultTo(null);
     t.text('url').notNullable();
     t.string('checkType').notNullable();
-    t.string('relatedEntityIds');
+    t.string('relatedSkillNames');
     t.text('comment');
   }
 

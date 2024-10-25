@@ -9,7 +9,7 @@ export function whitelistedUrlsBuilder(databaseBuilder, adminId) {
     updatedAt: new Date('2022-02-02'),
     deletedAt: null,
     url: 'https://www.google.com',
-    relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+    relatedSkillNames: '@noix2,@coque8',
     comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
     checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
   });
@@ -21,7 +21,7 @@ export function whitelistedUrlsBuilder(databaseBuilder, adminId) {
     updatedAt: new Date('2022-02-02'),
     deletedAt: null,
     url: 'https://www.editor.pix.fr',
-    relatedEntityIds: null,
+    relatedSkillNames: null,
     comment: 'Mon site préféré',
     checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
   });
@@ -33,7 +33,7 @@ export function whitelistedUrlsBuilder(databaseBuilder, adminId) {
     updatedAt: new Date('2022-02-02'),
     deletedAt: new Date('2023-01-01'),
     url: 'https://www.les-fruits-c-super-bon',
-    relatedEntityIds: 'reclbhuUTRGc1jZRL',
+    relatedSkillNames: '@chameau4',
     comment: null,
     checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
   });

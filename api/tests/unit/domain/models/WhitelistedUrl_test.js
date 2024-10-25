@@ -81,7 +81,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@noix2,@chose8',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
       });
 
@@ -98,7 +98,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         updatedAt: now,
         deletedAt: now,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@noix2,@chose8',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
       }));
     });
@@ -114,13 +114,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         })];
         const creationCommand1 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         };
         const creationCommand2 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 'recTest12345678,recSuperTest789123',
+          relatedSkillNames: '@choix1,@creux7',
           comment: 'COucou',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -140,7 +140,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -183,17 +183,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(canCreate3.errorMessage).to.equal('URL invalide');
       });
 
-      it('should return a canExecute invalid when relatedEntityIds is not in valid format in creation command', function() {
+      it('should return a canExecute invalid when relatedSkillNames is not in valid format in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand1 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 123456.12,
+          relatedSkillNames: 123456.12,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const creationCommand2 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 'je ne suis pas une suite d ids d entités séparés par des virgules sans espaces',
+          relatedSkillNames: 'je ne suis pas une suite d acquis',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
@@ -203,9 +203,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
         // then
         expect(canCreate1.cannot).to.be.true;
-        expect(canCreate1.errorMessage).to.equal('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+        expect(canCreate1.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
         expect(canCreate2.cannot).to.be.true;
-        expect(canCreate2.errorMessage).to.equal('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+        expect(canCreate2.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
       });
 
       it('should return a canExecute invalid when comment is not in valid format in creation command', function() {
@@ -213,7 +213,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: 123,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -265,7 +265,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         })];
         const creationCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -286,7 +286,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       const user = domainBuilder.buildUser({ id: 444, access: User.ROLES.ADMIN });
       const creationCommand = {
         url: 'https://www.brioche.com',
-        relatedEntityIds: 'recABC,redDEF',
+        relatedSkillNames: '@proie2,@cancre5',
         comment: 'coucou maman',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       };
@@ -304,7 +304,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         updatedAt: now,
         deletedAt: null,
         url: 'https://www.brioche.com',
-        relatedEntityIds: 'recABC,redDEF',
+        relatedSkillNames: '@proie2,@cancre5',
         comment: 'coucou maman',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       }));
@@ -321,13 +321,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         })];
         const updateCommand1 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand2 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 'recTest12345678,recSuperTest789123',
+          relatedSkillNames: '@choix1,@creux7',
           comment: 'COucou',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -351,7 +351,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -402,17 +402,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(canUpdate3.errorMessage).to.equal('URL invalide');
       });
 
-      it('should return a canExecute invalid when relatedEntityIds is not in valid format in update command', function() {
+      it('should return a canExecute invalid when relatedSkillNames is not in valid format in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand1 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 123456.12,
+          relatedSkillNames: 123456.12,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand2 = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: 'je ne suis pas une suite d ids d entités séparés par des virgules sans espaces',
+          relatedSkillNames: 'je ne suis pas une suite d acquis',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
@@ -426,9 +426,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
         // then
         expect(canUpdate1.cannot).to.be.true;
-        expect(canUpdate1.errorMessage).to.equal('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+        expect(canUpdate1.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
         expect(canUpdate2.cannot).to.be.true;
-        expect(canUpdate2.errorMessage).to.equal('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+        expect(canUpdate2.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
       });
 
       it('should return a canExecute invalid when comment is not in valid format in update command', function() {
@@ -436,7 +436,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: 123,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -496,7 +496,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         })];
         const updateCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -518,7 +518,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand = {
           url: 'https://www.brioche.com',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
@@ -550,13 +550,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@noix2,@chose8',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       const updateCommand = {
         url: 'https://www.brioche.com',
-        relatedEntityIds: 'recDautreTrucs',
+        relatedSkillNames: '@bidule4',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       };
@@ -574,7 +574,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         updatedAt: now,
         deletedAt: null,
         url: 'https://www.brioche.com',
-        relatedEntityIds: 'recDautreTrucs',
+        relatedSkillNames: '@bidule4',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       }));

@@ -57,7 +57,7 @@ export async function register(server) {
           const attributes = request.payload.data.attributes;
           const creationCommand = {
             url: attributes['url'] ?? null,
-            relatedEntityIds: attributes['related-entity-ids'] ?? null,
+            relatedSkillNames: attributes['related-skill-names'] ?? null,
             comment: attributes['comment'] ?? null,
             checkType: attributes['check-type'] ?? null,
           };
@@ -89,7 +89,7 @@ export async function register(server) {
           const whitelistedUrlId = request.params.whitelistUrlId;
           const updateCommand = {
             url: attributes['url'] ?? null,
-            relatedEntityIds: attributes['related-entity-ids'] ?? null,
+            relatedSkillNames: attributes['related-skill-names'] ?? null,
             comment: attributes['comment'] ?? null,
             checkType: attributes['check-type'] ?? null,
           };

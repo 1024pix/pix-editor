@@ -9,7 +9,7 @@ const serializer = new Serializer('whitelisted-urls', {
     'creatorName',
     'latestUpdatorName',
     'url',
-    'relatedEntityIds',
+    'relatedSkillNames',
     'comment',
     'checkType',
   ],

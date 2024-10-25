@@ -6,7 +6,7 @@ export class WhitelistedUrl {
     creatorName,
     latestUpdatorName,
     url,
-    relatedEntityIds,
+    relatedSkillNames,
     comment,
     checkType,
   }) {
@@ -16,7 +16,7 @@ export class WhitelistedUrl {
     this.creatorName = creatorName;
     this.latestUpdatorName = latestUpdatorName;
     this.url = url;
-    this.relatedEntityIds = relatedEntityIds;
+    this.relatedSkillNames = relatedSkillNames;
     this.comment = comment;
     this.checkType = checkType;
   }

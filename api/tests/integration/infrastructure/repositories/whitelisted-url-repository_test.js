@@ -20,7 +20,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -33,7 +33,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -46,7 +46,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -64,7 +64,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           creatorName: null,
           latestUpdatorName: null,
           url: 'https://www.editor.pix.fr',
-          relatedEntityIds: null,
+          relatedSkillNames: null,
           comment: 'Mon site préféré',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         }),
@@ -75,7 +75,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           creatorName: 'Madame Admin 1',
           latestUpdatorName: 'Madame Admin 2',
           url: 'https://www.google.com',
-          relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+          relatedSkillNames: '@bidule3,@chose2',
           comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
           checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         }),
@@ -94,7 +94,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2024-01-01'),
         deletedAt: new Date('2024-01-01'),
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -107,7 +107,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2023-01-01'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -136,7 +136,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -149,7 +149,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -162,7 +162,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -179,7 +179,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         creatorName: 'Madame Admin 1',
         latestUpdatorName: 'Madame Admin 2',
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       }));
@@ -198,7 +198,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -211,7 +211,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -224,7 +224,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -249,7 +249,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2024-01-01'),
         deletedAt: new Date('2024-01-01'),
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -262,7 +262,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2023-01-01'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -291,7 +291,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -304,7 +304,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-08-08'),
         deletedAt: null,
         url: 'https://www.editor.pix.fr',
-        relatedEntityIds: null,
+        relatedSkillNames: null,
         comment: 'Mon site préféré',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -317,7 +317,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -336,7 +336,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       }));
@@ -354,7 +354,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2024-01-01'),
         deletedAt: new Date('2024-01-01'),
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -367,7 +367,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2023-01-01'),
         deletedAt: new Date('2023-01-01'),
         url: 'https://www.les-fruits-c-super-bon',
-        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        relatedSkillNames: '@ours8',
         comment: null,
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -399,7 +399,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2022-02-02'),
         deletedAt: null,
         url: 'https://www.google.com',
-        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        relatedSkillNames: '@bidule3,@chose2',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
@@ -413,7 +413,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2023-03-03'),
         deletedAt: new Date('2024-04-04'),
         url: 'https://www.bing.com',
-        relatedEntityIds: 'recABC789123',
+        relatedSkillNames: '@morse8',
         comment: 'Je viens de modifier le commentaire',
         checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
@@ -440,7 +440,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         updatedAt: new Date('2023-03-03'),
         deletedAt: new Date('2024-04-04'),
         url: 'https://www.bing.com',
-        relatedEntityIds: 'recABC789123',
+        relatedSkillNames: '@morse8',
         comment: 'Je viens de créer cette entrée',
         checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
