@@ -182,7 +182,14 @@
     @edition={{@edition}}
     @label="URL"
     @id="challenge-embed-url"
+    @change={{@checkEmbedURL}}
   />
+  {{#if @invalidEmbedURL}}
+    <p class="ui red message" data-test-invalid-embed-url>
+      URL invalide :
+      {{@invalidEmbedURL}}
+    </p>
+  {{/if}}
   <Field::Input
     @value={{@challenge.embedHeight}}
     @edition={{@edition}}

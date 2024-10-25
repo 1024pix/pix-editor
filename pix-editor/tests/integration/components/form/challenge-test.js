@@ -13,9 +13,10 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Given
     const challengeData = EmberObject.create({ type: 'QROC', isTextBased: true, isPrototype: true });
     this.set('challengeData', challengeData);
+    this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
 
     // Then
     ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
@@ -27,9 +28,10 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Given
     const challengeData = EmberObject.create({ autoReply: true, isTextBased: true, isPrototype: true });
     this.set('challengeData', challengeData);
+    this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
 
     // Then
     ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
@@ -45,9 +47,10 @@ module('Integration | Component | challenge-form', function(hooks) {
       genealogy: 'Prototype 1',
     });
     this.set('challengeData', challengeData);
+    this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
     await click(findAll('.ember-power-select-option')[1]);
@@ -69,9 +72,10 @@ module('Integration | Component | challenge-form', function(hooks) {
       genealogy: 'Prototype 1',
     });
     this.set('challengeData', challengeData);
+    this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
     await click(findAll('.ember-power-select-option')[0]);

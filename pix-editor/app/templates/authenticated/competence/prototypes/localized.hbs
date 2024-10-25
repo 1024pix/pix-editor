@@ -46,11 +46,18 @@
         @value={{this.localizedChallenge.embedURL}}
         @edition={{this.edition}}
         @placeholder="Url de l'embed"
+        @change={{this.checkEmbedURL}}
       />
       {{#if this.shouldDisplayPrimaryEmbedUrl }}
         <div class="ui  blue message">
          <p data-testid="default-embed-url">Embed URL auto-générée : {{this.localizedChallenge.defaultEmbedURL}}</p>
         </div>
+      {{/if}}
+      {{#if this.invalidEmbedURL}}
+        <p class="ui red message" data-test-invalid-embed-url>
+          URL invalide :
+          {{this.invalidEmbedURL}}
+        </p>
       {{/if}}
       <Field::Select
         @title="Géographie"
