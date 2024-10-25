@@ -81,7 +81,7 @@
           </tr>
         </thead>
         <tbody>
-        {{#each this.model.whitelistedUrls as |whitelistedUrl|}}
+        {{#each this.filteredWhitelistedUrls as |whitelistedUrl|}}
           <tr class="tr--clickable">
             <td>
               {{whitelistedUrl.relatedSkillNames}}
@@ -113,7 +113,6 @@
                   <PixIconButton
                     @triggerAction={{fn this.copyUrl whitelistedUrl}}
                     @iconName="copy"
-                    @iconPrefix="far"
                     @ariaLabel="Copier l'URL whitelistée"
                     class="icon"
                     aria-describedby='copy-whitelisted-url-link-tooltip'
@@ -121,6 +120,23 @@
                   </PixIconButton>
                 </:triggerElement>
                 <:tooltip>Copier l’URL whitelistée</:tooltip>
+              </PixTooltip>
+              <PixTooltip
+                @id='delete-whitelisted-url-tooltip'
+                @position="top"
+                @isInline={{true}}
+              >
+                <:triggerElement>
+                  <PixIconButton
+                    @triggerAction={{fn this.deleteUrl whitelistedUrl}}
+                    @iconName="delete"
+                    @ariaLabel="Supprimer l'URL de la whitelist"
+                    class="icon"
+                    aria-describedby='delete-whitelisted-url-tooltip'
+                  >
+                  </PixIconButton>
+                </:triggerElement>
+                <:tooltip>Supprimer l'URL de la whitelist</:tooltip>
               </PixTooltip>
             </td>
           </tr>

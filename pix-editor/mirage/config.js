@@ -454,6 +454,11 @@ function routes() {
 
     return this.serialize({ modelName: 'whitelisted-urls', models: whitelistedUrls }, 'whitelisted-url');
   });
+
+  this.delete('/whitelisted-urls/:id', (schema, request) => {
+    const whitelistedUrl = schema.whitelistedUrls.find(request.params.id);
+    whitelistedUrl.destroy();
+  });
 }
 
 function _serializeModel(instance, modelName) {

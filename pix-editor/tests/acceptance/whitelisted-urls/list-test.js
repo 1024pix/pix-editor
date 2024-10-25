@@ -121,4 +121,19 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
     assert.dom(screen.getByText('OUAF')).exists();
     assert.dom(screen.queryByText('MIAOU')).doesNotExist();
   });
+
+  test('should delete delete whitelisted url', async function(assert) {
+    // when
+    const screen = await visit('/');
+    await clickByName('Whitelist moulinette des URLs');
+
+    const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL de la whitelist' });
+    await click(deleteButtons[0]);
+    await click(await screen.findByRole('button', { name: 'Oui' }));
+
+    // then
+    assert.dom(screen.getByText('OUAF')).exists();
+    assert.dom(screen.getByText('MIAOU')).exists();
+    assert.dom(screen.queryByText('Les grenouilles sont jolies')).doesNotExist();
+  });
 });

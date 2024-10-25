@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class StaticCoursesRoute extends Route {
+export default class WhitelistedUrlsRoute extends Route {
   queryParams = {
     url: {
       refreshModel: true,
@@ -14,22 +14,10 @@ export default class StaticCoursesRoute extends Route {
   @service store;
   @service access;
 
-  async model(params) {
+  async model() {
     const whitelistedUrls = await this.store.findAll('whitelisted-url', { reload: true });
-
-    const filteredWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => {
-      const hasMatchingUrl = whitelistedUrl.url.includes(params.url ?? '');
-      let hasMatchingNames = true;
-      if (params.names) {
-        const urlNames = whitelistedUrl.relatedSkillNames ?? [];
-        const searchedNames = params.names.split(',');
-        hasMatchingNames = searchedNames.some((name) => urlNames.includes(name));
-      }
-      return hasMatchingUrl && hasMatchingNames;
-    });
-
     return {
-      whitelistedUrls: filteredWhitelistedUrls,
+      whitelistedUrls,
       mayCreateWhitelistedUrl: this.access.mayCreateOrEditWhitelistedUrl(),
     };
   }
