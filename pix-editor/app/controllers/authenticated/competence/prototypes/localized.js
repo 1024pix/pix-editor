@@ -176,7 +176,7 @@ export default class LocalizedController extends Controller {
     this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join('\n') ?? '';
     this.displayUrlsToConsultField = false;
     this.invalidUrlsToConsult = '';
-    await this.model.files;
+    await this.localizedChallenge.files;
     this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
     this.deletedFiles = [];
     if (!this.wasMaximized) {
