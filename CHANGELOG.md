@@ -1,5 +1,14 @@
 
 
+## v3.169.0 (28/10/2024)
+
+
+### :rocket: Amélioration
+- [#793](https://github.com/1024pix/pix-editor/pull/793) [FEATURE] Ajouter l'option `Acquis non pertinent` au select `Sourds et malentendants` (PIX-14996).
+
+### :bug: Correction
+- [#790](https://github.com/1024pix/pix-editor/pull/790) [BUGFIX] Les pièces jointes des épreuves traduites ne s'affichent pas (PIX-14941).
+
 ## v3.168.0 (23/10/2024)
 
 
