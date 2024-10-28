@@ -8,6 +8,7 @@
     >
       <:triggerElement>
         <PixButtonLink
+          @route="authenticated.whitelisted-urls.new"
           @backgroundColor="blue"
           @isDisabled={{not this.model.mayCreateWhitelistedUrl}}
           aria-describedby='create-whitelisted-url-tooltip'

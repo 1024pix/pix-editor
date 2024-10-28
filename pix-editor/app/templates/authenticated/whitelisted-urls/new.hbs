@@ -1,0 +1,17 @@
+<header class="page-header">
+  <h1 class="page-title">Ajout d'une URL whitelistée</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Form::WhitelistedUrl
+      @initialUrl=""
+      @initialComment=""
+      @initialRelatedSkillNames=""
+      @initialCheckType=""
+      @cancelButtonText="Annuler"
+      @onFormCancelled={{this.goBackToList}}
+      @submitButtonText={{"Ajouter l'URL à la whitelist"}}
+      @onFormSubmitted={{this.createWhitelistedUrl}}
+    />
+  </section>
+</main>
