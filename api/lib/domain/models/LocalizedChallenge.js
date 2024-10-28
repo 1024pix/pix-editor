@@ -51,6 +51,7 @@ export class LocalizedChallenge {
       OK: 'OK',
       KO: 'KO',
       RAS: 'RAS',
+      ACQUIS_NON_PERTINENT: 'Acquis Non Pertinent',
     };
   }
 

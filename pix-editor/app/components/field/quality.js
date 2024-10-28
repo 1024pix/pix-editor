@@ -27,6 +27,7 @@ export default class Quality extends Component {
   deafAndHardOfHearingOptions = [
     { value: 'RAS', label: 'RAS' },
     { value: 'OK', label: 'OK' },
+    { value: 'Acquis Non Pertinent', label: 'Acquis Non Pertinent' },
     { value: 'KO', label: 'KO' },
   ];
 }
