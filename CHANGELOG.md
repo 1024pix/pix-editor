@@ -1,5 +1,11 @@
 
 
+## v3.170.0 (29/10/2024)
+
+
+### :bug: Correction
+- [#794](https://github.com/1024pix/pix-editor/pull/794) [BUGFIX] Impossible d'afficher une épreuve lorsque l'embedURL de l'épreuve est invalide (PIX-14419).
+
 ## v3.169.0 (28/10/2024)
 
 
