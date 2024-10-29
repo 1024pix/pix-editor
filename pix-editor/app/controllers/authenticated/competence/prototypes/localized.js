@@ -21,6 +21,7 @@ export default class LocalizedController extends Controller {
   @tracked displayUrlsToConsultField = false;
 
   @tracked urlsToConsult = '';
+  @tracked invalidEmbedURL = '';
   @tracked invalidUrlsToConsult = '';
   helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
 
@@ -176,6 +177,7 @@ export default class LocalizedController extends Controller {
     this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join('\n') ?? '';
     this.displayUrlsToConsultField = false;
     this.invalidUrlsToConsult = '';
+    this.invalidEmbedURL = '';
     await this.localizedChallenge.files;
     this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
     this.deletedFiles = [];
@@ -357,5 +359,19 @@ export default class LocalizedController extends Controller {
     }
     this.deletedFiles = [];
     return challenge;
+  }
+
+  @action
+  checkEmbedURL() {
+    this.invalidEmbedURL = '';
+    let embedURL = this.localizedChallenge.embedURL;
+    embedURL = embedURL.trim();
+    try {
+      new URL(embedURL);
+      return true;
+    } catch {
+      this.localizedChallenge.embedURL = '';
+      this.invalidEmbedURL = embedURL;
+    }
   }
 }

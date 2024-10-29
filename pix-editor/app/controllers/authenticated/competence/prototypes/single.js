@@ -35,6 +35,7 @@ export default class SingleController extends Controller {
   @service store;
 
   @tracked invalidUrlsToConsult = '';
+  @tracked invalidEmbedURL = '';
   @tracked urlsToConsult = '';
 
   deletedFiles = [];
@@ -199,6 +200,7 @@ export default class SingleController extends Controller {
     this.challenge.files.forEach((file) => file.rollbackAttributes());
     this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
     this.invalidUrlsToConsult = '';
+    this.invalidEmbedURL = '';
     this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
@@ -750,5 +752,19 @@ export default class SingleController extends Controller {
     this.changelogCallback = callback;
     this.changelogDefault = defaultMessage;
     this.displayChangeLog = true;
+  }
+
+  @action
+  checkEmbedURL() {
+    this.invalidEmbedURL = '';
+    let embedURL = this.challenge.embedURL;
+    embedURL = embedURL.trim();
+    try {
+      new URL(embedURL);
+      return true;
+    } catch {
+      this.challenge.embedURL = null;
+      this.invalidEmbedURL = embedURL;
+    }
   }
 }

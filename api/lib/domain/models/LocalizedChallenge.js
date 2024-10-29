@@ -61,6 +61,7 @@ export class LocalizedChallenge {
 
   get defaultEmbedUrl() {
     if (!this.#primaryEmbedUrl) return null;
+    if (!URL.canParse(this.#primaryEmbedUrl)) return null;
 
     const url = new URL(this.#primaryEmbedUrl);
     if (hasLocaleInFirstPathSegment(url)) {

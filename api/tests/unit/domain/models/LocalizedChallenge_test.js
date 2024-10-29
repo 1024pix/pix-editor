@@ -66,6 +66,36 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         expect(localizedChallenge).toHaveProperty('defaultEmbedUrl', 'http://test.com/pix-embed/to/page.html?lang=ar');
       });
     });
+
+    describe('when URL is invalid', () => {
+      it('should be null', () => {
+        // given
+        const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'alternativeId',
+          challengeId: 'challengeId',
+          locale: 'ai',
+          primaryEmbedUrl: '<iframe src="https://figma.com/want-to-use-our-ai"></iframe>',
+        });
+
+        // then
+        expect(localizedChallenge).toHaveProperty('defaultEmbedUrl', null);
+      });
+    });
+
+    describe('when primaryEmbedUrl is null', () => {
+      it('should be null', () => {
+        // given
+        const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'alternativeId',
+          challengeId: 'challengeId',
+          locale: 'ai',
+          primaryEmbedUrl: null,
+        });
+
+        // then
+        expect(localizedChallenge).toHaveProperty('defaultEmbedUrl', null);
+      });
+    });
   });
 
   describe('static buildPrimary', function() {
