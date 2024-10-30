@@ -255,6 +255,10 @@ export class Challenge {
     return getCountryCode(this.geography);
   }
 
+  get isDeclinable() {
+    return this.declinable !== Challenge.DECLINABLES.NON;
+  }
+
   get #primaryLocalizedChallenge() {
     return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale);
   }

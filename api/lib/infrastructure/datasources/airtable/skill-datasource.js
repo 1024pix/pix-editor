@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
+import { Skill } from '../../../domain/models/Skill.js';
 
 export const skillDatasource = datasource.extend({
 
@@ -78,6 +79,15 @@ export const skillDatasource = datasource.extend({
   async filterByTubeId(tubeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `{Tube (id persistant)} = ${stringValue(tubeId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
+  async listActiveByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `AND({Compétence (via Tube) (id persistant)} = ${stringValue(competenceId)}, {Status} = ${stringValue(Skill.STATUSES.ACTIF)})`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
