@@ -30,11 +30,17 @@ export default class CompetenceController extends Controller {
   @service notify;
   @service loader;
 
+  @controller('authenticated.competence.prototypes') prototypesController;
   @controller('authenticated.competence.prototypes.single') challengeController;
   @controller('authenticated.competence.skills.single') skillController;
 
   get competence() {
     return this.model;
+  }
+
+  get competenceOverview() {
+    if (this.section === 'challenges') return this.prototypesController.model;
+    return null;
   }
 
   get displayGrid() {

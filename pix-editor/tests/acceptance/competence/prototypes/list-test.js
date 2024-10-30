@@ -47,7 +47,7 @@ module('Acceptance | competence/prototypes/list', function() {
       await authenticateSession();
 
       // when
-      await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}`);
+      await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}?view=workbench`);
     });
 
     test('it should display a list of prototype of `skill1`', function(assert) {

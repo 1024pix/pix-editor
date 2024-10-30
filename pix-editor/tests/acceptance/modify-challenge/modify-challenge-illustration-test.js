@@ -17,18 +17,32 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: [] });
-    this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-    this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
-    this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+    const prototype = this.server.create('challenge', { id: 'recChallenge1' });
+    const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+    const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [{
+        id: thematic.id,
+        name: thematic.name,
+        tubeOverviews: [{
+          id: tube.id,
+          name: tube.name,
+          skillOverviews: [{
+            id: skill.id,
+            name: skill.name,
+            prototypeId: prototype.id,
+            isPrototypeDeclinable: true,
+            proposedChallengesCount: 1,
+            validatedChallengesCount: 0,
+          }, null, null, null, null, null, null],
+        }],
+      }],
+    });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
-    this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
-    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
+    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
@@ -112,20 +126,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
   test('delete illustration', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      illustration: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
-        'filename': 'Certificat GUL 2020.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      skillId: 'recSkill2',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
       uploadFile() { }
     }
@@ -135,7 +136,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-illustration-button]'));
 
@@ -154,20 +155,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
   test('update illustration', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      illustration: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
-        'filename': 'Certificat GUL 2020.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      skillId: 'recSkill2',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
       uploadFile() { }
     }
@@ -177,7 +165,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
@@ -188,7 +176,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
-    const challenge = await store.peekRecord('challenge', 'recChallenge2');
+    const challenge = await store.peekRecord('challenge', 'recChallenge1');
     const files = challenge.hasMany('files').value() ?? [];
     const newIllustration = files.find((file) => file.type === 'illustration');
 
@@ -201,19 +189,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
   test('delete and upload a new illustration', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      illustration: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
-        'filename': 'Certificat GUL 2020.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      skillId: 'recSkill2',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
       uploadFile() { }
     }
@@ -223,7 +199,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-file-input-illustration] button.file-remove'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
@@ -235,7 +211,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
-    const challenge = await store.peekRecord('challenge', 'recChallenge2');
+    const challenge = await store.peekRecord('challenge', 'recChallenge1');
     const files = challenge.hasMany('files').value() ?? [];
     const newIllustration = files.find((file) => file.type === 'illustration');
 

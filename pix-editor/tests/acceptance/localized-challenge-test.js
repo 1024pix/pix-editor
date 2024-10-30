@@ -15,17 +15,50 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
-      this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Prototype 1', version: 1 });
+      const prototype1 = this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Prototype 1', version: 1 });
       this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
       this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
-      this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-      this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-      this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      this.server.create('competence', {
+
+      const prototype2 = this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1', embedURL: null });
+      this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
+      this.server.create('localized-challenge', { id: 'recChallenge2NL', challengeId: 'recChallenge2', locale: 'nl' });
+
+      const skill1 = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
+      const skill2 = this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'], level: 2 });
+
+      const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1', 'recSkill2'] });
+      const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
         id: 'recCompetence1.1',
         pixId: 'pixId recCompetence1.1',
         rawThemeIds: ['recTheme1'],
         rawTubeIds: ['recTube1'],
+      });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-production`,
+        thematicOverviews: [{
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [{
+            id: tube.id,
+            name: tube.name,
+            skillOverviews: [{
+              id: skill1.id,
+              name: skill1.name,
+              prototypeId: prototype1.id,
+              isPrototypeDeclinable: true,
+              proposedChallengesCount: 2,
+              validatedChallengesCount: 1,
+            }, {
+              id: skill2.id,
+              name: skill2.name,
+              prototypeId: prototype2.id,
+              isPrototypeDeclinable: true,
+              proposedChallengesCount: 2,
+              validatedChallengesCount: 1,
+            }, null, null, null, null, null],
+          }],
+        }],
       });
       this.server.create('area', {
         id: 'recArea1',
@@ -59,7 +92,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       const screen = await visit('/');
       await click(findAll('[data-test-area-item]')[0]);
       await click(findAll('[data-test-competence-item]')[0]);
-      await click(findAll('[data-test-skill-cell-link]')[0]);
+      await click(findAll('[data-test-skill-cell-link]')[1]);
       await clickByText('Version nl');
 
       // then
@@ -67,21 +100,18 @@ module('Acceptance | Localized-Challenge', function(hooks) {
     });
     test('should display an embed url if localized challenge has one', async function(assert) {
       // given
-      this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1' });
-      this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
-      this.server.create('localized-challenge', { id: 'recChallenge2NL', challengeId: 'recChallenge2', locale: 'nl', embedURL: 'https://mon-site.fr/my-nl-link.html' });
-      this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'], level: 1, tubeId: 'recTube1' });
+      this.server.create('localized-challenge', { id: 'recChallenge2ES', challengeId: 'recChallenge2', locale: 'es', embedURL: 'https://mon-site.fr/my-es-link.html' });
 
       // when
       const screen = await visit('/');
       await click(findAll('[data-test-area-item]')[0]);
       await click(findAll('[data-test-competence-item]')[0]);
-      await click(findAll('[data-test-skill-cell-link]')[0]);
-      await clickByText('Version nl');
+      await click(findAll('[data-test-skill-cell-link]')[1]);
+      await clickByText('Version es');
 
       // then
       const input = await screen.findByLabelText('Embed URL :');
-      assert.strictEqual(input.value, 'https://mon-site.fr/my-nl-link.html');
+      assert.strictEqual(input.value, 'https://mon-site.fr/my-es-link.html');
     });
 
   });
@@ -91,20 +121,39 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
-      this.server.create('challenge', { id: 'recChallengeProto1', airtableId: 'airtableIdProto1', genealogy: 'Prototype 1', version: 1 });
+      const prototype = this.server.create('challenge', { id: 'recChallengeProto1', airtableId: 'airtableIdProto1', genealogy: 'Prototype 1', version: 1 });
       this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Décliné 1', version: 1, instruction: 'Instruction de la déclinaison' });
       this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
       this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
-      this.server.create('skill', { id: 'recSkill1', name: '@acquis2', challengeIds: ['recChallenge1', 'recChallengeProto1'] });
-      this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-      this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      this.server.create('competence', {
+      const skill = this.server.create('skill', { id: 'recSkill1', name: '@acquis2', challengeIds: ['recChallenge1', 'recChallengeProto1'] });
+      const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+      const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
         id: 'recCompetence1.1',
         title: 'Nom de compétence',
         code: 1,
         pixId: 'pixId recCompetence1.1',
         rawThemeIds: ['recTheme1'],
         rawTubeIds: ['recTube1'],
+      });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-production`,
+        thematicOverviews: [{
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [{
+            id: tube.id,
+            name: tube.name,
+            skillOverviews: [{
+              id: skill.id,
+              name: skill.name,
+              prototypeId: prototype.id,
+              isPrototypeDeclinable: true,
+              proposedChallengesCount: 3,
+              validatedChallengesCount: 1,
+            }, null, null, null, null, null, null],
+          }],
+        }],
       });
       this.server.create('area', {
         id: 'recArea1',

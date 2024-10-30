@@ -21,6 +21,14 @@ function routes() {
   this.get('/users/me', ({ users }) => users.first());
   this.get('/config', ({ configs }) => configs.first());
 
+  this.get('/competences/:id/overviews/challenges-production', (schema, request) => {
+    const competenceOverview = schema.competenceOverviews
+      .where((competenceOverview) => competenceOverview.id === `${request.params.id}:challenges-production`)
+      .models[0];
+    if (!competenceOverview) return;
+    return schema.competenceOverviews.find(competenceOverview.id);
+  });
+
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const attachment = _deserializePayload(payload, 'attachment');

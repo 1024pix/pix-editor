@@ -15,12 +15,31 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1', updatedAt: '2021-10-04T14:00:00Z', alternativeLocales: ['nl', 'en'] });
-    this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', updatedAt: '2021-10-04T14:00:00Z', genealogy: 'Prototype 1' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1', 'recChallenge2'], level: 1 });
+    const prototype = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', updatedAt: '2021-10-04T14:00:00Z', genealogy: 'Prototype 1' });
+    const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1', 'recChallenge2'], level: 1 });
     this.server.create('skill', { id: 'recSkill2', status: 'en construction', challengeIds: [], level: 2, name: '@skill2' });
-    this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1', 'recSkill2'] });
-    this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1', 'recSkill2'] });
+    const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [{
+        id: thematic.id,
+        name: thematic.name,
+        tubeOverviews: [{
+          id: tube.id,
+          name: tube.name,
+          skillOverviews: [{
+            id: skill.id,
+            name: skill.name,
+            prototypeId: prototype.id,
+            isPrototypeDeclinable: true,
+            proposedChallengesCount: 1,
+            validatedChallengesCount: 0,
+          }, null, null, null, null, null, null],
+        }],
+      }],
+    });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();

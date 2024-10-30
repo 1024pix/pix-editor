@@ -17,7 +17,8 @@
     <div class="ui attached segment competence {{this.size}}">
       {{#if this.displayGrid}}
         <Competence::CompetenceGrid
-          @themes={{this.competence.sortedThemes}}
+          @competence={{this.competence}}
+          @competenceOverview={{this.competenceOverview}}
           @languageFilter={{this.languageFilter}}
           @section={{this.section}}
           @view={{this.view}}
@@ -33,6 +34,7 @@
     </div>
     <Competence::CompetenceFooter
       @competence={{this.competence}}
+      @competenceOverview={{this.competenceOverview}}
       @section={{this.section}}
       @view={{this.view}}
       @selectView={{this.selectView}}
