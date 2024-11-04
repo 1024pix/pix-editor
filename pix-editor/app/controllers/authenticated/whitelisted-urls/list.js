@@ -5,6 +5,9 @@ import { tracked } from '@glimmer/tracking';
 
 export default class WhitelistedUrlsController extends Controller {
   @service router;
+  @service confirm;
+  @service notifications;
+
   queryParams = ['url', 'names'];
   @tracked url = '';
   @tracked names = '';
@@ -32,5 +35,17 @@ export default class WhitelistedUrlsController extends Controller {
   async clearFilters() {
     this.url = '';
     this.names = '';
+  }
+
+  @action
+  async deleteUrl(whitelistedUrl) {
+    try {
+      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer cette URL de la whitelist ?');
+    } catch {
+      return;
+    }
+    await whitelistedUrl.destroyRecord().catch(() => {
+      this.notifications.error('Une erreur est survenue lors de la suppression de cette URL de la whitelist.');
+    });
   }
 }
