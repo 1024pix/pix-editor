@@ -3,9 +3,9 @@ import { databaseBuffer } from '../database-buffer.js';
 export function buildUser({
   id = databaseBuffer.nextId++,
   name,
-  trigram,
+  trigram = 'SOS',
   access,
-  apiKey,
+  apiKey = '463eed07-e872-42bf-8110-004fcba07a5b',
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
