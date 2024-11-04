@@ -44,7 +44,7 @@ function _mapToInfrastructureError(error) {
     };
   }
   if (error instanceof DomainErrors.InvalidStaticCourseCreationOrUpdateError) {
-    const infraErrors = error.errors.map((error) => new InfraErrors.UnprocessableEntityError({ detail: error.data, attribute: error.field, code: error.code }));
+    const infraErrors = error.errors.map((error) => new InfraErrors.UnprocessableEntityError({ detail: error.detail, attribute: error.attribute }));
     return {
       infraErrors,
       statusCode: 422,

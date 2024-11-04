@@ -46,28 +46,15 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-          // with code
-          const errorWithCode = new infraErrorClass({ message, code: 'erreur-robot-broken' });
-          const serializedErrorWithCode = serialize(errorWithCode);
-          expect(serializedErrorWithCode, `Bad serialization for ${infraErrorName} with code`).toStrictEqual({
-            errors: [
-              {
-                status: '422',
-                title: 'Unprocessable entity',
-                detail: 'error message',
-                code: 'erreur-robot-broken',
-              },
-            ],
-          });
           // with detail
-          const errorWithDetail = new infraErrorClass({ message, detail: [' un', 'detail '] });
+          const errorWithDetail = new infraErrorClass({ message, detail: 'un détail' });
           const serializedErrorWithDetail = serialize(errorWithDetail);
           expect(serializedErrorWithDetail, `Bad serialization for ${infraErrorName} with detail`).toStrictEqual({
             errors: [
               {
                 status: '422',
                 title: 'Unprocessable entity',
-                detail: [' un', 'detail '],
+                detail: 'un détail',
               },
             ],
           });

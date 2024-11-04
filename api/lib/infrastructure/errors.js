@@ -7,12 +7,11 @@ export class InfrastructureError extends Error {
 }
 
 export class UnprocessableEntityError extends InfrastructureError {
-  constructor({ message, attribute, code, detail }) {
+  constructor({ message, attribute, detail }) {
     super(message);
     this.title = 'Unprocessable entity';
     this.status = 422;
     this.attribute = attribute;
-    this.code = code;
     this.detail = detail;
   }
 }

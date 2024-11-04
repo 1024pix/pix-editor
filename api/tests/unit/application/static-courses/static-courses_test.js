@@ -269,11 +269,11 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error0.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error1.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error2.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(saveStub).not.toHaveBeenCalled();
       });
 
@@ -365,13 +365,13 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error0.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error1.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error2.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error3.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error3.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(saveStub).not.toHaveBeenCalled();
       });
 
@@ -524,11 +524,11 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error0.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error1.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
+        expect(error2.errors[0]).toStrictEqual({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
         expect(saveStub).not.toHaveBeenCalled();
       });
 
@@ -627,13 +627,13 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error0.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error1.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error2.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error3.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
+        expect(error3.errors[0]).toStrictEqual({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
         expect(saveStub).not.toHaveBeenCalled();
       });
 

@@ -52,16 +52,8 @@ export class InvalidStaticCourseCreationOrUpdateError extends DomainError {
     return this.errors.length > 0;
   }
 
-  addMandatoryFieldError({ field }) {
-    this.errors.push({ field, code: 'MANDATORY_FIELD' });
-  }
-
-  addUnknownResourcesError({ field, unknownResources }) {
-    this.errors.push({ field, data: unknownResources, code: 'UNKNOWN_RESOURCES' });
-  }
-
-  addDuplicatesForbiddenError({ field, duplicates }) {
-    this.errors.push({ field, data: duplicates, code: 'DUPLICATES_FORBIDDEN' });
+  addError({ attribute, detail }) {
+    this.errors.push({ attribute, detail });
   }
 }
 

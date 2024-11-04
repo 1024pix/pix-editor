@@ -16,7 +16,6 @@ export function serialize(infrastructureError) {
         title: error.title,
         detail: error.detail ?? error.message,
         source,
-        code: error.code,
       };
     }),
   );

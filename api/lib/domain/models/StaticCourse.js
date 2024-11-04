@@ -129,19 +129,19 @@ function validateAttributes({ name, challengeIds, tagIds }, allChallengeIds, all
 
 function checkName(name, validationError) {
   if (name.length === 0) {
-    validationError.addMandatoryFieldError({ field: 'name' });
+    validationError.addError({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
   }
 }
 
 function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
   if (challengeIds.length === 0) {
-    validationError.addMandatoryFieldError({ field: 'challengeIds' });
+    validationError.addError({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
     return;
   }
 
   const notFoundChallengeIds = _.difference(challengeIds, allChallengeIds);
   if (notFoundChallengeIds.length > 0) {
-    validationError.addUnknownResourcesError({ field: 'challengeIds', unknownResources: notFoundChallengeIds });
+    validationError.addError({ attribute: 'challengeIds', detail: `Les IDs d'épreuve suivants n'existent pas : ${notFoundChallengeIds.join(', ')}` });
   }
 
   const challengeOccurrencesMap = _.countBy(challengeIds);
@@ -152,7 +152,7 @@ function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
     }
   }
   if (duplicateChallengeIds.length > 0) {
-    validationError.addDuplicatesForbiddenError({ field: 'challengeIds', duplicates: duplicateChallengeIds });
+    validationError.addError({ attribute: 'challengeIds', detail: `Les IDs d'épreuve suivants sont en doublon : ${duplicateChallengeIds.join(', ')}` });
   }
 }
 
@@ -160,7 +160,7 @@ function checkTagIds(tagIds, allTagIds, validationError) {
 
   const notFoundTagIds = _.difference(tagIds, allTagIds);
   if (notFoundTagIds.length > 0) {
-    validationError.addUnknownResourcesError({ field: 'tagIds', unknownResources: notFoundTagIds });
+    validationError.addError({ attribute: 'tagIds', detail: `Les tags suivants n'existent pas : ${notFoundTagIds.join(', ')}` });
   }
 
   const tagOccurrencesMap = _.countBy(tagIds);
@@ -171,6 +171,6 @@ function checkTagIds(tagIds, allTagIds, validationError) {
     }
   }
   if (duplicateTagIds.length > 0) {
-    validationError.addDuplicatesForbiddenError({ field: 'tagIds', duplicates: duplicateTagIds.map((tagId) => parseInt(tagId)) });
+    validationError.addError({ attribute: 'tagIds', detail: `Les tags suivants sont en doublon : ${duplicateTagIds.join(', ')}` });
   }
 }

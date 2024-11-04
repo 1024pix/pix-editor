@@ -98,9 +98,8 @@ describe('Unit | Infrastructure | ErrorManager', function() {
         }
         else if (domainErrorName === 'InvalidStaticCourseCreationOrUpdateError') {
           const errorStaticCourse = new domainErrorClass();
-          errorStaticCourse.addMandatoryFieldError({ field: 'name' });
-          errorStaticCourse.addDuplicatesForbiddenError({ field: 'challengeIds', duplicates: ['chalA', 'chalB'] });
-          errorStaticCourse.addUnknownResourcesError({ field: 'challengeIds', unknownResources: ['chalC', 'chalD'] });
+          errorStaticCourse.addError({ attribute: 'name', detail: 'Un texte détaillant une erreur' });
+          errorStaticCourse.addError({ attribute: 'challengeIds', detail: 'le détail d\'une autre erreur' });
           const responseStaticCourse = send(hFake, errorStaticCourse);
           expect(responseStaticCourse.statusCode, expectErrorMessage).toStrictEqual(422);
           expect(responseStaticCourse.source).toStrictEqual({
@@ -108,7 +107,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               {
                 status: '422',
                 title: 'Unprocessable entity',
-                code: 'MANDATORY_FIELD',
+                detail: 'Un texte détaillant une erreur',
                 source: {
                   pointer: '/data/attributes/name',
                 },
@@ -116,20 +115,10 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               {
                 status: '422',
                 title: 'Unprocessable entity',
-                code: 'DUPLICATES_FORBIDDEN',
                 source: {
                   pointer: '/data/attributes/challenge-ids',
                 },
-                detail: ['chalA', 'chalB'],
-              },
-              {
-                status: '422',
-                title: 'Unprocessable entity',
-                code: 'UNKNOWN_RESOURCES',
-                source: {
-                  pointer: '/data/attributes/challenge-ids',
-                },
-                detail: ['chalC', 'chalD'],
+                detail: 'le détail d\'une autre erreur',
               },
             ],
           });

@@ -99,7 +99,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'name' },
+            {
+              attribute: 'name',
+              detail: 'Le champ "Nom" est obligatoire',
+            },
           ]);
         });
       });
@@ -124,7 +127,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+            },
           ]);
         });
 
@@ -147,7 +153,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalJKF, chalABC',
+            },
           ]);
         });
 
@@ -170,7 +179,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'challengeIds' },
+            {
+              attribute: 'challengeIds',
+              detail: 'Le champ "IDs des épreuves" est obligatoire',
+            }
           ]);
         });
       });
@@ -194,7 +206,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'UNKNOWN_RESOURCES', field: 'tagIds', data: [789] },
+            {
+              attribute: 'tagIds',
+              detail: 'Les tags suivants n\'existent pas : 789',
+            }
           ]);
         });
 
@@ -217,7 +232,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'DUPLICATES_FORBIDDEN', field: 'tagIds', data: [123] },
+            {
+              attribute: 'tagIds',
+              detail: 'Les tags suivants sont en doublon : 123',
+            }
           ]);
         });
       });
@@ -242,9 +260,19 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'name' },
-            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
-            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
+            {
+              attribute: 'name',
+              detail: 'Le champ "Nom" est obligatoire',
+            },
+
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+            },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalGHI',
+            },
           ]);
         });
       });
@@ -381,7 +409,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'name' },
+            {
+              attribute: 'name',
+              detail: 'Le champ "Nom" est obligatoire',
+            }
           ]);
         });
       });
@@ -405,7 +436,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+            }
           ]);
         });
 
@@ -427,7 +461,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalJKF, chalABC',
+            }
           ]);
         });
 
@@ -449,7 +486,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'challengeIds' },
+            {
+              attribute: 'challengeIds',
+              detail: 'Le champ "IDs des épreuves" est obligatoire',
+            }
           ]);
         });
       });
@@ -473,7 +513,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'UNKNOWN_RESOURCES', field: 'tagIds', data: [1574, 888] },
+            {
+              attribute: 'tagIds',
+              detail: 'Les tags suivants n\'existent pas : 1574, 888',
+            }
           ]);
         });
 
@@ -495,7 +538,10 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'DUPLICATES_FORBIDDEN', field: 'tagIds', data: [123] },
+            {
+              attribute: 'tagIds',
+              detail: 'Les tags suivants sont en doublon : 123',
+            }
           ]);
         });
       });
@@ -520,9 +566,18 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
           expect(commandResult.error.errors).toEqual([
-            { code: 'MANDATORY_FIELD', field: 'name' },
-            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
-            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
+            {
+              attribute: 'name',
+              detail: 'Le champ "Nom" est obligatoire',
+            },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+            },
+            {
+              attribute: 'challengeIds',
+              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalGHI',
+            },
           ]);
         });
       });
