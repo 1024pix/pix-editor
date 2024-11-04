@@ -4,5 +4,4 @@ export default class ApplicationSerializer extends JSONAPISerializer {
   shouldSerializeHasMany() {
     return true;
   }
-
 }
