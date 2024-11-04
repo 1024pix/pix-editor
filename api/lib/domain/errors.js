@@ -65,4 +65,16 @@ export class InvalidStaticCourseCreationOrUpdateError extends DomainError {
   }
 }
 
+export class NotFoundWhitelistedUrlError extends NotFoundError {
+  constructor(message) {
+    super(message);
+  }
+}
+
+export class CommandWhitelistedUrlError extends DomainError {
+  constructor(message) {
+    super(message);
+  }
+}
+
 export class ForbiddenError extends DomainError {}

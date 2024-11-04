@@ -234,9 +234,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       // Then
       expect(response.statusCode).to.equal(404);
       expect(response.result).to.deep.equal({
-        error: 'Not Found',
-        message: 'L\'URL whitelistée d\'id 777 n\'existe pas',
-        statusCode: 404,
+        errors: [
+          {
+            status: '404',
+            title: 'Not Found',
+            detail: 'L\'URL whitelistée d\'id 777 n\'existe pas',
+          },
+        ],
       });
     });
 
@@ -251,9 +255,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       // Then
       expect(response.statusCode).to.equal(422);
       expect(response.result).to.deep.equal({
-        error: 'Unprocessable Entity',
-        message: 'L\'URL whitelistée a déjà été supprimée',
-        statusCode: 422,
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'L\'URL whitelistée a déjà été supprimée',
+          },
+        ],
       });
     });
 
@@ -368,9 +376,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       // Then
       expect(response.statusCode).to.equal(422);
       expect(response.result).to.deep.equal({
-        error: 'Unprocessable Entity',
-        message: 'URL invalide',
-        statusCode: 422,
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'URL invalide',
+          },
+        ],
       });
     });
 
@@ -501,9 +513,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       // Then
       expect(response.statusCode).to.equal(422);
       expect(response.result).to.deep.equal({
-        error: 'Unprocessable Entity',
-        message: 'URL invalide',
-        statusCode: 422,
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'URL invalide',
+          },
+        ],
       });
     });
 

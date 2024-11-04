@@ -38,6 +38,9 @@ function _mapToInfrastructureError(error) {
   if (error instanceof DomainErrors.StaticCourseIsInactiveError) {
     return new InfraErrors.ConflictError(error.message);
   }
+  if (error instanceof DomainErrors.CommandWhitelistedUrlError) {
+    return new InfraErrors.UnprocessableEntityError(error.message);
+  }
 
   return new InfraErrors.InfrastructureError(error.message);
 }

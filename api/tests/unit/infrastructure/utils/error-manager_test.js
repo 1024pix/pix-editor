@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { hFake } from '../../../test-helper.js';
 import {
+  CommandWhitelistedUrlError,
   InvalidStaticCourseCreationOrUpdateError,
+  NotFoundWhitelistedUrlError,
   StaticCourseIsInactiveError,
 } from '../../../../lib/domain/errors.js';
 import { send } from '../../../../lib/infrastructure/utils/error-manager.js';
@@ -62,6 +64,46 @@ describe('Unit | Infrastructure | ErrorManager', function() {
             detail: 'Opération impossible sur un test statique inactif.',
             status: '409',
             title: 'Conflict',
+          },
+        ],
+      });
+    });
+
+    it('should convert NotFoundWhitelistedUrlError', async function() {
+      // given
+      const error = new NotFoundWhitelistedUrlError('pas trouvé');
+
+      // when
+      const response = await send(hFake, error);
+
+      // then
+      expect(response.statusCode).to.equal(404);
+      expect(response.source).to.deep.equal({
+        errors: [
+          {
+            status: '404',
+            title: 'Not Found',
+            detail: 'pas trouvé',
+          },
+        ],
+      });
+    });
+
+    it('should convert CommandWhitelistedUrlError', async function() {
+      // given
+      const error = new CommandWhitelistedUrlError('commande marche pas');
+
+      // when
+      const response = await send(hFake, error);
+
+      // then
+      expect(response.statusCode).to.equal(422);
+      expect(response.source).to.deep.equal({
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'commande marche pas',
           },
         ],
       });

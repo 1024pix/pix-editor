@@ -2,8 +2,8 @@ import Joi from 'joi';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as whitelistedUrlRepository from '../../infrastructure/repositories/whitelisted-url-repository.js';
 import * as whitelistedUrlSerializer from '../../infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
-import Boom from '@hapi/boom';
 import { WhitelistedUrl } from '../../domain/models/index.js';
+import { CommandWhitelistedUrlError, NotFoundWhitelistedUrlError } from '../../domain/errors.js';
 
 const whitelistedUrlIdentifierType = Joi.number().integer().min(1);
 
@@ -35,11 +35,11 @@ export async function register(server) {
           const whitelistedUrlId = request.params.whitelistUrlId;
           const whitelistedUrlToDelete = await whitelistedUrlRepository.find(whitelistedUrlId);
           if (!whitelistedUrlToDelete) {
-            return Boom.notFound(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
+            throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
           }
           const canDelete = whitelistedUrlToDelete.canDelete(authenticatedUser);
           if (canDelete.cannot) {
-            return Boom.badData(canDelete.errorMessage);
+            throw new CommandWhitelistedUrlError(canDelete.errorMessage);
           }
           whitelistedUrlToDelete.delete(authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToDelete);
@@ -64,7 +64,7 @@ export async function register(server) {
           const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
           const canCreate = WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
           if (canCreate.cannot) {
-            return Boom.badData(canCreate.errorMessage);
+            throw new CommandWhitelistedUrlError(canCreate.errorMessage);
           }
           const whitelistedUrlToCreate = WhitelistedUrl.create(creationCommand, authenticatedUser);
           const id = await whitelistedUrlRepository.save(whitelistedUrlToCreate);
@@ -95,12 +95,12 @@ export async function register(server) {
           };
           const whitelistedUrlToUpdate = await whitelistedUrlRepository.find(whitelistedUrlId);
           if (!whitelistedUrlToUpdate) {
-            return Boom.notFound(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
+            throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
           }
           const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
           const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
           if (canUpdate.cannot) {
-            return Boom.badData(canUpdate.errorMessage);
+            throw new CommandWhitelistedUrlError(canUpdate.errorMessage);
           }
           whitelistedUrlToUpdate.update(updateCommand, authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToUpdate);
