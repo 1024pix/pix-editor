@@ -72,8 +72,9 @@ export class NotFoundWhitelistedUrlError extends NotFoundError {
 }
 
 export class CommandWhitelistedUrlError extends DomainError {
-  constructor(message) {
+  constructor(message, attribute) {
     super(message);
+    this.attribute = attribute;
   }
 }
 
