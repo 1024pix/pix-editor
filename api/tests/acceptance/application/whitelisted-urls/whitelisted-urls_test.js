@@ -244,7 +244,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       });
     });
 
-    it('should return a 422 status code when provided whitelisted url id has already been deleted', async () => {
+    it('should return a 409 status code when provided whitelisted url id has already been deleted', async () => {
       // when
       const response = await server.inject({
         method: 'DELETE',
@@ -253,12 +253,12 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       });
 
       // Then
-      expect(response.statusCode).to.equal(422);
+      expect(response.statusCode).to.equal(409);
       expect(response.result).to.deep.equal({
         errors: [
           {
-            status: '422',
-            title: 'Unprocessable entity',
+            status: '409',
+            title: 'Conflict',
             detail: 'L\'URL whitelistée a déjà été supprimée',
           },
         ],
@@ -381,6 +381,8 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             status: '422',
             title: 'Unprocessable entity',
             detail: 'URL invalide',
+            code: 'application-error',
+            source: { pointer: '/data/attributes/url' },
           },
         ],
       });
@@ -518,6 +520,8 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             status: '422',
             title: 'Unprocessable entity',
             detail: 'URL invalide',
+            code: 'application-error',
+            source: { pointer: '/data/attributes/url' },
           },
         ],
       });

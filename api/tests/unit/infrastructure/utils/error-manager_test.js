@@ -97,8 +97,10 @@ describe('Unit | Infrastructure | ErrorManager', function() {
           });
         }
         else if (domainErrorName === 'CommandWhitelistedUrlError') {
-          expect(response.statusCode, expectErrorMessage).toStrictEqual(422);
-          expect(response.source).toStrictEqual({
+          const errorCommandWhitelistedUrl = new domainErrorClass({ message, attribute });
+          const responseCommandWhitelistedUrl = send(hFake, errorCommandWhitelistedUrl);
+          expect(responseCommandWhitelistedUrl.statusCode, expectErrorMessage).toStrictEqual(422);
+          expect(responseCommandWhitelistedUrl.source).toStrictEqual({
             errors: [
               {
                 status: '422',
@@ -156,6 +158,30 @@ describe('Unit | Infrastructure | ErrorManager', function() {
                   pointer: '/data/attributes/challenge-ids',
                 },
                 detail: ['chalC', 'chalD'],
+              },
+            ],
+          });
+        }
+        else if (domainErrorName === 'CommandWhitelistedUrlForbiddenError') {
+          expect(response.statusCode, expectErrorMessage).toStrictEqual(403);
+          expect(response.source).toStrictEqual({
+            errors: [
+              {
+                status: '403',
+                title: 'Forbidden',
+                detail: 'error message',
+              },
+            ],
+          });
+        }
+        else if (domainErrorName === 'CommandWhitelistedUrlConflictError') {
+          expect(response.statusCode, expectErrorMessage).toStrictEqual(409);
+          expect(response.source).toStrictEqual({
+            errors: [
+              {
+                status: '409',
+                title: 'Conflict',
+                detail: 'error message',
               },
             ],
           });

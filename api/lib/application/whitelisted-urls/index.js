@@ -3,7 +3,7 @@ import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as whitelistedUrlRepository from '../../infrastructure/repositories/whitelisted-url-repository.js';
 import * as whitelistedUrlSerializer from '../../infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
 import { WhitelistedUrl } from '../../domain/models/index.js';
-import { CommandWhitelistedUrlError, NotFoundWhitelistedUrlError } from '../../domain/errors.js';
+import { NotFoundWhitelistedUrlError } from '../../domain/errors.js';
 
 const whitelistedUrlIdentifierType = Joi.number().integer().min(1);
 
@@ -37,10 +37,7 @@ export async function register(server) {
           if (!whitelistedUrlToDelete) {
             throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
           }
-          const canDelete = whitelistedUrlToDelete.canDelete(authenticatedUser);
-          if (canDelete.cannot) {
-            throw new CommandWhitelistedUrlError(canDelete.errorMessage);
-          }
+          whitelistedUrlToDelete.canDelete(authenticatedUser);
           whitelistedUrlToDelete.delete(authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToDelete);
           return h.response().code(204);
@@ -62,10 +59,7 @@ export async function register(server) {
             checkType: attributes['check-type'] ?? null,
           };
           const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
-          const canCreate = WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
-          if (canCreate.cannot) {
-            throw new CommandWhitelistedUrlError(canCreate.errorMessage);
-          }
+          WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
           const whitelistedUrlToCreate = WhitelistedUrl.create(creationCommand, authenticatedUser);
           const id = await whitelistedUrlRepository.save(whitelistedUrlToCreate);
           const createdWhitelistedUrl = await whitelistedUrlRepository.findRead(id);
@@ -98,10 +92,7 @@ export async function register(server) {
             throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
           }
           const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
-          const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
-          if (canUpdate.cannot) {
-            throw new CommandWhitelistedUrlError(canUpdate.errorMessage);
-          }
+          whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
           whitelistedUrlToUpdate.update(updateCommand, authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToUpdate);
           const updatedWhitelistedUrl = await whitelistedUrlRepository.findRead(whitelistedUrlId);

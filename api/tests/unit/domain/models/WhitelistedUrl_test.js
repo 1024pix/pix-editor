@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { User, WhitelistedUrl } from '../../../../lib/domain/models/index.js';
+import {
+  CommandWhitelistedUrlConflictError,
+  CommandWhitelistedUrlError,
+  CommandWhitelistedUrlForbiddenError,
+  NotFoundWhitelistedUrlError
+} from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | WhitelistedUrl', () => {
   let now;
@@ -18,7 +24,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
   describe('#canDelete', () => {
     describe('can', function() {
-      it('should return a canExecute valid when all conditions are reunited', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -27,14 +33,14 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canDelete = whitelistedUrlToDelete.canDelete(user);
+        whitelistedUrlToDelete.canDelete(user);
 
         // then
-        expect(canDelete.can).to.be.true;
+        expect(true).to.be.true;
       });
     });
     describe('cannot', function() {
-      it('should return a canExecute invalid when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -43,14 +49,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canDelete = whitelistedUrlToDelete.canDelete(user);
-
-        // then
-        expect(canDelete.cannot).to.be.true;
-        expect(canDelete.errorMessage).to.equal('L\'utilisateur n\'a pas les droits pour supprimer cette URL whitelistée');
+        try {
+          whitelistedUrlToDelete.canDelete(user);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
+            'L\'utilisateur n\'a pas les droits pour supprimer cette URL whitelistée'
+          ));
+        }
       });
 
-      it('should return a canExecute invalid when whitelisted url has already been deleted', function() {
+      it('should throw a CommandWhitelistedUrlConflictError when whitelisted url has already been deleted', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -59,11 +68,14 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canDelete = whitelistedUrlToDelete.canDelete(user);
-
-        // then
-        expect(canDelete.cannot).to.be.true;
-        expect(canDelete.errorMessage).to.equal('L\'URL whitelistée a déjà été supprimée');
+        try {
+          whitelistedUrlToDelete.canDelete(user);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
+            'L\'URL whitelistée a déjà été supprimée'
+          ));
+        }
       });
     });
   });
@@ -106,7 +118,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
   describe('#static canCreate', () => {
     describe('can', function() {
-      it('should return a canExecute valid when all conditions are reunited', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const existingWhitelistedUrls = [domainBuilder.buildReadWhitelistedUrl({
@@ -126,16 +138,15 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate1 = WhitelistedUrl.canCreate(creationCommand1, user, existingWhitelistedUrls);
-        const canCreate2 = WhitelistedUrl.canCreate(creationCommand2, user, []);
+        WhitelistedUrl.canCreate(creationCommand1, user, existingWhitelistedUrls);
+        WhitelistedUrl.canCreate(creationCommand2, user, []);
 
         // then
-        expect(canCreate1.can).to.be.true;
-        expect(canCreate2.can).to.be.true;
+        expect(true).to.be.true;
       });
     });
     describe('cannot', function() {
-      it('should return a canExecute invalid when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand = {
@@ -146,14 +157,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate = WhitelistedUrl.canCreate(creationCommand, user, []);
-
-        // then
-        expect(canCreate.cannot).to.be.true;
-        expect(canCreate.errorMessage).to.equal('L\'utilisateur n\'a pas les droits pour créer une URL whitelistée');
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
+            'L\'utilisateur n\'a pas les droits pour créer une URL whitelistée'
+          ));
+        }
       });
 
-      it('should return a canExecute invalid when url is not valid in creation command', function() {
+      it('should throw a CommandWhitelistedUrlError when url is not valid in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand1 = {
@@ -170,20 +184,36 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate1 = WhitelistedUrl.canCreate(creationCommand1, user, []);
-        const canCreate2 = WhitelistedUrl.canCreate(creationCommand2, user, []);
-        const canCreate3 = WhitelistedUrl.canCreate(creationCommand3, user, []);
-
-        // then
-        expect(canCreate1.cannot).to.be.true;
-        expect(canCreate1.errorMessage).to.equal('URL invalide');
-        expect(canCreate2.cannot).to.be.true;
-        expect(canCreate2.errorMessage).to.equal('URL invalide');
-        expect(canCreate3.cannot).to.be.true;
-        expect(canCreate3.errorMessage).to.equal('URL invalide');
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when relatedSkillNames is not in valid format in creation command', function() {
+      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand1 = {
@@ -198,17 +228,27 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate1 = WhitelistedUrl.canCreate(creationCommand1, user, []);
-        const canCreate2 = WhitelistedUrl.canCreate(creationCommand2, user, []);
-
-        // then
-        expect(canCreate1.cannot).to.be.true;
-        expect(canCreate1.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
-        expect(canCreate2.cannot).to.be.true;
-        expect(canCreate2.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when comment is not in valid format in creation command', function() {
+      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand = {
@@ -219,14 +259,18 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate = WhitelistedUrl.canCreate(creationCommand, user, []);
-
-        // then
-        expect(canCreate.cannot).to.be.true;
-        expect(canCreate.errorMessage).to.equal('Commentaire invalide. Doit être un texte ou vide');
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Commentaire invalide. Doit être un texte ou vide',
+            attribute: 'comment',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when checkType is not valid in creation command', function() {
+      it('should throw a CommandWhitelistedUrlError when checkType is not valid in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand1 = {
@@ -243,21 +287,37 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate1 = WhitelistedUrl.canCreate(creationCommand1, user, []);
-        const canCreate2 = WhitelistedUrl.canCreate(creationCommand2, user, []);
-        const canCreate3 = WhitelistedUrl.canCreate(creationCommand3, user, []);
-
-        // then
         const allowedValues = Object.values(WhitelistedUrl.CHECK_TYPES).join(', ');
-        expect(canCreate1.cannot).to.be.true;
-        expect(canCreate1.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
-        expect(canCreate2.cannot).to.be.true;
-        expect(canCreate2.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
-        expect(canCreate3.cannot).to.be.true;
-        expect(canCreate3.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when url has already been whitelisted (case sensitive, exact match)', function() {
+      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const existingWhitelistedUrls = [domainBuilder.buildReadWhitelistedUrl({
@@ -271,11 +331,14 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
 
         // when
-        const canCreate = WhitelistedUrl.canCreate(creationCommand, user, existingWhitelistedUrls);
-
-        // then
-        expect(canCreate.cannot).to.be.true;
-        expect(canCreate.errorMessage).to.equal('URL déjà whitelistée');
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, existingWhitelistedUrls);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
+            'URL déjà whitelistée'
+          ));
+        }
       });
     });
   });
@@ -313,7 +376,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
   describe('#canUpdate', () => {
     describe('can', function() {
-      it('should return a canExecute valid when all conditions are reunited', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const existingWhitelistedUrls = [domainBuilder.buildReadWhitelistedUrl({
@@ -337,16 +400,15 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate1 = whitelistedUrlToUpdate.canUpdate(updateCommand1, user, existingWhitelistedUrls);
-        const canUpdate2 = whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+        whitelistedUrlToUpdate.canUpdate(updateCommand1, user, existingWhitelistedUrls);
+        whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
 
         // then
-        expect(canUpdate1.can).to.be.true;
-        expect(canUpdate2.can).to.be.true;
+        expect(true).to.be.true;
       });
     });
     describe('cannot', function() {
-      it('should return a canExecute invalid when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
@@ -361,14 +423,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
-
-        // then
-        expect(canUpdate.cannot).to.be.true;
-        expect(canUpdate.errorMessage).to.equal('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
+            'L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée'
+          ));
+        }
       });
 
-      it('should return a canExecute invalid when url is not valid in update command', function() {
+      it('should throw a CommandWhitelistedUrlError when url is not valid in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand1 = {
@@ -389,20 +454,36 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate1 = whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
-        const canUpdate2 = whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
-        const canUpdate3 = whitelistedUrlToUpdate.canUpdate(updateCommand3, user, []);
-
-        // then
-        expect(canUpdate1.cannot).to.be.true;
-        expect(canUpdate1.errorMessage).to.equal('URL invalide');
-        expect(canUpdate2.cannot).to.be.true;
-        expect(canUpdate2.errorMessage).to.equal('URL invalide');
-        expect(canUpdate3.cannot).to.be.true;
-        expect(canUpdate3.errorMessage).to.equal('URL invalide');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when relatedSkillNames is not in valid format in update command', function() {
+      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand1 = {
@@ -421,17 +502,27 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate1 = whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
-        const canUpdate2 = whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
-
-        // then
-        expect(canUpdate1.cannot).to.be.true;
-        expect(canUpdate1.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
-        expect(canUpdate2.cannot).to.be.true;
-        expect(canUpdate2.errorMessage).to.equal('Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when comment is not in valid format in update command', function() {
+      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand = {
@@ -446,14 +537,18 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
-
-        // then
-        expect(canUpdate.cannot).to.be.true;
-        expect(canUpdate.errorMessage).to.equal('Commentaire invalide. Doit être un texte ou vide');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Commentaire invalide. Doit être un texte ou vide',
+            attribute: 'comment',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when checkType is not valid in update command', function() {
+      it('should throw a CommandWhitelistedUrlError when checkType is not valid in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand1 = {
@@ -474,21 +569,37 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate1 = whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
-        const canUpdate2 = whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
-        const canUpdate3 = whitelistedUrlToUpdate.canUpdate(updateCommand3, user, []);
-
-        // then
         const allowedValues = Object.values(WhitelistedUrl.CHECK_TYPES).join(', ');
-        expect(canUpdate1.cannot).to.be.true;
-        expect(canUpdate1.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
-        expect(canUpdate2.cannot).to.be.true;
-        expect(canUpdate2.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
-        expect(canUpdate3.cannot).to.be.true;
-        expect(canUpdate3.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
       });
 
-      it('should return a canExecute invalid when url has already been whitelisted (case sensitive, exact match)', function() {
+      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const existingWhitelistedUrls = [domainBuilder.buildReadWhitelistedUrl({
@@ -506,14 +617,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, user, existingWhitelistedUrls);
-
-        // then
-        expect(canUpdate.cannot).to.be.true;
-        expect(canUpdate.errorMessage).to.equal('URL déjà whitelistée');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand, user, existingWhitelistedUrls);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
+            'URL déjà whitelistée'
+          ));
+        }
       });
 
-      it('should return a canExecute invalid when whitelisted url is deleted', function() {
+      it('should throw a NotFoundWhitelistedUrlError when whitelisted url is deleted', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand = {
@@ -528,11 +642,14 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const canUpdate = whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
-
-        // then
-        expect(canUpdate.cannot).to.be.true;
-        expect(canUpdate.errorMessage).to.equal('L\'URL whitelistée n\'existe pas');
+        try {
+          whitelistedUrlToUpdate.canUpdate(updateCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new NotFoundWhitelistedUrlError(
+            'L\'URL whitelistée n\'existe pas'
+          ));
+        }
       });
     });
   });
