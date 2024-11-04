@@ -10,8 +10,10 @@ export class CompetenceOverview {
   }
 
   static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges, locale }) {
+    let id = `${competenceId}:challenges-production`;
+    if (locale) id += `:${locale}`;
     return new CompetenceOverview({
-      id: `${competenceId}-challenges-production-fr`,
+      id,
       thematicOverviews: thematics
         .sort(byIndex)
         .map((thematic) => ThematicOverview.buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }))
