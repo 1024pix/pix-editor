@@ -1,5 +1,10 @@
 import Joi from 'joi';
 
+const postgreSQLSequenceDefaultStart = 1;
+const postgreSQLSequenceEnd = 2 ** 31 - 1;
+
+const schemaPositiveInteger32bits = Joi.number().integer().min(postgreSQLSequenceDefaultStart).max(postgreSQLSequenceEnd);
+
 export const Types = Object.freeze({
   competenceId() {
     return Joi.string().pattern(/^(rec|competence)[a-zA-Z0-9]+$/);
@@ -7,4 +12,7 @@ export const Types = Object.freeze({
   locale() {
     return Joi.string().pattern(/^[a-z]{2}(-[a-z]{2})?$/);
   },
+  whitelistedUrlId() {
+    return schemaPositiveInteger32bits;
+  }
 });
