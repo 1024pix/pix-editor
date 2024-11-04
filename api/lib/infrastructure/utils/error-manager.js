@@ -1,43 +1,59 @@
-import _ from 'lodash';
-import JsonapiSerializer from 'jsonapi-serializer';
 import * as DomainErrors from '../../domain/errors.js';
 import * as InfraErrors from '../errors.js';
 import { errorSerializer } from '../serializers/jsonapi/index.js';
 
-const { Error: JSONAPIError } = JsonapiSerializer;
-
 export function send(h, error) {
-  if (error instanceof DomainErrors.InvalidStaticCourseCreationOrUpdateError) {
-    const jsonApiError = new JSONAPIError(
-      error.errors.map((err) => ({
-        code: err.code,
-        detail: err.data,
-        source: {
-          pointer: `/data/attributes/${_.kebabCase(err.field)}`,
-        },
-      }))
-    );
-    return h.response(jsonApiError).code(422);
-  }
+  const { infraErrors, statusCode } = _mapToInfrastructureError(error);
 
-  const infraError = _mapToInfrastructureError(error);
-  return h.response(errorSerializer.serialize(infraError)).code(infraError.status);
+  return h.response(errorSerializer.serialize(infraErrors)).code(statusCode);
 }
 
 function _mapToInfrastructureError(error) {
   if (error instanceof InfraErrors.InfrastructureError) {
-    return error;
+    return {
+      infraErrors: [error],
+      statusCode: error.status,
+    };
   }
-
   if (error instanceof DomainErrors.NotFoundError) {
-    return new InfraErrors.NotFoundError(error.message);
+    const infraError = new InfraErrors.NotFoundError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
   }
   if (error instanceof DomainErrors.UserNotFoundError) {
-    return new InfraErrors.NotFoundError(error.message);
+    const infraError = new InfraErrors.NotFoundError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
   }
   if (error instanceof DomainErrors.StaticCourseIsInactiveError) {
-    return new InfraErrors.ConflictError(error.message);
+    const infraError = new InfraErrors.ConflictError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+  if (error instanceof DomainErrors.ForbiddenError) {
+    const infraError = new InfraErrors.ForbiddenError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+  if (error instanceof DomainErrors.InvalidStaticCourseCreationOrUpdateError) {
+    const infraErrors = error.errors.map((error) => new InfraErrors.UnprocessableEntityError({ detail: error.data, attribute: error.field, code: error.code }));
+    return {
+      infraErrors,
+      statusCode: 422,
+    };
   }
 
-  return new InfraErrors.InfrastructureError(error.message);
+  const infraError = new InfraErrors.InfrastructureError(error.message);
+  return {
+    infraErrors: [infraError],
+    statusCode: infraError.status,
+  };
 }
