@@ -1,0 +1,108 @@
+<header class="page-header">
+  <h1 class="page-title">Whitelist de la moulinette des URLs cassées</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <form {{on "submit" this.submitFilters}} class="filter-whitelisted-url-form">
+      <PixFilterBanner
+        @title="Filtres"
+        class="table-filter-banner"
+        @clearFiltersLabel="Réinitialiser les filtres"
+        @onClearFilters={{this.clearFilters}}
+        @isClearFilterButtonDisabled={{false}}
+      >
+        <PixInput
+          @id="whitelisted-url-filter-names"
+          placeholder="Nom d'acquis"
+          @screenReaderOnly={{true}}
+          @value={{this.searchNames}}
+          {{on "change" this.updateSearchNames}}
+        >
+          <:label>Nom d'acquis</:label>
+        </PixInput>
+        <PixInput
+          @id="whitelisted-url-filter-url"
+          placeholder="URL"
+          @screenReaderOnly={{true}}
+          @value={{this.searchUrl}}
+          {{on "change" this.updateSearchUrl}}
+        >
+          <:label>URL</:label>
+        </PixInput>
+        <PixButton
+          @type="submit"
+        >
+          Filtrer
+        </PixButton>
+      </PixFilterBanner>
+    </form>
+    <div class="panel-table-v2">
+      <table class="content-text content-text--small">
+        <colgroup class="table__column">
+          <col class="table__column--small" />
+          <col class="table__column" />
+          <col class="table__column--wide" />
+          <col class="table__column--wide" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Nom des acquis concernés</th>
+            <th>Type de comparaison</th>
+            <th>URL</th>
+            <th>Commentaire</th>
+            <th>Créée le</th>
+            <th>Modifiée le</th>
+          </tr>
+        </thead>
+        <tbody>
+        {{#each this.filteredWhitelistedUrls as |whitelistedUrl|}}
+          <tr class="tr--clickable">
+            <td>
+              {{whitelistedUrl.relatedSkillNames}}
+            </td>
+            <td>
+              <PixTag class="whitelisted-url-check-type-tag" @color={{this.checkTypeColor whitelistedUrl.checkType}}>
+                {{this.formatCheckType whitelistedUrl.checkType}}
+              </PixTag>
+            </td>
+            <td>
+              {{whitelistedUrl.url}}
+            </td>
+            <td>
+              {{whitelistedUrl.comment}}
+            </td>
+            <td>
+              {{this.formatCreationString whitelistedUrl}}
+            </td>
+            <td>
+              {{this.formatUpdateString whitelistedUrl}}
+            </td>
+            <td class="actions">
+              <PixTooltip
+                @id='copy-whitelisted-url-link-tooltip'
+                @position="top"
+                @isInline={{true}}
+              >
+                <:triggerElement>
+                  <PixIconButton
+                    @triggerAction={{fn this.copyUrl whitelistedUrl}}
+                    @iconName="copy"
+                    @iconPrefix="far"
+                    @ariaLabel="Copier l'URL whitelistée"
+                    class="icon"
+                    aria-describedby='copy-whitelisted-url-link-tooltip'
+                  >
+                  </PixIconButton>
+                </:triggerElement>
+                <:tooltip>Copier l’URL whitelistée</:tooltip>
+              </PixTooltip>
+            </td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
