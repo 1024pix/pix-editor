@@ -164,6 +164,8 @@ describe('Acceptance | Route | competence-overviews', () => {
             type: 'competence-overviews',
             id: `${competenceId}:challenges-production`,
             attributes: {
+              'tubes-count': 4,
+              'skills-count': 5,
               'thematic-overviews': [
                 {
                   airtableId: 'recAirtableThematic2',
@@ -301,6 +303,8 @@ describe('Acceptance | Route | competence-overviews', () => {
             type: 'competence-overviews',
             id: `${competenceId}:challenges-production:en`,
             attributes: {
+              'tubes-count': 4,
+              'skills-count': 5,
               'thematic-overviews': [
                 {
                   airtableId: 'recAirtableThematic2',

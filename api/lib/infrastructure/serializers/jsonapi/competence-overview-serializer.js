@@ -5,6 +5,8 @@ const { Serializer } = JsonapiSerializer;
 const serializer = new Serializer('competence-overview', {
   attributes: [
     'thematicOverviews',
+    'tubesCount',
+    'skillsCount',
   ],
 });
 
