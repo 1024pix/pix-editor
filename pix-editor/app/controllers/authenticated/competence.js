@@ -63,6 +63,7 @@ export default class CompetenceController extends Controller {
   get twoColumns() {
     switch (this.router.currentRouteName) {
       case 'authenticated.competence.prototypes.single.alternatives':
+      case 'authenticated.competence.prototypes.single.alternatives_loading':
       case 'authenticated.competence.prototypes.single.alternatives.index':
       case 'authenticated.competence.prototypes.single.alternatives.single':
       case 'authenticated.competence.prototypes.single.alternatives.new':
