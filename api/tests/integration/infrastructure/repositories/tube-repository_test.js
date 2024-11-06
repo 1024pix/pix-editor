@@ -158,7 +158,7 @@ describe('Integration | Repository | tube-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
-        if (options?.filterByFormula !==  `{Competence (via Thematique) (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !==  `{Competences (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
           id: 'airtableTubeId1',
           fields: {
