@@ -74,7 +74,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           fields: {
             '': tubeDatasource.usedFields,
           },
-          filterByFormula: `{Competence (via Thematique) (id persistant)} = "${competenceId}"`
+          filterByFormula: `{Competences (id persistant)} = "${competenceId}"`
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableTubes });

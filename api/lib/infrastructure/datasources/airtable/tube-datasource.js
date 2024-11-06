@@ -23,7 +23,6 @@ export const tubeDatasource = datasource.extend({
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
       index: airtableRecord.get('Index'),
-      // FIXME remplacer par Competence (via Thematique) (id persistant) ?
       competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
     };
   },
@@ -31,7 +30,7 @@ export const tubeDatasource = datasource.extend({
   async listByCompetenceId(competenceId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       fields: this.usedFields,
-      filterByFormula: `{Competence (via Thematique) (id persistant)} = ${stringValue(competenceId)}`,
+      filterByFormula: `{Competences (id persistant)} = ${stringValue(competenceId)}`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
