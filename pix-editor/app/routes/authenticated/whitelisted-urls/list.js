@@ -20,14 +20,4 @@ export default class WhitelistedUrlsRoute extends Route {
       whitelistedUrls,
     };
   }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    if (controller.url) {
-      controller.searchUrl = controller.url;
-    }
-    if (controller.names) {
-      controller.searchNames = controller.names;
-    }
-  }
 }
