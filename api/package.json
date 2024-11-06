@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "engines": {
-    "node": "^20.18.0"
+    "node": "^22.11.0"
   },
   "directories": {
     "doc": "docs",
@@ -43,6 +43,7 @@
   "author": "GIP Pix",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@1024pix/oppsy": "^1.0.1",
     "@adminjs/hapi": "^7.0.1",
     "@adminjs/sequelize": "^4.0.0",
     "@hapi/boom": "^10.0.0",
@@ -51,7 +52,7 @@
     "@hapi/inert": "^7.0.0",
     "@hapi/vision": "^7.0.0",
     "@sentry/node": "^8.0.0",
-    "adminjs": "^7.2.1",
+    "adminjs": "^7.8.13",
     "airtable": "^0.12.2",
     "axios": "^1.0.0",
     "axios-cookiejar-support": "^5.0.0",
@@ -71,7 +72,6 @@
     "knex": "^3.0.0",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
-    "oppsy": "https://github.com/1024pix/oppsy#main",
     "p-map": "^7.0.0",
     "pg": "^8.9.0",
     "pg-query-stream": "^4.5.3",
