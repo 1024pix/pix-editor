@@ -1,7 +1,7 @@
-import { WhitelistedUrl as ReadWhitelistedUrl } from '../../../../lib/domain/readmodels/WhitelistedUrl.js';
+import { WhitelistedUrl as WhitelistedUrlRead } from '../../../../lib/domain/readmodels/WhitelistedUrl.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-export function buildReadWhitelistedUrl({
+export function buildWhitelistedUrlRead({
   id = 1,
   createdAt = new Date('2020-01-01'),
   updatedAt = new Date('2021-01-01'),
@@ -12,7 +12,7 @@ export function buildReadWhitelistedUrl({
   comment = 'Les grenouilles sont jolies',
   checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
 } = {}) {
-  return new ReadWhitelistedUrl({
+  return new WhitelistedUrlRead({
     id,
     createdAt,
     updatedAt,

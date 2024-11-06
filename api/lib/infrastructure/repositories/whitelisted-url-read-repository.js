@@ -1,7 +1,7 @@
 import { knex } from '../../../db/knex-database-connection.js';
-import { WhitelistedUrl as ReadWhitelistedUrl } from '../../domain/readmodels/WhitelistedUrl.js';
+import { WhitelistedUrl } from '../../domain/readmodels/WhitelistedUrl.js';
 
-export async function listRead() {
+export async function list() {
   const whitelistedUrlDtos = await knex('whitelisted_urls')
     .select({
       id: 'whitelisted_urls.id',
@@ -19,13 +19,13 @@ export async function listRead() {
     .whereNull('deletedAt')
     .orderBy('url');
 
-  return toDomainReadList(whitelistedUrlDtos);
+  return toDomainList(whitelistedUrlDtos);
 }
 
-function toDomainReadList(whitelistedUrlDtos) {
-  return whitelistedUrlDtos.map(toDomainRead);
+function toDomainList(whitelistedUrlDtos) {
+  return whitelistedUrlDtos.map(toDomain);
 }
 
-function toDomainRead(whitelistedUrlDto) {
-  return new ReadWhitelistedUrl(whitelistedUrlDto);
+function toDomain(whitelistedUrlDto) {
+  return new WhitelistedUrl(whitelistedUrlDto);
 }

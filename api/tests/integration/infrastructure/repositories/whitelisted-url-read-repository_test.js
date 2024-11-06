@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
-import * as whitelistedUrlRepository from '../../../../lib/infrastructure/repositories/whitelisted-url-repository.js';
+import * as whitelistedUrlReadRepository
+  from '../../../../lib/infrastructure/repositories/whitelisted-url-read-repository.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Integration | Repository | whitelisted-url-repository', () => {
+describe('Integration | Repository | whitelisted-url-read-repository', () => {
 
-  describe('#listRead', () => {
+  describe('#list', () => {
 
     it('should retrieve active whitelisted url readmodels ordered by url', async () => {
       // given
@@ -53,11 +54,11 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const whitelistedUrls = await whitelistedUrlRepository.listRead();
+      const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
 
       // then
-      expect(whitelistedUrls).toStrictEqual([
-        domainBuilder.buildReadWhitelistedUrl({
+      expect(whitelistedUrls_read).toStrictEqual([
+        domainBuilder.buildWhitelistedUrlRead({
           id: 456,
           createdAt: new Date('2020-12-12'),
           updatedAt: new Date('2022-08-08'),
@@ -68,7 +69,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           comment: 'Mon site préféré',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         }),
-        domainBuilder.buildReadWhitelistedUrl({
+        domainBuilder.buildWhitelistedUrlRead({
           id: 123,
           createdAt: new Date('2020-01-01'),
           updatedAt: new Date('2022-02-02'),
@@ -114,11 +115,10 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const whitelistedUrls = await whitelistedUrlRepository.listRead();
+      const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
 
       // then
-      expect(whitelistedUrls).toStrictEqual([]);
+      expect(whitelistedUrls_read).toStrictEqual([]);
     });
   });
-
 });

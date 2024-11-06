@@ -1,5 +1,5 @@
 import * as securityPreHandlers from '../security-pre-handlers.js';
-import * as whitelistedUrlRepository from '../../infrastructure/repositories/whitelisted-url-repository.js';
+import { whitelistedUrlReadRepository } from '../../infrastructure/repositories/index.js';
 import * as whitelistedUrlSerializer from '../../infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
 
 export async function register(server) {
@@ -10,8 +10,8 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
         handler: async function(request, h) {
-          const whitelistedUrls = await whitelistedUrlRepository.listRead();
-          return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls));
+          const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
+          return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls_read));
         },
       },
     },
