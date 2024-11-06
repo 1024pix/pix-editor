@@ -1,5 +1,11 @@
 
 
+## v3.171.1 (06/11/2024)
+
+
+### :bug: Correction
+- [#803](https://github.com/1024pix/pix-editor/pull/803) [BUGFIX] Erreur 500 sur le endpoint /competences/{id}/overviews/challenges-production (PIX-15211).
+
 ## v3.171.0 (06/11/2024)
 
 
