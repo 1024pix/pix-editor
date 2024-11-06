@@ -1,6 +1,6 @@
 import * as config from './lib/config.js';
 import Hapi from '@hapi/hapi';
-import Oppsy from 'oppsy';
+import Oppsy from '@1024pix/oppsy';
 
 import { catchDomainAndInfrastructureErrors } from './lib/infrastructure/utils/pre-response-utils.js';
 
