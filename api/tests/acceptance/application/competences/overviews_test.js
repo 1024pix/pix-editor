@@ -428,6 +428,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'] })),
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube3', 'recTube4'] })),
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematicWorkbench', airtableId: 'recAirtableThematicWorkbench', index: 4, tubeIds: ['recTubeWorkbench'] })),
       ];
 
       airtableThematicsScope = nock('https://api.airtable.com')
@@ -457,6 +458,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1 })),
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3 })),
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 4 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTubeWorkbench', airtableId: 'recAirtableTubeWorkbench', competenceId, name: '@workbench', index: 5 })),
       ];
 
       airtableTubesScope = nock('https://api.airtable.com')
@@ -478,6 +480,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube27', level: 7, version: 3, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube2' })),
         airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill6', airtableId: 'recAirtableSkill6', name: '@tube32', level: 2, version: 1, status: Skill.STATUSES.PERIME, competenceId, tubeId: 'recTube3' })),
         airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill7', airtableId: 'recAirtableSkill7', name: '@tube35', level: 5, version: 1, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube3' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkillWorkbench', airtableId: 'recAirtableSkillWorkbench', name: '@workbench', competenceId, tubeId: 'recTubeWorkbench' })),
       ];
 
       airtableSkillsScope = nock('https://api.airtable.com')
@@ -532,7 +535,7 @@ describe('Acceptance | Route | competence-overviews', () => {
 
     });
 
-    it.fails('should respond status 200 and overview of competence’s workbench challenges', async () => {
+    it('should respond status 200 and overview of competence’s workbench challenges', async () => {
       // given
       const server = await createServer();
 
