@@ -1,4 +1,4 @@
-import packageJSON from '../../../package.json' assert { type: 'json' };
+import packageJSON from '../../../package.json' with { type: 'json' };
 import { environment } from '../../config.js';
 
 export function get() {

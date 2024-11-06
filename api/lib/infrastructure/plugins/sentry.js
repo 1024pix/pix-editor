@@ -1,4 +1,4 @@
-import Pack from '../../../package.json' assert { type: 'json' };
+import Pack from '../../../package.json' with { type: 'json' };
 import * as config from '../../config.js';
 
 export { default as plugin } from 'hapi-sentry';
