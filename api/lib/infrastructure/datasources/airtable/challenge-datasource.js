@@ -198,6 +198,15 @@ export const challengeDatasource = datasource.extend({
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },
+
+  async listPrototypesByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `AND({Compétences (via tube) (id persistant)} = ${stringValue(competenceId)}, {acquis} != ${stringValue(Skill.WORKBENCH_NAME)}, {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)})`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 });
 
 function _convertBooleanToAirtableValue(value) {
