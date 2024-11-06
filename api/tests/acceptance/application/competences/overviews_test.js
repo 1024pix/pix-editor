@@ -143,6 +143,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         .reply(200, { records: [...airtableChallenges, ...airtableNoiseChallenges, ...airtableEnglishChallenges] });
 
     });
+
     describe('without language filter', () => {
       it('should respond status 200 and overview of competence’s production challenges that are primary', async () => {
       // given
@@ -161,8 +162,10 @@ describe('Acceptance | Route | competence-overviews', () => {
         expect(response.result).toEqual({
           data:{
             type: 'competence-overviews',
-            id: `${competenceId}-challenges-production-fr`,
+            id: `${competenceId}:challenges-production`,
             attributes: {
+              'tubes-count': 4,
+              'skills-count': 5,
               'thematic-overviews': [
                 {
                   airtableId: 'recAirtableThematic2',
@@ -298,8 +301,10 @@ describe('Acceptance | Route | competence-overviews', () => {
         expect(response.result).toEqual({
           data:{
             type: 'competence-overviews',
-            id: `${competenceId}-challenges-production-fr`,
+            id: `${competenceId}:challenges-production:en`,
             attributes: {
+              'tubes-count': 4,
+              'skills-count': 5,
               'thematic-overviews': [
                 {
                   airtableId: 'recAirtableThematic2',

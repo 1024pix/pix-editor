@@ -18,16 +18,16 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1' });
+    const prototype = this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
     this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
+    const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkill2', challengeIds: [] });
-    this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
-    this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+    const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
     this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('competence', {
+    const competence = this.server.create('competence', {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
       rawThemeIds: ['recTheme1'],
@@ -38,6 +38,25 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
       pixId: 'pixId recCompetence2.1',
       rawThemeIds: ['recTheme2'],
       rawTubeIds: ['recTube2'],
+    });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [{
+        id: thematic.id,
+        name: thematic.name,
+        tubeOverviews: [{
+          id: tube.id,
+          name: tube.name,
+          skillOverviews: [{
+            id: skill.id,
+            name: skill.name,
+            prototypeId: prototype.id,
+            isPrototypeDeclinable: true,
+            proposedChallengesCount: 1,
+            validatedChallengesCount: 0,
+          }, null, null, null, null, null, null],
+        }],
+      }],
     });
     this.server.create('area', {
       id: 'recArea1',
@@ -94,25 +113,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
 
   test('adding attachments on localized challenge with illustration', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      skillId: 'recSkill2',
-    });
-    this.server.create('localizedChallenge', {
-      id: 'recChallenge2NL',
-      challengeId: 'recChallenge2',
-      illustration: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
-        'filename': 'Certificat GUL 2020.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      locale: 'nl',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2', localizedChallengeId: 'recChallenge2NL' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
 
     class StorageServiceStub extends Service {
       uploadFile() {
@@ -124,7 +125,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    const screen = await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await clickByText('Version nl');
     await clickByText('Modifier');
 
@@ -144,24 +145,6 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
 
   test('replace attachment', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      skillId: 'recSkill2',
-    });
-    this.server.create('localizedChallenge', {
-      id: 'recChallenge2NL',
-      challengeId: 'recChallenge2',
-      illustration: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
-        'filename': 'Certificat GUL 2020.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      locale: 'nl',
-    });
     class StorageServiceStub extends Service {
       uploadFile() { }
     }
@@ -176,7 +159,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
 
     // when
     // adding attachmentA
-    const screen = await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await clickByText('Version nl');
     await clickByText('Modifier');
     await selectFiles('[data-test-file-input-attachment] input', attachmentA);
@@ -205,35 +188,16 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
 
   test('delete attachment', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      skillId: 'recSkill2',
-    });
-    this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
-    this.server.create('localized-challenge', {
-      id: 'recChallenge2NL',
-      challengeId: 'recChallenge2',
-      attachments: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
-        'filename': 'attachment.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      locale: 'nl',
-    });
     this.server.create('attachment', {
       id: 'recAttachment1',
       type: 'attachment',
-      challengeId: 'recChallenge2',
+      challengeId: 'recChallenge1',
       filename: 'attachment.png',
-      localizedChallengeId: 'recChallenge2NL',
+      localizedChallengeId: 'recChallenge1NL',
     });
 
     // when
-    const screen = await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await clickByText('Version nl');
     await clickByText('Modifier');
 
@@ -255,35 +219,16 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
 
   test('cancel adding an attachment', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      skillId: 'recSkill2',
-    });
-    this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
-    this.server.create('localized-challenge', {
-      id: 'recChallenge2NL',
-      challengeId: 'recChallenge2',
-      attachments: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
-        'filename': 'attachment.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      locale: 'nl',
-    });
     this.server.create('attachment', {
       id: 'recAttachment1',
       type: 'attachment',
-      challengeId: 'recChallenge2',
+      challengeId: 'recChallenge1',
       filename: 'attachment.png',
-      localizedChallengeId: 'recChallenge2NL',
+      localizedChallengeId: 'recChallenge1NL',
     });
 
     // when
-    const screen = await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await clickByText('Version nl');
     await clickByText('Modifier');
     await click(find('[data-test-delete-attachment-button]'));

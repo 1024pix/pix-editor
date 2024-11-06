@@ -7,11 +7,15 @@ export class CompetenceOverview {
   }) {
     this.id = id;
     this.thematicOverviews = thematicOverviews;
+    this.tubesCount = sumBy(thematicOverviews, ({ tubesCount }) => tubesCount);
+    this.skillsCount = sumBy(thematicOverviews, ({ skillsCount }) => skillsCount);
   }
 
   static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges, locale }) {
+    let id = `${competenceId}:challenges-production`;
+    if (locale) id += `:${locale}`;
     return new CompetenceOverview({
-      id: `${competenceId}-challenges-production-fr`,
+      id,
       thematicOverviews: thematics
         .sort(byIndex)
         .map((thematic) => ThematicOverview.buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }))
@@ -48,6 +52,14 @@ class ThematicOverview {
   get isEmpty() {
     return !this.tubeOverviews || this.tubeOverviews.length === 0;
   }
+
+  get tubesCount() {
+    return this.isEmpty ? 0 : this.tubeOverviews.length;
+  }
+
+  get skillsCount() {
+    return this.isEmpty ? 0 : sumBy(this.tubeOverviews, ({ skillsCount }) => skillsCount);
+  }
 }
 
 class TubeOverview {
@@ -74,6 +86,10 @@ class TubeOverview {
 
   get isEmpty() {
     return !this.skillOverviews || this.skillOverviews.length === 0;
+  }
+
+  get skillsCount() {
+    return this.isEmpty ? 0 : sumBy(this.skillOverviews, (skillOverview) => skillOverview === null ? 0 : 1);
   }
 }
 
@@ -156,4 +172,8 @@ function getChallengeForLocale(challenge, locale) {
   if (challenge.locales.includes(locale)) return challenge;
   if (challenge.alternativeLocales.includes(locale)) return challenge.translate(locale);
   return undefined;
+}
+
+function sumBy(items, mapper) {
+  return items.reduce((sum, item) => sum + mapper(item), 0);
 }

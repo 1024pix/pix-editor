@@ -31,8 +31,10 @@ module('Acceptance | Create-Challenge', function(hooks) {
     this.server.create('theme', { id: 'recTheme2', name: 'monTheme2', rawTubeIds: ['recTube2'] });
     this.server.create('theme', { id: 'recThemeWorkbench', name: 'workbench_1_1', rawSkillIds: ['recTubeWorkbench'] });
 
-    this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'Titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1', 'recThemeWorkbench'], rawTubeIds: ['recTube1', 'recTubeWorkbench'] });
+    const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'Titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1', 'recThemeWorkbench'], rawTubeIds: ['recTube1', 'recTubeWorkbench'] });
     this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+
+    this.server.create('competence-overview', { id: `${competence.pixId}:challenges-production`, thematicOverviews: [] });
 
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });

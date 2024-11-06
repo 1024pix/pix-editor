@@ -5,6 +5,28 @@ export default class CompetenceFooter extends Component {
 
   @service access;
 
+  get isOverview() {
+    return this.args.competenceOverview != null;
+  }
+
+  get tubesCount() {
+    if (this.isOverview) {
+      return this.args.competenceOverview.tubesCount;
+    }
+    return this.displayProductionStats
+      ? this.args.competence.productionTubeCount
+      : this.args.competence.tubeCount;
+  }
+
+  get skillsCount() {
+    if (this.isOverview) {
+      return this.args.competenceOverview.skillsCount;
+    }
+    return this.displayProductionStats
+      ? this.args.competence.productionSkillCount
+      : this.args.competence.skillCount;
+  }
+
   get skillClass() {
     return this.args.section === 'skills' ? ' skill-mode ' : '';
   }

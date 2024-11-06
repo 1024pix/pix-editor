@@ -17,18 +17,32 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: [] });
-    this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-    this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
-    this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+    const prototype = this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1' });
+    const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+    const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [{
+        id: thematic.id,
+        name: thematic.name,
+        tubeOverviews: [{
+          id: tube.id,
+          name: tube.name,
+          skillOverviews: [{
+            id: skill.id,
+            name: skill.name,
+            prototypeId: prototype.id,
+            isPrototypeDeclinable: true,
+            proposedChallengesCount: 1,
+            validatedChallengesCount: 0,
+          }, null, null, null, null, null, null],
+        }],
+      }],
+    });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
-    this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
-    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
+    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
@@ -113,23 +127,10 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
   test('delete attachment', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      airtableId: 'airtableId2',
-      attachments: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
-        'filename': 'attachment.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      skillId: 'recSkill2',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge2', filename: 'attachment.png' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
 
     // when
-    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 
@@ -148,22 +149,10 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
   test('cancel adding an attachment', async function(assert) {
     // given
-    this.server.create('challenge', {
-      id: 'recChallenge2',
-      attachments: [{
-        'id': 'attd74YR8ga7IOfWp',
-        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
-        'filename': 'attachment.png',
-        'size': 178629,
-        'type': 'image/png',
-      }],
-      filesIds: ['recAttachment1'],
-      skillId: 'recSkill2',
-    });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge2', filename: 'attachment.png' });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
 
     // when
-    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 

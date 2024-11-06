@@ -277,6 +277,7 @@ export default class SingleController extends Controller {
           await this._validateAlternatives(challenge);
           this._message('Mise en production réussie');
           this.parentController.send('selectView', 'production', true);
+          this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
           console.error(error);
           Sentry.captureException(error);
@@ -306,6 +307,7 @@ export default class SingleController extends Controller {
           await this.challenge.archive();
           this._message('Épreuve archivée');
           this.send('close');
+          this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
           console.error(error);
           Sentry.captureException(error);
@@ -336,6 +338,7 @@ export default class SingleController extends Controller {
           await this.challenge.obsolete();
           this._message(this.intl.t('challenge.obsolete.success'));
           this.send('close');
+          this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
           Sentry.captureException(error);
           this._errorMessage(this.intl.t('challenge.obsolete.error'));

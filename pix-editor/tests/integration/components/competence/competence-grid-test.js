@@ -1,3 +1,4 @@
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -7,14 +8,39 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | competence-grid', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // given
-    // when
+  module('using competence-overview', function(hooks) {
+    hooks.beforeEach(function() {
+      const competenceOverview = EmberObject.create({
+        thematicOverviews: [],
+      });
 
-    await render(hbs`<Competence::CompetenceGrid />`);
+      this.set('competenceOverview', competenceOverview);
+    });
 
-    // then
+    test('it renders', async function(assert) {
+      // when
+      await render(hbs`<Competence::CompetenceGrid @competenceOverview={{this.competenceOverview}} />`);
 
-    assert.dom('.competence-grid').exists();
+      // then
+      assert.dom('.competence-grid').exists();
+    });
+  });
+
+  module('using competence', function(hooks) {
+    hooks.beforeEach(function() {
+      const competence = EmberObject.create({
+        sortedThemes: [],
+      });
+
+      this.set('competence', competence);
+    });
+
+    test('it renders', async function(assert) {
+      // when
+      await render(hbs`<Competence::CompetenceGrid @competence={{this.competence}} />`);
+
+      // then
+      assert.dom('.competence-grid').exists();
+    });
   });
 });

@@ -57,7 +57,10 @@
     }
   }
 
-
+  &--loading {
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 img.clickable {

@@ -14,6 +14,7 @@ export default class SingleRoute extends Route {
 
   async afterModel(model) {
     super.afterModel(...arguments);
+    await model.skill;
     await model.localizedChallenges;
     if (!model) return;
     await model?.files;

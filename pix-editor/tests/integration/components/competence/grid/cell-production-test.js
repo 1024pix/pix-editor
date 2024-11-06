@@ -7,46 +7,51 @@ import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-production', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let skill;
+  let skillOverview, skillOverviewNR, skillOverviewFR, skillOverviewDE, skillOverviewEN;
   hooks.beforeEach(function() {
     // given
-    const challenge1 = {
-      id: 'challenge1',
-      locales: ['Francophone', 'Franco Français'],
-    };
-    const challenge2 = {
-      id: 'challenge2',
-      locales: ['Francophone'],
-    };
-    const challenge3 = {
-      id: 'challenge3',
-      locales: ['Espagnol'],
-    };
-    const challenge4 = {
-      id: 'challenge4',
-      locales: ['Francophone', 'Franco Français'],
-    };
-    const challenge5 = {
-      id: 'challenge5',
-      locales: ['Anglais'],
-    };
-    skill = EmberObject.create({
-      productionPrototype: {
-        id: 'challenge6',
-        locales: ['Francophone', 'Franco Français'],
-        productionAlternatives: [challenge1, challenge2, challenge3],
-        draftAlternatives: [challenge4, challenge5],
-      },
-      challenges: [challenge1, challenge2, challenge3, challenge4, challenge5],
+    skillOverview = EmberObject.create({
+      name: 'skillOverview',
+      isPrototypeDeclinable: true,
+      proposedChallengesCount: 2,
+      validatedChallengesCount: 4,
+    });
+
+    skillOverviewNR = EmberObject.create({
+      name: 'skillOverview',
+      isPrototypeDeclinable: false,
+      proposedChallengesCount: 1,
+      validatedChallengesCount: 1,
+    });
+
+    skillOverviewFR = EmberObject.create({
+      name: 'skillOverviewFR',
+      isPrototypeDeclinable: true,
+      proposedChallengesCount: 1,
+      validatedChallengesCount: 3,
+    });
+
+    skillOverviewDE = EmberObject.create({
+      name: 'skillOverviewDE',
+      isPrototypeDeclinable: true,
+      proposedChallengesCount: 0,
+      validatedChallengesCount: 0,
+    });
+
+    skillOverviewEN = EmberObject.create({
+      name: 'skillOverviewEN',
+      isPrototypeDeclinable: true,
+      proposedChallengesCount: 1,
+      validatedChallengesCount: 0,
     });
   });
 
   test('it should display a number of production challenges and draft alternative', async function(assert) {
     // given
-    this.set('skill', skill);
+    this.set('skillOverview', skillOverview);
 
     // when
-    await render(hbs`<Competence::Grid::CellProduction @skill={{this.skill}}/>`);
+    await render(hbs`<Competence::Grid::CellProduction @skillOverview={{this.skillOverview}}/>`);
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('4');
@@ -56,10 +61,10 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
   test('it should display a number of production challenges and draft alternative filtered by language', async function(assert) {
     // given
     this.set('languageFilter', 'Francophone');
-    this.set('skill', skill);
+    this.set('skillOverview', skillOverviewFR);
 
     // when
-    await render(hbs`<Competence::Grid::CellProduction @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
+    await render(hbs`<Competence::Grid::CellProduction @skillOverview={{this.skillOverview}} @languageFilter={{this.languageFilter}}/>`);
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('3');
@@ -68,11 +73,10 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
 
   test('it should display `NR` if prototype is not declinable', async function(assert) {
     // given
-    skill.productionPrototype.notDeclinable = true;
-    this.set('skill', skill);
+    this.set('skillOverview', skillOverviewNR);
 
     // when
-    await render(hbs`<Competence::Grid::CellProduction @skill={{this.skill}}/>`);
+    await render(hbs`<Competence::Grid::CellProduction @skillOverview={{this.skillOverview}}/>`);
 
     // then
     assert.dom('.not-declinable').hasText('NR');
@@ -82,10 +86,10 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
   test('it should alert with danger class if have no challenge and no draft', async function(assert) {
     // given
     this.set('languageFilter', 'Allemand');
-    this.set('skill', skill);
+    this.set('skillOverview', skillOverviewDE);
 
     // when
-    await render(hbs`<Competence::Grid::CellProduction @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
+    await render(hbs`<Competence::Grid::CellProduction @skillOverview={{this.skillOverview}} @languageFilter={{this.languageFilter}}/>`);
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('0');
@@ -96,10 +100,10 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
   test('it should alert with warning class if have no challenge but draft', async function(assert) {
     // given
     this.set('languageFilter', 'Anglais');
-    this.set('skill', skill);
+    this.set('skillOverview', skillOverviewEN);
 
     // when
-    await render(hbs`<Competence::Grid::CellProduction @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
+    await render(hbs`<Competence::Grid::CellProduction @skillOverview={{this.skillOverview}} @languageFilter={{this.languageFilter}}/>`);
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('0');

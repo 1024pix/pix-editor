@@ -1,14 +1,17 @@
 <div class="competence-grid">
   <table class="ui celled table definition tubes">
     <tbody>
-    {{#each @themes as |theme|}}
-     <Competence::CompetenceGridTheme @languageFilter={{@languageFilter}}
-                                      @section={{@section}}
-                                      @view={{@view}}
-                                      @theme={{theme}}
-                                      @newTube={{@newTube}}
-                                      @displaySortTubesPopIn={{@displaySortTubesPopIn}}
-                                      @link={{@link}}/>
+    {{#each this.thematicOverviewsOrThematics as |thematicOverviewOrThematic|}}
+      <Competence::CompetenceGridThematic
+        @languageFilter={{@languageFilter}}
+        @section={{@section}}
+        @view={{@view}}
+        @thematic={{thematicOverviewOrThematic.thematic}}
+        @thematicOverview={{thematicOverviewOrThematic.thematicOverview}}
+        @newTube={{@newTube}}
+        @displaySortTubesPopIn={{@displaySortTubesPopIn}}
+        @link={{@link}}
+      />
     {{/each}}
     </tbody>
   </table>

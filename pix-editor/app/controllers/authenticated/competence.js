@@ -30,11 +30,17 @@ export default class CompetenceController extends Controller {
   @service notify;
   @service loader;
 
+  @controller('authenticated.competence.prototypes') prototypesController;
   @controller('authenticated.competence.prototypes.single') challengeController;
   @controller('authenticated.competence.skills.single') skillController;
 
   get competence() {
     return this.model;
+  }
+
+  get competenceOverview() {
+    if (this.section === 'challenges') return this.prototypesController.model;
+    return null;
   }
 
   get displayGrid() {
@@ -57,6 +63,7 @@ export default class CompetenceController extends Controller {
   get twoColumns() {
     switch (this.router.currentRouteName) {
       case 'authenticated.competence.prototypes.single.alternatives':
+      case 'authenticated.competence.prototypes.single.alternatives_loading':
       case 'authenticated.competence.prototypes.single.alternatives.index':
       case 'authenticated.competence.prototypes.single.alternatives.single':
       case 'authenticated.competence.prototypes.single.alternatives.new':

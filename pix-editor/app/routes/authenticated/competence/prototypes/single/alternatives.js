@@ -2,8 +2,10 @@ import Route from '@ember/routing/route';
 
 export default class AlternativesRoute extends Route {
 
-  model() {
-    return this.modelFor('authenticated.competence.prototypes.single');
+  async model() {
+    const prototype = this.modelFor('authenticated.competence.prototypes.single');
+    await prototype.skill.get('challenges');
+    return prototype;
   }
 
   setupController(controller) {

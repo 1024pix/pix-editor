@@ -7,12 +7,12 @@ export default class GridCell extends Component {
   @service config;
 
   get cellType() {
-    const skill = this.args.skill;
+    const { skill, skillOverview } = this.args;
     switch (this.args.section) {
       case 'challenges':
         switch (this.args.view) {
           case 'production':
-            if (skill) {
+            if (skillOverview) {
               return 'production';
             }
             break;

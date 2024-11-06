@@ -167,6 +167,13 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     min-width: 0;
     overflow: hidden;
     border-left: 10px solid #dfe1e4;
+
+    &__loader {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
 }

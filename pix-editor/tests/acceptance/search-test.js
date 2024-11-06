@@ -13,17 +13,36 @@ module('Acceptance | Search', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', instruction: 'test', airtableId: 'REC_RECHERCHE1' });
+    const prototype = this.server.create('challenge', { id: 'recChallenge1', instruction: 'test', airtableId: 'REC_RECHERCHE1' });
     this.server.create('challenge', { id: 'challengeChallenge1', airtableId: 'REC_RECHERCHE2' });
     this.server.create('localized-challenge', { id: 'challengeChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'challengeLocalizedChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1' });
-    this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
-    this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-    this.server.create('competence', {
+    const skill = this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+    const competence = this.server.create('competence', {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
       rawTubeIds: ['recTube1'],
+    });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [{
+        id: 'pas de thématique',
+        name: 'on m\'a oublié :(',
+        tubeOverviews: [{
+          id: tube.id,
+          name: tube.name,
+          skillOverviews: [{
+            id: skill.id,
+            name: skill.name,
+            prototypeId: prototype.id,
+            isPrototypeDeclinable: true,
+            proposedChallengesCount: 1,
+            validatedChallengesCount: 0,
+          }, null, null, null, null, null, null],
+        }],
+      }],
     });
     this.server.create('area', {
       id: 'recArea1',
