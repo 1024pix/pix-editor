@@ -1,5 +1,18 @@
 
 
+## v3.171.0 (06/11/2024)
+
+
+### :rocket: Amélioration
+- [#800](https://github.com/1024pix/pix-editor/pull/800) [FEATURE] Connecter la vue challenges production à l’overview (PIX-14424).
+- [#795](https://github.com/1024pix/pix-editor/pull/795) [FEATURE] Route pour récupérer les données de la page "Épreuves -> En Production" (PIX-14423).
+
+### :bug: Correction
+- [#796](https://github.com/1024pix/pix-editor/pull/796) [BUGFIX] Corriger l'affichage d'erreur lors de l'édition ou de la création d'un test statique (PIX-15179).
+
+### :arrow_up: Montée de version
+- [#801](https://github.com/1024pix/pix-editor/pull/801) [BUMP] Update dependency node to v22.
+
 ## v3.170.0 (29/10/2024)
 
 
