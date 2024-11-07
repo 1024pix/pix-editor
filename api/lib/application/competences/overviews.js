@@ -51,7 +51,6 @@ export async function register(server) {
             const competenceOverview = await getCompetenceChallengesWorkbenchOverview({ competenceId });
             return competenceOverviewSerializer.serialize(competenceOverview);
           } catch (err) {
-            console.error(err);
             logger.error(err);
             Sentry.captureException(err);
             return Boom.internal(err);

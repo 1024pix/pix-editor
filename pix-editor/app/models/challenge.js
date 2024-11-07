@@ -103,11 +103,6 @@ export default class ChallengeModel extends Model {
     return this.status === 'périmé';
   }
 
-  get notDeclinable() {
-    const declinable = this.declinable;
-    return (declinable && declinable === 'non');
-  }
-
   get statusCSS() {
     const status = this.status;
     switch (status) {
