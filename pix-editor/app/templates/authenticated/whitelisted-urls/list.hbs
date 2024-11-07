@@ -1,0 +1,14 @@
+<header class="page-header">
+  <h1 class="page-title">Whitelist de la moulinette des URLs cassées</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <WhitelistedUrls::List
+      @whitelistedUrls={{this.filteredWhitelistedUrls}}
+      @urlFilterValue={{this.url}}
+      @namesFilterValue={{this.names}}
+      @onApplyFiltersClicked={{this.applyFilters}}
+      @onClearFiltersClicked={{this.clearFilters}}
+    />
+  </section>
+</main>

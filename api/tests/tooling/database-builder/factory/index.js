@@ -6,3 +6,4 @@ export * from './build-static-course.js';
 export * from './build-static-course-tag.js';
 export * from './build-translation.js';
 export * from './build-user.js';
+export * from './build-whitelisted-url.js';

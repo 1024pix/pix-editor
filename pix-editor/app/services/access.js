@@ -157,6 +157,10 @@ export default class AccessService extends Service {
     return level >= READ_ONLY;
   }
 
+  mayAccessWhitelistedUrls() {
+    return this.isAdmin();
+  }
+
   mayCreateOrEditStaticCourse() {
     return this.isEditor();
   }

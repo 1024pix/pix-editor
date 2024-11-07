@@ -456,6 +456,8 @@ function routes() {
     });
     return staticCourse;
   });
+
+  this.get('/whitelisted-urls');
 }
 
 function _serializeModel(instance, modelName) {

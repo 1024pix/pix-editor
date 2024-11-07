@@ -76,5 +76,8 @@ Router.map(function() {
       });
     });
     this.route('synchronize-translations');
+    this.route('whitelisted-urls', function() {
+      this.route('list', { path: '/' });
+    });
   });
 });

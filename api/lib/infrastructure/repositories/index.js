@@ -15,3 +15,4 @@ export * as translationRepository from './translation-repository.js';
 export * as tubeRepository from './tube-repository.js';
 export * as urlRepository from './url-repository.js';
 export * as userRepository from './user-repository.js';
+export * as whitelistedUrlReadRepository from './whitelisted-url-read-repository.js';
