@@ -52,13 +52,32 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         status: 'proposé',
         instruction: 'Cliquer sur instructions de la décli pour interagir avec',
       });
-      this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1', 'recChallenge2'], status: 'en construction' });
-      this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
-      this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1', 'recChallenge2'], status: 'en construction' });
+      const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
+      const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
       const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
+      });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-workbench`,
+        thematicOverviews: [{
+          airtableId: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [{
+            airtableId: tube.id,
+            name: tube.name,
+            skillOverviews: [{
+              airtableId: skill.id,
+              name: skill.name,
+              proposedChallengesCount: 2,
+              validatedChallengesCount: 0,
+              archivedChallengesCount: 0,
+              obsoleteChallengesCount: 0,
+            }, null, null, null, null, null, null],
+          }],
+        }],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
@@ -256,13 +275,32 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         status: 'archivé',
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
       });
-      this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
-      this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
-      this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
+      const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
+      const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
       const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
+      });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-workbench`,
+        thematicOverviews: [{
+          airtableId: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [{
+            airtableId: tube.id,
+            name: tube.name,
+            skillOverviews: [{
+              airtableId: skill.id,
+              name: skill.name,
+              proposedChallengesCount: 2,
+              validatedChallengesCount: 0,
+              archivedChallengesCount: 0,
+              obsoleteChallengesCount: 0,
+            }, null, null, null, null, null, null],
+          }],
+        }],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
@@ -314,13 +352,32 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         status: 'périmé',
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
       });
-      this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
-      this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
-      this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
+      const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
+      const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
       const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
+      });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-workbench`,
+        thematicOverviews: [{
+          airtableId: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [{
+            airtableId: tube.id,
+            name: tube.name,
+            skillOverviews: [{
+              airtableId: skill.id,
+              name: skill.name,
+              proposedChallengesCount: 2,
+              validatedChallengesCount: 0,
+              archivedChallengesCount: 0,
+              obsoleteChallengesCount: 0,
+            }, null, null, null, null, null, null],
+          }],
+        }],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });

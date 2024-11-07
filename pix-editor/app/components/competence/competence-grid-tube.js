@@ -10,6 +10,12 @@ export default class CompetenceCompetenceGridTubeComponent extends Component {
     if (this.isOverview) {
       return this.args.tubeOverview.skillOverviews.map((skillOverview) => ({ skillOverview }));
     }
+    if (this.args.view === 'workbench') {
+      return this.args.tube.filledSkills.map((skills) => ({ skills, skill: skills[0] }));
+    }
+    if (this.args.view === 'draft') {
+      return this.args.tube.filledLastDraftSkills.map((skill) => ({ skill }));
+    }
     return this.args.tube.filledProductionSkills.map((skill) => ({ skill }));
   }
 

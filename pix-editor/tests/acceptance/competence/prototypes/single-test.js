@@ -40,6 +40,10 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
         }],
       }],
     });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-workbench`,
+      thematicOverviews: [],
+    });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
