@@ -1,6 +1,7 @@
 import JsonapiSerializer from 'jsonapi-serializer';
+import { Framework } from '../../../domain/models/index.js';
 
-const { Serializer } = JsonapiSerializer;
+const { Serializer, Deserializer } = JsonapiSerializer;
 
 const serializer = new Serializer('framework', {
   attributes: [
@@ -20,4 +21,14 @@ const serializer = new Serializer('framework', {
 
 export function serialize(frameworks) {
   return serializer.serialize(frameworks);
+}
+
+const deserializer = new Deserializer({
+  transform(frameworkDto) {
+    return new Framework(frameworkDto);
+  },
+});
+
+export function deserialize(payload) {
+  return deserializer.deserialize(payload);
 }

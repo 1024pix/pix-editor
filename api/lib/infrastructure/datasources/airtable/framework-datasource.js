@@ -20,5 +20,13 @@ export const frameworkDatasource = datasource.extend({
       areaIds: airtableRecord.get('Domaines (identifiants)'),
     };
   },
+
+  toAirTableObject(framework) {
+    return {
+      fields: {
+        Nom: framework.name,
+      }
+    };
+  },
 });
 

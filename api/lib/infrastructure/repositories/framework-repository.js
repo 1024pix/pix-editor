@@ -6,6 +6,11 @@ export async function list() {
   return frameworkDtos.map(toDomain);
 }
 
+export async function create(framework) {
+  const createdFrameworkDto = await frameworkDatasource.create(framework);
+  return toDomain(createdFrameworkDto);
+}
+
 function toDomain(frameworkDto) {
   return new Framework(frameworkDto);
 }
