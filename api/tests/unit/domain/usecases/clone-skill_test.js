@@ -243,11 +243,13 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
     });
 
     describe('when patching fails', () => {
-      let logError, captureException;
+      let logError;
 
       beforeEach(() => {
         logError = vi.spyOn(logger, 'error');
-        captureException = vi.spyOn(Sentry, 'captureException');
+        vi.mock('@sentry/node', () => ({
+          captureException: vi.fn(),
+        }));
       });
 
       it('should still resolve', async () => {
@@ -273,7 +275,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
         expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedSkill, model: 'skills', pixApiClient });
         expect(logError).toHaveBeenCalledWith(error);
-        expect(captureException).toHaveBeenCalledWith(error);
+        expect(Sentry.captureException).toHaveBeenCalledWith(error);
       });
     });
   });
