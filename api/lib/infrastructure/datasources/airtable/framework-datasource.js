@@ -6,18 +6,19 @@ export const frameworkDatasource = datasource.extend({
 
   tableName: 'Referentiel',
 
-  sortField: 'Nom',
+  sortField: 'Date',
 
   usedFields: [
     'Nom',
+    'Domaines (identifiants)',
   ],
 
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.id,
-      name: airtableRecord.get('Nom')
+      name: airtableRecord.get('Nom'),
+      areaIds: airtableRecord.get('Domaines (identifiants)'),
     };
   },
-
 });
 
