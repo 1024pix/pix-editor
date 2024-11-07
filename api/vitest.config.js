@@ -7,8 +7,8 @@ export default defineConfig({
     outputFile: process.env.CI ? './test-results/report.xml' : undefined,
     restoreMocks: true,
     poolOptions: {
-      threads: {
-        singleThread: true,
+      forks: {
+        singleFork: true,
       },
     }
   },
