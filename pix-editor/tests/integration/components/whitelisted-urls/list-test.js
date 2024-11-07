@@ -8,7 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | whitelisted-urls/list', function(hooks) {
   setupIntlRenderingTest(hooks);
   let store, whitelistedUrl1, whitelistedUrl2, hour1_create, hour1_update, hour2_create;
-  let onApplyFiltersClickedStub, onClearFiltersClickedStub;
+  let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
@@ -46,6 +46,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
       .replaceAll(/[A-Za-z\s]/g, '');
     onApplyFiltersClickedStub = sinon.stub();
     onClearFiltersClickedStub = sinon.stub();
+    onDeleteItemClickedStub = sinon.stub();
   });
 
   test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function(assert) {
@@ -55,6 +56,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.namesFilterValue = 'initialNamesValue';
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
 
     // when
     const screen = await render(hbs`
@@ -64,7 +66,8 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}/>`);
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
 
     // then
     assert.ok(
@@ -122,6 +125,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.namesFilterValue = 'initialNamesValue';
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
 
     // when
     const screen = await render(hbs`
@@ -131,7 +135,8 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}/>`);
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
 
@@ -148,6 +153,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.namesFilterValue = 'initialNamesValue';
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
 
     // when
     const screen = await render(hbs`
@@ -157,7 +163,8 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}/>`);
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await clickByName('Filtrer');
 
@@ -174,6 +181,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.namesFilterValue = 'initialNamesValue';
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
 
     // when
     const screen = await render(hbs`
@@ -183,7 +191,8 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}/>`);
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
@@ -201,6 +210,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.namesFilterValue = 'initialNamesValue';
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
 
     // when
     await render(hbs`
@@ -210,7 +220,8 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}/>`);
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
     await clickByName('Réinitialiser les filtres');
 
     // then

@@ -24,3 +24,31 @@ export function buildWhitelistedUrlRead({
     checkType,
   });
 }
+
+export function buildWhitelistedUrl({
+  id = 1,
+  createdBy = 123,
+  latestUpdatedBy = 123,
+  deletedBy = null,
+  createdAt = new Date('2020-01-01'),
+  updatedAt = new Date('2022-01-01'),
+  deletedAt = null,
+  url = 'http://pipeau-la-grenouille.fr',
+  relatedSkillNames = '@bidule4,@chose6',
+  comment = 'Les grenouilles sont jolies',
+  checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+} = {}) {
+  return new WhitelistedUrl({
+    id,
+    createdBy,
+    latestUpdatedBy,
+    deletedBy,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    url,
+    relatedSkillNames,
+    comment,
+    checkType,
+  });
+}

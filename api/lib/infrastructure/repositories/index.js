@@ -16,3 +16,4 @@ export * as tubeRepository from './tube-repository.js';
 export * as urlRepository from './url-repository.js';
 export * as userRepository from './user-repository.js';
 export * as whitelistedUrlReadRepository from './whitelisted-url-read-repository.js';
+export * as whitelistedUrlRepository from './whitelisted-url-repository.js';

@@ -50,6 +50,20 @@ function _mapToInfrastructureError(error) {
       statusCode: 422,
     };
   }
+  if (error instanceof DomainErrors.CommandWhitelistedUrlForbiddenError) {
+    const infraError = new InfraErrors.ForbiddenError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+  if (error instanceof DomainErrors.CommandWhitelistedUrlConflictError) {
+    const infraError = new InfraErrors.ConflictError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
 
   const infraError = new InfraErrors.InfrastructureError(error.message);
   return {

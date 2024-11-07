@@ -123,6 +123,42 @@ describe('Unit | Infrastructure | ErrorManager', function() {
             ],
           });
         }
+        else if (domainErrorName === 'NotFoundWhitelistedUrlError') {
+          expect(response.statusCode, expectErrorMessage).toStrictEqual(404);
+          expect(response.source).toStrictEqual({
+            errors: [
+              {
+                status: '404',
+                title: 'Not Found',
+                detail: 'error message',
+              },
+            ],
+          });
+        }
+        else if (domainErrorName === 'CommandWhitelistedUrlForbiddenError') {
+          expect(response.statusCode, expectErrorMessage).toStrictEqual(403);
+          expect(response.source).toStrictEqual({
+            errors: [
+              {
+                status: '403',
+                title: 'Forbidden',
+                detail: 'error message',
+              },
+            ],
+          });
+        }
+        else if (domainErrorName === 'CommandWhitelistedUrlConflictError') {
+          expect(response.statusCode, expectErrorMessage).toStrictEqual(409);
+          expect(response.source).toStrictEqual({
+            errors: [
+              {
+                status: '409',
+                title: 'Conflict',
+                detail: 'error message',
+              },
+            ],
+          });
+        }
         else {
           expect(true, `Conversion for ${domainErrorName} not tested`).to.be.false;
         }

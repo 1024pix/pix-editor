@@ -1,5 +1,5 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -65,5 +65,20 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
     assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
     assert.dom(screen.getByText('http://chats.fr')).exists();
     assert.dom(screen.getByText('http://chiens.fr')).exists();
+  });
+
+  test('should delete delete whitelisted url', async function(assert) {
+    // when
+    const screen = await visit('/');
+    await clickByName('Whitelist moulinette des URLs');
+
+    const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL de la whitelist' });
+    await click(deleteButtons[0]);
+    await click(await screen.findByRole('button', { name: 'Oui' }));
+
+    // then
+    assert.dom(screen.getByText('OUAF')).exists();
+    assert.dom(screen.getByText('MIAOU')).exists();
+    assert.dom(screen.queryByText('Les grenouilles sont jolies')).doesNotExist();
   });
 });

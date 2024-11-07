@@ -458,6 +458,7 @@ function routes() {
   });
 
   this.get('/whitelisted-urls');
+  this.delete('/whitelisted-urls/:id');
 }
 
 function _serializeModel(instance, modelName) {

@@ -93,6 +93,23 @@
             </:triggerElement>
             <:tooltip>Copier l’URL whitelistée</:tooltip>
           </PixTooltip>
+          <PixTooltip
+            @id='delete-whitelisted-url-tooltip'
+            @position="top"
+            @isInline={{true}}
+          >
+            <:triggerElement>
+              <PixIconButton
+                @triggerAction={{fn this.args.onDeleteItemClicked whitelistedUrl}}
+                @iconName="delete"
+                @ariaLabel="Supprimer l'URL de la whitelist"
+                class="icon"
+                aria-describedby='delete-whitelisted-url-tooltip'
+              >
+              </PixIconButton>
+            </:triggerElement>
+            <:tooltip>Supprimer l'URL de la whitelist</:tooltip>
+        </PixTooltip>
         </td>
       </tr>
     {{/each}}
