@@ -6,7 +6,7 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
+module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -33,7 +33,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
       creatorName: 'Mon chat',
       latestUpdatorName: null,
       url: 'http://chats.fr',
-      relatedSkillNames: null,
+      relatedSkillNames: '',
       checkType: 'exact_match',
       comment: 'MIAOU',
     });
@@ -53,44 +53,38 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     return authenticateSession();
   });
 
-  test('should create a whitelisted url', async function(assert) {
+  test('should edit a whitelisted url', async function(assert) {
     // given
     const screen = await visit('/');
     await clickByName('Whitelist moulinette des URLs');
-    await clickByName('Ajouter une nouvelle URL');
+    await clickByText('MIAOU');
 
     // when
-    await fillByLabel('URL à whitelister', 'https://example.org');
-    await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
-    await fillByLabel('Commentaire', 'Test de création');
-    await clickByName('Ajouter l\'URL à la whitelist');
+    await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@miaou1,@croquettes2');
+    await fillByLabel('Commentaire', 'MIAOU MIAOU');
+    await clickByName('Modifier l\'URL whitelistée');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
-    assert.dom(screen.getByText('Test de création')).exists();
-    assert.dom(screen.getByText('https://example.org')).exists();
-    assert.dom(screen.getByText('@test1,@test2')).exists();
-    assert.strictEqual(screen.getAllByText('Strictement égale à').length, 3);
+    assert.dom(screen.getByText('http://chats.fr')).exists();
+    assert.dom(screen.getByText('MIAOU MIAOU')).exists();
+    assert.dom(screen.getByText('@miaou1,@croquettes2')).exists();
+    assert.strictEqual(screen.getAllByText('Strictement égale à').length, 2);
   });
 
-  test('should create a whitelisted url without comment and different check type', async function(assert) {
+  test('should edit a whitelisted url\'s url', async function(assert) {
     // given
     const screen = await visit('/');
     await clickByName('Whitelist moulinette des URLs');
-    await clickByName('Ajouter une nouvelle URL');
+    await clickByText('OUAF');
 
     // when
-    await clickByName('Type de comparaison d\'URL');
-    await clickByText('Commence par');
-    await fillByLabel('URL à whitelister', 'https://example.org');
-    await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
-    await clickByName('Ajouter l\'URL à la whitelist');
+    await fillByLabel('URL à whitelister', 'https://en.wikipedia.org/wiki/Dog');
+    await clickByName('Modifier l\'URL whitelistée');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
-    assert.dom(screen.queryByText('Test de création')).doesNotExist();
-    assert.dom(screen.getByText('https://example.org')).exists();
-    assert.dom(screen.getByText('@test1,@test2')).exists();
-    assert.strictEqual(screen.getAllByText('Commence par').length, 2);
+    assert.dom(screen.getByText('https://en.wikipedia.org/wiki/Dog')).exists();
+    assert.dom(screen.queryByText('http://chiens.fr')).doesNotExist();
   });
 });

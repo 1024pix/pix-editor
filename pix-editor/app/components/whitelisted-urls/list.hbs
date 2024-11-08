@@ -54,24 +54,24 @@
     <tbody>
     {{#each @whitelistedUrls as |whitelistedUrl|}}
       <tr class="tr--clickable" aria-label="URL en liste blanche">
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           {{whitelistedUrl.relatedSkillNames}}
         </td>
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           <PixTag class="whitelisted-url-check-type-tag" @color={{this.checkTypeColor whitelistedUrl.checkType}}>
             {{this.formatCheckType whitelistedUrl.checkType}}
           </PixTag>
         </td>
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           {{whitelistedUrl.url}}
         </td>
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           {{whitelistedUrl.comment}}
         </td>
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           {{this.formatCreationString whitelistedUrl}}
         </td>
-        <td>
+        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
           {{this.formatUpdateString whitelistedUrl}}
         </td>
         <td class="actions">

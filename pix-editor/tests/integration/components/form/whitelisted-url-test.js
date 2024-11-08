@@ -91,7 +91,7 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.dom(button).hasAttribute('disabled');
 
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
-    await fillByLabel('Commentaire explicatif', 'Ça rend la chose plus claire');
+    await fillByLabel('Commentaire', 'Ça rend la chose plus claire');
     assert.dom(button).hasAttribute('disabled');
   });
 
