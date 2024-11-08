@@ -39,19 +39,8 @@ function routes() {
     return _serializeModel(createdAttachment, 'attachment');
   });
 
-  this.get('/airtable/content/Referentiel', (schema) => {
-    const records = schema.frameworks.all().models.map((framework) => {
-      return _serializeModel(framework, 'framework');
-    });
-    return { records };
-  });
-
-  this.post('/airtable/content/Referentiel', (schema, request) => {
-    const areaPayload = JSON.parse(request.requestBody);
-    const framework = _deserializePayload(areaPayload, 'framework');
-    const createdFramework = schema.competences.create(framework);
-    return _serializeModel(createdFramework, 'framework');
-  });
+  this.get('/frameworks');
+  this.post('/frameworks');
 
   this.get('/airtable/content/Domaines', (schema) => {
     const records = schema.areas.all().models.map((area) => {

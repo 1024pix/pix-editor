@@ -11,7 +11,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | FrameworkDatasource', 
 
     it('should create a Framework from the AirtableRecord', () => {
       // given
-      const expectedFramework = domainBuilder.buildFrameworkForRelease();
+      const expectedFramework = domainBuilder.buildFramework();
       const airtableFramework = airtableBuilder.factory.buildFramework(expectedFramework);
       const recordFramework = new AirtableRecord('Referentiel', airtableFramework.id, airtableFramework);
 

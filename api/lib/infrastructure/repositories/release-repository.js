@@ -1,13 +1,13 @@
 import {
   attachmentDatasource,
   challengeDatasource,
-  frameworkDatasource,
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
 import {
   areaRepository,
   challengeRepository,
   competenceRepository,
+  frameworkRepository,
   missionRepository,
   skillRepository,
   thematicRepository,
@@ -17,6 +17,7 @@ import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   createChallengeTransformer,
   competenceTransformer,
+  frameworkTransformer,
   skillTransformer,
   tubeTransformer,
   thematicTransformer,
@@ -113,7 +114,7 @@ async function _getCurrentContent() {
     areaRepository.list(),
     attachmentDatasource.list(),
     competenceRepository.list(),
-    frameworkDatasource.list(),
+    frameworkRepository.list(),
     skillRepository.list(),
     thematicRepository.list(),
     tubeRepository.list(),
@@ -130,6 +131,7 @@ async function _getCurrentContent() {
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+  const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
 
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
@@ -137,7 +139,7 @@ async function _getCurrentContent() {
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
-    frameworks,
+    frameworks: transformedFrameworks,
     areas,
     competences: filteredCompetences,
     thematics: transformedThematics,
