@@ -22,6 +22,18 @@ export class CompetenceOverview {
         .filter((thematicOverview) => !thematicOverview.isEmpty),
     });
   }
+
+  static buildForChallengesWorkbench({ competenceId, thematics, tubes, skills, challenges }) {
+    const id = `${competenceId}:challenges-workbench`;
+    const skillsWithoutWorkbench = skills.filter(({ name }) => name !== '@workbench');
+    return new CompetenceOverview({
+      id,
+      thematicOverviews: thematics
+        .sort(byIndex)
+        .map((thematic) => ThematicOverview.buildForChallengesWorkbench({ thematic, tubes, skills: skillsWithoutWorkbench, challenges }))
+        .filter((thematicOverview) => !thematicOverview.isEmpty),
+    });
+  }
 }
 
 class ThematicOverview {
@@ -45,6 +57,20 @@ class ThematicOverview {
         ?.map((tubeId) => tubesById[tubeId])
         .sort(byIndex)
         .map((tube) => TubeOverview.buildForChallengesProduction({ tube, skills, challenges, locale }))
+        .filter((tubeOverview) => !tubeOverview.isEmpty)
+    });
+  }
+
+  static buildForChallengesWorkbench({ thematic, tubes, skills, challenges }) {
+    const tubesById = Object.fromEntries(tubes.map((tube) => [tube.id, tube]));
+
+    return new ThematicOverview({
+      airtableId: thematic.airtableId,
+      name: thematic.name_i18n.fr,
+      tubeOverviews: thematic.tubeIds
+        ?.map((tubeId) => tubesById[tubeId])
+        .sort(byIndex)
+        .map((tube) => TubeOverview.buildForChallengesWorkbench({ tube, skills, challenges }))
         .filter((tubeOverview) => !tubeOverview.isEmpty)
     });
   }
@@ -80,7 +106,18 @@ class TubeOverview {
       airtableId: tube.airtableId,
       name: tube.name,
       skillOverviews: skillsByTubeIdAndLevel[tube.id]
-        ?.map((skill) => SkillOverview.buildForChallengesProduction({ skill, challenges, locale })),
+        ?.map((skills) => SkillOverview.buildForChallengesProduction({ skill: skills?.[0], challenges, locale })),
+    });
+  }
+
+  static buildForChallengesWorkbench({ tube, skills, challenges }) {
+    const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(skills);
+
+    return new TubeOverview({
+      airtableId: tube.airtableId,
+      name: tube.name,
+      skillOverviews: skillsByTubeIdAndLevel[tube.id]
+        ?.map((skills) => SkillOverview.buildForChallengesWorkbench({ skills, challenges })),
     });
   }
 
@@ -101,6 +138,8 @@ class SkillOverview {
     isPrototypeDeclinable,
     proposedChallengesCount,
     validatedChallengesCount,
+    archivedChallengesCount,
+    obsoleteChallengesCount,
   }) {
     this.airtableId = airtableId;
     this.name = name;
@@ -108,6 +147,8 @@ class SkillOverview {
     this.isPrototypeDeclinable = isPrototypeDeclinable;
     this.proposedChallengesCount = proposedChallengesCount;
     this.validatedChallengesCount = validatedChallengesCount;
+    this.archivedChallengesCount = archivedChallengesCount;
+    this.obsoleteChallengesCount = obsoleteChallengesCount;
   }
 
   static buildForChallengesProduction({ skill, challenges, locale }) {
@@ -126,6 +167,29 @@ class SkillOverview {
       validatedChallengesCount: countChallengesByStatusAndLocale(productionChallenges, Challenge.STATUSES.VALIDE, locale),
     });
   }
+
+  static buildForChallengesWorkbench({ skills, challenges }) {
+    if (!skills) return null;
+
+    const latestSkill = getLatestSkill(skills);
+
+    const skillsChallenges = challenges.filter(belongsToOneOf(skills));
+
+    return new SkillOverview({
+      airtableId: latestSkill.airtableId,
+      name: latestSkill.name,
+      proposedChallengesCount: countChallengesByStatus(skillsChallenges, Challenge.STATUSES.PROPOSE),
+      validatedChallengesCount: countChallengesByStatus(skillsChallenges, Challenge.STATUSES.VALIDE),
+      archivedChallengesCount: countChallengesByStatus(skillsChallenges, Challenge.STATUSES.ARCHIVE),
+      obsoleteChallengesCount: countChallengesByStatus(skillsChallenges, Challenge.STATUSES.PERIME),
+    });
+  }
+}
+
+function getLatestSkill(skills) {
+  return skills.reduce((skill1, skill2) => {
+    return skill1.version < skill2.version ? skill2 : skill1;
+  });
 }
 
 function byIndex({ index: index1 }, { index: index2 }) {
@@ -139,7 +203,10 @@ function arrangeSkillsByTubeIdAndLevel(skills) {
     if (!skillsByTubeIdAndLevel[skill.tubeId]) {
       skillsByTubeIdAndLevel[skill.tubeId] = new Array(7).fill(null);
     }
-    skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1] = skill;
+    if (!skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1]) {
+      skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1] = [];
+    }
+    skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1].push(skill);
   }
 
   return skillsByTubeIdAndLevel;
@@ -157,6 +224,11 @@ function hasSkillIdAndVersionOf({ skillId, version } = {}) {
   return (challenge) => challenge.skillId === skillId && challenge.version === version;
 }
 
+function belongsToOneOf(skills) {
+  const skillIds = skills.map((skill) => skill.id);
+  return (challenge) => skillIds.includes(challenge.skillId);
+}
+
 function countChallengesByStatusAndLocale(challenges, status, locale) {
   return challenges.reduce((count, challenge) => {
     const localeChallenge = getChallengeForLocale(challenge, locale);
@@ -164,6 +236,12 @@ function countChallengesByStatusAndLocale(challenges, status, locale) {
     if (!localeChallenge) return count;
 
     return localeChallenge.status === status ? count + 1 : count;
+  }, 0);
+}
+
+function countChallengesByStatus(challenges, status) {
+  return challenges.reduce((count, challenge) => {
+    return challenge.status === status ? count + 1 : count;
   }, 0);
 }
 

@@ -16,14 +16,17 @@ module('Integration | Component | competence/competence-grid-thematic', function
       const productionTube1 = EmberObject.create({
         name: '@productionTube1',
         filledProductionSkills: [],
+        filledSkills: [],
       });
       const productionTube2 = EmberObject.create({
         name: '@productionTube2',
         filledProductionSkills: [],
+        filledSkills: [],
       });
 
       const draftTube = EmberObject.create({
         name: '@draftTube',
+        filledSkills: [],
       });
 
       const thematic = EmberObject.create({
@@ -42,9 +45,14 @@ module('Integration | Component | competence/competence-grid-thematic', function
         skillOverviews: [],
       });
 
+      const draftTubeOverview = EmberObject.create({
+        name: '@draftTubeOverview',
+        skillOverviews: [],
+      });
+
       const thematicOverview = EmberObject.create({
         name: 'ThematicOverview',
-        tubeOverviews: [tubeOverview1, tubeOverview2],
+        tubeOverviews: [tubeOverview1, tubeOverview2, draftTubeOverview],
       });
 
       this.set('thematic', thematic);
@@ -59,10 +67,10 @@ module('Integration | Component | competence/competence-grid-thematic', function
       // when
       await render(hbs`<Competence::CompetenceGridThematic @section={{this.section}}
                                                            @view={{this.view}}
-                                                           @thematic={{this.thematic}}/>`);
+                                                           @thematicOverview={{this.thematicOverview}}/>`);
 
       // then
-      assert.dom('[data-test-theme-cell]').hasText('Thematic');
+      assert.dom('[data-test-theme-cell]').hasText('ThematicOverview');
       assert.dom('[data-test-theme-cell]').hasAttribute('rowspan', '3');
     });
 
@@ -93,7 +101,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
                                                            @thematicOverview={{this.thematicOverview}}/>`);
 
       // then
-      assert.dom('[data-test-tube-cell]').exists({ count: 2 });
+      assert.dom('[data-test-tube-cell]').exists({ count: 3 });
 
     });
 

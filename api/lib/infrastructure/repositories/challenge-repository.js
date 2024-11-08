@@ -158,6 +158,13 @@ export async function listActiveOrDraftByCompetenceId(competenceId) {
   return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
+export async function listPrototypesByCompetenceId(competenceId) {
+  const challengeDTOs = await challengeDatasource.listPrototypesByCompetenceId(competenceId);
+  if (!challengeDTOs) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
+}
+
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
   return loadTranslationsAndLocalizedChallengesForChallengeIds(
     challengeDtos.map(({ id }) => id),

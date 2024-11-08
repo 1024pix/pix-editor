@@ -19,6 +19,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1' });
     this.server.create('challenge', { id: 'recChallenge2' });
+
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'] });
     this.server.create('skill', { id: 'recSkillWorkbench', name: '@workbench', code: null });
@@ -35,6 +36,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
 
     this.server.create('competence-overview', { id: `${competence.pixId}:challenges-production`, thematicOverviews: [] });
+    this.server.create('competence-overview', { id: `${competence.pixId}:challenges-workbench`, thematicOverviews: [] });
 
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });

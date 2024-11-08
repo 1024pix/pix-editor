@@ -8,13 +8,17 @@ export default class ListRoute extends Route {
   @service store;
 
   async model(params) {
-    const tube = await this.store.findRecord('tube', params.tube_id);
-    const skill = await this.store.findRecord('skill', params.skill_id);
+    const [tube, skill] = await Promise.all([
+      this.store.findRecord('tube', params.tube_id),
+      this.store.findRecord('skill', params.skill_id),
+    ]);
+    const skills = await tube.rawSkills;
+    await Promise.all(skills.map((skill)=> skill.challenges));
     return { skills: tube.filledSkills[skill.level - 1], skill };
   }
 
   setupController(controller, model) {
-    super.setupController(...arguments);
+    super.setupController(controller, model);
     controller.selectedSkill = model.skill;
     const competenceController = this.controllerFor('authenticated.competence');
     competenceController.setSection('challenges');

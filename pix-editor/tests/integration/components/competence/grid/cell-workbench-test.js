@@ -1,3 +1,4 @@
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -61,11 +62,19 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
       challenges: [archivedPrototype3, deletedPrototype2],
     });
 
+    const skillOverview = EmberObject.create({
+      proposedChallengesCount: 1,
+      validatedChallengesCount: 1,
+      archivedChallengesCount: 3,
+      obsoleteChallengesCount: 2,
+    });
+
     this.skill = skill1;
     this.skills = [skill1, skill2];
+    this.skillOverview = skillOverview;
 
     // when
-    await render(hbs`<Competence::Grid::CellWorkbench @skill={{this.skill}} @skills={{this.skills}}/>`);
+    await render(hbs`<Competence::Grid::CellWorkbench @skillOverview={{this.skillOverview}} @skills={{this.skills}}/>`);
 
     // then
     assert.dom('[data-test-draft-prototype-count]').hasText('1');

@@ -39,11 +39,15 @@ module('Acceptance | competence/prototypes/list', function() {
       this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill3'] });
       this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tubeId1] });
       this.server.create('theme', { id: 'recTheme2', rawTubeIds: ['recTube2'] });
-      this.server.create('competence', { id: competenceId1, pixId: 'pixId recCompetence1.1', rawTubeIds: [tubeId1], rawThemeIds: ['recTheme1'] });
+      const competence = this.server.create('competence', { id: competenceId1, pixId: 'pixId recCompetence1.1', rawTubeIds: [tubeId1], rawThemeIds: ['recTheme1'] });
       this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawTubeIds: ['recTube2'], rawThemeIds: ['recTheme2'] });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: [competenceId1] });
       this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
+      this.server.create('competence-overview', {
+        id: `${competence.pixId}:challenges-workbench`,
+        thematicOverviews: [],
+      });
       await authenticateSession();
 
       // when

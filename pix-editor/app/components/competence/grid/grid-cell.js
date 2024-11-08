@@ -17,7 +17,7 @@ export default class GridCell extends Component {
             }
             break;
           case 'workbench':
-            if (skill) {
+            if (skillOverview) {
               return 'workbench';
             }
             break;

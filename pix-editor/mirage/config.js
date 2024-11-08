@@ -29,6 +29,14 @@ function routes() {
     return schema.competenceOverviews.find(competenceOverview.id);
   });
 
+  this.get('/competences/:id/overviews/challenges-workbench', (schema, request) => {
+    const competenceOverview = schema.competenceOverviews
+      .where((competenceOverview) => competenceOverview.id === `${request.params.id}:challenges-workbench`)
+      .models[0];
+    if (!competenceOverview) return;
+    return schema.competenceOverviews.find(competenceOverview.id);
+  });
+
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const attachment = _deserializePayload(payload, 'attachment');
