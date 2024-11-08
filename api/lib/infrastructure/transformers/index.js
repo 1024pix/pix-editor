@@ -1,4 +1,5 @@
 export * from './challenge-transformer.js';
+export * as areaTransformer from './area-transformer.js';
 export * as competenceTransformer from './competence-transformer.js';
 export * as frameworkTransformer from './framework-transformer.js';
 export * as skillTransformer from './skill-transformer.js';

@@ -7,7 +7,6 @@ export class AreaForRelease {
     title_i18n,
     name,
     competenceIds,
-    competenceAirtableIds,
     color,
     frameworkId,
   }) {
@@ -16,7 +15,6 @@ export class AreaForRelease {
     this.title_i18n = title_i18n;
     this.competenceIds = competenceIds;
     this.name = name;
-    this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
     this.frameworkId = frameworkId;
   }

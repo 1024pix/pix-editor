@@ -1,6 +1,7 @@
 export class Area {
   constructor({
     id,
+    airtableId,
     code,
     name,
     title_i18n,
@@ -10,6 +11,7 @@ export class Area {
     frameworkId,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.code = code;
     this.name = name;
     this.title_i18n = title_i18n;

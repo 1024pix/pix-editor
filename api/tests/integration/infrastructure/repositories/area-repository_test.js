@@ -11,6 +11,7 @@ describe('Integration | Repository | area-repository', () => {
       const airtableScope = airtableBuilder.mockList({ tableName: 'Domaines' }).returns([
         airtableBuilder.factory.buildArea({
           id: 'areaId1',
+          airtableId: 'recAreaId1',
           code: '1',
           color: Area.COLORS.BUTTERFLY_BUSH,
           competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
@@ -19,6 +20,7 @@ describe('Integration | Repository | area-repository', () => {
         }),
         airtableBuilder.factory.buildArea({
           id: 'areaId2',
+          airtableId: 'recAreaId2',
           code: '2',
           color: Area.COLORS.WILD_STRAWBERRY,
           competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
@@ -57,6 +59,7 @@ describe('Integration | Repository | area-repository', () => {
       expect(areas).toEqual([
         domainBuilder.buildArea({
           id: 'areaId1',
+          airtableId: 'recAreaId1',
           code: '1',
           color: Area.COLORS.BUTTERFLY_BUSH,
           competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
@@ -69,6 +72,7 @@ describe('Integration | Repository | area-repository', () => {
         }),
         domainBuilder.buildArea({
           id: 'areaId2',
+          airtableId: 'recAreaId2',
           code: '2',
           color: Area.COLORS.WILD_STRAWBERRY,
           competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
