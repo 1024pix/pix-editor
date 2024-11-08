@@ -1,4 +1,5 @@
 import {
+  NotFoundWhitelistedUrlError,
   CommandWhitelistedUrlConflictError,
   CommandWhitelistedUrlError,
   CommandWhitelistedUrlForbiddenError,
@@ -75,6 +76,26 @@ export class WhitelistedUrl {
     this.deletedBy = user.id;
     this.updatedAt = operationDate;
     this.deletedAt = operationDate;
+  }
+
+  canUpdate(updateCommand, user, existingReadWhitelistedUrls) {
+    if (!user.isAdmin) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée');
+    if (this.deletedAt) throw new NotFoundWhitelistedUrlError('L\'URL whitelistée n\'existe pas');
+    if (!isUrlValid(updateCommand.url)) throw new CommandWhitelistedUrlError({ message: 'URL invalide', attribute: 'url' });
+    if (!isRelatedSkillNamesValid(updateCommand.relatedSkillNames)) throw new CommandWhitelistedUrlError({ message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide', attribute: 'relatedSkillNames' });
+    if (!isCommentValid(updateCommand.comment)) throw new CommandWhitelistedUrlError({ message: 'Commentaire invalide. Doit être un texte ou vide', attribute: 'comment' });
+    if (!isCheckTypeValid(updateCommand.checkType)) throw new CommandWhitelistedUrlError({ message: `Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`, attribute: 'checkType' });
+    if (!isUrlUnique(updateCommand.url, existingReadWhitelistedUrls)) throw new CommandWhitelistedUrlConflictError('URL déjà whitelistée');
+  }
+
+  update(updateCommand, user) {
+    const operationDate = new Date();
+    this.latestUpdatedBy = user.id;
+    this.updatedAt = operationDate;
+    this.url = updateCommand.url;
+    this.relatedSkillNames = updateCommand.relatedSkillNames;
+    this.comment = updateCommand.comment;
+    this.checkType = updateCommand.checkType;
   }
 }
 
