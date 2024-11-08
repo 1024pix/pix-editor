@@ -26,6 +26,11 @@ export default class WhitelistedUrlsController extends Controller {
   }
 
   @action
+  goToEditWhitelistedUrl(whitelistedUrlId) {
+    this.router.transitionTo('authenticated.whitelisted-urls.whitelisted-url.edit', whitelistedUrlId);
+  }
+
+  @action
   async applyFilters(urlFilterValue, namesFilterValue) {
     this.url = urlFilterValue ?? '';
     this.names = namesFilterValue ?? '';

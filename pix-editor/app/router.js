@@ -79,6 +79,9 @@ Router.map(function() {
     this.route('whitelisted-urls', function() {
       this.route('list', { path: '/' });
       this.route('new');
+      this.route('whitelisted-url', { path: '/:whitelisted_url_id' }, function() {
+        this.route('edit');
+      });
     });
   });
 });

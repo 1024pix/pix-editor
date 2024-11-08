@@ -1,4 +1,4 @@
-import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -8,7 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | whitelisted-urls/list', function(hooks) {
   setupIntlRenderingTest(hooks);
   let store, whitelistedUrl1, whitelistedUrl2, hour1_create, hour1_update, hour2_create;
-  let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub;
+  let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub, onEditStub;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
@@ -47,6 +47,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     onApplyFiltersClickedStub = sinon.stub();
     onClearFiltersClickedStub = sinon.stub();
     onDeleteItemClickedStub = sinon.stub();
+    onEditStub = sinon.stub();
   });
 
   test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function(assert) {
@@ -57,6 +58,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -67,7 +69,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
 
     // then
     assert.ok(
@@ -126,6 +130,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -136,7 +141,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
 
@@ -154,6 +161,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -164,7 +172,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await clickByName('Filtrer');
 
@@ -182,6 +192,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -192,7 +203,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
@@ -211,6 +224,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     await render(hbs`
@@ -221,11 +235,44 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @namesFilterValue={{this.namesFilterValue}}
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}/>`);
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
     await clickByName('Réinitialiser les filtres');
 
     // then
     sinon.assert.calledOnce(onClearFiltersClickedStub);
     assert.ok(true);
+  });
+
+  test('it should call arg edit function when clicking on list item', async function(assert) {
+    // given
+    this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
+    this.urlFilterValue = 'initialUrlValue';
+    this.namesFilterValue = 'initialNamesValue';
+    this.onApplyFiltersClicked = onApplyFiltersClickedStub;
+    this.onClearFiltersClicked = onClearFiltersClickedStub;
+    this.onDeleteItemClicked = onDeleteItemClickedStub;
+    this.goToEditWhitelistedUrl = onEditStub;
+
+    // when
+    await render(hbs`
+      <WhitelistedUrls::List
+        @whitelistedUrls={{this.whitelistedUrls}}
+        @urlFilterValue={{this.urlFilterValue}}
+        @namesFilterValue={{this.namesFilterValue}}
+        @namesFilterValue={{this.namesFilterValue}}
+        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
+        @onClearFiltersClicked={{this.onClearFiltersClicked}}
+        @onDeleteItemClicked={{this.onDeleteItemClicked}}
+        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
+      />`);
+    await clickByText('Strictement égale à');
+    await clickByText('Un commentaire sur Laura');
+    await clickByText('https://foo.com');
+    await clickByText('@fruit4,@legume5');
+
+    // then
+    assert.strictEqual(onEditStub.callCount, 4);
   });
 });
