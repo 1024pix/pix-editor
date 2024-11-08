@@ -72,6 +72,18 @@ function toDomain({ fields, locales }) {
   };
 }
 
+function extractFromDomainObject({ localizedFields, prefix }) {
+  return (entity) => {
+    return localizedFields
+      .filter(({ field, locale }) => entity?.[`${field}_i18n`][locale])
+      .map(({ field, locale }) => new Translation({
+        key: `${prefix}${entity.id}.${field}`,
+        value: entity[`${field}_i18n`][locale],
+        locale,
+      }));
+  };
+}
+
 function extractFromReleaseObject({ localizedFields, prefix }) {
   return (entity) => {
     return localizedFields
@@ -106,6 +118,7 @@ export function buildTranslationsUtils({
     airtableObjectToProxyObject: airtableObjectToProxyObject({ localizedFields, prefixFor }),
     proxyObjectToAirtableObject: proxyObjectToAirtableObject({ localizedFields }),
     toDomain: toDomain({ fields, locales }),
+    extractFromDomainObject: extractFromDomainObject({ localizedFields, prefix }),
     extractFromReleaseObject: extractFromReleaseObject({ localizedFields, prefix }),
   };
 }

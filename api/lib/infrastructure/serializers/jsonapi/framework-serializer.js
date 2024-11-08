@@ -1,5 +1,7 @@
-import { Serializer, Deserializer } from 'jsonapi-serializer';
+import Jsonapi from 'jsonapi-serializer';
 import { Framework } from '../../../domain/models/index.js';
+
+const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('framework', {
   attributes: [
