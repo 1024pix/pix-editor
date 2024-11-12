@@ -50,24 +50,8 @@ function routes() {
   this.get('/frameworks');
   this.post('/frameworks');
 
-  this.get('/airtable/content/Domaines', (schema) => {
-    const records = schema.areas.all().models.map((area) => {
-      return _serializeModel(area, 'area');
-    });
-    return { records };
-  });
-
-  this.get('/airtable/content/Domaines/:id', (schema, request) => {
-    const area = schema.areas.find(request.params.id);
-    return _serializeModel(area, 'area');
-  });
-
-  this.post('/airtable/content/Domaines', (schema, request) => {
-    const areaPayload = JSON.parse(request.requestBody);
-    const area = _deserializePayload(areaPayload, 'area');
-    const createdArea = schema.competences.create(area);
-    return _serializeModel(createdArea, 'area');
-  });
+  this.get('/areas');
+  this.post('/areas');
 
   this.get('/airtable/content/Competences', (schema) => {
     const records = schema.competences.all().models.map((competence) => {
