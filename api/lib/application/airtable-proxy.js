@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/node';
+import Boom from '@hapi/boom';
 import * as config from '../config.js';
 import * as pixApiClient from '../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
@@ -11,6 +12,16 @@ import * as usecases from '../domain/usecases/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 
+const AIRTABLE_PROXY_TABLES = [
+  'Competences',
+  'Thematiques',
+  'Tubes',
+  'Acquis',
+  'Tutoriels',
+  'Tags',
+  'Attachments',
+];
+
 export async function register(server) {
   server.route([
     {
@@ -19,6 +30,7 @@ export async function register(server) {
       config: {
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
+          if (!AIRTABLE_PROXY_TABLES.includes(tableName)) return Boom.notFound();
           const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
           const response = await usecases.proxyReadRequestToAirtable(request, config.airtable.base, {
@@ -41,6 +53,7 @@ export async function register(server) {
         }],
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
+          if (!AIRTABLE_PROXY_TABLES.includes(tableName)) return Boom.notFound();
           const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
           const response = await usecases.proxyWriteRequestToAirtable(request, config.airtable.base, tableName, {
@@ -64,6 +77,7 @@ export async function register(server) {
         }],
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
+          if (!AIRTABLE_PROXY_TABLES.includes(tableName)) return Boom.notFound();
           const response = await usecases.proxyDeleteRequestToAirtable(request, config.airtable.base, tableName, {
             proxyRequestToAirtable: _proxyRequestToAirtable,
           });
