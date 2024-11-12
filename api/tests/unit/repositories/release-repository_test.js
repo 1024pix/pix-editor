@@ -1,59 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, domainBuilder } from '../../test-helper.js';
-import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import { attachmentDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 import { challengeRepository } from '../../../lib/infrastructure/repositories/index.js';
-import { Area, Attachment, Translation } from '../../../lib/domain/models/index.js';
+import { Attachment } from '../../../lib/domain/models/index.js';
 import { ChallengeForRelease } from '../../../lib/domain/models/release/index.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
-    it.fails('serializes an area', async () => {
-      const entity = airtableBuilder.factory.buildArea({
-        id: '1',
-        code: 1,
-        color: Area.COLORS.JAFFA,
-        competenceIds: [],
-        competenceAirtableIds: [],
-        frameworkId: 'recFramework0',
-      });
-      const type = 'Domaines';
-      const translations = [
-        new Translation({
-          key: 'area.1.title',
-          locale: 'fr',
-          value: 'Bonjour',
-        }),
-        new Translation({
-          key: 'area.1.title',
-          locale: 'en',
-          value: 'Hello',
-        }),
-      ];
-
-      vi.spyOn(attachmentDatasource, 'filterByLocalizedChallengeId');
-      vi.spyOn(challengeDatasource, 'filterById');
-
-      const { updatedRecord, model } = await serializeEntity({ entity, type, translations });
-
-      expect(updatedRecord).to.deep.equal({
-        id: '1',
-        code: 1,
-        color: Area.COLORS.JAFFA,
-        name: '1. Bonjour',
-        competenceIds: [],
-        competenceAirtableIds: [],
-        title_i18n: {
-          fr: 'Bonjour',
-          en: 'Hello',
-        },
-        frameworkId: 'recFramework0',
-      });
-      expect(attachmentDatasource.filterByLocalizedChallengeId).not.toHaveBeenCalled();
-      expect(challengeDatasource.filterById).not.toHaveBeenCalled();
-      expect(model).to.equal('areas');
-    });
-
     it('serializes attachment', async () => {
       const entity = airtableBuilder.factory.buildAttachment({
         id: 'recAttachment',
