@@ -18,6 +18,7 @@ export default class WhitelistedUrlsRoute extends Route {
     const whitelistedUrls = await this.store.findAll('whitelisted-url', { reload: true });
     return {
       whitelistedUrls,
+      mayCreateWhitelistedUrl: this.access.mayCreateOrEditWhitelistedUrl(),
     };
   }
 }

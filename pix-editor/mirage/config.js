@@ -456,6 +456,19 @@ function routes() {
 
   this.get('/whitelisted-urls');
   this.delete('/whitelisted-urls/:id');
+  this.post('/whitelisted-urls', function(schema, request) {
+    const whitelistedUrl = JSON.parse(request.requestBody).data.attributes;
+    return schema.create('whitelisted-url', {
+      url: whitelistedUrl.url,
+      relatedSkillNames: whitelistedUrl['related-skill-names'],
+      checkType: whitelistedUrl['check-type'],
+      comment: whitelistedUrl.comment,
+      creatorName: 'TEST USER',
+      createdAt: new Date().toISOString(),
+      latestUpdatorName: 'TEST USER',
+      updatedAt: new Date().toISOString(),
+    });
+  });
 }
 
 function _serializeModel(instance, modelName) {

@@ -75,4 +75,11 @@ export class CommandWhitelistedUrlForbiddenError extends DomainError {
   }
 }
 
+export class CommandWhitelistedUrlError extends DomainError {
+  constructor({ message, attribute = 'irrelevant' }) {
+    super(message);
+    this.attribute = attribute;
+  }
+}
+
 export class ForbiddenError extends DomainError {}

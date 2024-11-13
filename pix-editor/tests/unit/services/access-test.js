@@ -174,4 +174,28 @@ module('Unit | Service | access', function(hooks) {
       assert.ok(accessResult);
     });
   });
+
+  module('mayCreateOrEditWhitelistedUrl', function() {
+    test('it should return `false` when is not admin', function(assert) {
+      // given
+      _stubAccessLevel(EDITOR, this.owner);
+
+      //when
+      const accessResult = accessService.mayCreateOrEditWhitelistedUrl();
+
+      //then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `true` when is admin', function(assert) {
+      // given
+      _stubAccessLevel(ADMIN, this.owner);
+
+      //when
+      const accessResult = accessService.mayCreateOrEditWhitelistedUrl();
+
+      //then
+      assert.ok(accessResult);
+    });
+  });
 });

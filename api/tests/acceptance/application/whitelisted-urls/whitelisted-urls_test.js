@@ -1,9 +1,22 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | Controller | whitelisted-urls', () => {
+describe('Acceptance | Controller | whitelisted-urls', () => {let now;
+  beforeEach(function() {
+    now = new Date('2024-10-29T03:04:00Z');
+    vi.useFakeTimers({
+      now,
+      toFake: ['Date'],
+    });
+  });
+
+  afterEach(function() {
+    vi.useRealTimers();
+    return knex('whitelisted_urls').del();
+  });
+
   describe('GET /whitelisted-urls', () => {
     let adminUser, server;
     beforeEach(async function() {
@@ -263,6 +276,144 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const exists = await knex('whitelisted_urls').where({ id: 123 }).whereNotNull('deletedAt').first();
       expect(response.statusCode).to.equal(204);
       expect(exists.id).to.equal(123);
+    });
+  });
+  describe('POST /whitelisted-urls', () => {
+    let adminUser, server, validPayload;
+    beforeEach(async function() {
+      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 123,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: null,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: null,
+        url: 'https://www.google.com',
+        relatedSkillNames: '@morse2,@saumon5',
+        comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 456,
+        createdBy: null,
+        latestUpdatedBy: null,
+        deletedBy: null,
+        createdAt: new Date('2020-12-12'),
+        updatedAt: new Date('2022-08-08'),
+        deletedAt: null,
+        url: 'https://www.editor.pix.fr',
+        relatedSkillNames: null,
+        comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 789,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: adminUser.id,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: new Date('2023-01-01'),
+        url: 'https://www.les-fruits-c-super-bon',
+        relatedSkillNames: '@truite2',
+        comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+      });
+      await databaseBuilder.commit();
+      server = await createServer();
+      validPayload = {
+        data: {
+          attributes: {
+            url: 'https://super-casserole.com',
+            'related-skill-names': '@feutre2,@crayon1',
+            comment: 'Un super commentaire',
+            'check-type': WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+          },
+        },
+      };
+    });
+
+    it('should return a 403 status code when user is not admin', async () => {
+      // given
+      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      await databaseBuilder.commit();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/whitelisted-urls',
+        headers: generateAuthorizationHeader(notAdminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(403);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            code: 403,
+            detail: 'Missing or insufficient permissions.',
+            title: 'Forbidden access',
+          },
+        ],
+      });
+    });
+
+    it('should return a 422 status code when creation command in invalid', async () => {
+      // when
+      const invalidPayload = JSON.parse(JSON.stringify(validPayload));
+      invalidPayload.data.attributes.url = 'je ne suis pas une bonne url';
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/whitelisted-urls',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: invalidPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(422);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'URL invalide',
+            source: { pointer: '/data/attributes/url' },
+          },
+        ],
+      });
+    });
+
+    it('should return a 201 status code and the serialized created whitelisted url', async () => {
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/whitelisted-urls',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(201);
+      const [id] = await knex('whitelisted_urls').pluck('id').where('createdAt', now);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'whitelisted-urls',
+          id: id.toString(),
+          attributes: {
+            'created-at': now,
+            'updated-at': now,
+            'creator-name': 'Madame Admin',
+            'latest-updator-name': 'Madame Admin',
+            url: 'https://super-casserole.com',
+            'related-skill-names': '@feutre2,@crayon1',
+            comment: 'Un super commentaire',
+            'check-type': 'exact_match',
+          },
+        },
+      });
     });
   });
 });

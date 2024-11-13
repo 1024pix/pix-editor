@@ -64,6 +64,13 @@ function _mapToInfrastructureError(error) {
       statusCode: infraError.status,
     };
   }
+  if (error instanceof DomainErrors.CommandWhitelistedUrlError) {
+    const infraError = new InfraErrors.UnprocessableEntityError({ message: error.message, attribute: error.attribute });
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
 
   const infraError = new InfraErrors.InfrastructureError(error.message);
   return {

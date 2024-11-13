@@ -159,6 +159,21 @@ describe('Unit | Infrastructure | ErrorManager', function() {
             ],
           });
         }
+        else if (domainErrorName === 'CommandWhitelistedUrlError') {
+          const errorCommandWhitelistedUrl = new domainErrorClass({ message, attribute });
+          const responseCommandWhitelistedUrl = send(hFake, errorCommandWhitelistedUrl);
+          expect(responseCommandWhitelistedUrl.statusCode, expectErrorMessage).toStrictEqual(422);
+          expect(responseCommandWhitelistedUrl.source).toStrictEqual({
+            errors: [
+              {
+                status: '422',
+                title: 'Unprocessable entity',
+                detail: 'error message',
+                source: { pointer: '/data/attributes/attribute-in-error' },
+              },
+            ],
+          });
+        }
         else {
           expect(true, `Conversion for ${domainErrorName} not tested`).to.be.false;
         }

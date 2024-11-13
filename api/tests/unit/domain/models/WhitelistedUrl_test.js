@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { User } from '../../../../lib/domain/models/index.js';
+import { User, WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 import {
   CommandWhitelistedUrlConflictError,
+  CommandWhitelistedUrlError,
   CommandWhitelistedUrlForbiddenError,
 } from '../../../../lib/domain/errors.js';
 
@@ -110,6 +111,264 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         url: 'https://www.google.com',
         relatedSkillNames: '@noix2,@chose8',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+      }));
+    });
+  });
+
+  describe('#static canCreate', () => {
+    describe('can', function() {
+      it('should not throw when all conditions are reunited', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
+          url: 'https://www.painperdu.com',
+        })];
+        const creationCommand1 = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: null,
+          comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        };
+        const creationCommand2 = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: '@choix1,@creux7',
+          comment: 'COucou',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        WhitelistedUrl.canCreate(creationCommand1, user, existingWhitelistedUrls);
+        WhitelistedUrl.canCreate(creationCommand2, user, []);
+
+        // then
+        expect(true).to.be.true;
+      });
+    });
+    describe('cannot', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
+        const creationCommand = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: null,
+          comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
+            'L\'utilisateur n\'a pas les droits pour créer une URL whitelistée'
+          ));
+        }
+      });
+
+      it('should throw a CommandWhitelistedUrlError when url is not valid in creation command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const creationCommand1 = {
+          url: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+        const creationCommand2 = {
+          url: 'www.missing-protocol.com',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+        const creationCommand3 = {
+          url: 123456,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'URL invalide',
+            attribute: 'url',
+          }));
+        }
+      });
+
+      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in creation command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const creationCommand1 = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: 123456.12,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+        const creationCommand2 = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: 'je ne suis pas une suite d acquis',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide',
+            attribute: 'relatedSkillNames',
+          }));
+        }
+      });
+
+      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in creation command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const creationCommand = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: null,
+          comment: 123,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: 'Commentaire invalide. Doit être un texte ou vide',
+            attribute: 'comment',
+          }));
+        }
+      });
+
+      it('should throw a CommandWhitelistedUrlError when checkType is not valid in creation command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const creationCommand1 = {
+          url: 'https://www.brioche.com',
+          checkType: 'autre_type',
+        };
+        const creationCommand2 = {
+          url: 'https://www.brioche.com',
+          checkType: null,
+        };
+        const creationCommand3 = {
+          url: 'https://www.brioche.com',
+          checkType: 456789,
+        };
+
+        // when
+        const allowedValues = Object.values(WhitelistedUrl.CHECK_TYPES).join(', ');
+        try {
+          WhitelistedUrl.canCreate(creationCommand1, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand2, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+        try {
+          WhitelistedUrl.canCreate(creationCommand3, user, []);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlError({
+            message: `Type de check invalide. Valeurs parmi : ${allowedValues}`,
+            attribute: 'checkType',
+          }));
+        }
+      });
+
+      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
+          url: 'https://www.brioche.com',
+        })];
+        const creationCommand = {
+          url: 'https://www.brioche.com',
+          relatedSkillNames: null,
+          comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        };
+
+        // when
+        try {
+          WhitelistedUrl.canCreate(creationCommand, user, existingWhitelistedUrls);
+          expect(false, 'Should have thrown').to.be.true;
+        } catch (err) {
+          expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
+            'URL déjà whitelistée'
+          ));
+        }
+      });
+    });
+  });
+
+  describe('#static create', () => {
+    it('should return a newly created whitelisted url', function() {
+      // given
+      const user = domainBuilder.buildUser({ id: 444, access: User.ROLES.ADMIN });
+      const creationCommand = {
+        url: 'https://www.brioche.com',
+        relatedSkillNames: '@proie2,@cancre5',
+        comment: 'coucou maman',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+      };
+
+      // when
+      const createdWhitelistedUrl = WhitelistedUrl.create(creationCommand, user);
+
+      // then
+      expect(createdWhitelistedUrl).toStrictEqual(domainBuilder.buildWhitelistedUrl({
+        id: null,
+        createdBy: 444,
+        latestUpdatedBy: 444,
+        deletedBy: null,
+        createdAt: now,
+        updatedAt: now,
+        deletedAt: null,
+        url: 'https://www.brioche.com',
+        relatedSkillNames: '@proie2,@cancre5',
+        comment: 'coucou maman',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       }));
     });
   });
