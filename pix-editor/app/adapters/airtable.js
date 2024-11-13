@@ -48,7 +48,7 @@ export default class AirtableAdapter extends RESTAdapter {
 
   coalesceFindRequests = true;
 
-  groupRecordsForFindMany(store, snapshots) {
+  groupRecordsForFindMany(_store, snapshots) {
     const groups = [];
     for (let i = 0; i < snapshots.length; i += 100) {
       groups.push(snapshots.slice(i, i + 100));
@@ -69,7 +69,31 @@ export default class AirtableAdapter extends RESTAdapter {
     });
   }
 
-  ajax() {
-    return this.ajaxQueue.add(() => super.ajax(...arguments));
+  async findAll(_store, type, _sinceToken, snapshotRecordArray) {
+    const query = this.buildQuery(snapshotRecordArray);
+    const url = this.buildURL(type.modelName, null, snapshotRecordArray, 'findAll');
+
+    const records = [];
+
+    let res;
+    do {
+      query.offset = res?.offset;
+      res = await this.ajax(url, 'GET', { data: query });
+      records.push(...res.records);
+    } while (res.offset);
+
+    return { records };
+  }
+
+  buildQuery(snapshot) {
+    const query = super.buildQuery(snapshot);
+
+    if (this.sort && !snapshot.id) query.sort = this.sort;
+
+    return query;
+  }
+
+  ajax(...args) {
+    return this.ajaxQueue.add(() => super.ajax(...args));
   }
 }
