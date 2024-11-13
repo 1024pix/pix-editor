@@ -9,8 +9,11 @@ export function buildCompetence({
   description = 'descriptionCompetence1',
   description_i18n = { fr: 'descriptionFrCompetence1', en:'descriptionUsCompetence1' },
   areaId = 'recArea1',
+  areaAirtableId = 'recr32j23d3djp1d',
   skillIds = ['recSkill1', 'recSkill2'],
   thematicIds = ['recThematic1'],
+  thematicAirtableIds = ['recpq782rf2h3df'],
+  tubeAirtableIds = ['recP12434hvf34', 'recO01dh3298cf'],
   origin = 'Pix',
 } = {}) {
   return new Competence({
@@ -22,8 +25,11 @@ export function buildCompetence({
     description,
     description_i18n,
     areaId,
+    areaAirtableId,
     skillIds,
     thematicIds,
+    thematicAirtableIds,
+    tubeAirtableIds,
     origin,
   });
 }

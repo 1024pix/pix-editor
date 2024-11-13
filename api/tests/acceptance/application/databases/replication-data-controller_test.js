@@ -127,6 +127,9 @@ async function mockCurrentContent() {
   });
 
   delete expectedCompetence.airtableId;
+  delete expectedCompetence.thematicAirtableIds;
+  delete expectedCompetence.tubeAirtableIds;
+  delete expectedCompetence.areaAirtableId;
 
   const expectedTube = domainBuilder.buildTube();
   delete expectedTube.airtableId;

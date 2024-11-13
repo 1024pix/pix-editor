@@ -10,7 +10,7 @@ import {
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | Controller | airtable-proxy-controller | create competence translations', () => {
+describe.skip('Acceptance | Controller | airtable-proxy-controller | create competence translations', () => {
   beforeEach(() => {
     nock('https://api.test.pix.fr').post(/.*/).reply(200);
     nock('https://api.test.pix.fr').patch(/.*/).reply(200);

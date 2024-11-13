@@ -3,6 +3,7 @@ export function buildCompetenceDatasourceObject({
   airtableId,
   index = '1.1',
   areaId = 'recvoGdo7z2z7pXWa',
+  areaAirtableId = 'recr32j23d3djp1d',
   origin = 'Pix',
   skillIds = [
     'recV11ibSCXvaUzZd',
@@ -16,6 +17,8 @@ export function buildCompetenceDatasourceObject({
     'rec50NXHkatsRkjVQ',
   ],
   thematicIds = ['recFvllz2Ckz'],
+  thematicAirtableIds = ['recpq782rf2h3df'],
+  tubeAirtableIds = ['recP12434hvf34', 'recO01dh3298cf'],
 } = {}) {
 
   return {
@@ -23,8 +26,11 @@ export function buildCompetenceDatasourceObject({
     airtableId: airtableId ?? id,
     index,
     areaId,
+    areaAirtableId,
     origin,
     skillIds,
     thematicIds,
+    thematicAirtableIds,
+    tubeAirtableIds,
   };
 }
