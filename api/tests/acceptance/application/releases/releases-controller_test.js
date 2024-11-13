@@ -35,7 +35,6 @@ async function mockCurrentContent() {
         nl: 'Titre du Domaine - nl',
       },
       competenceIds: ['recCompetence0'],
-      competenceAirtableIds: ['recCompetence123'],
       color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
     }],
@@ -398,7 +397,6 @@ async function mockContentForRelease() {
       name: '1. Titre du Domaine - fr',
       code: '1',
       competenceIds: ['recCompetence0'],
-      competenceAirtableIds: ['recCompetence123'],
       color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
       title_i18n: {

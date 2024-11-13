@@ -1,4 +1,5 @@
 import * as airtableProxyRoute from './application/airtable-proxy.js';
+import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
 import { competenceRoutes } from './application/competences/index.js';
 import * as configRoute from './application/config.js';
@@ -21,6 +22,7 @@ import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
 export const routes = [
   airtableProxyRoute,
+  areasRoute,
   challengesRoute,
   configRoute,
   fileStorageTokenRoute,

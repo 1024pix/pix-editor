@@ -75,7 +75,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework1',
             attributes: {
-              'name': 'Pix',
+              name: 'Pix',
             },
             relationships: {
               areas: {
@@ -90,7 +90,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework3',
             attributes: {
-              'name': 'Poux',
+              name: 'Poux',
             },
             relationships: {
               areas: {
@@ -106,7 +106,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework2',
             attributes: {
-              'name': 'Paix',
+              name: 'Paix',
             },
             relationships: {
               areas: {
@@ -122,7 +122,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework4',
             attributes: {
-              'name': 'Prix',
+              name: 'Prix',
             },
             relationships: {
               areas: {
@@ -247,7 +247,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework4',
             attributes: {
-              'name': 'Prix',
+              name: 'Prix',
             },
             relationships: {
               areas: {

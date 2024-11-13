@@ -889,10 +889,6 @@ function _getRichCurrentContentDTO() {
       'competence11',
       'competence12',
     ],
-    competenceAirtableIds: [
-      'competence11',
-      'competence12',
-    ],
     title_i18n: {
       fr: 'area1 titleFrFr',
       en: 'area1 titleEnUs',
@@ -904,9 +900,6 @@ function _getRichCurrentContentDTO() {
   }, {
     id: 'area2',
     competenceIds: [
-      'competence21',
-    ],
-    competenceAirtableIds: [
       'competence21',
     ],
     title_i18n: {

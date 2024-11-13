@@ -1,5 +1,6 @@
 export function buildArea({
   id,
+  airtableId = id,
   competenceIds,
   competenceAirtableIds,
   code,
@@ -7,7 +8,7 @@ export function buildArea({
   frameworkId,
 } = {}) {
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
       'Competences (identifiants) (id persistant)': competenceIds,

@@ -15,6 +15,7 @@ import {
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
+  areaTransformer,
   createChallengeTransformer,
   competenceTransformer,
   frameworkTransformer,
@@ -132,6 +133,7 @@ async function _getCurrentContent() {
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
   const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
+  const transformedAreas = areaTransformer.filterAreasFields(areas);
 
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
@@ -140,7 +142,7 @@ async function _getCurrentContent() {
 
   return {
     frameworks: transformedFrameworks,
-    areas,
+    areas: transformedAreas,
     competences: filteredCompetences,
     thematics: transformedThematics,
     tubes: transformedTubes,

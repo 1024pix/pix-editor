@@ -18,18 +18,7 @@ const areaTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, i
 export const {
   extractFromProxyObject,
   extractFromReleaseObject,
-  proxyObjectToAirtableObject,
   prefixFor,
+  toDomain,
+  extractFromDomainObject,
 } = areaTranslationUtils;
-
-export function airtableObjectToProxyObject(airtableObject, translations) {
-  const areaProxyObject = areaTranslationUtils.airtableObjectToProxyObject(airtableObject, translations);
-  areaProxyObject.fields.Nom = `${areaProxyObject.fields.Code}. ${areaProxyObject.fields['Titre fr-fr']}`;
-  return areaProxyObject;
-}
-
-export function toDomain(translations, datasourceArea) {
-  const domainArea = areaTranslationUtils.toDomain(translations);
-  domainArea.name = `${datasourceArea.code}. ${domainArea.title_i18n.fr}`;
-  return domainArea;
-}

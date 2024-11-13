@@ -1,3 +1,4 @@
+export * as areaSerializer from './area-serializer.js';
 export * as challengeSerializer from './challenge-serializer.js';
 export * as competenceOverviewSerializer from './competence-overview-serializer.js';
 export * as configSerializer from './config-serializer.js';

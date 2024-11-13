@@ -15,9 +15,17 @@ export const areaDatasource = datasource.extend({
     'Referentiel',
   ],
 
+  sortField: 'Code',
+
+  async listByFrameworkId(frameworkId) {
+    const areas = await this.list();
+    return areas.filter((area) => area.frameworkId === frameworkId);
+  },
+
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.id,
       code: airtableRecord.get('Code'),
       competenceIds: airtableRecord.get('Competences (identifiants) (id persistant)'),
       competenceAirtableIds: airtableRecord.get('Competences (identifiants)'),
@@ -26,4 +34,13 @@ export const areaDatasource = datasource.extend({
     };
   },
 
+  toAirTableObject(area) {
+    return {
+      fields: {
+        'id persistant': area.id,
+        Code: area.code,
+        Referentiel: [area.frameworkId],
+      }
+    };
+  },
 });

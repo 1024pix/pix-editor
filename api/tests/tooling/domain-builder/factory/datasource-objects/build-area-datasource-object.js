@@ -2,6 +2,7 @@ import { Area } from '../../../../../lib/domain/models/index.js';
 
 export function buildAreaDatasourceObject({
   id = 'recvoGdo7z2z7pXWa',
+  airtableId = id,
   code = '1',
   competenceIds = [
     'recsvLz0W2ShyfD63',
@@ -17,6 +18,7 @@ export function buildAreaDatasourceObject({
 
   return {
     id,
+    airtableId,
     code,
     competenceIds,
     competenceAirtableIds,
