@@ -1,5 +1,25 @@
 
 
+## v3.172.0 (13/11/2024)
+
+
+### :rocket: Amélioration
+- [#812](https://github.com/1024pix/pix-editor/pull/812) [FEATURE] Je veux pouvoir modifier une URL de la liste blanche (PIX-15183).
+- [#808](https://github.com/1024pix/pix-editor/pull/808) [FEATURE] Sortir les domaines du proxy Airtable (PIX-15253).
+- [#799](https://github.com/1024pix/pix-editor/pull/799) [FEATURE] Je veux pouvoir ajouter une URL à la liste blanche (PIX-15182).
+- [#804](https://github.com/1024pix/pix-editor/pull/804) [FEATURE] Connecter la vue Épreuves Atelier avec le CompetenceOverview (PIX-14523).
+- [#798](https://github.com/1024pix/pix-editor/pull/798) [FEATURE] Je veux pouvoir supprimer une URL de la liste blanche (PIX-15181).
+- [#797](https://github.com/1024pix/pix-editor/pull/797) [FEATURE] Permettre de consulter la liste des URLs sur liste blanche pour la moulinette (PIX-15180).
+
+### :building_construction: Tech
+- [#806](https://github.com/1024pix/pix-editor/pull/806) [TECH] Sortir les référentiels du proxy Airtable (PIX-15250).
+- [#805](https://github.com/1024pix/pix-editor/pull/805) [TECH] Optimisation du chargement de la route authenticated.
+
+### :arrow_up: Montée de version
+- [#811](https://github.com/1024pix/pix-editor/pull/811) [BUMP] Update dependency ember-load-initializers to v3 (pix-editor).
+- [#809](https://github.com/1024pix/pix-editor/pull/809) [BUMP] Update dependency fast-csv to v5.0.2 (api).
+- [#802](https://github.com/1024pix/pix-editor/pull/802) [BUMP] Update dependency vitest to v2 (api).
+
 ## v3.171.1 (06/11/2024)
 
 
