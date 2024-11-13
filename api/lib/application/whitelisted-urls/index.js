@@ -90,9 +90,8 @@ export async function register(server) {
           if (!whitelistedUrlToUpdate) {
             throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
           }
-          const existingWhitelistedUrls = await whitelistedUrlReadRepository.list();
-          const existingWhitelistedUrlsExceptUpdatedOne = existingWhitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.id !== whitelistedUrlId);
-          whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrlsExceptUpdatedOne);
+          const existingWhitelistedUrls = await whitelistedUrlRepository.list();
+          whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
           whitelistedUrlToUpdate.update(updateCommand, authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToUpdate);
           const updatedWhitelistedUrl = await whitelistedUrlReadRepository.find(whitelistedUrlId);

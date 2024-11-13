@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { User, WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 import {
-  NotFoundWhitelistedUrlError,
   CommandWhitelistedUrlConflictError,
   CommandWhitelistedUrlError,
   CommandWhitelistedUrlForbiddenError,
+  NotFoundWhitelistedUrlError,
 } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | WhitelistedUrl', () => {
@@ -20,6 +20,34 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
   afterEach(function() {
     vi.useRealTimers();
+  });
+
+  describe('#get isActive', function() {
+    it('should return true when WhitelistedUrl is not deleted', function() {
+      // given
+      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({
+        deletedAt: null,
+      });
+
+      // when
+      const isActive = activeWhitelistedUrl.isActive;
+
+      // then
+      expect(isActive).toStrictEqual(true);
+    });
+
+    it('should return false when WhitelistedUrl is deleted', function() {
+      // given
+      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({
+        deletedAt: new Date('2020-01-01'),
+      });
+
+      // when
+      const isActive = activeWhitelistedUrl.isActive;
+
+      // then
+      expect(isActive).toStrictEqual(false);
+    });
   });
 
   describe('#canDelete', () => {
@@ -121,9 +149,16 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
-        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
-          url: 'https://www.painperdu.com',
-        })];
+        const existingWhitelistedUrls = [
+          domainBuilder.buildWhitelistedUrl({
+            url: 'https://www.painperdu.com',
+            deletedAt: null,
+          }),
+          domainBuilder.buildWhitelistedUrl({
+            url: 'https://www.brioche.com',
+            deletedAt: new Date('2020-01-01'),
+          }),
+        ];
         const creationCommand1 = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -379,9 +414,22 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
-        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrlRead({
-          url: 'https://www.painperdu.com',
-        })];
+        const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
+          url: 'https://www.url-origine.com',
+          deletedBy: null,
+          deletedAt: null,
+        });
+        const existingWhitelistedUrls = [
+          domainBuilder.buildWhitelistedUrl({
+            url: 'https://www.painperdu.com',
+            deletedAt: null,
+          }),
+          domainBuilder.buildWhitelistedUrl({
+            url: 'https://www.brioche.com',
+            deletedAt: new Date('2020-01-01'),
+          }),
+          whitelistedUrlToUpdate,
+        ];
         const updateCommand1 = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -394,14 +442,17 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           comment: 'COucou',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
-        const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
-          deletedBy: null,
-          deletedAt: null,
-        });
+        const updateCommand3 = {
+          url: 'https://www.url-origine.com',
+          relatedSkillNames: '@fruit8',
+          comment: 'Update avec la même url mais je vérifie que je me conflicte pas avec moi-même',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        };
 
         // when
         whitelistedUrlToUpdate.canUpdate(updateCommand1, user, existingWhitelistedUrls);
         whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+        whitelistedUrlToUpdate.canUpdate(updateCommand3, user, existingWhitelistedUrls);
 
         // then
         expect(true).to.be.true;
@@ -602,7 +653,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
-        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrlRead({
+        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
           url: 'https://www.brioche.com',
         })];
         const updateCommand = {
