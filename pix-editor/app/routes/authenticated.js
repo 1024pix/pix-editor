@@ -16,10 +16,10 @@ export default class AuthenticatedRoute extends Route {
     const [frameworks, areas] = await Promise.all([
       this.store.findAll('framework'),
       this.store.findAll('area'),
-      this.store.findAll('competence'),
       this.config.load(),
     ]);
     if (frameworks) {
+      await Promise.all(areas.map((area) => area.competences));
       this.currentData.setFrameworks(frameworks);
       this.currentData.setAreas(areas);
       const pixFramework = frameworks.find((framework) => framework.name === 'Pix');
