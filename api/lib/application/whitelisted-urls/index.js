@@ -66,6 +66,39 @@ export async function register(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/whitelisted-urls/{whitelistUrlId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            whitelistUrlId: Types.whitelistedUrlId().required(),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        handler: async function(request, h) {
+          const authenticatedUser = request.auth.credentials.user;
+          const attributes = request.payload.data.attributes;
+          const whitelistedUrlId = request.params.whitelistUrlId;
+          const updateCommand = {
+            url: attributes['url'] ?? null,
+            relatedSkillNames: attributes['related-skill-names'] ?? null,
+            comment: attributes['comment'] ?? null,
+            checkType: attributes['check-type'] ?? null,
+          };
+          const whitelistedUrlToUpdate = await whitelistedUrlRepository.find(whitelistedUrlId);
+          if (!whitelistedUrlToUpdate) {
+            throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
+          }
+          const existingWhitelistedUrls = await whitelistedUrlRepository.list();
+          whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
+          whitelistedUrlToUpdate.update(updateCommand, authenticatedUser);
+          await whitelistedUrlRepository.save(whitelistedUrlToUpdate);
+          const updatedWhitelistedUrl = await whitelistedUrlReadRepository.find(whitelistedUrlId);
+          return h.response(whitelistedUrlSerializer.serialize(updatedWhitelistedUrl));
+        },
+      },
+    },
   ]);
 }
 

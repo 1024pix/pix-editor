@@ -440,6 +440,21 @@ function routes() {
 
   this.get('/whitelisted-urls');
   this.delete('/whitelisted-urls/:id');
+  this.patch('/whitelisted-urls/:id', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const whitelistedUrl = schema.whitelistedUrls.find(request.params.id);
+    whitelistedUrl.update({
+      url: attributes.url,
+      relatedSkillNames: attributes['related-skill-names'],
+      checkType: attributes['check-type'],
+      comment: attributes.comment,
+      creatorName: 'TEST USER',
+      createdAt: new Date().toISOString(),
+      latestUpdatorName: 'TEST USER',
+      updatedAt: new Date().toISOString(),
+    });
+    return whitelistedUrl;
+  });
   this.post('/whitelisted-urls', function(schema, request) {
     const whitelistedUrl = JSON.parse(request.requestBody).data.attributes;
     return schema.create('whitelisted-url', {

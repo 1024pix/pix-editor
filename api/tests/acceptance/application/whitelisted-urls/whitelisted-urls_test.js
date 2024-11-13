@@ -416,4 +416,141 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       });
     });
   });
+  describe('PATCH /whitelisted-urls/{whitelistedUrlId}', () => {
+    let adminUser, server, validPayload;
+    beforeEach(async function() {
+      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 123,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: null,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: null,
+        url: 'https://www.google.com',
+        relatedSkillNames: '@morse2,@saumon5',
+        comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 456,
+        createdBy: null,
+        latestUpdatedBy: null,
+        deletedBy: null,
+        createdAt: new Date('2020-12-12'),
+        updatedAt: new Date('2022-08-08'),
+        deletedAt: null,
+        url: 'https://www.editor.pix.fr',
+        relatedSkillNames: null,
+        comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 789,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: adminUser.id,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: new Date('2023-01-01'),
+        url: 'https://www.les-fruits-c-super-bon',
+        relatedSkillNames: '@truite2',
+        comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+      });
+      await databaseBuilder.commit();
+      server = await createServer();
+      validPayload = {
+        data: {
+          attributes: {
+            url: 'https://super-casserole.com',
+            'related-skill-names': '@feutre2,@crayon1',
+            comment: 'Un super commentaire',
+            'check-type': 'starts_with',
+          },
+        },
+      };
+    });
+
+    it('should return a 403 status code when user is not admin', async () => {
+      // given
+      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      await databaseBuilder.commit();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(notAdminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(403);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            code: 403,
+            detail: 'Missing or insufficient permissions.',
+            title: 'Forbidden access',
+          },
+        ],
+      });
+    });
+
+    it('should return a 422 status code when update command in invalid', async () => {
+      // when
+      const invalidPayload = JSON.parse(JSON.stringify(validPayload));
+      invalidPayload.data.attributes.url = 'je ne suis pas une bonne url';
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: invalidPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(422);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            status: '422',
+            title: 'Unprocessable entity',
+            detail: 'URL invalide',
+            source: { pointer: '/data/attributes/url' },
+          },
+        ],
+      });
+    });
+
+    it('should return a 200 status code and the serialized updated whitelisted url', async () => {
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'whitelisted-urls',
+          id: '456',
+          attributes: {
+            'created-at': new Date('2020-12-12'),
+            'updated-at': now,
+            'creator-name': null,
+            'latest-updator-name': 'Madame Admin',
+            url: 'https://super-casserole.com',
+            'related-skill-names': '@feutre2,@crayon1',
+            comment: 'Un super commentaire',
+            'check-type': 'starts_with',
+          },
+        },
+      });
+    });
+  });
 });

@@ -33,12 +33,12 @@ export default class WhitelistedUrlForm extends Component {
       this.url.setValue(this.args.initialUrl);
       this.url.validate();
     }
-    if (this.args.initialComment.length > 0) {
+    if (this.args.initialComment?.length > 0) {
       this.comment.setValue(this.args.initialComment);
       this.comment.validate();
     }
-    if (this.args.initialRelatedSkillNames.length > 0) {
-      this.relatedSkillNames.setValue(this.args.relatedSkillNames);
+    if (this.args.initialRelatedSkillNames?.length > 0) {
+      this.relatedSkillNames.setValue(this.args.initialRelatedSkillNames);
       this.relatedSkillNames.validate();
     }
     if (this.args.initialCheckType.length > 0) {
