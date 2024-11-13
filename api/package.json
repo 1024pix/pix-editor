@@ -61,7 +61,7 @@
     "bull": "^4.10.4",
     "countries-list": "^3.0.6",
     "dotenv": "^16.0.0",
-    "fast-csv": "5.0.1",
+    "fast-csv": "5.0.2",
     "file-saver": "2.0.5",
     "googleapis": "^136.0.0",
     "hapi-pino": "^8.4.0",
