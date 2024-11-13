@@ -1,9 +1,11 @@
 const emberRecommendedConfig = require('eslint-plugin-ember/configs/recommended');
+const emberGjsRecommendedConfig = require('eslint-plugin-ember/configs/recommended-gjs');
 const qunitRecommendedConfig = require('eslint-plugin-qunit/configs/recommended');
 const pixRecommendedConfig = require('@1024pix/eslint-plugin/config');
 const n = require('eslint-plugin-n');
 const globals = require('globals');
 const babelParser = require('@babel/eslint-parser');
+const emberParser = require('ember-eslint-parser');
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
 const compiledOutputFiles = ['dist/*', 'tmp/*'];
@@ -28,6 +30,7 @@ const nodeFiles = [
 module.exports = [
   ...pixRecommendedConfig,
   ...emberRecommendedConfig,
+  ...emberGjsRecommendedConfig,
   qunitRecommendedConfig,
   {
     ignores: [...unconventionalJsFiles, ...compiledOutputFiles, ...dependenciesFiles, ...miscFiles, ...emberTryFiles],
@@ -70,6 +73,13 @@ module.exports = [
       ],
 
       'qunit/require-expect': ['error', 'except-simple'],
+    },
+  },
+  {
+    files: ['**/*.gjs'],
+    languageOptions: {
+      parser: emberParser,
+      sourceType: 'module',
     },
   },
   {
