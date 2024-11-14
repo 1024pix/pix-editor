@@ -1,5 +1,11 @@
 
 
+## v3.173.0 (14/11/2024)
+
+
+### :rocket: Amélioration
+- [#792](https://github.com/1024pix/pix-editor/pull/792) [FEATURE] Prendre en compte la whitelist des URLs dans la moulinette (PIX-6043).
+
 ## v3.172.1 (14/11/2024)
 
 
