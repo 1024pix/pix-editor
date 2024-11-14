@@ -2,7 +2,10 @@ import Joi from 'joi';
 import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
-import { getCompetenceChallengesProductionOverview, getCompetenceChallengesWorkbenchOverview } from '../../domain/usecases/index.js';
+import {
+  getCompetenceChallengesProductionOverview,
+  getCompetenceChallengesWorkbenchOverview
+} from '../../domain/usecases/index.js';
 import { competenceOverviewSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { Types } from '../types.js';
 

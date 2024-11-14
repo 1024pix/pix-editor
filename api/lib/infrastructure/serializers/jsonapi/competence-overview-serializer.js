@@ -4,6 +4,8 @@ const { Serializer } = JsonapiSerializer;
 
 const serializer = new Serializer('competence-overview', {
   attributes: [
+    'airtableId',
+    'name',
     'thematicOverviews',
     'tubesCount',
     'skillsCount',

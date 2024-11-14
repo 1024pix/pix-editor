@@ -1,17 +1,13 @@
-import {  beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import {
   challengeDatasource,
+  competenceDatasource,
   skillDatasource,
   thematicDatasource,
-  tubeDatasource
+  tubeDatasource,
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models/index.js';
 import { LOCALE } from '../../../../lib/domain/constants.js';
@@ -25,10 +21,30 @@ describe('Acceptance | Route | competence-overviews', () => {
   });
 
   describe('GET /competences/:id/overviews/challenges-production', () => {
-    let competenceId, airtableThematicsScope, airtableTubesScope, airtableSkillsScope, airtableChallengesScope;
+    let competenceId, airtableCompetencesScope, airtableThematicsScope, airtableTubesScope, airtableSkillsScope, airtableChallengesScope;
 
     beforeEach(async function() {
       competenceId = 'recCompetence1';
+
+      const airtableCompetences = [
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
+      ];
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.recCompetence1.name',
+        locale: 'fr',
+        value: 'Mon super titre',
+      });
+
+      airtableCompetencesScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Competences')
+        .query({
+          fields: {
+            '': competenceDatasource.usedFields,
+          },
+          filterByFormula: `OR("${competenceId}" = {id persistant})`,
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableCompetences });
 
       const airtableThematics = [
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2', 'recTube3'] })),
@@ -164,6 +180,8 @@ describe('Acceptance | Route | competence-overviews', () => {
             type: 'competence-overviews',
             id: `${competenceId}:challenges-production`,
             attributes: {
+              'airtable-id': 'recAirtableCompetence1',
+              'name': '2.2 Mon super titre',
               'tubes-count': 4,
               'skills-count': 5,
               'thematic-overviews': [
@@ -271,6 +289,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           },
         });
 
+        expect(airtableCompetencesScope.isDone()).toBe(true);
         expect(airtableThematicsScope.isDone()).toBe(true);
         expect(airtableTubesScope.isDone()).toBe(true);
         expect(airtableSkillsScope.isDone()).toBe(true);
@@ -303,6 +322,8 @@ describe('Acceptance | Route | competence-overviews', () => {
             type: 'competence-overviews',
             id: `${competenceId}:challenges-production:en`,
             attributes: {
+              'airtable-id': 'recAirtableCompetence1',
+              'name': '2.2 Mon super titre',
               'tubes-count': 4,
               'skills-count': 5,
               'thematic-overviews': [
@@ -410,6 +431,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           },
         });
 
+        expect(airtableCompetencesScope.isDone()).toBe(true);
         expect(airtableThematicsScope.isDone()).toBe(true);
         expect(airtableTubesScope.isDone()).toBe(true);
         expect(airtableSkillsScope.isDone()).toBe(true);
@@ -419,10 +441,30 @@ describe('Acceptance | Route | competence-overviews', () => {
   });
 
   describe('GET /competences/:id/overviews/challenges-workbench', () => {
-    let competenceId, airtableThematicsScope, airtableTubesScope, airtableSkillsScope, airtableChallengesScope;
+    let competenceId, airtableCompetencesScope, airtableThematicsScope, airtableTubesScope, airtableSkillsScope, airtableChallengesScope;
 
     beforeEach(async function() {
       competenceId = 'recCompetence1';
+
+      const airtableCompetences = [
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
+      ];
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.recCompetence1.name',
+        locale: 'fr',
+        value: 'Mon super titre',
+      });
+
+      airtableCompetencesScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Competences')
+        .query({
+          fields: {
+            '': competenceDatasource.usedFields,
+          },
+          filterByFormula: `OR("${competenceId}" = {id persistant})`,
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableCompetences });
 
       const airtableThematics = [
         airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'] })),
@@ -554,6 +596,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           type: 'competence-overviews',
           id: `${competenceId}:challenges-workbench`,
           attributes: {
+            'airtable-id': 'recAirtableCompetence1',
+            'name': '2.2 Mon super titre',
             'tubes-count': 3,
             'skills-count': 5,
             'thematic-overviews': [
@@ -648,6 +692,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         },
       });
 
+      expect(airtableCompetencesScope.isDone()).toBe(true);
       expect(airtableThematicsScope.isDone()).toBe(true);
       expect(airtableTubesScope.isDone()).toBe(true);
       expect(airtableSkillsScope.isDone()).toBe(true);
