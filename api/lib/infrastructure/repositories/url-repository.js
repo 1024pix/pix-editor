@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import { logger } from '../logger.js';
 import * as config from '../../config.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const sheets = google.sheets('v4');
 
@@ -90,11 +91,39 @@ export function updateChallenges(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.challengesSheetName);
 }
 
-export function updateTutorials(dataToUpload) {
-  return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.tutorialsSheetName);
+export async function updateTutorials(dataToUpload) {
+  const finalDataToUpload = await keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload);
+  return sendDataToGoogleSheet(finalDataToUpload, config.checkUrlsJobs.tutorialsSheetName);
 }
 
 export function exportExternalUrls(dataToUpload) {
   const sheetName = new Date().toLocaleDateString('fr-FR');
   return addSheetToGoogleSheet(dataToUpload, sheetName, config.exportExternalUrlsJob.spreadsheetId);
+}
+
+const TUTORIAL_KO_URLS_TABLE_NAME = 'tutorial_ko_urls';
+const CONTINUOUS_FAILURE_MINIMUM_COUNT = 2;
+async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
+  const finalDataToUpload = [];
+  await knex.transaction(async (trx) => {
+    const currentTutorialKoUrlsInDB = await trx(TUTORIAL_KO_URLS_TABLE_NAME);
+
+    const tutorialKoUrlsToInsertInDB = [];
+    for (const itemToUpload of dataToUpload) {
+      const [,,,currentUrl] = itemToUpload;
+      let currentContinuousKoCount = currentTutorialKoUrlsInDB.find(({ url }) => url === currentUrl)?.continuousKoCount ?? 0;
+      ++currentContinuousKoCount;
+      tutorialKoUrlsToInsertInDB.push({
+        url: currentUrl,
+        continuousKoCount: currentContinuousKoCount,
+      });
+      if (currentContinuousKoCount >= CONTINUOUS_FAILURE_MINIMUM_COUNT) {
+        finalDataToUpload.push(itemToUpload);
+      }
+    }
+
+    await trx(TUTORIAL_KO_URLS_TABLE_NAME).del();
+    await trx(TUTORIAL_KO_URLS_TABLE_NAME).insert(tutorialKoUrlsToInsertInDB);
+  });
+  return finalDataToUpload;
 }
