@@ -104,7 +104,7 @@ export class WhitelistedUrl {
     this.checkType = updateCommand.checkType;
   }
 
-  isMatching(url) {
+  matches(url) {
     if (this.checkType === WhitelistedUrl.CHECK_TYPES.EXACT_MATCH) return url === this.url;
     if (this.checkType === WhitelistedUrl.CHECK_TYPES.STARTS_WITH) return url.startsWith(this.url);
     return false;

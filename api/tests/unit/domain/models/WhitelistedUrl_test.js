@@ -756,7 +756,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     });
   });
 
-  describe('#isMatching', function() {
+  describe('#matches', function() {
     describe('exact_match', function() {
       it('should match when url is exactly the same as the whitelisted', function() {
         // given
@@ -767,7 +767,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.true;
@@ -782,7 +782,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;
@@ -797,7 +797,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;
@@ -812,7 +812,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;
@@ -828,7 +828,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.true;
@@ -842,7 +842,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.true;
@@ -857,7 +857,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;
@@ -872,7 +872,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;
@@ -887,7 +887,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         });
 
         // when
-        const isMatching = whitelistedUrl.isMatching(url);
+        const isMatching = whitelistedUrl.matches(url);
 
         // then
         expect(isMatching).to.be.false;

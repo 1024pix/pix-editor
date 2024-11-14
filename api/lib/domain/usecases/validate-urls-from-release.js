@@ -61,7 +61,7 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, loca
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
-  const finalUrlList = urlList.filter(({ url }) => whitelistedUrls.every((whitelistedUrl) => !whitelistedUrl.isMatching(url)));
+  const finalUrlList = urlList.filter(({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateChallenges(formattedKOChallengeUrls);
@@ -70,7 +70,7 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, loca
 async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
   const tutorials = release.content.tutorials;
   const urlList = findUrlsFromTutorials(tutorials, release);
-  const finalUrlList = urlList.filter(({ url }) => whitelistedUrls.every((whitelistedUrl) => !whitelistedUrl.isMatching(url)));
+  const finalUrlList = urlList.filter(({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateTutorials(formattedKOTutorialUrls);
