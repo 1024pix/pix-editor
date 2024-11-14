@@ -1,5 +1,11 @@
 
 
+## v3.172.1 (14/11/2024)
+
+
+### :bug: Correction
+- [#816](https://github.com/1024pix/pix-editor/pull/816) [BUGFIX] Toutes les compétences ne sont pas chargées (PIX-15300).
+
 ## v3.172.0 (13/11/2024)
 
 
