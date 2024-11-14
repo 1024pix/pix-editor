@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { competenceDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
-import { Competence } from '../../domain/models/Competence.js';
+import { Competence } from '../../domain/models/index.js';
 
 const model = 'competence';
 
@@ -21,6 +21,15 @@ export async function getMany(ids) {
     translationRepository.listByEntities(model, ids),
   ]);
   return toDomainList(datasourceCompetences, translations);
+}
+
+export async function get(id) {
+  const [[competenceDTO], translations] = await Promise.all([
+    competenceDatasource.filter({ filter: { ids: [id] } }),
+    translationRepository.listByEntity(model, id),
+  ]);
+  if (!competenceDTO) return null;
+  return toDomain(competenceDTO, translations);
 }
 
 function toDomainList(datasourceCompetences, translations) {

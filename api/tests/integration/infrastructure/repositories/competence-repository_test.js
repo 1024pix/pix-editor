@@ -113,4 +113,106 @@ describe('Integration | Repository | competence-repository', () => {
       airtableScope.done();
     });
   });
+
+  describe('#get', () => {
+    it('should return the competence by its id', async () => {
+      // given
+      const competenceId = 'competence2';
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
+        airtableBuilder.factory.buildCompetence({
+          id: 'competence2',
+          index: '1.2',
+          origin: 'Pix',
+          areaId: 'area2',
+          skillIds: ['skill3', 'skill4'],
+          thematicIds: ['thematic3', 'thematic4'],
+        }),
+      ]).activate().nockScope;
+
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.name',
+        locale: 'fr',
+        value: 'Nom compétence 1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.description',
+        locale: 'fr',
+        value: 'Description compétence 1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.name',
+        locale: 'en',
+        value: 'Competence 1 name',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.description',
+        locale: 'en',
+        value: 'Competence 1 description',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'fr',
+        value: 'Nom compétence 2',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'fr',
+        value: 'Description compétence 2',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'en',
+        value: 'Competence 2 name',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'en',
+        value: 'Competence 2 description',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const competence = await competenceRepository.get(competenceId);
+
+      // then
+      expect(competence).toStrictEqual(domainBuilder.buildCompetence({
+        id: 'competence2',
+        airtableId: 'competence2',
+        index: '1.2',
+        origin: 'Pix',
+        areaId: 'area2',
+        skillIds: ['skill3', 'skill4'],
+        thematicIds: ['thematic3', 'thematic4'],
+        name_i18n: {
+          fr: 'Nom compétence 2',
+          en: 'Competence 2 name',
+        },
+        description_i18n:  {
+          fr: 'Description compétence 2',
+          en: 'Competence 2 description',
+        }
+      }));
+      airtableScope.done();
+    });
+
+    it('should return null when no competence with id found', async () => {
+      // given
+      const competenceId = 'coucouMaman';
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([]).activate().nockScope;
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.name',
+        locale: 'fr',
+        value: 'Nom compétence 1',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const competence = await competenceRepository.get(competenceId);
+
+      // then
+      expect(competence).toStrictEqual(null);
+      airtableScope.done();
+    });
+  });
 });

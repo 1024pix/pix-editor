@@ -3,19 +3,25 @@ import { Challenge } from '../models/index.js';
 export class CompetenceOverview {
   constructor({
     id,
+    airtableId,
+    name,
     thematicOverviews,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
+    this.name = name;
     this.thematicOverviews = thematicOverviews;
     this.tubesCount = sumBy(thematicOverviews, ({ tubesCount }) => tubesCount);
     this.skillsCount = sumBy(thematicOverviews, ({ skillsCount }) => skillsCount);
   }
 
-  static buildForChallengesProduction({ competenceId, thematics, tubes, skills, challenges, locale }) {
-    let id = `${competenceId}:challenges-production`;
+  static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale }) {
+    let id = `${competence.id}:challenges-production`;
     if (locale) id += `:${locale}`;
     return new CompetenceOverview({
       id,
+      airtableId: competence.airtableId,
+      name: `${competence.index} ${competence.name_i18n['fr']}`,
       thematicOverviews: thematics
         .sort(byIndex)
         .map((thematic) => ThematicOverview.buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }))
@@ -23,11 +29,13 @@ export class CompetenceOverview {
     });
   }
 
-  static buildForChallengesWorkbench({ competenceId, thematics, tubes, skills, challenges }) {
-    const id = `${competenceId}:challenges-workbench`;
+  static buildForChallengesWorkbench({ competence, thematics, tubes, skills, challenges }) {
+    const id = `${competence.id}:challenges-workbench`;
     const skillsWithoutWorkbench = skills.filter(({ name }) => name !== '@workbench');
     return new CompetenceOverview({
       id,
+      airtableId: competence.airtableId,
+      name: `${competence.index} ${competence.name_i18n['fr']}`,
       thematicOverviews: thematics
         .sort(byIndex)
         .map((thematic) => ThematicOverview.buildForChallengesWorkbench({ thematic, tubes, skills: skillsWithoutWorkbench, challenges }))
@@ -45,6 +53,18 @@ class ThematicOverview {
     this.airtableId = airtableId;
     this.name = name;
     this.tubeOverviews = tubeOverviews;
+  }
+
+  get isEmpty() {
+    return !this.tubeOverviews || this.tubeOverviews.length === 0;
+  }
+
+  get tubesCount() {
+    return this.isEmpty ? 0 : this.tubeOverviews.length;
+  }
+
+  get skillsCount() {
+    return this.isEmpty ? 0 : sumBy(this.tubeOverviews, ({ skillsCount }) => skillsCount);
   }
 
   static buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }) {
@@ -74,18 +94,6 @@ class ThematicOverview {
         .filter((tubeOverview) => !tubeOverview.isEmpty)
     });
   }
-
-  get isEmpty() {
-    return !this.tubeOverviews || this.tubeOverviews.length === 0;
-  }
-
-  get tubesCount() {
-    return this.isEmpty ? 0 : this.tubeOverviews.length;
-  }
-
-  get skillsCount() {
-    return this.isEmpty ? 0 : sumBy(this.tubeOverviews, ({ skillsCount }) => skillsCount);
-  }
 }
 
 class TubeOverview {
@@ -97,6 +105,14 @@ class TubeOverview {
     this.airtableId = airtableId;
     this.name = name;
     this.skillOverviews = skillOverviews;
+  }
+
+  get isEmpty() {
+    return !this.skillOverviews || this.skillOverviews.length === 0;
+  }
+
+  get skillsCount() {
+    return this.isEmpty ? 0 : sumBy(this.skillOverviews, (skillOverview) => skillOverview === null ? 0 : 1);
   }
 
   static buildForChallengesProduction({ tube, skills, challenges, locale }) {
@@ -119,14 +135,6 @@ class TubeOverview {
       skillOverviews: skillsByTubeIdAndLevel[tube.id]
         ?.map((skills) => SkillOverview.buildForChallengesWorkbench({ skills, challenges })),
     });
-  }
-
-  get isEmpty() {
-    return !this.skillOverviews || this.skillOverviews.length === 0;
-  }
-
-  get skillsCount() {
-    return this.isEmpty ? 0 : sumBy(this.skillOverviews, (skillOverview) => skillOverview === null ? 0 : 1);
   }
 }
 

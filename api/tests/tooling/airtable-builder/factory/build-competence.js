@@ -1,5 +1,6 @@
 export function buildCompetence({
   id = 'competenceid1',
+  airtableId,
   index,
   areaId,
   skillIds,
@@ -7,7 +8,7 @@ export function buildCompetence({
   origin,
 } = {}) {
   return {
-    id,
+    id: airtableId ?? id,
     'fields': {
       'id persistant': id,
       'Sous-domaine': index,
