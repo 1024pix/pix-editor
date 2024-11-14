@@ -60,8 +60,10 @@ export default class AirtableAdapter extends RESTAdapter {
     const serializer = store.serializerFor(type.modelName);
     const responses = await Promise.all(chunk(ids, maxIds).map((chunkedIds) => {
       const recordsText = 'OR(' + chunkedIds.map((id) => `{${serializer.primaryKey}} = '${id}'`).join(',') + ')';
+      const query = { filterByFormula: recordsText };
+      if (this.fields) query.fields = this.fields;
       const url = this.buildURL(type.modelName, chunkedIds, snapshots, 'findMany');
-      return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
+      return this.ajax(url, 'GET', { data: query });
     }));
     return responses.reduce((acc, response) => {
       acc.records.push(...response.records);
@@ -88,7 +90,10 @@ export default class AirtableAdapter extends RESTAdapter {
   buildQuery(snapshot) {
     const query = super.buildQuery(snapshot);
 
-    if (this.sort && !snapshot.id) query.sort = this.sort;
+    if (snapshot.id) return query;
+
+    if (this.fields) query.fields = this.fields;
+    if (this.sort) query.sort = this.sort;
 
     return query;
   }
