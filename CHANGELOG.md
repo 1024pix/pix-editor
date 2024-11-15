@@ -1,5 +1,14 @@
 
 
+## v3.174.0 (15/11/2024)
+
+
+### :rocket: Amélioration
+- [#817](https://github.com/1024pix/pix-editor/pull/817) [FEATURE] Pour les tutoriels, ne faire remonter que les URLs qui ont été KO au moins deux fois d'affilé dans la moulinette (PIX-15002).
+
+### :building_construction: Tech
+- [#818](https://github.com/1024pix/pix-editor/pull/818) [TECH] Ajouter les attributs "title" et "airtableId" dans le modèle "CompetenceOverview" (PIX-15307).
+
 ## v3.173.0 (14/11/2024)
 
 
