@@ -4,6 +4,7 @@ import { competenceDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/index.js';
+import * as idGenerator from '../utils/id-generator.js';
 
 const model = 'competence';
 
@@ -37,6 +38,24 @@ export async function getByAirtableId(airtableId) {
   if (!competenceDTO) return null;
   const translations = await translationRepository.listByEntity(model, competenceDTO.id);
   return toDomain(competenceDTO, translations);
+}
+
+export async function listByAreaAirtableId(areaAirtableId) {
+  const competenceDTOs = await competenceDatasource.listByAreaAirtableId(areaAirtableId);
+  const translations = await translationRepository.listByEntities(model, competenceDTOs.map(({ id }) => id));
+  return toDomainList(competenceDTOs, translations);
+}
+
+export async function create(competence) {
+  competence.id = idGenerator.generateNewId('competence');
+
+  const translations = competenceTranslations.extractFromDomainObject(competence);
+
+  const createdCompetenceDto = await competenceDatasource.create(competence);
+
+  await translationRepository.save({ translations });
+
+  return toDomain(createdCompetenceDto, translations);
 }
 
 function toDomainList(datasourceCompetences, translations) {

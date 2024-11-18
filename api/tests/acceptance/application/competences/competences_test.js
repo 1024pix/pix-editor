@@ -1,19 +1,22 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import {
   airtableBuilder,
   databaseBuilder,
   domainBuilder,
   generateAuthorizationHeader,
+  knex,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { competenceDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Acceptance | Route | competences', () => {
 
-  let editorUser;
+  let editorUser, adminUser;
   beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
+    adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
   });
 
@@ -398,6 +401,237 @@ describe('Acceptance | Route | competences', () => {
       });
 
       expect(airtableCompetenceScope.isDone()).toBe(true);
+    });
+  });
+
+  describe('POST /competences', async () => {
+    let airtableAreaScope, airtableCompetencesScope, airtableCreateCompetenceScope, generateNewId, pixApiCacheScope;
+
+    beforeEach(async () => {
+      const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
+        id: 'area2',
+        airtableId: 'recArea2',
+        code: '2',
+      }));
+
+      airtableAreaScope = nock('https://api.airtable.com')
+        .get(`/v0/airtableBaseValue/Domaines/${airtableArea.id}`)
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableArea);
+
+      const airtableCompetences = [
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          id: 'competence3',
+          airtableId: 'recCompetence3',
+          index: '2.1',
+          areaAirtableId: 'recArea2',
+        })),
+      ];
+
+      airtableCompetencesScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Competences')
+        .query({
+          fields: { '': competenceDatasource.usedFields },
+          filterByFormula: 'Domaine = "recArea2"',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableCompetences });
+
+      const airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+        id: 'competence4',
+        airtableId: 'recCompetence4',
+        index: '2.2',
+        areaId: 'area2',
+        areaAirtableId: 'recArea2',
+        origin: 'Pix',
+        thematicIds: null,
+        thematicAirtableIds: null,
+        tubeAirtableIds: null,
+        skillIds: null,
+      }));
+
+      airtableCreateCompetenceScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Competences/', {
+          records: [{
+            fields: {
+              'id persistant': 'competence4',
+              'Sous-domaine': '2.2',
+              Domaine: ['recArea2'],
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableCompetence] });
+
+      generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('competence4');
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/competences/competence4', {
+          id: 'competence4',
+          index: '2.2',
+          areaId: 'area2',
+          skillIds: [],
+          thematicIds: [],
+          origin: 'Pix',
+          name_i18n: {
+            fr: 'Quatrième compétence',
+            en: 'Fourth competence'
+          },
+          'description_i18n': {
+            fr: 'C’est la quatrième',
+            en: 'It’s the fourth one'
+          }
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+    });
+
+    describe('when payload is NOT valid', () => {
+      it('should respond with status 400', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/competences',
+          payload:  {
+            data: {
+              type: 'competences',
+              attributes: {
+                title: 'Quatrième compétence',
+              },
+              relationships: {
+                area: {
+                  data: null,
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(adminUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    describe('when user is NOT admin', () => {
+      it('should respond with status 403', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/competences',
+          payload:  {
+            data: {
+              type: 'competences',
+              attributes: {
+                title: 'Quatrième compétence',
+              },
+              relationships: {
+                area: {
+                  data: {
+                    type: 'areas',
+                    id: 'recArea2',
+                  },
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+      });
+    });
+
+    it('should respond with status 201 and created competence', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/competences',
+        payload:  {
+          data: {
+            type: 'competences',
+            attributes: {
+              title: 'Quatrième compétence',
+              'title-en': 'Fourth competence',
+              description: 'C’est la quatrième',
+              'description-en': 'It’s the fourth one',
+            },
+            relationships: {
+              area: {
+                data: {
+                  type: 'areas',
+                  id: 'recArea2',
+                },
+              },
+            },
+          },
+        },
+        headers: generateAuthorizationHeader(adminUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(201);
+
+      expect(response.result).toEqual({
+        data: {
+          type: 'competences',
+          id: 'recCompetence4',
+          attributes: {
+            'pix-id': 'competence4',
+            code: '2.2',
+            title: 'Quatrième compétence',
+            'title-en': 'Fourth competence',
+            description: 'C’est la quatrième',
+            'description-en': 'It’s the fourth one',
+            source: 'Pix',
+          },
+          relationships: {
+            area: {
+              data: {
+                type: 'areas',
+                id: 'recArea2',
+              },
+            },
+            'raw-themes': {
+              data: [],
+            },
+            'raw-tubes': {
+              data: [],
+            },
+          },
+        },
+      });
+
+      expect(generateNewId).toHaveBeenCalledWith('competence');
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' },
+        { key: 'competence.competence4.description', locale: 'fr', value: 'C’est la quatrième' },
+        { key: 'competence.competence4.name', locale: 'en', value: 'Fourth competence' },
+        { key: 'competence.competence4.name', locale: 'fr', value: 'Quatrième compétence' },
+      ]);
+
+      expect(airtableAreaScope.isDone()).toBe(true);
+      expect(airtableCompetencesScope.isDone()).toBe(true);
+      expect(airtableCreateCompetenceScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });

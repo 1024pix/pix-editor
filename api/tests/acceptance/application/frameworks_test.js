@@ -188,78 +188,76 @@ describe('Acceptance | Route | frameworks', () => {
       });
     });
 
-    describe('when user is admin', () => {
-      it('should respond with status 201 and created framework', async () => {
-        // given
-        const airtableFramework = airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
+    it('should respond with status 201 and created framework', async () => {
+      // given
+      const airtableFramework = airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
+        id: 'framework4',
+        name: 'Prix',
+        areaIds: null,
+      }));
+
+      const airtableFrameworksScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Referentiel/', {
+          records: [{
+            fields: {
+              Nom: 'Prix',
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableFramework] });
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      const pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/frameworks/framework4', {
           id: 'framework4',
           name: 'Prix',
-          areaIds: null,
-        }));
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
 
-        const airtableFrameworksScope = nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Referentiel/', {
-            records: [{
-              fields: {
-                Nom: 'Prix',
-              },
-            }],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [airtableFramework] });
+      const server = await createServer();
 
-        const pixApiToken = 'secret';
-        nock('https://api.test.pix.fr')
-          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
-        const pixApiCacheScope = nock('https://api.test.pix.fr')
-          .patch('/api/cache/frameworks/framework4', {
-            id: 'framework4',
-            name: 'Prix',
-          })
-          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-          .reply(200);
-
-        const server = await createServer();
-
-        // when
-        const response = await server.inject({
-          method: 'POST',
-          payload: {
-            data: {
-              type: 'frameworks',
-              attributes: {
-                name: 'Prix',
-              },
-            },
-          },
-          url: '/api/frameworks',
-          headers: generateAuthorizationHeader(adminUser),
-        });
-
-        // then
-        expect(response.statusCode).toBe(201);
-
-        expect(response.result).toEqual({
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        payload: {
           data: {
             type: 'frameworks',
-            id: 'framework4',
             attributes: {
               name: 'Prix',
             },
-            relationships: {
-              areas: {
-                data: null,
-              },
+          },
+        },
+        url: '/api/frameworks',
+        headers: generateAuthorizationHeader(adminUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(201);
+
+      expect(response.result).toEqual({
+        data: {
+          type: 'frameworks',
+          id: 'framework4',
+          attributes: {
+            name: 'Prix',
+          },
+          relationships: {
+            areas: {
+              data: null,
             },
           },
-        });
-
-        expect(airtableFrameworksScope.isDone()).toBe(true);
-        expect(pixApiCacheScope.isDone()).toBe(true);
+        },
       });
+
+      expect(airtableFrameworksScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });

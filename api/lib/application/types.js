@@ -9,6 +9,9 @@ export const Types = Object.freeze({
   frameworkId() {
     return Joi.string().pattern(/^(rec|framework)[a-zA-Z0-9]+$/);
   },
+  areaId() {
+    return Joi.string().pattern(/^(rec|area)[a-zA-Z0-9]+$/);
+  },
   competenceId() {
     return Joi.string().pattern(/^(rec|competence)[a-zA-Z0-9]+$/);
   },

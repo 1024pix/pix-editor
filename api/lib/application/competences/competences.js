@@ -1,6 +1,8 @@
 import Joi from 'joi';
 import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
+import * as securityPreHandlers from '../security-pre-handlers.js';
+import * as usecases from '../../domain/usecases/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import { competenceSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { competenceRepository } from '../../infrastructure/repositories/index.js';
@@ -39,6 +41,45 @@ export async function register(server) {
             const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
             if (!competence) throw new NotFoundError('unknown competence');
             return competenceSerializer.serialize(competence);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/competences',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        validate: {
+          payload: Joi.object({
+            data: {
+              type: Joi.string().required().equal('competences'),
+              attributes: {
+                title: Joi.string(),
+                'title-en': Joi.string(),
+                description: Joi.string(),
+                'description-en': Joi.string(),
+              },
+              relationships: {
+                area: {
+                  data: {
+                    type: Joi.string().required().equal('areas'),
+                    id: Types.areaId(),
+                  },
+                },
+              },
+            },
+          }),
+        },
+        handler: async function(request, h) {
+          try {
+            const competence = await competenceSerializer.deserialize(request.payload);
+            const createdCompetence = await usecases.createCompetence(competence);
+            return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);

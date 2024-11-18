@@ -19,6 +19,7 @@ export const {
   airtableObjectToProxyObject,
   proxyObjectToAirtableObject,
   toDomain,
+  extractFromDomainObject,
   extractFromReleaseObject,
   prefixFor,
 } = buildTranslationsUtils({ locales, fields, prefix, idField });

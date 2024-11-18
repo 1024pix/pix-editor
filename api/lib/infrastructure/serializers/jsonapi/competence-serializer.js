@@ -1,6 +1,7 @@
 import Jsonapi from 'jsonapi-serializer';
+import { Competence } from '../../../domain/models/index.js';
 
-const { Serializer } = Jsonapi;
+const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('competence', {
   attributes: [
@@ -65,4 +66,30 @@ const serializer = new Serializer('competence', {
 
 export function serialize(areas) {
   return serializer.serialize(areas);
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+  areas: {
+    valueForRelationship({ id }) {
+      return id;
+    },
+  },
+  transform({ title, titleEn, description, descriptionEn, area: areaAirtableId }) {
+    return new Competence({
+      name_i18n: {
+        fr: title,
+        en: titleEn,
+      },
+      description_i18n: {
+        fr: description,
+        en: descriptionEn,
+      },
+      areaAirtableId,
+    });
+  },
+});
+
+export function deserialize(payload) {
+  return deserializer.deserialize(payload);
 }

@@ -1,3 +1,4 @@
+import { stringValue } from '../../airtable.js';
 import { datasource } from './datasource.js';
 
 export const competenceDatasource = datasource.extend({
@@ -33,5 +34,19 @@ export const competenceDatasource = datasource.extend({
       origin: airtableRecord.get('Origine2')[0],
       tubeAirtableIds: airtableRecord.get('Tubes') ?? [],
     };
+  },
+
+  toAirTableObject(competence) {
+    return {
+      fields: {
+        'id persistant': competence.id,
+        'Sous-domaine': competence.index,
+        Domaine: [competence.areaAirtableId],
+      }
+    };
+  },
+
+  async listByAreaAirtableId(areaAirtableId) {
+    return this.filter({ filter: { formula: `Domaine = ${stringValue(areaAirtableId)}` } });
   },
 });
