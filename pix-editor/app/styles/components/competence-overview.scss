@@ -121,10 +121,6 @@
     }
   }
 
-  .skill {
-    background: var(--pix-neutral-0);
-  }
-
   .skill:last-child {
     border-right: none;
   }
@@ -148,11 +144,13 @@
 }
 
 .competence-overview-footer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: (2, 1fr);
 
   .competence-overview-legend {
     display: flex;
+    grid-column: 1;
+    justify-self: start;
     gap: var(--pix-spacing-4x);
     background: var(--pix-neutral-0);
     padding: var(--pix-spacing-4x);
@@ -188,6 +186,8 @@
   .competence-overview-counts {
     display: flex;
     align-items: center;
+    grid-column: 2;
+    justify-self: end;
     gap: var(--pix-spacing-4x);
 
     p {

@@ -5,7 +5,7 @@ import { concat, hash } from '@ember/helper';
 import Component from '@glimmer/component';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-
+import CompetenceOverviewSkill from './competence-overview-skill';
 
 export default class CompetenceOverview extends Component {
   @service router;
@@ -85,6 +85,10 @@ export default class CompetenceOverview extends Component {
     return this.args.locale;
   }
 
+  get hasLocaleSelected() {
+    return !!this.args.locale;
+  }
+
   <template>
     <div class="competence-overview">
       <div class="competence-overview-header">
@@ -134,11 +138,7 @@ export default class CompetenceOverview extends Component {
             <div class="tube">
               <h4>{{tubeOverview.name}}</h4>
               {{#each tubeOverview.skillOverviews as |skillOverview|}}
-              <div class="skill">
-                {{#if skillOverview}}
-                  <p>{{skillOverview.name}}</p>
-                {{/if}}
-              </div>
+                <CompetenceOverviewSkill @skillOverview={{skillOverview}} class="skill" />
               {{/each}}
             </div>
             {{/each}}
@@ -146,17 +146,19 @@ export default class CompetenceOverview extends Component {
         {{/each}}
         </div>
         <div class="competence-overview-footer">
-          <ul class="competence-overview-legend">
-            <li>
-              <span class="circle green"></span> L'acquis possède des épreuves validées
-            </li>
-            <li>
-              <span class="circle red"></span> L'acquis ne possède pas d’épreuve
-            </li>
-            <li>
-              <span class="circle blue"></span> L'acquis possède seulement des épreuves proposées
-            </li>
-          </ul>
+          {{#if this.hasLocaleSelected}}
+            <ul class="competence-overview-legend">
+              <li>
+                <span class="circle green"></span> L'acquis possède des épreuves validées
+              </li>
+              <li>
+                <span class="circle red"></span> L'acquis ne possède pas d’épreuve
+              </li>
+              <li>
+                <span class="circle blue"></span> L'acquis possède seulement des épreuves proposées
+              </li>
+            </ul>
+          {{/if}}
           <div class="competence-overview-counts">
             <p>Tubes : {{@competenceOverview.tubesCount}}</p>
             <p>Acquix : {{@competenceOverview.skillsCount}}</p>
