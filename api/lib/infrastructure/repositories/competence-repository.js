@@ -32,6 +32,13 @@ export async function get(id) {
   return toDomain(competenceDTO, translations);
 }
 
+export async function getByAirtableId(airtableId) {
+  const competenceDTO = await competenceDatasource.find(airtableId);
+  if (!competenceDTO) return null;
+  const translations = await translationRepository.listByEntity(model, competenceDTO.id);
+  return toDomain(competenceDTO, translations);
+}
+
 function toDomainList(datasourceCompetences, translations) {
   const translationsByCompetenceId = _.groupBy(translations, 'entityId');
   return datasourceCompetences.map(

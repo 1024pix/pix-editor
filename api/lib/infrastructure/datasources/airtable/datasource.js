@@ -15,6 +15,16 @@ const _DatasourcePrototype = {
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
+  async find(recordId) {
+    try {
+      const airtableRecord = await airtable.findRecord(this.tableName, recordId);
+      return this.fromAirTableObject(airtableRecord);
+    } catch (err) {
+      if (err.statusCode === 404) return null;
+      throw err;
+    }
+  },
+
   async filter({ filter: { ids, formula } }) {
     const filterByFormula = ids ? (
       'OR(' + ids.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',') + ')'

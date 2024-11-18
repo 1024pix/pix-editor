@@ -15,6 +15,13 @@ export function findRecords(tableName, options = {}) {
     .all();
 }
 
+export function findRecord(tableName, recordId) {
+  logger.info({ tableName }, 'Querying Airtable');
+  return _airtableClient()
+    .table(tableName)
+    .find(recordId);
+}
+
 export async function createRecord(tableName, body) {
   const records = await _airtableClient()
     .table(tableName)
