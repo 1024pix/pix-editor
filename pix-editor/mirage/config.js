@@ -1,5 +1,7 @@
+import basex from 'base-x';
 import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
 import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
+import random from 'js-crypto-random';
 import slice from 'lodash/slice';
 import { createServer, Response } from 'miragejs';
 
@@ -57,32 +59,18 @@ function routes() {
   this.get('/areas');
   this.post('/areas');
 
-  this.get('/airtable/content/Competences', (schema) => {
-    const records = schema.competences.all().models.map((competence) => {
-      return _serializeModel(competence, 'competence');
-    });
-    return { records };
-  });
+  this.get('/competences');
+  this.get('/competences/:id');
+  this.patch('/competences/:id');
+  this.post('/competences', function(schema) {
+    const competence = this.normalizedRequestAttrs();
+    const area = schema.areas.find(competence.areaId);
+    const areaCompetences = schema.competences.where({ areaId: competence.areaId });
 
-  this.get('/airtable/content/Competences/:id', (schema, request) => {
-    const competence = schema.competences.find(request.params.id);
-    return _serializeModel(competence, 'competence');
-  });
+    competence.pixId = newId('competence');
+    competence.code = `${area.code}.${areaCompetences.length + 1}`;
 
-  this.patch('/airtable/content/Competences/:id', (schema, request) => {
-    const competencePayload = JSON.parse(request.requestBody);
-    const competence = schema.competences.find(request.params.id);
-    const competenceNew = _deserializePayload(competencePayload, 'competence');
-    delete competenceNew.id;
-    competence.update({ ...competenceNew });
-    return _serializeModel(competence, 'competence');
-  });
-
-  this.post('/airtable/content/Competences', (schema, request) => {
-    const competencePayload = JSON.parse(request.requestBody);
-    const competence = _deserializePayload(competencePayload, 'competence');
-    const createdCompetence = schema.competences.create(competence);
-    return _serializeModel(createdCompetence, 'competence');
+    return this.serialize(schema.competences.create(competence));
   });
 
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
@@ -525,4 +513,16 @@ function _applyPagination(data, { page, pageSize }) {
   const end = start + pageSize;
 
   return slice(data, start, end);
+}
+
+const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const base62_encode = basex(BASE62).encode;
+
+const RECORD_ID_PREFIX = 'rec';
+
+function newId(prefix = RECORD_ID_PREFIX) {
+  const randomString = random.getRandomAsciiString(10);
+  const buf = new TextEncoder('utf-8').encode(randomString);
+  const randomBase62 = base62_encode(buf);
+  return `${prefix}${randomBase62}`;
 }
