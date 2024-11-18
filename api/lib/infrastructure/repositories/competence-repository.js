@@ -58,6 +58,18 @@ export async function create(competence) {
   return toDomain(createdCompetenceDto, translations);
 }
 
+export async function update(competence) {
+  const translations = competenceTranslations.extractFromDomainObject(competence);
+
+  await translationRepository.deleteByKeyPrefixAndLocales({
+    prefix: `${competenceTranslations.prefix}${competence.id}.`,
+    locales: ['fr', 'en'],
+  });
+  await translationRepository.save({ translations });
+
+  return competence;
+}
+
 function toDomainList(datasourceCompetences, translations) {
   const translationsByCompetenceId = _.groupBy(translations, 'entityId');
   return datasourceCompetences.map(

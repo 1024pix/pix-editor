@@ -26,4 +26,9 @@ export class Competence {
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;
   }
+
+  update({ name_i18n, description_i18n }) {
+    this.name_i18n = name_i18n;
+    this.description_i18n = description_i18n;
+  }
 }

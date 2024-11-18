@@ -59,10 +59,10 @@ export async function register(server) {
             data: {
               type: Joi.string().required().equal('competences'),
               attributes: {
-                title: Joi.string(),
-                'title-en': Joi.string(),
-                description: Joi.string(),
-                'description-en': Joi.string(),
+                title: Joi.string().allow(null),
+                'title-en': Joi.string().allow(null),
+                description: Joi.string().allow(null),
+                'description-en': Joi.string().allow(null),
               },
               relationships: {
                 area: {
@@ -80,6 +80,44 @@ export async function register(server) {
             const competence = await competenceSerializer.deserialize(request.payload);
             const createdCompetence = await usecases.createCompetence(competence);
             return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'PATCH',
+      path: '/api/competences/{competenceAirtableId}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        validate: {
+          params: Joi.object({
+            competenceAirtableId: Types.competenceId().required(),
+          }),
+          payload: Joi.object({
+            data: {
+              type: Joi.string().required().equal('competences'),
+              id: Types.competenceId().required(),
+              attributes: Joi.object({
+                title: Joi.string().allow(null),
+                'title-en': Joi.string().allow(null),
+                description: Joi.string().allow(null),
+                'description-en': Joi.string().allow(null),
+              }).unknown(true),
+              relationships: Joi.object(),
+            },
+          }),
+        },
+        handler: async function(request) {
+          try {
+            const competenceUpdates = await competenceSerializer.deserialize(request.payload);
+
+            const updatedCompetence = await usecases.updateCompetence(request.params.competenceAirtableId, competenceUpdates);
+
+            return competenceSerializer.serialize(updatedCompetence);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);
