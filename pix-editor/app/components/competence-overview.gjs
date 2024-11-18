@@ -1,10 +1,11 @@
-import { service } from '@ember/service';
-import { LinkTo } from '@ember/routing';
-import { action } from '@ember/object';
-import { concat, hash } from '@ember/helper';
-import Component from '@glimmer/component';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import { concat, hash } from '@ember/helper';
+import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
+import { service } from '@ember/service';
+import Component from '@glimmer/component';
+
 import CompetenceOverviewSkill from './competence-overview-skill';
 
 export default class CompetenceOverview extends Component {
@@ -12,7 +13,7 @@ export default class CompetenceOverview extends Component {
 
   @action
   setLocale(locale) {
-    if (locale === 'source') locale = undefined
+    if (locale === 'source') locale = undefined;
     this.router.transitionTo({
       queryParams: {
         locale,
@@ -46,24 +47,29 @@ export default class CompetenceOverview extends Component {
     {
       label: 'Langue source',
       value: 'source',
+      flag: '',
     },
     {
       label: 'Français',
       value: 'fr',
+      flag: '🇫🇷',
     },
     {
       label: 'Anglais',
       value: 'en',
+      flag: '🇬🇧',
     },
     {
       label: 'Espagnol',
       value: 'es',
+      flag: '🇪🇸',
     },
     {
       label: 'Néerlandais',
       value: 'nl',
+      flag: '🇳🇱',
     },
-  ]
+  ];
 
   sections = [
     {
@@ -81,8 +87,12 @@ export default class CompetenceOverview extends Component {
   ];
 
   get localeValue() {
-    if(!this.args.locale) return 'source';
+    if (!this.args.locale) return 'source';
     return this.args.locale;
+  }
+
+  get localeEntry() {
+    return this.localeOptions.find((localeEntry) => localeEntry.value === this.localeValue);
   }
 
   get hasLocaleSelected() {
@@ -92,6 +102,11 @@ export default class CompetenceOverview extends Component {
   <template>
     <div class="competence-overview">
       <div class="competence-overview-header">
+        {{#if this.hasLocaleSelected}}
+          <p class="locale-tag">
+            <span>{{this.localeEntry.flag}}</span> {{this.localeEntry.label}}
+          </p>
+        {{/if}}
         <h2>
           <LinkTo @route="authenticated.competence-management.single" @model={{@competenceOverview.airtableId}}>{{@competenceOverview.name}}</LinkTo>
         </h2>
@@ -168,5 +183,4 @@ export default class CompetenceOverview extends Component {
     </div>
   </template>
 }
-
 

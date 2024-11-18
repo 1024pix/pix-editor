@@ -17,6 +17,18 @@
   &__spacer {
     flex-grow: 1;
   }
+
+  .locale-tag {
+    background:var(--pix-neutral-20);
+    padding: var(--pix-spacing-2x) var(--pix-spacing-4x);
+    border-radius: var(--pix-spacing-2x);
+    @extend %pix-body-m;
+
+    span {
+      display: inline-block;
+      margin-right:  var(--pix-spacing-2x);
+    }
+  }
 }
 
 .competence-overview {
