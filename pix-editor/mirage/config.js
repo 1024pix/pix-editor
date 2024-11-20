@@ -22,8 +22,12 @@ function routes() {
   this.get('/config', ({ configs }) => configs.first());
 
   this.get('/competences/:id/overviews/challenges-production', (schema, request) => {
+    let id = `${request.params.id}:challenges-production`;
+    if (request.queryParams.locale) {
+      id += `:${request.queryParams.locale}`;
+    }
     const competenceOverview = schema.competenceOverviews
-      .where((competenceOverview) => competenceOverview.id === `${request.params.id}:challenges-production`)
+      .where((competenceOverview) => competenceOverview.id === id)
       .models[0];
     if (!competenceOverview) return;
     return schema.competenceOverviews.find(competenceOverview.id);
