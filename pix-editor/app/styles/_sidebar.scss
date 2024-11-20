@@ -5,12 +5,21 @@
     transition: transform 0.5s, visibility 0.5s;
   }
 
-  h1.header {
-    height: 50px;
-    margin: 0;
-    padding: 15px 5px;
+  .checkbox-v2-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 15px 15px 5px;
     color: #ffffff;
-    font-size: 25px;
+
+    h1.header {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    label span {
+      color: #ffffff;
+    }
   }
 
   .legal-mention {
