@@ -106,15 +106,16 @@ const CONTINUOUS_FAILURE_MINIMUM_COUNT = 2;
 async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
   const finalDataToUpload = [];
   await knex.transaction(async (trx) => {
-    const currentTutorialKoUrlsInDB = await trx(TUTORIAL_KO_URLS_TABLE_NAME);
+    const tutorialKoUrlsInDB = await trx(TUTORIAL_KO_URLS_TABLE_NAME);
 
     const tutorialKoUrlsToInsertInDB = [];
     for (const itemToUpload of dataToUpload) {
-      const [,,,currentUrl] = itemToUpload;
-      let currentContinuousKoCount = currentTutorialKoUrlsInDB.find(({ url }) => url === currentUrl)?.continuousKoCount ?? 0;
+      const [,,currentTutorialId,currentUrl] = itemToUpload;
+      let currentContinuousKoCount = tutorialKoUrlsInDB.find(({ tutorialId, url }) => url === currentUrl && tutorialId === currentTutorialId)?.continuousKoCount ?? 0;
       ++currentContinuousKoCount;
       tutorialKoUrlsToInsertInDB.push({
         url: currentUrl,
+        tutorialId: currentTutorialId,
         continuousKoCount: currentContinuousKoCount,
       });
       if (currentContinuousKoCount >= CONTINUOUS_FAILURE_MINIMUM_COUNT) {
@@ -123,7 +124,7 @@ async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
     }
 
     await trx(TUTORIAL_KO_URLS_TABLE_NAME).del();
-    await trx(TUTORIAL_KO_URLS_TABLE_NAME).insert(tutorialKoUrlsToInsertInDB);
+    await trx.batchInsert(TUTORIAL_KO_URLS_TABLE_NAME, tutorialKoUrlsToInsertInDB);
   });
   return finalDataToUpload;
 }
