@@ -1,5 +1,14 @@
 
 
+## v3.175.0 (20/11/2024)
+
+
+### :bug: Correction
+- [#820](https://github.com/1024pix/pix-editor/pull/820) [BUGFIX] La moulinette des URLs KO ne marche plus pour les tutoriels (PIX-15320).
+
+### :arrow_up: Montée de version
+- [#814](https://github.com/1024pix/pix-editor/pull/814) [BUMP] Update dependency @playwright/test to v1.48.2.
+
 ## v3.174.0 (15/11/2024)
 
 
