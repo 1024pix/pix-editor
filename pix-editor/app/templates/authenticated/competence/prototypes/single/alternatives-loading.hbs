@@ -1,9 +1,7 @@
 {{#if this.competenceController.mainRightSlot}}
   {{#in-element this.competenceController.mainRightSlot}}
     <div class="main-right__loader">
-      <div>
-        <img src="/assets/images/elephant_loader.gif" width="400" height="400" alt="elephant qui marche en attendant que la page se charge" />
-      </div>
+      <Loader />
     </div>
   {{/in-element}}
 {{/if}}
