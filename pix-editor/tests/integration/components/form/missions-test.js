@@ -20,7 +20,7 @@ module('Integration | Component | mission', function(hooks) {
                                               @submitButtonText={{this.submitButtonText}}
                                               />`);
 
-    await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
+    await fillByLabel('Nom de la mission *', 'Nouvelle mission de test');
     await triggerEvent(find('#mission-name'), 'keyup', '');
 
     await fillByLabel('URL de l\'image de la carte', 'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg');
@@ -45,7 +45,7 @@ module('Integration | Component | mission', function(hooks) {
                                                     @submitButtonText={{this.submitButtonText}}
                                                     />`);
 
-    await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
+    await fillByLabel('Nom de la mission *', 'Nouvelle mission de test');
     await triggerEvent(find('#mission-name'), 'keyup', '');
 
     const button = screen.getByRole('button', { name: 'Créer la mission' });
