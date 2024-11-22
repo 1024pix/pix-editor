@@ -9,6 +9,9 @@ export default class Router extends EmberRouter {
 Router.map(function() {
   this.route('login', { path: 'connexion' });
   this.route('authenticated', { path: '' }, function() {
+    this.route('v2', function() {
+      this.route('competence-overview', { path: '/competences/:competence_id/:overview' });
+    });
     this.route('competence', { path: '/competence/:competence_id' }, function() {
       this.route('prototypes', function() {
         this.route('new');

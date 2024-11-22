@@ -26,8 +26,5 @@
   "bugs": {
     "url": "https://github.com/1024pix/pix-editor/issues"
   },
-  "homepage": "https://github.com/1024pix/pix-editor#readme",
-  "dependencies": {
-    "inflected": "^2.1.0"
-  }
+  "homepage": "https://github.com/1024pix/pix-editor#readme"
 }

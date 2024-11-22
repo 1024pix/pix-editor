@@ -29,6 +29,18 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   min-height: 100vh;
 }
 
+h1, h2, h3, h4 {
+  // TODO: remplacer par `@extend %pix-title-${size}` (un jour, potentiellement quand la V2 sera partout)
+  // stylelint-disable-next-line custom-property-pattern
+  font-family: var(--_pix-font-family-title), Arial, sans-serif;
+}
+
+a, p, span, li {
+  // TODO: remplacer par `@extend %pix-body-${size}` (un jour, potentiellement quand la V2 sera partout)
+  // stylelint-disable-next-line custom-property-pattern
+  font-family: var(--_pix-font-family-body), Arial, sans-serif;
+}
+
 .waiting {
   height: 100%;
 }

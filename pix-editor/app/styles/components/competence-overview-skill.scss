@@ -1,0 +1,39 @@
+@use 'sass:color';
+
+.production-skill-overview {
+  &--no-skill {
+    background-color: var(--pix-neutral-0);
+  }
+
+  &--empty {
+    background-color: var(--pix-error-100);
+
+    &:hover {
+      background-color: hsl(from var(--pix-error-100) h s calc(l - 25));
+    }
+  }
+
+  &--proposed {
+    background-color: var(--pix-info-100);
+
+    &:hover {
+      background-color: hsl(from var(--pix-info-100) h s calc(l - 25));
+    }
+  }
+
+  &--validated {
+    background-color: var(--pix-success-100);
+
+    &:hover {
+      background-color: hsl(from var(--pix-success-100) h s calc(l - 25));
+    }
+  }
+
+  &__details {
+    display: block;
+  }
+
+  &:hover > &__name {
+    font-weight: var(--pix-font-bold);
+  }
+}
