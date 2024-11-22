@@ -109,11 +109,11 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     const urlErrorMandatoryField = screen.getByText('L\'URL est obligatoire');
     assert.dom(urlErrorMandatoryField).isVisible();
 
-    await fillByLabel('* URL à whitelister', 'chouchou beignets');
+    await fillByLabel('URL à whitelister *', 'chouchou beignets');
     const urlErrorInvalidUrl = screen.getByText('L\'URL n\'est pas valide');
     assert.dom(urlErrorInvalidUrl).isVisible();
 
-    await fillByLabel('* URL à whitelister', 'https://example.org');
+    await fillByLabel('URL à whitelister *', 'https://example.org');
     assert.dom(urlErrorInvalidUrl).isNotVisible();
     assert.dom(urlErrorMandatoryField).isNotVisible();
 

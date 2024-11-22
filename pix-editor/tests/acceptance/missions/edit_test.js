@@ -66,7 +66,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       const screen = await visit('/missions/3/edit');
 
       // when
-      await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
+      await fillByLabel('Nom de la mission *', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
       await fillByLabel('URL de l\'image de la carte', 'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg');
@@ -101,7 +101,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       const screen = await visit('/missions/3/edit');
 
       // when
-      await fillByLabel('* Nom de la mission', 'will trigger error');
+      await fillByLabel('Nom de la mission *', 'will trigger error');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
       await clickByText('Compétence');

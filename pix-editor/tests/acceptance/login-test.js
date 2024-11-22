@@ -40,7 +40,7 @@ module('Acceptance | Login', function(hooks) {
       await visit('/');
 
       // when
-      await fillByLabel('* Clé API', VALID_API_KEY);
+      await fillByLabel('Clé API *', VALID_API_KEY);
       await clickByName('Se connecter');
 
       // then
@@ -52,7 +52,7 @@ module('Acceptance | Login', function(hooks) {
       await visit('/');
 
       // when
-      await fillByLabel('* Clé API', INVALID_API_KEY);
+      await fillByLabel('Clé API *', INVALID_API_KEY);
       await clickByName('Se connecter');
 
       // then
@@ -65,7 +65,7 @@ module('Acceptance | Login', function(hooks) {
       await visit('/statistics');
 
       // when
-      await fillByLabel('* Clé API', VALID_API_KEY);
+      await fillByLabel('Clé API *', VALID_API_KEY);
       await clickByName('Se connecter');
 
       // then

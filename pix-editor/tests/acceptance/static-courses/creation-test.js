@@ -86,7 +86,7 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       await clickByName('Créer un nouveau test');
 
       // when
-      await fillByLabel('* Nom du test statique', 'Mon nouveau test statique');
+      await fillByLabel('Nom du test statique *', 'Mon nouveau test statique');
       await fillByLabel('Description à usage interne', 'Une super description pour mon nouveau test');
       await fillByLabel('Tags', 'cou');
       await clickByText('COUrage');
@@ -118,7 +118,7 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       await clickByName('Créer un nouveau test');
 
       // when
-      await fillByLabel('* Nom du test statique', 'Mon nouveau test statique');
+      await fillByLabel('Nom du test statique *', 'Mon nouveau test statique');
       await fillByLabel('Description à usage interne', 'Une super description');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await clickByName('Annuler');
