@@ -55,6 +55,11 @@ export default class CompetenceOverview extends Component {
       flag: '🇫🇷',
     },
     {
+      label: 'Franco-français',
+      value: 'fr-fr',
+      flag: '🇫🇷',
+    },
+    {
       label: 'Anglais',
       value: 'en',
       flag: '🇬🇧',
