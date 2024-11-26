@@ -5,14 +5,14 @@
     transition: transform 0.5s, visibility 0.5s;
   }
 
-  .checkbox-v2-container {
+  &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px 15px 15px 5px;
     color: #ffffff;
 
-    h1.header {
+    h1 {
       margin: 0;
       font-size: 25px;
     }

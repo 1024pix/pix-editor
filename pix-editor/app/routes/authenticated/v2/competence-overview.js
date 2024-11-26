@@ -28,14 +28,13 @@ export default class CompetenceOverviewRoute extends Route {
   }
 
   afterModel(model) {
-    const isV1 = !this.versionManager.isV2();
-    if (isV1) {
-      const { competenceOverview } = model;
-      const competence_id = competenceOverview.airtableId;
-      const locale = competenceOverview.locale;
-      const view = competenceOverview.view;
+    if (this.versionManager.isV2) return;
 
-      this.router.transitionTo('authenticated.competence.prototypes', competence_id, { queryParams: { languageFilter: locale, view } });
-    }
+    const { competenceOverview } = model;
+    const competence_id = competenceOverview.airtableId;
+    const locale = competenceOverview.locale;
+    const view = competenceOverview.view;
+
+    this.router.transitionTo('authenticated.competence.prototypes', competence_id, { queryParams: { languageFilter: locale, view } });
   }
 }

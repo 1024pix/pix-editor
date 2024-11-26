@@ -1,7 +1,7 @@
 <div class="ui inverted left wide sidebar {{if @open "visible "}}main-sidebar menu vertical {{if this.config.lite "lite"""}}">
-  <div class="checkbox-v2-container">
-    <h1 class="header">Pix Editor</h1>
-    <PixToggle @size="small" @screenReaderOnly={{true}} @onChange={{this.switchVersion}} @toggled={{this.isSwitchVersionActive}}>
+  <div class="main-sidebar__header">
+    <h1>Pix Editor</h1>
+    <PixToggle @size="small" @screenReaderOnly={{true}} @onChange={{this.switchVersion}} @toggled={{this.isV2}}>
       <:label>changer de version</:label>
       <:off>V1</:off>
       <:on>V2</:on>

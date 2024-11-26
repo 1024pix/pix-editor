@@ -6,6 +6,6 @@ export function setupApplicationTest(hooks) {
   setupIntl(hooks, 'fr');
 
   hooks.beforeEach(function() {
-    window.localStorage.removeItem('version-toggle');
+    window.localStorage.removeItem('v2');
   });
 }

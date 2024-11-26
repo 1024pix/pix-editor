@@ -54,10 +54,10 @@ export default class PrototypesRoute extends Route {
     // QUESTION: est-ce nécessaire ?
     this.currentData.setPrototype(null);
 
-    const isToggled = this.versionManager.isV2();
+    if (!this.versionManager.isV2) return;
     const view = transition.to.queryParams.view;
     const goingToProduction = view === 'production' || !view;
-    if (goingToProduction && isToggled) {
+    if (goingToProduction) {
       const competence_id = model.competencePixId;
       const locale = model.locale;
       const overview = 'challenges-production';
