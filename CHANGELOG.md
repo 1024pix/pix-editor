@@ -1,5 +1,11 @@
 
 
+## v3.176.1 (26/11/2024)
+
+
+### :building_construction: Tech
+- [#829](https://github.com/1024pix/pix-editor/pull/829) [TECH] Remplacer le loader de la V2 par le nouveau loader.
+
 ## v3.176.0 (26/11/2024)
 
 
