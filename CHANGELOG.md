@@ -1,5 +1,19 @@
 
 
+## v3.176.0 (26/11/2024)
+
+
+### :rocket: Amélioration
+- [#821](https://github.com/1024pix/pix-editor/pull/821) [FEATURE] Création de la V2 de la vue épreuves production (PIX-15287).
+
+### :arrow_up: Montée de version
+- [#826](https://github.com/1024pix/pix-editor/pull/826) [BUMP] Update dependency @1024pix/pix-ui to ^48.7.1 (pix-editor).
+- [#825](https://github.com/1024pix/pix-editor/pull/825) [BUMP] Update dependency @1024pix/pix-ui to ^48.7.0 (pix-editor).
+- [#819](https://github.com/1024pix/pix-editor/pull/819) [BUMP] Update dependency @1024pix/pix-ui to v48 (pix-editor).
+
+### :coffee: Autre
+- [#823](https://github.com/1024pix/pix-editor/pull/823) [DESIGN] Changement du loader.
+
 ## v3.175.0 (20/11/2024)
 
 
