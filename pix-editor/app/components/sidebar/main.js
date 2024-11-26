@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
@@ -9,6 +10,11 @@ export default class SidebarMain extends Component {
   @service access;
   @service config;
   @service currentData;
+  @service versionManager;
+
+  constructor(...args) {
+    super(...args);
+  }
 
   get author() {
     return this.config.author;
@@ -44,6 +50,15 @@ export default class SidebarMain extends Component {
 
   get shouldShowMissionsLink() {
     return this.currentData?.getFramework()?.name.toLowerCase() === FrameworkModel.pix1DFrameworkName.toLowerCase();
+  }
+
+  get isV2() {
+    return this.versionManager.isV2;
+  }
+
+  @action
+  switchVersion() {
+    this.versionManager.toggleV2();
   }
 }
 

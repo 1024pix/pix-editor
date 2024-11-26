@@ -7,6 +7,7 @@ export default class PrototypesRoute extends Route {
   @service currentData;
   @service store;
   @service router;
+  @service versionManager;
 
   refreshing = false;
 
@@ -49,9 +50,20 @@ export default class PrototypesRoute extends Route {
 
   }
 
-  afterModel() {
+  afterModel(model, transition) {
     // QUESTION: est-ce nécessaire ?
     this.currentData.setPrototype(null);
+
+    if (!this.versionManager.isV2) return;
+    const view = transition.to.queryParams.view;
+    const goingToProduction = view === 'production' || !view;
+    if (goingToProduction) {
+      const competence_id = model.competencePixId;
+      const locale = model.locale;
+      const overview = 'challenges-production';
+
+      this.router.transitionTo('authenticated.v2.competence-overview', competence_id, overview, { queryParams: { locale } });
+    }
   }
 
   @action

@@ -10,6 +10,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function() {
+    window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });

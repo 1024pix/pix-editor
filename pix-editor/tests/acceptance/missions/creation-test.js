@@ -21,7 +21,7 @@ module('Acceptance | Missions | Creation', function(hooks) {
     this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
   });
 
-  module.skip('when user does not have write access', function(hooks) {
+  module('when user does not have write access', function(hooks) {
 
     hooks.beforeEach(function() {
       this.server.create('user', { trigram: 'ABC', access: 'readonly' });
