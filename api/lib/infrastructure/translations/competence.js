@@ -16,8 +16,6 @@ const idField = 'fields.id persistant';
 
 export const {
   extractFromProxyObject,
-  airtableObjectToProxyObject,
-  proxyObjectToAirtableObject,
   toDomain,
   extractFromDomainObject,
   extractFromReleaseObject,

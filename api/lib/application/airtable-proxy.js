@@ -13,7 +13,6 @@ import * as usecases from '../domain/usecases/index.js';
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 
 const AIRTABLE_PROXY_TABLES = [
-  'Competences',
   'Thematiques',
   'Tubes',
   'Acquis',
