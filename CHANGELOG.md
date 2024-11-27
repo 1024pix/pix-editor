@@ -1,5 +1,11 @@
 
 
+## v3.177.1 (27/11/2024)
+
+
+### :bug: Correction
+- [#830](https://github.com/1024pix/pix-editor/pull/830) [BUGFIX] Création d’un proto depuis la vue workbench (PIX-15405).
+
 ## v3.177.0 (27/11/2024)
 
 
