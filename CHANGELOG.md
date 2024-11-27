@@ -1,5 +1,11 @@
 
 
+## v3.177.0 (27/11/2024)
+
+
+### :rocket: Amélioration
+- [#824](https://github.com/1024pix/pix-editor/pull/824) [FEATURE] Donner accès à la V2 de la vue "Épreuves -> Production" (PIX-15288).
+
 ## v3.176.1 (26/11/2024)
 
 
