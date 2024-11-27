@@ -1,8 +1,4 @@
-import {
-  attachmentDatasource,
-  challengeDatasource,
-  tutorialDatasource,
-} from '../datasources/airtable/index.js';
+import { attachmentDatasource, challengeDatasource, tutorialDatasource, } from '../datasources/airtable/index.js';
 import {
   areaRepository,
   challengeRepository,
@@ -16,15 +12,15 @@ import {
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   areaTransformer,
-  createChallengeTransformer,
   competenceTransformer,
-  frameworkTransformer,
-  skillTransformer,
-  tubeTransformer,
-  thematicTransformer,
-  tutorialTransformer,
-  missionTransformer,
+  createChallengeTransformer,
   fillAlternativeQualityFieldsFromMatchingProto,
+  frameworkTransformer,
+  missionTransformer,
+  skillTransformer,
+  thematicTransformer,
+  tubeTransformer,
+  tutorialTransformer,
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
@@ -121,7 +117,7 @@ async function _getCurrentContent() {
     tubeRepository.list(),
     tutorialDatasource.list(),
     getStaticCourses(),
-    missionRepository.listActive(),
+    missionRepository.list(),
   ]);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges.flatMap((challenge) => [

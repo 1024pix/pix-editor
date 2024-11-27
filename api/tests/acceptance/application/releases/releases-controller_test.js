@@ -197,7 +197,26 @@ async function mockCurrentContent() {
           dareChallenges: [],
           steps: [],
         },
-      }
+      },
+      {
+        id: 3,
+        name_i18n: { fr: 'Alt name' },
+        cardImageUrl: 'https://example.com/image2.png',
+        competenceId: 'competenceId',
+        thematicIds: 'thematicId,thematicId',
+        learningObjectives_i18n: { fr: 'Alt objectives' },
+        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        status: Mission.status.INACTIVE,
+        createdAt: new Date('2010-01-05'),
+        introductionMediaUrl: null,
+        introductionMediaType: null,
+        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+        documentationUrl: null,
+        content: {
+          dareChallenges: [],
+          steps: [],
+        },
+      },
     ]
   };
 
@@ -585,6 +604,18 @@ async function mockContentForRelease() {
       introductionMediaType: null,
       introductionMediaAlt_i18n: { fr: 'Alt Message alternatif' },
       documentationUrl: 'http://url-example.net',
+    }), new MissionForRelease({
+      id: 3,
+      name_i18n: { fr: 'Alt name' },
+      cardImageUrl: 'https://example.com/image2.png',
+      competenceId: 'competenceId',
+      learningObjectives_i18n: { fr: 'Alt objectives' },
+      validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+      status: Mission.status.INACTIVE,
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt_i18n: { fr: 'Alt Message alternatif inactive' },
+      documentationUrl: null,
     })],
   };
 
@@ -895,6 +926,7 @@ describe('Acceptance | Controller | release-controller', () => {
           thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
+          introductionMediaAlt: 'Alt Message alternatif inactive',
           status: Mission.status.INACTIVE,
         });
         const server = await createServer();
