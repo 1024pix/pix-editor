@@ -1,18 +1,13 @@
 import { omit } from 'lodash';
-import { beforeEach, describe as context, describe, expect, expectTypeOf, it } from 'vitest';
+import { afterEach, describe, describe as context, expect, expectTypeOf, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
-import {
-  findAllMissions,
-  getById,
-  listActive,
-  save,
-} from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import { findAllMissions, getById, list, save, } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Integration | Repository | mission-repository', function() {
 
-  beforeEach(async function() {
+  afterEach(async function() {
     await knex('translations').delete();
     await knex('missions').delete();
   });
@@ -156,37 +151,54 @@ describe('Integration | Repository | mission-repository', function() {
     });
   });
 
-  describe('#listActive', function() {
-    it('should return all active missions', async function() {
+  describe('#list', function() {
+    it('should return all missions', async function() {
       databaseBuilder.factory.buildMission({
-        id: 2,
+        id: 3,
+        competenceId: 'competenceId active',
         cardImageUrl: 'https://example.com/image.png',
         name: 'Alt name',
         status: Mission.status.VALIDATED,
         learningObjectives: 'Alt objectives',
         validatedObjectives: 'Alt validated objectives',
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
+        createdAt: new Date('2020-01-01'),
       });
-
       databaseBuilder.factory.buildMission({
-        id: 3,
+        id: 2,
+        competenceId: 'competenceId inactive',
         cardImageUrl: null,
         name: 'inactive name',
         status: Mission.status.INACTIVE,
         learningObjectives: 'Alt objectives',
         validatedObjectives: 'Alt validated objectives',
-        thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
+        thematicIds: 'thematicStep1,thematicStep2',
+        createdAt: new Date('2019-01-01'),
       });
 
       await databaseBuilder.commit();
 
-      const result = await listActive();
+      const result = await list();
 
       expect(result).to.deep.equal([new Mission({
         id: 2,
+        cardImageUrl: null,
+        name_i18n: { fr: 'inactive name' },
+        competenceId: 'competenceId inactive',
+        thematicIds: 'thematicStep1,thematicStep2',
+        learningObjectives_i18n: { fr: 'Alt objectives' },
+        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        introductionMediaUrl: null,
+        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+        introductionMediaType: null,
+        documentationUrl: null,
+        status: Mission.status.INACTIVE,
+        createdAt: new Date('2019-01-01'),
+      }),new Mission({
+        id: 3,
         cardImageUrl: 'https://example.com/image.png',
         name_i18n: { fr: 'Alt name' },
-        competenceId: 'competenceId',
+        competenceId: 'competenceId active',
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
@@ -195,7 +207,7 @@ describe('Integration | Repository | mission-repository', function() {
         introductionMediaType: null,
         documentationUrl: null,
         status: Mission.status.VALIDATED,
-        createdAt: new Date('2010-01-04'),
+        createdAt: new Date('2020-01-01'),
       })]);
     });
   });

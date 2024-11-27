@@ -37,9 +37,9 @@ export async function findAllMissions({ filter, page }) {
   };
 }
 
-export async function listActive() {
+export async function list() {
   const [missions, translations] = await Promise.all([
-    knex('missions').select('*').whereNot({ status: 'INACTIVE' }),
+    knex('missions').select('*').orderBy('id'),
     translationRepository.listByModel(model),
   ]);
 

@@ -1445,6 +1445,7 @@ function _getRichCurrentContentDTO() {
       locale: 'fr-fr',
     },
   ];
+
   const expectedMissionsDTOs = [
     {
       id: 123456789,
@@ -1459,6 +1460,25 @@ function _getRichCurrentContentDTO() {
       introductionMediaType: null,
       introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: 'http://url-example.net',
+      cardImageUrl: null,
+      content: {
+        dareChallenges: [],
+        steps: [],
+      },
+    },
+    {
+      id: 987654321,
+      name_i18n: { fr: 'inactive mission PG name' },
+      competenceId: 'competenceId',
+      thematicIds: 'thematicIds',
+      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+      validatedObjectives_i18n: { fr: 'Rien' },
+      status: Mission.status.INACTIVE,
+      createdAt: new Date('2010-01-04'),
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+      documentationUrl: null,
       cardImageUrl: null,
       content: {
         dareChallenges: [],
