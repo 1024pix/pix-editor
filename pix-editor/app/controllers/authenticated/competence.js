@@ -147,7 +147,7 @@ export default class CompetenceController extends Controller {
 
   @action
   newPrototype() {
-    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence);
+    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, { queryParams: { view: 'workbench-list' } });
   }
 
   @action
