@@ -533,12 +533,17 @@ export default class SingleController extends Controller {
       return;
     }
     const alternatives = challenge.draftAlternatives;
-    await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
-    const alternativesPublication = alternatives.map(async (alternative) => {
-      const validatedAlternative = await alternative.validate();
-      this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
-    });
-    return Promise.all(alternativesPublication);
+    try {
+      await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
+      const alternativesPublication = alternatives.map(async (alternative) => {
+        const validatedAlternative = await alternative.validate();
+        this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
+      });
+      return Promise.all(alternativesPublication);
+    } catch (e) {
+      console.log(e);
+      this._message('Mise en production des déclinaisons annulée');
+    }
   }
 
   _archiveAlternatives(challenge) {
