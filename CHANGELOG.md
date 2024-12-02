@@ -1,5 +1,11 @@
 
 
+## v3.178.0 (02/12/2024)
+
+
+### :rocket: Amélioration
+- [#831](https://github.com/1024pix/pix-editor/pull/831) [FEATURE] Exposer toutes les missions dans la release, y compris les inactives (PIX-15478).
+
 ## v3.177.1 (27/11/2024)
 
 
