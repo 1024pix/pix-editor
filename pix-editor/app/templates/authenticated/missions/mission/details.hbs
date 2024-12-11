@@ -6,9 +6,8 @@
       @isDisabled={{not this.model.userMayCreateOrEditMissions}}
       class="pix-button-link-with-icon white-font"
     >
-      <FaIcon
-        @icon="pen"
-        @prefix="fas"></FaIcon>Modifier la mission
+      <PixIcon @name="edit" @ariaHidden={{true}}/>
+      Modifier la mission
     </PixButtonLink>
   </div>
 </header>

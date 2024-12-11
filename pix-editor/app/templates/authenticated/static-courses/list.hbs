@@ -14,9 +14,7 @@
           aria-describedby='create-static-course-tooltip'
           class="pix-button-link-with-icon white-font"
         >
-          <FaIcon
-            @icon="plus"
-            @prefix="fas"></FaIcon>
+          <PixIcon @name="add" @ariaHidden={{true}}/>
           Créer un nouveau test
         </PixButtonLink>
       </:triggerElement>
@@ -150,7 +148,7 @@
                     aria-describedby='open-static-course-link-tooltip'
                     class="{{if staticCourseSummary.isActive "" "disabled-link-with-icon"}}"
                   >
-                    <FaIcon @icon="eye" @prefix="fas"/>
+                    <PixIcon @name="eye" @plainIcon={{true}}/>
                   </a>
                 </:triggerElement>
                 <:tooltip>Accéder au test</:tooltip>
