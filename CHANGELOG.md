@@ -1,5 +1,14 @@
 
 
+## v3.178.1 (12/12/2024)
+
+
+### :bug: Correction
+- [#834](https://github.com/1024pix/pix-editor/pull/834) [BUGFIX] Thématiques avec `tubeIds` null dans la release (PIX-15699).
+
+### :arrow_up: Montée de version
+- [#832](https://github.com/1024pix/pix-editor/pull/832) [BUMP] Lock file maintenance (pix-editor).
+
 ## v3.178.0 (02/12/2024)
 
 
