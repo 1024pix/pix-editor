@@ -22,6 +22,12 @@ describe('Integration | Repository | thematic-repository', () => {
           index: '2',
           tubeIds: ['tubeId3', 'tubeId4'],
         }),
+        airtableBuilder.factory.buildThematic({
+          id: 'thematic3',
+          competenceId: 'competenceId2',
+          index: '3',
+          tubeIds: null,
+        }),
       ]).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
@@ -43,6 +49,16 @@ describe('Integration | Repository | thematic-repository', () => {
         key: 'thematic.thematic2.name',
         locale: 'en',
         value: 'Thematic 2 name',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'thematic.thematic3.name',
+        locale: 'fr',
+        value: 'Nom thématique 3',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'thematic.thematic3.name',
+        locale: 'en',
+        value: 'Thematic 3 name',
       });
 
       await databaseBuilder.commit();
@@ -72,6 +88,17 @@ describe('Integration | Repository | thematic-repository', () => {
           name_i18n: {
             en: 'Thematic 2 name',
             fr: 'Nom thématique 2',
+          },
+        }),
+        domainBuilder.buildThematic({
+          id: 'thematic3',
+          airtableId: 'thematic3',
+          competenceId: 'competenceId2',
+          index: '3',
+          tubeIds: [],
+          name_i18n: {
+            en: 'Thematic 3 name',
+            fr: 'Nom thématique 3',
           },
         }),
       ]);
