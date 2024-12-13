@@ -7,9 +7,8 @@
       @isDisabled={{not this.canEditStaticCourse}}
       class="pix-button-link-with-icon white-font"
     >
-      <FaIcon
-        @icon="pen"
-        @prefix="fas"></FaIcon>Éditer le test statique
+      <PixIcon @name="edit" @ariaHidden={{true}}/>
+      Éditer le test statique
     </PixButtonLink>
     <PixButton
       @backgroundColor="grey"
@@ -70,9 +69,8 @@
           class="pix-button-link-with-icon"
           @isDisabled={{not this.model.staticCourse.isActive}}
         >
-          <FaIcon
-            @icon="eye"
-            @prefix="fas"></FaIcon> Prévisualiser
+          <PixIcon @name="eye" @plainIcon={{true}}/>
+          Prévisualiser
         </PixButtonLink>
         <PixTooltip
           @id="info-preview-links-tooltip"
@@ -80,7 +78,7 @@
           @isWide={{true}}
         >
           <:triggerElement>
-            <FaIcon @icon="circle-info" aria-describedby="'info-preview-links-tooltip"></FaIcon>
+            <PixIcon aria-describedby="info-preview-links-tooltip" @name="info" @plainIcon={{true}}/>
           </:triggerElement>
           <:tooltip>
             Le test statique sera accessible à compter du lendemain de sa création / mise à jour. Si besoin d’accéder au test d’ici-là, recharger le cache de la recette depuis l’application PixAdmin puis “copier le lien” du test et remplacer la partie de l’URL “app.pix” par “app.recette.pix”.
@@ -145,7 +143,7 @@
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaIcon @icon="eye" @prefix="fas"/>
+                  <PixIcon @name="eye" @plainIcon={{true}}/>
                 </a>
               </td>
             </tr>
@@ -168,9 +166,8 @@
         @isDisabled={{not this.canEditStaticCourse}}
         class="pix-button-link-with-icon white-font"
       >
-        <FaIcon
-          @icon="pen"
-          @prefix="fas"></FaIcon>Éditer le test statique
+        <PixIcon @name="edit"/>
+        Éditer le test statique
       </PixButtonLink>
     </div>
   </section>

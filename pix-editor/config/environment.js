@@ -34,10 +34,6 @@ module.exports = function(environment) {
       }),
     },
 
-    fontawesome: {
-      warnIfNoIconsIncluded: false,
-    },
-
     '@sentry/ember': {
       disablePerformance: true,
       sentry: {

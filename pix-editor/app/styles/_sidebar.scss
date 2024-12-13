@@ -196,6 +196,12 @@
     margin-top: 40px;
     border-top: solid 1px rgba(255, 255, 255, 0.08);
 
+    .secondary-links--action {
+      display: flex;
+      gap: .3rem;
+      align-items: center;
+    }
+
     i, a, p {
       color: rgba(255, 255, 255, 0.9);
     }

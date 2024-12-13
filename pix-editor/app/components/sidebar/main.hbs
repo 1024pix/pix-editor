@@ -22,8 +22,8 @@
       </LinkTo>
     {{/if}}
     {{#if this.mayAccessStaticCourses}}
-      <LinkTo @route="authenticated.static-courses" {{on "click" @close}}>
-        <FaIcon @icon="sheet-plastic" @prefix="fas"></FaIcon>
+      <LinkTo class="secondary-links--action" @route="authenticated.static-courses" {{on "click" @close}}>
+        <PixIcon @name="assignment" @ariaHidden={{true}}/>
         Tests statiques
       </LinkTo>
     {{/if}}
@@ -33,8 +33,8 @@
       </LinkTo>
     {{/if}}
     {{#if this.mayAccessWhitelistedUrls}}
-      <LinkTo data-test-whitelisted-urls-link @route="authenticated.whitelisted-urls" {{on "click" @close}}>
-        <FaIcon @icon="recycle" @prefix="fas"></FaIcon>
+      <LinkTo class="secondary-links--action" data-test-whitelisted-urls-link @route="authenticated.whitelisted-urls" {{on "click" @close}}>
+        <PixIcon @name="bookAlt" @ariaHidden={{true}}/>
         Whitelist moulinette des URLs
       </LinkTo>
     {{/if}}
