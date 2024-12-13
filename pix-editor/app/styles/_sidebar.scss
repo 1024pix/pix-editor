@@ -10,7 +10,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 15px 15px 15px 5px;
-    color: #ffffff;
+    color: var(--pix-neutral-0);
 
     h1 {
       margin: 0;
@@ -18,14 +18,15 @@
     }
 
     label span {
-      color: #ffffff;
+      color: var(--pix-neutral-0);
     }
   }
 
   .legal-mention {
     margin: 0;
     padding: 0 5px 7px;
-    color: #00DBFF;
+    color: var(--pix-neutral-0);
+    font-weight: bold;
   }
 
   .sidebar-search {
@@ -105,7 +106,7 @@
       &-header {
         &__trigger {
           padding: .5rem 0;
-          color: white;
+          color: var(--pix-neutral-0);
           cursor: pointer;
 
           &:hover {
@@ -142,7 +143,7 @@
     .menu .item {
       align-items: initial;
       padding: 10px;
-      color: #ffffff;
+      color: var(--pix-neutral-0);
     }
 
     .menu .item i.icon {
@@ -177,13 +178,13 @@
       }
 
       i.icon {
-        color: #ffffff;
+        color: var(--pix-neutral-0);
       }
     }
 
     &.loading {
       .input > i.icon::after {
-        border-color: #ffffff transparent transparent;
+        border-color: var(--pix-neutral-0) transparent transparent;
       }
     }
 

@@ -19,8 +19,8 @@
 }
 
 .target-profile-title {
-  color: white;
-  background: black;
+  color: var(--pix-neutral-0);
+  background: var(--pix-neutral-900);
 
   .trigger-menu {
     cursor: pointer;
@@ -32,7 +32,7 @@
   }
 
   .ember-power-select-multiple-option {
-    background-color: #ffffff;
+    background-color: var(--pix-neutral-0);
   }
 }
 
@@ -50,27 +50,27 @@
 
   .competence-profile {
     margin-bottom: 0;
-    color: white;
-    background-color: #000044;
+    color: var(--pix-neutral-0);
+    background-color: rgb(0, 0, 68);
 
     &.area-profile-1 {
-      background: #F1A141;
+      background: rgb(241, 161, 65);
     }
 
     &.area-profile-2 {
-      background: #57C884;
+      background: rgb(87, 200, 132);
     }
 
     &.area-profile-3 {
-      background: #12A3FF;
+      background: rgb(18, 163, 255);
     }
 
     &.area-profile-4 {
-      background: #FF3F94;
+      background: rgb(255, 63, 148);
     }
 
     &.area-profile-5 {
-      background: #574DA6;
+      background: rgb(87, 77, 166);
     }
 
     .competence-info {
@@ -80,28 +80,24 @@
         box-shadow: none;
 
         i {
-          color: white;
+          color: var(--pix-neutral-0);
         }
 
         &:hover {
           i {
-            color: black;
+            color: var(--pix-neutral-900);
           }
         }
       }
-
-
     }
-
-
   }
 
   .theme-profile {
     padding: 0 !important;
-    background: #F3F3F3;
+    background: rgb(243, 243, 243);
 
     &:not(:nth-last-child(2)) {
-      border-bottom: #d4d4d4 solid 1px;
+      border-bottom: rgb(212, 212, 212) solid 1px;
     }
 
     .theme-name {
@@ -137,7 +133,7 @@
           transform: translateY(0.2rem);
 
           &.active {
-            color: #57C884
+            color: rgb(87, 200, 132)
           }
 
         }
@@ -167,7 +163,7 @@
           }
 
           &__color-red {
-            color: #7f0101;
+            color: rgb(127, 1, 1);
           }
         }
       }
@@ -183,7 +179,7 @@
 
       &.thematicResult {
         .icon.active {
-          color: #3f7bc4;
+          color: rgb(63, 123, 196);
         }
 
         .practicalTitle-profile {
@@ -209,7 +205,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     height: 60px;
-    border-color: #000000;
+    border-color: var(--pix-neutral-900);
     border-style: solid;
     border-width: 1px 0 0 1px;
 
@@ -222,7 +218,7 @@
       padding: 20px;
       font-size: 16px;
       text-align: center;
-      border-color: #000000;
+      border-color: var(--pix-neutral-900);
       border-style: solid;
       border-width: 0 1px 1px 0;
       cursor: pointer;
@@ -232,7 +228,7 @@
       }
 
       &.disabled {
-        background-color: #dddddd;
+        background-color: var(--pix-neutral-100);
         cursor: default;
       }
     }
