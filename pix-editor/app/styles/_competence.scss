@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .ui.small.floated.select-section {
   min-width: 150px;
   margin-bottom: 0;
@@ -301,17 +302,17 @@
           }
 
           &.loading {
-            background-color: #aaaaaa;
+            background-color: #aaa;
           }
 
           .half-tutorial {
-            color: #aaaaaa
+            color: #aaa
           }
         }
 
         &.active {
           .quality {
-            box-shadow: #000000 0 0 7px;
+            box-shadow: #000 0 0 7px;
             opacity: .8;
           }
 

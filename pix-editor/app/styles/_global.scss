@@ -1,24 +1,25 @@
+// stylelint-disable color-no-hex, color-named
 $challenge-background-color: #fcfd9f;
 $skill-background-color: #d5e8fd;
-$production-background-color: #00ff00;
-$production-color: #000000;
-$draft-color: #000000;
-$validated-background-color: #00ff00/*#08cf08*/;
-$validated-color: #000000;
-$validated-no-test-background-color: #00ff00;
-$validated-no-test-color: #000000;
-$prevalidated-background-color: #00ff00/*#aaFFaa*/;
-$prevalidated-color: #000000;
+$production-background-color: #0f0;
+$production-color: #000;
+$draft-color: #000;
+$validated-background-color: #0f0/*#08cf08*/;
+$validated-color: #000;
+$validated-no-test-background-color: #0f0;
+$validated-no-test-color: #000;
+$prevalidated-background-color: #0f0/*#aaFFaa*/;
+$prevalidated-color: #000;
 $suggested-background-color: #9ceaf7;
 $suggested-color: #0a1b53;
 $archived-background-color: #6b686d;
-$archived-color: #ffffff;
+$archived-color: #fff;
 $deleted-background-color: #c13b3b;
 $deleted-color: #1f0101;
 $to-be-submitted-background-color: #ffc851;
-$to-be-submitted-color: #000000;
+$to-be-submitted-color: #000;
 $need-work-background-color: #ff51e8;
-$need-work-color: #000000;
+$need-work-color: #000;
 $na-background-color: #eceaea;
 $na-color: #3e7726;
 $production-alternative-color: #085508;/* #0000ff; */
@@ -46,7 +47,7 @@ a, p, span, li {
 }
 
 .application {
-  background-color: #ffffff;
+  background-color: #fff;
 
   .pusher {
     display: flex;
@@ -61,7 +62,7 @@ a, p, span, li {
   border-radius: 0;
 
   .ui.icon.button {
-    color: #ffffff;
+    color: #fff;
   }
 
 }
@@ -111,7 +112,7 @@ a, p, span, li {
       .item {
         margin-top: 0.4em;
         padding-top: 0.528571em;
-        color: #777777;
+        color: #777;
         cursor: pointer;
 
         &.active {
@@ -129,7 +130,7 @@ a, p, span, li {
   .menu.skill-mode .ui[class*="top attached"].menu.tabular .item.active {
     &.production,
     &.workbench {
-      color: #444488;
+      color: #448;
 
     }
   }
@@ -203,7 +204,7 @@ a, p, span, li {
   h1.ui.header {
     margin: 0;
     padding: 6px 0;
-    color: #FFFFFF;
+    color: #FFF;
     font-weight: normal;
     font-size: 20px;
 
@@ -221,7 +222,7 @@ a, p, span, li {
         box-shadow: none;
 
         i {
-          color: #ffffff;
+          color: #fff;
         }
       }
     }
@@ -251,7 +252,7 @@ a, p, span, li {
   }
 
   .item {
-    color: #ffffff;
+    color: #fff;
   }
 }
 
@@ -281,7 +282,7 @@ footer.ui.attached.header {
 }
 
 .ui.button {
-  color: #000000;
+  color: #000;
   font-weight: normal;
   background-color: transparent;
 

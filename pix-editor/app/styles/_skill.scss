@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .main-title {
   .skill-mode {
     float: right;
@@ -7,7 +8,7 @@
     font-size: 14px;
 
     &.active {
-      color: #ffffff;
+      color: #fff;
     }
 
     .checkbox {
@@ -54,7 +55,7 @@
 
   .ember-basic-dropdown-content .ui.button {
     margin: 0;
-    color: #000000 !important;
+    color: #000 !important;
   }
 
 }
