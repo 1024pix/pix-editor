@@ -1,6 +1,5 @@
 // stylelint-disable color-no-hex, color-named
 .main-sidebar {
-
   &.ui.sidebar {
     z-index: 99;
     transition: transform 0.5s, visibility 0.5s;
@@ -130,27 +129,38 @@
   }
 
   .ui.menu {
-    position: absolute;
-    bottom: 0;
+    align-items: end;
     width: 100%;
+    height:100%;
+    padding-bottom: 1rem;
     background: transparent;
     border: none;
     box-shadow: none;
+
+    .button:hover {
+      background: rgba(255,255,255,.1);
+    }
+
+    .icon {
+      margin-left: .5rem !important;
+    }
   }
 
-  .ui.vertical.inverted.menu {
+  .menu .item {
+    align-items: initial;
+    padding: 10px;
+    color: #fff;
+  }
 
-    .menu .item {
-      align-items: initial;
-      padding: 10px;
-      color: #fff;
-    }
+  .menu .item i.icon {
+    float: none;
+    margin-right: 5px;
+    font-size: 12px;
+  }
 
-    .menu .item i.icon {
-      float: none;
-      margin-right: 5px;
-      font-size: 12px;
-    }
+  &.ui.vertical.inverted.menu {
+    display: flex !important;
+    flex-direction: column;
   }
 
   .ui.search {
