@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .alternative {
   color: rgba(0, 0, 0, 0.87);
   font-size: 12px;
@@ -226,7 +227,7 @@ img.clickable {
       align-items: stretch;
       margin: 0;
       padding: 10px;
-      background-color: #ffffff;
+      background-color: #fff;
       inset: 0;
 
       label {
@@ -269,7 +270,7 @@ img.clickable {
   position: absolute;
   right: 0;
   bottom: 0;
-  color: #ffffff;
+  color: #fff;
   background: transparent;
   border: none;
   outline: none;

@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .skill-tab {
   &__status {
     display: inline-block;
@@ -83,7 +84,7 @@
     }
 
     tr.is-selected td {
-      background-color: #ffffcc;
+      background-color: #ffc;
     }
   }
 }

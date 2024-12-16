@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .main-title {
   .target-profile-filter {
     display: flex;
@@ -32,7 +33,7 @@
   }
 
   .ember-power-select-multiple-option {
-    background-color: #ffffff;
+    background-color: #fff;
   }
 }
 
@@ -51,7 +52,7 @@
   .competence-profile {
     margin-bottom: 0;
     color: white;
-    background-color: #000044;
+    background-color: #004;
 
     &.area-profile-1 {
       background: #F1A141;
@@ -209,7 +210,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     height: 60px;
-    border-color: #000000;
+    border-color: #000;
     border-style: solid;
     border-width: 1px 0 0 1px;
 
@@ -222,7 +223,7 @@
       padding: 20px;
       font-size: 16px;
       text-align: center;
-      border-color: #000000;
+      border-color: #000;
       border-style: solid;
       border-width: 0 1px 1px 0;
       cursor: pointer;
@@ -232,7 +233,7 @@
       }
 
       &.disabled {
-        background-color: #dddddd;
+        background-color: #ddd;
         cursor: default;
       }
     }

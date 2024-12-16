@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .main-sidebar {
 
   &.ui.sidebar {
@@ -10,7 +11,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 15px 15px 15px 5px;
-    color: #ffffff;
+    color: #fff;
 
     h1 {
       margin: 0;
@@ -18,7 +19,7 @@
     }
 
     label span {
-      color: #ffffff;
+      color: #fff;
     }
   }
 
@@ -142,7 +143,7 @@
     .menu .item {
       align-items: initial;
       padding: 10px;
-      color: #ffffff;
+      color: #fff;
     }
 
     .menu .item i.icon {
@@ -177,13 +178,13 @@
       }
 
       i.icon {
-        color: #ffffff;
+        color: #fff;
       }
     }
 
     &.loading {
       .input > i.icon::after {
-        border-color: #ffffff transparent transparent;
+        border-color: #fff transparent transparent;
       }
     }
 

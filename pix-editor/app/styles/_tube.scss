@@ -1,3 +1,4 @@
+// stylelint-disable color-no-hex, color-named
 .tube-header {
   @extend .challenge-header;
 
@@ -8,7 +9,7 @@
   &.archived,
   &.need-work,
   &.to-be-submitted {
-    background-color: #444488 !important;
+    background-color: #448 !important;
   }
 }
 
