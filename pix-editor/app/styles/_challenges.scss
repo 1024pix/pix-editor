@@ -117,12 +117,12 @@ img.clickable {
 
     .circular {
       &.validated {
-        color: var(--pix-neutral-900) !important;
+        color: #2f2f2f !important;
         background: $validated-background-color !important;
       }
 
       &.suggested {
-        color: var(--pix-neutral-900) !important;
+        color: #2f2f2f !important;
         background: $suggested-background-color !important;
       }
 
@@ -205,7 +205,7 @@ img.clickable {
       height: 95px;
       padding: 0.78571429em 1em;
       overflow: scroll;
-      background-color: var(--pix-neutral-0);
+      background-color: #f9f9f9;
       border: 1px solid rgba(34, 36, 38, 0.15);
       border-radius: 0.28571429rem;
     }
@@ -214,7 +214,7 @@ img.clickable {
       textarea,
       input[type="text"],
       .selection {
-        background-color: var(--pix-neutral-0);
+        background-color: #f9f9f9;
       }
     }
 
@@ -226,7 +226,7 @@ img.clickable {
       align-items: stretch;
       margin: 0;
       padding: 10px;
-      background-color: var(--pix-neutral-0);
+      background-color: #ffffff;
       inset: 0;
 
       label {
@@ -256,7 +256,7 @@ img.clickable {
   .item {
 
     &.alternatives {
-      color: var(--pix-info-500);
+      color: #2185d0;
     }
   }
 }
@@ -269,7 +269,7 @@ img.clickable {
   position: absolute;
   right: 0;
   bottom: 0;
-  color: var(--pix-neutral-0);
+  color: #ffffff;
   background: transparent;
   border: none;
   outline: none;
@@ -289,7 +289,7 @@ img.clickable {
 
 .ui.icon.menu .item.important-action,
 .ui.icon.menu .item.important-action:hover {
-  color: var(--pix-security-light);
+  color: #d02181;
 }
 
 .challenge_languages {

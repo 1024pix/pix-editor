@@ -55,11 +55,11 @@
 
     .row--not-clickable {
       cursor: auto;
-      background-color: var(--pix-neutral-0);
+      background-color: white;
     }
 
     th.th--clickable {
-      background-color: var(--pix-neutral-0);
+      background-color: white;
 
       &:hover {
         background-color: $pix-neutral-15;

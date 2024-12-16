@@ -9,12 +9,12 @@
   font-weight: normal;
 
   .ember-power-select-trigger {
-    color: var(--pix-neutral-0);
+    color: white;
     background: transparent;
-    border-color: var(--pix-neutral-0);
+    border-color: white;
 
     .ember-power-select-status-icon {
-      border-color: rgba(var(--pix-neutral-0-inline), 0.5) transparent transparent;
+      border-color: rgba(255, 255, 255, 0.5) transparent transparent;
     }
   }
 }
@@ -27,10 +27,10 @@
 }
 
 .competence-management-link {
-  color: var(--pix-neutral-0);
+  color: white;
 
   &:hover {
-    color: var(--pix-neutral-0);
+    color: white;
     text-decoration: underline;
   }
 }
@@ -111,7 +111,7 @@
       text-align: center;
 
       .skill-cell__link {
-        color: var(--pix-neutral-900);
+        color: black;
         cursor: pointer;
 
         &.disabled {
@@ -121,11 +121,11 @@
 
       &.production {
         &.warning {
-          background: var(--pix-warning-300) !important;
+          background: #fdc59f !important;
         }
 
         &.danger {
-          background: var(--pix-error-100) !important;
+          background: #FF5E5E !important;
         }
       }
 
@@ -135,7 +135,7 @@
 
         &.active {
           position: relative;
-          color: var(--pix-error-500) !important;
+          color: red !important;
 
           &::after {
             position: absolute;
@@ -143,7 +143,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(var(--pix-secondary-700-inline),.2);
+            background: rgba(146, 146, 55, 0.3);
             content: '';
           }
         }
@@ -163,18 +163,18 @@
             }
 
             &.archived-prototype {
-              color: var(--pix-neutral-0);
+              color: white;
               background: $archived-background-color;
             }
 
             &.obsolete-prototype {
-              color: var(--pix-neutral-0);
+              color: white;
               background: $deleted-background-color;
             }
 
             &.not-declinable {
-              color: var(--pix-neutral-900);
-              background: var(--pix-neutral-0);
+              color: black;
+              background: white;
             }
 
             &.loading {
@@ -186,11 +186,11 @@
 
       &.skill-mode {
         &.warning {
-          background: var(--pix-primary-100) !important;
+          background: #b5b3ff !important;
         }
 
         &.danger {
-          background: var(--pix-primary-300) !important;
+          background: #c496ff !important;
         }
       }
 
@@ -200,7 +200,7 @@
 
         &.active {
           position: relative;
-          color: var(--pix-error-500) !important;
+          color: red !important;
 
           &::after {
             position: absolute;
@@ -267,12 +267,12 @@
             }
 
             &.archive-skill {
-              color: var(--pix-neutral-0);
+              color: white;
               background: $archived-background-color;
             }
 
             &.obsolete-skill {
-              color: var(--pix-neutral-0);
+              color: white;
               background: $deleted-background-color;
             }
           }
@@ -288,30 +288,30 @@
           cursor: pointer;
 
           &.bad-quality {
-            color: var(--pix-neutral-0);
-            background: var(--pix-error-500);
+            color: white;
+            background: #EA2700;
           }
 
           &.medium-quality {
-            background: var(--pix-warning-500);
+            background: #F3AC0B;
           }
 
           &.good-quality {
-            background: var(--pix-success-500);
+            background: #0DC600;
           }
 
           &.loading {
-            background-color: var(--pix-neutral-20);
+            background-color: #aaaaaa;
           }
 
           .half-tutorial {
-            color: var(--pix-neutral-20);
+            color: #aaaaaa
           }
         }
 
         &.active {
           .quality {
-            box-shadow: var(--pix-neutral-900) 0 0 7px;
+            box-shadow: #000000 0 0 7px;
             opacity: .8;
           }
 
@@ -355,12 +355,12 @@
 .quality-indication-details {
   tr {
     &:nth-child(even) {
-      color: var(--pix-neutral-0);
-      background: var(--pix-warning-500);
+      color: white;
+      background: #FFA300;
     }
 
     &:nth-child(odd) {
-      background: var(--pix-secondary-500);
+      background: #FFCE4D;
     }
 
     td {
@@ -386,11 +386,11 @@
         width: 80px;
 
         &.warning {
-          background: var(--pix-primary-100) !important;
+          background: #b5b3ff !important;
         }
 
         &.danger {
-          background: var(--pix-primary-300);
+          background: #c496ff;
         }
       }
     }
@@ -402,11 +402,11 @@
         width: 80px;
 
         &.warning {
-          background: var(--pix-warning-300) !important;
+          background: #fdc59f !important;
         }
 
         &.danger {
-          background: var(--pix-error-100);
+          background: #FF5E5E;
         }
       }
     }
@@ -424,7 +424,7 @@
     position: absolute;
     top: 0;
     left: 3px;
-    color: var(--pix-neutral-900);
+    color: black;
     font-weight: bold;
     font-size: 10px;
     font-style: normal;

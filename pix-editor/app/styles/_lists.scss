@@ -31,7 +31,7 @@
     th {
       padding: 10px;
       text-align: left;
-      background-color: var(--pix-neutral-20);
+      background-color: #F9FAFB;
       border-bottom: 1px solid rgba(34, 36, 38, .1);
       border-left: 1px solid rgba(34, 36, 38, .1);
 
@@ -39,7 +39,7 @@
 
         &::before {
           display: inline-block;
-          color: var(--pix-neutral-800);
+          color: #b9b9b9;
           font-family: Icons;
           line-height: 1;
           border: none;
@@ -83,7 +83,7 @@
     }
 
     tr.is-selected td {
-      background-color: var(--pix-secondary-50);
+      background-color: #ffffcc;
     }
   }
 }
