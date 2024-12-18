@@ -194,6 +194,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                       name: '@tube4',
                       skillOverviews: [
                         {
+                          id: 'recSkill4',
                           airtableId: 'recAirtableSkill4',
                           name: '@tube41',
                           prototypeId: 'recChallenge4',
@@ -219,6 +220,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill5',
                           airtableId: 'recAirtableSkill5',
                           name: '@tube56',
                           prototypeId: 'recChallenge5',
@@ -246,6 +248,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill3',
                           airtableId: 'recAirtableSkill3',
                           name: '@tube27',
                           prototypeId: 'recChallenge3',
@@ -262,6 +265,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill2',
                           airtableId: 'recAirtableSkill2',
                           name: '@tube13',
                           prototypeId: 'recChallenge2',
@@ -270,6 +274,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                           isPrototypeDeclinable: false,
                         },
                         {
+                          id: 'recSkill1',
                           airtableId: 'recAirtableSkill1',
                           name: '@tube14',
                           prototypeId: 'recChallenge1',
@@ -336,6 +341,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                       name: '@tube4',
                       skillOverviews: [
                         {
+                          id: 'recSkill4',
                           airtableId: 'recAirtableSkill4',
                           name: '@tube41',
                           prototypeId: 'recChallenge4',
@@ -361,6 +367,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill5',
                           airtableId: 'recAirtableSkill5',
                           name: '@tube56',
                           prototypeId: 'recChallenge5',
@@ -388,6 +395,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill3',
                           airtableId: 'recAirtableSkill3',
                           name: '@tube27',
                           prototypeId: 'recChallenge3',
@@ -404,6 +412,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         {
+                          id: 'recSkill2',
                           airtableId: 'recAirtableSkill2',
                           name: '@tube13',
                           prototypeId: 'recChallenge2',
@@ -412,6 +421,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                           isPrototypeDeclinable: false,
                         },
                         {
+                          id: 'recSkill1',
                           airtableId: 'recAirtableSkill1',
                           name: '@tube14',
                           prototypeId: 'recChallenge1',
