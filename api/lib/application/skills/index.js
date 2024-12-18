@@ -1,9 +1,7 @@
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as skillsController from './skills.js';
 import Joi from 'joi';
-
-const tubeIdType = Joi.string().pattern(/^(rec|tube)[a-zA-Z0-9]+$/).required();
-const skillIdType = Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/).required();
+import { Types } from '../types.js';
 
 export async function register(server) {
   server.route([
@@ -15,8 +13,8 @@ export async function register(server) {
           payload: Joi.object({
             data: {
               attributes: {
-                tubeDestinationId: tubeIdType,
-                skillIdToClone: skillIdType,
+                tubeDestinationId: Types.tubeId().required(),
+                skillIdToClone: Types.skillId().required(),
                 level: Joi.number().required(),
               },
             },
