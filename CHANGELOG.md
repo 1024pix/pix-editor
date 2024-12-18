@@ -1,5 +1,26 @@
 
 
+## v3.179.0 (18/12/2024)
+
+
+### :rocket: Amélioration
+- [#835](https://github.com/1024pix/pix-editor/pull/835) [FEATURE] Ne plus afficher un message d'érreur lorsqu'on annule la mise en prod des déclinaisons (PIX-14987).
+- [#822](https://github.com/1024pix/pix-editor/pull/822) [FEATURE] Sortir les compétences du proxy Airtable (PIX-15345).
+- [#833](https://github.com/1024pix/pix-editor/pull/833) [FEATURE] Mettre à jour les icons fontawsome avec ceux du design système (PIX-14773).
+
+### :bug: Correction
+- [#843](https://github.com/1024pix/pix-editor/pull/843) [BUGFIX] Navigation de qualité à épreuves (PIX-15748).
+- [#844](https://github.com/1024pix/pix-editor/pull/844) [BUGFIX] Le bouton de déconnexion et la version ne devraient pas se superposer aux options du menu (PIX-15505).
+- [#842](https://github.com/1024pix/pix-editor/pull/842) [BUGFIX] Vue acquis prod : attendre que les tutos soient chargés (PIX-15747).
+
+### :arrow_up: Montée de version
+- [#840](https://github.com/1024pix/pix-editor/pull/840) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.25 (pix-editor).
+- [#813](https://github.com/1024pix/pix-editor/pull/813) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.22 (pix-editor).
+- [#839](https://github.com/1024pix/pix-editor/pull/839) [BUMP] Update dependency @1024pix/pix-ui to v51 (pix-editor).
+- [#838](https://github.com/1024pix/pix-editor/pull/838) [BUMP] Update dependency @1024pix/pix-ui to v50 (pix-editor).
+- [#837](https://github.com/1024pix/pix-editor/pull/837) [BUMP] Update dependency @1024pix/pix-ui to v49 (pix-editor).
+- [#836](https://github.com/1024pix/pix-editor/pull/836) [BUMP] Update dependency @1024pix/pix-ui to ^48.9.0 (pix-editor).
+
 ## v3.178.1 (12/12/2024)
 
 
