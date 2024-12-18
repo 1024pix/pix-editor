@@ -12,7 +12,7 @@ export default class PrototypesRoute extends Route {
   refreshing = false;
 
   beforeModel(transition) {
-    if (transition.to.queryParams.view === 'draft') {
+    if (!['production', 'workbench', 'workbench-list'].includes(transition.to.queryParams.view)) {
       this.router.replaceWith({
         queryParams: {
           view: 'production',

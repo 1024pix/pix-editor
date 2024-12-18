@@ -26,7 +26,7 @@ export default class ChallengeRoute extends Route {
       const tube = await skill.tube;
       const competence = await tube.competence;
       if (challenge.get('isPrototype') && localizedChallenge.isPrimaryChallenge) {
-        return this.router.transitionTo('authenticated.competence.prototypes.single', competence, challenge);
+        return this.router.transitionTo('authenticated.competence.prototypes.single', competence, challenge.get('id'));
       } else if (challenge.get('isPrototype')) {
         return this.router.transitionTo('authenticated.competence.prototypes.localized', competence, challenge.get('id'), localizedChallenge.get('id'));
       } else if (localizedChallenge.isPrimaryChallenge) {

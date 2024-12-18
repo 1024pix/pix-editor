@@ -1,4 +1,5 @@
-import { click, currentURL, fillIn, find, visit, waitUntil } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, fillIn, find, waitUntil } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -57,6 +58,7 @@ module('Acceptance | Search', function(hooks) {
   test('search a challenge by rec id', async function(assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
+
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
@@ -65,7 +67,6 @@ module('Acceptance | Search', function(hooks) {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });
     await click(find('[data-test-sidebar-search] li'));
-
     // then
     assert.strictEqual(currentURL(), expectedUrl);
   });
@@ -88,7 +89,7 @@ module('Acceptance | Search', function(hooks) {
 
   test('search a challenge by localized challenge id', async function(assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/challengeLocalizedChallenge1';
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/challengeLocalizedChallenge1?view=production';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
@@ -96,6 +97,7 @@ module('Acceptance | Search', function(hooks) {
     await waitUntil(function() {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });
+
     await click(find('[data-test-sidebar-search] li'));
 
     // then
