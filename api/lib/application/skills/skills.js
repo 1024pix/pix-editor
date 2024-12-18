@@ -7,9 +7,10 @@ import {
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
-import { cloneSkill } from '../../domain/usecases/index.js';
+import { cloneSkill, getSkillChallengesProduction } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
+import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 export async function clone(request, h) {
   try {
@@ -29,5 +30,22 @@ export async function clone(request, h) {
   } catch (err) {
     logger.error(err);
     return h.response(err).code(400);
+  }
+}
+
+export async function getProductionChallenges(request, h) {
+  try {
+    const skillId = request.params.skillId;
+    const challenges = await getSkillChallengesProduction({
+      skillId,
+      dependencies: {
+        challengeRepository,
+        logger,
+      },
+    });
+    return h.response(challengeSerializer.serialize(challenges));
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 }

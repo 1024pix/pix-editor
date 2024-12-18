@@ -24,6 +24,18 @@ export async function register(server) {
         handler: skillsController.clone,
       },
     },
+    {
+      method: 'GET',
+      path: '/api/skills/{skillId}/challenges-production',
+      config: {
+        validate: {
+          params: Joi.object({
+            skillId: Types.skillId().required(),
+          }),
+        },
+        handler: skillsController.getProductionChallenges,
+      },
+    },
   ]);
 }
 
