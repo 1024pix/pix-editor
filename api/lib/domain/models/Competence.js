@@ -5,7 +5,10 @@ export class Competence {
     index,
     origin,
     areaId,
+    areaAirtableId,
     thematicIds,
+    thematicAirtableIds,
+    tubeAirtableIds,
     skillIds,
     name_i18n,
     description_i18n,
@@ -15,8 +18,16 @@ export class Competence {
     this.index = index;
     this.origin = origin;
     this.areaId = areaId;
+    this.areaAirtableId = areaAirtableId;
     this.thematicIds = thematicIds;
+    this.thematicAirtableIds = thematicAirtableIds;
+    this.tubeAirtableIds = tubeAirtableIds;
     this.skillIds = skillIds;
+    this.name_i18n = name_i18n;
+    this.description_i18n = description_i18n;
+  }
+
+  update({ name_i18n, description_i18n }) {
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;
   }

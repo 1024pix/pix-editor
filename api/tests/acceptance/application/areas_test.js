@@ -274,125 +274,96 @@ describe('Acceptance | Route | areas', () => {
       });
     });
 
-    describe('when user is admin', () => {
-      it('should respond with status 201 and created area', async () => {
-        // given
-        const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area5',
-          airtableId: 'recArea5',
-          code: '2',
+    it('should respond with status 201 and created area', async () => {
+      // given
+      const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
+        id: 'area5',
+        airtableId: 'recArea5',
+        code: '2',
+        frameworkId: 'framework2',
+        competenceAirtableIds: null,
+        competenceIds: null,
+        color: null,
+      }));
+
+      const airtableAreas = [
+        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
+          id: 'area1',
+          airtableId: 'recArea2',
+          code: '1',
+          frameworkId: 'framework1',
+        })),
+        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
+          id: 'area4',
+          airtableId: 'recArea4',
+          code: '1',
           frameworkId: 'framework2',
-          competenceAirtableIds: null,
+        })),
+        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
+          id: 'area2',
+          airtableId: 'recArea2',
+          code: '2',
+          frameworkId: 'framework1',
+        })),
+      ];
+
+      const airtableGetAreasScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Domaines')
+        .query({
+          fields: { '': areaDatasource.usedFields },
+          sort: [{ field: areaDatasource.sortField, direction: 'asc' }],
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableAreas });
+
+      const airtablePostAreaScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Domaines/', {
+          records: [{
+            fields: {
+              'id persistant': 'area5',
+              Code: '2',
+              Referentiel: ['framework2'],
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableArea] });
+
+      const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('area5');
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      const pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/areas/area5', {
+          id: 'area5',
+          code: '2',
+          title_i18n: {
+            fr: 'Cinquième domaine',
+            en: 'Fifth domain',
+          },
+          name: '2. Cinquième domaine',
+          frameworkId: 'framework2',
           competenceIds: null,
           color: null,
-        }));
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
 
-        const airtableAreas = [
-          airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-            id: 'area1',
-            airtableId: 'recArea2',
-            code: '1',
-            frameworkId: 'framework1',
-          })),
-          airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-            id: 'area4',
-            airtableId: 'recArea4',
-            code: '1',
-            frameworkId: 'framework2',
-          })),
-          airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-            id: 'area2',
-            airtableId: 'recArea2',
-            code: '2',
-            frameworkId: 'framework1',
-          })),
-        ];
+      const server = await createServer();
 
-        const airtableGetAreasScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Domaines')
-          .query({
-            fields: { '': areaDatasource.usedFields },
-            sort: [{ field: areaDatasource.sortField, direction: 'asc' }],
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableAreas });
-
-        const airtablePostAreaScope = nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Domaines/', {
-            records: [{
-              fields: {
-                'id persistant': 'area5',
-                Code: '2',
-                Referentiel: ['framework2'],
-              },
-            }],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [airtableArea] });
-
-        const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('area5');
-
-        const pixApiToken = 'secret';
-        nock('https://api.test.pix.fr')
-          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
-        const pixApiCacheScope = nock('https://api.test.pix.fr')
-          .patch('/api/cache/areas/area5', {
-            id: 'area5',
-            code: '2',
-            title_i18n: {
-              fr: 'Cinquième domaine',
-              en: 'Fifth domain',
-            },
-            name: '2. Cinquième domaine',
-            frameworkId: 'framework2',
-            competenceIds: null,
-            color: null,
-          })
-          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-          .reply(200);
-
-        const server = await createServer();
-
-        // when
-        const response = await server.inject({
-          method: 'POST',
-          payload: {
-            data: {
-              type: 'areas',
-              attributes: {
-                'title-fr-fr': 'Cinquième domaine',
-                'title-en-us': 'Fifth domain',
-              },
-              relationships: {
-                framework: {
-                  data: {
-                    type: 'frameworks',
-                    id: 'framework2',
-                  },
-                },
-              },
-            },
-          },
-          url: '/api/areas',
-          headers: generateAuthorizationHeader(adminUser),
-        });
-
-        // then
-        expect(response.statusCode).toBe(201);
-
-        expect(response.result).toEqual({
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        payload: {
           data: {
             type: 'areas',
-            id: 'recArea5',
             attributes: {
-              'pix-id': 'area5',
-              code: '2',
               'title-fr-fr': 'Cinquième domaine',
               'title-en-us': 'Fifth domain',
-              name: '2. Cinquième domaine',
             },
             relationships: {
               framework: {
@@ -401,24 +372,51 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework2',
                 },
               },
-              competences: {
-                data: null,
-              },
             },
           },
-        });
-
-        expect(generateNewId).toHaveBeenCalledWith('area');
-
-        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual([
-          { key: 'area.area5.title', locale: 'en', value: 'Fifth domain' },
-          { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' },
-        ]);
-
-        expect(airtableGetAreasScope.isDone()).toBe(true);
-        expect(airtablePostAreaScope.isDone()).toBe(true);
-        expect(pixApiCacheScope.isDone()).toBe(true);
+        },
+        url: '/api/areas',
+        headers: generateAuthorizationHeader(adminUser),
       });
+
+      // then
+      expect(response.statusCode).toBe(201);
+
+      expect(response.result).toEqual({
+        data: {
+          type: 'areas',
+          id: 'recArea5',
+          attributes: {
+            'pix-id': 'area5',
+            code: '2',
+            'title-fr-fr': 'Cinquième domaine',
+            'title-en-us': 'Fifth domain',
+            name: '2. Cinquième domaine',
+          },
+          relationships: {
+            framework: {
+              data: {
+                type: 'frameworks',
+                id: 'framework2',
+              },
+            },
+            competences: {
+              data: null,
+            },
+          },
+        },
+      });
+
+      expect(generateNewId).toHaveBeenCalledWith('area');
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual([
+        { key: 'area.area5.title', locale: 'en', value: 'Fifth domain' },
+        { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' },
+      ]);
+
+      expect(airtableGetAreasScope.isDone()).toBe(true);
+      expect(airtablePostAreaScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });

@@ -1,5 +1,6 @@
 export * from './clone-skill.js';
 export * from './create-area.js';
+export * from './create-competence.js';
 export * from './create-framework.js';
 export * from './create-mission.js';
 export * from './delete-unmentioned-keys-after-upload.js';
@@ -16,6 +17,7 @@ export * from './preview-challenge.js';
 export * from './proxy-delete-request-to-airtable.js';
 export * from './proxy-read-request-to-airtable.js';
 export * from './proxy-write-request-to-airtable.js';
+export * from './update-competence.js';
 export * from './update-mission.js';
 export * from './upload-translation-to-phrase.js';
 export * from './validate-urls-from-release.js';

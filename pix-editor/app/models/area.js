@@ -16,6 +16,7 @@ export default class AreaModel extends Model {
     return competences
       .slice()
       .sort((competenceA, competenceB) => {
+        if (!competenceA.code || !competenceB.code) return 0;
         const [domainCodeA, competenceCodeA] = competenceA.code.split('.');
         const [domainCodeB, competenceCodeB] = competenceB.code.split('.');
         if (parseInt(domainCodeA) === parseInt(domainCodeB))

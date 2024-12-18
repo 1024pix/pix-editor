@@ -35,6 +35,13 @@ export async function listByFrameworkId(frameworkId) {
   return toDomainList(datasourceAreas, translations);
 }
 
+export async function getByAirtableId(areaAirtableId) {
+  const areaDTO = await areaDatasource.find(areaAirtableId);
+  if (!areaDTO) return null;
+  const translations = await translationRepository.listByEntity(model, areaDTO.id);
+  return toDomain(areaDTO, translations);
+}
+
 function toDomainList(datasourceAreas, translations) {
   const translationsByAreaId = _.groupBy(translations, 'entityId');
   return datasourceAreas.map(
