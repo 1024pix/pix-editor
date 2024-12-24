@@ -7,7 +7,7 @@ export default class SkillRoute extends Route {
   @service store;
 
   async model(params) {
-    return this.store.query('skill', { filterByFormula: `FIND('${params.skill_pix_id}', {id persistant})` });
+    return this.store.query('skill', { filter: { pixId: params.skill_pix_id } });
   }
 
   async afterModel(model) {

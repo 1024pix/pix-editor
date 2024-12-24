@@ -95,12 +95,15 @@ module('Unit | Model | skill', function(hooks) {
 
     // then
     assert.ok(saveStub.calledOnce);
-    assert.ok(saveStub.calledWith({ adapterOptions: {
-      clone: true,
-      skillIdToClone: 'pix_1',
-      tubeDestinationId: 'tubeId',
-      level,
-    },
+    assert.ok(saveStub.calledWith({
+      adapterOptions: {
+        clone: true,
+        body: {
+          skillIdToClone: 'pix_1',
+          tubeDestinationId: 'tubeId',
+          level,
+        },
+      },
     }));
   });
 });

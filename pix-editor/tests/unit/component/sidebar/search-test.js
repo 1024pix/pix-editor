@@ -13,7 +13,7 @@ module('Unit | Component | sidebar/search', function(hooks) {
   });
 
   module('#searchSkillsByName', function() {
-    test('it should escape skill name', function(assert) {
+    test('it should query store with skill name', function(assert) {
     // given
       const queryStub = sinon.stub().resolves([]);
 
@@ -24,9 +24,11 @@ module('Unit | Component | sidebar/search', function(hooks) {
 
       // then
       assert.ok(queryStub.calledWith('skill', {
-        filterByFormula: 'FIND("\\\\\'\\"\\t coucou \\\\\'\\"\\t", LOWER(Nom))',
-        maxRecords: 20,
-        sort: [{ field: 'Nom', direction: 'asc' }],
+        filter: {
+          name: '\\\'"\t coucou \\\'"\t',
+        },
+        page: { limit: 20 },
+        sort: 'name',
       }));
     });
   });

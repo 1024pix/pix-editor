@@ -123,10 +123,7 @@ function routes() {
     return _serializeModel(createdTube, 'tube');
   });
 
-  this.get('/airtable/content/Acquis/:id', (schema, request) => {
-    const skill = schema.skills.find(request.params.id);
-    return _serializeModel(skill, 'skill');
-  });
+  this.patch('/skills/:id');
 
   this.patch('/airtable/content/Acquis/:id', (schema, request) => {
     const skillPayload = JSON.parse(request.requestBody);
@@ -152,12 +149,9 @@ function routes() {
     return { records };
   });
 
-  this.post('/airtable/content/Acquis', (schema, request) => {
-    const skillPayload = JSON.parse(request.requestBody);
-    const skill = _deserializePayload(skillPayload, 'skill');
-    const createdSkill = schema.skills.create(skill);
-    return _serializeModel(createdSkill, 'skill');
-  });
+  this.get('/skills/:id');
+
+  this.post('/skills');
 
   this.post('/skills/clone', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
@@ -175,7 +169,7 @@ function routes() {
       tutoMore: skillToClone.tutoMore,
       challenges: skillToClone.challenges,
     });
-    return _serializeModel(createdSkill, 'skill');
+    return createdSkill;
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {

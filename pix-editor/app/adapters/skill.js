@@ -1,31 +1,13 @@
-import AirtableAdapter from './airtable';
+import ApplicationAdapter from './application';
 
-export default class SkillAdapter extends AirtableAdapter {
+export default class SkillAdapter extends ApplicationAdapter {
+  coalesceFindRequests = true;
 
-  fields = [
-    'Record Id',
-    'Nom',
-    'Statut de l\'indice',
-    'Epreuves (id persistant)',
-    'Date',
-    'Description',
-    'Statut de la description',
-    'Comprendre',
-    'En savoir plus',
-    'Tube',
-    'Level',
-    'Status',
-    'Internationalisation',
-    'id persistant',
-    'Version',
-  ];
-
-  urlForCreateRecord(model, snapshot) {
-    if (snapshot.adapterOptions?.clone) return '/api/skills/clone';
-    return super.urlForCreateRecord(model, snapshot);
-  }
-
-  pathForType() {
-    return 'Acquis';
+  createRecord(_store, type, snapshot) {
+    if (snapshot.adapterOptions?.clone) {
+      // TODO: voir si on peut faire this.serialize()
+      return this.ajax('/api/skills/clone', 'POST', { data: { data: { type: 'skills', attributes: snapshot.adapterOptions.body } } });
+    }
+    return super.createRecord(_store, type, snapshot);
   }
 }
