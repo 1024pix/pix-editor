@@ -1,6 +1,7 @@
+import Joi from 'joi';
+
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as skillsController from './skills.js';
-import Joi from 'joi';
 import { Types } from '../types.js';
 
 export async function register(server) {
@@ -51,6 +52,18 @@ export async function register(server) {
           }),
         },
         handler: skillsController.getProductionLocalizedChallenges,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/skills/{skillAirtableId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            skillAirtableId: Types.skillId().required(),
+          }),
+        },
+        handler: skillsController.get,
       },
     },
   ]);

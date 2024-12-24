@@ -841,4 +841,122 @@ describe('Application | Route | Skills', () => {
       });
     });
   });
+
+  describe('GET /api/skills/{skillAirtableId}', () => {
+    let airtableSkillScope;
+
+    beforeEach(async () => {
+      const airtableSkill =   airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+        id: 'skill1',
+        airtableId: 'recSkill1',
+        createdAt: '2025-01-06T13:50:47.437Z',
+        description: 'premier acquis',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        level: 4,
+        name: '@skill4',
+        pixValue: 1.5,
+        status: Skill.STATUSES.ACTIF,
+        version: 1,
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        tutorialIds: ['tuto1'],
+        tutorialAirtableIds: ['recTuto1'],
+        learningMoreTutorialIds: ['tuto2', 'tuto3'],
+        learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+        challengeIds: ['challenge1', 'challenge2'],
+      }));
+
+      airtableSkillScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis/recSkill1')
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableSkill);
+
+      databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
+      databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
+
+      await databaseBuilder.commit();
+    });
+
+    it('should respond with status 200 and areas', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/skills/recSkill1',
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+
+      expect(response.result).toEqual({
+        data:
+          {
+            type: 'skills',
+            id: 'recSkill1',
+            attributes: {
+              'pix-id': 'skill1',
+              'clue': 'Un indice',
+              'clue-en': 'A clue',
+              'clue-status': 'Validé',
+              'created-at': '2025-01-06T13:50:47.437Z',
+              'description': 'premier acquis',
+              'description-status': 'Validé',
+              'i18n': 'France',
+              'level': 4,
+              'name': '@skill4',
+              'status': 'actif',
+              'version': 1,
+            },
+            relationships: {
+              'challenges': {
+                data: [
+                  {
+                    id: 'challenge1',
+                    type: 'challenges',
+                  },
+                  {
+                    id: 'challenge2',
+                    type: 'challenges',
+                  },
+                ],
+              },
+              'tube': {
+                data: {
+                  id: 'recTube1',
+                  type: 'tubes',
+                },
+              },
+              'tuto-more': {
+                data: [
+                  {
+                    id: 'recTuto2',
+                    type: 'tutorials',
+                  },
+                  {
+                    id: 'recTuto3',
+                    type: 'tutorials',
+                  },
+                ],
+              },
+              'tuto-solution': {
+                data: [
+                  {
+                    id: 'recTuto1',
+                    type: 'tutorials',
+                  },
+                ],
+              },
+            }
+          },
+      });
+
+      expect(airtableSkillScope.isDone()).toBe(true);
+    });
+  });
 });

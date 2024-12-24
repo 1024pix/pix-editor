@@ -34,7 +34,7 @@ export async function clone(request, h) {
         updatedRecordNotifier,
       },
     });
-    return h.response().redirect(`/api/airtable/content/Acquis/${newSkill.airtableId}`);
+    return h.response().redirect(`/api/skills/${newSkill.airtableId}`);
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);
@@ -71,6 +71,18 @@ export async function list(req) {
     const params = extractParameters(req.query);
     const skills = await listSkills(params);
     return skillSerializer.serialize(skills);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function get(req) {
+  try {
+    const skill = await skillRepository.getByAirtableId(req.params.skillAirtableId);
+    if (!skill) throw new NotFoundError('unknown skill');
+    return skillSerializer.serialize(skill);
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);

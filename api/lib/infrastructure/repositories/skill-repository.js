@@ -26,6 +26,13 @@ export async function get(id) {
   return toDomain(skillDTO, translations);
 }
 
+export async function getByAirtableId(id) {
+  const datasourceSkill = await skillDatasource.find(id);
+  if (!datasourceSkill) return null;
+  const translations = await translationRepository.listByEntity(model, datasourceSkill.id);
+  return toDomain(datasourceSkill, translations);
+}
+
 export async function getManyByAirtableIds(ids) {
   if (!ids?.length) return [];
   const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
