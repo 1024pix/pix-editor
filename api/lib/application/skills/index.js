@@ -6,6 +6,11 @@ import { Types } from '../types.js';
 export async function register(server) {
   server.route([
     {
+      method: 'GET',
+      path: '/api/skills',
+      handler: skillsController.list,
+    },
+    {
       method: 'POST',
       path: '/api/skills/clone',
       config: {

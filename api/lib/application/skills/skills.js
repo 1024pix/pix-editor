@@ -1,3 +1,6 @@
+import * as Sentry from '@sentry/node';
+import Boom from '@hapi/boom';
+
 import {
   attachmentRepository,
   challengeRepository,
@@ -5,7 +8,6 @@ import {
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import {
   cloneSkill,
@@ -14,7 +16,7 @@ import {
 } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeSerializer, localizedChallengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { challengeSerializer, localizedChallengeSerializer, skillSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 export async function clone(request, h) {
   try {
@@ -33,6 +35,7 @@ export async function clone(request, h) {
     return h.response().redirect(`/api/airtable/content/Acquis/${newSkill.airtableId}`);
   } catch (err) {
     logger.error(err);
+    Sentry.captureException(err);
     return h.response(err).code(400);
   }
 }
@@ -59,4 +62,15 @@ export async function getProductionLocalizedChallenges(request, h) {
     },
   });
   return h.response(localizedChallengeSerializer.serializeRead(localizedChallenges));
+}
+
+export async function list() {
+  try {
+    const skills = await skillRepository.list();
+    return skillSerializer.serialize(skills);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
 }

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
 import { Skill } from '../../../domain/models/Skill.js';
@@ -16,16 +15,22 @@ export const skillDatasource = datasource.extend({
     'Record Id',
     'Nom',
     'Statut de l\'indice',
+    'Comprendre',
     'Comprendre (id persistant)',
+    'En savoir plus',
     'En savoir plus (id persistant)',
     'PixValue',
     'Compétence (via Tube) (id persistant)',
     'Status',
+    'Tube',
     'Tube (id persistant)',
     'Description',
     'Level',
     'Internationalisation',
     'Version',
+    'Date',
+    'Statut de la description',
+    'Epreuves (id persistant)',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -34,17 +39,23 @@ export const skillDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.get('Record Id'),
       name: airtableRecord.get('Nom'),
-      hintStatus: airtableRecord.get('Statut de l\'indice') || '',
-      tutorialIds: airtableRecord.get('Comprendre (id persistant)') || [],
-      learningMoreTutorialIds: airtableRecord.get('En savoir plus (id persistant)') || [],
+      hintStatus: airtableRecord.get('Statut de l\'indice') ?? '',
+      tutorialIds: airtableRecord.get('Comprendre (id persistant)') ?? [],
+      tutorialAirtableIds: airtableRecord.get('Comprendre') ?? [],
+      learningMoreTutorialIds: airtableRecord.get('En savoir plus (id persistant)') ?? [],
+      learningMoreTutorialAirtableIds: airtableRecord.get('En savoir plus') ?? [],
       pixValue: airtableRecord.get('PixValue'),
-      competenceId: _.head(airtableRecord.get('Compétence (via Tube) (id persistant)')),
+      competenceId: airtableRecord.get('Compétence (via Tube) (id persistant)')?.[0],
       status: airtableRecord.get('Status'),
-      tubeId: _.head(airtableRecord.get('Tube (id persistant)')),
+      tubeId: airtableRecord.get('Tube (id persistant)')?.[0],
+      tubeAirtableId: airtableRecord.get('Tube')?.[0],
       description: airtableRecord.get('Description'),
       level: airtableRecord.get('Level'),
       internationalisation: airtableRecord.get('Internationalisation'),
-      version: airtableRecord.get('Version')
+      version: airtableRecord.get('Version'),
+      createdAt: airtableRecord.get('Date'),
+      descriptionStatus: airtableRecord.get('Statut de la description'),
+      challengeIds: airtableRecord.get('Epreuves (id persistant)') ?? [],
     };
   },
 

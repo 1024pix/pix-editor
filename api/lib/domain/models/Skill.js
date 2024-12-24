@@ -6,33 +6,45 @@ export class Skill {
     airtableId,
     name,
     description,
+    descriptionStatus,
     hint_i18n,
     hintStatus,
     tutorialIds,
+    tutorialAirtableIds,
     learningMoreTutorialIds,
+    learningMoreTutorialAirtableIds,
     pixValue,
     competenceId,
     internationalisation,
     status,
     tubeId,
+    tubeAirtableId,
     version,
     level,
+    challengeIds,
+    createdAt,
   }) {
     this.id = id;
     this.airtableId = airtableId;
     this.name = name;
     this.description = description;
+    this.descriptionStatus = descriptionStatus;
     this.hint_i18n = hint_i18n;
     this.hintStatus = hintStatus;
     this.tutorialIds = tutorialIds;
+    this.tutorialAirtableIds = tutorialAirtableIds;
     this.learningMoreTutorialIds = learningMoreTutorialIds;
+    this.learningMoreTutorialAirtableIds = learningMoreTutorialAirtableIds;
     this.pixValue = pixValue;
     this.competenceId = competenceId;
     this.status = status;
     this.tubeId = tubeId;
+    this.tubeAirtableId = tubeAirtableId;
     this.version = version;
     this.level = level;
     this.internationalisation = internationalisation;
+    this.challengeIds = challengeIds;
+    this.createdAt = createdAt;
   }
 
   static get STATUSES() {
@@ -53,6 +65,18 @@ export class Skill {
       A_RETRAVAILLER: 'à retravailler',
       ARCHIVE: 'archivé',
       INAPPLICABLE: 'inapplicable',
+      NONE: '',
+    };
+  }
+
+  static get DESCRIPTION_STATUSES() {
+    return {
+      PROPOSE: 'Proposé',
+      VALIDE: 'Validé',
+      PRE_VALIDE: 'pré-validé',
+      A_SOUMETTRE: 'à soumettre',
+      A_RETRAVAILLER: 'à retravailler',
+      ARCHIVE: 'archivé',
       NONE: '',
     };
   }
