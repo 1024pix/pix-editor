@@ -26,6 +26,14 @@ export async function get(id) {
   return toDomain(skillDTO, translations);
 }
 
+export async function getManyByAirtableIds(ids) {
+  if (!ids?.length) return [];
+  const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
+  if (!datasourceSkills) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations);
+}
+
 export async function listByTubeId(tubeId) {
   const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));

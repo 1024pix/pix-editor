@@ -426,209 +426,419 @@ describe('Application | Route | Skills', () => {
   describe('GET /api/skills', () => {
     let airtableSkillsScope;
 
-    beforeEach(async () => {
-      const airtableSkills = [
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
-          id: 'skill1',
-          airtableId: 'recSkill1',
-          createdAt: '2025-01-06T13:50:47.437Z',
-          description: 'premier acquis',
-          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-          hintStatus: Skill.HINT_STATUSES.VALIDE,
-          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          level: 4,
-          name: '@skill4',
-          pixValue: 1.5,
-          status: Skill.STATUSES.ACTIF,
-          version: 1,
-          tubeId: 'tube1',
-          tubeAirtableId: 'recTube1',
-          tutorialIds: ['tuto1'],
-          tutorialAirtableIds: ['recTuto1'],
-          learningMoreTutorialIds: ['tuto2', 'tuto3'],
-          learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
-          challengeIds: ['challenge1', 'challenge2'],
-        })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
-          id: 'skill2',
-          airtableId: 'recSkill2',
-          createdAt: '2025-01-06T13:51:04.381Z',
-          description: 'deuxième acquis',
-          descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
-          hintStatus: Skill.HINT_STATUSES.PROPOSE,
-          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-          level: 3,
-          name: '@skill3',
-          pixValue: 1.8,
-          status: Skill.STATUSES.EN_CONSTRUCTION,
-          version: 2,
-          tubeId: 'tube2',
-          tubeAirtableId: 'recTube2',
-          tutorialIds: ['tuto2'],
-          tutorialAirtableIds: ['recTuto2'],
-          learningMoreTutorialIds: ['tuto3', 'tuto4'],
-          learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-          challengeIds: ['challenge3', 'challenge4', 'challenge5'],
-        })),
-      ];
+    describe('with no filters', () => {
+      beforeEach(async () => {
+        const airtableSkills = [
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+            id: 'skill1',
+            airtableId: 'recSkill1',
+            createdAt: '2025-01-06T13:50:47.437Z',
+            description: 'premier acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 4,
+            name: '@skill4',
+            pixValue: 1.5,
+            status: Skill.STATUSES.ACTIF,
+            version: 1,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            tutorialIds: ['tuto1'],
+            tutorialAirtableIds: ['recTuto1'],
+            learningMoreTutorialIds: ['tuto2', 'tuto3'],
+            learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+            challengeIds: ['challenge1', 'challenge2'],
+          })),
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+            id: 'skill2',
+            airtableId: 'recSkill2',
+            createdAt: '2025-01-06T13:51:04.381Z',
+            description: 'deuxième acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            level: 3,
+            name: '@skill3',
+            pixValue: 1.8,
+            status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 2,
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            tutorialIds: ['tuto2'],
+            tutorialAirtableIds: ['recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          })),
+        ];
 
-      airtableSkillsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Acquis')
-        .query({
-          fields: { '': skillDatasource.usedFields },
-          sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableSkills });
+        airtableSkillsScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis')
+          .query({
+            fields: { '': skillDatasource.usedFields },
+            sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: airtableSkills });
 
-      databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
-      databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
-      databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'fr', value: 'Un autre indice' });
-      databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'en', value: 'An other clue' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'fr', value: 'Un autre indice' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'en', value: 'An other clue' });
 
-      await databaseBuilder.commit();
+        await databaseBuilder.commit();
+      });
+
+      it('should respond with status 200 and skills', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/skills',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'skills',
+              id: 'recSkill1',
+              attributes: {
+                'pix-id': 'skill1',
+                'clue': 'Un indice',
+                'clue-en': 'A clue',
+                'clue-status': 'Validé',
+                'created-at': '2025-01-06T13:50:47.437Z',
+                'description': 'premier acquis',
+                'description-status': 'Validé',
+                'i18n': 'France',
+                'level': 4,
+                'name': '@skill4',
+                'status': 'actif',
+                'version': 1,
+              },
+              relationships: {
+                'challenges': {
+                  data: [
+                    {
+                      id: 'challenge1',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge2',
+                      type: 'challenges',
+                    },
+                  ],
+                },
+                'tube': {
+                  data: {
+                    id: 'recTube1',
+                    type: 'tubes',
+                  },
+                },
+                'tuto-more': {
+                  data: [
+                    {
+                      id: 'recTuto2',
+                      type: 'tutorials',
+                    },
+                    {
+                      id: 'recTuto3',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+                'tuto-solution': {
+                  data: [
+                    {
+                      id: 'recTuto1',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+              }
+            },
+            {
+              type: 'skills',
+              id: 'recSkill2',
+              attributes: {
+                'pix-id': 'skill2',
+                'clue': 'Un autre indice',
+                'clue-en': 'An other clue',
+                'clue-status': 'Proposé',
+                'created-at': '2025-01-06T13:51:04.381Z',
+                'description': 'deuxième acquis',
+                'description-status': 'Proposé',
+                'i18n': 'Monde',
+                'level': 3,
+                'name': '@skill3',
+                'status': 'en construction',
+                'version': 2,
+              },
+              relationships: {
+                'challenges': {
+                  data: [
+                    {
+                      id: 'challenge3',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge4',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge5',
+                      type: 'challenges',
+                    },
+                  ],
+                },
+                'tube': {
+                  data: {
+                    id: 'recTube2',
+                    type: 'tubes',
+                  },
+                },
+                'tuto-more': {
+                  data: [
+                    {
+                      id: 'recTuto3',
+                      type: 'tutorials',
+                    },
+                    {
+                      id: 'recTuto4',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+                'tuto-solution': {
+                  data: [
+                    {
+                      id: 'recTuto2',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+              }
+            },
+          ],
+        });
+
+        expect(airtableSkillsScope.isDone()).toBe(true);
+      });
     });
 
-    it('should respond with status 200 and skills', async () => {
-      // given
-      const server = await createServer();
+    describe('with ids filter', () => {
+      beforeEach(async () => {
+        const airtableSkills = [
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+            id: 'skill1',
+            airtableId: 'recSkill1',
+            createdAt: '2025-01-06T13:50:47.437Z',
+            description: 'premier acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 4,
+            name: '@skill4',
+            pixValue: 1.5,
+            status: Skill.STATUSES.ACTIF,
+            version: 1,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            tutorialIds: ['tuto1'],
+            tutorialAirtableIds: ['recTuto1'],
+            learningMoreTutorialIds: ['tuto2', 'tuto3'],
+            learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+            challengeIds: ['challenge1', 'challenge2'],
+          })),
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+            id: 'skill2',
+            airtableId: 'recSkill2',
+            createdAt: '2025-01-06T13:51:04.381Z',
+            description: 'deuxième acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            level: 3,
+            name: '@skill3',
+            pixValue: 1.8,
+            status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 2,
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            tutorialIds: ['tuto2'],
+            tutorialAirtableIds: ['recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          })),
+        ];
 
-      // when
-      const response = await server.inject({
-        method: 'GET',
-        url: '/api/skills',
-        headers: generateAuthorizationHeader(editorUser),
+        airtableSkillsScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis')
+          .query({
+            filterByFormula: 'OR(RECORD_ID() = "recSkill1", RECORD_ID() = "recSkill2")',
+            fields: { '': skillDatasource.usedFields },
+            sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: airtableSkills });
+
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'fr', value: 'Un autre indice' });
+        databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'en', value: 'An other clue' });
+
+        await databaseBuilder.commit();
       });
 
-      // then
-      expect(response.statusCode).toBe(200);
+      it('should respond with status 200 and skills', async () => {
+        // given
+        const server = await createServer();
 
-      expect(response.result).toEqual({
-        data: [
-          {
-            type: 'skills',
-            id: 'recSkill1',
-            attributes: {
-              'pix-id': 'skill1',
-              'clue': 'Un indice',
-              'clue-en': 'A clue',
-              'clue-status': 'Validé',
-              'created-at': '2025-01-06T13:50:47.437Z',
-              'description': 'premier acquis',
-              'description-status': 'Validé',
-              'i18n': 'France',
-              'level': 4,
-              'name': '@skill4',
-              'status': 'actif',
-              'version': 1,
-            },
-            relationships: {
-              'challenges': {
-                data: [
-                  {
-                    id: 'challenge1',
-                    type: 'challenges',
-                  },
-                  {
-                    id: 'challenge2',
-                    type: 'challenges',
-                  },
-                ],
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/skills?filter[ids][]=recSkill1&filter[ids][]=recSkill2',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'skills',
+              id: 'recSkill1',
+              attributes: {
+                'pix-id': 'skill1',
+                'clue': 'Un indice',
+                'clue-en': 'A clue',
+                'clue-status': 'Validé',
+                'created-at': '2025-01-06T13:50:47.437Z',
+                'description': 'premier acquis',
+                'description-status': 'Validé',
+                'i18n': 'France',
+                'level': 4,
+                'name': '@skill4',
+                'status': 'actif',
+                'version': 1,
               },
-              'tube': {
-                data: {
-                  id: 'recTube1',
-                  type: 'tubes',
+              relationships: {
+                'challenges': {
+                  data: [
+                    {
+                      id: 'challenge1',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge2',
+                      type: 'challenges',
+                    },
+                  ],
                 },
-              },
-              'tuto-more': {
-                data: [
-                  {
-                    id: 'recTuto2',
-                    type: 'tutorials',
+                'tube': {
+                  data: {
+                    id: 'recTube1',
+                    type: 'tubes',
                   },
-                  {
-                    id: 'recTuto3',
-                    type: 'tutorials',
-                  },
-                ],
-              },
-              'tuto-solution': {
-                data: [
-                  {
-                    id: 'recTuto1',
-                    type: 'tutorials',
-                  },
-                ],
-              },
-            }
-          },
-          {
-            type: 'skills',
-            id: 'recSkill2',
-            attributes: {
-              'pix-id': 'skill2',
-              'clue': 'Un autre indice',
-              'clue-en': 'An other clue',
-              'clue-status': 'Proposé',
-              'created-at': '2025-01-06T13:51:04.381Z',
-              'description': 'deuxième acquis',
-              'description-status': 'Proposé',
-              'i18n': 'Monde',
-              'level': 3,
-              'name': '@skill3',
-              'status': 'en construction',
-              'version': 2,
-            },
-            relationships: {
-              'challenges': {
-                data: [
-                  {
-                    id: 'challenge3',
-                    type: 'challenges',
-                  },
-                  {
-                    id: 'challenge4',
-                    type: 'challenges',
-                  },
-                  {
-                    id: 'challenge5',
-                    type: 'challenges',
-                  },
-                ],
-              },
-              'tube': {
-                data: {
-                  id: 'recTube2',
-                  type: 'tubes',
                 },
+                'tuto-more': {
+                  data: [
+                    {
+                      id: 'recTuto2',
+                      type: 'tutorials',
+                    },
+                    {
+                      id: 'recTuto3',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+                'tuto-solution': {
+                  data: [
+                    {
+                      id: 'recTuto1',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+              }
+            },
+            {
+              type: 'skills',
+              id: 'recSkill2',
+              attributes: {
+                'pix-id': 'skill2',
+                'clue': 'Un autre indice',
+                'clue-en': 'An other clue',
+                'clue-status': 'Proposé',
+                'created-at': '2025-01-06T13:51:04.381Z',
+                'description': 'deuxième acquis',
+                'description-status': 'Proposé',
+                'i18n': 'Monde',
+                'level': 3,
+                'name': '@skill3',
+                'status': 'en construction',
+                'version': 2,
               },
-              'tuto-more': {
-                data: [
-                  {
-                    id: 'recTuto3',
-                    type: 'tutorials',
+              relationships: {
+                'challenges': {
+                  data: [
+                    {
+                      id: 'challenge3',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge4',
+                      type: 'challenges',
+                    },
+                    {
+                      id: 'challenge5',
+                      type: 'challenges',
+                    },
+                  ],
+                },
+                'tube': {
+                  data: {
+                    id: 'recTube2',
+                    type: 'tubes',
                   },
-                  {
-                    id: 'recTuto4',
-                    type: 'tutorials',
-                  },
-                ],
-              },
-              'tuto-solution': {
-                data: [
-                  {
-                    id: 'recTuto2',
-                    type: 'tutorials',
-                  },
-                ],
-              },
-            }
-          },
-        ],
+                },
+                'tuto-more': {
+                  data: [
+                    {
+                      id: 'recTuto3',
+                      type: 'tutorials',
+                    },
+                    {
+                      id: 'recTuto4',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+                'tuto-solution': {
+                  data: [
+                    {
+                      id: 'recTuto2',
+                      type: 'tutorials',
+                    },
+                  ],
+                },
+              }
+            },
+          ],
+        });
+
+        expect(airtableSkillsScope.isDone()).toBe(true);
       });
-
-      expect(airtableSkillsScope.isDone()).toBe(true);
     });
   });
 });

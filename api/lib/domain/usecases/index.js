@@ -14,6 +14,7 @@ export * from './get-competence-challenges-workbench-overview.js';
 export * from './get-skill-challenges-production.js';
 export * from './get-skill-localized-challenges-production.js';
 export * from './import-translations.js';
+export * from './list-skills.js';
 export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';
 export * from './proxy-delete-request-to-airtable.js';

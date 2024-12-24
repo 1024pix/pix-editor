@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
 import {
@@ -7,7 +8,7 @@ import {
   tutorialDatasource,
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
-import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
 
 describe('Integration | Repository | skill-repository', () => {
@@ -186,7 +187,7 @@ describe('Integration | Repository | skill-repository', () => {
       });
 
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
         if (options?.filterByFormula !== `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`) expect.unreachable('Wrong filterByFormula');
         return [{
@@ -291,7 +292,7 @@ describe('Integration | Repository | skill-repository', () => {
       });
 
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
         if (options?.filterByFormula !== `{Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
@@ -326,7 +327,6 @@ describe('Integration | Repository | skill-repository', () => {
       const skills = await skillRepository.listByCompetenceId('competence1');
 
       // then
-
       expect(skills).toEqual([
         domainBuilder.buildSkill({
           id: 'skill1',
@@ -355,6 +355,119 @@ describe('Integration | Repository | skill-repository', () => {
           createdAt: '2025-01-06T08:58:57.465Z',
         }),
       ]);
+    });
+  });
+
+  describe('#getManyByAirtableIds', () => {
+    describe('when no ids', () => {
+      it('should return an empty array', async () => {
+        // given
+        const ids = [];
+
+        // when
+        const results = await skillRepository.getManyByAirtableIds(ids);
+
+        // then
+        expect(results).toEqual([]);
+      });
+    });
+
+    describe('when none found', () => {
+      it('should return an empty array', async () => {
+        // given
+        const ids = ['notfound1', 'noutfound2'];
+        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([]);
+
+        // when
+        const results = await skillRepository.getManyByAirtableIds(ids);
+
+        // then
+        expect(results).toEqual([]);
+        expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
+          filterByFormula: 'OR(RECORD_ID() = "notfound1", RECORD_ID() = "noutfound2")',
+          fields: skillDatasource.usedFields,
+          sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
+        });
+      });
+    });
+
+    describe('when some found', () => {
+      it('should return domain skills', async () => {
+        // given
+        const skills = [
+          {
+            id: 'skill1',
+            airtableId: 'recSkill1',
+            createdAt: '2025-01-06T13:50:47.437Z',
+            description: 'premier acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hint_i18n: {
+              fr: 'premier indice',
+              en: 'first clue',
+            },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 4,
+            name: '@skill4',
+            pixValue: 1.5,
+            status: Skill.STATUSES.ACTIF,
+            version: 1,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            tutorialIds: ['tuto1'],
+            tutorialAirtableIds: ['recTuto1'],
+            learningMoreTutorialIds: ['tuto2', 'tuto3'],
+            learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+            challengeIds: ['challenge1', 'challenge2'],
+          },
+          {
+            id: 'skill2',
+            airtableId: 'recSkill2',
+            createdAt: '2025-01-06T13:51:04.381Z',
+            description: 'deuxième acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hint_i18n: {
+              fr: 'premier indice',
+              en: 'first clue',
+            },
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            level: 3,
+            name: '@skill3',
+            pixValue: 1.8,
+            status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 2,
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            tutorialIds: ['tuto2'],
+            tutorialAirtableIds: ['recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          },
+        ];
+        const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
+        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
+          airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+        );
+        skills.forEach((skill) => {
+          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
+          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+        });
+        await databaseBuilder.commit();
+        const ids = skills.map((skill) => skill.id);
+
+        // when
+        const results = await skillRepository.getManyByAirtableIds(ids);
+
+        // then
+        expect(results).toStrictEqual(skills.map(domainBuilder.buildSkill));
+        expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
+          filterByFormula: 'OR(RECORD_ID() = "skill1", RECORD_ID() = "skill2")',
+          fields: skillDatasource.usedFields,
+          sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
+        });
+      });
     });
   });
 

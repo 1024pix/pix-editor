@@ -12,11 +12,13 @@ import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import {
   cloneSkill,
   getSkillChallengesProduction,
-  getSkillLocalizedChallengesProduction
+  getSkillLocalizedChallengesProduction,
+  listSkills,
 } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
 import { challengeSerializer, localizedChallengeSerializer, skillSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 export async function clone(request, h) {
   try {
@@ -64,9 +66,10 @@ export async function getProductionLocalizedChallenges(request, h) {
   return h.response(localizedChallengeSerializer.serializeRead(localizedChallenges));
 }
 
-export async function list() {
+export async function list(req) {
   try {
-    const skills = await skillRepository.list();
+    const params = extractParameters(req.query);
+    const skills = await listSkills(params);
     return skillSerializer.serialize(skills);
   } catch (err) {
     logger.error(err);
