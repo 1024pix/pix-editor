@@ -1,5 +1,16 @@
 
 
+## v3.180.0 (30/12/2024)
+
+
+### :building_construction: Tech
+- [#850](https://github.com/1024pix/pix-editor/pull/850) [TECH] Ajouter les référentiels et les missions dans la réplication (PIX-15879).
+- [#846](https://github.com/1024pix/pix-editor/pull/846) [TECH] Monter la version de Postgres vers 15.10 sur tous les environnements de développement pour matcher avec la production (PIX-15877).
+
+### :arrow_up: Montée de version
+- [#848](https://github.com/1024pix/pix-editor/pull/848) [BUMP] Update dependency @1024pix/pix-ui to ^51.6.1 (pix-editor).
+- [#847](https://github.com/1024pix/pix-editor/pull/847) [BUMP] Update Node.js to v22.12.0.
+
 ## v3.179.0 (18/12/2024)
 
 
