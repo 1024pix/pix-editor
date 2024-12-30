@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 
 const {
+  buildFramework,
   buildArea,
   buildCompetence,
   buildTube,
@@ -14,7 +15,47 @@ const {
   buildThematic,
 } = airtableBuilder.factory;
 
+function omit(keys, obj) {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([k]) => !keys.includes(k))
+  );
+}
+
 async function mockCurrentContent() {
+  const expectedCurrentContent = {};
+  const expectedFramework = omit(['areaIds'], domainBuilder.buildFramework());
+  expectedCurrentContent.frameworks = [expectedFramework];
+
+  const area = domainBuilder.buildArea();
+  const expectedArea = omit(['airtableId', 'competenceAirtableIds'], { name: area.name, ...area });
+  expectedCurrentContent.areas = [expectedArea];
+
+  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'areaAirtableId'], domainBuilder.buildCompetence({
+    name_i18n: {
+      fr: 'Français',
+      en: 'English',
+    },
+    description_i18n: {
+      fr: 'Description française',
+      en: 'Description anglaise',
+    }
+  }));
+  expectedCurrentContent.competences = [expectedCompetence];
+
+  const expectedThematic = omit(['airtableId'], domainBuilder.buildThematic({
+    name_i18n: {
+      fr: 'Thématique en fr',
+      en: 'Thematic in en',
+    },
+  }));
+  expectedCurrentContent.thematics = [expectedThematic];
+
+  const expectedTube = omit(['airtableId', 'index'], domainBuilder.buildTube());
+  expectedCurrentContent.tubes = [expectedTube];
+
+  expectedCurrentContent.skills = [{ ...domainBuilder.buildSkill({ id: 'recSkill1' }) }];
+
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
     files: [
@@ -26,7 +67,6 @@ async function mockCurrentContent() {
     accessibility1: Challenge.ACCESSIBILITY1.OK,
     accessibility2: Challenge.ACCESSIBILITY2.OK,
   });
-
   const alternativeChallenge = domainBuilder.buildChallenge({
     id: 'challenge-id_alt',
     version: 1,
@@ -35,7 +75,6 @@ async function mockCurrentContent() {
     accessibility2: Challenge.ACCESSIBILITY2.RAS,
     files: null,
   });
-
   const challengeNl = domainBuilder.buildChallenge({
     id: 'localized-challenge-id',
     locales: ['nl'],
@@ -52,6 +91,36 @@ async function mockCurrentContent() {
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
   });
+  const expectedPrimaryProtoQualityAttributes = {
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  };
+  const expectedChallenge = {
+    ...challenge,
+    geography: 'Brésil',
+    area: 'Brésil',
+    urlsToConsult: [
+      'https://example.com/',
+      'https://pix.org/nl-be',
+    ],
+    ...expectedPrimaryProtoQualityAttributes,
+  };
+  delete expectedChallenge.localizedChallenges;
+  const expectedAlternativeChallenge = {
+    ...alternativeChallenge,
+    area: 'Neutre',
+    files: [],
+    accessibility1: challenge.accessibility1,
+    accessibility2: challenge.accessibility2,
+    ...expectedPrimaryProtoQualityAttributes,
+  };
+  delete expectedAlternativeChallenge.localizedChallenges;
+  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
+  delete expectedChallengeNl.localizedChallenges;
+  expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
 
   const expectedAttachment = {
     id: 'attid1',
@@ -73,102 +142,55 @@ async function mockCurrentContent() {
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
   };
-  const expectedThematic = domainBuilder.buildThematic({
-    name_i18n: {
-      fr: 'Thématique en fr',
-      en: 'Thematic in en',
+  expectedCurrentContent.attachments = [
+    { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
+    {
+      ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
+      alt: 'alt_nl'
     },
-  });
+  ];
 
-  delete expectedThematic.airtableId;
+  expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject()];
 
-  const expectedPrimaryProtoQualityAttributes = {
-    requireGafamWebsiteAccess: true,
-    isIncompatibleIpadCertif: true,
-    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-    isAwarenessChallenge: true,
-    toRephrase: true,
-  };
-
-  const expectedChallenge = {
-    ...challenge,
-    geography: 'Brésil',
-    area: 'Brésil',
-    urlsToConsult: [
-      'https://example.com/',
-      'https://pix.org/nl-be',
-    ],
-    ...expectedPrimaryProtoQualityAttributes,
-  };
-  delete expectedChallenge.localizedChallenges;
-
-  const expectedAlternativeChallenge = {
-    ...alternativeChallenge,
-    area: 'Neutre',
-    files: [],
-    accessibility1: challenge.accessibility1,
-    accessibility2: challenge.accessibility2,
-    ...expectedPrimaryProtoQualityAttributes,
-  };
-  delete expectedAlternativeChallenge.localizedChallenges;
-
-  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
-  delete expectedChallengeNl.localizedChallenges;
-
-  const expectedCompetence = domainBuilder.buildCompetence({
-    name_i18n: {
-      fr: 'Français',
-      en: 'English',
+  expectedCurrentContent.courses = [
+    {
+      id: 'recCourse1',
+      name: 'nameCourse1',
     },
-    description_i18n: {
-      fr: 'Description française',
-      en: 'Description anglaise',
-    }
-  });
+    {
+      id: 'recCourse2',
+      name: 'nameCourse2',
+    },
+  ];
 
-  delete expectedCompetence.airtableId;
-  delete expectedCompetence.thematicAirtableIds;
-  delete expectedCompetence.tubeAirtableIds;
-  delete expectedCompetence.areaAirtableId;
-
-  const expectedTube = domainBuilder.buildTube();
-  delete expectedTube.airtableId;
-  delete expectedTube.index;
-
-  const { airtableId: _, competenceAirtableIds: __, name, ...area } = domainBuilder.buildArea();
-  const expectedArea = { ...area, name };
-
-  const expectedCurrentContent = {
-    attachments: [
-      { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
-      {
-        ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
-        alt: 'alt_nl'
+  expectedCurrentContent.missions = [
+    {
+      id: 123456789,
+      name_i18n: { fr: 'validated mission PG name' },
+      competenceId: 'competenceId',
+      thematicIds: 'thematicIds',
+      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+      validatedObjectives_i18n: { fr: 'Rien' },
+      status: Mission.status.VALIDATED,
+      createdAt: new Date('2010-01-04').toISOString(),
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+      documentationUrl: 'http://url-example.net',
+      cardImageUrl: null,
+      content: {
+        dareChallenges: [],
+        steps: [],
       },
-    ],
-    areas: [expectedArea],
-    competences: [expectedCompetence],
-    tubes: [expectedTube],
-    skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
-    challenges: [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge],
-    tutorials: [domainBuilder.buildTutorialDatasourceObject()],
-    thematics: [expectedThematic],
-    courses: [
-      {
-        id: 'recCourse1',
-        name: 'nameCourse1',
-      },
-      {
-        id: 'recCourse2',
-        name: 'nameCourse2',
-      },
-    ]
-  };
+    },
+  ];
 
   const airtableSkill = buildSkill(expectedCurrentContent.skills[0]);
   airtableBuilder.mockLists({
+    frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     areas: [buildArea(expectedCurrentContent.areas[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
+    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [{
       ...airtableSkill,
@@ -190,12 +212,11 @@ async function mockCurrentContent() {
       ...alternativeChallenge
     })
     ],
-    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
-    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     attachments: [
       buildAttachment(expectedAttachment),
       buildAttachment(expectedAttachmentNl)
     ],
+    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',
@@ -203,12 +224,22 @@ async function mockCurrentContent() {
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
   });
-
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse1',
     name: 'nameCourse1',
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
+  });
+
+  databaseBuilder.factory.buildMission({
+    id: 123456789,
+    name: 'validated mission PG name',
+    competenceId: 'competenceId',
+    learningObjectives: 'Que tu sois le meilleur',
+    thematicIds: 'thematicIds',
+    validatedObjectives: 'Rien',
+    status: Mission.status.VALIDATED,
+    documentationUrl: 'http://url-example.net'
   });
 
   databaseBuilder.factory.buildLocalizedChallenge({
@@ -397,7 +428,7 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const response = await server.inject(currentContentOptions);
 
       // then
-      expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
+      expect(JSON.parse(response.result)).toStrictEqual(expectedCurrentContent);
     });
   });
 });

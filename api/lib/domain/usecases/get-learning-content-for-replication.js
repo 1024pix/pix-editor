@@ -1,9 +1,11 @@
-import { tutorialDatasource, } from '../../infrastructure/datasources/airtable/index.js';
+import { tutorialDatasource } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
   attachmentRepository,
   challengeRepository,
   competenceRepository,
+  frameworkRepository,
+  missionRepository,
   skillRepository,
   thematicRepository,
   tubeRepository,
@@ -12,6 +14,8 @@ import {
   areaTransformer,
   competenceTransformer,
   fillAlternativeQualityFieldsFromMatchingProto,
+  frameworkTransformer,
+  missionTransformer,
   thematicTransformer,
   tubeTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -19,26 +23,36 @@ import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
   const [
+    frameworks,
     areas,
     competences,
+    thematics,
     tubes,
     skills,
     challenges,
-    tutorials,
     attachments,
-    thematics,
+    tutorials,
     courses,
+    missions,
   ] = await Promise.all([
+    frameworkRepository.list(),
     areaRepository.list(),
     competenceRepository.list(),
+    thematicRepository.list(),
     tubeRepository.list(),
     skillRepository.list(),
     challengeRepository.list(),
-    tutorialDatasource.list(),
     attachmentRepository.list(),
-    thematicRepository.list(),
+    tutorialDatasource.list(),
     _getCoursesFromPGForReplication(),
+    missionRepository.list(),
   ]);
+  const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
+  const transformedAreas = areaTransformer.filterAreasFields(areas);
+  const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
+  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+  const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
+
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges
     .flatMap((challenge) => [
@@ -52,21 +66,21 @@ export async function getLearningContentForReplication() {
     challengeId: attachment.localizedChallengeId,
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
-  const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
-  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
-  const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
-  const transformedAreas = areaTransformer.filterAreasFields(areas);
+  
+  const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
+    frameworks: transformedFrameworks,
     areas: transformedAreas,
     competences: transformedCompetences,
+    thematics: transformedThematics,
     tubes: transformedTubes,
     skills,
     challenges: translatedChallenges,
-    tutorials,
     attachments: translatedAttachments,
-    thematics: transformedThematics,
-    courses
+    tutorials,
+    courses,
+    missions: transformedMissions,
   };
 }
 
