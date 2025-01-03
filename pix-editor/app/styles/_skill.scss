@@ -63,6 +63,21 @@
 
 }
 
+.skill-status-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__menu {
+    position: absolute;
+    z-index: 1000000;
+    background: white;
+    border: solid lightgray 1px;
+    border-radius: 5px;
+    top: 45px;
+  }
+}
+
 .skill-data {
   @extend .challenge-data;
 }
