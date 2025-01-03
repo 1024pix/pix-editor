@@ -21,6 +21,7 @@ export default class SingleController extends Controller {
   @tracked displayChangeLog = false;
   @tracked changelogDefault = '';
   @tracked displayConfirmLog = false;
+  @tracked isStatusActionMenuOpen = false;
   @service access;
   @service changelogEntry;
   @service config;
@@ -258,10 +259,8 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async validate(dropdown) {
-    if (dropdown) {
-      dropdown.actions.close();
-    }
+  async validate() {
+    this.isStatusActionMenuOpen = false;
     try {
       await this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?');
       const defaultLogMessage = this.challenge.isPrototype ? 'Mise en production du prototype' : 'Mise en production de la déclinaison';
@@ -292,10 +291,8 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async archive(dropdown) {
-    if (dropdown) {
-      dropdown.actions.close();
-    }
+  async archive() {
+    this.isStatusActionMenuOpen = false;
     try {
       await this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?');
       this._displayChangelogPopIn('Archivage de l\'épreuve', async (changelog) => {
@@ -323,10 +320,8 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async obsolete(dropdown) {
-    if (dropdown) {
-      dropdown.actions.close();
-    }
+  async obsolete() {
+    this.isStatusActionMenuOpen = false;
     try {
       await this.confirm.ask(this.intl.t('challenge.obsolete.confirm.title'), this.intl.t('challenge.obsolete.confirm.message'));
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
@@ -774,5 +769,15 @@ export default class SingleController extends Controller {
       this.challenge.embedURL = null;
       this.invalidEmbedURL = embedURL;
     }
+  }
+
+  @action
+  async toggleStatusActionMenu() {
+    this.isStatusActionMenuOpen = !this.isStatusActionMenuOpen;
+  }
+
+  @action
+  async hideStatusActionMenu() {
+    this.isStatusActionMenuOpen = false;
   }
 }
