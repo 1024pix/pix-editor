@@ -13,25 +13,31 @@
           <i class="clone icon"></i>&nbsp;v{{this.skill.version}}
         </LinkTo>
         {{#if (or this.mayArchive this.mayObsolete)}}
-          <BasicDropdown title="Actions" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
-            <dd.Trigger>
-              <button class="ui icon button item" type="button"><i class="bolt icon"></i></button>
-            </dd.Trigger>
-            <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
-              {{#if this.mayArchive}}
-                <button class="ui button archive item"  {{on "click" (fn this.archiveSkill dd)}} type="button">
-                  <i class="archive icon"></i>
-                  {{t 'competence.skills.archive'}}
-                </button>
-              {{/if}}
-              {{#if this.mayObsolete}}
-                <button class="ui button delete item"  {{on "click" (fn this.obsoleteSkill dd)}} type="button">
-                  <i class="trash alternate icon"></i>
-                  {{t 'competence.skills.obsolete'}}
-                </button>
-              {{/if}}
-            </dd.Content>
-          </BasicDropdown>
+          <div class="skill-status-actions">
+            <PixIconButton
+              @ariaLabel="Changer le statut de l'acquis"
+              @iconName="bolt"
+              @plainIcon={{true}}
+              @triggerAction={{this.toggleStatusActionMenu}}
+              {{on "focusout" this.hideStatusActionMenu}}
+            />
+            {{#if this.isStatusActionMenuOpen}}
+              <div class="skill-status-actions__menu">
+                {{#if this.mayArchive}}
+                  <button class="ui button archive item"  {{on "click" this.archiveSkill}} type="button">
+                    <i class="archive icon"></i>
+                    {{t 'competence.skills.archive'}}
+                  </button>
+                {{/if}}
+                {{#if this.mayObsolete}}
+                  <button class="ui button delete item"  {{on "click" this.obsoleteSkill}} type="button">
+                    <i class="trash alternate icon"></i>
+                    {{t 'competence.skills.obsolete'}}
+                  </button>
+                {{/if}}
+              </div>
+            {{/if}}
+          </div>
         {{/if}}
       {{/unless}}
     </div>
@@ -120,3 +126,4 @@
   @showModal={{this.displayConfirmLog}}
 />
 {{outlet}}
+

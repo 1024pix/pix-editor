@@ -14,18 +14,10 @@ export default class SingleController extends Controller {
   @tracked displayChangeLog = false;
   @tracked changelogText = '';
   @tracked displayConfirmLog = false;
+  @tracked isStatusActionMenuOpen = false;
 
   @controller('authenticated.competence')
     parentController;
-
-  get maximized() {
-    return this.parentController.leftMaximized;
-  }
-
-  get skill() {
-    return this.model;
-  }
-
   @service access;
   @service changelogEntry;
   @service config;
@@ -36,6 +28,14 @@ export default class SingleController extends Controller {
   @service router;
   @service storage;
   @service store;
+
+  get maximized() {
+    return this.parentController.leftMaximized;
+  }
+
+  get skill() {
+    return this.model;
+  }
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -183,14 +183,12 @@ export default class SingleController extends Controller {
   }
 
   @action
-  archiveSkill(dropdown) {
+  archiveSkill() {
     if (this.skill.productionPrototype) {
       this.notify.error(this.intl.t('skill.archive.skill_with_live_challenges'));
       return;
     }
-    if (dropdown) {
-      dropdown.actions.close();
-    }
+    this.isStatusActionMenuOpen = false;
     const challenges = this.skill.challengesArray;
     return this.confirm.ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
       .then(() => {
@@ -233,14 +231,12 @@ export default class SingleController extends Controller {
   }
 
   @action
-  obsoleteSkill(dropdown) {
+  obsoleteSkill() {
     if (this.skill.productionPrototype) {
       this.notify.error(this.intl.t('skill.obsolete.skill_with_live_challenges'));
       return;
     }
-    if (dropdown) {
-      dropdown.actions.close();
-    }
+    this.isStatusActionMenuOpen = false;
     const challenges = this.skill.challengesArray;
     return this.confirm.ask(this.intl.t('skill.obsolete.confirm.title'), this.intl.t('skill.obsolete.confirm.message'))
       .then(() => {
@@ -293,6 +289,16 @@ export default class SingleController extends Controller {
       this.changelogCallback(value);
     }
     this.displayChangeLog = false;
+  }
+
+  @action
+  async toggleStatusActionMenu() {
+    this.isStatusActionMenuOpen = !this.isStatusActionMenuOpen;
+  }
+
+  @action
+  async hideStatusActionMenu() {
+    this.isStatusActionMenuOpen = false;
   }
 
   _displayChangelogPopIn(defaultMessage, callback) {
