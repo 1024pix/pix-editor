@@ -12,8 +12,11 @@ import Challenge from 'pixeditor/models/challenge';
 import {on} from '@ember/modifier';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
+import { service } from '@ember/service';
 
 export default class ChallengesProduction extends Component {
+  @service router;
+
   @tracked shouldDisplayObsoleteChallenges = false;
 
   get challenges() {
@@ -48,6 +51,11 @@ export default class ChallengesProduction extends Component {
     await navigator.clipboard.writeText(this.getChallengePreviewUrl(challenge));
   }
 
+  @action
+  closePanel() {
+    this.router.transitionTo('authenticated.v2.competence-overview');
+  }
+
 <template>
     <section class="challenges-production">
       <header class="challenges-production__header">
@@ -68,6 +76,7 @@ export default class ChallengesProduction extends Component {
           <span class="separator"></span>
           <PixIconButton
             class="challenges-production-header__button-icon"
+            @triggerAction={{this.closePanel}}
             @ariaLabel="Fermer la liste des épreuves"
             @iconName="close"
           />
