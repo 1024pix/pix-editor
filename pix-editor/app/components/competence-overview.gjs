@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import flagForLanguage from 'pixeditor/helpers/flag-for-language.js';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
 
@@ -47,32 +48,26 @@ export default class CompetenceOverview extends Component {
     {
       label: 'Langue source',
       value: 'source',
-      flag: '',
     },
     {
       label: 'Français',
       value: 'fr',
-      flag: '🇫🇷',
     },
     {
       label: 'Franco-français',
       value: 'fr-fr',
-      flag: '🇫🇷',
     },
     {
       label: 'Anglais',
       value: 'en',
-      flag: '🇬🇧',
     },
     {
       label: 'Espagnol',
       value: 'es',
-      flag: '🇪🇸',
     },
     {
       label: 'Néerlandais',
       value: 'nl',
-      flag: '🇳🇱',
     },
   ];
 
@@ -109,7 +104,7 @@ export default class CompetenceOverview extends Component {
       <div class="competence-overview-header">
         {{#if this.hasLocaleSelected}}
           <p class="locale-tag">
-            <span>{{this.localeEntry.flag}}</span> {{this.localeEntry.label}}
+            <span>{{flagForLanguage this.localeEntry.value}}</span> {{this.localeEntry.label}}
           </p>
         {{/if}}
         <h2>
