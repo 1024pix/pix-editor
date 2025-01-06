@@ -1,6 +1,7 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
@@ -38,6 +39,15 @@ export default class ChallengesProduction extends Component {
     return 'secondary';
   }
 
+  getChallengePreviewUrl(challenge) {
+    return new URL(challenge.preview, window.location).href;
+  }
+
+  @action
+  async copyChallengePreviewUrl(challenge) {
+    await navigator.clipboard.writeText(this.getChallengePreviewUrl(challenge));
+  }
+
 <template>
     <section class="challenges-production">
       <header class="challenges-production__header">
@@ -50,15 +60,10 @@ export default class ChallengesProduction extends Component {
           V{{@skill.version}}
         </p>
         <div class="challenges-production-header__action-buttons">
-          <PixButton
-            class="challenges-production-header__create-decli-button"
-          >
-            Créer une déclinaison
-          </PixButton>
           <PixIconButton
             class="challenges-production-header__button-icon"
             @ariaLabel="Agrandir la liste des épreuves"
-            @iconName="check"
+            @iconName="openInFull"
           />
           <span class="separator"></span>
           <PixIconButton
@@ -91,7 +96,7 @@ export default class ChallengesProduction extends Component {
                 {{/if}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn @context={{context}} class="consigne">
               <:header>
                 Consigne
               </:header>
@@ -131,7 +136,9 @@ export default class ChallengesProduction extends Component {
               </:header>
               <:cell>
                 {{#each challenge.locales as |locale|}}
-                  {{flagForLanguage locale}} {{locale}}
+                  <p>
+                    {{flagForLanguage locale}} {{locale}}
+                  </p>
                 {{/each}}
               </:cell>
             </PixTableColumn>
@@ -140,13 +147,18 @@ export default class ChallengesProduction extends Component {
                 Actions
               </:header>
               <:cell>
-                <PixIconButton
-                  @ariaLabel="Prévisualiser l'épreuve {{challenge.id}}"
-                  @iconName="eye"
-                />
+                <a
+                  href="{{this.getChallengePreviewUrl challenge}}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Prévisualiser l'épreuve {{challenge.id}}"
+                >
+                  <PixIcon @name="eye" />
+                </a>
                 <PixIconButton
                   @ariaLabel="Copier le lien de l'épreuve {{challenge.id}}"
                   @iconName="copy"
+                  @triggerAction={{this.copyChallengePreviewUrl challenge}}
                 />
               </:cell>
             </PixTableColumn>

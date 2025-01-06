@@ -23,6 +23,14 @@
   &--table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
   }
+  .consigne {
+    max-width: 650px;
+    height: 3rem;
+    line-height: 1.5rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 
   .display-actions {
     display: flex;
