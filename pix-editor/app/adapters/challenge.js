@@ -15,5 +15,4 @@ export default class ChallengeAdapter extends ApplicationAdapter {
     const url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
     return this.ajax(url, 'GET', { data: { filter: { ids } } });
   }
-
 }

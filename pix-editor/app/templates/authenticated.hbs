@@ -11,7 +11,7 @@
       </button>
       {{!-- template-lint-enable --}}
     </div>
-    <div class="main" {{on "click" this.closeMenu}}>
+    <div class="{{if this.isV2 "v2-main" "main"}}" {{on "click" this.closeMenu}}>
       {{#if this.isIndex}}
         <div class="main-left">
           <main class="elephant ui attached"></main>

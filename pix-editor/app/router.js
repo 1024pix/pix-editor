@@ -10,7 +10,9 @@ Router.map(function() {
   this.route('login', { path: 'connexion' });
   this.route('authenticated', { path: '' }, function() {
     this.route('v2', function() {
-      this.route('competence-overview', { path: '/competences/:competence_id/:overview' });
+      this.route('competence-overview', { path: '/competences/:competence_id/:overview' }, function() {
+        this.route('challenges', { path: '/skills/:skill_id/challenges' });
+      });
     });
     this.route('competence', { path: '/competence/:competence_id' }, function() {
       this.route('prototypes', function() {

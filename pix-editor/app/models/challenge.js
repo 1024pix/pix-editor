@@ -61,6 +61,15 @@ export default class ChallengeModel extends Model {
 
   @tracked _definedBaseName;
 
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
+
   get illustration() {
     const files = this.hasMany('files').value() ?? [];
     return files.find((file) => file.type === 'illustration' && !file.isDeleted);
