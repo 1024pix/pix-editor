@@ -70,6 +70,18 @@ export default class ChallengeModel extends Model {
     };
   }
 
+  static get GENEALOGIES() {
+    return {
+      PROTOTYPE: 'Prototype 1',
+      DECLINAISON: 'Décliné 1',
+      UNUSED_DECLINE: 'décliné',
+      UNUSED_ENG: 'ENG',
+      UNUSED_ECRI: 'ECRI',
+      UNUSED_FRANCOPHONE: 'FRANCOPHONE',
+      NONE: '',
+    };
+  }
+
   get illustration() {
     const files = this.hasMany('files').value() ?? [];
     return files.find((file) => file.type === 'illustration' && !file.isDeleted);
@@ -81,7 +93,7 @@ export default class ChallengeModel extends Model {
   }
 
   get isPrototype() {
-    return (this.genealogy === 'Prototype 1');
+    return (this.genealogy === ChallengeModel.GENEALOGIES.PROTOTYPE);
   }
 
   get isWorkbench() {

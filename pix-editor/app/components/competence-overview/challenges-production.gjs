@@ -24,7 +24,9 @@ export default class ChallengesProduction extends Component {
     if(this.shouldDisplayObsoleteChallenges) {
       statuses.push(Challenge.STATUSES.PERIME);
     }
-    return this.args.challenges.filter((challenge) => statuses.includes(challenge.status));
+    return this.args.challenges
+      .filter((challenge) => statuses.includes(challenge.status))
+      .sort(byAlternativeVersion);
   }
 
   @action
@@ -176,4 +178,14 @@ export default class ChallengesProduction extends Component {
       </div>
     </section>
   </template>
+}
+
+function byAlternativeVersion(challengeA, challengeB) {
+  if (challengeA.isPrototype) {
+    return -1;
+  }
+  if (challengeB.isPrototype) {
+    return 1;
+  }
+  return challengeA.alternativeVersion - challengeB.alternativeVersion;
 }
