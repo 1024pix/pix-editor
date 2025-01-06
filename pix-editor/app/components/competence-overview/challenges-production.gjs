@@ -13,6 +13,7 @@ import {on} from '@ember/modifier';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { fn } from '@ember/helper';
 
 export default class ChallengesProduction extends Component {
   @service router;
@@ -72,6 +73,7 @@ export default class ChallengesProduction extends Component {
         <div class="challenges-production-header__action-buttons">
           <PixIconButton
             class="challenges-production-header__button-icon"
+            @triggerAction={{this.closePanel}}
             @ariaLabel="Agrandir la liste des épreuves"
             @iconName="openInFull"
           />
@@ -169,7 +171,7 @@ export default class ChallengesProduction extends Component {
                 <PixIconButton
                   @ariaLabel="Copier le lien de l'épreuve {{challenge.id}}"
                   @iconName="copy"
-                  @triggerAction={{this.copyChallengePreviewUrl challenge}}
+                  @triggerAction={{fn this.copyChallengePreviewUrl challenge}}
                 />
               </:cell>
             </PixTableColumn>
