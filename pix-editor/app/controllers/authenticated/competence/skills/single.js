@@ -297,7 +297,8 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async hideStatusActionMenu() {
+  async hideStatusActionMenu(event) {
+    if (document.querySelector('.skill-status-actions').contains(event.relatedTarget)) return;
     this.isStatusActionMenuOpen = false;
   }
 

@@ -777,7 +777,8 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async hideStatusActionMenu() {
+  async hideStatusActionMenu(event) {
+    if (document.querySelector('.challenge-status-actions').contains(event.relatedTarget)) return;
     this.isStatusActionMenuOpen = false;
   }
 }
