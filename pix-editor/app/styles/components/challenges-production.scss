@@ -1,4 +1,6 @@
 .challenges-production {
+  position: relative;
+  overflow: auto;
 
   &__header {
     display: flex;
@@ -7,6 +9,9 @@
     color: var(--pix-neutral-0);
     background-color: var(--pix-neutral-900);
     padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
+    position: sticky;
+    top: 0;
+    z-index: 1;
 
     p {
       display: flex;

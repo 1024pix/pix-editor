@@ -7,6 +7,8 @@
   display: flex;
   gap: var(--pix-spacing-2x);
   padding: var(--pix-spacing-3x) var(--pix-spacing-6x);
+  position: sticky;
+  top: 0;
 
   > h2 {
     @extend %pix-title-xs;
@@ -34,6 +36,7 @@
 .competence-overview {
   background: var(--pix-primary-10);
   width: 100%;
+  overflow: auto;
 }
 
 .competence-overview-main {
