@@ -1,28 +1,28 @@
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import {fn} from '@ember/helper';
+import {on} from '@ember/modifier';
+import {action} from '@ember/object';
+import {service} from '@ember/service';
 import Component from '@glimmer/component';
+import {tracked} from '@glimmer/tracking';
 import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import Challenge from 'pixeditor/models/challenge';
-import {on} from '@ember/modifier';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import { service } from '@ember/service';
-import { fn } from '@ember/helper';
 
 export default class ChallengesProduction extends Component {
   @service router;
+  @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
 
   get challenges() {
     const statuses = [Challenge.STATUSES.VALIDE];
-    if(this.shouldDisplayObsoleteChallenges) {
+    if (this.shouldDisplayObsoleteChallenges) {
       statuses.push(Challenge.STATUSES.PERIME);
     }
     return this.args.challenges
@@ -30,16 +30,11 @@ export default class ChallengesProduction extends Component {
       .sort(byAlternativeVersion);
   }
 
-  @action
-  toggleDisplayObsoleteChallenges() {
-    this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
-  }
-
   getChallengeStatusColor(challengeStatus) {
-    if(challengeStatus === Challenge.STATUSES.VALIDE) {
+    if (challengeStatus === Challenge.STATUSES.VALIDE) {
       return 'success';
     }
-    if(challengeStatus === Challenge.STATUSES.PERIME) {
+    if (challengeStatus === Challenge.STATUSES.PERIME) {
       return 'error';
     }
     return 'secondary';
@@ -55,8 +50,19 @@ export default class ChallengesProduction extends Component {
   }
 
   @action
+  toggleDisplayObsoleteChallenges() {
+    this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
+  }
+
+  @action
   closePanel() {
+    this.multipanelManager.reset();
     this.router.transitionTo('authenticated.v2.competence-overview');
+  }
+
+  @action
+  expandPanel() {
+    this.multipanelManager.expandTable();
   }
 
 <template>
@@ -73,7 +79,7 @@ export default class ChallengesProduction extends Component {
         <div class="challenges-production-header__action-buttons">
           <PixIconButton
             class="challenges-production-header__button-icon"
-            @triggerAction={{this.closePanel}}
+            @triggerAction={{this.expandPanel}}
             @ariaLabel="Agrandir la liste des épreuves"
             @iconName="openInFull"
           />

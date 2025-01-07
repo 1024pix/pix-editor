@@ -45,6 +45,10 @@
   gap: var(--pix-spacing-4x);
   margin: var(--pix-spacing-6x);
   @extend %pix-body-s;
+
+  &--hidden {
+    display: none;
+  }
 }
 
 .competence-overview-actions {

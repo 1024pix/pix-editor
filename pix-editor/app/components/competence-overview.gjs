@@ -11,6 +11,7 @@ import CompetenceOverviewSkill from './competence-overview-skill';
 
 export default class CompetenceOverview extends Component {
   @service router;
+  @service multipanelManager;
 
   @action
   setLocale(locale) {
@@ -124,7 +125,7 @@ export default class CompetenceOverview extends Component {
           @hideDefaultOption={{true}}
         />
       </div>
-      <div class="competence-overview-main">
+      <div class="competence-overview-main {{if this.multipanelManager.gridShouldBeMinimized "competence-overview-main--hidden" ""}}">
         <div class="competence-overview-actions">
           <ul class="competence-overview-actions__tabs">
             <li class="active">En production</li>
