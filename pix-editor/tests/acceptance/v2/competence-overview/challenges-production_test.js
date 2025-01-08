@@ -95,16 +95,12 @@ module('Acceptance | competences | challenge-production', function(hooks) {
   });
 
   test('should display a challenge production list', async function(assert) {
-    // given
-    this.server.create('challenge', { id: prototypeId, status: 'validé', version: 1, alternativeVersion: null, genealogy: 'Prototype 1', instruction: 'instruction' });
-    this.server.create('skill', { id: skillId, challengeIds: [prototypeId] });
-
     // when
     const screen = await visit('/v2/competences/competence1/challenges-production');
     await clickByText('@tube1');
 
     // then
-    assert.dom(screen.getByText('instruction'));
+    assert.dom(screen.getByText('Coucou maman'));
     assert.strictEqual(currentURL(), `/v2/competences/competence1/challenges-production/skills/${skillId}/challenges`);
   });
 });
