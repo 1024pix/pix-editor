@@ -1,10 +1,10 @@
-import {render} from '@1024pix/ember-testing-library';
-import {click} from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import ChallengesProduction from 'pixeditor/components/competence-overview/challenges-production';
 import Challenge from 'pixeditor/models/challenge';
-import {module, test} from 'qunit';
+import { module, test } from 'qunit';
 
-import {setupIntlRenderingTest} from '../../../setup-intl-rendering';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence-overview | challenges-production', function(hooks) {
   setupIntlRenderingTest(hooks);
