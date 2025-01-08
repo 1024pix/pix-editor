@@ -47,6 +47,10 @@ export default class ChallengesProduction extends Component {
     return 'secondary';
   }
 
+  getChallengeStatus(challengeStatus) {
+    return challengeStatus ?? 'absence de statut ❓';
+  }
+
   getChallengePreviewUrl(challenge) {
     return new URL(challenge.preview, window.location).href;
   }
@@ -117,7 +121,7 @@ export default class ChallengesProduction extends Component {
               </:header>
               <:cell>
                 <PixTag @color={{this.getChallengeStatusColor challenge.status}}>
-                  {{challenge.status}}
+                  {{this.getChallengeStatus challenge.status}}
                 </PixTag>
               </:cell>
             </PixTableColumn>
