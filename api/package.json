@@ -44,7 +44,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@1024pix/oppsy": "^1.0.1",
-    "@adminjs/hapi": "^7.0.1",
+    "@adminjs/hapi": "github:1024pix/adminjs-hapijs#master",
     "@adminjs/sequelize": "^4.0.0",
     "@hapi/boom": "^10.0.0",
     "@hapi/cookie": "^12.0.0",
