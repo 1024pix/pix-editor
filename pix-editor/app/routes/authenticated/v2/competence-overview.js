@@ -6,12 +6,17 @@ export default class CompetenceOverviewRoute extends Route {
   @service router;
   @service store;
   @service versionManager;
+  @service multipanelManager;
 
   queryParams = {
     locale: {
       refreshModel: true,
     },
   };
+
+  beforeModel() {
+    this.multipanelManager.reset();
+  }
 
   async model(params) {
     const { competence_id, overview, locale } = params;
