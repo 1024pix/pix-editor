@@ -4,7 +4,7 @@ import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { fn, concat } from '@ember/helper';
+import { concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -14,9 +14,10 @@ import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import Challenge from 'pixeditor/models/challenge';
 
+import ChallengesProductionHeader from './challenges-production-header';
+
 export default class ChallengesProduction extends Component {
   @service router;
-  @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
 
@@ -60,43 +61,8 @@ export default class ChallengesProduction extends Component {
     this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
   }
 
-  @action
-  closePanel() {
-    this.multipanelManager.reset();
-    this.router.transitionTo('authenticated.v2.competence-overview');
-  }
-
-  @action
-  expandPanel() {
-    this.multipanelManager.expandTable();
-  }
-
 <template>
-    <header class="challenges-production-header">
-      <p>
-        {{@skill.name}}
-        <PixTag @color="success">
-          actif
-        </PixTag>
-        <span class="separator"></span>
-        V{{@skill.version}}
-      </p>
-      <div class="challenges-production-header__action-buttons">
-        <PixIconButton
-          class="challenges-production-header__button-icon"
-          @triggerAction={{this.expandPanel}}
-          @ariaLabel="Agrandir la liste des épreuves"
-          @iconName="openInFull"
-        />
-        <span class="separator"></span>
-        <PixIconButton
-          class="challenges-production-header__button-icon"
-          @triggerAction={{this.closePanel}}
-          @ariaLabel="Fermer la liste des épreuves"
-          @iconName="close"
-        />
-      </div>
-    </header>
+    <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production">
       <div class="challenges-production--table">
         <div class="display-actions">
