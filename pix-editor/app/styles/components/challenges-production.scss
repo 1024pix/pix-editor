@@ -1,33 +1,45 @@
+.challenges-production-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--pix-neutral-0);
+  background-color: var(--pix-neutral-900);
+  padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
+
+  p {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+  }
+
+  .separator {
+    height: 24px;
+    width: 1px;
+    border-right: solid 1px var(--pix-neutral-0);
+  }
+
+  &__action-buttons {
+    display: flex;
+    align-items:center;
+    gap: var(--pix-spacing-2x);
+  }
+
+  &__action-buttons > &__button-icon {
+    color: var(--pix-neutral-0);
+
+    &:hover {
+      background-color: rgba(var(--pix-neutral-500-inline), 0.5);
+    }
+  }
+}
+
 .challenges-production {
   position: relative;
   overflow: auto;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--pix-neutral-0);
-    background-color: var(--pix-neutral-900);
-    padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
-    position: sticky;
-    top: 0;
-    z-index: 1;
-
-    p {
-      display: flex;
-      gap: var(--pix-spacing-2x);
-    }
-
-    .separator {
-      height: 24px;
-      width: 1px;
-      border-right: solid 1px var(--pix-neutral-0);
-    }
-  }
-
   &--table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
   }
+
   .consigne {
     max-width: 650px;
     height: 3rem;
@@ -41,22 +53,5 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--pix-spacing-4x);
-  }
-
-  .challenges-production-header {
-
-    &__action-buttons {
-      display: flex;
-      align-items:center;
-      gap: var(--pix-spacing-2x);
-    }
-
-    &__button-icon {
-      color: var(--pix-neutral-0);
-
-      &:hover {
-        background-color: rgba(var(--pix-neutral-500-inline), 0.5);
-      }
-    }
   }
 }

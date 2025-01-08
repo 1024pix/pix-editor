@@ -72,32 +72,32 @@ export default class ChallengesProduction extends Component {
   }
 
 <template>
+    <header class="challenges-production-header">
+      <p>
+        {{@skill.name}}
+        <PixTag @color="success">
+          actif
+        </PixTag>
+        <span class="separator"></span>
+        V{{@skill.version}}
+      </p>
+      <div class="challenges-production-header__action-buttons">
+        <PixIconButton
+          class="challenges-production-header__button-icon"
+          @triggerAction={{this.expandPanel}}
+          @ariaLabel="Agrandir la liste des épreuves"
+          @iconName="openInFull"
+        />
+        <span class="separator"></span>
+        <PixIconButton
+          class="challenges-production-header__button-icon"
+          @triggerAction={{this.closePanel}}
+          @ariaLabel="Fermer la liste des épreuves"
+          @iconName="close"
+        />
+      </div>
+    </header>
     <section class="challenges-production">
-      <header class="challenges-production__header">
-        <p>
-          {{@skill.name}}
-          <PixTag @color="success">
-            actif
-          </PixTag>
-          <span class="separator"></span>
-          V{{@skill.version}}
-        </p>
-        <div class="challenges-production-header__action-buttons">
-          <PixIconButton
-            class="challenges-production-header__button-icon"
-            @triggerAction={{this.expandPanel}}
-            @ariaLabel="Agrandir la liste des épreuves"
-            @iconName="openInFull"
-          />
-          <span class="separator"></span>
-          <PixIconButton
-            class="challenges-production-header__button-icon"
-            @triggerAction={{this.closePanel}}
-            @ariaLabel="Fermer la liste des épreuves"
-            @iconName="close"
-          />
-        </div>
-      </header>
       <div class="challenges-production--table">
         <div class="display-actions">
           <PixCheckbox

@@ -101,30 +101,30 @@ export default class CompetenceOverview extends Component {
   }
 
   <template>
+    <div class="competence-overview-header">
+      {{#if this.hasLocaleSelected}}
+        <p class="locale-tag">
+          <span>{{flagForLanguage this.localeEntry.value}}</span> {{this.localeEntry.label}}
+        </p>
+      {{/if}}
+      <h2>
+        <LinkTo @route="authenticated.competence-management.single" @model={{@competenceOverview.airtableId}}>{{@competenceOverview.name}}</LinkTo>
+      </h2>
+      <div class="competence-overview-header__spacer"></div>
+      <PixSelect
+        @options={{this.localeOptions}}
+        @value={{this.localeValue}}
+        @onChange={{this.setLocale}}
+        @hideDefaultOption={{true}}
+      />
+      <PixSelect
+        @options={{this.sections}}
+        @value="challenges"
+        @onChange={{this.setSection}}
+        @hideDefaultOption={{true}}
+      />
+    </div>
     <div class="competence-overview">
-      <div class="competence-overview-header">
-        {{#if this.hasLocaleSelected}}
-          <p class="locale-tag">
-            <span>{{flagForLanguage this.localeEntry.value}}</span> {{this.localeEntry.label}}
-          </p>
-        {{/if}}
-        <h2>
-          <LinkTo @route="authenticated.competence-management.single" @model={{@competenceOverview.airtableId}}>{{@competenceOverview.name}}</LinkTo>
-        </h2>
-        <div class="competence-overview-header__spacer"></div>
-        <PixSelect
-          @options={{this.localeOptions}}
-          @value={{this.localeValue}}
-          @onChange={{this.setLocale}}
-          @hideDefaultOption={{true}}
-        />
-        <PixSelect
-          @options={{this.sections}}
-          @value="challenges"
-          @onChange={{this.setSection}}
-          @hideDefaultOption={{true}}
-        />
-      </div>
       <div class="competence-overview-main {{if this.multipanelManager.gridShouldBeMinimized "competence-overview-main--hidden" ""}}">
         <div class="competence-overview-actions">
           <ul class="competence-overview-actions__tabs">
