@@ -90,7 +90,9 @@ a, p, span, li {
   flex: 1;
   flex-direction: row;
   min-width: 0;
+}
 
+.main, .v2-main {
   .messages {
     position: absolute;
     top: 5px;
