@@ -59,6 +59,11 @@ module('Acceptance | competences | challenge-production', function(hooks) {
         }],
       }],
     });
+    const skill = this.server.create('skill', {
+      id: skillId,
+      name: skillName,
+      pixId: skillId,
+    });
     const challengeProduction = this.server.create('challenge', {
       id: 'challengeIdProto',
       genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -66,12 +71,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       instruction: 'Coucou maman',
       locales: ['fr'],
     });
-    this.server.create('skill', {
-      id: skillId,
-      name: skillName,
-      pixId: skillId,
-      challengesProduction: [challengeProduction],
-    });
+    skill.update({ challengesProduction: [challengeProduction] });
 
     return authenticateSession();
   });
@@ -95,12 +95,16 @@ module('Acceptance | competences | challenge-production', function(hooks) {
   });
 
   test('should display a challenge production list', async function(assert) {
+    // given
+    this.server.create('challenge', { id: prototypeId, status: 'validé', version: 1, alternativeVersion: null, genealogy: 'Prototype 1', instruction: 'instruction' });
+    this.server.create('skill', { id: skillId, challengeIds: [prototypeId] });
+
     // when
     const screen = await visit('/v2/competences/competence1/challenges-production');
     await clickByText('@tube1');
 
     // then
-    assert.dom(screen.getByText('Coucou maman'));
+    assert.dom(screen.getByText('instruction'));
     assert.strictEqual(currentURL(), `/v2/competences/competence1/challenges-production/skills/${skillId}/challenges`);
   });
 });

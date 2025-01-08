@@ -1,10 +1,10 @@
-import { render } from '@1024pix/ember-testing-library';
-import { click } from '@ember/test-helpers';
+import {render} from '@1024pix/ember-testing-library';
+import {click} from '@ember/test-helpers';
 import ChallengesProduction from 'pixeditor/components/competence-overview/challenges-production';
 import Challenge from 'pixeditor/models/challenge';
-import { module, test } from 'qunit';
+import {module, test} from 'qunit';
 
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import {setupIntlRenderingTest} from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence-overview | challenges-production', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -90,7 +90,7 @@ module('Integration | Component | competence-overview | challenges-production', 
 
   module('when displaying the list', function() {
     module('when box to display obsolete challenges not checked', function() {
-      test('should only display validated challenges', async function(assert) {
+      test('should display all but obsolete', async function(assert) {
         // then
         const validatedChallenges = screen.queryAllByText('validé');
         const obsoleteChallenges = screen.queryAllByText('périmé');
@@ -99,12 +99,12 @@ module('Integration | Component | competence-overview | challenges-production', 
 
         assert.strictEqual(validatedChallenges.length, 3);
         assert.strictEqual(obsoleteChallenges.length, 0);
-        assert.strictEqual(archivedChallenges.length, 0);
-        assert.strictEqual(proposedChallenges.length, 0);
+        assert.strictEqual(archivedChallenges.length, 1);
+        assert.strictEqual(proposedChallenges.length, 1);
       });
     });
     module('when box to display obsolete challenges checked', function() {
-      test('display validated and obsolete challenges', async function(assert) {
+      test('display all challenges', async function(assert) {
         // when
         await click(screen.getByLabelText('Afficher les épreuves périmées'));
 
@@ -116,8 +116,8 @@ module('Integration | Component | competence-overview | challenges-production', 
 
         assert.strictEqual(validatedChallenges.length, 3);
         assert.strictEqual(obsoleteChallenges.length, 1);
-        assert.strictEqual(archivedChallenges.length, 0);
-        assert.strictEqual(proposedChallenges.length, 0);
+        assert.strictEqual(archivedChallenges.length, 1);
+        assert.strictEqual(proposedChallenges.length, 1);
       });
     });
   });

@@ -21,18 +21,24 @@ export default class ChallengesProduction extends Component {
   @tracked shouldDisplayObsoleteChallenges = false;
 
   get challenges() {
-    const statuses = [Challenge.STATUSES.VALIDE];
-    if (this.shouldDisplayObsoleteChallenges) {
-      statuses.push(Challenge.STATUSES.PERIME);
+    const excludeStatuses = [];
+    if (!this.shouldDisplayObsoleteChallenges) {
+      excludeStatuses.push(Challenge.STATUSES.PERIME);
     }
     return this.args.challenges
-      .filter((challenge) => statuses.includes(challenge.status))
+      .filter((challenge) => !excludeStatuses.includes(challenge.status))
       .sort(byAlternativeVersion);
   }
 
   getChallengeStatusColor(challengeStatus) {
+    if (challengeStatus === Challenge.STATUSES.PROPOSE) {
+      return 'tertiary';
+    }
     if (challengeStatus === Challenge.STATUSES.VALIDE) {
       return 'success';
+    }
+    if (challengeStatus === Challenge.STATUSES.ARCHIVE) {
+      return 'neutral';
     }
     if (challengeStatus === Challenge.STATUSES.PERIME) {
       return 'error';
