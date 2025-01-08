@@ -2,7 +2,8 @@ import { clickByText, visit } from '@1024pix/ember-testing-library';
 import { currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, module, test } from 'qunit';
+import Challenge from 'pixeditor/models/challenge';
+import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
@@ -33,6 +34,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
             isPrototypeDeclinable: true,
             proposedChallengesCount: 1,
             validatedChallengesCount: 1,
+            airtableId: skillId,
           }, null, null, null, null, null, null],
         }],
       }],
@@ -57,6 +59,19 @@ module('Acceptance | competences | challenge-production', function(hooks) {
         }],
       }],
     });
+    const challengeProduction = this.server.create('challenge', {
+      id: 'challengeIdProto',
+      genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      status: Challenge.STATUSES.VALIDE,
+      instruction: 'Coucou maman',
+      locales: ['fr'],
+    });
+    this.server.create('skill', {
+      id: skillId,
+      name: skillName,
+      pixId: skillId,
+      challengesProduction: [challengeProduction],
+    });
 
     return authenticateSession();
   });
@@ -80,16 +95,12 @@ module('Acceptance | competences | challenge-production', function(hooks) {
   });
 
   test('should display a challenge production list', async function(assert) {
-    // given
-    this.server.create('challenge', { id: prototypeId, status: 'validé', version: 1, alternativeVersion: null, genealogy: 'Prototype 1', instruction: 'instruction' });
-    this.server.create('skill', { id: skillId, challengeIds: [prototypeId] });
-
     // when
     const screen = await visit('/v2/competences/competence1/challenges-production');
-    await click(screen.getByRole('link', { name: '@tube1' }));
+    await clickByText('@tube1');
 
     // then
-    assert.dom(screen.getByText('instruction'));
+    assert.dom(screen.getByText('Coucou maman'));
     assert.strictEqual(currentURL(), `/v2/competences/competence1/challenges-production/skills/${skillId}/challenges`);
   });
 });

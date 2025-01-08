@@ -43,6 +43,12 @@ function routes() {
     return schema.competenceOverviews.find(competenceOverview.id);
   });
 
+  this.get('/skills/:pixId/challenges-production', (schema, request) => {
+    const pixId = request.params.pixId;
+    const skill = schema.skills.findBy({ pixId });
+    return skill.challengesProduction;
+  });
+
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const attachment = _deserializePayload(payload, 'attachment');
