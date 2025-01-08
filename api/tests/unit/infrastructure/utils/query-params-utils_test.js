@@ -12,7 +12,7 @@ describe('Unit | Utils | Query Params Utils', function() {
         'filter[tubeIds][]': ['456', '789'],
         'page[number]': '1',
         'page[size]': '200',
-        'sort[participationCount]': 'asc',
+        sort: 'participationCount,-courseId',
         include: 'user,organization',
       };
 
@@ -31,9 +31,10 @@ describe('Unit | Utils | Query Params Utils', function() {
           number: 1,
           size: 200,
         },
-        sort: {
-          participationCount: 'asc',
-        },
+        sort: [
+          ['participationCount', 'asc'],
+          ['courseId', 'desc'],
+        ],
         include: ['user', 'organization'],
       });
     });
@@ -52,7 +53,7 @@ describe('Unit | Utils | Query Params Utils', function() {
       expect(result).to.deep.equal({
         filter: {},
         page: {},
-        sort: {},
+        sort: undefined,
         include: [],
       });
     });
@@ -66,9 +67,9 @@ describe('Unit | Utils | Query Params Utils', function() {
         page: {
           size: 100,
         },
-        sort: {
-          participationCount: 'asc',
-        }
+        sort: [
+          ['participationCount', 'asc'],
+        ],
       };
 
       // when
@@ -81,9 +82,9 @@ describe('Unit | Utils | Query Params Utils', function() {
           number: 1,
           size: 100,
         },
-        sort: {
-          participationCount: 'asc',
-        },
+        sort: [
+          ['participationCount', 'asc'],
+        ],
         include: [],
       });
     });

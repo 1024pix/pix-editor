@@ -3,35 +3,38 @@ import _ from 'lodash';
 // query example: 'filter[organizationId]=4&page[size]=30$page[number]=3&sort=createdAt[desc]&include=user'
 // Warning: there is not any order between sort parameters
 export function extractParameters(query, defaultQuery) {
-  return _.mapValues({
-    filter: _extractFilter(query),
-    page: _extractPage(query),
-    sort: _extractSort(query, 'sort'),
-    include: _extractArrayParameter(query, 'include'),
-  }, (value, key) => {
-    if (Array.isArray(value)) return value;
-    if (defaultQuery?.[key] == undefined) return value;
-    return _.defaults(value, defaultQuery[key]);
+  return {
+    filter: _.defaults(extractFilter(query), defaultQuery?.filter),
+    page: _.defaults(extractPage(query), defaultQuery?.page),
+    sort: extractSort(query) ?? defaultQuery?.sort,
+    include: extractArrayParameter(query, 'include') ?? defaultQuery?.include,
+  };
+}
+
+function extractFilter(query) {
+  const regex = /filter\[([a-zA-Z]*)\]/;
+  return extractObjectParameter(query, regex);
+}
+
+function extractSort(query) {
+  const sortArray = extractArrayParameter(query, 'sort');
+  if (!sortArray.length) return undefined;
+  return sortArray.map((field) => {
+    const desc = field.startsWith('-');
+    return [
+      desc ? field.slice(1) : field,
+      desc ? 'desc' : 'asc',
+    ];
   });
 }
 
-function _extractFilter(query) {
-  const regex = /filter\[([a-zA-Z]*)\]/;
-  return _extractObjectParameter(query, regex);
-}
-
-function _extractSort(query) {
-  const regex = /sort\[([a-zA-Z]*)\]/;
-  return _extractObjectParameter(query, regex);
-}
-
-function _extractPage(query) {
+function extractPage(query) {
   const regex = /page\[([a-zA-Z]*)\]/;
-  const params = _extractObjectParameter(query, regex);
-  return _convertObjectValueToInt(params);
+  const params = extractObjectParameter(query, regex);
+  return convertObjectValueToInt(params);
 }
 
-function _extractObjectParameter(query, regex) {
+function extractObjectParameter(query, regex) {
   return _.reduce(
     query,
     (result, queryFilterValue, queryFilterKey) => {
@@ -49,10 +52,10 @@ function _extractObjectParameter(query, regex) {
   );
 }
 
-function _extractArrayParameter(query, parameterName) {
+function extractArrayParameter(query, parameterName) {
   return _.has(query, parameterName) ? query[parameterName].split(',') : [];
 }
 
-function _convertObjectValueToInt(params) {
+function convertObjectValueToInt(params) {
   return _.mapValues(params, _.toInteger);
 }
