@@ -375,7 +375,7 @@ describe('Integration | Repository | skill-repository', () => {
     describe('when none found', () => {
       it('should return an empty array', async () => {
         // given
-        const ids = ['notfound1', 'noutfound2'];
+        const ids = ['notfound1', 'notfound2'];
         const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([]);
 
         // when
@@ -384,7 +384,7 @@ describe('Integration | Repository | skill-repository', () => {
         // then
         expect(results).toEqual([]);
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
-          filterByFormula: 'OR(RECORD_ID() = "notfound1", RECORD_ID() = "noutfound2")',
+          filterByFormula: 'OR(RECORD_ID() = "notfound1", RECORD_ID() = "notfound2")',
           fields: skillDatasource.usedFields,
           sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
         });
@@ -464,6 +464,113 @@ describe('Integration | Repository | skill-repository', () => {
         expect(results).toStrictEqual(skills.map(domainBuilder.buildSkill));
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
           filterByFormula: 'OR(RECORD_ID() = "skill1", RECORD_ID() = "skill2")',
+          fields: skillDatasource.usedFields,
+          sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
+        });
+      });
+    });
+  });
+
+  describe('#search', () => {
+    describe('when none found', () => {
+      it('should return corresponding skills', async () => {
+        const params = {
+          filter: { name: '@NotFound' },
+          sort: [['name', 'asc']],
+          page: { limit: 10 },
+        };
+        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([]);
+
+        // when
+        const results = await skillRepository.search(params);
+
+        // then
+        expect(results).toEqual([]);
+        expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
+          filterByFormula: 'FIND("@notfound", LOWER(Nom))',
+          fields: skillDatasource.usedFields,
+          sort: [{ field: 'Nom', direction: 'asc' }],
+          maxRecords: 10,
+        });
+      });
+    });
+
+    describe('when some found', () => {
+      it('should return domain skills', async () => {
+        // given
+        const skills = [
+          {
+            id: 'skill1',
+            airtableId: 'recSkill1',
+            createdAt: '2025-01-06T13:50:47.437Z',
+            description: 'premier acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hint_i18n: {
+              fr: 'premier indice',
+              en: 'first clue',
+            },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 3,
+            name: '@skill3',
+            pixValue: 1.5,
+            status: Skill.STATUSES.ACTIF,
+            version: 1,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            tutorialIds: ['tuto1'],
+            tutorialAirtableIds: ['recTuto1'],
+            learningMoreTutorialIds: ['tuto2', 'tuto3'],
+            learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+            challengeIds: ['challenge1', 'challenge2'],
+          },
+          {
+            id: 'skill2',
+            airtableId: 'recSkill2',
+            createdAt: '2025-01-06T13:51:04.381Z',
+            description: 'deuxième acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hint_i18n: {
+              fr: 'premier indice',
+              en: 'first clue',
+            },
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            level: 4,
+            name: '@skill4',
+            pixValue: 1.8,
+            status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 2,
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            tutorialIds: ['tuto2'],
+            tutorialAirtableIds: ['recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          },
+        ];
+        const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
+        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
+          airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+        );
+        skills.forEach((skill) => {
+          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
+          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+        });
+        await databaseBuilder.commit();
+
+        const params = {
+          filter: { name: '@skill' },
+        };
+
+        // when
+        const results = await skillRepository.search(params);
+
+        // then
+        expect(results).toStrictEqual(skills.map(domainBuilder.buildSkill));
+        expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
+          filterByFormula: 'FIND("@skill", LOWER(Nom))',
           fields: skillDatasource.usedFields,
           sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
         });

@@ -33,6 +33,10 @@ export const skillDatasource = datasource.extend({
     'Epreuves (id persistant)',
   ],
 
+  sortableFields: {
+    name: 'Nom',
+  },
+
   fromAirTableObject(airtableRecord) {
 
     return {
@@ -91,7 +95,7 @@ export const skillDatasource = datasource.extend({
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `OR(${ids.map((id) => `RECORD_ID() = ${stringValue(id)}`).join(', ')})`,
       fields: this.usedFields,
-      sort: [{ field: this.sortField, direction: 'asc' }],
+      sort: this.defaultSort(),
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
@@ -121,5 +125,29 @@ export const skillDatasource = datasource.extend({
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
+  async search(params) {
+    const filterByFormula = `FIND(${stringValue(params.filter.name.toLowerCase())}, LOWER(Nom))`;
+
+    let sort = params.sort?.filter(([field]) => this.sortableFields[field]).map(([field, direction]) => ({
+      field: this.sortableFields[field],
+      direction,
+    }));
+    if (!sort?.length) {
+      sort = this.defaultSort();
+    }
+
+    const maxRecords = params.page?.limit;
+
+    const records = await findRecords(this.tableName, {
+      filterByFormula,
+      fields: this.usedFields,
+      sort,
+      maxRecords,
+    });
+
+    if (records.length === 0) return undefined;
+    return records.map(this.fromAirTableObject);
   },
 });

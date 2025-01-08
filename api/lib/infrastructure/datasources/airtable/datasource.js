@@ -7,7 +7,7 @@ const _DatasourcePrototype = {
   },
 
   async list(params = {}) {
-    const options = { fields: this.usedFields, sort: [{ field: this.sortField, direction: 'asc' }] };
+    const options = { fields: this.usedFields, sort: this.defaultSort() };
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;
     }
@@ -79,6 +79,10 @@ const _DatasourcePrototype = {
     return Object
       .fromEntries(airtableRawObjects
         .map((airtableObject) => [airtableObject.get('id persistant'), airtableObject.get(this.airtableIdField)]));
+  },
+
+  defaultSort() {
+    return [{ field: this.sortField, direction: 'asc' }];
   },
 };
 

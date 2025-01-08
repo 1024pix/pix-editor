@@ -62,6 +62,13 @@ export async function listByCompetenceId(competenceId) {
   return toDomainList(datasourceSkills, translations);
 }
 
+export async function search(params) {
+  const datasourceSkills = await skillDatasource.search(params);
+  if (!datasourceSkills) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations);
+}
+
 export async function create(skill) {
   const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
   const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));

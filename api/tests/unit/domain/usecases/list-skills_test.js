@@ -5,12 +5,14 @@ describe('Unit | Domain | Use Cases | list-skills', () => {
 
   const allSkills = Symbol('allSkills');
   const skillsByAirtableIds = Symbol('skillsByAirtableIds');
+  const foundSKills = Symbol('foundSKills');
   let skillRepository;
 
   beforeEach(() => {
     skillRepository = {
       list: vi.fn().mockResolvedValueOnce(allSkills),
       getManyByAirtableIds: vi.fn().mockResolvedValueOnce(skillsByAirtableIds),
+      search: vi.fn().mockResolvedValueOnce(foundSKills),
     };
   });
 
@@ -39,6 +41,26 @@ describe('Unit | Domain | Use Cases | list-skills', () => {
       // then
       expect(result).toBe(skillsByAirtableIds);
       expect(skillRepository.getManyByAirtableIds).toHaveBeenCalledWith(['skill1', 'skill2']);
+    });
+  });
+
+  describe('when filter name', () => {
+    it('should search corresponding skills', async () => {
+      // given
+      const name = Symbol('name');
+      const page = Symbol('page');
+      const sort = Symbol('sort');
+      const params = {
+        filter: { name },
+        page,
+        sort,
+      };
+
+      // when
+      const result = await listSkills(params, { skillRepository });
+
+      // then
+      expect(result).toBe(foundSKills);
     });
   });
 });
