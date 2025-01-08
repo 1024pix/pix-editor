@@ -4,7 +4,7 @@ import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { fn } from '@ember/helper';
+import { fn, concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -107,7 +107,7 @@ export default class ChallengesProduction extends Component {
             <:label>Afficher les épreuves périmées</:label>
           </PixCheckbox>
         </div>
-        <PixTable @data={{this.challenges}}>
+        <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
           <:columns as |challenge context|>
             <PixTableColumn @context={{context}}>
               <:header>
