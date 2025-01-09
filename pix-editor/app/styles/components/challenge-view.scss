@@ -1,4 +1,4 @@
-.primary-form {
+.challenge-view {
   display: flex;
   flex-direction: column;
   background-color: var(--pix-neutral-0);
@@ -17,6 +17,15 @@
   img {
     width: 100px;
     height: auto;
+  }
+
+  &-internationalisation {
+    width: 100%;
+    display: flex;
+
+    .pix-input {
+      margin-right: var(--pix-spacing-4x);
+    }
   }
 
   &__tolerance {

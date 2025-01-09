@@ -66,7 +66,7 @@ export default class ChallengesProduction extends Component {
     this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
   }
 
-<template>
+  <template>
     <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production {{if this.multipanelManager.tableShouldBeExpanded "challenges-production--full" ""}}">
       <div class="challenges-production-table">
