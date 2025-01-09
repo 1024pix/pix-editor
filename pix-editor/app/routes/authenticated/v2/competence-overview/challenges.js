@@ -15,7 +15,8 @@ export default class ChallengesRoute extends Route {
   async model(params) {
     const skill = await this.store.findRecord('skill', params.skill_id);
     const challenges = await skill.challengesProduction;
+    const { overview } = this.paramsFor('authenticated.v2.competence-overview');
 
-    return { challenges, skill };
+    return { challenges, overview, skill };
   }
 }

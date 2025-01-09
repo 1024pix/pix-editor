@@ -14,6 +14,7 @@ Router.map(function() {
         this.route('challenges', { path: '/skills/:skill_id/challenges' });
         this.route('localized-challenges', { path: '/skills/:skill_id/localized-challenges' });
       });
+      this.route('challenge', { path: '/:overview/skills/:skill_id/challenges/:challenge_id' });
     });
     this.route('competence', { path: '/competence/:competence_id' }, function() {
       this.route('prototypes', function() {

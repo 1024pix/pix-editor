@@ -4,9 +4,10 @@ import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { concat, fn } from '@ember/helper';
+import { array, concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -17,7 +18,6 @@ import Challenge from 'pixeditor/models/challenge';
 import ChallengesProductionHeader from './challenges-production-header';
 
 export default class ChallengesProduction extends Component {
-  @service router;
   @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
@@ -77,11 +77,13 @@ export default class ChallengesProduction extends Component {
                 Version
               </:header>
               <:cell>
-                {{#if challenge.isPrototype}}
-                  Proto
-                {{else}}
-                  {{challenge.alternativeVersion}}
-                {{/if}}
+                <LinkTo @route="authenticated.v2.challenge" @models={{array @overview @skill.id challenge.id}}>
+                  {{#if challenge.isPrototype}}
+                    Proto
+                  {{else}}
+                    {{challenge.alternativeVersion}}
+                  {{/if}}
+                </LinkTo>
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}} class="challenges-production-table__consigne">
