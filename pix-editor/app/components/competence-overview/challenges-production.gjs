@@ -69,14 +69,6 @@ export default class ChallengesProduction extends Component {
     <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production">
       <div class="challenges-production-table">
-        <div class="challenges-production-table__display-actions">
-          <PixCheckbox
-            {{on "click" this.toggleDisplayObsoleteChallenges}}
-            @checked={{this.shouldDisplayObsoleteChallenges}}
-          >
-            <:label>Afficher les épreuves périmées</:label>
-          </PixCheckbox>
-        </div>
         <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
           <:columns as |challenge context|>
             <PixTableColumn @context={{context}}>
@@ -159,6 +151,14 @@ export default class ChallengesProduction extends Component {
             </PixTableColumn>
           </:columns>
         </PixTable>
+        <div class="challenges-production-table__display-actions">
+          <PixCheckbox
+            {{on "click" this.toggleDisplayObsoleteChallenges}}
+            @checked={{this.shouldDisplayObsoleteChallenges}}
+          >
+            <:label>Afficher les épreuves périmées</:label>
+          </PixCheckbox>
+        </div>
       </div>
     </section>
   </template>

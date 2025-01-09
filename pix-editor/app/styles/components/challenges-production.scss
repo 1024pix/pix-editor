@@ -1,6 +1,7 @@
 .challenges-production {
   position: relative;
   overflow: auto;
+  height: 70%;
 
   &-table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
@@ -17,7 +18,7 @@
     &__display-actions {
       display: flex;
       justify-content: space-between;
-      margin-bottom: var(--pix-spacing-4x);
+      margin-block: var(--pix-spacing-4x);
     }
   }
 
@@ -27,4 +28,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 70%;
 }
