@@ -110,6 +110,13 @@ export class Skill {
     return this.status === Skill.STATUSES.ACTIF;
   }
 
+  prepareForCreation(tube, tubeSkills, generateNewIdFnc) {
+    this.id = generateNewIdFnc(Skill.ID_PREFIX);
+    this.name = `${tube.name}${this.level}`;
+    this.status = Skill.STATUSES.EN_CONSTRUCTION;
+    this.version = Iterator.from(tubeSkills).filter((skill) => skill.level === this.level).reduce((count) => count + 1, 0) + 1;
+  }
+
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {
     const version = tubeSkills.filter((sk) => sk.level === level).length + 1;
     const name = `${tubeDestination.name}${level}`;
@@ -166,13 +173,16 @@ export class Skill {
       level,
       pixValue: null,
       tubeId: tubeDestination.id,
+      tubeAirtableId: tubeDestination.airtableId,
       competenceId: tubeDestination.competenceId,
       status: Skill.STATUSES.EN_CONSTRUCTION,
       description: this.description,
       hint_i18n: this.hint_i18n,
       hintStatus: this.hintStatus,
       tutorialIds: this.tutorialIds,
+      tutorialAirtableIds: this.tutorialAirtableIds,
       learningMoreTutorialIds: this.learningMoreTutorialIds,
+      learningMoreTutorialAirtableIds: this.learningMoreTutorialAirtableIds,
       internationalisation: this.internationalisation,
     });
     return {

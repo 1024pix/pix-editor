@@ -3,6 +3,7 @@ export * from './create-area.js';
 export * from './create-competence.js';
 export * from './create-framework.js';
 export * from './create-mission.js';
+export * from './create-skill.js';
 export * from './delete-unmentioned-keys-after-upload.js';
 export * from './download-translation-from-phrase.js';
 export * from './export-external-urls-from-release.js';

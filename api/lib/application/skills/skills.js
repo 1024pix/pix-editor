@@ -11,13 +11,19 @@ import * as updatedRecordNotifier from '../../infrastructure/event-notifier/upda
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import {
   cloneSkill,
+  createSkill,
   getSkillChallengesProduction,
   getSkillLocalizedChallengesProduction,
   listSkills,
 } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeSerializer, localizedChallengeSerializer, skillSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import {
+  challengeSerializer,
+  localizedChallengeSerializer,
+  skillSerializer
+} from '../../infrastructure/serializers/jsonapi/index.js';
+import { skillTransformer } from '../../infrastructure/transformers/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 export async function clone(request, h) {
@@ -83,6 +89,25 @@ export async function get(req) {
     const skill = await skillRepository.getByAirtableId(req.params.skillAirtableId);
     if (!skill) throw new NotFoundError('unknown skill');
     return skillSerializer.serialize(skill);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function create(req, h) {
+  try {
+    const skill = await skillSerializer.deserialize(req.payload);
+    const createdSkill = await createSkill(skill, {
+      skillRepository,
+      tubeRepository,
+      skillTransformer,
+      updatedRecordNotifier,
+      pixApiClient,
+      generateNewIdFnc: generateNewId
+    });
+    return h.response(skillSerializer.serialize(createdSkill)).code(201);
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);

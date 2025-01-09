@@ -885,4 +885,47 @@ describe('Integration | Repository | skill-repository', () => {
       });
     });
   });
+
+  describe('#create', () => {
+    afterEach(() => {
+      return knex('translations').truncate();
+    });
+
+    it('should save new skill to Airtable and translations to DB', async () => {
+      // given
+      const skill = domainBuilder.buildSkill({
+        airtableId: null,
+      });
+      const airtableSkill = airtableBuilder.factory.buildSkill({ ...skill, airtableId: 'recSkillPouet' });
+      const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
+        new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
+      );
+
+      // when
+      const createdSkill = await skillRepository.create(skill);
+
+      // then
+      expect(createdSkill).toStrictEqual(domainBuilder.buildSkill({
+        ...skill,
+        airtableId: 'recSkillPouet',
+      }));
+      expect(createRecordSpy).toHaveBeenCalledWith(
+        'Acquis',
+        {
+          fields: {
+            'id persistant': skill.id,
+            'Statut de l\'indice': skill.hintStatus,
+            'Comprendre': skill.tutorialAirtableIds,
+            'En savoir plus': skill.learningMoreTutorialAirtableIds,
+            'Status': skill.status,
+            'Tube': [skill.tubeAirtableId],
+            'Description': skill.description,
+            'Statut de la description': skill.descriptionStatus,
+            'Level': skill.level,
+            'Internationalisation': skill.internationalisation,
+            'Version': skill.version,
+          },
+        });
+    });
+  });
 });

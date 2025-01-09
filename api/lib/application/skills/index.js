@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as skillsController from './skills.js';
-import { Types } from '../types.js';
+import * as Types from '../types.js';
 
 export async function register(server) {
   server.route([
@@ -64,6 +64,43 @@ export async function register(server) {
           }),
         },
         handler: skillsController.get,
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/skills',
+      config: {
+        validate: {
+          payload: Joi.object({
+            data: {
+              type: Joi.string().required().equal('skills'),
+              attributes: {
+                'level': Joi.number().required(),
+                'description': Joi.string().allow(null),
+                'description-status': Joi.string().allow(null),
+                'clue': Joi.string().allow(null),
+                'clue-en': Joi.string().allow(null),
+                'clue-status': Joi.string().allow(null),
+                'i18n': Joi.string().allow(null),
+                'name': Joi.string().allow(null),
+                'status': Joi.string().allow(null),
+                'version': Joi.number().allow(null),
+              },
+              relationships: {
+                'tube': {
+                  data: {
+                    type: Joi.string().required().equal('tubes'),
+                    id: Types.tubeId(),
+                  },
+                },
+                'tuto-more': Types.tutorialsRelationship(),
+                'tuto-solution': Types.tutorialsRelationship(),
+              },
+            },
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: skillsController.create,
       },
     },
   ]);

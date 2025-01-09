@@ -44,6 +44,7 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.false;
     });
   });
+
   describe('#get isEnConstruction', () => {
     it('should return true when skill is enConstruction', () => {
       // given
@@ -72,6 +73,7 @@ describe('Unit | Domain | Skill', () => {
       expect(isEnConstruction).to.be.false;
     });
   });
+
   describe('#get isActif', () => {
     it('should return true when skill is actif', () => {
       // given
@@ -100,6 +102,7 @@ describe('Unit | Domain | Skill', () => {
       expect(isActif).to.be.false;
     });
   });
+
   describe('#cloneSkillAndChallenges', () => {
     const clonedSkillId = 'clonedSkillId';
     const level = 4;
@@ -109,6 +112,7 @@ describe('Unit | Domain | Skill', () => {
       generateNewIdFnc = vi.fn().mockImplementation(() => clonedSkillId);
       tubeDestination = domainBuilder.buildTube({
         id: 'tubeACB',
+        airtableId: 'recTubeACB',
         competenceId: 'competenceA',
         name: '@monSuperTube',
       });
@@ -145,7 +149,9 @@ describe('Unit | Domain | Skill', () => {
         description: 'description de mon acquis',
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
+        tutorialAirtableIds: ['recTutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
+        learningMoreTutorialAirtableIds: ['recTutoDEF'],
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
@@ -170,27 +176,32 @@ describe('Unit | Domain | Skill', () => {
         name: '@monSuperTube4',
         status: 'en construction',
         tubeId: tubeDestination.id,
+        tubeAirtableId: tubeDestination.airtableId,
         competenceId: tubeDestination.competenceId,
       });
 
-      expect(clonedSkill.id).toEqual(clonedSkillId);
-      expect(clonedSkill.version).toEqual(expectedClonedSkill.version);
-      expect(clonedSkill.name).toEqual(expectedClonedSkill.name);
-      expect(clonedSkill.status).toEqual(expectedClonedSkill.status);
-      expect(clonedSkill.level).toEqual(expectedClonedSkill.level);
-      expect(clonedSkill.tubeId).toEqual(expectedClonedSkill.tubeId);
-      expect(clonedSkill.competenceId).toEqual(expectedClonedSkill.competenceId);
+      expect(clonedSkill.id).toBe(clonedSkillId);
+      expect(clonedSkill.version).toBe(expectedClonedSkill.version);
+      expect(clonedSkill.name).toBe(expectedClonedSkill.name);
+      expect(clonedSkill.status).toBe(expectedClonedSkill.status);
+      expect(clonedSkill.level).toBe(expectedClonedSkill.level);
+      expect(clonedSkill.tubeId).toBe(expectedClonedSkill.tubeId);
+      expect(clonedSkill.tubeAirtableId).toBe(expectedClonedSkill.tubeAirtableId);
+      expect(clonedSkill.competenceId).toBe(expectedClonedSkill.competenceId);
       expect(clonedChallenges).toEqual(['clonedChallenge']);
       expect(clonedAttachments).toEqual(['clonedAttachment']);
 
-      expect(clonedSkill.description).toEqual(skillToClone.description);
+      expect(clonedSkill.description).toBe(skillToClone.description);
       expect(clonedSkill.pixValue).toBeNull();
       expect(clonedSkill.hint_i18n).toEqual(skillToClone.hint_i18n);
-      expect(clonedSkill.hintStatus).toEqual(skillToClone.hintStatus);
+      expect(clonedSkill.hintStatus).toBe(skillToClone.hintStatus);
       expect(clonedSkill.tutorialIds).toEqual(skillToClone.tutorialIds);
+      expect(clonedSkill.tutorialAirtableIds).toEqual(skillToClone.tutorialAirtableIds);
       expect(clonedSkill.learningMoreTutorialIds).toEqual(skillToClone.learningMoreTutorialIds);
-      expect(clonedSkill.internationalisation).toEqual(skillToClone.internationalisation);
+      expect(clonedSkill.learningMoreTutorialAirtableIds).toEqual(skillToClone.learningMoreTutorialAirtableIds);
+      expect(clonedSkill.internationalisation).toBe(skillToClone.internationalisation);
     });
+
     it('should set the good version when destination has several skills', () => {
       // given
       const tubeSkills = [
@@ -216,7 +227,9 @@ describe('Unit | Domain | Skill', () => {
         description: 'description de mon acquis',
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
+        tutorialAirtableIds: ['recTutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
+        learningMoreTutorialAirtableIds: ['recTutoDEF'],
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
@@ -241,26 +254,31 @@ describe('Unit | Domain | Skill', () => {
         name: '@monSuperTube4',
         status: 'en construction',
         tubeId: tubeDestination.id,
+        tubeAirtableId: tubeDestination.airtableId,
         competenceId: tubeDestination.competenceId,
       });
 
-      expect(clonedSkill.id).toEqual(clonedSkillId);
-      expect(clonedSkill.version).toEqual(expectedClonedSkill.version);
-      expect(clonedSkill.name).toEqual(expectedClonedSkill.name);
-      expect(clonedSkill.status).toEqual(expectedClonedSkill.status);
-      expect(clonedSkill.level).toEqual(expectedClonedSkill.level);
-      expect(clonedSkill.tubeId).toEqual(expectedClonedSkill.tubeId);
-      expect(clonedSkill.competenceId).toEqual(expectedClonedSkill.competenceId);
+      expect(clonedSkill.id).toBe(clonedSkillId);
+      expect(clonedSkill.version).toBe(expectedClonedSkill.version);
+      expect(clonedSkill.name).toBe(expectedClonedSkill.name);
+      expect(clonedSkill.status).toBe(expectedClonedSkill.status);
+      expect(clonedSkill.level).toBe(expectedClonedSkill.level);
+      expect(clonedSkill.tubeId).toBe(expectedClonedSkill.tubeId);
+      expect(clonedSkill.tubeAirtableId).toBe(expectedClonedSkill.tubeAirtableId);
+      expect(clonedSkill.competenceId).toBe(expectedClonedSkill.competenceId);
       expect(clonedChallenges).toEqual(['clonedChallenge']);
       expect(clonedAttachments).toEqual(['clonedAttachment']);
 
-      expect(clonedSkill.description).toEqual(skillToClone.description);
+      expect(clonedSkill.description).toBe(skillToClone.description);
       expect(clonedSkill.hint_i18n).toEqual(skillToClone.hint_i18n);
-      expect(clonedSkill.hintStatus).toEqual(skillToClone.hintStatus);
+      expect(clonedSkill.hintStatus).toBe(skillToClone.hintStatus);
       expect(clonedSkill.tutorialIds).toEqual(skillToClone.tutorialIds);
+      expect(clonedSkill.tutorialAirtableIds).toEqual(skillToClone.tutorialAirtableIds);
       expect(clonedSkill.learningMoreTutorialIds).toEqual(skillToClone.learningMoreTutorialIds);
-      expect(clonedSkill.internationalisation).toEqual(skillToClone.internationalisation);
+      expect(clonedSkill.learningMoreTutorialAirtableIds).toEqual(skillToClone.learningMoreTutorialAirtableIds);
+      expect(clonedSkill.internationalisation).toBe(skillToClone.internationalisation);
     });
+
     it('should handle reversioning of all challenges', () => {
       // given
       const tubeSkills = [
@@ -277,11 +295,14 @@ describe('Unit | Domain | Skill', () => {
         status: Skill.STATUSES.ACTIF,
         level: 5,
         tubeId: 'tubeUnAutreTubeId',
+        tubeAirtableId: 'recTubeUnAutreTubeId',
         competenceId: 'unAutreCompetenceId',
         description: 'description de mon acquis',
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
+        tutorialAirtableIds: ['recTutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
+        learningMoreTutorialAirtableIds: ['recTutoDEF'],
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
@@ -371,6 +392,52 @@ describe('Unit | Domain | Skill', () => {
       expect(skillToArchive).toStrictEqual(expectedArchivedSkill);
       expect(challenge1.archive).toHaveBeenCalledTimes(1);
       expect(challenge2.archive).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('#prepareForCreation', () => {
+    const createdSkillId = 'createdSkillId';
+    let generateNewIdFnc;
+
+    beforeEach(() => {
+      generateNewIdFnc = vi.fn().mockImplementation(() => createdSkillId);
+    });
+
+    it('should set fields for creation', () => {
+      // given
+      const skill = domainBuilder.buildSkill({
+        name: null,
+        level: 6,
+        status: null,
+        version: null,
+      });
+
+      const tube = domainBuilder.buildTube({
+        name: '@test',
+      });
+
+      const tubeSkills = [
+        domainBuilder.buildSkill({ level: 1 }),
+        domainBuilder.buildSkill({ level: 1 }),
+        domainBuilder.buildSkill({ level: 3 }),
+        domainBuilder.buildSkill({ level: 3 }),
+        domainBuilder.buildSkill({ level: 3 }),
+        domainBuilder.buildSkill({ level: 4 }),
+        domainBuilder.buildSkill({ level: 6 }),
+        domainBuilder.buildSkill({ level: 7 }),
+        domainBuilder.buildSkill({ level: 7 }),
+        domainBuilder.buildSkill({ level: 7 }),
+        domainBuilder.buildSkill({ level: 7 }),
+      ];
+
+      // when
+      skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+
+      // then
+      expect(skill).toHaveProperty('id', createdSkillId);
+      expect(skill).toHaveProperty('name', '@test6');
+      expect(skill).toHaveProperty('status', Skill.STATUSES.EN_CONSTRUCTION);
+      expect(skill).toHaveProperty('version', 2);
     });
   });
 });

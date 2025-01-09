@@ -1,11 +1,12 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper';
 import { createServer } from '../../../../server';
 import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models';
 import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Application | Route | Skills', () => {
   let editorUser;
@@ -1201,6 +1202,261 @@ describe('Application | Route | Skills', () => {
       });
 
       expect(airtableSkillScope.isDone()).toBe(true);
+    });
+  });
+
+  describe('POST /skills', async () => {
+    let airtableGetTubeScope, airtableGetSkillsScope, airtableCreateSkillScope, pixApiCacheScope, dataToPost;
+
+    beforeEach(async () => {
+      dataToPost = {
+        level: 1,
+        description: 'La description de mon nouvel acquis',
+        descriptionStatus: 'Un statut de description pour mon nouvel acquis',
+        hint: 'L indice de mon nouvel acquis',
+        hintEn: 'L indice EN de mon nouvel acquis',
+        hintStatus: 'Le statut de l indice de mon nouvel acquis',
+        internationalisation: 'Internationalisation de mon nouvel acquis',
+        tubeAirtableId: 'recTube1',
+        tutorialAirtableIds: ['recTuto1', 'recTuto3'],
+        learningMoreTutorialAirtableIds: ['recTuto2'],
+      };
+      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+        id: 'tube1',
+        airtableId: 'recTube1',
+        name: '@tube',
+        index: 5,
+        competenceId: 'recCompetence1',
+      }));
+
+      airtableGetTubeScope = nock('https://api.airtable.com')
+        .get(`/v0/airtableBaseValue/Tubes/${airtableTube.id}`)
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableTube);
+
+      const airtableSkills = [
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+          id: 'skill1Tube1',
+          airtableId: 'recSkill1Tube1',
+          tubeId: 'tube1',
+          tubeAirtableId: 'recTube1',
+          level: 1,
+          version: 1,
+        })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+          id: 'skill2Tube1',
+          airtableId: 'recSkill2Tube1',
+          tubeId: 'tube1',
+          tubeAirtableId: 'recTube1',
+          level: 2,
+        })),
+      ];
+
+      airtableGetSkillsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis')
+        .query({
+          filterByFormula:  '{Tube (id persistant)} = "tube1"',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableSkills });
+
+      const createdAirtableSkill = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+        id: 'nouvelAcquis',
+        airtableId: 'recSkill1BisTube1',
+        description: dataToPost.description,
+        name: '@tube1',
+        hintStatus: dataToPost.hintStatus,
+        tutorialAirtableIds: dataToPost.tutorialAirtableIds,
+        learningMoreTutorialAirtableIds: dataToPost.learningMoreTutorialAirtableIds,
+        pixValue: 3,
+        status: 'en construction',
+        tubeAirtableId: dataToPost.tubeAirtableId,
+        descriptionStatus: dataToPost.descriptionStatus,
+        level: 1,
+        internationalisation: dataToPost.internationalisation,
+        version: 2,
+        challengeIds: null,
+      }));
+
+      airtableCreateSkillScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Acquis/', {
+          records: [{
+            fields: {
+              'id persistant': createdAirtableSkill.fields['id persistant'],
+              'Statut de l\'indice': createdAirtableSkill.fields['Statut de l\'indice'],
+              'Comprendre': createdAirtableSkill.fields['Comprendre'],
+              'En savoir plus': createdAirtableSkill.fields['En savoir plus'],
+              'Status': createdAirtableSkill.fields['Status'],
+              'Tube': createdAirtableSkill.fields['Tube'],
+              'Description': createdAirtableSkill.fields['Description'],
+              'Statut de la description': createdAirtableSkill.fields['Statut de la description'],
+              'Level': createdAirtableSkill.fields['Level'],
+              'Internationalisation': createdAirtableSkill.fields['Internationalisation'],
+              'Version': createdAirtableSkill.fields['Version'],
+            }
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [createdAirtableSkill] });
+
+      vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('nouvelAcquis');
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/skills/nouvelAcquis', {
+          id: createdAirtableSkill.fields['id persistant'],
+          name: createdAirtableSkill.fields['Nom'],
+          hintStatus: createdAirtableSkill.fields['Statut de l\'indice'],
+          tutorialIds: createdAirtableSkill.fields['Comprendre (id persistant)'] ,
+          learningMoreTutorialIds: createdAirtableSkill.fields['En savoir plus (id persistant)'] ,
+          pixValue: createdAirtableSkill.fields['PixValue'],
+          competenceId: createdAirtableSkill.fields['Compétence (via Tube) (id persistant)'][0],
+          status: createdAirtableSkill.fields['Status'],
+          tubeId: createdAirtableSkill.fields['Tube (id persistant)'][0],
+          level: createdAirtableSkill.fields['Level'],
+          version: createdAirtableSkill.fields['Version'],
+          hint_i18n: {
+            fr: dataToPost.hint,
+            en: dataToPost.hintEn,
+          }
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+    });
+
+    afterEach(async () => {
+      await knex('translations').truncate();
+    });
+
+    it('should respond with status 201 and created competence', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/skills',
+        payload:  {
+          data: {
+            type: 'skills',
+            attributes: {
+              'level': dataToPost.level,
+              'clue': dataToPost.hint,
+              'clue-en': dataToPost.hintEn,
+              'clue-status': dataToPost.hintStatus,
+              'description': dataToPost.description,
+              'description-status': dataToPost.descriptionStatus,
+              'i18n': dataToPost.internationalisation,
+              'name': '@tube1',
+              'status': 'en construction',
+              'version': 2
+            },
+            relationships: {
+              'tube': {
+                data: {
+                  type: 'tubes',
+                  id: dataToPost.tubeAirtableId,
+                },
+              },
+              'tuto-solution': {
+                data: [
+                  {
+                    type: 'tutorials',
+                    id: dataToPost.tutorialAirtableIds[0],
+                  },
+                  {
+                    type: 'tutorials',
+                    id: dataToPost.tutorialAirtableIds[1],
+                  },
+                ],
+              },
+              'tuto-more': {
+                data: [
+                  {
+                    type: 'tutorials',
+                    id: dataToPost.learningMoreTutorialAirtableIds[0],
+                  },
+                ],
+              },
+            },
+          },
+        },
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(airtableGetTubeScope.isDone()).to.be.true;
+      expect(airtableGetSkillsScope.isDone()).to.be.true;
+      expect(airtableCreateSkillScope.isDone()).to.be.true;
+      expect(pixApiCacheScope.isDone()).to.be.true;
+      expect(response.statusCode).toBe(201);
+      expect(response.result).toEqual({
+        data: {
+          type: 'skills',
+          id: 'recSkill1BisTube1',
+          attributes: {
+            name: '@tube1',
+            clue: 'L indice de mon nouvel acquis',
+            'clue-en': 'L indice EN de mon nouvel acquis',
+            'clue-status': 'Le statut de l indice de mon nouvel acquis',
+            'created-at': '2025-01-06T08:58:57.465Z',
+            description: 'La description de mon nouvel acquis',
+            'description-status': 'Un statut de description pour mon nouvel acquis',
+            level: 1,
+            status: 'en construction',
+            i18n: 'Internationalisation de mon nouvel acquis',
+            'pix-id': 'nouvelAcquis',
+            version: 2
+          },
+          relationships: {
+            tube: {
+              data: {
+                id: 'recTube1',
+                type: 'tubes'
+              }
+            },
+            'tuto-more': {
+              data: [
+                {
+                  id: 'recTuto2',
+                  type: 'tutorials',
+                },
+              ],
+            },
+            'tuto-solution': {
+              data: [
+                {
+                  id: 'recTuto1',
+                  type: 'tutorials',
+                },
+                {
+                  id: 'recTuto3',
+                  type: 'tutorials',
+                },
+              ],
+            },
+            challenges: {
+              data: [],
+            },
+            'challenges-production': {
+              links: {
+                related: '/api/skills/nouvelAcquis/challenges-production',
+              },
+            },
+          }
+        }
+      });
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'skill.nouvelAcquis.hint', locale: 'en', value: 'L indice EN de mon nouvel acquis' },
+        { key: 'skill.nouvelAcquis.hint', locale: 'fr', value: 'L indice de mon nouvel acquis' },
+      ]);
+
     });
   });
 });

@@ -64,8 +64,8 @@ const serializer = new Serializer('competence', {
   },
 });
 
-export function serialize(areas) {
-  return serializer.serialize(areas);
+export function serialize(competences) {
+  return serializer.serialize(competences);
 }
 
 const deserializer = new Deserializer({

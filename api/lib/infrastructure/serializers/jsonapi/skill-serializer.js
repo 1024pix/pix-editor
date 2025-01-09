@@ -1,6 +1,7 @@
 import Jsonapi from 'jsonapi-serializer';
+import { Skill } from '../../../domain/models/index.js';
 
-const {  Serializer } = Jsonapi;
+const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('skill', {
   attributes: [
@@ -75,6 +76,46 @@ const serializer = new Serializer('skill', {
   },
 });
 
-export function serialize(areas) {
-  return serializer.serialize(areas);
+export function serialize(skills) {
+  return serializer.serialize(skills);
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+  tubes: {
+    valueForRelationship({ id }) {
+      return id;
+    },
+  },
+  tutorials: {
+    valueForRelationship({ id }) {
+      return id;
+    },
+  },
+  transform({
+    clue,
+    clueEn,
+    clueStatus: hintStatus,
+    i18n: internationalisation,
+    tube: tubeAirtableId,
+    tutoSolution: tutorialAirtableIds,
+    tutoMore: learningMoreTutorialAirtableIds, ...skill
+  }) {
+    return new Skill({
+      ...skill,
+      tubeAirtableId,
+      tutorialAirtableIds,
+      learningMoreTutorialAirtableIds,
+      hint_i18n: {
+        fr: clue,
+        en: clueEn,
+      },
+      hintStatus,
+      internationalisation,
+    });
+  },
+});
+
+export function deserialize(payload) {
+  return deserializer.deserialize(payload);
 }

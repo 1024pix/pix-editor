@@ -70,24 +70,7 @@ export async function search(params) {
 }
 
 export async function create(skill) {
-  const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
-  const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
-  const airtableTutorialIds = skill.tutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
-  const airtableLearningMoreTutorialIds = skill.learningMoreTutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
-
-  const skillToSaveDTO = {
-    id: skill.id,
-    hintStatus: skill.hintStatus,
-    tutorialIds: airtableTutorialIds,
-    learningMoreTutorialIds: airtableLearningMoreTutorialIds,
-    status: skill.status,
-    tubeId: airtableTubeId,
-    description: skill.description,
-    level: skill.level,
-    internationalisation: skill.internationalisation,
-    version: skill.version,
-  };
-  const createdSkillDTO = await skillDatasource.create(skillToSaveDTO);
+  const createdSkillDTO = await skillDatasource.create(skill);
   const translations = [];
   for (const [locale, value] of Object.entries(skill.hint_i18n)) {
     if (!value) continue;
