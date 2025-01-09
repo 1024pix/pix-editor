@@ -34,6 +34,7 @@
 .competence-overview {
   background: var(--pix-primary-10);
   width: 100%;
+  overflow: auto;
 }
 
 .competence-overview-main {
@@ -42,6 +43,10 @@
   gap: var(--pix-spacing-4x);
   margin: var(--pix-spacing-6x);
   @extend %pix-body-s;
+
+  &--hidden {
+    display: none;
+  }
 }
 
 .competence-overview-actions {

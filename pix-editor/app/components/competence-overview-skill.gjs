@@ -1,4 +1,5 @@
 import { concat } from '@ember/helper';
+import { LinkTo } from '@ember/routing';
 import Component from '@glimmer/component';
 
 export default class CompetenceOverviewSkill extends Component {
@@ -13,20 +14,22 @@ export default class CompetenceOverviewSkill extends Component {
   <template>
     <div ...attributes class={{concat "production-skill-overview production-skill-overview--" this.modifier}}>
       {{#if @skillOverview}}
-        <span class="production-skill-overview__name">{{@skillOverview.name}}</span>
-        <span class="production-skill-overview__details">
-          <span title="Nombre d'épreuves en production">
-            {{@skillOverview.validatedChallengesCount}}
-          </span>
-          {{#if @skillOverview.proposedChallengesCount}}
-            <span title="Nombre d'épreuves en cours de construction">
-              ({{@skillOverview.proposedChallengesCount}})
+        <LinkTo @route="authenticated.v2.competence-overview.challenges" @model={{@skillOverview.airtableId}}>
+          <span class="production-skill-overview__name">{{@skillOverview.name}}</span>
+          <span class="production-skill-overview__details">
+            <span title="Nombre d'épreuves en production">
+              {{@skillOverview.validatedChallengesCount}}
             </span>
-          {{/if}}
-          {{#unless @skillOverview.isPrototypeDeclinable}}
-            <span class="">NR</span>
-          {{/unless}}
-        </span>
+            {{#if @skillOverview.proposedChallengesCount}}
+              <span title="Nombre d'épreuves en cours de construction">
+                ({{@skillOverview.proposedChallengesCount}})
+              </span>
+            {{/if}}
+            {{#unless @skillOverview.isPrototypeDeclinable}}
+              <span class="">NR</span>
+            {{/unless}}
+          </span>
+        </LinkTo>
       {{/if}}
     </div>
   </template>

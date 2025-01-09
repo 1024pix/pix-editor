@@ -11,6 +11,7 @@ export * from './find-all-missions.js';
 export * from './get-phrase-translations-url.js';
 export * from './get-competence-challenges-production-overview.js';
 export * from './get-competence-challenges-workbench-overview.js';
+export * from './get-skill-challenges-production.js';
 export * from './import-translations.js';
 export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';

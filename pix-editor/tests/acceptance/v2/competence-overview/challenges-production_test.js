@@ -1,6 +1,8 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import Challenge from 'pixeditor/models/challenge';
 import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
@@ -8,6 +10,7 @@ import { setupApplicationTest } from '../../../setup-application-rendering';
 module('Acceptance | competences | challenge-production', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
 
   hooks.beforeEach(function() {
     window.localStorage.setItem('v2', 'true');
@@ -25,12 +28,13 @@ module('Acceptance | competences | challenge-production', function(hooks) {
           id: 'tube1',
           name: '@tube',
           skillOverviews: [{
-            id: 'skill1',
-            name: '@tube1',
-            prototypeId: 'prototype1',
+            id: skillId,
+            name: skillName,
+            prototypeId,
             isPrototypeDeclinable: true,
             proposedChallengesCount: 1,
             validatedChallengesCount: 1,
+            airtableId: skillId,
           }, null, null, null, null, null, null],
         }],
       }],
@@ -45,9 +49,9 @@ module('Acceptance | competences | challenge-production', function(hooks) {
           id: 'tube1',
           name: '@tube',
           skillOverviews: [{
-            id: 'skill1',
-            name: '@tube1',
-            prototypeId: 'prototype1',
+            id: skillId,
+            name: skillName,
+            prototypeId,
             isPrototypeDeclinable: true,
             proposedChallengesCount: 0,
             validatedChallengesCount: 1,
@@ -55,6 +59,19 @@ module('Acceptance | competences | challenge-production', function(hooks) {
         }],
       }],
     });
+    const skill = this.server.create('skill', {
+      id: skillId,
+      name: skillName,
+      pixId: skillId,
+    });
+    const challengeProduction = this.server.create('challenge', {
+      id: 'challengeIdProto',
+      genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      status: Challenge.STATUSES.VALIDE,
+      instruction: 'Coucou maman',
+      locales: ['fr'],
+    });
+    skill.update({ challengesProduction: [challengeProduction] });
 
     return authenticateSession();
   });
@@ -75,5 +92,15 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     assert.ok(screen.getByText('@tube1'));
     assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('1');
     assert.dom(screen.queryByTitle('Nombre d\'épreuves en cours de construction')).doesNotExist();
+  });
+
+  test('should display a challenge production list', async function(assert) {
+    // when
+    const screen = await visit('/v2/competences/competence1/challenges-production');
+    await clickByText('@tube1');
+
+    // then
+    assert.dom(screen.getByText('Coucou maman'));
+    assert.strictEqual(currentURL(), `/v2/competences/competence1/challenges-production/skills/${skillId}/challenges`);
   });
 });

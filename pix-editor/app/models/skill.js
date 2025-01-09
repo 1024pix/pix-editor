@@ -22,6 +22,7 @@ export default class SkillModel extends Model {
   @belongsTo('tube', { async: true, inverse: 'rawSkills' }) tube;
 
   @hasMany('challenge', { async: true, inverse: 'skill' }) challenges;
+  @hasMany('challenge', { async: true, inverse: null }) challengesProduction;
 
   @hasMany('tutorial', { async: true, inverse: null }) tutoSolution;
 

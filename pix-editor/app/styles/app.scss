@@ -1,3 +1,6 @@
+@use 'authenticated-v2';
+@use 'components/challenges-production';
+@use 'components/challenges-production-header';
 @charset "utf-8";
 @import 'pix-design-tokens';
 @import 'global';

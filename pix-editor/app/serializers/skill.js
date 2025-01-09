@@ -47,4 +47,16 @@ export default class SkillSerializer extends AirtableSerializer {
     }
     super.serializeIntoHash(hash, typeClass, snapshot, options);
   }
+
+  extractRelationships(model, payload) {
+    const relationships = super.extractRelationships(model, payload);
+    return {
+      ...relationships,
+      challengesProduction: {
+        links: {
+          related: `/api/skills/${payload.pixId}/challenges-production`,
+        },
+      },
+    };
+  }
 }

@@ -1,0 +1,33 @@
+.challenges-production-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--pix-neutral-0);
+  background-color: var(--pix-neutral-900);
+  padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
+
+  p {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+  }
+
+  &__separator {
+    height: 24px;
+    width: 1px;
+    border-right: solid 1px var(--pix-neutral-0);
+  }
+
+  &__action-buttons {
+    display: flex;
+    align-items:center;
+    gap: var(--pix-spacing-2x);
+  }
+
+  &__action-buttons > &__button-icon {
+    color: var(--pix-neutral-0);
+
+    &:hover {
+      background-color: rgba(var(--pix-neutral-500-inline), 0.5);
+    }
+  }
+}

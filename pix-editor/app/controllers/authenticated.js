@@ -26,6 +26,7 @@ export default class ApplicationController extends Controller {
   @service store;
   @service window;
   @service session;
+  @service versionManager;
 
   messages = A([]);
 
@@ -57,6 +58,10 @@ export default class ApplicationController extends Controller {
 
   get isIndex() {
     return (this.router.currentRouteName === 'authenticated.index');
+  }
+
+  get isV2() {
+    return this.versionManager.getV2();
   }
 
   showMessage(content, positive) {

@@ -29,11 +29,15 @@
     }
   }
 
-  &__details {
+  &__details, &__name {
     display: block;
   }
 
-  &:hover > &__name {
+  :hover > &__name {
     font-weight: var(--pix-font-bold);
+  }
+
+  a {
+    color: inherit;
   }
 }

@@ -140,6 +140,7 @@ class TubeOverview {
 
 class SkillOverview {
   constructor({
+    id,
     airtableId,
     name,
     prototypeId,
@@ -149,6 +150,7 @@ class SkillOverview {
     archivedChallengesCount,
     obsoleteChallengesCount,
   }) {
+    this.id = id;
     this.airtableId = airtableId;
     this.name = name;
     this.prototypeId = prototypeId;
@@ -167,6 +169,7 @@ class SkillOverview {
     const productionChallenges = challenges.filter(hasSkillIdAndVersionOf(productionPrototype));
 
     return new SkillOverview({
+      id: skill.id,
       airtableId: skill.airtableId,
       name: skill.name,
       prototypeId: productionPrototype?.id,
