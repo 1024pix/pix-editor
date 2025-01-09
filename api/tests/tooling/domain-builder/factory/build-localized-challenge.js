@@ -1,4 +1,21 @@
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { LocalizedChallenge as LocalizedChallengeRead } from '../../../../lib/domain/readmodels/index.js';
+
+export function buildLocalizedChallengeRead({
+  id = 'persistant id',
+  challengeId = 'persistant id',
+  locale = 'fr',
+  instruction = 'une instruction par défaut',
+  status = LocalizedChallenge.STATUSES.PRIMARY,
+}) {
+  return new LocalizedChallengeRead({
+    id,
+    challengeId,
+    locale,
+    instruction,
+    status,
+  });
+}
 
 export function buildLocalizedChallenge({
   id = 'persistant id',
@@ -7,7 +24,7 @@ export function buildLocalizedChallenge({
   primaryEmbedUrl = 'https://example.com/embed.html',
   fileIds = [],
   locale = 'fr',
-  status = null,
+  status = LocalizedChallenge.STATUSES.PRIMARY,
   geography = null,
   urlsToConsult = ['http://url.com'],
   requireGafamWebsiteAccess = false,
