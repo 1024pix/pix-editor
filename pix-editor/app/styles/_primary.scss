@@ -1,0 +1,27 @@
+.primary-form {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--pix-neutral-0);
+  padding: var(--pix-spacing-4x) var(--pix-spacing-6x);
+  gap: var(--pix-spacing-8x);
+
+  .pix-checkbox {
+    margin-top: 0;
+  }
+
+  p {
+    color: var(--pix-neutral-900);
+    font-weight: var(--pix-font-medium);
+  }
+
+  img {
+    width: 100px;
+    height: auto;
+  }
+
+  &__tolerance {
+    display: flex;
+    align-items: center;
+    gap: var(--pix-spacing-6x);
+  }
+}
