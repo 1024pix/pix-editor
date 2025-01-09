@@ -26,7 +26,7 @@ export default class ChallengesProduction extends Component {
         <PixTag @color="success">
           actif
         </PixTag>
-        <span class="separator"></span>
+        <span class="challenges-production-header__separator"></span>
         V{{@skill.version}}
       </p>
       <div class="challenges-production-header__action-buttons">
@@ -36,7 +36,7 @@ export default class ChallengesProduction extends Component {
           @ariaLabel="Agrandir la liste des épreuves"
           @iconName="openInFull"
         />
-        <span class="separator"></span>
+        <span class="challenges-production-header__separator"></span>
         <PixIconButton
           class="challenges-production-header__button-icon"
           @triggerAction={{this.closePanel}}

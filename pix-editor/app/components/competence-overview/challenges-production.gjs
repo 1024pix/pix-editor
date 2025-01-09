@@ -68,8 +68,8 @@ export default class ChallengesProduction extends Component {
 <template>
     <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production">
-      <div class="challenges-production--table">
-        <div class="display-actions">
+      <div class="challenges-production-table">
+        <div class="challenges-production-table__display-actions">
           <PixCheckbox
             {{on "click" this.toggleDisplayObsoleteChallenges}}
             @checked={{this.shouldDisplayObsoleteChallenges}}
@@ -91,7 +91,7 @@ export default class ChallengesProduction extends Component {
                 {{/if}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}} class="consigne">
+            <PixTableColumn @context={{context}} class="challenges-production-table__consigne">
               <:header>
                 Consigne
               </:header>

@@ -2,24 +2,25 @@
   position: relative;
   overflow: auto;
 
-  &--table {
+  &-table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
+
+    &__consigne {
+      max-width: 650px;
+      height: 3rem;
+      line-height: 1.5rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &__display-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--pix-spacing-4x);
+    }
   }
 
-  .consigne {
-    max-width: 650px;
-    height: 3rem;
-    line-height: 1.5rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  .display-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--pix-spacing-4x);
-  }
 }
 
 .challenges-production-loader {

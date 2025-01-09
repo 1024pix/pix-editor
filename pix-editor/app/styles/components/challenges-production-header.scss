@@ -11,7 +11,7 @@
     gap: var(--pix-spacing-2x);
   }
 
-  .separator {
+  &__separator {
     height: 24px;
     width: 1px;
     border-right: solid 1px var(--pix-neutral-0);
