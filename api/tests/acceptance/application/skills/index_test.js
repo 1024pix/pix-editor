@@ -186,7 +186,7 @@ describe('Acceptance | API | skills', function() {
     });
   });
   describe('GET /api/skills/{skillId}/localized-challenges-production', () => {
-    it.fails('returns all localized challenges', async function() {
+    it('returns all localized challenges', async function() {
       // given
       const server = await createServer();
       const user = databaseBuilder.factory.buildAdminUser();
@@ -409,8 +409,8 @@ describe('Acceptance | API | skills', function() {
       // Then
       expect(airtableChallengesScope.isDone()).toBe(true);
       expect(response.statusCode).to.equal(200);
-      const returnedChallengeIds = response.result.data.map((item) => item.id);
-      expect(returnedChallengeIds).toStrictEqual(['challengeProtoValideId', 'challengeProtoValideNlId', 'challengeProtoValideDecliValideEsId', 'challengeProtoValideDecliValideId', 'challengeProtoValideDecliValideItId', 'challengeProtoValideDecliArchiveId']);
+      const returnedLocalizedChallengeIds = response.result.data.map((item) => item.id);
+      expect(returnedLocalizedChallengeIds).toStrictEqual(['challengeProtoValideId', 'challengeProtoValideNlId', 'challengeProtoValideDecliValideEsId', 'challengeProtoValideDecliValideId', 'challengeProtoValideDecliValideItId', 'challengeProtoValideDecliArchiveId']);
     });
   });
 });

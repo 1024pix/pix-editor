@@ -7,10 +7,14 @@ import {
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
-import { cloneSkill, getSkillChallengesProduction } from '../../domain/usecases/index.js';
+import {
+  cloneSkill,
+  getSkillChallengesProduction,
+  getSkillLocalizedChallengesProduction
+} from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { challengeSerializer, localizedChallengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 export async function clone(request, h) {
   try {
@@ -34,18 +38,25 @@ export async function clone(request, h) {
 }
 
 export async function getProductionChallenges(request, h) {
-  try {
-    const skillId = request.params.skillId;
-    const challenges = await getSkillChallengesProduction({
-      skillId,
-      dependencies: {
-        challengeRepository,
-        logger,
-      },
-    });
-    return h.response(challengeSerializer.serialize(challenges));
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
+  const skillId = request.params.skillId;
+  const challenges = await getSkillChallengesProduction({
+    skillId,
+    dependencies: {
+      challengeRepository,
+      logger,
+    },
+  });
+  return h.response(challengeSerializer.serialize(challenges));
+}
+
+export async function getProductionLocalizedChallenges(request, h) {
+  const skillId = request.params.skillId;
+  const localizedChallenges = await getSkillLocalizedChallengesProduction({
+    skillId,
+    dependencies: {
+      challengeRepository,
+      logger,
+    },
+  });
+  return h.response(localizedChallengeSerializer.serializeRead(localizedChallenges));
 }

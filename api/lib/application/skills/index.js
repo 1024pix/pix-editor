@@ -36,6 +36,18 @@ export async function register(server) {
         handler: skillsController.getProductionChallenges,
       },
     },
+    {
+      method: 'GET',
+      path: '/api/skills/{skillId}/localized-challenges-production',
+      config: {
+        validate: {
+          params: Joi.object({
+            skillId: Types.skillId().required(),
+          }),
+        },
+        handler: skillsController.getProductionLocalizedChallenges,
+      },
+    },
   ]);
 }
 
