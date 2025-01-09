@@ -54,13 +54,16 @@ export default class PrototypesRoute extends Route {
     this.currentData.setPrototype(null);
 
     if (!this.versionManager.isV2) return;
+    if (transition.to.name !== 'authenticated.competence.prototypes.index') return;
+
     const view = transition.to.queryParams.view;
     const goingToProduction = view === 'production' || !view;
-    if (goingToProduction) {
-      const locale = model.locale;
-      const overview = 'challenges-production';
-      this.router.transitionTo('authenticated.v2.competence-overview', model.airtableId, overview, { queryParams: { locale } });
-    }
+    if (!goingToProduction) return;
+
+    const locale = model.locale;
+    const overview = 'challenges-production';
+
+    this.router.transitionTo('authenticated.v2.competence-overview', model.airtableId, overview, { queryParams: { locale } });
   }
 
   @action
