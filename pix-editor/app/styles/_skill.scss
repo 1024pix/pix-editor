@@ -67,11 +67,11 @@
 
   &__menu {
     position: absolute;
+    top: 45px;
     z-index: 1000000;
     background: white;
     border: solid lightgray 1px;
     border-radius: 5px;
-    top: 45px;
   }
 }
 
