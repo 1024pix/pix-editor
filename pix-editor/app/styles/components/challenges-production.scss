@@ -3,6 +3,10 @@
   overflow: auto;
   height: 70%;
 
+  &--full {
+    height: auto;
+  }
+
   &-table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
 

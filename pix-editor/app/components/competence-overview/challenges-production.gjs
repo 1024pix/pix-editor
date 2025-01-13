@@ -18,6 +18,7 @@ import ChallengesProductionHeader from './challenges-production-header';
 
 export default class ChallengesProduction extends Component {
   @service router;
+  @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
 
@@ -67,7 +68,7 @@ export default class ChallengesProduction extends Component {
 
 <template>
     <ChallengesProductionHeader @skill={{@skill}} />
-    <section class="challenges-production">
+    <section class="challenges-production {{if this.multipanelManager.tableShouldBeExpanded "challenges-production--full" ""}}">
       <div class="challenges-production-table">
         <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
           <:columns as |challenge context|>
