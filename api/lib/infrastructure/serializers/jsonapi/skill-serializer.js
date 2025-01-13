@@ -9,6 +9,7 @@ const serializer = new Serializer('skill', {
     'clueEn',
     'clueStatus',
     'challenges',
+    'challengesProduction',
     'createdAt',
     'description',
     'descriptionStatus',
@@ -45,6 +46,7 @@ const serializer = new Serializer('skill', {
       clueStatus: hintStatus,
       i18n: internationalisation,
       challenges: challengeIds?.map((id) => ({ id })),
+      challengesProduction: {},
       tutoSolution: tutorialAirtableIds?.map((id) => ({ id })),
       tutoMore: learningMoreTutorialAirtableIds?.map((id) => ({ id })),
       tube: tubeAirtableId && { id: tubeAirtableId },
@@ -52,6 +54,15 @@ const serializer = new Serializer('skill', {
   },
   challenges: {
     ref: 'id',
+  },
+  challengesProduction: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related(skill) {
+        return `/api/skills/${skill.pixId}/challenges-production`;
+      },
+    },
   },
   tutoSolution: {
     ref: 'id',

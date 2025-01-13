@@ -562,6 +562,11 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/challenges-production',
+                  },
+                },
               }
             },
             {
@@ -623,6 +628,11 @@ describe('Application | Route | Skills', () => {
                       type: 'tutorials',
                     },
                   ],
+                },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/challenges-production',
+                  },
                 },
               }
             },
@@ -770,6 +780,11 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/challenges-production',
+                  },
+                },
               }
             },
             {
@@ -831,6 +846,11 @@ describe('Application | Route | Skills', () => {
                       type: 'tutorials',
                     },
                   ],
+                },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/challenges-production',
+                  },
                 },
               }
             },
@@ -979,6 +999,11 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/challenges-production',
+                  },
+                },
               }
             },
             {
@@ -1040,6 +1065,11 @@ describe('Application | Route | Skills', () => {
                       type: 'tutorials',
                     },
                   ],
+                },
+                'challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/challenges-production',
+                  },
                 },
               }
             },
@@ -1160,6 +1190,11 @@ describe('Application | Route | Skills', () => {
                     type: 'tutorials',
                   },
                 ],
+              },
+              'challenges-production': {
+                links: {
+                  related: '/api/skills/skill1/challenges-production',
+                },
               },
             }
           },
