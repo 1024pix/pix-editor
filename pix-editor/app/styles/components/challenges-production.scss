@@ -10,13 +10,8 @@
   &-table {
     padding: var(--pix-spacing-6x) var(--pix-spacing-8x);
 
-    &__consigne {
-      max-width: 650px;
-      height: 3rem;
-      line-height: 1.5rem;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+    &__locale {
+      text-wrap: nowrap;
     }
 
     &__display-actions {
@@ -25,7 +20,25 @@
       margin-block: var(--pix-spacing-4x);
     }
   }
+}
 
+td.challenges-production-table {
+  &__actions {
+    text-wrap: nowrap;
+  }
+
+  &__consigne {
+    max-width: 650px;
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
 }
 
 .challenges-production-loader {
