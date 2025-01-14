@@ -50,3 +50,6 @@ pix-editor/app/config-private-test.js
 
 # VSCode
 .vscode/settings.json
+
+# Nina
+nina/.env
