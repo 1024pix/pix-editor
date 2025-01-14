@@ -1,14 +1,16 @@
+@use 'pix-design-tokens/colors';
+
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   min-height: 100vh;
-  background: $pix-secondary-app-gradient;
+  background: colors.$pix-secondary-app-gradient;
 
   &__container {
     display: flex;
     flex-direction: column;
-    gap: $pix-spacing-s;
+    gap: var(--pix-spacing-4x);
   }
 }

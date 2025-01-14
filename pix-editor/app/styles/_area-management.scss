@@ -1,3 +1,5 @@
+@use 'challenges' as *;
+
 .area-management {
   &__details {
     @extend .challenge;

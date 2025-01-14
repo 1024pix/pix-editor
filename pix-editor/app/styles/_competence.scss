@@ -1,3 +1,5 @@
+@use "global";
+
 // stylelint-disable color-no-hex, color-named
 .ui.small.floated.select-section {
   min-width: 150px;
@@ -132,7 +134,7 @@
 
       &.production,
       &.workbench {
-        background-color: $challenge-background-color !important;
+        background-color: global.$challenge-background-color !important;
 
         &.active {
           position: relative;
@@ -156,21 +158,21 @@
 
           span {
             &.draft-prototype {
-              background: $suggested-background-color;
+              background: global.$suggested-background-color;
             }
 
             &.validated-prototype {
-              background: $production-background-color;
+              background: global.$production-background-color;
             }
 
             &.archived-prototype {
               color: white;
-              background: $archived-background-color;
+              background: global.$archived-background-color;
             }
 
             &.obsolete-prototype {
               color: white;
-              background: $deleted-background-color;
+              background: global.$deleted-background-color;
             }
 
             &.not-declinable {
@@ -197,7 +199,7 @@
 
       &.skill-mode,
       &.skill-workbench {
-        background-color: $skill-background-color !important;
+        background-color: global.$skill-background-color !important;
 
         &.active {
           position: relative;
@@ -219,33 +221,33 @@
 
           &.validated,
           &.prevalidated {
-            color: $validated-background-color;
+            color: global.$validated-background-color;
           }
 
           &.to-be-submitted {
-            color: $to-be-submitted-background-color;
+            color: global.$to-be-submitted-background-color;
           }
 
           &.need-work {
-            color: $need-work-background-color;
+            color: global.$need-work-background-color;
           }
 
           &.suggested {
-            color: $suggested-background-color;
+            color: global.$suggested-background-color;
           }
 
           &.archived {
-            color: $archived-background-color;
+            color: global.$archived-background-color;
             text-shadow: none;
           }
 
           &.na {
-            color: $na-color;
+            color: global.$na-color;
             text-shadow: none;
           }
 
           &.empty {
-            color: $deleted-background-color;
+            color: global.$deleted-background-color;
           }
         }
 
@@ -260,21 +262,21 @@
 
           .workbench-status {
             &.active-skill {
-              background: $production-background-color;
+              background: global.$production-background-color;
             }
 
             &.draft-skill {
-              background: $suggested-background-color;
+              background: global.$suggested-background-color;
             }
 
             &.archive-skill {
               color: white;
-              background: $archived-background-color;
+              background: global.$archived-background-color;
             }
 
             &.obsolete-skill {
               color: white;
-              background: $deleted-background-color;
+              background: global.$deleted-background-color;
             }
           }
         }

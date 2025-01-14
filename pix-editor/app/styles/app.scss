@@ -2,52 +2,58 @@
 @use 'components/challenges-production';
 @use 'components/challenges-production-header';
 @charset "utf-8";
-@import 'pix-design-tokens';
-@import 'global';
-@import 'sidebar';
-@import 'competence';
-@import 'competence-management';
-@import 'area-management';
-@import 'target-profile';
-@import 'challenges';
-@import 'skill';
-@import 'tube';
-@import 'challenge-log';
-@import 'confirm-log';
-@import 'custom-accordion';
-@import 'custom-tooltip';
-@import 'custom-sortable-group';
-@import 'custom-tabs';
-@import 'lists';
-@import 'statistics';
-@import 'events-log';
-@import 'mde';
-@import 'popin';
-@import 'pages/login';
-@import 'shadows';
-@import 'authenticated';
-@import 'authenticated/missions/new';
-@import 'authenticated/missions/details';
-@import 'authenticated/static-courses/list';
-@import 'authenticated/static-courses/static-course';
-@import 'authenticated/whitelisted-urls/list';
-@import 'authenticated/whitelisted-urls/new';
-@import 'authenticated/synchronize-translations';
-@import 'components/card';
-@import 'components/competence-overview';
-@import 'components/competence-overview-skill';
-@import 'components/login-form';
-@import 'components/field';
-@import 'components/field/quality';
-@import 'globals/global';
-@import 'globals/notification';
-@import 'globals/page';
-@import 'globals/table';
+@use 'pix-design-tokens' as *;
+@use 'global';
+@use 'sidebar';
+@use 'competence';
+@use 'competence-management';
+@use 'area-management';
+@use 'target-profile';
+@use 'challenges';
+@use 'skill';
+@use 'tube';
+@use 'challenge-log';
+@use 'confirm-log';
+@use 'custom-accordion';
+@use 'custom-tooltip';
+@use 'custom-sortable-group';
+@use 'custom-tabs';
+@use 'lists';
+@use 'statistics';
+@use 'events-log';
+@use 'mde';
+@use 'popin';
+@use 'pages/login';
+@use 'shadows';
+@use 'authenticated';
+@use 'authenticated/missions/new';
+@use 'authenticated/missions/details';
+@use 'authenticated/static-courses/list';
+@use 'authenticated/static-courses/static-course';
+@use 'authenticated/whitelisted-urls/list' as list2;
+@use 'authenticated/whitelisted-urls/new' as new2;
+@use 'authenticated/synchronize-translations';
+@use 'components/card';
+@use 'components/competence-overview';
+@use 'components/competence-overview-skill';
+@use 'components/login-form';
+@use 'components/field';
+@use 'components/field/quality';
+@use 'globals/global' as global2;
+@use 'globals/notification';
+@use 'globals/page';
+@use 'globals/table';
 
 // ember-power-select
-@import 'custom-select';
-@import 'ember-power-select';
+@use 'custom-select';
+@use 'ember-power-select' with (
+  // stylelint-disable color-no-hex, color-named
+  $ember-power-select-border-color: rgba(34, 36, 38, 0.15),
+  $ember-power-select-trigger-ltr-padding: .3em 16px .3em .3em,
+  $ember-power-select-dropdown-box-shadow: 0 4px 10px rgba(34, 36, 38, 0.4),
+  $ember-power-select-disabled-background-color: #f9f9f9
+);
 
 // basic-dropdown
-@import 'custom-basic-dropdown';
-@import 'ember-basic-dropdown';
+@use 'custom-basic-dropdown';
+@use 'ember-basic-dropdown';

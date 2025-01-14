@@ -1,10 +1,14 @@
+@use 'pix-design-tokens/breakpoints';
+@use 'pix-design-tokens/fonts';
+@use 'pix-design-tokens/colors';
+
 .login {
-  background-color: $pix-neutral-0;
+  background-color: var(--pix-neutral-0);
   border-radius: 10px;
   padding: 20px 30px;
   max-width: 500px;
 
-  @include device-is('tablet') {
+  @include breakpoints.device-is('tablet') {
     padding: 40px 60px;
   }
 
@@ -19,17 +23,17 @@
 
 .login-header {
   &__title {
-    font-family: $font-open-sans;
+    font-family: fonts.$font-open-sans;
     font-weight: 400;
     font-size: 2rem;
-    color: $pix-neutral-80;
+    color: colors.$pix-neutral-80;
     margin-top: 32px;
     margin-bottom: 8px;
   }
 
   &__information {
     margin-bottom: 32px;
-    font-family: $font-roboto;
+    font-family: fonts.$font-roboto;
     max-width: 400px;
     width: 100%;
   }
@@ -40,7 +44,7 @@
     margin-top: 16px;
     display: flex;
     flex-direction: column;
-    gap: $pix-spacing-s;
+    gap: var(--pix-spacing-4x);
   }
 }
 

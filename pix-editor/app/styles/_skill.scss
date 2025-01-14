@@ -1,3 +1,6 @@
+@use "global";
+@use 'challenges' as *;
+
 // stylelint-disable color-no-hex, color-named
 .main-title {
   .skill-mode {
@@ -25,26 +28,26 @@
   &.archived,
   &.deleted {
     color: #2f2f2f !important;
-    background: $skill-background-color !important;
+    background: global.$skill-background-color !important;
   }
 
   .circular {
     &.validated {
       color: #2f2f2f !important;
-      background: $validated-background-color !important;
+      background: global.$validated-background-color !important;
     }
 
     &.suggested {
       color: #2f2f2f !important;
-      background: $suggested-background-color !important;
+      background: global.$suggested-background-color !important;
     }
 
     &.archived {
-      background: $archived-background-color !important;
+      background: global.$archived-background-color !important;
     }
 
     &.deleted {
-      background: $deleted-background-color !important;
+      background: global.$deleted-background-color !important;
     }
 
   }

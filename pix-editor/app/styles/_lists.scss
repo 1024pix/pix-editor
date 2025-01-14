@@ -1,3 +1,5 @@
+@use "global";
+
 // stylelint-disable color-no-hex, color-named
 .skill-tab {
   &__status {
@@ -8,19 +10,19 @@
     border-radius: 50%;
 
     &.validated {
-      background: $production-background-color;
+      background: global.$production-background-color;
     }
 
     &.suggested {
-      background: $suggested-background-color;
+      background: global.$suggested-background-color;
     }
 
     &.archived {
-      background: $archived-background-color;
+      background: global.$archived-background-color;
     }
 
     &.deleted {
-      background: $deleted-background-color;
+      background: global.$deleted-background-color;
     }
   }
 }
@@ -63,23 +65,23 @@
       cursor: pointer;
 
       &.suggested {
-        color: $suggested-color;
-        background-color: $suggested-background-color !important;
+        color: global.$suggested-color;
+        background-color: global.$suggested-background-color !important;
       }
 
       &.validated {
-        color: $validated-color;
-        background-color: $validated-background-color !important;
+        color: global.$validated-color;
+        background-color: global.$validated-background-color !important;
       }
 
       &.archived {
-        color: $archived-color;
-        background-color: $archived-background-color !important;
+        color: global.$archived-color;
+        background-color: global.$archived-background-color !important;
       }
 
       &.deleted {
-        color: $deleted-color;
-        background-color: $deleted-background-color !important;
+        color: global.$deleted-color;
+        background-color: global.$deleted-background-color !important;
       }
     }
 
