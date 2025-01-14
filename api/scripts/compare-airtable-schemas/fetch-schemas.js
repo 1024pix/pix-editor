@@ -21,37 +21,44 @@ export async function fetchTableSchemas({ baseId, apiKey }) {
 }
 
 function getFieldKeys(table) {
-  const keys = [];
-  for (const field of table.fields) {
-    const fieldKey = `${table.name}.${field.name}.${field.type}`;
-    keys.push(fieldKey);
-  }
-  return keys;
+  return table.fields.map((field) => `${table.name}.${field.name}.${field.type}`);
 }
 
 async function main() {
   if (!isLaunchedFromCommandLine) return;
   try {
-    const apiKey = process.env.AIRTABLE_API_KEY;
-    if (!apiKey) throw new Error('Missing Airtable API key');
+    // Throw all env errors at once for faster feedback
+    const missingEnvErrors = [];
 
-    const reviewAppsBaseId = process.env.AIRTABLE_BASE;
-    if (!reviewAppsBaseId) throw new Error('Missing Review Apps base id');
+    // Jeton d'accès `read-schema-only`
+    const apiKey = process.env.AIRTABLE_READ_ONLY_API_KEY;
+    if (!apiKey) missingEnvErrors.push('🕵️ Missing AIRTABLE_READ_ONLY_API_KEY environment variable');
+
+    const reviewAppsBaseId = process.env.AIRTABLE_BASE_REVIEW_APPS;
+    if (!reviewAppsBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_REVIEW_APPS environment variable');
 
     const integrationBaseId = process.env.AIRTABLE_BASE_INTEGRATION;
-    if (!integrationBaseId) throw new Error('Missing Integration base id');
+    if (!integrationBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_INTEGRATION environment variable');
 
     const prodBaseId = process.env.AIRTABLE_BASE_PROD;
-    if (!prodBaseId) throw new Error('Missing Prod base id');
+    if (!prodBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_PROD environment variable');
 
-    for (const [env, id] of [['RA', reviewAppsBaseId], ['INTEG', integrationBaseId], ['PROD', prodBaseId]]) {
+    if (missingEnvErrors.length > 0) {
+      throw new Error(missingEnvErrors.join(',\n'));
+    }
+
+    for (const [env, id] of [
+      ['REVIEW_APPS', reviewAppsBaseId],
+      ['INTEGRATION', integrationBaseId],
+      ['PRODUCTION', prodBaseId],
+    ]) {
+      console.info(`📥 Fetching schema for base '${env}' ...`);
       const reviewAppsTableSchemas = await fetchTableSchemas({ baseId: id, apiKey });
       const keys = reviewAppsTableSchemas.flatMap(getFieldKeys).sort();
 
-      const resultFileName = `COMPARE_SCRIPT_schema_${env}.json`;
+      const resultFileName = `COMPARE_SCRIPT_schema_keys_for_${env}.json`;
       await writeFile(resultFileName, JSON.stringify(keys, null, 2));
     }
-
   } catch (e) {
     console.error(e);
     process.exitCode = 1;
