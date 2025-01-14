@@ -67,8 +67,8 @@ async function main() {
       ['PRODUCTION', prodBaseId],
     ]) {
       console.info(`📥 Fetching schema for base '${env}' ...`);
-      const reviewAppsTableSchemas = await fetchTableSchemas({ baseId: id, apiKey });
-      const keys = reviewAppsTableSchemas.flatMap(getFieldKeys).sort();
+      const baseTableSchemas = await fetchTableSchemas({ baseId: id, apiKey });
+      const keys = baseTableSchemas.flatMap(getFieldKeys).sort();
 
       const resultFileName = `COMPARE_SCRIPT_schema_keys_for_${env}.json`;
       await writeFile(resultFileName, JSON.stringify(keys, null, 2));
