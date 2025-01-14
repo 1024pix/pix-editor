@@ -21,7 +21,21 @@ export async function fetchTableSchemas({ baseId, apiKey }) {
 }
 
 function getFieldKeys(table) {
-  return table.fields.map((field) => `${table.name}.${field.name}.${field.type}`);
+  return table.fields.map((field) => {
+    let key = `${table.name}.${field.name}.${field.type}`;
+    if (field.type === 'formula') {
+      let simplifiedFormula = field.options.formula;
+      for (const [i, fieldId] of field.options.referencedFieldIds.toSorted().entries()) {
+        simplifiedFormula = simplifiedFormula.replaceAll(fieldId, `fieldNumber${i + 1}`);
+      }
+      key += `=\`${simplifiedFormula}\``;
+    }
+    if (['singleSelect', 'multipleSelects'].includes(field.type)) {
+      const options = field.options.choices.map(({ name }) => name).toSorted().join('/');
+      key += `:${options}`;
+    }
+    return key;
+  });
 }
 
 async function main() {
