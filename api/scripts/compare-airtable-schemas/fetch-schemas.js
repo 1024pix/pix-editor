@@ -25,8 +25,9 @@ function getFieldKeys(table) {
     let key = `${table.name}.${field.name}.${field.type}`;
     if (field.type === 'formula') {
       let simplifiedFormula = field.options.formula;
-      for (const [i, fieldId] of field.options.referencedFieldIds.toSorted().entries()) {
-        simplifiedFormula = simplifiedFormula.replaceAll(fieldId, `fieldNumber${i + 1}`);
+      for (const fieldId of field.options.referencedFieldIds) {
+        const fieldName = table.fields.find((field) => field.id === fieldId).name;
+        simplifiedFormula = simplifiedFormula.replaceAll(fieldId, `\`${fieldName}\``);
       }
       key += `=\`${simplifiedFormula}\``;
     }
