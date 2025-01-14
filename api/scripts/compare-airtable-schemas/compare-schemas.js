@@ -43,10 +43,10 @@ function findDifferentFieldTypes(aIdentifiers, bIdentifiers, alreadyMissingTable
 async function main() {
   if (!isLaunchedFromCommandLine) return;
   try {
-    const bases = ['RA', 'INTEG', 'PROD'];
+    const bases = ['REVIEW_APPS', 'INTEGRATION', 'PRODUCTION'];
     const basesIdentifiers = [];
     for (const base of bases) {
-      const rawFile = await readFile(`COMPARE_SCRIPT_schema_${base}.json`, { encoding: 'utf-8' });
+      const rawFile = await readFile(`COMPARE_SCRIPT_schema_keys_for_${base}.json`, { encoding: 'utf-8' });
       const identifiers = JSON.parse(rawFile);
       basesIdentifiers.push([base, identifiers]);
     }
@@ -54,14 +54,16 @@ async function main() {
     for (const [base, identifiers] of basesIdentifiers) {
       const otherBasesIdentifiers = basesIdentifiers.filter(([b]) => b !== base);
       for (const [otherBase, otherIdentifiers] of otherBasesIdentifiers) {
+        console.info(`🧐 Comparing ${base} to ${otherBase} ...`);
+
         const missingTablesInOtherBase = findMissingTables(identifiers, otherIdentifiers);
         const missingFieldsInOtherBase = findMissingFields(identifiers, otherIdentifiers, missingTablesInOtherBase);
-        const differentTypeInOtherBase = findDifferentFieldTypes(identifiers, otherIdentifiers, missingTablesInOtherBase, missingFieldsInOtherBase);
+        const differentFieldTypesInOtherBase = findDifferentFieldTypes(identifiers, otherIdentifiers, missingTablesInOtherBase, missingFieldsInOtherBase);
 
         const res = {
-          missingTablesInOtherBase,
-          missingFieldsInOtherBase,
-          differentTypeInOtherBase,
+          [`missingTablesIn_${otherBase}`]: missingTablesInOtherBase,
+          [`missingFieldsIn_${otherBase}`]: missingFieldsInOtherBase,
+          [`differentFieldTypesIn_${otherBase}`]: differentFieldTypesInOtherBase,
         };
 
         const fileName = `COMPARE_SCRIPT_fields_in_${base}_but_not_in_${otherBase}.json`;
