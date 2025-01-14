@@ -2,7 +2,7 @@
 @use 'components/challenges-production';
 @use 'components/challenges-production-header';
 @charset "utf-8";
-@use 'pix-design-tokens' as *;
+@use 'pix-design-tokens';
 @use 'global';
 @use 'sidebar';
 @use 'competence';
@@ -26,12 +26,12 @@
 @use 'pages/login';
 @use 'shadows';
 @use 'authenticated';
-@use 'authenticated/missions/new';
-@use 'authenticated/missions/details';
-@use 'authenticated/static-courses/list';
-@use 'authenticated/static-courses/static-course';
-@use 'authenticated/whitelisted-urls/list' as list2;
-@use 'authenticated/whitelisted-urls/new' as new2;
+@use 'authenticated/missions/new' as missions-new;
+@use 'authenticated/missions/details' as missions-details;
+@use 'authenticated/static-courses/list' as static-courses-list;
+@use 'authenticated/static-courses/static-course' as static-course-static-course;
+@use 'authenticated/whitelisted-urls/list' as whitelisted-urls-list;
+@use 'authenticated/whitelisted-urls/new' as whitelisted-urls-new;
 @use 'authenticated/synchronize-translations';
 @use 'components/card';
 @use 'components/competence-overview';
@@ -39,7 +39,7 @@
 @use 'components/login-form';
 @use 'components/field';
 @use 'components/field/quality';
-@use 'globals/global' as global2;
+@use 'globals/global' as globals-global;
 @use 'globals/notification';
 @use 'globals/page';
 @use 'globals/table';
