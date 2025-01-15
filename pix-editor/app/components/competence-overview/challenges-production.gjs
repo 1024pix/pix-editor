@@ -18,6 +18,7 @@ import ChallengesProductionHeader from './challenges-production-header';
 
 export default class ChallengesProduction extends Component {
   @service router;
+  @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
 
@@ -67,7 +68,7 @@ export default class ChallengesProduction extends Component {
 
 <template>
     <ChallengesProductionHeader @skill={{@skill}} />
-    <section class="challenges-production">
+    <section class="challenges-production {{if this.multipanelManager.tableShouldBeExpanded "challenges-production--full" ""}}">
       <div class="challenges-production-table">
         <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
           <:columns as |challenge context|>
@@ -88,7 +89,9 @@ export default class ChallengesProduction extends Component {
                 Consigne
               </:header>
               <:cell>
-                {{challenge.instruction}}
+                <div class="challenges-production-table__consigne">
+                  {{challenge.instruction}}
+                </div>
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>
@@ -123,13 +126,13 @@ export default class ChallengesProduction extends Component {
               </:header>
               <:cell>
                 {{#each challenge.locales as |locale|}}
-                  <p>
+                  <div class="challenges-production-table__locale">
                     {{flagForLanguage locale}} {{locale}}
-                  </p>
+                  </div>
                 {{/each}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn @context={{context}} class="challenges-production-table__actions">
               <:header>
                 Actions
               </:header>
