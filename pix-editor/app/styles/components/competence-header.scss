@@ -1,0 +1,35 @@
+@use 'pix-design-tokens/shadows' as *;
+@use 'pix-design-tokens/typography' as *;
+
+.competence-header {
+  @extend %pix-shadow-lg;
+
+  align-items: center;
+  background-color: var(--pix-neutral-0);
+  border-bottom: 1px solid var(--pix-neutral-100);
+  display: flex;
+  gap: var(--pix-spacing-2x);
+  padding: var(--pix-spacing-3x) var(--pix-spacing-6x);
+
+  > h2 {
+    @extend %pix-title-xs;
+
+    color: var(--pix-neutral-900);
+  }
+
+  &__spacer {
+    flex-grow: 1;
+  }
+
+  .locale-tag {
+    background:var(--pix-neutral-20);
+    padding: var(--pix-spacing-2x) var(--pix-spacing-4x);
+    border-radius: var(--pix-spacing-2x);
+    @extend %pix-body-m;
+
+    span {
+      display: inline-block;
+      margin-right:  var(--pix-spacing-2x);
+    }
+  }
+}

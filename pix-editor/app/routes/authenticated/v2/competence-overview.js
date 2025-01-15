@@ -8,38 +8,21 @@ export default class CompetenceOverviewRoute extends Route {
   @service versionManager;
   @service multipanelManager;
 
-  queryParams = {
-    locale: {
-      refreshModel: true,
-    },
-  };
-
   beforeModel() {
     this.multipanelManager.reset();
   }
 
   async model(params) {
-    const { competence_id, overview, locale } = params;
+    const overview = params.overview;
+    const { competence, locale } = this.modelFor('authenticated.v2');
 
-    let id = `${competence_id}:${overview}`;
+    let id = `${competence.pixId}:${overview}`;
     if (locale) id += `:${locale}`;
-
     const competenceOverview = await this.store.findRecord('competence-overview', id);
 
     return {
       competenceOverview,
       locale,
     };
-  }
-
-  afterModel(model) {
-    if (this.versionManager.isV2) return;
-
-    const { competenceOverview } = model;
-    const competence_id = competenceOverview.airtableId;
-    const locale = competenceOverview.locale;
-    const view = competenceOverview.view;
-
-    this.router.transitionTo('authenticated.competence.prototypes', competence_id, { queryParams: { languageFilter: locale, view } });
   }
 }

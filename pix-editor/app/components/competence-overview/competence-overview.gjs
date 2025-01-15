@@ -6,7 +6,6 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
-import CompetenceOverviewHeader from './competence-overview-header';
 
 export default class CompetenceOverview extends Component {
   @service router;
@@ -18,7 +17,6 @@ export default class CompetenceOverview extends Component {
   }
 
   <template>
-    <CompetenceOverviewHeader  @competenceOverview={{@competenceOverview}} />
     <div class="competence-overview">
       <div class="competence-overview-main {{if this.multipanelManager.gridShouldBeMinimized "competence-overview-main--hidden" ""}}">
         <div class="competence-overview-actions">

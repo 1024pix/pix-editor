@@ -5,8 +5,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language.js';
 
-
-export default class CompetenceOverview extends Component {
+export default class CompetenceHeader extends Component {
   @service router;
 
   @action
@@ -23,7 +22,7 @@ export default class CompetenceOverview extends Component {
   setSection(section) {
     if (section === 'skills') {
       this.router.transitionTo('authenticated.competence.skills',
-        this.args.competenceOverview.airtableId,
+        this.args.competence.id,
         {
           queryParams: {
             view: 'production',
@@ -32,7 +31,7 @@ export default class CompetenceOverview extends Component {
         });
     }
     if (section === 'quality') {
-      this.router.transitionTo('authenticated.competence.quality', this.args.competenceOverview.airtableId);
+      this.router.transitionTo('authenticated.competence.quality', this.args.competence.id);
     }
   }
 
@@ -92,16 +91,16 @@ export default class CompetenceOverview extends Component {
   }
 
   <template>
-    <div class="competence-overview-header">
+    <div class="competence-header">
       {{#if this.hasLocaleSelected}}
         <p class="locale-tag">
           <span>{{flagForLanguage this.localeEntry.value}}</span> {{this.localeEntry.label}}
         </p>
       {{/if}}
       <h2>
-        <LinkTo @route="authenticated.competence-management.single" @model={{@competenceOverview.airtableId}}>{{@competenceOverview.name}}</LinkTo>
+        <LinkTo @route="authenticated.competence-management.single" @model={{@competence.id}}>{{@competence.name}}</LinkTo>
       </h2>
-      <div class="competence-overview-header__spacer"></div>
+      <div class="competence-header__spacer"></div>
       <PixSelect
         @options={{this.localeOptions}}
         @value={{this.localeValue}}

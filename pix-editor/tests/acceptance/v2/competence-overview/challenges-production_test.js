@@ -18,9 +18,16 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
+    this.server.create('competence', {
+      id: 'recCompetence1',
+      code: '1.1',
+      title: 'ma compétence',
+      pixId: 'competence1',
+    });
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production',
       name: '1.1 ma compétence',
+      airtableId: 'recCompetence1',
       thematicOverviews: [{
         id: 'thematic1',
         name: 'thematic name',
@@ -42,6 +49,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production:nl',
       name: '1.1 ma compétence',
+      airtableId: 'recCompetence1',
       thematicOverviews: [{
         id: 'thematic1',
         name: 'thematic name',
@@ -78,7 +86,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
 
   test('should visit challenge production v2', async function(assert) {
     // when
-    const screen = await visit('/v2/competences/competence1/challenges-production');
+    const screen = await visit('/v2/competences/recCompetence1/challenges-production');
 
     // then
     assert.ok(screen.getByRole('heading', { name: '1.1 ma compétence' }));
@@ -96,11 +104,11 @@ module('Acceptance | competences | challenge-production', function(hooks) {
 
   test('should display a challenge production list', async function(assert) {
     // when
-    const screen = await visit('/v2/competences/competence1/challenges-production');
+    const screen = await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('@tube1');
 
     // then
     assert.dom(screen.getByText('Coucou maman'));
-    assert.strictEqual(currentURL(), `/v2/competences/competence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
   });
 });
