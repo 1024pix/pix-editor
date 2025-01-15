@@ -1,14 +1,16 @@
+@use "global";
+
 // stylelint-disable color-no-hex, color-named
 .alternative {
   color: rgba(0, 0, 0, 0.87);
   font-size: 12px;
 
   .production {
-    color: $production-alternative-color;
+    color: global.$production-alternative-color;
   }
 
   .draft {
-    color: $draft-alternative-color;
+    color: global.$draft-alternative-color;
   }
 
   .not-declinable {
@@ -16,7 +18,7 @@
   }
 
   .alternative-count {
-    color: $alternative-count-color;
+    color: global.$alternative-count-color;
   }
 }
 
@@ -83,13 +85,13 @@ img.clickable {
     border-radius: 0;
 
     &.validate {
-      color: $production-color !important;
-      background-color: $production-background-color !important;
+      color: global.$production-color !important;
+      background-color: global.$production-background-color !important;
     }
 
     &.archive {
-      color: $archived-color !important;
-      background-color: $archived-background-color !important;
+      color: global.$archived-color !important;
+      background-color: global.$archived-background-color !important;
     }
   }
 
@@ -119,20 +121,20 @@ img.clickable {
     .circular {
       &.validated {
         color: #2f2f2f !important;
-        background: $validated-background-color !important;
+        background: global.$validated-background-color !important;
       }
 
       &.suggested {
         color: #2f2f2f !important;
-        background: $suggested-background-color !important;
+        background: global.$suggested-background-color !important;
       }
 
       &.archived {
-        background: $archived-background-color !important;
+        background: global.$archived-background-color !important;
       }
 
       &.deleted {
-        background: $deleted-background-color !important;
+        background: global.$deleted-background-color !important;
       }
     }
 
@@ -174,7 +176,7 @@ img.clickable {
   &.deleted,
   &.to-be-submitted,
   &.need-work {
-    background-color: $challenge-background-color !important;
+    background-color: global.$challenge-background-color !important;
   }
 }
 

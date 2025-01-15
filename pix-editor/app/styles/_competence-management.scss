@@ -1,3 +1,5 @@
+@use 'challenges' as *;
+
 .competence-management {
   &__details {
     @extend .challenge;

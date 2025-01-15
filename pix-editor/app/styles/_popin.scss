@@ -1,3 +1,5 @@
+@use 'pix-design-tokens/breakpoints';
+
 .image-modal {
   width: 100%;
   height: auto;
@@ -7,10 +9,10 @@
   &__footer {
     display: flex;
     flex-direction: column;
-    gap: $pix-spacing-s;
-    margin-bottom: $pix-spacing-s;
+    gap: var(--pix-spacing-4x);
+    margin-bottom: var(--pix-spacing-4x);
 
-    @include device-is('tablet') {
+    @include breakpoints.device-is('tablet') {
       flex-flow: row wrap;
       justify-content: flex-end;
     }

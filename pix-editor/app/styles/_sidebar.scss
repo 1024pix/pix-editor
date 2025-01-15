@@ -1,3 +1,5 @@
+@use "global";
+
 // stylelint-disable color-no-hex, color-named
 .main-sidebar {
   &.ui.sidebar {
@@ -62,19 +64,19 @@
         border-radius: 50%;
 
         &.validated {
-          background: $production-background-color;
+          background: global.$production-background-color;
         }
 
         &.suggested {
-          background: $suggested-background-color;
+          background: global.$suggested-background-color;
         }
 
         &.archived {
-          background: $archived-background-color;
+          background: global.$archived-background-color;
         }
 
         &.deleted {
-          background: $deleted-background-color;
+          background: global.$deleted-background-color;
         }
       }
     }

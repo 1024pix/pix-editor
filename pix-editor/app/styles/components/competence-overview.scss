@@ -1,3 +1,6 @@
+@use 'pix-design-tokens/shadows' as *;
+@use 'pix-design-tokens/typography' as *;
+
 .competence-overview-header {
   @extend %pix-shadow-lg;
 

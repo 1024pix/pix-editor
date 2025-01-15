@@ -1,24 +1,27 @@
+@use 'pix-design-tokens/colors';
+@use 'pix-design-tokens/fonts';
+
 .card {
   box-shadow: 5px 4px 10px 2px rgb(0 0 0 / 10%);
   border-radius: 8px;
-  background: $pix-neutral-0;
-  border: 1.2px $pix-neutral-35 solid;
+  background: var(--pix-neutral-0);
+  border: 1.2px colors.$pix-neutral-35 solid;
   margin-bottom: 24px;
 
   &__title {
-    color: $pix-neutral-0;
-    font-family: $font-open-sans;
+    color: var(--pix-neutral-0);
+    font-family: fonts.$font-open-sans;
     font-size: 1.5rem;
-    font-weight: $font-medium;
+    font-weight: fonts.$font-medium;
     line-height: 28px;
     padding: 11px 32px;
-    background: $pix-neutral-70;
+    background: colors.$pix-neutral-70;
     border-radius: 8px 8px 0 0;
   }
 
   &__content {
     padding: 11px 32px;
-    font-family: $font-roboto;
+    font-family: fonts.$font-roboto;
     .pix-input, .pix-textarea, .pix-select, span {
       margin-bottom: 8px;
       margin-top: 8px;

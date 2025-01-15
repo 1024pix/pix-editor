@@ -1,3 +1,5 @@
+@use 'challenges' as *;
+
 // stylelint-disable color-no-hex, color-named
 .tube-header {
   @extend .challenge-header;
