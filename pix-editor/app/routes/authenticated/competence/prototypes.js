@@ -47,7 +47,6 @@ export default class PrototypesRoute extends Route {
     if (view === 'production' && locale) id += `:${locale}`;
     this.refreshing = false;
     return this.store.findRecord('competence-overview', id);
-
   }
 
   afterModel(model, transition) {
@@ -58,11 +57,9 @@ export default class PrototypesRoute extends Route {
     const view = transition.to.queryParams.view;
     const goingToProduction = view === 'production' || !view;
     if (goingToProduction) {
-      const competence_id = model.competencePixId;
       const locale = model.locale;
       const overview = 'challenges-production';
-
-      this.router.transitionTo('authenticated.v2.competence-overview', competence_id, overview, { queryParams: { locale } });
+      this.router.transitionTo('authenticated.v2.competence-overview', model.airtableId, overview, { queryParams: { locale } });
     }
   }
 

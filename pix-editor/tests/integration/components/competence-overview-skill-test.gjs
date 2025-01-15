@@ -1,10 +1,10 @@
 import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 
-import CompetenceOverviewSkill from '../../../components/competence-overview-skill';
+import CompetenceOverviewSkill from '../../../components/competence-overview/competence-overview-skill';
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
-module('Integration | Component | competence-overview-skill', function(hooks) {
+module('Integration | Component | competence-overview | competence-overview-skill', function(hooks) {
 
   setupIntlRenderingTest(hooks);
 

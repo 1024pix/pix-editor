@@ -74,7 +74,7 @@ module('Acceptance | navigation-v1-v2', function(hooks) {
     await clickByText('1. Information et données');
     await clickByText('1.1 ma compétence');
 
-    assert.strictEqual(currentURL(), '/v2/competences/competence1/challenges-production');
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production');
   });
 
   test('should upgrade route to v2 when toggling v2 on upgradable v1 route', async function(assert) {
@@ -83,14 +83,14 @@ module('Acceptance | navigation-v1-v2', function(hooks) {
     await clickByText('V2');
 
     // then
-    assert.strictEqual(currentURL(), '/v2/competences/competence1/challenges-production');
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production');
   });
 
   test('should downgrade route to v1 when toggling v1 on a v2 route', async function(assert) {
     // when
     await visit('/');
     await clickByText('V2');
-    await visit('/v2/competences/competence1/challenges-production');
+    await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('V2');
 
     // then
@@ -103,6 +103,6 @@ module('Acceptance | navigation-v1-v2', function(hooks) {
     await clickByText('V2');
 
     // then
-    assert.strictEqual(currentURL(), '/v2/competences/competence1/challenges-production?locale=nl');
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production?locale=nl');
   });
 });
