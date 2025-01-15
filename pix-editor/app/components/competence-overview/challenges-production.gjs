@@ -70,7 +70,7 @@ export default class ChallengesProduction extends Component {
     <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production {{if this.multipanelManager.tableShouldBeExpanded "challenges-production--full" ""}}">
       <div class="challenges-production-table">
-        <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
+        <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}} @condensed={{true}}>
           <:columns as |challenge context|>
             <PixTableColumn @context={{context}}>
               <:header>
