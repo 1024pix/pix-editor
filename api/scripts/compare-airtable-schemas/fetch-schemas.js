@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
 import * as dotenv from 'dotenv';
+import basesToCompare from './bases-to-compare.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 dotenv.config({ path: resolve(__dirname, '../../.env') });
@@ -49,24 +50,25 @@ async function main() {
     const apiKey = process.env.AIRTABLE_READ_ONLY_API_KEY;
     if (!apiKey) missingEnvErrors.push('🕵️ Missing AIRTABLE_READ_ONLY_API_KEY environment variable');
 
-    const reviewAppsBaseId = process.env.AIRTABLE_BASE_REVIEW_APPS;
-    if (!reviewAppsBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_REVIEW_APPS environment variable');
-
-    const integrationBaseId = process.env.AIRTABLE_BASE_INTEGRATION;
-    if (!integrationBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_INTEGRATION environment variable');
-
-    const prodBaseId = process.env.AIRTABLE_BASE_PROD;
-    if (!prodBaseId) missingEnvErrors.push('🕵️ Missing AIRTABLE_BASE_PROD environment variable');
+    const bases = [];
+    for (const baseSlug of basesToCompare) {
+      const envName = `AIRTABLE_BASE_${baseSlug}`;
+      const baseId = process.env[envName];
+      if (!baseId) missingEnvErrors.push(`🕵️ Missing ${envName} environment variable`);
+      bases.push([baseSlug, baseId]);
+    }
 
     if (missingEnvErrors.length > 0) {
       throw new Error(missingEnvErrors.join(',\n'));
     }
+    if (bases.length === 0) {
+      throw new Error('👀 No valid bases were specified in `bases-to-compare.js`');
+    }
+    if (bases.length < 2) {
+      throw new Error('🧑‍🤝‍🧑 Not enough valid bases were specified in `bases-to-compare.js`, at least 2 are required.');
+    }
 
-    for (const [env, id] of [
-      ['REVIEW_APPS', reviewAppsBaseId],
-      ['INTEGRATION', integrationBaseId],
-      ['PRODUCTION', prodBaseId],
-    ]) {
+    for (const [env, id] of bases) {
       console.info(`📥 Fetching schema for base '${env}' ...`);
       const baseTableSchemas = await fetchTableSchemas({ baseId: id, apiKey });
       const keys = baseTableSchemas.flatMap(getFieldKeys).sort();

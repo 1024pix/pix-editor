@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { readFile, writeFile } from 'node:fs/promises';
+import basesToCompare from './bases-to-compare.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
@@ -43,9 +44,8 @@ function findDifferentFieldTypes(aIdentifiers, bIdentifiers, alreadyMissingTable
 async function main() {
   if (!isLaunchedFromCommandLine) return;
   try {
-    const bases = ['REVIEW_APPS', 'INTEGRATION', 'PRODUCTION'];
     const basesIdentifiers = [];
-    for (const base of bases) {
+    for (const base of basesToCompare) {
       const rawFile = await readFile(`COMPARE_SCRIPT_schema_keys_for_${base}.json`, { encoding: 'utf-8' });
       const identifiers = JSON.parse(rawFile);
       basesIdentifiers.push([base, identifiers]);
