@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { readFile, writeFile } from 'node:fs/promises';
+import { logger } from '../../lib/infrastructure/logger.js';
 import basesToCompare from './bases-to-compare.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -54,7 +55,7 @@ async function main() {
     for (const [base, identifiers] of basesIdentifiers) {
       const otherBasesIdentifiers = basesIdentifiers.filter(([b]) => b !== base);
       for (const [otherBase, otherIdentifiers] of otherBasesIdentifiers) {
-        console.info(`🧐 Comparing ${base} to ${otherBase} ...`);
+        logger.info(`🧐 Comparing ${base} to ${otherBase} ...`);
 
         const missingTablesInOtherBase = findMissingTables(identifiers, otherIdentifiers);
         const missingFieldsInOtherBase = findMissingFields(identifiers, otherIdentifiers, missingTablesInOtherBase);
@@ -71,7 +72,7 @@ async function main() {
       }
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     process.exitCode = 1;
   }
 }

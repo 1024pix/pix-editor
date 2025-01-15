@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
 import * as dotenv from 'dotenv';
+import { logger } from '../../lib/infrastructure/logger.js';
 import basesToCompare from './bases-to-compare.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -69,7 +70,7 @@ async function main() {
     }
 
     for (const [env, id] of bases) {
-      console.info(`📥 Fetching schema for base '${env}' ...`);
+      logger.info(`📥 Fetching schema for base '${env}' ...`);
       const baseTableSchemas = await fetchTableSchemas({ baseId: id, apiKey });
       const keys = baseTableSchemas.flatMap(getFieldKeys).sort();
 
@@ -77,7 +78,7 @@ async function main() {
       await writeFile(resultFileName, JSON.stringify(keys, null, 2));
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     process.exitCode = 1;
   }
 }
