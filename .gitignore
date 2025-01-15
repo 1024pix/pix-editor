@@ -25,6 +25,7 @@ testem.log
 api/public/pix-editor/**
 **/.eslintcache
 api/.adminjs
+COMPARE_SCRIPT_*
 
 # ember-try
 **/.node_modules.ember-try/

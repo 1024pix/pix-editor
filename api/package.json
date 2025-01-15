@@ -23,6 +23,7 @@
     "db:seed": "knex --knexfile db/knexfile.js seed:run",
     "db:reset": "npm run db:prepare && npm run db:seed",
     "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
+    "airtable:compare-schemas": "node scripts/compare-airtable-schemas/fetch-schemas.js && node scripts/compare-airtable-schemas/compare-schemas.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
