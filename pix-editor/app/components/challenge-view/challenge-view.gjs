@@ -1,9 +1,10 @@
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
-import ChallengeViewHeader from './challenge-view-header';
 import Component from '@glimmer/component';
 import Challenge from 'pixeditor/models/challenge';
+
+import ChallengeViewHeader from './challenge-view-header';
 
 export default class ChallengeViewProduction extends Component {
 
@@ -24,7 +25,13 @@ export default class ChallengeViewProduction extends Component {
   }
 
   <template>
-    <ChallengeViewHeader @challenge={{@challenge}} @statusColor={{this.getChallengeStatusColor @challenge.status}} />
+    <ChallengeViewHeader
+      @challenge={{@challenge}}
+      @statusColor={{this.getChallengeStatusColor @challenge.status}}
+      @overview={{@overview}}
+      @competenceId={{@competenceId}}
+      @skillId={{@skillId}}
+    />
 
     <div class="challenge-view">
       <PixTextarea

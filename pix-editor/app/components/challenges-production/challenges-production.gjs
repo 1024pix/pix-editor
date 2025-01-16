@@ -4,13 +4,13 @@ import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { array, concat, fn } from '@ember/helper';
-import { on } from '@ember/modifier';
-import { action } from '@ember/object';
-import { LinkTo } from '@ember/routing';
-import { service } from '@ember/service';
+import {array, concat, fn} from '@ember/helper';
+import {on} from '@ember/modifier';
+import {action} from '@ember/object';
+import {LinkTo} from '@ember/routing';
+import {service} from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import {tracked} from '@glimmer/tracking';
 import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import Challenge from 'pixeditor/models/challenge';
@@ -67,8 +67,8 @@ export default class ChallengesProduction extends Component {
   }
 
   <template>
-    <ChallengesProductionHeader @skill={{@skill}} />
-    <section class="challenges-production {{if this.multipanelManager.tableShouldBeExpanded "challenges-production--full" ""}}">
+    <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competenceId}} @canExpand={{@canExpand}}/>
+    <section class="challenges-production {{if this.multipanelManager.tableShouldBeMinimized "challenges-production--hidden" ""}}">
       <div class="challenges-production-table">
         <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}} @condensed={{true}}>
           <:columns as |challenge context|>

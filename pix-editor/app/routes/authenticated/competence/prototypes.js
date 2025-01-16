@@ -8,6 +8,7 @@ export default class PrototypesRoute extends Route {
   @service store;
   @service router;
   @service versionManager;
+  @service multipanelManager;
 
   refreshing = false;
 
@@ -54,6 +55,7 @@ export default class PrototypesRoute extends Route {
     this.currentData.setPrototype(null);
 
     if (!this.versionManager.isV2) return;
+    this.multipanelManager.reset();
     if (transition.to.name !== 'authenticated.competence.prototypes.index') return;
 
     const view = transition.to.queryParams.view;

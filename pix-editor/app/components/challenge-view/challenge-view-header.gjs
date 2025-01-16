@@ -1,14 +1,14 @@
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-
-import { action } from '@ember/object';
-import { service } from '@ember/service';
-import { fn } from '@ember/helper';
-import dayjs from 'ember-dayjs/helpers/dayjs-format';
+import {fn} from '@ember/helper';
+import {action} from '@ember/object';
+import {service} from '@ember/service';
 import Component from '@glimmer/component';
-
+import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
+
+import Challenge from 'pixeditor/models/challenge';
 
 export default class ChallengesViewHeader extends Component {
   @service router;
@@ -16,13 +16,13 @@ export default class ChallengesViewHeader extends Component {
 
   @action
   closePanel() {
-    this.multipanelManager.reset();
-    this.router.transitionTo('authenticated.v2.competence-overview');
+    this.multipanelManager.onDetailsClosed();
+    this.router.transitionTo('authenticated.v2.competence-overview.challenges', this.args.competenceId, this.args.overview, this.args.skillId);
   }
 
   @action
   expandPanel() {
-    this.multipanelManager.expandTable();
+    this.multipanelManager.expandDetails();
   }
 
   @action

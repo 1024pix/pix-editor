@@ -14,11 +14,14 @@ export default class ChallengesRoute extends Route {
   }
 
   async model(params) {
-    const skill = await this.store.findRecord('skill', params.skill_id);
-    const challenges = await skill.challengesProduction;
+    const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
     const { overview } = this.paramsFor('authenticated.v2.competence-overview');
+    const { skill_id } = params;
 
-    return { challenges, overview, skill };
+    const skill = await this.store.findRecord('skill', skill_id);
+    const challenges = await skill.challengesProduction;
+
+    return { challenges, overview, skill, competenceId };
   }
 
   afterModel(model) {
