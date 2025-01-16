@@ -180,13 +180,16 @@ module('Integration | Component | challenges-production | localized-challenges-p
     test('should display all expected info for a given challenge', async function(assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
+      const translationLink = screen.getByLabelText('traduction de l\'épreuve de version Proto');
       const prototype = validatedChallenges[1];
+
       assert.dom(prototype).includesText('Proto');
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('25/12/2019');
       assert.dom(prototype).includesText('ELLE');
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
+      assert.ok(translationLink.href.endsWith('/api/challenges/challengeProtoValide/translations/nl'));
     });
 
     test('should display appropriate translation statuses for each challenge', async function(assert) {
