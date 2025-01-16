@@ -1,0 +1,18 @@
+@use 'pix-design-tokens/shadows' as *;
+
+.dropdown {
+  .dropdown-button[aria-expanded="true"],
+  .dropdown-button:hover {
+    background: var(--pix-neutral-100);
+  }
+
+  &-menu {
+    position: absolute;
+    z-index: 10;
+    background: var(--pix-neutral-0);
+    border-radius: var(--pix-spacing-2x);
+    padding: var(--pix-spacing-2x);
+    visibility: hidden;
+    @extend %pix-shadow-sm;
+  }
+}

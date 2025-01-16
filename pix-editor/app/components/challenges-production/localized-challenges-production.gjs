@@ -1,8 +1,4 @@
-import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
-import PixTable from '@1024pix/pix-ui/components/pix-table';
-import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { concat } from '@ember/helper';
+import { concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -12,6 +8,13 @@ import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
+import PixTable from '@1024pix/pix-ui/components/pix-table';
+import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+
+import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 
 const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
@@ -52,6 +55,11 @@ export default class LocalizedChallengesProduction extends Component {
         primaryStatusText: this.getPrimaryStatusText(challenge.status),
         localizedStatusColor: this.getLocalizedStatusColor(localizedStatus),
         localizedStatusText: this.getLocalizedStatusText(localizedStatus),
+        primaryPreviewUrl: new URL(challenge.preview, window.location).href,
+        localizedPreviewUrl: localizedChallengeForLocale ? new URL(`${challenge.preview}?locale=${localizedChallengeForLocale.locale}`, window.location).href : null,
+        primaryId: challenge.id,
+        localizedId: localizedChallengeForLocale?.id,
+        isNotTranslated: !isPrimaryInLocale && localizedChallengeForLocale,
       };
     });
   }
@@ -111,6 +119,11 @@ export default class LocalizedChallengesProduction extends Component {
   @action
   toggleDisplayObsoleteChallenges() {
     this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
+  }
+
+  @action
+  async copyChallengePreviewUrl(previewUrl) {
+    await navigator.clipboard.writeText(previewUrl);
   }
 
 <template>
@@ -173,8 +186,51 @@ export default class LocalizedChallengesProduction extends Component {
                 </PixTag>
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn @context={{context}} class="challenges-production__localized-menu-action">
               <:cell>
+                <DropdownMenu
+                  @ariaLabel={{concat 'ouvrir option pour l\'épreuve ' localizedChallengeData.primaryId}}
+                  @iconName="moreVert"
+                  class="localized-menu-action"
+                >
+                  <li>
+                    <span class="title">Source</span>
+                    <ul aria-label="source">
+                      <li class="localized-menu-action__item">
+                        <a
+                          href="{{localizedChallengeData.primaryPreviewUrl}}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <PixIcon @name="eye" aria-hidden="true"/> Prévisualiser <span class="sr-only">l'épreuve {{localizedChallengeData.primaryId}}</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  {{#if localizedChallengeData.isNotTranslated}}
+                    <li>
+                      <span class="title">Traduction</span>
+                      <ul aria-label="traduction">
+                        <li class="localized-menu-action__item">
+                          <a
+                            href="{{localizedChallengeData.localizedPreviewUrl}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <PixIcon @name="eye" aria-hidden="true"/> Prévisualiser <span class="sr-only">l'épreuve {{localizedChallengeData.localizedId}}</span>
+                          </a>
+                        </li>
+                        <li class="localized-menu-action__item">
+                          <button
+                            {{on 'click' (fn this.copyChallengePreviewUrl localizedChallengeData.localizedPreviewUrl)}}
+                          >
+                            <PixIcon @name="copy" aria-hidden="true"/> Copier le lien <span class="sr-only">de l'épreuve {{localizedChallengeData.localizedId}}</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  {{/if}}
+                </DropdownMenu>
                 {{#if localizedChallengeData.translationsUrl}}
                   <a class="ui button item" href={{localizedChallengeData.translationsUrl}} target="_blank" rel="noopener noreferrer" aria-label={{concat "traduction de l'épreuve de version " localizedChallengeData.version}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -1,4 +1,4 @@
-import { render } from '@1024pix/ember-testing-library';
+import { clickByText, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
 import LocalizedChallengesProduction from 'pixeditor/components/challenges-production/localized-challenges-production';
 import Challenge from 'pixeditor/models/challenge';
@@ -190,6 +190,39 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
       assert.ok(translationLink.href.endsWith('/api/challenges/challengeProtoValide/translations/nl'));
+    });
+    module('it should display actions', function() {
+      test('when have translation for current locale', async function(assert) {
+        // when
+        await clickByText('ouvrir option pour l\'épreuve challengeProtoValide');
+
+        // then
+        assert.dom(screen.getByRole('list', { name: 'source' })).exists();
+        assert.dom(screen.getByRole('list', { name: 'traduction' })).exists();
+        const primaryPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValide' });
+        const localizedPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValideeNl' });
+        assert.ok(primaryPreview.href.endsWith('api/urlto/challengeProtoValide'));
+        assert.ok(localizedPreview.href.endsWith('api/urlto/challengeProtoValide?locale=nl'));
+        assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValideeNl' })).exists();
+      });
+
+      test('when primary is in current locale', async function(assert) {
+        // when
+        await clickByText('ouvrir option pour l\'épreuve challengeDecliNl');
+
+        // then
+        assert.dom(screen.getByRole('list', { name: 'source' })).exists();
+        assert.dom(screen.queryByRole('list', { name: 'traduction' })).doesNotExist();
+      });
+
+      test('when have not translation for current locale', async function(assert) {
+        // when
+        await clickByText('ouvrir option pour l\'épreuve challengeDecliProposee');
+
+        // then
+        assert.dom(screen.getByRole('list', { name: 'source' })).exists();
+        assert.dom(screen.queryByRole('list', { name: 'traduction' })).doesNotExist();
+      });
     });
 
     test('should display appropriate translation statuses for each challenge', async function(assert) {

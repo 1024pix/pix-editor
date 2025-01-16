@@ -20,6 +20,41 @@
       margin-block: var(--pix-spacing-4x);
     }
   }
+
+  .localized-menu-action {
+    padding: var(--pix-spacing-2x);
+
+    &__item a,
+    &__item button {
+      display: flex;
+      align-items: center;
+      gap:  var(--pix-spacing-2x);
+      padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
+      white-space: nowrap;
+
+      &:hover {
+        color: var(--pix-neutral-800);
+        background: var(--pix-primary-10);
+      }
+    }
+
+    .title {
+      display: block;
+      background: var(--pix-neutral-20);
+      padding: var(--pix-spacing-2x) var(--pix-spacing-4x);
+      border-radius: var(--pix-spacing-2x);
+    }
+  }
+
+  // permet de pouvoir afficher le menu dropdown si le tableau est trop petit
+  .pix-table {
+    overflow-y: visible !important;
+  }
+}
+
+td.challenges-production__localized-menu-action {
+  display: flex;
+  align-items: center;
 }
 
 td.challenges-production-table {
@@ -47,3 +82,4 @@ td.challenges-production-table {
   justify-content: center;
   height: 70%;
 }
+
