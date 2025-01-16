@@ -1,8 +1,8 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import { concat, hash } from '@ember/helper';
-import { action } from '@ember/object';
-import { LinkTo } from '@ember/routing';
-import { service } from '@ember/service';
+import {concat, hash} from '@ember/helper';
+import {action} from '@ember/object';
+import {LinkTo} from '@ember/routing';
+import {service} from '@ember/service';
 import Component from '@glimmer/component';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
@@ -12,8 +12,9 @@ export default class CompetenceOverview extends Component {
   @service multipanelManager;
 
   @action
-  refresh() {
-    this.router.refresh('authenticated.v2.competence-overview');
+  async refresh() {
+    this.router.transitionTo('authenticated.v2.competence-overview');
+    await this.router.refresh('authenticated.v2.competence-overview');
   }
 
   <template>
