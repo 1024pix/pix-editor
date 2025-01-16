@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Challenge from 'pixeditor/models/challenge';
 
 const inProductionCombinations = [
   'validé:validé',
@@ -18,9 +19,17 @@ export default class LocalizedChallengeModel extends Model {
   @attr deafAndHardOfHearing;
   @attr isAwarenessChallenge;
   @attr toRephrase;
+  @attr instruction;
 
   @belongsTo('challenge', { inverse: 'localizedChallenges', async: true }) challenge;
   @hasMany('attachment', { inverse: 'localizedChallenge', async: true }) files;
+
+  static get STATUSES() {
+    return {
+      PLAY: Challenge.STATUSES.VALIDE,
+      PAUSE: Challenge.STATUSES.PROPOSE,
+    };
+  }
 
   get isPrimaryChallenge() {
     return this.challenge.get('id') === this.id;

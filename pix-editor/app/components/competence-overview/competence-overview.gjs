@@ -47,7 +47,7 @@ export default class CompetenceOverview extends Component {
             <div class="tube">
               <h4>{{tubeOverview.name}}</h4>
               {{#each tubeOverview.skillOverviews as |skillOverview|}}
-                <CompetenceOverviewSkill @skillOverview={{skillOverview}} class="skill" />
+                <CompetenceOverviewSkill @skillOverview={{skillOverview}} @locale={{this.args.locale}} class="skill" />
               {{/each}}
             </div>
             {{/each}}

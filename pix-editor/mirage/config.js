@@ -49,6 +49,12 @@ function routes() {
     return skill.challengesProduction;
   });
 
+  this.get('/skills/:pixId/localized-challenges-production', (schema, request) => {
+    const pixId = request.params.pixId;
+    const skill = schema.skills.findBy({ pixId });
+    return skill.localizedChallengesProduction;
+  });
+
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const attachment = _deserializePayload(payload, 'attachment');

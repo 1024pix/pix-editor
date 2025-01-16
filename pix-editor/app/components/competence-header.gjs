@@ -106,7 +106,10 @@ export default class CompetenceHeader extends Component {
         @value={{this.localeValue}}
         @onChange={{this.setLocale}}
         @hideDefaultOption={{true}}
-      />
+        @screenReaderOnly={{true}}
+      >
+        <:label>Choix de la langue</:label>
+      </PixSelect>
       <PixSelect
         @options={{this.sections}}
         @value="challenges"
