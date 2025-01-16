@@ -1,5 +1,22 @@
 
 
+## v3.181.0 (16/01/2025)
+
+
+### :rocket: Amélioration
+- [#845](https://github.com/1024pix/pix-editor/pull/845) [FEATURE] Pouvoir voir la liste des épreuves d'un acquis lorsqu'on clique dessus depuis la vue V2 (PIX-15784).
+
+### :building_construction: Tech
+- [#828](https://github.com/1024pix/pix-editor/pull/828) [TECH] Script de comparaison des schémas des tables des différents environnements Airtable.
+- [#858](https://github.com/1024pix/pix-editor/pull/858) [TECH] Extraire l'en-tête de la nouvelle page parente "V2" dans une route parente dédiée (PIX-16119).
+- [#857](https://github.com/1024pix/pix-editor/pull/857) [TECH] Remplacer les PixTables par des PixTables condensés (PIX-16039).
+
+### :arrow_up: Montée de version
+- [#855](https://github.com/1024pix/pix-editor/pull/855) [BUMP] Update dependency @1024pix/pix-ui to v53 (pix-editor).
+
+### :coffee: Autre
+- [#854](https://github.com/1024pix/pix-editor/pull/854)  [FEATURE] Afficher la consigne du tableau `challenges-production` sur 2 lignes (PIX-16072).
+
 ## v3.180.0 (30/12/2024)
 
 
