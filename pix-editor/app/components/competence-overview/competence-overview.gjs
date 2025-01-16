@@ -1,8 +1,8 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import {concat, hash} from '@ember/helper';
-import {action} from '@ember/object';
-import {LinkTo} from '@ember/routing';
-import {service} from '@ember/service';
+import { concat, hash } from '@ember/helper';
+import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 import CompetenceOverviewSkill from './competence-overview-skill';

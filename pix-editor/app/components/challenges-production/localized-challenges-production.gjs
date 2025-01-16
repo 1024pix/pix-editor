@@ -1,7 +1,10 @@
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { concat } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -16,7 +19,6 @@ const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';
 
 // todo list
 /*
-coche périmé
 menu actions
 lien vers phrase
  */
@@ -24,8 +26,18 @@ export default class LocalizedChallengesProduction extends Component {
   @service router;
   @tracked shouldDisplayObsoleteChallenges = false;
 
+  get sortedChallenges() {
+    const excludeStatuses = [];
+    if (!this.shouldDisplayObsoleteChallenges) {
+      excludeStatuses.push(Challenge.STATUSES.PERIME);
+    }
+    return this.args.challenges
+      .filter((challenge) => !excludeStatuses.includes(challenge.status))
+      .sort(byAlternativeVersion);
+  }
+
   get localizedChallengeDataItems() {
-    return this.args.challenges.toSorted(byAlternativeVersion).map((challenge) => {
+    return this.sortedChallenges.map((challenge) => {
       const localizedChallengeForLocale = this.args.localizedChallenges.find((localizedChallenge) =>
         localizedChallenge.challenge.id === challenge.id && localizedChallenge.locale === this.args.locale);
       const isPrimaryInLocale = challenge.locales.includes(this.args.locale);
@@ -96,6 +108,11 @@ export default class LocalizedChallengesProduction extends Component {
     return 'absence de statut ❓';
   }
 
+  @action
+  toggleDisplayObsoleteChallenges() {
+    this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
+  }
+
 <template>
     <ChallengesProductionHeader @skill={{@skill}} />
     <section class="challenges-production">
@@ -158,6 +175,14 @@ export default class LocalizedChallengesProduction extends Component {
             </PixTableColumn>
           </:columns>
         </PixTable>
+        <div class="challenges-production-table__display-actions">
+          <PixCheckbox
+            {{on "click" this.toggleDisplayObsoleteChallenges}}
+            @checked={{this.shouldDisplayObsoleteChallenges}}
+          >
+            <:label>Afficher les épreuves périmées</:label>
+          </PixCheckbox>
+        </div>
       </div>
     </section>
   </template>

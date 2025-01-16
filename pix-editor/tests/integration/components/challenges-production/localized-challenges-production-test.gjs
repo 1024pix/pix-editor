@@ -1,4 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import LocalizedChallengesProduction from 'pixeditor/components/challenges-production/localized-challenges-production';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
@@ -34,7 +35,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       id: challengeProtoValide.id,
       challenge: challengeProtoValide,
       locale: 'fr',
-      status: LocalizedChallenge.STATUSES.PLAY,
+      status: null,
       instruction: 'consigne challengeProtoValidee',
     });
     const localizedProtoValideNl = store.createRecord('localized-challenge', {
@@ -61,7 +62,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       id: challengeDecliArchivee.id,
       challenge: challengeDecliArchivee,
       locale: 'fr',
-      status: LocalizedChallenge.STATUSES.PAUSE,
+      status: null,
       instruction: 'consigne challengeDecliArchivee',
     });
     const localizedDecliArchiveeNl = store.createRecord('localized-challenge', {
@@ -80,7 +81,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       instruction: 'consigne challengeDecliNl',
       updatedAt: new Date('2020-01-05'),
       author: 'EUX',
-      status: Challenge.STATUSES.PERIME,
+      status: Challenge.STATUSES.VALIDE,
       locales: ['nl'],
       preview: 'api/urlto/challengeDecliNl',
     });
@@ -88,7 +89,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       id: challengeDecliNl.id,
       challenge: challengeDecliNl,
       locale: 'nl',
-      status: LocalizedChallenge.STATUSES.PAUSE,
+      status: null,
       instruction: 'consigne challengeDecliNl',
     });
 
@@ -109,7 +110,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       challenge: challengeDecliProposee,
       locale: 'fr',
       instruction: 'consigne challengeDecliProposee',
-      status: LocalizedChallenge.STATUSES.PAUSE,
+      status: null,
     });
     const localizedDecliProposeeEs = store.createRecord('localized-challenge', {
       id: 'challengeDecliProposeeEs',
@@ -118,11 +119,40 @@ module('Integration | Component | challenges-production | localized-challenges-p
       status: LocalizedChallenge.STATUSES.PAUSE,
     });
 
+    // primary périmé
+
+    const challengeDecliObsolete = store.createRecord('challenge', {
+      id: 'challengeDecliObsolete',
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      alternativeVersion: 4,
+      instruction: 'consigne challengeDecliObsolete',
+      updatedAt: new Date('2020-01-05'),
+      author: 'TOI',
+      status: Challenge.STATUSES.PERIME,
+      locales: ['fr'],
+      preview: 'api/urlto/challengeDecliObsolete',
+    });
+    const localizedDecliObsoleteFr = store.createRecord('localized-challenge', {
+      id: challengeDecliObsolete.id,
+      challenge: challengeDecliObsolete,
+      locale: 'fr',
+      instruction: 'consigne challengeDecliObsolete',
+      status: null,
+    });
+    const localizedDecliObsoleteNl = store.createRecord('localized-challenge', {
+      id: `${challengeDecliObsolete.id}-nl`,
+      challenge: challengeDecliObsolete,
+      locale: 'nl',
+      instruction: 'consigne NL challengeDecliObsolete',
+      status: LocalizedChallenge.STATUSES.PAUSE,
+    });
+
     const challenges = [
       challengeProtoValide,
       challengeDecliArchivee,
       challengeDecliNl,
       challengeDecliProposee,
+      challengeDecliObsolete,
     ];
     const localizedChallenges = [
       localizedProtoValideFr,
@@ -132,6 +162,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       localizedDecliNl,
       localizedDecliProposeeFr,
       localizedDecliProposeeEs,
+      localizedDecliObsoleteFr,
+      localizedDecliObsoleteNl,
     ];
     const locale = 'nl';
 
@@ -173,13 +205,47 @@ module('Integration | Component | challenges-production | localized-challenges-p
 
       const primaryAlreadyNl = validatedChallenges[3];
       assert.dom(primaryAlreadyNl).includesText('consigne challengeDecliNl');
-      assert.dom(primaryAlreadyNl).includesText('périmé');
+      assert.dom(primaryAlreadyNl).includesText('validé');
       assert.dom(primaryAlreadyNl).includesText('Source dans la langue');
 
       const notTranslated = validatedChallenges[4];
       assert.dom(notTranslated).includesText('consigne challengeDecliProposee');
       assert.dom(notTranslated).includesText('proposé');
       assert.dom(notTranslated).includesText('Pas traduit');
+    });
+  });
+
+  module('when displaying the list', function() {
+    module('when box to display obsolete challenges not checked', function() {
+      test('should display all but obsolete', async function(assert) {
+        // then
+        const validatedChallenges = screen.queryAllByText('validé');
+        const obsoleteChallenges = screen.queryAllByText('périmé');
+        const archivedChallenges = screen.queryAllByText('archivé');
+        const proposedChallenges = screen.queryAllByText('proposé');
+
+        assert.strictEqual(validatedChallenges.length, 2);
+        assert.strictEqual(archivedChallenges.length, 1);
+        assert.strictEqual(proposedChallenges.length, 1);
+        assert.strictEqual(obsoleteChallenges.length, 0);
+      });
+    });
+    module('when box to display obsolete challenges checked', function() {
+      test('display all challenges', async function(assert) {
+        // when
+        await click(screen.getByLabelText('Afficher les épreuves périmées'));
+
+        // then
+        const validatedChallenges = screen.queryAllByText('validé');
+        const obsoleteChallenges = screen.queryAllByText('périmé');
+        const archivedChallenges = screen.queryAllByText('archivé');
+        const proposedChallenges = screen.queryAllByText('proposé');
+
+        assert.strictEqual(validatedChallenges.length, 2);
+        assert.strictEqual(obsoleteChallenges.length, 1);
+        assert.strictEqual(archivedChallenges.length, 1);
+        assert.strictEqual(proposedChallenges.length, 1);
+      });
     });
   });
 });
