@@ -28,10 +28,10 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.getByText('@skillOverviewName1')).exists();
     assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('2');
     assert.dom(screen.getByTitle('Nombre d\'épreuves en cours de construction')).hasText('(2)');
-
     assert.dom(screen.queryByText('NR')).doesNotExist();
+    const link = screen.getByRole('link', { name: '@skillOverviewName1 2 (2)' });
+    assert.dom(link).hasClass('production-skill-overview-action--validated');
 
-    assert.dom('.production-skill-overview--validated').exists();
   });
 
   test('it should display a skill cell with only proposed Challenges on it', async function(assert) {
@@ -52,7 +52,8 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.getByText('@skillOverviewName1')).exists();
     assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('0');
     assert.dom(screen.getByTitle('Nombre d\'épreuves en cours de construction')).hasText('(2)');
-    assert.dom('.production-skill-overview--proposed').exists();
+    const link = screen.getByRole('link', { name: '@skillOverviewName1 0 (2)' });
+    assert.dom(link).hasClass('production-skill-overview-action--proposed');
   });
 
   test('it should display a skill cell with no challenges on it', async function(assert) {
@@ -73,7 +74,8 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.getByText('@skillOverviewName1')).exists();
     assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('0');
     assert.dom(screen.queryByTitle('Nombre d\'épreuves en cours de construction')).doesNotExist();
-    assert.dom('.production-skill-overview--empty').exists();
+    const link = screen.getByRole('link', { name: '@skillOverviewName1 0' });
+    assert.dom(link).hasClass('production-skill-overview-action--empty');
   });
 
   test('it should display a skill cell with no skill', async function(assert) {
@@ -84,7 +86,6 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.queryByText('@skillOverviewName1')).doesNotExist();
     assert.dom(screen.queryByTitle('Nombre d\'épreuves en production')).doesNotExist();
     assert.dom(screen.queryByTitle('Nombre d\'épreuves en cours de construction')).doesNotExist();
-    assert.dom('.production-skill-overview--no-skill').exists();
   });
 
   test('it should display a skill cell with `NR` challenge', async function(assert) {

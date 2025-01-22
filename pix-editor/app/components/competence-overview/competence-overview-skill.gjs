@@ -1,22 +1,37 @@
-import { concat } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import Component from '@glimmer/component';
 
 export default class CompetenceOverviewSkill extends Component {
 
   get modifier() {
-    if (!this.args.skillOverview) return 'no-skill';
     if (this.args.skillOverview.validatedChallengesCount) return 'validated';
     if (this.args.skillOverview.proposedChallengesCount) return 'proposed';
     return 'empty';
   }
 
+  get classes() {
+    let classes = `production-skill-overview-action production-skill-overview-action--${this.modifier}`;
+    if (this.args.activeSkillId === this.args.skillOverview?.id) {
+      classes += ' active';
+    }
+    return classes;
+  }
+
+  @action
+  skillClicked() {
+    this.args.onSkillClicked(this.args.skillOverview.id);
+  }
+
   <template>
-    <div ...attributes class={{concat "production-skill-overview production-skill-overview--" this.modifier}}>
+    <div ...attributes class="production-skill-overview">
       {{#if @skillOverview}}
         <LinkTo
+          class={{this.classes}}
           @route={{if this.args.locale "authenticated.v2.competence-overview.localized-challenges" "authenticated.v2.competence-overview.challenges"}}
           @model={{@skillOverview.airtableId}}
+          {{on "click" this.skillClicked}}
         >
           <span class="production-skill-overview__name">{{@skillOverview.name}}</span>
           <span class="production-skill-overview__details">

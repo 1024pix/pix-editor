@@ -1,3 +1,8 @@
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixTable from '@1024pix/pix-ui/components/pix-table';
+import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -7,12 +12,6 @@ import { tracked } from '@glimmer/tracking';
 import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
-
-import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
-import PixTable from '@1024pix/pix-ui/components/pix-table';
-import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';

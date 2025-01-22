@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
 
@@ -11,10 +12,17 @@ export default class CompetenceOverview extends Component {
   @service router;
   @service multipanelManager;
 
+  @tracked selectedSkillId = null;
+
   @action
   async refresh() {
     this.router.transitionTo('authenticated.v2.competence-overview');
     await this.router.refresh('authenticated.v2.competence-overview');
+  }
+
+  @action
+  async updateSelectedSkillId(id) {
+    this.selectedSkillId = id;
   }
 
   <template>
@@ -48,7 +56,7 @@ export default class CompetenceOverview extends Component {
             <div class="tube">
               <h4>{{tubeOverview.name}}</h4>
               {{#each tubeOverview.skillOverviews as |skillOverview|}}
-                <CompetenceOverviewSkill @skillOverview={{skillOverview}} @locale={{this.args.locale}} class="skill" />
+                <CompetenceOverviewSkill @skillOverview={{skillOverview}} @locale={{this.args.locale}} class="skill" @onSkillClicked={{this.updateSelectedSkillId}} @activeSkillId={{this.selectedSkillId}}/>
               {{/each}}
             </div>
             {{/each}}

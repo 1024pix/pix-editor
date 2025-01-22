@@ -1,43 +1,56 @@
 @use 'sass:color';
 
 .production-skill-overview {
-  &--no-skill {
-    background-color: var(--pix-neutral-0);
-  }
+  background-color: var(--pix-neutral-0);
 
-  &--empty {
-    background-color: var(--pix-error-100);
+  &-action {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
-    &:hover {
-      background-color: hsl(from var(--pix-error-100) h s calc(l - 25));
+    &--empty {
+      background-color: var(--pix-error-100);
+
+      &:hover,
+      &:focus,
+      &.active {
+        color: inherit;
+        background-color: hsl(from var(--pix-error-100) h s calc(l - 25));
+
+        & > .production-skill-overview__name {
+          font-weight: var(--pix-font-bold);
+        }
+      }
     }
-  }
 
-  &--proposed {
-    background-color: var(--pix-info-100);
+    &--proposed {
+      background-color: var(--pix-info-100);
 
-    &:hover {
-      background-color: hsl(from var(--pix-info-100) h s calc(l - 25));
+      &:hover,
+      &:focus,
+      &.active {
+        color: inherit;
+        background-color: hsl(from var(--pix-info-100) h s calc(l - 25));
+
+        & > .production-skill-overview__name {
+          font-weight: var(--pix-font-bold);
+        }
+      }
     }
-  }
 
-  &--validated {
-    background-color: var(--pix-success-100);
+    &--validated {
+      background-color: var(--pix-success-100);
 
-    &:hover {
-      background-color: hsl(from var(--pix-success-100) h s calc(l - 25));
+      &:hover,
+      &:focus,
+      &.active {
+        color: inherit;
+        background-color: hsl(from var(--pix-success-100) h s calc(l - 25));
+
+        & > .production-skill-overview__name {
+          font-weight: var(--pix-font-bold);
+        }
+      }
     }
-  }
-
-  &__details, &__name {
-    display: block;
-  }
-
-  :hover > &__name {
-    font-weight: var(--pix-font-bold);
-  }
-
-  a {
-    color: inherit;
   }
 }
