@@ -1,13 +1,13 @@
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import {fn} from '@ember/helper';
-import {action} from '@ember/object';
-import {service} from '@ember/service';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { fn } from '@ember/helper';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import dayjs from 'ember-dayjs/helpers/dayjs-format';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
-
 import Challenge from 'pixeditor/models/challenge';
 
 export default class ChallengesViewHeader extends Component {
@@ -32,6 +32,20 @@ export default class ChallengesViewHeader extends Component {
 
   getChallengePreviewUrl(challenge) {
     return new URL(challenge.preview, window.location).href;
+  }
+
+  buildStatusText(challenge) {
+    const formater = new Intl.DateTimeFormat('fr');
+    if (challenge.status === Challenge.STATUSES.VALIDE) {
+      return `Validée${challenge.validatedAt ? ` le ${formater.format(challenge.validatedAt)}` : ''}`;
+    }
+    if (challenge.status === Challenge.STATUSES.ARCHIVE) {
+      return `Archivée${challenge.archivedAt ? ` le ${formater.format(challenge.archivedAt)}` : ''}`;
+    }
+    if (challenge.status === Challenge.STATUSES.PERIME) {
+      return `Périmée${challenge.madeObsoleteAt ? ` le ${formater.format(challenge.madeObsoleteAt)}` : ''}`;
+    }
+    return 'Proposée';
   }
 
   <template>
@@ -64,29 +78,47 @@ export default class ChallengesViewHeader extends Component {
         </div>
         <div class="challenge-view-header-second__infos">
           <PixTag @color={{@statusColor}}>
-
-            {{@challenge.status}}
+            {{this.buildStatusText @challenge}}
           </PixTag>
           <p>{{dayjs @challenge.updatedAt "DD/MM/YYYY" allow-empty=true}}</p>
         </div>
         <span class="challenge-view-header__dark-separator"></span>
         <div class="challenge-view-header-second__actions">
-          <a
-            href="{{this.getChallengePreviewUrl @challenge}}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Prévisualiser l'épreuve {{@challenge.id}}"
+          <PixTooltip
+            @id='preview-challenge-tooltip'
+            @position="top"
+            @isInline={{true}}
+            @isLight={{true}}
           >
-            <PixIcon @name="eye" />
-          </a>
-          <PixIconButton
-            @ariaLabel="Copier le lien de l'épreuve {{@challenge.id}}"
-            @iconName="copy"
-            @triggerAction={{fn this.copyChallengePreviewUrl @challenge}}
-          />
+            <:triggerElement>
+              <a
+                href="{{this.getChallengePreviewUrl @challenge}}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-labelledby="preview-challenge-tooltip"
+              >
+                <PixIcon @name="eye" />
+              </a>
+            </:triggerElement>
+            <:tooltip>Prévisualiser l'épreuve <span class="sr-only">{{@challenge.id}}</span></:tooltip>
+          </PixTooltip>
+          <PixTooltip
+            @id='copy-url-challenge-tooltip'
+            @position="top"
+            @isInline={{true}}
+            @isLight={{true}}
+          >
+            <:triggerElement>
+              <PixIconButton
+                aria-labelledby="copy-url-challenge-tooltip"
+                @iconName="copy"
+                @triggerAction={{fn this.copyChallengePreviewUrl @challenge}}
+              />
+            </:triggerElement>
+            <:tooltip>Copier le lien de l'épreuve <span class="sr-only">{{@challenge.id}}</span></:tooltip>
+          </PixTooltip>
         </div>
       </div>
-
     </header>
   </template>
 }

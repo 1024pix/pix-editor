@@ -38,6 +38,9 @@
     }
 
     &__infos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       color: var(--pix-tertiary-80);
       font-size: var(--pix-body-m);
     }

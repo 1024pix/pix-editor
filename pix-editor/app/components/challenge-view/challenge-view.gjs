@@ -1,5 +1,6 @@
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import Component from '@glimmer/component';
 import Challenge from 'pixeditor/models/challenge';
@@ -7,6 +8,14 @@ import Challenge from 'pixeditor/models/challenge';
 import ChallengeViewHeader from './challenge-view-header';
 
 export default class ChallengeViewProduction extends Component {
+  challengeTypeOptions = [
+    { value: 'QCU', label: 'QCU' },
+    { value: 'QCM', label: 'QCM' },
+    { value: 'QROC', label: 'QROC' },
+    { value: 'QROCM-ind', label: 'QROCM-ind' },
+    { value: 'QROCM-dep', label: 'QROCM-dep' },
+    { value: 'autoReply', label: 'Embed-auto' },
+  ];
 
   getChallengeStatusColor(challengeStatus) {
     if (challengeStatus === Challenge.STATUSES.PROPOSE) {
@@ -29,7 +38,7 @@ export default class ChallengeViewProduction extends Component {
       @challenge={{@challenge}}
       @statusColor={{this.getChallengeStatusColor @challenge.status}}
       @overview={{@overview}}
-      @competenceId={{@competenceId}}
+    @competenceId={{@competenceId}}
       @skillId={{@skillId}}
     />
 
@@ -37,19 +46,27 @@ export default class ChallengeViewProduction extends Component {
       <PixTextarea
         @id="instruction"
         @value={{@challenge.instruction}}
-        @maxlength="500"
         readonly
+        rows="5"
       >
         <:label>Consigne</:label>
       </PixTextarea>
-      <PixInput
-        @id="type"
-        @value={{@challenge.type}}
-        @maxlength="500"
+      <PixTextarea
+        @id="alternativeInstruction"
+        @value={{@challenge.alternativeInstruction}}
         readonly
+        rows="5"
+      >
+        <:label>Alternative textuelle</:label>
+      </PixTextarea>
+      <PixSelect
+        @id="type"
+        @options={{this.challengeTypeOptions}}
+        @value={{@challenge.type}}
+        @isDisabled={{true}}
       >
         <:label>Type</:label>
-      </PixInput>
+      </PixSelect>
 
       {{#if @challenge.isTextBased}}
         <PixInput
@@ -63,30 +80,29 @@ export default class ChallengeViewProduction extends Component {
       <PixTextarea
         @id="proposals"
         @value={{@challenge.proposals}}
-        @maxlength="500"
         readonly
+        rows="5"
       >
         <:label>Propositions</:label>
       </PixTextarea>
       <PixTextarea
         @id="solution"
         @value={{@challenge.solution}}
-        @maxlength="500"
         readonly
+        rows="3"
       >
         <:label>Réponses</:label>
       </PixTextarea>
       {{#if @challenge.illustration}}
         <p>Illustration</p>
         <img src="{{@challenge.illustration.url}}" alt="">
-        <PixTextarea
+        <PixInput
           @id="illustrationAlt"
           @value={{@challenge.illustrationAlt}}
-          @maxlength="500"
           readonly
         >
           <:label>Texte alternatif</:label>
-        </PixTextarea>
+        </PixInput>
       {{/if}}
       <div>
         <p>Tolérance</p>

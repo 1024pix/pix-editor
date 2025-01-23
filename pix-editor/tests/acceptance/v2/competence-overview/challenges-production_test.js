@@ -111,4 +111,16 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     assert.dom(screen.getByText('Coucou maman'));
     assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
   });
+  test('it should navigate to challenge view', async function(assert) {
+    await visit('/v2/competences/recCompetence1/challenges-production');
+    await clickByText('@tube1');
+    await clickByText('Proto');
+
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
+    await clickByText('Fermer l\'épreuve');
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    await clickByText('Coucou maman');
+
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
+  });
 });

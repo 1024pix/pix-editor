@@ -1,8 +1,8 @@
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import {action} from '@ember/object';
-import {service} from '@ember/service';
-import {fn} from '@ember/helper';
+import { fn } from '@ember/helper';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class ChallengesProduction extends Component {
