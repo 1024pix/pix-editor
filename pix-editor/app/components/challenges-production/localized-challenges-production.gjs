@@ -19,10 +19,6 @@ import ChallengesProductionHeader from './challenges-production-header';
 const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
 const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';
 
-// todo list
-/*
-menu actions
- */
 export default class LocalizedChallengesProduction extends Component {
   @service router;
   @tracked shouldDisplayObsoleteChallenges = false;

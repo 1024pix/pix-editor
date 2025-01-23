@@ -45,11 +45,6 @@
       border-radius: var(--pix-spacing-2x);
     }
   }
-
-  // permet de pouvoir afficher le menu dropdown si le tableau est trop petit
-  .pix-table {
-    overflow-y: visible !important;
-  }
 }
 
 td.challenges-production__localized-menu-action {

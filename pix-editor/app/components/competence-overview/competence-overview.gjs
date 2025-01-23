@@ -5,6 +5,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { eq } from 'ember-truth-helpers';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
 
@@ -56,7 +57,13 @@ export default class CompetenceOverview extends Component {
             <div class="tube">
               <h4>{{tubeOverview.name}}</h4>
               {{#each tubeOverview.skillOverviews as |skillOverview|}}
-                <CompetenceOverviewSkill @skillOverview={{skillOverview}} @locale={{this.args.locale}} class="skill" @onSkillClicked={{this.updateSelectedSkillId}} @activeSkillId={{this.selectedSkillId}}/>
+                <CompetenceOverviewSkill
+                  @skillOverview={{skillOverview}}
+                  @locale={{this.args.locale}}
+                  class="skill"
+                  @onSkillClicked={{this.updateSelectedSkillId}}
+                  @isActive={{eq skillOverview.id this.selectedSkillId}}
+                />
               {{/each}}
             </div>
             {{/each}}

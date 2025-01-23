@@ -13,7 +13,7 @@ export default class CompetenceOverviewSkill extends Component {
 
   get classes() {
     let classes = `production-skill-overview-action production-skill-overview-action--${this.modifier}`;
-    if (this.args.activeSkillId === this.args.skillOverview?.id) {
+    if (this.args.isActive) {
       classes += ' active';
     }
     return classes;
