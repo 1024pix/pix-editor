@@ -10,11 +10,11 @@ export default class SingleRoute extends Route {
 
   async model(params) {
     const skill = await this.store.findRecord('skill', params.skill_id);
-    await skill.challenges;
     return skill;
   }
 
-  afterModel(model) {
+  async afterModel(model) {
+    await model.challenges;
     return model.pinRelationships();
   }
 
@@ -32,12 +32,13 @@ export default class SingleRoute extends Route {
   }
 
   @action
-  willTransition(transition) {
+  async willTransition(transition) {
     if (this.controllerFor('authenticated.competence.skills.single').edition &&
       !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
       const modelSkillSingle = this.controllerFor('authenticated.competence.skills.single').model;
+
       if (modelSkillSingle && modelSkillSingle.rollbackAttributes) {
         // may not exist if it was a new skill
         modelSkillSingle.rollbackAttributes();
