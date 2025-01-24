@@ -56,7 +56,7 @@ Router.map(function() {
       this.route('new', { path: 'new/:area_id' });
       this.route('single', { path: '/:competence_id' });
     });
-    this.route('skill', { path: '/skill/:skill_name' });
+    this.route('skill', { path: '/skill/:skill_id' });
     this.route('challenge', { path: '/challenge/:challenge_id' });
     this.route('target-profile');
     this.route('statistics');

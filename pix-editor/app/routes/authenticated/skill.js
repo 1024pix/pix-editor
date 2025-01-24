@@ -6,13 +6,13 @@ export default class SkillRoute extends Route {
   @service router;
   @service store;
 
-  model(params) {
-    return this.store.query('skill', { filterByFormula: `FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
+  async model(params) {
+    return this.store.findRecord('skill', params.skill_id);
   }
 
   async afterModel(model) {
-    if (model.length > 0) {
-      const skill = model[0];
+    if (model) {
+      const skill = model;
       const tube = await skill.tube;
       const competence = await tube.competence;
       this.router.transitionTo('authenticated.competence.skills.single', competence.id, skill.id);
