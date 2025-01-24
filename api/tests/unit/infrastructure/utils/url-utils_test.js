@@ -43,7 +43,7 @@ describe('Unit | Utils | URL Utils', function() {
 
     it('should fix url by prepending protocol if missing', function() {
       // given
-      const markdownText = 'instructions [link](www.example.net/) [second link](www.example.net/?url=https://example.com/path)';
+      const markdownText = 'instructions [link](www.example.net/) [second link](www.example.net/?url=https://example.com/path) [third link](HTTPS://example.com/path) ';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
@@ -52,6 +52,7 @@ describe('Unit | Utils | URL Utils', function() {
       expect(urls).toStrictEqual([
         'https://www.example.net/',
         'https://www.example.net/?url=https://example.com/path',
+        'HTTPS://example.com/path',
       ]);
     });
 
