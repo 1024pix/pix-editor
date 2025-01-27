@@ -23,6 +23,7 @@ export default class SkillModel extends Model {
 
   @hasMany('challenge', { async: true, inverse: 'skill' }) challenges;
   @hasMany('challenge', { async: true, inverse: null }) challengesProduction;
+  @hasMany('localized-challenge', { async: true, inverse: null }) localizedChallengesProduction;
 
   @hasMany('tutorial', { async: true, inverse: null }) tutoSolution;
 

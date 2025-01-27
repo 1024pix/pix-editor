@@ -57,6 +57,11 @@ export default class SkillSerializer extends AirtableSerializer {
           related: `/api/skills/${payload.pixId}/challenges-production`,
         },
       },
+      localizedChallengesProduction: {
+        links: {
+          related: `/api/skills/${payload.pixId}/localized-challenges-production`,
+        },
+      },
     };
   }
 }

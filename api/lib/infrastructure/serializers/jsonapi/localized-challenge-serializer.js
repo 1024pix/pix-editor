@@ -10,6 +10,7 @@ const serializer = new Serializer('localized-challenges', {
     'challenge',
     'locale',
     'embedUrl',
+    'instruction',
     'defaultEmbedUrl',
     'geography',
     'urlsToConsult',
@@ -22,13 +23,6 @@ const serializer = new Serializer('localized-challenges', {
     'isAwarenessChallenge',
     'toRephrase',
   ],
-  typeForAttribute(attribute) {
-    if (attribute === 'fileIds') return 'attachments';
-  },
-  keyForAttribute(attribute) {
-    if (attribute === 'fileIds') return 'files';
-    return Inflector.dasherize(Inflector.underscore(attribute));
-  },
   challenge: {
     ref: 'id',
     included: false,
@@ -37,6 +31,14 @@ const serializer = new Serializer('localized-challenges', {
     ref(_, fileId) {
       return fileId;
     }
+  },
+
+  typeForAttribute(attribute) {
+    if (attribute === 'fileIds') return 'attachments';
+  },
+  keyForAttribute(attribute) {
+    if (attribute === 'fileIds') return 'files';
+    return Inflector.dasherize(Inflector.underscore(attribute));
   },
   transform: function({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
     return {
@@ -51,6 +53,24 @@ const serializer = new Serializer('localized-challenges', {
 
 export function serialize(localizedChallenge) {
   return serializer.serialize(localizedChallenge);
+}
+
+export function serializeRead(localizedChallengeRead) {
+  let dataToSerialize;
+  if (Array.isArray(localizedChallengeRead)) {
+    dataToSerialize = localizedChallengeRead.map((localizedChallenge) => ({
+      challengeId: localizedChallenge.challengeId,
+      defaultEmbedUrl: null,
+      ...localizedChallenge,
+    }));
+  } else {
+    dataToSerialize = {
+      challengeId: localizedChallengeRead.challengeId,
+      defaultEmbedUrl: null,
+      ...localizedChallengeRead,
+    };
+  }
+  return serializer.serialize(dataToSerialize);
 }
 
 const deserializer = new Deserializer({

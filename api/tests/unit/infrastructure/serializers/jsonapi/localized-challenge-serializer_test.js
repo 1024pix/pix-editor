@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
 import {
   deserialize,
-  serialize
+  serialize,
+  serializeRead,
 } from '../../../../../lib/infrastructure/serializers/jsonapi/localized-challenge-serializer.js';
 import { LocalizedChallenge } from '../../../../../lib/domain/models/index.js';
 
@@ -195,6 +196,115 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
 
       // Then
       expect(json).to.deep.equal(expectedSerializedLocalizedChallenge);
+    });
+  });
+
+  describe('#serializeRead', () => {
+    it('should serialize one localized challenge read model', async () => {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallengeRead({
+        id: 'challengeNlId',
+        challengeId: 'challengeId',
+        locale: 'nl',
+        instruction: 'Da Da Da',
+        status: LocalizedChallenge.STATUSES.PLAY,
+      });
+      const expectedSerializedLocalizedChallenge = {
+        data: {
+          type: 'localized-challenges',
+          id: `${localizedChallenge.id}`,
+          attributes: {
+            locale: localizedChallenge.locale,
+            geography: 'Neutre',
+            'default-embed-url': null,
+            status: localizedChallenge.status,
+            instruction: localizedChallenge.instruction,
+            translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
+          },
+          relationships: {
+            challenge: {
+              data: {
+                id: `${localizedChallenge.challengeId}`,
+                type: 'challenges',
+              },
+            },
+          },
+        },
+      };
+
+      // When
+      const json = serializeRead(localizedChallenge);
+
+      // Then
+      expect(json).to.deep.equal(expectedSerializedLocalizedChallenge);
+    });
+
+    it('should serialize an array of localized challenge read models', async () => {
+      // given
+      const localizedChallenge1 = domainBuilder.buildLocalizedChallengeRead({
+        id: 'challengeNlId',
+        challengeId: 'challengeId',
+        locale: 'nl',
+        instruction: 'Da Da Da',
+        status: LocalizedChallenge.STATUSES.PLAY,
+      });
+      const localizedChallenge2 = domainBuilder.buildLocalizedChallengeRead({
+        id: 'challengeEsId',
+        challengeId: 'challengeId',
+        locale: 'es',
+        instruction: 'SI SI SI',
+        status: LocalizedChallenge.STATUSES.PAUSE,
+      });
+      const expectedSerializedLocalizedChallenges = {
+        data: [
+          {
+            type: 'localized-challenges',
+            id: `${localizedChallenge1.id}`,
+            attributes: {
+              locale: localizedChallenge1.locale,
+              geography: 'Neutre',
+              'default-embed-url': null,
+              status: localizedChallenge1.status,
+              instruction: localizedChallenge1.instruction,
+              translations: `/api/challenges/${localizedChallenge1.challengeId}/translations/${localizedChallenge1.locale}`,
+            },
+            relationships: {
+              challenge: {
+                data: {
+                  id: `${localizedChallenge1.challengeId}`,
+                  type: 'challenges',
+                },
+              },
+            },
+          },
+          {
+            type: 'localized-challenges',
+            id: `${localizedChallenge2.id}`,
+            attributes: {
+              locale: localizedChallenge2.locale,
+              geography: 'Neutre',
+              'default-embed-url': null,
+              status: localizedChallenge2.status,
+              instruction: localizedChallenge2.instruction,
+              translations: `/api/challenges/${localizedChallenge2.challengeId}/translations/${localizedChallenge2.locale}`,
+            },
+            relationships: {
+              challenge: {
+                data: {
+                  id: `${localizedChallenge2.challengeId}`,
+                  type: 'challenges',
+                },
+              },
+            },
+          },
+        ],
+      };
+
+      // When
+      const json = serializeRead([localizedChallenge1, localizedChallenge2]);
+
+      // Then
+      expect(json).to.deep.equal(expectedSerializedLocalizedChallenges);
     });
   });
 });
