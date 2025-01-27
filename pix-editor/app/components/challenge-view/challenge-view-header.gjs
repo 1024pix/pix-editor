@@ -92,6 +92,7 @@ export default class ChallengesViewHeader extends Component {
           >
             <:triggerElement>
               <a
+                class="challenge-view-header-action__preview"
                 href="{{this.getChallengePreviewUrl @challenge}}"
                 target="_blank"
                 rel="noopener noreferrer"

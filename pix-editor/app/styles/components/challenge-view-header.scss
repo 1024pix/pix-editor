@@ -79,4 +79,10 @@
       background-color: rgba(var(--pix-neutral-500-inline), 0.5);
     }
   }
+
+  &-action {
+    &__preview {
+      display: flex;
+    }
+  }
 }
