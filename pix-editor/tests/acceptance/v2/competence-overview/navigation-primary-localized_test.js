@@ -143,5 +143,13 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
     assert.dom(screen.getByText('Coucou maman'));
     assert.dom(screen.queryByText('Source')).doesNotExist();
+
+    // Click on primary details then switch language, it will go back to grid/table view
+    await clickByText('@tube1');
+    await clickByText('Proto');
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges/challengeIdProto');
+    await clickByText('Choix de la langue');
+    await clickByText('Néerlandais');
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=nl');
   });
 });

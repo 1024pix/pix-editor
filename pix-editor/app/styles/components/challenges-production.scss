@@ -3,8 +3,8 @@
   overflow: auto;
   height: 100%;
 
-  &--full {
-    height: auto;
+  &--hidden {
+    display: none;
   }
 
   &-table {

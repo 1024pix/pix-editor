@@ -6,11 +6,6 @@ export default class CompetenceOverviewRoute extends Route {
   @service router;
   @service store;
   @service versionManager;
-  @service multipanelManager;
-
-  beforeModel() {
-    this.multipanelManager.reset();
-  }
 
   async model(params) {
     const overview = params.overview;

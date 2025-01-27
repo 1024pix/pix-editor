@@ -3,16 +3,26 @@ import { tracked } from '@glimmer/tracking';
 
 export default class MultipanelManager extends Service {
   @tracked gridShouldBeMinimized = false;
-
-  get tableShouldBeExpanded() {
-    return this.gridShouldBeMinimized;
-  }
+  @tracked tableShouldBeMinimized = false;
 
   reset() {
+    this.gridShouldBeMinimized = false;
+    this.tableShouldBeMinimized = false;
+  }
+
+  onDetailsClosed() {
+    this.tableShouldBeMinimized = false;
+  }
+
+  onTableClosed() {
     this.gridShouldBeMinimized = false;
   }
 
   expandTable() {
     this.gridShouldBeMinimized = !this.gridShouldBeMinimized;
+  }
+
+  expandDetails() {
+    this.tableShouldBeMinimized = !this.tableShouldBeMinimized;
   }
 }

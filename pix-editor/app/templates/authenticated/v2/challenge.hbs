@@ -1,0 +1,13 @@
+<ChallengesProduction::ChallengesProduction
+  @skill={{this.model.skill}}
+  @challenges={{this.model.challenges}}
+  @overview={{this.model.overview}}
+  @competenceId={{this.model.competenceId}}
+  @canExpand={{false}}
+/>
+<ChallengeView::ChallengeView
+  @challenge={{this.model.challenge}}
+  @overview={{this.model.overview}}
+  @competenceId={{this.model.competenceId}}
+  @skillId={{this.model.skill.id}}
+/>

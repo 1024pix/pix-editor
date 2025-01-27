@@ -7,18 +7,31 @@ export default class SingleRoute extends Route {
   @service currentData;
   @service router;
   @service store;
+  @service versionManager;
 
   model(params) {
     return this.store.findRecord('challenge', params.prototype_id);
   }
 
-  async afterModel(model) {
-    super.afterModel(...arguments);
-    await model.skill;
+  async afterModel(model, transition) {
+    super.afterModel(model, transition);
+    const skill = await model.skill;
     await model.localizedChallenges;
     if (!model) return;
     await model?.files;
     this.currentData.setPrototype(model);
+
+    if (!this.versionManager.isV2) return;
+
+    const view = transition.to.queryParams.view;
+    const goingToProduction = view === 'production' || !view;
+    if (!goingToProduction) return;
+
+    const { competencePixId, locale } = this.modelFor('authenticated.competence.prototypes');
+    const skillId = skill.id;
+    const overview = 'challenges-production';
+
+    this.router.transitionTo('authenticated.v2.competence-overview.challenges', competencePixId, overview, skillId, { queryParams: { locale } });
   }
 
   setupController(controller, model) {

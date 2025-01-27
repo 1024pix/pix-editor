@@ -138,11 +138,8 @@ module('Integration | Component | challenges-production | challenges-production'
 
     module('copy preview url action', function() {
       test('copy preview url button should exist', async function(assert) {
-        // when
-        screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValidee' });
-
         // then
-        assert.ok(true);
+        assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValidee' })).exists();
       });
     });
 
