@@ -1,4 +1,4 @@
-import { visit } from '@1024pix/ember-testing-library';
+import { clickByText, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, fillIn, find, waitUntil } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -19,8 +19,9 @@ module('Acceptance | Search', function(hooks) {
     this.server.create('localized-challenge', { id: 'challengeChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'challengeLocalizedChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1' });
+    this.server.create('skill', { id: 'recSkill2', name: '@skill1', challengeIds: [], status: 'archivé', version: 2 });
     const skill = this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
-    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill2', 'recSkill1' ] });
     const competence = this.server.create('competence', {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
@@ -127,10 +128,11 @@ module('Acceptance | Search', function(hooks) {
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
     await fillIn('[data-test-sidebar-search] input', '@skill1');
+
     await waitUntil(function() {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });
-    await click(find('[data-test-sidebar-search] li'));
+    await clickByText('@skill1 v1');
 
     // then
     assert.strictEqual(currentURL(), expectedUrl);
