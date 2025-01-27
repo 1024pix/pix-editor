@@ -184,20 +184,21 @@ module('Acceptance | Validate-Challenge', function(hooks) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${validatedPrototype.id}`);
 
-      await click(await screen.getByTitle('Afficher les différentes versions d\'épreuves'));
-      await click(await screen.getByText('name v.2'));
-      await click(await screen.getByText('proposé'));
-      await click(await screen.getByTitle('Modifier le statut de l\'épreuve'));
-      await click(await screen.getByRole('button', { name: 'Valider' }));
+      await click(screen.getByTitle('Afficher les différentes versions d\'épreuves'));
+      await click(screen.getByText('name v.2'));
+
+      await click(await screen.findByRole('cell', { name: 'proposé' }));
+      await click(screen.getByTitle('Modifier le statut de l\'épreuve'));
+      await click(screen.getByRole('button', { name: 'Valider' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Mise en production' }));
-      await click(await screen.getByRole('button', { name: 'Oui' }));
+      await click(screen.getByRole('button', { name: 'Oui' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Message pour le changelog' }));
-      await click(await screen.getByRole('button', { name: 'Enregistrer' }));
+      await click(screen.getByRole('button', { name: 'Enregistrer' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Archivage de la version précédente de l\'acquis' }));
-      await click(await screen.getByRole('button', { name: 'Oui' }));
+      await click(screen.getByRole('button', { name: 'Oui' }));
       // then
 
       const newPrototype = await store.peekRecord('challenge', proposalPrototype.id);
