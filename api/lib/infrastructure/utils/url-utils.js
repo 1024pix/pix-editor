@@ -87,7 +87,7 @@ function cleanUrl(url) {
 }
 
 function ensureProtocol(url) {
-  if (/^https?:\/\//.test(url)) return url;
+  if (/^https?:\/\//i.test(url)) return url;
   return  url = 'https://' + url;
 }
 
