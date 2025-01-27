@@ -1,5 +1,21 @@
 
 
+## v3.182.0 (27/01/2025)
+
+
+### :rocket: Amélioration
+- [#856](https://github.com/1024pix/pix-editor/pull/856) [FEATURE] Affiche un challenge primaire (PIX-14859).
+- [#859](https://github.com/1024pix/pix-editor/pull/859) [FEATURE] Afficher le tableau des épreuves localisées en fonction de la langue choisie lorsqu'on clique sur un acquis de la grille (PIX-15785).
+
+### :building_construction: Tech
+- [#866](https://github.com/1024pix/pix-editor/pull/866) [TECH] Ne plus avoir de test flacky (PIX-16288).
+- [#861](https://github.com/1024pix/pix-editor/pull/861) [TECH] Supprimer l'historique des données de script de passage en focus des acquis (PIX-16149).
+
+### :bug: Correction
+- [#863](https://github.com/1024pix/pix-editor/pull/863) [BUGFIX] Afficher les données qualités depuis un acquis (PIX-15771).
+- [#862](https://github.com/1024pix/pix-editor/pull/862) [BUGFIX] Moulinette des URLs KO - Ne pas tenir compte de la casse pour le début des URLs (PIX-15760).
+- [#864](https://github.com/1024pix/pix-editor/pull/864) [BUGFIX] Réparer la recherche d'un acquis (PIX-15500).
+
 ## v3.181.0 (16/01/2025)
 
 
