@@ -1265,7 +1265,7 @@ function _getRichCurrentContentDTO() {
       toRephrase: true,
       hasEmbedInternalValidation: false,
       noValidationNeeded: false,
-   },
+    },
     {
       id: 'challenge121212',
       instruction: 'challenge121212 instruction en',
