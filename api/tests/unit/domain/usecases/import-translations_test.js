@@ -106,6 +106,8 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       }),
       new LocalizedChallenge({
         id: null,
@@ -121,6 +123,8 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       }),
     ] });
   });
