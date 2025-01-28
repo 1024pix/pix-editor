@@ -212,7 +212,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('clone', function() {
-    it.fails('should return a cloned localized challenge and its cloned attachments', function() {
+    it('should return a cloned localized challenge and its cloned attachments', function() {
       // given
       const newId = 'newChallengeId';
       const newChallengeId = 'newChallengeId';
@@ -231,6 +231,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const attachments = [
         domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
@@ -274,6 +276,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
       expect(clonedAttachments).toStrictEqual([

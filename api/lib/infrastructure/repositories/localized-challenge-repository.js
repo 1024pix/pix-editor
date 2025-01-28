@@ -102,6 +102,8 @@ function _adaptModelsForDB(localizedChallenges, generateId) {
       deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
       isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
       toRephrase: localizedChallenge.toRephrase,
+      hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
+      noValidationNeeded: localizedChallenge.noValidationNeeded,
     };
   });
 }

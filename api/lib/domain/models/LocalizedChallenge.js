@@ -141,6 +141,8 @@ export class LocalizedChallenge {
       deafAndHardOfHearing: this.deafAndHardOfHearing,
       isAwarenessChallenge: this.isAwarenessChallenge,
       toRephrase: this.toRephrase,
+      hasEmbedInternalValidation: this.hasEmbedInternalValidation,
+      noValidationNeeded: this.noValidationNeeded,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);

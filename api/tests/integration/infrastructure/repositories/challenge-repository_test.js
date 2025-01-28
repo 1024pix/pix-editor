@@ -1171,6 +1171,8 @@ describe('Integration | Repository | challenge-repository', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const localizedChallengeNL_challengeA = domainBuilder.buildLocalizedChallenge({
         id: 'localizedChallengeNL_challengeA_id',
@@ -1186,6 +1188,8 @@ describe('Integration | Repository | challenge-repository', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: true,
         toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: false,
       });
       const challengeA_data = {
         id: 'challengeA_id',
@@ -1249,6 +1253,8 @@ describe('Integration | Repository | challenge-repository', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       const challengeB_data = {
         id: 'challengeB_id',
@@ -1577,8 +1583,8 @@ describe('Integration | Repository | challenge-repository', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         },
         {
           id: localizedChallengeNL_challengeA.id,
@@ -1593,7 +1599,7 @@ describe('Integration | Repository | challenge-repository', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
           isAwarenessChallenge: true,
           toRephrase: false,
-          hasEmbedInternalValidation: false,
+          hasEmbedInternalValidation: true,
           noValidationNeeded: false,
         },
         {

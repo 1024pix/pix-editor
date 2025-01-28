@@ -152,6 +152,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         })
       ] });
 
@@ -171,8 +173,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
-        hasEmbedInternalValidation: false,
-        noValidationNeeded: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       }]);
     });
 
@@ -203,6 +205,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         });
         delete localizedChallengeToCreate.id;
         await localizedChallengeRepository.create({
@@ -226,8 +230,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         }]);
       });
 
@@ -265,6 +269,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         });
         await databaseBuilder.commit();
 
@@ -282,6 +288,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
             isAwarenessChallenge: false,
             toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: true,
           },
           {
             challengeId: 'challengeId',
@@ -295,6 +303,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
             isAwarenessChallenge: true,
             toRephrase: false,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: false,
           }
         ] });
 
@@ -316,8 +326,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             isAwarenessChallenge: true,
             toRephrase: true,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
@@ -332,7 +342,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
             isAwarenessChallenge: true,
             toRephrase: false,
-            hasEmbedInternalValidation: false,
+            hasEmbedInternalValidation: true,
             noValidationNeeded: false,
           },
         ]);

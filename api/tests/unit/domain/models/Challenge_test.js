@@ -612,7 +612,7 @@ describe('Unit | Domain | Challenge', () => {
   });
 
   describe('#cloneChallengeAndAttachments', ()=> {
-    it.fails('should clone challenge', () => {
+    it('should clone challenge', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
       const competenceId = 'competenceId';
@@ -647,6 +647,8 @@ describe('Unit | Domain | Challenge', () => {
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             isAwarenessChallenge: true,
             toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
           }),
         ],
         files: [{
@@ -761,7 +763,7 @@ describe('Unit | Domain | Challenge', () => {
       }));
     });
 
-    it.fails('should clone challenge without translations', () => {
+    it('should clone challenge without translations', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
       const clonedNLLocalizedChallengeId = 'clonedNLLocalizedChallengeId';
