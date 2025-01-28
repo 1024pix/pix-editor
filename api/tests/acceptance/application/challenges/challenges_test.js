@@ -890,6 +890,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: false,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
@@ -902,12 +904,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
 
       await databaseBuilder.commit();
     });
 
-    it.fails('should redirect to a staging Pix App preview URL', async () => {
+    it('should redirect to a staging Pix App preview URL', async () => {
       // given
       const apiToken = 'secret';
       const apiTokenScope = nock('https://api.test.pix.fr')
@@ -943,6 +947,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             isAwarenessChallenge: false,
             toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);
