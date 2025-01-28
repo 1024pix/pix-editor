@@ -6,6 +6,7 @@ import * as configRoute from './application/config.js';
 import * as fileStorageTokenRoute from './application/file-storage-token/index.js';
 import * as frameworksRoute from './application/frameworks.js';
 import * as healthcheckRoute from './application/healthcheck/index.js';
+import * as heapdumpRoute from './application/heapdump.js';
 import * as localizedChallengesRoute from './application/localized-challenges.js';
 import * as missionsRoute from './application/missions/index.js';
 import * as phraseRoute from './application/phrase.js';
@@ -27,6 +28,7 @@ export const routes = [
   configRoute,
   fileStorageTokenRoute,
   frameworksRoute,
+  heapdumpRoute,
   healthcheckRoute,
   localizedChallengesRoute,
   missionsRoute,
