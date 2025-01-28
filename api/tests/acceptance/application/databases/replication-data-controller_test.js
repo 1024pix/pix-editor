@@ -97,6 +97,8 @@ async function mockCurrentContent() {
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
     isAwarenessChallenge: true,
     toRephrase: true,
+    hasEmbedInternalValidation: true,
+    noValidationNeeded: true,
   };
   const expectedChallenge = {
     ...challenge,
@@ -414,7 +416,7 @@ describe('Acceptance | Controller | replication-data-controller', () => {
   });
 
   describe('GET /api/replication-data', function() {
-    it.fails('should return data for replication', async function() {
+    it('should return data for replication', async function() {
       const expectedCurrentContent = await mockCurrentContent();
 
       const server = await createServer();

@@ -352,6 +352,8 @@ describe('Unit | Domain | Challenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
       });
       const dutchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: dutchChallengeId,
@@ -366,6 +368,8 @@ describe('Unit | Domain | Challenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: false,
       });
       const englishLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: englishChallengeId,
@@ -380,6 +384,8 @@ describe('Unit | Domain | Challenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: true,
         toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const localizedChallenges = [
         frenchLocalizedChallenge,
@@ -440,6 +446,8 @@ describe('Unit | Domain | Challenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
       };
 
       const expectedEnglishChallenge = {
@@ -456,6 +464,8 @@ describe('Unit | Domain | Challenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
       };
 
       // when
@@ -474,6 +484,8 @@ describe('Unit | Domain | Challenge', () => {
       expect(dutchChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
       expect(dutchChallenge).toHaveProperty('isAwarenessChallenge', true);
       expect(dutchChallenge).toHaveProperty('toRephrase', true);
+      expect(dutchChallenge).toHaveProperty('hasEmbedInternalValidation', false);
+      expect(dutchChallenge).toHaveProperty('noValidationNeeded', true);
 
       expect(refrenchChallenge).toEqual(challenge);
       expect(refrenchChallenge).toHaveProperty('primaryLocale', 'fr');
@@ -485,6 +497,8 @@ describe('Unit | Domain | Challenge', () => {
       expect(refrenchChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
       expect(refrenchChallenge).toHaveProperty('isAwarenessChallenge', true);
       expect(refrenchChallenge).toHaveProperty('toRephrase', true);
+      expect(refrenchChallenge).toHaveProperty('hasEmbedInternalValidation', false);
+      expect(refrenchChallenge).toHaveProperty('noValidationNeeded', true);
 
       expect(englishChallenge).toEqual(expectedEnglishChallenge);
       expect(englishChallenge).toHaveProperty('primaryLocale', 'fr');
@@ -496,6 +510,8 @@ describe('Unit | Domain | Challenge', () => {
       expect(englishChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
       expect(englishChallenge).toHaveProperty('isAwarenessChallenge', true);
       expect(englishChallenge).toHaveProperty('toRephrase', true);
+      expect(englishChallenge).toHaveProperty('hasEmbedInternalValidation', false);
+      expect(englishChallenge).toHaveProperty('noValidationNeeded', true);
     });
 
     [
