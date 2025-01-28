@@ -35,6 +35,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         version: 1,
         status: 'proposé',
         instruction: 'Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       this.server.create('challenge', {
         id: 'recChallenge2',
@@ -98,6 +100,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
       await clickByText('Incompatible iPad certif');
+      await clickByText('Sans validation (Pix Junior)');
+      await clickByText('Validation par l\'embed (Pix Junior)');
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
       await delay(100);
@@ -127,6 +131,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
+      assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
+      assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
     });
 
     test('can modify common attributes but not the quality attributes when challenge is an alternative', async function(assert) {
@@ -150,6 +156,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.dom(find('[data-test-require-gafam-website-access-challenge-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-to-rephrase-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-is-incompatible-ipad-certif-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-no-validation-needed-checkbox="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-has-embed-internal-validation-checkbox="recChallenge2"]')).doesNotExist();
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
@@ -175,6 +183,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         genealogy: 'Prototype 1',
         status: 'validé',
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'actif' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
@@ -211,6 +221,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Modifier');
       await clickByText('Ajouter des URLs à consulter');
       await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Sans validation (Pix Junior)');
+      await clickByText('Validation par l\'embed (Pix Junior)');
       assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();
       assert.dom(screen.queryByText('Épreuve de sensibilisation')).doesNotExist();
       assert.dom(screen.queryByText('Formulation à revoir')).doesNotExist();
@@ -274,6 +286,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         genealogy: 'Prototype 1',
         status: 'archivé',
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
@@ -316,6 +330,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Modifier');
       await clickByText('Ajouter des URLs à consulter');
       await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Sans validation (Pix Junior)');
+      await clickByText('Validation par l\'embed (Pix Junior)');
       assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();
       assert.dom(screen.queryByText('Épreuve de sensibilisation')).doesNotExist();
       assert.dom(screen.queryByText('Formulation à revoir')).doesNotExist();
@@ -351,6 +367,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         genealogy: 'Prototype 1',
         status: 'périmé',
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });

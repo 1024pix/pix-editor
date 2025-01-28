@@ -19,6 +19,8 @@ export default class LocalizedChallengeModel extends Model {
   @attr deafAndHardOfHearing;
   @attr isAwarenessChallenge;
   @attr toRephrase;
+  @attr('boolean') hasEmbedInternalValidation;
+  @attr('boolean') noValidationNeeded;
   @attr instruction;
 
   @belongsTo('challenge', { inverse: 'localizedChallenges', async: true }) challenge;

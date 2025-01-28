@@ -34,6 +34,14 @@
       @setValue={{this.setChallengeType}}
       data-test-select-type
     />
+    <div class="field">
+      <Field::Checkbox
+        @label="Sans validation (Pix Junior)"
+        @checked={{@challenge.noValidationNeeded}}
+        @disabled={{not @edition}}
+        data-test-no-validation-needed-checkbox={{@challenge.id}}
+      />
+    </div>
   {{/if}}
   {{#if this.typeIsQCUOrQCM}}
     <Field::Checkbox
@@ -203,6 +211,16 @@
     @id="challenge-embed-title"
   />
   {{#if @challenge.isPrototype}}
+    <div class="fields--selectors">
+      <div class="field">
+        <Field::Checkbox
+          @label="Validation par l'embed (Pix Junior)"
+          @checked={{@challenge.hasEmbedInternalValidation}}
+          @disabled={{not @edition}}
+          data-test-has-embed-internal-validation-checkbox={{@challenge.id}}
+        />
+      </div>
+    </div>
     <Field::Select
       @title="Type pédagogie"
       @value={{@challenge.pedagogy}}
