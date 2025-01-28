@@ -141,6 +141,8 @@ async function mockCurrentContent() {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       }
     ],
     tutorials: [{
@@ -398,6 +400,8 @@ async function mockCurrentContent() {
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
     isAwarenessChallenge: true,
     toRephrase: true,
+    hasEmbedInternalValidation: false,
+    noValidationNeeded: false,
   });
 
   await databaseBuilder.commit();
@@ -527,6 +531,8 @@ async function mockContentForRelease() {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge0_1',
@@ -563,6 +569,8 @@ async function mockContentForRelease() {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },],
     tutorials: [{
       id: 'recTutorial0',

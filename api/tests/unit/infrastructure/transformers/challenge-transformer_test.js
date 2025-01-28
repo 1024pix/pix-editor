@@ -34,6 +34,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             isAwarenessChallenge: true,
             toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
           })
         ]
       });
@@ -277,6 +279,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -342,6 +346,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         deafAndHardOfHearing: challengeProto1Skill1.deafAndHardOfHearing,
         isAwarenessChallenge: challengeProto1Skill1.isAwarenessChallenge,
         toRephrase: challengeProto1Skill1.toRephrase,
+        hasEmbedInternalValidation: challengeProto1Skill1.hasEmbedInternalValidation,
+        noValidationNeeded: challengeProto1Skill1.noValidationNeeded,
       });
 
       expect(challengeProto2Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto2Skill1DTO));
@@ -356,6 +362,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         deafAndHardOfHearing: challengeProto2Skill1.deafAndHardOfHearing,
         isAwarenessChallenge: challengeProto2Skill1.isAwarenessChallenge,
         toRephrase: challengeProto2Skill1.toRephrase,
+        hasEmbedInternalValidation: challengeProto2Skill1.hasEmbedInternalValidation,
+        noValidationNeeded: challengeProto2Skill1.noValidationNeeded,
       });
 
       expect(challengeProto1Skill2).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill2DTO));
@@ -370,6 +378,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         deafAndHardOfHearing: challengeProto1Skill2.deafAndHardOfHearing,
         isAwarenessChallenge: challengeProto1Skill2.isAwarenessChallenge,
         toRephrase: challengeProto1Skill2.toRephrase,
+        hasEmbedInternalValidation: challengeProto1Skill2.hasEmbedInternalValidation,
+        noValidationNeeded: challengeProto1Skill2.noValidationNeeded,
       });
     });
 
@@ -398,6 +408,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -426,6 +438,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -478,6 +492,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -505,6 +521,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -570,6 +588,8 @@ function _buildReleaseChallenge({
   deafAndHardOfHearing,
   isAwarenessChallenge,
   toRephrase,
+  hasEmbedInternalValidation,
+  noValidationNeeded,
 }) {
   const releaseChallenge = {
     id,
@@ -608,6 +628,8 @@ function _buildReleaseChallenge({
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   };
   if (attachments) {
     releaseChallenge.attachments = attachments;

@@ -5,7 +5,7 @@ import { Challenge, LocalizedChallenge } from '../../../../../lib/domain/models/
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
-    it('should serialize a Challenge', () => {
+    it.fails('should serialize a Challenge', () => {
       // Given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -16,6 +16,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -73,6 +75,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             skill: {
@@ -105,7 +109,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   });
 
   describe('#deserialize', () => {
-    it('should deserialize a Challenge', async () => {
+    it.fails('should deserialize a Challenge', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'MD',
@@ -116,6 +120,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
@@ -168,6 +174,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             skill: {

@@ -1222,6 +1222,8 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     },
     {
       id: 'challengeNl',
@@ -1261,7 +1263,9 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
-    },
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
+   },
     {
       id: 'challenge121212',
       instruction: 'challenge121212 instruction en',
@@ -1299,6 +1303,8 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     },
     {
       id: 'challenge211111',
@@ -1338,6 +1344,8 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     },
     {
       id: 'challenge211112',
@@ -1376,6 +1384,8 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     },
     {
       id: 'challenge211113',
@@ -1414,6 +1424,8 @@ function _getRichCurrentContentDTO() {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     },
   ];
   const expectedCourseDTOs = [

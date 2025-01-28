@@ -20,7 +20,8 @@ export class LocalizedChallenge {
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
-
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -36,6 +37,8 @@ export class LocalizedChallenge {
     this.deafAndHardOfHearing = deafAndHardOfHearing;
     this.isAwarenessChallenge = isAwarenessChallenge;
     this.toRephrase = toRephrase;
+    this.hasEmbedInternalValidation = hasEmbedInternalValidation;
+    this.noValidationNeeded = noValidationNeeded;
   }
 
   static get STATUSES() {
