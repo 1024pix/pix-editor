@@ -20,6 +20,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
       challengeId: 'recChallenge1',
       locale: 'nl',
       status: LocalizedChallenge.STATUSES.PLAY,
+      hasEmbedInternalValidation: true,
+      noValidationNeeded: true,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge2',
@@ -103,8 +105,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
-        hasEmbedInternalValidation: false,
-        noValidationNeeded: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       },
       {
         id: 'recChallenge2',
