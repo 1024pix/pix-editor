@@ -87,6 +87,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge1Nl',
@@ -101,6 +103,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge2',
@@ -115,6 +119,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge2Nl',
@@ -129,6 +135,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge3',
@@ -143,6 +151,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge4',
@@ -157,6 +167,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
       {
         id: 'recChallenge5',
@@ -171,6 +183,8 @@ describe('Script | migrate-localized-challenges-geography', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       },
     ]);
   });

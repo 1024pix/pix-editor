@@ -13,6 +13,8 @@ export function buildLocalizedChallenge({
   status = null,
   geography = null,
   urlsToConsult = null,
+  hasEmbedInternalValidation = false,
+  noValidationNeeded = false,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'localized_challenges',
@@ -29,6 +31,8 @@ export function buildLocalizedChallenge({
       deafAndHardOfHearing,
       isAwarenessChallenge,
       toRephrase,
+      hasEmbedInternalValidation,
+      noValidationNeeded,
     },
   });
 }

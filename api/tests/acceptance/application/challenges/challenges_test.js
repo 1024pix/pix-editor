@@ -1239,6 +1239,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         }
       ]);
       const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
@@ -2001,6 +2003,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         },
       ]);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([

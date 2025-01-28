@@ -171,6 +171,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       }]);
     });
 
@@ -224,6 +226,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         }]);
       });
 
@@ -312,6 +316,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             isAwarenessChallenge: true,
             toRephrase: true,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
@@ -326,6 +332,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
             isAwarenessChallenge: true,
             toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false,
           },
         ]);
       });
@@ -954,6 +962,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         },
       ]);
 
@@ -1056,6 +1066,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
             isAwarenessChallenge: false,
             toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false,
           },
         ]);
 
