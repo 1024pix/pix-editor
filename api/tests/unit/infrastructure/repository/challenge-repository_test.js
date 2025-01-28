@@ -414,7 +414,7 @@ describe('Unit | Repository | challenge-repository', () => {
     });
   });
   describe('#update', () => {
-    it.fails('should update a challenge by id', async () => {
+    it('should update a challenge by id', async () => {
       // given
       const locale = 'en';
       const oldPrimaryLocale = 'fr';

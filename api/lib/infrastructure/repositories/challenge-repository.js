@@ -128,6 +128,8 @@ export async function update(challenge, knexConn = knex) {
   primaryLocalizedChallenge.deafAndHardOfHearing = challenge.deafAndHardOfHearing;
   primaryLocalizedChallenge.isAwarenessChallenge = challenge.isAwarenessChallenge;
   primaryLocalizedChallenge.toRephrase = challenge.toRephrase;
+  primaryLocalizedChallenge.hasEmbedInternalValidation = challenge.hasEmbedInternalValidation;
+  primaryLocalizedChallenge.noValidationNeeded = challenge.noValidationNeeded;
 
   await localizedChallengeRepository.update({
     localizedChallenge: primaryLocalizedChallenge,

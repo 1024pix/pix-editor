@@ -1511,7 +1511,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
-    it.fails('should update a challenge', async () => {
+    it('should update a challenge', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const locale = 'fr';
@@ -1536,6 +1536,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge_localized_nl',
@@ -1641,6 +1643,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
               'is-awareness-challenge': false,
               'to-rephrase': false,
+              'has-embed-internal-validation': true,
+              'no-validation-needed': true,
             },
             relationships: {
               skill: {
@@ -1715,6 +1719,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
             'is-awareness-challenge': false,
             'to-rephrase': false,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             skill: {
@@ -1755,6 +1761,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(localizedChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
       expect(localizedChallenge).toHaveProperty('isAwarenessChallenge', false);
       expect(localizedChallenge).toHaveProperty('toRephrase', false);
+      expect(localizedChallenge).toHaveProperty('hasEmbedInternalValidation', true);
+      expect(localizedChallenge).toHaveProperty('noValidationNeeded', true);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -1789,7 +1797,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
 
-    it.fails('should change challenge\'s primary locale', async () => {
+    it('should change challenge\'s primary locale', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const originalLocale = 'fr-fr';
@@ -1816,6 +1824,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1914,6 +1924,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
               'is-awareness-challenge': true,
               'to-rephrase': true,
+              'has-embed-internal-validation': false,
+              'no-validation-needed': false,
             },
             relationships: {
               skill: {
@@ -1988,6 +2000,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': false,
+            'no-validation-needed': false,
           },
           relationships: {
             skill: {

@@ -925,7 +925,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
   });
 
   context('#update', () => {
-    it('should change localized challenge locale, embedUrl, geography and urlsToConsult', async () => {
+    it('should change many attributes', async () => {
       // given
       const id = 'localizedChallengeId';
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -940,6 +940,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
       });
       await databaseBuilder.commit();
 
@@ -956,6 +958,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: false,
       });
 
       // when
@@ -976,7 +980,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
-          hasEmbedInternalValidation: false,
+          hasEmbedInternalValidation: true,
           noValidationNeeded: false,
         },
       ]);
@@ -995,6 +999,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: false,
         }));
     });
 
@@ -1043,6 +1049,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         });
 
         await databaseBuilder.commit();
@@ -1060,6 +1068,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: true,
         });
 
         // when
@@ -1081,7 +1091,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             isAwarenessChallenge: false,
             toRephrase: false,
             hasEmbedInternalValidation: false,
-            noValidationNeeded: false,
+            noValidationNeeded: true,
           },
         ]);
 
@@ -1099,6 +1109,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
             deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
             isAwarenessChallenge: false,
             toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: true,
           }));
       });
     });
