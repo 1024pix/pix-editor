@@ -1,5 +1,11 @@
 
 
+## v3.183.0 (28/01/2025)
+
+
+### :building_construction: Tech
+- [#865](https://github.com/1024pix/pix-editor/pull/865) [TECH] Ajout d'une route permettant de télécharger un snapshot mémoire.
+
 ## v3.182.0 (27/01/2025)
 
 
