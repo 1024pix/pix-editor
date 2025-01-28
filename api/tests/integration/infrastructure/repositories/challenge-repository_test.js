@@ -1715,6 +1715,8 @@ describe('Integration | Repository | challenge-repository', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const challengeToCreate = domainBuilder.buildChallenge({
         ...challengeToCreate_data,
@@ -1881,8 +1883,8 @@ describe('Integration | Repository | challenge-repository', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         },
       ]);
       const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')

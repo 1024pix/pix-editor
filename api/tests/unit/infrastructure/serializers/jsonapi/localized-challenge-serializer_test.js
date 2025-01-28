@@ -9,7 +9,7 @@ import { LocalizedChallenge } from '../../../../../lib/domain/models/index.js';
 
 describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
   describe('#deserialize', () => {
-    it.fails('should deserialize a Localized Challenge', async () => {
+    it('should deserialize a Localized Challenge', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'BZ',
@@ -30,6 +30,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'deaf-and-hard-of-hearing': expectedLocalizedChallenge.deafAndHardOfHearing,
             'is-awareness-challenge': expectedLocalizedChallenge.isAwarenessChallenge,
             'to-rephrase': expectedLocalizedChallenge.toRephrase,
+            'has-embed-internal-validation': expectedLocalizedChallenge.hasEmbedInternalValidation,
+            'no-validation-needed': expectedLocalizedChallenge.noValidationNeeded,
           },
           relationships: {
             challenge: {
@@ -49,7 +51,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       expect(localizedChallenge).to.deep.equal(expectedLocalizedChallenge);
     });
 
-    it.fails('should deserialize a Localized Challenge with files', async () => {
+    it('should deserialize a Localized Challenge with files', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         fileIds: ['attachmentId'],
@@ -69,6 +71,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'deaf-and-hard-of-hearing': expectedLocalizedChallenge.deafAndHardOfHearing,
             'is-awareness-challenge': expectedLocalizedChallenge.isAwarenessChallenge,
             'to-rephrase': expectedLocalizedChallenge.toRephrase,
+            'has-embed-internal-validation': expectedLocalizedChallenge.hasEmbedInternalValidation,
+            'no-validation-needed': expectedLocalizedChallenge.noValidationNeeded,
           },
           relationships: {
             challenge: {
@@ -94,7 +98,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       expect(localizedChallenge).to.deep.equal(expectedLocalizedChallenge);
     });
 
-    it.fails('should deserialize empty embed URL as null', async () => {
+    it('should deserialize empty embed URL as null', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         embedUrl: null,
@@ -113,6 +117,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'deaf-and-hard-of-hearing': expectedLocalizedChallenge.deafAndHardOfHearing,
             'is-awareness-challenge': expectedLocalizedChallenge.isAwarenessChallenge,
             'to-rephrase': expectedLocalizedChallenge.toRephrase,
+            'has-embed-internal-validation': expectedLocalizedChallenge.hasEmbedInternalValidation,
+            'no-validation-needed': expectedLocalizedChallenge.noValidationNeeded,
           },
           relationships: {
             challenge: {
@@ -149,6 +155,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const expectedSerializedLocalizedChallenge = {
         data: {
@@ -167,6 +175,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             files: {

@@ -87,6 +87,8 @@ export class LocalizedChallenge {
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -102,6 +104,8 @@ export class LocalizedChallenge {
       deafAndHardOfHearing: deafAndHardOfHearing ?? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
       isAwarenessChallenge: isAwarenessChallenge ?? false,
       toRephrase: toRephrase ?? false,
+      hasEmbedInternalValidation: hasEmbedInternalValidation ?? false,
+      noValidationNeeded: noValidationNeeded ?? false,
     });
   }
 

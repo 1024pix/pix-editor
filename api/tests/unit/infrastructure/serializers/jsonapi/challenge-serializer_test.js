@@ -5,7 +5,7 @@ import { Challenge, LocalizedChallenge } from '../../../../../lib/domain/models/
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
-    it.fails('should serialize a Challenge', () => {
+    it('should serialize a Challenge', () => {
       // Given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -109,7 +109,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   });
 
   describe('#deserialize', () => {
-    it.fails('should deserialize a Challenge', async () => {
+    it('should deserialize a Challenge', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'MD',

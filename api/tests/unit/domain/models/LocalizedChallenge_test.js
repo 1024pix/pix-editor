@@ -99,7 +99,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('static buildPrimary', function() {
-    it.fails('should build a primary localized challenge', function() {
+    it('should build a primary localized challenge', function() {
       // given
       const challengeId = 'idDuChallenge';
       const locale = 'en';
@@ -111,6 +111,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       const deafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK;
       const isAwarenessChallenge = true;
       const toRephrase = true;
+      const hasEmbedInternalValidation = true;
+      const noValidationNeeded = true;
 
       // when
       const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
@@ -124,6 +126,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing,
         isAwarenessChallenge,
         toRephrase,
+        hasEmbedInternalValidation,
+        noValidationNeeded,
       });
 
       // then
@@ -141,9 +145,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
     });
-    it.fails('should build a primary localized challenge with default values when some not filled', function() {
+    it('should build a primary localized challenge with default values when some not filled', function() {
       // given
       const challengeId = 'idDuChallenge';
       const locale = 'en';
@@ -175,6 +181,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
     });
   });
