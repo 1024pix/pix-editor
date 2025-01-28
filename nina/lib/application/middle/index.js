@@ -37,13 +37,16 @@ const getLatestReleaseFromLCMSApi = async(request, h) => {
 
 function obfuscatedRelease(release) {
     release.challenges = release.challenges
+      .filter(byValideType)
       .map(obfuscateChallenge);
     return release;
 }
 
-function obfuscateChallenge(challenge) {
-    challenge.instruction = 'Je suis caché';
+function byValideType(challenge) {
+    return valideTypes.includes(challenge?.type);
+}
 
+function obfuscateChallenge(challenge) {
     if(challenge.embedUrl) {
         challenge.embedUrl = 'https://epreuves.pix.fr/old/qcm_unite-4.html';
         challenge.embedTitle = 'embedTitle';
@@ -69,6 +72,7 @@ function obfuscateChallenge(challenge) {
         ...challengeFakeData[challenge.type]
     };
 }
+const valideTypes = ['QCM', 'QCU', 'QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep', 'QMAIL']
 
 const challengeFakeData = {
     QCM: {
