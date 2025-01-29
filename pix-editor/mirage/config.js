@@ -472,6 +472,10 @@ function routes() {
       updatedAt: new Date().toISOString(),
     });
   });
+
+  this.post('/phrase/download', function() {
+    return { ok: 'cool' };
+  });
 }
 
 function _serializeModel(instance, modelName) {

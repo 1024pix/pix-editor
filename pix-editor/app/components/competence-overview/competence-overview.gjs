@@ -10,10 +10,23 @@ import { eq } from 'ember-truth-helpers';
 import CompetenceOverviewSkill from './competence-overview-skill';
 
 export default class CompetenceOverview extends Component {
+  @service phrase;
   @service router;
+  @service notifications;
   @service multipanelManager;
 
   @tracked selectedSkillId = null;
+
+  @action
+  async fetchTranslations() {
+    try {
+      await this.phrase.download();
+      this.notifications.success('Téléchargement des traductions depuis Phrase effectué.');
+      await this.refresh();
+    } catch {
+      this.notifications.error('Erreur lors du téléchargement des traductions.');
+    }
+  }
 
   @action
   async refresh() {
@@ -38,16 +51,30 @@ export default class CompetenceOverview extends Component {
               </LinkTo>
             </li>
           </ul>
-          <PixButton
-            class="competence-overview-actions__refresh"
-            @iconBefore="refresh"
-            @size="small"
-            @isBorderVisible={{true}}
-            @variant="secondary"
-            @triggerAction={{this.refresh}}
-          >
-            Actualiser
-          </PixButton>
+          <div class="competence-overview-actions__buttons">
+            {{#if @locale}}
+              <PixButton
+                class="competence-overview-actions__fetch"
+                @size="small"
+                @isBorderVisible={{true}}
+                @variant="secondary"
+                @loadingColor="grey"
+                @triggerAction={{this.fetchTranslations}}
+              >
+                Récupérer les traductions
+              </PixButton>
+            {{/if}}
+            <PixButton
+              class="competence-overview-actions__refresh"
+              @iconBefore="refresh"
+              @size="small"
+              @isBorderVisible={{true}}
+              @variant="secondary"
+              @triggerAction={{this.refresh}}
+            >
+              Actualiser
+            </PixButton>
+          </div>
         </div>
         <div class="competence-overview-grid">
         {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
@@ -59,7 +86,7 @@ export default class CompetenceOverview extends Component {
               {{#each tubeOverview.skillOverviews as |skillOverview|}}
                 <CompetenceOverviewSkill
                   @skillOverview={{skillOverview}}
-                  @locale={{this.args.locale}}
+                  @locale={{@locale}}
                   class="skill"
                   @onSkillClicked={{this.updateSelectedSkillId}}
                   @isActive={{eq skillOverview.id this.selectedSkillId}}
@@ -93,4 +120,3 @@ export default class CompetenceOverview extends Component {
     </div>
   </template>
 }
-

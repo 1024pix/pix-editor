@@ -1,5 +1,5 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -23,6 +23,7 @@ module('Acceptance | Synchronize Translations', function(hooks) {
 
     // then
     assert.strictEqual(currentURL(), '/synchronize-translations');
-    assert.dom(screen.getByText('Récupérer les traductions depuis Phrase')).exists();
+    await click(screen.getByRole('button', { name: 'Récupérer les traductions depuis Phrase' }));
+    assert.dom(await screen.findByText('Téléchargement des traductions depuis Phrase effectué.')).exists();
   });
 });

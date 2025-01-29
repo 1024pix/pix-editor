@@ -48,7 +48,13 @@
       }
     }
   }
-  &__refresh {
+
+  &__buttons {
+    display: flex;
+    gap: var(--pix-spacing-4x);
+  }
+
+  &__refresh, &__fetch {
     margin: .5rem 0;
   }
 }
