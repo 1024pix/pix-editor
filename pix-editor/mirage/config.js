@@ -137,10 +137,18 @@ function routes() {
     return _serializeModel(skill, 'skill');
   });
 
-  this.get('/airtable/content/Acquis', (schema) => {
+  this.get('/airtable/content/Acquis', (schema, request) => {
+    if (request.queryParams.filterByFormula.includes('{id persistant}')) {
+      const [, pixId] = request.queryParams.filterByFormula.match(/FIND\('([^']*)'/);
+      const skill = schema.skills.findBy({ pixId });
+      const record = _serializeModel(skill, 'skill');
+      return { records: [record] };
+    }
+
     const records = schema.skills.all().models.map((skill) => {
       return _serializeModel(skill, 'skill');
     });
+
     return { records };
   });
 
