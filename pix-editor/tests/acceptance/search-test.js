@@ -19,8 +19,8 @@ module('Acceptance | Search', function(hooks) {
     this.server.create('localized-challenge', { id: 'challengeChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'challengeLocalizedChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1' });
-    this.server.create('skill', { id: 'recSkill2', name: '@skill1', challengeIds: [], status: 'archivé', version: 2 });
-    const skill = this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
+    this.server.create('skill', { id: 'recSkill2', name: '@skill1', challengeIds: [], status: 'archivé', version: 2, pixId: 'skill2' });
+    const skill = this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'], pixId: 'skill1', version: 1 });
     const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill2', 'recSkill1' ] });
     const competence = this.server.create('competence', {
       id: 'recCompetence1.1',

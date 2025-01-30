@@ -33,7 +33,7 @@ export default class SidebarSearchComponent extends Component {
       version: skill.version,
       transition: {
         route: 'authenticated.skill',
-        model: skill.id,
+        model: skill.pixId,
       },
     }));
   }
