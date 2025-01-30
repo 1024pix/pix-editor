@@ -7,5 +7,9 @@ export async function listSkills({ filter, page, sort }, dependencies = { skillR
   if (filter.name) {
     return dependencies.skillRepository.search({ filter, page, sort });
   }
+  if (filter.pixId) {
+    const skill = await dependencies.skillRepository.get(filter.pixId);
+    return skill ? [skill] : [];
+  }
   return dependencies.skillRepository.list();
 }
