@@ -97,6 +97,8 @@ async function mockCurrentContent() {
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
     isAwarenessChallenge: true,
     toRephrase: true,
+    hasEmbedInternalValidation: true,
+    noValidationNeeded: true,
   };
   const expectedChallenge = {
     ...challenge,

@@ -54,6 +54,8 @@ const serializer = new Serializer('challenges', {
     'deafAndHardOfHearing',
     'isAwarenessChallenge',
     'toRephrase',
+    'hasEmbedInternalValidation',
+    'noValidationNeeded',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'files') return 'attachments';
@@ -139,6 +141,8 @@ export function deserialize(challengeBody) {
         deafAndHardOfHearing: challengeObject.deafAndHardOfHearing,
         isAwarenessChallenge: challengeObject.isAwarenessChallenge,
         toRephrase: challengeObject.toRephrase,
+        hasEmbedInternalValidation: challengeObject.hasEmbedInternalValidation,
+        noValidationNeeded: challengeObject.noValidationNeeded,
       })];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });

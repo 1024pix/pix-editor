@@ -39,6 +39,8 @@ export class ChallengeForRelease {
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -77,6 +79,8 @@ export class ChallengeForRelease {
     this.deafAndHardOfHearing = deafAndHardOfHearing;
     this.isAwarenessChallenge = isAwarenessChallenge;
     this.toRephrase = toRephrase;
+    this.hasEmbedInternalValidation = hasEmbedInternalValidation;
+    this.noValidationNeeded = noValidationNeeded;
   }
 
   static get STATUSES() {

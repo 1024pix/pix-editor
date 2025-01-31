@@ -73,6 +73,8 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await clickByText('Accès GAFAM requis');
     await clickByText('Formulation à revoir');
     await clickByText('Incompatible iPad certif');
+    await clickByText('Sans validation (Pix Junior)');
+    await clickByText('Validation par l\'embed (Pix Junior)');
     await clickByText('Sourds et malentendants');
     await click(await screen.findByRole('option', { name: 'RAS' }));
     await delay(100);
@@ -105,6 +107,8 @@ module('Acceptance | Create-Challenge', function(hooks) {
     assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
+    assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
+    assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
     assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
   });
 });

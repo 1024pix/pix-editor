@@ -69,6 +69,8 @@ module('Unit | Model | challenge', function(hooks) {
       deafAndHardOfHearing: 'OK',
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: true,
+      noValidationNeeded: true,
     };
     alternative = {
       id: 'pix_1',
@@ -119,6 +121,8 @@ module('Unit | Model | challenge', function(hooks) {
       deafAndHardOfHearing: 'OK',
       isAwarenessChallenge: true,
       toRephrase: true,
+      hasEmbedInternalValidation: true,
+      noValidationNeeded: true,
     };
   });
 
@@ -179,6 +183,8 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.deafAndHardOfHearing, prototype.deafAndHardOfHearing, 'champ deafAndHardOfHearing');
       assert.strictEqual(clonedChallenge.isAwarenessChallenge, prototype.isAwarenessChallenge, 'champ isAwarenessChallenge');
       assert.strictEqual(clonedChallenge.toRephrase, prototype.toRephrase, 'champ toRephrase');
+      assert.strictEqual(clonedChallenge.hasEmbedInternalValidation, prototype.hasEmbedInternalValidation, 'champ hasEmbedInternalValidation');
+      assert.strictEqual(clonedChallenge.noValidationNeeded, prototype.noValidationNeeded, 'champ noValidationNeeded');
     });
 
     test('it should duplicate challenge to create new alternative version', async function(assert) {
@@ -237,6 +243,8 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.deafAndHardOfHearing, alternative.deafAndHardOfHearing, 'champ deafAndHardOfHearing');
       assert.strictEqual(clonedChallenge.isAwarenessChallenge, alternative.isAwarenessChallenge, 'champ isAwarenessChallenge');
       assert.strictEqual(clonedChallenge.toRephrase, alternative.toRephrase, 'champ toRephrase');
+      assert.strictEqual(clonedChallenge.hasEmbedInternalValidation, alternative.hasEmbedInternalValidation, 'champ hasEmbedInternalValidation');
+      assert.strictEqual(clonedChallenge.noValidationNeeded, alternative.noValidationNeeded, 'champ noValidationNeeded');
     });
 
     test('it should clone the attachments', async function(assert) {

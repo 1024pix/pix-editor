@@ -50,6 +50,8 @@ export default class ChallengeModel extends Model {
   @attr deafAndHardOfHearing;
   @attr isAwarenessChallenge;
   @attr toRephrase;
+  @attr('boolean') hasEmbedInternalValidation;
+  @attr('boolean') noValidationNeeded;
 
   @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
   @hasMany('attachment', { inverse: 'challenge', async: true }) files;

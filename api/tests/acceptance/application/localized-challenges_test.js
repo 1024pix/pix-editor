@@ -28,6 +28,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
 
       await databaseBuilder.commit();
@@ -56,6 +58,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             challenge: {
@@ -100,6 +104,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
 
       await databaseBuilder.commit();
@@ -128,6 +134,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             challenge: {
@@ -179,6 +187,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: false,
           toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
         }),
         databaseBuilder.factory.buildLocalizedChallenge({
           challengeId: 'recChallenge1',
@@ -190,6 +200,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
           isAwarenessChallenge: true,
           toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
         }),
       ];
 
@@ -220,6 +232,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
               'is-awareness-challenge': false,
               'to-rephrase': false,
+              'has-embed-internal-validation': false,
+              'no-validation-needed': false,
             },
             relationships: {
               challenge: {
@@ -249,6 +263,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
               'is-awareness-challenge': true,
               'to-rephrase': true,
+              'has-embed-internal-validation': true,
+              'no-validation-needed': true,
             },
             relationships: {
               challenge: {
@@ -294,6 +310,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
         status: LocalizedChallenge.STATUSES.PAUSE,
       });
 
@@ -317,6 +335,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
               'is-awareness-challenge': false,
               'to-rephrase': false,
+              'has-embed-internal-validation': false,
+              'no-validation-needed': false,
               status: LocalizedChallenge.STATUSES.PLAY,
             },
           },
@@ -344,6 +364,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           'is-awareness-challenge': false,
           'to-rephrase': false,
+          'has-embed-internal-validation': false,
+          'no-validation-needed': false,
         },
         relationships: {
           challenge: {
@@ -371,6 +393,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
     });
 

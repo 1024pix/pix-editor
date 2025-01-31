@@ -20,7 +20,8 @@ export class LocalizedChallenge {
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
-
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -36,6 +37,8 @@ export class LocalizedChallenge {
     this.deafAndHardOfHearing = deafAndHardOfHearing;
     this.isAwarenessChallenge = isAwarenessChallenge;
     this.toRephrase = toRephrase;
+    this.hasEmbedInternalValidation = hasEmbedInternalValidation;
+    this.noValidationNeeded = noValidationNeeded;
   }
 
   static get STATUSES() {
@@ -84,6 +87,8 @@ export class LocalizedChallenge {
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -99,6 +104,8 @@ export class LocalizedChallenge {
       deafAndHardOfHearing: deafAndHardOfHearing ?? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
       isAwarenessChallenge: isAwarenessChallenge ?? false,
       toRephrase: toRephrase ?? false,
+      hasEmbedInternalValidation: hasEmbedInternalValidation ?? false,
+      noValidationNeeded: noValidationNeeded ?? false,
     });
   }
 
@@ -117,6 +124,8 @@ export class LocalizedChallenge {
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
       isAwarenessChallenge: false,
       toRephrase: false,
+      hasEmbedInternalValidation: false,
+      noValidationNeeded: false,
     });
   }
 
@@ -136,6 +145,8 @@ export class LocalizedChallenge {
       deafAndHardOfHearing: this.deafAndHardOfHearing,
       isAwarenessChallenge: this.isAwarenessChallenge,
       toRephrase: this.toRephrase,
+      hasEmbedInternalValidation: this.hasEmbedInternalValidation,
+      noValidationNeeded: this.noValidationNeeded,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);

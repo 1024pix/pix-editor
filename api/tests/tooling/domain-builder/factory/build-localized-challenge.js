@@ -32,6 +32,8 @@ export function buildLocalizedChallenge({
   deafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
   isAwarenessChallenge = false,
   toRephrase = false,
+  hasEmbedInternalValidation = false,
+  noValidationNeeded = false,
 }) {
   return new LocalizedChallenge({
     id,
@@ -48,5 +50,7 @@ export function buildLocalizedChallenge({
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   });
 }

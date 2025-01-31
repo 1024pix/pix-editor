@@ -398,6 +398,8 @@ export class Challenge {
     this.deafAndHardOfHearing = this.#primaryLocalizedChallenge.deafAndHardOfHearing;
     this.isAwarenessChallenge = this.#primaryLocalizedChallenge.isAwarenessChallenge;
     this.toRephrase = this.#primaryLocalizedChallenge.toRephrase;
+    this.hasEmbedInternalValidation  = this.#primaryLocalizedChallenge.hasEmbedInternalValidation;
+    this.noValidationNeeded  = this.#primaryLocalizedChallenge.noValidationNeeded;
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)

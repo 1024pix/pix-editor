@@ -41,6 +41,8 @@ function _fillAlternativeQualityFields(challenge, prototype) {
     'deafAndHardOfHearing',
     'isAwarenessChallenge',
     'toRephrase',
+    'hasEmbedInternalValidation',
+    'noValidationNeeded',
   ];
 
   for (const field of fieldsToOverride) {
@@ -87,6 +89,8 @@ function _filterChallengeFields(challenge) {
     'deafAndHardOfHearing',
     'isAwarenessChallenge',
     'toRephrase',
+    'hasEmbedInternalValidation',
+    'noValidationNeeded',
   ];
 
   return _.pick(challenge, fieldsToInclude);

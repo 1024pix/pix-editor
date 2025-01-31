@@ -22,6 +22,8 @@ const serializer = new Serializer('localized-challenges', {
     'deafAndHardOfHearing',
     'isAwarenessChallenge',
     'toRephrase',
+    'hasEmbedInternalValidation',
+    'noValidationNeeded',
   ],
   challenge: {
     ref: 'id',

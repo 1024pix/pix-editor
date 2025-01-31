@@ -16,6 +16,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -73,6 +75,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             skill: {
@@ -116,6 +120,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
@@ -168,6 +174,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
             'is-awareness-challenge': true,
             'to-rephrase': true,
+            'has-embed-internal-validation': true,
+            'no-validation-needed': true,
           },
           relationships: {
             skill: {

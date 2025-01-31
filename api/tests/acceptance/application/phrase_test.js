@@ -470,6 +470,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       }]);
     });
   });

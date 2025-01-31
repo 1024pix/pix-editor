@@ -111,6 +111,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       const deafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK;
       const isAwarenessChallenge = true;
       const toRephrase = true;
+      const hasEmbedInternalValidation = true;
+      const noValidationNeeded = true;
 
       // when
       const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
@@ -124,6 +126,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing,
         isAwarenessChallenge,
         toRephrase,
+        hasEmbedInternalValidation,
+        noValidationNeeded,
       });
 
       // then
@@ -141,6 +145,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
     });
     it('should build a primary localized challenge with default values when some not filled', function() {
@@ -175,6 +181,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
     });
   });
@@ -205,6 +213,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
         isAwarenessChallenge: false,
         toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
       });
     });
   });
@@ -229,6 +239,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       const attachments = [
         domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
@@ -272,6 +284,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
       expect(clonedAttachments).toStrictEqual([

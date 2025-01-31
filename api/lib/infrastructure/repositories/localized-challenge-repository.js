@@ -60,7 +60,22 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
 }
 
 export async function update({
-  localizedChallenge: { id, locale, embedUrl, status, fileIds, geography, urlsToConsult, requireGafamWebsiteAccess, isIncompatibleIpadCertif, deafAndHardOfHearing, isAwarenessChallenge, toRephrase },
+  localizedChallenge: {
+    id,
+    locale,
+    embedUrl,
+    status,
+    fileIds,
+    geography,
+    urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
+  },
   transaction: knexConnection = knex
 }) {
   const [dto] = await knexConnection('localized_challenges').where('id', id).update({
@@ -74,6 +89,8 @@ export async function update({
     deafAndHardOfHearing,
     isAwarenessChallenge,
     toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
   }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
@@ -102,6 +119,8 @@ function _adaptModelsForDB(localizedChallenges, generateId) {
       deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
       isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
       toRephrase: localizedChallenge.toRephrase,
+      hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
+      noValidationNeeded: localizedChallenge.noValidationNeeded,
     };
   });
 }
