@@ -1,5 +1,15 @@
 
 
+## v3.184.0 (31/01/2025)
+
+
+### :rocket: Amélioration
+- [#869](https://github.com/1024pix/pix-editor/pull/869) [FEATURE] Ajout d'options dans le challenge pour Pix Junior.
+- [#867](https://github.com/1024pix/pix-editor/pull/867) [FEATURE] Permettre de récupérer les traductions Phrase depuis la V2 (PIX-14858).
+
+### :building_construction: Tech
+- [#870](https://github.com/1024pix/pix-editor/pull/870) [TECH] Utiliser le pixId pour la route authenticated/skill (PIX-16321).
+
 ## v3.183.0 (28/01/2025)
 
 
