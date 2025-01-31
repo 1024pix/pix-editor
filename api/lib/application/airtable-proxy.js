@@ -15,7 +15,7 @@ const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 const AIRTABLE_PROXY_TABLES = [
   'Thematiques',
   'Tubes',
-  'Acquis',
+  'Acquis', // todo delete
   'Tutoriels',
   'Tags',
   'Attachments',

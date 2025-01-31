@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
+import _ from 'lodash';
 
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper';
 import { createServer } from '../../../../server';
 import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models';
-import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable';
+import { skillDatasource, tubeDatasource } from '../../../../lib/infrastructure/datasources/airtable';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
@@ -1205,7 +1206,7 @@ describe('Application | Route | Skills', () => {
     });
   });
 
-  describe('POST /skills', async () => {
+  describe('POST /api/skills', async () => {
     let airtableGetTubeScope, airtableGetSkillsScope, airtableCreateSkillScope, pixApiCacheScope, dataToPost;
 
     beforeEach(async () => {
@@ -1333,7 +1334,7 @@ describe('Application | Route | Skills', () => {
       await knex('translations').truncate();
     });
 
-    it('should respond with status 201 and created competence', async () => {
+    it('should respond with status 201 and created skill', async () => {
       // given
       const server = await createServer();
 
@@ -1676,6 +1677,450 @@ describe('Application | Route | Skills', () => {
           value: 'Pouet'
         }]);
       });
+    });
+  });
+
+  describe('POST /api/skills/clone', async () => {
+    let airtableGetTubeByIdScope,
+      airtableGetSkillByIdScope,
+      airtableGetTubeSkillsScope,
+      airtableGetSkillChallengesScope,
+      airtableGetChallengesAttachmentsScope,
+      airtableCreateSkillScope,
+      airtableGetSkillAirtableIdsByIdsScope,
+      airtableCreateChallengesScope,
+      airtableGetAirtableChallengeIdsByIdsScope,
+      airtableCreateAttachmentsScope,
+      pixApiCacheSkillUpdateScope,
+      pixApiCacheChallengeUpdateScope,
+      dataToPost;
+
+    beforeEach(async () => {
+      // given
+      dataToPost = {
+        level: 2,
+        skillIdToClone: 'skill1Tube1',
+        tubeDestinationId: 'tube1',
+      };
+      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+        id: 'tube1',
+        airtableId: 'recTube1',
+        name: '@tube',
+        index: 5,
+        competenceId: 'recCompetence1',
+      }));
+      const airtableSkillToClone = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+        id: 'skill1Tube1',
+        airtableId: 'recSkill1Tube1',
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        level: 1,
+        version: 1,
+      }));
+      const airtableSkillAlreadyAtDestinationTubeLevel = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
+        id: 'skill2Tube1',
+        airtableId: 'recSkill2Tube1',
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        level: 2,
+        version: 1,
+      }));
+      const airtableSkills = [
+        airtableSkillToClone,
+        airtableSkillAlreadyAtDestinationTubeLevel,
+      ];
+      const skillTradFr = databaseBuilder.factory.buildTranslation({
+        key: 'skill.skill1Tube1.hint',
+        locale: 'fr',
+        value: 'C\'est chaud-nen',
+      });
+      const skillTradEn = databaseBuilder.factory.buildTranslation({
+        key: 'skill.skill1Tube1.hint',
+        locale: 'en',
+        value: 'AIRTABLE IS SO FUN OMG 🥰',
+      });
+      const protoId = 'validatedChallengeProto';
+      const validatedChallengeProtoToClone = airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({
+        id: protoId,
+        airtableId: 'recChallengeValidated',
+        status: 'validé',
+        locales: ['fr'],
+        skillId: airtableSkillToClone.fields['id persistant'],
+        skills: [airtableSkillToClone.id],
+        competenceId: 'recCompetence123',
+      }));
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${protoId}.instruction`,
+        locale: 'fr',
+        value: 'Juste une trad ?',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${protoId}.instruction`,
+        locale: 'nl',
+        value: 'Slechts een vertaling ?',
+      });
+      const skillToCloneChallenges = [
+        validatedChallengeProtoToClone,
+      ];
+      const localizedChallenges = [
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: protoId,
+          challengeId: protoId,
+          locale: 'fr',
+          embedUrl: validatedChallengeProtoToClone.fields['Embed URL'],
+          status: validatedChallengeProtoToClone.fields['Statut'],
+          geography: 'fr',
+        }),
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'validatedChallengeProtoNl',
+          challengeId: protoId,
+          locale: 'nl',
+          geography: 'fr',
+        }),
+      ];
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        localizedChallengeId: protoId,
+        attachmentId: 'attid1',
+      });
+      const attachment = airtableBuilder.factory.buildAttachment({
+        challengeId: protoId,
+        localizedChallengeId: protoId,
+        type: 'illustration',
+      });
+
+      const createdAirtableSkill = structuredClone(airtableSkillToClone);
+      createdAirtableSkill.id = null;
+      createdAirtableSkill.fields['id persistant'] = 'clonedAcquisId';
+      createdAirtableSkill.fields['Version']++;
+      createdAirtableSkill.fields['Level'] = 2;
+      createdAirtableSkill.fields['Status'] = 'en construction';
+      const clonedSkillAirtableId = 'recClonedSkillAirtableId';
+      const usedFields = [
+        'id persistant',
+        'Timer',
+        'Type d\'épreuve',
+        'T1 - Espaces, casse & accents',
+        'T2 - Ponctuation',
+        'T3 - Distance d\'édition',
+        'Statut',
+        'Embed URL',
+        'Embed height',
+        'Format',
+        'files',
+        'Réponse automatique',
+        'Langues',
+        'Focalisée',
+        'Acquix',
+        'Généalogie',
+        'Type péda',
+        'Auteur',
+        'Déclinable',
+        'Version prototype',
+        'Version déclinaison',
+        'Non voyant',
+        'Daltonien',
+        'Spoil',
+        'Responsive',
+        'Géographie',
+        'shuffled',
+        'contextualizedFields',
+      ];
+      const createdChallengeFields = _.pick(validatedChallengeProtoToClone.fields, usedFields);
+      createdChallengeFields['Acquix'] = [clonedSkillAirtableId];
+      createdChallengeFields['id persistant'] = 'clonedChallengeId';
+      createdChallengeFields['Version déclinaison'] = null;
+      createdChallengeFields['archived_at'] = null;
+      createdChallengeFields['made_obsolete_at'] = null;
+      createdChallengeFields['validated_at'] = null;
+      createdChallengeFields['Statut'] = 'proposé';
+      createdChallengeFields['files'] = [];
+      const challengeProtoCloned = {
+        id: 'recChallengeProtoCloned',
+        fields: {
+          ...createdChallengeFields,
+          'Record ID': 'recChallengeProtoCloned'
+        }
+      };
+      let createdAttachmentFields = _.omit(attachment.fields, ['Record ID', 'challengeId persistant', 'createdAt']);
+      createdAttachmentFields = {
+        ...createdAttachmentFields,
+        challengeId: ['recChallengeProtoCloned'],
+        'localizedChallengeId': 'clonedChallengeId'
+      };
+      const skillForPixApi =  {
+        id: createdAirtableSkill.fields['id persistant'],
+        name: '@tube2',
+        hintStatus: createdAirtableSkill.fields['Statut de l\'indice'],
+        tutorialIds: createdAirtableSkill.fields['Comprendre (id persistant)'] ,
+        learningMoreTutorialIds: createdAirtableSkill.fields['En savoir plus (id persistant)'] ,
+        pixValue: null,
+        competenceId: 'recCompetence1',
+        status: createdAirtableSkill.fields['Status'],
+        tubeId: createdAirtableSkill.fields['Tube (id persistant)'][0],
+        level: createdAirtableSkill.fields['Level'],
+        version: createdAirtableSkill.fields['Version'],
+        hint_i18n: {
+          fr: skillTradFr.value,
+          en: skillTradEn.value,
+        }
+      };
+      const challengeForPixApi = {
+        id: 'clonedChallengeId',
+        alpha: null,
+        alternativeInstruction: '',
+        autoReply: false,
+        competenceId: 'recCompetence1',
+        delta: null,
+        embedUrl: 'https://github.io/page/epreuve.html',
+        embedTitle: '',
+        embedHeight: 500,
+        focusable: false,
+        format: 'mots',
+        genealogy: 'Prototype 1',
+        illustrationAlt: null,
+        illustrationUrl: 'url/to/attachment',
+        instruction: 'Juste une trad ?',
+        locales: [ 'fr' ],
+        proposals: '',
+        responsive: 'Non',
+        solution: '',
+        solutionToDisplay: '',
+        status: 'proposé',
+        skillId: 'clonedAcquisId',
+        t1Status: true,
+        t2Status: false,
+        t3Status: true,
+        timer: 1234,
+        type: 'QCM',
+        shuffled: false,
+        alternativeVersion: null,
+        accessibility1: 'OK',
+        accessibility2: 'RAS',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: 'RAS',
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false
+      };
+
+      // _checkIfCloningIsPossible
+      airtableGetTubeByIdScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Tubes')
+        .query({
+          fields: {
+            '': tubeDatasource.usedFields
+          },
+          filterByFormula: 'OR("tube1" = {id persistant})'
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableTube] });
+
+      airtableGetSkillByIdScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis')
+        .query({
+          fields: {
+            '': skillDatasource.usedFields,
+          },
+          filterByFormula:  'OR("skill1Tube1" = {id persistant})',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableSkillToClone] });
+
+      // _fetchData
+      airtableGetSkillChallengesScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Epreuves')
+        .query({
+          filterByFormula:  '{Acquix (id persistant)} = "skill1Tube1"',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: skillToCloneChallenges });
+
+      airtableGetTubeSkillsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis')
+        .query({
+          filterByFormula:  '{Tube (id persistant)} = "tube1"',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableSkills });
+
+      airtableGetChallengesAttachmentsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments')
+        .query({
+          filterByFormula:  'OR(' + localizedChallenges.map((l) => `{localizedChallengeId} = ${stringValue(l.id)}`).join(',') + ')',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [attachment] });
+
+      // skillRepository.create
+      airtableCreateSkillScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Acquis/', {
+          records: [{
+            fields: {
+              'id persistant': createdAirtableSkill.fields['id persistant'],
+              'Statut de l\'indice': createdAirtableSkill.fields['Statut de l\'indice'],
+              'Comprendre': createdAirtableSkill.fields['Comprendre'],
+              'En savoir plus': createdAirtableSkill.fields['En savoir plus'],
+              'Status': createdAirtableSkill.fields['Status'],
+              'Tube': createdAirtableSkill.fields['Tube'],
+              'Description': createdAirtableSkill.fields['Description'],
+              'Statut de la description': createdAirtableSkill.fields['Statut de la description'],
+              'Level': createdAirtableSkill.fields['Level'],
+              'Internationalisation': createdAirtableSkill.fields['Internationalisation'],
+              'Version': createdAirtableSkill.fields['Version'],
+            }
+          }],
+        })
+        .query({ })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, {
+          records: [{
+            id: clonedSkillAirtableId,
+            fields: { ...createdAirtableSkill.fields, 'Record Id': clonedSkillAirtableId }
+          }]
+        });
+
+      // challengeRepository.createBatch
+      airtableGetSkillAirtableIdsByIdsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis')
+        .query({
+          fields: {
+            '': ['Record Id', 'id persistant'],
+          },
+          filterByFormula:  'OR("clonedAcquisId" = {id persistant})',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [{
+          fields: {
+            'id persistant': 'clonedAcquisId',
+            'Record Id': clonedSkillAirtableId
+          }
+        }]
+        });
+
+      airtableCreateChallengesScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Epreuves/', {
+          records: [{
+            fields: createdChallengeFields
+          }],
+        })
+        .query({ })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [challengeProtoCloned] });
+
+      // attachmentRepository.createBatch
+      airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Epreuves')
+        .query({
+          fields: {
+            '': ['Record ID', 'id persistant'],
+          },
+          filterByFormula: 'OR("clonedChallengeId" = {id persistant})',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [{
+          fields: {
+            'id persistant': 'clonedChallengeId',
+            'Record ID': 'recChallengeProtoCloned'
+          }
+        }]
+        });
+
+      airtableCreateAttachmentsScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Attachments/', {
+          records: [{
+            fields: createdAttachmentFields,
+          }],
+        })
+        .query({ })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [
+          {
+            id:'recOsef',
+            fields: {
+              ...createdAttachmentFields,
+              'Record ID': 'recOsef',
+              'challengeId persistant':'clonedChallengeId'
+            }
+          }
+        ] });
+
+      // update pix api staging cache
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+
+      pixApiCacheSkillUpdateScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/skills/clonedAcquisId', skillForPixApi)
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+
+      pixApiCacheChallengeUpdateScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/challenges/clonedChallengeId', challengeForPixApi)
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+
+      await databaseBuilder.commit();
+
+      vi.spyOn(idGenerator, 'generateNewId')
+        .mockReturnValueOnce('clonedAcquisId')
+        .mockReturnValueOnce('clonedChallengeId');
+    });
+
+    afterEach(async () => {
+      await knex('translations').truncate();
+    });
+
+    it('should respond with status 302 with cloned skill redirection', async () => {
+    // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/skills/clone',
+        payload: {
+          data: {
+            type: 'skills',
+            attributes: {
+              'level': dataToPost.level,
+              'tubeDestinationId': dataToPost.tubeDestinationId,
+              'skillIdToClone': dataToPost.skillIdToClone,
+            },
+          },
+        },
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(airtableGetTubeByIdScope.isDone()).to.be.true;
+      expect(airtableGetSkillByIdScope.isDone()).to.be.true;
+      expect(airtableGetTubeSkillsScope.isDone()).to.be.true;
+      expect(airtableGetSkillChallengesScope.isDone()).to.be.true;
+      expect(airtableGetChallengesAttachmentsScope.isDone()).to.be.true;
+      expect(airtableCreateSkillScope.isDone()).to.be.true;
+      expect(airtableGetSkillAirtableIdsByIdsScope.isDone()).to.be.true;
+      expect(airtableCreateChallengesScope.isDone()).to.be.true;
+      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).to.be.true;
+      expect(airtableCreateAttachmentsScope.isDone()).to.be.true;
+      expect(pixApiCacheSkillUpdateScope.isDone()).to.be.true;
+      expect(pixApiCacheChallengeUpdateScope.isDone()).to.be.true;
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toMatch('/api/skills/');
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'challenge.clonedChallengeId.instruction', locale: 'fr', value: 'Juste une trad ?' },
+        { key: 'challenge.validatedChallengeProto.instruction', locale: 'fr', value: 'Juste une trad ?' },
+        { key: 'challenge.validatedChallengeProto.instruction', locale: 'nl', value: 'Slechts een vertaling ?' },
+        { key: 'skill.clonedAcquisId.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
+        { key: 'skill.clonedAcquisId.hint', locale: 'fr', value: 'C\'est chaud-nen' },
+        { key: 'skill.skill1Tube1.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
+        { key: 'skill.skill1Tube1.hint', locale: 'fr', value: 'C\'est chaud-nen' },
+      ]);
     });
   });
 });

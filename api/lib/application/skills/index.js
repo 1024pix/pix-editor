@@ -18,6 +18,7 @@ export async function register(server) {
         validate: {
           payload: Joi.object({
             data: {
+              type: Joi.string().required().equal('skills'),
               attributes: {
                 tubeDestinationId: Types.tubeId().required(),
                 skillIdToClone: Types.skillId().required(),

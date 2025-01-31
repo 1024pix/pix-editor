@@ -177,6 +177,7 @@ export class Skill {
       competenceId: tubeDestination.competenceId,
       status: Skill.STATUSES.EN_CONSTRUCTION,
       description: this.description,
+      descriptionStatus: this.descriptionStatus,
       hint_i18n: this.hint_i18n,
       hintStatus: this.hintStatus,
       tutorialIds: this.tutorialIds,
