@@ -18,5 +18,11 @@
     "@hapi/hapi": "^21.3.12",
     "dotenv": "^16.4.7",
     "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.0",
+    "eslint-plugin-mocha": "^10.5.0",
+    "nock": "^14.0.1",
+    "vitest": "^3.0.5"
   }
 }
