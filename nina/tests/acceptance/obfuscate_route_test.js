@@ -68,6 +68,10 @@ describe('Acceptance | Route | obfuscateRoute', () => {
 
     beforeEach(async () => {
       date = new Date();
+    });
+
+    it('should respond with status 2xx and an obfuscated release', async () => {
+      // given
       releaseScope = nock(lcms.baseUrl)
         .get('/releases/latest')
         .matchHeader('authorization', `Bearer ${lcms.token}`)
@@ -127,10 +131,6 @@ describe('Acceptance | Route | obfuscateRoute', () => {
             ],
           },
         });
-    });
-
-    it('should respond with status 200 and an obfuscated release', async () => {
-      // given
       const server = await createServer();
 
       // when
@@ -282,6 +282,40 @@ describe('Acceptance | Route | obfuscateRoute', () => {
             { some: 'otherCourse', i: 'leave untouch' },
           ],
         },
+      });
+    });
+
+    it('should forward errors from LCMS when there are some', async () => {
+      // given
+      releaseScope = nock(lcms.baseUrl)
+        .get('/releases/latest')
+        .matchHeader('authorization', `Bearer ${lcms.token}`)
+        .reply(400, {
+          errors: [
+            {
+              code: 400,
+              errorMessage: 'some error message',
+            },
+          ],
+        });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/releases/latest',
+      });
+
+      // then
+      expect(response.statusCode).toBe(400);
+      expect(releaseScope.isDone()).toBe(true);
+      expect(response.result).toEqual({
+        errors: [
+          {
+            code: 400,
+            errorMessage: 'some error message',
+          },
+        ],
       });
     });
   });

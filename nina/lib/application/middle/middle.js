@@ -1,7 +1,6 @@
-import {lcms} from "../../config.js";
+import { lcms } from '../../config.js';
 
 export const getLatestReleaseFromLCMSApi = async(request, h) => {
-  console.log('alo')
   const requestUrl = `${lcms.baseUrl}/releases/latest`;
   try {
     const _request = await fetch(requestUrl, {
@@ -9,14 +8,16 @@ export const getLatestReleaseFromLCMSApi = async(request, h) => {
         'Authorization': `Bearer ${lcms.token}`
       }
     });
-    if (_request.status === 200) {
-      const response = await _request.json();
+    const response = await _request.json();
+    if (_request.status.toString().startsWith('2')) {
       const release = obfuscatedRelease(response.content);
       return h.response({ ...response, content: release }).code(200);
+    } else {
+      return h.response(response).code(response.errors[0].code);
     }
   } catch (e) {
     console.error(e);
-    return h.response().code(400);
+    return h.response('Something went wrong when fetching from LCMS API').code(400);
   }
 };
 

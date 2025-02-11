@@ -1,4 +1,4 @@
-import { getLatestReleaseFromLCMSApi } from './middle.js'
+import { getLatestReleaseFromLCMSApi } from './middle.js';
 
 export async function register(server) {
   server.route([
@@ -8,8 +8,8 @@ export async function register(server) {
       config: {
         auth: false,
         handler: getLatestReleaseFromLCMSApi,
-        tags: ['api']
-      }
+        tags: ['api'],
+      },
     },
     {
       method: 'POST',
