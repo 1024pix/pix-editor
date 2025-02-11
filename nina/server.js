@@ -2,7 +2,6 @@ import * as config from './lib/config.js';
 import Hapi from '@hapi/hapi';
 import { routes } from './lib/routes.js';
 
-
 export async function createServer() {
 
   const server = new Hapi.server({

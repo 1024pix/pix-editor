@@ -1,4 +1,4 @@
-import {afterEach, beforeEach} from 'vitest';
+import { afterEach, beforeEach } from 'vitest';
 import nock from 'nock';
 
 beforeEach(() => {
