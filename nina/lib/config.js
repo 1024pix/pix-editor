@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import {fileURLToPath} from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -25,8 +25,14 @@ export const hapi = {
   publicDir: 'public/',
 };
 
-
 export const lcms = {
   baseUrl: process.env.LCMS_API_URL,
   token: process.env.LCMS_API_KEY,
 };
+
+if (process.env.NODE_ENV === 'test') {
+  port = 0;
+  hapi.publicDir = 'tests/public-tests/';
+  lcms.baseUrl = 'http://lcms-test.test';
+  lcms.token = 'TEST_TOKEN';
+}

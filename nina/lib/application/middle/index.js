@@ -25,14 +25,13 @@ const getLatestReleaseFromLCMSApi = async(request, h) => {
         if (_request.status === 200) {
             const response = await _request.json();
             const release = obfuscatedRelease(response.content)
-            return h.response({content: release});
+            return h.response({ ...response, content: release }).code(200);
         }
     } catch (e) {
         console.error(e);
-        return h.response().code(204);
+        return h.response().code(400);
     }
 }
-
 
 
 function obfuscatedRelease(release) {
@@ -72,7 +71,7 @@ function obfuscateChallenge(challenge) {
         ...challengeFakeData[challenge.type]
     };
 }
-const valideTypes = ['QCM', 'QCU', 'QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep', 'QMAIL']
+const valideTypes = ['QCM', 'QCU', 'QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep', 'QMAIL'];
 
 const challengeFakeData = {
     QCM: {
