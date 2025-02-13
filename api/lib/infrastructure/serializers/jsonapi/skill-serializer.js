@@ -93,16 +93,21 @@ const deserializer = new Deserializer({
     },
   },
   transform({
+    id,
+    pixId,
     clue,
     clueEn,
     clueStatus: hintStatus,
     i18n: internationalisation,
     tube: tubeAirtableId,
     tutoSolution: tutorialAirtableIds,
-    tutoMore: learningMoreTutorialAirtableIds, ...skill
+    tutoMore: learningMoreTutorialAirtableIds,
+    ...skill
   }) {
     return new Skill({
       ...skill,
+      airtableId: id,
+      id: pixId,
       tubeAirtableId,
       tutorialAirtableIds,
       learningMoreTutorialAirtableIds,

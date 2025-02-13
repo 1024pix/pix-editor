@@ -787,7 +787,7 @@ describe('Acceptance | Route | competences', () => {
           .get('/v0/airtableBaseValue/Competences/recCompetence404')
           .query({})
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404, airtableCompetence);;
+          .reply(404, airtableCompetence);
 
         const server = await createServer();
 

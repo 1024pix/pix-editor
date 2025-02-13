@@ -15,6 +15,7 @@ import {
   getSkillChallengesProduction,
   getSkillLocalizedChallengesProduction,
   listSkills,
+  updateSkill,
 } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
@@ -108,6 +109,40 @@ export async function create(req, h) {
       generateNewIdFnc: generateNewId
     });
     return h.response(skillSerializer.serialize(createdSkill)).code(201);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function update(req, h) {
+  const { attributes, relationships } = req.payload.data;
+  try {
+    const updateSkillCommand = {
+      airtableId: req.params.skillAirtableId,
+      description: attributes['description'],
+      descriptionStatus: attributes['description-status'],
+      clue: attributes['clue'],
+      clueEn: attributes['clue-en'],
+      clueStatus: attributes['clue-status'],
+      i18n: attributes['i18n'],
+      status: attributes['status'],
+      tutoMoreAirtableIds: relationships['tuto-more'].data.map(({ id }) => id),
+      tutoSolutionAirtableIds: relationships['tuto-solution'].data.map(({ id }) => id),
+    };
+    const updatedSkill = await updateSkill(updateSkillCommand, {
+      skillRepository,
+      skillTransformer,
+      updatedRecordNotifier,
+      pixApiClient,
+      logger,
+      Sentry,
+    });
+
+    if (updatedSkill === null) return Boom.notFound();
+
+    return h.response(skillSerializer.serialize(updatedSkill)).code(200);
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);

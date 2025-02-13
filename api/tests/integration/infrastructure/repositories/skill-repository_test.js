@@ -2,11 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
-import {
-  skillDatasource,
-  tubeDatasource,
-  tutorialDatasource,
-} from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { skillDatasource, } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
@@ -647,242 +643,99 @@ describe('Integration | Repository | skill-repository', () => {
       return knex('translations').truncate();
     });
 
-    it('should update skill', async () => {
+    it('should update the skill', async function() {
       // given
-      const airtableIdsByIds = {
-        'tubeIdPersistant': 'airtableTubeId',
-        'tutorialIdPersistant': 'airtableTutorialId',
-        'skillIdPersistantA': 'airtableSkillIdA',
-        'skillIdPersistantB': 'airtableSkillIdB',
-        'skillIdPersistantC': 'airtableSkillIdC',
-        'skillIdPersistantD': 'airtableSkillIdD',
-      };
-      vi.spyOn(tubeDatasource, 'getAirtableIdsByIds').mockImplementation(() => airtableIdsByIds);
-      vi.spyOn(tutorialDatasource, 'getAirtableIdsByIds').mockImplementation(() => airtableIdsByIds);
-      vi.spyOn(skillDatasource, 'getAirtableIdsByIds').mockImplementation(() => airtableIdsByIds);
-
-      const skillNoHintBeforeHintAfter = domainBuilder.buildSkill({
-        id: 'skillIdPersistantA',
+      const skillToSave = domainBuilder.buildSkill({
+        id: 'skillIdPersistant',
+        airtableId: 'skillAirtableId',
         hintStatus: Skill.HINT_STATUSES.PROPOSE,
-        tutorialIds: ['tutorialIdPersistant'],
-        learningMoreTutorialIds: [],
+        tutorialAirtableIds: ['tutorialAirtableId'],
+        learningMoreTutorialAirtableIds: ['learningMoreTutorialAirtableId'],
         status: Skill.STATUSES.ACTIF,
-        tubeId: 'tubeIdPersistant',
-        description: 'ma super description',
+        tubeAirtableId: 'tubeAirtableId',
+        description: 'ma nouvelle description',
         level: 4,
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
-        hint_i18n: { fr: 'hint A fr', en: 'hint A en' },
+        hint_i18n: { fr: 'hint fr', en: 'hint en' },
       });
-
-      const skillHintBeforeHintAfter = domainBuilder.buildSkill({
-        id: 'skillIdPersistantB',
-        hintStatus: Skill.HINT_STATUSES.PROPOSE,
-        tutorialIds: ['tutorialIdPersistant'],
-        learningMoreTutorialIds: [],
-        status: Skill.STATUSES.ACTIF,
-        tubeId: 'tubeIdPersistant',
-        description: 'ma super description',
-        level: 4,
-        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-        version: 2,
-        hint_i18n: { fr: 'hint B fr', en: 'hint B en' },
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantB.hint',
-        locale: 'fr',
-        value: 'hint before B',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantB.hint',
-        locale: 'en',
-        value: 'hint before B EN',
-      });
-
-      const skillHintBeforeNoHintAfter = domainBuilder.buildSkill({
-        id: 'skillIdPersistantC',
-        hintStatus: Skill.HINT_STATUSES.PROPOSE,
-        tutorialIds: ['tutorialIdPersistant'],
-        learningMoreTutorialIds: [],
-        status: Skill.STATUSES.ACTIF,
-        tubeId: 'tubeIdPersistant',
-        description: 'ma super description',
-        level: 4,
-        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-        version: 2,
-        hint_i18n: { fr: null, en: null },
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantC.hint',
-        locale: 'fr',
-        value: 'hint before C FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantC.hint',
-        locale: 'en',
-        value: 'hint before C EN',
-      });
-
-      const skillNoHintBeforeNoHintAfter = domainBuilder.buildSkill({
-        id: 'skillIdPersistantD',
-        hintStatus: Skill.HINT_STATUSES.PROPOSE,
-        tutorialIds: ['tutorialIdPersistant'],
-        learningMoreTutorialIds: [],
-        status: Skill.STATUSES.ACTIF,
-        tubeId: 'tubeIdPersistant',
-        description: 'ma super description',
-        level: 4,
-        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-        version: 2,
-        hint_i18n: { fr: null, en: null },
-      });
-
-      await databaseBuilder.commit();
 
       vi.spyOn(skillDatasource, 'update')
         .mockImplementationOnce(() => ({
-          id: skillNoHintBeforeHintAfter.id,
-          name: 'nom computé',
-          tutorialIds: skillNoHintBeforeHintAfter.tutorialIds,
-          learningMoreTutorialIds: skillNoHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeHintAfter.hintStatus,
-          pixValue: 'pix value computé',
-          competenceId: 'maSUperCOmpetenceId',
-          status: skillNoHintBeforeHintAfter.status,
-          tubeId: skillNoHintBeforeHintAfter.tubeId,
-          description: skillNoHintBeforeHintAfter.description,
-          level: skillNoHintBeforeHintAfter.level,
-          internationalisation: skillNoHintBeforeHintAfter.internationalisation,
-          version: skillNoHintBeforeHintAfter.version,
-        }))
-        .mockImplementationOnce(() => ({
-          id: skillHintBeforeHintAfter.id,
-          name: 'nom computé',
-          tutorialIds: skillHintBeforeHintAfter.tutorialIds,
-          learningMoreTutorialIds: skillHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeHintAfter.hintStatus,
-          pixValue: 'pix value computé',
-          competenceId: 'maSUperCOmpetenceId',
-          status: skillHintBeforeHintAfter.status,
-          tubeId: skillHintBeforeHintAfter.tubeId,
-          description: skillHintBeforeHintAfter.description,
-          level: skillHintBeforeHintAfter.level,
-          internationalisation: skillHintBeforeHintAfter.internationalisation,
-          version: skillHintBeforeHintAfter.version,
-        }))
-        .mockImplementationOnce(() => ({
-          id: skillHintBeforeNoHintAfter.id,
-          name: 'nom computé',
-          tutorialIds: skillHintBeforeNoHintAfter.tutorialIds,
-          learningMoreTutorialIds: skillHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeNoHintAfter.hintStatus,
-          pixValue: 'pix value computé',
-          competenceId: 'maSUperCOmpetenceId',
-          status: skillHintBeforeNoHintAfter.status,
-          tubeId: skillHintBeforeNoHintAfter.tubeId,
-          description: skillHintBeforeNoHintAfter.description,
-          level: skillHintBeforeNoHintAfter.level,
-          internationalisation: skillHintBeforeNoHintAfter.internationalisation,
-          version: skillHintBeforeNoHintAfter.version,
-        }))
-        .mockImplementationOnce(() => ({
-          id: skillNoHintBeforeNoHintAfter.id,
-          name: 'nom computé',
-          tutorialIds: skillNoHintBeforeNoHintAfter.tutorialIds,
-          learningMoreTutorialIds: skillNoHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeNoHintAfter.hintStatus,
-          pixValue: 'pix value computé',
-          competenceId: 'maSUperCOmpetenceId',
-          status: skillNoHintBeforeNoHintAfter.status,
-          tubeId: skillNoHintBeforeNoHintAfter.tubeId,
-          description: skillNoHintBeforeNoHintAfter.description,
-          level: skillNoHintBeforeNoHintAfter.level,
-          internationalisation: skillNoHintBeforeNoHintAfter.internationalisation,
-          version: skillNoHintBeforeNoHintAfter.version,
+          id: skillToSave.id,
+          airtableId: skillToSave.airtableId,
+          name: 'Nom computé depuis Airtable',
+          hintStatus: skillToSave.hintStatus,
+          tutorialIds: ['tutorialIdPersistant'],
+          tutorialAirtableIds: skillToSave.tutorialAirtableIds,
+          learningMoreTutorialIds: ['learningMoreTutorialIdPersistant'],
+          learningMoreTutorialAirtableIds: skillToSave.learningMoreTutorialAirtableIds,
+          pixValue: 789,
+          competenceId: 'competenceIdPersistant',
+          status: skillToSave.status,
+          tubeId: 'tubeIdPersistant',
+          tubeAirtableId: skillToSave.tubeAirtableId,
+          description: skillToSave.description,
+          level: skillToSave.level,
+          internationalisation: skillToSave.internationalisation,
+          version: skillToSave.version,
+          createdAt: new Date('2020-01-01'),
+          descriptionStatus: skillToSave.descriptionStatus,
+          challengeIds: ['someChallengeIdPersistant'],
         }));
 
       // when
-      await skillRepository.update(skillNoHintBeforeHintAfter);
-      await skillRepository.update(skillHintBeforeHintAfter);
-      await skillRepository.update(skillHintBeforeNoHintAfter);
-      await skillRepository.update(skillNoHintBeforeNoHintAfter);
+      await skillRepository.update(skillToSave);
+
+      // when
+      expect(skillDatasource.update).toHaveBeenCalledTimes(1);
+      expect(skillDatasource.update).toHaveBeenNthCalledWith(1, skillToSave);
+    });
+    it('should handle translations correctly', async function() {
+      // given
+      const skillAlterHintFrDeleteHintEn_A = domainBuilder.buildSkill({
+        id: 'skillIdPersistantA',
+        airtableId: 'skillAirtableIdA',
+        hint_i18n: { fr: 'hint après A FR', en: '' },
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'skill.skillIdPersistantA.hint',
+        locale: 'fr',
+        value: 'hint avant A FR',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'skill.skillIdPersistantA.hint',
+        locale: 'en',
+        value: 'hint avant A EN',
+      });
+      const skillAddHint_B = domainBuilder.buildSkill({
+        id: 'skillIdPersistantB',
+        airtableId: 'skillAirtableIdB',
+        hint_i18n: { fr: 'nouveau hint B FR', en: '' },
+      });
+      await databaseBuilder.commit();
+
+      vi.spyOn(skillDatasource, 'update')
+        .mockImplementationOnce(() => skillAlterHintFrDeleteHintEn_A)
+        .mockImplementationOnce(() => skillAddHint_B);
+
+      // when
+      await skillRepository.update(skillAlterHintFrDeleteHintEn_A);
+      await skillRepository.update(skillAddHint_B);
 
       // when
       const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy('key', 'locale');
-      expect(allTranslations).toEqual([{
-        key: 'skill.skillIdPersistantA.hint',
-        locale: 'fr',
-        value: skillNoHintBeforeHintAfter.hint_i18n.fr
-      },{
-        key: 'skill.skillIdPersistantB.hint',
-        locale: 'en',
-        value: 'hint before B EN'
-      },{
-        key: 'skill.skillIdPersistantB.hint',
-        locale: 'fr',
-        value: skillHintBeforeHintAfter.hint_i18n.fr
-      },{
-        key: 'skill.skillIdPersistantC.hint',
-        locale: 'en',
-        value: 'hint before C EN'
-      },{
-        key: 'skill.skillIdPersistantC.hint',
-        locale: 'fr',
-        value: ''
-      },]);
-      expect(skillDatasource.update).toHaveBeenCalledTimes(4);
-      expect(skillDatasource.update).toHaveBeenNthCalledWith(1, {
-        id: skillNoHintBeforeHintAfter.id,
-        airtableId: airtableIdsByIds[skillNoHintBeforeHintAfter.id],
-        hintStatus: skillNoHintBeforeHintAfter.hintStatus,
-        tutorialIds: ['airtableTutorialId'],
-        learningMoreTutorialIds: [],
-        status: skillNoHintBeforeHintAfter.status,
-        tubeId: 'airtableTubeId',
-        description: skillNoHintBeforeHintAfter.description,
-        level: skillNoHintBeforeHintAfter.level,
-        internationalisation: skillNoHintBeforeHintAfter.internationalisation,
-        version: skillNoHintBeforeHintAfter.version,
-      });
-      expect(skillDatasource.update).toHaveBeenNthCalledWith(2, {
-        id: skillHintBeforeHintAfter.id,
-        airtableId: airtableIdsByIds[skillHintBeforeHintAfter.id],
-        hintStatus: skillHintBeforeHintAfter.hintStatus,
-        tutorialIds: ['airtableTutorialId'],
-        learningMoreTutorialIds: [],
-        status: skillHintBeforeHintAfter.status,
-        tubeId: 'airtableTubeId',
-        description: skillHintBeforeHintAfter.description,
-        level: skillHintBeforeHintAfter.level,
-        internationalisation: skillHintBeforeHintAfter.internationalisation,
-        version: skillHintBeforeHintAfter.version,
-      });
-      expect(skillDatasource.update).toHaveBeenNthCalledWith(3, {
-        id: skillHintBeforeNoHintAfter.id,
-        airtableId: airtableIdsByIds[skillHintBeforeNoHintAfter.id],
-        hintStatus: skillHintBeforeNoHintAfter.hintStatus,
-        tutorialIds: ['airtableTutorialId'],
-        learningMoreTutorialIds: [],
-        status: skillHintBeforeNoHintAfter.status,
-        tubeId: 'airtableTubeId',
-        description: skillHintBeforeNoHintAfter.description,
-        level: skillHintBeforeNoHintAfter.level,
-        internationalisation: skillHintBeforeNoHintAfter.internationalisation,
-        version: skillHintBeforeNoHintAfter.version,
-      });
-      expect(skillDatasource.update).toHaveBeenNthCalledWith(4, {
-        id: skillNoHintBeforeNoHintAfter.id,
-        airtableId: airtableIdsByIds[skillNoHintBeforeNoHintAfter.id],
-        hintStatus: skillNoHintBeforeNoHintAfter.hintStatus,
-        tutorialIds: ['airtableTutorialId'],
-        learningMoreTutorialIds: [],
-        status: skillNoHintBeforeNoHintAfter.status,
-        tubeId: 'airtableTubeId',
-        description: skillNoHintBeforeNoHintAfter.description,
-        level: skillNoHintBeforeNoHintAfter.level,
-        internationalisation: skillNoHintBeforeNoHintAfter.internationalisation,
-        version: skillNoHintBeforeNoHintAfter.version,
-      });
+      expect(allTranslations).toEqual([
+        {
+          key: 'skill.skillIdPersistantA.hint',
+          locale: 'fr',
+          value: skillAlterHintFrDeleteHintEn_A.hint_i18n.fr,
+        },{
+          key: 'skill.skillIdPersistantB.hint',
+          locale: 'fr',
+          value: skillAddHint_B.hint_i18n.fr,
+        },
+      ]);
     });
   });
 

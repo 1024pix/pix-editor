@@ -1459,4 +1459,223 @@ describe('Application | Route | Skills', () => {
 
     });
   });
+
+  describe('PATCH /api/skills/{skillAirtableId}', () => {
+    let skillPayload;
+    let airtableSkill;
+    let skillDataObject;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+      const skillAttributes = {
+        'description': 'une nouvelle description',
+        'description-status': Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
+        'clue': 'AAA',
+        'clue-en': 'BBB',
+        'clue-status': Skill.HINT_STATUSES.A_RETRAVAILLER,
+        'i18n': Skill.INTERNATIONALISATIONS.FRANCE,
+        'status': Skill.STATUSES.ACTIF,
+      };
+
+      skillDataObject = domainBuilder.buildSkillDatasourceObject({
+        airtableId: 'skillAirtableId',
+        id: 'skillIdPersistant',
+        name: 'Un nom généré par Airtable',
+        hintStatus: skillAttributes['clue-status'],
+        tutorialIds: ['tutorialIdPersistant'],
+        tutorialAirtableIds: ['tutorialAirtableId'],
+        learningMoreTutorialIds: ['tutorialLMIdPersistant'],
+        learningMoreTutorialAirtableIds: ['tutorialLMAirtableId'],
+        competenceId: 'UneCompetenceId',
+        pixValue: 789,
+        status: skillAttributes['status'],
+        tubeId: 'tubeIdPersistant',
+        tubeAirtableId: 'tubeAirtableId',
+        description: skillAttributes['description'],
+        descriptionStatus: skillAttributes['description-status'],
+        level: 7,
+        internationalisation: skillAttributes['i18n'],
+        version: 5,
+        challengeIds: ['challengeIdPersistantA', 'challengeIdPersistantB'],
+        createdAt: '2025-01-06T08:58:57.465Z',
+      });
+      airtableSkill = airtableBuilder.factory.buildSkill(skillDataObject);
+
+      skillPayload = {
+        data: {
+          type: 'skills',
+          attributes: {
+            description: 'new description',
+            'description-status': 'new description-status',
+            clue: 'new clue',
+            'clue-en': 'new clueEn',
+            'clue-status': 'new clueStatus',
+            i18n: 'new i18n',
+            status: 'new status',
+          },
+          relationships: {
+            'tuto-more': {
+              data: [
+                { type: 'tutorials', id: 'tutorialLMAirtableId' },
+                { type: 'tutorials', id: 'tutorialLMNewAirtableId' },
+              ]
+            },
+            'tuto-solution': {
+              data: [
+                { type: 'tutorials', id: 'tutorialAirtableId' },
+              ]
+            },
+          }
+        },
+      };
+
+      databaseBuilder.factory.buildTranslation({
+        locale: 'fr',
+        key: 'skill.skillIdPersistant.hint',
+        value: 'Pouet'
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale: 'en',
+        key: 'skill.skillIdPersistant.hint',
+        value: 'Toot'
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    it('should patch skill', async () => {
+      // Given
+      const skillToUpdateFromAirtableScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Acquis/skillAirtableId?')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableSkill);
+
+      const airtableSkillPatched = airtableBuilder.factory.buildSkill({
+        ...skillDataObject,
+        hintStatus: skillPayload.data.attributes['clue-status'],
+        learningMoreTutorialIds: ['tutorialLMIdPersistant', 'recNewTuto'],
+        learningMoreTutorialAirtableIds: ['tutorialLMAirtableId', 'tutorialLMNewAirtableId'],
+        status: skillPayload.data.attributes.status,
+        description: skillPayload.data.attributes.description,
+        descriptionStatus: skillPayload.data.attributes['description-status'],
+        internationalisation: skillPayload.data.attributes.i18n
+      });
+
+      const airtablePatchScope = nock('https://api.airtable.com')
+        .patch('/v0/airtableBaseValue/Acquis/?', {
+          records: [{
+            fields: {
+              'id persistant': skillDataObject.id,
+              'Statut de l\'indice': skillPayload.data.attributes['clue-status'],
+              'Comprendre': ['tutorialAirtableId'],
+              'En savoir plus': ['tutorialLMAirtableId', 'tutorialLMNewAirtableId'],
+              'Status': skillPayload.data.attributes.status,
+              'Tube': [skillDataObject.tubeAirtableId],
+              'Description': skillPayload.data.attributes.description,
+              'Statut de la description': skillPayload.data.attributes['description-status'],
+              'Level': skillDataObject.level,
+              'Internationalisation': skillPayload.data.attributes.i18n,
+              'Version': skillDataObject.version,
+            },
+            id: skillDataObject.airtableId,
+          }],
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableSkillPatched] });
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+
+      const pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/skills/skillIdPersistant', {
+          id: airtableSkillPatched.fields['id persistant'],
+          name: airtableSkillPatched.fields['Nom'],
+          hintStatus: airtableSkillPatched.fields['Statut de l\'indice'],
+          tutorialIds: airtableSkillPatched.fields['Comprendre (id persistant)'],
+          learningMoreTutorialIds: airtableSkillPatched.fields['En savoir plus (id persistant)'],
+          pixValue: airtableSkillPatched.fields['PixValue'],
+          competenceId: airtableSkillPatched.fields['Compétence (via Tube) (id persistant)'][0],
+          status: airtableSkillPatched.fields['Status'],
+          tubeId: airtableSkillPatched.fields['Tube (id persistant)'][0],
+          level: airtableSkillPatched.fields['Level'],
+          version: airtableSkillPatched.fields['Version'],
+          hint_i18n: {
+            fr: skillPayload.data.attributes.clue,
+            en: skillPayload.data.attributes['clue-en'],
+          },
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+
+      const server = await createServer();
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/skills/skillAirtableId',
+        headers: generateAuthorizationHeader(user),
+        payload: skillPayload,
+      });
+
+      // Then
+      expect(response.statusCode).toBe(200);
+      expect(skillToUpdateFromAirtableScope.isDone()).toBe(true);
+      expect(airtablePatchScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
+
+      const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
+        column: 'key',
+        order: 'asc'
+      }, { column: 'locale', order: 'asc' }]);
+
+      expect(translations).to.deep.equal([{
+        key: 'skill.skillIdPersistant.hint',
+        locale: 'en',
+        value: 'new clueEn'
+      }, {
+        key: 'skill.skillIdPersistant.hint',
+        locale: 'fr',
+        value: 'new clue'
+      }]);
+    });
+    describe('when resources doesn\'t exists', () => {
+      it('Should not patch and return 404 code', async () => {
+        // Given
+        const skillToUpdateFromAirtableScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis/skillAirtableId?')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+
+        const server = await createServer();
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/skills/skillAirtableId',
+          headers: generateAuthorizationHeader(user),
+          payload: skillPayload,
+        });
+
+        // Then
+        expect(skillToUpdateFromAirtableScope.isDone()).toBe(true);
+        expect(response.statusCode).to.equal(404);
+
+        const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
+          column: 'key',
+          order: 'asc'
+        }, { column: 'locale', order: 'asc' }]);
+
+        expect(translations).to.deep.equal([{
+          key: 'skill.skillIdPersistant.hint',
+          locale: 'en',
+          value: 'Toot'
+        }, {
+          key: 'skill.skillIdPersistant.hint',
+          locale: 'fr',
+          value: 'Pouet'
+        }]);
+      });
+    });
+  });
 });

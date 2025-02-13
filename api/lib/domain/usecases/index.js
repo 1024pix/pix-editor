@@ -23,5 +23,6 @@ export * from './proxy-read-request-to-airtable.js';
 export * from './proxy-write-request-to-airtable.js';
 export * from './update-competence.js';
 export * from './update-mission.js';
+export * from './update-skill.js';
 export * from './upload-translation-to-phrase.js';
 export * from './validate-urls-from-release.js';

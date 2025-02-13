@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { skillDatasource, tubeDatasource, tutorialDatasource } from '../datasources/airtable/index.js';
+import { skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
@@ -86,38 +86,15 @@ export async function create(skill) {
 
 export async function update(skill) {
   return knex.transaction(async (transaction) => {
-    const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
-    const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
-    const airtableTutorialIds = skill.tutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
-    const airtableLearningMoreTutorialIds = skill.learningMoreTutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
-    const airtableSkillId = (await skillDatasource.getAirtableIdsByIds([skill.id]))[skill.id];
+    const updatedSkillDto = await skillDatasource.update(skill);
+    const translations = skillTranslations.extractFromDomainObject(skill);
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: `${skillTranslations.prefix}${skill.id}.`,
+      locales: ['fr', 'en'],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
 
-    const skillToUpdateDTO = {
-      id: skill.id,
-      airtableId: airtableSkillId,
-      hintStatus: skill.hintStatus,
-      tutorialIds: airtableTutorialIds,
-      learningMoreTutorialIds: airtableLearningMoreTutorialIds,
-      status: skill.status,
-      tubeId: airtableTubeId,
-      description: skill.description,
-      level: skill.level,
-      internationalisation: skill.internationalisation,
-      version: skill.version,
-    };
-    const updatedSkillDto = await skillDatasource.update(skillToUpdateDTO);
-    const translations = [];
-    const locale = 'fr';
-    const hasKeyForHint = Boolean(await knex('translations').select('*').where({ key: `${model}.${skill.id}.hint`, locale }).first());
-    const translationFr = skill.hint_i18n[locale];
-    if (hasKeyForHint || translationFr) {
-      translations.push(new Translation({
-        key: `${model}.${skill.id}.hint`,
-        locale,
-        value: translationFr,
-      }));
-      await translationRepository.save({ translations, transaction });
-    }
     return toDomain(updatedSkillDto, translations);
   });
 }

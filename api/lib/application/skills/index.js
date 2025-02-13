@@ -103,6 +103,34 @@ export async function register(server) {
         handler: skillsController.create,
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/skills/{skillAirtableId}',
+      config: {
+        validate: {
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().required().equal('skills'),
+              attributes: Joi.object({
+                'description': Joi.string().allow(null),
+                'description-status': Joi.string().allow(null),
+                'clue': Joi.string().allow(null),
+                'clue-en': Joi.string().allow(null),
+                'clue-status': Joi.string().allow(null),
+                'i18n': Joi.string().allow(null),
+                'status': Joi.string().allow(null),
+              }).unknown(true),
+              relationships: Joi.object({
+                'tuto-more': Types.tutorialsRelationship(),
+                'tuto-solution': Types.tutorialsRelationship(),
+              }).unknown(true),
+            }).unknown(true),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: skillsController.update,
+      },
+    },
   ]);
 }
 
