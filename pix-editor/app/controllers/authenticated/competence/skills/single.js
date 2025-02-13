@@ -128,22 +128,19 @@ export default class SingleController extends Controller {
     const skill = this.skill;
     const prototype = this.skill.productionPrototype;
     const operation = prototype ? prototype.save() : Promise.resolve();
-
-    return operation.then(()=>{
-      return skill.save();
-    })
-      .then(()=>this._handleSkillChangelog(skill, changelog, this.changelogEntry.modifyAction))
-      .then(() => {
-        this.edition = false;
-        this.loader.stop();
-        this.notify.message(this.intl.t('skill.changelog.update-status'));
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this.loader.stop();
-        this.notify.error(this.intl.t('skill.changelog.update-error'));
-      });
+    try {
+      await operation;
+      await skill.save();
+      await this._handleSkillChangelog(skill, changelog, this.changelogEntry.modifyAction);
+      this.edition = false;
+      this.loader.stop();
+      this.notify.message(this.intl.t('skill.changelog.update-status'));
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.loader.stop();
+      this.notify.error(this.intl.t('skill.changelog.update-error'));
+    }
   }
 
   @action
