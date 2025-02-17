@@ -31,88 +31,117 @@
     </PixButton>
   </PixFilterBanner>
 </form>
-<div class="panel-table-v2">
-  <table class="content-text content-text--small">
-    <colgroup class="table__column">
-      <col class="table__column--small" />
-      <col class="table__column" />
-      <col class="table__column--wide" />
-      <col class="table__column--wide" />
-      <col class="table__column--small" />
-      <col class="table__column--small" />
-    </colgroup>
-    <thead>
-    <tr>
-      <th>Nom des acquis concernés</th>
-      <th>Type de comparaison</th>
-      <th>URL</th>
-      <th>Commentaire</th>
-      <th>Créée le</th>
-      <th>Modifiée le</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#each @whitelistedUrls as |whitelistedUrl|}}
-      <tr class="tr--clickable" aria-label="URL en liste blanche">
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          {{whitelistedUrl.relatedSkillNames}}
-        </td>
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          <PixTag class="whitelisted-url-check-type-tag" @color={{this.checkTypeColor whitelistedUrl.checkType}}>
-            {{this.formatCheckType whitelistedUrl.checkType}}
-          </PixTag>
-        </td>
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          {{whitelistedUrl.url}}
-        </td>
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          {{whitelistedUrl.comment}}
-        </td>
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          {{this.formatCreationString whitelistedUrl}}
-        </td>
-        <td {{on "click" (fn @goToEditWhitelistedUrl whitelistedUrl.id)}}>
-          {{this.formatUpdateString whitelistedUrl}}
-        </td>
-        <td class="actions">
-          <PixTooltip
-            @id='copy-whitelisted-url-link-tooltip'
-            @position="top"
-            @isInline={{true}}
-          >
-            <:triggerElement>
-              <PixIconButton
-                @triggerAction={{fn this.copyUrl whitelistedUrl}}
-                @iconName="copy"
-                @iconPrefix="far"
-                @ariaLabel="Copier l'URL whitelistée"
-                class="icon"
-                aria-describedby='copy-whitelisted-url-link-tooltip'
-              >
-              </PixIconButton>
-            </:triggerElement>
-            <:tooltip>Copier l’URL whitelistée</:tooltip>
-          </PixTooltip>
-          <PixTooltip
-            @id='delete-whitelisted-url-tooltip'
-            @position="top"
-            @isInline={{true}}
-          >
-            <:triggerElement>
-              <PixIconButton
-                @triggerAction={{fn this.args.onDeleteItemClicked whitelistedUrl}}
-                @iconName="delete"
-                @ariaLabel="Supprimer l'URL de la whitelist"
-                class="icon"
-                aria-describedby='delete-whitelisted-url-tooltip'
-              >
-              </PixIconButton>
-            </:triggerElement>
-            <:tooltip>Supprimer l'URL de la whitelist</:tooltip>
-        </PixTooltip>
-        </td>
-      </tr>
-    {{/each}}
-    </tbody>
-  </table>
+<div class="whitelisted-urls-table">
+  <PixTable
+    @caption="Liste des URLs à ne pas mettre dans les URLs cassées"
+    @condensed={{true}}
+    @data={{@whitelistedUrls}}
+  >
+    <:columns as |row context|>
+      <PixTableColumn @context={{context}} class="column--small">
+        <:header>
+          Nom des acquis concernés
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            {{row.relatedSkillNames}}
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}}>
+        <:header>
+          Type de comparaison
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            <PixTag class="whitelisted-url-check-type-tag" @color={{this.checkTypeColor row.checkType}}>
+              {{this.formatCheckType row.checkType}}
+            </PixTag>
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}} class="column--wide">
+        <:header>
+          URL
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            {{row.url}}
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}} class="column--wide">
+        <:header>
+          Commentaire
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            {{row.comment}}
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}} class="column--small">
+        <:header>
+          Créée le
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            {{this.formatCreationString row}}
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}} class="column--small">
+        <:header>
+          Modifiée le
+        </:header>
+        <:cell>
+          <LinkTo @route="authenticated.whitelisted-urls.whitelisted-url.edit" @model={{row.id}}>
+            {{this.formatUpdateString row}}
+          </LinkTo>
+        </:cell>
+      </PixTableColumn>
+      <PixTableColumn @context={{context}} class="column--small">
+        <:header>
+          Actions
+        </:header>
+        <:cell>
+          <div class="actions">
+            <PixTooltip
+              @id='copy-whitelisted-url-link-tooltip'
+              @position="left"
+              @isInline={{true}}
+            >
+              <:triggerElement>
+                <PixIconButton
+                  @triggerAction={{fn this.copyUrl row}}
+                  @iconName="copy"
+                  @iconPrefix="far"
+                  @ariaLabel="Copier l'URL whitelistée"
+                  class="icon"
+                  aria-describedby='copy-whitelisted-url-link-tooltip'
+                />
+              </:triggerElement>
+              <:tooltip>Copier l’URL whitelistée</:tooltip>
+            </PixTooltip>
+            <PixTooltip
+              @id='delete-whitelisted-url-tooltip'
+              @position="left"
+              @isInline={{true}}
+            >
+              <:triggerElement>
+                <PixIconButton
+                  @triggerAction={{fn this.args.onDeleteItemClicked row}}
+                  @iconName="delete"
+                  @ariaLabel="Supprimer l'URL de la whitelist"
+                  class="icon"
+                  aria-describedby='delete-whitelisted-url-tooltip'
+                />
+              </:triggerElement>
+              <:tooltip>Supprimer l'URL de la whitelist</:tooltip>
+            </PixTooltip>
+          </div>
+        </:cell>
+      </PixTableColumn>
+    </:columns>
+  </PixTable>
 </div>

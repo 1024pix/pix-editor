@@ -1,4 +1,12 @@
+@use 'pix-design-tokens/shadows' as *;
+
 .filter-whitelisted-url-form {
+  .table-filter-banner {
+    margin-top: 0;
+    border-radius: var(--pix-spacing-2x);
+    border: 1px solid var(--pix-neutral-100);
+  }
+
   .card__content{
     display: flex;
     flex-direction: column;
@@ -37,5 +45,32 @@
 
   &__description {
     font-size: 0.825rem;
+  }
+}
+
+.whitelisted-urls-table {
+  @extend %pix-shadow-sm;
+
+  .column {
+    &--small {
+      width: 8%;
+      max-width: 150px;
+    }
+
+    &--wide {
+      width: 25%;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+  }
+
+  a {
+    display: block;
   }
 }

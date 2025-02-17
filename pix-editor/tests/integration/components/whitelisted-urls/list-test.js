@@ -1,4 +1,4 @@
-import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -8,12 +8,12 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | whitelisted-urls/list', function(hooks) {
   setupIntlRenderingTest(hooks);
   let store, whitelistedUrl1, whitelistedUrl2, hour1_create, hour1_update, hour2_create;
-  let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub, onEditStub;
+  let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
     whitelistedUrl1 = store.createRecord('whitelisted-url', {
-      id: 1,
+      id: '1',
       url: 'https://foo.com',
       creatorName: 'Laura le chocolat',
       latestUpdatorName: 'Iris l\'anis',
@@ -31,7 +31,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
       .format(new Date('2021-01-01T09:00:00Z'))
       .replaceAll(/[A-Za-z\s]/g, '');
     whitelistedUrl2 = store.createRecord('whitelisted-url', {
-      id: 2,
+      id: '2',
       url: 'https://bar.com',
       creatorName: 'Fael le miel',
       latestUpdatorName: null,
@@ -47,7 +47,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     onApplyFiltersClickedStub = sinon.stub();
     onClearFiltersClickedStub = sinon.stub();
     onDeleteItemClickedStub = sinon.stub();
-    onEditStub = sinon.stub();
   });
 
   test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function(assert) {
@@ -58,7 +57,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -70,7 +68,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
 
     // then
@@ -104,10 +101,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         name: 'Modifiée le',
       }),
     );
-    assert.strictEqual(
-      screen.getAllByRole('row', { name: 'URL en liste blanche' }).length,
-      2,
-    );
+    assert.strictEqual(screen.getAllByRole('row').length, 3);
     assert.ok(screen.getByRole('cell', { name: 'https://foo.com' }), 'https://foo.com');
     assert.ok(screen.getByRole('cell', { name: 'Strictement égale à' }), 'Strictement égale à');
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Laura' }), 'Un commentaire sur Laura');
@@ -130,7 +124,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -142,7 +135,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
@@ -161,7 +153,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -173,7 +164,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await clickByName('Filtrer');
@@ -192,7 +182,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     const screen = await render(hbs`
@@ -204,7 +193,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
     await fillByLabel('Nom d\'acquis', 'different names value');
     await fillByLabel('URL', 'different url value');
@@ -224,7 +212,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
     await render(hbs`
@@ -236,7 +223,6 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
     await clickByName('Réinitialiser les filtres');
 
@@ -245,7 +231,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     assert.ok(true);
   });
 
-  test('it should call arg edit function when clicking on list item', async function(assert) {
+  test('it should link to edit page when clicking on list item', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -253,10 +239,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.onApplyFiltersClicked = onApplyFiltersClickedStub;
     this.onClearFiltersClicked = onClearFiltersClickedStub;
     this.onDeleteItemClicked = onDeleteItemClickedStub;
-    this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    await render(hbs`
+    const screen = await render(hbs`
       <WhitelistedUrls::List
         @whitelistedUrls={{this.whitelistedUrls}}
         @urlFilterValue={{this.urlFilterValue}}
@@ -265,14 +250,16 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
         @onClearFiltersClicked={{this.onClearFiltersClicked}}
         @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
       />`);
-    await clickByText('Strictement égale à');
-    await clickByText('Un commentaire sur Laura');
-    await clickByText('https://foo.com');
-    await clickByText('@fruit4,@legume5');
 
     // then
-    assert.strictEqual(onEditStub.callCount, 4);
+    const links = screen.getAllByRole('link');
+    assert.strictEqual(links.length, 12);
+
+    const firstRowLinks = links.slice(0, 6);
+    assert.ok(firstRowLinks.every((link) => link.href.endsWith('/whitelisted-urls/1/edit')));
+
+    const secondRowLinks = links.slice(6, 12);
+    assert.ok(secondRowLinks.every((link) => link.href.endsWith('/whitelisted-urls/2/edit')));
   });
 });
