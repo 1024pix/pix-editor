@@ -1,0 +1,28 @@
+@use 'pix-design-tokens/shadows' as *;
+
+.whitelisted-urls-table {
+  @extend %pix-shadow-sm;
+
+  .column {
+    &--small {
+      width: 8%;
+      max-width: 150px;
+    }
+
+    &--wide {
+      width: 25%;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+  }
+
+  a {
+    display: block;
+  }
+}

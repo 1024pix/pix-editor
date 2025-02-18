@@ -34,6 +34,7 @@
 @use 'authenticated/static-courses/static-course' as static-course-static-course;
 @use 'authenticated/whitelisted-urls/list' as whitelisted-urls-list;
 @use 'authenticated/whitelisted-urls/new' as whitelisted-urls-new;
+@use 'authenticated/whitelisted-urls/table' as whitelisted-urls-table;
 @use 'authenticated/synchronize-translations';
 @use 'components/card';
 @use 'components/competence-header';
