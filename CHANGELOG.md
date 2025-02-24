@@ -1,5 +1,11 @@
 
 
+## v3.185.1 (24/02/2025)
+
+
+### :building_construction: Tech
+- [#875](https://github.com/1024pix/pix-editor/pull/875) [TECH] Ajout d'un log quand aucun datasource ne correspond à l'entité à sérialiser (PIX-16611).
+
 ## v3.184.0 (31/01/2025)
 
 
