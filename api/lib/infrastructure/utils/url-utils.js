@@ -10,11 +10,7 @@ export function findUrlsInMarkdown(value) {
   const safeValue = value || '';
   const converter = new showdown.Converter();
   const html = converter.makeHtml(safeValue);
-  const urls = html.match(urlRegex({ strict: true }));
-  if (!urls) {
-    return [];
-  }
-  return _.uniq(urls.map(cleanUrl).map(ensureProtocol));
+  return findUrlsInText(html);
 }
 
 /**
@@ -93,4 +89,12 @@ function ensureProtocol(url) {
 
 export function getOrigin(url) {
   return new URL(url).origin;
+}
+
+export function findUrlsInText(inputText) {
+  const urls = inputText.match(urlRegex({ strict: true }));
+  if (!urls) {
+    return [];
+  }
+  return _.uniq(urls.map(cleanUrl).map(ensureProtocol));
 }

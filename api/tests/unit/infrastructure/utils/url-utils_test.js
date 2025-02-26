@@ -68,6 +68,29 @@ describe('Unit | Utils | URL Utils', function() {
     });
   });
 
+  describe('#findUrlsInText', () => {
+    it('should find multiple url', function() {
+      const inputString = `lien:
+- "https://pas_local.org/super_nom_wow.pdf"
+- "http://local_youyou.org/el_-_deuxième_super_truc.html"
+- "http://local_youyou.test.org/el_-_deuxième_super_truc"
+- "http://local_youyou.org/autre_dossier/el_-_deuxième_super_truc.txt"
+- "www.local_youyou.org/text.txt"
+soin:
+- 20 ans`;
+
+      const result = UrlUtils.findUrlsInText(inputString);
+
+      expect(result).toStrictEqual([
+        'https://pas_local.org/super_nom_wow.pdf',
+        'http://local_youyou.org/el_-_deuxième_super_truc.html',
+        'http://local_youyou.test.org/el_-_deuxième_super_truc',
+        'http://local_youyou.org/autre_dossier/el_-_deuxième_super_truc.txt',
+        'https://www.local_youyou.org/text.txt'
+      ]);
+    });
+
+  });
   describe('#getOrigin', () => {
     [
       { url: 'http://pix.fr', expected: 'http://pix.fr' },
