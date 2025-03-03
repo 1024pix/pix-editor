@@ -14,8 +14,8 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
     const functions = [
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.proposals),
-      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.solution),
-      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.solutionToDisplay),
+      (challenge) => UrlUtils.findUrlsInText(challenge.solution),
+      (challenge) => UrlUtils.findUrlsInText(challenge.solutionToDisplay),
       (challenge) => localizedChallengesById[challenge.id].urlsToConsult ?? [],
     ];
     const urls = functions

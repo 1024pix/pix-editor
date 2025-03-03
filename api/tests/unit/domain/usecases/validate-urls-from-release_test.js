@@ -199,6 +199,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       mockedUrlUtils = {
         findUrlsInMarkdown: UrlUtils.findUrlsInMarkdown,
         analyzeIdentifiedUrls: vi.fn().mockResolvedValue('yo'),
+        findUrlsInText: UrlUtils.findUrlsInText,
       };
     });
 
