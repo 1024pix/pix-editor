@@ -1,5 +1,23 @@
 
 
+## v3.186.0 (04/03/2025)
+
+
+### :bug: Correction
+- [#882](https://github.com/1024pix/pix-editor/pull/882) [BUGFIX] Utilisation de `findUrlsInMarkdown()` sur champs qui ne sont pas du markdown (PIX15982).
+
+### :arrow_up: Montée de version
+- [#880](https://github.com/1024pix/pix-editor/pull/880) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.27 (pix-editor).
+- [#868](https://github.com/1024pix/pix-editor/pull/868) [BUMP] Update dependency @sentry/node to v8.49.0 [SECURITY].
+- [#872](https://github.com/1024pix/pix-editor/pull/872) [BUMP] Update dependency vitest to v2.1.9 [SECURITY].
+- [#877](https://github.com/1024pix/pix-editor/pull/877) [BUMP] Update dependency phrase-js to v3 (api).
+- [#841](https://github.com/1024pix/pix-editor/pull/841) [BUMP] Update dependency browser-tools to v1.5.2 (.circleci).
+- [#876](https://github.com/1024pix/pix-editor/pull/876) [BUMP] Update Node.js to v22.14.0.
+- [#879](https://github.com/1024pix/pix-editor/pull/879) [BUMP] Update dependency sinon to v19 (scripts).
+- [#878](https://github.com/1024pix/pix-editor/pull/878) [BUMP] Update dependency sinon to v19 (pix-editor).
+- [#873](https://github.com/1024pix/pix-editor/pull/873) [BUMP] Update dependency vitest to v1.6.1 [SECURITY].
+- [#860](https://github.com/1024pix/pix-editor/pull/860) [BUMP] Update dependency @1024pix/pix-ui to v54 (pix-editor).
+
 ## v3.185.1 (24/02/2025)
 
 
