@@ -60,7 +60,7 @@ executors:
         default: 1.49.1
         type: string
     docker:
-      - image: mcr.microsoft.com/playwright:v<<parameters.playwright-version>>-focal
+      - image: mcr.microsoft.com/playwright:v<<parameters.playwright-version>>-noble
       - image: postgres:15.10-alpine
         environment:
           POSTGRES_USER: circleci
