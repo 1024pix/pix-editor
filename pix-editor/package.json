@@ -54,7 +54,7 @@
     "ember-aria-tabs": "^7.0.0",
     "ember-auto-import": "^2.6.3",
     "ember-basic-dropdown": "^8.0.4",
-    "ember-cli": "^5.0.0",
+    "ember-cli": "^6.0.0",
     "ember-cli-app-version": "^7.0.0",
     "ember-cli-babel": "^8.0.0",
     "ember-cli-clipboard": "1.2",
