@@ -64,7 +64,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
           locale: 'nl',
         });
 
-        expect(modifyLocalizedChallenge({
+        await expect(modifyLocalizedChallenge({
           isAdmin: false,
           localizedChallenge
         }, { localizedChallengeRepository })).rejects.toThrow();

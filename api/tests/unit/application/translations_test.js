@@ -13,7 +13,7 @@ describe('Unit | Controller | translations controller', function() {
       vi.spyOn(exports, 'importTranslations').mockRejectedValue(new Error('unexpected'));
 
       // When
-      expect(importTranslationsHandler(mockRequest, hFake)).rejects.toThrow();
+      await expect(importTranslationsHandler(mockRequest, hFake)).rejects.toThrow();
     });
   });
 });

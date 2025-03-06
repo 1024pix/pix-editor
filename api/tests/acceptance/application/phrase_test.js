@@ -464,7 +464,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         expect(phraseAPILocales.isDone()).to.be.true;
         expect(phraseAPIDownloadEn.isDone()).to.be.true;
         expect(phraseAPIDownloadNl.isDone()).to.be.true;
-        expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal([
+        await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal([
           { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
           {
             key: 'challenge.challenge1nwE8BcKcmiNvR.instruction',
@@ -472,7 +472,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
           },
         ]);
-        expect(knex('localized_challenges').select().orderBy('id')).resolves.toEqual([{
+        await expect(knex('localized_challenges').select().orderBy('id')).resolves.toEqual([{
           id: expect.stringMatching(/^challenge.*$/),
           challengeId: 'challenge1nwE8BcKcmiNvR',
           locale: 'nl',
@@ -596,7 +596,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         expect(phraseAPIAreaTwoLocales.isDone()).to.be.true;
         expect(phraseAPIAreaTwoDownloadEn.isDone()).to.be.true;
         expect(phraseAPIAreaTwoDownloadNl.isDone()).to.be.true;
-        expect(knex('translations').select('key', 'locale', 'value').orderBy('key', 'asc')).resolves.to.deep.equal([
+        await expect(knex('translations').select('key', 'locale', 'value').orderBy('key', 'asc')).resolves.to.deep.equal([
           { key: 'area.recDesCodesLaAreaDeux.title', locale: 'nl', value: 'Environnement digital' },
           { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
           {
@@ -610,7 +610,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             value: 'Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
           },
         ]);
-        expect(knex('localized_challenges').select().orderBy('challengeId', 'asc')).resolves.toEqual([
+        await expect(knex('localized_challenges').select().orderBy('challengeId', 'asc')).resolves.toEqual([
           {
             id: expect.stringMatching(/^challenge.*$/),
             challengeId: 'challenge1nwE8BcKcmiNvR',

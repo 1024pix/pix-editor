@@ -37,8 +37,8 @@ describe('Unit | Domain | Usecases | create competence', function() {
       const result = createCompetence(competence);
 
       // then
-      expect(result).rejects.toBeInstanceOf(BadRequestError);
-      expect(result).rejects.toHaveProperty('message', 'unknown area');
+      await expect(result).rejects.toBeInstanceOf(BadRequestError);
+      await expect(result).rejects.toHaveProperty('message', 'unknown area');
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);

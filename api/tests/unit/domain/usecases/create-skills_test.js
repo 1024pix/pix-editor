@@ -70,7 +70,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
       const resultPromise = createSkill(skill, { skillRepository, tubeRepository });
 
       // then
-      expect(resultPromise).rejects.toStrictEqual(new NotFoundError('Tube introuvable'));
+      await expect(resultPromise).rejects.toStrictEqual(new NotFoundError('Tube introuvable'));
     });
   });
 });
