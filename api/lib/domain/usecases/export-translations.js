@@ -10,11 +10,10 @@ import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function exportTranslations(stream, dependencies) {
+export async function exportTranslations(stream, { areaCode }, dependencies) {
   const release = await dependencies.releaseRepository.getLatestRelease();
   const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
   const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
-
   const releaseContent = Object.fromEntries(
     Object.entries(release.content)
       .map(([collection, entities]) => [
@@ -47,6 +46,7 @@ export async function exportTranslations(stream, dependencies) {
   const csvLinesStream = translationsStreams
     .filter(({ translation }) => translation.locale === localeToExtract)
     .filter(keepPixFramework)
+    .filter(keepSpecifiedArea(areaCode))
     .map(translationAndTagsToCSVLine);
 
   pipeline(
@@ -58,6 +58,13 @@ export async function exportTranslations(stream, dependencies) {
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
+}
+
+function keepSpecifiedArea(areaCode) {
+  return ({ tags }) => {
+    if (!areaCode) return true;
+    return tags.includes(`Pix-${areaCode}`);
+  };
 }
 
 function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
