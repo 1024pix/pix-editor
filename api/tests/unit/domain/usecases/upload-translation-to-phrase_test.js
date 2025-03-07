@@ -19,6 +19,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       uploadCreate() { return uploadCreateStub(); }
     };
     vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
+    vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
 
     // when
     await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
@@ -50,6 +51,98 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     expect(scheduleStub).toHaveBeenCalledWith({ uploadId: 'upload-id' });
   });
 
+  it('should multi upload to Phrase when the are several projectIds', async () => {
+    // given
+    const ConfigurationStub = class {};
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
+      { projectId: 'mon-projet-1' },
+      { projectId: 'mon-projet-2', areaCode: '4' },
+    ]);
+    const localesListStub = vi.fn()
+      .mockResolvedValueOnce([
+        { id: 'frLocaleId-1', code: 'fr', name: 'fr', _default: true },
+      ])
+      .mockResolvedValueOnce([
+        { id: 'frLocaleId-2', code: 'fr', name: 'fr', _default: true },
+      ]);
+
+    const LocalesApiStub = class {
+      localesList() { return localesListStub(); }
+    };
+    const uploadCreateStub = vi.fn()
+      .mockResolvedValue({ id: 'upload-id-1' })
+      .mockResolvedValue({ id: 'upload-id-2' });
+
+    const UploadsApiStub = class {
+      uploadCreate(...args) { return uploadCreateStub(...args); }
+    };
+
+    vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
+    vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
+
+    // when
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
+
+    // then
+    const expectedData = {
+      file: expect.anything(),
+      fileFormat: 'csv',
+      updateDescriptions: true,
+      updateTranslations: true,
+      skipUploadTags: true,
+      localeMapping: {
+        fr: 2,
+      },
+      formatOptions: {
+        key_index: 1,
+        tag_column: 3,
+        comment_index: 4,
+        header_content_row: true,
+      }
+    };
+    expect(uploadCreateStub).toHaveBeenCalledTimes(2);
+    expect(uploadCreateStub).toHaveBeenNthCalledWith(1, { projectId: 'mon-projet-1', localeId: 'frLocaleId-1', ...expectedData });
+    expect(uploadCreateStub).toHaveBeenNthCalledWith(2, { projectId: 'mon-projet-2', localeId: 'frLocaleId-2', ...expectedData });
+  });
+
+  it('should schedule multiple deletions of unmentioned keys when the are several projectIds', async () => {
+    // given
+    const ConfigurationStub = class {};
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
+      { projectId: 'mon-projet-1' },
+      { projectId: 'mon-projet-2', areaCode: '4' },
+    ]);
+    const localesListStub = vi.fn()
+      .mockResolvedValueOnce([
+        { id: 'frLocaleId-1', code: 'fr', name: 'fr', _default: true },
+      ])
+      .mockResolvedValueOnce([
+        { id: 'frLocaleId-2', code: 'fr', name: 'fr', _default: true },
+      ]);
+
+    const LocalesApiStub = class {
+      localesList() { return localesListStub(); }
+    };
+    const uploadCreateStub = vi.fn()
+      .mockResolvedValueOnce({ id: 'upload-id-1' })
+      .mockResolvedValueOnce({ id: 'upload-id-2' });
+
+    const UploadsApiStub = class {
+      uploadCreate(...args) { return uploadCreateStub(...args); }
+    };
+
+    vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
+    const deleteUnmentionedKeysJobStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
+
+    // when
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
+
+    // then
+    expect(deleteUnmentionedKeysJobStub).toHaveBeenCalledTimes(2);
+    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(1, { uploadId: 'upload-id-1' });
+    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(2, { uploadId: 'upload-id-2' });
+  });
+
   it('should not upload to Phrase when apiKey is not set', async () => {
     // given
     vi.spyOn(config.phrase, 'apiKey', 'get').mockReturnValue(undefined);
@@ -65,7 +158,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
 
   it('should not upload to Phrase when projectId is not set', async () => {
     // given
-    vi.spyOn(config.phrase, 'projectId', 'get').mockReturnValue(undefined);
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([]);
 
     const ConfigurationStub = vi.fn();
 
