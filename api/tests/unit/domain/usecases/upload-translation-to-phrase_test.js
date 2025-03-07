@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { uploadTranslationToPhrase } from '../../../../lib/domain/usecases/index.js';
+import { localizedChallengeRepository, releaseRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import * as exportTranslationsUseCase from '../../../../lib/domain/usecases/export-translations.js';
 import * as deleteUnmentionedKeysAfterUploadJob from '../../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 import * as config from '../../../../lib/config.js';
@@ -7,6 +8,7 @@ import * as config from '../../../../lib/config.js';
 describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
   it('should upload to Phrase', async () => {
     // given
+    const release = Symbol('release');
     const ConfigurationStub = class {};
     const localesListStub = vi.fn().mockResolvedValue([
       { id: 'frLocaleId', code: 'fr', name: 'fr', _default: true },
@@ -18,14 +20,28 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     const UploadsApiStub = class {
       uploadCreate() { return uploadCreateStub(); }
     };
-    vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
+    const exportTranslationsStub = vi.spyOn(exportTranslationsUseCase, 'exportTranslations')
+      .mockImplementation((stream) => stream.end());
     vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
+
+    const releaseStub = vi.spyOn(releaseRepository, 'getLatestRelease').mockResolvedValue(release);
 
     // when
     await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
 
     // then
-    expect(uploadCreateStub).toHaveBeenCalled();
+    expect(releaseStub).toHaveBeenCalledTimes(1);
+    expect(exportTranslationsStub).toHaveBeenCalledTimes(1);
+    expect(exportTranslationsStub).toHaveBeenCalledWith(
+      expect.anything(),
+      { areaCode: undefined },
+      {
+        baseUrl: 'http://test.site',
+        localizedChallengeRepository,
+        release
+      }
+    );
+    expect(uploadCreateStub).toHaveBeenCalledTimes(1);
   });
 
   it('should schedule deletion of unmentioned keys', async () => {
@@ -53,6 +69,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
 
   it('should multi upload to Phrase when the are several projectIds', async () => {
     // given
+    const release = Symbol('release');
     const ConfigurationStub = class {};
     vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
       { projectId: 'mon-projet-1' },
@@ -77,8 +94,10 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       uploadCreate(...args) { return uploadCreateStub(...args); }
     };
 
-    vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
+    const exportTranslationsStub = vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
     vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
+
+    const releaseStub = vi.spyOn(releaseRepository, 'getLatestRelease').mockResolvedValue(release);
 
     // when
     await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
@@ -100,6 +119,26 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
         header_content_row: true,
       }
     };
+    expect(releaseStub).toHaveBeenCalledTimes(1);
+    expect(exportTranslationsStub).toHaveBeenCalledTimes(2);
+    expect(exportTranslationsStub).toHaveBeenCalledWith(
+      expect.anything(),
+      { areaCode: undefined },
+      {
+        baseUrl: 'http://test.site',
+        localizedChallengeRepository,
+        release
+      }
+    );
+    expect(exportTranslationsStub).toHaveBeenCalledWith(
+      expect.anything(),
+      { areaCode: '4' },
+      {
+        baseUrl: 'http://test.site',
+        localizedChallengeRepository,
+        release
+      }
+    );
     expect(uploadCreateStub).toHaveBeenCalledTimes(2);
     expect(uploadCreateStub).toHaveBeenNthCalledWith(1, { projectId: 'mon-projet-1', localeId: 'frLocaleId-1', ...expectedData });
     expect(uploadCreateStub).toHaveBeenNthCalledWith(2, { projectId: 'mon-projet-2', localeId: 'frLocaleId-2', ...expectedData });

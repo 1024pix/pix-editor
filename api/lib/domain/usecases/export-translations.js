@@ -11,7 +11,7 @@ import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
 export async function exportTranslations(stream, { areaCode }, dependencies) {
-  const release = await dependencies.releaseRepository.getLatestRelease();
+  const release = dependencies.release;
   const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
   const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
   const releaseContent = Object.fromEntries(

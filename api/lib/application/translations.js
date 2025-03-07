@@ -23,7 +23,8 @@ export async function register(server) {
         handler: async function(request, h) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
-          await exportTranslations(stream, request.query, { releaseRepository, localizedChallengeRepository, baseUrl });
+          const release = await releaseRepository.getLatestRelease();
+          await exportTranslations(stream, request.query, { localizedChallengeRepository, release, baseUrl });
           return h.response(stream).header('Content-type', 'text/csv');
         }
       },
