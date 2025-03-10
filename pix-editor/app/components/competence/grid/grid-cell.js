@@ -54,4 +54,8 @@ export default class GridCell extends Component {
     }
     return 'empty';
   }
+
+  get skillLevel() {
+    return this.args.index + 1;
+  }
 }

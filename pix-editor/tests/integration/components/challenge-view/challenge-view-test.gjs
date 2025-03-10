@@ -81,7 +81,6 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     // then
     assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve' })).exists();
     const link = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve' });
-    console.log(link);
     assert.ok(link.href.endsWith('/api/urlto/challengeProtoValidee'));
   });
 
