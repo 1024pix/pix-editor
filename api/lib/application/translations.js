@@ -7,6 +7,7 @@ import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import * as config from '../config.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
+import Joi from 'joi';
 
 export async function register(server) {
   server.route([
@@ -14,10 +15,16 @@ export async function register(server) {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
+        validate:{
+          query:  Joi.object({
+            areaCode: Joi.number()
+          })
+        },
         handler: async function(request, h) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
-          await exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
+          const release = await releaseRepository.getLatestRelease();
+          await exportTranslations(stream, request.query, { localizedChallengeRepository, release, baseUrl });
           return h.response(stream).header('Content-type', 'text/csv');
         }
       },

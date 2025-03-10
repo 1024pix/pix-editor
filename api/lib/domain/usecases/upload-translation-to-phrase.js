@@ -9,53 +9,57 @@ import { schedule as scheduleDeleteUnmentionedKeysAfterUploadJob } from '../../i
 
 export async function uploadTranslationToPhrase(phraseApi = { Configuration, LocalesApi, UploadsApi }) {
 
-  const { apiKey, projectId } = config.phrase;
+  const { apiKey, projects } = config.phrase;
+  const baseUrl = config.lcms.baseUrl;
 
-  if (!apiKey || !projectId) {
+  if (!apiKey || !projects.length) {
     logger.info('Phrase API Key or Project Id is not defined. Skipping upload translations.');
     return;
   }
 
-  const baseUrl = config.lcms.baseUrl;
-  const stream = new PassThrough();
-  await exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
-  const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
+  const release = await releaseRepository.getLatestRelease();
 
-  const configuration = new phraseApi.Configuration({
-    fetchApi: fetch,
-    apiKey: `token ${config.phrase.apiKey}`,
-  });
+  for (const { projectId, areaCode } of projects) {
+    const stream = new PassThrough();
+    await exportTranslations(stream, { areaCode }, { release, localizedChallengeRepository, baseUrl });
+    const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
 
-  try {
-    const locales = await new phraseApi.LocalesApi(configuration).localesList({
-      projectId: config.phrase.projectId,
+    const configuration = new phraseApi.Configuration({
+      fetchApi: fetch,
+      apiKey: `token ${apiKey}`,
     });
 
-    const defaultLocaleId = locales.find((locale) => locale._default)?.id;
+    try {
+      const locales = await new phraseApi.LocalesApi(configuration).localesList({
+        projectId,
+      });
 
-    const upload = await new phraseApi.UploadsApi(configuration).uploadCreate({
-      projectId: config.phrase.projectId,
-      localeId: defaultLocaleId,
-      file: csvFile,
-      fileFormat: 'csv',
-      updateDescriptions: true,
-      updateTranslations: true,
-      skipUploadTags: true,
-      localeMapping: {
-        fr: 2,
-      },
-      formatOptions: {
-        key_index: 1,
-        tag_column: 3,
-        comment_index: 4,
-        header_content_row: true,
-      }
-    });
+      const defaultLocaleId = locales.find((locale) => locale._default)?.id;
 
-    await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
-  } catch (e) {
-    const text = await e.text?.() ?? e;
-    logger.error(`Phrase error while uploading translations: ${text}`);
-    throw new Error('Phrase error', { cause: e });
+      const upload = await new phraseApi.UploadsApi(configuration).uploadCreate({
+        projectId,
+        localeId: defaultLocaleId,
+        file: csvFile,
+        fileFormat: 'csv',
+        updateDescriptions: true,
+        updateTranslations: true,
+        skipUploadTags: true,
+        localeMapping: {
+          fr: 2,
+        },
+        formatOptions: {
+          key_index: 1,
+          tag_column: 3,
+          comment_index: 4,
+          header_content_row: true,
+        }
+      });
+
+      await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
+    } catch (e) {
+      const text = await e.text?.() ?? e;
+      logger.error(`Phrase error while uploading translations: ${text}`);
+      throw new Error('Phrase error', { cause: e });
+    }
   }
 }
