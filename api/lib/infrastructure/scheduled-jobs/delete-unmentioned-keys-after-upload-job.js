@@ -23,6 +23,6 @@ const deleteUnmentionedKeysAfterUploadJobOptions = {
   delay: 3 * 60 * 1000
 };
 
-export function schedule({ uploadId }) {
-  return queue.add({ uploadId }, deleteUnmentionedKeysAfterUploadJobOptions);
+export function schedule({ uploadId, projectId }) {
+  return queue.add({ uploadId, projectId }, deleteUnmentionedKeysAfterUploadJobOptions);
 }

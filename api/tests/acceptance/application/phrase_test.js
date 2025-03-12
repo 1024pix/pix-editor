@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
 import { Buffer } from 'node:buffer';
@@ -9,12 +9,15 @@ import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
 import { Area, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
+import * as scheduleDeleteUnmentionedKeysAfterUploadJob from '../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
+
 describe('Acceptance | Controller | phrase-controller', () => {
 
   describe('POST /phrase/upload', () => {
 
     it('should upload the translations to phrase', async () => {
       // Given
+      const spyScheduleDeleteUnmentionedKeysAfterUploadJob = vi.spyOn(scheduleDeleteUnmentionedKeysAfterUploadJob, 'schedule');
       const user = databaseBuilder.factory.buildAdminUser();
       const releaseContent = {
         frameworks: [{
@@ -286,7 +289,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true');
         })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(201, {});
+        .reply(201, { id: 'uplaodId' });
 
       const server = await createServer();
       const postPhraseUploadOptions = {
@@ -392,6 +395,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
           ''
         ],
       ]);
+
+      expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({ uploadId: 'uplaodId', projectId: 'MY_PHRASE_PROJECT_ID' });
     });
   });
 

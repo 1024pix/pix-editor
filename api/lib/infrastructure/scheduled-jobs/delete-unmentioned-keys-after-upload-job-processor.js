@@ -3,7 +3,10 @@ import { RETRY, deleteUnmentionedKeysAfterUpload } from '../../domain/usecases/i
 import { schedule } from './delete-unmentioned-keys-after-upload-job.js';
 
 export default async function deleteUnmentionedKeysAfterUploadJobProcessor(job) {
-  const status = await deleteUnmentionedKeysAfterUpload(job.data.uploadId);
+  const status = await deleteUnmentionedKeysAfterUpload({
+    uploadId: job.data.uploadId,
+    projectId: job.data.projectId,
+  });
 
   if (status === RETRY) {
     schedule(job.data);
