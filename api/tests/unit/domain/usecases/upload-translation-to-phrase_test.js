@@ -64,7 +64,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
 
     // then
-    expect(scheduleStub).toHaveBeenCalledWith({ uploadId: 'upload-id' });
+    expect(scheduleStub).toHaveBeenCalledWith({ uploadId: 'upload-id', projectId: 'MY_PHRASE_PROJECT_ID' });
   });
 
   it('should multi upload to Phrase when the are several projectIds', async () => {
@@ -178,8 +178,8 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
 
     // then
     expect(deleteUnmentionedKeysJobStub).toHaveBeenCalledTimes(2);
-    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(1, { uploadId: 'upload-id-1' });
-    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(2, { uploadId: 'upload-id-2' });
+    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(1, { uploadId: 'upload-id-1', projectId: 'mon-projet-1' });
+    expect(deleteUnmentionedKeysJobStub).toHaveBeenNthCalledWith(2, { uploadId: 'upload-id-2', projectId: 'mon-projet-2' });
   });
 
   it('should not upload to Phrase when apiKey is not set', async () => {

@@ -55,7 +55,7 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
         }
       });
 
-      await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
+      await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id, projectId });
     } catch (e) {
       const text = await e.text?.() ?? e;
       logger.error(`Phrase error while uploading translations: ${text}`);
