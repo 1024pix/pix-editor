@@ -18,4 +18,8 @@ export default class CompetenceOverviewModel extends Model {
   get locale() {
     return this.id.split(':')[2];
   }
+
+  get competenceAirtableId() {
+    return this.airtableId;
+  }
 }

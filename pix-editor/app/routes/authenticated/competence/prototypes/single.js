@@ -20,18 +20,17 @@ export default class SingleRoute extends Route {
     if (!model) return;
     await model?.files;
     this.currentData.setPrototype(model);
-
     if (!this.versionManager.isV2) return;
 
     const view = transition.to.queryParams.view;
     const goingToProduction = view === 'production' || !view;
     if (!goingToProduction) return;
 
-    const { competencePixId, locale } = this.modelFor('authenticated.competence.prototypes');
+    const { competenceAirtableId, locale } = this.modelFor('authenticated.competence.prototypes');
     const skillId = skill.id;
     const overview = 'challenges-production';
 
-    this.router.transitionTo('authenticated.v2.competence-overview.challenges', competencePixId, overview, skillId, { queryParams: { locale } });
+    this.router.transitionTo('authenticated.v2.competence-overview.challenges', competenceAirtableId, overview, skillId, { queryParams: { locale } });
   }
 
   setupController(controller, model) {
