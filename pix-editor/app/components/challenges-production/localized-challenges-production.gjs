@@ -122,7 +122,7 @@ export default class LocalizedChallengesProduction extends Component {
   }
 
 <template>
-    <ChallengesProductionHeader @skill={{@skill}} />
+    <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competenceId}} />
     <section class="challenges-production">
       <div class="challenges-production-table">
         <PixTable @condensed={{true}} @data={{this.localizedChallengeDataItems}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
