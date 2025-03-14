@@ -131,7 +131,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       const competence = this.server.create('competence', {
         id: 'recCompetence1.1',
         title: 'Nom de compétence',
-        code: 1,
+        code: '1.1',
         pixId: 'pixId recCompetence1.1',
         rawThemeIds: ['recTheme1'],
         rawTubeIds: ['recTube1'],
@@ -169,7 +169,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       // when
       const screen = await visit('/');
       await clickByText('Nom du domaine');
-      await clickByText('1 Nom de compétence');
+      await clickByText('1.1 Nom de compétence');
       await clickByText('@acquis2');
       await clickByText('Déclinaisons >>');
       await clickByText('Instruction de la déclinaison');
@@ -180,4 +180,3 @@ module('Acceptance | Localized-Challenge', function(hooks) {
     });
   });
 });
-

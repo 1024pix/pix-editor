@@ -16,14 +16,21 @@ export default class LocalizedChallengesRoute extends Route {
   }
 
   async model(params) {
-    const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
+    const { locale, competence } = this.modelFor('authenticated.v2');
     const { overview } = this.paramsFor('authenticated.v2.competence-overview');
-    const { locale } = this.paramsFor('authenticated.v2');
     const { skill_id } = params;
     const skill = await this.store.findRecord('skill', skill_id);
     const challenges = await skill.challengesProduction;
     const localizedChallenges = await skill.localizedChallengesProduction;
 
-    return { challenges, skill, localizedChallenges, locale, competenceId, overview };
+    return {
+      challenges,
+      skill,
+      localizedChallenges,
+      locale,
+      areaCode: competence.areaCode,
+      competenceId: competence.id,
+      overview,
+    };
   }
 }

@@ -49,6 +49,10 @@ export default class CompetenceModel extends Model {
       .sortBy('index');
   }
 
+  get areaCode() {
+    return this.code.split('.')[0];
+  }
+
   get sortedTubes() {
     return this.tubes.sortBy('index');
   }

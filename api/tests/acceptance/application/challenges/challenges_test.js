@@ -988,10 +988,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
   });
 
-  describe('GET /challenges/:id/translations/:locale', () => {
+  describe('GET /challenges/:id/translations/:locale/area-code/:code', () => {
 
-    it('should redirect Phrase translations page', async () => {
+    it('should redirect Phrase translations page when enableDownloadByArea is false', async () => {
       // given
+      vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(false);
       const challengeId = 'challenge123';
       const locale = 'nl';
 
@@ -1048,7 +1049,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: `/api/challenges/${challengeId}/translations/${locale}`,
+        url: `/api/challenges/${challengeId}/translations/${locale}/area-code/2`,
       });
 
       // then
@@ -1058,6 +1059,83 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(phraseAccountsApiScope.isDone()).toBe(true);
       expect(phraseLocalesApiScope.isDone()).toBe(true);
     });
+
+    it('should redirect to the phrase project corresponding to area code enableDownloadByArea is true',async () => {
+      // given
+      vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(true);
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
+        { areaCode: 1, projectId: 'PHRASE_PROJECT_ID_AREA_1' },
+        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_2' },
+        { projectId: 'OLD_PHRASE_PROJECT_ID' }
+      ]);
+      const challengeId = 'challenge123';
+      const locale = 'nl';
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123_nl',
+        challengeId,
+        locale,
+      });
+
+      await databaseBuilder.commit();
+
+      const phraseAccountsApiScope = nock('https://api.phrase.com')
+        .get('/v2/accounts')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .query({ page:1 })
+        .reply(200, [
+          {
+            id: 'pixAccountId',
+            name: 'Pix',
+          },
+        ]);
+
+      const phraseLocalesApiScope = nock('https://api.phrase.com')
+        .get('/v2/projects/PHRASE_PROJECT_ID_AREA_2/locales')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, [
+          {
+            id: 'frLocaleId',
+            name: 'fr',
+            code: 'fr',
+            default: true,
+          },
+          {
+            id: 'enLocaleId',
+            name: 'en',
+            code: 'en',
+            default: false,
+          },
+          {
+            id: 'nlLocaleId',
+            name: 'nl',
+            code: 'nl',
+            default: false,
+          },
+        ]);
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/challenges/${challengeId}/translations/${locale}/area-code/2`,
+      });
+
+      // then
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe(`https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_2?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`);
+
+      expect(phraseAccountsApiScope.isDone()).toBe(true);
+      expect(phraseLocalesApiScope.isDone()).toBe(true);
+
+    });
+
   });
 
   describe('POST /challenges', () => {

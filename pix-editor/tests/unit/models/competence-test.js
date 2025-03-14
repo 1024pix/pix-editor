@@ -46,4 +46,16 @@ module('Unit | Model | competence', function(hooks) {
       assert.deepEqual(competence.productionTubes, [liveTube]);
     });
   });
+
+  module('#getAreaCode', function() {
+    test('should return area code', function(assert) {
+      const store = this.owner.lookup('service:store');
+
+      const competence = store.createRecord('competence', {
+        code: '2.4',
+      });
+
+      assert.strictEqual(competence.areaCode, '2');
+    });
+  });
 });
