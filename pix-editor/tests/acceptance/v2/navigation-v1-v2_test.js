@@ -61,7 +61,8 @@ module('Acceptance | navigation-v1-v2', function(hooks) {
         }],
       }],
     });
-
+    this.server.create('challenge', { id: 'prototype1', airtableId: 'airtableRecChallenge1', instruction: 'instructionsChallenge1' });
+    this.server.create('skill', { id: 'skill1', challengeIds: ['prototype1'], level: 1 });
     return authenticateSession();
   });
 
@@ -104,5 +105,14 @@ module('Acceptance | navigation-v1-v2', function(hooks) {
 
     // then
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production?locale=nl');
+  });
+
+  test('should move to v2 of the selected challenge', async function(assert) {
+    // when
+    await visit('/competence/recCompetence1/prototypes/prototype1?view=production');
+    await clickByText('V2');
+
+    // then
+    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
   });
 });
