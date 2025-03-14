@@ -6,8 +6,9 @@ export default class LocalizedPrototypeRoute extends Route {
 
   async model({ localized_challenge_id }) {
     const localizedChallenge = await this.store.findRecord('localized_challenge', localized_challenge_id);
+    const competence = this.modelFor('authenticated.competence');
     const challenge = await localizedChallenge.challenge;
-    return { localizedChallenge, challenge };
+    return { localizedChallenge, challenge, competence };
   }
 
   async afterModel(model) {

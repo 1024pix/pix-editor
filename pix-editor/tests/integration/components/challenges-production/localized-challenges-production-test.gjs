@@ -166,13 +166,16 @@ module('Integration | Component | challenges-production | localized-challenges-p
       localizedDecliObsoleteNl,
     ];
     const locale = 'nl';
+    const areaCode = '1';
 
     screen = await render(<template>
 <LocalizedChallengesProduction
   @skill={{skill}}
   @challenges={{challenges}}
   @localizedChallenges={{localizedChallenges}}
-  @locale={{locale}} />
+  @locale={{locale}}
+  @areaCode={{areaCode}}
+/>
 </template>);
   });
 
@@ -180,7 +183,6 @@ module('Integration | Component | challenges-production | localized-challenges-p
     test('should display all expected info for a given challenge', async function(assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
-      const translationLink = screen.getByLabelText('traduction de l\'épreuve de version Proto');
       const prototype = validatedChallenges[1];
 
       assert.dom(prototype).includesText('Proto');
@@ -189,7 +191,6 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('ELLE');
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
-      assert.ok(translationLink.href.endsWith('/api/challenges/challengeProtoValide/translations/nl'));
     });
     module('it should display actions', function() {
       test('when have translation for current locale', async function(assert) {
@@ -201,8 +202,10 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.dom(screen.getByRole('list', { name: 'traduction' })).exists();
         const primaryPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValide' });
         const localizedPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValideeNl' });
+        const localizedTranslationLink = screen.getByRole('link', { name: 'traduction de l\'épreuve de version 1' });
         assert.ok(primaryPreview.href.endsWith('api/urlto/challengeProtoValide'));
         assert.ok(localizedPreview.href.endsWith('api/urlto/challengeProtoValide?locale=nl'));
+        assert.ok(localizedTranslationLink.href.endsWith('api/challenges/challengeDecliArchivee/translations/nl/area-code/1'));
         assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValideeNl' })).exists();
       });
 

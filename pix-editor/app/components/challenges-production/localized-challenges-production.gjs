@@ -45,7 +45,7 @@ export default class LocalizedChallengesProduction extends Component {
         instruction: localizedChallengeForLocale?.instruction ?? challenge.instruction,
         primaryUpdatedAt: challenge.updatedAt,
         primaryAuthor: challenge.author,
-        translationsUrl: isPrimaryInLocale ? null : `/api/challenges/${challenge.id}/translations/${this.args.locale}`,
+        translationsUrl: isPrimaryInLocale ? null : `/api/challenges/${challenge.id}/translations/${this.args.locale}/area-code/${this.args.areaCode}`,
         primaryStatusColor: this.getPrimaryStatusColor(challenge.status),
         primaryStatusText: this.getPrimaryStatusText(challenge.status),
         localizedStatusColor: this.getLocalizedStatusColor(localizedStatus),

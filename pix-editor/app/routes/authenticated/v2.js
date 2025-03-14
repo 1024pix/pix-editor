@@ -14,6 +14,7 @@ export default class V2Route extends Route {
 
   async model(params) {
     const competence = await this.store.findRecord('competence', params.competence_id);
+
     return {
       competence,
       locale: params.locale,
