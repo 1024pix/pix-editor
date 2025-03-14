@@ -1,46 +1,112 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { downloadTranslationFromPhrase } from '../../../../lib/domain/usecases';
 import * as config from '../../../../lib/config.js';
 
 describe('Unit | Domain | Usecases | download-translation-from-phrase', () => {
-  it('should not download from Phrase when apiKey is not set', async () => {
-    // given
-    vi.spyOn(config.phrase, 'apiKey', 'get').mockReturnValue(undefined);
+  describe('disableDownloadByArea',  () => {
+    beforeEach(()=> {
+      vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(false);
+    });
 
-    const ConfigurationStub = vi.fn();
+    it('should not download from Phrase when apiKey is not set', async () => {
+      // given
+      vi.spyOn(config.phrase, 'apiKey', 'get').mockReturnValue(undefined);
 
-    // when
-    await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+      const ConfigurationStub = vi.fn();
 
-    // then
-    expect(ConfigurationStub).not.toHaveBeenCalled();
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+
+      // then
+      expect(ConfigurationStub).not.toHaveBeenCalled();
+    });
+
+    it('should not download from Phrase when projectId is not set', async () => {
+      // given
+      vi.spyOn(config.phrase, 'projectId', 'get').mockReturnValue(undefined);
+
+      const ConfigurationStub = vi.fn();
+
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+
+      // then
+      expect(ConfigurationStub).not.toHaveBeenCalled();
+    });
+
+    it('should download from Phrase when config is set', async () => {
+      // given
+      const ConfigurationStub = class {};
+      const localesListStub = vi.fn().mockResolvedValue([]);
+      const LocalesApiStub = class {
+        localesList() { return localesListStub(); }
+      };
+
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub });
+
+      // then
+      expect(localesListStub).toHaveBeenCalled();
+    });
   });
+  describe('enableDownloadByArea', () => {
+    beforeEach(()=> {
+      vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(true);
+    });
 
-  it('should not download from Phrase when projectId is not set', async () => {
-    // given
-    vi.spyOn(config.phrase, 'projectId', 'get').mockReturnValue(undefined);
+    it('should download from Phrase when config is set', async () => {
+      // given
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'PHRASE_AREA_ONE_PROJECT', areaCode: 1 }, { projectId : 'PHRASE_AREA_TWO_PROJECT', areaCode: 2 }]);
+      const ConfigurationStub = class {};
+      const localesListStub = vi.fn().mockResolvedValue([]);
+      const LocalesApiStub = class {
+        localesList() { return localesListStub(); }
+      };
 
-    const ConfigurationStub = vi.fn();
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub });
 
-    // when
-    await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+      // then
+      expect(localesListStub).toHaveBeenCalledTimes(2);
+    });
 
-    // then
-    expect(ConfigurationStub).not.toHaveBeenCalled();
-  });
+    it('should not download from Phrase when apiKey is not set', async () => {
+      // given
+      vi.spyOn(config.phrase, 'apiKey', 'get').mockReturnValue(undefined);
 
-  it('should download from Phrase when config is set', async () => {
-    // given
-    const ConfigurationStub = class {};
-    const localesListStub = vi.fn().mockResolvedValue([]);
-    const LocalesApiStub = class {
-      localesList() { return localesListStub(); }
-    };
+      const ConfigurationStub = vi.fn();
 
-    // when
-    await downloadTranslationFromPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub });
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
 
-    // then
-    expect(localesListStub).toHaveBeenCalled();
+      // then
+      expect(ConfigurationStub).not.toHaveBeenCalled();
+    });
+
+    it('should not download from Phrase when projects don\'t have areaCode', async () => {
+      // given
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'PIX_🍓_REFERENTIEL_❤️' }]);
+
+      const ConfigurationStub = vi.fn();
+
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+
+      // then
+      expect(ConfigurationStub).not.toHaveBeenCalled();
+    });
+
+    it('should not download from Phrase when projects is empty', async () => {
+      // given
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([]);
+
+      const ConfigurationStub = vi.fn();
+
+      // when
+      await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
+
+      // then
+      expect(ConfigurationStub).not.toHaveBeenCalled();
+    });
   });
 });

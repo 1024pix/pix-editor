@@ -120,6 +120,7 @@ export const exportExternalUrlsJob = {
 };
 
 export const phrase = {
+  enableDownloadByArea: isFeatureEnabled(process.env.ENABLE_DOWNLOAD_BY_AREA),
   apiKey: process.env.PHRASE_API_KEY,
   projectId: process.env.PHRASE_PROJECT_ID,
   projects: [
