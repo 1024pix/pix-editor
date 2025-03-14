@@ -28,7 +28,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
     const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', code: '1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
       thematicOverviews: [{
@@ -63,7 +63,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     await click(versionEn);
 
     const embedUrlInput = await screen.getByRole('textbox', { name: 'Embed URL :' });
-    assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
+    assert.strictEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
 
     const previewLink = await screen.findByText('Prévisualiser');
     assert.ok(previewLink.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
@@ -72,7 +72,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     assert.dom(header).hasText(/Pas en prod/);
 
     const translationsLink = await screen.findByText('Traductions');
-    assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en'), 'href ends with /translations/en');
+    assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en/area-code/1'), 'href ends with /translations/en/area-code/1');
   });
 
   test('it should go back to the original challenge', async function(assert) {

@@ -42,12 +42,16 @@ export default class LocalizedController extends Controller {
     return this.model.localizedChallenge;
   }
 
+  get competence() {
+    return this.model.competence;
+  }
+
   get previewUrl() {
     return new URL(`${this.challenge.preview}?locale=${this.localizedChallenge.locale}`, window.location).href;
   }
 
   get translationsUrl() {
-    return new URL(`${this.localizedChallenge.translations}`, window.location).href;
+    return new URL(`${this.localizedChallenge.translations}/area-code/${this.competence.areaCode}`, window.location).href;
   }
 
   get challengeRoute() {
