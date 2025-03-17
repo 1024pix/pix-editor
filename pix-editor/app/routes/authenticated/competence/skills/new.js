@@ -4,7 +4,6 @@ import SingleRoute from './single';
 
 export default class NewRoute extends SingleRoute {
   templateName = 'authenticated/competence/skills/single';
-  @service idGenerator;
   @service store;
 
   model() {
