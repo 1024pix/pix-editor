@@ -38,7 +38,7 @@ executors:
       - image: cimg/node:<<parameters.node-version>>-browsers
         environment:
           JOBS: 2
-    resource_class: small
+    resource_class: medium
   node-browsers-redis-postgres-docker:
     parameters:
       node-version:
