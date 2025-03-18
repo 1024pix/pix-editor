@@ -114,7 +114,7 @@ export class Skill {
     this.id = generateNewIdFnc(Skill.ID_PREFIX);
     this.name = `${tube.name}${this.level}`;
     this.status = Skill.STATUSES.EN_CONSTRUCTION;
-    this.version = Iterator.from(tubeSkills).filter((skill) => skill.level === this.level).reduce((count) => count + 1, 0) + 1;
+    this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
   }
 
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {

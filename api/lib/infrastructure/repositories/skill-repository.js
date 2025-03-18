@@ -43,8 +43,8 @@ export async function getManyByAirtableIds(ids) {
 
 export async function listByTubeId(tubeId) {
   const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
   if (!datasourceSkills) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
   return toDomainList(datasourceSkills, translations);
 }
 
