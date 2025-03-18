@@ -1,5 +1,31 @@
 
 
+## v3.187.0 (18/03/2025)
+
+
+### :rocket: Amélioration
+- [#904](https://github.com/1024pix/pix-editor/pull/904) [FEATURE] Importer les clef de traduction depuis les nouveaux projets Phrase séparés par domaine (PIX-16834).
+- [#899](https://github.com/1024pix/pix-editor/pull/899) [FEATURE] Réparer le script `delete-unmentioned-keys` (PIX-17001).
+- [#897](https://github.com/1024pix/pix-editor/pull/897) [FEATURE] Envoyer les clés `fr` dans les nouveaux projets Phrase séparés par domaine (PIX-16832).
+
+### :bug: Correction
+- [#902](https://github.com/1024pix/pix-editor/pull/902) [BUGFIX] Le bouton de fermeture de la liste des localized challenges ne fonctionnait pas (PIX-16453).
+
+### :arrow_up: Montée de version
+- [#883](https://github.com/1024pix/pix-editor/pull/883) [BUMP] Update dependency redis to v7.2.7.
+- [#889](https://github.com/1024pix/pix-editor/pull/889) [BUMP] Update dependency @sentry/ember to v9 (pix-editor).
+- [#890](https://github.com/1024pix/pix-editor/pull/890) [BUMP] Update dependency @1024pix/pix-ui to ^54.12.2 (pix-editor).
+- [#827](https://github.com/1024pix/pix-editor/pull/827) [BUMP] Update dependency ember-cli to v6 (pix-editor).
+- [#884](https://github.com/1024pix/pix-editor/pull/884) [BUMP] Update dependency @1024pix/pix-ui to ^54.12.1 (pix-editor).
+- [#886](https://github.com/1024pix/pix-editor/pull/886) [BUMP] Update dependency p-queue to v8.1.0 (pix-editor).
+- [#885](https://github.com/1024pix/pix-editor/pull/885) [BUMP] Update dependency @playwright/test to v1.50.1.
+- [#849](https://github.com/1024pix/pix-editor/pull/849) [BUMP] Update dependency @playwright/test to v1.49.1.
+- [#788](https://github.com/1024pix/pix-editor/pull/788) [BUMP] Update dependency @ember/test-helpers to v4 (pix-editor).
+- [#881](https://github.com/1024pix/pix-editor/pull/881) [BUMP] Update dependency form-data to v4.0.2 (api).
+
+### :coffee: Autre
+- [#903](https://github.com/1024pix/pix-editor/pull/903) [FEAT] Le bouton de switch à la v2 ne fonctionne pas partout (PIX-16702).
+
 ## v3.186.0 (04/03/2025)
 
 
