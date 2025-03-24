@@ -4,19 +4,18 @@ import SingleRoute from './single';
 
 export default class NewRoute extends SingleRoute {
   templateName = 'authenticated/competence/skills/single';
-  @service idGenerator;
   @service store;
 
   model() {
     return {
-      skill: this.store.createRecord('skill', { status: 'en construction', pixId: this.idGenerator.newId('skill') }),
+      skill: this.store.createRecord('skill', { status: 'en construction' }),
     };
   }
 
   async afterModel(model) {
     const params = this.paramsFor(this.routeName);
     const tube = await this.store.findRecord('tube', params.tube_id);
-    const level = parseInt(params.level) + 1;
+    const level = parseInt(params.level);
     model.skill.name = tube.name + level;
     model.skill.level = level;
     model.tube = tube;

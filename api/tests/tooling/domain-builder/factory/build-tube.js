@@ -12,7 +12,8 @@ export function buildTube({
     fr: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche',
     en: 'Identify a web browser and a search engine, know how the search engine works',
   },
-  competenceId = 'recsvLz0W2ShyfD63'
+  competenceId = 'recsvLz0W2ShyfD63',
+  index = 1,
 } = {}) {
   return new Tube({
     id,
@@ -21,5 +22,6 @@ export function buildTube({
     practicalTitle_i18n,
     practicalDescription_i18n,
     competenceId,
+    index,
   });
 }

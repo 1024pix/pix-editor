@@ -32,8 +32,8 @@ describe('Unit | Domain | Usecases | update competence', function() {
       const result = updateCompetence(competenceAirtableId, competenceUpdates);
 
       // then
-      expect(result).rejects.toBeInstanceOf(NotFoundError);
-      expect(result).rejects.toHaveProperty('message', 'unknown competence');
+      await expect(result).rejects.toBeInstanceOf(NotFoundError);
+      await expect(result).rejects.toHaveProperty('message', 'unknown competence');
 
       expect(competenceRepository.getByAirtableId).toHaveBeenCalledWith(competenceAirtableId);
     });

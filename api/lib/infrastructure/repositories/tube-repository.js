@@ -30,6 +30,13 @@ export async function listByCompetenceId(competenceId) {
   return toDomainList(datasourceTubes, translations);
 }
 
+export async function getByAirtableId(airtableId) {
+  const datasourceTube = await tubeDatasource.find(airtableId);
+  if (!datasourceTube) return null;
+  const translations = await translationRepository.listByEntity(model, datasourceTube.id);
+  return toDomain(datasourceTube, translations);
+}
+
 function toDomainList(datasourceTubes, translations) {
   const translationsByTubeId = _.groupBy(translations, 'entityId');
   return datasourceTubes.map(

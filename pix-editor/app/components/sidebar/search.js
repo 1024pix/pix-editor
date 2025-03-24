@@ -10,20 +10,13 @@ export default class SidebarSearchComponent extends Component {
   @service store;
   @service router;
 
-  #stringValue(value) {
-    return `"${
-      value.replace(/\r/g, '')
-        .replace(/["\\]/g, '\\$&')
-        .replace(/\n/g, '\\n')
-        .replace(/\t/g, '\\t')
-    }"`;
-  }
-
   async searchSkillsByName(skillName) {
     const skills = await this.store.query('skill', {
-      filterByFormula: `FIND(${this.#stringValue(skillName.toLowerCase())}, LOWER(Nom))`,
-      maxRecords: 20,
-      sort: [{ field: 'Nom', direction: 'asc' }],
+      filter: {
+        name: skillName,
+      },
+      page: { limit: 20 },
+      sort: 'name',
     });
     return skills.map((skill) => ({
       isSkill: true,

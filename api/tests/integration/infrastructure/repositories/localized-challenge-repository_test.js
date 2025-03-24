@@ -418,7 +418,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         const promise = localizedChallengeRepository.getByChallengeIdAndLocale({ challengeId, locale });
 
         // then
-        expect(promise).rejects.toStrictEqual(new NotFoundError('Épreuve ou langue introuvable'));
+        await expect(promise).rejects.toStrictEqual(new NotFoundError('Épreuve ou langue introuvable'));
       });
     });
 

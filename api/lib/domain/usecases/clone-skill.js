@@ -42,7 +42,6 @@ export async function cloneSkill({
     skillRepository,
     attachmentRepository,
   });
-
   const {
     clonedSkill,
     clonedChallenges,

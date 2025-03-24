@@ -1,3 +1,6 @@
+import * as Sentry from '@sentry/node';
+import Boom from '@hapi/boom';
+
 import {
   attachmentRepository,
   challengeRepository,
@@ -5,16 +8,24 @@ import {
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import {
   cloneSkill,
+  createSkill,
   getSkillChallengesProduction,
-  getSkillLocalizedChallengesProduction
+  getSkillLocalizedChallengesProduction,
+  listSkills,
+  updateSkill,
 } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeSerializer, localizedChallengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import {
+  challengeSerializer,
+  localizedChallengeSerializer,
+  skillSerializer
+} from '../../infrastructure/serializers/jsonapi/index.js';
+import { skillTransformer } from '../../infrastructure/transformers/index.js';
+import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 export async function clone(request, h) {
   try {
@@ -30,9 +41,10 @@ export async function clone(request, h) {
         updatedRecordNotifier,
       },
     });
-    return h.response().redirect(`/api/airtable/content/Acquis/${newSkill.airtableId}`);
+    return h.response().redirect(`/api/skills/${newSkill.airtableId}`);
   } catch (err) {
     logger.error(err);
+    Sentry.captureException(err);
     return h.response(err).code(400);
   }
 }
@@ -59,4 +71,81 @@ export async function getProductionLocalizedChallenges(request, h) {
     },
   });
   return h.response(localizedChallengeSerializer.serializeRead(localizedChallenges));
+}
+
+export async function list(req) {
+  try {
+    const params = extractParameters(req.query);
+    const skills = await listSkills(params);
+    return skillSerializer.serialize(skills);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function get(req) {
+  try {
+    const skill = await skillRepository.getByAirtableId(req.params.skillAirtableId);
+    if (!skill) throw new NotFoundError('unknown skill');
+    return skillSerializer.serialize(skill);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function create(req, h) {
+  try {
+    const skill = await skillSerializer.deserialize(req.payload);
+    const createdSkill = await createSkill(skill, {
+      skillRepository,
+      tubeRepository,
+      skillTransformer,
+      updatedRecordNotifier,
+      pixApiClient,
+      generateNewIdFnc: generateNewId
+    });
+    return h.response(skillSerializer.serialize(createdSkill)).code(201);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
+}
+
+export async function update(req, h) {
+  const { attributes, relationships } = req.payload.data;
+  try {
+    const updateSkillCommand = {
+      airtableId: req.params.skillAirtableId,
+      description: attributes['description'],
+      descriptionStatus: attributes['description-status'],
+      clue: attributes['clue'],
+      clueEn: attributes['clue-en'],
+      clueStatus: attributes['clue-status'],
+      i18n: attributes['i18n'],
+      status: attributes['status'],
+      tutoMoreAirtableIds: relationships['tuto-more'].data.map(({ id }) => id),
+      tutoSolutionAirtableIds: relationships['tuto-solution'].data.map(({ id }) => id),
+    };
+    const updatedSkill = await updateSkill(updateSkillCommand, {
+      skillRepository,
+      skillTransformer,
+      updatedRecordNotifier,
+      pixApiClient,
+      logger,
+      Sentry,
+    });
+
+    if (updatedSkill === null) return Boom.notFound();
+
+    return h.response(skillSerializer.serialize(updatedSkill)).code(200);
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+    return Boom.internal(err);
+  }
 }

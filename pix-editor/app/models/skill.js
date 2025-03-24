@@ -196,13 +196,14 @@ export default class SkillModel extends Model {
 
   async clone({ tubeDestination, level }) {
     const newSkill = this.myStore.createRecord(this.constructor.modelName, {});
-
     return newSkill.save({
       adapterOptions: {
         clone: true,
-        skillIdToClone: this.pixId,
-        tubeDestinationId: tubeDestination.pixId,
-        level,
+        body: {
+          skillIdToClone: this.pixId,
+          tubeDestinationId: tubeDestination.pixId,
+          level,
+        },
       },
     });
   }

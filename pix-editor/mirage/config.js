@@ -123,41 +123,25 @@ function routes() {
     return _serializeModel(createdTube, 'tube');
   });
 
-  this.get('/airtable/content/Acquis/:id', (schema, request) => {
-    const skill = schema.skills.find(request.params.id);
-    return _serializeModel(skill, 'skill');
-  });
+  this.patch('/skills/:id');
 
-  this.patch('/airtable/content/Acquis/:id', (schema, request) => {
-    const skillPayload = JSON.parse(request.requestBody);
-    const skill = schema.skills.find(request.params.id);
-    const skillNew = _deserializePayload(skillPayload, 'skill');
-    delete skillNew.id;
-    skill.update({ ...skillNew });
-    return _serializeModel(skill, 'skill');
-  });
-
-  this.get('/airtable/content/Acquis', (schema, request) => {
-    if (request.queryParams.filterByFormula.includes('{id persistant}')) {
-      const [, pixId] = request.queryParams.filterByFormula.match(/FIND\('([^']*)'/);
-      const skill = schema.skills.findBy({ pixId });
-      const record = _serializeModel(skill, 'skill');
-      return { records: [record] };
+  this.get('/skills', (schema, request) => {
+    const { 'filter[ids]': ids, 'filter[name]': name, 'filter[pixId]': pixId } = request.queryParams;
+    if (ids) {
+      return schema.skills.where((skill) => ids.includes(skill.id));
     }
-
-    const records = schema.skills.all().models.map((skill) => {
-      return _serializeModel(skill, 'skill');
-    });
-
-    return { records };
+    if (name) {
+      return schema.skills.where({ name });
+    }
+    if (pixId) {
+      return schema.skills.where({ pixId });
+    }
+    return [];
   });
 
-  this.post('/airtable/content/Acquis', (schema, request) => {
-    const skillPayload = JSON.parse(request.requestBody);
-    const skill = _deserializePayload(skillPayload, 'skill');
-    const createdSkill = schema.skills.create(skill);
-    return _serializeModel(createdSkill, 'skill');
-  });
+  this.get('/skills/:id');
+
+  this.post('/skills');
 
   this.post('/skills/clone', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
@@ -175,7 +159,7 @@ function routes() {
       tutoMore: skillToClone.tutoMore,
       challenges: skillToClone.challenges,
     });
-    return _serializeModel(createdSkill, 'skill');
+    return createdSkill;
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {

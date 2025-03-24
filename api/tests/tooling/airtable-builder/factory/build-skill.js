@@ -4,15 +4,21 @@ export function buildSkill({
   name,
   hintStatus,
   tutorialIds,
+  tutorialAirtableIds,
   learningMoreTutorialIds,
+  learningMoreTutorialAirtableIds,
   pixValue,
   competenceId,
   status = 'actif',
   tubeId,
+  tubeAirtableId,
   description,
+  descriptionStatus,
   level,
   internationalisation,
   version,
+  challengeIds,
+  createdAt,
 } = {}) {
 
   return {
@@ -22,8 +28,11 @@ export function buildSkill({
       'Record Id': airtableId,
       'Statut de l\'indice': hintStatus,
       'Comprendre (id persistant)': tutorialIds,
+      'Comprendre': tutorialAirtableIds,
       'En savoir plus (id persistant)': learningMoreTutorialIds,
+      'En savoir plus': learningMoreTutorialAirtableIds,
       'Tube (id persistant)': [tubeId],
+      'Tube': [tubeAirtableId],
       'Status': status,
       'Nom': name,
       'Compétence (via Tube) (id persistant)': [competenceId],
@@ -32,6 +41,9 @@ export function buildSkill({
       'Level': level,
       'Internationalisation': internationalisation,
       'Version': version,
+      'Epreuves (id persistant)': challengeIds,
+      'Statut de la description': descriptionStatus,
+      'Date': createdAt,
     },
   };
 }
