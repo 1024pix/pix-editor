@@ -98,7 +98,7 @@ export default class CompetenceOverview extends Component {
         {{/each}}
         </div>
         <div class="competence-overview-footer">
-          {{#if this.hasLocaleSelected}}
+          {{#if @locale}}
             <ul class="competence-overview-legend">
               <li>
                 <span class="circle green"></span> L'acquis possède des épreuves validées
