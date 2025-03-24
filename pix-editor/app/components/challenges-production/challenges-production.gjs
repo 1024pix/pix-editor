@@ -67,7 +67,7 @@ export default class ChallengesProduction extends Component {
   }
 
   <template>
-    <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competenceId}} @canExpand={{@canExpand}}/>
+    <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competenceId}} @canExpand={{@canExpand}} />
     <section class="challenges-production {{if this.multipanelManager.tableShouldBeMinimized "challenges-production--hidden" ""}}">
       <div class="challenges-production-table">
         <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}} @condensed={{true}}>
