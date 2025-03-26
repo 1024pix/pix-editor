@@ -1,25 +1,42 @@
 #!/usr/bin/env bash
-
 set -eo pipefail
 
-# In case filename contains spaces [https://www.baeldung.com/linux/reading-output-into-array#1-output-may-contain-spaces](https://www.baeldung.com/linux/reading-output-into-array#1-output-may-contain-spaces)
-IFS=$'\n'
+SMELLS=(
+  "console.log"
+  "console.info"
+  "console.error"
+  "console.warn"
+  "{{ log"
+  "{{log"
+  ".skip("
+  ".only("
+  "this.pauseTest()"
+)
 
 CHANGED_FILES=($(git diff --name-only --cached --diff-filter=ACMR))
 
-SECRET=postgres://postgres:J9FUMSBhei8oU@db.dbhostprovider.com:5434/thedb
-
 RED='\033[0;31m'
-GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
 NO_COLOR='\033[0m'
 
-for file in "${CHANGED_FILES[@]}"
-do
-  echo -e "Inspecting file : ${GREEN} ${file} ${NO_COLOR}"
-  MATCHES="$(grep --count "$SECRET" "${file}" || true)"
-  if [[ "$MATCHES" > 0 ]]
-    then
-      echo -e "Oops, we found the secret ${RED} ${SECRET} ${NO_COLOR} in file ${file} ! "
-      exit 255
+URI_START='\x1B]8;;'
+ALIAS_START='\x1B\\'
+ALIAS_END='\x1B]8;;'
+URI_END='\x1B\\'
+
+sniff_smell () {
+  FILE=$1
+  SMELL=$2
+  MATCHES="$(grep --count "$SMELL" "$FILE" || true)"
+  if [[ "$MATCHES" > 0 ]]; then
+    echo -e "\
+🚨 Found ${MATCHES} ${RED}$SMELL${NO_COLOR} in file \
+${YELLOW}${URI_START}file://$(pwd)/$FILE${ALIAS_START}$FILE${ALIAS_END}${URI_END}${NO_COLOR}"
   fi
+}
+
+for file in "${CHANGED_FILES[@]}"; do
+  for smell in "${SMELLS[@]}"; do
+    sniff_smell $file "$smell"
+  done
 done
