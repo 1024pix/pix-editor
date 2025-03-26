@@ -19,12 +19,19 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NO_COLOR='\033[0m'
 
+URI_START='\x1B]8;;'
+ALIAS_START='\x1B\\'
+ALIAS_END='\x1B]8;;'
+URI_END='\x1B\\'
+
 sniff_smell () {
   FILE=$1
   SMELL=$2
   MATCHES="$(grep --count "$SMELL" "$FILE" || true)"
   if [[ "$MATCHES" > 0 ]]; then
-    echo -e "🚨 Found ${MATCHES} ${RED}$SMELL${NO_COLOR} in file ${YELLOW}$FILE${NO_COLOR}"
+    echo -e "\
+🚨 Found ${MATCHES} ${RED}$SMELL${NO_COLOR} in file \
+${YELLOW}${URI_START}file://$(pwd)/$FILE${ALIAS_START}$FILE${ALIAS_END}${URI_END}${NO_COLOR}"
   fi
 }
 
