@@ -51,9 +51,6 @@ export default class PrototypesRoute extends Route {
   }
 
   afterModel(model, transition) {
-    // QUESTION: est-ce nécessaire ?
-    this.currentData.setPrototype(null);
-
     if (!this.versionManager.isV2) return;
     this.multipanelManager.reset();
     if (transition.to.name !== 'authenticated.competence.prototypes.index') return;
