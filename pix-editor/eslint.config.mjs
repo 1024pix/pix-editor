@@ -1,11 +1,11 @@
-const emberRecommendedConfig = require('eslint-plugin-ember/configs/recommended');
-const emberGjsRecommendedConfig = require('eslint-plugin-ember/configs/recommended-gjs');
-const qunitRecommendedConfig = require('eslint-plugin-qunit/configs/recommended');
-const pixRecommendedConfig = require('@1024pix/eslint-plugin/config');
-const n = require('eslint-plugin-n');
-const globals = require('globals');
-const babelParser = require('@babel/eslint-parser');
-const emberParser = require('ember-eslint-parser');
+import pixRecommendedConfig from '@1024pix/eslint-plugin/config';
+import babelParser from '@babel/eslint-parser';
+import emberParser from 'ember-eslint-parser';
+import emberRecommendedConfig from 'eslint-plugin-ember/configs/recommended';
+import emberGjsRecommendedConfig from 'eslint-plugin-ember/configs/recommended-gjs';
+import n from 'eslint-plugin-n';
+import qunitRecommendedConfig from 'eslint-plugin-qunit/configs/recommended';
+import globals from 'globals';
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
 const compiledOutputFiles = ['dist/*', 'tmp/*'];
@@ -27,7 +27,7 @@ const nodeFiles = [
   'tests/e2e/**/*.js',
 ];
 
-module.exports = [
+export default [
   ...pixRecommendedConfig,
   ...emberRecommendedConfig,
   ...emberGjsRecommendedConfig,
