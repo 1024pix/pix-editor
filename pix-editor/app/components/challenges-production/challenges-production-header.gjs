@@ -24,7 +24,7 @@ export default class ChallengesProduction extends Component {
     <header class="challenges-production-header">
       <p>
         {{@skill.name}}
-        <PixTag @color="success">
+        <PixTag @color="green">
           actif
         </PixTag>
         <span class="challenges-production-header__separator"></span>

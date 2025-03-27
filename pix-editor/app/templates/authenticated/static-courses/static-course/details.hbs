@@ -28,7 +28,7 @@
   <section class="page-section">
     <Card class="static-course-details__card-information" @title="1. Informations">
       {{#each this.model.staticCourse.tags as |tag|}}
-        <PixTag class="static-course-tag" @color="secondary">
+        <PixTag class="static-course-tag" @color="yellow">
           {{tag.label}}
         </PixTag>
       {{/each}}
@@ -39,7 +39,7 @@
           <div class="static-course-details__description">{{this.model.staticCourse.description}}</div>
         </li>
         <li><span class="bold">Statut du test : </span>
-          <PixTag @color="{{if this.model.staticCourse.isActive "success" "neutral"}}">
+          <PixTag @color="{{if this.model.staticCourse.isActive "green" "grey"}}">
             {{if this.model.staticCourse.isActive "Actif" "Inactif"}}
           </PixTag>
           {{#if this.model.staticCourse.deactivationReason}}
