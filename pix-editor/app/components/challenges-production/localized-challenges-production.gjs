@@ -61,18 +61,18 @@ export default class LocalizedChallengesProduction extends Component {
 
   getPrimaryStatusColor(primaryStatus) {
     if (primaryStatus === Challenge.STATUSES.PROPOSE) {
-      return 'tertiary';
+      return 'blue';
     }
     if (primaryStatus === Challenge.STATUSES.VALIDE) {
-      return 'success';
+      return 'green';
     }
     if (primaryStatus === Challenge.STATUSES.ARCHIVE) {
-      return 'neutral';
+      return 'grey';
     }
     if (primaryStatus === Challenge.STATUSES.PERIME) {
-      return 'error';
+      return 'red';
     }
-    return 'secondary';
+    return 'yellow';
   }
 
   getPrimaryStatusText(primaryStatus) {
@@ -81,18 +81,18 @@ export default class LocalizedChallengesProduction extends Component {
 
   getLocalizedStatusColor(localizedStatus) {
     if (localizedStatus === LocalizedChallenge.STATUSES.PLAY) {
-      return 'success';
+      return 'green';
     }
     if (localizedStatus === LocalizedChallenge.STATUSES.PAUSE) {
-      return 'secondary';
+      return 'yellow';
     }
     if (localizedStatus === PRIMARY_IN_LOCALE_STATUS) {
-      return 'neutral';
+      return 'grey';
     }
     if (localizedStatus === NOT_TRANSLATED_STATUS) {
-      return 'tertiary';
+      return 'blue';
     }
-    return 'error';
+    return 'orange';
   }
 
   getLocalizedStatusText(localizedStatus) {

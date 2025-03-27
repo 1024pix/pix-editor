@@ -27,7 +27,7 @@ export default class MissionSummary extends Model {
   }
 
   get statusColor() {
-    if (this.isExperimental) return 'secondary';
+    if (this.isExperimental) return 'yellow';
     if (this.isValidated) return 'green-light';
     return 'grey-light';
   }

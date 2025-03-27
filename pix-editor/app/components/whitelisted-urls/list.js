@@ -24,7 +24,7 @@ export default class WhitelistedUrlList extends Component {
     if (checkType === 'exact_match') {
       return 'primary';
     } else {
-      return 'secondary';
+      return 'yellow';
     }
   };
 
