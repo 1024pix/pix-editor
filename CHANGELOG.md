@@ -1,5 +1,21 @@
 
 
+## v3.188.0 (27/03/2025)
+
+
+### :rocket: Amélioration
+- [#851](https://github.com/1024pix/pix-editor/pull/851) [FEATURE] Sortir les acquis du proxy Airtable (PIX-15963).
+
+### :building_construction: Tech
+- [#911](https://github.com/1024pix/pix-editor/pull/911) [TECH] Afficher un avertissement quand on commit un `console.log`.
+
+### :bug: Correction
+- [#909](https://github.com/1024pix/pix-editor/pull/909) [BUGFIX] Le bouton d'expand de la liste des localized challenges a disparu. (PIX-17146).
+- [#907](https://github.com/1024pix/pix-editor/pull/907) [BUGFIX] Fix affichage des légendes des tableaux d'épreuves en V2.
+
+### :arrow_up: Montée de version
+- [#912](https://github.com/1024pix/pix-editor/pull/912) [BUMP] Update dependency @1024pix/pix-ui to ^54.15.0 (pix-editor).
+
 ## v3.187.0 (18/03/2025)
 
 
