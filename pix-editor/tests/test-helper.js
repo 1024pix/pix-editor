@@ -1,6 +1,7 @@
 import { setApplication } from '@ember/test-helpers';
 import NotificationMessageService from 'ember-cli-notifications/services/notifications';
 import { start } from 'ember-qunit';
+import { loadTests } from 'ember-qunit/test-loader';
 import Application from 'pixeditor/app';
 import config from 'pixeditor/config/environment';
 import * as QUnit from 'qunit';
@@ -20,5 +21,5 @@ NotificationMessageService.reopen({
 setApplication(Application.create(config.APP));
 
 setup(QUnit.assert);
-
+loadTests();
 start();
