@@ -1,8 +1,10 @@
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class WhitelistedUrlList extends Component {
+  @service router;
   @tracked searchUrl;
   @tracked searchNames;
 
@@ -61,8 +63,16 @@ export default class WhitelistedUrlList extends Component {
     return formater.format(date);
   }
 
-  async copyUrl(whitelistedUrl) {
+  @action
+  async copyUrl(whitelistedUrl, event) {
+    event.stopPropagation();
     await navigator.clipboard.writeText(whitelistedUrl.url);
+  }
+
+  @action
+  async deleteWhitelistedUrl(whitelistedUrl, event) {
+    event.stopPropagation();
+    await this.args.onDeleteItemClicked(whitelistedUrl);
   }
 
   @action

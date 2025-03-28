@@ -58,10 +58,7 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
-    assert.strictEqual(
-      screen.getAllByRole('row', { name: 'URL en liste blanche' }).length,
-      3,
-    );
+    assert.strictEqual(screen.getAllByRole('row').length, 4);
     assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
     assert.dom(screen.getByText('http://chats.fr')).exists();
     assert.dom(screen.getByText('http://chiens.fr')).exists();
