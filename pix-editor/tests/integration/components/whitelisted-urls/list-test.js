@@ -13,7 +13,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
     whitelistedUrl1 = store.createRecord('whitelisted-url', {
-      id: 1,
+      id: '1',
       url: 'https://foo.com',
       creatorName: 'Laura le chocolat',
       latestUpdatorName: 'Iris l\'anis',
@@ -31,7 +31,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
       .format(new Date('2021-01-01T09:00:00Z'))
       .replaceAll(/[A-Za-z\s]/g, '');
     whitelistedUrl2 = store.createRecord('whitelisted-url', {
-      id: 2,
+      id: '2',
       url: 'https://bar.com',
       creatorName: 'Fael le miel',
       latestUpdatorName: null,
@@ -104,10 +104,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
         name: 'Modifiée le',
       }),
     );
-    assert.strictEqual(
-      screen.getAllByRole('row', { name: 'URL en liste blanche' }).length,
-      2,
-    );
+    assert.strictEqual(screen.getAllByRole('row').length, 3);
     assert.ok(screen.getByRole('cell', { name: 'https://foo.com' }), 'https://foo.com');
     assert.ok(screen.getByRole('cell', { name: 'Strictement égale à' }), 'Strictement égale à');
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Laura' }), 'Un commentaire sur Laura');

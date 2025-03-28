@@ -26,8 +26,8 @@ export default class WhitelistedUrlsController extends Controller {
   }
 
   @action
-  goToEditWhitelistedUrl(whitelistedUrlId) {
-    this.router.transitionTo('authenticated.whitelisted-urls.whitelisted-url.edit', whitelistedUrlId);
+  goToEditWhitelistedUrl(whitelistedUrl) {
+    this.router.transitionTo('authenticated.whitelisted-urls.whitelisted-url.edit', whitelistedUrl.id);
   }
 
   @action
