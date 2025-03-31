@@ -22,7 +22,7 @@ export default class CompetenceHistoryListController extends Controller {
   @action
   newSkillVersion() {
     const tube = this.model.tube;
-    const level = parseInt(this.firstSkill.level) - 1;
+    const level = parseInt(this.firstSkill.level);
     this.router.transitionTo('authenticated.competence.skills.new', this.currentData.getCompetence(), tube.id, level);
   }
 
