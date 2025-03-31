@@ -17,7 +17,7 @@ module('Acceptance | skill | single', function(hooks) {
 
     const challenge1 = this.server.create('challenge', { id: 'recChallenge1', status: 'proposé', version: 1 });
     const challenge2 = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', version: 2 });
-    skill1 = this.server.create('skill', { id: 'skillId1', name: 'monAcquisÀMoi', challengeIds: [challenge1.id, challenge2.id], level: 1 });
+    skill1 = this.server.create('skill', { id: 'skillId1', name: '@monAcquisÀMoi', challengeIds: [challenge1.id, challenge2.id], level: 1 });
     tube1 = this.server.create('tube', { id: 'recTube1', name: '@tube', rawSkillIds: [skill1.id] });
     const theme1 = this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tube1.id] });
     competence1 = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: [theme1.id], rawTubeIds: [tube1.id] });
@@ -73,6 +73,30 @@ module('Acceptance | skill | single', function(hooks) {
 
       assert.ok(newSkill);
       assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/new/recTube1/2?leftMaximized=true&view=workbench`);
+    });
+
+    test('it should create a new skill version', async function(assert) {
+      // given
+      const screen = await visit(`/competence/${competence1.id}/skills?view=workbench`);
+      const store = this.owner.lookup('service:store');
+      const skillDescription = 'Nouvelle description de ma nouvelle version du skill';
+
+      // when
+      await screen.getByRole('link', { name: '@monAcquisÀMoi 1' }).click();
+      const newVersionButton = await screen.findByRole('button', { name: 'Nouvelle Version' });
+      await newVersionButton.click();
+      const descriptionInput = await screen.findByLabelText('Description');
+      await fillIn(descriptionInput, skillDescription);
+
+      const saveButton = await screen.getByRole('button', { name: 'Enregistrer l\'acquis @tube1' });
+      await saveButton.click();
+
+      // then
+      const tube = await store.peekRecord('tube', 'recTube1');
+      const newSkillVersion = tube.rawSkillsArray.find((skill) => skill.description === skillDescription && skill.level === 1);
+
+      assert.ok(newSkillVersion);
+      assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/new/recTube1/1?leftMaximized=true&view=workbench`);
     });
   });
 
@@ -143,7 +167,7 @@ module('Acceptance | skill | single', function(hooks) {
       await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Non' }));
-      const saveButton = screen.getByRole('button', { name: 'Enregistrer l\'acquis monAcquisÀMoi' });
+      const saveButton = screen.getByRole('button', { name: 'Enregistrer l\'acquis @monAcquisÀMoi' });
       await click(saveButton);
       await clickByText('Valider');
       // then
@@ -158,7 +182,7 @@ module('Acceptance | skill | single', function(hooks) {
 
       assert.strictEqual(screen.getByLabelText('Responsive').childNodes[3].textContent, 'Non');
       assert.strictEqual(screen.getByLabelText('Description').value, skillDescription);
-      assert.dom(screen.queryByRole('button', { name: 'Enregistrer l\'acquis monAcquisÀMoi' })).doesNotExist();
+      assert.dom(screen.queryByRole('button', { name: 'Enregistrer l\'acquis @monAcquisÀMoi' })).doesNotExist();
     });
   });
 });
