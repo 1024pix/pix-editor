@@ -15,6 +15,9 @@ export default class SingleRoute extends Route {
 
   async afterModel(model) {
     await model.challenges;
+    if (model.prototypes.length > 0) {
+      this.currentData.setPrototype(model.prototypes[0]);
+    }
     return model.pinRelationships();
   }
 
@@ -44,11 +47,8 @@ export default class SingleRoute extends Route {
         modelSkillSingle.rollbackAttributes();
       }
       if (transition.targetName === 'authenticated.competence.prototypes.index') {
-        if (this.controllerFor('authenticated.competence').view === 'workbench') {
-          return true;
-        }
         const skill = this.controllerFor('authenticated.competence.skills.single').skill;
-        const prototype = skill.productionPrototype;
+        const prototype = this.currentData.getPrototype();
         if (prototype) {
           return this.router.transitionTo('authenticated.competence.prototypes.single', prototype);
         } else {
