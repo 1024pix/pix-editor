@@ -9,11 +9,11 @@ import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 module('Integration | Component | alternatives', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  let newAlternativeStub, store;
+  let newAlternativeStub, store, alternatives;
 
   hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
-    const alternatives = [
+    alternatives = [
       store.createRecord('challenge', {
         id: 'recAlternativeId1',
         status: 'validé',
@@ -34,6 +34,13 @@ module('Integration | Component | alternatives', function(hooks) {
         instruction: 'ceci est une alternative périmée',
         version: 2,
         genealogy: 'Décliné 1',
+      }),
+      store.createRecord('challenge', {
+        id: 'recAlternativeId4',
+        status: 'archivé',
+        instruction: 'ceci est une alternative archivé',
+        version: 2,
+        genealogy: 'Décliné 4',
       }),
     ];
 
@@ -92,9 +99,11 @@ module('Integration | Component | alternatives', function(hooks) {
     assert.dom(screen.queryByText('ceci est une alternative périmée')).exists();
   });
 
-  test('creates new alternative when allowed', async function(assert) {
-    // when
-    const screen = await render(hbs`
+  [ 'validé', 'proposé'].forEach((status) => {
+    test(`alternative button exist for alternative status ${status}`, async function(assert) {
+      // when
+      this.set('challenge', alternatives.find((challenge) => challenge.status === status));
+      const screen = await render(hbs`
       <Alternatives
         @challenge={{this.challenge}}
         @maximizeRight={{false}}
@@ -105,9 +114,26 @@ module('Integration | Component | alternatives', function(hooks) {
       />
     `);
 
-    await click(screen.getByRole('button', { name: 'Nouvelle déclinaison' }));
-
-    sinon.assert.calledOnce(newAlternativeStub);
-    assert.ok(true);
+      await click(screen.getByRole('button', { name: 'Nouvelle déclinaison' }));
+      sinon.assert.calledOnce(newAlternativeStub);
+      assert.ok(true);
+    });
+  });
+  ['périmé', 'archivé'].forEach((status) => {
+    test(`alternative button does not exist for alternative status ${status}`, async function(assert) {
+      // when
+      this.set('challenge', alternatives.find((challenge) => challenge.status === status));
+      const screen = await render(hbs`
+      <Alternatives
+        @challenge={{this.challenge}}
+        @maximizeRight={{false}}
+        @mayCreateAlternative={{true}}
+        @newAlternative={{this.newAlternative}}
+        @rightMaximized={{false}}
+        @size="full"
+      />
+    `);
+      assert.dom(screen.queryByRole('button', { name: 'Nouvelle déclinaison' })).doesNotExist();
+    });
   });
 });

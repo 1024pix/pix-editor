@@ -12,4 +12,8 @@ export default class Alternatives extends Component {
   get alternatives() {
     return this.arePerimeDeclisDisplayed ? this.args.challenge.alternatives : this.args.challenge.alternatives.filter((alternative) => alternative.status !== 'périmé');
   }
+
+  get canCreateAlternative() {
+    return this.args.mayCreateAlternative && this.args.challenge.isLive;
+  }
 }
