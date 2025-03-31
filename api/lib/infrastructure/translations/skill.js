@@ -16,9 +16,7 @@ const idField = 'fields.id persistant';
 export const {
   extractFromProxyObject,
   extractFromReleaseObject,
-  airtableObjectToProxyObject,
   extractFromDomainObject,
-  proxyObjectToAirtableObject,
   prefixFor,
   toDomain,
 } = buildTranslationsUtils({ locales, fields, prefix, idField });
