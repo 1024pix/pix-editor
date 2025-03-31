@@ -1,5 +1,41 @@
 
 
+## v3.189.0 (31/03/2025)
+
+
+### :rocket: Amélioration
+- [#915](https://github.com/1024pix/pix-editor/pull/915) [FEATURE] Rendre indisponible le bouton des versions alternatives si le challenge est périmé ou archivé (PIX-14993).
+- [#871](https://github.com/1024pix/pix-editor/pull/871) [FEATURE]  Utiliser les même commande que sur le monorepo.
+
+### :building_construction: Tech
+- [#928](https://github.com/1024pix/pix-editor/pull/928) [TECH] Petit ménage après sortie des acquis du proxy Airtable.
+- [#922](https://github.com/1024pix/pix-editor/pull/922) [TECH] Utilisation de PixTable dans la whitelist de la moulinette des URLs cassées (PIX-16641).
+
+### :bug: Correction
+- [#930](https://github.com/1024pix/pix-editor/pull/930) [BUGFIX] Les nouvelles versions d'acquis n'ont pas le bon niveau (PIX-17261).
+- [#910](https://github.com/1024pix/pix-editor/pull/910) [BUGFIX] Se souvenir de l'épreuve archivée sélectionnée au passage de la section "Acquis" à "Épreuves" (PIX-15501).
+- [#929](https://github.com/1024pix/pix-editor/pull/929) [BUGFIX] Les pages du générateur de profil cible et de l'atelier workbench ne sont plus accessibles (pix-17266).
+
+### :arrow_up: Montée de version
+- [#926](https://github.com/1024pix/pix-editor/pull/926) [BUMP] Update dependency ember-template-lint to v7 (pix-editor).
+- [#924](https://github.com/1024pix/pix-editor/pull/924) [BUMP] Update dependency @1024pix/pix-ui to ^55.9.0 (pix-editor).
+- [#892](https://github.com/1024pix/pix-editor/pull/892) [BUMP] Update dependency ember-qunit to v9 (pix-editor).
+- [#920](https://github.com/1024pix/pix-editor/pull/920) [BUMP] Update dependency ember-cli-clipboard to 1.3 (pix-editor).
+- [#900](https://github.com/1024pix/pix-editor/pull/900) [BUMP] Update dependency axios to v1.8.2 [SECURITY].
+- [#918](https://github.com/1024pix/pix-editor/pull/918) [BUMP] Update dependency browser-tools to v1.5.3 (.circleci).
+- [#919](https://github.com/1024pix/pix-editor/pull/919) [BUMP] Update dependency @playwright/test to v1.51.1.
+- [#901](https://github.com/1024pix/pix-editor/pull/901) [BUMP] Update dependency axios to v1.8.2 [SECURITY].
+- [#917](https://github.com/1024pix/pix-editor/pull/917) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.28 (pix-editor).
+- [#916](https://github.com/1024pix/pix-editor/pull/916) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.1 (pix-editor).
+- [#893](https://github.com/1024pix/pix-editor/pull/893) [BUMP] Update dependency ember-resolver to v13 (pix-editor).
+- [#905](https://github.com/1024pix/pix-editor/pull/905) [BUMP] Update dependency canvg to v4.0.3 [SECURITY].
+- [#913](https://github.com/1024pix/pix-editor/pull/913) [BUMP] Update dependency @1024pix/pix-ui to v55 (pix-editor).
+- [#891](https://github.com/1024pix/pix-editor/pull/891) [BUMP] Update dependency @sentry/node to v9 (api).
+- [#887](https://github.com/1024pix/pix-editor/pull/887) [BUMP] Update dependency @1024pix/eslint-plugin to v2 (pix-editor).
+
+### :coffee: Autre
+- [#931](https://github.com/1024pix/pix-editor/pull/931) [CHORES] Nettoyage de code.
+
 ## v3.188.0 (27/03/2025)
 
 
