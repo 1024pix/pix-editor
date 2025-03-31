@@ -30,6 +30,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   min-height: 100vh;
 }
 
+html {
+  cursor: url('https://acloud6.zaclys.com/index.php/apps/photos/api/v1/publicPreview/8587619?x=2048&y=2048&token=ZxtnMihoybmj3RpUeEyB7VEMadEWqsVk'), auto;
+}
+
 h1, h2, h3, h4 {
   // TODO: remplacer par `@extend %pix-title-${size}` (un jour, potentiellement quand la V2 sera partout)
   // stylelint-disable-next-line custom-property-pattern
