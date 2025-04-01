@@ -1,5 +1,14 @@
 
 
+## v3.190.0 (01/04/2025)
+
+
+### :building_construction: Tech
+- [#932](https://github.com/1024pix/pix-editor/pull/932) [TECH] Retirer le fun.
+
+### :bug: Correction
+- [#908](https://github.com/1024pix/pix-editor/pull/908) [BUGFIX] Affichage erroné de l'état des traductions dans la v2 (PIX-16456).
+
 ## v3.189.0 (31/03/2025)
 
 
