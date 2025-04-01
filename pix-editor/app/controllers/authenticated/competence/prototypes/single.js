@@ -537,7 +537,7 @@ export default class SingleController extends Controller {
       });
       return Promise.all(alternativesPublication);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       this._message('Mise en production des déclinaisons annulée');
     }
   }
@@ -779,7 +779,9 @@ export default class SingleController extends Controller {
 
   @action
   async hideStatusActionMenu(event) {
-    if (document.querySelector('.challenge-status-actions').contains(event.relatedTarget)) return;
-    this.isStatusActionMenuOpen = false;
+    const challengeSelector = document.querySelector('.challenge-status-actions');
+    if (!event.relatedTarget || !challengeSelector.contains(event.relatedTarget)) {
+      this.isStatusActionMenuOpen = false;
+    }
   }
 }
