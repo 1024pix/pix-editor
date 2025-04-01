@@ -63,6 +63,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
             isPrototypeDeclinable: true,
             proposedChallengesCount: 0,
             validatedChallengesCount: 1,
+            airtableId: skillId,
           }, null, null, null, null, null, null],
         }],
       }],
@@ -79,7 +80,15 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       instruction: 'Coucou maman',
       locales: ['fr'],
     });
-    skill.update({ challengesProduction: [challengeProduction] });
+
+    const localizedChallengeProduction = this.server.create('localized-challenge', {
+      id: 'localizedChallengeIdProto',
+      locale: 'nl',
+      status: Challenge.STATUSES.VALIDE,
+      instruction: 'hallo mama',
+      challenge: challengeProduction,
+    });
+    skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProduction] });
 
     return authenticateSession();
   });
@@ -111,6 +120,17 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     assert.dom(screen.getByText('Coucou maman'));
     assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
   });
+
+  test('should display a localized challenge production list', async function(assert) {
+    // when
+    const screen = await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
+    await clickByText('@tube1');
+
+    // then
+    assert.dom(screen.getByText('hallo mama'));
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
+  });
+
   test('it should navigate to challenge view', async function(assert) {
     await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('@tube1');

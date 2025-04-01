@@ -569,6 +569,11 @@ describe('Application | Route | Skills', () => {
                     related: '/api/skills/skill1/challenges-production',
                   },
                 },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/localized-challenges-production',
+                  },
+                },
               }
             },
             {
@@ -634,6 +639,11 @@ describe('Application | Route | Skills', () => {
                 'challenges-production': {
                   links: {
                     related: '/api/skills/skill2/challenges-production',
+                  },
+                },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/localized-challenges-production',
                   },
                 },
               }
@@ -787,6 +797,11 @@ describe('Application | Route | Skills', () => {
                     related: '/api/skills/skill1/challenges-production',
                   },
                 },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/localized-challenges-production',
+                  },
+                },
               }
             },
             {
@@ -852,6 +867,11 @@ describe('Application | Route | Skills', () => {
                 'challenges-production': {
                   links: {
                     related: '/api/skills/skill2/challenges-production',
+                  },
+                },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/localized-challenges-production',
                   },
                 },
               }
@@ -1006,6 +1026,11 @@ describe('Application | Route | Skills', () => {
                     related: '/api/skills/skill1/challenges-production',
                   },
                 },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill1/localized-challenges-production',
+                  },
+                },
               }
             },
             {
@@ -1071,6 +1096,11 @@ describe('Application | Route | Skills', () => {
                 'challenges-production': {
                   links: {
                     related: '/api/skills/skill2/challenges-production',
+                  },
+                },
+                'localized-challenges-production': {
+                  links: {
+                    related: '/api/skills/skill2/localized-challenges-production',
                   },
                 },
               }
@@ -1196,6 +1226,11 @@ describe('Application | Route | Skills', () => {
               'challenges-production': {
                 links: {
                   related: '/api/skills/skill1/challenges-production',
+                },
+              },
+              'localized-challenges-production': {
+                links: {
+                  related: '/api/skills/skill1/localized-challenges-production',
                 },
               },
             }
@@ -1447,6 +1482,11 @@ describe('Application | Route | Skills', () => {
             'challenges-production': {
               links: {
                 related: '/api/skills/nouvelAcquis/challenges-production',
+              },
+            },
+            'localized-challenges-production': {
+              links: {
+                related: '/api/skills/nouvelAcquis/localized-challenges-production',
               },
             },
           }
