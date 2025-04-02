@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
-import { buildTranslation } from '../../tooling/database-builder/factory/index.js';
 
 const {
   buildFramework,
@@ -71,7 +70,7 @@ async function mockCurrentContent() {
     accessibility2: Challenge.ACCESSIBILITY2.OK,
   });
   const alternativeChallenge = domainBuilder.buildChallenge({
-    id: 'challenge-id_alt',
+    id: 'challenge-id-alt',
     version: 1,
     genealogy: Challenge.GENEALOGIES.DECLINAISON,
     accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -307,12 +306,6 @@ async function mockCurrentContent() {
   });
 
   expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `challenge.${challenge.id}.instruction`,
-    locale: 'nl',
-    value: 'Consigne en nl',
-  }));
-
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
     key: `area.${expectedCurrentContent.areas[0].id}.title`,
     locale: 'fr',
     value: expectedCurrentContent.areas[0].title_i18n.fr,
@@ -420,11 +413,39 @@ async function mockCurrentContent() {
     }));
   }
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.illustrationAlt`,
-    locale: 'nl',
-    value: expectedAttachmentNl.alt,
-  }));
+  expectedCurrentContent.translations.forEach((translation) => {
+    translation.sourceEntityId = null;
+  });
+
+  expectedCurrentContent.translations.push({
+    ...databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.instruction`,
+      locale: 'nl',
+      value: 'Consigne en nl',
+    }),
+    key: 'challenge.localized-challenge-id.instruction',
+    entityId: 'localized-challenge-id',
+    sourceEntityId: challenge.id,
+  });
+
+  expectedCurrentContent.translations.push({
+    ...databaseBuilder.factory.buildTranslation({
+      key: `challenge.${expectedChallenge.id}.illustrationAlt`,
+      locale: 'nl',
+      value: expectedAttachmentNl.alt,
+    }),
+    key: 'challenge.localized-challenge-id.illustrationAlt',
+    entityId: 'localized-challenge-id',
+    sourceEntityId: expectedChallenge.id,
+  });
+
+  expectedCurrentContent.translations = expectedCurrentContent.translations.sort((trA, trB) => {
+    const compareKey = trA.key.localeCompare(trB.key);
+    if (compareKey === 0) {
+      return trA.locale.localeCompare(trB.locale);
+    }
+    return compareKey;
+  });
 
   await databaseBuilder.commit();
 
