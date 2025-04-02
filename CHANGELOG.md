@@ -1,5 +1,15 @@
 
 
+## v3.191.0 (02/04/2025)
+
+
+### :rocket: Amélioration
+- [#935](https://github.com/1024pix/pix-editor/pull/935) [FEATURE] Purge de l'ancien code de Phrase (PIX-16835).
+
+### :arrow_up: Montée de version
+- [#933](https://github.com/1024pix/pix-editor/pull/933) [BUMP] Update dependency @1024pix/pix-ui to ^55.10.0 (pix-editor).
+- [#927](https://github.com/1024pix/pix-editor/pull/927) [BUMP] Update dependency ember-tui-editor to v4 (pix-editor).
+
 ## v3.190.0 (01/04/2025)
 
 
