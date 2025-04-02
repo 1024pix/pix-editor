@@ -10,7 +10,8 @@ import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models
 import { Area, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 import * as config from '../../../lib/config.js';
 
-import * as scheduleDeleteUnmentionedKeysAfterUploadJob from '../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
+import * as scheduleDeleteUnmentionedKeysAfterUploadJob
+  from '../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/upload', () => {
@@ -399,80 +400,126 @@ describe('Acceptance | Controller | phrase-controller', () => {
       expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({ uploadId: 'uplaodId', projectId: 'MY_PHRASE_PROJECT_ID' });
     });
   });
-
   describe('POST /phrase/download', () => {
-    describe('disableDownloadByArea', () => {
-      beforeEach(()=> {
-        vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(false);
-        vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: '🍓_DES_🪵_PAS_UTILISÉ' }]);
-      });
+    beforeEach(()=> {
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
+        { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1 },
+        { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2 },
+      ]);
+    });
 
-      it('should download the translations from phrase', async () => {
-        const user = databaseBuilder.factory.buildAdminUser();
-        await databaseBuilder.commit();
+    it('should download the translations from phrase', async () => {
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
 
-        const phraseAPILocales = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, [
-            {
-              id: 'frLocaleId',
-              name: 'fr',
-              code: 'fr',
-              default: true,
-            },
-            {
-              id: 'enLocaleId',
-              name: 'en',
-              code: 'en',
-              default: false,
-            },
-            {
-              id: 'nlLocaleId',
-              name: 'nl',
-              code: 'nl',
-              default: false,
-            },
-          ]);
-
-        const phraseAPIDownloadEn = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales/enLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
-
-        const phraseAPIDownloadNl = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales/nlLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
-
-        const server = await createServer();
-        const postPhraseDownloadOptions = {
-          method: 'POST',
-          url: '/api/phrase/download',
-          headers: {
-            ...generateAuthorizationHeader(user)
-          },
-        };
-
-        // When
-        const response = await server.inject(postPhraseDownloadOptions);
-
-        // Then
-        expect(response.statusCode).to.equal(204);
-        expect(phraseAPILocales.isDone()).to.be.true;
-        expect(phraseAPIDownloadEn.isDone()).to.be.true;
-        expect(phraseAPIDownloadNl.isDone()).to.be.true;
-        await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal([
-          { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
+      const phraseAPIAreaOneLocales = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, [
           {
-            key: 'challenge.challenge1nwE8BcKcmiNvR.instruction',
-            locale: 'nl',
-            value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
+            id: 'frLocaleId',
+            name: 'fr',
+            code: 'fr',
+            default: true,
+          },
+          {
+            id: 'enLocaleId',
+            name: 'en',
+            code: 'en',
+            default: false,
+          },
+          {
+            id: 'nlLocaleId',
+            name: 'nl',
+            code: 'nl',
+            default: false,
           },
         ]);
-        await expect(knex('localized_challenges').select().orderBy('id')).resolves.toEqual([{
+
+      const phraseAPIAreaOneDownloadEn = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/enLocaleId/download')
+        .query({ file_format: 'csv' })
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
+
+      const phraseAPIAreaOneDownloadNl = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/nlLocaleId/download')
+        .query({ file_format: 'csv' })
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, 'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
+
+      const phraseAPIAreaTwoLocales = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, [
+          {
+            id: 'frLocaleId',
+            name: 'fr',
+            code: 'fr',
+            default: true,
+          },
+          {
+            id: 'enLocaleId',
+            name: 'en',
+            code: 'en',
+            default: false,
+          },
+          {
+            id: 'nlLocaleId',
+            name: 'nl',
+            code: 'nl',
+            default: false,
+          },
+        ]);
+
+      const phraseAPIAreaTwoDownloadEn = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/enLocaleId/download')
+        .query({ file_format: 'csv' })
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
+
+      const phraseAPIAreaTwoDownloadNl = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/nlLocaleId/download')
+        .query({ file_format: 'csv' })
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, 'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
+
+      const server = await createServer();
+      const postPhraseDownloadOptions = {
+        method: 'POST',
+        url: '/api/phrase/download',
+        headers: {
+          ...generateAuthorizationHeader(user)
+        },
+      };
+
+      // When
+      const response = await server.inject(postPhraseDownloadOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(204);
+      expect(phraseAPIAreaOneLocales.isDone()).to.be.true;
+      expect(phraseAPIAreaOneDownloadEn.isDone()).to.be.true;
+      expect(phraseAPIAreaOneDownloadNl.isDone()).to.be.true;
+      expect(phraseAPIAreaTwoLocales.isDone()).to.be.true;
+      expect(phraseAPIAreaTwoDownloadEn.isDone()).to.be.true;
+      expect(phraseAPIAreaTwoDownloadNl.isDone()).to.be.true;
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy('key', 'asc')).resolves.to.deep.equal([
+        { key: 'area.recDesCodesLaAreaDeux.title', locale: 'nl', value: 'Environnement digital' },
+        { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
+        {
+          key: 'challenge.challenge1nwE8BcKcmiNvR.instruction',
+          locale: 'nl',
+          value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
+        },
+        {
+          key: 'challenge.challengeDeLAreaDeux.instruction',
+          locale: 'nl',
+          value: 'Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
+        },
+      ]);
+      await expect(knex('localized_challenges').select().orderBy('challengeId', 'asc')).resolves.toEqual([
+        {
           id: expect.stringMatching(/^challenge.*$/),
           challengeId: 'challenge1nwE8BcKcmiNvR',
           locale: 'nl',
@@ -487,164 +534,24 @@ describe('Acceptance | Controller | phrase-controller', () => {
           toRephrase: false,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
-        }]);
-      });
-    });
-
-    describe('enableDownloadByArea', () => {
-      beforeEach(()=> {
-        vi.spyOn(config.phrase, 'enableDownloadByArea', 'get').mockReturnValue(true);
-        vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-          { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1 },
-          { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2 },
-        ]);
-      });
-
-      it('should download the translations from phrase', async () => {
-        const user = databaseBuilder.factory.buildAdminUser();
-        await databaseBuilder.commit();
-
-        const phraseAPIAreaOneLocales = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales')
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, [
-            {
-              id: 'frLocaleId',
-              name: 'fr',
-              code: 'fr',
-              default: true,
-            },
-            {
-              id: 'enLocaleId',
-              name: 'en',
-              code: 'en',
-              default: false,
-            },
-            {
-              id: 'nlLocaleId',
-              name: 'nl',
-              code: 'nl',
-              default: false,
-            },
-          ]);
-
-        const phraseAPIAreaOneDownloadEn = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/enLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
-
-        const phraseAPIAreaOneDownloadNl = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/nlLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
-
-        const phraseAPIAreaTwoLocales = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales')
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, [
-            {
-              id: 'frLocaleId',
-              name: 'fr',
-              code: 'fr',
-              default: true,
-            },
-            {
-              id: 'enLocaleId',
-              name: 'en',
-              code: 'en',
-              default: false,
-            },
-            {
-              id: 'nlLocaleId',
-              name: 'nl',
-              code: 'nl',
-              default: false,
-            },
-          ]);
-
-        const phraseAPIAreaTwoDownloadEn = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/enLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
-
-        const phraseAPIAreaTwoDownloadNl = nock('https://api.phrase.com')
-          .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/nlLocaleId/download')
-          .query({ file_format: 'csv' })
-          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-          .reply(200, 'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
-
-        const server = await createServer();
-        const postPhraseDownloadOptions = {
-          method: 'POST',
-          url: '/api/phrase/download',
-          headers: {
-            ...generateAuthorizationHeader(user)
-          },
-        };
-
-        // When
-        const response = await server.inject(postPhraseDownloadOptions);
-
-        // Then
-        expect(response.statusCode).to.equal(204);
-        expect(phraseAPIAreaOneLocales.isDone()).to.be.true;
-        expect(phraseAPIAreaOneDownloadEn.isDone()).to.be.true;
-        expect(phraseAPIAreaOneDownloadNl.isDone()).to.be.true;
-        expect(phraseAPIAreaTwoLocales.isDone()).to.be.true;
-        expect(phraseAPIAreaTwoDownloadEn.isDone()).to.be.true;
-        expect(phraseAPIAreaTwoDownloadNl.isDone()).to.be.true;
-        await expect(knex('translations').select('key', 'locale', 'value').orderBy('key', 'asc')).resolves.to.deep.equal([
-          { key: 'area.recDesCodesLaAreaDeux.title', locale: 'nl', value: 'Environnement digital' },
-          { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
-          {
-            key: 'challenge.challenge1nwE8BcKcmiNvR.instruction',
-            locale: 'nl',
-            value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
-          },
-          {
-            key: 'challenge.challengeDeLAreaDeux.instruction',
-            locale: 'nl',
-            value: 'Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
-          },
-        ]);
-        await expect(knex('localized_challenges').select().orderBy('challengeId', 'asc')).resolves.toEqual([
-          {
-            id: expect.stringMatching(/^challenge.*$/),
-            challengeId: 'challenge1nwE8BcKcmiNvR',
-            locale: 'nl',
-            geography: null,
-            embedUrl: null,
-            urlsToConsult: null,
-            status: ChallengeForRelease.STATUSES.PROPOSE,
-            requireGafamWebsiteAccess: false,
-            isIncompatibleIpadCertif: false,
-            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-            isAwarenessChallenge: false,
-            toRephrase: false,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false,
-          },
-          {
-            id: expect.stringMatching(/^challenge.*$/),
-            challengeId: 'challengeDeLAreaDeux',
-            locale: 'nl',
-            geography: null,
-            embedUrl: null,
-            urlsToConsult: null,
-            status: ChallengeForRelease.STATUSES.PROPOSE,
-            requireGafamWebsiteAccess: false,
-            isIncompatibleIpadCertif: false,
-            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-            isAwarenessChallenge: false,
-            toRephrase: false,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false,
-          },
-        ]);
-      });
+        },
+        {
+          id: expect.stringMatching(/^challenge.*$/),
+          challengeId: 'challengeDeLAreaDeux',
+          locale: 'nl',
+          geography: null,
+          embedUrl: null,
+          urlsToConsult: null,
+          status: ChallengeForRelease.STATUSES.PROPOSE,
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
+        },
+      ]);
     });
   });
 });

@@ -6,53 +6,19 @@ import { Readable } from 'node:stream';
 
 export async function downloadTranslationFromPhrase(phraseApi = { Configuration, LocalesApi }) {
 
-  const { apiKey, projectId, enableDownloadByArea, projects } = config.phrase;
+  const { apiKey, projects } = config.phrase;
 
-  if (enableDownloadByArea) {
-    const projectsByArea = projects.filter((project) => !Number.isNaN(parseInt(project.areaCode)));
-    if (!apiKey || !projectsByArea.length) {
-      logger.info('Phrase API Key or Projects is empty or doesn\'t contain areaCode. Skipping download translations.');
-      return;
-    }
-    const configuration = new phraseApi.Configuration({
-      fetchApi: fetch,
-      apiKey: `token ${apiKey}`,
-    });
+  const projectsByArea = projects.filter((project) => !Number.isNaN(parseInt(project.areaCode)));
+  if (!apiKey || !projectsByArea.length) {
+    logger.info('Phrase API Key or Projects is empty or doesn\'t contain areaCode. Skipping download translations.');
+    return;
+  }
+  const configuration = new phraseApi.Configuration({
+    fetchApi: fetch,
+    apiKey: `token ${apiKey}`,
+  });
 
-    for (const { projectId } of projectsByArea) {
-      try {
-        const localesApi = new phraseApi.LocalesApi(configuration);
-
-        const phraseLocales = await localesApi.localesList({ projectId });
-
-        for (const phraseLocale of phraseLocales) {
-          if (phraseLocale._default) continue;
-
-          const csvFile = await localesApi.localeDownload({
-            projectId,
-            id: phraseLocale.id,
-            fileFormat: 'csv',
-          });
-          await importTranslations(Readable.fromWeb(csvFile.stream()));
-        }
-      } catch (e) {
-        const text = await e.text?.() ?? e;
-        logger.error(`Error while downloading translations: ${text}`);
-        throw new Error('Download error', { cause: e });
-      }
-    }
-
-  } else {
-    if (!apiKey || !projectId) {
-      logger.info('Phrase API Key or Project Id is not defined. Skipping download translations.');
-      return;
-    }
-
-    const configuration = new phraseApi.Configuration({
-      fetchApi: fetch,
-      apiKey: `token ${apiKey}`,
-    });
-
+  for (const { projectId } of projectsByArea) {
     try {
       const localesApi = new phraseApi.LocalesApi(configuration);
 

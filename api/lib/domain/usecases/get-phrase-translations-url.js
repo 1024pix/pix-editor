@@ -4,7 +4,6 @@ import { logger } from '../../infrastructure/logger.js';
 
 export async function getPhraseTranslationsURL({ challengeId, locale, areaCode }, phrase = { AccountsApi, Configuration, LocalesApi }) {
   try {
-    const enableDownloadByArea = config.phrase.enableDownloadByArea;
     const configuration = new phrase.Configuration({
       apiKey: `token ${config.phrase.apiKey}`,
       fetchApi: fetch,
@@ -13,9 +12,7 @@ export async function getPhraseTranslationsURL({ challengeId, locale, areaCode }
     const accounts = await new phrase.AccountsApi(configuration).accountsList({ page: 1 });
 
     const accountId = accounts.find(({ name }) => name === 'Pix')?.id;
-    const projectId = enableDownloadByArea
-      ? config.phrase.projects.find((project) => project.areaCode === areaCode).projectId
-      : config.phrase.projectId;
+    const projectId = config.phrase.projects.find((project) => project.areaCode === areaCode).projectId;
 
     const locales = await new phrase.LocalesApi(configuration).localesList({
       projectId,
