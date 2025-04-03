@@ -30,6 +30,7 @@ export default class LocalizedChallengesProduction extends Component {
     }
     return this.args.challenges
       .filter((challenge) => !excludeStatuses.includes(challenge.status))
+      .filter((challenge) => challenge.locales.includes(this.args.locale) || challenge.locales.includes('fr'))
       .sort(byAlternativeVersion);
   }
 

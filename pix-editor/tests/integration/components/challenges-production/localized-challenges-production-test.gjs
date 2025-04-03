@@ -9,11 +9,11 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | challenges-production | localized-challenges-production', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let screen, store;
+  let screen, store, skill, challenges, localizedChallenges, locale, areaCode;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
-    const skill = store.createRecord('skill', {
+    skill = store.createRecord('skill', {
       id: 'skillAId',
       name: '@skillA1',
       version: 3,
@@ -147,14 +147,14 @@ module('Integration | Component | challenges-production | localized-challenges-p
       status: LocalizedChallenge.STATUSES.PAUSE,
     });
 
-    const challenges = [
+    challenges = [
       challengeProtoValide,
       challengeDecliArchivee,
       challengeDecliNl,
       challengeDecliProposee,
       challengeDecliObsolete,
     ];
-    const localizedChallenges = [
+    localizedChallenges = [
       localizedProtoValideFr,
       localizedProtoValideNl,
       localizedDecliArchiveeFr,
@@ -165,26 +165,27 @@ module('Integration | Component | challenges-production | localized-challenges-p
       localizedDecliObsoleteFr,
       localizedDecliObsoleteNl,
     ];
-    const locale = 'nl';
-    const areaCode = '1';
-
-    screen = await render(<template>
-<LocalizedChallengesProduction
-  @skill={{skill}}
-  @challenges={{challenges}}
-  @localizedChallenges={{localizedChallenges}}
-  @locale={{locale}}
-  @areaCode={{areaCode}}
-/>
-</template>);
+    locale = 'nl';
+    areaCode = '1';
   });
 
-  module('list item', function() {
+  module('list item', function(hooks) {
+    hooks.beforeEach(async ()=> {
+      screen = await render(<template>
+        <LocalizedChallengesProduction
+          @skill={{skill}}
+          @challenges={{challenges}}
+          @localizedChallenges={{localizedChallenges}}
+          @locale={{locale}}
+          @areaCode={{areaCode}}
+        />
+      </template>);
+    });
+
     test('should display all expected info for a given challenge', async function(assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
       const prototype = validatedChallenges[1];
-
       assert.dom(prototype).includesText('Proto');
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('25/12/2019');
@@ -255,8 +256,40 @@ module('Integration | Component | challenges-production | localized-challenges-p
   });
 
   module('when displaying the list', function() {
+    test('it should display only challenge who has selected locale or fr', async function(assert) {
+      // given
+      locale = 'es';
+
+      // when
+      screen = await render(<template>
+        <LocalizedChallengesProduction
+          @skill={{skill}}
+          @challenges={{challenges}}
+          @localizedChallenges={{localizedChallenges}}
+          @locale={{locale}}
+          @areaCode={{areaCode}}
+        />
+      </template>);
+
+      // then
+      const challengesList = screen.queryAllByRole('row');
+      const challengeListWithoutThead = challengesList.slice(1);
+      assert.strictEqual(challengeListWithoutThead.length, 3);
+    });
+
     module('when box to display obsolete challenges not checked', function() {
       test('should display all but obsolete', async function(assert) {
+        // when
+        screen = await render(<template>
+          <LocalizedChallengesProduction
+            @skill={{skill}}
+            @challenges={{challenges}}
+            @localizedChallenges={{localizedChallenges}}
+            @locale={{locale}}
+            @areaCode={{areaCode}}
+          />
+        </template>);
+
         // then
         const validatedChallenges = screen.queryAllByText('validé');
         const obsoleteChallenges = screen.queryAllByText('périmé');
@@ -272,6 +305,16 @@ module('Integration | Component | challenges-production | localized-challenges-p
     module('when box to display obsolete challenges checked', function() {
       test('display all challenges', async function(assert) {
         // when
+        screen = await render(<template>
+          <LocalizedChallengesProduction
+            @skill={{skill}}
+            @challenges={{challenges}}
+            @localizedChallenges={{localizedChallenges}}
+            @locale={{locale}}
+            @areaCode={{areaCode}}
+          />
+        </template>);
+
         await click(screen.getByLabelText('Afficher les épreuves périmées'));
 
         // then
