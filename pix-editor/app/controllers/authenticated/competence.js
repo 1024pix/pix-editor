@@ -195,7 +195,7 @@ export default class CompetenceController extends Controller {
 
   @action
   selectSection(value) {
-    this._transitionToSection(value.id);
+    this._transitionToSection(value);
   }
 
   @action
