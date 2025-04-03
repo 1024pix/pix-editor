@@ -277,6 +277,29 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.strictEqual(challengeListWithoutThead.length, 3);
     });
 
+    module('when locale is not in phrase', function() {
+      test('when locale is not in phrase', async function(assert) {
+        // given
+        locale = 'fr-fr';
+
+        // when
+        screen = await render(<template>
+          <LocalizedChallengesProduction
+            @skill={{skill}}
+            @challenges={{challenges}}
+            @localizedChallenges={{localizedChallenges}}
+            @locale={{locale}}
+            @areaCode={{areaCode}}
+          />
+        </template>);
+
+        // then
+        const phraseLinks = screen.queryAllByRole('link', { name: /traduction de l'épreuve de version/ });
+
+        assert.strictEqual(phraseLinks.length, 0);
+      });
+    });
+
     module('when box to display obsolete challenges not checked', function() {
       test('should display all but obsolete', async function(assert) {
         // when
