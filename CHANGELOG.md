@@ -1,5 +1,11 @@
 
 
+## v3.192.0 (03/04/2025)
+
+
+### :rocket: Amélioration
+- [#936](https://github.com/1024pix/pix-editor/pull/936) [FEATURE] Exposer les données de traduction des entités du contenu pédagogique pour la réplication (PIX-16799).
+
 ## v3.191.0 (02/04/2025)
 
 
