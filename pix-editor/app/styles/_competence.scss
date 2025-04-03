@@ -1,32 +1,12 @@
 @use "global";
 
-// stylelint-disable color-no-hex, color-named
-.ui.small.floated.select-section {
-  min-width: 150px;
-  margin-bottom: 0;
+.main-title-filters {
+  display: flex;
+  gap: 2rem
 }
 
-.ui.small.floated.language-filter {
-  min-width: 180px;
-  margin-bottom: 0;
-  font-weight: normal;
-
-  .ember-power-select-trigger {
-    color: white;
-    background: transparent;
-    border-color: white;
-
-    .ember-power-select-status-icon {
-      border-color: rgba(255, 255, 255, 0.5) transparent transparent;
-    }
-  }
-}
-
-.select-section-dropdown, .language-filter-dropdown {
-  li {
-    padding-top: .5em;
-    padding-bottom: .5em;
-  }
+.competence-header__language-filter {
+  width: 200px;
 }
 
 .competence-management-link {
