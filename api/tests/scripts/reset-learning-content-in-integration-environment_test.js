@@ -280,7 +280,9 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
     const script = new ResetLearningContentInIntegrationEnvironment();
 
     // when
-    await script.handle({ logger: vi.fn() });
+    await script.handle({ 
+      logger: { info: vi.fn() },
+    });
 
     // then
     readCompetenceScope.done();
