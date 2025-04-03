@@ -8,10 +8,26 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
     super({
       description: 'Refresh INTEGRATION environment dataset',
       permanent: false,
+      options: {
+        dryRun: {
+          type: 'boolean',
+          describe: 'If true, it does not persist any deletion made during the script.',
+          demandOption: true,
+          default: true,
+        },
+      },
     });
   }
 
-  async handle({ logger }) {
+  async handle({ options, logger }) {
+    const dryRun = options.dryRun;
+    const sleepMs = options.sleepMs ?? 2000;
+    if (dryRun) {
+      logger.info('Exécution en DRY RUN, dans 2 secondes c\'est parti...');
+    } else {
+      logger.info('Exécution persistante, vous avez encore 2 secondes pour tout annuler !...');
+    }
+    await sleep(sleepMs);
     const airtablePixCompetences = await airtable.findRecords(
       'Competences',
       {
@@ -60,42 +76,47 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
     );
     logger.info(`${airtableChallenges.length} pièces jointes Pix trouvées.`);
 
-    logger.info('Suppression des thématiques...');
-    for (const chunkThematics of chunk(airtablePixThematics, 10)) {
-      const chunkAirtableThematicsIds = chunkThematics.map((thematic) => thematic['id']);
-      await airtable.deleteRecords('Thematiques', chunkAirtableThematicsIds);
-    }
-    logger.info('Suppression des thématiques OK');
+    if (!dryRun) {
+      logger.info('Suppression des thématiques...');
+      for (const chunkThematics of chunk(airtablePixThematics, 10)) {
+        const chunkAirtableThematicsIds = chunkThematics.map((thematic) => thematic['id']);
+        await airtable.deleteRecords('Thematiques', chunkAirtableThematicsIds);
+      }
+      logger.info('Suppression des thématiques OK');
 
-    logger.info('Suppression des sujets...');
-    for (const chunkTubes of chunk(airtablePixTubes, 10)) {
-      const chunkAirtableTubesIds = chunkTubes.map((tube) => tube['id']);
-      await airtable.deleteRecords('Tubes', chunkAirtableTubesIds);
-    }
-    logger.info('Suppression des sujets OK');
+      logger.info('Suppression des sujets...');
+      for (const chunkTubes of chunk(airtablePixTubes, 10)) {
+        const chunkAirtableTubesIds = chunkTubes.map((tube) => tube['id']);
+        await airtable.deleteRecords('Tubes', chunkAirtableTubesIds);
+      }
+      logger.info('Suppression des sujets OK');
 
-    logger.info('Suppression des acquis...');
-    for (const chunkSkills of chunk(airtableSkills, 10)) {
-      const chunkAirtableSkillsIds = chunkSkills.map((skill) => skill['id']);
-      await airtable.deleteRecords('Acquis', chunkAirtableSkillsIds);
-    }
-    logger.info('Suppression des acquis OK');
+      logger.info('Suppression des acquis...');
+      for (const chunkSkills of chunk(airtableSkills, 10)) {
+        const chunkAirtableSkillsIds = chunkSkills.map((skill) => skill['id']);
+        await airtable.deleteRecords('Acquis', chunkAirtableSkillsIds);
+      }
+      logger.info('Suppression des acquis OK');
 
-    logger.info('Suppression des épreuves...');
-    for (const chunkChallenges of chunk(airtableChallenges, 10)) {
-      const chunkAirtableChallengesIds = chunkChallenges.map((challenge) => challenge['id']);
-      await airtable.deleteRecords('Epreuves', chunkAirtableChallengesIds);
-    }
-    logger.info('Suppression des épreuves OK');
+      logger.info('Suppression des épreuves...');
+      for (const chunkChallenges of chunk(airtableChallenges, 10)) {
+        const chunkAirtableChallengesIds = chunkChallenges.map((challenge) => challenge['id']);
+        await airtable.deleteRecords('Epreuves', chunkAirtableChallengesIds);
+      }
+      logger.info('Suppression des épreuves OK');
 
-    logger.info('Suppression des pièces jointes...');
-    for (const chunkAttachments of chunk(airtableAttachments, 10)) {
-      const chunkAirtableAttachmentsIds = chunkAttachments.map((attachment) => attachment['id']);
-      await airtable.deleteRecords('Attachments', chunkAirtableAttachmentsIds);
+      logger.info('Suppression des pièces jointes...');
+      for (const chunkAttachments of chunk(airtableAttachments, 10)) {
+        const chunkAirtableAttachmentsIds = chunkAttachments.map((attachment) => attachment['id']);
+        await airtable.deleteRecords('Attachments', chunkAirtableAttachmentsIds);
+      }
+      logger.info('Suppression des pièces jointes OK');
+    } else {
+      logger.info('DRY RUN activé, pas de suppression effective sur Airtable.');
     }
-    logger.info('Suppression des pièces jointes OK');
 
-    await knex.transaction(async (trx) => {
+    const trx = await knex.transaction();
+    try {
       const attachmentIds = airtableAttachments.map((attachment) => attachment['id']);
       logger.info(`${attachmentIds.length} pièces jointes concernées pour la suppression des localized_challenges-attachments correspondant`);
       let deletedRecords = await trx('localized_challenges-attachments').whereIn('attachmentId', attachmentIds).delete().returning('attachmentId');
@@ -125,7 +146,15 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
       logger.info(`${challengeIds.length} pièces jointes concernées pour la suppression des traductions correspondantes`);
       deletedRecords = await trx('translations').whereIn('entityId', attachmentIds).delete().returning('key');
       logger.info(`${deletedRecords.length} traductions de pièces jointes supprimées`);
-    });
+      if (dryRun) {
+        await trx.rollback();
+      } else {
+        await trx.commit();
+      }
+    } catch (err) {
+      await trx.rollback();
+      throw err;
+    }
   }
 }
 
@@ -139,6 +168,10 @@ function chunk(input, size) {
       ? [...arr, [item]]
       : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
   }, []);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 await ScriptRunner.execute(import.meta.url, ResetLearningContentInIntegrationEnvironment);

@@ -280,7 +280,8 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
     const script = new ResetLearningContentInIntegrationEnvironment();
 
     // when
-    await script.handle({ 
+    await script.handle({
+      options: { dryRun: false, sleepMs: 0 },
       logger: { info: vi.fn() },
     });
 
@@ -308,5 +309,41 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
     expect(otherLocalizedChallenges.length).to.equal(1); // noise localized left
     expect(pixLocalizedChallengeAttachments.length).to.equal(0);
     expect(otherLocalizedChallengeAttachments.length).to.equal(1); // noise localized left
+  });
+
+  it('should do no deletion at all when dry run is enabled', async function() {
+    // given
+    const script = new ResetLearningContentInIntegrationEnvironment();
+
+    // when
+    await script.handle({
+      options: { dryRun: true, sleepMs: 0 },
+      logger: { info: vi.fn() },
+    });
+
+    // then
+    readCompetenceScope.done();
+    readThematicScope.done();
+    readTubeScope.done();
+    readSkillScope.done();
+    readChallengeScope.done();
+    readAttachmentScope.done();
+    expect(deleteThematicScope.isDone()).to.be.false;
+    expect(deleteTubeScope.isDone()).to.be.false;
+    expect(deleteSkillScope.isDone()).to.be.false;
+    expect(deleteChallengeScope.isDone()).to.be.false;
+    expect(deleteAttachmentScope.isDone()).to.be.false;
+    const translationsWithPix = await knex('translations').select('*').whereILike('key', '%pix%');
+    const translationsWithOther = await knex('translations').select('*').whereILike('key', '%other%');
+    const pixLocalizedChallenges = await knex('localized_challenges').select('*').whereILike('challengeId', '%pix%');
+    const otherLocalizedChallenges = await knex('localized_challenges').select('*').whereILike('challengeId', '%other%');
+    const pixLocalizedChallengeAttachments = await knex('localized_challenges-attachments').select('*').whereILike('attachmentId', '%pix%');
+    const otherLocalizedChallengeAttachments = await knex('localized_challenges-attachments').select('*').whereILike('attachmentId', '%other%');
+    expect(translationsWithPix.length).to.equal(13);
+    expect(translationsWithOther.length).to.equal(5);
+    expect(pixLocalizedChallenges.length).to.equal(3);
+    expect(otherLocalizedChallenges.length).to.equal(1);
+    expect(pixLocalizedChallengeAttachments.length).to.equal(2);
+    expect(otherLocalizedChallengeAttachments.length).to.equal(1);
   });
 });
