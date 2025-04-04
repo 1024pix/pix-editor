@@ -16,6 +16,6 @@ module('Integration | Component | sidebar/search', function(hooks) {
     await render(hbs`<Sidebar::Search @displaySearch={{this.maySearch}} />`);
 
     // then
-    assert.dom('.sidebar-search').exists();
+    assert.dom('#sidebar-search').exists();
   });
 });

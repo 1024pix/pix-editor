@@ -6,8 +6,9 @@ import Component from '@glimmer/component';
 export default class SelectSearch extends Component {
   @action
   async onSelectFocus() {
-    const [searchInput] = document.getElementById(this.args.selectId).getElementsByClassName('pix-select-search__input');
-    const [emptyMessage] = document.getElementById(this.args.selectId).getElementsByClassName('pix-select-list__empty-search-message');
+    const containerElement = document.getElementById(`container-${this.args.selectId}`);
+    const [searchInput] = containerElement.getElementsByClassName('pix-select-search__input');
+    const [emptyMessage] = containerElement.getElementsByClassName('pix-select-list__empty-search-message');
     searchInput.addEventListener('input', async (e) => {
       const query = e.target.value;
       if (query.length) {
@@ -20,17 +21,22 @@ export default class SelectSearch extends Component {
     });
   }
 
+  get placeholder() {
+    return this.args.placeholder || 'Rechercher...';
+  }
+
   <template>
     <PixSelect
       {{on "focusout" this.onSelectFocus}}
-      id={{@selectId}}
+      @id={{@selectId}}
       @options={{@resultList}}
       @onChange={{@onChange}}
       @isSearchable={{true}}
       @searchLabel="Rechercher"
       @searchPlaceholder={{@searchPlaceholder}}
       @emptySearchMessage="Aucun résultat"
-      @placeholder="Rechercher"
+      @hideDefaultOption={{@hideDefaultOption}}
+      @placeholder={{this.placeholder}}
     />
   </template>
 }

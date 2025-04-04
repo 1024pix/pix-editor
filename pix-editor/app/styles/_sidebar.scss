@@ -30,72 +30,44 @@
     color: #00DBFF;
   }
 
-  .sidebar-search {
-    .ember-basic-dropdown-trigger {
-      margin: 0 5px;
-      color: rgba(255, 255, 255, 0.9);
-      background: transparent;
-      border-color: rgba(255, 255, 255, 0.9);
+  .skill-result-status {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: .5em;
+    border-radius: 50%;
 
-      .ember-power-select-placeholder {
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      .custom-trigger {
-        color: rgba(255, 255, 255, 0.9);
-      }
+    &.validated {
+      background: global.$production-background-color;
     }
 
-    .ember-power-select-dropdown.ember-basic-dropdown-content--in-place {
-      right: 5px;
-      left: 5px;
-      width: auto;
+    &.suggested {
+      background: global.$suggested-background-color;
     }
 
-    .ember-power-select-option {
-      display: flex;
-      align-items: center;
+    &.archived {
+      background: global.$archived-background-color;
+    }
 
-      .skill-result-status {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        margin-left: .5em;
-        border-radius: 50%;
-
-        &.validated {
-          background: global.$production-background-color;
-        }
-
-        &.suggested {
-          background: global.$suggested-background-color;
-        }
-
-        &.archived {
-          background: global.$archived-background-color;
-        }
-
-        &.deleted {
-          background: global.$deleted-background-color;
-        }
-      }
+    &.deleted {
+      background: global.$deleted-background-color;
     }
   }
 
-  #select-framework {
+  #select-sidebar-search {
+    margin: 0 1rem;
 
-    .ember-power-select-status-icon {
-      border-color: rgba(255, 255, 255, 0.9) transparent transparent;
+    .pix-select__dropdown {
+      overflow-x: hidden;
+      transform: translate3d(0, 50px, 0) !important;
     }
+  }
 
-    .ember-power-select-trigger {
-      margin: 10px 5px;
-      color: rgba(255, 255, 255, 0.9);
-      background-color: transparent;
-      border-color: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.9);
-      border-left: 1px solid rgba(255, 255, 255, 0.9);
-      cursor: pointer;
+  #container-select-framework {
+    margin: 1rem;
+
+    .pix-select__dropdown {
+      transform: translate3d(0, 50px, 0) !important;
     }
   }
 

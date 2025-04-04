@@ -35,14 +35,14 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
 
   test('it should set custom title and selected language on validate', async function(assert) {
     // when
-    await fillIn('[data-test-pdf-title-field] input', 'mont titre');
-    await click('[data-test-pdf-language-field] .ember-basic-dropdown-trigger');
-    await click('.ember-power-select-option');
+    await fillIn('[data-test-pdf-title-field] input', 'mon titre');
+    await click('[data-test-pdf-language-field]');
+    await click('.pix-select-list-category__option');
     await click('[data-test-validate-pdf-entries]');
 
     // then
     assert.ok(callBackActionStub.calledOnce);
     assert.ok(closeTitleInputStub.calledOnce);
-    assert.deepEqual(this.callBackAction.getCall(0).args, ['mont titre', 'en']);
+    assert.deepEqual(this.callBackAction.getCall(0).args, ['mon titre', 'en']);
   });
 });

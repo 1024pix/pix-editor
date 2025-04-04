@@ -37,8 +37,8 @@ module('Acceptance | competence-management/new', function(hooks) {
 
     // when
     await visit('/');
-    await click(findAll('.ember-basic-dropdown-trigger')[1]);
-    await click(find('.ember-power-select-option'));
+    await click(findAll('.pix-select-button')[1]);
+    await click(find('.pix-select-list-category__option'));
     await click(find('[data-test-area-item]'));
     await click(find('[data-test-add-competence]'));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);

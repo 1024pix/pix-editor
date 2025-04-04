@@ -89,10 +89,7 @@ module('unit | Component | sidebar/navigation', function(hooks) {
       assert.ok(loaderStartStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(setFrameworkStub.calledWith(framework));
-      assert.deepEqual(component._selectedFramework, {
-        label: 'pix +',
-        data: framework,
-      });
+      assert.deepEqual(component._selectedFramework, framework);
       assert.ok(notifyMessageStub.calledWith('Référentiel créé'));
       assert.notOk(component.displayNewFrameworkPopIn);
       assert.ok(transitionToStub.calledWith('authenticated'));

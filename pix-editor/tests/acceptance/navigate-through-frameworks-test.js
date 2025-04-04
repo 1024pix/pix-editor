@@ -30,7 +30,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
       test('it should display select framework', async function(assert) {
         // then
-        assert.dom(await screen.findByRole('combobox', { name: 'Sélectionner un référentiel' })).exists();
+        assert.dom(await screen.getByText('Sélectionner un référentiel')).exists();
       });
 
       test('it should display generator target profile link', async function(assert) {
@@ -40,7 +40,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
       test('it should display search bar', function(assert) {
         // then
-        assert.dom('[data-test-sidebar-search]').exists();
+        assert.dom('#select-sidebar-search').exists();
       });
     });
   }
@@ -66,7 +66,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
     test('it should not display search bar', function(assert) {
       // then
-      assert.dom('[data-test-sidebar-search]').doesNotExist();
+      assert.dom('#sidebar-search').doesNotExist();
     });
   });
 });

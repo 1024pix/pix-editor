@@ -44,12 +44,12 @@ export default class SidebarNavigationComponent extends Component {
   get frameworkList() {
     const frameworkList = this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework,
+      value: framework,
     }));
     if (this.access.isAdmin()) {
       frameworkList.push({
         label: this.addFrameworkLabel,
-        data: 'create',
+        value: 'create',
       });
     }
     return frameworkList;
@@ -65,11 +65,11 @@ export default class SidebarNavigationComponent extends Component {
 
   @action
   setFramework(item) {
-    if (item.data === 'create') {
+    if (item === 'create') {
       this._openNewFrameworkPopIn();
       return;
     }
-    this.currentData.setFramework(item.data);
+    this.currentData.setFramework(item);
     this._selectedFramework = item;
   }
 
@@ -91,10 +91,7 @@ export default class SidebarNavigationComponent extends Component {
       const router = this.router;
       this.loader.start();
       await this.newFramework.save();
-      this.setFramework({
-        label: this.newFramework.name,
-        data: this.newFramework,
-      });
+      this.setFramework(this.newFramework);
       this.notify.message('Référentiel créé');
       this.displayNewFrameworkPopIn = false;
       router.transitionTo('authenticated');
