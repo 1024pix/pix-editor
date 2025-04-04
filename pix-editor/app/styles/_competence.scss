@@ -10,10 +10,10 @@
 }
 
 .competence-management-link {
-  color: white;
+  color: var(--pix-neutral-0);
 
   &:hover {
-    color: white;
+    color: var(--pix-neutral-0);
     text-decoration: underline;
   }
 }
@@ -94,7 +94,7 @@
       text-align: center;
 
       .skill-cell__link {
-        color: black;
+        color: var(--pix-neutral-900);
         cursor: pointer;
 
         &.disabled {
@@ -104,11 +104,11 @@
 
       &.production {
         &.warning {
-          background: #fdc59f !important;
+          background: var(--pix-error-100) !important;
         }
 
         &.danger {
-          background: #FF5E5E !important;
+          background: #var(--pix-error-500) !important;
         }
       }
 
@@ -118,7 +118,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;
@@ -146,18 +146,18 @@
             }
 
             &.archived-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: global.$archived-background-color;
             }
 
             &.obsolete-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: global.$deleted-background-color;
             }
 
             &.not-declinable {
-              color: black;
-              background: white;
+              color: var(--pix-neutral-900);
+              background: var(--pix-neutral-0);
             }
 
             &.loading {
@@ -169,11 +169,11 @@
 
       &.skill-mode {
         &.warning {
-          background: #b5b3ff !important;
+          background: var(--pix-primary-100) !important;
         }
 
         &.danger {
-          background: #c496ff !important;
+          background: var(--pix-primary-300) !important;
         }
       }
 
@@ -183,7 +183,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;
@@ -250,12 +250,12 @@
             }
 
             &.archive-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: global.$archived-background-color;
             }
 
             &.obsolete-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: global.$deleted-background-color;
             }
           }
@@ -271,30 +271,30 @@
           cursor: pointer;
 
           &.bad-quality {
-            color: white;
-            background: #EA2700;
+            color: var(--pix-neutral-0);
+            background: var(--pix-error-500);
           }
 
           &.medium-quality {
-            background: #F3AC0B;
+            background: var(--pix-warning-500);
           }
 
           &.good-quality {
-            background: #0DC600;
+            background: var(--pix-success-500);
           }
 
           &.loading {
-            background-color: #aaa;
+            background-color: var(--pix-neutral-500);
           }
 
           .half-tutorial {
-            color: #aaa
+            color: var(--pix-neutral-500)
           }
         }
 
         &.active {
           .quality {
-            box-shadow: #000 0 0 7px;
+            box-shadow: var(--pix-shadow-100) 0 0 7px;
             opacity: .8;
           }
 
@@ -338,12 +338,12 @@
 .quality-indication-details {
   tr {
     &:nth-child(even) {
-      color: white;
-      background: #FFA300;
+      color: var(--pix-neutral-0);
+      background: var(--pix-warning-500);
     }
 
     &:nth-child(odd) {
-      background: #FFCE4D;
+      background: var(--pix-warning-300);
     }
 
     td {
@@ -369,11 +369,11 @@
         width: 80px;
 
         &.warning {
-          background: #b5b3ff !important;
+          background: var(--pix-primary-100) !important;
         }
 
         &.danger {
-          background: #c496ff;
+          background: var(--pix-primary-300);
         }
       }
     }
@@ -385,11 +385,11 @@
         width: 80px;
 
         &.warning {
-          background: #fdc59f !important;
+          background: var(--pix-error-100) !important;
         }
 
         &.danger {
-          background: #FF5E5E;
+          background: var(--pix-error-500);
         }
       }
     }
@@ -407,7 +407,7 @@
     position: absolute;
     top: 0;
     left: 3px;
-    color: black;
+    color: var(--pix-neutral-900);
     font-weight: bold;
     font-size: 10px;
     font-style: normal;
