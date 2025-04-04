@@ -1,4 +1,4 @@
-import { clickByName } from '@1024pix/ember-testing-library';
+import { clickByText } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -74,10 +74,10 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       // when
       await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
 
-      await clickByName('Sélectionner un référentiel');
+      await clickByText('Sélectionner un référentiel');
 
       // then
-      const sourcesList = findAll('.ember-power-select-option');
+      const sourcesList = findAll('.pix-select-list-category__option');
       sourcesList.forEach((source) => {
         assert.ok(expectedFrameworks.includes(source.textContent.trim()));
       });

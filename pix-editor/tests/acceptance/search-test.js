@@ -62,12 +62,13 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     await visit('/');
-    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '  recChallenge1  ');
+    await click(find('#select-sidebar-search'));
+    await fillIn('.pix-select-search__input', 'recChallenge1');
     await waitUntil(function() {
-      return find('[data-test-sidebar-search] li');
+      return find('#listbox-select-sidebar-search li');
     }, { timeout: 1000 });
-    await click(find('[data-test-sidebar-search] li'));
+    await clickByText('recChallenge1');
+
     // then
     assert.strictEqual(currentURL(), expectedUrl);
   });
@@ -77,12 +78,12 @@ module('Acceptance | Search', function(hooks) {
     const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1?view=production';
     // when
     await visit('/');
-    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '  challengeChallenge1  ');
+    await click(find('#select-sidebar-search'));
+    await fillIn('.pix-select-search__input', 'challengeChallenge1');
     await waitUntil(function() {
-      return find('[data-test-sidebar-search] li');
+      return find('#listbox-select-sidebar-search li');
     }, { timeout: 1000 });
-    await click(find('[data-test-sidebar-search] li'));
+    await clickByText('challengeChallenge1');
 
     // then
     assert.strictEqual(currentURL(), expectedUrl);
@@ -93,13 +94,12 @@ module('Acceptance | Search', function(hooks) {
     const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/challengeLocalizedChallenge1?view=production';
     // when
     await visit('/');
-    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '  challengeLocalizedChallenge1  ');
+    await click(find('#select-sidebar-search'));
+    await fillIn('.pix-select-search__input', 'challengeLocalizedChallenge1');
     await waitUntil(function() {
-      return find('[data-test-sidebar-search] li');
+      return find('#listbox-select-sidebar-search li');
     }, { timeout: 1000 });
-
-    await click(find('[data-test-sidebar-search] li'));
+    await clickByText('challengeLocalizedChallenge1');
 
     // then
     assert.strictEqual(currentURL(), expectedUrl);
@@ -110,12 +110,12 @@ module('Acceptance | Search', function(hooks) {
     const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
     // when
     await visit('/');
-    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', 'test');
+    await click(find('#select-sidebar-search'));
+    await fillIn('.pix-select-search__input', 'test');
     await waitUntil(function() {
-      return find('[data-test-sidebar-search] li');
+      return find('#listbox-select-sidebar-search li');
     }, { timeout: 1000 });
-    await click(find('[data-test-sidebar-search] li'));
+    await clickByText('test');
 
     // then
     assert.strictEqual(currentURL(), expectedUrl);
@@ -126,11 +126,10 @@ module('Acceptance | Search', function(hooks) {
     const expectedUrl = '/competence/recCompetence1.1/skills/recSkill1?view=production';
     // when
     await visit('/');
-    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '@skill1');
-
+    await click(find('#select-sidebar-search'));
+    await fillIn('.pix-select-search__input', '@skill1');
     await waitUntil(function() {
-      return find('[data-test-sidebar-search] li');
+      return find('#listbox-select-sidebar-search li');
     }, { timeout: 1000 });
     await clickByText('@skill1 v1');
 

@@ -29,8 +29,8 @@ module('Acceptance | area-management/new', function(hooks) {
 
     // when
     await visit('/');
-    await click(findAll('.ember-basic-dropdown-trigger')[1]);
-    await click(find('.ember-power-select-option'));
+    await click(findAll('.pix-select-button')[1]);
+    await click(find('.pix-select-list-category__option'));
     await click(find('[data-test-add-area]'));
     await fillIn('[data-test-area-title-input] input', newAreaTitle);
     await click(find('[data-test-save-button]'));

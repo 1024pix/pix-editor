@@ -59,7 +59,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
-    await click(findAll('.ember-power-select-option')[1]);
+    await click(findAll('.pix-select-list-category__option')[1]);
 
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();
@@ -86,7 +86,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
-    await click(findAll('.ember-power-select-option')[0]);
+    await click(findAll('.pix-select-list-category__option')[0]);
 
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();

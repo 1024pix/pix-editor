@@ -1,9 +1,14 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { uniqBy } from 'lodash';
 
+import SelectSearch from '../field/select-search';
+
 export default class SidebarSearchComponent extends Component {
+  @tracked resultList = [];
+  @tracked result = null;
 
   routeModel = null;
 
@@ -20,7 +25,8 @@ export default class SidebarSearchComponent extends Component {
     });
     return skills.map((skill) => ({
       isSkill: true,
-      title: skill.name,
+      value: skill.id,
+      label: `${skill.name} v${skill.version}`,
       status: skill.status,
       statusCSS: skill.statusCSS,
       version: skill.version,
@@ -38,7 +44,8 @@ export default class SidebarSearchComponent extends Component {
       },
     });
     return challenges.map((challenge) => ({
-      title: challenge.id,
+      value: challenge.id,
+      label: challenge.id,
       transition: {
         route: 'authenticated.challenge',
         model: challenge.id,
@@ -53,7 +60,8 @@ export default class SidebarSearchComponent extends Component {
       },
     });
     return results.map((result) => ({
-      title: result.id,
+      value: result.id,
+      label: result.id,
       transition: {
         route: 'authenticated.challenge',
         model: result.id,
@@ -71,7 +79,8 @@ export default class SidebarSearchComponent extends Component {
       },
     });
     return challenges.map((challenge) => ({
-      title: challenge.instruction.substr(0, 100),
+      value: challenge.id,
+      label: challenge.instruction.substr(0, 100),
       transition: {
         route: 'authenticated.challenge',
         model: challenge.id,
@@ -83,20 +92,42 @@ export default class SidebarSearchComponent extends Component {
   async getSearchResults(query) {
     query = query.trim();
     if (query.startsWith('@')) {
-      return this.searchSkillsByName(query);
+      this.resultList = await this.searchSkillsByName(query);
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       const challenges = await this.searchChallengesById(query);
       const localizedChallenges = await this.searchLocalizedChallengesById(query);
-      return uniqBy([...challenges, ...localizedChallenges], 'id');
+      this.resultList = uniqBy([...challenges, ...localizedChallenges], 'id');
+    } else {
+      this.resultList = await this.searchChallengesByText(query);
     }
-    return this.searchChallengesByText(query);
   }
 
   @action
-  linkTo({ transition }) {
+  setResultList(list) {
+    this.resultList = list;
+  }
+
+  @action
+  linkTo(item) {
+    const [searchInput] = document.getElementById('container-select-sidebar-search').getElementsByClassName('pix-select-search__input');
+    const { transition } = this.resultList.find((result) => result.value === item);
+    this.resultList = [];
     const router = this.router;
+    searchInput.value = '';
     this.args.close();
     router.transitionTo(transition.route, transition.model);
   }
 
+  <template>
+    {{#if @displaySearch}}
+      <SelectSearch
+        @selectId="select-sidebar-search"
+        @resultList={{this.resultList}}
+        @setResultList={{this.setResultList}}
+        @getResults={{this.getSearchResults}}
+        @onChange={{this.linkTo}}
+        @hideDefaultOption={{true}}
+        @searchPlaceholder="Acquix ou recordId" />
+    {{/if}}
+  </template>
 }
