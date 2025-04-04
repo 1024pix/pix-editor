@@ -32,24 +32,30 @@
     @setValue={{fn (mut @skill.clueStatus)}}
   />
   {{#if @skill.productionPrototype}}
-    <Field::Quality @title="Qualité" @challenge={{@skill.productionPrototype}} @edition={{@edition}} />
+    <Field::Quality
+      @title="Qualité"
+      @challenge={{@skill.productionPrototype}}
+      @edition={{@edition}}
+    />
   {{/if}}
   <Field::Tutorials
     @title="Pour réussir la prochaine fois"
     @skill={{@skill}}
     @tutorials={{@skill.tutoSolution}}
-    @searchClass="solution"
+    @searchId="solution"
     @edition={{@edition}}
     @addTutorial={{this.addTutorial}}
-    @removeTutorial={{this.removeTutorial}}/>
+    @removeTutorial={{this.removeTutorial}}
+  />
   <Field::Tutorials
     @title="Pour en savoir plus"
     @skill={{@skill}}
     @tutorials={{@skill.tutoMore}}
     @edition={{@edition}}
-    @searchClass="more"
+    @searchId="more"
     @addTutorial={{this.addTutorial}}
-    @removeTutorial={{this.removeTutorial}}/>
+    @removeTutorial={{this.removeTutorial}}
+  />
   <Field::Select
     @title="Internationalisation"
     @value={{@skill.i18n}}

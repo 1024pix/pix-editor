@@ -1,9 +1,7 @@
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import { LinkTo } from '@ember/routing';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import {LinkTo} from "@ember/routing";
-import PixSelect from "@1024pix/pix-ui/components/pix-select";
-import {fn} from "@ember/helper";
-import {action} from "@ember/object";
 
 export default class CompetenceHeader extends Component {
   @service config;
