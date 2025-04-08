@@ -30,6 +30,10 @@
     "web": {
       "amount": 1,
       "size": "S"
+    },
+    "nina": {
+      "amount": 1,
+      "size": "S"
     }
   }
 }
