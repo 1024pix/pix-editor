@@ -28,6 +28,7 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
       logger.info('Exécution persistante, vous avez encore 2 secondes pour tout annuler !...');
     }
     await sleep(sleepMs);
+
     const airtablePixCompetences = await airtable.findRecords(
       'Competences',
       {
@@ -61,20 +62,17 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
     logger.info(`${airtableSkills.length} acquis Pix trouvés.`);
     const airtableChallengeIds = airtableSkills.flatMap((airtablePixSkill) => airtablePixSkill.fields['Epreuves']);
     const airtableChallenges = await airtable.findRecords(
-      'Epreuves',
-      {
-        filterByFormula: whereRecordIdInFormula(airtableChallengeIds, 'Record ID'),
-      },
+      'Epreuves'
     );
-    logger.info(`${airtableChallenges.length} épreuves Pix trouvées.`);
-    const airtableAttachmentIds = airtableChallenges.flatMap((airtableChallenge) => airtableChallenge.fields['files']);
+    const airtablePixChallenges = airtableChallenges.filter((challenge) => airtableChallengeIds.includes(challenge.id));
+    logger.info(`${airtablePixChallenges.length} épreuves Pix trouvées.`);
+    const airtableAttachmentIds = airtablePixChallenges.flatMap((airtableChallenge) => airtableChallenge.fields['files']);
     const airtableAttachments = await airtable.findRecords(
-      'Attachments',
-      {
-        filterByFormula: whereRecordIdInFormula(airtableAttachmentIds, 'Record ID'),
-      },
+      'Attachments'
     );
-    logger.info(`${airtableChallenges.length} pièces jointes Pix trouvées.`);
+    const airtablePixAttachments = airtableAttachments.filter((attachment) => airtableAttachmentIds.includes(attachment.id));
+
+    logger.info(`${airtablePixAttachments.length} pièces jointes Pix trouvées.`);
 
     if (!dryRun) {
       logger.info('Suppression des thématiques...');
@@ -99,14 +97,14 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
       logger.info('Suppression des acquis OK');
 
       logger.info('Suppression des épreuves...');
-      for (const chunkChallenges of chunk(airtableChallenges, 10)) {
+      for (const chunkChallenges of chunk(airtablePixChallenges, 10)) {
         const chunkAirtableChallengesIds = chunkChallenges.map((challenge) => challenge['id']);
         await airtable.deleteRecords('Epreuves', chunkAirtableChallengesIds);
       }
       logger.info('Suppression des épreuves OK');
 
       logger.info('Suppression des pièces jointes...');
-      for (const chunkAttachments of chunk(airtableAttachments, 10)) {
+      for (const chunkAttachments of chunk(airtablePixAttachments, 10)) {
         const chunkAirtableAttachmentsIds = chunkAttachments.map((attachment) => attachment['id']);
         await airtable.deleteRecords('Attachments', chunkAirtableAttachmentsIds);
       }
@@ -117,35 +115,32 @@ export class ResetLearningContentInIntegrationEnvironment extends Script {
 
     const trx = await knex.transaction();
     try {
-      const attachmentIds = airtableAttachments.map((attachment) => attachment['id']);
+      const attachmentIds = airtablePixAttachments.map((attachment) => attachment.fields['Record ID']);
       logger.info(`${attachmentIds.length} pièces jointes concernées pour la suppression des localized_challenges-attachments correspondant`);
       let deletedRecords = await trx('localized_challenges-attachments').whereIn('attachmentId', attachmentIds).delete().returning('attachmentId');
       logger.info(`${deletedRecords.length} localized_challenges-attachments supprimés`);
-      const challengeIds = airtableChallenges.map((challenge) => challenge.fields['id persistant']);
+      const challengeIds = airtablePixChallenges.map((challenge) => challenge.fields['id persistant']);
       logger.info(`${challengeIds.length} épreuves concernées pour la suppression des localized_challenges correspondant`);
       deletedRecords = await trx('localized_challenges').whereIn('challengeId', challengeIds).delete().returning('id');
       logger.info(`${deletedRecords.length} localized_challenges supprimés`);
 
-      const thematicIds = airtablePixThematics.map((thematic) => thematic['id']);
+      const thematicIds = airtablePixThematics.map((thematic) => thematic.fields['id persistant']);
       logger.info(`${thematicIds.length} thématiques concernées pour la suppression des traductions correspondantes`);
-      deletedRecords = await trx('translations').whereIn('entityId', thematicIds).delete().returning('key');
+      deletedRecords = await trx('translations').whereIn('entityId', thematicIds).where('model', 'thematic').delete().returning('key');
       logger.info(`${deletedRecords.length} traductions de thématiques supprimées`);
 
       const tubeIds = airtablePixTubes.map((tube) => tube.fields['id persistant']);
       logger.info(`${thematicIds.length} sujets concernés pour la suppression des traductions correspondantes`);
-      deletedRecords = await trx('translations').whereIn('entityId', tubeIds).delete().returning('key');
+      deletedRecords = await trx('translations').whereIn('entityId', tubeIds).where('model', 'tube').delete().returning('key');
       logger.info(`${deletedRecords.length} traductions de sujets supprimées`);
 
       const skillIds = airtableSkills.map((skill) => skill.fields['id persistant']);
       logger.info(`${skillIds.length} acquis concernés pour la suppression des traductions correspondantes`);
-      deletedRecords = await trx('translations').whereIn('entityId', skillIds).delete().returning('key');
+      deletedRecords = await trx('translations').whereIn('entityId', skillIds).where('model', 'skill').delete().returning('key');
       logger.info(`${deletedRecords.length} traductions d\'acquis supprimées`);
       logger.info(`${challengeIds.length} épreuves concernées pour la suppression des traductions correspondantes`);
-      deletedRecords = await trx('translations').whereIn('entityId', challengeIds).delete().returning('key');
+      deletedRecords = await trx('translations').whereIn('entityId', challengeIds).where('model', 'challenge').delete().returning('key');
       logger.info(`${deletedRecords.length} traductions d\'épreuves supprimées`);
-      logger.info(`${challengeIds.length} pièces jointes concernées pour la suppression des traductions correspondantes`);
-      deletedRecords = await trx('translations').whereIn('entityId', attachmentIds).delete().returning('key');
-      logger.info(`${deletedRecords.length} traductions de pièces jointes supprimées`);
       if (dryRun) {
         await trx.rollback();
       } else {

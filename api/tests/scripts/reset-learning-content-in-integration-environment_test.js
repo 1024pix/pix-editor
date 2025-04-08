@@ -32,18 +32,20 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
       .reply(200, { records: pixCompetences });
 
     const pixThematics = [
-      airtableBuilder.factory.buildThematic({ airtableId: 'pixThematicAirtableId1', id: 'pixThematicAirtableId1', tubeAirtableIds: ['pixTubeAirtableId1'] }),
-      airtableBuilder.factory.buildThematic({ airtableId: 'pixThematicAirtableId2', id: 'pixThematicAirtableId2', tubeAirtableIds: ['pixTubeAirtableId2'] }),
+      airtableBuilder.factory.buildThematic({ id: 'pixThematicId1', airtableId: 'pixThematicAirtableId1' }),
+      airtableBuilder.factory.buildThematic({ id: 'pixThematicId2', airtableId: 'pixThematicAirtableId2' }),
     ];
+    pixThematics[0].fields['Tubes'] = ['pixTubeAirtableId1'];
+    pixThematics[1].fields['Tubes'] = ['pixTubeAirtableId2'];
     databaseBuilder.factory.buildTranslation({
-      key: 'thematic.pixThematicAirtableId1.someField',
+      key: 'thematic.pixThematicId1.someField',
       locale: 'fr',
-      value: 'thematic.pixThematicAirtableId1.someField FR value',
+      value: 'thematic.pixThematicId1.someField FR value',
     });
     databaseBuilder.factory.buildTranslation({
-      key: 'thematic.pixThematicAirtableId2.someField',
+      key: 'thematic.pixThematicId2.someField',
       locale: 'fr',
-      value: 'thematic.pixThematicAirtableId2.someField FR value',
+      value: 'thematic.pixThematicId2.someField FR value',
     });
     databaseBuilder.factory.buildTranslation({
       key: 'thematic.otherThematicId.someField',
@@ -63,6 +65,8 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
       airtableBuilder.factory.buildTube({ airtableId: 'pixTubeAirtableId1', id: 'pixTubeId1', skillAirtableIds: ['pixSkillAirtableId1'] }),
       airtableBuilder.factory.buildTube({ airtableId: 'pixTubeAirtableId2', id: 'pixTubeId2', skillAirtableIds: ['pixSkillAirtableId2'] }),
     ];
+    pixTubes[0].fields['Acquis'] = ['pixSkillAirtableId1'];
+    pixTubes[1].fields['Acquis'] = ['pixSkillAirtableId2'];
     databaseBuilder.factory.buildTranslation({
       key: 'tube.pixTubeId1.someField',
       locale: 'fr',
@@ -88,9 +92,11 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
       .reply(200, { records: pixTubes });
 
     const pixSkills = [
-      airtableBuilder.factory.buildSkill({ airtableId: 'pixSkillAirtableId1', id: 'pixSkillId1', challengeAirtableIds: ['pixChallengeAirtableId1'] }),
-      airtableBuilder.factory.buildSkill({ airtableId: 'pixSkillAirtableId2', id: 'pixSkillId2', challengeAirtableIds: ['pixChallengeAirtableId2']  }),
+      airtableBuilder.factory.buildSkill({ airtableId: 'pixSkillAirtableId1', id: 'pixSkillId1' }),
+      airtableBuilder.factory.buildSkill({ airtableId: 'pixSkillAirtableId2', id: 'pixSkillId2' }),
     ];
+    pixSkills[0].fields['Epreuves'] = ['pixChallengeAirtableId1'];
+    pixSkills[1].fields['Epreuves'] = ['pixChallengeAirtableId2'];
     databaseBuilder.factory.buildTranslation({
       key: 'skill.pixSkillId1.someField',
       locale: 'fr',
@@ -118,6 +124,9 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
     const pixChallenges = [
       airtableBuilder.factory.buildChallenge({ airtableId: 'pixChallengeAirtableId1', id: 'pixChallengeId1', files: [{ fileId: 'pixAttachmentAirtableId1' }] }),
       airtableBuilder.factory.buildChallenge({ airtableId: 'pixChallengeAirtableId2', id: 'pixChallengeId2', files: [{ fileId: 'pixAttachmentAirtableId2' }] }),
+    ];
+    const otherChallenges = [
+      airtableBuilder.factory.buildChallenge({ airtableId: 'otherChallengeAirtableId', id: 'otherChallengeId', files: [{ fileId: 'otherAttachmentAirtableId' }] }),
     ];
 
     databaseBuilder.factory.buildLocalizedChallenge({
@@ -165,24 +174,28 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
 
     readChallengeScope = nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Epreuves')
-      .query({
-        filterByFormula: 'OR({Record ID} = "pixChallengeAirtableId1",{Record ID} = "pixChallengeAirtableId2")',
-      })
+      .query({})
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .reply(200, { records: pixChallenges });
+      .reply(200, { records: [...pixChallenges, ...otherChallenges] });
 
     const pixAttachments = [
-      airtableBuilder.factory.buildAttachment({ id: 'pixAttachmentAirtableId1', challengeAirtableId: 'pixChallengeAirtableId1' }),
-      airtableBuilder.factory.buildAttachment({ id: 'pixAttachmentAirtableId2', challengeAirtableId: 'pixChallengeAirtableId2' }),
+      airtableBuilder.factory.buildAttachment({ id: 'pixAttachmentAirtableId1' }),
+      airtableBuilder.factory.buildAttachment({ id: 'pixAttachmentAirtableId2' }),
     ];
+    pixAttachments[0].fields['challengeId'] = 'pixChallengeAirtableId1';
+    pixAttachments[1].fields['challengeId'] = 'pixChallengeAirtableId2';
+    const otherAttachments = [
+      airtableBuilder.factory.buildAttachment({ id: 'otherAttachmentAirtableId' }),
+    ];
+    otherAttachments[0].fields['challengeId'] = 'otherChallengeAirtableId';
     databaseBuilder.factory.buildLocalizedChallengeAttachment({
       attachmentId: 'pixAttachmentAirtableId1',
       localizedChallengeId: 'pixChallengeId1',
     });
     databaseBuilder.factory.buildTranslation({
-      key: 'attachment.pixAttachmentAirtableId1.someField',
+      key: 'challenge.pixChallengeId1.someAttachmentField',
       locale: 'fr',
-      value: 'attachment.pixAttachmentAirtableId1.someField FR value',
+      value: 'challenge.pixChallengeId1.someAttachmentField FR value',
     });
 
     databaseBuilder.factory.buildLocalizedChallengeAttachment({
@@ -190,28 +203,26 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
       localizedChallengeId: 'pixChallengeId2',
     });
     databaseBuilder.factory.buildTranslation({
-      key: 'attachment.pixAttachmentAirtableId2.someField',
+      key: 'challenge.pixChallengeId2.someAttachmentField',
       locale: 'fr',
-      value: 'attachment.pixAttachmentAirtableId2.someField FR value',
+      value: 'challenge.pixChallengeId2.someAttachmentField FR value',
     });
 
     databaseBuilder.factory.buildLocalizedChallengeAttachment({
-      attachmentId: 'otherAttachmentId',
+      attachmentId: 'otherAttachmentAirtableId',
       localizedChallengeId: 'otherChallengeId',
     });
     databaseBuilder.factory.buildTranslation({
-      key: 'attachment.otherAttachmentId.someField',
+      key: 'challenge.otherChallengeId.someAttachmentField',
       locale: 'fr',
-      value: 'attachment.otherAttachmentId.someField FR value',
+      value: 'challenge.otherChallengeId.someAttachmentField FR value',
     });
 
     readAttachmentScope = nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Attachments')
-      .query({
-        filterByFormula: 'OR({Record ID} = "pixAttachmentAirtableId1",{Record ID} = "pixAttachmentAirtableId2")',
-      })
+      .query({})
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .reply(200, { records: pixAttachments });
+      .reply(200, { records: [...pixAttachments, otherAttachments] });
 
     deleteThematicScope = nock('https://api.airtable.com')
       .delete('/v0/airtableBaseValue/Thematiques')
@@ -275,7 +286,7 @@ describe('Script | ResetLearningContentInIntegrationEnvironment', function() {
     await databaseBuilder.commit();
   });
 
-  it('should delete all thematics in PIX framework', async function() {
+  it('should delete all thematics, tubes, skills, challenges and attachments in PIX framework', async function() {
     // given
     const script = new ResetLearningContentInIntegrationEnvironment();
 
