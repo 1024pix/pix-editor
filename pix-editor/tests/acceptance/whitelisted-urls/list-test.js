@@ -54,7 +54,7 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
   test('should display whitelisted urls when accessing list', async function(assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
@@ -67,7 +67,7 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
   test('should delete delete whitelisted url', async function(assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
 
     const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL de la whitelist' });
     await click(deleteButtons[0]);
