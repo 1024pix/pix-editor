@@ -38,7 +38,8 @@ export const logging = {
   logLevel: (process.env.LOG_LEVEL || 'info'),
   logOpsMetrics: isFeatureEnabled(process.env.LOG_OPS_METRICS),
   emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
-  prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT)
+  prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT),
+  debugSections: process.env.LOG_DEBUG?.split(',') ?? [],
 };
 
 export let pixApi = {
