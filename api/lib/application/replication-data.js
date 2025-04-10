@@ -5,15 +5,6 @@ export async function register(server) {
   server.route([
     {
       method: 'GET',
-      path: '/api/databases/airtable',
-      config: {
-        handler: async function() {
-          return promiseStreamer(getLearningContentForReplication());
-        },
-      },
-    },
-    {
-      method: 'GET',
       path: '/api/replication-data',
       config: {
         handler: async function() {
