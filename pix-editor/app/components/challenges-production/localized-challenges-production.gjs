@@ -30,6 +30,7 @@ export default class LocalizedChallengesProduction extends Component {
     }
     return this.args.challenges
       .filter((challenge) => !excludeStatuses.includes(challenge.status))
+      .filter((challenge) => challenge.locales.includes(this.args.locale) || challenge.locales.includes('fr'))
       .sort(byAlternativeVersion);
   }
 
@@ -45,7 +46,7 @@ export default class LocalizedChallengesProduction extends Component {
         instruction: localizedChallengeForLocale?.instruction ?? challenge.instruction,
         primaryUpdatedAt: challenge.updatedAt,
         primaryAuthor: challenge.author,
-        translationsUrl: isPrimaryInLocale ? null : `/api/challenges/${challenge.id}/translations/${this.args.locale}/area-code/${this.args.areaCode}`,
+        translationsUrl: this.getTranslationsUrl({ isPrimaryInLocale, challenge }),
         primaryStatusColor: this.getPrimaryStatusColor(challenge.status),
         primaryStatusText: this.getPrimaryStatusText(challenge.status),
         localizedStatusColor: this.getLocalizedStatusColor(localizedStatus),
@@ -57,6 +58,12 @@ export default class LocalizedChallengesProduction extends Component {
         isNotTranslated: !isPrimaryInLocale && localizedChallengeForLocale,
       };
     });
+  }
+
+  getTranslationsUrl({ isPrimaryInLocale, challenge }) {
+    if (this.args.locale === 'fr-fr') return null;
+    if (isPrimaryInLocale) return null;
+    return `/api/challenges/${challenge.id}/translations/${this.args.locale}/area-code/${this.args.areaCode}`;
   }
 
   getPrimaryStatusColor(primaryStatus) {

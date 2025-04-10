@@ -73,6 +73,7 @@ export default [
       ],
 
       'qunit/require-expect': ['error', 'except-simple'],
+      'ember/template-no-let-reference': 'off',
     },
   },
   {
