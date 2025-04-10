@@ -60,10 +60,10 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     await clickByName('Ajouter une nouvelle URL');
 
     // when
-    await fillByLabel('URL à whitelister', 'https://example.org');
+    await fillByLabel('URL à ne pas analyser', 'https://example.org');
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
     await fillByLabel('Commentaire', 'Test de création');
-    await clickByName('Ajouter l\'URL à la whitelist');
+    await clickByName('Ajouter');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
@@ -82,9 +82,9 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     // when
     await clickByName('Type de comparaison d\'URL');
     await clickByText('Commence par');
-    await fillByLabel('URL à whitelister', 'https://example.org');
+    await fillByLabel('URL à ne pas analyser', 'https://example.org');
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
-    await clickByName('Ajouter l\'URL à la whitelist');
+    await clickByName('Ajouter');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');

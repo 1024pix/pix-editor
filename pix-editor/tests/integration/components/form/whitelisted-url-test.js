@@ -13,7 +13,7 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
 
     const onSubmit = sinon.spy(() => {});
 
-    this.set('submitButtonText', 'Ajouter l\'URL à la whitelist');
+    this.set('submitButtonText', 'Ajouter');
     this.set('createWhitelistedUrl', onSubmit);
 
     const screen = await render(
@@ -26,9 +26,9 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
         @onFormSubmitted={{this.createWhitelistedUrl}}
       />`);
 
-    await fillByLabel('URL à whitelister', 'https://example.org');
+    await fillByLabel('URL à ne pas analyser', 'https://example.org');
 
-    const submitButton = screen.getByRole('button', { name: 'Ajouter l\'URL à la whitelist' });
+    const submitButton = screen.getByRole('button', { name: 'Ajouter' });
     await click(submitButton);
     assert.ok(onSubmit.calledOnce);
     assert.deepEqual(onSubmit.args[0][0], {
@@ -57,7 +57,7 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
 
   test('should enable add url button when mandatory information has been given', async function(assert) {
 
-    this.set('submitButtonText', 'Ajouter l\'URL à la whitelist');
+    this.set('submitButtonText', 'Ajouter');
 
     const screen = await render(
       hbs`<Form::WhitelistedUrl
@@ -68,15 +68,15 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
         @submitButtonText={{this.submitButtonText}}
       />`);
 
-    await fillByLabel('URL à whitelister', 'https://example.org');
+    await fillByLabel('URL à ne pas analyser', 'https://example.org');
 
-    const button = screen.getByRole('button', { name: 'Ajouter l\'URL à la whitelist' });
+    const button = screen.getByRole('button', { name: 'Ajouter' });
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
 
   test('should disable create mission button when no complete informations', async function(assert) {
 
-    this.set('submitButtonText', 'Ajouter l\'URL à la whitelist');
+    this.set('submitButtonText', 'Ajouter');
 
     const screen = await render(
       hbs`<Form::WhitelistedUrl
@@ -87,7 +87,7 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
         @submitButtonText={{this.submitButtonText}}
       />`);
 
-    const button = screen.getByRole('button', { name: 'Ajouter l\'URL à la whitelist' });
+    const button = screen.getByRole('button', { name: 'Ajouter' });
     assert.dom(button).hasAttribute('disabled');
 
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
@@ -105,15 +105,15 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
         @submitButtonText={{this.submitButtonText}}
       />`);
 
-    await fillByLabel('URL à whitelister', '');
+    await fillByLabel('URL à ne pas analyser', '');
     const urlErrorMandatoryField = screen.getByText('L\'URL est obligatoire');
     assert.dom(urlErrorMandatoryField).isVisible();
 
-    await fillByLabel('URL à whitelister *', 'chouchou beignets');
+    await fillByLabel('URL à ne pas analyser *', 'chouchou beignets');
     const urlErrorInvalidUrl = screen.getByText('L\'URL n\'est pas valide');
     assert.dom(urlErrorInvalidUrl).isVisible();
 
-    await fillByLabel('URL à whitelister *', 'https://example.org');
+    await fillByLabel('URL à ne pas analyser *', 'https://example.org');
     assert.dom(urlErrorInvalidUrl).isNotVisible();
     assert.dom(urlErrorMandatoryField).isNotVisible();
 
