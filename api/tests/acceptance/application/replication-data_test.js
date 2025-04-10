@@ -414,6 +414,7 @@ async function mockCurrentContent() {
   }
 
   expectedCurrentContent.translations.forEach((translation) => {
+    translation.id = translation.key;
     translation.sourceEntityId = null;
   });
 
@@ -423,6 +424,7 @@ async function mockCurrentContent() {
       locale: 'nl',
       value: 'Consigne en nl',
     }),
+    id: 'challenge.localized-challenge-id.instruction',
     key: 'challenge.localized-challenge-id.instruction',
     entityId: 'localized-challenge-id',
     sourceEntityId: challenge.id,
@@ -434,6 +436,7 @@ async function mockCurrentContent() {
       locale: 'nl',
       value: expectedAttachmentNl.alt,
     }),
+    id: 'challenge.localized-challenge-id.illustrationAlt',
     key: 'challenge.localized-challenge-id.illustrationAlt',
     entityId: 'localized-challenge-id',
     sourceEntityId: expectedChallenge.id,

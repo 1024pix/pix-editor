@@ -53,6 +53,7 @@ export async function getLearningContentForReplication() {
   ]);
   const translationsForReplication = translations.map((translation) => ({
     ...translation,
+    id: translation.key,
     model: translation.model,
     entityId: translation.entityId,
     sourceEntityId: null,
@@ -75,6 +76,7 @@ export async function getLearningContentForReplication() {
           translationForChallenge.key = `${prefixFor(localizedChallenge)}${translatedField}`;
           translationForChallenge.entityId = localizedChallenge.id;
           translationForChallenge.sourceEntityId = challenge.id;
+          translationForChallenge.id = translationForChallenge.key;
         }
         return localizedChallenge;
       }),
