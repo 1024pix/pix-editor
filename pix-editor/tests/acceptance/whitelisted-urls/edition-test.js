@@ -56,7 +56,7 @@ module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
   test('should edit a whitelisted url', async function(assert) {
     // given
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
     await clickByText('MIAOU');
 
     // when
@@ -75,7 +75,7 @@ module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
   test('should edit a whitelisted url\'s url', async function(assert) {
     // given
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
     await clickByText('OUAF');
 
     // when

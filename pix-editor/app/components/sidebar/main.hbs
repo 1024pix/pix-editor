@@ -35,7 +35,7 @@
     {{#if this.mayAccessWhitelistedUrls}}
       <LinkTo class="secondary-links--action" data-test-whitelisted-urls-link @route="authenticated.whitelisted-urls" {{on "click" @close}}>
         <PixIcon @name="bookAlt" @ariaHidden={{true}}/>
-        Whitelist moulinette des URLs
+        URLs à ne pas analyser
       </LinkTo>
     {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>

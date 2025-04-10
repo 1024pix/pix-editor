@@ -56,7 +56,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
   test('should create a whitelisted url', async function(assert) {
     // given
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
     await clickByName('Ajouter une nouvelle URL');
 
     // when
@@ -76,7 +76,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
   test('should create a whitelisted url without comment and different check type', async function(assert) {
     // given
     const screen = await visit('/');
-    await clickByName('Whitelist moulinette des URLs');
+    await clickByName('URLs à ne pas analyser');
     await clickByName('Ajouter une nouvelle URL');
 
     // when
