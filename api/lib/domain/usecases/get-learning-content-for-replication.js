@@ -8,6 +8,7 @@ import {
   missionRepository,
   skillRepository,
   thematicRepository,
+  translationRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import {
@@ -34,6 +35,7 @@ export async function getLearningContentForReplication() {
     tutorials,
     courses,
     missions,
+    translations,
   ] = await Promise.all([
     frameworkRepository.list(),
     areaRepository.list(),
@@ -46,6 +48,7 @@ export async function getLearningContentForReplication() {
     tutorialDatasource.list(),
     _getCoursesFromPGForReplication(),
     missionRepository.list(),
+    translationRepository.list(),
   ]);
   const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
   const transformedAreas = areaTransformer.filterAreasFields(areas);
@@ -66,7 +69,7 @@ export async function getLearningContentForReplication() {
     challengeId: attachment.localizedChallengeId,
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
-  
+
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
@@ -81,6 +84,12 @@ export async function getLearningContentForReplication() {
     tutorials,
     courses,
     missions: transformedMissions,
+    translations: translations.map((translation) => ({
+      ...translation,
+      model: translation.model,
+      entityId: translation.entityId,
+    })
+    ),
   };
 }
 
