@@ -1,5 +1,11 @@
 
 
+## v3.194.0 (11/04/2025)
+
+
+### :rocket: Amélioration
+- [#944](https://github.com/1024pix/pix-editor/pull/944) [FEATURE] Remettre à disposition les translations dans la réplication.
+
 ## v3.193.0 (11/04/2025)
 
 
