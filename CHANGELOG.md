@@ -1,5 +1,12 @@
 
 
+## v3.195.0 (11/04/2025)
+
+
+### :building_construction: Tech
+- [#949](https://github.com/1024pix/pix-editor/pull/949) [TECH] S'assurer que le stream est toujours fonctionnel avant d'écrire dedans.
+- [#948](https://github.com/1024pix/pix-editor/pull/948) [TECH] Dans l'endpoint /api/replication-data, envoyer les données de réplication dans le flux attribut par attribut, et non plus d'un seul bloc.
+
 ## v3.194.0 (11/04/2025)
 
 
