@@ -1,5 +1,20 @@
 
 
+## v3.193.0 (11/04/2025)
+
+
+### :rocket: Amélioration
+- [#946](https://github.com/1024pix/pix-editor/pull/946) [FEATURE] Retirer toute mention du terme whitelist (PIX-17449).
+- [#938](https://github.com/1024pix/pix-editor/pull/938) [FEATURE] Ne pas afficher les liens de traduction vers Phrase quand l'épreuve est fr-fr (PIX-17041).
+- [#941](https://github.com/1024pix/pix-editor/pull/941) [FEATURE] Renommer la page de la whitelist des URLs pour plus de clarté (PIX-17356).
+
+### :building_construction: Tech
+- [#945](https://github.com/1024pix/pix-editor/pull/945) [TECH] Retirer la route GET /api/databases/airtable.
+- [#906](https://github.com/1024pix/pix-editor/pull/906) [TECH] Exploration des problèmes de mémoire sur la création de release.
+- [#937](https://github.com/1024pix/pix-editor/pull/937) [TECH] Ajout d'un script pour vider une grande partie du contenu pédagogique de l'environnement d'intégration, et ce faisant des entrées dans Phrase (PIX-16521).
+- [#942](https://github.com/1024pix/pix-editor/pull/942) [TECH] Suppression du script de nettoyage de données dans Intégration.
+- [#940](https://github.com/1024pix/pix-editor/pull/940) [TECH] Retours en arrière, des ajouts de traduction dans la réplication.
+
 ## v3.192.0 (03/04/2025)
 
 
