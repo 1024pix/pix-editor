@@ -33,14 +33,10 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   }).catch((error) => {
     logger.error(error);
     Sentry.captureException(error);
-    if (!writableStream.closed) {
-      writableStream.write('error');
-    }
+    writableStream.write('error');
   }).finally(() => {
     clearInterval(timer);
-    if (!writableStream.closed) {
-      writableStream.end();
-    }
+    writableStream.end();
   });
   return writableStream;
 }
