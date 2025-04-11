@@ -1,5 +1,11 @@
 
 
+## v3.195.1 (11/04/2025)
+
+
+### :building_construction: Tech
+- [#947](https://github.com/1024pix/pix-editor/pull/947) [TECH] Retirer à nouveau les traductions des données de la répli.
+
 ## v3.195.0 (11/04/2025)
 
 
