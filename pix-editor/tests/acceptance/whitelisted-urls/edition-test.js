@@ -62,7 +62,7 @@ module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
     // when
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@miaou1,@croquettes2');
     await fillByLabel('Commentaire', 'MIAOU MIAOU');
-    await clickByName('Modifier l\'URL whitelistée');
+    await clickByName('Modifier');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');
@@ -79,8 +79,8 @@ module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
     await clickByText('OUAF');
 
     // when
-    await fillByLabel('URL à whitelister', 'https://en.wikipedia.org/wiki/Dog');
-    await clickByName('Modifier l\'URL whitelistée');
+    await fillByLabel('URL à ne pas analyser', 'https://en.wikipedia.org/wiki/Dog');
+    await clickByName('Modifier');
 
     // then
     assert.strictEqual(currentURL(), '/whitelisted-urls');

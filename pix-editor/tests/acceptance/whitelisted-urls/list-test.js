@@ -69,7 +69,7 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
 
-    const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL de la whitelist' });
+    const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL' });
     await click(deleteButtons[0]);
     await click(await screen.findByRole('button', { name: 'Oui' }));
 

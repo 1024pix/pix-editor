@@ -45,12 +45,12 @@ export default class WhitelistedUrlsController extends Controller {
   @action
   async deleteUrl(whitelistedUrl) {
     try {
-      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer cette URL de la whitelist ?');
+      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer cette URL ? (Cette URL pourra à nouveau être analysée par les moulinettes)');
     } catch {
       return;
     }
     await whitelistedUrl.destroyRecord().catch(() => {
-      this.notifications.error('Une erreur est survenue lors de la suppression de cette URL de la whitelist.');
+      this.notifications.error('Une erreur est survenue lors de la suppression de cette URL.');
     });
   }
 }
