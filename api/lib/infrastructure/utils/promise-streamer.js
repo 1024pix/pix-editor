@@ -46,7 +46,6 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
     writableStream.write('\n');
   }, 1000);
   promise.then((data) => {
-    let hasWritten;
     logger.info(
       { event: 'lcms:debug-epipe' },'Start sending data into stream');
     clearInterval(timer);
@@ -58,28 +57,16 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
         { event: 'lcms:debug-epipe' },`Streaming ${key} data`);
       logger.info(
         { event: 'lcms:debug-epipe' },`${data[key].length} items being send`);
-      hasWritten = writableStream.write('"' + key + '":' + JSON.stringify(data[key]));
-      if (!hasWritten) {
-        logger.info(
-          { event: 'lcms:debug-epipe' }, `write failed for key ${key} when writing data`);
-      }
+      writableStream.write('"' + key + '":' + JSON.stringify(data[key]));
       if (keys.length !== 0) {
         logger.info(
           { event: 'lcms:debug-epipe' },'Still more keys to send');
-        hasWritten = writableStream.write(',');
-        if (!hasWritten) {
-          logger.info(
-            { event: 'lcms:debug-epipe' }, `write failed for key ${key} when "still more keys to send"`);
-        }
+        writableStream.write(',');
       }
     }
     logger.info(
       { event: 'lcms:debug-epipe' },'Closing json string');
-    hasWritten = writableStream.write('}');
-    if (!hasWritten) {
-      logger.info(
-        { event: 'lcms:debug-epipe' }, 'write failed for last accolade, finishing the stream');
-    }
+    writableStream.write('}');
   }).catch((error) => {
     logger.info(
       { event: 'lcms:debug-epipe' },'An error occurred');
