@@ -66,6 +66,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await clickByText('1 Titre compétence');
     await clickByText('Atelier');
     await clickByText('Nouveau prototype');
+
     await selectFiles('[data-test-file-input-illustration] input', illustrationFile);
     await selectFiles('[data-test-file-input-attachment] input', attachmentFile);
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
