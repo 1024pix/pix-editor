@@ -1,5 +1,11 @@
 
 
+## v3.197.6 (14/04/2025)
+
+
+### :building_construction: Tech
+- [#953](https://github.com/1024pix/pix-editor/pull/953) [TECH] Je vous laisse deviner... Revert de tout le travail d'aujourd'hui :joie:.
+
 ## v3.197.0 (14/04/2025)
 
 
