@@ -29,7 +29,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
         version: 2,
         level: 1,
         challengeIds: ['challId1', 'challId2'],
-        createdAt: new Date(),
+        createdAt: new Date('2023-10-23T18:06:00Z'),
       });
 
       const attributes = {
@@ -116,7 +116,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
         version: 2,
         level: 1,
         challengeIds: ['challId1', 'challId2'],
-        createdAt: new Date(),
+        createdAt: new Date('2023-10-23T18:06:00Z'),
       });
 
       const attributes = {
@@ -131,7 +131,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
         'status': Skill.STATUSES.ACTIF,
         'version': 2,
         'level': 1,
-        'created-at': new Date(),
+        'created-at': new Date('2023-10-23T18:06:00Z'),
       };
 
       const payload = {
