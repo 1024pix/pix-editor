@@ -1,4 +1,5 @@
 import { tutorialDatasource } from '../../infrastructure/datasources/airtable/index.js';
+import * as config from '../../config.js';
 import {
   areaRepository,
   attachmentRepository,
@@ -91,6 +92,19 @@ export async function getLearningContentForReplication() {
 
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
+  const multiply = function(arr, numb) {
+    const res = [];
+    for (let i = 0; i < numb; ++i) {
+      res.push(...structuredClone(arr));
+    }
+    return res;
+  };
+  console.log(challenges.length);
+  const bigChallenges = multiply(challenges, config.mon_debug.multiplyBefore);
+  console.log(bigChallenges.length);
+  console.log(translationsForReplication.length);
+  const bigTranslations = multiply(translationsForReplication, config.mon_debug.multiplyBefore);
+  console.log(bigTranslations.length);
   return {
     frameworks: transformedFrameworks,
     areas: transformedAreas,
@@ -98,12 +112,12 @@ export async function getLearningContentForReplication() {
     thematics: transformedThematics,
     tubes: transformedTubes,
     skills,
-    challenges: translatedChallenges,
+    challenges: bigChallenges,
     attachments: translatedAttachments,
     tutorials,
     courses,
     missions: transformedMissions,
-    translations: translationsForReplication.sort(byKeyAndLocale),
+    translations: bigTranslations.sort(byKeyAndLocale),
   };
 }
 

@@ -131,6 +131,11 @@ export const phrase = {
   ].filter(({ projectId }) => projectId),
 };
 
+export const mon_debug = {
+  multiplyBefore: _getNumber(process.env.DEBUG_MULTIPLY_BEFORE, 1),
+  multiplyAfter: _getNumber(process.env.DEBUG_MULTIPLY_AFTER, 1),
+};
+
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
 if (process.env.NODE_ENV === 'test') {
