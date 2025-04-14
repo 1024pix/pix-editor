@@ -60,24 +60,6 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
           { event: 'lcms:debug-epipe' },`Streaming ${key} data`);
         logger.info(
           { event: 'lcms:debug-epipe' },`${data[key].length} items being send`);
-        if (keys.length > 0) {
-          ok = writableStream.write('"' + key + '":' + JSON.stringify(data[key]) + ',');
-        } else {
-          ok = writableStream.write('"' + key + '":' + JSON.stringify(data[key]) + ',', 'utf8', () => {
-            if (ok) {
-              logger.info(
-                { event: 'lcms:debug-epipe' },'Writing directly final accolade');
-              writableStream.end('}');
-            } else {
-              logger.info({ event: 'lcms:debug-epipe' },'Waiting for draining before writing accoalde');
-              writableStream.once('drain', () => {
-                logger.info({ event: 'lcms:debug-epipe' },'Writing after drain the accolade');
-                writableStream.end('}');
-                logger.info({ event: 'lcms:debug-epipe' },'Ending');
-              });
-            }
-          });
-        }
         const comma = keys.length > 0 ? ',' : '';
         ok = writableStream.write('"' + key + '":' + JSON.stringify(data[key]) + comma);
         if (!ok) {
@@ -91,8 +73,18 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
         writableStream.once('drain', write);
       }
     }
+    if (ok) {
+      logger.info(
+        { event: 'lcms:debug-epipe' },'Writing directly final accolade');
+      writableStream.write('}');
+    } else {
+      logger.info({ event: 'lcms:debug-epipe' },'Waiting for draining before writing accoalde');
+      writableStream.once('drain', () => {
+        logger.info({ event: 'lcms:debug-epipe' },'Writing after drain the accolade');
+        writableStream.write('}');
+      });
+    }
   }).catch((error) => {
-    clearInterval(timer);
     logger.info(
       { event: 'lcms:debug-epipe' },'An error occurred');
     logger.error(
@@ -100,9 +92,12 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
     Sentry.captureException(error);
     logger.info(
       { event: 'lcms:debug-epipe' },`is stream closed ? ${writableStream.closed}`);
-    if (!writableStream.closed) {
-      writableStream.end('error');
-    }
+    writableStream.write('error');
+  }).finally(() => {
+    clearInterval(timer);
+    logger.info({ event: 'lcms:debug-epipe' },`In the finally, is stream closed ? ${writableStream.closed}`);
+    writableStream.end();
+    logger.info({ event: 'lcms:debug-epipe' },`In the finally after the end, is stream closed ? ${writableStream.closed}`);
   });
   return writableStream;
 }
