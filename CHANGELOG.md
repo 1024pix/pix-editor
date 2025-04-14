@@ -1,5 +1,11 @@
 
 
+## v3.196.0 (14/04/2025)
+
+
+### :bug: Correction
+- [#950](https://github.com/1024pix/pix-editor/pull/950) [BUGFIX] Les ids donnés à la volée lors de la création des données de réplication pour les traductions n'étaient pas uniques + rétablissement du code lié à l'ajout des traductions dans la répli.
+
 ## v3.195.1 (11/04/2025)
 
 
