@@ -51,9 +51,9 @@ export async function getLearningContentForReplication() {
     missionRepository.list(),
     translationRepository.list(),
   ]);
-  const translationsForReplication = translations.map((translation) => ({
+  const translationsForReplication = translations.map((translation, index) => ({
     ...translation,
-    id: translation.key,
+    id: index + 1,
     model: translation.model,
     entityId: translation.entityId,
     sourceEntityId: null,
