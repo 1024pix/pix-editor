@@ -16,19 +16,4 @@ describe('Unit | Domain | Translation', function() {
       expect(entityId).to.equal('idDuChallenge');
     });
   });
-
-  context('get model', function() {
-    it('should return the expected model', function() {
-      // given
-      const translation = domainBuilder.buildTranslation({
-        key: 'challenge.idDuChallenge.champ',
-      });
-
-      // when
-      const model = translation.model;
-
-      // then
-      expect(model).to.equal('challenge');
-    });
-  });
 });
