@@ -73,7 +73,7 @@ export async function listByPattern(pattern, { transaction = knex } = {}) {
 }
 
 export async function list() {
-  const translationDtos = await knex.select(projection).from('translations').orderBy(['key', 'locale']);
+  const translationDtos = await knex.select(projection).from('translations');
   return translationDtos.map(_toDomain);
 }
 
