@@ -1,5 +1,11 @@
 
 
+## v3.197.0 (14/04/2025)
+
+
+### :building_construction: Tech
+- [#952](https://github.com/1024pix/pix-editor/pull/952) [TECH] Ajout de logs pour essayer de comprendre le problème lors de la récupération des données de la réplication.
+
 ## v3.196.0 (14/04/2025)
 
 
