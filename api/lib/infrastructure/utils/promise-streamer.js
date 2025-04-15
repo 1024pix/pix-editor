@@ -19,17 +19,7 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
     writableStream.write('\n');
   }, 1000);
   promise.then((data) => {
-    clearInterval(timer);
-    writableStream.write('{');
-    const keys = Object.keys(data);
-    while (keys.length > 0) {
-      const key = keys.shift();
-      writableStream.write('"' + key + '":' + JSON.stringify(data[key]));
-      if (keys.length !== 0) {
-        writableStream.write(',');
-      }
-    }
-    writableStream.write('}');
+    writableStream.write(JSON.stringify(data));
   }).catch((error) => {
     logger.error(error);
     Sentry.captureException(error);
