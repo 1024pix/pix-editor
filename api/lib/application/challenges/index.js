@@ -9,7 +9,7 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import { getPhraseTranslationsURL, previewChallenge, createChallenge } from '../../domain/usecases/index.js';
+import { getPhraseTranslationsURL, previewChallenge, createChallenge, updateChallenge } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
@@ -114,7 +114,6 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-
           const createdChallenge = await createChallenge(challenge, { challengeRepository });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
@@ -132,8 +131,7 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const updatedChallenge = await challengeRepository.update(challenge);
-          await _refreshCache({ challenge: updatedChallenge });
+          const updatedChallenge = await updateChallenge(challenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },
