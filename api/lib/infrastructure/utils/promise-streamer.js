@@ -196,10 +196,9 @@ export function promiseStreamerForRepli2(promise) {
         logger.info(
           { event: 'lcms:debug-epipe' },
           `dans transform, traitement de la clé ${chunk.key}`);
-        /*const commaOrCloseBracket = chunk.isLast ? '}' : ',';
+        const commaOrCloseBracket = chunk.isLast ? '}' : ',';
         const openBracketOrNothing = chunk.isFirst ? '{' : '';
-        callback(null, openBracketOrNothing + '"' + chunk.key + '":' + JSON.stringify(chunk.data) + commaOrCloseBracket);*/
-        callback(null, '.');
+        callback(null, openBracketOrNothing + '"' + chunk.key + '":' + JSON.stringify(chunk.data) + commaOrCloseBracket);
       },
     });
     pipeline(
