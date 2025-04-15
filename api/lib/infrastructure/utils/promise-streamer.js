@@ -167,15 +167,24 @@ export function promiseStreamerForRepli2(promise) {
       isFirst: true,
       next() {
         const key = this.keys.shift();
-        logger.info(
-          { event: 'lcms:debug-epipe' },
-          `dans iter, traitement de la clé ${key}`);
         const thisOneIsFirst = this.isFirst;
         this.isFirst = false;
-        return {
-          value: { key, data: data[key], isFirst: thisOneIsFirst, isLast: this.keys.length === 0 },
-          done: !key,
-        };
+        if (key) {
+          logger.info(
+            { event: 'lcms:debug-epipe' },
+            `dans iter, traitement de la clé ${key}`);
+          return {
+            value: { key, data: data[key], isFirst: thisOneIsFirst, isLast: this.keys.length === 0 },
+            done: false,
+          };
+        } else {
+          logger.info(
+            { event: 'lcms:debug-epipe' },
+            'dans iter, plus de clé a dépiler');
+          return {
+            done: true,
+          };
+        }
       },
       [Symbol.iterator]() {
         return this;
