@@ -31,14 +31,10 @@ export default class NewController extends Prototype {
     try {
       await this._handleIllustration(this.challenge);
       await this._handleAttachments(this.challenge);
-
-      this.transformFrenchChallengeSpaces(this.challenge);
-
       // create challenge without patching Pix API cache
       await this._saveChallenge(this.challenge);
       await this._saveFiles(this.challenge);
       await this._setVersion(this.challenge);
-
       // update challenge's version and patch Pix API cache
       await this._saveChallenge(this.challenge);
       this.edition = false;

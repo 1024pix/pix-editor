@@ -221,7 +221,7 @@ export default class SingleController extends Controller {
     this.closeComfirmLogPopin();
     this.loader.start();
 
-    return Promise.resolve(this.transformFrenchChallengeSpaces(this.challenge))
+    return Promise.resolve(this.challenge)
       .then((challenge) => this._handleIllustration(challenge))
       .then((challenge) => this._handleAttachments(challenge))
       .then((challenge) => this._saveFiles(challenge))
@@ -776,19 +776,4 @@ export default class SingleController extends Controller {
       this.invalidEmbedURL = embedURL;
     }
   }
-
-  transformSpaces(str) {
-    return str.replaceAll(/ ([;?!])/g, ' $1');
-  }
-
-  transformFrenchChallengeSpaces(challenge) {
-    if (challenge.locales.includes('fr') || challenge.locales.includes('fr-fr')) {
-      this.transformSpaces(challenge.instruction);
-      this.transformSpaces(challenge.proposals);
-      this.transformSpaces(challenge.illustrationAlt);
-    }
-
-    return challenge;
-  }
-
 }

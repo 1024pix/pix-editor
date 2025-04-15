@@ -680,19 +680,4 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       assert.true(storageServiceStub.renameFile.calledOnce);
     });
   });
-
-  module('transformSpaces', function() {
-    test('it should transform spaces before ;?! into NBSP', async function(assert) {
-      // given
-      const prototype = {};
-      prototype.instruction = 'Est-ce ça ? Oui ! Non ; non';
-
-      // when
-      const transformedPrototype = controller.transformSpaces(prototype.instruction);
-      const result = transformedPrototype.replaceAll(' ', '');
-
-      // then
-      assert.strictEqual(result, 'Est-ce ça? Oui! Non; non');
-    });
-  });
 });
