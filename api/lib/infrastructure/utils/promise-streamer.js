@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/node';
 import { logger } from '../logger.js';
-import { PassThrough, pipeline, Readable } from 'node:stream';
-import _ from 'lodash';
+import { PassThrough, pipeline } from 'node:stream';
+
+const CHUNK_SIZE = 200_000;
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -163,6 +164,14 @@ export function promiseStreamerForRepli2(promise) {
     clearInterval(timer);
     logger.info(
       { event: 'lcms:debug-epipe' },'Start sending data into stream');
+
+    function* chunk(data, size) {
+      const stringifiedData = JSON.stringify(data);
+      for (let i = 0; i < stringifiedData.length; i += size) {
+        yield stringifiedData.slice(i, i + size);
+      }
+    }
+
     /*
     const iter = {
       keys: Object.keys(data),
@@ -208,9 +217,8 @@ export function promiseStreamerForRepli2(promise) {
     //callback();
     //},
     // });
-    const newData = _.omit(data, ['challenges', 'skills', 'tutorials', 'translations']);
     pipeline(
-      Readable.from(JSON.stringify(newData)),
+      chunk(data, CHUNK_SIZE),
       //jsonStringifyTransform,
       writableStream,
       (err) => {
