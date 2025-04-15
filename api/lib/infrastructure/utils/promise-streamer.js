@@ -15,6 +15,30 @@ function getWritableStream() {
 }
 
 export function promiseStreamer(promise, writableStream = getWritableStream()) {
+  writableStream.on('close', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: close');
+  });
+  writableStream.on('drain', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: drain');
+  });
+  writableStream.on('error', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: error');
+  });
+  writableStream.on('finish', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: finish');
+  });
+  writableStream.on('pipe', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: pipe');
+  });
+  writableStream.on('unpipe', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: unpipe');
+  });
   const timer = setInterval(() => {
     logger.info(
       { event: 'lcms:debug-epipe' },
@@ -55,7 +79,7 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   }).finally(() => {
     clearInterval(timer);
     logger.info({ event: 'lcms:debug-epipe' },`In the finally, is stream closed ? ${writableStream.closed}`);
-    writableStream.end();
+    //writableStream.end();
     logger.info({ event: 'lcms:debug-epipe' },`In the finally after the end, is stream closed ? ${writableStream.closed}`);
   });
   return writableStream;
