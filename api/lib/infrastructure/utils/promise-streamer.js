@@ -1,8 +1,6 @@
 import * as Sentry from '@sentry/node';
 import { logger } from '../logger.js';
-import { PassThrough, pipeline } from 'node:stream';
-
-const CHUNK_SIZE = 200_000;
+import { PassThrough, pipeline, Transform } from 'node:stream';
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -164,19 +162,9 @@ export function promiseStreamerForRepli2(promise) {
     clearInterval(timer);
     logger.info(
       { event: 'lcms:debug-epipe' },'Start sending data into stream');
-
-    function* chunk(data, size) {
-      const stringifiedData = JSON.stringify(data);
-      for (let i = 0; i < stringifiedData.length; i += size) {
-        yield stringifiedData.slice(i, i + size);
-      }
-    }
-
-    /*
     const iter = {
       keys: Object.keys(data),
       isFirst: true,
-      chunksLeftToSend: [],
       next() {
         const key = this.keys.shift();
         const thisOneIsFirst = this.isFirst;
@@ -185,10 +173,8 @@ export function promiseStreamerForRepli2(promise) {
           logger.info(
             { event: 'lcms:debug-epipe' },
             `dans iter, traitement de la clé ${key}`);
-          const chunks = [...chunk(JSON.stringify(data[key]))];
-          const firstChunk = chunks[0];
           return {
-            value: { key, data: firstChunk, isFirst: thisOneIsFirst, isLast: this.keys.length === 0 && this.chunksLeftToSend.length === 0 },
+            value: { key, data: data[key], isFirst: thisOneIsFirst, isLast: this.keys.length === 0 },
             done: false,
           };
         } else {
@@ -203,8 +189,8 @@ export function promiseStreamerForRepli2(promise) {
       [Symbol.iterator]() {
         return this;
       }
-    };*/
-    /*const jsonStringifyTransform = new Transform({
+    };
+    const jsonStringifyTransform = new Transform({
       writableObjectMode: true,
       transform(chunk, _encoding, callback) {
         logger.info(
@@ -213,13 +199,13 @@ export function promiseStreamerForRepli2(promise) {
         /*const commaOrCloseBracket = chunk.isLast ? '}' : ',';
         const openBracketOrNothing = chunk.isFirst ? '{' : '';
         callback(null, openBracketOrNothing + '"' + chunk.key + '":' + JSON.stringify(chunk.data) + commaOrCloseBracket);*/
-    // this.push('COUCOUMAMAN--');
-    //callback();
-    //},
-    // });
+        this.push('COUCOUMAMAN--');
+        callback();
+      },
+    });
     pipeline(
-      chunk(data, CHUNK_SIZE),
-      //jsonStringifyTransform,
+      iter,
+      jsonStringifyTransform,
       writableStream,
       (err) => {
         if (err) {
@@ -241,3 +227,4 @@ export function promiseStreamerForRepli2(promise) {
   });
   return writableStream;
 }
+
