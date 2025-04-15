@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node';
 import { logger } from '../logger.js';
-import { PassThrough } from 'node:stream';
+import { PassThrough, pipeline, Transform } from 'node:stream';
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -15,6 +15,24 @@ function getWritableStream() {
 }
 
 export function promiseStreamer(promise, writableStream = getWritableStream()) {
+  const timer = setInterval(() => {
+    writableStream.write('\n');
+  }, 1000);
+  promise.then((data) => {
+    writableStream.write(JSON.stringify(data));
+  }).catch((error) => {
+    logger.error(error);
+    Sentry.captureException(error);
+    writableStream.write('error');
+  }).finally(() => {
+    clearInterval(timer);
+    writableStream.end();
+  });
+  return writableStream;
+}
+
+export function promiseStreamerForRepli(promise) {
+  const writableStream = new PassThrough();
   writableStream.on('close', () => {
     logger.info(
       { event: 'lcms:debug-epipe' },'Stream event: close');
@@ -69,7 +87,7 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
                 { event: 'lcms:debug-epipe' },'Writing directly final accolade');
               writableStream.end('}');
             } else {
-              logger.info({ event: 'lcms:debug-epipe' },'Waiting for draining before writing accoalde');
+              logger.info({ event: 'lcms:debug-epipe' },'Waiting for draining before writing accolade');
               writableStream.once('drain', () => {
                 logger.info({ event: 'lcms:debug-epipe' },'Writing after drain the accolade');
                 writableStream.end('}');
@@ -106,3 +124,96 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   });
   return writableStream;
 }
+
+export function promiseStreamerForRepli2(promise) {
+  const writableStream = new PassThrough();
+  writableStream.on('close', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: close');
+  });
+  writableStream.on('drain', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: drain');
+  });
+  writableStream.on('error', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: error');
+  });
+  writableStream.on('finish', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: finish');
+  });
+  writableStream.on('pipe', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: pipe');
+  });
+  writableStream.on('unpipe', () => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Stream event: unpipe');
+  });
+  const timer = setInterval(() => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },
+      'anti slash n');
+    writableStream.write('\n');
+  }, 1000);
+
+  promise.then((data) => {
+    clearInterval(timer);
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Start sending data into stream');
+    const iter = {
+      keys: Object.keys(data),
+      isFirst: true,
+      next() {
+        const key = this.keys.shift();
+        logger.info(
+          { event: 'lcms:debug-epipe' },
+          `dans iter, traitement de la clé ${key}`);
+        const thisOneIsFirst = this.isFirst;
+        this.isFirst = false;
+        return {
+          value: { key, data: data[key], isFirst: thisOneIsFirst, isLast: this.keys.length === 0 },
+          done: !key,
+        };
+      },
+      [Symbol.iterator]() {
+        return this;
+      }
+    };
+    const jsonStringifyTransform = new Transform({
+      writableObjectMode: true,
+      transform(chunk, _encoding, callback) {
+        logger.info(
+          { event: 'lcms:debug-epipe' },
+          `dans transform, traitement de la clé ${chunk.key}`);
+        const commaOrCloseBracket = chunk.isLast ? '}' : ',';
+        const openBracketOrNothing = chunk.isFirst ? '{' : '';
+        callback(null, openBracketOrNothing + '"' + chunk.key + '":' + JSON.stringify(chunk.data) + commaOrCloseBracket);
+      },
+    });
+    pipeline(
+      iter,
+      jsonStringifyTransform,
+      writableStream,
+      (err) => {
+        if (err) {
+          logger.error(
+            { event: 'lcms:debug-epipe' }, 'error dans pipeline');
+          logger.error(
+            { event: 'lcms:debug-epipe' }, err);
+        } else {
+          logger.info(
+            { event: 'lcms:debug-epipe' },
+            'SUCCESS');
+        }
+      });
+  }).catch((error) => {
+    logger.error(
+      { event: 'lcms:debug-epipe' }, 'error dans catch du promise');
+    logger.error(
+      { event: 'lcms:debug-epipe' }, error);
+  });
+  return writableStream;
+}
+
