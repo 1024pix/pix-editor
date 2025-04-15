@@ -1,5 +1,11 @@
 
 
+## v3.197.7 (15/04/2025)
+
+
+### :coffee: Autre
+- [#955](https://github.com/1024pix/pix-editor/pull/955) [POC] On remet tout le travail d'hier + tentative d'usage de pipe pour gérer le watermark à notre place.
+
 ## v3.197.6 (14/04/2025)
 
 
