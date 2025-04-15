@@ -46,43 +46,39 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
     writableStream.write('\n');
   }, 1000);
   promise.then((data) => {
-    clearInterval(timer);
+    let hasWritten;
     logger.info(
       { event: 'lcms:debug-epipe' },'Start sending data into stream');
+    clearInterval(timer);
     writableStream.write('{');
     const keys = Object.keys(data);
-    let ok = true;
-    write();
-    function write() {
-      do {
-        const key = keys.shift();
+    while (keys.length > 0) {
+      const key = keys.shift();
+      logger.info(
+        { event: 'lcms:debug-epipe' },`Streaming ${key} data`);
+      logger.info(
+        { event: 'lcms:debug-epipe' },`${data[key].length} items being send`);
+      hasWritten = writableStream.write('"' + key + '":' + JSON.stringify(data[key]));
+      if (!hasWritten) {
         logger.info(
-          { event: 'lcms:debug-epipe' },`Streaming ${key} data`);
+          { event: 'lcms:debug-epipe' }, `write failed for key ${key} when writing data`);
+      }
+      if (keys.length !== 0) {
         logger.info(
-          { event: 'lcms:debug-epipe' },`${data[key].length} items being send`);
-        const comma = keys.length > 0 ? ',' : '';
-        ok = writableStream.write('"' + key + '":' + JSON.stringify(data[key]) + comma);
-        if (!ok) {
+          { event: 'lcms:debug-epipe' },'Still more keys to send');
+        hasWritten = writableStream.write(',');
+        if (!hasWritten) {
           logger.info(
-            { event: 'lcms:debug-epipe' },`Need draining after ${key}`);
+            { event: 'lcms:debug-epipe' }, `write failed for key ${key} when "still more keys to send"`);
         }
-      } while (keys.length > 0 && ok);
-      if (keys.length > 0) {
-        logger.info(
-          { event: 'lcms:debug-epipe' },'Waiting for draining before calling next write');
-        writableStream.once('drain', write);
       }
     }
-    if (ok) {
+    logger.info(
+      { event: 'lcms:debug-epipe' },'Closing json string');
+    hasWritten = writableStream.write('}');
+    if (!hasWritten) {
       logger.info(
-        { event: 'lcms:debug-epipe' },'Writing directly final accolade');
-      writableStream.write('}');
-    } else {
-      logger.info({ event: 'lcms:debug-epipe' },'Waiting for draining before writing accoalde');
-      writableStream.once('drain', () => {
-        logger.info({ event: 'lcms:debug-epipe' },'Writing after drain the accolade');
-        writableStream.write('}');
-      });
+        { event: 'lcms:debug-epipe' }, 'write failed for last accolade, finishing the stream');
     }
   }).catch((error) => {
     logger.info(
@@ -96,7 +92,7 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   }).finally(() => {
     clearInterval(timer);
     logger.info({ event: 'lcms:debug-epipe' },`In the finally, is stream closed ? ${writableStream.closed}`);
-    writableStream.end();
+    //writableStream.end();
     logger.info({ event: 'lcms:debug-epipe' },`In the finally after the end, is stream closed ? ${writableStream.closed}`);
   });
   return writableStream;
