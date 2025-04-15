@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/node';
 import { logger } from '../logger.js';
 import { PassThrough, pipeline, Readable } from 'node:stream';
+import _ from 'lodash';
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -207,9 +208,9 @@ export function promiseStreamerForRepli2(promise) {
     //callback();
     //},
     // });
-    //const newData = _.omit(data, ['challenges', 'skills', 'tutorials']);
+    const newData = _.omit(data, ['challenges', 'skills', 'tutorials']);
     pipeline(
-      Readable.from(JSON.stringify(data)),
+      Readable.from(JSON.stringify(newData)),
       //jsonStringifyTransform,
       writableStream,
       (err) => {
