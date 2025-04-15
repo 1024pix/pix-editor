@@ -199,7 +199,8 @@ export function promiseStreamerForRepli2(promise) {
         /*const commaOrCloseBracket = chunk.isLast ? '}' : ',';
         const openBracketOrNothing = chunk.isFirst ? '{' : '';
         callback(null, openBracketOrNothing + '"' + chunk.key + '":' + JSON.stringify(chunk.data) + commaOrCloseBracket);*/
-        callback(null, '.');
+        this.push('COUCOUMAMAN--');
+        callback();
       },
     });
     pipeline(
