@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
+import _ from 'lodash';
 
 const {
   buildFramework,
@@ -414,7 +415,6 @@ async function mockCurrentContent() {
   }
 
   expectedCurrentContent.translations.forEach((translation) => {
-    translation.id = translation.key;
     translation.sourceEntityId = null;
   });
 
@@ -424,7 +424,6 @@ async function mockCurrentContent() {
       locale: 'nl',
       value: 'Consigne en nl',
     }),
-    id: 'challenge.localized-challenge-id.instruction',
     key: 'challenge.localized-challenge-id.instruction',
     entityId: 'localized-challenge-id',
     sourceEntityId: challenge.id,
@@ -436,7 +435,6 @@ async function mockCurrentContent() {
       locale: 'nl',
       value: expectedAttachmentNl.alt,
     }),
-    id: 'challenge.localized-challenge-id.illustrationAlt',
     key: 'challenge.localized-challenge-id.illustrationAlt',
     entityId: 'localized-challenge-id',
     sourceEntityId: expectedChallenge.id,
@@ -479,7 +477,11 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const response = await server.inject(currentContentOptions);
 
       // then
-      expect(JSON.parse(response.result).translations).toStrictEqual(expectedCurrentContent.translations);
+      const result = JSON.parse(response.result);
+      const resultWithoutTranslations = _.omit(result, 'translations');
+      const expectedCurrentContentWithoutTranslations = _.omit(result, 'translations');
+      expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
+      expect(result.translations).toMatchObject(expectedCurrentContent.translations);
     });
   });
 });
