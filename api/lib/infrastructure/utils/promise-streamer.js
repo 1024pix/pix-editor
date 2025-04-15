@@ -208,7 +208,7 @@ export function promiseStreamerForRepli2(promise) {
     //callback();
     //},
     // });
-    const newData = _.omit(data, ['challenges', 'skills', 'tutorials']);
+    const newData = _.omit(data, ['challenges', 'skills', 'tutorials', 'translations']);
     pipeline(
       Readable.from(JSON.stringify(newData)),
       //jsonStringifyTransform,
