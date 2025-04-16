@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import nock from 'nock';
-import { knex, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
 
 describe('Integration | Repository | translation-repository', function() {
@@ -370,6 +370,60 @@ describe('Integration | Repository | translation-repository', function() {
         // then
         expect(entityIds).to.deep.equal(['entityId1']);
       });
+    });
+  });
+
+  context('#list', () => {
+    it('should list translations ordered by key and locale', async () => {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.id1.field1',
+        locale:  'fr',
+        value: 'field1 id1 en FR',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.id2.field1',
+        locale:  'fr',
+        value: 'field1 id2 en FR',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.id2.field2',
+        locale:  'en',
+        value: 'field2 id2 en EN',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.id1.field1',
+        locale:  'en',
+        value: 'field1 id1 en EN',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const translations = await translationRepository.list();
+
+      // then
+      expect(translations).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity.id1.field1',
+          locale:  'en',
+          value: 'field1 id1 en EN',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity.id1.field1',
+          locale:  'fr',
+          value: 'field1 id1 en FR',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity.id2.field1',
+          locale:  'fr',
+          value: 'field1 id2 en FR',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity.id2.field2',
+          locale:  'en',
+          value: 'field2 id2 en EN',
+        }),
+      ]);
     });
   });
 
