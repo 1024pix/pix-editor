@@ -69,6 +69,9 @@ export function promiseStreamerForRepli2(promise) {
 
   promise.then((data) => {
     logger.info(
+      { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
+    clearInterval(timer);
+    logger.info(
       { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
     const readableStream = Readable.from(JSON.stringify(data));
     readableStream.on('close', () => {
@@ -99,9 +102,6 @@ export function promiseStreamerForRepli2(promise) {
       logger.info(
         { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: resume'));
     });
-    logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
-    clearInterval(timer);
     pipeline(
       readableStream,
       writableStream,
