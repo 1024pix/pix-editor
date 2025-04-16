@@ -65,7 +65,7 @@ export function promiseStreamerForRepli2(promise) {
   const timer = setInterval(() => {
     logger.info(
       { event: 'lcms:debug-epipe' },
-      'anti slash n ');
+      prefixWithDate('anti slash n '));
     writableStream.write('\n');
   }, 1000);
 
@@ -123,6 +123,9 @@ export function promiseStreamerForRepli2(promise) {
         }
       });
   }).catch((error) => {
+    logger.info(
+      { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval in catch'));
+    clearInterval(timer);
     logger.error(
       { event: 'lcms:debug-epipe' }, prefixWithDate('error dans catch du promise'));
     logger.error(
