@@ -1,5 +1,11 @@
 
 
+## v3.197.16 (16/04/2025)
+
+
+### :building_construction: Tech
+- [#957](https://github.com/1024pix/pix-editor/pull/957) [TECH] On continue d'essayer un petit peu ce matin.
+
 ## v3.197.15 (15/04/2025)
 
 
