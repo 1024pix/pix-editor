@@ -12,8 +12,4 @@ export class Translation {
   get entityId() {
     return this.key.split('.')[1];
   }
-
-  get model() {
-    return this.key.split('.')[0];
-  }
 }
