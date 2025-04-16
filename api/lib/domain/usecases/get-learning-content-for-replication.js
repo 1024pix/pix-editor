@@ -22,8 +22,14 @@ import {
 } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import { prefixFor } from '../../infrastructure/translations/challenge.js';
+import { logger } from '../../infrastructure/logger.js';
 
+function prefixWithDate(str) {
+  return `${new Date().toISOString()} -- ${str}`;
+}
 export async function getLearningContentForReplication() {
+  logger.info(
+    { event: 'lcms:debug-epipe' },prefixWithDate('Before promise all'));
   const [
     frameworks,
     areas,
@@ -51,6 +57,8 @@ export async function getLearningContentForReplication() {
     missionRepository.list(),
     translationRepository.list(),
   ]);
+  logger.info(
+    { event: 'lcms:debug-epipe' },prefixWithDate('After promise all'));
   const translationsForReplication = translations.map((translation, index) => ({
     ...translation,
     id: index + 1,
@@ -63,6 +71,8 @@ export async function getLearningContentForReplication() {
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
   const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
+  logger.info(
+    { event: 'lcms:debug-epipe' },prefixWithDate('Some transforms'));
 
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges
@@ -90,6 +100,11 @@ export async function getLearningContentForReplication() {
   }));
 
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
+  logger.info(
+    { event: 'lcms:debug-epipe' },prefixWithDate('Some other transforms'));
+  const tr = translationsForReplication.sort(byKeyAndLocale);
+  logger.info(
+    { event: 'lcms:debug-epipe' },prefixWithDate('Sorting translations'));
 
   return {
     frameworks: transformedFrameworks,
@@ -103,7 +118,7 @@ export async function getLearningContentForReplication() {
     tutorials,
     courses,
     missions: transformedMissions,
-    translations: translationsForReplication.sort(byKeyAndLocale),
+    translations: tr,
   };
 }
 
