@@ -31,81 +31,76 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   return writableStream;
 }
 
-function prefixWithDate(str) {
-  return `${new Date().toISOString()} -- ${str}`;
-}
 export function promiseStreamerForRepli2(promise) {
   const writableStream = new PassThrough();
   writableStream.on('close', () => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: close'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: close');
   });
   writableStream.on('drain', () => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: drain'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: drain');
   });
   writableStream.on('error', (error) => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: error'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: error');
     logger.error(
       { event: 'lcms:debug-epipe' }, error);
   });
   writableStream.on('finish', () => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: finish'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: finish');
   });
   writableStream.on('pipe', () => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: pipe'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: pipe');
   });
   writableStream.on('unpipe', () => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: unpipe'));
+      { event: 'lcms:debug-epipe' },'WritableStream event: unpipe');
   });
   const timer = setInterval(() => {
     logger.info(
       { event: 'lcms:debug-epipe' },
-      'anti slash n ');
+      'anti slash n');
     writableStream.write('\n');
   }, 1000);
 
   promise.then((data) => {
-    logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
     clearInterval(timer);
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
+      { event: 'lcms:debug-epipe' },'Start sending data into stream');
     //const newData = _.omit(data, ['challenges', 'skills', 'tutorials']);
     const readableStream = Readable.from(JSON.stringify(data));
     readableStream.on('close', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: close'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: close');
     });
     readableStream.on('data', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: data'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: data');
     });
     readableStream.on('end', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: end'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: end');
     });
     readableStream.on('error', (error) => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: error'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: error');
       logger.error(
         { event: 'lcms:debug-epipe' }, error);
     });
     readableStream.on('pause', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: pause'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: pause');
     });
     readableStream.on('readable', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: readable'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: readable');
     });
     readableStream.on('resume', () => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: resume'));
+        { event: 'lcms:debug-epipe' },'ReadableStream event: resume');
     });
     pipeline(
       Readable.from(JSON.stringify(data)),
@@ -113,18 +108,18 @@ export function promiseStreamerForRepli2(promise) {
       (err, val) => {
         if (err) {
           logger.error(
-            { event: 'lcms:debug-epipe' }, prefixWithDate('error dans pipeline'));
+            { event: 'lcms:debug-epipe' }, 'error dans pipeline');
           logger.error(
             { event: 'lcms:debug-epipe' }, err);
         } else {
           logger.info(
             { event: 'lcms:debug-epipe' },
-            prefixWithDate(`SUCCESS, val returned ${val}`));
+            `SUCCESS, val returned ${val}`);
         }
       });
   }).catch((error) => {
     logger.error(
-      { event: 'lcms:debug-epipe' }, prefixWithDate('error dans catch du promise'));
+      { event: 'lcms:debug-epipe' }, 'error dans catch du promise');
     logger.error(
       { event: 'lcms:debug-epipe' }, error);
   });
