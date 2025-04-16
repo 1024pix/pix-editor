@@ -1,5 +1,11 @@
 
 
+## v3.197.27 (16/04/2025)
+
+
+### :coffee: Autre
+- [#958](https://github.com/1024pix/pix-editor/pull/958) Retour en arrière mais la faille est découverte et résolue.
+
 ## v3.197.16 (16/04/2025)
 
 
