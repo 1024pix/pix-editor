@@ -46,7 +46,9 @@ export function promiseStreamerForRepli2(promise) {
   });
   writableStream.on('error', (error) => {
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: error ' + JSON.stringify(error, undefined, 2)));
+      { event: 'lcms:debug-epipe' },prefixWithDate('WritableStream event: error'));
+    logger.error(
+      { event: 'lcms:debug-epipe' }, error);
   });
   writableStream.on('finish', () => {
     logger.info(
@@ -85,7 +87,9 @@ export function promiseStreamerForRepli2(promise) {
     });
     readableStream.on('error', (error) => {
       logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: error ' + JSON.stringify(error, undefined, 2)));
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: error'));
+      logger.error(
+        { event: 'lcms:debug-epipe' }, error);
     });
     readableStream.on('pause', () => {
       logger.info(
@@ -108,8 +112,9 @@ export function promiseStreamerForRepli2(promise) {
       (err, val) => {
         if (err) {
           logger.error(
-            { event: 'lcms:debug-epipe' },prefixWithDate('error dans pipeline ' + JSON.stringify(err, undefined, 2)));
-          throw err;
+            { event: 'lcms:debug-epipe' }, prefixWithDate('error dans pipeline'));
+          logger.error(
+            { event: 'lcms:debug-epipe' }, err);
         } else {
           logger.info(
             { event: 'lcms:debug-epipe' },
@@ -121,7 +126,9 @@ export function promiseStreamerForRepli2(promise) {
       { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval in catch'));
     clearInterval(timer);
     logger.error(
-      { event: 'lcms:debug-epipe' },prefixWithDate('Error dans catch du promise ' + JSON.stringify(error, undefined, 2)));
+      { event: 'lcms:debug-epipe' }, prefixWithDate('error dans catch du promise'));
+    logger.error(
+      { event: 'lcms:debug-epipe' }, error);
   });
   return writableStream;
 }
