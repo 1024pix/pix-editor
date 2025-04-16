@@ -73,7 +73,7 @@ export function promiseStreamerForRepli2(promise) {
     clearInterval(timer);
     logger.info(
       { event: 'lcms:debug-epipe' },prefixWithDate('Creating the readable stream'));
-    const readableStream = Readable.from(JSON.stringify(data), { objectMode: false });
+    const readableStream = Readable.from(JSON.stringify(data));
     readableStream.on('close', () => {
       logger.info(
         { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: close'));
