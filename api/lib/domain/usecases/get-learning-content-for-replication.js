@@ -1,4 +1,5 @@
 import { tutorialDatasource } from '../../infrastructure/datasources/airtable/index.js';
+import _ from 'lodash';
 import {
   areaRepository,
   attachmentRepository,
@@ -74,12 +75,13 @@ export async function getLearningContentForReplication() {
   logger.info(
     { event: 'lcms:debug-epipe' },prefixWithDate('Some transforms'));
 
+  const translationsByEntityId = _.groupBy(translationsForReplication, 'entityId');
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges
     .flatMap((challenge) => [
       challenge,
       ...challenge.alternativeLocales.map((locale) => {
-        const translationsForChallenge = translationsForReplication.filter((translation) => translation.entityId === challenge.id && translation.locale === locale);
+        const translationsForChallenge = translationsByEntityId[challenge.id].filter((translation) => translation.locale === locale);
         const localizedChallenge = challenge.translate(locale);
         for (const translationForChallenge of translationsForChallenge) {
           const translatedField = translationForChallenge.key.split('.')[2];
