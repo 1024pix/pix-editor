@@ -72,7 +72,7 @@ export function promiseStreamerForRepli2(promise) {
       { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
     clearInterval(timer);
     logger.info(
-      { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
+      { event: 'lcms:debug-epipe' },prefixWithDate('Creating the readable stream'));
     const readableStream = Readable.from(JSON.stringify(data));
     readableStream.on('close', () => {
       logger.info(
@@ -102,6 +102,8 @@ export function promiseStreamerForRepli2(promise) {
       logger.info(
         { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: resume'));
     });
+    logger.info(
+      { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
     pipeline(
       readableStream,
       writableStream,
