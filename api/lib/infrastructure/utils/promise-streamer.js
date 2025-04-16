@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node';
 import { logger } from '../logger.js';
-import { PassThrough, pipeline } from 'node:stream';
+import { PassThrough, pipeline, Readable } from 'node:stream';
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -71,16 +71,41 @@ export function promiseStreamerForRepli2(promise) {
     logger.info(
       { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
     clearInterval(timer);
-    function* chunk(data, size) {
-      const stringifiedData = JSON.stringify(data);
-      for (let i = 0; i < stringifiedData.length; i += size) {
-        yield stringifiedData.slice(i, i + size);
-      }
-    }
+    logger.info(
+      { event: 'lcms:debug-epipe' },prefixWithDate('Creating the readable stream'));
+    const readableStream = Readable.from(JSON.stringify(data), { objectMode: false });
+    readableStream.on('close', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: close'));
+    });
+    readableStream.on('data', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: data'));
+    });
+    readableStream.on('end', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: end'));
+    });
+    readableStream.on('error', (error) => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: error ' + JSON.stringify(error, undefined, 2)));
+    });
+    readableStream.on('pause', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: pause'));
+    });
+    readableStream.on('readable', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: readable'));
+    });
+    readableStream.on('resume', () => {
+      logger.info(
+        { event: 'lcms:debug-epipe' },prefixWithDate('ReadableStream event: resume'));
+    });
     logger.info(
       { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
     pipeline(
-      chunk(data, 200_000),
+      readableStream,
       writableStream,
       (err, val) => {
         if (err) {
