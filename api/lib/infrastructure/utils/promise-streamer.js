@@ -72,16 +72,10 @@ export function promiseStreamerForRepli2(promise) {
       { event: 'lcms:debug-epipe' },prefixWithDate('Clearing interval'));
     clearInterval(timer);
     function* chunk(data, size) {
-      logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('STRINGIFYING'));
       const stringifiedData = JSON.stringify(data);
       for (let i = 0; i < stringifiedData.length; i += size) {
-        logger.info(
-          { event: 'lcms:debug-epipe' },prefixWithDate('NEXT'));
         yield stringifiedData.slice(i, i + size);
       }
-      logger.info(
-        { event: 'lcms:debug-epipe' },prefixWithDate('END'));
     }
     logger.info(
       { event: 'lcms:debug-epipe' },prefixWithDate('Start sending data into stream'));
