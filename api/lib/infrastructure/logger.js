@@ -37,5 +37,10 @@ export const logger = pino(
   config.logging.enabled ? destination : nullDestination
 );
 
+export const SCOPES = {
+  REPLICATION: 'replication',
+  RELEASE: 'release',
+};
+
 logger.debug('DEBUG logs enabled');
 logger.trace('TRACE logs enabled');
