@@ -1,5 +1,6 @@
 import { PassThrough, pipeline } from 'node:stream';
 import { child, logger as genericLogger } from '../logger.js';
+import * as config from '../../config.js';
 
 const NB_CHARS_PER_CHUNK = 65_536;
 
@@ -7,11 +8,14 @@ function getWritableStream() {
   const writableStream = new PassThrough();
   writableStream.headers = {
     'content-type': 'application/json',
-
+  };
+  if (config.hapi.shouldCompressLargeJson) {
+    writableStream.headers['content-encoding'] = 'gzip';
+  } else {
     // WHY: to avoid compression because when compressing, the server buffers
     // for too long causing a response timeout.
-    'content-encoding': 'identity',
-  };
+    writableStream.headers['content-encoding'] = 'identity';
+  }
   return writableStream;
 }
 
