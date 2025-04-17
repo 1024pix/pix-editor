@@ -220,6 +220,7 @@ export default class SingleController extends Controller {
   async saveChallengeCallback(changelog) {
     this.closeComfirmLogPopin();
     this.loader.start();
+
     return Promise.resolve(this.challenge)
       .then((challenge) => this._handleIllustration(challenge))
       .then((challenge) => this._handleAttachments(challenge))
