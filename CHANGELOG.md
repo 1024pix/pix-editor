@@ -1,5 +1,11 @@
 
 
+## v3.197.28 (17/04/2025)
+
+
+### :building_construction: Tech
+- [#959](https://github.com/1024pix/pix-editor/pull/959) [TECH] Exposer les traductions dans les données de réplication et résoudre les problèmes techniques.
+
 ## v3.197.27 (16/04/2025)
 
 
