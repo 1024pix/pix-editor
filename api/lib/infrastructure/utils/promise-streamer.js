@@ -1,4 +1,5 @@
 import { PassThrough, pipeline } from 'node:stream';
+import { child, logger as genericLogger } from '../logger.js';
 
 const NB_CHARS_PER_CHUNK = 65_536;
 
@@ -14,22 +15,52 @@ function getWritableStream() {
   return writableStream;
 }
 
-export function promiseStreamer(promise, writableStream = getWritableStream()) {
+export function promiseStreamer({
+  promise,
+  writableStream = getWritableStream(),
+  loggingScope,
+}) {
+  let logger = genericLogger;
+  if (loggingScope) {
+    logger = child('promisestream', { event: loggingScope });
+  }
   const timer = setInterval(() => {
     writableStream.write('\n');
   }, 1000);
+  writableStream.on('error', (err) => {
+    logger.error(`WritableStream error: ${err}`);
+  });
+  writableStream.on('finish', () => {
+    logger.info('WritableStream close');
+  });
+  writableStream.on('pipe', () => {
+    logger.info('WritableStream pipe');
+  });
 
+  logger.info('Gathering data...');
   promise.then((data) => {
+    logger.info('Data gathered, streaming about to begin...');
     clearInterval(timer);
     pipeline(
       chunk(data),
       writableStream,
+      (err) => {
+        if (err) {
+          logger.error(`Streaming pipeline error: ${err}`);
+          if (!writableStream.closed && !writableStream.errored) {
+            writableStream.end('error');
+          }
+        } else {
+          logger.info('Streaming pipeline done');
+        }
+      }
     );
-  }).catch(() => {
-    if (!writableStream.closed) {
-      writableStream.write('error');
-    }
+  }).catch((err) => {
     clearInterval(timer);
+    if (!writableStream.closed && !writableStream.errored) {
+      writableStream.end('error');
+    }
+    logger.error(`Error in promise : ${err}`);
   });
   return writableStream;
 }
