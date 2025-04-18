@@ -77,17 +77,14 @@ export async function getLearningContentForReplication() {
           translationForChallenge.entityId = localizedChallenge.id;
           translationForChallenge.sourceEntityId = challenge.id;
         }
-        localizedChallenge.area = localizedChallenge.geography;
-        delete localizedChallenge.localizedChallenges;
         return localizedChallenge;
       });
-      challenge.area = challenge.geography;
-      delete challenge.localizedChallenges;
       return [
         challenge,
         ...translatedChallenges,
       ];
-    });
+    })
+    .map(normalizeChallenge);
 
   const translatedAttachments = attachments.map((attachment) => ({
     ...attachment,
@@ -125,4 +122,10 @@ async function _getCoursesFromPGForReplication() {
   return knex('static_courses')
     .select(['id', 'name'])
     .orderBy('id');
+}
+
+function normalizeChallenge(challenge) {
+  delete challenge.localizedChallenges;
+  challenge.area = challenge.geography;
+  return challenge;
 }
