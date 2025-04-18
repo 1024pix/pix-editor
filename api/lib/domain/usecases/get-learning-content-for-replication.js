@@ -64,12 +64,12 @@ export async function getLearningContentForReplication() {
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
   const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
 
-  const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges
-    .flatMap((challenge) => {
-      const translatedChallenges = challenge.alternativeLocales.map((locale) => {
-        const translationsForChallenge = translationsGroupedByEntityId[challenge.id].filter((translation) => translation.locale === locale);
+    .flatMap((challenge) => [
+      challenge,
+      ...challenge.alternativeLocales.map((locale) => {
+        const translationsForChallenge = translationsForReplication.filter((translation) => translation.entityId === challenge.id && translation.locale === locale);
         const localizedChallenge = challenge.translate(locale);
         for (const translationForChallenge of translationsForChallenge) {
           const translatedField = translationForChallenge.key.split('.')[2];
@@ -78,12 +78,8 @@ export async function getLearningContentForReplication() {
           translationForChallenge.sourceEntityId = challenge.id;
         }
         return localizedChallenge;
-      });
-      return [
-        challenge,
-        ...translatedChallenges,
-      ];
-    })
+      }),
+    ])
     .map(normalizeChallenge);
 
   const translatedAttachments = attachments.map((attachment) => ({
