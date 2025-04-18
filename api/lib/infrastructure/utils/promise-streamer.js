@@ -1,6 +1,6 @@
-import { PassThrough, pipeline } from 'node:stream';
-
-const NB_CHARS_PER_CHUNK = 65_536;
+import * as Sentry from '@sentry/node';
+import { logger } from '../logger.js';
+import { PassThrough } from 'node:stream';
 
 function getWritableStream() {
   const writableStream = new PassThrough();
@@ -18,25 +18,15 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   const timer = setInterval(() => {
     writableStream.write('\n');
   }, 1000);
-
   promise.then((data) => {
+    writableStream.write(JSON.stringify(data));
+  }).catch((error) => {
+    logger.error(error);
+    Sentry.captureException(error);
+    writableStream.write('error');
+  }).finally(() => {
     clearInterval(timer);
-    pipeline(
-      chunk(data),
-      writableStream,
-    );
-  }).catch(() => {
-    if (!writableStream.closed) {
-      writableStream.write('error');
-    }
-    clearInterval(timer);
+    writableStream.end();
   });
   return writableStream;
-}
-
-function* chunk(data) {
-  const stringifiedData = JSON.stringify(data);
-  for (let i = 0; i < stringifiedData.length; i += NB_CHARS_PER_CHUNK) {
-    yield stringifiedData.slice(i, i + NB_CHARS_PER_CHUNK);
-  }
 }
