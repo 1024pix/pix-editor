@@ -4,7 +4,6 @@ import { releaseRepository } from '../infrastructure/repositories/index.js';
 import { queue as createReleaseQueue } from '../infrastructure/scheduled-jobs/release-job.js';
 import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { SCOPES } from '../infrastructure/logger.js';
 
 const releaseIdType = Joi.number().greater(-2147483648).less(2147483647).required();
 
@@ -15,10 +14,7 @@ export async function register(server) {
       path: '/api/current-content',
       config: {
         handler: function() {
-          return promiseStreamer({
-            promise: releaseRepository.getCurrentContent(),
-            loggingScope: SCOPES.RELEASE,
-          });
+          return promiseStreamer(releaseRepository.getCurrentContent());
         },
       },
     },
@@ -35,10 +31,7 @@ export async function register(server) {
             const releaseId = await job.finished();
             return releaseRepository.getRelease(releaseId);
           };
-          return promiseStreamer({
-            promise: promise(),
-            loggingScope: SCOPES.RELEASE,
-          });
+          return promiseStreamer(promise());
         },
       },
     },

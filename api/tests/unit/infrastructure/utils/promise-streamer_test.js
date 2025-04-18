@@ -12,10 +12,7 @@ describe('Unit | Infrastructure | Utils | Promise Streamer', () => {
     const streamPromise = streamToPromise(writableStream);
 
     // when
-    promiseStreamer({
-      promise: promise(),
-      writableStream,
-    });
+    promiseStreamer(promise(), writableStream);
     const result = await streamPromise;
 
     // then
@@ -29,13 +26,9 @@ describe('Unit | Infrastructure | Utils | Promise Streamer', () => {
     const streamPromise = streamToPromise(writableStream);
 
     //When
-    promiseStreamer({
-      promise: promise(),
-      writableStream,
-    });
-    const result = await streamPromise;
+    promiseStreamer(promise(), writableStream);
 
     //Then
-    expect(result).to.match(/error$/);
+    expect(await streamPromise).to.match(/error$/);
   });
 });
