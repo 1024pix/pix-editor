@@ -24,7 +24,6 @@ export const hapi = {
   options: {},
   enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
   publicDir: 'public/',
-  shouldCompressLargeJson: isFeatureEnabled(process.env.ALLOW_COMPRESSION_ON_LARGE_JSON),
 };
 
 export const airtable = {
