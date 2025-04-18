@@ -8,7 +8,6 @@ import {
   missionRepository,
   skillRepository,
   thematicRepository,
-  translationRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import {
@@ -21,7 +20,6 @@ import {
   tubeTransformer,
 } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { prefixFor } from '../../infrastructure/translations/challenge.js';
 
 export async function getLearningContentForReplication() {
   const [
@@ -36,7 +34,6 @@ export async function getLearningContentForReplication() {
     tutorials,
     courses,
     missions,
-    translations,
   ] = await Promise.all([
     frameworkRepository.list(),
     areaRepository.list(),
@@ -49,15 +46,7 @@ export async function getLearningContentForReplication() {
     tutorialDatasource.list(),
     _getCoursesFromPGForReplication(),
     missionRepository.list(),
-    translationRepository.list(),
   ]);
-  const translationsForReplication = translations.map((translation, index) => ({
-    ...translation,
-    id: index + 1,
-    model: translation.model,
-    entityId: translation.entityId,
-    sourceEntityId: null,
-  }));
   const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
   const transformedAreas = areaTransformer.filterAreasFields(areas);
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
@@ -68,17 +57,7 @@ export async function getLearningContentForReplication() {
   const translatedChallenges = challenges
     .flatMap((challenge) => [
       challenge,
-      ...challenge.alternativeLocales.map((locale) => {
-        const translationsForChallenge = translationsForReplication.filter((translation) => translation.entityId === challenge.id && translation.locale === locale);
-        const localizedChallenge = challenge.translate(locale);
-        for (const translationForChallenge of translationsForChallenge) {
-          const translatedField = translationForChallenge.key.split('.')[2];
-          translationForChallenge.key = `${prefixFor(localizedChallenge)}${translatedField}`;
-          translationForChallenge.entityId = localizedChallenge.id;
-          translationForChallenge.sourceEntityId = challenge.id;
-        }
-        return localizedChallenge;
-      }),
+      ...challenge.alternativeLocales.map((locale) => challenge.translate(locale)),
     ])
     .map(normalizeChallenge);
 
@@ -87,7 +66,7 @@ export async function getLearningContentForReplication() {
     challengeId: attachment.localizedChallengeId,
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
-
+  
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
@@ -102,16 +81,7 @@ export async function getLearningContentForReplication() {
     tutorials,
     courses,
     missions: transformedMissions,
-    translations: translationsForReplication.sort(byKeyAndLocale),
   };
-}
-
-function byKeyAndLocale(trA, trB) {
-  const compareKey = trA.key.localeCompare(trB.key);
-  if (compareKey === 0) {
-    return trA.locale.localeCompare(trB.locale);
-  }
-  return compareKey;
 }
 
 async function _getCoursesFromPGForReplication() {
