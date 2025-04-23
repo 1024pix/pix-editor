@@ -92,8 +92,8 @@ describe('Unit | Domain | Usecases | update challenge', function() {
   });
 
   it.each([
-    ['fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
-    ['fr-fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
+    ['fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
+    ['fr-fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
     ['other', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
   ])('should normalize breaking space when challenge is `fr` or `fr-fr`', async (locale, { instruction, proposals, alternativeInstruction }) => {
     const challenge = domainBuilder.buildChallenge({
