@@ -1,5 +1,13 @@
 
 
+## v3.198.0 (25/04/2025)
+
+
+### :rocket: Amélioration
+- [#962](https://github.com/1024pix/pix-editor/pull/962) [FEATURE] Devant certains caractères spéciaux, ne pas remplacer le vide par une espace fine insécable (PIX-17603).
+- [#961](https://github.com/1024pix/pix-editor/pull/961) [FEATURE] Transformer les espaces classiques en espaces fines insécables devant certains caractères spéciaux (PIX-17590).
+- [#954](https://github.com/1024pix/pix-editor/pull/954) [FEATURE] Gérer l'ajout d'espaces insécables en français/francophone sur les épreuves (PIX-17125).
+
 ## v3.197.28 (17/04/2025)
 
 
