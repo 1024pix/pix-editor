@@ -1,5 +1,11 @@
 
 
+## v3.199.0 (29/04/2025)
+
+
+### :building_construction: Tech
+- [#964](https://github.com/1024pix/pix-editor/pull/964) [TECH] Gérer le traitement du header conditionnel "if-modified-since" dans le endpoint GET /releases/latest pour ne renvoyer la dernière release que si elle est plus récente que la date transmise.
+
 ## v3.198.0 (25/04/2025)
 
 
