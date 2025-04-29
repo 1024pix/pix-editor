@@ -48,6 +48,15 @@ export async function getLatestRelease() {
   return _toDomain(release[0]);
 }
 
+export async function getLatestReleaseDate() {
+  const [createdAt] = await knex('releases')
+    .pluck('createdAt')
+    .orderBy('createdAt', 'desc')
+    .limit(1);
+
+  return createdAt;
+}
+
 export async function getRelease(id) {
   const release = await knex('releases')
     .select('id', 'content', 'createdAt')

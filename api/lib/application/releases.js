@@ -46,9 +46,16 @@ export async function register(server) {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
-        handler: async function() {
-          const release = await releaseRepository.getLatestRelease();
-          return JSON.stringify(release);
+        handler: async function(request, h) {
+          const ifModifiedSinceDate = request.headers?.['if-modified-since'] ? new Date(request.headers['if-modified-since']) : null;
+          const latestReleaseDate = await releaseRepository.getLatestReleaseDate();
+          if (!ifModifiedSinceDate || latestReleaseDate.getTime() > ifModifiedSinceDate.getTime()) {
+            const release = await releaseRepository.getLatestRelease();
+            return JSON.stringify(release);
+          }
+
+          return h.response()
+            .header('Last-Modified', latestReleaseDate.toUTCString());
         },
       },
     },

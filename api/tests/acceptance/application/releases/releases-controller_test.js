@@ -830,12 +830,11 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('GET /releases/latest - Returns latest release', () => {
+    let user;
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+    });
     context('nominal case', () => {
-      let user;
-      beforeEach(async function() {
-        user = databaseBuilder.factory.buildAdminUser();
-      });
-
       it('should return latest release of learning content', async () => {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({
@@ -850,7 +849,7 @@ describe('Acceptance | Controller | release-controller', () => {
             tubes: [],
             tutorials: [],
             missions: [],
-          }
+          },
         });
         const expectedContent = {
           areas: [],
@@ -873,6 +872,79 @@ describe('Acceptance | Controller | release-controller', () => {
           method: 'GET',
           url: '/api/releases/latest',
           headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        const latestRelease = JSON.parse(response.result);
+        expect(latestRelease.content).to.deep.equal(expectedContent);
+        expect(latestRelease.id).to.deep.equal(expectedLatestRelease.id);
+        expect(latestRelease.date).to.deep.equal(expectedLatestRelease.date);
+      });
+    });
+
+    context('with if-modified-since header', function() {
+      it('should return a 304 when no latest release exist after given if-modified-since date', async function() {
+        // given
+        const server = await createServer();
+        const latestReleaseDate = new Date('2023-01-01T00:00:00Z');
+        databaseBuilder.factory.buildRelease({ createdAt: latestReleaseDate, content: '{"value":"coucouLatest"}' });
+        databaseBuilder.factory.buildRelease({ createdAt: new Date('2021-01-01'), content: '{"value":"coucouOld"}' });
+        databaseBuilder.factory.buildRelease({ createdAt: new Date('2020-01-01'), content: '{"value":"coucouSuperOld"}' });
+        await databaseBuilder.commit();
+
+        // when
+        const headers = generateAuthorizationHeader(user);
+        headers['If-Modified-Since'] = latestReleaseDate.toUTCString();
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers,
+        });
+
+        // then
+        expect(response.statusCode).to.equal(304);
+        expect(response.result).to.be.null;
+      });
+      it('should return the latest release if the release is newer than given if-modified-since date', async function() {
+        // Given
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({
+          content: {
+            areas: [],
+            challenges: [],
+            competences: [],
+            courses: [],
+            frameworks: [],
+            skills: [],
+            thematics: [],
+            tubes: [],
+            tutorials: [],
+            missions: [],
+          },
+          createdAt: new Date('2023-01-01T00:00:01Z'),
+        });
+        const expectedContent = {
+          areas: [],
+          challenges: [],
+          competences: [],
+          courses: [],
+          frameworks: [],
+          skills: [],
+          thematics: [],
+          tubes: [],
+          tutorials: [],
+          missions: [],
+        };
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const headers = generateAuthorizationHeader(user);
+        headers['If-Modified-Since'] = new Date('2023-01-01T00:00:00Z').toUTCString();
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers,
         });
 
         // Then

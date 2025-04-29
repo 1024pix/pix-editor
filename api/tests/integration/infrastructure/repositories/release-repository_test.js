@@ -4,18 +4,18 @@ import {
   create,
   getCurrentContent,
   getLatestRelease,
+  getLatestReleaseDate,
   getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
 import { Area, Attachment, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function() {
+  afterEach(function() {
+    return knex('releases').delete();
+  });
+
   describe('#create', function() {
-
-    afterEach(function() {
-      return knex('releases').delete();
-    });
-
     it('should save current content as a new release', async function() {
       // Given
       const currentContent = { some: 'property' };
@@ -96,6 +96,31 @@ describe('Integration | Repository | release-repository', function() {
         content: expectedContent
       });
       expect(latestRelease).toEqualInstance(expectedRelease);
+    });
+  });
+
+  describe('#getLatestReleaseDate', function() {
+    it('should return the date of the latest release', async function() {
+      // Given
+      databaseBuilder.factory.buildRelease({
+        createdAt: new Date('2022-01-01'),
+        content: '{}',
+      });
+      const latestReleaseDate = databaseBuilder.factory.buildRelease({
+        createdAt: new Date('2023-01-01'),
+        content: '{}',
+      }).createdAt;
+      databaseBuilder.factory.buildRelease({
+        createdAt: new Date('2021-01-01'),
+        content: '{}',
+      });
+      await databaseBuilder.commit();
+
+      // When
+      const actualLatestReleaseDate = await getLatestReleaseDate();
+
+      // Then
+      expect(actualLatestReleaseDate).to.deep.equal(latestReleaseDate);
     });
   });
 
