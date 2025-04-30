@@ -3,10 +3,11 @@ import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 import { exportExternalUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
+import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Usecases | Export external urls from release', function() {
   describe('#exportExternalUrlsFromRelease', function() {
-    let releaseRepository, urlRepository, localizedChallengeRepository;
+    let releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository;
 
     beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
@@ -68,7 +69,7 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       });
       const pixChallenge3Skill2 = domainBuilder.buildChallengeForRelease({
         id: 'challenge3',
-        instruction: 'instructions',
+        instruction: 'instructions https://ignore-me.us',
         skillId: 'skill2',
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['en'],
@@ -105,6 +106,12 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
         domainBuilder.buildLocalizedChallenge({ id: 'challenge5', challengeId: 'challenge5', urlsToConsult: null }),
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
+      const whitelistedUrls = [
+        domainBuilder.buildWhitelistedUrl({ url: 'https://ignorez-moi.fr', checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH, deletedAt: null }),
+        domainBuilder.buildWhitelistedUrl({ url: 'https://ignore-me.us', checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH, deletedAt: null }),
+        domainBuilder.buildWhitelistedUrl({ url: 'https://example.net/', checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH, deletedAt: new Date('2020-01-01') }),
+      ];
+      whitelistedUrlRepository = { list: vi.fn().mockResolvedValue(whitelistedUrls) };
       urlRepository = {
         exportExternalUrls: vi.fn(),
       };
@@ -112,7 +119,7 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
 
     it('should export external URLs for operative challenges (and also get urls from primary localized challenge)', async function() {
       // when
-      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils, localizedChallengeRepository });
+      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils, localizedChallengeRepository, whitelistedUrlRepository });
 
       // then
       expect(urlRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
