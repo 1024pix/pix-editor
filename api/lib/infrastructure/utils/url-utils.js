@@ -6,6 +6,8 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 import axios from 'axios';
 
+const GENERIC_URL_REGEX_IN_TEXT = urlRegex({ strict: true, parens: true });
+
 export function findUrlsInMarkdown(value) {
   const safeValue = value || '';
   const converter = new showdown.Converter();
@@ -92,7 +94,7 @@ export function getOrigin(url) {
 }
 
 export function findUrlsInText(inputText) {
-  const urls = inputText.match(urlRegex({ strict: true }));
+  const urls = inputText.match(GENERIC_URL_REGEX_IN_TEXT);
   if (!urls) {
     return [];
   }
