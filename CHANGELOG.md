@@ -1,5 +1,16 @@
 
 
+## v3.200.0 (30/04/2025)
+
+
+### :rocket: Amélioration
+- [#967](https://github.com/1024pix/pix-editor/pull/967) [FEATURE] Vérifier la viablilité d'un lien ajouté à un tutoriel (PIX-17660).
+- [#965](https://github.com/1024pix/pix-editor/pull/965) [FEATURE] Ne pas tenir compte des URLs à ne pas analyser dans l'export des URLs externes (PIX-17260).
+
+### :bug: Correction
+- [#966](https://github.com/1024pix/pix-editor/pull/966) [BUGFIX] Les parenthèses n'étaient pas bien prises en compte lors de l'identification des URLs dans les champs d'épreuve pour la moulinette et pour l'export des urls externes (PIX-15983).
+- [#963](https://github.com/1024pix/pix-editor/pull/963) [BUGFIX] Le traitement des URLs à ignorer ne marche pas bien lorsque les casses dans les URLs sont différentes (PIX-17398).
+
 ## v3.199.0 (29/04/2025)
 
 
