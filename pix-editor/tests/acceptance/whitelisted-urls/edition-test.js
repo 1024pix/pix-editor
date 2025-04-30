@@ -68,7 +68,7 @@ module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
     assert.strictEqual(currentURL(), '/whitelisted-urls');
     assert.dom(screen.getByText('http://chats.fr')).exists();
     assert.dom(screen.getByText('MIAOU MIAOU')).exists();
-    assert.dom(screen.getByText('@miaou1,@croquettes2')).exists();
+    assert.dom(screen.getByText('@croquettes2 et 1 autre acquis')).exists();
     assert.strictEqual(screen.getAllByText('Strictement égale à').length, 2);
   });
 

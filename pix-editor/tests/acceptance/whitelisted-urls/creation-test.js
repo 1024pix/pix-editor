@@ -69,7 +69,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     assert.strictEqual(currentURL(), '/whitelisted-urls');
     assert.dom(screen.getByText('Test de création')).exists();
     assert.dom(screen.getByText('https://example.org')).exists();
-    assert.dom(screen.getByText('@test1,@test2')).exists();
+    assert.dom(screen.getByText('@test1 et 1 autre acquis')).exists();
     assert.strictEqual(screen.getAllByText('Strictement égale à').length, 3);
   });
 
@@ -90,7 +90,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     assert.strictEqual(currentURL(), '/whitelisted-urls');
     assert.dom(screen.queryByText('Test de création')).doesNotExist();
     assert.dom(screen.getByText('https://example.org')).exists();
-    assert.dom(screen.getByText('@test1,@test2')).exists();
+    assert.dom(screen.getByText('@test1 et 1 autre acquis')).exists();
     assert.strictEqual(screen.getAllByText('Commence par').length, 2);
   });
 });
