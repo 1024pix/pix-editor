@@ -181,6 +181,39 @@ function routes() {
     };
   });
 
+  this.get('/airtable/content/Tutoriels', (schema) => {
+    const records = schema.tutorials.all().models.map((note) => {
+      return _serializeModel(note, 'tutorial');
+    });
+    return { records };
+  });
+
+  this.post('/airtable/content/Tutoriels', (schema, request) => {
+    const tutorialPayload = JSON.parse(request.requestBody);
+    const tutorial = _deserializePayload(tutorialPayload, 'tutorial');
+    const createdTutorial = schema.tutorials.create(tutorial);
+    createdTutorial.update({ tagIds: createdTutorial.tagsIds });
+
+    if (createdTutorial.tagIds) {
+      createdTutorial.tags = createdTutorial.tagIds.map((tag)=> {
+        return schema.tags.find(tag);
+      });
+    }
+    return _serializeModel(createdTutorial, 'tutorial');
+  });
+
+  this.get('/airtable/content/Tags', (schema) => {
+    const records = schema.tags.all().models.map((note) => {
+      return _serializeModel(note, 'tag');
+    });
+    return { records };
+  });
+
+  this.get('/airtable/content/Tags/:id', (schema, request) => {
+    const tag = schema.tags.find(request.params.id);
+    return _serializeModel(tag, 'tag');
+  });
+
   this.get('/airtable/changelog/Notes', (schema) => {
     schema.notes.create();
     schema.notes.create();

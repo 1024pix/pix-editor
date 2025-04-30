@@ -13,7 +13,9 @@ export default class SkillForm extends Component {
     loadedTutorials.push(tutorial);
   }
 
-  async removeTutorial(tutorials, tutorial) {
+  async removeTutorial(tutorials, tutorial, event) {
+    event.preventDefault();
+
     const loadedTutorials = await tutorials;
     loadedTutorials.removeObject(tutorial);
   }

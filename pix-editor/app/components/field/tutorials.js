@@ -62,7 +62,8 @@ export default class Tutorials extends Component {
   }
 
   @action
-  editTutorial(tutorial) {
+  editTutorial(tutorial, e) {
+    e.preventDefault();
     this.tutorial = tutorial;
     this.displayTutorialPopin = true;
   }
@@ -74,23 +75,33 @@ export default class Tutorials extends Component {
 
   @action
   closeTutorialPopin() {
+    this.tutorial.rollbackAttributes();
     this.displayTutorialPopin = false;
   }
 
   @action
   async saveTutorial() {
-    this.displayTutorialPopin = false;
     this.loader.start();
     try {
-      const tutorial = await this.tutorial.save();
+      if (this.tutorial.link) {
+        this.tutorial.link = this.tutorial.link.replaceAll(' ', '');
+        new URL(this.tutorial.link);
+      }
+    } catch {
       this.loader.stop();
+      this.notify.error('Lien du tutoriel non valide');
+      return;
+    }
+    try {
+      const tutorial = await this.tutorial.save();
       this.notify.message('Tutoriel créé');
       this.args.addTutorial(this.args.tutorials, tutorial);
+      this.displayTutorialPopin = false;
     } catch (error) {
-      console.error(error);
       Sentry.captureException(error);
-      this.loader.stop();
       this.notify.error('Erreur lors de la création du tutoriel');
+    } finally {
+      this.loader.stop();
     }
   }
 
