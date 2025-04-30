@@ -6,14 +6,6 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 import axios from 'axios';
 
-/* Given the following text: Coucou (https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
-  - With "parens" at false, it extracts the url until the first closing bracket : https://fr.wikipedia.org/wiki/(14234
-  - With "parens" at true, it extracts the url until the last closing bracket, that does not belong to the url: https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
-
-  So we leave the mode that extracts the closest to what we want (which is "parens" at true) and we do some calculation to remove
-  last bracket if it does not belong to the url
- */
-
 const GENERIC_URL_REGEX_IN_TEXT = new RegExp(urlRegex({ strict: true, parens: true, returnString: true }), 'i');
 
 export function findUrlsInMarkdown(value) {
@@ -102,17 +94,17 @@ export function getOrigin(url) {
 }
 
 /* Given the following text: Coucou (https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
-  - With "parens" at false, it extracts the url until the first closing bracket : https://fr.wikipedia.org/wiki/(14234
-  - With "parens" at true, it extracts the url until the last closing bracket, that does not belong to the url: https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
+  - With "parens" at false, it extracts the url until the first closing parenthesis : https://fr.wikipedia.org/wiki/(14234
+  - With "parens" at true, it extracts the url until the last closing parenthesis, that does not belong to the url: https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
 
   So we leave the mode that extracts the closest to what we want (which is "parens" at true) and we do some calculation to remove
-  the last bracket if it does not belong to the url
+  the last parenthesis if it does not belong to the url
   To do so, given an extracted url if :
-    The url ends with a closing bracket
+    The url ends with a closing parenthesis
   AND
-    The character before the url is an opened bracket
+    The character before the url is an opened parenthesis
   THEN
-    We can remove the last closing bracket in the url
+    We can remove the last closing parenthesis in the url
  */
 export function findUrlsInText(inputText) {
   let textToParse = inputText;
