@@ -84,6 +84,7 @@ soin:
 - (https://solution_example.net/123)_fin_deuxparentheses())
 - (https://solution_example.net/123)_fin_parentheseouvrante()
 - (https://solution_example.net/123)_fin_parenthesefermante))
+solutionA to display https://solutionToDisplay_example.org/
 `;
 
       const result = UrlUtils.findUrlsInText(inputString);
@@ -100,6 +101,7 @@ soin:
         'https://solution_example.net/123)_fin_deuxparentheses()',
         'https://solution_example.net/123)_fin_parentheseouvrante(',
         'https://solution_example.net/123)_fin_parenthesefermante)',
+        'https://solutionToDisplay_example.org/',
       ]);
     });
 

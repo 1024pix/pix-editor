@@ -14,7 +14,7 @@ import axios from 'axios';
   last bracket if it does not belong to the url
  */
 
-const GENERIC_URL_REGEX_IN_TEXT = urlRegex({ strict: true, parens: true, returnString: true });
+const GENERIC_URL_REGEX_IN_TEXT = new RegExp(urlRegex({ strict: true, parens: true, returnString: true }), 'i');
 
 export function findUrlsInMarkdown(value) {
   const safeValue = value || '';
