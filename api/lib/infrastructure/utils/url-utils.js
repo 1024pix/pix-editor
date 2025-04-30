@@ -6,7 +6,7 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 import axios from 'axios';
 
-const GENERIC_URL_REGEX_IN_TEXT = urlRegex({ strict: true, parens: true });
+const GENERIC_URL_REGEX_IN_TEXT = urlRegex({ strict: true, parens: true, returnString: true });
 
 export function findUrlsInMarkdown(value) {
   const safeValue = value || '';
@@ -94,7 +94,23 @@ export function getOrigin(url) {
 }
 
 export function findUrlsInText(inputText) {
-  const urls = inputText.match(GENERIC_URL_REGEX_IN_TEXT);
+  let textToParse = inputText;
+  let hasUrlsLeft = true;
+  const urls = [];
+  do {
+    const result = textToParse.match(GENERIC_URL_REGEX_IN_TEXT);
+    if (!result) {
+      hasUrlsLeft = false;
+    } else {
+      let url = result[0];
+      const characterBeforeUrl = textToParse.charAt(result.index - 1);
+      if (characterBeforeUrl === '(' && url.slice(-1) === ')') {
+        url = url.slice(0, -1);
+      }
+      urls.push(url);
+      textToParse = textToParse.slice(result.index + url.length);
+    }
+  } while (hasUrlsLeft);
   if (!urls) {
     return [];
   }
