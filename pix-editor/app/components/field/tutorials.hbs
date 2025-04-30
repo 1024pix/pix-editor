@@ -39,14 +39,14 @@
           <div class="content">
             <div class="header">
               {{#if @edition}}
-                <div {{on "click" (fn @removeTutorial @tutorials tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
+                <button {{on "click" (fn @removeTutorial @tutorials tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
                   <i class="close icon"></i>
-                </div>
-                <div {{on "click" (fn this.editTutorial tutorial)}} title="Modifier le tutoriel" class="ui right floated button">
+                </button>
+                <button {{on "click" (fn this.editTutorial tutorial)}} title="Modifier le tutoriel" class="ui right floated button">
                   <i class="edit icon"></i>
-                </div>
+                </button>
               {{/if}}
-              <a class="ui right floated button basic" href={{tutorial.link}} target="_blank"
+              <a aria-label="Ouvrir le tutoriel {{tutorial.title}}" class="ui right floated button basic" href={{tutorial.link}} target="_blank"
                  rel="noreferrer noopener">
                 <i class="external icon"></i>
               </a>
@@ -78,7 +78,7 @@
           <div class="content">
             <a href="#" {{on "click" this.addTutorial}}>
               <i class="icon plus circle"></i>
-              Ajouter un tutoriel
+              Ajouter un tutoriel <span class="sr-only">{{@title}}</span>
             </a>
           </div>
         </div>

@@ -13,7 +13,7 @@
       <label for="text_tutorial">Lien *</label>
       <Input id="text_tutorial" @type="text" @value={{@tutorial.link}} placeholder="Lien" />
     </div>
-    <div class="field">
+    <div class="field" data-test-select-source-for-tutorial>
       <label>Source *</label>
       <PowerSelect
               @searchEnabled={{true}}
@@ -40,7 +40,7 @@
     <Field::Select @title="Niveau" @defaultText="Niveau" @value={{@tutorial.level}} @options={{this.options.level}} @edition={{true}} @setValue={{fn (mut @tutorial.level)}}/>
   </div>
   <div class="three fields">
-    <div class="field">
+    <div data-test-tag-search class="field">
       <label>Rechercher tags</label>
       <PowerSelect
         @searchEnabled={{true}}
