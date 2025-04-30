@@ -84,6 +84,7 @@ export default class Tutorials extends Component {
     this.loader.start();
     try {
       if (this.tutorial.link) {
+        this.tutorial.link = this.tutorial.link.replaceAll(' ', '');
         new URL(this.tutorial.link);
       }
     } catch {

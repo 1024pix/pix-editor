@@ -125,7 +125,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(find('[data-test-save-tutorial-button]'));
 
     assert.dom(screen.getByText('Lien du tutoriel non valide')).exists();
-    assert.dom(screen.getByLabelText('Lien *')).hasValue('PAS BON LE LINK');
+    assert.dom(screen.getByLabelText('Lien *')).hasValue('PASBONLELINK');
 
   });
 });
