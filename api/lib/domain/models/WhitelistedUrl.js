@@ -105,8 +105,28 @@ export class WhitelistedUrl {
   }
 
   matches(url) {
-    if (this.checkType === WhitelistedUrl.CHECK_TYPES.EXACT_MATCH) return url === this.url;
-    if (this.checkType === WhitelistedUrl.CHECK_TYPES.STARTS_WITH) return url.startsWith(this.url);
+    const urlToCompare = new URL(url);
+    const urlFromWhitelist = new URL(this.url);
+
+    const urlToCompare_origin = urlToCompare.origin;
+    const urlFromWhitelist_origin = urlFromWhitelist.origin;
+
+    const urlToCompare_wholePath = urlToCompare.href.replace(urlToCompare_origin, '');
+    const urlFromWhitelist_wholePath = urlFromWhitelist.href.replace(urlFromWhitelist_origin, '');
+
+    if (this.checkType === WhitelistedUrl.CHECK_TYPES.EXACT_MATCH) {
+      const originIsMatching = urlToCompare_origin.localeCompare(urlFromWhitelist_origin, undefined, { sensitivity: 'base' }) === 0;
+      const wholePathIsMatching = urlToCompare_wholePath.localeCompare(urlFromWhitelist_wholePath, undefined, { sensitivity: 'case' }) === 0;
+
+      return originIsMatching && wholePathIsMatching;
+    }
+
+    if (this.checkType === WhitelistedUrl.CHECK_TYPES.STARTS_WITH) {
+      const originIsMatching = urlToCompare_origin.startsWith(urlFromWhitelist_origin);
+      const wholePathIsMatching = urlToCompare_wholePath.startsWith(urlFromWhitelist_wholePath);
+
+      return originIsMatching && wholePathIsMatching;
+    }
     return false;
   }
 }

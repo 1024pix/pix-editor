@@ -773,11 +773,11 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should not match when url is not the same case-wise', function() {
+      it('should not match when url is not the same case-wise after the domain part', function() {
         // given
-        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const url = 'httpS://mOn-Bidet_orangE.cOm/tokEn=COuCOu';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
-          url: 'https://MON-Bidet_orange.com/token=COUCOU',
+          url: 'https://mon-bidet_orange.com/token=coucou',
           checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         });
 
@@ -786,6 +786,21 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
         // then
         expect(isMatching).to.be.false;
+      });
+
+      it('should match when url is not the same case-wise before the domain part', function() {
+        // given
+        const url = 'httpS://mOn-Bidet_orangE.cOm/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mon-bidet_orange.com/token=COUCOU',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.matches(url);
+
+        // then
+        expect(isMatching).to.be.true;
       });
 
       it('should not match when url is just partially the same', function() {
@@ -818,8 +833,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.false;
       });
     });
+
     describe('starts_with', function() {
-      it('should match when url is starts exactly with the same as the whitelisted', function() {
+      it('should match when url starts exactly with the same as the whitelisted', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -833,6 +849,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         // then
         expect(isMatching).to.be.true;
       });
+
       it('should match when url is exactly the same', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
@@ -848,11 +865,26 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should not match when url does not start the same case-wise', function() {
+      it('should match when url starts the same case-wise before the domain part', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
-          url: 'https://MON-Bidet_orange.com/to',
+          url: 'https://MON-Bidet_orange.C',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.matches(url);
+
+        // then
+        expect(isMatching).to.be.true;
+      });
+
+      it('should not match when url does not start the same case-wise after the domain part', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://MON-Bidet_orange.com/toKe',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         });
 
