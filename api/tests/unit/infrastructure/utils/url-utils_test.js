@@ -69,7 +69,7 @@ describe('Unit | Utils | URL Utils', function() {
   });
 
   describe('#findUrlsInText', () => {
-    it('should find multiple url', function() {
+    it('should find multiple urls', function() {
       const inputString = `lien:
 - "https://pas_local.org/super_nom_wow.pdf"
 - "http://local_youyou.org/el_-_deuxième_super_truc.html"
@@ -77,7 +77,15 @@ describe('Unit | Utils | URL Utils', function() {
 - "http://local_youyou.org/autre_dossier/el_-_deuxième_super_truc.txt"
 - "www.local_youyou.org/text.txt"
 soin:
-- 20 ans`;
+- 20 ans
+- (https://solution_example.net/(123)_deuxparentheses)
+- (https://solution_example.net/(123_parentheseouvrante)
+- (https://solution_example.net/123)_parenthesefermante)
+- (https://solution_example.net/123)_fin_deuxparentheses())
+- (https://solution_example.net/123)_fin_parentheseouvrante()
+- (https://solution_example.net/123)_fin_parenthesefermante))
+solutionA to display https://solutionToDisplay_example.org/
+`;
 
       const result = UrlUtils.findUrlsInText(inputString);
 
@@ -86,7 +94,14 @@ soin:
         'http://local_youyou.org/el_-_deuxième_super_truc.html',
         'http://local_youyou.test.org/el_-_deuxième_super_truc',
         'http://local_youyou.org/autre_dossier/el_-_deuxième_super_truc.txt',
-        'https://www.local_youyou.org/text.txt'
+        'https://www.local_youyou.org/text.txt',
+        'https://solution_example.net/(123)_deuxparentheses',
+        'https://solution_example.net/(123_parentheseouvrante',
+        'https://solution_example.net/123)_parenthesefermante',
+        'https://solution_example.net/123)_fin_deuxparentheses()',
+        'https://solution_example.net/123)_fin_parentheseouvrante(',
+        'https://solution_example.net/123)_fin_parenthesefermante)',
+        'https://solutionToDisplay_example.org/',
       ]);
     });
 

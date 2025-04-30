@@ -6,6 +6,8 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 import axios from 'axios';
 
+const GENERIC_URL_REGEX_IN_TEXT = new RegExp(urlRegex({ strict: true, parens: true, returnString: true }), 'i');
+
 export function findUrlsInMarkdown(value) {
   const safeValue = value || '';
   const converter = new showdown.Converter();
@@ -91,8 +93,37 @@ export function getOrigin(url) {
   return new URL(url).origin;
 }
 
+/* Given the following text: Coucou (https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
+  - With "parens" at false, it extracts the url until the first closing parenthesis : https://fr.wikipedia.org/wiki/(14234
+  - With "parens" at true, it extracts the url until the last closing parenthesis, that does not belong to the url: https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
+
+  So we leave the mode that extracts the closest to what we want (which is "parens" at true) and we do some calculation to remove
+  the last parenthesis if it does not belong to the url
+  To do so, given an extracted url if :
+    The url ends with a closing parenthesis
+  AND
+    The character before the url is an opened parenthesis
+  THEN
+    We can remove the last closing parenthesis in the url
+ */
 export function findUrlsInText(inputText) {
-  const urls = inputText.match(urlRegex({ strict: true }));
+  let textToParse = inputText;
+  let hasUrlsLeft = true;
+  const urls = [];
+  do {
+    const result = textToParse.match(GENERIC_URL_REGEX_IN_TEXT);
+    if (!result) {
+      hasUrlsLeft = false;
+    } else {
+      let url = result[0];
+      const characterBeforeUrl = textToParse.charAt(result.index - 1);
+      if (characterBeforeUrl === '(' && url.slice(-1) === ')') {
+        url = url.slice(0, -1);
+      }
+      urls.push(url);
+      textToParse = textToParse.slice(result.index + url.length);
+    }
+  } while (hasUrlsLeft);
   if (!urls) {
     return [];
   }
