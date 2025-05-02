@@ -84,6 +84,7 @@ soin:
 - (https://solution_example.net/123)_fin_deuxparentheses())
 - (https://solution_example.net/123)_fin_parentheseouvrante()
 - (https://solution_example.net/123)_fin_parenthesefermante))
+- (https://solution_example.net/(123)_deuxparentheses_avec_caractère_après),
 solutionA to display https://solutionToDisplay_example.org/
 `;
 
@@ -101,6 +102,7 @@ solutionA to display https://solutionToDisplay_example.org/
         'https://solution_example.net/123)_fin_deuxparentheses()',
         'https://solution_example.net/123)_fin_parentheseouvrante(',
         'https://solution_example.net/123)_fin_parenthesefermante)',
+        'https://solution_example.net/(123)_deuxparentheses_avec_caractère_après',
         'https://solutionToDisplay_example.org/',
       ]);
     });
