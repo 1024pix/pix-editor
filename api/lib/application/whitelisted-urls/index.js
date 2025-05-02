@@ -34,7 +34,7 @@ export async function register(server) {
           const whitelistedUrlId = request.params.whitelistedUrlId;
           const whitelistedUrlToDelete = await whitelistedUrlRepository.find(whitelistedUrlId);
           if (!whitelistedUrlToDelete) {
-            throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
+            throw new NotFoundWhitelistedUrlError(`L'URL d'id ${whitelistedUrlId} n'existe pas`);
           }
           whitelistedUrlToDelete.canDelete(authenticatedUser);
           whitelistedUrlToDelete.delete(authenticatedUser);
@@ -88,7 +88,7 @@ export async function register(server) {
           };
           const whitelistedUrlToUpdate = await whitelistedUrlRepository.find(whitelistedUrlId);
           if (!whitelistedUrlToUpdate) {
-            throw new NotFoundWhitelistedUrlError(`L'URL whitelistée d'id ${whitelistedUrlId} n'existe pas`);
+            throw new NotFoundWhitelistedUrlError(`L'URL d'id ${whitelistedUrlId} n'existe pas`);
           }
           const existingWhitelistedUrls = await whitelistedUrlRepository.list();
           whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
