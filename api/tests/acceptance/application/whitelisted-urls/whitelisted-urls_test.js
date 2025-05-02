@@ -237,7 +237,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
           {
             status: '404',
             title: 'Not Found',
-            detail: 'L\'URL whitelistée d\'id 777 n\'existe pas',
+            detail: 'L\'URL d\'id 777 n\'existe pas',
           },
         ],
       });
@@ -258,7 +258,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
           {
             status: '409',
             title: 'Conflict',
-            detail: 'L\'URL whitelistée a déjà été supprimée',
+            detail: 'L\'URL a déjà été supprimée',
           },
         ],
       });

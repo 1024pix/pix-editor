@@ -82,7 +82,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
-            'L\'utilisateur n\'a pas les droits pour supprimer cette URL whitelistée'
+            'L\'utilisateur n\'a pas les droits pour supprimer cette URL'
           ));
         }
       });
@@ -101,7 +101,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
-            'L\'URL whitelistée a déjà été supprimée'
+            'L\'URL a déjà été supprimée'
           ));
         }
       });
@@ -199,7 +199,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
-            'L\'utilisateur n\'a pas les droits pour créer une URL whitelistée'
+            'L\'utilisateur n\'a pas les droits pour ajouter une URL à ne pas analyser'
           ));
         }
       });
@@ -373,7 +373,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
-            'URL déjà whitelistée'
+            'URL déjà dans la liste'
           ));
         }
       });
@@ -484,7 +484,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlForbiddenError(
-            'L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée'
+            'L\'utilisateur n\'a pas les droits pour mettre à jour cette URL'
           ));
         }
       });
@@ -680,7 +680,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new CommandWhitelistedUrlConflictError(
-            'URL déjà whitelistée'
+            'URL déjà dans la liste'
           ));
         }
       });
@@ -705,7 +705,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           expect(false, 'Should have thrown').to.be.true;
         } catch (err) {
           expect(err).toStrictEqual(new NotFoundWhitelistedUrlError(
-            'L\'URL whitelistée n\'existe pas'
+            'L\'URL n\'existe pas'
           ));
         }
       });
