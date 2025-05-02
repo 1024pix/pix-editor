@@ -6,6 +6,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 const sheets = google.sheets('v4');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const DELETE_EXTERNAL_URL_SHEET_DELAY_MONTHS = 3;
 
 async function getAuthToken(credentials) {
   const auth = new google.auth.GoogleAuth({
@@ -87,6 +88,35 @@ async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
   }
 }
 
+async function clearOlderSheets(spreadsheetId) {
+  try {
+    const auth = await getAuthToken(config.googleAuthCredentials);
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
+    const limitDate = new Date();
+    limitDate.setMonth(new Date().getMonth() - DELETE_EXTERNAL_URL_SHEET_DELAY_MONTHS);
+    const isSheetOlderThanLimitDate = function(sheetTitle, limitDate) {
+      const standardFormattedDate = sheetTitle.split('/').reverse().join('-');
+      const sheetDate = new Date(standardFormattedDate);
+      if (isNaN(sheetDate)) {
+        return false;
+      }
+      return sheetDate.getTime() < limitDate.getTime();
+    };
+    const sheetsToDelete = spreadsheet.data.sheets.filter((sheet) => isSheetOlderThanLimitDate(sheet.properties.title, limitDate));
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      auth,
+      resource: {
+        requests: sheetsToDelete.map((sheetToDelete) => {
+          return { deleteSheet: { sheetId: sheetToDelete.properties.sheetId } };
+        }),
+      },
+    });
+  } catch (error) {
+    logger.error(error.message);
+  }
+}
+
 export function updateChallenges(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.challengesSheetName);
 }
@@ -96,8 +126,9 @@ export async function updateTutorials(dataToUpload) {
   return sendDataToGoogleSheet(finalDataToUpload, config.checkUrlsJobs.tutorialsSheetName);
 }
 
-export function exportExternalUrls(dataToUpload) {
+export async function exportExternalUrls(dataToUpload) {
   const sheetName = new Date().toLocaleDateString('fr-FR');
+  await clearOlderSheets(config.exportExternalUrlsJob.spreadsheetId);
   return addSheetToGoogleSheet(dataToUpload, sheetName, config.exportExternalUrlsJob.spreadsheetId);
 }
 
