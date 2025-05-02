@@ -199,8 +199,8 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  selectLanguageToFilter(value) {
-    this.languageFilter = value.locale;
+  selectLanguageToFilter(language) {
+    this.languageFilter = language;
   }
 
   @action

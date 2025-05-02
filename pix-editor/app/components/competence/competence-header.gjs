@@ -51,8 +51,8 @@ export default class CompetenceHeader extends Component {
   }
 
   get selectedLanguageToFilter() {
-    const languageFilter = this.args.languageFilter;
-    return this.languageOptions.find((languagesOption) => languagesOption.value === languageFilter);
+    const language = this.languageOptions.find((languagesOption) => languagesOption.value === this.args.languageFilter);
+    return language?.value || null;
   }
 
   get displayLanguageFilter() {
@@ -73,7 +73,7 @@ export default class CompetenceHeader extends Component {
             @className="competence-header__language-filter"
             @onChange={{@selectLanguageToFilter}}
             @options={{this.languageOptions}}
-            @value={{this.selectedLanguageToFilter.value}}
+            @value={{this.selectedLanguageToFilter}}
             @placeholder="Filtre par langue"
           >
             <:default as |languageOption|>
