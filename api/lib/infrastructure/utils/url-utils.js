@@ -98,13 +98,9 @@ export function getOrigin(url) {
   - With "parens" at true, it extracts the url until the last closing parenthesis, that does not belong to the url: https://fr.wikipedia.org/wiki/(14234)_Davidhoover)
 
   So we leave the mode that extracts the closest to what we want (which is "parens" at true) and we do some calculation to remove
-  the last parenthesis if it does not belong to the url
-  To do so, given an extracted url if :
-    The url ends with a closing parenthesis
-  AND
-    The character before the url is an opened parenthesis
-  THEN
-    We can remove the last closing parenthesis in the url
+  the last parenthesis if it does not belong to the url.
+  If the character before the url is an opened parenthesis, then find the last closing parenthesis of the extracted URL
+  and remove everything after this parenthesis (parenthesis included)
  */
 export function findUrlsInText(inputText) {
   let textToParse = inputText;
@@ -117,8 +113,11 @@ export function findUrlsInText(inputText) {
     } else {
       let url = result[0];
       const characterBeforeUrl = textToParse.charAt(result.index - 1);
-      if (characterBeforeUrl === '(' && url.slice(-1) === ')') {
-        url = url.slice(0, -1);
+      if (characterBeforeUrl === '(') {
+        const indexOfLastParenthesis = url.lastIndexOf(')');
+        if (indexOfLastParenthesis) {
+          url = url.slice(0, indexOfLastParenthesis);
+        }
       }
       urls.push(url);
       textToParse = textToParse.slice(result.index + url.length);
