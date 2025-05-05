@@ -110,7 +110,7 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Laura' }), 'Un commentaire sur Laura');
     assert.ok(screen.getByRole('cell', { name: `01/01/2020 à ${hour1_create}:00 par Laura le chocolat` }), `01/01/2020 à ${hour1_create}:00 par Laura le chocolat`);
     assert.ok(screen.getByRole('cell', { name: `01/01/2021 à ${hour1_update}:00 par Iris l'anis` }), `01/01/2021 à ${hour1_update}:00 par Iris l'anis`);
-    assert.dom(screen.getByText('@fruit4 et 1 autre acquis')).exists();
+    assert.ok(screen.getByText('@fruit4 et 1 autre acquis'));
     assert.ok(screen.getByRole('cell', { name: 'https://bar.com' }), 'https://bar.com');
     assert.ok(screen.getByRole('cell', { name: 'Commence par' }), 'Commence par');
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Fael' }), 'Un commentaire sur Fael');

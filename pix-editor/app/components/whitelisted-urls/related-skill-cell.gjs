@@ -33,9 +33,9 @@ export default class RelatedSkillCell extends Component {
   }
 
   <template>
-    <PixTooltip @id={{this.id}} @position="top-left">
+    <PixTooltip @id={{this.id}} @position="top-right">
       <:triggerElement>
-      <span class="icon icon-info" aria-labelledby={{this.id}}>{{this.skillCellContent}}</span>
+        <span class="icon icon-info" aria-labelledby={{this.id}}>{{this.skillCellContent}}</span>
       </:triggerElement>
 
       <:tooltip>

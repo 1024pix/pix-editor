@@ -36,7 +36,7 @@
     @onRowClick={{@goToEditWhitelistedUrl}}
   >
     <:columns as |whitelistedUrl context|>
-      <PixTableColumn @context={{context}} class="column--small">
+      <PixTableColumn @context={{context}} class="column--wide">
         <:header>Nom des acquis concernés</:header>
         <:cell>
           <WhitelistedUrls::RelatedSkillCell @skills={{whitelistedUrl.relatedSkillNames}} />
