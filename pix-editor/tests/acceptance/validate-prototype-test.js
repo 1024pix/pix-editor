@@ -63,7 +63,7 @@ module('Acceptance | Validate-Challenge', function(hooks) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${proposalPrototype.id}/alternatives?view=workbench`);
 
-      await click(await screen.getByTitle('Modifier le statut de l\'épreuve'));
+      await click(screen.getByRole('button', { name: 'Modifier le statut de l\'épreuve' }));
       await click(await screen.getByRole('button', { name: 'Valider' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Mise en production' }));
@@ -95,7 +95,7 @@ module('Acceptance | Validate-Challenge', function(hooks) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${proposalPrototype.id}/alternatives?view=workbench`);
 
-      await click(await screen.getByTitle('Modifier le statut de l\'épreuve'));
+      await click(screen.getByRole('button', { name: 'Modifier le statut de l\'épreuve' }));
       await click(await screen.getByRole('button', { name: 'Valider' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Mise en production' }));
@@ -143,7 +143,7 @@ module('Acceptance | Validate-Challenge', function(hooks) {
       const screen = await visit(`competence/${competence.id}/prototypes/list/${tube.id}/${skill.id}?view=workbench`);
 
       await clickByText('Epreuve à valider');
-      await click(await screen.getByTitle('Modifier le statut de l\'épreuve'));
+      await click(screen.getByRole('button', { name: 'Modifier le statut de l\'épreuve' }));
 
       await click(await screen.getByRole('button', { name: 'Valider' }));
       assert.ok(await screen.findByRole('heading', { name: 'Mise en production' }));
@@ -188,7 +188,7 @@ module('Acceptance | Validate-Challenge', function(hooks) {
       await click(screen.getByText('name v.2'));
 
       await click(await screen.findByRole('cell', { name: 'proposé' }));
-      await click(screen.getByTitle('Modifier le statut de l\'épreuve'));
+      await click(screen.getByRole('button', { name: 'Modifier le statut de l\'épreuve' }));
       await click(screen.getByRole('button', { name: 'Valider' }));
 
       assert.ok(await screen.findByRole('heading', { name: 'Mise en production' }));

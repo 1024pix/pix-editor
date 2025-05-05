@@ -195,12 +195,12 @@ export default class CompetenceController extends Controller {
 
   @action
   selectSection(value) {
-    this._transitionToSection(value.id);
+    this._transitionToSection(value);
   }
 
   @action
-  selectLanguageToFilter(value) {
-    this.languageFilter = value.locale;
+  selectLanguageToFilter(language) {
+    this.languageFilter = language;
   }
 
   @action
