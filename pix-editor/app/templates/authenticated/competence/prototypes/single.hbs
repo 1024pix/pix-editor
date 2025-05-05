@@ -20,6 +20,7 @@
             @iconName="bolt"
             @plainIcon={{true}}
             @triggerAction={{this.toggleStatusActionMenu}}
+            {{on "focusout" this.hideStatusActionMenu}}
           />
           {{#if this.isStatusActionMenuOpen}}
             <div class="challenge-status-actions__menu">
