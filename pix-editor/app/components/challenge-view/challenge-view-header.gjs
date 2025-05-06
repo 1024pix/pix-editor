@@ -51,7 +51,14 @@ export default class ChallengesViewHeader extends Component {
   <template>
     <header class="challenge-view-header">
       <div class="challenge-view-header-first">
-        <p>Épreuve {{@challenge.version}}</p>
+        <p>
+          {{#if @challenge.isPrototype}}
+            Proto
+          {{else}}
+            Déclinaison {{@challenge.alternativeVersion}}
+          {{/if}}
+          (V{{@challenge.version}})
+        </p>
         <div class="challenge-view-header__action-buttons">
           <PixIconButton
             class="challenge-view-header__button-icon"

@@ -232,5 +232,45 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Proposée')).exists();
       });
     });
+    module('when challenge is prototype', function() {
+      test('it should display wright title', async function(assert) {
+        // given
+        const challenge = challengeFromStore;
+        // when
+        screen = await render(<template>
+            <ChallengeView
+              @challenge={{challenge}}
+              @skillId="skillId"
+              @overview="overview"
+              @competenceId="competenceId"
+            />
+          </template>,
+        );
+        // then
+        assert.dom(screen.getByText('Proto (V1)')).exists();
+      });
+    });
+    module('when challenge is alternative', function() {
+      test('it should display wright title', async function(assert) {
+        // given
+        challengeFromStore.genealogy = 'Décliné 1';
+        challengeFromStore.alternativeVersion = 2;
+        const challenge = challengeFromStore;
+
+        // when
+        screen = await render(<template>
+            <ChallengeView
+              @challenge={{challenge}}
+              @skillId="skillId"
+              @overview="overview"
+              @competenceId="competenceId"
+            />
+          </template>,
+        );
+
+        // then
+        assert.dom(screen.getByText('Déclinaison 2 (V1)')).exists();
+      });
+    });
   });
 });
