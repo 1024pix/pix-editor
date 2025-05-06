@@ -36,9 +36,11 @@
     @onRowClick={{@goToEditWhitelistedUrl}}
   >
     <:columns as |whitelistedUrl context|>
-      <PixTableColumn @context={{context}} class="column--small">
+      <PixTableColumn @context={{context}} class="column--wide">
         <:header>Nom des acquis concernés</:header>
-        <:cell>{{ whitelistedUrl.relatedSkillNames }}</:cell>
+        <:cell>
+          <WhitelistedUrls::RelatedSkillCell @skills={{whitelistedUrl.relatedSkillNames}} />
+        </:cell>
       </PixTableColumn>
       <PixTableColumn @context={{context}}>
         <:header>Type de comparaison</:header>
