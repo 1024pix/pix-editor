@@ -171,7 +171,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       }
     });
   });
-  module('if `isPrototypeLocation`', function(hooks) {
+  module('if `isMovingPrototype`', function(hooks) {
     hooks.beforeEach(async function() {
       // when
       this.setSkill = sinon.stub();
@@ -188,10 +188,9 @@ module('Integration | Component | popin-select-location', function(hooks) {
                         @onChange={{this.setSkill}}
                         @title="Acquis du prototype"
                         @selectTubeLevel={{true}}
-                        @isPrototypeLocation={{true}}
+                        @isMovingPrototype={{true}}
                         @tube={{this.tube}}
                         @skill={{this.challenge.skill}}
-                        @multipleLevel={{true}}
                         @close={{this.closeMovePrototype}} />`);
     });
 
@@ -267,7 +266,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       assert.deepEqual(this.setSkill.getCall(0).args[0], skill1_2_1_2_1);
     });
   });
-  module('if `isSkillLocation`', function(hooks) {
+  module('if `isMovingSkill`', function(hooks) {
     hooks.beforeEach(async function() {
       // when
       this.copyToNewLocation = sinon.stub();
@@ -282,9 +281,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
                         @title="title"
                         @selectTubeLevel={{true}}
                         @tube={{this.tube}}
-                        @level={{this.skill.level}}
-                        @selectEmptyLevels={{true}}
-                        @isSkillLocation={{true}}
+                        @isMovingSkill={{true}}
                         @close={{this.closeSelectLocation}} />`);
     });
     test('it should display a list of all skill levels', async function(assert) {
@@ -302,7 +299,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       });
     });
   });
-  module('if `isTubeLocation`', function(hooks) {
+  module('if `isMovingTube`', function(hooks) {
     let setCompetenceStub;
     hooks.beforeEach(async function() {
       // given
@@ -317,7 +314,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       await render(hbs`<PopIn::SelectLocation @onChange={{this.setCompetence}}
                                               @name={{this.name}}
                                               @theme={{this.theme}}
-                                              @isTubeLocation={{true}}
+                                              @isMovingTube={{true}}
                                               @close={{this.close}} />`);
     });
 
