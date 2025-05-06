@@ -1,242 +1,196 @@
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class SelectLocation extends Component {
-
-  //todo refacto element loading
-  @tracked _selectedCompetence = null;
-  @tracked _selectedTube = null;
-  @tracked _selectedFramework = null;
-  @tracked _selectedSkill = null;
-  @tracked _selectedTheme = null;
-  @tracked themesLoaded = false;
-  @tracked tubesLoaded = false;
-  @tracked areSkillsLoaded = false;
-  @tracked selectedLevel = null;
-
   @service currentData;
+  @tracked selectedFrameworkId;
+  @tracked selectedCompetenceId;
+  @tracked selectedThemeId;
+  @tracked selectedTubeId;
+  @tracked selectedSkillId;
+  @tracked selectedLevel;
+  @tracked areTubesLoaded;
+  @tracked areSkillsLoaded;
 
-  selectLevelOptions = [
-    { value: 1, label: '1' },
-    { value: 2, label: '2' },
-    { value: 3, label: '3' },
-    { value: 4, label: '4' },
-    { value: 5, label: '5' },
-    { value: 6, label: '6' },
-    { value: 7, label: '7' },
-    { value: 8, label: '8' },
-  ];
+  constructor(...args) {
+    super(...args);
 
-  _themes = A([]);
-  _tubes = A([]);
-  _skills = A([]);
-
-  get frameworks() {
-    return this.currentData.getFrameworks();
-  }
-
-  get selectedFramework() {
-    if (this._selectedFramework) {
-      return this._selectedFramework;
-    }
-    const currentFramework = this.currentData.getFramework();
-    return this.frameworkList.find((framework) => framework.value === currentFramework.id);
-  }
-
-  get frameworkList() {
-    return this.frameworks.map((framework) => ({
-      label: framework.name,
-      value: framework.id,
-    }));
-  }
-
-  get selectedCompetence() {
-    if (this._selectedCompetence) {
-      return this._selectedCompetence;
+    const supportedVariants = ['prototype', 'skill', 'tube'];
+    if (!supportedVariants.includes(this.args.variant)) {
+      throw new Error(`[Form::SelectLocation] the @variant argument must be a valid option (${supportedVariants})`);
     }
 
-    const currentCompetence = this.currentData.getCompetence();
-    return this.competenceList.find((competence) => competence.value === currentCompetence.id);
+    this.selectedFrameworkId = this.currentData.getFramework().id;
+    this.selectedCompetenceId = this.currentData.getCompetence().id;
+    this.selectedThemeId = this.args.theme?.id;
+    this.selectedTubeId = this.args.tube?.id;
+    this.selectedSkillId = this.args.skill?.id;
+    this.areTubesLoaded = false;
+    this.areSkillsLoaded = false;
+    if (this.selectedCompetenceId) {
+      this._loadTubes(this.selectedCompetenceId);
+    }
   }
 
-  get competences() {
-    const framework = this.frameworks.find((framework) => framework.id === this.selectedFramework.value);
-    const areas = framework?.hasMany('areas').value() ?? [];
-    const areaCompetences = areas.map((area) => area.sortedCompetences);
-    return areaCompetences.reduce((table, competences) => {
-      return table.concat(competences);
-    }, []);
+  get isMovingPrototype() {
+    return this.args.variant === 'prototype';
   }
+
+  get isMovingSkill() {
+    return this.args.variant === 'skill';
+  }
+
+  get isMovingTube() {
+    return this.args.variant === 'tube';
+  }
+
+  // == FRAMEWORKS
+
+  get frameworkOptionList() {
+    const frameworkList = this.currentData.getFrameworks();
+    return frameworkList.map((framework) => ({ label: framework.name, value: framework.id }));
+  }
+
+  @action
+  selectFramework(frameworkId) {
+    this.selectedFrameworkId = frameworkId;
+    this.selectCompetence(null);
+  }
+
+  // == COMPETENCES
 
   get competenceList() {
-    return this.competences.map((competence) => ({
-      label: competence.name,
-      value: competence.id,
-    }));
+    const frameworkList = this.currentData.getFrameworks();
+    const currentFramework = frameworkList.find((framework) => framework.id === this.selectedFrameworkId);
+    const areas = currentFramework?.hasMany('areas').value() ?? [];
+    return areas.flatMap((area) => area.sortedCompetences);
   }
 
-  get selectedTheme() {
-    if (this._selectedTheme) {
-      return this._selectedTheme;
-    }
-    return this.themeList.find((item) => (item.value === this.args.theme.id));
+  get competenceOptionList() {
+    return this.competenceList.map((competence) => ({ label: competence.name, value: competence.id }));
   }
 
-  get themes() {
-    if (!this.themesLoaded) {
-      this._loadThemes().then(() => this._themes);
-    }
-    return this._themes;
+  @action
+  selectCompetence(competenceId) {
+    this.selectedCompetenceId = competenceId;
+    this.selectTheme(null);
+    this.selectTube(null);
+    if (competenceId) this._loadTubes(competenceId);
   }
+
+  // == THEMES
 
   get themeList() {
-    if (!this.themesLoaded) {
-      this._loadThemes();
-      return A([]);
-    } else {
-      return this.themes.map((theme) => ({ label: theme.name, value: theme.id }));
+    const currentCompetence = this.competenceList.find((competence) => competence.id === this.selectedCompetenceId);
+    if (!currentCompetence) return null;
+
+    const themeRelationship = currentCompetence.hasMany('rawThemes');
+    if (!themeRelationship.value()) {
+      themeRelationship.load();
+      return null;
     }
+
+    return currentCompetence.sortedThemes;
   }
 
-  _loadThemes() {
-    if (this.selectedCompetence.value) {
-      const competence = this.competences.find((comp) => comp.id === this.selectedCompetence.value);
-      competence.rawThemes
-        .then(() => {
-          this._themes = competence.sortedThemes;
-          this.themesLoaded = true;
-        });
-    }
+  get areThemesLoaded() {
+    return this.themeList !== null;
   }
 
-  get tubes() {
-    if (!this.tubesLoaded) {
-      this._loadTubes().then(() => this._tubes);
-    }
-    return this._tubes;
+  get themeOptionList() {
+    return this.themeList.map((theme) => ({ label: theme.name, value: theme.id }));
   }
+
+  @action
+  selectTheme(themeId) {
+    this.selectedThemeId = themeId;
+  }
+
+  // == TUBES
 
   get tubeList() {
-    if (!this.tubesLoaded) {
-      this._loadTubes();
-      return A([]);
-    } else {
-      return this.tubes.map((tube) => ({
-        label: tube.name,
-        value: tube.id,
-      }));
+    const currentCompetence = this.competenceList.find((competence) => competence.id === this.selectedCompetenceId);
+    if (!currentCompetence) return null;
+
+    if (!this.areTubesLoaded) {
+      return null;
     }
+
+    return currentCompetence.sortedTubes;
   }
 
-  _loadTubes() {
-    if (this.selectedCompetence) {
-      const competence = this.competences.find((comp) => comp.id === this.selectedCompetence.value);
-      competence.rawTubes
-        .then(() => {
-          this._tubes = competence.sortedTubes;
-          this.tubesLoaded = true;
-        });
-    }
+  get tubeOptionList() {
+    return this.tubeList.map((tube) => ({ label: tube.name, value: tube.id }));
   }
 
-  get selectedTube() {
-    if (this._selectedTube) {
-      return this._selectedTube.value;
-    }
+  _loadTubes(competenceId) {
+    const currentCompetence = this.competenceList.find((competence) => competence.id === competenceId);
+    currentCompetence.hasMany('rawTubes').load().then(() => {
+      this.areTubesLoaded = true;
 
-    const currentTube = this.tubeList.find((tube) => tube.value === this.args.tube?.id);
-    return currentTube?.value;
+      if (this.selectedTubeId) {
+        this._loadSkills(this.selectedTubeId);
+      }
+    });
   }
 
-  get skillsByLevel() {
-    if (!this.areSkillsLoaded) {
-      this._loadSkills();
-    }
-    return this._skills;
+  @action
+  selectTube(tubeId) {
+    this.selectedTubeId = tubeId;
+    this.selectSkill(null);
+    if (tubeId) this._loadSkills(tubeId);
   }
 
-  get skillsListWithCategory() {
-    if (!this.areSkillsLoaded) {
-      this._loadSkills();
-      return A([]);
-    }
-    return this.skillsByLevel.flat().map((skill) => ({
+  // == SKILLS
+
+  get skillListWithCategory() {
+    if (!this.tubeList) return null;
+    const currentTube = this.tubeList.find((tube) => tube.id === this.selectedTubeId);
+    if (!currentTube) return null;
+    if (!this.areSkillsLoaded) return null;
+
+    // ASK JEREM WTF
+    return currentTube.filledLiveSkills.filter((liveSkill) => liveSkill).flat();
+  }
+
+  get skillOptionListWithCategory() {
+    return this.skillListWithCategory.map((skill) => ({
       category: `Niveau ${skill.level}`,
       label: `${skill.name} (v.${skill.version}) ${skill.status === 'actif' ? '🟢' : '🔵'}`,
       value: skill.id,
     }));
   }
 
-  _loadSkills() {
-    if (this._selectedTube) {
-      const selectedTube = this.tubes.find((tube) => tube.id === this._selectedTube.value);
-      return selectedTube.rawSkills.then(() => {
-        this._skills = selectedTube.filledLiveSkills.filter((liveSkill) => liveSkill);
-        this.areSkillsLoaded = true;
-      });
-    }
+  _loadSkills(tubeId) {
+    const currentTube = this.tubeList.find((tube) => tube.id === tubeId);
+    currentTube.hasMany('rawSkills').load().then(() => this.areSkillsLoaded = true);
   }
 
   @action
-  selectFramework(frameworkId) {
-    this._selectedFramework = this.frameworkList.find((f) => f.value === frameworkId);
-    this.selectCompetence(null);
-  }
-
-  @action
-  selectCompetence(competenceId) {
-    this._selectedCompetence = this.competenceList.find((f) => f.value === competenceId);
-    this._selectedTube = null;
-    this.selectTheme(null);
-    this.tubesLoaded = false;
-    this.themesLoaded = false;
-  }
-
-  @action
-  selectTheme(item) {
-    this._selectedTheme = item;
-  }
-
-  @action
-  selectTube(item) {
-    this._selectedTube = this.tubeList.find((tube) => tube.value === item);
+  selectSkill(skillId) {
+    this.selectedSkillId = skillId;
     this.selectLevel(null);
-    this.selectedLevel = null;
-    this.areSkillsLoaded = false;
-    this._selectedSkill = null;
+  }
+
+  // == LEVEL
+
+  get levelOptionList() {
+    return [
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+    ];
   }
 
   @action
   selectLevel(level) {
     this.selectedLevel = level;
-  }
-
-  get selectedSkill() {
-    if (this._selectedSkill) {
-      return this._selectedSkill;
-    }
-    return this.skillsListWithCategory.find((skill) => {
-      return skill.id === this.args.skill.get('id');
-    });
-  }
-
-  @action
-  selectSkill(value) {
-    this._selectedSkill = value;
-    return value;
-  }
-
-  _reset() {
-    this._selectedCompetence = null;
-    this._selectedTube = null;
-    this._selectedSkill = null;
-    this.selectedLevel = null;
-    this.tubesLoaded = false;
-    this.areSkillLoaded = false;
-    this._tubes = A([]);
-    this._skills = A([]);
   }
 }

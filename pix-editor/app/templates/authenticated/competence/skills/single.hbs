@@ -102,9 +102,8 @@
 <PopIn::SelectLocation
         @onChange={{this.duplicateToLocation}}
         @title={{concat "Destination de la copie de " this.skillName}}
-        @selectTubeLevel={{true}}
         @tube={{this.skill.tube}}
-        @isMovingSkill={{true}}
+        @variant="skill"
         @close={{this.closeSelectLocation}}
         @showModal={{this.displaySelectLocation}}
 />

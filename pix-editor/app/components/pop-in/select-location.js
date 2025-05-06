@@ -1,4 +1,3 @@
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 

@@ -4,7 +4,12 @@
   @showModal={{@showModal}}
 >
   <:content>
-    <Form::SelectLocation />
+    <Form::SelectLocation
+      @variant={{@variant}}
+      @theme={{@theme}}
+      @tube={{@tube}}
+      @skill={{@skill}}
+    />
   </:content>
   <:footer>
     <PixButton

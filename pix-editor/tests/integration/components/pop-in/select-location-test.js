@@ -188,7 +188,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
                         @onChange={{this.setSkill}}
                         @title="Acquis du prototype"
                         @selectTubeLevel={{true}}
-                        @isMovingPrototype={{true}}
+                        @variant="prototype"
                         @tube={{this.tube}}
                         @skill={{this.challenge.skill}}
                         @close={{this.closeMovePrototype}} />`);
@@ -281,7 +281,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
                         @title="title"
                         @selectTubeLevel={{true}}
                         @tube={{this.tube}}
-                        @isMovingSkill={{true}}
+                        @variant="skill"
                         @close={{this.closeSelectLocation}} />`);
     });
     test('it should display a list of all skill levels', async function(assert) {
@@ -314,7 +314,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       await render(hbs`<PopIn::SelectLocation @onChange={{this.setCompetence}}
                                               @name={{this.name}}
                                               @theme={{this.theme}}
-                                              @isMovingTube={{true}}
+                                              @variant="tube"
                                               @close={{this.close}} />`);
     });
 
