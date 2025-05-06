@@ -6,7 +6,7 @@ import * as usecases from '../../domain/usecases/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import { competenceSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { competenceRepository } from '../../infrastructure/repositories/index.js';
-import { Types } from '../types.js';
+import * as Types from '../types.js';
 import { NotFoundError } from '../../infrastructure/errors.js';
 
 export async function register(server) {
