@@ -3,6 +3,7 @@ import { thematicDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
+import * as idGenerator from '../utils/id-generator.js';
 
 const model = 'thematic';
 
@@ -27,6 +28,14 @@ export async function listByCompetenceId(competenceId) {
   if (!datasourceThematics) return [];
   const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
   return toDomainList(datasourceThematics, translations);
+}
+
+export async function create(thematic) {
+  thematic.id = idGenerator.generateNewId('thematic');
+  const createdThematicDTO = await thematicDatasource.create(thematic);
+  const translations = thematicTranslations.extractFromDomainObject(thematic);
+  await translationRepository.save({ translations });
+  return toDomain(createdThematicDTO, translations);
 }
 
 function toDomainList(datasourceThematics, translations) {

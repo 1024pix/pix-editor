@@ -6,6 +6,7 @@ export function buildThematic(
       en: nameEnUs,
     } = {},
     competenceId,
+    competenceAirtableId,
     tubeIds,
     index,
   } = {}) {
@@ -16,6 +17,7 @@ export function buildThematic(
       'Nom': name,
       'Titre en-us': nameEnUs,
       'Competence (id persistant)': [competenceId],
+      'Competence': [competenceAirtableId],
       'Tubes (id persistant)': tubeIds,
       'Index': index
     },

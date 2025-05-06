@@ -3,6 +3,7 @@ export function buildThematic(
     id,
     airtableId = id,
     competenceId,
+    competenceAirtableId,
     tubeIds,
     index,
   } = {}) {
@@ -11,6 +12,7 @@ export function buildThematic(
     'fields': {
       'id persistant': id,
       'Competence (id persistant)': [competenceId],
+      'Competence': [competenceAirtableId],
       'Tubes (id persistant)': tubeIds,
       'Index': index
     },
