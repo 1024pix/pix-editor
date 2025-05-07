@@ -1,0 +1,95 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../../test-helper.js';
+import { Area } from '../../../../../lib/domain/models/index.js';
+import { AreaRepository } from '../../../../../lib/infrastructure/repositories/propal/index.js';
+
+describe('Integration | Repository | AreaRepository', () => {
+  let areaRepository;
+  beforeEach(function() {
+    areaRepository = new AreaRepository();
+  });
+
+  describe('#list', () => {
+    it('should return the list of all areas', async () => {
+      // given
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Domaines' }).returns([
+        airtableBuilder.factory.buildArea({
+          id: 'areaId1',
+          airtableId: 'recAreaId1',
+          code: '1',
+          color: Area.COLORS.BUTTERFLY_BUSH,
+          competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
+          competenceIds: ['competenceId11', 'competenceId12'],
+          frameworkId: 'frameworkId1',
+        }),
+        airtableBuilder.factory.buildArea({
+          id: 'areaId2',
+          airtableId: 'recAreaId2',
+          code: '2',
+          color: Area.COLORS.WILD_STRAWBERRY,
+          competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
+          competenceIds: ['competenceId21', 'competenceId22'],
+          frameworkId: 'frameworkId1',
+        }),
+      ]).activate().nockScope;
+
+      databaseBuilder.factory.buildTranslation({
+        key: 'area.areaId1.title',
+        locale: 'fr',
+        value: 'Premier domaine',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'area.areaId1.title',
+        locale: 'en',
+        value: 'First area',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'area.areaId2.title',
+        locale: 'fr',
+        value: 'Second domaine',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'area.areaId2.title',
+        locale: 'en',
+        value: 'Second area',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const areas = await areaRepository.list();
+
+      // then
+      expect(areas).toEqual([
+        domainBuilder.buildArea({
+          id: 'areaId1',
+          airtableId: 'recAreaId1',
+          code: '1',
+          color: Area.COLORS.BUTTERFLY_BUSH,
+          competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
+          competenceIds: ['competenceId11', 'competenceId12'],
+          frameworkId: 'frameworkId1',
+          title_i18n: {
+            fr: 'Premier domaine',
+            en: 'First area',
+          },
+        }),
+        domainBuilder.buildArea({
+          id: 'areaId2',
+          airtableId: 'recAreaId2',
+          code: '2',
+          color: Area.COLORS.WILD_STRAWBERRY,
+          competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
+          competenceIds: ['competenceId21', 'competenceId22'],
+          frameworkId: 'frameworkId1',
+          title_i18n: {
+            fr: 'Second domaine',
+            en: 'Second area',
+          },
+        }),
+      ]);
+
+      airtableScope.done();
+    });
+  });
+});
