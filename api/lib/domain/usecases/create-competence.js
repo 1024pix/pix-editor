@@ -3,7 +3,7 @@ import { logger } from '../../infrastructure/logger.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { areaRepository, competenceRepository, thematicRepository } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer } from '../../infrastructure/transformers/index.js';
+import { competenceTransformer, thematicTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
 import { Thematic } from '../models/Thematic.js';
 
@@ -34,11 +34,18 @@ export async function createCompetence(competence) {
   createdCompetence.thematicAirtableIds = [createdWorkbenchThematic.airtableId];
 
   try {
-    await updatedRecordNotifier.notify({
-      pixApiClient,
-      model: 'competences',
-      updatedRecord: competenceTransformer.filterCompetenceFields(createdCompetence),
-    });
+    await Promise.all([
+      updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'competences',
+        updatedRecord: competenceTransformer.filterCompetenceFields(createdCompetence),
+      }),
+      updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'thematics',
+        updatedRecord: thematicTransformer.filterThematicFields(createdWorkbenchThematic),
+      }),
+    ]);
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);

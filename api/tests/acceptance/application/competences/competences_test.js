@@ -410,7 +410,8 @@ describe('Acceptance | Route | competences', () => {
     let airtableCreateCompetenceScope;
     let airtableCreateThematicScope;
     let generateNewId;
-    let pixApiCacheScope;
+    let pixApiCompetenceCacheScope;
+    let pixApiThematicCacheScope;
 
     beforeEach(async () => {
       const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
@@ -504,8 +505,10 @@ describe('Acceptance | Route | competences', () => {
       nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .reply(200, { 'access_token': pixApiToken })
+        .persist();
+
+      pixApiCompetenceCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/competences/competence4', {
           id: 'competence4',
           index: '2.2',
@@ -521,6 +524,20 @@ describe('Acceptance | Route | competences', () => {
             fr: 'C’est la quatrième',
             en: 'It’s the fourth one'
           }
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+
+      pixApiThematicCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/thematics/thematic1', {
+          id: 'thematic1',
+          name_i18n: {
+            fr: 'workbench_2_2',
+            en: null,
+          },
+          index: 0,
+          competenceId: 'competence4',
+          tubeIds: [],
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);
@@ -672,7 +689,8 @@ describe('Acceptance | Route | competences', () => {
       expect(airtableCompetencesScope.isDone()).toBe(true);
       expect(airtableCreateCompetenceScope.isDone()).toBe(true);
       expect(airtableCreateThematicScope.isDone()).toBe(true);
-      expect(pixApiCacheScope.isDone()).toBe(true);
+      expect(pixApiCompetenceCacheScope.isDone()).toBe(true);
+      expect(pixApiThematicCacheScope.isDone()).toBe(true);
     });
   });
 

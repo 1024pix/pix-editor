@@ -5,13 +5,14 @@ import { createCompetence } from '../../../../lib/domain/usecases/create-compete
 import { areaRepository, competenceRepository, thematicRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
-import { competenceTransformer } from '../../../../lib/infrastructure/transformers/index.js';
+import { competenceTransformer, thematicTransformer } from '../../../../lib/infrastructure/transformers/index.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
 import { Thematic } from '../../../../lib/domain/models/Thematic.js';
 
 describe('Unit | Domain | Usecases | create competence', function() {
 
   const transformedCompetence = Symbol('transformedCompetence');
+  const transformedThematic = Symbol('transformedThematic');
 
   beforeEach(() => {
     vi.spyOn(areaRepository, 'getByAirtableId');
@@ -19,6 +20,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
     vi.spyOn(competenceRepository, 'create');
     vi.spyOn(thematicRepository, 'create');
     vi.spyOn(competenceTransformer, 'filterCompetenceFields');
+    vi.spyOn(thematicTransformer, 'filterThematicFields');
     vi.spyOn(updatedRecordNotifier, 'notify');
   });
 
@@ -69,8 +71,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
+      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
-      updatedRecordNotifier.notify.mockResolvedValueOnce();
+      updatedRecordNotifier.notify.mockResolvedValue();
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -99,6 +102,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         competenceAirtableId: createdCompetence.airtableId,
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
+      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'thematics',
+        pixApiClient,
+        updatedRecord: transformedThematic,
+      });
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
@@ -122,8 +131,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       const createdThematic = domainBuilder.buildThematic();
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
+      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
-      updatedRecordNotifier.notify.mockResolvedValueOnce();
+      updatedRecordNotifier.notify.mockResolvedValue();
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -150,6 +160,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         competenceAirtableId: createdCompetence.airtableId,
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
+      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'thematics',
+        pixApiClient,
+        updatedRecord: transformedThematic,
+      });
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
@@ -173,8 +189,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       const createdThematic = domainBuilder.buildThematic();
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
+      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
-      updatedRecordNotifier.notify.mockRejectedValueOnce(new Error());
+      updatedRecordNotifier.notify.mockRejectedValue(new Error());
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -201,6 +218,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         competenceAirtableId: createdCompetence.airtableId,
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
+      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'thematics',
+        pixApiClient,
+        updatedRecord: transformedThematic,
+      });
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
