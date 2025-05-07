@@ -30,26 +30,13 @@ export default class PopinSelectLocation extends Component {
   }
 
   @action
-  setLocation() {
-    const competence = this.competences.find((comp) => comp.id === this.selectedCompetence.value);
-    if (this.args.isMovingTube) {
-      const theme = this.themes.find((theme)=> theme.id === this.selectedTheme.value);
-      this.args.onChange(competence, theme);
-    }
-    if (this.args.isMovingPrototype) {
-      this.args.onChange(this._selectedSkill);
-    }
-    if (this.args.isMovingSkill) {
-      const tube = this.tubes.find((tube)=> tube.id === this._selectedTube.value);
-      this.args.onChange(competence, tube, this.selectedLevel);
-    }
+  closeModal() {
     this.args.close();
-    this._reset();
   }
 
   @action
-  closeModal() {
-    this._reset();
-    this.args.close();
+  onSubmit(...args) {
+    this.args.onChange(...args);
+    this.closeModal();
   }
 }

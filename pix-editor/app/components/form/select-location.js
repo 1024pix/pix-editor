@@ -64,7 +64,8 @@ export default class SelectLocation extends Component {
   get competenceList() {
     const frameworkList = this.currentData.getFrameworks();
     const currentFramework = frameworkList.find((framework) => framework.id === this.selectedFrameworkId);
-    const areas = currentFramework?.hasMany('areas').value() ?? [];
+    const areas = currentFramework?.hasMany('areas').value();
+    if (!areas) return null;
     return areas.flatMap((area) => area.sortedCompetences);
   }
 
@@ -77,6 +78,7 @@ export default class SelectLocation extends Component {
     this.selectedCompetenceId = competenceId;
     this.selectTheme(null);
     this.selectTube(null);
+    this.areTubesLoaded = false;
     if (competenceId) this._loadTubes(competenceId);
   }
 
@@ -140,23 +142,23 @@ export default class SelectLocation extends Component {
   selectTube(tubeId) {
     this.selectedTubeId = tubeId;
     this.selectSkill(null);
+    this.areSkillsLoaded = false;
     if (tubeId) this._loadSkills(tubeId);
   }
 
   // == SKILLS
 
-  get skillListWithCategory() {
+  get skillList() {
     if (!this.tubeList) return null;
     const currentTube = this.tubeList.find((tube) => tube.id === this.selectedTubeId);
     if (!currentTube) return null;
     if (!this.areSkillsLoaded) return null;
 
-    // ASK JEREM WTF
     return currentTube.filledLiveSkills.filter((liveSkill) => liveSkill).flat();
   }
 
   get skillOptionListWithCategory() {
-    return this.skillListWithCategory.map((skill) => ({
+    return this.skillList.map((skill) => ({
       category: `Niveau ${skill.level}`,
       label: `${skill.name} (v.${skill.version}) ${skill.status === 'actif' ? '🟢' : '🔵'}`,
       value: skill.id,
@@ -192,5 +194,23 @@ export default class SelectLocation extends Component {
   @action
   selectLevel(level) {
     this.selectedLevel = level;
+  }
+
+  @action
+  onSubmit(event) {
+    event.preventDefault();
+    const competence = this.competenceList.find((comp) => comp.id === this.selectedCompetenceId);
+    if (this.isMovingTube) {
+      const theme = this.themeList.find((theme) => theme.id === this.selectedThemeId);
+      this.args.onSubmit(competence, theme);
+    }
+    if (this.isMovingPrototype) {
+      const skill = this.skillList.find((skill) => skill.id === this.selectedSkillId);
+      this.args.onSubmit(skill);
+    }
+    if (this.isMovingSkill) {
+      const tube = this.tubeList.find((tube)=> tube.id === this.selectedTubeId);
+      this.args.onSubmit(competence, tube, this.selectedLevel);
+    }
   }
 }

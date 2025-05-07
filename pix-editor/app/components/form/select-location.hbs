@@ -1,4 +1,9 @@
-<form action="" class="ui form">
+<form
+  action=""
+  class="ui form"
+  id="form-select-location"
+  {{on "submit" this.onSubmit}}
+>
   <PixSelect
     @id="select-framework-location"
     @value={{this.selectedFrameworkId}}
@@ -37,20 +42,22 @@
     {{/if}}
   {{/if}}
   {{#if (or this.isMovingPrototype this.isMovingSkill)}}
-    {{#if this.areTubesLoaded}}
-      <PixSelect
-        data-test-select-tube
-        @id="select-tube-location"
-        @value={{this.selectedTubeId}}
-        @options={{this.tubeOptionList}}
-        @onChange={{this.selectTube}}
-        @hideDefaultOption={{true}}
-        @placeholder="Sélectionner un sujet"
-      >
-        <:label>Sujet</:label>
-      </PixSelect>
-    {{else}}
-      <p>Chargement des sujets en cours...</p>
+    {{#if this.selectedCompetenceId}}
+      {{#if this.areTubesLoaded}}
+        <PixSelect
+          data-test-select-tube
+          @id="select-tube-location"
+          @value={{this.selectedTubeId}}
+          @options={{this.tubeOptionList}}
+          @onChange={{this.selectTube}}
+          @hideDefaultOption={{true}}
+          @placeholder="Sélectionner un sujet"
+        >
+          <:label>Sujet</:label>
+        </PixSelect>
+      {{else}}
+        <p>Chargement des sujets en cours...</p>
+      {{/if}}
     {{/if}}
     {{#if this.selectedTubeId}}
       {{#if this.isMovingPrototype}}

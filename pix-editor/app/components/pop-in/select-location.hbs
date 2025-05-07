@@ -4,12 +4,15 @@
   @showModal={{@showModal}}
 >
   <:content>
-    <Form::SelectLocation
-      @variant={{@variant}}
-      @theme={{@theme}}
-      @tube={{@tube}}
-      @skill={{@skill}}
-    />
+    {{#if @showModal}}
+      <Form::SelectLocation
+        @variant={{@variant}}
+        @theme={{@theme}}
+        @tube={{@tube}}
+        @skill={{@skill}}
+        @onSubmit={{this.onSubmit}}
+      />
+    {{/if}}
   </:content>
   <:footer>
     <PixButton
@@ -21,8 +24,9 @@
     </PixButton>
     <PixButton
       data-test-move-action
-      @triggerAction={{this.setLocation}}
       @isDisabled={{not this.enableMoveActionButton}}
+      @type="submit"
+      form="form-select-location"
     >
       <i class="checkmark icon"></i>
       {{this.titleButtonAction}}
