@@ -5,6 +5,7 @@ export default class ChallengeRoute extends Route {
 
   @service router;
   @service store;
+  @service versionManager;
 
   async model(params) {
     try {
@@ -26,13 +27,56 @@ export default class ChallengeRoute extends Route {
       const tube = await skill.tube;
       const competence = await tube.competence;
       if (challenge.get('isPrototype') && localizedChallenge.isPrimaryChallenge) {
-        return this.router.transitionTo('authenticated.competence.prototypes.single', competence, challenge.get('id'));
+        if (this.versionManager.isV2 && challenge.get('isValidated')) {
+          return this.router.transitionTo(
+            'authenticated.v2.challenge',
+            competence.get('id'),
+            'challenges-production',
+            skill.get('id'),
+            challenge.get('id'),
+          );
+        } else {
+          return this.router.transitionTo(
+            'authenticated.competence.prototypes.single',
+            competence.get('id'),
+            challenge.get('id'),
+            { queryParams: { view: challenge.get('isValidated') ? 'production' : 'workbench' } },
+          );
+        }
       } else if (challenge.get('isPrototype')) {
-        return this.router.transitionTo('authenticated.competence.prototypes.localized', competence, challenge.get('id'), localizedChallenge.get('id'));
+        return this.router.transitionTo(
+          'authenticated.competence.prototypes.localized',
+          competence.get('id'),
+          challenge.get('id'),
+          localizedChallenge.get('id'),
+        );
       } else if (localizedChallenge.isPrimaryChallenge) {
-        return this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.single', competence, challenge.get('relatedPrototype'), challenge);
+        const prototype = challenge.get('relatedPrototype');
+        if (this.versionManager.isV2 && prototype.get('isValidated')) {
+          return this.router.transitionTo(
+            'authenticated.v2.challenge',
+            competence.get('id'),
+            'challenges-production',
+            skill.get('id'),
+            challenge.get('id'),
+          );
+        } else {
+          return this.router.transitionTo(
+            'authenticated.competence.prototypes.single.alternatives.single',
+            competence.get('id'),
+            prototype.get('id'),
+            challenge.get('id'),
+            { queryParams: { view: prototype.get('isValidated') ? 'production' : 'workbench' } },
+          );
+        }
       } else {
-        return this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.localized', competence, challenge.get('relatedPrototype'), challenge.get('id'), localizedChallenge.get('id'));
+        return this.router.transitionTo(
+          'authenticated.competence.prototypes.single.alternatives.localized',
+          competence.get('id'),
+          challenge.get('relatedPrototype').get('id'),
+          challenge.get('id'),
+          localizedChallenge.get('id'),
+        );
       }
     } catch {
       this.router.transitionTo('authenticated');
