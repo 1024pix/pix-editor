@@ -1,5 +1,21 @@
 
 
+## v3.201.0 (07/05/2025)
+
+
+### :rocket: Amélioration
+- [#980](https://github.com/1024pix/pix-editor/pull/980) [FEATURE] Utiliser le numéro de version de déclinaison dans le header v2 de l'affichage d'une épreuve en production (PIX-17756).
+- [#978](https://github.com/1024pix/pix-editor/pull/978) [FEATURE] Pouvoir voir clairement et proprement la liste des noms des acquis concernés dans le tableau des URLs à ne pas analyser (PIX-17354).
+- [#975](https://github.com/1024pix/pix-editor/pull/975) [FEATURE] Suppression automatique des feuilles de calcul vieilles de plus de 3 mois dans l'exports des URLs externes (PIX-17360).
+
+### :building_construction: Tech
+- [#973](https://github.com/1024pix/pix-editor/pull/973) [TECH] Suppression du dropdown pour PixSelect dans le header (PIX-17228).
+- [#976](https://github.com/1024pix/pix-editor/pull/976) [TECH] Retirer les mots "whiteliste/whitelistée" des messages renvoyés par l'API pour parler des URLs à ne pas analyser (PIX-17462).
+
+### :bug: Correction
+- [#979](https://github.com/1024pix/pix-editor/pull/979) [BUGFIX] Rediriger vers la V2 depuis `/challenge/{id}` (PIX-17244).
+- [#971](https://github.com/1024pix/pix-editor/pull/971) [BUGFIX] Moulinette URLS : URL entre parenthèses mal identifiée si un caractère succède immédiatement la dernière parenthèse (PIX-17725).
+
 ## v3.200.0 (30/04/2025)
 
 
