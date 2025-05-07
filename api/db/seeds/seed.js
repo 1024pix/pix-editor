@@ -10,6 +10,7 @@ import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTubes } from './data/tubes.js';
 import { buildSkills } from './data/skills.js';
 import { buildChallenges } from './data/challenges.js';
+import { airtableSeedsConfig } from '../../lib/config.js';
 
 /*
 import {localizedChallengesAttachmentsBuilder} from "./data/localized-challenges-attachments.js";
@@ -58,13 +59,13 @@ export async function seed(knex) {
   buildMissions(databaseBuilder);
 */
   const learningContentConfig = {
-    countFrameworks: 1,
-    countAreasPerFramework: 1,
-    countCompetencesPerArea: 2,
-    countThematicsPerCompetence: 2,
-    countTubesPerThematic: 2,
-    skillMaxLevel: 4,
-    locales: ['fr', 'en', 'nl'],
+    countFrameworks: airtableSeedsConfig.cntFrameworks,
+    countAreasPerFramework: airtableSeedsConfig.cntAreas,
+    countCompetencesPerArea: airtableSeedsConfig.cntCompetences,
+    countThematicsPerCompetence: airtableSeedsConfig.cntThematics,
+    countTubesPerThematic: airtableSeedsConfig.cntTubes,
+    skillMaxLevel: airtableSeedsConfig.skillLevel,
+    locales: airtableSeedsConfig.locales,
   };
   const learningContentData = await buildFrameworks({ airtableClient, databaseBuilder, logger, learningContentConfig });
   await buildAreas({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });

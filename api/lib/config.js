@@ -134,6 +134,16 @@ export const phrase = {
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
+export const airtableSeedsConfig = {
+  cntFrameworks: _getNumber(process.env.AIRTABLE_SEEDS_CNT_FRAMEWORKS, 2),
+  cntAreas: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
+  cntCompetences: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),
+  cntThematics: _getNumber(process.env.AIRTABLE_SEEDS_CNT_THEMATICS, 2),
+  cntTubes: _getNumber(process.env.AIRTABLE_SEEDS_CNT_TUBES, 2),
+  skillLevel: _getNumber(process.env.AIRTABLE_SEEDS_SKILL_LEVEL, 3),
+  locales: process.env.AIRTABLE_SEEDS_LOCALES ? process.env.AIRTABLE_SEEDS_LOCALES.split(',') : ['fr', 'en'],
+};
+
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';
