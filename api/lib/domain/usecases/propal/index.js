@@ -10,6 +10,7 @@ import { child } from '../../../infrastructure/logger.js';
 import * as updatedRecordNotifier from '../../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../../infrastructure/pix-api-client.js';
 import { generateNewId as generateNewIdFnc } from '../../../infrastructure/utils/id-generator.js';
+import { normalizeNonBreakingSpace } from '../../../infrastructure/utils/normalize-non-breaking-space.js';
 
 const path = dirname(fileURLToPath(import.meta.url));
 const usecasesWithoutInjectedDependencies = {
@@ -42,6 +43,7 @@ function buildDependencies(usecaseName, trx) {
     updatedRecordNotifier,
     Sentry,
     generateNewIdFnc,
+    normalizeNonBreakingSpace,
   };
   const dynamicDependencies = buildDynamicDependencies(usecaseName, trx);
   return {

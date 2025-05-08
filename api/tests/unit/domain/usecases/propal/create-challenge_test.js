@@ -1,7 +1,7 @@
-import { describe, it, vi, expect } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
-
-import { createChallenge } from '../../../../lib/domain/usecases/create-challenge.js';
+import { describe, expect, it, vi } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
+import { usecases } from '../../../../../lib/domain/usecases/propal/index.js';
+import { normalizeNonBreakingSpace } from '../../../../../lib/infrastructure/utils/normalize-non-breaking-space.js';
 
 describe('Unit | Domain | Usecases | create challenge', function() {
   it('should create a challenge', async () => {
@@ -12,8 +12,10 @@ describe('Unit | Domain | Usecases | create challenge', function() {
       create: vi.fn().mockResolvedValueOnce(createdChallenge)
     };
     // when
-    const result = await createChallenge(challengeToCreate, {
-      challengeRepository: challengeRepositoryStub
+    const result = await usecases.createChallenge({
+      challenge: challengeToCreate,
+      challengeRepository: challengeRepositoryStub,
+      normalizeNonBreakingSpace,
     });
 
     // then
@@ -37,7 +39,11 @@ describe('Unit | Domain | Usecases | create challenge', function() {
       create: vi.fn().mockResolvedValueOnce(challenge)
     };
 
-    const result = await createChallenge(challenge, { challengeRepository: challengeRepositoryStub });
+    const result = await usecases.createChallenge({
+      challenge,
+      challengeRepository: challengeRepositoryStub,
+      normalizeNonBreakingSpace,
+    });
 
     expect(challengeRepositoryStub.create).toHaveBeenCalledOnce();
     expect(result.instruction).toBe(expected.instruction);
