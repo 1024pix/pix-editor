@@ -1,16 +1,10 @@
 import * as Sentry from '@sentry/node';
 import Boom from '@hapi/boom';
 
-import {
-  attachmentRepository,
-  challengeRepository,
-  skillRepository,
-  tubeRepository,
-} from '../../infrastructure/repositories/index.js';
+import { challengeRepository, skillRepository, tubeRepository, } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import {
-  cloneSkill,
   createSkill,
   getSkillChallengesProduction,
   getSkillLocalizedChallengesProduction,
@@ -26,20 +20,12 @@ import {
 } from '../../infrastructure/serializers/jsonapi/index.js';
 import { skillTransformer } from '../../infrastructure/transformers/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import { usecases } from '../../domain/usecases/propal/index.js';
 
 export async function clone(request, h) {
   try {
-    const newSkill = await cloneSkill({
+    const newSkill = await usecases.cloneSkill({
       cloneCommand: request.payload.data.attributes,
-      dependencies: {
-        skillRepository,
-        challengeRepository,
-        tubeRepository,
-        attachmentRepository,
-        generateNewIdFnc: generateNewId,
-        pixApiClient,
-        updatedRecordNotifier,
-      },
     });
     return h.response().redirect(`/api/skills/${newSkill.airtableId}`);
   } catch (err) {

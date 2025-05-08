@@ -1,27 +1,22 @@
-import {
-  createChallengeTransformer,
-  skillTransformer,
-} from '../../infrastructure/transformers/index.js';
-import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
-
 // TODO LIST
 // industrialiser les utils translations pour gérer les objets du domaine
 // factoriser du code entre pix-api-client et storage et faire un peu mieux (separation of concerns etc...)
 // les objets du domaine devraient maintenant avoir un id (id persistant) et un airtableId (record id de airtable)
 // tester les répos mieux (parce que là on a déconné)
 
-export async function cloneSkill({
+const cloneSkill = async function({
   cloneCommand,
-  dependencies: {
-    skillRepository,
-    challengeRepository,
-    tubeRepository,
-    attachmentRepository,
-    generateNewIdFnc,
-    pixApiClient,
-    updatedRecordNotifier,
-  },
+  skillRepository,
+  challengeRepository,
+  tubeRepository,
+  attachmentRepository,
+  generateNewIdFnc,
+  pixApiClient,
+  updatedRecordNotifier,
+  createChallengeTransformer,
+  skillTransformer,
+  logger,
+  Sentry,
 }) {
   const { tube, skillToClone } = await _checkIfCloningIsPossible({
     level: cloneCommand.level,
@@ -59,9 +54,9 @@ export async function cloneSkill({
   // for now only persist primary attachments
   const attachmentsToPersist = clonedAttachments.filter((attachment) => attachment.challengeId === attachment.localizedChallengeId);
   await attachmentRepository.createBatch(attachmentsToPersist);
-  await updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier });
+  await updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, createChallengeTransformer, skillTransformer, pixApiClient, updatedRecordNotifier, logger, Sentry });
   return savedSkill;
-}
+};
 
 async function _checkIfCloningIsPossible({ level, tubeId, skillIdToClone, tubeRepository, skillRepository }) {
   if (level < 1 || level > 7) {
@@ -97,7 +92,7 @@ async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRe
   };
 }
 
-async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier }) {
+async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, createChallengeTransformer, skillTransformer, pixApiClient, updatedRecordNotifier, logger, Sentry }) {
   try {
     const [transformedSkill] = skillTransformer.filterSkillsFields([clonedSkill]);
     await updatedRecordNotifier.notify({ updatedRecord: transformedSkill, model: 'skills', pixApiClient });
@@ -111,5 +106,9 @@ async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedA
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);
-  };
+  }
 }
+
+cloneSkill.NEED_TRX = true;
+
+export { cloneSkill };

@@ -1,4 +1,3 @@
-export * from './clone-skill.js';
 export * from './create-challenge.js';
 export * from './create-competence.js';
 export * from './create-framework.js';
