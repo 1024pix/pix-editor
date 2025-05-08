@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as usecases from '../../domain/usecases/index.js';
+import { usecases as injectedUsecases } from '../../domain/usecases/propal/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import { competenceSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { competenceRepository } from '../../infrastructure/repositories/index.js';
@@ -78,7 +79,7 @@ export async function register(server) {
         handler: async function(request, h) {
           try {
             const competence = await competenceSerializer.deserialize(request.payload);
-            const createdCompetence = await usecases.createCompetence(competence);
+            const createdCompetence = await injectedUsecases.createCompetence({ competence });
             return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
           } catch (err) {
             logger.error(err);

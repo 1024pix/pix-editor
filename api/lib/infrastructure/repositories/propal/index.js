@@ -1,6 +1,7 @@
 import { AttachmentRepository } from './AttachmentRepository.js';
 import { AreaRepository } from './AreaRepository.js';
 import { ChallengeRepository } from './ChallengeRepository.js';
+import { CompetenceRepository } from './CompetenceRepository.js';
 import { LocalizedChallengeRepository } from './LocalizedChallengeRepository.js';
 import { LocalizedChallengesAttachmentsRepository } from './LocalizedChallengesAttachmentsRepository.js';
 import { SkillRepository } from './SkillRepository.js';
@@ -14,6 +15,7 @@ export {
   AttachmentRepository,
   AreaRepository,
   ChallengeRepository,
+  CompetenceRepository,
   LocalizedChallengeRepository,
   LocalizedChallengesAttachmentsRepository,
   SkillRepository,

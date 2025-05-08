@@ -1,24 +1,44 @@
-import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
-
-import { createCompetence } from '../../../../lib/domain/usecases/create-competence.js';
-import { areaRepository, competenceRepository } from '../../../../lib/infrastructure/repositories/index.js';
-import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
-import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
-import { competenceTransformer } from '../../../../lib/infrastructure/transformers/index.js';
-import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
+import { BadRequestError } from '../../../../../lib/infrastructure/errors.js';
+import { usecases } from '../../../../../lib/domain/usecases/propal/index.js';
 
 describe('Unit | Domain | Usecases | create competence', function() {
-
   const createdCompetence = Symbol('createdCompetence');
   const transformedCompetence = Symbol('transformedCompetence');
+  const pixApiClient = Symbol('pixApiClient');
+  let areaRepository, competenceRepository, competenceTransformer, updatedRecordNotifier, logger, Sentry;
+  let dependencies;
 
   beforeEach(() => {
-    vi.spyOn(areaRepository, 'getByAirtableId');
-    vi.spyOn(competenceRepository, 'listByAreaAirtableId');
-    vi.spyOn(competenceRepository, 'create');
-    vi.spyOn(competenceTransformer, 'filterCompetenceFields');
-    vi.spyOn(updatedRecordNotifier, 'notify');
+    areaRepository = {
+      getByAirtableId: vi.fn(),
+    };
+    competenceRepository = {
+      listByAreaAirtableId: vi.fn(),
+      create: vi.fn(),
+    };
+    competenceTransformer = {
+      filterCompetenceFields: vi.fn(),
+    };
+    updatedRecordNotifier = {
+      notify: vi.fn(),
+    };
+    logger = {
+      error: vi.fn(),
+    };
+    Sentry = {
+      captureException: vi.fn(),
+    };
+    dependencies = {
+      areaRepository,
+      competenceRepository,
+      competenceTransformer,
+      updatedRecordNotifier,
+      pixApiClient,
+      logger,
+      Sentry,
+    };
   });
 
   describe('when area id is unknown', () => {
@@ -33,12 +53,10 @@ describe('Unit | Domain | Usecases | create competence', function() {
         areaAirtableId,
       });
 
-      // when
-      const result = createCompetence(competence);
-
-      // then
-      await expect(result).rejects.toBeInstanceOf(BadRequestError);
-      await expect(result).rejects.toHaveProperty('message', 'unknown area');
+      // when / then
+      const promise = usecases.createCompetence({ competence, ...dependencies });
+      await expect(promise).rejects.toBeInstanceOf(BadRequestError);
+      await expect(promise).rejects.toHaveProperty('message', 'unknown area');
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);
@@ -69,7 +87,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
 
       // when
-      const result = await createCompetence(competence);
+      const result = await usecases.createCompetence({ competence, ...dependencies });
 
       // then
       expect(competence.index).toBe('24.6');
@@ -106,7 +124,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
 
       // when
-      const result = await createCompetence(competence);
+      const result = await usecases.createCompetence({ competence, ...dependencies });
 
       // then
       expect(competence.index).toBe('24.1');
@@ -143,7 +161,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
 
       // when
-      const result = await createCompetence(competence);
+      const result = await usecases.createCompetence({ competence, ...dependencies });
 
       // then
       expect(competence.index).toBe('24.1');

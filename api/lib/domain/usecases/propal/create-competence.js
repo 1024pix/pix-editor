@@ -1,12 +1,7 @@
-import * as Sentry from '@sentry/node';
-import { logger } from '../../infrastructure/logger.js';
-import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { areaRepository, competenceRepository } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer } from '../../infrastructure/transformers/index.js';
-import { BadRequestError } from '../../infrastructure/errors.js';
+// TODO what to do
+import { BadRequestError } from '../../../infrastructure/errors.js';
 
-export async function createCompetence(competence) {
+const createCompetence = async function({ competence, areaRepository, competenceRepository, competenceTransformer, updatedRecordNotifier, pixApiClient, logger, Sentry }) {
   const [area, competences] = await Promise.all([
     areaRepository.getByAirtableId(competence.areaAirtableId),
     competenceRepository.listByAreaAirtableId(competence.areaAirtableId),
@@ -32,4 +27,7 @@ export async function createCompetence(competence) {
   }
 
   return createdCompetence;
-}
+};
+
+createCompetence.NEED_TRX = true;
+export { createCompetence };
