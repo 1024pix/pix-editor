@@ -9,6 +9,7 @@ import * as transformers from '../../../infrastructure/transformers/index.js';
 import { child } from '../../../infrastructure/logger.js';
 import * as updatedRecordNotifier from '../../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../../infrastructure/pix-api-client.js';
+import { generateNewId as generateNewIdFnc } from '../../../infrastructure/utils/id-generator.js';
 
 const path = dirname(fileURLToPath(import.meta.url));
 const usecasesWithoutInjectedDependencies = {
@@ -40,6 +41,7 @@ function buildDependencies(usecaseName, trx) {
     pixApiClient,
     updatedRecordNotifier,
     Sentry,
+    generateNewIdFnc,
   };
   const dynamicDependencies = buildDynamicDependencies(usecaseName, trx);
   return {
