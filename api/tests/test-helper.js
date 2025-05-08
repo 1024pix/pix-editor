@@ -1,11 +1,11 @@
-import { beforeEach, afterEach } from 'vitest';
+import { afterAll, afterEach, beforeEach } from 'vitest';
 import * as infraErrors from '../lib/infrastructure/errors.js';
 import { cache } from '../lib/infrastructure/cache.js';
 import nock from 'nock';
 import { DatabaseBuilder } from './tooling/database-builder/database-builder.js';
 import { AirtableBuilder } from './tooling/airtable-builder/airtable-builder.js';
-import { InputOutputDataBuilder }  from './tooling/input-output-data-builder/input-output-data-builder.js';
-import { knex } from '../db/knex-database-connection.js';
+import { InputOutputDataBuilder } from './tooling/input-output-data-builder/input-output-data-builder.js';
+import { disconnect, knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
 import { queues } from '../lib/infrastructure/scheduled-jobs/index.js';
 
@@ -21,6 +21,10 @@ afterEach(async () => {
   for (const queue of queues) {
     await queue.obliterate({ force: true });
   }
+});
+
+afterAll(async function() {
+  return await disconnect();
 });
 
 export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/utils/stream-to-promise.js';
