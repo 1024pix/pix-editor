@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import * as usecases from '../domain/usecases/index.js';
+import { usecases as injectedUsecases } from '../domain/usecases/propal/index.js';
 import { logger } from '../infrastructure/logger.js';
 import { frameworkRepository } from '../infrastructure/repositories/index.js';
 import { frameworkSerializer } from '../infrastructure/serializers/jsonapi/index.js';
@@ -44,7 +44,7 @@ export function register(server) {
           try {
             const framework = await frameworkSerializer.deserialize(request.payload);
 
-            const createdFramework = await usecases.createFramework(framework);
+            const createdFramework = await injectedUsecases.createFramework({ framework });
 
             return h
               .response(frameworkSerializer.serialize(createdFramework))
