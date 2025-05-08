@@ -18,11 +18,17 @@ const usecasesWithoutInjectedDependencies = {
 const usecases = {};
 for (const [usecaseName, usecaseFnc] of Object.entries(usecasesWithoutInjectedDependencies)) {
   usecases[usecaseName] = (params) => {
-    return knex.transaction((trx) => {
-      const deps = buildDependencies(usecaseName, trx);
+    if (usecaseFnc.NEED_TRX) {
+      return knex.transaction((trx) => {
+        const deps = buildDependencies(usecaseName, trx);
+        const injectedUsecase =  _.partial(injectDefaults, deps, usecaseFnc)();
+        return injectedUsecase(params);
+      });
+    } else {
+      const deps = buildDependencies(usecaseName, null);
       const injectedUsecase =  _.partial(injectDefaults, deps, usecaseFnc)();
       return injectedUsecase(params);
-    });
+    }
   };
 }
 

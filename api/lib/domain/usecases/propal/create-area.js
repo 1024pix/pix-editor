@@ -1,4 +1,4 @@
-export async function createArea({ area, areaRepository, areaTransformer, pixApiClient, updatedRecordNotifier, logger, Sentry }) {
+const createArea = async function({ area, areaRepository, areaTransformer, pixApiClient, updatedRecordNotifier, logger, Sentry }) {
   const areas = await areaRepository.listByFrameworkId(area.frameworkId);
 
   area.code = `${(areas?.length ?? 0) + 1}`;
@@ -17,4 +17,8 @@ export async function createArea({ area, areaRepository, areaTransformer, pixApi
   }
 
   return createdArea;
-}
+};
+
+createArea.NEED_TRX = true;
+
+export { createArea };
