@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
+import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
 module('Acceptance | Modify-Challenge', function(hooks) {
@@ -95,7 +96,6 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Modifier');
       await clickByText('Ajouter des URLs à consulter');
       await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
-      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
@@ -104,17 +104,19 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Validation par l\'embed (Pix Junior)');
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Non voyant');
       await click(await screen.findByRole('option', { name: 'OK' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Daltonien');
       await click(await screen.findByRole('option', { name: 'KO' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Spoil');
       await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
+      await waitForSelectToBeClosed(screen);
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Non' }));
+      await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
