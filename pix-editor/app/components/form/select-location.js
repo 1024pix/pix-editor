@@ -24,20 +24,30 @@ export default class SelectLocation extends Component {
 
     this.selectedFrameworkId = this.currentData.getFramework().id;
     this.selectedCompetenceId = this.currentData.getCompetence().id;
-    this.selectedTubeId = this.args.tube?.id;
-    this.selectedSkillId = this.args.skill?.id;
     this.areTubesLoaded = false;
     this.areSkillsLoaded = false;
     if (this.selectedCompetenceId) {
       this._loadTubes(this.selectedCompetenceId);
     }
-    if (this.isMovingTube) {
+    if (this.isMovingTube) { // theme
       if (!this.args.theme) {
-        throw new Error('[Form::SelectLocation] Tube has no thematic');
+        throw new Error('[Form::SelectLocation] @variant=`tube` requires @thematic argument');
       }
       this.selectedThemeId = this.args.theme.id;
+    } else if (this.isMovingPrototype) { // tube and skill
+      if (!this.args.tube || !this.args.skill) {
+        throw new Error('[Form::SelectLocation] @variant=`prototype` requires @skill and @tube arguments');
+      }
+      this.selectedTubeId = this.args.tube?.id;
+      this.selectedSkillId = this.args.skill?.id;
+    } else if (this.isMovingSkill) { // tube only
+      if (!this.args.tube) {
+        throw new Error('[Form::SelectLocation] @variant=`skill` requires @tube argument');
+      }
+      this.selectedTubeId = this.args.tube?.id;
     }
-    this.args.setIsSubmitable(false);
+
+    this.args.setIsSubmittable(false);
   }
 
   get isMovingPrototype() {
@@ -114,7 +124,7 @@ export default class SelectLocation extends Component {
   @action
   selectTheme(themeId) {
     this.selectedThemeId = themeId;
-    this.args.setIsSubmitable(!!themeId && themeId !== this.args.theme.id);
+    this.args.setIsSubmittable(!!themeId && themeId !== this.args.theme.id);
   }
 
   // == TUBES
@@ -181,6 +191,9 @@ export default class SelectLocation extends Component {
   selectSkill(skillId) {
     this.selectedSkillId = skillId;
     this.selectLevel(null);
+    if (this.isMovingPrototype) {
+      this.args.setIsSubmittable(!!skillId && skillId !== this.args.skill.id);
+    }
   }
 
   // == LEVEL
@@ -201,6 +214,9 @@ export default class SelectLocation extends Component {
   @action
   selectLevel(level) {
     this.selectedLevel = level;
+    if (this.isMovingSkill) {
+      this.args.setIsSubmittable(!!level);
+    }
   }
 
   @action

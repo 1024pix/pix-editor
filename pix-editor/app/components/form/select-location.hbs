@@ -27,7 +27,6 @@
   {{#if (and this.isMovingTube this.selectedCompetenceId)}}
     {{#if this.areThemesLoaded}}
       <PixSelect
-        data-test-select-thematic
         @id="select-thematic-location"
         @value={{this.selectedThemeId}}
         @options={{this.themeOptionList}}
@@ -46,7 +45,6 @@
     {{#if this.selectedCompetenceId}}
       {{#if this.areTubesLoaded}}
         <PixSelect
-          data-test-select-tube
           @id="select-tube-location"
           @value={{this.selectedTubeId}}
           @options={{this.tubeOptionList}}
@@ -65,7 +63,6 @@
         <div data-test-skill-list class="field">
           {{#if this.areSkillsLoaded}}
             <PixSelect
-              data-test-select-skill
               @id="select-skill-location"
               @value={{this.selectedSkillId}}
               @options={{this.skillOptionListWithCategory}}
@@ -81,7 +78,6 @@
         </div>
       {{else}}
         <PixSelect
-          data-test-select-level
           @id="select-level-location"
           @value={{this.selectedLevel}}
           @options={{this.levelOptionList}}

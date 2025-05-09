@@ -1,5 +1,5 @@
 <PixModal
-  @title={{this.titleModal}}
+  @title={{@title}}
   @onCloseButtonClick={{this.closeModal}}
   @showModal={{@showModal}}
 >
@@ -10,7 +10,7 @@
         @theme={{@theme}}
         @tube={{@tube}}
         @skill={{@skill}}
-        @setIsSubmitable={{this.setIsSubmitable}}
+        @setIsSubmittable={{this.setIsSubmittable}}
         @onSubmit={{this.onSubmit}}
       />
     {{/if}}
@@ -24,13 +24,12 @@
       {{t 'common.cancel'}}
     </PixButton>
     <PixButton
-      data-test-move-action
-      @isDisabled={{not this.enableMoveActionButton}}
+      @isDisabled={{this.disableActionButton}}
       @type="submit"
       form="form-select-location"
     >
       <i class="checkmark icon"></i>
-      {{this.titleButtonAction}}
+      {{this.actionButtonTitle}}
     </PixButton>
   </:footer>
 </PixModal>

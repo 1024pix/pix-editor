@@ -53,11 +53,11 @@
   </div>
 </div>
 <PopIn::SelectLocation
-  @class="tube-select-competence"
-  @onChange={{this.setCompetence}}
-  @name={{this.tube.name}}
-  @theme={{this.tube.theme}}
   @variant="tube"
+  @class="tube-select-competence"
+  @onSubmit={{this.setCompetence}}
+  @name={{concat "Déplacer le tube " this.tube.name " dans une autre thématique"}}
+  @theme={{this.tube.theme}}
   @close={{this.closeSelectCompetence}}
   @showModal={{this.displaySelectLocation}}
 />

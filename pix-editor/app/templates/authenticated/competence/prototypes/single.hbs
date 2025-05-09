@@ -47,7 +47,7 @@
         </div>
       {{/if}}
       {{#if this.mayMove}}
-        <button data-test-move-button class="ui icon button item" {{on "click" this.movePrototype}} type="button"><i class="icon random"></i></button>
+        <button title="Déplacer l'épreuve" class="ui icon button item" {{on "click" this.movePrototype}} type="button"><i class="icon random"></i></button>
       {{/if}}
     {{/unless}}
   </:actions>
@@ -157,9 +157,9 @@
 />
 {{#if this.mayMove}}
   <PopIn::SelectLocation
-    @onChange={{this.setSkill}}
-    @title="Acquis du prototype"
     @variant="prototype"
+    @onSubmit={{this.setSkill}}
+    @title="Déplacer le prototype dans un autre acquis"
     @tube={{this.challenge.skill.tube}}
     @skill={{this.challenge.skill}}
     @close={{this.closeMovePrototype}}

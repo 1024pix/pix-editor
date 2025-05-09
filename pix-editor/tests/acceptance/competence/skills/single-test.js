@@ -1,5 +1,5 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find, findAll } from '@ember/test-helpers';
+import { click, currentURL, fillIn, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -108,12 +108,12 @@ module('Acceptance | skill | single', function(hooks) {
       const store = this.owner.lookup('service:store');
 
       // when
-      await visit(`/competence/${competence1.id}/skills/${skill1.id}?leftMaximized=true&view=workbench`);
-      await click(find('[data-test-duplicate-skill-action]'));
-      await click(find('[data-test-select-level] .ember-basic-dropdown-trigger'));
-      await click(findAll('.ember-power-select-options li')[SKILL_LEVEL_CHOOSE - 1]);
-      await click(find('[data-test-move-action]'));
-      await click(find('[data-test-save-changelog-button]'));
+      const screen = await visit(`/competence/${competence1.id}/skills/${skill1.id}?leftMaximized=true&view=workbench`);
+      await click(screen.getByRole('button', { name: 'Dupliquer vers' }));
+      await click(screen.getByLabelText('Niveau'));
+      await click(await screen.findByRole('option', { name: SKILL_LEVEL_CHOOSE }));
+      await click(screen.getByRole('button', { name: 'Dupliquer' }));
+      await click(await screen.findByRole('button', { name: 'Enregistrer' }));
 
       const tube = await store.peekRecord('tube', 'recTube1');
       const newSkill = tube.rawSkillsArray.find((skill) => skill.level === SKILL_LEVEL_CHOOSE);

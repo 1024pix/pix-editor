@@ -1,14 +1,14 @@
-import { render } from '@1024pix/ember-testing-library';
+import { render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, findAll } from '@ember/test-helpers';
+import { click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { waitForSelectCloseAnimation } from '../../../helpers/wait-for-select-close-animation';
+import { waitForSelectToBeClosed} from '../../../helpers/wait-for-select-to-be-closed';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | form-select-location', function(hooks) {
+module('Integration | Component | pop-in-select-location / form-select-location', function(hooks) {
   setupIntlRenderingTest(hooks);
   let framework1, framework2,
     area1_1, area1_2,
@@ -18,7 +18,7 @@ module('Integration | Component | form-select-location', function(hooks) {
     skill1_1_1_1_1, skill1_1_1_1_2, skill1_2_1_1_1,
     skill1_2_1_1_2, skill1_2_1_1_3, skill1_2_1_2_1,
     skill1_2_1_2_2, skill1_2_2_1_1, skill1_2_2_1_2;
-  let onSubmitStub, isSubmitableStub, screen;
+  let onSubmitStub, closeModalStub, screen;
 
   hooks.beforeEach(function() {
     const store = this.owner.lookup('service:store');
@@ -186,153 +186,210 @@ module('Integration | Component | form-select-location', function(hooks) {
         return framework1;
       }
     });
-  });
-  module('if `isMovingPrototype`', function(hooks) {
-    hooks.beforeEach(async function() {
-      // when
-      this.setSkill = sinon.stub();
-      this.closeMovePrototype = () => {
-      };
-      tube1_2_1_1.content = tube1_2_1_1;
-      this.tube = tube1_2_1_1;
-      this.challenge = {
-        name: 'challenge1',
-        skill: skill1_2_1_1_2,
-      };
 
-      await render(hbs`<PopIn::SelectLocation
-                        @onChange={{this.setSkill}}
-                        @title="Acquis du prototype"
-                        @selectTubeLevel={{true}}
-                        @variant="prototype"
-                        @tube={{this.tube}}
-                        @skill={{this.challenge.skill}}
-                        @close={{this.closeMovePrototype}} />`);
+    closeModalStub = sinon.stub();
+    onSubmitStub = sinon.stub();
+  });
+
+  module('if variant is `prototype`', function(hooks) {
+    hooks.beforeEach(async function() {
+      // given
+      this.tube = tube1_2_1_1;
+      this.skill = skill1_2_1_1_2;
+      this.onSubmit = onSubmitStub;
+      this.closeModal = closeModalStub;
+
+      // when
+      screen = await render(
+        hbs`<PopIn::SelectLocation
+          @onSubmit={{this.onSubmit}}
+          @variant="prototype"
+          @title="prototype"
+          @showModal={{true}}
+          @tube={{this.skill.tube}}
+          @skill={{this.skill}}
+          @close={{this.closeModal}}
+        />`,
+      );
     });
 
     test('it should display location fields of challenge', function(assert) {
       // given
-      const expectedResult = ['pix', '2.1 competence1_2_1', 'tube1_2_1_1', 'skill1_2_1_1_2 (v.1)'];
-
-      // then
-      const fields = findAll('.field .ember-power-select-selected-item');
-      fields.forEach((field, i) => {
-        assert.dom(field).hasText(expectedResult[i]);
-      });
+      assert.dom(screen.getByLabelText('Référentiel')).hasText('pix');
+      assert.dom(screen.getByLabelText('Compétence')).hasText('2.1 competence1_2_1');
+      assert.dom(screen.getByLabelText('Sujet')).hasText('tube1_2_1_1');
+      assert.dom(screen.getByLabelText('Acquis')).hasText('skill1_2_1_1_2 (v.1) 🟢');
     });
 
     test('it should display a list of skills on click', async function(assert) {
-      assert.expect(5);
-      // given
-      const expectedGroupResult = ['Niveau 1', 'Niveau 6'];
-      const expectedOptionsResult = [ 'skill1_2_1_1_1 (v.1)', 'skill1_2_1_1_2 (v.1)', 'skill1_2_1_1_3 (v.2)'];
-
+      assert.expect(0);
       // when
-      await click('[data-test-skill-list] .ember-basic-dropdown-trigger');
+      await click(screen.getByLabelText('Acquis'));
 
       // then
-      const groupOptions = findAll('.ember-basic-dropdown-content>.ember-power-select-options>li');
-      const options = findAll('.ember-power-select-options ul>li');
+      const firstGroup = await screen.findByRole('group', { name: 'Niveau 1' });
+      within(firstGroup).getByRole('option', { name: 'skill1_2_1_1_1 (v.1) 🟢' });
 
-      groupOptions.forEach((groupOption, i)=>{
-        assert.notStrictEqual(groupOption.textContent.trim().indexOf(expectedGroupResult[i]), -1);
-      });
-
-      options.forEach((option, i)=>{
-        assert.dom(option).hasText(expectedOptionsResult[i]);
-      });
+      const secondGroup = screen.getByRole('group', { name: 'Niveau 6' });
+      within(secondGroup).getByRole('option', { name: 'skill1_2_1_1_2 (v.1) 🟢' });
+      within(secondGroup).getByRole('option', { name: 'skill1_2_1_1_3 (v.2) 🔵' });
     });
 
     test('it should load a list of skill of selected location', async function(assert) {
-      //given
-      const expectedOptionsResult = [ 'skill1_1_1_1_1 (v.1)', 'skill1_1_1_1_2 (v.1)'];
-
+      assert.expect(0);
       // when
-      await click(findAll('.ember-basic-dropdown-trigger')[1]);
-      await click(findAll('.ember-power-select-options li')[0]);
-      await click(findAll('.ember-basic-dropdown-trigger')[2]);
-      await click(findAll('.ember-power-select-options li')[0]);
-      await click('[data-test-skill-list] .ember-basic-dropdown-trigger');
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_2_1_2' }));
+      await waitForSelectToBeClosed(screen);
+      await click(await screen.findByLabelText('Acquis'));
 
       // then
-      const options = findAll('.ember-power-select-options ul>li');
-      options.forEach((option, i)=>{
-        assert.dom(option).hasText(expectedOptionsResult[i]);
-      });
+      await screen.findByRole('option', { name: 'skill1_2_1_2_1 (v.1) 🟢' });
+      screen.getByRole('option', { name: 'skill1_2_1_2_2 (v.1) 🟢' });
     });
 
     test('move button is disabled if no location is selected', async function(assert) {
       // when
-      await click(findAll('.ember-basic-dropdown-trigger')[2]);
-      await click(findAll('.ember-power-select-options li')[1]);
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same skill
 
-      // then
-      assert.dom('[data-test-move-action]').hasAttribute('disabled');
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_2_1_2' }));
+
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no skill
+
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Acquis'));
+      await click(await screen.findByRole('option', { name: 'skill1_2_1_2_1 (v.1) 🟢' }));
+
+      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // different skill
+
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_2_1_1' }));
+
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no skill
+
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Acquis'));
+      await click(await screen.findByRole('option', { name: 'skill1_2_1_1_2 (v.1) 🟢' }));
+
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same skill
     });
 
-    test('it should invoke `setSkill` on click with new skill location argument', async function(assert) {
+    test('it should call @onSubmit with new skill location argument', async function(assert) {
       // when
-      await click(findAll('.ember-basic-dropdown-trigger')[2]);
-      await click(findAll('.ember-power-select-options li')[1]);
-      await click('[data-test-skill-list] .ember-basic-dropdown-trigger');
-      await click(findAll('.ember-power-select-options ul>li')[0]);
-      await click('[data-test-move-action]');
+
+      await click(screen.getByLabelText('Compétence'));
+      await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_1_1_1' }));
+      await waitForSelectToBeClosed(screen);
+
+      await click(await screen.findByLabelText('Acquis'));
+      await click(await screen.findByRole('option', { name: 'skill1_1_1_1_1 (v.1) 🟢' }));
+
+      await click(screen.getByRole('button', { name: 'Déplacer' }));
 
       // then
-      assert.deepEqual(this.setSkill.getCall(0).args[0], skill1_2_1_2_1);
+      assert.true(onSubmitStub.calledOnce);
+      assert.ok(onSubmitStub.calledWith(skill1_1_1_1_1));
+      assert.true(closeModalStub.calledOnce);
     });
   });
-  module('if `isMovingSkill`', function(hooks) {
+
+  module('if variant is `skill`', function(hooks) {
     hooks.beforeEach(async function() {
-      // when
-      this.copyToNewLocation = sinon.stub();
-      this.closeSelectLocation = () => {
-      };
-      tube1_2_1_1.content = tube1_2_1_1;
+      // given
       this.tube = tube1_2_1_1;
       this.skill = skill1_2_1_1_2;
+      this.onSubmit = onSubmitStub;
+      this.closeModal = closeModalStub;
 
-      await render(hbs`<PopIn::SelectLocation
-                        @onChange={{this.copyToNewLocation}}
-                        @title="title"
-                        @selectTubeLevel={{true}}
-                        @tube={{this.tube}}
-                        @variant="skill"
-                        @close={{this.closeSelectLocation}} />`);
+      // when
+      screen = await render(
+        hbs`<PopIn::SelectLocation
+          @onSubmit={{this.onSubmit}}
+          @variant="skill"
+          @title="skill"
+          @showModal={{true}}
+          @tube={{this.skill.tube}}
+          @skill={{this.skill}}
+          @close={{this.closeModal}}
+        />`,
+      );
     });
     test('it should display a list of all skill levels', async function(assert) {
       // given
       const expectedOptionsResult = [1, 2, 3, 4, 5, 6, 7, 8];
 
       // when
-      await click(findAll('.ember-basic-dropdown-trigger')[3]);
-      const options = findAll('.ember-power-select-options li');
+      await click(screen.getByLabelText('Niveau'));
+      const options = await screen.findAllByRole('option');
 
       // then
+      assert.dom(screen.getByLabelText('Référentiel')).hasText('pix');
+      assert.dom(screen.getByLabelText('Compétence')).hasText('2.1 competence1_2_1');
+      assert.dom(screen.getByLabelText('Sujet')).hasText('tube1_2_1_1');
+
       assert.strictEqual(options.length, 8);
       options.forEach((option, i) => {
         assert.dom(option).hasText(`${expectedOptionsResult[i]}`);
       });
     });
+
+    test('duplicate button is disabled when form is not submittable', async function(assert) {
+      // when
+      assert.true(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('disabled'));
+
+      await click(screen.getByLabelText('Niveau'));
+      await click(await screen.findByRole('option', { name: '2' }));
+
+      assert.false(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('disabled'));
+    });
+
+    test('it should call @onSubmit with skill copy location', async function(assert) {
+      // when
+      await click(screen.getByLabelText('Compétence'));
+      await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_1_1_1' }));
+
+      await click(screen.getByLabelText('Niveau'));
+      await click(await screen.findByRole('option', { name: '2' }));
+
+      await click(screen.getByRole('button', { name: 'Dupliquer' }));
+
+      // then
+      assert.true(onSubmitStub.calledOnce);
+      assert.ok(onSubmitStub.calledWith(competence1_1_1, tube1_1_1_1, 2));
+      assert.true(closeModalStub.calledOnce);
+    });
   });
+
   module('if variant is `tube`', function(hooks) {
     hooks.beforeEach(async function() {
       // given
-      onSubmitStub = sinon.stub();
-      isSubmitableStub = sinon.stub();
-      this.setCompetence = onSubmitStub;
-      theme1_2_1_1.content = theme1_2_1_1;
       this.theme = theme1_2_1_1;
-      this.isSubmitableStub = isSubmitableStub;
+      this.onSubmit = onSubmitStub;
+      this.closeModal = closeModalStub;
 
       // when
       screen = await render(
-        hbs`<Form::SelectLocation
-              @onSubmit={{this.setCompetence}}
-              @setIsSubmitable={{this.isSubmitableStub}}
-              @theme={{this.theme}}
-              @variant="tube"
-         />`,
+        hbs`<PopIn::SelectLocation
+          @onSubmit={{this.onSubmit}}
+          @variant="tube"
+          @title="tube"
+          @theme={{this.theme}}
+          @close={{this.closeModal}}
+          @showModal={{true}}
+        />`,
       );
     });
 
@@ -350,7 +407,7 @@ module('Integration | Component | form-select-location', function(hooks) {
       // when
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
-      await waitForSelectCloseAnimation(screen);
+      await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       // then
@@ -360,46 +417,52 @@ module('Integration | Component | form-select-location', function(hooks) {
       });
     });
 
-    test('it should send true when form is submitable and false when not', async function(assert) {
+    test('move button is disabled when form is not submittable', async function(assert) {
       // when
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same theme
+
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
 
-      await waitForSelectCloseAnimation(screen);
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no theme
+
+      await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       await click(await screen.findByRole('option', { name: 'theme1_1_1_1' }));
 
-      await waitForSelectCloseAnimation(screen);
+      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // different theme
+
+      await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '2.1 competence1_2_1' }));
 
-      await waitForSelectCloseAnimation(screen);
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no theme
+
+      await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       await click(await screen.findByRole('option', { name: 'theme1_2_1_1' }));
 
-      // then
-      assert.false(isSubmitableStub.getCall(0).args[0]); // same theme
-      assert.false(isSubmitableStub.getCall(1).args[0]); // no theme
-      assert.true(isSubmitableStub.getCall(2).args[0]); // different theme
-      assert.false(isSubmitableStub.getCall(3).args[0]); // no theme
-      assert.false(isSubmitableStub.getCall(4).args[0]); // same theme
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same theme
     });
 
     test('it should call @onSubmit with a competence and a theme', async function(assert) {
       // when
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
-      await waitForSelectCloseAnimation(screen);
+      await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       await click(await screen.findByRole('option', { name: 'theme1_1_1_1' }));
-      screen.getByRole('form').dispatchEvent(new Event('submit'));
+
+      await click(screen.getByRole('button', { name: 'Déplacer' }));
 
       // then
+      assert.true(onSubmitStub.calledOnce);
       assert.deepEqual(onSubmitStub.getCall(0).args, [competence1_1_1, theme1_1_1_1]);
+      assert.true(closeModalStub.calledOnce);
     });
   });
 });
