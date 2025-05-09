@@ -16,4 +16,12 @@ export class Tube {
     this.index = index;
     this.competenceId = competenceId;
   }
+
+  static get WORKBENCH_NAME() {
+    return '@workbench';
+  }
+
+  get isWorkbench() {
+    return this.name === Tube.WORKBENCH_NAME;
+  }
 }

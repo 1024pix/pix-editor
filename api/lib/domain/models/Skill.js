@@ -112,9 +112,16 @@ export class Skill {
 
   prepareForCreation(tube, tubeSkills, generateNewIdFnc) {
     this.id = generateNewIdFnc(Skill.ID_PREFIX);
-    this.name = `${tube.name}${this.level}`;
     this.status = Skill.STATUSES.EN_CONSTRUCTION;
-    this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
+
+    // TODO à enlever quand la création du skill workbench sera dans l’API
+    if (tube.isWorkbench) {
+      this.name = Skill.WORKBENCH_NAME;
+      this.level = null;
+    } else {
+      this.name = `${tube.name}${this.level}`;
+      this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
+    }
   }
 
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {

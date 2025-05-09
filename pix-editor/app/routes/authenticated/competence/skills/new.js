@@ -6,20 +6,18 @@ export default class NewRoute extends SingleRoute {
   templateName = 'authenticated/competence/skills/single';
   @service store;
 
-  model() {
-    return {
-      skill: this.store.createRecord('skill', { status: 'en construction' }),
-    };
-  }
-
-  async afterModel(model) {
-    const params = this.paramsFor(this.routeName);
+  async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);
     const level = parseInt(params.level);
-    model.skill.name = tube.name + level;
-    model.skill.level = level;
-    model.tube = tube;
-    return tube;
+    return this.store.createRecord('skill', {
+      name: `${tube.name}${level}`,
+      level,
+      status: 'en construction',
+      tube,
+    });
+  }
+
+  async afterModel() {
   }
 
   setupController(controller) {

@@ -149,15 +149,6 @@ module('Unit | Model | tube', function(hooks) {
     });
   });
 
-  test('it should get a next skill version', async function(assert) {
-
-    // when
-    const nextSkillVersion = tube.getNextSkillVersion(skillRecord2.level);
-
-    // then
-    assert.strictEqual(nextSkillVersion, 2);
-  });
-
   module('#productionSkills', function() {
     test('returns validated skills in the tube', function(assert) {
       assert.strictEqual(tube.productionSkillCount, 3);

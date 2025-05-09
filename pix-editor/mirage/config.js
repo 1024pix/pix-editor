@@ -141,7 +141,20 @@ function routes() {
 
   this.get('/skills/:id');
 
-  this.post('/skills');
+  this.post('/skills', (schema, request) => {
+    const skillPayload = JSON.parse(request.requestBody);
+    const tube = schema.tubes.find(skillPayload.data.relationships.tube.data.id);
+    const createdSkill = schema.skills.create({
+      ...skillPayload.data.attributes,
+      id: 'newSkillId',
+      pixId: 'newPixId',
+      status: 'en construction',
+      tubeId: skillPayload.data.relationships.tube.data.id,
+      name: tube.name === '@workbench' ? '@workbench' : `${tube.name}${skillPayload.data.attributes.level}`,
+      level: tube.name === '@workbench' ? undefined : skillPayload.data.attributes.level,
+    });
+    return createdSkill;
+  });
 
   this.post('/skills/clone', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;

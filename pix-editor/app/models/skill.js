@@ -6,7 +6,7 @@ export default class SkillModel extends Model {
 
   _pinnedRelationships = {};
 
-  @attr('string', { readOnly: true }) name;
+  @attr name;
   @attr clue;
   @attr clueEn;
   @attr clueStatus;
@@ -17,7 +17,7 @@ export default class SkillModel extends Model {
   @attr status;
   @attr pixId;
   @attr i18n;
-  @attr('number') version;
+  @attr version;
 
   @belongsTo('tube', { async: true, inverse: 'rawSkills' }) tube;
 

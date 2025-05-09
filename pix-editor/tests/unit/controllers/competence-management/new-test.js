@@ -135,10 +135,9 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       pixId: 'recId',
     };
     const expectedSkill = {
-      name: '@workbench',
       tube: 'tube',
       description: 'Acquis pour l\'atelier de la compétence 1.1 Pix+',
-      pixId: 'recId',
+      level: 0,
     };
 
     // when

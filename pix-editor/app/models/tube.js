@@ -91,11 +91,6 @@ export default class TubeModel extends Model {
     return this.productionSkillCount > 0;
   }
 
-  getNextSkillVersion(level) {
-    const skills = this.filledSkills[level - 1];
-    return skills.length;
-  }
-
   _getFilledOrderedVersions(skills) {
     const filledSkills = this._getFilledSkillGroupByLevel(skills);
     return filledSkills.map((filledSkill) => {
