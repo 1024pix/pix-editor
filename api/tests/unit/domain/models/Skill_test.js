@@ -436,8 +436,38 @@ describe('Unit | Domain | Skill', () => {
       // then
       expect(skill).toHaveProperty('id', createdSkillId);
       expect(skill).toHaveProperty('name', '@test6');
+      expect(skill).toHaveProperty('level', 6);
       expect(skill).toHaveProperty('status', Skill.STATUSES.EN_CONSTRUCTION);
       expect(skill).toHaveProperty('version', 2);
+    });
+
+    describe('when tube is @workbench', () => {
+
+      it('should set name to tube’s name and version to null', () => {
+      // given
+        const skill = domainBuilder.buildSkill({
+          name: null,
+          level: 0,
+          status: null,
+          version: null,
+        });
+
+        const tube = domainBuilder.buildTube({
+          name: '@workbench',
+        });
+
+        const tubeSkills = [];
+
+        // when
+        skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+
+        // then
+        expect(skill).toHaveProperty('id', createdSkillId);
+        expect(skill).toHaveProperty('name', '@workbench');
+        expect(skill).toHaveProperty('level', null);
+        expect(skill).toHaveProperty('status', Skill.STATUSES.EN_CONSTRUCTION);
+        expect(skill).toHaveProperty('version', null);
+      });
     });
   });
 });

@@ -87,10 +87,9 @@ export default class CompetenceManagementNewController extends Controller {
   async _createSkillWorkbench(tube, frameworkName) {
     const description = `Acquis pour l'atelier de la compétence ${this.competence.code} ${frameworkName}`;
     const skillWorkbench = this.store.createRecord('skill', {
-      name: '@workbench',
+      level: 0,
       description,
       tube,
-      pixId: this.idGenerator.newId('skill'),
     });
     return await skillWorkbench.save();
   }
