@@ -1,7 +1,11 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class PopinSelectLocation extends Component {
+
+  @tracked enableMoveActionButton = false;
+
   get titleModal() {
     if (this.args.title) {
       return this.args.title;
@@ -16,10 +20,7 @@ export default class PopinSelectLocation extends Component {
     return 'Déplacer';
   }
 
-  get enableMoveActionButton() {
-    if (this.args.isMovingTube) {
-      return this.themesLoaded && !!this._selectedTheme;
-    }
+  /* get enableMoveActionButton() {
     if (this.args.isMovingPrototype) {
       return (this.areSkillsLoaded && !!this._selectedSkill);
     }
@@ -27,11 +28,16 @@ export default class PopinSelectLocation extends Component {
       return !!this.selectedLevel;
     }
     return true;
-  }
+  }*/
 
   @action
   closeModal() {
     this.args.close();
+  }
+
+  @action
+  setIsSubmitable(value) {
+    this.enableMoveActionButton = value;
   }
 
   @action

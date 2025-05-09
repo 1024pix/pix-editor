@@ -24,7 +24,6 @@ export default class SelectLocation extends Component {
 
     this.selectedFrameworkId = this.currentData.getFramework().id;
     this.selectedCompetenceId = this.currentData.getCompetence().id;
-    this.selectedThemeId = this.args.theme?.id;
     this.selectedTubeId = this.args.tube?.id;
     this.selectedSkillId = this.args.skill?.id;
     this.areTubesLoaded = false;
@@ -32,6 +31,13 @@ export default class SelectLocation extends Component {
     if (this.selectedCompetenceId) {
       this._loadTubes(this.selectedCompetenceId);
     }
+    if (this.isMovingTube) {
+      if (!this.args.theme) {
+        throw new Error('[Form::SelectLocation] Tube has no thematic');
+      }
+      this.selectedThemeId = this.args.theme.id;
+    }
+    this.args.setIsSubmitable(false);
   }
 
   get isMovingPrototype() {
@@ -108,6 +114,7 @@ export default class SelectLocation extends Component {
   @action
   selectTheme(themeId) {
     this.selectedThemeId = themeId;
+    this.args.setIsSubmitable(!!themeId && themeId !== this.args.theme.id);
   }
 
   // == TUBES

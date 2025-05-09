@@ -18,7 +18,7 @@ module('Integration | Component | form-select-location', function(hooks) {
     skill1_1_1_1_1, skill1_1_1_1_2, skill1_2_1_1_1,
     skill1_2_1_1_2, skill1_2_1_1_3, skill1_2_1_2_1,
     skill1_2_1_2_2, skill1_2_2_1_1, skill1_2_2_1_2;
-  let onSubmitStub, screen;
+  let onSubmitStub, isSubmitableStub, screen;
 
   hooks.beforeEach(function() {
     const store = this.owner.lookup('service:store');
@@ -319,14 +319,17 @@ module('Integration | Component | form-select-location', function(hooks) {
     hooks.beforeEach(async function() {
       // given
       onSubmitStub = sinon.stub();
+      isSubmitableStub = sinon.stub();
       this.setCompetence = onSubmitStub;
       theme1_2_1_1.content = theme1_2_1_1;
       this.theme = theme1_2_1_1;
+      this.isSubmitableStub = isSubmitableStub;
 
       // when
       screen = await render(
         hbs`<Form::SelectLocation
               @onSubmit={{this.setCompetence}}
+              @setIsSubmitable={{this.isSubmitableStub}}
               @theme={{this.theme}}
               @variant="tube"
          />`,
@@ -357,15 +360,33 @@ module('Integration | Component | form-select-location', function(hooks) {
       });
     });
 
-    // TODO: fix after re-implementing disabled buttons logic
-    // test('it should disable button action if have no selected theme', async function(assert) {
-    //   // when
-    //   await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
-    //   await click(findAll('.ember-power-select-options li')[0]);
-    //
-    //   // then
-    //   assert.dom('[data-test-move-action]').hasAttribute('disabled');
-    // });
+    test('it should send true when form is submitable and false when not', async function(assert) {
+      // when
+      await click(screen.getByLabelText('Compétence'));
+      await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
+
+      await waitForSelectCloseAnimation(screen);
+
+      await click(screen.getByLabelText('Thématique *'));
+      await click(await screen.findByRole('option', { name: 'theme1_1_1_1' }));
+
+      await waitForSelectCloseAnimation(screen);
+
+      await click(screen.getByLabelText('Compétence'));
+      await click(await screen.findByRole('option', { name: '2.1 competence1_2_1' }));
+
+      await waitForSelectCloseAnimation(screen);
+
+      await click(screen.getByLabelText('Thématique *'));
+      await click(await screen.findByRole('option', { name: 'theme1_2_1_1' }));
+
+      // then
+      assert.false(isSubmitableStub.getCall(0).args[0]); // same theme
+      assert.false(isSubmitableStub.getCall(1).args[0]); // no theme
+      assert.true(isSubmitableStub.getCall(2).args[0]); // different theme
+      assert.false(isSubmitableStub.getCall(3).args[0]); // no theme
+      assert.false(isSubmitableStub.getCall(4).args[0]); // same theme
+    });
 
     test('it should call @onSubmit with a competence and a theme', async function(assert) {
       // when
