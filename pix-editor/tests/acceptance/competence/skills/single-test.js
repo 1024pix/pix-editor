@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
+import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
 module('Acceptance | skill | single', function(hooks) {
@@ -144,7 +145,6 @@ module('Acceptance | skill | single', function(hooks) {
       skill1.update({ challengeIds: [...skill1.challengeIds, challengeProto.id] });
       const skillDescription = 'Nouvelle description';
       // when
-      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
       const screen = await visit(`/competence/${competence1.id}/skills/${skill1.id}`);
       await clickByText('Modifier');
@@ -156,17 +156,19 @@ module('Acceptance | skill | single', function(hooks) {
       await clickByText('Incompatible iPad certif');
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Non voyant');
       await click(await screen.findByRole('option', { name: 'OK' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Daltonien');
       await click(await screen.findByRole('option', { name: 'KO' }));
-      await delay(100);
+      await waitForSelectToBeClosed(screen);
       await clickByText('Spoil');
       await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
+      await waitForSelectToBeClosed(screen);
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Non' }));
+      await waitForSelectToBeClosed(screen);
       const saveButton = screen.getByRole('button', { name: 'Enregistrer l\'acquis @monAcquisÀMoi' });
       await click(saveButton);
       await clickByText('Valider');
