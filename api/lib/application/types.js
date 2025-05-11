@@ -13,6 +13,10 @@ export function frameworkId() {
   return Joi.string().pattern(/^(rec|framework)[a-zA-Z0-9]+$/);
 }
 
+export function challengeId() {
+  return Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/);
+}
+
 export function competenceId() {
   return Joi.string().pattern(/^(rec|competence)[a-zA-Z0-9]+$/);
 }

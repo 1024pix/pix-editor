@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
@@ -535,6 +535,207 @@ describe('Integration | Repository | attachment-repository', () => {
           localizedChallengeId: attachmentB.localizedChallengeId,
         },
       ]);
+    });
+  });
+
+  describe('#create', () => {
+
+    afterEach(() => {
+      return knex('localized_challenges-attachments').truncate();
+    });
+
+    it('should create an attachment in airtable, in storage and the link to the localized challenge', async () => {
+      // given
+      const attachment = domainBuilder.buildAttachment({
+        id: null,
+        url: 'url/to/clone/attachment',
+        type: 'some other type',
+        size: 123,
+        mimeType: 'image/jpeg',
+        filename: 'attachment_filename',
+        challengeId: null,
+        localizedChallengeId: 'localizedChallengeId',
+      });
+      attachment.airtableChallengeId = 'airtableChallengeId';
+      /*databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeId.illustrationAlt',
+        locale: 'fr',
+        value: 'wrong illustrationAlt, wrong locale',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeId.illustrationAlt',
+        locale: 'nl',
+        value: 'good illustrationAlt',
+      });*/
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId',
+        challengeId: 'challengeId',
+        locale: 'nl',
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'createRecord').mockImplementation((tableName, airtableRequestBody) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (!_.isEqual(airtableRequestBody, { fields: {
+          url: attachment.url,
+          size: attachment.size,
+          type: attachment.type,
+          mimeType: attachment.mimeType,
+          filename: attachment.filename,
+          challengeId: ['airtableChallengeId'],
+          localizedChallengeId: attachment.localizedChallengeId,
+        } })
+        ) expect.unreachable('Attachments to create to airtable wrong bodies');
+        return {
+          id: 'airtableIdAttachment',
+          fields: {
+            'Record ID': 'airtableIdAttachmentA',
+            url: attachment.url,
+            size: attachment.size,
+            type: attachment.type,
+            mimeType: attachment.mimeType,
+            filename: attachment.filename,
+            'challengeId persistant': ['challengeId'],
+            'localizedChallengeId': attachment.localizedChallengeId,
+          },
+          get: function(field) { return this.fields[field]; },
+        };
+      });
+
+      // when
+      const createdAttachment = await attachmentRepository.create(attachment);
+
+      // then
+      const expectedAttachment = domainBuilder.buildAttachment({
+        id: 'airtableIdAttachmentA',
+        url: attachment.url,
+        type: attachment.type,
+        size: attachment.size,
+        mimeType: attachment.mimeType,
+        filename: attachment.filename,
+        challengeId: 'challengeId',
+        localizedChallengeId: attachment.localizedChallengeId,
+        alt: null,
+      });
+      expectedAttachment.airtableChallengeId = attachment.airtableChallengeId;
+      expect(createdAttachment).toStrictEqual(expectedAttachment);
+      const localizedChallengeAttachment = await knex('localized_challenges-attachments')
+        .select(['attachmentId', 'localizedChallengeId'])
+        .where({ localizedChallengeId: attachment.localizedChallengeId })
+        .first();
+      expect(localizedChallengeAttachment).toStrictEqual(
+        {
+          attachmentId: 'airtableIdAttachmentA',
+          localizedChallengeId: attachment.localizedChallengeId,
+        },
+      );
+    });
+
+    context('alt field', function() {
+      let attachmentToCreate, expectedAttachment;
+      beforeEach(function() {
+        // given
+        attachmentToCreate = domainBuilder.buildAttachment({
+          id: null,
+          url: 'url/to/clone/attachment',
+          size: 123,
+          mimeType: 'image/jpeg',
+          filename: 'attachment_filename',
+          challengeId: null,
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        attachmentToCreate.airtableChallengeId = 'airtableChallengeId';
+        vi.spyOn(airtableClient, 'createRecord').mockImplementation((tableName, airtableRequestBody) => {
+          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+          if (!_.isEqual(airtableRequestBody, {
+            fields: {
+              url: attachmentToCreate.url,
+              size: attachmentToCreate.size,
+              type: attachmentToCreate.type,
+              mimeType: attachmentToCreate.mimeType,
+              filename: attachmentToCreate.filename,
+              challengeId: ['airtableChallengeId'],
+              localizedChallengeId: attachmentToCreate.localizedChallengeId,
+            }
+          })
+          ) expect.unreachable('Attachments to create to airtable wrong bodies');
+          return {
+            id: 'airtableIdAttachment',
+            fields: {
+              'Record ID': 'airtableIdAttachmentA',
+              url: attachmentToCreate.url,
+              size: attachmentToCreate.size,
+              type: attachmentToCreate.type,
+              mimeType: attachmentToCreate.mimeType,
+              filename: attachmentToCreate.filename,
+              'challengeId persistant': ['challengeId'],
+              'localizedChallengeId': attachmentToCreate.localizedChallengeId,
+            },
+            get: function(field) {
+              return this.fields[field];
+            },
+          };
+        });
+        expectedAttachment = domainBuilder.buildAttachment({
+          id: 'airtableIdAttachmentA',
+          url: attachmentToCreate.url,
+          size: attachmentToCreate.size,
+          mimeType: attachmentToCreate.mimeType,
+          filename: attachmentToCreate.filename,
+          challengeId: 'challengeId',
+          localizedChallengeId: attachmentToCreate.localizedChallengeId,
+        });
+        expectedAttachment.airtableChallengeId = attachmentToCreate.airtableChallengeId;
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.challengeId.illustrationAlt',
+          locale: 'fr',
+          value: 'wrong illustrationAlt, wrong locale',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.challengeId.illustrationAlt',
+          locale: 'nl',
+          value: 'good illustrationAlt',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'nl',
+        });
+        return databaseBuilder.commit();
+      });
+
+      it('should fill the alt field when attachment is of type illustration', async function() {
+        attachmentToCreate.type = 'illustration';
+
+        // when
+        const createdAttachment = await attachmentRepository.create(attachmentToCreate);
+
+        // then
+        expectedAttachment.type = 'illustration';
+        expectedAttachment.alt = 'good illustrationAlt';
+        expect(createdAttachment).toStrictEqual(expectedAttachment);
+      });
+
+      it('should leave the alt field null when attachment is not of type illustration', async function() {
+        attachmentToCreate.type = 'NOTillustration';
+
+        // when
+        const createdAttachment = await attachmentRepository.create(attachmentToCreate);
+
+        // then
+        expectedAttachment.type = 'NOTillustration';
+        expectedAttachment.alt = null;
+        expect(createdAttachment).toStrictEqual(expectedAttachment);
+      });
     });
   });
 });

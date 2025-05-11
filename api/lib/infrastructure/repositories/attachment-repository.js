@@ -56,6 +56,29 @@ export async function createBatch(attachments) {
   return toDomainList(createdAttachmentsDtos, translations, localizedChallenges);
 }
 
+export async function create(attachment) {
+  const attachmentDTO = {
+    url: attachment.url,
+    size: attachment.size,
+    type: attachment.type,
+    mimeType: attachment.mimeType,
+    filename: attachment.filename,
+    challengeId: attachment.airtableChallengeId,
+    localizedChallengeId: attachment.localizedChallengeId,
+  };
+  const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
+  await localizedChallengesAttachmentsRepository.save({
+    localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
+    attachmentId: createdAttachmentDTO.id,
+  });
+  const translations = await translationRepository.listByPattern(`challenge.${createdAttachmentDTO.challengeId}.illustrationAlt`);
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [createdAttachmentDTO.challengeId] });
+
+  const [createdAttachment] = toDomainList([createdAttachmentDTO], translations, localizedChallenges);
+  createdAttachment.airtableChallengeId = attachment.airtableChallengeId;
+  return createdAttachment;
+}
+
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesById = _.keyBy(localizedChallenges, 'id');

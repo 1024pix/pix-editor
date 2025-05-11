@@ -1,5 +1,6 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
+import { Attachment } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Attachment', () => {
   context('#clone', () => {
@@ -37,6 +38,38 @@ describe('Unit | Domain | Attachment', () => {
       });
 
       expect(clonedAttachment).toStrictEqual(expectedAttachment);
+    });
+  });
+  context('static #buildFromCreationCommand', () => {
+    it('should return an attachment built from a creation command', () => {
+      // given
+      const creationCommand = {
+        filename: 'some filename',
+        size: 123,
+        url: 'some.url.com',
+        type: 'some type',
+        mimeType: 'some mime type',
+        localizedChallengeId: 'locId123',
+        airtableChallengeId: 'challenge123',
+      };
+
+      // when
+      const attachment = Attachment.buildFromCreationCommand(creationCommand);
+
+      // then
+      const expectedAttachment = domainBuilder.buildAttachment({
+        filename: 'some filename',
+        size: 123,
+        url: 'some.url.com',
+        type: 'some type',
+        mimeType: 'some mime type',
+        localizedChallengeId: 'locId123',
+      });
+      expectedAttachment.alt = undefined;
+      expectedAttachment.id = undefined;
+      expectedAttachment.challengeId = undefined;
+      expectedAttachment.airtableChallengeId = 'challenge123';
+      expect(attachment).toStrictEqual(expectedAttachment);
     });
   });
 });

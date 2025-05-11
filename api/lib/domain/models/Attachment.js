@@ -28,6 +28,19 @@ export class Attachment {
     };
   }
 
+  static buildFromCreationCommand({ filename, size, url, mimeType, type, localizedChallengeId, airtableChallengeId }) {
+    const newAttachment = new Attachment({
+      filename,
+      size,
+      url,
+      mimeType,
+      type,
+      localizedChallengeId
+    });
+    newAttachment.airtableChallengeId = airtableChallengeId;
+    return newAttachment;
+  }
+
   clone({ challengeId, localizedChallengeId }) {
     return new Attachment({
       id: null,
