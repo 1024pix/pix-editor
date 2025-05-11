@@ -1,6 +1,7 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import {
   deserializeCreationCommand,
+  deserializeQuery,
   serialize,
 } from '../../../../../lib/infrastructure/serializers/jsonapi/attachment-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
@@ -41,6 +42,19 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
         airtableChallengeId: 'challenge123',
+      });
+    });
+  });
+
+  describe('#deserializeQuery', () => {
+    it('should deserialize query', () => {
+      // Given
+      const query = { 'filter[localizedChallengeIds]': 'loc1Id,loc2Id' };
+
+      const deserializedQuery = deserializeQuery(query);
+
+      expect(deserializedQuery).toStrictEqual({
+        localizedChallengeIds: ['loc1Id', 'loc2Id'],
       });
     });
   });

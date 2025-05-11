@@ -82,6 +82,28 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'GET',
+      path: '/api/attachments',
+      config: {
+        validate: {
+          query: Joi.object({
+            'filter[localizedChallengeIds]': Joi.string().required(),
+          }).required(),
+        },
+        handler: async function(request, h) {
+          try {
+            const query = attachmentSerializer.deserializeQuery(request.query);
+            const attachments = await usecases.findAttachments({ query, attachmentRepository });
+            return h.response(attachmentSerializer.serialize(attachments));
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 

@@ -232,4 +232,145 @@ describe('Acceptance | Route | attachments', () => {
       expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
     });
   });
+
+  describe('GET /attachments?filter[localizedChallengeIds]=%', () => {
+    describe('when user is NOT authenticated', () => {
+      it('should respond with status 401', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId1,localizedChallengeId3',
+        });
+
+        // then
+        expect(response.statusCode).toBe(401);
+      });
+    });
+
+    describe('when query is NOT valid', () => {
+      it('should respond with status 400', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/attachments?filter[loclizedChallengeId]=localizedChallengeId123,challengeId456',
+          headers: generateAuthorizationHeader(readUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    it('should respond with found attachments', async () => {
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123',
+        challengeId: 'challenge123',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallenge123',
+        challengeId: 'challenge123',
+        locale: 'es',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge456',
+        challengeId: 'challenge456',
+        locale: 'fr',
+      });
+      await databaseBuilder.commit();
+      const airtableAttachments = [];
+      airtableAttachments.push(airtableBuilder.factory.buildAttachment({
+        id: 'airtableAttachmentId1',
+        type: 'some type 1',
+        url: 'some url 1',
+        size: 123,
+        mimeType: 'some mime type 1',
+        filename: 'some filename 1',
+        challengeId: 'challenge123',
+        localizedChallengeId: 'localizedChallenge123',
+      }));
+      airtableAttachments.push(airtableBuilder.factory.buildAttachment({
+        id: 'airtableAttachmentId2',
+        type: 'some type 2',
+        url: 'some url 2',
+        size: 456,
+        mimeType: 'some mime type 2',
+        filename: 'some filename 2',
+        challengeId: 'challenge456',
+        localizedChallengeId: 'challengeId456',
+      }));
+      const airtableGetAttachmentScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments')
+        .query({
+          filterByFormula: 'OR({localizedChallengeId} = "localizedChallengeId123",{localizedChallengeId} = "challengeId456")',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableAttachments });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId123,challengeId456',
+        headers: generateAuthorizationHeader(readUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual({
+        data: [
+          {
+            type: 'attachments',
+            id: 'airtableAttachmentId1',
+            attributes: {
+              type: 'some type 1',
+              url: 'some url 1',
+              size: 123,
+              'mime-type': 'some mime type 1',
+              filename: 'some filename 1',
+              'localized-challenge-id': 'localizedChallenge123',
+              alt: null,
+            },
+            relationships: {
+              challenge: {
+                data: null,/*{
+                  type: 'challenges',
+                  id: null, // TODO
+                },*/
+              },
+            },
+          },
+          {
+            type: 'attachments',
+            id: 'airtableAttachmentId2',
+            attributes: {
+              type: 'some type 2',
+              url: 'some url 2',
+              size: 456,
+              'mime-type': 'some mime type 2',
+              filename: 'some filename 2',
+              'localized-challenge-id': 'challengeId456',
+              alt: null,
+            },
+            relationships: {
+              challenge: {
+                data: null,/*{
+                  type: 'challenges',
+                  id: null, // TODO
+                },*/
+              },
+            },
+          },
+        ],
+      });
+      expect(airtableGetAttachmentScope.isDone()).toBe(true);
+    });
+  });
 });

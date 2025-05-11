@@ -1,4 +1,5 @@
 import Jsonapi from 'jsonapi-serializer';
+import { extractParameters } from '../../utils/query-params-utils.js';
 
 const { Serializer } = Jsonapi;
 
@@ -44,5 +45,12 @@ export function deserializeCreationCommand({ data }) {
     type: data.attributes.type,
     localizedChallengeId: data.attributes['localized-challenge-id'],
     airtableChallengeId: data.relationships.challenge.data.id,
+  };
+}
+
+export function deserializeQuery(query) {
+  const extractedParams = extractParameters(query);
+  return {
+    localizedChallengeIds: extractedParams.filter.localizedChallengeIds.split(','),
   };
 }
