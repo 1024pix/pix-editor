@@ -49,16 +49,3 @@ export function tutorialsRelationship() {
 export function whitelistedUrlId() {
   return schemaPositiveInteger32bits;
 }
-
-/**
- * @deprecated use `import * as Types` instead
- */
-export const Types = Object.freeze({
-  areaId,
-  frameworkId,
-  competenceId,
-  locale,
-  skillId,
-  tubeId,
-  whitelistedUrlId,
-});

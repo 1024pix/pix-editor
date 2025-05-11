@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import * as securityPreHandlers from '../security-pre-handlers.js';
-import { Types } from '../types.js';
+import * as Types from '../types.js';
 import { whitelistedUrlReadRepository, whitelistedUrlRepository } from '../../infrastructure/repositories/index.js';
 import * as whitelistedUrlSerializer from '../../infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
 import { NotFoundWhitelistedUrlError } from '../../domain/errors.js';
