@@ -41,7 +41,7 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
         type: 'some type',
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
-        airtableChallengeId: 'challenge123',
+        challengeId: 'challenge123',
       });
     });
   });
@@ -74,7 +74,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           challengeId: 'challenge123',
           alt: 'coucou les zamis',
         });
-        attachment.airtableChallengeId = 'airtableChallenge123';
 
         const serializedAttachment = serialize(attachment);
 
@@ -93,9 +92,58 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             },
             relationships: {
               challenge: {
+                data: null,
+              },
+              'localized-challenge': {
+                data: {
+                  type: 'localized-challenges',
+                  id: 'locId123',
+                },
+              },
+            },
+          },
+        });
+      });
+      it('should return a json with a filled challenge relationship when attachment is related to primary challenge (hence, localizedChallengeId and challengeId are the same)', function() {
+        // given
+        const attachment = domainBuilder.buildAttachment({
+          id: 'attachmentId',
+          filename: 'some filename',
+          size: 123,
+          url: 'some.url.com',
+          type: 'some type',
+          mimeType: 'some mime type',
+          localizedChallengeId: 'challenge123',
+          challengeId: 'challenge123',
+          alt: 'coucou les zamis',
+        });
+
+        const serializedAttachment = serialize(attachment);
+
+        expect(serializedAttachment).toStrictEqual({
+          data: {
+            type: 'attachments',
+            id: 'attachmentId',
+            attributes: {
+              filename: 'some filename',
+              size: 123,
+              url: 'some.url.com',
+              type: 'some type',
+              'mime-type': 'some mime type',
+              alt: 'coucou les zamis',
+              'localized-challenge-id': 'challenge123',
+            },
+            relationships: {
+              challenge: {
                 data: {
                   type: 'challenges',
-                  id: 'airtableChallenge123',
+                  id: 'challenge123',
+                },
+              },
+              'localized-challenge': {
+                data: {
+                  type: 'localized-challenges',
+                  id: 'challenge123',
                 },
               },
             },
@@ -149,11 +197,14 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   alt: 'coucou les zamis1',
                 },
                 relationships: {
-                  challenge: {
+                  'localized-challenge': {
                     data: {
-                      type: 'challenges',
-                      id: 'airtableChallenge123',
+                      type: 'localized-challenges',
+                      id: 'locId123',
                     },
+                  },
+                  challenge: {
+                    data: null,
                   },
                 },
               },
@@ -170,11 +221,14 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   alt: 'coucou les zamis2',
                 },
                 relationships: {
-                  challenge: {
+                  'localized-challenge': {
                     data: {
-                      type: 'challenges',
-                      id: 'airtableChallenge456',
+                      type: 'localized-challenges',
+                      id: 'locId456',
                     },
+                  },
+                  challenge: {
+                    data: null,
                   },
                 },
               },

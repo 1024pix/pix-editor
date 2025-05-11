@@ -30,7 +30,7 @@ describe('Acceptance | Route | attachments', () => {
             challenge: {
               data: {
                 type: 'challenges',
-                id: 'challengeAirtable123'
+                id: 'challenge123'
               },
             },
           },
@@ -101,8 +101,25 @@ describe('Acceptance | Route | attachments', () => {
         mimeType: validPayload.data.attributes['mime-type'],
         filename: validPayload.data.attributes.filename,
         challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
         localizedChallengeId: validPayload.data.attributes['localized-challenge-id'],
       });
+      const airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Epreuves')
+        .query({
+          fields: {
+            '': ['Record ID', 'id persistant'],
+          },
+          filterByFormula: 'OR("challenge123" = {id persistant})',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [{
+          fields: {
+            'id persistant': 'challenge123',
+            'Record ID': 'challengeAirtable123'
+          }
+        }]
+        });
       const airtablePostAttachmentScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Attachments/', {
           records: [{
@@ -112,7 +129,7 @@ describe('Acceptance | Route | attachments', () => {
               'type': validPayload.data.attributes.type,
               'mimeType': validPayload.data.attributes['mime-type'],
               'filename': validPayload.data.attributes.filename,
-              'challengeId': [validPayload.data.relationships.challenge.data.id],
+              'challengeId': ['challengeAirtable123'],
               'localizedChallengeId': validPayload.data.attributes['localized-challenge-id'],
             },
           }],
@@ -146,15 +163,19 @@ describe('Acceptance | Route | attachments', () => {
             alt: null,
           },
           relationships: {
-            challenge: {
+            'localized-challenge': {
               data: {
-                type: 'challenges',
-                id: validPayload.data.relationships.challenge.data.id,
+                type: 'localized-challenges',
+                id: validPayload.data.attributes['localized-challenge-id'],
               },
+            },
+            challenge: {
+              data: null,
             },
           },
         },
       });
+      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
       expect(airtablePostAttachmentScope.isDone()).toBe(true);
     });
   });
@@ -304,7 +325,7 @@ describe('Acceptance | Route | attachments', () => {
         size: 456,
         mimeType: 'some mime type 2',
         filename: 'some filename 2',
-        challengeId: 'challenge456',
+        challengeId: 'challengeId456',
         airtableChallengeId: 'challengeAirtable456',
         localizedChallengeId: 'challengeId456',
       }));
@@ -341,11 +362,14 @@ describe('Acceptance | Route | attachments', () => {
               alt: null,
             },
             relationships: {
-              challenge: {
+              'localized-challenge': {
                 data: {
-                  type: 'challenges',
-                  id: 'challengeAirtable123',
+                  type: 'localized-challenges',
+                  id: 'localizedChallenge123',
                 },
+              },
+              challenge: {
+                data: null,
               },
             },
           },
@@ -362,10 +386,16 @@ describe('Acceptance | Route | attachments', () => {
               alt: null,
             },
             relationships: {
+              'localized-challenge': {
+                data: {
+                  type: 'localized-challenges',
+                  id: 'challengeId456',
+                },
+              },
               challenge: {
                 data: {
                   type: 'challenges',
-                  id: 'challengeAirtable456',
+                  id: 'challengeId456',
                 },
               },
             },

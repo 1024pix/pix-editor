@@ -30,7 +30,7 @@ export class Attachment {
     };
   }
 
-  static buildFromCreationCommand({ filename, size, url, mimeType, type, localizedChallengeId, airtableChallengeId }) {
+  static buildFromCreationCommand({ filename, size, url, mimeType, type, localizedChallengeId, challengeId }) {
     return new Attachment({
       filename,
       size,
@@ -38,7 +38,7 @@ export class Attachment {
       mimeType,
       type,
       localizedChallengeId,
-      airtableChallengeId,
+      challengeId,
     });
   }
 

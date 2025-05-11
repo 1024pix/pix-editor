@@ -13,8 +13,17 @@ const serializer = new Serializer('attachment', {
     'alt',
     'localizedChallengeId',
     'challenge',
+    'localizedChallenge',
   ],
-  transform({ id, filename, size, url, mimeType, type, alt, localizedChallengeId, airtableChallengeId }) {
+  typeForAttribute(attribute) {
+    if (attribute === 'localizedChallenge') return 'localized-challenges';
+  },
+  transform({ id, filename, size, url, mimeType, type, alt, localizedChallengeId, challengeId }) {
+    let challenge = null;
+    const localizedChallenge = { id: localizedChallengeId };
+    if (localizedChallengeId === challengeId) {
+      challenge = { id: challengeId };
+    }
     return {
       id,
       filename,
@@ -24,10 +33,14 @@ const serializer = new Serializer('attachment', {
       type,
       alt,
       localizedChallengeId,
-      challenge: { id: airtableChallengeId },
+      challenge,
+      localizedChallenge,
     };
   },
   challenge: {
+    ref: 'id',
+  },
+  localizedChallenge: {
     ref: 'id',
   },
 });
@@ -44,7 +57,7 @@ export function deserializeCreationCommand({ data }) {
     mimeType: data.attributes['mime-type'],
     type: data.attributes.type,
     localizedChallengeId: data.attributes['localized-challenge-id'],
-    airtableChallengeId: data.relationships.challenge.data.id,
+    challengeId: data.relationships.challenge.data.id,
   };
 }
 

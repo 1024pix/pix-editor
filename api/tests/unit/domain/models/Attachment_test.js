@@ -52,7 +52,7 @@ describe('Unit | Domain | Attachment', () => {
         type: 'some type',
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
-        airtableChallengeId: 'challengeAirtable123',
+        challengeId: 'challenge123',
       };
 
       // when
@@ -66,11 +66,11 @@ describe('Unit | Domain | Attachment', () => {
         type: 'some type',
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
-        airtableChallengeId: 'challengeAirtable123',
+        challengeId: 'challenge123',
       });
       expectedAttachment.alt = undefined;
       expectedAttachment.id = undefined;
-      expectedAttachment.challengeId = undefined;
+      expectedAttachment.airtableChallengeId = undefined;
       expect(attachment).toStrictEqual(expectedAttachment);
     });
   });

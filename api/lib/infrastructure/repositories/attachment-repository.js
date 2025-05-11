@@ -57,13 +57,14 @@ export async function createBatch(attachments) {
 }
 
 export async function create(attachment) {
+  const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds([attachment.challengeId]);
   const attachmentDTO = {
     url: attachment.url,
     size: attachment.size,
     type: attachment.type,
     mimeType: attachment.mimeType,
     filename: attachment.filename,
-    challengeId: attachment.airtableChallengeId,
+    challengeId: airtableChallengeIdsByIds[attachment.challengeId],
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
