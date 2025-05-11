@@ -15,7 +15,6 @@ const serializer = new Serializer('localized-challenges', {
     'geography',
     'urlsToConsult',
     'status',
-    'fileIds',
     'translations',
     'requireGafamWebsiteAccess',
     'isIncompatibleIpadCertif',
@@ -24,6 +23,7 @@ const serializer = new Serializer('localized-challenges', {
     'toRephrase',
     'hasEmbedInternalValidation',
     'noValidationNeeded',
+    'attachmentses',
   ],
   challenge: {
     ref: 'id',
@@ -34,12 +34,20 @@ const serializer = new Serializer('localized-challenges', {
       return fileId;
     }
   },
+  attachmentses: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related: function(record, current, parent) {
+        return `/api/attachments?filter[localizedChallengeIds]=${parent.id}`;
+      },
+    },
+  },
 
   typeForAttribute(attribute) {
-    if (attribute === 'fileIds') return 'attachments';
+    if (attribute === 'attachmentses') return 'attachments';
   },
   keyForAttribute(attribute) {
-    if (attribute === 'fileIds') return 'files';
     return Inflector.dasherize(Inflector.underscore(attribute));
   },
   transform: function({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
@@ -49,6 +57,7 @@ const serializer = new Serializer('localized-challenges', {
       challenge: { id: challengeId },
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
       geography: getCountryName(localizedChallenge.geography),
+      attachmentses: [],
     };
   }
 });

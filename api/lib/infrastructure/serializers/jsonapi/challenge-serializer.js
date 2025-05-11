@@ -40,7 +40,6 @@ const serializer = new Serializer('challenges', {
     'autoReply',
     'focusable',
     'skill',
-    'files',
     'updatedAt',
     'validatedAt',
     'archivedAt',
@@ -56,28 +55,34 @@ const serializer = new Serializer('challenges', {
     'toRephrase',
     'hasEmbedInternalValidation',
     'noValidationNeeded',
+    'attachmentses',
   ],
   typeForAttribute(attribute) {
-    if (attribute === 'files') return 'attachments';
     if (attribute === 'localizedChallenges') return 'localized-challenges';
+    if (attribute === 'attachmentses') return 'attachments';
   },
   skill: {
     ref(challenge, skillId) {
       return skillId;
     }
   },
-  files: {
-    ref(challenge, fileId) {
-      return fileId;
-    }
-  },
   localizedChallenges: {
     ref: 'id',
     included: false,
   },
+  attachmentses: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related: function(record, current, parent) {
+        return `/api/attachments?filter[localizedChallengeIds]=${parent.id}`;
+      },
+    },
+  },
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
+    challenge.attachmentses = [];
     return challenge;
   }
 });
