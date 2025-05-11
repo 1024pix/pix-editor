@@ -8,6 +8,7 @@ export class Attachment {
     size,
     mimeType,
     challengeId,
+    airtableChallengeId,
     localizedChallengeId,
   }) {
     this.id = id;
@@ -18,6 +19,7 @@ export class Attachment {
     this.mimeType = mimeType;
     this.filename = filename;
     this.challengeId = challengeId;
+    this.airtableChallengeId = airtableChallengeId;
     this.localizedChallengeId = localizedChallengeId;
   }
 
@@ -29,16 +31,15 @@ export class Attachment {
   }
 
   static buildFromCreationCommand({ filename, size, url, mimeType, type, localizedChallengeId, airtableChallengeId }) {
-    const newAttachment = new Attachment({
+    return new Attachment({
       filename,
       size,
       url,
       mimeType,
       type,
-      localizedChallengeId
+      localizedChallengeId,
+      airtableChallengeId,
     });
-    newAttachment.airtableChallengeId = airtableChallengeId;
-    return newAttachment;
   }
 
   clone({ challengeId, localizedChallengeId }) {
@@ -50,6 +51,7 @@ export class Attachment {
       size: this.size,
       mimeType: this.mimeType,
       filename: this.filename,
+      airtableChallengeId: null,
       challengeId,
       localizedChallengeId,
     });

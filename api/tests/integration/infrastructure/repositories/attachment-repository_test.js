@@ -70,6 +70,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_1',
           url: 'http://1',
           challengeId: 'challengeId1',
+          airtableChallengeId: 'challengeAirtableId1',
           localizedChallengeId: 'localizedChallengeId1'
         }),
         airtableBuilder.factory.buildAttachment({
@@ -79,6 +80,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_1NL',
           url: 'http://1-nl',
           challengeId: 'challengeId1',
+          airtableChallengeId: 'challengeAirtableId1',
           localizedChallengeId: 'localizedChallengeId1Nl'
         }),
         airtableBuilder.factory.buildAttachment({
@@ -88,6 +90,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_2',
           url: 'http://2',
           challengeId: 'challengeId2',
+          airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2'
         }),
         airtableBuilder.factory.buildAttachment({
@@ -97,6 +100,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_3',
           url: 'http://3',
           challengeId: 'challengeId2',
+          airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2'
         }),
       ]).activate().nockScope;
@@ -126,6 +130,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_1',
           url: 'http://1',
           challengeId: 'challengeId1',
+          airtableChallengeId: 'challengeAirtableId1',
           localizedChallengeId: 'localizedChallengeId1',
         }),
         domainBuilder.buildAttachment({
@@ -136,6 +141,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_1NL',
           url: 'http://1-nl',
           challengeId: 'challengeId1',
+          airtableChallengeId: 'challengeAirtableId1',
           localizedChallengeId: 'localizedChallengeId1Nl',
         }),
         domainBuilder.buildAttachment({
@@ -146,6 +152,7 @@ describe('Integration | Repository | attachment-repository', () => {
           filename: 'filename_2',
           url: 'http://2',
           challengeId: 'challengeId2',
+          airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2',
         }),
         domainBuilder.buildAttachment({
@@ -156,6 +163,7 @@ describe('Integration | Repository | attachment-repository', () => {
           alt: null,
           url: 'http://3',
           challengeId: 'challengeId2',
+          airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2',
         }),
       ]);
@@ -253,6 +261,7 @@ describe('Integration | Repository | attachment-repository', () => {
               mimeType: attachment_NL_forChallengeA_data.mimeType,
               filename: attachment_NL_forChallengeA_data.filename,
               'challengeId persistant': [attachment_NL_forChallengeA_data.challengeId],
+              'challengeId': ['airtableChallengeId1'],
               'localizedChallengeId': attachment_NL_forChallengeA_data.localizedChallengeId,
             },
             get: function(field) { return this.fields[field]; },
@@ -267,6 +276,7 @@ describe('Integration | Repository | attachment-repository', () => {
               mimeType: attachment_FR_forChallengeA_data.mimeType,
               filename: attachment_FR_forChallengeA_data.filename,
               'challengeId persistant': [attachment_FR_forChallengeA_data.challengeId],
+              'challengeId': ['airtableChallengeId1'],
               'localizedChallengeId': attachment_FR_forChallengeA_data.localizedChallengeId,
             },
             get: function(field) { return this.fields[field]; },
@@ -281,6 +291,7 @@ describe('Integration | Repository | attachment-repository', () => {
               mimeType: attachment_FR_forChallengeB_data.mimeType,
               filename: attachment_FR_forChallengeB_data.filename,
               'challengeId persistant': [attachment_FR_forChallengeB_data.challengeId],
+              'challengeId': ['airtableChallengeId2'],
               'localizedChallengeId': attachment_FR_forChallengeB_data.localizedChallengeId,
             },
             get: function(field) { return this.fields[field]; },
@@ -302,6 +313,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachment_NL_forChallengeA_data.mimeType,
           filename: attachment_NL_forChallengeA_data.filename,
           challengeId: attachment_NL_forChallengeA_data.challengeId,
+          airtableChallengeId: 'airtableChallengeId1',
           localizedChallengeId: attachment_NL_forChallengeA_data.localizedChallengeId,
         }),
         domainBuilder.buildAttachment({
@@ -313,6 +325,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachment_FR_forChallengeA_data.mimeType,
           filename: attachment_FR_forChallengeA_data.filename,
           challengeId: attachment_FR_forChallengeA_data.challengeId,
+          airtableChallengeId: 'airtableChallengeId1',
           localizedChallengeId: attachment_FR_forChallengeA_data.localizedChallengeId,
         }),
         domainBuilder.buildAttachment({
@@ -324,6 +337,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachment_FR_forChallengeB_data.mimeType,
           filename: attachment_FR_forChallengeB_data.filename,
           challengeId: attachment_FR_forChallengeB_data.challengeId,
+          airtableChallengeId: 'airtableChallengeId2',
           localizedChallengeId: attachment_FR_forChallengeB_data.localizedChallengeId,
         }),
       ]);
@@ -473,6 +487,7 @@ describe('Integration | Repository | attachment-repository', () => {
               mimeType: attachmentA.mimeType,
               filename: attachmentA.filename,
               'challengeId persistant': [attachmentA.challengeId],
+              'challengeId': ['airtableChallengeA'],
               'localizedChallengeId': attachmentA.localizedChallengeId,
             },
             get: function(field) { return this.fields[field]; },
@@ -487,6 +502,7 @@ describe('Integration | Repository | attachment-repository', () => {
               mimeType: attachmentB.mimeType,
               filename: attachmentB.filename,
               'challengeId persistant': [attachmentB.challengeId],
+              'challengeId': ['airtableChallengeB'],
               'localizedChallengeId': attachmentB.localizedChallengeId,
             },
             get: function(field) { return this.fields[field]; },
@@ -508,6 +524,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachmentA.mimeType,
           filename: attachmentA.filename,
           challengeId: attachmentA.challengeId,
+          airtableChallengeId: 'airtableChallengeA',
           localizedChallengeId: attachmentA.localizedChallengeId,
         }),
         domainBuilder.buildAttachment({
@@ -519,6 +536,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachmentB.mimeType,
           filename: attachmentB.filename,
           challengeId: attachmentB.challengeId,
+          airtableChallengeId: 'airtableChallengeB',
           localizedChallengeId: attachmentB.localizedChallengeId,
         }),
       ]);

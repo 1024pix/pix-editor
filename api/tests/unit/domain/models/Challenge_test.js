@@ -917,6 +917,7 @@ describe('Unit | Domain | Challenge', () => {
           url: attachmentIdA.url,
           localizedChallengeId: clonedChallengeId,
           challengeId: clonedChallengeId,
+          airtableChallengeId: null,
         })
       ]);
     });

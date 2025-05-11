@@ -29,6 +29,7 @@ export const attachmentDatasource = datasource.extend({
       mimeType: airtableRecord.get('mimeType'),
       filename: airtableRecord.get('filename'),
       challengeId: airtableRecord.get('challengeId persistant')?.[0],
+      airtableChallengeId: airtableRecord.get('challengeId')?.[0],
       localizedChallengeId: airtableRecord.get('localizedChallengeId'),
     };
   },

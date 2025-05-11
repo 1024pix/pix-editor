@@ -15,6 +15,7 @@ describe('Unit | Domain | Attachment', () => {
         mimeType: 'image/png',
         filename: 'nom_du_fichier',
         challengeId: 'challengeId',
+        airtableChallengeId: 'challengeAirtableId',
         localizedChallengeId: 'localizedChallengeId'
       });
 
@@ -34,7 +35,8 @@ describe('Unit | Domain | Attachment', () => {
         mimeType: 'image/png',
         filename: 'nom_du_fichier',
         challengeId: 'newChallengeId',
-        localizedChallengeId: 'newLocalizedChallengeId'
+        localizedChallengeId: 'newLocalizedChallengeId',
+        airtableChallengeId: null,
       });
 
       expect(clonedAttachment).toStrictEqual(expectedAttachment);
@@ -50,7 +52,7 @@ describe('Unit | Domain | Attachment', () => {
         type: 'some type',
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
-        airtableChallengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
       };
 
       // when
@@ -64,11 +66,11 @@ describe('Unit | Domain | Attachment', () => {
         type: 'some type',
         mimeType: 'some mime type',
         localizedChallengeId: 'locId123',
+        airtableChallengeId: 'challengeAirtable123',
       });
       expectedAttachment.alt = undefined;
       expectedAttachment.id = undefined;
       expectedAttachment.challengeId = undefined;
-      expectedAttachment.airtableChallengeId = 'challenge123';
       expect(attachment).toStrictEqual(expectedAttachment);
     });
   });

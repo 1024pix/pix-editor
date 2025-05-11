@@ -294,6 +294,7 @@ describe('Acceptance | Route | attachments', () => {
         mimeType: 'some mime type 1',
         filename: 'some filename 1',
         challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
         localizedChallengeId: 'localizedChallenge123',
       }));
       airtableAttachments.push(airtableBuilder.factory.buildAttachment({
@@ -304,6 +305,7 @@ describe('Acceptance | Route | attachments', () => {
         mimeType: 'some mime type 2',
         filename: 'some filename 2',
         challengeId: 'challenge456',
+        airtableChallengeId: 'challengeAirtable456',
         localizedChallengeId: 'challengeId456',
       }));
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
@@ -340,10 +342,10 @@ describe('Acceptance | Route | attachments', () => {
             },
             relationships: {
               challenge: {
-                data: null,/*{
+                data: {
                   type: 'challenges',
-                  id: null, // TODO
-                },*/
+                  id: 'challengeAirtable123',
+                },
               },
             },
           },
@@ -361,10 +363,10 @@ describe('Acceptance | Route | attachments', () => {
             },
             relationships: {
               challenge: {
-                data: null,/*{
+                data: {
                   type: 'challenges',
-                  id: null, // TODO
-                },*/
+                  id: 'challengeAirtable456',
+                },
               },
             },
           },
