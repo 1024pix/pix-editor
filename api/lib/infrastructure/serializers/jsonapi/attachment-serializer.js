@@ -56,8 +56,8 @@ export function deserializeCreationCommand({ data }) {
     url: data.attributes.url,
     mimeType: data.attributes['mime-type'],
     type: data.attributes.type,
-    localizedChallengeId: data.attributes['localized-challenge-id'],
-    challengeId: data.relationships.challenge.data.id,
+    localizedChallengeId: data.relationships?.['localized-challenge']?.data?.id ?? null,
+    challengeId: data.relationships?.challenge?.data?.id ?? null,
   };
 }
 

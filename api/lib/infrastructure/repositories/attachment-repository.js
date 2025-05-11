@@ -76,7 +76,6 @@ export async function create(attachment) {
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [createdAttachmentDTO.challengeId] });
 
   const [createdAttachment] = toDomainList([createdAttachmentDTO], translations, localizedChallenges);
-  createdAttachment.airtableChallengeId = attachment.airtableChallengeId;
   return createdAttachment;
 }
 

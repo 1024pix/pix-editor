@@ -29,6 +29,11 @@ export function locale() {
   return Joi.string().pattern(/^[a-z]{2}(-[a-z]{2})?$/);
 }
 
+export function localizedChallengeId() {
+  // the part "(-[a-zA-Z0-9]+)?" is just for the data in review apps, we got ids like recABC123-nl
+  return Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?$/);
+}
+
 export function skillId() {
   return Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/);
 }

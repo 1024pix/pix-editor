@@ -24,13 +24,16 @@ describe('Acceptance | Route | attachments', () => {
             url: 'some.url.com',
             type: 'some type',
             'mime-type': 'some mime type',
-            'localized-challenge-id': 'localizedChallenge123ES',
+            'localized-challenge-id': 'I DONT CARE',
           },
           relationships: {
             challenge: {
+              data: null,
+            },
+            'localized-challenge': {
               data: {
-                type: 'challenges',
-                id: 'challenge123'
+                type: 'localized-challenges',
+                id: 'challenge123ES',
               },
             },
           },
@@ -88,7 +91,7 @@ describe('Acceptance | Route | attachments', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: validPayload.data.attributes['localized-challenge-id'],
+        id: validPayload.data.relationships['localized-challenge'].data.id,
         challengeId: 'challenge123',
         locale: 'es',
       });
@@ -102,7 +105,7 @@ describe('Acceptance | Route | attachments', () => {
         filename: validPayload.data.attributes.filename,
         challengeId: 'challenge123',
         airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: validPayload.data.attributes['localized-challenge-id'],
+        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
       });
       const airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
@@ -130,7 +133,7 @@ describe('Acceptance | Route | attachments', () => {
               'mimeType': validPayload.data.attributes['mime-type'],
               'filename': validPayload.data.attributes.filename,
               'challengeId': ['challengeAirtable123'],
-              'localizedChallengeId': validPayload.data.attributes['localized-challenge-id'],
+              'localizedChallengeId': validPayload.data.relationships['localized-challenge'].data.id,
             },
           }],
         })
@@ -159,14 +162,14 @@ describe('Acceptance | Route | attachments', () => {
             'type': validPayload.data.attributes.type,
             'mime-type': validPayload.data.attributes['mime-type'],
             'filename': validPayload.data.attributes.filename,
-            'localized-challenge-id': validPayload.data.attributes['localized-challenge-id'],
+            'localized-challenge-id': validPayload.data.relationships['localized-challenge'].data.id,
             alt: null,
           },
           relationships: {
             'localized-challenge': {
               data: {
                 type: 'localized-challenges',
-                id: validPayload.data.attributes['localized-challenge-id'],
+                id: validPayload.data.relationships['localized-challenge'].data.id,
               },
             },
             challenge: {

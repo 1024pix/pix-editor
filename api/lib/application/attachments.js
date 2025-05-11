@@ -7,6 +7,7 @@ import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as attachmentSerializer from '../infrastructure/serializers/jsonapi/attachment-serializer.js';
 import * as attachmentRepository from '../infrastructure/repositories/attachment-repository.js';
+import * as localizedChallengeRepository from '../infrastructure/repositories/localized-challenge-repository.js';
 
 export function register(server) {
   server.route([
@@ -33,10 +34,16 @@ export function register(server) {
               },
               relationships: {
                 challenge: {
-                  data: {
+                  data: Joi.object({
                     type: Joi.string().required().equal('challenges'),
                     id: Types.challengeId(),
-                  },
+                  }).allow(null),
+                },
+                'localized-challenge': {
+                  data: Joi.object({
+                    type: Joi.string().required().equal('localized-challenges'),
+                    id: Types.localizedChallengeId(),
+                  }).allow(null),
                 },
               },
             },
@@ -45,7 +52,7 @@ export function register(server) {
         handler: async function(request, h) {
           try {
             const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
-            const createdAttachment = await usecases.createAttachment({ attachmentCreationCommand, attachmentRepository });
+            const createdAttachment = await usecases.createAttachment({ attachmentCreationCommand, attachmentRepository, localizedChallengeRepository });
             return h.response(attachmentSerializer.serialize(createdAttachment)).code(201);
           } catch (err) {
             logger.error(err);
