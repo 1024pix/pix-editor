@@ -79,6 +79,11 @@ export async function create(attachment) {
   return createdAttachment;
 }
 
+export async function destroy(attachmentId) {
+  await attachmentDatasource.delete([attachmentId]);
+  await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
+}
+
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesById = _.keyBy(localizedChallenges, 'id');

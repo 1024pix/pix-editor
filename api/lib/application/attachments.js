@@ -55,6 +55,33 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'DELETE',
+      path: '/api/attachments/{attachmentId}',
+      config: {
+        pre: [{
+          method: (request, h) => {
+            return securityPreHandlers.checkUserHasWriteAccess(request, h);
+          }
+        }],
+        validate: {
+          params: Joi.object({
+            attachmentId: Types.attachmentId().required(),
+          }),
+        },
+        handler: async function(request, h) {
+          try {
+            const attachmentId = request.params.attachmentId;
+            await usecases.deleteAttachment({ attachmentId, attachmentRepository });
+            return h.response().code(204);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 

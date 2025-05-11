@@ -12,10 +12,6 @@ describe('Acceptance | Route | attachments', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function() {
-    return knex('localized_challenges-attachments').truncate();
-  });
-
   describe('POST /attachments', () => {
     let validPayload;
     beforeEach(function() {
@@ -40,6 +36,10 @@ describe('Acceptance | Route | attachments', () => {
           },
         },
       };
+    });
+
+    afterEach(function() {
+      return knex('localized_challenges-attachments').truncate();
     });
 
     describe('when user is NOT editor', () => {
@@ -156,6 +156,80 @@ describe('Acceptance | Route | attachments', () => {
         },
       });
       expect(airtablePostAttachmentScope.isDone()).toBe(true);
+    });
+  });
+
+  describe('DELETE /attachments/{attachmentId}', () => {
+    describe('when user is NOT editor', () => {
+      it('should respond with status 403', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'DELETE',
+          url: '/api/attachments/recABC123',
+          headers: generateAuthorizationHeader(readUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+      });
+    });
+
+    describe('when param id is NOT valid', () => {
+      it('should respond with status 400', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'DELETE',
+          url: '/api/attachments/coucouABC123',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    it('should respond with status 204', async () => {
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId',
+      });
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        localizedChallengeId: 'localizedChallengeId',
+        attachmentId: 'recAttachmentId',
+      });
+      await databaseBuilder.commit();
+      const airtableDeleteAttachmentScope = nock('https://api.airtable.com')
+        .delete('/v0/airtableBaseValue/Attachments')
+        .query({
+          'records[]': 'recAttachmentId',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(204, {
+          records: [
+            {
+              'id': 'recAttachmentId',
+              'deleted': true
+            },
+          ],
+        });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'DELETE',
+        url: '/api/attachments/recAttachmentId',
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(204);
+      expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
     });
   });
 });

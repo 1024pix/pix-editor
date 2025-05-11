@@ -557,16 +557,6 @@ describe('Integration | Repository | attachment-repository', () => {
         localizedChallengeId: 'localizedChallengeId',
       });
       attachment.airtableChallengeId = 'airtableChallengeId';
-      /*databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeId.illustrationAlt',
-        locale: 'fr',
-        value: 'wrong illustrationAlt, wrong locale',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeId.illustrationAlt',
-        locale: 'nl',
-        value: 'good illustrationAlt',
-      });*/
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeId',
         challengeId: 'challengeId',
@@ -736,6 +726,37 @@ describe('Integration | Repository | attachment-repository', () => {
         expectedAttachment.alt = null;
         expect(createdAttachment).toStrictEqual(expectedAttachment);
       });
+    });
+  });
+
+  describe('#delete', () => {
+    it('delete the attachment on Airtable and localized challenge attachment', async () => {
+      // given
+      const attachmentId = 'attachmentId';
+      const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: 'chal1' }).id;
+      const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: 'chal2' }).id;
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId,
+        localizedChallengeId: loc1Id,
+      });
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId: 'someOtherAttachmentId',
+        localizedChallengeId: loc2Id,
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'deleteRecords').mockImplementation((tableName, recordIds) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (!_.isEqual(recordIds, ['attachmentId'])
+        ) expect.unreachable('Attachments to delete to airtable : wrong attachments');
+      });
+
+      // when
+      await attachmentRepository.destroy(attachmentId);
+
+      // then
+      const localizedChallengeAttachmentsLeft = await knex('localized_challenges-attachments')
+        .pluck('attachmentId');
+      expect(localizedChallengeAttachmentsLeft).toStrictEqual(['someOtherAttachmentId']);
     });
   });
 });
