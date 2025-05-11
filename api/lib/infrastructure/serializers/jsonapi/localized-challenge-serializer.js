@@ -23,7 +23,7 @@ const serializer = new Serializer('localized-challenges', {
     'toRephrase',
     'hasEmbedInternalValidation',
     'noValidationNeeded',
-    'attachmentses',
+    'attachments',
   ],
   challenge: {
     ref: 'id',
@@ -34,7 +34,7 @@ const serializer = new Serializer('localized-challenges', {
       return fileId;
     }
   },
-  attachmentses: {
+  attachments: {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
@@ -45,7 +45,7 @@ const serializer = new Serializer('localized-challenges', {
   },
 
   typeForAttribute(attribute) {
-    if (attribute === 'attachmentses') return 'attachments';
+    if (attribute === 'attachments') return 'attachments';
   },
   keyForAttribute(attribute) {
     return Inflector.dasherize(Inflector.underscore(attribute));
@@ -57,7 +57,7 @@ const serializer = new Serializer('localized-challenges', {
       challenge: { id: challengeId },
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
       geography: getCountryName(localizedChallenge.geography),
-      attachmentses: [],
+      attachments: [],
     };
   }
 });

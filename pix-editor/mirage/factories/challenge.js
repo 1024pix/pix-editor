@@ -32,7 +32,7 @@ export default Factory.extend({
   autoReply: 'autoReply',
   hasEmbedInternalValidation: false,
   noValidationNeeded: false,
-  files: null,
+  attachments: null,
   updatedAt: '2021-10-02T14:00:00.000Z',
   contextualizedFields() { return ['illustration', 'instruction']; },
 });

@@ -68,7 +68,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
-            attachmentses: {
+            attachments: {
               links: {
                 related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
               },
@@ -146,7 +146,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
-            attachmentses: {
+            attachments: {
               links: {
                 related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
               },
@@ -246,7 +246,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              attachmentses: {
+              attachments: {
                 links: {
                   related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenges[0].id}`,
                 },
@@ -279,7 +279,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              attachmentses: {
+              attachments: {
                 links: {
                   related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenges[1].id}`,
                 },
@@ -382,7 +382,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               id: 'recChallenge0',
             },
           },
-          attachmentses: {
+          attachments: {
             links: {
               related: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId',
             },

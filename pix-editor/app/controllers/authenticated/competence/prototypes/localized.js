@@ -182,8 +182,8 @@ export default class LocalizedController extends Controller {
     this.displayUrlsToConsultField = false;
     this.invalidUrlsToConsult = '';
     this.invalidEmbedURL = '';
-    await this.localizedChallenge.files;
-    this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
+    await this.localizedChallenge.attachments;
+    this.localizedChallenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
     this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
@@ -195,7 +195,7 @@ export default class LocalizedController extends Controller {
     this.loader.start();
     try {
       await this._handleIllustration(this.localizedChallenge);
-      await this._handleAttachments(this.localizedChallenge);
+      await this._handlePiecesJointes(this.localizedChallenge);
       await this._saveFiles(this.localizedChallenge);
       await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
@@ -255,15 +255,15 @@ export default class LocalizedController extends Controller {
       alt,
     };
     const attachment = this.store.createRecord('attachment', attachmentData);
-    const files = await this.challenge.files;
-    const localizedFiles = await this.localizedChallenge.files;
-    files.push(attachment);
-    localizedFiles.push(attachment);
+    const attachments = await this.challenge.attachments;
+    const localizedAttachmentses = await this.localizedChallenge.attachments;
+    attachments.push(attachment);
+    localizedAttachmentses.push(attachment);
   }
 
   @action
   async removeIllustration() {
-    await this.localizedChallenge.files;
+    await this.localizedChallenge.attachments;
     const removedFile = this.localizedChallenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
@@ -284,16 +284,16 @@ export default class LocalizedController extends Controller {
       type: 'attachment',
     };
     const attachment = this.store.createRecord('attachment', attachmentData);
-    const files = await this.challenge.files;
-    const localizedFiles = await this.localizedChallenge.files;
-    files.push(attachment);
-    localizedFiles.push(attachment);
+    const attachments = await this.challenge.attachments;
+    const localizedAttachmentses = await this.localizedChallenge.attachments;
+    attachments.push(attachment);
+    localizedAttachmentses.push(attachment);
   }
 
   @action
   async removeAttachment(removedAttachment) {
-    const files = await this.localizedChallenge.files;
-    const removedFile = files.find((file) => file.filename === removedAttachment.filename);
+    const attachments = await this.localizedChallenge.attachments;
+    const removedFile = attachments.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
       if (!removedFile.isNew) {
@@ -312,39 +312,39 @@ export default class LocalizedController extends Controller {
     return challenge;
   }
 
-  async _handleAttachments(challenge) {
-    const attachments = challenge.attachments;
-    if (attachments.length === 0) {
+  async _handlePiecesJointes(challenge) {
+    const piecesJointes = challenge.piecesJointes;
+    if (piecesJointes.length === 0) {
       return challenge;
     }
     this.loader.start('Gestion des pièces jointes...');
-    await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
-    await this._renameAttachmentFiles(challenge);
+    await Promise.all(piecesJointes.map((pieceJointe) => this._handlePieceJointe(pieceJointe, challenge)));
+    await this._renamePiecesJointes(challenge);
 
     return challenge;
   }
 
-  async _handleAttachment(attachment) {
-    if (!attachment.isNew) {
+  async _handlePieceJointe(pieceJointe) {
+    if (!pieceJointe.isNew) {
       return;
     }
-    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true });
-    attachment.url = newAttachment.url;
+    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    pieceJointe.url = remoteFile.url;
   }
 
-  async _renameAttachmentFiles(challenge) {
+  async _renamePiecesJointes(challenge) {
     if (!challenge.baseNameUpdated()) {
       return;
     }
 
-    const attachments = await challenge.attachments;
-    for (const file of attachments.toArray()) {
-      file.filename = this._getAttachmentFullFilename(challenge, file.filename);
-      await this.storage.renameFile(file.url, file.filename);
+    const piecesJointes = await challenge.piecesJointes;
+    for (const pieceJointe of piecesJointes.toArray()) {
+      pieceJointe.filename = this._getPieceJointeFullFilename(challenge, pieceJointe.filename);
+      await this.storage.renameFile(pieceJointe.url, pieceJointe.filename);
     }
   }
 
-  _getAttachmentFullFilename(challenge, filename) {
+  _getPieceJointeFullFilename(challenge, filename) {
     return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
   }
 
@@ -354,12 +354,12 @@ export default class LocalizedController extends Controller {
   }
 
   async _saveFiles(challenge) {
-    const files = (await challenge.files)?.slice() ?? [];
-    for (const file of files) {
-      await file.save();
+    const attachments = (await challenge.attachments)?.slice() ?? [];
+    for (const attachment of attachments) {
+      await attachment.save();
     }
-    for (const file of this.deletedFiles) {
-      await file.save();
+    for (const attachment of this.deletedFiles) {
+      await attachment.save();
     }
     this.deletedFiles = [];
     return challenge;

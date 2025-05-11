@@ -12,7 +12,7 @@ export default class LocalizedPrototypeRoute extends Route {
   }
 
   async afterModel(model) {
-    await model.localizedChallenge.files;
+    await model.localizedChallenge.attachments;
   }
 
   setupController(controller, model) {

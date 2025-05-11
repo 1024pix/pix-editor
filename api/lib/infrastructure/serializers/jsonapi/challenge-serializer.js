@@ -55,11 +55,11 @@ const serializer = new Serializer('challenges', {
     'toRephrase',
     'hasEmbedInternalValidation',
     'noValidationNeeded',
-    'attachmentses',
+    'attachments',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenges') return 'localized-challenges';
-    if (attribute === 'attachmentses') return 'attachments';
+    if (attribute === 'attachments') return 'attachments';
   },
   skill: {
     ref(challenge, skillId) {
@@ -70,7 +70,7 @@ const serializer = new Serializer('challenges', {
     ref: 'id',
     included: false,
   },
-  attachmentses: {
+  attachments: {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
@@ -82,7 +82,7 @@ const serializer = new Serializer('challenges', {
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
-    challenge.attachmentses = [];
+    challenge.attachments = [];
     return challenge;
   }
 });
@@ -126,7 +126,7 @@ const deserializer = new Deserializer({
         illustrationAlt,
       },
     };
-    challenge.files = challenge.files?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
+    challenge.files = challenge.attachments?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
     return challenge;
   }
 });

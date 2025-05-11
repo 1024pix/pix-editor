@@ -71,6 +71,18 @@ function routes() {
   this.get('/areas');
   this.post('/areas');
 
+  this.get('/attachments', function(schema, request) {
+    const {
+      'filter[localizedChallengeIds]': localizedChallengeIdsStr,
+    } = request.queryParams;
+    const localizedChallengeIds = localizedChallengeIdsStr.split(',');
+    return schema.attachments.all().filter((attachment) => localizedChallengeIds.includes(attachment.localizedChallengeId));
+  });
+  this.get('/attachments/:id');
+  this.post('/attachments');
+  this.patch('/attachments/:id');
+  this.delete('/attachments/:id');
+
   this.get('/competences');
   this.get('/competences/:id');
   this.patch('/competences/:id');
@@ -334,13 +346,13 @@ function routes() {
     const body = JSON.parse(request.requestBody);
     const skillId = body.data.relationships.skill.data.id;
     const skill = schema.skills.find(skillId);
-    const files = body.data.relationships.files.data.map(({ id }) => {
+    const attachments = body.data.relationships.attachments.data.map(({ id }) => {
       return schema.attachments.find(id);
     });
     challenge.update({
       ...body.data.attributes,
       skill,
-      files,
+      attachments,
     });
 
     return challenge;

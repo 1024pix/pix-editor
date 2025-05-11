@@ -9,7 +9,12 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import { getPhraseTranslationsURL, previewChallenge, createChallenge, updateChallenge } from '../../domain/usecases/index.js';
+import {
+  createChallenge,
+  getPhraseTranslationsURL,
+  previewChallenge,
+  updateChallenge,
+} from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
