@@ -1,66 +1,46 @@
 import { saveInAirtable } from './utils.js';
 
-export async function buildThematics({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
-  const thematicData = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
-      for (let k = 0; k < learningContentConfig.countCompetencesPerArea; ++k) {
-        for (let l = 0; l < learningContentConfig.countThematicsPerCompetence; ++l) {
-          const thematicItem = buildThematic(i, j, k, l, learningContentData);
-          addTranslations(learningContentConfig.locales, thematicItem, databaseBuilder);
-          thematicData.push(thematicItem);
+export async function buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+  const thematicItems = [];
+  for (const frameworkItem of learningContentData) {
+    for (const areaItem of frameworkItem.areas) {
+      for (const competenceItem of areaItem.competences) {
+        for (let i = 0; i < learningContentConfig.countThematicsPerCompetence; ++i) {
+          const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+          thematicItems.push(thematicItem);
+          competenceItem.thematics.push(thematicItem);
         }
-        const thematicWorkbenchItem = buildThematicWorkbench(i, j, k, learningContentData);
-        thematicData.push(thematicWorkbenchItem);
-        addTranslations(learningContentConfig.locales, thematicWorkbenchItem, databaseBuilder);
+        const thematicWorkbenchItem = buildThematic({ competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+        thematicItems.push(thematicWorkbenchItem);
+        competenceItem.thematics.push(thematicWorkbenchItem);
       }
     }
   }
-  const airtableData = thematicData.map(toAirtableObject);
-
-  const records = await saveInAirtable({ tableName: 'Thematiques', data: airtableData, logger, airtableClient });
-
-  thematicData.forEach((thematicItem) => {
-    thematicItem.airtableId = records.shift().id;
+  await persistThematics({ items: thematicItems, airtableClient, logger });
+  thematicItems.forEach((thematicItem) => {
     thematicItem.tubes = [];
   });
 }
 
-function buildThematic(indexFramework, indexArea, indexCompetence, indexThematic, learningContentData) {
-  const currentCompetenceItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence];
-  const thematicId = `thematicF${indexFramework}A${indexArea}C${indexCompetence}Th${indexThematic}`;
-  const thematicName = `${thematicId} name`;
+export function buildThematic({ indexThematic, competenceItem, databaseBuilder, locales, isWorkbench }) {
+  const partId = competenceItem.id.split('competence')[1];
+  const thematicId = `thematic${partId}Th${isWorkbench ? 'W' : indexThematic}`;
+  let thematicName;
+  if (isWorkbench) {
+    if (competenceItem.origin === 'Pix') {
+      thematicName = `workbench_${competenceItem.index.split('.')[0]}_${competenceItem.index.split('.')[1]}`;
+    } else {
+      thematicName = `workbench_${competenceItem.origin}_${competenceItem.index.split('.')[0]}_${competenceItem.index.split('.')[1]}`;
+    }
+  } else {
+    thematicName = `${thematicId} name`;
+  }
   const thematicItem = {
     id: thematicId,
-    index: indexThematic,
-    competenceAirtableId: currentCompetenceItem.airtableId,
+    index: isWorkbench ? 0 : indexThematic,
+    competenceAirtableId: competenceItem.airtableId,
     name: thematicName,
   };
-  currentCompetenceItem.thematics.push(thematicItem);
-  return thematicItem;
-}
-
-function buildThematicWorkbench(indexFramework, indexArea, indexCompetence, learningContentData) {
-  const thematicWorkbenchId = `thematicF${indexFramework}A${indexArea}C${indexCompetence}ThW`;
-  const currentFrameworkItem = learningContentData[indexFramework];
-  const currentCompetenceItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence];
-  let thematicWorkbenchName;
-  if (currentFrameworkItem.name === 'Pix') {
-    thematicWorkbenchName = `workbench_${indexArea + 1}_${indexCompetence + 1}`;
-  } else {
-    thematicWorkbenchName = `workbench_${currentFrameworkItem.name}_${indexArea + 1}_${indexCompetence + 1}`;
-  }
-  const thematicWorkbenchItem = {
-    id: thematicWorkbenchId,
-    index: 0,
-    competenceAirtableId: currentCompetenceItem.airtableId,
-    name: thematicWorkbenchName,
-  };
-  currentCompetenceItem.thematics.push(thematicWorkbenchItem);
-  return thematicWorkbenchItem;
-}
-
-function addTranslations(locales, thematicItem, databaseBuilder) {
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation(
       {
@@ -69,6 +49,15 @@ function addTranslations(locales, thematicItem, databaseBuilder) {
         value: `${thematicItem.name} ${locale}`,
       }
     );
+  });
+  return thematicItem;
+}
+
+export async function persistThematics({ items, airtableClient, logger }) {
+  const airtableItems = items.map(toAirtableObject);
+  const records = await saveInAirtable({ tableName: 'Thematiques', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    item.airtableId = records.shift().id;
   });
 }
 

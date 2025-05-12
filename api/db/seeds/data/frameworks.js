@@ -1,29 +1,34 @@
 import { frameworkDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { saveInAirtable } from './utils.js';
 
-export async function buildFrameworks({ airtableClient, databaseBuilder: _, logger, learningContentConfig }) {
-  const frameworkData = [];
+export async function buildFrameworksFromConfig({ airtableClient, databaseBuilder: _, logger, learningContentConfig }) {
+  const frameworkItems = [];
   for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    frameworkData.push(buildFramework(i, i === 0));
+    const name = i === 0 ? 'Pix' : `RéfComplémentaire_${i}`;
+    frameworkItems.push(buildFramework({ name }));
   }
 
-  const airtableData = frameworkData.map(frameworkDatasource.toAirTableObject);
-
-  const records = await saveInAirtable({ tableName: 'Referentiel', data: airtableData, logger, airtableClient });
-
-  return frameworkData.map((rawItem) => {
-    const airtableId = records.shift().id;
+  await persistFrameworks({ items: frameworkItems, airtableClient, logger });
+  return frameworkItems.map((frameworkItem) => {
     return {
-      ...rawItem,
-      airtableId,
-      id: airtableId,
+      ...frameworkItem,
       areas: [],
     };
   });
 }
 
-function buildFramework(indexFramework, isPix) {
+export function buildFramework({ name }) {
   return {
-    name: isPix ? 'Pix' : `RéfComplémentaire_${indexFramework}`
+    name,
   };
+}
+
+export async function persistFrameworks({ items, airtableClient, logger }) {
+  const airtableItems = items.map(frameworkDatasource.toAirTableObject);
+  const records = await saveInAirtable({ tableName: 'Referentiel', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    const airtableId = records.shift().id;
+    item.airtableId = airtableId;
+    item.id = airtableId;
+  });
 }

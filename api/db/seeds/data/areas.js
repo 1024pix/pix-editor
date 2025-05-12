@@ -1,28 +1,24 @@
 import { areaDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { saveInAirtable } from './utils.js';
 
-export async function buildAreas({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
-  const areaData = [];
+export async function buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+  const areaItems = [];
   for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
     for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
-      const areaItem = buildArea(i, j, learningContentData);
-      addTranslations(learningContentConfig.locales, areaItem, databaseBuilder);
-      areaData.push(areaItem);
+      const frameworkItem = learningContentData[i];
+      const areaItem = buildArea({ indexFramework: i, indexArea: j, frameworkItem, databaseBuilder, locales: learningContentConfig.locales });
+      frameworkItem.areas.push(areaItem);
+      areaItems.push(areaItem);
     }
   }
 
-  const airtableData = areaData.map(areaDatasource.toAirTableObject);
-
-  const records = await saveInAirtable({ tableName: 'Domaines', data: airtableData, logger, airtableClient });
-
-  areaData.forEach((areaItem) => {
-    areaItem.airtableId = records.shift().id;
+  await persistAreas({ items: areaItems, airtableClient, logger });
+  areaItems.forEach((areaItem) => {
     areaItem.competences = [];
   });
 }
 
-function buildArea(indexFramework, indexArea, learningContentData) {
-  const frameworkItem = learningContentData[indexFramework];
+export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBuilder, locales }) {
   const areaId = `areaF${indexFramework}A${indexArea}`;
   const areaTitle = `${areaId} title`;
   const areaItem = {
@@ -31,11 +27,6 @@ function buildArea(indexFramework, indexArea, learningContentData) {
     frameworkId: frameworkItem.airtableId,
     title: areaTitle,
   };
-  frameworkItem.areas.push(areaItem);
-  return areaItem;
-}
-
-function addTranslations(locales, areaItem, databaseBuilder) {
   locales.forEach((locale) => databaseBuilder.factory.buildTranslation(
     {
       locale,
@@ -43,4 +34,13 @@ function addTranslations(locales, areaItem, databaseBuilder) {
       value: `${areaItem.title} ${locale}`,
     }
   ));
+  return areaItem;
+}
+
+export async function persistAreas({ items, airtableClient, logger }) {
+  const airtableItems = items.map(areaDatasource.toAirTableObject);
+  const records = await saveInAirtable({ tableName: 'Domaines', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    item.airtableId = records.shift().id;
+  });
 }

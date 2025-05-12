@@ -1,45 +1,36 @@
 import { competenceDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { saveInAirtable } from './utils.js';
 
-export async function buildCompetences({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
-  const competenceData = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
-      for (let k = 0; k < learningContentConfig.countCompetencesPerArea; ++k) {
-        const competenceItem = buildCompetence(i, j, k, learningContentData);
-        addTranslations(learningContentConfig.locales, competenceItem, databaseBuilder);
-        competenceData.push(competenceItem);
+export async function buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+  const competenceItems = [];
+  for (const frameworkItem of learningContentData) {
+    for (const areaItem of frameworkItem.areas) {
+      for (let i = 0; i < learningContentConfig.countCompetencesPerArea; ++i) {
+        const competenceItem = buildCompetence({ indexCompetence: i, areaItem, databaseBuilder, locales: learningContentConfig.locales });
+        areaItem.competences.push(competenceItem);
+        competenceItems.push(competenceItem);
       }
     }
   }
-  const airtableData = competenceData.map(competenceDatasource.toAirTableObject);
-
-  const records = await saveInAirtable({ tableName: 'Competences', data: airtableData, logger, airtableClient });
-
-  competenceData.forEach((competenceItem) => {
-    competenceItem.airtableId = records.shift().id;
+  await persistCompetences({ items: competenceItems, airtableClient, logger });
+  competenceItems.forEach((competenceItem) => {
     competenceItem.thematics = [];
   });
 }
 
-function buildCompetence(indexFramework, indexArea, indexCompetence, learningContentData) {
-  const currentAreaItem = learningContentData[indexFramework].areas[indexArea];
-  const competenceId = `competenceF${indexFramework}A${indexArea}C${indexCompetence}`;
+export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, locales }) {
+  const partId = areaItem.id.split('area')[1];
+  const competenceId = `competence${partId}C${indexCompetence}`;
   const competenceName = `${competenceId} name`;
   const competenceDescription = `${competenceId} description`;
   const competenceItem = {
     id: competenceId,
-    index: `${indexArea + 1}.${indexCompetence + 1}`,
-    areaAirtableId: currentAreaItem.airtableId,
-    areaId: currentAreaItem.id,
+    index: `${areaItem.code}.${indexCompetence + 1}`,
+    areaAirtableId: areaItem.airtableId,
+    areaId: areaItem.id,
     name: competenceName,
     description: competenceDescription,
   };
-  currentAreaItem.competences.push(competenceItem);
-  return competenceItem;
-}
-
-function addTranslations(locales, competenceItem, databaseBuilder) {
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation(
       {
@@ -55,5 +46,16 @@ function addTranslations(locales, competenceItem, databaseBuilder) {
         value: `${competenceItem.description} ${locale}`,
       }
     );
+  });
+  return competenceItem;
+}
+
+export async function persistCompetences({ items, airtableClient, logger }) {
+  const airtableItems = items.map(competenceDatasource.toAirTableObject);
+  const records = await saveInAirtable({ tableName: 'Competences', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    const record = records.shift();
+    item.airtableId = record.id;
+    item.origin = record.fields['Origine2'];
   });
 }

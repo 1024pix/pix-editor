@@ -1,4 +1,4 @@
-import { pickRandomValueInArr, saveInAirtable } from './utils.js';
+import { saveInAirtable } from './utils.js';
 
 const TUBE_NAMES_POOL = [
   'noix',
@@ -44,36 +44,54 @@ const TUBE_NAMES_POOL = [
   'pomme',
   'coing',
 ];
-let CURRENT_TUBE_NAMES_LEFT = [];
 
-export async function buildTubes({
+function* getTubeName() {
+  let i = 0;
+  let j = 1;
+  while (true) {
+    yield `${TUBE_NAMES_POOL[j]}${TUBE_NAMES_POOL[i].at(0).toUpperCase() + TUBE_NAMES_POOL[i].slice(1)}`;
+    ++i;
+    if (i === TUBE_NAMES_POOL.length) {
+      ++j;
+      i = 0;
+    }
+    if (j === TUBE_NAMES_POOL.length) {
+      j = 0;
+    }
+  }
+}
+
+const pickTubeName = getTubeName();
+
+export async function buildTubesFromConfig({
   airtableClient,
   databaseBuilder,
   logger,
   learningContentConfig,
   learningContentData,
 }) {
-  const tubeData = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
-      for (let k = 0; k < learningContentConfig.countCompetencesPerArea; ++k) {
-        for (let l = 0; l < learningContentConfig.countThematicsPerCompetence; ++l) {
-          for (let m = 0; m < learningContentConfig.countTubesPerThematic; ++m) {
-            const tubeItem = buildTube(i, j, k, l, m, learningContentData);
-            addTranslations(learningContentConfig.locales, tubeItem, databaseBuilder);
-            tubeData.push(tubeItem);
+  const tubeItems = [];
+  for (const frameworkItem of learningContentData) {
+    for (const areaItem of frameworkItem.areas) {
+      for (const competenceItem of areaItem.competences) {
+        for (const thematicItem of competenceItem.thematics) {
+          if (thematicItem.name.includes('workbench')) {
+            const tubeItemWorkbench = buildTube({ thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+            thematicItem.tubes.push(tubeItemWorkbench);
+            tubeItems.push(tubeItemWorkbench);
+          } else {
+            for (let i = 0; i < learningContentConfig.countTubesPerThematic; ++i) {
+              const tubeItem = buildTube({ indexTube: i, thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+              thematicItem.tubes.push(tubeItem);
+              tubeItems.push(tubeItem);
+            }
           }
         }
-        const tubeWorkbenchItem = buildTubeWorkbench(i, j, k, learningContentData);
-        addTranslations(learningContentConfig.locales, tubeWorkbenchItem, databaseBuilder);
-        tubeData.push(tubeWorkbenchItem);
       }
     }
   }
-  const airtableData = tubeData.map(toAirtableObject);
-  const records = await saveInAirtable({ tableName: 'Tubes', data: airtableData, logger, airtableClient });
-  tubeData.forEach((tubeItem) => {
-    tubeItem.airtableId = records.shift().id;
+  await persistTubes({ items: tubeItems, airtableClient, logger });
+  tubeItems.forEach((tubeItem) => {
     tubeItem.skills = [];
   });
 }
@@ -90,50 +108,21 @@ function toAirtableObject(item) {
   };
 }
 
-function buildTube(indexFramework, indexArea, indexCompetence, indexThematic, indexTube, learningContentData) {
-  const currentCompetenceItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence];
-  const currentThematicItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence].thematics[indexThematic];
-  const tubeId = `tubeF${indexFramework}A${indexArea}C${indexCompetence}Th${indexThematic}Tu${indexTube}`;
+export function buildTube({ indexTube , suffix = '', thematicItem, databaseBuilder, locales, isWorkbench }) {
+  const partId = thematicItem.id.split('thematic')[1];
+  const tubeId = `tube${partId}Tu${isWorkbench ? 'W' : indexTube}`;
   const tubePracticalDescription = `${tubeId} practicalDescription`;
   const tubePracticalTitle = `${tubeId} practicalTitle`;
-  CURRENT_TUBE_NAMES_LEFT = CURRENT_TUBE_NAMES_LEFT.length > 0 ? CURRENT_TUBE_NAMES_LEFT : structuredClone(TUBE_NAMES_POOL);
-  const randomTubeName = pickRandomValueInArr(CURRENT_TUBE_NAMES_LEFT);
-  CURRENT_TUBE_NAMES_LEFT.splice(CURRENT_TUBE_NAMES_LEFT.indexOf(randomTubeName), 1);
-  const tubeName = `@${randomTubeName}`;
+  const tubeName = isWorkbench ? '@workbench' : `@${pickTubeName.next().value}${suffix}`;
   const tubeItem = {
     id: tubeId,
-    index: indexTube,
+    index: isWorkbench ? null : indexTube,
     name: tubeName,
-    competenceAirtableId: currentCompetenceItem.airtableId,
-    thematicAirtableId: currentThematicItem.airtableId,
+    competenceAirtableId: thematicItem.competenceAirtableId,
+    thematicAirtableId: thematicItem.airtableId,
     practicalDescription: tubePracticalDescription,
     practicalTitle: tubePracticalTitle,
   };
-  currentThematicItem.tubes.push(tubeItem);
-  return tubeItem;
-}
-
-function buildTubeWorkbench(indexFramework, indexArea, indexCompetence, learningContentData) {
-  const currentCompetenceItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence];
-  const thematicWorkbenchItem = learningContentData[indexFramework].areas[indexArea].competences[indexCompetence].thematics.at(-1);
-  const tubeWorkbenchId = `tubeF${indexFramework}A${indexArea}C${indexCompetence}ThWTuW`;
-  const tubeWorkbenchPracticalDescription = `${tubeWorkbenchId} practicalDescription`;
-  const tubeWorkbenchPracticalTitle = `${tubeWorkbenchId} practicalTitle`;
-  const tubeWorkbenchName = '@workbench';
-  const tubeWorkbenchItem = {
-    id: tubeWorkbenchId,
-    index: null,
-    name: tubeWorkbenchName,
-    competenceAirtableId: currentCompetenceItem.airtableId,
-    thematicAirtableId: thematicWorkbenchItem.airtableId,
-    practicalDescription: tubeWorkbenchPracticalDescription,
-    practicalTitle: tubeWorkbenchPracticalTitle,
-  };
-  thematicWorkbenchItem.tubes.push(tubeWorkbenchItem);
-  return tubeWorkbenchItem;
-}
-
-function addTranslations(locales, tubeItem, databaseBuilder) {
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation(
       {
@@ -149,5 +138,14 @@ function addTranslations(locales, tubeItem, databaseBuilder) {
         value: `${tubeItem.practicalDescription} ${locale}`,
       }
     );
+  });
+  return tubeItem;
+}
+
+export async function persistTubes({ items, airtableClient, logger }) {
+  const airtableItems = items.map(toAirtableObject);
+  const records = await saveInAirtable({ tableName: 'Tubes', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    item.airtableId = records.shift().id;
   });
 }

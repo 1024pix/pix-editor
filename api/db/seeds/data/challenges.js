@@ -10,269 +10,105 @@ import { Challenge, LocalizedChallenge } from '../../../lib/domain/models/index.
 import { fields } from '../../../lib/infrastructure/translations/challenge.js';
 import { challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
-// 1 proto et des déclis par acquis hors workbench
-export async function buildChallenges({
+export async function buildChallengesFromConfig({
   airtableClient,
   databaseBuilder,
   logger,
   learningContentConfig,
   learningContentData,
 }) {
-  const challengeData = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
-      for (let k = 0; k < learningContentConfig.countCompetencesPerArea; ++k) {
-        for (let l = 0; l < learningContentConfig.countThematicsPerCompetence; ++l) {
-          for (let m = 0; m < learningContentConfig.countTubesPerThematic; ++m) {
-            const currentTubeItem = learningContentData[i].areas[j].competences[k].thematics[l].tubes[m];
-            for (const currentSkillItem of currentTubeItem.skills) {
-              const idPart = currentSkillItem.id.split('skill')[1];
-              const baseChallengeId = `challenge${idPart}Ch`;
-              if (currentSkillItem.status === 'en construction') {
-                const challenges = buildChallengesForEnConstructionSkill(currentSkillItem, baseChallengeId, learningContentConfig.locales, databaseBuilder);
-                challengeData.push(...challenges);
-                currentSkillItem.challenges.push(...challenges);
+  const challengeItems = [];
+  for (const frameworkItem of learningContentData) {
+    for (const areaItem of frameworkItem.areas) {
+      for (const competenceItem of areaItem.competences) {
+        for (const thematicItem of competenceItem.thematics) {
+          for (const tubeItem of thematicItem.tubes) {
+            for (const skillItem of tubeItem.skills) {
+              let challenges;
+              if (skillItem.status === 'en construction') {
+                challenges = buildChallengesForEnConstructionSkill(skillItem, learningContentConfig.locales, databaseBuilder);
               }
-              if (currentSkillItem.status === 'actif') {
-                const challenges = buildChallengesForActiveSkill(currentSkillItem, baseChallengeId, learningContentConfig.locales, databaseBuilder);
-                challengeData.push(...challenges);
-                currentSkillItem.challenges.push(...challenges);
+              if (skillItem.status === 'actif') {
+                challenges = buildChallengesForActiveSkill(skillItem, learningContentConfig.locales, databaseBuilder);
               }
-              if (currentSkillItem.status === 'archivé') {
-                const challenges = buildChallengesForArchivedSkill(currentSkillItem, baseChallengeId, learningContentConfig.locales, databaseBuilder);
-                challengeData.push(...challenges);
-                currentSkillItem.challenges.push(...challenges);
+              if (skillItem.status === 'archivé') {
+                challenges = buildChallengesForArchivedSkill(skillItem, learningContentConfig.locales, databaseBuilder);
               }
-              if (currentSkillItem.status === 'périmé') {
-                const challenges = buildChallengesForObsoleteSkill(currentSkillItem, baseChallengeId, learningContentConfig.locales, databaseBuilder);
-                challengeData.push(...challenges);
-                currentSkillItem.challenges.push(...challenges);
+              if (skillItem.status === 'périmé') {
+                challenges = buildChallengesForObsoleteSkill(skillItem, learningContentConfig.locales, databaseBuilder);
               }
+              challengeItems.push(...challenges);
+              skillItem.challenges.push(...challenges);
             }
           }
         }
       }
     }
   }
-  const airtableData = challengeData.map(challengeDatasource.toAirTableObject);
-  const records = await saveInAirtable({ tableName: 'Epreuves', data: airtableData, logger, airtableClient });
-  challengeData.forEach((challengeItem) => {
-    challengeItem.airtableId = records.shift().id;
+  await persistChallenges({ items: challengeItems, airtableClient, logger });
+}
+
+export function buildChallenge({ indexChallenge, skillItem, status, isProto, protoVersion, decliVersion, databaseBuilder, locales }) {
+  const partId = skillItem.id.split('skill')[1];
+  const challengeId = `challenge${partId}Ch${indexChallenge}`;
+  const challengeItem = {
+    ...generateBaseChallengeData(status),
+    id: challengeId,
+    status: status,
+    skills: [skillItem.airtableId],
+    skillId: skillItem.id,
+    locales: [locales[0]],
+    genealogy: isProto ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
+    version: protoVersion,
+    alternativeVersion: decliVersion,
+  };
+  addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);
+  if (status !== Challenge.STATUSES.PROPOSE) {
+    const translatedLocales = pickNRandomValueInArr(locales.slice(1), 2);
+    const statusForTranslation1 = status === Challenge.STATUSES.VALIDE ? LocalizedChallenge.STATUSES.PLAY : LocalizedChallenge.STATUSES.PAUSE;
+    addTranslationFor(challengeItem, translatedLocales[0], statusForTranslation1, databaseBuilder);
+    addTranslationFor(challengeItem, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
+  }
+  return challengeItem;
+}
+
+export async function persistChallenges({ items, airtableClient, logger }) {
+  const airtableItems = items.map(challengeDatasource.toAirTableObject);
+  const records = await saveInAirtable({ tableName: 'Epreuves', data: airtableItems, logger, airtableClient });
+  items.forEach((item) => {
+    item.airtableId = records.shift().id;
   });
 }
 
-function buildChallengesForEnConstructionSkill(currentSkillItem, baseChallengeId, locales, databaseBuilder) {
+function buildChallengesForEnConstructionSkill(skillItem, locales, databaseBuilder) {
   const challenges = [];
-  let i = 1;
-  const challengeProto = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PROPOSE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PROPOSE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-    version: currentSkillItem.version,
-    alternativeVersion: null,
-  };
-  addPrimaryLocalizedChallenge(challengeProto, databaseBuilder);
-  challenges.push(challengeProto);
-  ++i;
-  const challengeDecli1 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PROPOSE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PROPOSE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli1, databaseBuilder);
-  challenges.push(challengeDecli1);
-  ++i;
-  const challengeDecli2 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PERIME),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PERIME,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli2, databaseBuilder);
-  challenges.push(challengeDecli2);
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: true, protoVersion: skillItem.version, decliVersion: null, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForActiveSkill(currentSkillItem, baseChallengeId, locales, databaseBuilder) {
+function buildChallengesForActiveSkill(skillItem, locales, databaseBuilder) {
   const challenges = [];
-  let i = 1;
-  const challengeProto = {
-    ...generateBaseChallengeData(Challenge.STATUSES.VALIDE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.VALIDE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-    version: currentSkillItem.version,
-    alternativeVersion: null,
-  };
-  addPrimaryLocalizedChallenge(challengeProto, databaseBuilder);
-  let translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeProto, translatedLocales[0], LocalizedChallenge.STATUSES.PLAY, databaseBuilder);
-  addTranslationFor(challengeProto, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeProto);
-  ++i;
-  const challengeDecli1 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.VALIDE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.VALIDE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli1, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli1, translatedLocales[0], LocalizedChallenge.STATUSES.PLAY, databaseBuilder);
-  addTranslationFor(challengeDecli1, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli1);
-  ++i;
-  const challengeDecli2 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PERIME),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PERIME,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli2, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli2, translatedLocales[0], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  addTranslationFor(challengeDecli2, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli2);
-  ++i;
-  const challengeDecli3 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.ARCHIVE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.ARCHIVE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli3, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli3, translatedLocales[0], LocalizedChallenge.STATUSES.PLAY, databaseBuilder);
-  addTranslationFor(challengeDecli3, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli3);
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.VALIDE, isProto: true, protoVersion: skillItem.version, decliVersion: null, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.VALIDE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 3, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 3, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForArchivedSkill(currentSkillItem, baseChallengeId, locales, databaseBuilder) {
+function buildChallengesForArchivedSkill(skillItem, locales, databaseBuilder) {
   const challenges = [];
-  let i = 1;
-  const challengeProto = {
-    ...generateBaseChallengeData(Challenge.STATUSES.ARCHIVE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.ARCHIVE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-    version: currentSkillItem.version,
-    alternativeVersion: null,
-  };
-  addPrimaryLocalizedChallenge(challengeProto, databaseBuilder);
-  let translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeProto, translatedLocales[0], LocalizedChallenge.STATUSES.PLAY, databaseBuilder);
-  addTranslationFor(challengeProto, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeProto);
-  ++i;
-  const challengeDecli1 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.ARCHIVE),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.ARCHIVE,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli1, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli1, translatedLocales[0], LocalizedChallenge.STATUSES.PLAY, databaseBuilder);
-  addTranslationFor(challengeDecli1, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli1);
-  ++i;
-  const challengeDecli2 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PERIME),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PERIME,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli2, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli2, translatedLocales[0], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  addTranslationFor(challengeDecli2, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli2);
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: true, protoVersion: skillItem.version, decliVersion: null, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForObsoleteSkill(currentSkillItem, baseChallengeId, locales, databaseBuilder) {
+function buildChallengesForObsoleteSkill(skillItem, locales, databaseBuilder) {
   const challenges = [];
-  let i = 1;
-  const challengeProto = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PERIME),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PERIME,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-    version: currentSkillItem.version,
-    alternativeVersion: null,
-  };
-  addPrimaryLocalizedChallenge(challengeProto, databaseBuilder);
-  let translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeProto, translatedLocales[0], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  addTranslationFor(challengeProto, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeProto);
-  ++i;
-  const challengeDecli1 = {
-    ...generateBaseChallengeData(Challenge.STATUSES.PERIME),
-    id: `${baseChallengeId}${i}`,
-    status: Challenge.STATUSES.PERIME,
-    skills: [currentSkillItem.airtableId],
-    skillId: currentSkillItem.id,
-    locales: [locales[0]],
-    genealogy: Challenge.GENEALOGIES.DECLINAISON,
-    version: currentSkillItem.version,
-    alternativeVersion: i - 1,
-  };
-  addPrimaryLocalizedChallenge(challengeDecli1, databaseBuilder);
-  translatedLocales = pickNRandomValueInArr(locales.filter((loc) => loc !== 'fr'), 2);
-  addTranslationFor(challengeDecli1, translatedLocales[0], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  addTranslationFor(challengeDecli1, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
-  challenges.push(challengeDecli1);
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PERIME, isProto: true, protoVersion: skillItem.version, decliVersion: null, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 1, databaseBuilder, locales }));
   return challenges;
 }
 
