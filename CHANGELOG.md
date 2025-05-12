@@ -1,5 +1,14 @@
 
 
+## v3.202.0 (12/05/2025)
+
+
+### :building_construction: Tech
+- [#989](https://github.com/1024pix/pix-editor/pull/989) [TECH] Empêcher les tests flaky liés à l'affichage de plusieurs PixSelect.
+
+### :bug: Correction
+- [#988](https://github.com/1024pix/pix-editor/pull/988) [BUGFIX] Échec de la création du workbench acquis lors de la création d’une compétence (PIX-17777).
+
 ## v3.201.0 (07/05/2025)
 
 
