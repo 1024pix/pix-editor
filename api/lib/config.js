@@ -29,6 +29,7 @@ export const hapi = {
 
 export const airtable = {
   apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
+  apiKeyMetaData: process.env.AIRTABLE_API_KEY_META_DATA || process.env.AIRTABLE_API_KEY_META_DATA,
   base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
   editorBase: process.env.AIRTABLE_EDITOR_BASE,
 };

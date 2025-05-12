@@ -83,3 +83,56 @@ export function stringValue(value) {
       .replace(/\t/g, '\\t')
   }"`;
 }
+
+export async function emptyAllTables({ showProgression = false } = {}) {
+  const tablesAndRecordIds = {
+    'Referentiel': 'Record ID',
+    'Domaines': 'Record ID',
+    'Competences': 'Record ID',
+    'Thematiques': 'Record Id',
+    'Tubes': 'Record Id',
+    'Acquis': 'Record Id',
+    'Epreuves': 'Record ID',
+    'Tutoriels': 'Record ID',
+    'Tags': 'Record ID',
+    'Attachments': 'Record ID',
+  };
+  const res = await fetch('https://api.airtable.com/v0/meta/bases', {
+    headers: {
+      'Authorization': `Bearer ${config.airtable.apiKeyMetaData}`,
+    },
+    credentials: 'include',
+  });
+  const body = await res.json();
+  const airtableBase = body.bases.find((base) => base.id === config.airtable.base);
+  if (!airtableBase.name.includes('- DEV -')) {
+    logger.error(`Not allowed to empty Airtable base "${airtableBase.name}"`);
+    return;
+  }
+  for (const [tableName, idKey] of Object.entries(tablesAndRecordIds)) {
+    if (showProgression) logger.info(`\tFetching "${tableName}" ids...`);
+    const rawRecords = await _airtableClient().table(tableName)
+      .select({ fields: [idKey] })
+      .all();
+    if (showProgression) logger.info(`\tEmptying ${rawRecords.length} from "${tableName}"...`);
+    const ids = rawRecords.map((rawRecord) => rawRecord.fields[idKey]);
+    let progression = 0;
+    for (const chunk of chunks(ids, 10)) {
+      await _airtableClient().table(tableName).destroy(chunk);
+      progression = progression + chunk.length;
+      if (showProgression) {
+        process.stdout.cursorTo(0);
+        process.stdout.write(`${Math.round((progression * 100) / ids.length, 2)} %`);
+      }
+    }
+    if (showProgression) process.stdout.cursorTo(0);
+  }
+}
+
+function chunks(items, size) {
+  const chunks = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks;
+}
