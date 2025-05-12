@@ -1,3 +1,4 @@
+// todo: put real challenge ids
 export function staticCoursesBuilder(databaseBuilder) {
   const staticCourseId1 = databaseBuilder.factory.buildStaticCourse({
     name: 'Static Course 1',

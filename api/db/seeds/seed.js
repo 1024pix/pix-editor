@@ -1,16 +1,17 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
 import Airtable from 'airtable';
 import { logger } from '../../lib/infrastructure/logger.js';
+import { staticCoursesBuilder } from './data/static-courses.js';
+import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
+import { airtableSeedsConfig } from '../../lib/config.js';
+import { buildPix1D } from './data/pix-1d.js';
 import { buildFrameworks } from './data/frameworks.js';
 import { buildAreas } from './data/areas.js';
 import { buildCompetences } from './data/competences.js';
 import { buildThematics } from './data/thematics.js';
-import { staticCoursesBuilder } from './data/static-courses.js';
-import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTubes } from './data/tubes.js';
 import { buildSkills } from './data/skills.js';
 import { buildChallenges } from './data/challenges.js';
-import { airtableSeedsConfig } from '../../lib/config.js';
 
 /*
 import {localizedChallengesAttachmentsBuilder} from "./data/localized-challenges-attachments.js";
@@ -75,6 +76,7 @@ export async function seed(knex) {
   await buildSkills({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
   await buildChallenges({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
 
+  await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales });
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
   return databaseBuilder.commit();
