@@ -84,7 +84,7 @@ export function stringValue(value) {
   }"`;
 }
 
-export async function getBaseName() {
+async function getBaseName() {
   const res = await fetch('https://api.airtable.com/v0/meta/bases', {
     headers: {
       'Authorization': `Bearer ${config.airtable.apiKeyMetaData}`,
@@ -97,6 +97,16 @@ export async function getBaseName() {
     throw new Error('Base name not found');
   }
   return airtableBaseName;
+}
+
+export async function canSeedOrEmptyAirtableBase() {
+  let airtableBaseName;
+  try {
+    airtableBaseName = await getBaseName();
+  } catch {
+    return false;
+  }
+  return airtableBaseName.includes('- DEV -');
 }
 
 export async function emptyAllTables({ showProgression = false } = {}) {
@@ -112,15 +122,9 @@ export async function emptyAllTables({ showProgression = false } = {}) {
     'Tags': 'Record ID',
     'Attachments': 'Record ID',
   };
-  let airtableBaseName;
-  try {
-    airtableBaseName = await getBaseName();
-  } catch {
+  const canEmpty = await canSeedOrEmptyAirtableBase();
+  if (!canEmpty) {
     logger.error('Not allowed to empty Airtable base');
-    return;
-  }
-  if (!airtableBaseName.includes('- DEV -')) {
-    logger.error(`Not allowed to empty Airtable base "${airtableBaseName.name}"`);
     return;
   }
   for (const [tableName, idKey] of Object.entries(tablesAndRecordIds)) {
