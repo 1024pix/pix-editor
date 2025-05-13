@@ -635,7 +635,7 @@ describe('Acceptance | Route | competences', () => {
       });
     });
 
-    it.fails('should respond with status 201 and created competence', async () => {
+    it('should respond with status 201 and created competence', async () => {
       // given
       const server = await createServer();
 
