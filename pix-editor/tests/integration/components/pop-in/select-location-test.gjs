@@ -1,11 +1,11 @@
 import { render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import PopinSelectLocation from 'pixeditor/components/pop-in/select-location';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { waitForSelectToBeClosed} from '../../../helpers/wait-for-select-to-be-closed';
+import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in-select-location / form-select-location', function(hooks) {
@@ -194,22 +194,21 @@ module('Integration | Component | pop-in-select-location / form-select-location'
   module('if variant is `prototype`', function(hooks) {
     hooks.beforeEach(async function() {
       // given
-      this.tube = tube1_2_1_1;
-      this.skill = skill1_2_1_1_2;
-      this.onSubmit = onSubmitStub;
-      this.closeModal = closeModalStub;
+      const skill = skill1_2_1_1_2;
+      const onSubmit = onSubmitStub;
+      const closeModal = closeModalStub;
 
       // when
       screen = await render(
-        hbs`<PopIn::SelectLocation
-          @onSubmit={{this.onSubmit}}
+        <template><PopinSelectLocation
+          @onSubmit={{onSubmit}}
           @variant="prototype"
           @title="prototype"
           @showModal={{true}}
-          @tube={{this.skill.tube}}
-          @skill={{this.skill}}
-          @close={{this.closeModal}}
-        />`,
+          @tube={{skill.tube}}
+          @skill={{skill}}
+          @close={{closeModal}}
+        /></template>,
       );
     });
 
@@ -305,22 +304,21 @@ module('Integration | Component | pop-in-select-location / form-select-location'
   module('if variant is `skill`', function(hooks) {
     hooks.beforeEach(async function() {
       // given
-      this.tube = tube1_2_1_1;
-      this.skill = skill1_2_1_1_2;
-      this.onSubmit = onSubmitStub;
-      this.closeModal = closeModalStub;
+      const skill = skill1_2_1_1_2;
+      const onSubmit = onSubmitStub;
+      const closeModal = closeModalStub;
 
       // when
       screen = await render(
-        hbs`<PopIn::SelectLocation
-          @onSubmit={{this.onSubmit}}
+        <template><PopinSelectLocation
+          @onSubmit={{onSubmit}}
           @variant="skill"
           @title="skill"
           @showModal={{true}}
-          @tube={{this.skill.tube}}
-          @skill={{this.skill}}
-          @close={{this.closeModal}}
-        />`,
+          @tube={{skill.tube}}
+          @skill={{skill}}
+          @close={{closeModal}}
+        /></template>,
       );
     });
     test('it should display a list of all skill levels', async function(assert) {
@@ -376,20 +374,20 @@ module('Integration | Component | pop-in-select-location / form-select-location'
   module('if variant is `tube`', function(hooks) {
     hooks.beforeEach(async function() {
       // given
-      this.theme = theme1_2_1_1;
-      this.onSubmit = onSubmitStub;
-      this.closeModal = closeModalStub;
+      const theme = theme1_2_1_1;
+      const onSubmit = onSubmitStub;
+      const closeModal = closeModalStub;
 
       // when
       screen = await render(
-        hbs`<PopIn::SelectLocation
-          @onSubmit={{this.onSubmit}}
+        <template><PopinSelectLocation
+          @onSubmit={{onSubmit}}
           @variant="tube"
           @title="tube"
-          @theme={{this.theme}}
-          @close={{this.closeModal}}
+          @theme={{theme}}
+          @close={{closeModal}}
           @showModal={{true}}
-        />`,
+        /></template>,
       );
     });
 
