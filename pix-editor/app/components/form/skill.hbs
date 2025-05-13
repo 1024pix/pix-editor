@@ -5,13 +5,16 @@
     @edition={{@edition}}
     @id="skill-description"
   />
-  <Field::Select
-    @title="Statut de la description"
+  <PixSelect
+    @id="select-description-status"
     @value={{@skill.descriptionStatus}}
-    @options={{this.options.descriptionStatus}}
-    @edition={{@edition}}
-    @setValue={{fn (mut @skill.descriptionStatus)}}
-  />
+    @options={{this.descriptionStatusList}}
+    @isDisabled={{not @edition}}
+    @onChange={{this.setDescriptionStatusId}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Statut de la description</:label>
+  </PixSelect>
   <Field::Textarea
     @title="Indice (fr)"
     @value={{@skill.clue}}
@@ -24,13 +27,16 @@
     @edition={{@edition}}
     @id="skill-clue-en"
   />
-  <Field::Select
-    @title="Statut de l'indice"
+  <PixSelect
+    @id="select-clue-status"
     @value={{@skill.clueStatus}}
-    @options={{this.options.clueStatus}}
-    @edition={{@edition}}
-    @setValue={{fn (mut @skill.clueStatus)}}
-  />
+    @options={{this.clueStatusList}}
+    @isDisabled={{not @edition}}
+    @onChange={{this.setClueStatusId}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Statut de l'indice</:label>
+  </PixSelect>
   {{#if @skill.productionPrototype}}
     <Field::Quality @title="Qualité" @challenge={{@skill.productionPrototype}} @edition={{@edition}} />
   {{/if}}
@@ -50,13 +56,16 @@
     @searchClass="more"
     @addTutorial={{this.addTutorial}}
     @removeTutorial={{this.removeTutorial}}/>
-  <Field::Select
-    @title="Internationalisation"
+  <PixSelect
+    @id="select-i18n-option"
     @value={{@skill.i18n}}
-    @options={{this.options.i18n}}
-    @edition={{@edition}}
-    @setValue={{fn (mut @skill.i18n)}}
-  />
+    @options={{this.i18nOptionList}}
+    @isDisabled={{not @edition}}
+    @onChange={{this.setI18nOptionId}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Internationalisation</:label>
+  </PixSelect>
   {{#unless @edition}}
     <Field::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
   {{/unless}}

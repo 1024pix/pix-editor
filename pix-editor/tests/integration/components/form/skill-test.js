@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 
@@ -7,15 +7,16 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | skill-form', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('renders the skill form with status menu', async function(assert) {
+    // given
     this.set('skill', { i18n: false });
 
-    await render(hbs`<Form::Skill @skill={{this.skill}} />`);
+    //  when
+    const screen = await render(hbs`<Form::Skill @skill={{this.skill}} />`);
 
-    assert.dom('.ui.form').exists();
-
+    //  then
+    assert.dom(screen.getByRole('button', { name: 'Statut de la description' })).exists();
+    assert.dom(screen.getByRole('button', { name: 'Statut de l\'indice' })).exists();
+    assert.dom(screen.getByRole('button', { name: 'Internationalisation' })).exists();
   });
 });
