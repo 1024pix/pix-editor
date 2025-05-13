@@ -1,5 +1,11 @@
 
 
+## v3.202.1 (13/05/2025)
+
+
+### :bug: Correction
+- [#990](https://github.com/1024pix/pix-editor/pull/990) [BUGFIX] La validation de la déclinaison d'une épreuve ne fonctionne plus (PIX-17810).
+
 ## v3.202.0 (12/05/2025)
 
 
