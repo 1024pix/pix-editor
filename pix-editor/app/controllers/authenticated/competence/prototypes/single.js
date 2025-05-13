@@ -42,6 +42,17 @@ export default class SingleController extends Controller {
   deletedFiles = [];
   @controller('authenticated.competence') parentController;
 
+  get challengeStatusActionsId() {
+    return `challenge-${this.challenge.id}-status-actions`;
+  }
+
+  get challengeStatusActionsLabel() {
+    if (!this.challenge.isPrototype) {
+      return 'Modifier le statut de la déclinaison';
+    }
+    return 'Modifier le statut de l\'épreuve';
+  }
+
   get maximized() {
     return this.parentController.leftMaximized;
   }
@@ -779,7 +790,7 @@ export default class SingleController extends Controller {
 
   @action
   async hideStatusActionMenu(event) {
-    const challengeSelector = document.querySelector('.challenge-status-actions');
+    const challengeSelector = document.getElementById(this.challengeStatusActionsId);
     if (!event.relatedTarget || !challengeSelector.contains(event.relatedTarget)) {
       this.isStatusActionMenuOpen = false;
     }
