@@ -23,7 +23,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube1',
             en: 'practicalDescriptionEnUs tube1',
           },
-          competenceId: 'competenceId'
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
+          competenceId: 'competenceId1',
         }),
         airtableBuilder.factory.buildTube({
           id: 'tubeId2',
@@ -37,7 +39,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube2',
             en: 'practicalDescriptionEnUs tube2',
           },
-          competenceId: 'competenceId'
+          thematicAirtableId: 'thematicAirtableId2',
+          competenceAirtableId: 'competenceAirtableId2',
+          competenceId: 'competenceId2'
         }),
       ]).activate().nockScope;
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -101,7 +105,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
-          competenceId: 'competenceId',
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
+          competenceId: 'competenceId1',
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
@@ -116,7 +122,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube2DescriptionFr.value,
             en: tube2DescriptionEn.value,
           },
-          competenceId: 'competenceId',
+          thematicAirtableId: 'thematicAirtableId2',
+          competenceAirtableId: 'competenceAirtableId2',
+          competenceId: 'competenceId2',
         }),
       ]);
 
@@ -139,6 +147,8 @@ describe('Integration | Repository | tube-repository', () => {
           fr: 'practicalDescriptionFrFr tube1',
           en: 'practicalDescriptionEnUs tube1',
         },
+        thematicAirtableId: 'thematicAirtableId1',
+        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
       };
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -170,6 +180,8 @@ describe('Integration | Repository | tube-repository', () => {
           fields: {
             'id persistant': tube1.id,
             'Nom': tube1.name,
+            'Thematique': [tube1.thematicAirtableId],
+            'Competences': [tube1.competenceAirtableId],
             'Competences (id persistant)': [tube1.competenceId],
             'Index': tube1.index,
           },
@@ -195,6 +207,8 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
         })
       ]);
@@ -211,6 +225,8 @@ describe('Integration | Repository | tube-repository', () => {
         airtableId: 'recTube1',
         name: '@test',
         index: 3,
+        thematicAirtableId: 'thematicAirtableId1',
+        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
         practicalTitle_i18n: {
           fr: 'le titre',

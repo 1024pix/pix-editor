@@ -3,6 +3,8 @@ export function buildTube({
   airtableId = id,
   name,
   index,
+  thematicAirtableId,
+  competenceAirtableId,
   competenceId,
 } = {}) {
 
@@ -12,6 +14,8 @@ export function buildTube({
       'id persistant': id,
       'Nom': name,
       'Index': index,
+      'Thematique': [thematicAirtableId],
+      'Competences': [competenceAirtableId],
       'Competences (id persistant)': [competenceId],
     },
   };

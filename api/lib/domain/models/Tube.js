@@ -6,6 +6,8 @@ export class Tube {
     practicalTitle_i18n,
     practicalDescription_i18n,
     index,
+    thematicAirtableId,
+    competenceAirtableId,
     competenceId,
   }) {
     this.id = id;
@@ -14,6 +16,8 @@ export class Tube {
     this.practicalTitle_i18n = practicalTitle_i18n;
     this.practicalDescription_i18n = practicalDescription_i18n;
     this.index = index;
+    this.thematicAirtableId = thematicAirtableId;
+    this.competenceAirtableId = competenceAirtableId;
     this.competenceId = competenceId;
   }
 

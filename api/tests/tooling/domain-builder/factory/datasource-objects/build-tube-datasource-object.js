@@ -4,6 +4,8 @@ export function buildTubeDatasourceObject(
     airtableId,
     name = '@Moteur',
     index = 1,
+    thematicAirtableId = 'recAirFlqfqwl1231bd1',
+    competenceAirtableId = 'recAirsvLz0W2ShyfD63',
     competenceId = 'recsvLz0W2ShyfD63',
   } = {}) {
   return {
@@ -11,6 +13,8 @@ export function buildTubeDatasourceObject(
     airtableId: airtableId ?? id,
     name,
     index,
+    thematicAirtableId,
+    competenceAirtableId,
     competenceId,
   };
 }

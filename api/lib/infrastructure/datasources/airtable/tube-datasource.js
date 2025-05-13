@@ -13,6 +13,8 @@ export const tubeDatasource = datasource.extend({
   usedFields: [
     'id persistant',
     'Nom',
+    'Thematique',
+    'Competences',
     'Competences (id persistant)',
     'Index',
   ],
@@ -23,7 +25,9 @@ export const tubeDatasource = datasource.extend({
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
       index: airtableRecord.get('Index'),
-      competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
+      thematicAirtableId: airtableRecord.get('Thematique')[0],
+      competenceAirtableId: airtableRecord.get('Competences')[0],
+      competenceId: airtableRecord.get('Competences (id persistant)')[0],
     };
   },
 
