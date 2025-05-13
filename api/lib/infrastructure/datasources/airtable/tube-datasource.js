@@ -31,6 +31,18 @@ export const tubeDatasource = datasource.extend({
     };
   },
 
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'id persistant': model.id,
+        Nom: model.name,
+        Thematique: [model.thematicAirtableId],
+        Competences: [model.competenceAirtableId],
+        Index: model.index,
+      },
+    };
+  },
+
   async listByCompetenceId(competenceId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       fields: this.usedFields,

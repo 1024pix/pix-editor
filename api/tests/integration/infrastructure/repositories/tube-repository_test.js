@@ -1,9 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import Airtable from 'airtable';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
-import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
-import { stringValue } from '../../../../lib/infrastructure/airtable.js';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Integration | Repository | tube-repository', () => {
 
@@ -172,9 +173,9 @@ describe('Integration | Repository | tube-repository', () => {
         value: 'Outils d\'accès au web from PG 1'
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
-        if (options?.filterByFormula !==  `{Competences (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !==  `{Competences (id persistant)} = ${airtable.stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
           id: 'airtableTubeId1',
           fields: {
@@ -273,6 +274,57 @@ describe('Integration | Repository | tube-repository', () => {
         // then
         expect(result).toBe(null);
       });
+    });
+  });
+
+  describe('#create', () => {
+    afterEach(() => {
+      return knex('translations').truncate();
+    });
+
+    it('should save new tube to Airtable and translations to DB', async () => {
+      // given
+      const tubeId = 'tube45267428';
+      vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(tubeId);
+      const tube = domainBuilder.buildTube({
+        airtableId: null,
+        id: null,
+      });
+      const airtableTube = airtableBuilder.factory.buildTube({
+        ...tube,
+        airtableId: 'recTube1',
+        id: tubeId,
+      });
+      const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
+        new Airtable.Record('Tubes', airtableTube.id, airtableTube),
+      );
+
+      // when
+      const createdTube = await tubeRepository.create(tube);
+
+      // then
+      expect(createdTube).toStrictEqual(domainBuilder.buildTube({
+        ...tube,
+        airtableId: 'recTube1',
+      }));
+      expect(createRecordSpy).toHaveBeenCalledWith(
+        'Tubes',
+        {
+          fields: {
+            'id persistant': tubeId,
+            'Nom': tube.name,
+            Competences: [tube.competenceAirtableId],
+            Index: tube.index,
+            'Thematique': [tube.thematicAirtableId],
+          },
+        },
+      );
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+        { key: `tube.${tubeId}.practicalDescription`, locale: 'en', value: tube.practicalDescription_i18n.en },
+        { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: tube.practicalDescription_i18n.fr },
+        { key: `tube.${tubeId}.practicalTitle`, locale: 'en', value: tube.practicalTitle_i18n.en },
+        { key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: tube.practicalTitle_i18n.fr },
+      ]);
     });
   });
 });

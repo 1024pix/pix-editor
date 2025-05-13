@@ -3,6 +3,7 @@ import { tubeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
+import * as idGenerator from '../utils/id-generator.js';
 
 const model = 'tube';
 
@@ -35,6 +36,14 @@ export async function getByAirtableId(airtableId) {
   if (!datasourceTube) return null;
   const translations = await translationRepository.listByEntity(model, datasourceTube.id);
   return toDomain(datasourceTube, translations);
+}
+
+export async function create(tube) {
+  tube.id = idGenerator.generateNewId('tube');
+  const createdTubeDTO = await tubeDatasource.create(tube);
+  const translations = tubeTranslations.extractFromDomainObject(tube);
+  await translationRepository.save({ translations });
+  return toDomain(createdTubeDTO, translations);
 }
 
 function toDomainList(datasourceTubes, translations) {
