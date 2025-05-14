@@ -502,4 +502,69 @@ describe('Unit | Domain | Skill', () => {
       });
     });
   });
+
+  describe('#update', () => {
+
+    it('should set specific fields for update', function() {
+      // given
+      const originalData = {
+        id: 'originalId',
+        airtableId: 'originalAirtableId',
+        name: 'originalName',
+        description: 'originalDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
+        hint_i18n: {
+          fr: 'original hint fr',
+          en: 'original hint en',
+        },
+        hintStatus: Skill.HINT_STATUSES.A_RETRAVAILLER,
+        tutorialIds: ['originalTutoId'],
+        tutorialAirtableIds: ['originalTutoAirtableId'],
+        learningMoreTutorialIds: ['originalLMTutoId'],
+        learningMoreTutorialAirtableIds: ['originalLMTutoAirtableId'],
+        competenceId: 'originalCompetenceId',
+        pixValue: 1,
+        status: Skill.STATUSES.ACTIF,
+        tubeId: 'originalTubeId',
+        tubeAirtableId: 'originalTubeAirtableId',
+        level: 1,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        version: 2,
+        challengeIds: ['originalChallengeId'],
+        createdAt: new Date('2021-10-29'),
+      };
+      const skill = domainBuilder.buildSkill(originalData);
+      const updateCommand = {
+        airtableId: 'someValueWeDONotUse',
+        description: 'newDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        clue: 'new hint fr',
+        clueEn: 'new hint en',
+        clueStatus: Skill.HINT_STATUSES.PRE_VALIDE,
+        i18n: Skill.INTERNATIONALISATIONS.NONE,
+        status: Skill.STATUSES.ARCHIVE,
+        tutoSolutionAirtableIds: ['newTutoAirtableId'],
+        tutoMoreAirtableIds: ['newLMTutoAirtableId'],
+      };
+
+      // when
+      skill.update(updateCommand);
+
+      // then
+      expect(skill).toStrictEqual(domainBuilder.buildSkill({
+        ...originalData,
+        description: 'newDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hint_i18n: {
+          fr: 'new hint fr',
+          en: 'new hint en',
+        },
+        hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
+        internationalisation: Skill.INTERNATIONALISATIONS.NONE,
+        tutorialAirtableIds: ['newTutoAirtableId'],
+        learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
+        status: Skill.STATUSES.ARCHIVE,
+      }));
+    });
+  });
 });
