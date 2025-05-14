@@ -36,7 +36,7 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
   });
 }
 
-function findUrlsFromTutorials(tutorials, release) {
+function findUrlsFromTutorials(tutorials, release, UrlUtils) {
   return tutorials.map((tutorial) => {
     return {
       id: [
@@ -44,7 +44,7 @@ function findUrlsFromTutorials(tutorials, release) {
         release.findSkillNamesForTutorial(tutorial).join(' '),
         tutorial.id
       ].join(';'),
-      url: tutorial.link,
+      url: UrlUtils.findUrlsInText(tutorial.link)[0],
     };
   });
 }
@@ -69,7 +69,7 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, loca
 
 async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
   const tutorials = release.content.tutorials;
-  const urlList = findUrlsFromTutorials(tutorials, release);
+  const urlList = findUrlsFromTutorials(tutorials, release, UrlUtils);
   const finalUrlList = urlList.filter(({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
