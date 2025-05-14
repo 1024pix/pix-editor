@@ -146,10 +146,8 @@ export async function emptyAllTables({ showProgression = false } = {}) {
   }
 }
 
-function chunks(items, size) {
-  const chunks = [];
+function* chunks(items, size) {
   for (let i = 0; i < items.length; i += size) {
-    chunks.push(items.slice(i, i + size));
+    yield items.slice(i, i + size);
   }
-  return chunks;
 }

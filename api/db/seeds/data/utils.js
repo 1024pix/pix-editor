@@ -1,11 +1,9 @@
 const AIRTABLE_WRITE_LIMIT = 10;
 
-function chunksForAirtable(items) {
-  const chunks = [];
+function* chunksForAirtable(items) {
   for (let i = 0; i < items.length; i += AIRTABLE_WRITE_LIMIT) {
-    chunks.push(items.slice(i, i + AIRTABLE_WRITE_LIMIT));
+    yield items.slice(i, i + AIRTABLE_WRITE_LIMIT);
   }
-  return chunks;
 }
 
 export function pickRandomValueInObj(obj, ignoreEmptyValues) {
