@@ -1,15 +1,44 @@
-import {
-  pickNRandomValueInArr,
-  pickNRandomValuesInObj,
-  pickRandomBoolean,
-  pickRandomValueInArr,
-  pickRandomValueInObj,
-  saveInAirtable
-} from './utils.js';
+import { saveInAirtable, } from './utils.js';
 import { Challenge, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 import { fields } from '../../../lib/infrastructure/translations/challenge.js';
 import { challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
+const ignoreEmptyValues = (val) => Boolean(val);
+
+const iterFor = {
+  'accessibility1': cycle(Object.values(Challenge.ACCESSIBILITY1).filter(ignoreEmptyValues)),
+  'accessibility2': cycle(Object.values(Challenge.ACCESSIBILITY2).filter(ignoreEmptyValues)),
+  'declinable': cycle(Object.values(Challenge.DECLINABLES).filter(ignoreEmptyValues)),
+  'format': cycle(Object.values(Challenge.FORMATS).filter(ignoreEmptyValues)),
+  'pedagogy': cycle(Object.values(Challenge.PEDAGOGIES).filter(ignoreEmptyValues)),
+  'responsive': cycle(Object.values(Challenge.RESPONSIVES).filter(ignoreEmptyValues)),
+  'spoil': cycle(Object.values(Challenge.SPOILS).filter(ignoreEmptyValues)),
+  'type': cycle(Object.values(Challenge.TYPES).filter(ignoreEmptyValues)),
+  'deafAndHardOfHearing': cycle(Object.values(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES).filter(ignoreEmptyValues)),
+  'alpha': cycle([...Array(5).keys(), null]),
+  'delta': cycle([...Array(5).keys(), null]),
+  'timer': cycle([30, 120, 180, null]),
+  'autoReply': cycle([true, false]),
+  'shuffled': cycle([true, false]),
+  'focusable': cycle([true, false]),
+  't1Status': cycle([true, false]),
+  't2Status': cycle([true, false]),
+  't3Status': cycle([true, false]),
+  'toRephrase': cycle([true, false]),
+  'isAwarenessChallenge': cycle([true, false]),
+  'isIncompatibleIpadCertif': cycle([true, false]),
+  'requireGafamWebsiteAccess': cycle([true, false]),
+  'contextualizedFields': cycle(Object.values(Challenge.CONTEXTUALIZED_FIELDS).filter(ignoreEmptyValues)),
+};
+
+function* cycle(arr) {
+  if (arr.length === 0) return;
+  while (true) {
+    yield* arr;
+  }
+}
+
+let iterLocale;
 export async function buildChallengesFromConfig({
   airtableClient,
   databaseBuilder,
@@ -17,6 +46,7 @@ export async function buildChallengesFromConfig({
   learningContentConfig,
   learningContentData,
 }) {
+  iterLocale = cycle(learningContentConfig.locales.slice(1));
   const challengeItems = [];
   for (const frameworkItem of learningContentData) {
     for (const areaItem of frameworkItem.areas) {
@@ -63,11 +93,13 @@ export function buildChallenge({ indexChallenge, skillItem, status, isProto, pro
     alternativeVersion: decliVersion,
   };
   addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);
-  if (status !== Challenge.STATUSES.PROPOSE) {
-    const translatedLocales = pickNRandomValueInArr(locales.slice(1), 2);
+  if (status !== Challenge.STATUSES.PROPOSE && locales.length > 1) {
+    const translatedLocales = [iterLocale.next().value, iterLocale.next().value];
     const statusForTranslation1 = status === Challenge.STATUSES.VALIDE ? LocalizedChallenge.STATUSES.PLAY : LocalizedChallenge.STATUSES.PAUSE;
     addTranslationFor(challengeItem, translatedLocales[0], statusForTranslation1, databaseBuilder);
-    addTranslationFor(challengeItem, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
+    if (translatedLocales[0] !== translatedLocales[1]) {
+      addTranslationFor(challengeItem, translatedLocales[1], LocalizedChallenge.STATUSES.PAUSE, databaseBuilder);
+    }
   }
   return challengeItem;
 }
@@ -143,27 +175,27 @@ function generateBaseChallengeData(status) {
     madeObsoleteAt = new Date('2021-05-05');
   }
   return {
-    accessibility1: pickRandomValueInObj(Challenge.ACCESSIBILITY1),
-    accessibility2: pickRandomValueInObj(Challenge.ACCESSIBILITY2),
-    alpha: pickRandomValueInArr([...Array(5).keys(), null]),
+    accessibility1: iterFor.accessibility1.next().value,
+    accessibility2: iterFor.accessibility2.next().value,
+    alpha: iterFor.alpha.next().value,
     author: ['DEV'],
-    autoReply: pickRandomBoolean(),
-    contextualizedFields: pickNRandomValuesInObj(Challenge.CONTEXTUALIZED_FIELDS, 2),
-    declinable: pickRandomValueInObj(Challenge.DECLINABLES),
-    delta: pickRandomValueInArr([...Array(5).keys(), null]),
+    autoReply: iterFor.autoReply.next().value,
+    contextualizedFields: [iterFor.contextualizedFields.next().value, iterFor.contextualizedFields.next().value],
+    declinable: iterFor.declinable.next().value,
+    delta: iterFor.delta.next().value,
     files: [],
-    focusable: pickRandomBoolean(),
-    format: pickRandomValueInObj(Challenge.FORMATS),
+    focusable: iterFor.focusable.next().value,
+    format: iterFor.format.next().value,
     geography: 'Monde',
-    pedagogy: pickRandomValueInObj(Challenge.PEDAGOGIES),
-    responsive: pickRandomValueInObj(Challenge.RESPONSIVES),
-    shuffled: pickRandomBoolean(),
-    spoil: pickRandomValueInObj(Challenge.SPOILS),
-    t1Status: pickRandomBoolean(),
-    t2Status: pickRandomBoolean(),
-    t3Status: pickRandomBoolean(),
-    timer: pickRandomValueInArr([30, 120, 180, null]),
-    type: pickRandomValueInObj(Challenge.TYPES),
+    pedagogy: iterFor.pedagogy.next().value,
+    responsive: iterFor.responsive.next().value,
+    shuffled: iterFor.shuffled.next().value,
+    spoil: iterFor.spoil.next().value,
+    t1Status: iterFor.t1Status.next().value,
+    t2Status: iterFor.t2Status.next().value,
+    t3Status: iterFor.t3Status.next().value,
+    timer: iterFor.timer.next().value,
+    type: iterFor.type.next().value,
     createdAt,
     updatedAt,
     validatedAt,
@@ -209,11 +241,11 @@ function addTranslationFor(challengeData, locale, status, databaseBuilder) {
 function generateBaseLocalizedChallengeData() {
   return {
     embedUrl: null,
-    requireGafamWebsiteAccess: pickRandomBoolean(),
-    isIncompatibleIpadCertif: pickRandomBoolean(),
-    isAwarenessChallenge: pickRandomBoolean(),
-    toRephrase: pickRandomBoolean(),
-    deafAndHardOfHearing: pickRandomValueInObj(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES),
+    requireGafamWebsiteAccess: iterFor.requireGafamWebsiteAccess.next().value,
+    isIncompatibleIpadCertif: iterFor.isIncompatibleIpadCertif.next().value,
+    isAwarenessChallenge: iterFor.isAwarenessChallenge.next().value,
+    toRephrase: iterFor.toRephrase.next().value,
+    deafAndHardOfHearing: iterFor.deafAndHardOfHearing.next().value,
     geography: 'VN',
     urlsToConsult: null,
   };
