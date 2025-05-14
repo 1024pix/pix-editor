@@ -16,7 +16,6 @@ export async function fetchTableSchemas({ baseId, apiKey }) {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
     },
-    credentials: 'include',
   });
   const body = await res.json();
   return body.tables;

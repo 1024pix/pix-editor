@@ -89,7 +89,6 @@ async function getBaseName() {
     headers: {
       'Authorization': `Bearer ${config.airtable.apiKeyMetaData}`,
     },
-    credentials: 'include',
   });
   const body = await res.json();
   const airtableBaseName = body?.bases?.find((base) => base.id === config.airtable.base)?.name;
