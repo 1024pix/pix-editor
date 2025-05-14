@@ -50,7 +50,6 @@ module('Acceptance | competence-management/new', function(hooks) {
     const workbenchTube = newCompetence.hasMany('rawTubes').value().find((tube) => tube.name === '@workbench');
     const workbenchSkill = workbenchTube.hasMany('rawSkills').value().find((skill) => skill.name === '@workbench');
     assert.ok(newCompetence);
-    assert.ok(workbenchTube);
     assert.ok(workbenchSkill);
     assert.dom(findAll('[data-test-main-message]')[0]).hasText('Compétence créée');
     assert.dom(findAll('[data-test-main-message]')[1]).hasText('Atelier créé');

@@ -27,6 +27,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     competence = {
       code: '1.1',
       rawThemes: ['theme'],
+      rawTubes: ['tube'],
     };
     controller.model = {
       area,
@@ -74,6 +75,9 @@ module('Unit | Controller | competence-management/new', function(hooks) {
         rawThemes: [
           'theme',
         ],
+        rawTubes: [
+          'tube',
+        ],
         save: saveStub,
       };
       // when
@@ -118,18 +122,11 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       newId = idGeneratorStub;
     }
     this.owner.register('service:idGenerator', IdGenerator);
-    const saveStub = sinon.stub().onFirstCall().resolves('tube');
+    const saveStub = sinon.stub().onFirstCall().resolves('skill');
     const model = { save: saveStub };
     const createRecordStub = sinon.stub().returns(model);
     controller.store.createRecord = createRecordStub;
 
-    const expectedTube = {
-      name: '@workbench',
-      theme: 'theme',
-      title: 'Tube pour l\'atelier de la compétence 1.1 Pix+',
-      competence,
-      pixId: 'recId',
-    };
     const expectedSkill = {
       tube: 'tube',
       description: 'Acquis pour l\'atelier de la compétence 1.1 Pix+',
@@ -140,7 +137,6 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     await controller._createWorkbench('Pix+');
 
     // then
-    assert.deepEqual(createRecordStub.getCall(0).args, ['tube', expectedTube]);
-    assert.deepEqual(createRecordStub.getCall(1).args, ['skill', expectedSkill]);
+    assert.deepEqual(createRecordStub.getCall(0).args, ['skill', expectedSkill]);
   });
 });

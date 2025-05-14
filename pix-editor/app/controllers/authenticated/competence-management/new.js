@@ -51,21 +51,8 @@ export default class CompetenceManagementNewController extends Controller {
   }
 
   async _createWorkbench(frameworkName) {
-    const themes = await this.competence.rawThemes;
-    const tube = await this._createTubeWorkbench(themes[0], this.competence, frameworkName);
+    const [tube] = await this.competence.rawTubes;
     await this._createSkillWorkbench(tube, frameworkName);
-  }
-
-  async _createTubeWorkbench(theme, competence, frameworkName) {
-    const title = `Tube pour l'atelier de la compétence ${this.competence.code} ${frameworkName}`;
-    const tubeWorkbench = this.store.createRecord('tube', {
-      name: '@workbench',
-      title,
-      theme,
-      competence,
-      pixId: this.idGenerator.newId('tube'),
-    });
-    return await tubeWorkbench.save();
   }
 
   async _createSkillWorkbench(tube, frameworkName) {

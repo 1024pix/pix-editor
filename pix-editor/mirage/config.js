@@ -82,6 +82,7 @@ function routes() {
     competence.pixId = newId('competence');
     competence.code = `${area.code}.${areaCompetences.length + 1}`;
     const createdCompetence = schema.competences.create(competence);
+
     const createdThematic = schema.themes.create({
       pixId: newId('thematic'),
       name: `workbench_${area.code}_${areaCompetences.length + 1}`,
@@ -90,7 +91,17 @@ function routes() {
     });
     competence.rawThemes = [createdThematic];
 
-    return schema.competences.create(competence);
+    const createdTube = schema.tubes.create({
+      pixId: newId('tube'),
+      name: '@workbench',
+      title: 'Tube pour l’atelier',
+      competence: createdCompetence,
+      theme: createdThematic,
+    });
+
+    createdCompetence.rawTubes = [createdTube];
+
+    return createdCompetence;
   });
 
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
