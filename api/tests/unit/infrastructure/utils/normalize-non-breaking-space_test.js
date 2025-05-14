@@ -26,4 +26,18 @@ describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
     expect(result1).toBe('Descartes a dit : « Je pense, donc je suis. »');
     expect(result2).toBe('Descartes a dit: « Je pense, donc je suis. »');
   });
+
+  it('should not break when passing null or empty values', () => {
+    // given
+    const nullValue = null;
+    const emptyString = '';
+
+    // when
+    const result1 = normalizeNonBreakingSpace(nullValue);
+    const result2 = normalizeNonBreakingSpace(emptyString);
+
+    // then
+    expect(result1).toBe(null);
+    expect(result2).toBe('');
+  });
 });
