@@ -10,13 +10,14 @@ export async function createSkill(skill, dependencies = {
   skillTransformer,
   updatedRecordNotifier,
   pixApiClient,
-  generateNewIdFnc
+  generateNewIdFnc,
+  normalizeNonBreakingSpaceFnc,
 }) {
   const tube = await dependencies.tubeRepository.getByAirtableId(skill.tubeAirtableId);
   if (tube == null) throw new NotFoundError('Tube introuvable');
 
   const tubeSkills = await dependencies.skillRepository.listByTubeId(tube.id);
-  skill.prepareForCreation(tube, tubeSkills, dependencies.generateNewIdFnc);
+  skill.prepareForCreation(tube, tubeSkills, dependencies.generateNewIdFnc, dependencies.normalizeNonBreakingSpaceFnc);
 
   const createdSkill = await dependencies.skillRepository.create(skill);
   try {

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 
@@ -397,10 +397,11 @@ describe('Unit | Domain | Skill', () => {
 
   describe('#prepareForCreation', () => {
     const createdSkillId = 'createdSkillId';
-    let generateNewIdFnc;
+    let generateNewIdFnc, normalizeNonBreakingSpaceFnc;
 
     beforeEach(() => {
       generateNewIdFnc = vi.fn().mockImplementation(() => createdSkillId);
+      normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
     });
 
     it('should set fields for creation', () => {
@@ -431,7 +432,7 @@ describe('Unit | Domain | Skill', () => {
       ];
 
       // when
-      skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+      skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
 
       // then
       expect(skill).toHaveProperty('id', createdSkillId);
@@ -441,7 +442,38 @@ describe('Unit | Domain | Skill', () => {
       expect(skill).toHaveProperty('version', 2);
     });
 
-    describe('when tube is @workbench', () => {
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
+        // given
+        normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
+        const tube = domainBuilder.buildTube({
+          name: '@test',
+        });
+        const skill = domainBuilder.buildSkill({
+          name: null,
+          level: 6,
+          status: null,
+          version: null,
+          hint_i18n: {
+            'nl': 'Je vais rester tel quel',
+            'fr': 'Je vais passer dans la fonction',
+            'en': 'Je vais rester tel quel',
+          },
+        });
+
+        // when
+        skill.prepareForCreation(tube, [], generateNewIdFnc, normalizeNonBreakingSpaceFnc);
+
+        // then
+        expect(skill).toHaveProperty('hint_i18n', {
+          'nl': 'Je vais rester tel quel',
+          'fr': 'Je suis passée dans la fonction ! YOUPI',
+          'en': 'Je vais rester tel quel',
+        });
+      });
+    });
+
+    context('when tube is @workbench', () => {
 
       it('should set name to tube’s name and version to null', () => {
       // given
@@ -459,7 +491,7 @@ describe('Unit | Domain | Skill', () => {
         const tubeSkills = [];
 
         // when
-        skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+        skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
 
         // then
         expect(skill).toHaveProperty('id', createdSkillId);
