@@ -54,7 +54,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
     };
     const identifiedTutorial2 = {
       id: 'competence 4.5;@mySkill23;tutorial2',
-      url: 'https://tuto2.net/',
+      url: 'https://www.tuto2.net/',
     };
     const identifiedTutorial3 = {
       id: 'competence 1.1;@mySkill1;tutorial3',
@@ -107,7 +107,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       });
       const tutorials = [
         domainBuilder.buildTutorialForRelease({ id: 'tutorial1', link: 'https://tuto1.net/' }),
-        domainBuilder.buildTutorialForRelease({ id: 'tutorial2', link: 'https://tuto2.net/' }),
+        domainBuilder.buildTutorialForRelease({ id: 'tutorial2', link: 'www.tuto2.net/' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial3', link: 'https://tuto3.net/' }),
       ];
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
@@ -398,7 +398,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         'competence 4.5',
         '@mySkill23',
         'tutorial2',
-        'https://tuto2.net/',
+        'https://www.tuto2.net/',
         'KO',
         'FORMAT_ERROR',
         'identifiedTutorial2 identifiedTutorial2',
