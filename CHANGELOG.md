@@ -1,5 +1,15 @@
 
 
+## v3.203.0 (14/05/2025)
+
+
+### :building_construction: Tech
+- [#991](https://github.com/1024pix/pix-editor/pull/991) [TECH] Déplacer la création du sujet workbench dans l’API (PIX-17771).
+- [#984](https://github.com/1024pix/pix-editor/pull/984) [TECH] Déplacer la création de la thématique workbench dans l’API (PIX-17770).
+
+### :bug: Correction
+- [#992](https://github.com/1024pix/pix-editor/pull/992) [BUGFIX] Un lien de tutoriel sans protocole casse la moulinette (PIX-17825).
+
 ## v3.202.1 (13/05/2025)
 
 
