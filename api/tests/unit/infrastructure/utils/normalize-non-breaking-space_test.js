@@ -16,14 +16,14 @@ describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
   it('should replace spaces by non breaking spaces correctly in sentences with pointing double angle quotation marks "«»"', () => {
     // given
     const stringNoSpacesInsideQuotationMarks = 'Descartes a dit : «Je pense, donc je suis.»';
-    const stringWithSpacesInsideQuotationMarks = 'Descartes a dit : « Je pense, donc je suis. »';
+    const stringWithSpacesInsideQuotationMarks = 'Descartes a dit: « Je pense, donc je suis. »';
 
     // when
     const result1 = normalizeNonBreakingSpace(stringNoSpacesInsideQuotationMarks);
     const result2 = normalizeNonBreakingSpace(stringWithSpacesInsideQuotationMarks);
 
     // then
-    expect(result1).toBe('Descartes a dit : « Je pense, donc je suis. »');
-    expect(result2).toBe('Descartes a dit : « Je pense, donc je suis. »');
+    expect(result1).toBe('Descartes a dit : « Je pense, donc je suis. »');
+    expect(result2).toBe('Descartes a dit: « Je pense, donc je suis. »');
   });
 });
