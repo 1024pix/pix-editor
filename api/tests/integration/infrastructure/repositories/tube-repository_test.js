@@ -1,9 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import Airtable from 'airtable';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
-import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
-import { stringValue } from '../../../../lib/infrastructure/airtable.js';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Integration | Repository | tube-repository', () => {
 
@@ -23,7 +24,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube1',
             en: 'practicalDescriptionEnUs tube1',
           },
-          competenceId: 'competenceId'
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
+          competenceId: 'competenceId1',
         }),
         airtableBuilder.factory.buildTube({
           id: 'tubeId2',
@@ -37,7 +40,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube2',
             en: 'practicalDescriptionEnUs tube2',
           },
-          competenceId: 'competenceId'
+          thematicAirtableId: 'thematicAirtableId2',
+          competenceAirtableId: 'competenceAirtableId2',
+          competenceId: 'competenceId2'
         }),
       ]).activate().nockScope;
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -101,7 +106,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
-          competenceId: 'competenceId',
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
+          competenceId: 'competenceId1',
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
@@ -116,7 +123,9 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube2DescriptionFr.value,
             en: tube2DescriptionEn.value,
           },
-          competenceId: 'competenceId',
+          thematicAirtableId: 'thematicAirtableId2',
+          competenceAirtableId: 'competenceAirtableId2',
+          competenceId: 'competenceId2',
         }),
       ]);
 
@@ -139,6 +148,8 @@ describe('Integration | Repository | tube-repository', () => {
           fr: 'practicalDescriptionFrFr tube1',
           en: 'practicalDescriptionEnUs tube1',
         },
+        thematicAirtableId: 'thematicAirtableId1',
+        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
       };
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -162,14 +173,16 @@ describe('Integration | Repository | tube-repository', () => {
         value: 'Outils d\'accès au web from PG 1'
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
-        if (options?.filterByFormula !==  `{Competences (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !==  `{Competences (id persistant)} = ${airtable.stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
           id: 'airtableTubeId1',
           fields: {
             'id persistant': tube1.id,
             'Nom': tube1.name,
+            'Thematique': [tube1.thematicAirtableId],
+            'Competences': [tube1.competenceAirtableId],
             'Competences (id persistant)': [tube1.competenceId],
             'Index': tube1.index,
           },
@@ -195,6 +208,8 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
+          thematicAirtableId: 'thematicAirtableId1',
+          competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
         })
       ]);
@@ -211,6 +226,8 @@ describe('Integration | Repository | tube-repository', () => {
         airtableId: 'recTube1',
         name: '@test',
         index: 3,
+        thematicAirtableId: 'thematicAirtableId1',
+        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
         practicalTitle_i18n: {
           fr: 'le titre',
@@ -257,6 +274,57 @@ describe('Integration | Repository | tube-repository', () => {
         // then
         expect(result).toBe(null);
       });
+    });
+  });
+
+  describe('#create', () => {
+    afterEach(() => {
+      return knex('translations').truncate();
+    });
+
+    it('should save new tube to Airtable and translations to DB', async () => {
+      // given
+      const tubeId = 'tube45267428';
+      vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(tubeId);
+      const tube = domainBuilder.buildTube({
+        airtableId: null,
+        id: null,
+      });
+      const airtableTube = airtableBuilder.factory.buildTube({
+        ...tube,
+        airtableId: 'recTube1',
+        id: tubeId,
+      });
+      const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
+        new Airtable.Record('Tubes', airtableTube.id, airtableTube),
+      );
+
+      // when
+      const createdTube = await tubeRepository.create(tube);
+
+      // then
+      expect(createdTube).toStrictEqual(domainBuilder.buildTube({
+        ...tube,
+        airtableId: 'recTube1',
+      }));
+      expect(createRecordSpy).toHaveBeenCalledWith(
+        'Tubes',
+        {
+          fields: {
+            'id persistant': tubeId,
+            'Nom': tube.name,
+            Competences: [tube.competenceAirtableId],
+            Index: tube.index,
+            'Thematique': [tube.thematicAirtableId],
+          },
+        },
+      );
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+        { key: `tube.${tubeId}.practicalDescription`, locale: 'en', value: tube.practicalDescription_i18n.en },
+        { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: tube.practicalDescription_i18n.fr },
+        { key: `tube.${tubeId}.practicalTitle`, locale: 'en', value: tube.practicalTitle_i18n.en },
+        { key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: tube.practicalTitle_i18n.fr },
+      ]);
     });
   });
 });

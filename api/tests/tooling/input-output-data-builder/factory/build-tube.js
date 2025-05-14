@@ -10,6 +10,8 @@ export function buildTube({
     en: practicalDescriptionEnUs,
   } = {},
   index,
+  thematicAirtableId,
+  competenceAirtableId,
   competenceId,
 } = {}) {
   return {
@@ -22,6 +24,8 @@ export function buildTube({
       'Description pratique fr-fr': practicalDescriptionFrFr,
       'Description pratique en-us': practicalDescriptionEnUs,
       'Index': index,
+      'Thematique': [thematicAirtableId],
+      'Competences': [competenceAirtableId],
       'Competences (id persistant)': [competenceId],
     },
   };

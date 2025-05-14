@@ -2,10 +2,10 @@ import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { areaRepository, competenceRepository, thematicRepository } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer, thematicTransformer } from '../../infrastructure/transformers/index.js';
+import { areaRepository, competenceRepository, thematicRepository, tubeRepository } from '../../infrastructure/repositories/index.js';
+import { competenceTransformer, thematicTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
-import { Thematic } from '../models/Thematic.js';
+import { Thematic, Tube } from '../models/index.js';
 
 export async function createCompetence(competence) {
   const [area, competences] = await Promise.all([
@@ -30,8 +30,21 @@ export async function createCompetence(competence) {
 
   const createdWorkbenchThematic = await thematicRepository.create(workbenchThematic);
 
+  const workbenchTube = new Tube({
+    competenceAirtableId: createdCompetence.airtableId,
+    name: Tube.WORKBENCH_NAME,
+    thematicAirtableId: createdWorkbenchThematic.airtableId,
+    practicalTitle_i18n: {
+      fr: `Tube pour l'atelier de la compétence ${createdCompetence.index} ${createdCompetence.origin}`,
+    },
+    practicalDescription_i18n: {},
+  });
+
+  const createdWorkbenchTube = await tubeRepository.create(workbenchTube);
+
   createdCompetence.thematicIds = [createdWorkbenchThematic.id];
   createdCompetence.thematicAirtableIds = [createdWorkbenchThematic.airtableId];
+  createdCompetence.tubeAirtableIds = [createdWorkbenchTube.airtableId];
 
   try {
     await Promise.all([
@@ -44,6 +57,11 @@ export async function createCompetence(competence) {
         pixApiClient,
         model: 'thematics',
         updatedRecord: thematicTransformer.filterThematicFields(createdWorkbenchThematic),
+      }),
+      updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'tubes',
+        updatedRecord: tubeTransformer.filterTubeFields(createdWorkbenchTube),
       }),
     ]);
   } catch (err) {

@@ -409,6 +409,7 @@ describe('Acceptance | Route | competences', () => {
     let airtableCompetencesScope;
     let airtableCreateCompetenceScope;
     let airtableCreateThematicScope;
+    let airtableCreateTubeScope;
     let generateNewId;
     let pixApiCompetenceCacheScope;
     let pixApiThematicCacheScope;
@@ -465,6 +466,14 @@ describe('Acceptance | Route | competences', () => {
         tubeIds: [],
       }));
 
+      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+        id: 'tube1',
+        airtableId: 'recTube1',
+        name: '@workbench',
+        competenceId: 'competence4',
+        index: null,
+      }));
+
       airtableCreateCompetenceScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Competences/', {
           records: [{
@@ -493,11 +502,27 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableThematic] });
 
+      airtableCreateTubeScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Tubes/', {
+          records: [{
+            fields: {
+              'id persistant': 'tube1',
+              Nom: '@workbench',
+              Competences: ['recCompetence4'],
+              Thematique: ['recThematic1'],
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableTube] });
+
       generateNewId = vi.spyOn(idGenerator, 'generateNewId');
       generateNewId.mockImplementation((prefix) => {
         switch (prefix) {
           case 'competence': return 'competence4';
           case 'thematic': return 'thematic1';
+          case 'tube': return 'tube1';
         }
       });
 
@@ -669,13 +694,17 @@ describe('Acceptance | Route | competences', () => {
               ],
             },
             'raw-tubes': {
-              data: [],
+              data: [
+                { id: 'recTube1', type: 'tubes' },
+              ],
             },
           },
         },
       });
 
       expect(generateNewId).toHaveBeenCalledWith('competence');
+      expect(generateNewId).toHaveBeenCalledWith('thematic');
+      expect(generateNewId).toHaveBeenCalledWith('tube');
 
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' },
@@ -683,12 +712,14 @@ describe('Acceptance | Route | competences', () => {
         { key: 'competence.competence4.name', locale: 'en', value: 'Fourth competence' },
         { key: 'competence.competence4.name', locale: 'fr', value: 'Quatrième compétence' },
         { key: 'thematic.thematic1.name', locale: 'fr', value: 'workbench_2_2' },
+        { key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Tube pour l\'atelier de la compétence 2.2 Pix' },
       ]);
 
       expect(airtableAreaScope.isDone()).toBe(true);
       expect(airtableCompetencesScope.isDone()).toBe(true);
       expect(airtableCreateCompetenceScope.isDone()).toBe(true);
       expect(airtableCreateThematicScope.isDone()).toBe(true);
+      expect(airtableCreateTubeScope.isDone()).toBe(true);
       expect(pixApiCompetenceCacheScope.isDone()).toBe(true);
       expect(pixApiThematicCacheScope.isDone()).toBe(true);
     });
