@@ -1,7 +1,7 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
 import { canSeedOrEmptyAirtableBase } from '../../lib/infrastructure/airtable.js';
 import Airtable from 'airtable';
-import { airtableSeedsConfig } from '../../lib/config.js';
+import { airtable, airtableSeedsConfig } from '../../lib/config.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { buildAreasFromConfig } from './data/areas.js';
 import { buildChallengesFromConfig } from './data/challenges.js';
@@ -20,11 +20,7 @@ import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
 
 export async function seed(knex) {
-  const {
-    AIRTABLE_API_KEY: airtableApiKey,
-    AIRTABLE_BASE: airtableBase,
-  } = process.env;
-  const airtableClient = new Airtable({ apiKey: airtableApiKey }).base(airtableBase);
+  const airtableClient = new Airtable({ apiKey: airtable.apiKey }).base(airtable.base);
   const databaseBuilder = new DatabaseBuilder({ knex });
   const adminId = databaseBuilder.factory.buildUser({
     trigram: 'DEV',
