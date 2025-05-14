@@ -504,6 +504,11 @@ describe('Unit | Domain | Skill', () => {
   });
 
   describe('#update', () => {
+    let normalizeNonBreakingSpaceFnc;
+
+    beforeEach(function() {
+      normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
+    });
 
     it('should set specific fields for update', function() {
       // given
@@ -548,7 +553,7 @@ describe('Unit | Domain | Skill', () => {
       };
 
       // when
-      skill.update(updateCommand);
+      skill.update(updateCommand, normalizeNonBreakingSpaceFnc);
 
       // then
       expect(skill).toStrictEqual(domainBuilder.buildSkill({
@@ -565,6 +570,27 @@ describe('Unit | Domain | Skill', () => {
         learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
         status: Skill.STATUSES.ARCHIVE,
       }));
+    });
+
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
+        // given
+        normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
+        const skill = domainBuilder.buildSkill();
+        const updateCommand = {
+          clue: 'Je vais passer dans la fonction',
+          clueEn: 'Je vais rester tel quel',
+        };
+
+        // when
+        skill.update(updateCommand, normalizeNonBreakingSpaceFnc);
+
+        // then
+        expect(skill).toHaveProperty('hint_i18n', {
+          'fr': 'Je suis passée dans la fonction ! YOUPI',
+          'en': 'Je vais rester tel quel',
+        });
+      });
     });
   });
 });

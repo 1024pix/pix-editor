@@ -2,7 +2,7 @@ export async function updateSkill(updateCommand, dependencies) {
   const skill = await dependencies.skillRepository.getByAirtableId(updateCommand.airtableId);
   if (!skill) return null;
 
-  skill.update(updateCommand);
+  skill.update(updateCommand, dependencies.normalizeNonBreakingSpaceFnc);
   const updatedSkill = await dependencies.skillRepository.update(skill);
 
   try {

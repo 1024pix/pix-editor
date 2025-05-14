@@ -140,6 +140,7 @@ export async function update(req, h) {
       pixApiClient,
       logger,
       Sentry,
+      normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
     });
 
     if (updatedSkill === null) return Boom.notFound();

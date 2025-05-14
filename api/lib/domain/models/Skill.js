@@ -210,11 +210,11 @@ export class Skill {
     }
   }
 
-  update(command) {
+  update(command, normalizeNonBreakingSpaceFnc) {
     this.description = command.description;
     this.descriptionStatus = command.descriptionStatus;
     this.hintStatus = command.clueStatus;
-    this.hint_i18n = { fr: command.clue, en:command.clueEn };
+    this.hint_i18n = { fr: normalizeNonBreakingSpaceFnc(command.clue), en: command.clueEn };
     this.internationalisation = command.i18n;
     this.learningMoreTutorialAirtableIds = command.tutoMoreAirtableIds;
     this.status = command.status;
