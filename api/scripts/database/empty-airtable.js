@@ -1,10 +1,8 @@
 import 'dotenv/config';
-import { fileURLToPath } from 'node:url';
 import { emptyAllTables as emptyAirtable } from '../../lib/infrastructure/airtable.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const isLaunchedFromCommandLine = process.argv[1] === __filename;
+const isLaunchedFromCommandLine = process.argv[1] === import.meta.filename;
 async function main() {
   logger.info('Emptying Airtable base...');
   await emptyAirtable({ showProgression: true });
