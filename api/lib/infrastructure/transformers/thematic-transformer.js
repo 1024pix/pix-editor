@@ -1,13 +1,7 @@
-import _ from 'lodash';
-
 export function filterThematicsFields(thematics) {
-  const fieldsToInclude = [
-    'id',
-    'name_i18n',
-    'index',
-    'competenceId',
-    'tubeIds',
-  ];
+  return thematics.map(filterThematicFields);
+}
 
-  return thematics.map((thematic) => _.pick(thematic, fieldsToInclude));
+export function filterThematicFields({ id, name_i18n, index, competenceId, tubeIds }) {
+  return { id,name_i18n,index, competenceId,tubeIds };
 }

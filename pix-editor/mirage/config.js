@@ -81,8 +81,16 @@ function routes() {
 
     competence.pixId = newId('competence');
     competence.code = `${area.code}.${areaCompetences.length + 1}`;
+    const createdCompetence = schema.competences.create(competence);
+    const createdThematic = schema.themes.create({
+      pixId: newId('thematic'),
+      name: `workbench_${area.code}_${areaCompetences.length + 1}`,
+      index: 0,
+      competence: createdCompetence,
+    });
+    competence.rawThemes = [createdThematic];
 
-    return this.serialize(schema.competences.create(competence));
+    return schema.competences.create(competence);
   });
 
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {

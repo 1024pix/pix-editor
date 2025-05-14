@@ -8,6 +8,7 @@ export function buildThematic({
     en: 'Thematic\'s name',
   },
   competenceId = 'recCompetence0',
+  competenceAirtableId = 'recAirtableCompetence0',
   tubeIds = ['recTube0'],
   index = 0,
 } = {}) {
@@ -16,6 +17,7 @@ export function buildThematic({
     name_i18n,
     airtableId,
     competenceId,
+    competenceAirtableId,
     tubeIds,
     index,
   });

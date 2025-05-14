@@ -405,7 +405,13 @@ describe('Acceptance | Route | competences', () => {
   });
 
   describe('POST /competences', async () => {
-    let airtableAreaScope, airtableCompetencesScope, airtableCreateCompetenceScope, generateNewId, pixApiCacheScope;
+    let airtableAreaScope;
+    let airtableCompetencesScope;
+    let airtableCreateCompetenceScope;
+    let airtableCreateThematicScope;
+    let generateNewId;
+    let pixApiCompetenceCacheScope;
+    let pixApiThematicCacheScope;
 
     beforeEach(async () => {
       const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
@@ -451,6 +457,14 @@ describe('Acceptance | Route | competences', () => {
         skillIds: null,
       }));
 
+      const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+        id: 'thematic1',
+        airtableId: 'recThematic1',
+        index: 0,
+        competenceId: 'competence4',
+        tubeIds: [],
+      }));
+
       airtableCreateCompetenceScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Competences/', {
           records: [{
@@ -465,20 +479,42 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableCompetence] });
 
-      generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('competence4');
+      airtableCreateThematicScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Thematiques/', {
+          records: [{
+            fields: {
+              'id persistant': 'thematic1',
+              Competence: ['recCompetence4'],
+              Index: 0,
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableThematic] });
+
+      generateNewId = vi.spyOn(idGenerator, 'generateNewId');
+      generateNewId.mockImplementation((prefix) => {
+        switch (prefix) {
+          case 'competence': return 'competence4';
+          case 'thematic': return 'thematic1';
+        }
+      });
 
       const pixApiToken = 'secret';
       nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .reply(200, { 'access_token': pixApiToken })
+        .persist();
+
+      pixApiCompetenceCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/competences/competence4', {
           id: 'competence4',
           index: '2.2',
           areaId: 'area2',
           skillIds: [],
-          thematicIds: [],
+          thematicIds: ['thematic1'],
           origin: 'Pix',
           name_i18n: {
             fr: 'Quatrième compétence',
@@ -488,6 +524,20 @@ describe('Acceptance | Route | competences', () => {
             fr: 'C’est la quatrième',
             en: 'It’s the fourth one'
           }
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+
+      pixApiThematicCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/thematics/thematic1', {
+          id: 'thematic1',
+          name_i18n: {
+            fr: 'workbench_2_2',
+            en: null,
+          },
+          index: 0,
+          competenceId: 'competence4',
+          tubeIds: [],
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);
@@ -614,7 +664,9 @@ describe('Acceptance | Route | competences', () => {
               },
             },
             'raw-themes': {
-              data: [],
+              data: [
+                { id: 'recThematic1', type: 'themes' },
+              ],
             },
             'raw-tubes': {
               data: [],
@@ -630,12 +682,15 @@ describe('Acceptance | Route | competences', () => {
         { key: 'competence.competence4.description', locale: 'fr', value: 'C’est la quatrième' },
         { key: 'competence.competence4.name', locale: 'en', value: 'Fourth competence' },
         { key: 'competence.competence4.name', locale: 'fr', value: 'Quatrième compétence' },
+        { key: 'thematic.thematic1.name', locale: 'fr', value: 'workbench_2_2' },
       ]);
 
       expect(airtableAreaScope.isDone()).toBe(true);
       expect(airtableCompetencesScope.isDone()).toBe(true);
       expect(airtableCreateCompetenceScope.isDone()).toBe(true);
-      expect(pixApiCacheScope.isDone()).toBe(true);
+      expect(airtableCreateThematicScope.isDone()).toBe(true);
+      expect(pixApiCompetenceCacheScope.isDone()).toBe(true);
+      expect(pixApiThematicCacheScope.isDone()).toBe(true);
     });
   });
 

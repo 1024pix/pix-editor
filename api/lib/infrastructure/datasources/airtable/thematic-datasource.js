@@ -11,6 +11,7 @@ export const thematicDatasource = datasource.extend({
 
   usedFields: [
     'id persistant',
+    'Competence',
     'Competence (id persistant)',
     'Tubes (id persistant)',
     'Index',
@@ -21,8 +22,19 @@ export const thematicDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
       competenceId: airtableRecord.get('Competence (id persistant)')[0],
+      competenceAirtableId: airtableRecord.get('Competence')[0],
       tubeIds: airtableRecord.get('Tubes (id persistant)') ?? [],
       index: airtableRecord.get('Index'),
+    };
+  },
+
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'id persistant': model.id,
+        Competence: [model.competenceAirtableId],
+        Index: model.index,
+      },
     };
   },
 

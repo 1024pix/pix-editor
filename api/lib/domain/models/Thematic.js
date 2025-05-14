@@ -5,6 +5,7 @@ export class Thematic {
     index,
     airtableId,
     competenceId,
+    competenceAirtableId,
     tubeIds,
   }) {
     this.id = id;
@@ -12,6 +13,7 @@ export class Thematic {
     this.index = index;
     this.airtableId = airtableId;
     this.competenceId = competenceId;
+    this.competenceAirtableId = competenceAirtableId;
     this.tubeIds = tubeIds;
   }
 }
