@@ -1,5 +1,18 @@
 
 
+## v3.204.0 (15/05/2025)
+
+
+### :rocket: Amélioration
+- [#994](https://github.com/1024pix/pix-editor/pull/994) [FEATURE] Gérer l'ajout d'espaces insécables dans les indices fr des acquis lors de la création et de la modification (PIX-17617).
+- [#993](https://github.com/1024pix/pix-editor/pull/993) [FEATURE] Gérer l'ajout d'espace insécable mot, dit NBSP, dans du texte contenant des guillemets du style «» et deux-points : (PIX-17616).
+
+### :building_construction: Tech
+- [#981](https://github.com/1024pix/pix-editor/pull/981) [TECH] Pouvoir vider et recréer des seeds sur Airtable (PIX-17819).
+
+### :arrow_up: Montée de version
+- [#969](https://github.com/1024pix/pix-editor/pull/969) [BUMP] Update dependency base-x to v5.0.1 [SECURITY].
+
 ## v3.203.0 (14/05/2025)
 
 
