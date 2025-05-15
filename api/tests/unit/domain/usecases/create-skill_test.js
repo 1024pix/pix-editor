@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { createSkill } from '../../../../lib/domain/usecases/create-skill';
+import { createSkill } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Use Cases | create-skill', () => {
@@ -11,6 +11,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
   let skillRepository, tubeRepository, skillTransformer, updatedRecordNotifier;
   const pixApiClient = Symbol('pixApiClient');
   const generateNewIdFnc = Symbol('generateNewIdFnc');
+  const normalizeNonBreakingSpaceFnc = Symbol('normalizeNonBreakingSpaceFnc');
 
   beforeEach(() => {
     skillRepository = {
@@ -45,7 +46,8 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
       skillTransformer,
       updatedRecordNotifier,
       pixApiClient,
-      generateNewIdFnc
+      generateNewIdFnc,
+      normalizeNonBreakingSpaceFnc,
     });
 
     // then
@@ -53,7 +55,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
 
     expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith(skill.tubeAirtableId);
     expect(skillRepository.listByTubeId).toHaveBeenCalledWith('tube1');
-    expect(skill.prepareForCreation).toHaveBeenCalledWith(tube, tubeSkills, generateNewIdFnc);
+    expect(skill.prepareForCreation).toHaveBeenCalledWith(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
     expect(skillRepository.create).toHaveBeenCalledWith(skill);
     expect(skillTransformer.filterSkillsFields).toHaveBeenCalledWith([createdSkill]);
     expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: 'skillTransformed' , model: 'skills', pixApiClient });

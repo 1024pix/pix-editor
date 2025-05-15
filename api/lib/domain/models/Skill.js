@@ -110,7 +110,7 @@ export class Skill {
     return this.status === Skill.STATUSES.ACTIF;
   }
 
-  prepareForCreation(tube, tubeSkills, generateNewIdFnc) {
+  prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc) {
     this.id = generateNewIdFnc(Skill.ID_PREFIX);
     this.status = Skill.STATUSES.EN_CONSTRUCTION;
 
@@ -121,6 +121,9 @@ export class Skill {
     } else {
       this.name = `${tube.name}${this.level}`;
       this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
+      if (this.hint_i18n?.fr) {
+        this.hint_i18n.fr = normalizeNonBreakingSpaceFnc(this.hint_i18n.fr);
+      }
     }
   }
 
@@ -207,11 +210,11 @@ export class Skill {
     }
   }
 
-  update(command) {
+  update(command, normalizeNonBreakingSpaceFnc) {
     this.description = command.description;
     this.descriptionStatus = command.descriptionStatus;
     this.hintStatus = command.clueStatus;
-    this.hint_i18n = { fr: command.clue, en:command.clueEn };
+    this.hint_i18n = { fr: normalizeNonBreakingSpaceFnc(command.clue), en: command.clueEn };
     this.internationalisation = command.i18n;
     this.learningMoreTutorialAirtableIds = command.tutoMoreAirtableIds;
     this.status = command.status;

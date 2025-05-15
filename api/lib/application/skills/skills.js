@@ -9,6 +9,7 @@ import {
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
+import { normalizeNonBreakingSpace } from '../../infrastructure/utils/normalize-non-breaking-space.js';
 import {
   cloneSkill,
   createSkill,
@@ -106,7 +107,8 @@ export async function create(req, h) {
       skillTransformer,
       updatedRecordNotifier,
       pixApiClient,
-      generateNewIdFnc: generateNewId
+      generateNewIdFnc: generateNewId,
+      normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
     });
     return h.response(skillSerializer.serialize(createdSkill)).code(201);
   } catch (err) {
@@ -138,6 +140,7 @@ export async function update(req, h) {
       pixApiClient,
       logger,
       Sentry,
+      normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
     });
 
     if (updatedSkill === null) return Boom.notFound();

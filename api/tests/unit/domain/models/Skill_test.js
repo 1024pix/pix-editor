@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 
@@ -397,10 +397,11 @@ describe('Unit | Domain | Skill', () => {
 
   describe('#prepareForCreation', () => {
     const createdSkillId = 'createdSkillId';
-    let generateNewIdFnc;
+    let generateNewIdFnc, normalizeNonBreakingSpaceFnc;
 
     beforeEach(() => {
       generateNewIdFnc = vi.fn().mockImplementation(() => createdSkillId);
+      normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
     });
 
     it('should set fields for creation', () => {
@@ -431,7 +432,7 @@ describe('Unit | Domain | Skill', () => {
       ];
 
       // when
-      skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+      skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
 
       // then
       expect(skill).toHaveProperty('id', createdSkillId);
@@ -441,7 +442,38 @@ describe('Unit | Domain | Skill', () => {
       expect(skill).toHaveProperty('version', 2);
     });
 
-    describe('when tube is @workbench', () => {
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
+        // given
+        normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
+        const tube = domainBuilder.buildTube({
+          name: '@test',
+        });
+        const skill = domainBuilder.buildSkill({
+          name: null,
+          level: 6,
+          status: null,
+          version: null,
+          hint_i18n: {
+            'nl': 'Je vais rester tel quel car je suis en néerlandais',
+            'fr': 'Je vais passer dans la fonction',
+            'en': 'Je vais rester tel quel car je suis en anglais',
+          },
+        });
+
+        // when
+        skill.prepareForCreation(tube, [], generateNewIdFnc, normalizeNonBreakingSpaceFnc);
+
+        // then
+        expect(skill).toHaveProperty('hint_i18n', {
+          'nl': 'Je vais rester tel quel car je suis en néerlandais',
+          'fr': 'Je suis passée dans la fonction ! YOUPI',
+          'en': 'Je vais rester tel quel car je suis en anglais',
+        });
+      });
+    });
+
+    context('when tube is @workbench', () => {
 
       it('should set name to tube’s name and version to null', () => {
       // given
@@ -459,7 +491,7 @@ describe('Unit | Domain | Skill', () => {
         const tubeSkills = [];
 
         // when
-        skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc);
+        skill.prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
 
         // then
         expect(skill).toHaveProperty('id', createdSkillId);
@@ -467,6 +499,97 @@ describe('Unit | Domain | Skill', () => {
         expect(skill).toHaveProperty('level', null);
         expect(skill).toHaveProperty('status', Skill.STATUSES.EN_CONSTRUCTION);
         expect(skill).toHaveProperty('version', null);
+      });
+    });
+  });
+
+  describe('#update', () => {
+    let normalizeNonBreakingSpaceFnc;
+
+    beforeEach(function() {
+      normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
+    });
+
+    it('should set specific fields for update', function() {
+      // given
+      const originalData = {
+        id: 'originalId',
+        airtableId: 'originalAirtableId',
+        name: 'originalName',
+        description: 'originalDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
+        hint_i18n: {
+          fr: 'original hint fr',
+          en: 'original hint en',
+        },
+        hintStatus: Skill.HINT_STATUSES.A_RETRAVAILLER,
+        tutorialIds: ['originalTutoId'],
+        tutorialAirtableIds: ['originalTutoAirtableId'],
+        learningMoreTutorialIds: ['originalLMTutoId'],
+        learningMoreTutorialAirtableIds: ['originalLMTutoAirtableId'],
+        competenceId: 'originalCompetenceId',
+        pixValue: 1,
+        status: Skill.STATUSES.ACTIF,
+        tubeId: 'originalTubeId',
+        tubeAirtableId: 'originalTubeAirtableId',
+        level: 1,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        version: 2,
+        challengeIds: ['originalChallengeId'],
+        createdAt: new Date('2021-10-29'),
+      };
+      const skill = domainBuilder.buildSkill(originalData);
+      const updateCommand = {
+        airtableId: 'someValueWeDONotUse',
+        description: 'newDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        clue: 'new hint fr',
+        clueEn: 'new hint en',
+        clueStatus: Skill.HINT_STATUSES.PRE_VALIDE,
+        i18n: Skill.INTERNATIONALISATIONS.NONE,
+        status: Skill.STATUSES.ARCHIVE,
+        tutoSolutionAirtableIds: ['newTutoAirtableId'],
+        tutoMoreAirtableIds: ['newLMTutoAirtableId'],
+      };
+
+      // when
+      skill.update(updateCommand, normalizeNonBreakingSpaceFnc);
+
+      // then
+      expect(skill).toStrictEqual(domainBuilder.buildSkill({
+        ...originalData,
+        description: 'newDescription',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hint_i18n: {
+          fr: 'new hint fr',
+          en: 'new hint en',
+        },
+        hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
+        internationalisation: Skill.INTERNATIONALISATIONS.NONE,
+        tutorialAirtableIds: ['newTutoAirtableId'],
+        learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
+        status: Skill.STATUSES.ARCHIVE,
+      }));
+    });
+
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
+        // given
+        normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
+        const skill = domainBuilder.buildSkill();
+        const updateCommand = {
+          clue: 'Je vais passer dans la fonction',
+          clueEn: 'Je vais rester tel quel car je suis en anglais',
+        };
+
+        // when
+        skill.update(updateCommand, normalizeNonBreakingSpaceFnc);
+
+        // then
+        expect(skill).toHaveProperty('hint_i18n', {
+          'fr': 'Je suis passée dans la fonction ! YOUPI',
+          'en': 'Je vais rester tel quel car je suis en anglais',
+        });
       });
     });
   });
