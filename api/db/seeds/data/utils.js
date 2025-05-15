@@ -24,3 +24,10 @@ export async function saveInAirtable({ tableName, data, logger, airtableClient }
   logger.info('Done !');
   return records;
 }
+
+export function* cycle(arr) {
+  if (arr.length === 0) return;
+  while (true) {
+    yield* arr;
+  }
+}

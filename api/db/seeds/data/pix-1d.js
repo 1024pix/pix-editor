@@ -54,11 +54,11 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
   const skillItems = [];
   const workbenchSkillItems = [];
   for (const tubeItem of tubeItems) {
-    skillItems.push(buildSkill({ indexSkill: 0, tubeItem, status: 'actif', version: 1, isWorkbench: false }));
-    skillItems.push(buildSkill({ indexSkill: 1, tubeItem, status: 'actif', version: 1, isWorkbench: false }));
+    skillItems.push(buildSkill({ indexSkill: 0, tubeItem, status: 'actif', version: 1, isWorkbench: false, databaseBuilder, locales }));
+    skillItems.push(buildSkill({ indexSkill: 1, tubeItem, status: 'actif', version: 1, isWorkbench: false, databaseBuilder, locales }));
   }
   for (const workbenchTubeItem of workbenchTubeItems) {
-    workbenchSkillItems.push(buildSkill({ tubeItem: workbenchTubeItem, isWorkbench: true }));
+    workbenchSkillItems.push(buildSkill({ tubeItem: workbenchTubeItem, isWorkbench: true, databaseBuilder, locales }));
   }
   await persistSkills({ items: [...skillItems, ...workbenchSkillItems], airtableClient, logger });
 

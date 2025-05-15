@@ -1,4 +1,4 @@
-import { saveInAirtable, } from './utils.js';
+import { cycle, saveInAirtable, } from './utils.js';
 import { Challenge, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 import { fields } from '../../../lib/infrastructure/translations/challenge.js';
 import { challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
@@ -30,13 +30,6 @@ const iterFor = {
   'requireGafamWebsiteAccess': cycle([true, false]),
   'contextualizedFields': cycle(Object.values(Challenge.CONTEXTUALIZED_FIELDS).filter(ignoreEmptyValues)),
 };
-
-function* cycle(arr) {
-  if (arr.length === 0) return;
-  while (true) {
-    yield* arr;
-  }
-}
 
 let iterLocale;
 export async function buildChallengesFromConfig({

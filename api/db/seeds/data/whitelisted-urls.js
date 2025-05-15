@@ -1,6 +1,5 @@
 import { WhitelistedUrl } from '../../../lib/domain/models/index.js';
 
-// todo put real skill names
 export function whitelistedUrlsBuilder(databaseBuilder, adminId) {
   databaseBuilder.factory.buildWhitelistedUrl({
     createdBy: adminId,
