@@ -47,8 +47,8 @@ async function main() {
     const missingEnvErrors = [];
 
     // Jeton d'accès `read-schema-only`
-    const apiKey = process.env.AIRTABLE_READ_ONLY_API_KEY;
-    if (!apiKey) missingEnvErrors.push('🕵️ Missing AIRTABLE_READ_ONLY_API_KEY environment variable');
+    const apiKey = process.env.AIRTABLE_API_KEY_META_DATA;
+    if (!apiKey) missingEnvErrors.push('🕵️ Missing AIRTABLE_API_KEY_META_DATA environment variable');
 
     const bases = [];
     for (const baseSlug of basesToCompare) {
