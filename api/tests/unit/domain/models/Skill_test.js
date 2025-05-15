@@ -455,9 +455,9 @@ describe('Unit | Domain | Skill', () => {
           status: null,
           version: null,
           hint_i18n: {
-            'nl': 'Je vais rester tel quel',
+            'nl': 'Je vais rester tel quel car je suis en néerlandais',
             'fr': 'Je vais passer dans la fonction',
-            'en': 'Je vais rester tel quel',
+            'en': 'Je vais rester tel quel car je suis en anglais',
           },
         });
 
@@ -466,9 +466,9 @@ describe('Unit | Domain | Skill', () => {
 
         // then
         expect(skill).toHaveProperty('hint_i18n', {
-          'nl': 'Je vais rester tel quel',
+          'nl': 'Je vais rester tel quel car je suis en néerlandais',
           'fr': 'Je suis passée dans la fonction ! YOUPI',
-          'en': 'Je vais rester tel quel',
+          'en': 'Je vais rester tel quel car je suis en anglais',
         });
       });
     });
@@ -579,7 +579,7 @@ describe('Unit | Domain | Skill', () => {
         const skill = domainBuilder.buildSkill();
         const updateCommand = {
           clue: 'Je vais passer dans la fonction',
-          clueEn: 'Je vais rester tel quel',
+          clueEn: 'Je vais rester tel quel car je suis en anglais',
         };
 
         // when
@@ -588,7 +588,7 @@ describe('Unit | Domain | Skill', () => {
         // then
         expect(skill).toHaveProperty('hint_i18n', {
           'fr': 'Je suis passée dans la fonction ! YOUPI',
-          'en': 'Je vais rester tel quel',
+          'en': 'Je vais rester tel quel car je suis en anglais',
         });
       });
     });
