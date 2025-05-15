@@ -48,32 +48,23 @@ export async function buildChallengesFromConfig({
 }) {
   iterLocale = cycle(learningContentConfig.locales.slice(1));
   const challengeItems = [];
-  for (const frameworkItem of learningContentData) {
-    for (const areaItem of frameworkItem.areas) {
-      for (const competenceItem of areaItem.competences) {
-        for (const thematicItem of competenceItem.thematics) {
-          for (const tubeItem of thematicItem.tubes) {
-            for (const skillItem of tubeItem.skills) {
-              let challenges;
-              if (skillItem.status === 'en construction') {
-                challenges = buildChallengesForEnConstructionSkill(skillItem, learningContentConfig.locales, databaseBuilder);
-              }
-              if (skillItem.status === 'actif') {
-                challenges = buildChallengesForActiveSkill(skillItem, learningContentConfig.locales, databaseBuilder);
-              }
-              if (skillItem.status === 'archivé') {
-                challenges = buildChallengesForArchivedSkill(skillItem, learningContentConfig.locales, databaseBuilder);
-              }
-              if (skillItem.status === 'périmé') {
-                challenges = buildChallengesForObsoleteSkill(skillItem, learningContentConfig.locales, databaseBuilder);
-              }
-              challengeItems.push(...challenges);
-              skillItem.challenges.push(...challenges);
-            }
-          }
-        }
-      }
+  const allSkills = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes.flatMap((tube) => tube.skills))));
+  for (const skillItem of allSkills) {
+    let challenges;
+    if (skillItem.status === 'en construction') {
+      challenges = buildChallengesForEnConstructionSkill(skillItem, learningContentConfig.locales, databaseBuilder);
     }
+    if (skillItem.status === 'actif') {
+      challenges = buildChallengesForActiveSkill(skillItem, learningContentConfig.locales, databaseBuilder);
+    }
+    if (skillItem.status === 'archivé') {
+      challenges = buildChallengesForArchivedSkill(skillItem, learningContentConfig.locales, databaseBuilder);
+    }
+    if (skillItem.status === 'périmé') {
+      challenges = buildChallengesForObsoleteSkill(skillItem, learningContentConfig.locales, databaseBuilder);
+    }
+    challengeItems.push(...challenges);
+    skillItem.challenges.push(...challenges);
   }
   await persistChallenges({ items: challengeItems, airtableClient, logger });
 }

@@ -71,22 +71,17 @@ export async function buildTubesFromConfig({
   learningContentData,
 }) {
   const tubeItems = [];
-  for (const frameworkItem of learningContentData) {
-    for (const areaItem of frameworkItem.areas) {
-      for (const competenceItem of areaItem.competences) {
-        for (const thematicItem of competenceItem.thematics) {
-          if (thematicItem.name.includes('workbench')) {
-            const tubeItemWorkbench = buildTube({ thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
-            thematicItem.tubes.push(tubeItemWorkbench);
-            tubeItems.push(tubeItemWorkbench);
-          } else {
-            for (let i = 0; i < learningContentConfig.cntTubesPerThematic; ++i) {
-              const tubeItem = buildTube({ indexTube: i, thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
-              thematicItem.tubes.push(tubeItem);
-              tubeItems.push(tubeItem);
-            }
-          }
-        }
+  const allThematics = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics));
+  for (const thematicItem of allThematics) {
+    if (thematicItem.name.includes('workbench')) {
+      const tubeItemWorkbench = buildTube({ thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+      thematicItem.tubes.push(tubeItemWorkbench);
+      tubeItems.push(tubeItemWorkbench);
+    } else {
+      for (let i = 0; i < learningContentConfig.cntTubesPerThematic; ++i) {
+        const tubeItem = buildTube({ indexTube: i, thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+        thematicItem.tubes.push(tubeItem);
+        tubeItems.push(tubeItem);
       }
     }
   }

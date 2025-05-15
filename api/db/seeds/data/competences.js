@@ -3,13 +3,12 @@ import { saveInAirtable } from './utils.js';
 
 export async function buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
   const competenceItems = [];
-  for (const frameworkItem of learningContentData) {
-    for (const areaItem of frameworkItem.areas) {
-      for (let i = 0; i < learningContentConfig.cntCompetencesPerArea; ++i) {
-        const competenceItem = buildCompetence({ indexCompetence: i, areaItem, databaseBuilder, locales: learningContentConfig.locales });
-        areaItem.competences.push(competenceItem);
-        competenceItems.push(competenceItem);
-      }
+  const allAreas = learningContentData.flatMap((framework) => framework.areas);
+  for (const areaItem of allAreas) {
+    for (let i = 0; i < learningContentConfig.cntCompetencesPerArea; ++i) {
+      const competenceItem = buildCompetence({ indexCompetence: i, areaItem, databaseBuilder, locales: learningContentConfig.locales });
+      areaItem.competences.push(competenceItem);
+      competenceItems.push(competenceItem);
     }
   }
   await persistCompetences({ items: competenceItems, airtableClient, logger });

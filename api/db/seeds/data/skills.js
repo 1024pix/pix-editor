@@ -8,35 +8,28 @@ export async function buildSkillsFromConfig({
   learningContentData,
 }) {
   const skillItems = [];
-  for (const frameworkItem of learningContentData) {
-    for (const areaItem of frameworkItem.areas) {
-      for (const competenceItem of areaItem.competences) {
-        for (const thematicItem of competenceItem.thematics) {
-          for (const tubeItem of thematicItem.tubes) {
-            if (tubeItem.name.includes('workbench')) {
-              const workbenchSkillItem = buildSkill({ tubeItem, isWorkbench: true });
-              skillItems.push(workbenchSkillItem);
-              tubeItem.skills.push(workbenchSkillItem);
-            } else {
-              for (let i = 0; i < learningContentConfig.skillMaxLevel; ++i) {
-                if (i % 2 === 0) {
-                  const activeSkillV1 = buildSkill({ indexSkill: i, suffix: 'Act', tubeItem, status: 'actif', version: 1, isWorkbench: false });
-                  const enConstructionSkillV2 = buildSkill({ indexSkill: i, suffix: 'EnCons', tubeItem, status: 'en construction', version: 2, isWorkbench: false });
-                  skillItems.push(activeSkillV1);
-                  skillItems.push(enConstructionSkillV2);
-                  tubeItem.skills.push(activeSkillV1);
-                  tubeItem.skills.push(enConstructionSkillV2);
-                } else {
-                  const obsoleteSkillV1 = buildSkill({ indexSkill: i, suffix: 'Obs', tubeItem, status: 'périmé', version: 1, isWorkbench: false });
-                  const archivedSkillV2 = buildSkill({ indexSkill: i, suffix: 'Arch', tubeItem, status: 'archivé', version: 2, isWorkbench: false });
-                  skillItems.push(obsoleteSkillV1);
-                  skillItems.push(archivedSkillV2);
-                  tubeItem.skills.push(obsoleteSkillV1);
-                  tubeItem.skills.push(archivedSkillV2);
-                }
-              }
-            }
-          }
+  const allTubes = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)));
+  for (const tubeItem of allTubes) {
+    if (tubeItem.name.includes('workbench')) {
+      const workbenchSkillItem = buildSkill({ tubeItem, isWorkbench: true });
+      skillItems.push(workbenchSkillItem);
+      tubeItem.skills.push(workbenchSkillItem);
+    } else {
+      for (let i = 0; i < learningContentConfig.skillMaxLevel; ++i) {
+        if (i % 2 === 0) {
+          const activeSkillV1 = buildSkill({ indexSkill: i, suffix: 'Act', tubeItem, status: 'actif', version: 1, isWorkbench: false });
+          const enConstructionSkillV2 = buildSkill({ indexSkill: i, suffix: 'EnCons', tubeItem, status: 'en construction', version: 2, isWorkbench: false });
+          skillItems.push(activeSkillV1);
+          skillItems.push(enConstructionSkillV2);
+          tubeItem.skills.push(activeSkillV1);
+          tubeItem.skills.push(enConstructionSkillV2);
+        } else {
+          const obsoleteSkillV1 = buildSkill({ indexSkill: i, suffix: 'Obs', tubeItem, status: 'périmé', version: 1, isWorkbench: false });
+          const archivedSkillV2 = buildSkill({ indexSkill: i, suffix: 'Arch', tubeItem, status: 'archivé', version: 2, isWorkbench: false });
+          skillItems.push(obsoleteSkillV1);
+          skillItems.push(archivedSkillV2);
+          tubeItem.skills.push(obsoleteSkillV1);
+          tubeItem.skills.push(archivedSkillV2);
         }
       }
     }

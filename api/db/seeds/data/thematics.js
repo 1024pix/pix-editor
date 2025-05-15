@@ -2,19 +2,16 @@ import { saveInAirtable } from './utils.js';
 
 export async function buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
   const thematicItems = [];
-  for (const frameworkItem of learningContentData) {
-    for (const areaItem of frameworkItem.areas) {
-      for (const competenceItem of areaItem.competences) {
-        for (let i = 0; i < learningContentConfig.cntThematicsPerCompetence; ++i) {
-          const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
-          thematicItems.push(thematicItem);
-          competenceItem.thematics.push(thematicItem);
-        }
-        const thematicWorkbenchItem = buildThematic({ competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
-        thematicItems.push(thematicWorkbenchItem);
-        competenceItem.thematics.push(thematicWorkbenchItem);
-      }
+  const allCompetences = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences));
+  for (const competenceItem of allCompetences) {
+    for (let i = 0; i < learningContentConfig.cntThematicsPerCompetence; ++i) {
+      const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+      thematicItems.push(thematicItem);
+      competenceItem.thematics.push(thematicItem);
     }
+    const thematicWorkbenchItem = buildThematic({ competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+    thematicItems.push(thematicWorkbenchItem);
+    competenceItem.thematics.push(thematicWorkbenchItem);
   }
   await persistThematics({ items: thematicItems, airtableClient, logger });
   thematicItems.forEach((thematicItem) => {
