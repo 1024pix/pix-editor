@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import { emptyAllTables as emptyPG } from '../../db/knex-database-connection.js';
+import { emptyAllTables as emptyAirtable } from '../../lib/infrastructure/airtable.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 
 const isLaunchedFromCommandLine = process.argv[1] === import.meta.filename;
 async function main() {
-  logger.info('Emptying all POSTGRESQL tables...');
-  await emptyPG();
+  logger.info('Emptying Airtable base...');
+  await emptyAirtable({ showProgression: true });
   logger.info('Done!');
   process.exit(0);
 }

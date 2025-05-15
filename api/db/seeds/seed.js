@@ -1,12 +1,26 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
-import { localizedChallengesBuilder } from './data/localized-challenges.js';
-import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
+import { canSeedOrEmptyAirtableBase } from '../../lib/infrastructure/airtable.js';
+import Airtable from 'airtable';
+import { airtable, airtableSeedsConfig } from '../../lib/config.js';
+import { logger } from '../../lib/infrastructure/logger.js';
+import { buildAreasFromConfig } from './data/areas.js';
+import { buildChallengesFromConfig } from './data/challenges.js';
+import { buildCompetencesFromConfig } from './data/competences.js';
+import { buildFrameworksFromConfig } from './data/frameworks.js';
+import { buildPix1D } from './data/pix-1d.js';
+import { buildSkillsFromConfig } from './data/skills.js';
+import { buildThematicsFromConfig } from './data/thematics.js';
+import { buildTubesFromConfig } from './data/tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
+
+import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
+import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
 
 export async function seed(knex) {
+  const airtableClient = new Airtable({ apiKey: airtable.apiKey }).base(airtable.base);
   const databaseBuilder = new DatabaseBuilder({ knex });
   const adminId = databaseBuilder.factory.buildUser({
     trigram: 'DEV',
@@ -36,18 +50,28 @@ export async function seed(knex) {
     apiKey: process.env.REVIEW_APP_READ_ONLY_USER_API_KEY || readOnlyUserApiKey,
   });
 
-  const translations = await translationsBuilder(databaseBuilder);
-
-  await localizedChallengesBuilder(databaseBuilder, translations);
-
-  await localizedChallengesAttachmentsBuilder(databaseBuilder);
+  const canSeedAirtableBase = await canSeedOrEmptyAirtableBase();
+  if (canSeedAirtableBase) {
+    const learningContentConfig = {
+      ...airtableSeedsConfig,
+    };
+    const learningContentData = await buildFrameworksFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig });
+    await buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildTubesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
+  } else {
+    const translations = await translationsBuilder(databaseBuilder);
+    await localizedChallengesBuilder(databaseBuilder, translations);
+    await localizedChallengesAttachmentsBuilder(databaseBuilder);
+    buildMissions(databaseBuilder);
+  }
 
   staticCoursesBuilder(databaseBuilder);
-
-  buildMissions(databaseBuilder);
-
   whitelistedUrlsBuilder(databaseBuilder, adminId);
-
   return databaseBuilder.commit();
 }
 
