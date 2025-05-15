@@ -14,6 +14,13 @@ function _getNumber(numberAsString, defaultIntNumber) {
   return isNaN(number) ? defaultIntNumber : number;
 }
 
+function _getStringArray(stringWithCommas, defaultStringArray) {
+  if (stringWithCommas) {
+    return stringWithCommas.split(',');
+  }
+  return defaultStringArray;
+}
+
 export const rootPath = path.normalize(__dirname + '/..');
 
 export let port = parseInt(process.env.PORT, 10) || 3002;
@@ -29,7 +36,7 @@ export const hapi = {
 
 export const airtable = {
   apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
-  apiKeyMetaData: process.env.AIRTABLE_API_KEY_META_DATA || process.env.AIRTABLE_API_KEY_META_DATA,
+  apiKeyMetaData: process.env.AIRTABLE_API_KEY_META_DATA,
   base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
   editorBase: process.env.AIRTABLE_EDITOR_BASE,
 };
@@ -137,12 +144,12 @@ export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FIL
 
 export const airtableSeedsConfig = {
   cntFrameworks: _getNumber(process.env.AIRTABLE_SEEDS_CNT_FRAMEWORKS, 2),
-  cntAreas: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
-  cntCompetences: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),
-  cntThematics: _getNumber(process.env.AIRTABLE_SEEDS_CNT_THEMATICS, 2),
-  cntTubes: _getNumber(process.env.AIRTABLE_SEEDS_CNT_TUBES, 2),
-  skillLevel: _getNumber(process.env.AIRTABLE_SEEDS_SKILL_LEVEL, 3),
-  locales: process.env.AIRTABLE_SEEDS_LOCALES ? process.env.AIRTABLE_SEEDS_LOCALES.split(',') : ['fr', 'en'],
+  cntAreasPerFramework: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
+  cntCompetencesPerArea: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),
+  cntThematicsPerCompetence: _getNumber(process.env.AIRTABLE_SEEDS_CNT_THEMATICS, 2),
+  cntTubesPerThematic: _getNumber(process.env.AIRTABLE_SEEDS_CNT_TUBES, 2),
+  skillMaxLevel: _getNumber(process.env.AIRTABLE_SEEDS_SKILL_LEVEL, 3),
+  locales: _getStringArray(process.env.AIRTABLE_SEEDS_LOCALES, ['fr', 'en']),
 };
 
 if (process.env.NODE_ENV === 'test') {

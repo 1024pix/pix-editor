@@ -3,8 +3,8 @@ import { saveInAirtable } from './utils.js';
 
 export async function buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
   const areaItems = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
-    for (let j = 0; j < learningContentConfig.countAreasPerFramework; ++j) {
+  for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
+    for (let j = 0; j < learningContentConfig.cntAreasPerFramework; ++j) {
       const frameworkItem = learningContentData[i];
       const areaItem = buildArea({ indexFramework: i, indexArea: j, frameworkItem, databaseBuilder, locales: learningContentConfig.locales });
       frameworkItem.areas.push(areaItem);

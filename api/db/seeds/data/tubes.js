@@ -80,7 +80,7 @@ export async function buildTubesFromConfig({
             thematicItem.tubes.push(tubeItemWorkbench);
             tubeItems.push(tubeItemWorkbench);
           } else {
-            for (let i = 0; i < learningContentConfig.countTubesPerThematic; ++i) {
+            for (let i = 0; i < learningContentConfig.cntTubesPerThematic; ++i) {
               const tubeItem = buildTube({ indexTube: i, thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
               thematicItem.tubes.push(tubeItem);
               tubeItems.push(tubeItem);

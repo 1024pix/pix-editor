@@ -53,13 +53,7 @@ export async function seed(knex) {
   const canSeedAirtableBase = await canSeedOrEmptyAirtableBase();
   if (canSeedAirtableBase) {
     const learningContentConfig = {
-      countFrameworks: airtableSeedsConfig.cntFrameworks,
-      countAreasPerFramework: airtableSeedsConfig.cntAreas,
-      countCompetencesPerArea: airtableSeedsConfig.cntCompetences,
-      countThematicsPerCompetence: airtableSeedsConfig.cntThematics,
-      countTubesPerThematic: airtableSeedsConfig.cntTubes,
-      skillMaxLevel: airtableSeedsConfig.skillLevel,
-      locales: airtableSeedsConfig.locales,
+      ...airtableSeedsConfig,
     };
     const learningContentData = await buildFrameworksFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig });
     await buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
@@ -68,7 +62,7 @@ export async function seed(knex) {
     await buildTubesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.countFrameworks });
+    await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
   } else {
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);

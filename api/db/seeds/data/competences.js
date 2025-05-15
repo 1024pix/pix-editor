@@ -5,7 +5,7 @@ export async function buildCompetencesFromConfig({ airtableClient, databaseBuild
   const competenceItems = [];
   for (const frameworkItem of learningContentData) {
     for (const areaItem of frameworkItem.areas) {
-      for (let i = 0; i < learningContentConfig.countCompetencesPerArea; ++i) {
+      for (let i = 0; i < learningContentConfig.cntCompetencesPerArea; ++i) {
         const competenceItem = buildCompetence({ indexCompetence: i, areaItem, databaseBuilder, locales: learningContentConfig.locales });
         areaItem.competences.push(competenceItem);
         competenceItems.push(competenceItem);

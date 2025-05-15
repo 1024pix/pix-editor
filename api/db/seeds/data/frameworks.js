@@ -3,7 +3,7 @@ import { saveInAirtable } from './utils.js';
 
 export async function buildFrameworksFromConfig({ airtableClient, databaseBuilder: _, logger, learningContentConfig }) {
   const frameworkItems = [];
-  for (let i = 0; i < learningContentConfig.countFrameworks; ++i) {
+  for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
     const name = i === 0 ? 'Pix' : `RéfComplémentaire_${i}`;
     frameworkItems.push(buildFramework({ name }));
   }

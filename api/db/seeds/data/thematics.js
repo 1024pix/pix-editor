@@ -5,7 +5,7 @@ export async function buildThematicsFromConfig({ airtableClient, databaseBuilder
   for (const frameworkItem of learningContentData) {
     for (const areaItem of frameworkItem.areas) {
       for (const competenceItem of areaItem.competences) {
-        for (let i = 0; i < learningContentConfig.countThematicsPerCompetence; ++i) {
+        for (let i = 0; i < learningContentConfig.cntThematicsPerCompetence; ++i) {
           const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
           thematicItems.push(thematicItem);
           competenceItem.thematics.push(thematicItem);
