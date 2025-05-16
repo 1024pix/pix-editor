@@ -2,6 +2,7 @@ import { describe, describe as context, expect, it } from 'vitest';
 import {
   deserializeCreationCommand,
   deserializeQuery,
+  deserializeUpdateCommand,
   serialize,
 } from '../../../../../lib/infrastructure/serializers/jsonapi/attachment-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
@@ -77,6 +78,91 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
       const creationCommand = deserializeCreationCommand(payload);
 
       expect(creationCommand).toStrictEqual({
+        filename: 'some filename',
+        size: 123,
+        url: 'some.url.com',
+        type: 'some type',
+        mimeType: 'some mime type',
+        localizedChallengeId: null,
+        challengeId: 'challenge123',
+      });
+    });
+  });
+
+  describe('#deserializeUpdateCommand', () => {
+    it('should deserialize payload into an attachment update command when relationship is localized challenge', () => {
+      // Given
+      const payload = {
+        data: {
+          type: 'attachments',
+          id: 'recABC123',
+          attributes: {
+            filename: 'some filename',
+            size: 123,
+            url: 'some.url.com',
+            type: 'some type',
+            'mime-type': 'some mime type',
+            'localized-challenge-id': 'I DONT CARE',
+          },
+          relationships: {
+            'localized-challenge': {
+              data: {
+                type: 'localized-challenges',
+                id: 'localizedChallenge123',
+              },
+            },
+            challenge: {
+              data: null,
+            },
+          },
+        },
+      };
+
+      const updateCommand = deserializeUpdateCommand(payload);
+
+      expect(updateCommand).toStrictEqual({
+        id: 'recABC123',
+        filename: 'some filename',
+        size: 123,
+        url: 'some.url.com',
+        type: 'some type',
+        mimeType: 'some mime type',
+        localizedChallengeId: 'localizedChallenge123',
+        challengeId: null,
+      });
+    });
+    it('should deserialize payload into an attachment update command when relationship is challenge', () => {
+      // Given
+      const payload = {
+        data: {
+          type: 'attachments',
+          id: 'recABC123',
+          attributes: {
+            filename: 'some filename',
+            size: 123,
+            url: 'some.url.com',
+            type: 'some type',
+            'mime-type': 'some mime type',
+            'localized-challenge-id': 'I DONT CARE',
+          },
+          relationships: {
+            challenge: {
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
+            },
+            'localized-challenge': {
+              data: null,
+            },
+          },
+        },
+      };
+
+      const updateCommand = deserializeUpdateCommand(payload);
+
+      expect(updateCommand).toStrictEqual({
+        id: 'recABC123',
         filename: 'some filename',
         size: 123,
         url: 'some.url.com',

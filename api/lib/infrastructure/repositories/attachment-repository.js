@@ -5,6 +5,16 @@ import * as localizedChallengeRepository from './localized-challenge-repository.
 import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 
+export async function get(id) {
+  const datasourceAttachment = await attachmentDatasource.find(id);
+  if (!datasourceAttachment) return null;
+  const translations = await translationRepository.listByPattern(`challenge.${datasourceAttachment.challengeId}.illustrationAlt`);
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [datasourceAttachment.challengeId] });
+
+  const [attachment] = toDomainList([datasourceAttachment], translations, localizedChallenges);
+  return attachment;
+}
+
 export async function list() {
   const [datasourceAttachments, translations, localizedChallenges] = await Promise.all([
     attachmentDatasource.list(),
@@ -77,6 +87,25 @@ export async function create(attachment) {
 
   const [createdAttachment] = toDomainList([createdAttachmentDTO], translations, localizedChallenges);
   return createdAttachment;
+}
+
+export async function update(attachment) {
+  const attachmentDTO = {
+    id: attachment.id,
+    url: attachment.url,
+    size: attachment.size,
+    type: attachment.type,
+    mimeType: attachment.mimeType,
+    filename: attachment.filename,
+    challengeId: attachment.airtableChallengeId,
+    localizedChallengeId: attachment.localizedChallengeId,
+  };
+  const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
+  const translations = await translationRepository.listByPattern(`challenge.${updatedAttachmentDTO.challengeId}.illustrationAlt`);
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [updatedAttachmentDTO.challengeId] });
+
+  const [updatedAttachment] = toDomainList([updatedAttachmentDTO], translations, localizedChallenges);
+  return updatedAttachment;
 }
 
 export async function destroy(attachmentId) {

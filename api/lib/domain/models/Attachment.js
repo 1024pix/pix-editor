@@ -42,6 +42,10 @@ export class Attachment {
     });
   }
 
+  update(updateCommand) {
+    this.filename = updateCommand.filename;
+  }
+
   clone({ challengeId, localizedChallengeId }) {
     return new Attachment({
       id: null,

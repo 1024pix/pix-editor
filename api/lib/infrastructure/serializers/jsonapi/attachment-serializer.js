@@ -61,6 +61,13 @@ export function deserializeCreationCommand({ data }) {
   };
 }
 
+export function deserializeUpdateCommand({ data }) {
+  return {
+    ...deserializeCreationCommand({ data }),
+    id: data.id,
+  };
+}
+
 export function deserializeQuery(query) {
   const extractedParams = extractParameters(query);
   return {

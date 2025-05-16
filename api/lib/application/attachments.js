@@ -63,6 +63,64 @@ export function register(server) {
       },
     },
     {
+      method: 'PATCH',
+      path: '/api/attachments/{attachmentId}',
+      config: {
+        pre: [{
+          method: (request, h) => {
+            return securityPreHandlers.checkUserHasWriteAccess(request, h);
+          }
+        }],
+        validate: {
+          params: Joi.object({
+            attachmentId: Types.attachmentId().required(),
+          }),
+          payload: Joi.object({
+            data: {
+              id: Types.attachmentId().required(),
+              type: Joi.string().required().equal('attachments'),
+              attributes: {
+                'filename': Joi.string(),
+                'size': Joi.number(),
+                'url': Joi.string(),
+                'mime-type': Joi.string(),
+                'type': Joi.string(),
+                'localized-challenge-id': Joi.string(),
+              },
+              relationships: {
+                challenge: {
+                  data: Joi.object({
+                    type: Joi.string().required().equal('challenges'),
+                    id: Types.challengeId(),
+                  }).allow(null),
+                },
+                'localized-challenge': {
+                  data: Joi.object({
+                    type: Joi.string().required().equal('localized-challenges'),
+                    id: Types.localizedChallengeId(),
+                  }).allow(null),
+                },
+              },
+            },
+          }),
+        },
+        handler: async function(request, h) {
+          try {
+            const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
+            const updatedAttachment = await usecases.updateAttachment({ attachmentUpdateCommand, attachmentRepository, localizedChallengeRepository });
+            if (!updatedAttachment) {
+              return Boom.notFound();
+            }
+            return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
       method: 'DELETE',
       path: '/api/attachments/{attachmentId}',
       config: {

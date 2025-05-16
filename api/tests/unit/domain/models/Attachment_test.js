@@ -74,4 +74,40 @@ describe('Unit | Domain | Attachment', () => {
       expect(attachment).toStrictEqual(expectedAttachment);
     });
   });
+  context('#update', () => {
+    it('should update allowed attributes from update command', () => {
+      // given
+      const baseData = {
+        id: 'rec123aze',
+        filename: 'base filename',
+        size: 123,
+        url: 'base.url.com',
+        type: 'base type',
+        mimeType: 'base mime type',
+        localizedChallengeId: 'locId123',
+        challengeId: 'challenge123',
+      };
+      const updateCommand = {
+        id: 'some id',
+        filename: 'some filename',
+        size: 456,
+        url: 'some.url.com',
+        type: 'some type',
+        mimeType: 'some mime type',
+        localizedChallengeId: 'locId456',
+        challengeId: 'challenge456',
+      };
+      const attachment = domainBuilder.buildAttachment(baseData);
+
+      // when
+      attachment.update(updateCommand);
+
+      // then
+      const expectedAttachment = domainBuilder.buildAttachment({
+        ...baseData,
+        filename: 'some filename',
+      });
+      expect(attachment).toStrictEqual(expectedAttachment);
+    });
+  });
 });

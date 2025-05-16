@@ -608,7 +608,7 @@ describe('Integration | Repository | attachment-repository', () => {
         return {
           id: 'airtableIdAttachment',
           fields: {
-            'Record ID': 'airtableIdAttachmentA',
+            'Record ID': 'airtableIdAttachment',
             url: attachment.url,
             size: attachment.size,
             type: attachment.type,
@@ -627,7 +627,7 @@ describe('Integration | Repository | attachment-repository', () => {
 
       // then
       const expectedAttachment = domainBuilder.buildAttachment({
-        id: 'airtableIdAttachmentA',
+        id: 'airtableIdAttachment',
         url: attachment.url,
         type: attachment.type,
         size: attachment.size,
@@ -645,7 +645,7 @@ describe('Integration | Repository | attachment-repository', () => {
         .first();
       expect(localizedChallengeAttachment).toStrictEqual(
         {
-          attachmentId: 'airtableIdAttachmentA',
+          attachmentId: 'airtableIdAttachment',
           localizedChallengeId: attachment.localizedChallengeId,
         },
       );
@@ -689,7 +689,7 @@ describe('Integration | Repository | attachment-repository', () => {
           return {
             id: 'airtableIdAttachment',
             fields: {
-              'Record ID': 'airtableIdAttachmentA',
+              'Record ID': 'airtableIdAttachment',
               url: attachmentToCreate.url,
               size: attachmentToCreate.size,
               type: attachmentToCreate.type,
@@ -705,7 +705,7 @@ describe('Integration | Repository | attachment-repository', () => {
           };
         });
         expectedAttachment = domainBuilder.buildAttachment({
-          id: 'airtableIdAttachmentA',
+          id: 'airtableIdAttachment',
           url: attachmentToCreate.url,
           size: attachmentToCreate.size,
           mimeType: attachmentToCreate.mimeType,
@@ -759,6 +759,175 @@ describe('Integration | Repository | attachment-repository', () => {
         expectedAttachment.type = 'NOTillustration';
         expectedAttachment.alt = null;
         expect(createdAttachment).toStrictEqual(expectedAttachment);
+      });
+    });
+  });
+
+  describe('#update', () => {
+
+    it('should update an attachment in airtable', async () => {
+      // given
+      const attachment = domainBuilder.buildAttachment({
+        id: 'recABC123',
+        url: 'url/to/attachment',
+        type: 'some other type',
+        size: 123,
+        mimeType: 'image/jpeg',
+        filename: 'attachment_filename',
+        challengeId: 'challengeId',
+        airtableChallengeId: 'challengeAirtableId',
+        localizedChallengeId: 'localizedChallengeId',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId',
+        challengeId: 'challengeId',
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId: 'recABC123',
+        localizedChallengeId: 'localizedChallengeId',
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'updateRecord').mockImplementation((tableName, airtableRequestBody) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (!_.isEqual(airtableRequestBody, {
+          id: attachment.id,
+          fields: {
+            url: attachment.url,
+            size: attachment.size,
+            type: attachment.type,
+            mimeType: attachment.mimeType,
+            filename: attachment.filename,
+            challengeId: ['challengeAirtableId'],
+            localizedChallengeId: attachment.localizedChallengeId,
+          },
+        })
+        ) expect.unreachable('Attachments to update to airtable wrong bodies');
+        return {
+          id: attachment.id,
+          fields: {
+            'Record ID': attachment.id,
+            url: attachment.url,
+            size: attachment.size,
+            type: attachment.type,
+            mimeType: attachment.mimeType,
+            filename: attachment.filename,
+            'challengeId persistant': ['challengeId'],
+            'challengeId': ['airtableChallengeId'],
+            'localizedChallengeId': attachment.localizedChallengeId,
+          },
+          get: function(field) { return this.fields[field]; },
+        };
+      });
+
+      // when
+      const updatedAttachment = await attachmentRepository.update(attachment);
+
+      // then
+      const expectedAttachment = domainBuilder.buildAttachment({
+        id: attachment.id,
+        url: attachment.url,
+        type: attachment.type,
+        size: attachment.size,
+        mimeType: attachment.mimeType,
+        filename: attachment.filename,
+        challengeId: 'challengeId',
+        localizedChallengeId: attachment.localizedChallengeId,
+        airtableChallengeId: 'airtableChallengeId',
+        alt: null,
+      });
+      expect(updatedAttachment).toStrictEqual(expectedAttachment);
+      const localizedChallengeAttachment = await knex('localized_challenges-attachments')
+        .select(['attachmentId', 'localizedChallengeId'])
+        .where({ localizedChallengeId: attachment.localizedChallengeId })
+        .first();
+      expect(localizedChallengeAttachment).toStrictEqual(
+        {
+          attachmentId: attachment.id,
+          localizedChallengeId: attachment.localizedChallengeId,
+        },
+      );
+    });
+  });
+
+  describe('#get', () => {
+    context('when attachment does not exist', function() {
+      it('should return null', async () => {
+        // given
+        vi.spyOn(airtableClient, 'findRecord').mockImplementation((tableName, _) => {
+          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+          throw {
+            statusCode: 404,
+          };
+        });
+
+        // when
+        const nullAtt = await attachmentRepository.get('recABC123');
+
+        // then
+        expect(nullAtt).to.be.null;
+      });
+    });
+    context('when attachment exists', function() {
+      it('should return the attachment by id', async () => {
+        // given
+        const expectedAttachment = domainBuilder.buildAttachment({
+          id: 'recABC123',
+          url: 'url/to/attachment',
+          type: 'some other type',
+          size: 123,
+          mimeType: 'image/jpeg',
+          filename: 'attachment_filename',
+          challengeId: 'challengeId',
+          localizedChallengeId: 'localizedChallengeId',
+          airtableChallengeId: 'airtableChallengeId',
+          alt: null,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          attachmentId: 'recABC123',
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        await databaseBuilder.commit();
+        vi.spyOn(airtableClient, 'findRecord').mockImplementation((tableName, id) => {
+          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+          if (id !== 'recABC123') expect.unreachable('Wrong id given in findRecord');
+          return {
+            id: expectedAttachment.id,
+            fields: {
+              'Record ID': expectedAttachment.id,
+              url: expectedAttachment.url,
+              size: expectedAttachment.size,
+              type: expectedAttachment.type,
+              mimeType: expectedAttachment.mimeType,
+              filename: expectedAttachment.filename,
+              'challengeId persistant': [expectedAttachment.challengeId],
+              'challengeId': [expectedAttachment.airtableChallengeId],
+              'localizedChallengeId': expectedAttachment.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          };
+        });
+
+        // when
+        const attachment = await attachmentRepository.get('recABC123');
+
+        // then
+        expect(attachment).toStrictEqual(expectedAttachment);
       });
     });
   });

@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import nock from 'nock';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
@@ -45,7 +45,7 @@ describe('Acceptance | Route | attachments', () => {
       return knex('localized_challenges-attachments').truncate();
     });
 
-    describe('when user is NOT editor', () => {
+    context('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
         const server = await createServer();
@@ -63,7 +63,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    describe('when payload is NOT valid', () => {
+    context('when payload is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -183,8 +183,202 @@ describe('Acceptance | Route | attachments', () => {
     });
   });
 
+  describe('PATCH /attachments/{attachmentId}', () => {
+    let validPayload;
+    beforeEach(function() {
+      validPayload = {
+        data: {
+          type: 'attachments',
+          id: 'recABC123',
+          attributes: {
+            filename: 'filename APRES',
+            size: 159,
+            url: 'some.url.com APRES',
+            type: 'some type APRES',
+            'mime-type': 'some mime type APRES',
+            'localized-challenge-id': 'I DONT CARE',
+          },
+          relationships: {
+            challenge: {
+              data: null,
+            },
+            'localized-challenge': {
+              data: {
+                type: 'localized-challenges',
+                id: 'challenge123ES',
+              },
+            },
+          },
+        },
+      };
+    });
+
+    context('when user is NOT editor', () => {
+      it('should respond with status 403', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/attachments/recABC123',
+          payload: validPayload,
+          headers: generateAuthorizationHeader(readUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+      });
+    });
+
+    context('when payload is NOT valid', () => {
+      it('should respond with status 400', async () => {
+        // given
+        const server = await createServer();
+        const invalidPayload = structuredClone(validPayload);
+        invalidPayload.data.attributes.url = 123;
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/attachments/recABC123',
+          payload: invalidPayload,
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('when attachment does not exist', function() {
+      it('should return a 404 not found', async function() {
+        // given
+        const airtableGetAttachmentScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Attachments/recABC123')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          payload: validPayload,
+          url: '/api/attachments/recABC123',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+        expect(airtableGetAttachmentScope.isDone()).toBe(true);
+      });
+    });
+
+    it('should respond with status 200 and updated attachment', async () => {
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123',
+        challengeId: 'challenge123',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: validPayload.data.relationships['localized-challenge'].data.id,
+        challengeId: 'challenge123',
+        locale: 'es',
+      });
+      await databaseBuilder.commit();
+      const airtableAttachmentBefore = airtableBuilder.factory.buildAttachment({
+        id: 'recABC123',
+        type: 'type avant',
+        url: 'url avant',
+        size: 'size avant',
+        mimeType: 'mimeType avant',
+        filename: 'filename avant',
+        challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
+        localizedChallengeId: 'challenge123ES',
+      });
+      const airtableAttachmentAfter = airtableBuilder.factory.buildAttachment({
+        id: 'recABC123',
+        type: 'type avant',
+        url: 'url avant',
+        size: 'size avant',
+        mimeType: 'mimeType avant',
+        filename: validPayload.data.attributes.filename,
+        challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
+        localizedChallengeId: 'challenge123ES',
+      });
+      const airtableGetAttachmentScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments/recABC123')
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableAttachmentBefore);
+
+      const airtablePatchAttachmentScope = nock('https://api.airtable.com')
+        .patch('/v0/airtableBaseValue/Attachments/', {
+          records: [{
+            id: 'recABC123',
+            fields: {
+              'url': 'url avant',
+              'size': 'size avant',
+              'type': 'type avant',
+              'mimeType': 'mimeType avant',
+              'filename': 'filename APRES',
+              'challengeId': ['challengeAirtable123'],
+              'localizedChallengeId': 'challenge123ES',
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableAttachmentAfter] });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        payload: validPayload,
+        url: '/api/attachments/recABC123',
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual({
+        data: {
+          type: 'attachments',
+          id: 'recABC123',
+          attributes: {
+            'url': 'url avant',
+            'size': 'size avant',
+            'type': 'type avant',
+            'mime-type': 'mimeType avant',
+            'filename': 'filename APRES',
+            'localized-challenge-id': 'challenge123ES',
+            alt: null,
+          },
+          relationships: {
+            'localized-challenge': {
+              data: {
+                type: 'localized-challenges',
+                id: 'challenge123ES',
+              },
+            },
+            challenge: {
+              data: null,
+            },
+          },
+        },
+      });
+      expect(airtableGetAttachmentScope.isDone()).toBe(true);
+      expect(airtablePatchAttachmentScope.isDone()).toBe(true);
+    });
+  });
+
   describe('DELETE /attachments/{attachmentId}', () => {
-    describe('when user is NOT editor', () => {
+    context('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
         const server = await createServer();
@@ -201,7 +395,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    describe('when param id is NOT valid', () => {
+    context('when param id is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -258,7 +452,7 @@ describe('Acceptance | Route | attachments', () => {
   });
 
   describe('GET /attachments?filter[localizedChallengeIds]=%', () => {
-    describe('when user is NOT authenticated', () => {
+    context('when user is NOT authenticated', () => {
       it('should respond with status 401', async () => {
         // given
         const server = await createServer();
@@ -274,7 +468,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    describe('when query is NOT valid', () => {
+    context('when query is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();

@@ -38,7 +38,7 @@ export const attachmentDatasource = datasource.extend({
     challengeId persistant                      (write "challengeId" instead)
    */
   toAirTableObject(model) {
-    return {
+    const body = {
       fields: {
         'url': model.url,
         'size': model.size,
@@ -49,6 +49,10 @@ export const attachmentDatasource = datasource.extend({
         'localizedChallengeId': model.localizedChallengeId,
       }
     };
+    if (model.id) {
+      body.id = model.id;
+    }
+    return body;
   },
 
   async filterByLocalizedChallengeId(localizedChallengeId) {
