@@ -50,17 +50,22 @@ export async function buildChallengesFromConfig({
     const shouldAddAttachment = tubeIndex % 4 === 0;
     const typeForAttachment = iterFor['attachmentType'].next().value;
     let challenges;
+    let autoReply = false;
+    const type = iterFor.type.next().value;
+    if (type === Challenge.TYPES.QROC) {
+      autoReply = iterFor.autoReply.next().value;
+    }
     if (skillItem.status === 'en construction') {
-      challenges = buildChallengesForEnConstructionSkill(skillItem, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
+      challenges = buildChallengesForEnConstructionSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
     }
     if (skillItem.status === 'actif') {
-      challenges = buildChallengesForActiveSkill(skillItem, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
+      challenges = buildChallengesForActiveSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
     }
     if (skillItem.status === 'archivé') {
-      challenges = buildChallengesForArchivedSkill(skillItem, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
+      challenges = buildChallengesForArchivedSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
     }
     if (skillItem.status === 'périmé') {
-      challenges = buildChallengesForObsoleteSkill(skillItem, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
+      challenges = buildChallengesForObsoleteSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, learningContentConfig.locales, databaseBuilder);
     }
     challengeItems.push(...challenges);
     skillItem.challenges.push(...challenges);
@@ -70,7 +75,7 @@ export async function buildChallengesFromConfig({
   await persistAttachments({ items: allAttachments, airtableClient, logger, databaseBuilder });
 }
 
-export function buildChallenge({ indexChallenge, skillItem, status, isProto, protoVersion, decliVersion, shouldAddAttachment = false, typeForAttachment, databaseBuilder, locales }) {
+export function buildChallenge({ indexChallenge, skillItem, status, isProto, protoVersion, decliVersion, type = Challenge.TYPES.QCM, autoReply = false, shouldAddAttachment = false, typeForAttachment, databaseBuilder, locales }) {
   const partId = skillItem.id.split('skill')[1];
   const challengeId = `challenge${partId}Ch${indexChallenge}`;
   const attachments = [];
@@ -78,7 +83,7 @@ export function buildChallenge({ indexChallenge, skillItem, status, isProto, pro
     attachments.push(buildAttachment({ challengeId, localizedChallengeId: challengeId, type: typeForAttachment, databaseBuilder, locale: locales[0] }));
   }
   const challengeItem = {
-    ...generateBaseChallengeData(status),
+    ...generateBaseChallengeData(status, autoReply),
     id: challengeId,
     status: status,
     skills: [skillItem.airtableId],
@@ -87,6 +92,8 @@ export function buildChallenge({ indexChallenge, skillItem, status, isProto, pro
     genealogy: isProto ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
     version: protoVersion,
     alternativeVersion: decliVersion,
+    type,
+    autoReply,
   };
   addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);
   if (status !== Challenge.STATUSES.PROPOSE && locales.length > 1) {
@@ -113,39 +120,39 @@ export async function persistChallenges({ items, airtableClient, logger }) {
   });
 }
 
-function buildChallengesForEnConstructionSkill(skillItem, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
+function buildChallengesForEnConstructionSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
   const challenges = [];
-  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: true, protoVersion: skillItem.version, decliVersion: null, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: true, protoVersion: skillItem.version, decliVersion: null, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PROPOSE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForActiveSkill(skillItem, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
+function buildChallengesForActiveSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
   const challenges = [];
-  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.VALIDE, isProto: true, protoVersion: skillItem.version, decliVersion: null, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.VALIDE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 3, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 3, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.VALIDE, isProto: true, protoVersion: skillItem.version, decliVersion: null, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.VALIDE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 3, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 3, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForArchivedSkill(skillItem, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
+function buildChallengesForArchivedSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
   const challenges = [];
-  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: true, protoVersion: skillItem.version, decliVersion: null, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: true, protoVersion: skillItem.version, decliVersion: null, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.ARCHIVE, isProto: false, protoVersion: skillItem.version, decliVersion: 1, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 2, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 2, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
   return challenges;
 }
 
-function buildChallengesForObsoleteSkill(skillItem, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
+function buildChallengesForObsoleteSkill(skillItem, type, autoReply, shouldAddAttachment, typeForAttachment, locales, databaseBuilder) {
   const challenges = [];
-  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PERIME, isProto: true, protoVersion: skillItem.version, decliVersion: null, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
-  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 1, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.PERIME, isProto: true, protoVersion: skillItem.version, decliVersion: null, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
+  challenges.push(buildChallenge({ indexChallenge: 1, skillItem, status: Challenge.STATUSES.PERIME, isProto: false, protoVersion: skillItem.version, decliVersion: 1, type, autoReply, shouldAddAttachment, typeForAttachment, databaseBuilder, locales }));
   return challenges;
 }
 
-function generateBaseChallengeData(status) {
+function generateBaseChallengeData(status, autoReply) {
   let updatedAt, validatedAt, archivedAt, madeObsoleteAt, createdAt;
   if (status === Challenge.STATUSES.PROPOSE) {
     createdAt = new Date('2024-01-01');
@@ -175,16 +182,11 @@ function generateBaseChallengeData(status) {
     archivedAt = null;
     madeObsoleteAt = new Date('2021-05-05');
   }
-  let autoReply = false;
-  const type = iterFor.type.next().value;
   let embedUrl, embedHeight, embedTitle;
-  if (type === Challenge.TYPES.QROC) {
-    autoReply = iterFor.autoReply.next().value;
-    if (autoReply) {
-      embedUrl = 'https://some-embed-url.com';
-      embedTitle = 'some embed title';
-      embedHeight = 400;
-    }
+  if (autoReply) {
+    embedUrl = 'https://some-embed-url.com';
+    embedTitle = 'some embed title';
+    embedHeight = 400;
   }
   return {
     accessibility1: iterFor.accessibility1.next().value,
@@ -210,7 +212,6 @@ function generateBaseChallengeData(status) {
     embedHeight,
     embedTitle,
     embedUrl,
-    type,
     createdAt,
     updatedAt,
     validatedAt,
