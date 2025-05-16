@@ -243,7 +243,7 @@ export default class FormSelectLocation extends Component {
   <template>
     <form
       action=""
-      class="ui form"
+      class="select-location"
       id="form-select-location"
       name="Sélectionner un emplacement"
       {{on "submit" this.onSubmit}}
