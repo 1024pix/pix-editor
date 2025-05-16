@@ -303,22 +303,20 @@ export default class FormSelectLocation extends Component {
         {{/if}}
         {{#if this.selectedTubeId}}
           {{#if this.isMovingPrototype}}
-            <div data-test-skill-list class="field">
-              {{#if this.areSkillsLoaded}}
-                <PixSelect
-                  @id="select-skill-location"
-                  @value={{this.selectedSkillId}}
-                  @options={{this.skillOptionListWithCategory}}
-                  @onChange={{this.selectSkill}}
-                  @hideDefaultOption={{true}}
-                  @placeholder="Sélectionner un acquis"
-                >
-                  <:label>Acquis</:label>
-                </PixSelect>
-              {{else}}
-                <p>Chargement des acquis en cours...</p>
-              {{/if}}
-            </div>
+            {{#if this.areSkillsLoaded}}
+              <PixSelect
+                @id="select-skill-location"
+                @value={{this.selectedSkillId}}
+                @options={{this.skillOptionListWithCategory}}
+                @onChange={{this.selectSkill}}
+                @hideDefaultOption={{true}}
+                @placeholder="Sélectionner un acquis"
+              >
+                <:label>Acquis</:label>
+              </PixSelect>
+            {{else}}
+              <p>Chargement des acquis en cours...</p>
+            {{/if}}
           {{else}}
             <PixSelect
               @id="select-level-location"
