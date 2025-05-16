@@ -451,6 +451,133 @@ describe('Acceptance | Route | attachments', () => {
     });
   });
 
+  describe('GET /attachments/{attachmentId}', () => {
+    context('when user is NOT authenticated', () => {
+      it('should respond with status 401', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/attachments/recABC123',
+        });
+
+        // then
+        expect(response.statusCode).toBe(401);
+      });
+    });
+
+    context('when attachmentId is NOT valid', () => {
+      it('should respond with status 400', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/attachments/bouboulapraline',
+          headers: generateAuthorizationHeader(readUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('when attachment does not exist', function() {
+      it('should return a 404 not found', async function() {
+        // given
+        const airtableGetAttachmentScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Attachments/recABC123')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/attachments/recABC123',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+        expect(airtableGetAttachmentScope.isDone()).toBe(true);
+      });
+    });
+
+    it('should respond with status 200 and the attachment', async () => {
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123',
+        challengeId: 'challenge123',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123ES',
+        challengeId: 'challenge123',
+        locale: 'es',
+      });
+      await databaseBuilder.commit();
+      const airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'recABC123',
+        type: 'some type',
+        url: 'some url',
+        size: 'some size',
+        mimeType: 'some mimeType',
+        filename: 'some filename',
+        challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
+        localizedChallengeId: 'challenge123ES',
+      });
+      const airtableGetAttachmentScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments/recABC123')
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableAttachment);
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/attachments/recABC123',
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual({
+        data: {
+          type: 'attachments',
+          id: 'recABC123',
+          attributes: {
+            type: 'some type',
+            url: 'some url',
+            size: 'some size',
+            'mime-type': 'some mimeType',
+            filename: 'some filename',
+            'localized-challenge-id': 'challenge123ES',
+            alt: null,
+          },
+          relationships: {
+            'localized-challenge': {
+              data: {
+                type: 'localized-challenges',
+                id: 'challenge123ES',
+              },
+            },
+            challenge: {
+              data: null,
+            },
+          },
+        },
+      });
+      expect(airtableGetAttachmentScope.isDone()).toBe(true);
+    });
+  });
+
   describe('GET /attachments?filter[localizedChallengeIds]=%', () => {
     context('when user is NOT authenticated', () => {
       it('should respond with status 401', async () => {

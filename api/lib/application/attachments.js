@@ -149,6 +149,31 @@ export function register(server) {
     },
     {
       method: 'GET',
+      path: '/api/attachments/{attachmentId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            attachmentId: Types.attachmentId().required(),
+          }),
+        },
+        handler: async function(request, h) {
+          try {
+            const id = request.params.attachmentId;
+            const attachment = await usecases.findAttachment({ id, attachmentRepository });
+            if (!attachment) {
+              return Boom.notFound();
+            }
+            return h.response(attachmentSerializer.serialize(attachment));
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'GET',
       path: '/api/attachments',
       config: {
         validate: {
