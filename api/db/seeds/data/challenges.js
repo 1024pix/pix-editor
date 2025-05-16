@@ -175,12 +175,23 @@ function generateBaseChallengeData(status) {
     archivedAt = null;
     madeObsoleteAt = new Date('2021-05-05');
   }
+  let autoReply = false;
+  const type = iterFor.type.next().value;
+  let embedUrl, embedHeight, embedTitle;
+  if (type === Challenge.TYPES.QROC) {
+    autoReply = iterFor.autoReply.next().value;
+    if (autoReply) {
+      embedUrl = 'https://some-embed-url.com';
+      embedTitle = 'some embed title';
+      embedHeight = 400;
+    }
+  }
   return {
     accessibility1: iterFor.accessibility1.next().value,
     accessibility2: iterFor.accessibility2.next().value,
     alpha: iterFor.alpha.next().value,
     author: ['DEV'],
-    autoReply: iterFor.autoReply.next().value,
+    autoReply,
     contextualizedFields: [iterFor.contextualizedFields.next().value, iterFor.contextualizedFields.next().value],
     declinable: iterFor.declinable.next().value,
     delta: iterFor.delta.next().value,
@@ -196,7 +207,10 @@ function generateBaseChallengeData(status) {
     t2Status: iterFor.t2Status.next().value,
     t3Status: iterFor.t3Status.next().value,
     timer: iterFor.timer.next().value,
-    type: iterFor.type.next().value,
+    embedHeight,
+    embedTitle,
+    embedUrl,
+    type,
     createdAt,
     updatedAt,
     validatedAt,
@@ -211,6 +225,7 @@ function addPrimaryLocalizedChallenge(challengeData, databaseBuilder) {
     challengeId: challengeData.id,
     locale: challengeData.locales[0],
     status: null,
+    embedUrl: challengeData.embedUrl,
     ...generateBaseLocalizedChallengeData(),
   });
   for (const translatableField of fields.filter((field) => field !== 'illustrationAlt')) {
