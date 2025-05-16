@@ -14,7 +14,7 @@ const iterFor = {
   'pedagogy': cycle(Object.values(Challenge.PEDAGOGIES).filter(ignoreEmptyValues)),
   'responsive': cycle(Object.values(Challenge.RESPONSIVES).filter(ignoreEmptyValues)),
   'spoil': cycle(Object.values(Challenge.SPOILS).filter(ignoreEmptyValues)),
-  'type': cycle(Object.values(Challenge.TYPES).filter(ignoreEmptyValues)),
+  'type': cycle(Object.values(Challenge.TYPES).filter(ignoreEmptyValues).filter((type) => ![Challenge.TYPES.QROCM, Challenge.TYPES.QMAIL].includes(type))),
   'deafAndHardOfHearing': cycle(Object.values(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES).filter(ignoreEmptyValues)),
   'alpha': cycle([...Array(5).keys(), null]),
   'delta': cycle([...Array(5).keys(), null]),
