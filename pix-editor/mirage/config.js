@@ -55,16 +55,6 @@ function routes() {
     return skill.localizedChallengesProduction;
   });
 
-  this.post('/airtable/content/Attachments', (schema, request) => {
-    const payload = JSON.parse(request.requestBody);
-    const attachment = _deserializePayload(payload, 'attachment');
-    if (attachment.localizedChallenge) {
-      attachment.localizedChallenge = schema.localizedChallenges.find(attachment.localizedChallenge);
-    }
-    const createdAttachment = schema.attachments.create(attachment);
-    return _serializeModel(createdAttachment, 'attachment');
-  });
-
   this.get('/frameworks');
   this.post('/frameworks');
 
@@ -210,25 +200,6 @@ function routes() {
       challenges: skillToClone.challenges,
     });
     return createdSkill;
-  });
-
-  this.get('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    return _serializeModel(attachment, 'attachment');
-  });
-
-  this.patch('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    return _serializeModel(attachment, 'attachment');
-  });
-
-  this.delete('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    attachment.destroy();
-    return {
-      deleted: true,
-      id: request.params.id,
-    };
   });
 
   this.get('/airtable/content/Tutoriels', (schema) => {
