@@ -47,12 +47,8 @@ module('Acceptance | competence-management/new', function(hooks) {
     // then
     const area = await store.peekRecord('area', 'recArea1');
     const newCompetence = area.competencesArray.find((competence) => competence.title === newCompetenceTitle);
-    const workbenchTube = newCompetence.hasMany('rawTubes').value().find((tube) => tube.name === '@workbench');
-    const workbenchSkill = workbenchTube.hasMany('rawSkills').value().find((skill) => skill.name === '@workbench');
     assert.ok(newCompetence);
-    assert.ok(workbenchSkill);
     assert.dom(findAll('[data-test-main-message]')[0]).hasText('Compétence créée');
-    assert.dom(findAll('[data-test-main-message]')[1]).hasText('Atelier créé');
     assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 

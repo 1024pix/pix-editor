@@ -29,12 +29,9 @@ export default class CompetenceManagementNewController extends Controller {
   async save() {
     const area = this.model.area;
     try {
-      const framework = await area.framework;
       this.loader.start();
       await this._createCompetence(area);
       this.notify.message('Compétence créée');
-      await this._createWorkbench(framework.name);
-      this.notify.message('Atelier créé');
       this.edition = false;
       this.router.transitionTo('authenticated.competence.skills', this.competence.id, { queryParams: { view: 'workbench' } });
     } catch (error) {
@@ -48,20 +45,5 @@ export default class CompetenceManagementNewController extends Controller {
   async _createCompetence(area) {
     this.competence.area = area;
     await this.competence.save();
-  }
-
-  async _createWorkbench(frameworkName) {
-    const [tube] = await this.competence.rawTubes;
-    await this._createSkillWorkbench(tube, frameworkName);
-  }
-
-  async _createSkillWorkbench(tube, frameworkName) {
-    const description = `Acquis pour l'atelier de la compétence ${this.competence.code} ${frameworkName}`;
-    const skillWorkbench = this.store.createRecord('skill', {
-      level: 0,
-      description,
-      tube,
-    });
-    return await skillWorkbench.save();
   }
 }

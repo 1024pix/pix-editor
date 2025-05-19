@@ -101,6 +101,12 @@ function routes() {
 
     createdCompetence.rawTubes = [createdTube];
 
+    schema.skills.create({
+      pixId: newId('skill'),
+      name: '@workbench',
+      tube: createdTube,
+    });
+
     return createdCompetence;
   });
 
