@@ -113,17 +113,10 @@ export class Skill {
   prepareForCreation(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc) {
     this.id = generateNewIdFnc(Skill.ID_PREFIX);
     this.status = Skill.STATUSES.EN_CONSTRUCTION;
-
-    // TODO à enlever quand la création du skill workbench sera dans l’API
-    if (tube.isWorkbench) {
-      this.name = Skill.WORKBENCH_NAME;
-      this.level = null;
-    } else {
-      this.name = `${tube.name}${this.level}`;
-      this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
-      if (this.hint_i18n?.fr) {
-        this.hint_i18n.fr = normalizeNonBreakingSpaceFnc(this.hint_i18n.fr);
-      }
+    this.name = `${tube.name}${this.level}`;
+    this.version = tubeSkills.filter((skill) => skill.level === this.level).length + 1;
+    if (this.hint_i18n?.fr) {
+      this.hint_i18n.fr = normalizeNonBreakingSpaceFnc(this.hint_i18n.fr);
     }
   }
 
