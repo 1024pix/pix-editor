@@ -2,7 +2,6 @@ import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { fn } from '@ember/helper';
-import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -116,9 +115,13 @@ export default class Tutorials extends Component {
     return `select-tutorial-${this.args.searchId}`;
   }
 
+  get searchLabel() {
+    return `Rechercher un tutoriel ${this.args.title.toLowerCase()}`;
+  }
+
   <template>
     <div class="field {{if this.edition "" " disabled"}}">
-      <label>
+      <label for={{this.selectId}}>
         {{@title}}
       </label>
       {{#if @edition}}
@@ -127,6 +130,7 @@ export default class Tutorials extends Component {
           @resultList={{this.tutorialList}}
           @setResultList={{this.setTutorialList}}
           @onChange={{this.attachTutorial}}
+          @searchLabel={{this.searchLabel}}
           @searchPlaceholder="Commencer la recherche par > pour rechercher par Tag"
           @getResults={{this.getSearchTutorialResults}}
         />

@@ -31,7 +31,7 @@ export default class SelectSearch extends Component {
       @options={{@resultList}}
       @onChange={{@onChange}}
       @isSearchable={{true}}
-      @searchLabel="Rechercher"
+      @searchLabel={{this.searchLabel}}
       @searchPlaceholder={{@searchPlaceholder}}
       @emptySearchMessage="Aucun résultat"
       @placeholder="Rechercher"
