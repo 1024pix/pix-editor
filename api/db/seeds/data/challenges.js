@@ -222,19 +222,29 @@ function generateBaseChallengeData(status, autoReply) {
 
 function addPrimaryLocalizedChallenge(challengeData, databaseBuilder) {
   databaseBuilder.factory.buildLocalizedChallenge({
+    ...generateBaseLocalizedChallengeData(),
     id: challengeData.id,
     challengeId: challengeData.id,
     locale: challengeData.locales[0],
     status: null,
     embedUrl: challengeData.embedUrl,
-    ...generateBaseLocalizedChallengeData(),
   });
   for (const translatableField of fields.filter((field) => field !== 'illustrationAlt')) {
-    databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeData.id}.${translatableField}`,
-      locale: challengeData.locales[0],
-      value: `value ${challengeData.locales[0]} for ${translatableField}`,
-    });
+    if (translatableField === 'embedTitle') {
+      if (challengeData.embedTitle) {
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challengeData.id}.${translatableField}`,
+          locale: challengeData.locales[0],
+          value: `${challengeData.embedTitle}_${challengeData.locales[0]}`,
+        });
+      }
+    } else {
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeData.id}.${translatableField}`,
+        locale: challengeData.locales[0],
+        value: `value ${challengeData.locales[0]} for ${translatableField}`,
+      });
+    }
   }
 }
 
@@ -244,18 +254,28 @@ function addTranslationFor(challengeData, locale, status, databaseBuilder, shoul
     attachments.push(buildAttachment({ challengeId: challengeData.id, localizedChallengeId, type: typeForAttachment, databaseBuilder, locale }));
   }
   databaseBuilder.factory.buildLocalizedChallenge({
+    ...generateBaseLocalizedChallengeData(),
     id: localizedChallengeId,
     challengeId: challengeData.id,
     locale: locale,
     status,
-    ...generateBaseLocalizedChallengeData(),
   });
   for (const translatableField of fields.filter((field) => field !== 'illustrationAlt')) {
-    databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeData.id}.${translatableField}`,
-      locale: locale,
-      value: `value ${locale} for ${translatableField}`,
-    });
+    if (translatableField === 'embedTitle') {
+      if (challengeData.embedTitle) {
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challengeData.id}.${translatableField}`,
+          locale: locale,
+          value: `${challengeData.embedTitle}_${locale}`,
+        });
+      }
+    } else {
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeData.id}.${translatableField}`,
+        locale: locale,
+        value: `value ${locale} for ${translatableField}`,
+      });
+    }
   }
 }
 
