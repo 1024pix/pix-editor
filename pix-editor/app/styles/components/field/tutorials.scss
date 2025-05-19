@@ -1,0 +1,28 @@
+#tutorials-field {
+  .header {
+    align-items: center;
+    display: flex;
+    justify-content:  space-between;
+
+    span {
+      align-items: center;
+      display: flex;
+    }
+
+    .tutorial-link {
+      padding: 0.4rem;
+
+      svg {
+        height: 1.3rem;
+        width: 1.3rem;
+      }
+    }
+  }
+}
+
+#select-tutorial-solution,
+#select-tutorial-more,
+#container-select-tutorial-solution,
+#container-select-tutorial-more {
+  width: 100%;
+}

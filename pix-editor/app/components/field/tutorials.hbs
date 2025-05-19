@@ -3,29 +3,14 @@
     {{@title}}
   </label>
   {{#if @edition}}
-    <PowerSelect
-            @searchEnabled={{true}}
-            @search={{this.getSearchTutorialResults}}
-            @placeholder="commencer la recherche par > pour rechercher par Tag"
-            @onChange={{this.attachTutorial}}
-            @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}}
-            @triggerComponent={{ component "power-select/custom-trigger" }}
-            @searchMessage=""
-            @searchPlaceholder="Rechercher..."
-            @loadingMessage="Recherche en cours..." as |result|>
-      <div class="search-title">
-        {{#if (eq this.repo.id "create")}}
-          {{result.title}} <i class="add icon"></i>
-        {{else}}
-          {{result.title}}
-        {{/if}}
-      </div>
-      <div class="search-description">
-        {{#if result.description}}
-          {{result.description}}
-        {{/if}}
-      </div>
-    </PowerSelect>
+    <SelectSearch
+      @selectId={{this.selectId}}
+      @resultList={{this.tutorialList}}
+      @setResultList={{this.setTutorialList}}
+      @onChange={{this.attachTutorial}}
+      @searchPlaceholder="Commencer la recherche par > pour rechercher par Tag"
+      @getResults={{this.getSearchTutorialResults}}
+    />
   {{/if}}
 
 </div>
@@ -57,7 +42,6 @@
               <div>Durée : {{tutorial.duration}}</div>
               <div>Source : {{tutorial.source}}
                 <div class="ui right floated">
-                  <i class="{{convert-language-as-flag tutorial.language}} flag" title="{{tutorial.language}}"></i>
                   {{#if tutorial.crush}}
                     <i class="red heart icon"></i>
                   {{/if}}
@@ -79,15 +63,15 @@
             <a href="#" {{on "click" this.addTutorial}}>
               <i class="icon plus circle"></i>
               Ajouter un tutoriel <span class="sr-only">{{@title}}</span>
-            </a>
           </div>
         </div>
       {{/if}}
     </div>
   {{/if}}
 </div>
-<PopIn::Tutorial @tutorial={{this.tutorial}}
-                 @close={{this.closeTutorialPopin}}
-                 @saveTutorial={{this.saveTutorial}}
-                 @showModal={{this.displayTutorialPopin}}
+<PopInTutorialComponent
+  @tutorial={{this.tutorial}}
+  @close={{this.closeTutorialPopin}}
+  @saveTutorial={{this.saveTutorial}}
+  @showModal={{this.displayTutorialPopin}}
 />

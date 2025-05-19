@@ -5,10 +5,9 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class Tutorials extends Component {
-
+  @tracked tutorialList = [];
   @tracked displayTutorialPopin = false;
   @tracked tutorial = null;
-  defaultTitle = '';
 
   @service store;
 
@@ -33,20 +32,19 @@ export default class Tutorials extends Component {
     const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
     await Promise.all(tagsLoad);
 
-    const results = tutorials.map((tutorial) => {
+    return tutorials.map((tutorial) => {
       const haveTags = filter.tagTitles ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
       return {
-        title: tutorial.title,
+        label: tutorial.title,
         description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
-        id: tutorial.id,
+        value: tutorial.id,
       };
     });
-    return results;
   }
 
   @action
-  async attachTutorial(item) {
-    const tutorial = await this.store.findRecord('tutorial', item.id);
+  async attachTutorial(itemId) {
+    const tutorial = await this.store.findRecord('tutorial', itemId);
     this.args.addTutorial(this.args.tutorials, tutorial);
   }
 
@@ -58,15 +56,14 @@ export default class Tutorials extends Component {
   }
 
   @action
-  editTutorial(tutorial, e) {
-    e.preventDefault();
+  editTutorial(tutorial) {
     this.tutorial = tutorial;
     this.displayTutorialPopin = true;
   }
 
   @action
-  getSearchTutorialResults(query) {
-    return this._searchTutorial(query.toLowerCase());
+  async getSearchTutorialResults(query) {
+    this.tutorialList = await this._searchTutorial(query.toLowerCase());
   }
 
   @action
@@ -101,4 +98,12 @@ export default class Tutorials extends Component {
     }
   }
 
+  @action
+  setTutorialList(list) {
+    this.tutorialList = list;
+  }
+
+  get selectId() {
+    return `select-tutorial-${this.args.searchId}`;
+  }
 }
