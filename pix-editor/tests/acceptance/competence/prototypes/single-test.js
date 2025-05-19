@@ -1,5 +1,5 @@
 import { visit } from '@1024pix/ember-testing-library';
-import { click, find, findAll } from '@ember/test-helpers';
+import { click, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -60,17 +60,17 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
 
   test('it should change prototype location', async function(assert) {
     //when
-    await visit('/competence/recCompetence1.1/prototypes/recChallenge2?leftMaximized=false&view=workbench');
-    await click(find('[data-test-move-button]'));
-    await click(find('[data-test-skill-list] .ember-basic-dropdown-trigger'));
-    await click(findAll('.skill-list')[2]);
-    await click(find('[data-test-move-action]'));
-    await click(find('[data-test-save-changelog-button]'));
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge2?leftMaximized=false&view=workbench');
+    await click(screen.getByRole('button', { name: 'Déplacer l\'épreuve' }));
+    await click(screen.getByLabelText('Acquis'));
+    await click(await screen.findByRole('option', { name: '@skill2 (v.1) 🔵' }));
+    await click(screen.getByRole('button', { name: 'Déplacer' }));
+    await click(await screen.findByRole('button', { name: 'Enregistrer' }));
     const store = this.owner.lookup('service:store');
 
     //then
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
-    assert.dom('[data-test-main-message]').hasText('Changement d\'acquis effectué pour le prototype');
+    assert.ok(await screen.findByText('Changement d\'acquis effectué pour le prototype'));
     assert.strictEqual(challenge.skill.get('id'), 'recSkill2');
   });
 });
