@@ -2,18 +2,20 @@ import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
 import { createCompetence } from '../../../../lib/domain/usecases/create-competence.js';
-import { areaRepository, competenceRepository, thematicRepository, tubeRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { areaRepository, competenceRepository, skillRepository, thematicRepository, tubeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
-import { competenceTransformer, thematicTransformer, tubeTransformer } from '../../../../lib/infrastructure/transformers/index.js';
+import { competenceTransformer, skillTransformer, thematicTransformer, tubeTransformer } from '../../../../lib/infrastructure/transformers/index.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
-import { Thematic, Tube } from '../../../../lib/domain/models/index.js';
+import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Unit | Domain | Usecases | create competence', function() {
 
   const transformedCompetence = Symbol('transformedCompetence');
   const transformedThematic = Symbol('transformedThematic');
   const transformedTube = Symbol('transformedTube');
+  const transformedSkill = Symbol('transformedSkill');
 
   beforeEach(() => {
     vi.spyOn(areaRepository, 'getByAirtableId');
@@ -21,10 +23,13 @@ describe('Unit | Domain | Usecases | create competence', function() {
     vi.spyOn(competenceRepository, 'create');
     vi.spyOn(thematicRepository, 'create');
     vi.spyOn(tubeRepository, 'create');
+    vi.spyOn(skillRepository, 'create');
     vi.spyOn(competenceTransformer, 'filterCompetenceFields');
     vi.spyOn(thematicTransformer, 'filterThematicFields');
     vi.spyOn(tubeTransformer, 'filterTubeFields');
+    vi.spyOn(skillTransformer, 'filterSkillFields');
     vi.spyOn(updatedRecordNotifier, 'notify');
+    vi.spyOn(idGenerator, 'generateNewId');
   });
 
   describe('when area id is unknown', () => {
@@ -76,13 +81,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
       const createdThematic = domainBuilder.buildThematic();
       const createdTube = domainBuilder.buildTube();
+      const createdSkill = domainBuilder.buildSkill();
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
+      skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockResolvedValue();
+      idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -121,9 +130,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
         },
         practicalDescription_i18n: {},
       }));
+      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
+        id: 'skill1',
+        name: '@workbench',
+        description: 'Acquis pour l\'atelier de la compétence 24.6 Fmk',
+        tubeAirtableId: createdTube.airtableId,
+        hint_i18n: {},
+      }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
       expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
@@ -139,6 +156,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         pixApiClient,
         updatedRecord: transformedTube,
       });
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'skills',
+        pixApiClient,
+        updatedRecord: transformedSkill,
+      });
+      expect(idGenerator.generateNewId).toHaveBeenCalledWith('skill');
     });
   });
 
@@ -161,13 +184,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
       const createdThematic = domainBuilder.buildThematic();
       const createdTube = domainBuilder.buildTube();
+      const createdSkill = domainBuilder.buildSkill();
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
+      skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockResolvedValue();
+      idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -206,9 +233,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
         },
         practicalDescription_i18n: {},
       }));
+      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
+        id: 'skill1',
+        name: '@workbench',
+        description: 'Acquis pour l\'atelier de la compétence 24.1 Fmk',
+        tubeAirtableId: createdTube.airtableId,
+        hint_i18n: {},
+      }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
       expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
@@ -224,6 +259,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         pixApiClient,
         updatedRecord: transformedTube,
       });
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'skills',
+        pixApiClient,
+        updatedRecord: transformedSkill,
+      });
+      expect(idGenerator.generateNewId).toHaveBeenCalledWith('skill');
     });
   });
 
@@ -245,13 +286,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
       });
       const createdThematic = domainBuilder.buildThematic();
       const createdTube = domainBuilder.buildTube();
+      const createdSkill = domainBuilder.buildSkill();
       competenceRepository.create.mockResolvedValueOnce(createdCompetence);
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
+      skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockRejectedValue(new Error());
+      idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
         id: null,
@@ -290,9 +335,17 @@ describe('Unit | Domain | Usecases | create competence', function() {
         },
         practicalDescription_i18n: {},
       }));
+      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
+        id: 'skill1',
+        name: '@workbench',
+        description: 'Acquis pour l\'atelier de la compétence 24.1 Fmk',
+        tubeAirtableId: createdTube.airtableId,
+        hint_i18n: {},
+      }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
       expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
         pixApiClient,
@@ -308,6 +361,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
         pixApiClient,
         updatedRecord: transformedTube,
       });
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+        model: 'skills',
+        pixApiClient,
+        updatedRecord: transformedSkill,
+      });
+      expect(idGenerator.generateNewId).toHaveBeenCalledWith('skill');
     });
   });
 });
