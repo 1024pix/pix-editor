@@ -197,3 +197,6 @@ if (process.env.NODE_ENV === 'test') {
   phrase.projectId = 'MY_PHRASE_PROJECT_ID';
   phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID' }];
 }
+
+// amandeNoix3
+// amandeCajou1
