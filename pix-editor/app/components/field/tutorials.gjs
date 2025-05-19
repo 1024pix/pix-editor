@@ -1,3 +1,6 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -11,7 +14,6 @@ import PopInTutorialComponent from '../pop-in/tutorial';
 import SelectSearch from './select-search';
 
 export default class Tutorials extends Component {
-
   @tracked tutorialList = [];
   @tracked displayTutorialPopin = false;
   @tracked tutorial = null;
@@ -131,7 +133,7 @@ export default class Tutorials extends Component {
       {{/if}}
 
     </div>
-    <div class="field">
+    <div class="field" id="tutorials-field">
       {{#if @tutorials.isPending}}
         <div class="ui active centered inline loader"></div>
       {{else}}
@@ -140,27 +142,25 @@ export default class Tutorials extends Component {
             <div class="card">
               <div class="content">
                 <div class="header">
-                  {{#if @edition}}
-                    <button {{on "click" (fn @removeTutorial @tutorials tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
-                      <i class="close icon"></i>
-                    </button>
-                    <button {{on "click" (fn this.editTutorial tutorial)}} title="Modifier le tutoriel" class="ui right floated button">
-                      <i class="edit icon"></i>
-                    </button>
-                  {{/if}}
-                  <a aria-label="Ouvrir le tutoriel {{tutorial.title}}" class="ui right floated button basic" href={{tutorial.link}} target="_blank"
-                     rel="noreferrer noopener">
-                    <i class="external icon"></i>
-                  </a>
                   {{tutorial.title}}
+                  <span>
+                    <a class="ui right floated button tutorial-link" href={{tutorial.link}} target="_blank"
+                       rel="noreferrer noopener">
+                      <PixIcon @name="openNew" />
+                    </a>
+                    {{#if @edition}}
+                      <PixIconButton @ariaLabel="Modifier le tutoriel" @iconName="edit" @triggerAction={{fn this.editTutorial tutorial}} class="ui right floated" />
+                      <PixIconButton @ariaLabel="Supprimer le tutoriel" @iconName="close" @triggerAction={{fn @removeTutorial @tutorials tutorial}} class="ui right floated" />
+                    {{/if}}
+                  </span>
                 </div>
                 <div class="description">
                   <div>Format : {{tutorial.format}}</div>
                   <div>Durée : {{tutorial.duration}}</div>
                   <div>Source : {{tutorial.source}}
-                    <div class="ui right floated">
+                    <div class="ui right floated favorite">
                       {{#if tutorial.crush}}
-                        <i class="red heart icon"></i>
+                        <PixIcon @name="favorite" @plainIcon={{true}} />
                       {{/if}}
                     </div>
                   </div>
@@ -177,10 +177,9 @@ export default class Tutorials extends Component {
           {{#if @edition}}
             <div class="card">
               <div class="content">
-                <a href="#" {{on "click" this.addTutorial}}>
-                  <i class="icon plus circle"></i>
+                <PixButton @triggerAction={{this.addTutorial}} @variant="tertiary" @size="small" @iconBefore="add">
                   Ajouter un tutoriel <span class="sr-only">{{@title}}</span>
-                </a>
+                </PixButton>
               </div>
             </div>
           {{/if}}

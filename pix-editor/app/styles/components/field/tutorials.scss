@@ -18,6 +18,10 @@
       }
     }
   }
+
+  .favorite svg {
+    fill: var(--pix-error-500);
+  }
 }
 
 #select-tutorial-solution,

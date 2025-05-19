@@ -47,7 +47,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
   test('create a new tutorial', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
-    await clickByText('Modifier');
+    await click(screen.getByRole('button', { name: 'Modifier' }));
     const createTutorialLink = screen.getByRole('link', {
       name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
     });
