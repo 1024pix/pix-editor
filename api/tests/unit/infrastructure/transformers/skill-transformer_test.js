@@ -1,18 +1,33 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { filterSkillsFields } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
+import { filterSkillFields, filterSkillsFields } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
 
 describe('Unit | Infrastructure | skill-transformer', function() {
 
-  it('should only keep useful fields', function() {
-    const airtableSkills = [domainBuilder.buildSkillDatasourceObject()];
+  describe('#filterSkillFields', () => {
+    it('filters skill fields for release', () => {
+      // given
+      const skill = domainBuilder.buildSkill();
 
-    const skills = filterSkillsFields(airtableSkills);
+      // when
+      const filteredSkill = filterSkillFields(skill);
 
-    expect(skills.length).to.equal(1);
-    expect(skills[0].name).to.exist;
-    expect(skills[0].description).to.not.exist;
-    expect(skills[0].level).to.equal(5);
-    expect(skills[0].internationalisation).to.not.exist;
+      // then
+      expect(filteredSkill).toEqual(domainBuilder.buildSkillForRelease(skill));
+    });
+  });
+
+  describe('#filterSkillsFields', () => {
+    it('filters skills fields for release', function() {
+      // given
+      const skill1 = domainBuilder.buildSkill({ id: 'skill1' });
+      const skill2 = domainBuilder.buildSkill({ id: 'skill2' });
+
+      // when
+      const filteredSkills = filterSkillsFields([skill1, skill2]);
+
+      // then
+      expect(filteredSkills).toEqual([domainBuilder.buildSkillForRelease(skill1), domainBuilder.buildSkillForRelease(skill2)]);
+    });
   });
 });

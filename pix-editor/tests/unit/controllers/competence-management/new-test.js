@@ -64,9 +64,6 @@ module('Unit | Controller | competence-management/new', function(hooks) {
 
     test('it should save competence', async function(assert) {
       // given
-      const createWorkbenchStub = sinon.stub().resolves();
-      controller._createWorkbench = createWorkbenchStub;
-
       const saveStub = sinon.stub().resolves();
       competence.save = saveStub;
       const expectedCompetence = {
@@ -90,8 +87,6 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.deepEqual(controller.model.competence, expectedCompetence);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
-      assert.ok(createWorkbenchStub.calledOnce);
-      assert.ok(notifyMessageStub.getCall(0).args, ['Atelier créé']);
       assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence.id, { queryParams: { view: 'workbench' } }));
     });
 
@@ -113,30 +108,5 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyErrorStub.calledWith('Erreur lors de la création de la compétence'));
     });
-  });
-
-  test('it should create workbench', async function(assert) {
-    // given
-    const idGeneratorStub = sinon.stub().returns('recId');
-    class IdGenerator extends Service {
-      newId = idGeneratorStub;
-    }
-    this.owner.register('service:idGenerator', IdGenerator);
-    const saveStub = sinon.stub().onFirstCall().resolves('skill');
-    const model = { save: saveStub };
-    const createRecordStub = sinon.stub().returns(model);
-    controller.store.createRecord = createRecordStub;
-
-    const expectedSkill = {
-      tube: 'tube',
-      description: 'Acquis pour l\'atelier de la compétence 1.1 Pix+',
-      level: 0,
-    };
-
-    // when
-    await controller._createWorkbench('Pix+');
-
-    // then
-    assert.deepEqual(createRecordStub.getCall(0).args, ['skill', expectedSkill]);
   });
 });
