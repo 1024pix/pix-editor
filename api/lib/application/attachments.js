@@ -3,11 +3,15 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as usecases from '../domain/usecases/index.js';
+import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
+import * as pixApiClient from '../infrastructure/pix-api-client.js';
+import { createChallengeTransformer } from '../infrastructure/transformers/index.js';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as attachmentSerializer from '../infrastructure/serializers/jsonapi/attachment-serializer.js';
 import * as attachmentRepository from '../infrastructure/repositories/attachment-repository.js';
 import * as localizedChallengeRepository from '../infrastructure/repositories/localized-challenge-repository.js';
+import * as challengeRepository from '../infrastructure/repositories/challenge-repository.js';
 
 export function register(server) {
   server.route([
@@ -52,7 +56,17 @@ export function register(server) {
         handler: async function(request, h) {
           try {
             const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
-            const createdAttachment = await usecases.createAttachment({ attachmentCreationCommand, attachmentRepository, localizedChallengeRepository });
+            const createdAttachment = await usecases.createAttachment({
+              attachmentCreationCommand,
+              attachmentRepository,
+              localizedChallengeRepository,
+              challengeRepository,
+              createChallengeTransformer,
+              updatedRecordNotifier,
+              pixApiClient,
+              logger,
+              Sentry,
+            });
             return h.response(attachmentSerializer.serialize(createdAttachment)).code(201);
           } catch (err) {
             logger.error(err);
