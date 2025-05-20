@@ -18,9 +18,9 @@ export default class ChallengeForm extends Component {
       { value: 'QROCM-dep', label: 'QROCM-dep' },
       { value: 'autoReply', label: 'Embed-auto' },
     ],
-    'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
-    'declinable': ['', 'facilement', 'difficilement', 'permutation', 'non'],
-    'format': ['petit', 'mots', 'phrase', 'paragraphe', 'nombre'],
+    'pedagogy': [{ label: 'e-preuve', value: 'e-preuve' }, { label: 'q-savoir', value: 'q-savoir' }, { label: 'q-situation', value: 'q-situation' }],
+    'declinable': [{ label: 'facilement', value: 'facilement' }, { label: 'difficilement', value: 'difficilement' }, { label: 'permutation', value: 'permutation' }, { label: 'non', value: 'non' }],
+    'format': [{ label: 'petit', value: 'petit' }, { label: 'mots', value: 'mots' }, { label: 'phrase', value: 'phrase' }, { label: 'paragraphe', value: 'paragraphe' }, { label: 'nombre', value: 'nombre' }],
     'accessibility1': ['RAS', 'OK', 'Acquis Non Pertinent', 'KO', 'A tester'],
     'accessibility2': ['RAS', 'OK', 'KO'],
     'responsive': ['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
@@ -52,6 +52,10 @@ export default class ChallengeForm extends Component {
       };
       this.languageOptions.push(option);
     }
+  }
+
+  get geographyOptionList() {
+    return this.options.geography.map((g) => ({ label: g, value: g }));
   }
 
   get helpSuggestions() {
@@ -125,6 +129,14 @@ export default class ChallengeForm extends Component {
     }
 
     return this.options.types.find((type)=> type.value === actualType).value;
+  }
+
+  get challengeFormatValue() {
+    if (!this.args.challenge.format) {
+      return 'mots';
+    }
+
+    return this.options.format.find((format)=> format.value === this.args.challenge.format).value;
   }
 
   get challengeGeographyValue() {

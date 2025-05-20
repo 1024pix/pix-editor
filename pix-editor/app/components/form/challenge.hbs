@@ -53,15 +53,15 @@
     />
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
-    <Field::Select
-      @title="Format QROC"
-      @value={{@challenge.format}}
-      @defaultText="Mots"
+    <PixSelect
       @options={{this.options.format}}
-      @edition={{@edition}}
-      @setValue={{fn (mut @challenge.format)}}
-      data-test-format-field
-    />
+      @onChange={{fn (mut @challenge.format)}}
+      @value={{this.challengeFormatValue}}
+      @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
+    >
+      <:label>Format QROC</:label>
+    </PixSelect>
   {{/if}}
   {{#unless this.isAutoReply}}
     <Field::Mde
@@ -223,22 +223,26 @@
         />
       </div>
     </div>
-    <Field::Select
-      @title="Type pédagogie"
-      @value={{@challenge.pedagogy}}
+    <PixSelect
       @options={{this.options.pedagogy}}
-      @edition={{@edition}}
-      @setValue={{fn (mut @challenge.pedagogy)}}
-    />
+      @onChange={{fn (mut @challenge.pedagogy)}}
+      @value={{@challenge.pedagogy}}
+      @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
+    >
+      <:label>Type pédagogie</:label>
+    </PixSelect>
   {{/if}}
   {{#if @challenge.isPrototype}}
-    <Field::Select
-      @title="Déclinable"
-      @value={{@challenge.declinable}}
+    <PixSelect
       @options={{this.options.declinable}}
-      @edition={{@edition}}
-      @setValue={{fn (mut @challenge.declinable)}}
-    />
+      @onChange={{fn (mut @challenge.declinable)}}
+      @value={{@challenge.declinable}}
+      @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
+    >
+      <:label>Déclinable</:label>
+    </PixSelect>
   {{/if}}
   <div class="field {{if @edition '' 'disabled'}}">
     <Field::Checkbox
@@ -289,14 +293,15 @@
     </div>
     {{#if @challenge.isPrototype}}
       <div class="field">
-        <Field::Select
-          @title="Champs contextualisés"
-          @value={{this.contextualizedFields}}
-          @edition={{@edition}}
-          @multiple={{true}}
+        <PixMultiSelect
+          @placeholder="Champs contextualisés"
+          @onChange={{this.setContextualizedFields}}
+          @emptyMessage="Aucun champ sélectionné"
+          @values={{this.contextualizedFields}}
           @options={{this.options.contextualizedFields}}
-          @setValue={{this.setContextualizedFields}}
-        />
+        >
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
       </div>
     {{/if}}
   </div>

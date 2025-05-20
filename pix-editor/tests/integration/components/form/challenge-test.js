@@ -19,12 +19,12 @@ module('Integration | Component | challenge-form', function(hooks) {
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     // Then
-    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
-      assert.dom(`[${field}]`).exists();
-    });
+    assert.dom(screen.getByLabelText('Format QROC')).exists();
+    assert.dom('[data-test-tolerence-fields]').exists();
+    assert.dom('[data-test-suggestion-field]').exists();
   });
 
   test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
@@ -46,14 +46,12 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
     // Given
-    const countries = [{ FR: 'France' }];
     const store = this.owner.lookup('service:store');
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
       type: 'QCU',
     });
-    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
