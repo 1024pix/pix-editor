@@ -119,7 +119,12 @@ export default class ChallengeForm extends Component {
 
   get challengeTypeValue() {
     const actualType = this.args.challenge.autoReply ? 'autoReply' : this.args.challenge.type;
-    return this.options.types.find((type)=> type.value === actualType);
+
+    if (!actualType) {
+      return null;
+    }
+
+    return this.options.types.find((type)=> type.value === actualType).value;
   }
 
   get challengeGeographyValue() {
@@ -141,7 +146,7 @@ export default class ChallengeForm extends Component {
   shouldDisplayQualitySection = (challenge) => challenge.isDraft && challenge.isPrototype;
 
   @action
-  setChallengeType({ value }) {
+  setChallengeType(value) {
     this.args.challenge.type = value;
     this.args.challenge.autoReply = false;
     this.args.challenge.format = null;

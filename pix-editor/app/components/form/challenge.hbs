@@ -26,14 +26,15 @@
     />
   </Field::ToggleField>
   {{#if @challenge.isPrototype}}
-    <Field::Select
-      @title="Type"
-      @value={{this.challengeTypeValue}}
+    <PixSelect
       @options={{this.options.types}}
-      @edition={{@edition}}
-      @setValue={{this.setChallengeType}}
-      data-test-select-type
-    />
+      @onChange={{this.setChallengeType}}
+      @value={{this.challengeTypeValue}}
+      @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
+    >
+      <:label>Type</:label>
+    </PixSelect>
     <div class="field">
       <Field::Checkbox
         @label="Sans validation (Pix Junior)"

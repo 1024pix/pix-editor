@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { click, find, findAll, settled } from '@ember/test-helpers';
+import { click, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 
@@ -8,6 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | challenge-form', function(hooks) {
   setupIntlRenderingTest(hooks);
+  let screen;
 
   test('it should display expected fields if challenge type is `QROC`', async function(assert) {
     // Given
@@ -50,16 +51,17 @@ module('Integration | Component | challenge-form', function(hooks) {
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
+      type: 'QCU',
     });
     this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
-
-    await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
-    await click(findAll('.ember-power-select-option')[1]);
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await click(screen.getByRole('button', { name: 'Type' }));
+    await screen.findByRole('listbox');
+    await click(screen.getByRole('option', { name: 'QCM' }));
 
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();
@@ -77,16 +79,17 @@ module('Integration | Component | challenge-form', function(hooks) {
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
+      type: 'QCM',
     });
     this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
-
-    await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
-    await click(findAll('.ember-power-select-option')[0]);
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await click(screen.getByRole('button', { name: 'Type' }));
+    await screen.findByRole('listbox');
+    await click(screen.getByRole('option', { name: 'QCM' }));
 
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();
