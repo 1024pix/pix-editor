@@ -151,7 +151,16 @@ export function register(server) {
         handler: async function(request, h) {
           try {
             const attachmentId = request.params.attachmentId;
-            await usecases.deleteAttachment({ attachmentId, attachmentRepository });
+            await usecases.deleteAttachment({
+              attachmentId,
+              attachmentRepository,
+              challengeRepository,
+              createChallengeTransformer,
+              updatedRecordNotifier,
+              pixApiClient,
+              logger,
+              Sentry,
+            });
             return h.response().code(204);
           } catch (err) {
             logger.error(err);

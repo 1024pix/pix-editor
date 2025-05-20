@@ -479,13 +479,31 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with status 204', async () => {
       // given
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId',
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'localizedChallengeId',
+        localizedChallengeId: 'challengeId',
         attachmentId: 'recAttachmentId',
       });
       await databaseBuilder.commit();
+      const airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'recAttachmentId',
+        type: 'some type',
+        url: 'some url',
+        size: 'some size',
+        mimeType: 'some mimeType',
+        filename: 'some filename',
+        challengeId: 'challengeId',
+        airtableChallengeId: 'challengeAirtableId',
+        localizedChallengeId: 'challengeId',
+      });
+      const airtableGetAttachmentScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableAttachment);
       const airtableDeleteAttachmentScope = nock('https://api.airtable.com')
         .delete('/v0/airtableBaseValue/Attachments')
         .query({
@@ -496,10 +514,70 @@ describe('Acceptance | Route | attachments', () => {
           records: [
             {
               'id': 'recAttachmentId',
-              'deleted': true
+              'deleted': true,
             },
           ],
         });
+      const airtableChallenge = airtableBuilder.factory.buildChallenge({
+        id: 'challengeId',
+        locales: ['fr'],
+      });
+      const airtableGetChallengeScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Epreuves')
+        .query({
+          filterByFormula: '{id persistant} = "challengeId"',
+          maxRecords: '1'
+        })
+        .reply(200, {
+          records: [
+            airtableChallenge,
+          ]
+        });
+      const airtableFindAttachmentsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments')
+        .query({
+          filterByFormula: 'OR({localizedChallengeId} = "challengeId")',
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [] });
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      const apiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/challenges/challengeId',
+          {
+            id: 'challengeId',
+            alpha: null,
+            alternativeInstruction: '',
+            autoReply: false,
+            competenceId: null,
+            delta: null,
+            embedUrl: null,
+            embedTitle: '',
+            format: 'mots',
+            illustrationAlt: null,
+            illustrationUrl: null,
+            instruction: '',
+            locales: [ 'fr' ],
+            proposals: '',
+            solution: '',
+            solutionToDisplay: '',
+            skillId: null,
+            t1Status: false,
+            t2Status: false,
+            t3Status: false,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: 'RAS',
+            isAwarenessChallenge: false,
+            toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false
+          })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
       const server = await createServer();
 
       // when
@@ -511,7 +589,11 @@ describe('Acceptance | Route | attachments', () => {
 
       // then
       expect(response.statusCode).toBe(204);
+      expect(airtableGetAttachmentScope.isDone()).toBe(true);
       expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
+      expect(airtableGetChallengeScope.isDone()).toBe(true);
+      expect(airtableFindAttachmentsScope.isDone()).toBe(true);
+      expect(apiCacheScope.isDone()).toBe(true);
     });
   });
 
