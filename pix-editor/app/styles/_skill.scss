@@ -112,7 +112,7 @@
   }
 }
 
-.serch-tuto-more, .search-tuto-solution {
+.search-tuto-more, .search-tuto-solution {
   .results {
     max-height: 350px;
     overflow-y: scroll;
@@ -131,5 +131,11 @@
       color: red;
     }
   }
+}
 
+#container-select-description-status,
+#select-i18n-option,
+#container-select-clue-status {
+  width: 100%;
+  margin-bottom: 1rem;
 }
