@@ -1,5 +1,18 @@
 
 
+## v3.205.0 (21/05/2025)
+
+
+### :building_construction: Tech
+- [#998](https://github.com/1024pix/pix-editor/pull/998) [TECH] Déplacer la création de l’acquis workbench dans l’API (PIX-17772) (PIX-17768).
+- [#977](https://github.com/1024pix/pix-editor/pull/977) [TECH] Suppression du dropdown pour PixSelect dans les statuts d'un acquis (PIX-17235).
+- [#982](https://github.com/1024pix/pix-editor/pull/982) [TECH] Suppression de `ember-basic-dropdown` du composant `popin-select-location` (PIX-17793).
+- [#997](https://github.com/1024pix/pix-editor/pull/997) [TECH] Ajouter des pièces jointes aux seeds.
+
+### :arrow_up: Montée de version
+- [#999](https://github.com/1024pix/pix-editor/pull/999) [BUMP] caniuse-lite.
+- [#996](https://github.com/1024pix/pix-editor/pull/996) [BUMP] Update dependency @1024pix/pix-ui to ^55.18.2 (pix-editor).
+
 ## v3.204.0 (15/05/2025)
 
 
