@@ -4,27 +4,30 @@ import { normalizeNonBreakingSpace } from '../../../../lib/infrastructure/utils/
 describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
   it('should replace spaces by narrow non breaking spaces if are before `;`, `?` or `!`', () => {
     // given
-    const string = 'Est-ce ça ? Oui ! Non ; non! 15 €, 15 $, 15 %, 15 °C, 16°C';
+    const stringNoSpacesToReplace = 'Est-ce ça? Oui! Non; 15€, 15$, 15%, 15°C';
+    const stringWithSpacesToReplace = 'Est-ce ça ? Oui ! Non ; 15 €, 15 $, 15 %, 15 °C';
 
     // when
-    const result = normalizeNonBreakingSpace(string);
+    const result1 = normalizeNonBreakingSpace(stringNoSpacesToReplace);
+    const result2 = normalizeNonBreakingSpace(stringWithSpacesToReplace);
 
     // then
-    expect(result).toBe('Est-ce ça ? Oui ! Non ; non! 15 €, 15 $, 15 %, 15 °C, 16 °C');
+    expect(result1).toBe('Est-ce ça? Oui! Non; 15€, 15$, 15%, 15°C');
+    expect(result2).toBe('Est-ce ça ? Oui ! Non ; 15 €, 15 $, 15 %, 15 °C');
   });
 
   it('should replace spaces by non breaking spaces correctly in sentences with pointing double angle quotation marks "«»"', () => {
     // given
-    const stringNoSpacesInsideQuotationMarks = 'Descartes a dit : «Je pense, donc je suis.»';
-    const stringWithSpacesInsideQuotationMarks = 'Descartes a dit: « Je pense, donc je suis. »';
+    const stringNoSpacesToReplace = 'Descartes a dit: «Je pense, donc je suis.»';
+    const stringWithSpacesToReplace = 'Descartes a dit : « Je pense, donc je suis. »';
 
     // when
-    const result1 = normalizeNonBreakingSpace(stringNoSpacesInsideQuotationMarks);
-    const result2 = normalizeNonBreakingSpace(stringWithSpacesInsideQuotationMarks);
+    const result1 = normalizeNonBreakingSpace(normalizeNonBreakingSpace(stringNoSpacesToReplace));
+    const result2 = normalizeNonBreakingSpace(normalizeNonBreakingSpace(stringWithSpacesToReplace));
 
     // then
-    expect(result1).toBe('Descartes a dit : « Je pense, donc je suis. »');
-    expect(result2).toBe('Descartes a dit: « Je pense, donc je suis. »');
+    expect(result1).toBe('Descartes a dit: «Je pense, donc je suis.»');
+    expect(result2).toBe('Descartes a dit : « Je pense, donc je suis. »');
   });
 
   it('should not break when passing null or empty values', () => {

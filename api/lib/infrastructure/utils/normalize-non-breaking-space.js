@@ -1,9 +1,9 @@
 export function normalizeNonBreakingSpace(str) {
   if (!str) return str;
   return str
-    .replaceAll(/ ?(°C)/g, ' $1')
-    .replaceAll(/ ([;?!€$%])/g, ' $1')
-    .replaceAll(/ (:)/g, ' $1')
-    .replaceAll(/ ?(»)/g, ' $1')
-    .replaceAll(/(«) ?/g, '$1 ');
+    .replaceAll(/\p{Zs}(°C)/gu, ' $1')
+    .replaceAll(/\p{Zs}([;?!€$%])/gu, ' $1')
+    .replaceAll(/\p{Zs}(:)/gu, ' $1')
+    .replaceAll(/\p{Zs}(»)/gu, ' $1')
+    .replaceAll(/(«)\p{Zs}/gu, '$1 ');
 }
