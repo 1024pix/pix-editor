@@ -19,8 +19,8 @@ describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
     const stringWithSpacesInsideQuotationMarks = 'Descartes a dit: « Je pense, donc je suis. »';
 
     // when
-    const result1 = normalizeNonBreakingSpace(stringNoSpacesInsideQuotationMarks);
-    const result2 = normalizeNonBreakingSpace(stringWithSpacesInsideQuotationMarks);
+    const result1 = normalizeNonBreakingSpace(normalizeNonBreakingSpace(stringNoSpacesInsideQuotationMarks));
+    const result2 = normalizeNonBreakingSpace(normalizeNonBreakingSpace(stringWithSpacesInsideQuotationMarks));
 
     // then
     expect(result1).toBe('Descartes a dit : « Je pense, donc je suis. »');
