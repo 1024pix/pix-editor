@@ -144,11 +144,9 @@ export default class ChallengeForm extends Component {
   }
 
   get languages() {
-    return this.options.locales.filter((locale)=> this.args.challenge.locales.includes(locale.value));
-  }
+    const languageValueList = this.languageOptions.map(({ value }) => value);
 
-  get contextualizedFields() {
-    return this.options.contextualizedFields.filter(({ value }) => this.args.challenge.contextualizedFields?.includes(value));
+    return languageValueList.filter((locale) => this.args.challenge.locales.includes(locale));
   }
 
   get displayUrlsToConsult() {
@@ -209,11 +207,11 @@ export default class ChallengeForm extends Component {
 
   @action
   setLocales(selectedOptions) {
-    this.args.challenge.locales = selectedOptions.map(({ value }) => value);
+    this.args.challenge.locales = selectedOptions.map((value) => value);
   }
 
   @action
   setContextualizedFields(selectedOptions) {
-    this.args.challenge.contextualizedFields = selectedOptions.map(({ value }) => value);
+    this.args.challenge.contextualizedFields = selectedOptions.map((value) => value);
   }
 }

@@ -268,14 +268,16 @@
     <label>Internationalisation</label>
     <div class="two fields">
       <div class="field">
-        <Field::Select
-          @title="Langue(s)"
-          @value={{this.languages}}
-          @edition={{@edition}}
-          @multiple={{true}}
-          @options={{this.options.locales}}
-          @setValue={{this.setLocales}}
-        />
+        <PixMultiSelect
+          @placeholder="Choisir une ou plusieurs langues"
+          @onChange={{this.setLocales}}
+          @emptyMessage="Aucune langue sélectionnée"
+          @values={{this.languages}}
+          @options={{this.languageOptions}}
+        >
+          <:label>Langue(s)</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
       </div>
       <div class="field">
         <PixSelect
@@ -297,9 +299,10 @@
           @placeholder="Champs contextualisés"
           @onChange={{this.setContextualizedFields}}
           @emptyMessage="Aucun champ sélectionné"
-          @values={{this.contextualizedFields}}
+          @values={{this.args.challenge.contextualizedFields}}
           @options={{this.options.contextualizedFields}}
         >
+          <:label>Champs contextualisés</:label>
           <:default as |option|>{{option.label}}</:default>
         </PixMultiSelect>
       </div>

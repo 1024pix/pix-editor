@@ -47,16 +47,18 @@ module('Integration | Component | challenge-form', function(hooks) {
   test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
     // Given
     const store = this.owner.lookup('service:store');
+    const countries = [{ FR: 'France' }];
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
       type: 'QCU',
     });
+    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
     await click(screen.getByRole('button', { name: 'Type' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));
@@ -84,7 +86,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     this.set('checkEmbedURL', () => {});
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
     await click(screen.getByRole('button', { name: 'Type' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));

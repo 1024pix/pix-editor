@@ -15,11 +15,7 @@ module('unit | Component | form/challenge', function(hooks) {
 
   test('it should set locales properly', async function(assert) {
     // given
-    const input = [
-      { label: 'Anglais', value: 'en' },
-      { label: 'Franco Français', value: 'fr-fr' },
-      { label: 'Francophone', value: 'fr' },
-    ];
+    const input = ['en', 'fr-fr', 'fr'];
 
     const expected = ['en', 'fr-fr', 'fr'];
 
