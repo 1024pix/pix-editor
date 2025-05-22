@@ -1,5 +1,11 @@
 
 
+## v3.206.0 (22/05/2025)
+
+
+### :bug: Correction
+- [#1001](https://github.com/1024pix/pix-editor/pull/1001) [BUGFIX] Des espaces insécables s'ajoutent au niveau des « » même s'il y en a déjà. (PIX-17957).
+
 ## v3.205.0 (21/05/2025)
 
 
