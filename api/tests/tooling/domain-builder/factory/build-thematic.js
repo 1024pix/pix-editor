@@ -10,6 +10,7 @@ export function buildThematic({
   competenceId = 'recCompetence0',
   competenceAirtableId = 'recAirtableCompetence0',
   tubeIds = ['recTube0'],
+  tubeAirtableIds = ['recAirtableTube0'],
   index = 0,
 } = {}) {
   return new Thematic({
@@ -19,6 +20,7 @@ export function buildThematic({
     competenceId,
     competenceAirtableId,
     tubeIds,
+    tubeAirtableIds,
     index,
   });
 }

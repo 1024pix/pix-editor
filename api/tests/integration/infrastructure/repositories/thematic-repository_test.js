@@ -17,6 +17,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId1',
           index: '1',
           tubeIds: ['tubeId1', 'tubeId2'],
+          tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
         }),
         airtableBuilder.factory.buildThematic({
           id: 'thematic2',
@@ -24,6 +25,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId2',
           index: '2',
           tubeIds: ['tubeId3', 'tubeId4'],
+          tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
         }),
         airtableBuilder.factory.buildThematic({
           id: 'thematic3',
@@ -31,6 +33,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId2',
           index: '3',
           tubeIds: null,
+          tubeAirtableIds: null,
         }),
       ]).activate().nockScope;
 
@@ -79,6 +82,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId1',
           index: '1',
           tubeIds: ['tubeId1', 'tubeId2'],
+          tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
           name_i18n: {
             en: 'Thematic 1 name',
             fr: 'Nom thématique 1',
@@ -91,6 +95,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId2',
           index: '2',
           tubeIds: ['tubeId3', 'tubeId4'],
+          tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
           name_i18n: {
             en: 'Thematic 2 name',
             fr: 'Nom thématique 2',
@@ -103,6 +108,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceAirtableId: 'recCompetenceId2',
           index: '3',
           tubeIds: [],
+          tubeAirtableIds: [],
           name_i18n: {
             en: 'Thematic 3 name',
             fr: 'Nom thématique 3',
@@ -141,6 +147,7 @@ describe('Integration | Repository | thematic-repository', () => {
             'Competence (id persistant)': [competenceId],
             'Competence': ['recCompetenceId1'],
             'Tubes (id persistant)': ['tubeId1', 'tubeId2'],
+            'Tubes': ['recTubeId1', 'recTubeId2'],
             'Index': 1,
           },
           get: function(field) { return this.fields[field]; },
@@ -162,6 +169,7 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceId: 'competenceId1',
           competenceAirtableId: 'recCompetenceId1',
           tubeIds: ['tubeId1', 'tubeId2'],
+          tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
           index: 1,
         })
       ]);
@@ -175,12 +183,14 @@ describe('Integration | Repository | thematic-repository', () => {
         competenceId: 'competenceId2',
         index: '2',
         tubeIds: ['tubeId3', 'tubeId4'],
+        tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
       });
       const thematic3 = airtableBuilder.factory.buildThematic({
         id: 'thematic3',
         competenceId: 'competenceId3',
         index: '3',
         tubeIds: ['tubeId5', 'tubeId6'],
+        tubeAirtableIds: ['recTubeId5', 'recTubeId6'],
       });
 
       const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([thematic2, thematic3]).activate().nockScope;

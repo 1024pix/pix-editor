@@ -7,6 +7,7 @@ export class Thematic {
     competenceId,
     competenceAirtableId,
     tubeIds,
+    tubeAirtableIds,
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -15,5 +16,6 @@ export class Thematic {
     this.competenceId = competenceId;
     this.competenceAirtableId = competenceAirtableId;
     this.tubeIds = tubeIds;
+    this.tubeAirtableIds = tubeAirtableIds;
   }
 }

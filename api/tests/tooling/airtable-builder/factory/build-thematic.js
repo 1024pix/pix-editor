@@ -5,6 +5,7 @@ export function buildThematic(
     competenceId,
     competenceAirtableId,
     tubeIds,
+    tubeAirtableIds,
     index,
   } = {}) {
   return {
@@ -14,6 +15,7 @@ export function buildThematic(
       'Competence (id persistant)': [competenceId],
       'Competence': [competenceAirtableId],
       'Tubes (id persistant)': tubeIds,
+      'Tubes': tubeAirtableIds,
       'Index': index
     },
   };
