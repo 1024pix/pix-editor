@@ -3,6 +3,8 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
+import { thematicRepository } from '../infrastructure/repositories/index.js';
+import { thematicSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 
 export function register(server) {
   server.route([
@@ -15,9 +17,11 @@ export function register(server) {
             thematicAirtableId: Types.thematicId().required(),
           }),
         },
-        handler: async function() {
+        handler: async function(request) {
           try {
-            return null;
+            const thematic = await thematicRepository.getByAirtableId(request.params.thematicAirtableId);
+            if (!thematic) return Boom.notFound('unknown thematic id');
+            return thematicSerializer.serialize(thematic);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);

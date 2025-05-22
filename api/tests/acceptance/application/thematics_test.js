@@ -37,7 +37,7 @@ describe('Application | Route | Thematics', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should respond with status 200 and thematic data', async () => {
+    it('should respond with status 200 and thematic data', async () => {
       // given
       const server = await createServer();
 
