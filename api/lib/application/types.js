@@ -38,6 +38,10 @@ export function skillId() {
   return Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/);
 }
 
+export function thematicId() {
+  return Joi.string().pattern(/^(rec|thematic)[a-zA-Z0-9]+$/);
+}
+
 export function tubeId() {
   return Joi.string().pattern(/^(rec|tube)[a-zA-Z0-9]+$/);
 }
