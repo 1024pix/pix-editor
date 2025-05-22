@@ -15,6 +15,15 @@ export async function list() {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function getByAirtableId(airtableId) {
+  const datasourceThematic = await thematicDatasource.find(airtableId);
+  if (!datasourceThematic) return null;
+
+  const translations = await translationRepository.listByEntity(model, datasourceThematic.id);
+
+  return toDomain(datasourceThematic, translations);
+}
+
 export async function getMany(ids) {
   const [datasourceThematics, translations] = await Promise.all([
     thematicDatasource.filter({ filter: { ids } }),

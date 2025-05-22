@@ -4,6 +4,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../
 import * as thematicRepository from '../../../../lib/infrastructure/repositories/thematic-repository.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import { thematicDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Integration | Repository | thematic-repository', () => {
 
@@ -246,6 +247,56 @@ describe('Integration | Repository | thematic-repository', () => {
         { key: `thematic.${thematicId}.name`, locale: 'en', value: thematic.name_i18n.en },
         { key: `thematic.${thematicId}.name`, locale: 'fr', value: thematic.name_i18n.fr },
       ]);
+    });
+  });
+
+  describe('#getByAirtableId', () => {
+    describe('when not found', () => {
+      it('should return null', async () => {
+        // given
+        const id = 'notfound';
+        const findRecordSpy = vi.spyOn(airtable, 'findRecord').mockRejectedValueOnce(new Airtable.Error('', '', 404));
+
+        // when
+        const result = await thematicRepository.getByAirtableId(id);
+
+        // then
+        expect(result).toBe(null);
+        expect(findRecordSpy).toHaveBeenCalledWith(thematicDatasource.tableName, id);
+      });
+    });
+
+    describe('when found', () => {
+      it('should return domain thematic', async () => {
+        // given
+        const thematic = {
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          name_i18n: {
+            fr: 'Première thématique',
+            en: 'First thematic',
+          },
+          index: 1,
+          competenceId: 'competence1',
+          competenceAirtableId: 'recCompetence1',
+          tubeIds: ['tube1', 'tube2'],
+          tubeAirtableIds: ['recTube1', 'recTube2'],
+        };
+        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
+        const findRecordSpy = vi.spyOn(airtable, 'findRecord').mockResolvedValueOnce(
+          new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+        );
+        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'fr', value: thematic.name_i18n.fr });
+        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'en', value: thematic.name_i18n.en });
+        await databaseBuilder.commit();
+
+        // when
+        const result = await thematicRepository.getByAirtableId(thematic.airtableId);
+
+        // then
+        expect(result).toStrictEqual(domainBuilder.buildThematic(thematic));
+        expect(findRecordSpy).toHaveBeenCalledWith(thematicDatasource.tableName, thematic.airtableId);
+      });
     });
   });
 });

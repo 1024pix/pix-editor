@@ -14,6 +14,7 @@ export const thematicDatasource = datasource.extend({
     'Competence',
     'Competence (id persistant)',
     'Tubes (id persistant)',
+    'Tubes',
     'Index',
   ],
 
