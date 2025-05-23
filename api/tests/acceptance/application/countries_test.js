@@ -20,7 +20,6 @@ describe('Acceptance | API | country | GET /api/countries', function() {
 
     //then
     expect(response.statusCode).toBe(200);
-    console.log(response.result.data.length);
     expect(response.result.data.length).to.equal(261);
   });
 

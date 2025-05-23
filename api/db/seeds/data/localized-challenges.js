@@ -1,7 +1,7 @@
 import Airtable from 'airtable';
 import fp from 'lodash/fp.js';
 import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
-import { getCountryCode } from '../../../lib/domain/models/Geography.js';
+import { getCountryCode } from '../../../lib/infrastructure/repositories/country-repository.js';
 import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {

@@ -1,4 +1,4 @@
-import { getCountryCode, getCountryName } from './Geography.js';
+import { getCountryCode, getCountryName } from '../../infrastructure/repositories/country-repository.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 

@@ -1,6 +1,6 @@
 import JsonapiSerializer from 'jsonapi-serializer';
 import { Challenge, LocalizedChallenge } from '../../../domain/models/index.js';
-import { getCountryCode } from '../../../domain/models/Geography.js';
+import { getCountryCode } from '../../repositories/country-repository.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 

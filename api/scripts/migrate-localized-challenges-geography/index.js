@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { knex, disconnect } from '../../db/knex-database-connection.js';
 import * as airtable from '../../lib/infrastructure/airtable.js';
 import { logger } from '../../lib/infrastructure/logger.js';
-import { getCountryCode } from '../../lib/domain/models/Geography.js';
+import { getCountryCode } from '../../lib/infrastructure/repositories/country-repository.js';
 
 export async function migrateLocalizedChallengesGeography({ dryRun } = {}) {
   const challenges = await airtable.findRecords('Epreuves', {

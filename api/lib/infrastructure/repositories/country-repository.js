@@ -33,3 +33,29 @@ export function list() {
 function toDomain({ code, name }) {
   return new Country({ code, name });
 }
+
+export function getCountryCode(name) {
+  const standardCountry = findByNameComparison(standardCountries, name);
+  if (standardCountry) return standardCountry.code;
+
+  const nonStandardCountry = findByNameComparison(nonStandardCountries, name);
+  return nonStandardCountry?.code ?? null;
+}
+
+export function getCountryName(code) {
+  const countryFound = [
+    ...standardCountries,
+    ...nonStandardCountries
+  ].find((standardCountry) => collator.compare(standardCountry.code, code) === 0);
+
+  return countryFound?.name ?? 'Neutre';
+}
+
+const collator = new Intl.Collator(NAME_LOCALE, {
+  sensitivity: 'base',
+  usage: 'search',
+});
+
+function findByNameComparison(countries, name) {
+  return countries.find((country) => collator.compare(country.name, name) === 0);
+}
