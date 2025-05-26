@@ -208,7 +208,7 @@ describe('Application | Route | Thematics', () => {
     });
 
     describe('when filtering by ids', () => {
-      it.fails('should respond with status 200 and thematics data', async () => {
+      it('should respond with status 200 and thematics data', async () => {
         // given
         const airtableThematics = [
           airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({

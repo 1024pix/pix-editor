@@ -5,6 +5,9 @@ import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import { thematicRepository } from '../infrastructure/repositories/index.js';
 import { thematicSerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
+import { listThematics } from '../domain/usecases/index.js';
+import { DomainError } from '../domain/errors.js';
 
 export function register(server) {
   server.route([
@@ -39,11 +42,13 @@ export function register(server) {
             'filter[ids][]': Joi.array().items(Types.thematicId()),
           }),
         },
-        handler: async function() {
+        handler: async function(request) {
           try {
-            const thematics = await thematicRepository.list();
+            const params = extractParameters(request.query);
+            const thematics = await listThematics(params);
             return thematicSerializer.serialize(thematics);
           } catch (err) {
+            if (err instanceof DomainError) throw err;
             logger.error(err);
             Sentry.captureException(err);
             return Boom.internal(err);
