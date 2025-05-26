@@ -30,6 +30,22 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'GET',
+      path: '/api/thematics',
+      config: {
+        handler: async function() {
+          try {
+            const thematics = await thematicRepository.list();
+            return thematicSerializer.serialize(thematics);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 
