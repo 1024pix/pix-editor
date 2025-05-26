@@ -34,6 +34,11 @@ export function register(server) {
       method: 'GET',
       path: '/api/thematics',
       config: {
+        validate: {
+          query: Joi.object({
+            'filter[ids][]': Joi.array().items(Types.thematicId()),
+          }),
+        },
         handler: async function() {
           try {
             const thematics = await thematicRepository.list();

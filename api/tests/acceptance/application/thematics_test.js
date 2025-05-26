@@ -90,123 +90,239 @@ describe('Application | Route | Thematics', () => {
   });
 
   describe('GET /api/thematics', () => {
-    let airtableThematicsScope;
+    describe('when using no filters', () => {
+      it('should respond with status 200 and thematics data', async () => {
+        // given
+        const airtableThematics = [
+          airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+            id: 'thematic1',
+            airtableId: 'recThematic1',
+            index: 1,
+            competenceAirtableId: 'recCompetence1',
+            tubeAirtableIds: ['recTube1', 'recTube2'],
+          })),
+          airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+            id: 'thematic2',
+            airtableId: 'recThematic2',
+            index: 2,
+            competenceAirtableId: 'recCompetence2',
+            tubeAirtableIds: ['recTube3', 'recTube4'],
+          })),
+        ];
 
-    beforeEach(async () => {
-      const airtableThematics = [
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
-          id: 'thematic1',
-          airtableId: 'recThematic1',
-          index: 1,
-          competenceAirtableId: 'recCompetence1',
-          tubeAirtableIds: ['recTube1', 'recTube2'],
-        })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
-          id: 'thematic2',
-          airtableId: 'recThematic2',
-          index: 2,
-          competenceAirtableId: 'recCompetence2',
-          tubeAirtableIds: ['recTube3', 'recTube4'],
-        })),
-      ];
+        const airtableThematicsScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Thematiques')
+          .query({
+            fields: { '': thematicDatasource.usedFields },
+            sort: [{ field: thematicDatasource.sortField, direction: 'asc' }]
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: airtableThematics });
 
-      airtableThematicsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Thematiques')
-        .query({
-          fields: { '': thematicDatasource.usedFields },
-          sort: [{ field: thematicDatasource.sortField, direction: 'asc' }]
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableThematics });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'fr', value: 'Première thématique' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'en', value: 'First thematic' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'fr', value: 'Deuxième thématique' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'en', value: 'Second thematic' });
 
-      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'fr', value: 'Première thématique' });
-      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'en', value: 'First thematic' });
-      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'fr', value: 'Deuxième thématique' });
-      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'en', value: 'Second thematic' });
+        await databaseBuilder.commit();
 
-      await databaseBuilder.commit();
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/thematics',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'themes',
+              id: 'recThematic1',
+              attributes: {
+                'pix-id': 'thematic1',
+                name: 'Première thématique',
+                'name-en-us': 'First thematic',
+                index: 1,
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
+                },
+                'raw-tubes': {
+                  data: [
+                    {
+                      id: 'recTube1',
+                      type: 'tubes',
+                    },
+                    {
+                      id: 'recTube2',
+                      type: 'tubes',
+                    },
+                  ],
+                },
+              }
+            },
+            {
+              type: 'themes',
+              id: 'recThematic2',
+              attributes: {
+                'pix-id': 'thematic2',
+                name: 'Deuxième thématique',
+                'name-en-us': 'Second thematic',
+                index: 2,
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence2',
+                    type: 'competences',
+                  },
+                },
+                'raw-tubes': {
+                  data: [
+                    {
+                      id: 'recTube3',
+                      type: 'tubes',
+                    },
+                    {
+                      id: 'recTube4',
+                      type: 'tubes',
+                    },
+                  ],
+                },
+              }
+            },
+          ],
+        });
+
+        expect(airtableThematicsScope.isDone()).toBe(true);
+      });
     });
 
-    it('should respond with status 200 and thematics data', async () => {
-      // given
-      const server = await createServer();
+    describe('when filtering by ids', () => {
+      it.fails('should respond with status 200 and thematics data', async () => {
+        // given
+        const airtableThematics = [
+          airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+            id: 'thematic1',
+            airtableId: 'recThematic1',
+            index: 1,
+            competenceAirtableId: 'recCompetence1',
+            tubeAirtableIds: ['recTube1', 'recTube2'],
+          })),
+          airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+            id: 'thematic2',
+            airtableId: 'recThematic2',
+            index: 2,
+            competenceAirtableId: 'recCompetence2',
+            tubeAirtableIds: ['recTube3', 'recTube4'],
+          })),
+        ];
 
-      // when
-      const response = await server.inject({
-        method: 'GET',
-        url: '/api/thematics',
-        headers: generateAuthorizationHeader(editorUser),
-      });
+        const airtableThematicsScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Thematiques')
+          .query({
+            filterByFormula: 'OR(RECORD_ID() = "recThematic1", RECORD_ID() = "recThematic2")',
+            fields: { '': thematicDatasource.usedFields },
+            sort: [{ field: thematicDatasource.sortField, direction: 'asc' }]
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: airtableThematics });
 
-      // then
-      expect(response.statusCode).toBe(200);
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'fr', value: 'Première thématique' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'en', value: 'First thematic' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'fr', value: 'Deuxième thématique' });
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic2.name', locale: 'en', value: 'Second thematic' });
 
-      expect(response.result).toEqual({
-        data: [
-          {
-            type: 'themes',
-            id: 'recThematic1',
-            attributes: {
-              'pix-id': 'thematic1',
-              name: 'Première thématique',
-              'name-en-us': 'First thematic',
-              index: 1,
-            },
-            relationships: {
-              'competence': {
-                data: {
-                  id: 'recCompetence1',
-                  type: 'competences',
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/thematics?filter[ids][]=recThematic1&filter[ids][]=recThematic2',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'themes',
+              id: 'recThematic1',
+              attributes: {
+                'pix-id': 'thematic1',
+                name: 'Première thématique',
+                'name-en-us': 'First thematic',
+                index: 1,
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
                 },
-              },
-              'raw-tubes': {
-                data: [
-                  {
-                    id: 'recTube1',
-                    type: 'tubes',
-                  },
-                  {
-                    id: 'recTube2',
-                    type: 'tubes',
-                  },
-                ],
-              },
-            }
-          },
-          {
-            type: 'themes',
-            id: 'recThematic2',
-            attributes: {
-              'pix-id': 'thematic2',
-              name: 'Deuxième thématique',
-              'name-en-us': 'Second thematic',
-              index: 2,
-            },
-            relationships: {
-              'competence': {
-                data: {
-                  id: 'recCompetence2',
-                  type: 'competences',
+                'raw-tubes': {
+                  data: [
+                    {
+                      id: 'recTube1',
+                      type: 'tubes',
+                    },
+                    {
+                      id: 'recTube2',
+                      type: 'tubes',
+                    },
+                  ],
                 },
+              }
+            },
+            {
+              type: 'themes',
+              id: 'recThematic2',
+              attributes: {
+                'pix-id': 'thematic2',
+                name: 'Deuxième thématique',
+                'name-en-us': 'Second thematic',
+                index: 2,
               },
-              'raw-tubes': {
-                data: [
-                  {
-                    id: 'recTube3',
-                    type: 'tubes',
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence2',
+                    type: 'competences',
                   },
-                  {
-                    id: 'recTube4',
-                    type: 'tubes',
-                  },
-                ],
-              },
-            }
-          },
-        ],
-      });
+                },
+                'raw-tubes': {
+                  data: [
+                    {
+                      id: 'recTube3',
+                      type: 'tubes',
+                    },
+                    {
+                      id: 'recTube4',
+                      type: 'tubes',
+                    },
+                  ],
+                },
+              }
+            },
+          ],
+        });
 
-      expect(airtableThematicsScope.isDone()).toBe(true);
+        expect(airtableThematicsScope.isDone()).toBe(true);
+      });
     });
   });
 });
