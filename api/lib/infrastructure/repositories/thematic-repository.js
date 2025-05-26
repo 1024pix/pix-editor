@@ -32,6 +32,14 @@ export async function getMany(ids) {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function getManyByAirtableIds(ids) {
+  if (!ids?.length) return [];
+  const datasourceThematics = await thematicDatasource.getManyByAirtableIds(ids);
+  if (!datasourceThematics) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
+  return toDomainList(datasourceThematics, translations);
+}
+
 export async function listByCompetenceId(competenceId) {
   const datasourceThematics = await thematicDatasource.listByCompetenceId(competenceId);
   if (!datasourceThematics) return [];

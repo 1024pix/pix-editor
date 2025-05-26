@@ -92,16 +92,6 @@ export const skillDatasource = datasource.extend({
     return body;
   },
 
-  async getManyByAirtableIds(ids) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `OR(${ids.map((id) => `RECORD_ID() = ${stringValue(id)}`).join(', ')})`,
-      fields: this.usedFields,
-      sort: this.defaultSort(),
-    });
-    if (airtableRawObjects.length === 0) return undefined;
-    return airtableRawObjects.map(this.fromAirTableObject);
-  },
-
   async filterByTubeId(tubeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `{Tube (id persistant)} = ${stringValue(tubeId)}`,

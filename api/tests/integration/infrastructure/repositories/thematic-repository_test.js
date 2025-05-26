@@ -299,4 +299,56 @@ describe('Integration | Repository | thematic-repository', () => {
       });
     });
   });
+
+  describe('#getManyByAirtableIds', () => {
+    it('should return domain thematics', async () => {
+      // given
+      const thematics = [
+        {
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          name_i18n: {
+            fr: 'Première thématique',
+            en: 'First thematic',
+          },
+          index: 1,
+          competenceId: 'competence1',
+          competenceAirtableId: 'recCompetence1',
+          tubeIds: ['tube1', 'tube2'],
+          tubeAirtableIds: ['recTube1', 'recTube2'],
+        },
+        {
+          id: 'thematic2',
+          airtableId: 'recThematic2',
+          name_i18n: {
+            fr: 'Deuxième thématique',
+            en: 'Second thematic',
+          },
+          index: 2,
+          competenceId: 'competence2',
+          competenceAirtableId: 'recCompetence2',
+          tubeIds: ['tube3', 'tube4'],
+          tubeAirtableIds: ['recTube3', 'recTube4'],
+        },
+      ];
+      const airtableThematics = thematics.map((thematic) => airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic)));
+      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableThematics.map((airtableThematic) => new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic)));
+      for (const thematic of thematics) {
+        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'fr', value: thematic.name_i18n.fr });
+        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'en', value: thematic.name_i18n.en });
+      }
+      await databaseBuilder.commit();
+
+      // when
+      const result = await thematicRepository.getManyByAirtableIds(thematics.map((thematic) => thematic.airtableId));
+
+      // then
+      expect(result).toStrictEqual(thematics.map((thematic) => domainBuilder.buildThematic(thematic)));
+      expect(findRecordsSpy).toHaveBeenCalledWith(thematicDatasource.tableName, {
+        filterByFormula: 'OR(RECORD_ID() = "recThematic1", RECORD_ID() = "recThematic2")',
+        fields: thematicDatasource.usedFields,
+        sort: [{ direction: 'asc', field: thematicDatasource.sortField }]
+      });
+    });
+  });
 });
