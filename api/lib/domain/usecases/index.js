@@ -21,6 +21,7 @@ export * from './find-attachment.js';
 export * from './find-attachments.js';
 export * from './import-translations.js';
 export * from './list-skills.js';
+export * from './list-thematics.js';
 export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';
 export * from './proxy-delete-request-to-airtable.js';
