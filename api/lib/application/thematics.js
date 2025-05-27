@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
+import * as securityPreHandlers from './security-pre-handlers.js';
 import { thematicRepository } from '../infrastructure/repositories/index.js';
 import { thematicSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
@@ -49,6 +50,38 @@ export function register(server) {
             return thematicSerializer.serialize(thematics);
           } catch (err) {
             if (err instanceof DomainError) throw err;
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/thematics',
+      config: {
+        validate: {
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().required().equal('themes'),
+              attributes: Joi.object({
+                'name': Joi.string().allow(null),
+                'name-en-us': Joi.string().allow(null),
+                'index': Joi.number().allow(null),
+              }).unknown(true),
+              relationships: Joi.object({
+                'competence': Types.competenceRelationship(),
+                'tubes': Types.tubesRelationship(),
+              }),
+            }),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function() {
+          try {
+            return {};
+          } catch (err) {
             logger.error(err);
             Sentry.captureException(err);
             return Boom.internal(err);

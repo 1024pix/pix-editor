@@ -1,10 +1,11 @@
-import {  beforeEach, describe, expect, it } from 'vitest';
+import {  afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
 
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { thematicDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Application | Route | Thematics', () => {
   let editorUser;
@@ -323,6 +324,154 @@ describe('Application | Route | Thematics', () => {
 
         expect(airtableThematicsScope.isDone()).toBe(true);
       });
+    });
+  });
+
+  describe('POST /api/thematics', async () => {
+    let airtableCreateThematicScope, airtableThematicsScope, pixApiCacheScope;
+
+    beforeEach(async () => {
+      const airtableThematics = [
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          index: 0,
+          competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
+        })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: 'thematic2',
+          airtableId: 'recThematic2',
+          index: 1,
+          competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
+        })),
+      ];
+
+      airtableThematicsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Thematiques')
+        .query({
+          filterByFormula: 'Competence = "recCompetence1"',
+          fields: { '': thematicDatasource.usedFields },
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableThematics });
+
+      const createdAirtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+        id: 'thematic3',
+        airtableId: 'recThematic3',
+        index: 2,
+        competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
+        tubeAirtableIds: [],
+        tubeIds: [],
+      }));
+
+      airtableCreateThematicScope = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Thematiques/', {
+          records: [{
+            fields: {
+              'id persistant': createdAirtableThematic.fields['id persistant'],
+              'Index': 2,
+              'Competence': ['recCompetence1'],
+            },
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [createdAirtableThematic] });
+
+      vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('thematic3');
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/thematics/thematic3', {
+          id: createdAirtableThematic.fields['id persistant'],
+          name_i18n: {
+            fr: 'Troisième thématique',
+            en: 'Third thematic',
+          },
+          index: 2,
+          competenceId: 'competence1',
+          tubeIds: [],
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+    });
+
+    afterEach(async () => {
+      await knex('translations').truncate();
+    });
+
+    it.fails('should respond with status 201 and created thematic', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/thematics',
+        payload: {
+          data: {
+            type: 'themes',
+            attributes: {
+              'name': 'Troisième thématique',
+              'name-en-us': 'Third thematic',
+            },
+            relationships: {
+              'competence': {
+                data: {
+                  type: 'competences',
+                  id: 'recCompetence1',
+                },
+              },
+              'raw-tubes': {
+                data: [],
+              },
+            },
+          },
+        },
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(201);
+      expect(response.result).toEqual({
+        data: {
+          type: 'themes',
+          id: 'recThematic3',
+          attributes: {
+            'pix-id': 'thematic3',
+            'name': 'Troisième thématique',
+            'name-en-us': 'Third thematic',
+            'index': 2,
+          },
+          relationships: {
+            competence: {
+              data: {
+                id: 'recCompetence1',
+                type: 'competences'
+              }
+            },
+            'raw-tubes': {
+              data: [],
+            },
+          },
+        },
+      });
+
+      expect(airtableCreateThematicScope.isDone()).toBe(true);
+      expect(airtableThematicsScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'thematic.thematic3.name', locale: 'en', value: 'Third thematic' },
+        { key: 'thematic.thematic3.name', locale: 'fr', value: 'Troisième thématique' },
+      ]);
     });
   });
 });
