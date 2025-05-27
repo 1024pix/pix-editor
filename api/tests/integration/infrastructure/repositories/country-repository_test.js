@@ -1,7 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { getCountryCode, getCountryName } from '../../../../lib/domain/models/Geography';
+import * as countryRepository from '../../../../lib/infrastructure/repositories/country-repository.js';
 
-describe('Unit | Model | Geography', () => {
+describe('Integration | Repository | country-repository', () => {
+
+  describe('#list', () => {
+    it('should return the list of all countries', async () => {
+      // given
+      // when
+      const countries = await countryRepository.list();
+
+      // then
+      expect(countries).toHaveLength(261);
+    });
+  });
+
   describe('#getCountryCode', () => {
     it('should return country code for standard french names', () => {
       // given
@@ -14,7 +26,7 @@ describe('Unit | Model | Geography', () => {
       ];
 
       // when
-      const codes = names.map(getCountryCode);
+      const codes = names.map(countryRepository.getCountryCode);
 
       // then
       expect(codes).toEqual(['FR', 'NL', 'DE', 'BZ', 'CI']);
@@ -222,7 +234,7 @@ describe('Unit | Model | Geography', () => {
       ];
 
       // when
-      const codes = names.map(getCountryCode);
+      const codes = names.map(countryRepository.getCountryCode);
 
       // then
       expect(codes, `no country code for ${names[codes.indexOf(undefined)]}`).not.toContain(undefined);
@@ -239,7 +251,7 @@ describe('Unit | Model | Geography', () => {
       ];
 
       // when
-      const codes = names.map(getCountryCode);
+      const codes = names.map(countryRepository.getCountryCode);
 
       // then
       expect(codes).toEqual([
@@ -251,6 +263,7 @@ describe('Unit | Model | Geography', () => {
       ]);
     });
   });
+
   describe('#getCountryName', () => {
     it('should convert country code to country french name', () => {
       // given
@@ -293,7 +306,7 @@ describe('Unit | Model | Geography', () => {
       ];
 
       // when
-      const names = codes.map(getCountryName);
+      const names = codes.map(countryRepository.getCountryName);
 
       // then
       expect(names, `no country name for ${codes[names.indexOf(undefined)]}`).not.toContain(undefined);
@@ -304,7 +317,7 @@ describe('Unit | Model | Geography', () => {
       const codes = [ null, 'UKNOWN', undefined ];
 
       // when
-      const names = codes.map(getCountryName);
+      const names = codes.map(countryRepository.getCountryName);
 
       // then
       expect(names).toEqual([

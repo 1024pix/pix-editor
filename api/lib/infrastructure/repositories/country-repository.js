@@ -1,4 +1,5 @@
 import { countries } from 'countries-list';
+import { Country } from '../../domain/models/Country.js';
 
 const NAME_LOCALE = 'fr';
 
@@ -22,6 +23,16 @@ const nonStandardCountries = [
   { code: 'SB', name: 'Salomon' },
   { code: 'VA', name: 'Vatican' },
 ];
+
+export function list() {
+  const countries = [...standardCountries, ...nonStandardCountries];
+
+  return countries.map((country) => toDomain(country));
+};
+
+function toDomain({ code, name }) {
+  return new Country({ code, name });
+}
 
 export function getCountryCode(name) {
   const standardCountry = findByNameComparison(standardCountries, name);

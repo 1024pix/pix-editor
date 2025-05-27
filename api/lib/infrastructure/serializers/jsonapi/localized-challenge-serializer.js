@@ -1,7 +1,7 @@
 import JsonapiSerializer from 'jsonapi-serializer';
 import Inflector from 'inflected';
 import { LocalizedChallenge } from '../../../domain/models/index.js';
-import { getCountryCode, getCountryName } from '../../../domain/models/Geography.js';
+import { getCountryCode, getCountryName } from '../../repositories/country-repository.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 
