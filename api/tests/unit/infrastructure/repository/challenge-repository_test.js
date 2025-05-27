@@ -74,7 +74,7 @@ describe('Unit | Repository | challenge-repository', () => {
           noValidationNeeded: false,
         }),
       ]);
-      vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [], geography: 'DeprecatedLand' }, { id: 2, locales: [], geography: 'DeprecatedLand' }]);
+      vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [], geography: 'XX' }, { id: 2, locales: [], geography: 'XX' }]);
 
       // when
       const challenges = await list();
@@ -87,7 +87,7 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challenges[0].instruction).to.equal('instruction');
       expect(challenges[0].proposals).to.equal('proposals');
       expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
-      expect(challenges[0].geography).to.equal('Philippines');
+      expect(challenges[0].geography).to.equal('PH');
       expect(challenges[0].requireGafamWebsiteAccess).to.equal(true);
       expect(challenges[0].isIncompatibleIpadCertif).to.equal(true);
       expect(challenges[0].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
@@ -99,7 +99,7 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challenges[1].instruction).to.equal('instruction 2');
       expect(challenges[1].proposals).to.equal('proposals 2');
       expect(challenges[1].alternativeLocales).to.deep.equal([]);
-      expect(challenges[1].geography).to.equal('Brésil');
+      expect(challenges[1].geography).to.equal('BR');
       expect(challenges[1].requireGafamWebsiteAccess).to.equal(false);
       expect(challenges[1].isIncompatibleIpadCertif).to.equal(true);
       expect(challenges[1].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
@@ -115,8 +115,8 @@ describe('Unit | Repository | challenge-repository', () => {
       it('should return challenges with given ids', async () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([
-          { id: '1', locales: ['fr'], geography: 'DeprecatedLand' },
-          { id: '2', locales: ['fr'], geography: 'DeprecatedLand' },
+          { id: '1', locales: ['fr'], geography: 'XX' },
+          { id: '2', locales: ['fr'], geography: 'XX' },
         ]);
         vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
@@ -151,7 +151,7 @@ describe('Unit | Repository | challenge-repository', () => {
           id: '1_en',
           challengeId: '1',
           locale: 'en',
-          geography: null,
+          geography: 'AA',
         });
         const localizedChallenge2 = domainBuilder.buildLocalizedChallenge({
           id: '2',
@@ -175,12 +175,12 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges[0].proposals).to.equal('proposals');
         expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
         expect(challenges[0].localizedChallenges).to.deep.equal([localizedChallenge1, localizedChallenge1_en]);
-        expect(challenges[0].geography).to.equal('Brésil');
+        expect(challenges[0].geography).to.equal('BR');
         expect(challenges[1].instruction).to.equal('instruction 2');
         expect(challenges[1].proposals).to.equal('proposals 2');
         expect(challenges[1].alternativeLocales).to.deep.equal([]);
         expect(challenges[1].localizedChallenges).to.deep.equal([localizedChallenge2]);
-        expect(challenges[1].geography).to.equal('Philippines');
+        expect(challenges[1].geography).to.equal('PH');
         expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
         expect(translationRepository.listByEntities).toHaveBeenCalledWith('challenge', ['1', '2']);
         expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: ['1', '2'] });
@@ -188,7 +188,7 @@ describe('Unit | Repository | challenge-repository', () => {
 
       it('should return challenges with empty fields when have no translation', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [], geography: 'DeprecatedLand' }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [], geography: 'XX' }]);
         vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
             key: 'challenge.1.proposals',
@@ -211,12 +211,12 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges.length).to.equal(1);
         expect(challenges[0].instruction).to.equal('');
         expect(challenges[0].proposals).to.equal('proposals');
-        expect(challenges[0].geography).to.equal('Brésil');
+        expect(challenges[0].geography).to.equal('BR');
       });
 
       it('should return challenges with empty fields when locale translations are not available', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: ['en'], geography: 'DeprecatedLand' }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: ['en'], geography: 'XX' }]);
         vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
             key: 'challenge.1.proposals',
@@ -238,7 +238,7 @@ describe('Unit | Repository | challenge-repository', () => {
         // then
         expect(challenges.length).to.equal(1);
         expect(challenges[0].proposals).to.equal('');
-        expect(challenges[0].geography).to.equal('Brésil');
+        expect(challenges[0].geography).to.equal('BR');
       });
     });
 
@@ -247,8 +247,8 @@ describe('Unit | Repository | challenge-repository', () => {
         // given
         vi.spyOn(challengeDatasource, 'filter');
         vi.spyOn(challengeDatasource, 'list').mockResolvedValue([
-          { id: '1', locales: ['fr'], geography: 'DeprecatedLand' },
-          { id: '2', locales: ['en'], geography: 'DeprecatedLand' },
+          { id: '1', locales: ['fr'], geography: 'XX' },
+          { id: '2', locales: ['en'], geography: 'XX' },
         ]);
         vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
           domainBuilder.buildLocalizedChallenge({
@@ -280,7 +280,7 @@ describe('Unit | Repository | challenge-repository', () => {
         // given
         vi.spyOn(translationRepository, 'search').mockResolvedValueOnce(['challengeId1']);
         vi.spyOn(challengeDatasource, 'search').mockResolvedValue([
-          { id: 'challengeId1', locales: ['fr'], geography: 'DeprecatedLand' },
+          { id: 'challengeId1', locales: ['fr'], geography: 'XX' },
         ]);
         vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
           domainBuilder.buildLocalizedChallenge({
@@ -296,7 +296,7 @@ describe('Unit | Repository | challenge-repository', () => {
 
         // then
         expect(challenges.length).to.equal(1);
-        expect(challenges[0].geography).to.equal('Brésil');
+        expect(challenges[0].geography).to.equal('BR');
         expect(translationRepository.search).toHaveBeenCalledWith({
           entity: 'challenge',
           fields: ['instruction', 'proposals'],
@@ -349,7 +349,7 @@ describe('Unit | Repository | challenge-repository', () => {
       const challengeFromAirtable = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
         locales: [primaryLocale],
-        geography: 'DeprecatedLand',
+        geography: 'XX',
       });
       const expectedChallenge = domainBuilder.buildChallenge({
         ...challengeFromAirtable,
@@ -365,7 +365,7 @@ describe('Unit | Repository | challenge-repository', () => {
           },
         },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({ geography: 'BR' })],
-        geography: 'Brésil',
+        geography: 'BR',
       });
 
       vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(expectedChallenge.localizedChallenges);

@@ -1,7 +1,6 @@
 import Airtable from 'airtable';
 import fp from 'lodash/fp.js';
 import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
-import { getCountryCode } from '../../../lib/infrastructure/repositories/country-repository.js';
 import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {
@@ -32,10 +31,9 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
 
   const localizedChallenges = challenges.flatMap((challenge) => {
     const challengeId = challenge.get('id persistant');
-    const countryName = challenge.get('Géographie');
+    const countryCode = challenge.get('Géographie');
     const embedUrl = challenge.get('Embed URL');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
-    const countryCode = getCountryCode(countryName);
     return [
       {
         id: challengeId,

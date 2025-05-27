@@ -4,11 +4,13 @@ export class LocalizedChallenge {
     challengeId,
     locale,
     instruction,
+    geography,
     status,
   }) {
     this.id = id;
     this.challengeId = challengeId;
     this.locale = locale;
+    this.geography = geography;
     this.instruction = instruction;
     this.status = status;
   }
@@ -17,6 +19,7 @@ export class LocalizedChallenge {
     const translatedChallenge = challenge.translate(locale);
     return new LocalizedChallenge({
       id: translatedChallenge.id,
+      geography: translatedChallenge.geography,
       challengeId: challenge.id,
       locale,
       instruction: translatedChallenge.instruction,

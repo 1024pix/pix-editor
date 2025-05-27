@@ -22,7 +22,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
         localizedChallenges: [localizedChallenge],
-        geography: 'DEPRECATED',
+        geography: 'XX',
       });
       const alternativeLocales = ['en', 'nl'];
       const expectedSerializedChallenge = {
@@ -60,7 +60,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             responsive: Challenge.RESPONSIVES.NON,
             locales: ['fr'],
             'alternative-locales': ['en', 'nl'],
-            geography: 'Mozambique',
+            geography: 'MZ',
             'urls-to-consult': ['mylink1', 'mylink2'],
             'auto-reply': false,
             focusable: false,
@@ -156,7 +156,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             spoil: Challenge.SPOILS.NON_SPOILABLE,
             responsive: Challenge.RESPONSIVES.NON,
             locales: [],
-            geography: 'Moldavie',
+            geography: 'MD',
             'urls-to-consult': ['mylink1', 'mylink2'],
             'auto-reply': false,
             focusable: false,

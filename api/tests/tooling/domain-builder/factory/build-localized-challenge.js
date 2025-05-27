@@ -5,6 +5,7 @@ export function buildLocalizedChallengeRead({
   id = 'persistant id',
   challengeId = 'persistant id',
   locale = 'fr',
+  geography = 'AA',
   instruction = 'une instruction par défaut',
   status = LocalizedChallenge.STATUSES.PRIMARY,
 }) {
@@ -12,6 +13,7 @@ export function buildLocalizedChallengeRead({
     id,
     challengeId,
     locale,
+    geography,
     instruction,
     status,
   });
@@ -25,7 +27,7 @@ export function buildLocalizedChallenge({
   fileIds = [],
   locale = 'fr',
   status = LocalizedChallenge.STATUSES.PRIMARY,
-  geography = null,
+  geography = 'AA',
   urlsToConsult = ['http://url.com'],
   requireGafamWebsiteAccess = false,
   isIncompatibleIpadCertif = false,

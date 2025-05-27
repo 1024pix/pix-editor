@@ -1809,13 +1809,13 @@ describe('Application | Route | Skills', () => {
           locale: 'fr',
           embedUrl: validatedChallengeProtoToClone.fields['Embed URL'],
           status: validatedChallengeProtoToClone.fields['Statut'],
-          geography: 'fr',
+          geography: 'FR',
         }),
         databaseBuilder.factory.buildLocalizedChallenge({
           id: 'validatedChallengeProtoNl',
           challengeId: protoId,
           locale: 'nl',
-          geography: 'fr',
+          geography: 'FR',
         }),
       ];
       databaseBuilder.factory.buildLocalizedChallengeAttachment({

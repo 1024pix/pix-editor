@@ -28,7 +28,7 @@ export function buildChallenge({
   accessibility2,
   spoil,
   responsive,
-  geography,
+  geography = 'AA',
   focusable,
   delta,
   alpha,

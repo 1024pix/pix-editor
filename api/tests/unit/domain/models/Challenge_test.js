@@ -378,7 +378,7 @@ describe('Unit | Domain | Challenge', () => {
         embedUrl: null,
         primaryEmbedUrl,
         status: Challenge.STATUSES.VALIDE,
-        geography: null,
+        geography: 'GB',
         requireGafamWebsiteAccess: false,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
@@ -429,7 +429,7 @@ describe('Unit | Domain | Challenge', () => {
           ...dutchFiles,
           ...englishFiles,
         ],
-        geography: 'France',
+        geography: 'FR',
       });
 
       const expectedDutchChallenge = {
@@ -440,7 +440,7 @@ describe('Unit | Domain | Challenge', () => {
         ...translations.nl,
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
-        geography: 'Pays-Bas',
+        geography: 'NL',
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
@@ -458,7 +458,7 @@ describe('Unit | Domain | Challenge', () => {
         ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
-        geography: 'Neutre',
+        geography: 'GB',
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
@@ -562,55 +562,6 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
-  describe('#geographyCode', () => {
-    it('should return a country code', () => {
-      // given
-      const challengeId = 'challengeId';
-      const challenge = domainBuilder.buildChallenge({
-        id: challengeId,
-        locales: ['fr'],
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: challengeId,
-          challengeId,
-          locale: 'fr',
-          geography: 'NZ',
-        })],
-        translations: { fr: {} },
-        geography: 'DeprecatedLand',
-      });
-
-      // then
-      expect(challenge).toHaveProperty('geographyCode', 'NZ');
-    });
-
-    it('should undefined when geography is not a country', () => {
-      // given
-      const geographies = ['Neutre', undefined, null];
-      const challengeId = 'challengeId';
-      const challenge = domainBuilder.buildChallenge({
-        id: challengeId,
-        locales: ['fr'],
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: challengeId,
-          challengeId,
-          locale: 'fr',
-          geography: null,
-        })],
-        translations: { fr: {} },
-        geography: 'DeprecatedLand',
-      });
-
-      // when
-      const codes = geographies.map((geography) => {
-        challenge.geography = geography;
-        return challenge.geographyCode;
-      });
-
-      // then
-      expect(codes).toEqual([null, null, null]);
-    });
-  });
-
   describe('#cloneChallengeAndAttachments', ()=> {
     it('should clone challenge', () => {
       // given
@@ -640,7 +591,7 @@ describe('Unit | Domain | Challenge', () => {
             status: LocalizedChallenge.STATUSES.PRIMARY,
             fileIds: [],
             embedUrl: 'pix-mailccoule.fr',
-            geography: 'France',
+            geography: 'FR',
             urlsToConsult: ['https://monurl.fr'],
             requireGafamWebsiteAccess: true,
             isIncompatibleIpadCertif: true,
@@ -671,7 +622,7 @@ describe('Unit | Domain | Challenge', () => {
         focusable: 'oui avec plaisir',
         format: Challenge.FORMATS.PETIT,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
-        geography: 'Monde',
+        geography: 'AA',
         madeObsoleteAt: new Date('2021-01-01'),
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         responsive: Challenge.RESPONSIVES.NON,

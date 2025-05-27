@@ -2,7 +2,6 @@ export * from './Area.js';
 export * from './Attachment.js';
 export * from './Challenge.js';
 export * from './Competence.js';
-export * from './Country.js';
 export * from './Framework.js';
 export * from './LocalizedChallenge.js';
 export * from './Mission.js';

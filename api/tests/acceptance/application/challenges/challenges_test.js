@@ -81,7 +81,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return challenges', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'DeprecatedLand' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'XX' });
 
       const airtableChallenges = [
         airtableBuilder.factory.buildChallenge(challenge),
@@ -202,7 +202,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: Challenge.RESPONSIVES.NON,
               locales: ['fr'],
               'alternative-locales': ['nl'],
-              geography: 'Brésil',
+              geography: 'BR',
               'urls-to-consult': ['truc'],
               'auto-reply': false,
               focusable: false,
@@ -253,8 +253,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should filter challenges by id', async () => {
       // Given
-      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'DeprecatedLand' });
-      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'DeprecatedLand' });
+      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'XX' });
+      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'XX' });
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -428,7 +428,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: Challenge.RESPONSIVES.NON,
               locales: ['fr'],
               'alternative-locales': [],
-              geography: 'Brésil',
+              geography: 'BR',
               'urls-to-consult': ['truc.fr'],
               'auto-reply': false,
               focusable: false,
@@ -502,7 +502,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: Challenge.RESPONSIVES.NON,
               locales: ['fr'],
               'alternative-locales': ['nl'],
-              geography: 'Philippines',
+              geography: 'PH',
               'urls-to-consult': ['truc2.fr'],
               'auto-reply': false,
               focusable: false,
@@ -624,7 +624,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           { fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' },
           { fileId: 'fileId2', localizedChallengeId: 'recChallengeId2' },
         ],
-        geography: 'DeprecatedLand',
+        geography: 'XX',
       });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
@@ -746,7 +746,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: Challenge.RESPONSIVES.NON,
             locales: ['fr'],
             'alternative-locales': ['nl'],
-            geography: 'Brésil',
+            geography: 'BR',
             'urls-to-consult': ['truc.fr'],
             'auto-reply': false,
             focusable: false,
@@ -837,7 +837,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: challengeId,
           locales: ['fr', 'fr-fr'],
           status: Challenge.STATUSES.VALIDE,
-          geography: 'DeprecatedLand',
+          geography: 'XX',
         })
       ]).activate().nockScope;
 
@@ -1069,7 +1069,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // Given
       const challengeData = {
         ...domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] }),
-        geography: 'Mozambique',
+        geography: 'MZ',
         instruction: 'consigne',
         alternativeInstruction: 'consigne alternative',
         solution: 'solution',
@@ -1201,7 +1201,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: Challenge.RESPONSIVES.NON,
             'alternative-locales': [],
             locales: ['fr'],
-            geography: 'Mozambique',
+            geography: 'MZ',
             'urls-to-consult': ['firstLink', 'secondLink'],
             'auto-reply': false,
             focusable: false,
@@ -1513,7 +1513,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
-        geography: 'Pays-Bas',
+        geography: 'NL',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1693,7 +1693,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: Challenge.RESPONSIVES.NON,
             'alternative-locales': ['nl'],
             locales: ['fr'],
-            geography: 'Pays-Bas',
+            geography: 'NL',
             'urls-to-consult': ['pouet.com'],
             'auto-reply': false,
             focusable: false,
@@ -1798,7 +1798,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
-        geography: 'Jamaïque',
+        geography: 'JM',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1971,7 +1971,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: Challenge.RESPONSIVES.NON,
             'alternative-locales': [],
             locales: ['fr', 'fr-fr'],
-            geography: 'Jamaïque',
+            geography: 'JM',
             'urls-to-consult': ['truc'],
             'auto-reply': false,
             focusable: false,

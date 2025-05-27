@@ -3,7 +3,6 @@ import * as attachmentsRoute from './application/attachments.js';
 import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
 import { competenceRoutes } from './application/competences/index.js';
-import * as countriesRoute from './application/countries.js';
 import * as configRoute from './application/config.js';
 import * as fileStorageTokenRoute from './application/file-storage-token/index.js';
 import * as frameworksRoute from './application/frameworks.js';
@@ -29,7 +28,6 @@ export const routes = [
   attachmentsRoute,
   challengesRoute,
   configRoute,
-  countriesRoute,
   fileStorageTokenRoute,
   frameworksRoute,
   heapdumpRoute,

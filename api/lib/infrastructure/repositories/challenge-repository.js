@@ -121,7 +121,7 @@ export async function update(challenge, knexConn = knex) {
   }
 
   primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
-  primaryLocalizedChallenge.geography = challenge.geographyCode;
+  primaryLocalizedChallenge.geography = challenge.geography;
   primaryLocalizedChallenge.urlsToConsult = challenge.urlsToConsult;
   primaryLocalizedChallenge.requireGafamWebsiteAccess = challenge.requireGafamWebsiteAccess;
   primaryLocalizedChallenge.isIncompatibleIpadCertif = challenge.isIncompatibleIpadCertif;

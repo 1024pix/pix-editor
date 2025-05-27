@@ -119,7 +119,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should serialize a challenge to an airtable object', () => {
       // given
-      const createdChallenge = domainBuilder.buildChallenge({ locales: ['fr-fr'] });
+      const createdChallenge = domainBuilder.buildChallenge({ locales: ['fr-fr'], geography: 'FR' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge({
         ...createdChallenge,
         files: [{

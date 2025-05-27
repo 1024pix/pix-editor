@@ -20,7 +20,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
 
     const challenge = domainBuilder.buildChallenge({
       localizedChallenges: [localizedChallenge],
-      geography: 'Tadjikistan',
+      geography: 'TJ',
     });
     const challengeRepository = {
       get: vi.fn().mockResolvedValueOnce(challenge),

@@ -21,7 +21,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           id: `${expectedLocalizedChallenge.id}`,
           attributes: {
             'embed-url': expectedLocalizedChallenge.embedUrl,
-            geography: 'Bélize',
+            geography: 'BZ',
             'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
             locale: expectedLocalizedChallenge.locale,
             status: expectedLocalizedChallenge.status,
@@ -64,6 +64,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           attributes: {
             'embed-url': expectedLocalizedChallenge.embedUrl,
             locale: expectedLocalizedChallenge.locale,
+            geography: expectedLocalizedChallenge.geography,
             status: expectedLocalizedChallenge.status,
             'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
             'require-gafam-website-access': expectedLocalizedChallenge.requireGafamWebsiteAccess,
@@ -111,6 +112,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'embed-url': '',
             'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
             locale: expectedLocalizedChallenge.locale,
+            geography: expectedLocalizedChallenge.geography,
             status: expectedLocalizedChallenge.status,
             'require-gafam-website-access': expectedLocalizedChallenge.requireGafamWebsiteAccess,
             'is-incompatible-ipad-certif': expectedLocalizedChallenge.isIncompatibleIpadCertif,
@@ -165,7 +167,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             locale: localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
             'default-embed-url': 'https://example.com/path/to/page.html?lang=en',
-            geography: 'Belize',
+            geography: 'BZ',
             'urls-to-consult': localizedChallenge.urlsToConsult,
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
@@ -217,7 +219,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           id: `${localizedChallenge.id}`,
           attributes: {
             locale: localizedChallenge.locale,
-            geography: 'Neutre',
+            geography: 'AA',
             'default-embed-url': null,
             status: localizedChallenge.status,
             instruction: localizedChallenge.instruction,
@@ -269,7 +271,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             id: `${localizedChallenge1.id}`,
             attributes: {
               locale: localizedChallenge1.locale,
-              geography: 'Neutre',
+              geography: 'AA',
               'default-embed-url': null,
               status: localizedChallenge1.status,
               instruction: localizedChallenge1.instruction,
@@ -294,7 +296,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             id: `${localizedChallenge2.id}`,
             attributes: {
               locale: localizedChallenge2.locale,
-              geography: 'Neutre',
+              geography: 'AA',
               'default-embed-url': null,
               status: localizedChallenge2.status,
               instruction: localizedChallenge2.instruction,

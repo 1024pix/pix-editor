@@ -26,12 +26,13 @@ const nonStandardCountries = [
 
 export function list() {
   const countries = [...standardCountries, ...nonStandardCountries];
+  const countryList = countries.map((country) => toDomain(country));
 
-  return countries.map((country) => toDomain(country));
+  return countryList.sort((a, b) => a.name.localeCompare(b.name));
 };
 
 function toDomain({ code, name }) {
-  return new Country({ code, name });
+  return new Country({ id: code, code, name });
 }
 
 export function getCountryCode(name) {
@@ -40,15 +41,6 @@ export function getCountryCode(name) {
 
   const nonStandardCountry = findByNameComparison(nonStandardCountries, name);
   return nonStandardCountry?.code ?? null;
-}
-
-export function getCountryName(code) {
-  const countryFound = [
-    ...standardCountries,
-    ...nonStandardCountries
-  ].find((standardCountry) => collator.compare(standardCountry.code, code) === 0);
-
-  return countryFound?.name ?? 'Neutre';
 }
 
 const collator = new Intl.Collator(NAME_LOCALE, {

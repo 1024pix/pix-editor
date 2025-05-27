@@ -11,7 +11,7 @@ export function buildLocalizedChallenge({
   isAwarenessChallenge = false,
   toRephrase = false,
   status = null,
-  geography = null,
+  geography = 'AA',
   urlsToConsult = null,
   hasEmbedInternalValidation = false,
   noValidationNeeded = false,
