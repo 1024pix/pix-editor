@@ -135,14 +135,15 @@
     @edition={{@edition}}
     @model={{@challenge}}
     @modelField="urlsToConsult"
-    @hideTextButton="Supprimer les URLs à consulter"
-    @displayTextButton="Ajouter des URLs à consulter"
-    @confirmText="URLs à consulter"
+    @hideTextButton="Supprimer des URLs nécessaires à la résolution de l'épreuve"
+    @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
+    @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
     @displayField={{@displayUrlsToConsultField}}
     @setDisplayField={{@setDisplayUrlsToConsultField}}
+    @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont communiquées ni dans la consigne ni dans les propositions."
   >
     <Field::Textarea
-      @title="URLs externes à consulter"
+      @title="URLs externes nécessaires à la résolution de l'épreuve"
       @value={{@urlsToConsult}}
       @edition={{@edition}}
       @change={{@setUrlsToConsult}}

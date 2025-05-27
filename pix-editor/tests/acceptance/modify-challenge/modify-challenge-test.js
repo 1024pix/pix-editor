@@ -94,8 +94,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('@trululu2');
       await clickByText('Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs à consulter');
-      await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
@@ -147,8 +147,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Déclinaisons >>');
       await clickByText('Cliquer sur instructions de la décli pour interagir avec');
       await click('[data-test-modify-challenge-button="recChallenge2"]');
-      await clickByText('Ajouter des URLs à consulter');
-      await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       assert.dom(find('[data-test-accessibility1-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-accessibility2-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-spoil-challenge-id="recChallenge2"]')).doesNotExist();
@@ -221,8 +221,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('1 titre compétence');
       await clickByText('@trululu2');
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs à consulter');
-      await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       await clickByText('Sans validation (Pix Junior)');
       await clickByText('Validation par l\'embed (Pix Junior)');
       assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();
@@ -255,9 +255,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
 
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs à consulter');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
 
-      await fillByLabel('URLs externes à consulter', 'https://mon-url.com\n mon-autre-url.com');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\n mon-autre-url.com');
 
       // then
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
@@ -330,8 +330,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('@trululu2');
       await clickByText('Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs à consulter');
-      await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       await clickByText('Sans validation (Pix Junior)');
       await clickByText('Validation par l\'embed (Pix Junior)');
       assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();

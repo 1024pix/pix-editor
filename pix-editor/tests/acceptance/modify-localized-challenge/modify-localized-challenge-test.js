@@ -58,8 +58,8 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     assert.dom('[data-test-localized-challenge-urls-to-consult]').doesNotExist();
 
     await clickByText('Modifier');
-    await clickByText('Ajouter des URLs à consulter');
-    await fillByLabel('URLs externes à consulter', 'https://mon-url.com\n mon-autre-url.com');
+    await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+    await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\n mon-autre-url.com');
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
