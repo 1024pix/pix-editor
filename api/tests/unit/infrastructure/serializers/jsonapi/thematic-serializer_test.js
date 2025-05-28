@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
-import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/thematic-serializer.js';
+import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/thematic-serializer.js';
+import { Thematic } from '../../../../../lib/domain/models/Thematic.js';
 
 describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
   describe('#serialize', () => {
-    it('should serialize a thematic', () => {
+    it('serializes a thematic', () => {
       // given
       const thematic = domainBuilder.buildThematic();
 
@@ -40,6 +41,48 @@ describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
           },
         },
       });
+    });
+  });
+
+  describe('#deserialize', () => {
+    it('deserializes a thematic', async () => {
+      // given
+      const id = 'recThematic1';
+      const attributes = {
+        'name': 'Nom de la thématique',
+        'name-en-us': 'Thematic’s name',
+        'index': 2,
+      };
+      const relationships = {
+        competence: {
+          data: {
+            type: 'competences',
+            id: 'recCompetence1',
+          },
+        },
+      };
+      const payload = {
+        data: {
+          type: 'themes',
+          id,
+          attributes,
+          relationships,
+        },
+      };
+
+      // when
+      const deserializedThematic = await deserialize(payload);
+
+      // then
+      expect(deserializedThematic).toStrictEqual(new Thematic({
+        airtableId: id,
+        name_i18n: {
+          fr: attributes.name,
+          en: attributes['name-en-us'],
+        },
+        index: 2,
+        competenceAirtableId: relationships.competence.data.id,
+      }));
     });
   });
 });

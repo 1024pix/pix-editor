@@ -1,6 +1,8 @@
 import Jsonapi from 'jsonapi-serializer';
 
-const { Serializer } = Jsonapi;
+import { Thematic } from '../../../domain/models/index.js';
+
+const { Serializer, Deserializer } = Jsonapi;
 
 const serializer = new Serializer('theme', {
   attributes: [
@@ -42,4 +44,36 @@ const serializer = new Serializer('theme', {
 
 export function serialize(thematics) {
   return serializer.serialize(thematics);
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+  competences: {
+    valueForRelationship({ id }) {
+      return id;
+    },
+  },
+  transform({
+    id,
+    pixId,
+    name,
+    nameEnUs,
+    competence: competenceAirtableId,
+    ...thematic
+  }) {
+    return new Thematic({
+      ...thematic,
+      airtableId: id,
+      id: pixId,
+      name_i18n: {
+        fr: name,
+        en: nameEnUs,
+      },
+      competenceAirtableId,
+    });
+  },
+});
+
+export function deserialize(thematics) {
+  return deserializer.deserialize(thematics);
 }
