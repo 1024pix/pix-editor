@@ -92,6 +92,42 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/thematics/{thematicAirtableId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            thematicAirtableId: Types.thematicId(),
+          }),
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().required().equal('themes'),
+              id: Types.thematicId().required(),
+              attributes: Joi.object({
+                'name': Joi.string().allow(null),
+                'name-en-us': Joi.string().allow(null),
+                'index': Joi.number().allow(null),
+              }).unknown(true),
+              relationships: Joi.object({
+                'competence': Types.competenceRelationship(),
+                'tubes': Types.tubesRelationship(),
+              }),
+            }),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function() {
+          try {
+            return {};
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 

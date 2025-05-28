@@ -474,4 +474,161 @@ describe('Application | Route | Thematics', () => {
       ]);
     });
   });
+
+  describe('PATCH /api/thematics/{thematicAirtableId}', async () => {
+    let airtableUpdateThematicScope, airtableThematicScope, pixApiCacheScope;
+
+    beforeEach(async () => {
+      const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+        id: 'thematic1',
+        airtableId: 'recThematic1',
+        index: 1,
+        competenceAirtableId: 'recCompetence1',
+        tubeAirtableIds: ['recTube1', 'recTube2'],
+      }));
+
+      airtableThematicScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Thematiques/recThematic1')
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableThematic);
+
+      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'fr', value: 'Première thématique' });
+      databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'en', value: 'First thematic' });
+
+      await databaseBuilder.commit();
+
+      const updatedAirtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+        id: 'thematic1',
+        airtableId: 'recThematic1',
+        index: 2,
+        competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
+        tubeAirtableIds: ['recTube1', 'recTube2'],
+        tubeIds: ['tube1', 'tube2'],
+      }));
+
+      airtableUpdateThematicScope = nock('https://api.airtable.com')
+        .patch('/v0/airtableBaseValue/Thematiques/', {
+          records: [{
+            fields: {
+              'id persistant': 'thematic1',
+              'Index': 2,
+              'Competence': ['recCompetence1'],
+            },
+            id: 'recThematic1',
+          }],
+        })
+        .query({})
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [updatedAirtableThematic] });
+
+      const pixApiToken = 'secret';
+      nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': pixApiToken });
+      pixApiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/thematics/thematic1', {
+          id: 'thematic1',
+          name_i18n: {
+            fr: '1ère thématique',
+            en: '1st thematic',
+          },
+          index: 2,
+          competenceId: 'competence1',
+          tubeIds: ['tube1', 'tube2'],
+        })
+        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+        .reply(200);
+    });
+
+    it.fails('should respond with status 201 and created thematic', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/thematics/recThematic1',
+        payload: {
+          data: {
+            type: 'themes',
+            id: 'recThematic1',
+            attributes: {
+              'pix-id': 'thematic1',
+              'name': '1ère thématique',
+              'name-en-us': '1st thematic',
+              index: 2,
+            },
+            relationships: {
+              'competence': {
+                data: {
+                  type: 'competences',
+                  id: 'recCompetence1',
+                },
+              },
+              'tubes': {
+                data: [
+                  {
+                    type: 'tubes',
+                    id: 'recTube1',
+                  },
+                  {
+                    type: 'tubes',
+                    id: 'recTube2',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual({
+        data: {
+          type: 'themes',
+          id: 'recThematic1',
+          attributes: {
+            'pix-id': 'thematic1',
+            'name': '1ère thématique',
+            'name-en-us': '1st thematic',
+            index: 2,
+          },
+          relationships: {
+            'competence': {
+              data: {
+                type: 'competences',
+                id: 'recCompetence1',
+              },
+            },
+            'tubes': {
+              data: [
+                {
+                  type: 'tubes',
+                  id: 'recTube1',
+                },
+                {
+                  type: 'tubes',
+                  id: 'recTube2',
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      expect(airtableUpdateThematicScope.isDone()).toBe(true);
+      expect(airtableThematicScope.isDone()).toBe(true);
+      expect(pixApiCacheScope.isDone()).toBe(true);
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'thematic.thematic1.name', locale: 'en', value: '1st thematic' },
+        { key: 'thematic.thematic1.name', locale: 'fr', value: '1ère thématique' },
+      ]);
+    });
+  });
 });
