@@ -177,6 +177,54 @@ describe('Integration | Repository | thematic-repository', () => {
     });
   });
 
+  describe('#listByCompetenceAirtableId', () => {
+    it('should retrieve all thematics by competence id', async () => {
+      // given
+      const thematic = {
+        id: 'thematic1',
+        airtableId: 'recThematic1',
+        name_i18n: {
+          fr: 'Première thématique',
+          en: 'First thematic',
+        },
+        index: 1,
+        competenceId: 'competence1',
+        competenceAirtableId: 'recCompetence1',
+        tubeIds: ['tube1', 'tube2'],
+        tubeAirtableIds: ['recTube1', 'recTube2'],
+      };
+
+      const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
+      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
+        new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+      ]);
+
+      databaseBuilder.factory.buildTranslation({
+        key: `thematic.${thematic.id}.name`,
+        locale: 'fr',
+        value: thematic.name_i18n.fr,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `thematic.${thematic.id}.name`,
+        locale: 'en',
+        value: thematic.name_i18n.en,
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const thematics = await thematicRepository.listByCompetenceAirtableId(thematic.competenceAirtableId);
+
+      // then
+      expect(thematics).toStrictEqual([
+        domainBuilder.buildThematic(thematic),
+      ]);
+      expect(findRecordsSpy).toHaveBeenCalledWith(thematicDatasource.tableName, {
+        filterByFormula: 'Competence = "recCompetence1"',
+        fields: thematicDatasource.usedFields,
+      });
+    });
+  });
+
   describe('#getMany', () => {
     it('should return corresponding thematics', async () => {
       const thematic2 = airtableBuilder.factory.buildThematic({

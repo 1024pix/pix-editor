@@ -48,4 +48,13 @@ export const thematicDatasource = datasource.extend({
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },
+
+  async listByCompetenceAirtableId(competenceAirtableId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `Competence = ${stringValue(competenceAirtableId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 });

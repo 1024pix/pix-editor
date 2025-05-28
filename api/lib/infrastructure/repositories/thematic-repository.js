@@ -47,6 +47,13 @@ export async function listByCompetenceId(competenceId) {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function listByCompetenceAirtableId(competenceAirtableId) {
+  const datasourceThematics = await thematicDatasource.listByCompetenceAirtableId(competenceAirtableId);
+  if (!datasourceThematics) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
+  return toDomainList(datasourceThematics, translations);
+}
+
 export async function create(thematic) {
   thematic.id = idGenerator.generateNewId('thematic');
   const createdThematicDTO = await thematicDatasource.create(thematic);
