@@ -1505,10 +1505,8 @@ describe('Application | Route | Skills', () => {
     let skillPayload;
     let airtableSkill;
     let skillDataObject;
-    let user;
 
     beforeEach(async function() {
-      user = databaseBuilder.factory.buildAdminUser();
       const skillAttributes = {
         'description': 'une nouvelle description',
         'description-status': Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
@@ -1657,7 +1655,7 @@ describe('Application | Route | Skills', () => {
       const response = await server.inject({
         method: 'PATCH',
         url: '/api/skills/skillAirtableId',
-        headers: generateAuthorizationHeader(user),
+        headers: generateAuthorizationHeader(editorUser),
         payload: skillPayload,
       });
 
@@ -1694,7 +1692,7 @@ describe('Application | Route | Skills', () => {
         const response = await server.inject({
           method: 'PATCH',
           url: '/api/skills/skillAirtableId',
-          headers: generateAuthorizationHeader(user),
+          headers: generateAuthorizationHeader(editorUser),
           payload: skillPayload,
         });
 
