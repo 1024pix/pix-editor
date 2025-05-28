@@ -11,25 +11,25 @@ export async function createAttachment({
   logger,
   Sentry,
 }) {
-  if (attachmentCreationCommand.localizedChallengeId) {
-    const localizedChallenge = await localizedChallengeRepository.get({ id: attachmentCreationCommand.localizedChallengeId });
-    attachmentCreationCommand.challengeId = localizedChallenge.challengeId;
-  } else {
-    attachmentCreationCommand.localizedChallengeId = attachmentCreationCommand.challengeId;
-  }
-  const attachmentToCreate = Attachment.buildFromCreationCommand(attachmentCreationCommand);
+  const localizedChallengeId = attachmentCreationCommand.localizedChallengeId ?? attachmentCreationCommand.challengeId;
+  const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
+  const attachmentToCreate = new Attachment({
+    filename: attachmentCreationCommand.filename,
+    size: attachmentCreationCommand.size,
+    url: attachmentCreationCommand.url,
+    mimeType: attachmentCreationCommand.mimeType,
+    type: attachmentCreationCommand.type,
+    localizedChallengeId: localizedChallenge.id,
+    challengeId: localizedChallenge.challengeId,
+  });
   const createdAttachment = await attachmentRepository.create(attachmentToCreate);
 
   try {
     const primaryChallenge = await challengeRepository.get(createdAttachment.challengeId);
-    const allChallenges = [
-      primaryChallenge,
-      ...primaryChallenge.alternativeLocales.map((locale) => primaryChallenge.translate(locale))
-    ];
-    const challengeForAttachment = allChallenges.find((challenge) => challenge.id === createdAttachment.localizedChallengeId);
     const attachments = await attachmentRepository.listByLocalizedChallengeIds([createdAttachment.localizedChallengeId]);
+    const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
     const transformChallenge = createChallengeTransformer({ attachments });
-    const challenge = transformChallenge(challengeForAttachment);
+    const challenge = transformChallenge(challengeToTransform);
     await updatedRecordNotifier.notify({
       pixApiClient,
       model: 'challenges',

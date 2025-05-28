@@ -122,9 +122,6 @@ export function register(server) {
           try {
             const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
             const updatedAttachment = await usecases.updateAttachment({ attachmentUpdateCommand, attachmentRepository, localizedChallengeRepository });
-            if (!updatedAttachment) {
-              return Boom.notFound();
-            }
             return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
           } catch (err) {
             logger.error(err);
@@ -183,9 +180,6 @@ export function register(server) {
           try {
             const id = request.params.attachmentId;
             const attachment = await usecases.findAttachment({ id, attachmentRepository });
-            if (!attachment) {
-              return Boom.notFound();
-            }
             return h.response(attachmentSerializer.serialize(attachment));
           } catch (err) {
             logger.error(err);

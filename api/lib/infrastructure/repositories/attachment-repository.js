@@ -108,7 +108,7 @@ export async function update(attachment) {
   return updatedAttachment;
 }
 
-export async function destroy(attachmentId) {
+export async function remove(attachmentId) {
   await attachmentDatasource.delete([attachmentId]);
   await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
 }

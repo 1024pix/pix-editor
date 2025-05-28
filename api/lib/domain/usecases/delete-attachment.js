@@ -1,3 +1,5 @@
+import { NotFoundError } from '../errors.js';
+
 export async function deleteAttachment({
   attachmentId,
   attachmentRepository,
@@ -9,7 +11,9 @@ export async function deleteAttachment({
   Sentry,
 }) {
   const attachmentToDelete = await attachmentRepository.get(attachmentId);
-  await attachmentRepository.destroy(attachmentId);
+  if (!attachmentToDelete)
+    throw new NotFoundError(`Attachment d'id ${attachmentId} n'existe pas`);
+  await attachmentRepository.remove(attachmentId);
   try {
     const primaryChallenge = await challengeRepository.get(attachmentToDelete.challengeId);
     const allChallenges = [

@@ -1,6 +1,9 @@
+import { NotFoundError } from '../errors.js';
+
 export async function updateAttachment({ attachmentUpdateCommand, attachmentRepository }) {
   const attachment = await attachmentRepository.get(attachmentUpdateCommand.id);
-  if (!attachment) return null;
+  if (!attachment)
+    throw new NotFoundError(`Attachment d'id ${attachmentUpdateCommand.id} n'existe pas`);
   attachment.update(attachmentUpdateCommand);
   return attachmentRepository.update(attachment);
 }

@@ -932,7 +932,7 @@ describe('Integration | Repository | attachment-repository', () => {
     });
   });
 
-  describe('#delete', () => {
+  describe('#remove', () => {
     it('delete the attachment on Airtable and localized challenge attachment', async () => {
       // given
       const attachmentId = 'attachmentId';
@@ -954,7 +954,7 @@ describe('Integration | Repository | attachment-repository', () => {
       });
 
       // when
-      await attachmentRepository.destroy(attachmentId);
+      await attachmentRepository.remove(attachmentId);
 
       // then
       const localizedChallengeAttachmentsLeft = await knex('localized_challenges-attachments')

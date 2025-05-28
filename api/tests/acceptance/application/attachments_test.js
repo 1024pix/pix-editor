@@ -224,7 +224,7 @@ describe('Acceptance | Route | attachments', () => {
             'mime-type': validPayload.data.attributes['mime-type'],
             'filename': validPayload.data.attributes.filename,
             'localized-challenge-id': validPayload.data.relationships['localized-challenge'].data.id,
-            alt: null,
+            'alt': null,
           },
           relationships: {
             'localized-challenge': {
@@ -415,11 +415,11 @@ describe('Acceptance | Route | attachments', () => {
           type: 'attachments',
           id: 'recABC123',
           attributes: {
-            'url': 'url avant',
-            'size': 'size avant',
-            'type': 'type avant',
+            url: 'url avant',
+            size: 'size avant',
+            type: 'type avant',
             'mime-type': 'mimeType avant',
-            'filename': 'filename APRES',
+            filename: 'filename APRES',
             'localized-challenge-id': 'challenge123ES',
             alt: null,
           },
@@ -473,6 +473,27 @@ describe('Acceptance | Route | attachments', () => {
 
         // then
         expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('when attachment does not exist', function() {
+      it('should return a 404 not found', async function() {
+        // given
+        const airtableGetAttachmentScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+        const server = await createServer();
+        // when
+        const response = await server.inject({
+          method: 'DELETE',
+          url: '/api/attachments/recAttachmentId',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+        // then
+        expect(response.statusCode).toBe(404);
+        expect(airtableGetAttachmentScope.isDone()).toBe(true);
       });
     });
 

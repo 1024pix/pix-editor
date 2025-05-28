@@ -30,18 +30,6 @@ export class Attachment {
     };
   }
 
-  static buildFromCreationCommand({ filename, size, url, mimeType, type, localizedChallengeId, challengeId }) {
-    return new Attachment({
-      filename,
-      size,
-      url,
-      mimeType,
-      type,
-      localizedChallengeId,
-      challengeId,
-    });
-  }
-
   update(updateCommand) {
     this.filename = updateCommand.filename;
   }
