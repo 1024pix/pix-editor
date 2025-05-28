@@ -399,4 +399,59 @@ describe('Integration | Repository | thematic-repository', () => {
       });
     });
   });
+
+  describe('#update', () => {
+    it('should save thematic to Airtable and translations to DB', async () => {
+      // given
+      const thematicUpdates = {
+        airtableId: 'recThematic1',
+        id: 'thematic1',
+        name_i18n: {
+          fr: '1ère thématique',
+          en: '1st thematic',
+        },
+        index: 2,
+        competenceAirtableId: 'recCompetence1',
+      };
+
+      const expectedThematic = {
+        ...thematicUpdates,
+        competenceId: 'competence1',
+        tubeAirtableIds: ['recTube1', 'recTube2'],
+        tubeIds: ['tube1', 'tube2'],
+      };
+
+      const airtableThematic = airtableBuilder.factory.buildThematic(expectedThematic);
+      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
+        new Airtable.Record('Thematiques', airtableThematic.id, airtableThematic),
+      );
+
+      databaseBuilder.factory.buildTranslation({ key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: 'First thematic' });
+      databaseBuilder.factory.buildTranslation({ key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: 'Première thématique' });
+      await databaseBuilder.commit();
+
+      const thematic = domainBuilder.buildThematic(thematicUpdates);
+
+      // when
+      const updatedThematic = await thematicRepository.update(thematic);
+
+      // then
+      expect(updatedThematic).toStrictEqual(domainBuilder.buildThematic(expectedThematic));
+      expect(updateRecordSpy).toHaveBeenCalledWith(
+        'Thematiques',
+        {
+          id: thematicUpdates.airtableId,
+          fields: {
+            'id persistant': thematicUpdates.id,
+            Competence: [thematicUpdates.competenceAirtableId],
+            Index: thematicUpdates.index,
+          },
+        },
+      );
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+        { key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: thematicUpdates.name_i18n.en },
+        { key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: thematicUpdates.name_i18n.fr },
+      ]);
+    });
+  });
 });

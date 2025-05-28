@@ -31,13 +31,15 @@ export const thematicDatasource = datasource.extend({
   },
 
   toAirTableObject(model) {
-    return {
+    const airtableObject = {
       fields: {
         'id persistant': model.id,
         Competence: [model.competenceAirtableId],
         Index: model.index,
       },
     };
+    if (model.airtableId) airtableObject.id = model.airtableId;
+    return airtableObject;
   },
 
   async listByCompetenceId(competenceId) {

@@ -4,6 +4,7 @@ import * as translationRepository from './translation-repository.js';
 import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'thematic';
 
@@ -60,6 +61,20 @@ export async function create(thematic) {
   const translations = thematicTranslations.extractFromDomainObject(thematic);
   await translationRepository.save({ translations });
   return toDomain(createdThematicDTO, translations);
+}
+
+export async function update(thematic) {
+  return knex.transaction(async (transaction) => {
+    const updatedThematicDto = await thematicDatasource.update(thematic);
+    const translations = thematicTranslations.extractFromDomainObject(thematic);
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: `${thematicTranslations.prefix}${thematic.id}.`,
+      locales: ['fr', 'en'],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
+    return toDomain(updatedThematicDto, translations);
+  });
 }
 
 function toDomainList(datasourceThematics, translations) {
