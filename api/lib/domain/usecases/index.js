@@ -6,6 +6,7 @@ export * from './create-competence.js';
 export * from './create-framework.js';
 export * from './create-mission.js';
 export * from './create-skill.js';
+export * from './create-thematic.js';
 export * from './delete-attachment.js';
 export * from './delete-unmentioned-keys-after-upload.js';
 export * from './download-translation-from-phrase.js';

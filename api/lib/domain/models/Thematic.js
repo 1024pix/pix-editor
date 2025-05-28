@@ -18,4 +18,11 @@ export class Thematic {
     this.tubeIds = tubeIds;
     this.tubeAirtableIds = tubeAirtableIds;
   }
+
+  /**
+   * @param {Thematic[]} competenceThematics
+   */
+  prepareForCreation(competenceThematics) {
+    this.index = competenceThematics.length;
+  }
 }
