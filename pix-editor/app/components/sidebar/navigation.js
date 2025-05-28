@@ -31,9 +31,6 @@ export default class SidebarNavigationComponent extends Component {
   }
 
   get selectedFramework() {
-    if (this._selectedFramework) {
-      return this._selectedFramework;
-    }
     return this.frameworkList.find((item) => {
       if (this.currentData.getFramework()) {
         return item.label === this.currentData.getFramework().name;
