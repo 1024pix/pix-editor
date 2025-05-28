@@ -543,7 +543,7 @@ describe('Application | Route | Thematics', () => {
         .reply(200);
     });
 
-    it.fails('should respond with status 201 and created thematic', async () => {
+    it('should respond with status 201 and created thematic', async () => {
       // given
       const server = await createServer();
 
@@ -568,7 +568,7 @@ describe('Application | Route | Thematics', () => {
                   id: 'recCompetence1',
                 },
               },
-              'tubes': {
+              'raw-tubes': {
                 data: [
                   {
                     type: 'tubes',
@@ -605,7 +605,7 @@ describe('Application | Route | Thematics', () => {
                 id: 'recCompetence1',
               },
             },
-            'tubes': {
+            'raw-tubes': {
               data: [
                 {
                   type: 'tubes',

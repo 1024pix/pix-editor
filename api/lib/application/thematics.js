@@ -7,7 +7,7 @@ import * as securityPreHandlers from './security-pre-handlers.js';
 import { thematicRepository } from '../infrastructure/repositories/index.js';
 import { thematicSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
-import { createThematic, listThematics } from '../domain/usecases/index.js';
+import { createThematic, listThematics, updateThematic } from '../domain/usecases/index.js';
 import { DomainError } from '../domain/errors.js';
 
 export function register(server) {
@@ -111,16 +111,20 @@ export function register(server) {
               }).unknown(true),
               relationships: Joi.object({
                 'competence': Types.competenceRelationship(),
-                'tubes': Types.tubesRelationship(),
+                'raw-tubes': Types.tubesRelationship(),
               }),
             }),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function() {
+        handler: async function(request) {
           try {
-            return {};
+            const { thematicAirtableId } = request.params;
+            const thematicUpdates = await thematicSerializer.deserialize(request.payload);
+            const updatedThematic = await updateThematic(thematicAirtableId, thematicUpdates);
+            return thematicSerializer.serialize(updatedThematic);
           } catch (err) {
+            if (err instanceof DomainError) throw err;
             logger.error(err);
             Sentry.captureException(err);
             return Boom.internal(err);
