@@ -25,4 +25,13 @@ export class Thematic {
   prepareForCreation(competenceThematics) {
     this.index = competenceThematics.length;
   }
+
+  /**
+   * @param {Thematic} thematicUpdates
+   */
+  update(thematicUpdates) {
+    this.index = thematicUpdates.index;
+    this.name_i18n.en = thematicUpdates.name_i18n.en;
+    this.name_i18n.fr = thematicUpdates.name_i18n.fr;
+  }
 }
