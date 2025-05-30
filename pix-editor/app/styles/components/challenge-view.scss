@@ -29,6 +29,34 @@
     }
   }
 
+  &-quality {
+    background: var(--pix-neutral-20);
+    border-radius: var(--pix-spacing-2x);
+    padding: var(--pix-spacing-4x);
+
+    fieldset:not(:last-child) {
+      margin-bottom: var(--pix-spacing-8x);
+    }
+
+    legend {
+      font-weight: var(--pix-font-bold);
+      color: var(--pix-neutral-500);
+      margin-bottom: var(--pix-spacing-2x);
+    }
+
+    input.pix-input__input,
+    input.pix-checkbox__input:not(:checked){
+      background: var(--pix-neutral-0);
+    }
+
+    &__certification {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--pix-spacing-6x);
+    }
+  }
+
   &__tolerance {
     display: flex;
     align-items: center;
