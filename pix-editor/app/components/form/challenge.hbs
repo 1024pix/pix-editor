@@ -1,4 +1,4 @@
-<form action="" class="ui form">
+<form action="" class="ui form" class="challenge-form">
   <Field::Mde
     @title="Consigne"
     @value={{@challenge.instruction}}
@@ -273,15 +273,16 @@
         />
       </div>
       <div class="field">
-        <Field::Select
-          @title="Géographie"
-          @value={{@challenge.geography}}
-          @edition={{@edition}}
-          @multiple={{false}}
-          @defaultValue="Neutre"
-          @options={{this.options.geography}}
-          @setValue={{fn (mut @challenge.geography)}}
-        />
+        <PixSelect
+          @id="challenge-select-geography"
+          @placeholder="Géographie"
+          @onChange={{fn (mut @challenge.geography)}}
+          @value={{this.challengeGeographyValue}}
+          @options={{this.countryOptionList}}
+          @disabled={{not @edition}}
+        >
+          <:label>Géographie</:label>
+        </PixSelect>
       </div>
     </div>
     {{#if @challenge.isPrototype}}

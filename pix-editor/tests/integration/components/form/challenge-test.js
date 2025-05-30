@@ -11,12 +11,14 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should display expected fields if challenge type is `QROC`', async function(assert) {
     // Given
+    const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ type: 'QROC', isTextBased: true, isPrototype: true });
+    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     // Then
     ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
@@ -26,12 +28,14 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
     // Given
+    const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ autoReply: true, isTextBased: true, isPrototype: true });
+    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     // Then
     ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
@@ -41,16 +45,18 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
     // Given
+    const countries = [{ FR: 'France' }];
     const store = this.owner.lookup('service:store');
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
     });
+    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
     await click(findAll('.ember-power-select-option')[1]);
@@ -66,16 +72,18 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should display autochecked checkbox if challenge type is `QCU`', async function(assert) {
     // Given
+    const countries = [{ FR: 'France' }];
     const store = this.owner.lookup('service:store');
     const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
     });
+    this.set('countries', countries);
     this.set('challengeData', challengeData);
     this.set('checkEmbedURL', () => {});
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     await click(find('[data-test-select-type] .ember-basic-dropdown-trigger'));
     await click(findAll('.ember-power-select-option')[0]);

@@ -43,7 +43,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         focusable: false,
         responsive: 'responsive',
         locales: 'languages',
-        geography: 'geography',
+        geography: 'FR',
         files: [],
         isAwarenessChallenge: true,
         requireGafamWebsiteAccess: true,
