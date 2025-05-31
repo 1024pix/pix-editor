@@ -36,6 +36,7 @@ export async function listByFrameworkId(frameworkId) {
 }
 
 export async function getByAirtableId(areaAirtableId) {
+  console.log(areaAirtableId);
   const areaDTO = await areaDatasource.find(areaAirtableId);
   if (!areaDTO) return null;
   const translations = await translationRepository.listByEntity(model, areaDTO.id);

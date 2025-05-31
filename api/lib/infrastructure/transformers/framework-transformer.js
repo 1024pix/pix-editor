@@ -1,7 +1,15 @@
-export function filterFrameworkFields({ id, name }) {
-  return { id, name };
+import { FrameworkForRelease } from '../../domain/models/release/index.js';
+
+export function transformForRelease(framework) {
+  return new FrameworkForRelease({
+    id: framework.id,
+    name: framework.name,
+  });
 }
 
-export function filterFrameworksFields(frameworks) {
-  return frameworks.map(filterFrameworkFields);
+export function transformForReplication(framework) {
+  return {
+    id: framework.id,
+    name: framework.name,
+  };
 }

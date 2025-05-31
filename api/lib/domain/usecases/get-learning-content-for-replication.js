@@ -73,10 +73,10 @@ export async function getLearningContentForReplication() {
     entityId: translation.entityId,
     sourceEntityId: null,
   }));
-  const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
-  const transformedAreas = areaTransformer.filterAreasFields(areas);
-  const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
-  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+  const frameworksForReplication = frameworks.map(frameworkTransformer.transformForReplication);
+  const areasForReplication = areas.map(areaTransformer.transformForReplication);
+  const competencesForReplication = competences.map(competenceTransformer.transformForReplication);
+  const thematicsForReplication = thematics.map(thematicTransformer.transformForReplication);
   const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
 
   const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
@@ -118,10 +118,10 @@ export async function getLearningContentForReplication() {
 
   await setImmediatePromise();
   return {
-    frameworks: transformedFrameworks,
-    areas: transformedAreas,
-    competences: transformedCompetences,
-    thematics: transformedThematics,
+    frameworks: frameworksForReplication,
+    areas: areasForReplication,
+    competences: competencesForReplication,
+    thematics: thematicsForReplication,
     tubes: transformedTubes,
     skills,
     challenges: allTranslatedChallenges,

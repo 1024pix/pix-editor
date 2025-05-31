@@ -1,20 +1,52 @@
-import { describe, expect, it } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
-import { filterThematicsFields } from '../../../../lib/infrastructure/transformers/thematic-transformer.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import * as thematicTransformer from '../../../../lib/infrastructure/transformers/thematic-transformer.js';
+import { Thematic } from '../../../../lib/domain/models/index.js';
+import { ThematicForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Infrastructure | thematic-transformer', function() {
+  let thematic;
+  beforeEach(function() {
+    thematic = new Thematic({
+      id: 'thematicId',
+      name_i18n: { fr: 'thematicName fr', en: 'thematicName en' },
+      index: 1,
+      airtableId: 'thematicAirtableId',
+      competenceId: 'competenceId',
+      competenceAirtableId: 'competenceAirtableId',
+      tubeIds: ['tubeId1', 'tubeId2'],
+    });
+  });
 
-  it('should only keep useful fields', function() {
-    const thematics = [domainBuilder.buildThematic()];
+  describe('transformForRelease', function() {
+    it('should transform a Thematic model into a ThematicForRelease model', function() {
+      // when
+      const thematicForRelease = thematicTransformer.transformForRelease(thematic);
 
-    const filteredThematics = filterThematicsFields(thematics);
+      // then
+      expect(thematicForRelease).to.be.instanceOf(ThematicForRelease);
+      expect(thematicForRelease).toStrictEqual(new ThematicForRelease({
+        id: 'thematicId',
+        name_i18n: { fr: 'thematicName fr', en: 'thematicName en' },
+        index: 1,
+        competenceId: 'competenceId',
+        tubeIds: ['tubeId1', 'tubeId2'],
+      }));
+    });
+  });
 
-    expect(filteredThematics.length).to.equal(1);
-    expect(filteredThematics[0].id).to.exist;
-    expect(filteredThematics[0].name_i18n).to.exist;
-    expect(filteredThematics[0].index).to.exist;
-    expect(filteredThematics[0].competenceId).to.exist;
-    expect(filteredThematics[0].tubeIds).to.exist;
-    expect(filteredThematics[0].airtableId).to.not.exist;
+  describe('transformForReplication', function() {
+    it('should transform a Thematic model into a DTO for replication', function() {
+      // when
+      const thematicForReplicationDTO = thematicTransformer.transformForReplication(thematic);
+
+      // then
+      expect(thematicForReplicationDTO).toStrictEqual({
+        id: 'thematicId',
+        name_i18n: { fr: 'thematicName fr', en: 'thematicName en' },
+        index: 1,
+        competenceId: 'competenceId',
+        tubeIds: ['tubeId1', 'tubeId2'],
+      });
+    });
   });
 });

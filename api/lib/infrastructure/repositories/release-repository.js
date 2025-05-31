@@ -119,6 +119,10 @@ async function _getCurrentContent() {
     getStaticCourses(),
     missionRepository.list(),
   ]);
+  const frameworksForRelease = frameworks.map(frameworkTransformer.transformForRelease);
+  const areasForRelease = areas.map(areaTransformer.transformForRelease);
+  const competencesForRelease = competences.map(competenceTransformer.transformForRelease);
+  const thematicsForRelease = thematics.map(thematicTransformer.transformForRelease);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
@@ -127,20 +131,16 @@ async function _getCurrentContent() {
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
-  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
-  const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
-  const transformedAreas = areaTransformer.filterAreasFields(areas);
 
-  const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
-    frameworks: transformedFrameworks,
-    areas: transformedAreas,
-    competences: filteredCompetences,
-    thematics: transformedThematics,
+    frameworks: frameworksForRelease,
+    areas: areasForRelease,
+    competences: competencesForRelease,
+    thematics: thematicsForRelease,
     tubes: transformedTubes,
     skills: filteredSkills,
     challenges: transformedChallenges,

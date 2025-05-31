@@ -2,11 +2,18 @@ import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { areaRepository, competenceRepository, skillRepository, thematicRepository, tubeRepository } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer, skillTransformer, thematicTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
+import {
+  areaRepository,
+  competenceRepository,
+  skillRepository,
+  thematicRepository,
+  tubeRepository
+} from '../../infrastructure/repositories/index.js';
+import { skillTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
 import { Skill, Thematic, Tube } from '../models/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
+import * as updatePixApiCache from '../services/update-pix-api-cache.js';
 
 export async function createCompetence(competence) {
   const [area, competences] = await Promise.all([
@@ -59,16 +66,8 @@ export async function createCompetence(competence) {
 
   try {
     await Promise.all([
-      updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'competences',
-        updatedRecord: competenceTransformer.filterCompetenceFields(createdCompetence),
-      }),
-      updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'thematics',
-        updatedRecord: thematicTransformer.filterThematicFields(createdWorkbenchThematic),
-      }),
+      updatePixApiCache.updateCompetence({ competence: createdCompetence, shouldRefreshRelationships: true }),
+      updatePixApiCache.updateThematic({ thematic: createdWorkbenchThematic }),
       updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tubes',

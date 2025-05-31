@@ -17,6 +17,8 @@ const _DatasourcePrototype = {
 
   async find(recordId) {
     try {
+      console.log(this.tableName);
+      console.log(recordId);
       const airtableRecord = await airtable.findRecord(this.tableName, recordId);
       return this.fromAirTableObject(airtableRecord);
     } catch (err) {

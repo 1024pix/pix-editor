@@ -81,6 +81,7 @@ export async function register(server) {
             const createdCompetence = await usecases.createCompetence(competence);
             return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
           } catch (err) {
+            console.log(err);
             logger.error(err);
             Sentry.captureException(err);
             return Boom.internal(err);
