@@ -29,11 +29,8 @@ const idField = 'fields.id persistant';
 const thematicTranslationUtils = buildTranslationsUtils({ locales, fields, localizedFields, prefix, idField });
 
 export const {
-  extractFromProxyObject,
   extractFromDomainObject,
-  airtableObjectToProxyObject,
   extractFromReleaseObject,
-  proxyObjectToAirtableObject,
   toDomain,
   prefixFor,
 } = thematicTranslationUtils;
