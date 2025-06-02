@@ -8,6 +8,7 @@ export * from './LocalizedChallenge.js';
 export * from './Mission.js';
 export * from './Skill.js';
 export * from './StaticCourse.js';
+export * from './Tag.js';
 export * from './Thematic.js';
 export * from './Translation.js';
 export * from './Tube.js';

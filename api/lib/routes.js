@@ -18,6 +18,7 @@ import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
 import * as staticRoute from './application/static/index.js';
 import * as translationsRoute from './application/translations.js';
+import * as tagsRoute from './application/tags.js';
 import * as embedsRoute from './application/embeds.js';
 import * as usersRoute from './application/users.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
@@ -42,6 +43,7 @@ export const routes = [
   staticCourseTagsRoute,
   staticRoute,
   translationsRoute,
+  tagsRoute,
   embedsRoute,
   usersRoute,
   whitelistedUrlsRoute,

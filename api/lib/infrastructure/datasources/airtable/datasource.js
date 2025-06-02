@@ -41,6 +41,7 @@ const _DatasourcePrototype = {
 
   async create(model) {
     const airtableRequestBody = this.toAirTableObject(model);
+    console.log(airtableRequestBody);
     const airtableRawObject = await airtable.createRecord(this.tableName, airtableRequestBody);
     return this.fromAirTableObject(airtableRawObject);
   },

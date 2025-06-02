@@ -6,5 +6,6 @@ export * from './build-framework.js';
 export * from './build-skill.js';
 export * from './build-thematic.js';
 export * from './build-translation.js';
+export * from './build-tag.js';
 export * from './build-tube.js';
 export * from './build-tutorial.js';

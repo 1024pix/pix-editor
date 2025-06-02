@@ -11,4 +11,5 @@ export * as missionSerializer from './mission-serializer.js';
 export * as skillSerializer from './skill-serializer.js';
 export * as staticCourseSerializer from './static-course-serializer.js';
 export * as staticCourseTagSerializer from './static-course-tag-serializer.js';
+export * as tagSerializer from './tag-serializer.js';
 export * as userSerializer from './user-serializer.js';
