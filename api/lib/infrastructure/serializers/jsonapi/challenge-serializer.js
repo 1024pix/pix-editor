@@ -138,7 +138,7 @@ export function deserialize(challengeBody) {
         challengeId: challengeObject.id,
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
-        geography: challengeObject.geography,
+        geography: challengeObject.geography || 'AA',
         urlsToConsult: challengeObject.urlsToConsult,
         requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
         isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,

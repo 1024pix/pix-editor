@@ -278,8 +278,9 @@
           @placeholder="Géographie"
           @onChange={{fn (mut @challenge.geography)}}
           @value={{this.challengeGeographyValue}}
-          @options={{this.countryOptionList}}
+          @options={{@countries}}
           @disabled={{not @edition}}
+          @hideDefaultOption={{false}}
         >
           <:label>Géographie</:label>
         </PixSelect>

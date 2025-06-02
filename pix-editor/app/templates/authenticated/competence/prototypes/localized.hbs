@@ -13,99 +13,25 @@
 </Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
-    <form action="" class="ui form">
-      <Field::Illustration
-        @title="Illustration"
-        @value={{this.localizedChallenge.illustration}}
-        @edition={{this.edition}}
-        @addIllustration={{this.addIllustration}}
-        @removeIllustration={{this.removeIllustration}}
-        @display={{this.showIllustration}}
-        data-test-file-input-illustration
-      />
-      {{#if this.localizedChallenge.illustration}}
-        <Field::Textarea
-          @value={{this.localizedChallenge.illustration.alt}}
-          @title="Texte alternatif"
-          @edition={{false}}
-          @id="challenge-illustration-alt"
-        />
-      {{/if}}
-      <Field::Files
-        @title="Pièces jointes"
-        @value={{this.localizedChallenge.piecesJointes}}
-        @baseName={{this.localizedChallenge.attachmentBaseName}}
-        @addAttachment={{this.addAttachment}}
-        @edition={{this.edition}}
-        @removeAttachment={{this.removeAttachment}}
-        data-test-file-input-attachment
-      />
-      <Field::Input
-        @id="localized-challenge-embed-url"
-        @label="Embed URL"
-        @value={{this.localizedChallenge.embedURL}}
-        @edition={{this.edition}}
-        @placeholder="Url de l'embed"
-        @change={{this.checkEmbedURL}}
-      />
-      {{#if this.shouldDisplayPrimaryEmbedUrl }}
-        <div class="ui  blue message">
-         <p data-testid="default-embed-url">Embed URL auto-générée : {{this.localizedChallenge.defaultEmbedURL}}</p>
-        </div>
-      {{/if}}
-      {{#if this.invalidEmbedURL}}
-        <p class="ui red message" data-test-invalid-embed-url>
-          URL invalide :
-          {{this.invalidEmbedURL}}
-        </p>
-      {{/if}}
-      <Field::Select
-        @title="Géographie"
-        @value={{this.localizedChallenge.geography}}
-        @edition={{this.edition}}
-        @multiple={{false}}
-        @defaultValue="Neutre"
-        @options={{this.options.geography}}
-        @setValue={{fn (mut this.localizedChallenge.geography)}}
-      />
-
-      <Field::ToggleField
-        @edition={{this.edition}}
-        @model={{this.localizedChallenge}}
-        @modelField="urlsToConsult"
-        @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
-        @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
-        @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
-        @displayField={{this.displayUrlsToConsultField}}
-        @setDisplayField={{this.setDisplayUrlsToConsultField}}
-        @textToolTip="Ces URLs doit être trouvée par l’utilisateur car elle n’est pas communiquée dans la consigne ou les propositions."
-      >
-        <Field::Textarea
-          @title="URLs externes nécessaires à la résolution de l'épreuve"
-          @value={{this.urlsToConsult}}
-          @edition={{this.edition}}
-          @change={{this.setUrlsToConsult}}
-          @helpContent={{this.helpUrlsToConsult}}
-          data-test-localized-challenge-urls-to-consult
-          @id="localized-challenge-urls-to-consult"
-        />
-      </Field::ToggleField>
-      {{#if this.invalidUrlsToConsult}}
-        <p class="ui red message" data-test-invalid-urls-to-consult>
-          URLs invalides :
-          {{this.invalidUrlsToConsult}}
-        </p>
-      {{/if}}
-
-      {{#unless this.edition}}
-        <Field::Input
-          @id="localized-challenge-id"
-          @value={{this.localizedChallenge.id}}
-          @label="Id"
-          @edition={{false}}
-        />
-      {{/unless}}
-    </form>
+    <Form::LocalizedChallenge
+      @localizedChallenge={{this.localizedChallenge}}
+      @edition={{this.edition}}
+      @addIllustration={{this.addIllustration}}
+      @removeIllustration={{this.removeIllustration}}
+      @showIllustration={{this.showIllustration}}
+      @addAttachment={{this.addAttachment}}
+      @removeAttachment={{this.removeAttachment}}
+      @checkEmbedURL={{this.checkEmbedURL}}
+      @shouldDisplayPrimaryEmbedUrl={{this.shouldDisplayPrimaryEmbedUrl}}
+      @invalidEmbedURL={{this.invalidEmbedURL}}
+      @countryList={{this.countryList}}
+      @displayUrlsToConsultField={{this.displayUrlsToConsultField}}
+      @setDisplayUrlsToConsultField={{this.setDisplayUrlsToConsultField}}
+      @urlsToConsult={{this.urlsToConsult}}
+      @setUrlsToConsult={{this.setUrlsToConsult}}
+      @helpUrlsToConsult={{this.helpUrlsToConsult}}
+      @invalidUrlsToConsult={{this.invalidUrlsToConsult}}
+    />
   </div>
   <div class="ui vertical compact labeled icon menu challenge-menu">
     {{#if this.edition}}

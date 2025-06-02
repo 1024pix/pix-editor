@@ -126,13 +126,6 @@ export default class ChallengeForm extends Component {
     return this.args.challenge.geography || 'AA';
   }
 
-  get countryOptionList() {
-    return this.args.countries.map((country) => ({
-      label: country.name,
-      value: country.code,
-    }));
-  }
-
   get languages() {
     return this.options.locales.filter((locale)=> this.args.challenge.locales.includes(locale.value));
   }
