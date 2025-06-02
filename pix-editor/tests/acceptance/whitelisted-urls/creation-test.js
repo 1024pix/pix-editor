@@ -61,7 +61,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
 
     // when
     await fillByLabel('URL à ne pas analyser', 'https://example.org');
-    await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
+    await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@tèst2');
     await fillByLabel('Commentaire', 'Test de création');
     await clickByName('Ajouter');
 
