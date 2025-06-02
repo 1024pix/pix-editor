@@ -190,7 +190,7 @@ class RelatedSkillNamesField extends FormField {
 
     const hasAnyMalformedNames = relatedSkillNames.split(',')
       .filter((name) => name !== '')
-      .some((name) => !name.match(/^@[A-Za-z]+\d$/));
+      .some((name) => !name.match(/^@\p{L}+\d$/u));
     if (hasAnyMalformedNames) {
       this.state = FormField.STATES.ERROR;
       this.errorMessage = 'Les noms d\'acquis doivent être séparés par des virgules et ne peuvent pas être vides.';

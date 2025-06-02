@@ -169,7 +169,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         };
         const creationCommand2 = {
           url: 'https://www.brioche.com',
-          relatedSkillNames: '@choix1,@creux7',
+          relatedSkillNames: '@choix1, @creux7, @étÈ2001',
           comment: 'COucou',
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };

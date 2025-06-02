@@ -141,7 +141,7 @@ function isUrlValid(url) {
 }
 
 function isRelatedSkillNamesValid(relatedSkillNames) {
-  const skillsSeparatedByCommaRegex = /^(@[A-Za-z]+[0-9])(,(@[A-Za-z]+[0-9]))*/;
+  const skillsSeparatedByCommaRegex = /^(@\p{L}+[0-9])(,(@\p{L}+[0-9]))*/u;
   if (!relatedSkillNames) return true;
   return skillsSeparatedByCommaRegex.test(relatedSkillNames);
 }
