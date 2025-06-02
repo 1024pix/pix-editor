@@ -33,6 +33,10 @@ export default class ChallengeViewProduction extends Component {
     return 'secondary';
   }
 
+  get hasTimer() {
+    return !!this.args.challenge.timer;
+  }
+
   <template>
     <ChallengeViewHeader
       @challenge={{@challenge}}
@@ -144,22 +148,21 @@ export default class ChallengeViewProduction extends Component {
       >
         <:label>Type pédagogie</:label>
       </PixInput>
-      {{#if @challenge.timer}}
+      <PixCheckbox
+        @checked={{this.hasTimer}}
+        disabled
+      >
+        <:label>Timer</:label>
+      </PixCheckbox>
+      {{#if this.hasTimer}}
         <PixInput
+          class="sr-only-label"
           @value={{@challenge.timer}}
           readonly
         >
-          <:label>Timer</:label>
+          <:label>Durée du timer</:label>
         </PixInput>
-      {{else}}
-        <PixCheckbox
-          @checked="false"
-          disabled
-        >
-          <:label>Timer</:label>
-        </PixCheckbox>
       {{/if}}
-
       <PixCheckbox
         @checked={{@challenge.focusable}}
         disabled

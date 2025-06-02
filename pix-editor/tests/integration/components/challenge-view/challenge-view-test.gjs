@@ -82,7 +82,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     assert.dom(screen.getByLabelText('Hauteur')).hasValue('800');
     assert.dom(screen.getByLabelText('Titre')).hasValue('embedTitle');
     assert.dom(screen.getByLabelText('Type pédagogie')).hasValue('pedagogy');
-    assert.dom(screen.getByLabelText('Timer')).hasValue('10');
+    assert.dom(screen.getByLabelText('Timer')).isChecked();
+    assert.dom(screen.getByLabelText('Durée du timer')).hasValue('10');
     assert.dom(screen.getByLabelText('Focus')).isNotChecked();
     assert.dom(screen.getByLabelText('Langue(s)')).hasValue('languages');
     assert.dom(screen.getByLabelText('Spoil')).hasValue('spoil');
