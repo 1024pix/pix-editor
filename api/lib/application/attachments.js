@@ -34,7 +34,6 @@ export function register(server) {
                 'url': Joi.string(),
                 'mime-type': Joi.string(),
                 'type': Joi.string(),
-                'localized-challenge-id': Joi.string(),
               },
               relationships: {
                 challenge: {
@@ -99,7 +98,6 @@ export function register(server) {
                 'url': Joi.string(),
                 'mime-type': Joi.string(),
                 'type': Joi.string(),
-                'localized-challenge-id': Joi.string(),
               },
               relationships: {
                 challenge: {
