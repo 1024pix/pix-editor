@@ -1,32 +1,31 @@
-<form {{on "submit" this.applyFilters}} class="filter-whitelisted-url-form">
-  <PixFilterBanner
-    @title="Filtres"
-    class="table-filter-banner"
-    @clearFiltersLabel="Réinitialiser les filtres"
-    @onClearFilters={{this.clearFilters}}
-    @isClearFilterButtonDisabled={{false}}
+<PixFilterBanner
+  @title="Filtres"
+  class="table-filter-banner filter-whitelisted-url-form"
+  @clearFiltersLabel="Réinitialiser les filtres"
+  @onClearFilters={{this.clearFilters}}
+  @isClearFilterButtonDisabled={{false}}
+  @loadFiltersLabel="Filtrer"
+  @onLoadFilters={{this.applyFilters}}
+>
+  <PixInput
+    @id="whitelisted-url-filter-names"
+    placeholder="Nom d'acquis"
+    @screenReaderOnly={{true}}
+    @value={{@namesFilterValue}}
+    {{on "change" this.updateNamesFilterValue}}
   >
-    <PixInput
-      @id="whitelisted-url-filter-names"
-      placeholder="Nom d'acquis"
-      @screenReaderOnly={{true}}
-      @value={{@namesFilterValue}}
-      {{on "change" this.updateNamesFilterValue}}
-    >
-      <:label>Nom d'acquis</:label>
-    </PixInput>
-    <PixInput
-      @id="whitelisted-url-filter-url"
-      placeholder="URL"
-      @screenReaderOnly={{true}}
-      @value={{@urlFilterValue}}
-      {{on "change" this.updateUrlFilterValue}}
-    >
-      <:label>URL</:label>
-    </PixInput>
-    <PixButton @type="submit">Filtrer</PixButton>
-  </PixFilterBanner>
-</form>
+    <:label>Nom d'acquis</:label>
+  </PixInput>
+  <PixInput
+    @id="whitelisted-url-filter-url"
+    placeholder="URL"
+    @screenReaderOnly={{true}}
+    @value={{@urlFilterValue}}
+    {{on "change" this.updateUrlFilterValue}}
+  >
+    <:label>URL</:label>
+  </PixInput>
+</PixFilterBanner>
 <div class="whitelisted-urls-table">
   <PixTable
     @caption="Liste des URLs à ne pas mettre dans les URLs cassées"
