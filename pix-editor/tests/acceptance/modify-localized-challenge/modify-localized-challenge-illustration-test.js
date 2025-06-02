@@ -196,8 +196,8 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
-    await localizedChallenge.files;
-    const newIllustration = localizedChallenge.hasMany('files').value().find((file) => file.type === 'illustration');
+    await localizedChallenge.attachments;
+    const newIllustration = localizedChallenge.hasMany('attachments').value().find((attachment) => attachment.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
@@ -232,8 +232,8 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
-    await localizedChallenge.files;
-    const newIllustration = localizedChallenge.hasMany('files').value().find((file) => file.type === 'illustration');
+    await localizedChallenge.attachments;
+    const newIllustration = localizedChallenge.hasMany('attachments').value().find((attachment) => attachment.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');

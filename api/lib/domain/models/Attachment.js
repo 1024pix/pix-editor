@@ -8,6 +8,7 @@ export class Attachment {
     size,
     mimeType,
     challengeId,
+    airtableChallengeId,
     localizedChallengeId,
   }) {
     this.id = id;
@@ -18,6 +19,7 @@ export class Attachment {
     this.mimeType = mimeType;
     this.filename = filename;
     this.challengeId = challengeId;
+    this.airtableChallengeId = airtableChallengeId;
     this.localizedChallengeId = localizedChallengeId;
   }
 
@@ -26,6 +28,10 @@ export class Attachment {
       ATTACHMENT: 'attachment',
       ILLUSTRATION: 'illustration',
     };
+  }
+
+  update(updateCommand) {
+    this.filename = updateCommand.filename;
   }
 
   clone({ challengeId, localizedChallengeId }) {
@@ -37,6 +43,7 @@ export class Attachment {
       size: this.size,
       mimeType: this.mimeType,
       filename: this.filename,
+      airtableChallengeId: null,
       challengeId,
       localizedChallengeId,
     });

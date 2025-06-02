@@ -6,7 +6,7 @@ import * as usecases from '../domain/usecases/index.js';
 import { logger } from '../infrastructure/logger.js';
 import { areaRepository } from '../infrastructure/repositories/index.js';
 import { areaSerializer } from '../infrastructure/serializers/jsonapi/index.js';
-import { Types } from './types.js';
+import * as Types from './types.js';
 
 export function register(server) {
   server.route([

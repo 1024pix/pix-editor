@@ -55,21 +55,22 @@ function routes() {
     return skill.localizedChallengesProduction;
   });
 
-  this.post('/airtable/content/Attachments', (schema, request) => {
-    const payload = JSON.parse(request.requestBody);
-    const attachment = _deserializePayload(payload, 'attachment');
-    if (attachment.localizedChallenge) {
-      attachment.localizedChallenge = schema.localizedChallenges.find(attachment.localizedChallenge);
-    }
-    const createdAttachment = schema.attachments.create(attachment);
-    return _serializeModel(createdAttachment, 'attachment');
-  });
-
   this.get('/frameworks');
   this.post('/frameworks');
 
   this.get('/areas');
   this.post('/areas');
+
+  this.get('/attachments', function(schema, request) {
+    const {
+      'filter[localizedChallengeId]': localizedChallengeId,
+    } = request.queryParams;
+    return schema.attachments.all().filter((attachment) => [localizedChallengeId].includes(attachment.localizedChallengeId));
+  });
+  this.get('/attachments/:id');
+  this.post('/attachments');
+  this.patch('/attachments/:id');
+  this.delete('/attachments/:id');
 
   this.get('/competences');
   this.get('/competences/:id');
@@ -200,25 +201,6 @@ function routes() {
     return createdSkill;
   });
 
-  this.get('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    return _serializeModel(attachment, 'attachment');
-  });
-
-  this.patch('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    return _serializeModel(attachment, 'attachment');
-  });
-
-  this.delete('/airtable/content/Attachments/:id', (schema, request) => {
-    const attachment = schema.attachments.find(request.params.id);
-    attachment.destroy();
-    return {
-      deleted: true,
-      id: request.params.id,
-    };
-  });
-
   this.get('/airtable/content/Tutoriels', (schema) => {
     const records = schema.tutorials.all().models.map((note) => {
       return _serializeModel(note, 'tutorial');
@@ -334,13 +316,13 @@ function routes() {
     const body = JSON.parse(request.requestBody);
     const skillId = body.data.relationships.skill.data.id;
     const skill = schema.skills.find(skillId);
-    const files = body.data.relationships.files.data.map(({ id }) => {
+    const attachments = body.data.relationships.attachments.data.map(({ id }) => {
       return schema.attachments.find(id);
     });
     challenge.update({
       ...body.data.attributes,
       skill,
-      files,
+      attachments,
     });
 
     return challenge;

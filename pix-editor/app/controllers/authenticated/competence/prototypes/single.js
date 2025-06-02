@@ -208,8 +208,8 @@ export default class SingleController extends Controller {
     this.displaySolutionToDisplayField = false;
     this.displayUrlsToConsultField = false;
     this.challenge.rollbackAttributes();
-    await this.challenge.files;
-    this.challenge.files.forEach((file) => file.rollbackAttributes());
+    await this.challenge.attachments;
+    this.challenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
     this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
     this.invalidUrlsToConsult = '';
     this.invalidEmbedURL = '';
@@ -235,7 +235,7 @@ export default class SingleController extends Controller {
 
     return Promise.resolve(this.challenge)
       .then((challenge) => this._handleIllustration(challenge))
-      .then((challenge) => this._handleAttachments(challenge))
+      .then((challenge) => this._handlePiecesJointes(challenge))
       .then((challenge) => this._saveFiles(challenge))
       .then((challenge) => this._saveChallenge(challenge))
       .then((challenge) => this._handleChangelog(challenge, changelog))
@@ -443,7 +443,7 @@ export default class SingleController extends Controller {
 
   @action
   async removeIllustration() {
-    await this.challenge.files;
+    await this.challenge.attachments;
     const removedFile = this.challenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
@@ -455,8 +455,8 @@ export default class SingleController extends Controller {
 
   @action
   async removeAttachment(removedAttachment) {
-    await this.challenge.files;
-    const removedFile = this.challenge.attachments?.find((file) => file.filename === removedAttachment.filename);
+    await this.challenge.attachments;
+    const removedFile = this.challenge.piecesJointes?.find((pieceJointe) => pieceJointe.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
       if (removedFile.id) {
@@ -675,38 +675,38 @@ export default class SingleController extends Controller {
     return challenge;
   }
 
-  async _handleAttachments(challenge) {
-    const attachments = await challenge.attachments;
-    if (attachments.length === 0) {
+  async _handlePiecesJointes(challenge) {
+    const piecesJointes = await challenge.piecesJointes;
+    if (piecesJointes.length === 0) {
       return challenge;
     }
     this._loadingMessage('Gestion des pièces jointes...');
-    await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
-    await this._renameAttachmentFiles(challenge);
+    await Promise.all(piecesJointes.map((pieceJointe) => this._handlePieceJointe(pieceJointe, challenge)));
+    await this._renamePiecesJointes(challenge);
 
     return challenge;
   }
 
-  async _handleAttachment(attachment) {
-    if (!attachment.isNew || attachment.cloneBeforeSave) {
+  async _handlePieceJointe(pieceJointe) {
+    if (!pieceJointe.isNew || pieceJointe.cloneBeforeSave) {
       return;
     }
-    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true });
-    attachment.url = newAttachment.url;
+    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    pieceJointe.url = remoteFile.url;
   }
 
-  async _renameAttachmentFiles(challenge) {
+  async _renamePiecesJointes(challenge) {
     if (!challenge.baseNameUpdated()) {
       return;
     }
-    const attachments = (await challenge.attachments)?.slice() ?? [];
-    for (const file of attachments) {
-      file.filename = this._getAttachmentFullFilename(challenge, file.filename);
-      await this.storage.renameFile(file.url, file.filename);
+    const piecesJointes = (await challenge.piecesJointes)?.slice() ?? [];
+    for (const pieceJointe of piecesJointes) {
+      pieceJointe.filename = this._getPieceJointeFullFilename(challenge, pieceJointe.filename);
+      await this.storage.renameFile(pieceJointe.url, pieceJointe.filename);
     }
   }
 
-  _getAttachmentFullFilename(challenge, filename) {
+  _getPieceJointeFullFilename(challenge, filename) {
     return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
   }
 
@@ -717,13 +717,13 @@ export default class SingleController extends Controller {
   }
 
   async _saveFiles(challenge) {
-    const files = (await challenge.files)?.slice() ?? [];
-    for (const file of files) {
-      if (file.cloneBeforeSave) {
-        file.url = await this.storage.cloneFile(file.url);
-        file.cloneBeforeSave = false;
+    const attachments = (await challenge.attachments)?.slice() ?? [];
+    for (const attachment of attachments) {
+      if (attachment.cloneBeforeSave) {
+        attachment.url = await this.storage.cloneFile(attachment.url);
+        attachment.cloneBeforeSave = false;
       }
-      await file.save();
+      await attachment.save();
     }
     for (const deletedFile of this.deletedFiles) {
       await deletedFile.save();

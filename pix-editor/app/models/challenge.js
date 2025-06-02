@@ -54,7 +54,7 @@ export default class ChallengeModel extends Model {
   @attr('boolean') noValidationNeeded;
 
   @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
-  @hasMany('attachment', { inverse: 'challenge', async: true }) files;
+  @hasMany('attachment', { inverse: 'challenge', async: true }) attachments;
   @hasMany('localized-challenge', { inverse: 'challenge', async: true }) localizedChallenges;
 
   @service('store') myStore;
@@ -85,13 +85,13 @@ export default class ChallengeModel extends Model {
   }
 
   get illustration() {
-    const files = this.hasMany('files').value() ?? [];
-    return files.find((file) => file.type === 'illustration' && !file.isDeleted);
+    const attachments = this.hasMany('attachments').value() ?? [];
+    return attachments.find((attachment) => attachment.type === 'illustration' && !attachment.isDeleted);
   }
 
-  get attachments() {
-    const files = this.hasMany('files').value() ?? [];
-    return files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+  get piecesJointes() {
+    const attachments = this.hasMany('attachments').value() ?? [];
+    return attachments.filter((attachment) => attachment.type === 'attachment' && !attachment.isDeleted);
   }
 
   get isPrototype() {
@@ -236,9 +236,9 @@ export default class ChallengeModel extends Model {
   }
 
   get _firstAttachmentBaseName() {
-    const attachments = this.attachments;
-    if (attachments && attachments.length > 0) {
-      return attachments[0].filename.replace(/\.[^/.]+$/, '');
+    const piecesJointes = this.piecesJointes;
+    if (piecesJointes && piecesJointes.length > 0) {
+      return piecesJointes[0].filename.replace(/\.[^/.]+$/, '');
     }
     return null;
   }
@@ -319,16 +319,6 @@ export default class ChallengeModel extends Model {
     const data = this._toJSON(this);
 
     delete data['airtable-id'];
-
-    if (data.illustration) {
-      const illustration = data.illustration[0];
-      data.illustration = [{ url: illustration.url, filename: illustration.filename }];
-    }
-    if (data.attachments) {
-      data.attachments = data.attachments.map((value) => {
-        return { url: value.url, filename: value.filename };
-      });
-    }
     if (fieldsToRemove) {
       fieldsToRemove.forEach((current) => {
         if (data[current]) {
@@ -340,8 +330,8 @@ export default class ChallengeModel extends Model {
   }
 
   async _cloneAttachments(newChallenge) {
-    const files = (await this.files)?.slice() ?? [];
-    files.map((attachment) => {
+    const attachments = (await this.attachments)?.slice() ?? [];
+    attachments.map((attachment) => {
       const data = this._attachmentToJSON(attachment);
       this.store.createRecord('attachment', { ...data, challenge: newChallenge, cloneBeforeSave: true });
     });
@@ -360,7 +350,7 @@ export default class ChallengeModel extends Model {
   _attachmentToJSON(attachment) {
     const rawSerializedData = structuredClone(attachment.serialize({ idIncluded: false }));
     const data = {};
-    for (const [key, value] of Object.entries(rawSerializedData)) {
+    for (const [key, value] of Object.entries(rawSerializedData.data.attributes)) {
       const newKey = _.camelCase(key);
       data[newKey] = value;
     }

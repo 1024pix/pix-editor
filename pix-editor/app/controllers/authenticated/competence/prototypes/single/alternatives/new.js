@@ -29,7 +29,7 @@ export default class NewController extends Alternative {
     this.loader.start();
     try {
       await this._handleIllustration(this.challenge);
-      await this._handleAttachments(this.challenge);
+      await this._handlePiecesJointes(this.challenge);
       // create challenge without patching Pix API cache
       this._setAlternativeVersion(this.challenge);
       await this._saveChallenge(this.challenge);

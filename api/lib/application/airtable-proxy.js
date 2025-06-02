@@ -17,7 +17,6 @@ const AIRTABLE_PROXY_TABLES = [
   'Tubes',
   'Tutoriels',
   'Tags',
-  'Attachments',
 ];
 
 export async function register(server) {

@@ -286,7 +286,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
     const rollbackAttributesStub = sinon.stub();
     controller.model = EmberObject.create({
       id: 'recChallenge',
-      files: [],
+      attachments: [],
       urlsToConsult: ['http:://test.com'],
       rollbackAttributes: rollbackAttributesStub,
     });
@@ -311,7 +311,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       const challenge = {
         id: 'recchallenge_1',
         name: 'challenge',
-        files: [],
+        attachments: [],
         illustration: {
           id: 'illustration_id',
           filename: 'file_name',
@@ -340,8 +340,8 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       const challenge = {
         id: 'recchallenge_1',
         name: 'challenge',
-        files: [],
-        attachments: [
+        attachments: [],
+        piecesJointes: [
           {
             id: 'attachment_id',
             filename: 'file_name.pdf',
@@ -374,7 +374,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       controller.invalidUrlsToConsult = 'wrong-test.com';
       controller.model = EmberObject.create({
         id: 'recChallenge',
-        files: [],
+        attachments: [],
         urlsToConsult: ['http:://test.com'],
       });
 
@@ -489,7 +489,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
     });
   });
 
-  module('_handleAttachments', function(hooks) {
+  module('_handlePiecesJointes', function(hooks) {
     let challenge;
     let storageServiceStub;
     let storeServiceStub;
@@ -515,18 +515,19 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         id: 'recChallenge',
         attachmentBaseName,
         baseNameUpdated: sinon.stub().returns(false),
-        attachments: [{
-          filename: `${attachmentBaseName}.pdf`,
-          file: {
-            name: `${attachmentBaseName}.pdf`,
-            filePath: '',
-            size: 123,
-            type: 'application/pdf',
+        piecesJointes: [
+          {
+            filename: `${attachmentBaseName}.pdf`,
+            file: {
+              name: `${attachmentBaseName}.pdf`,
+              filePath: '',
+              size: 123,
+              type: 'application/pdf',
+            },
+            isNew: true,
           },
-          isNew: true,
-        },
         ],
-        files: [],
+        attachments: [],
       });
 
       storageServiceStub = {
@@ -537,7 +538,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       };
       controller.storage = storageServiceStub;
 
-      const expectedAttachment = [{
+      const expectedPiecesJointes = [{
         file: {
           filePath: '',
           name: 'attachment-base-name.pdf',
@@ -550,12 +551,12 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       }];
 
       // when
-      await controller._handleAttachments(challenge);
+      await controller._handlePiecesJointes(challenge);
 
       // then
       assert.ok(storageServiceStub.uploadFile.calledOnce);
       assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
-      assert.deepEqual(challenge.attachments, expectedAttachment);
+      assert.deepEqual(challenge.piecesJointes, expectedPiecesJointes);
     });
 
     test('it uploads two files', async function(assert) {
@@ -565,7 +566,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         id: 'recChallenge',
         attachmentBaseName,
         baseNameUpdated: sinon.stub().returns(true),
-        attachments: [{
+        piecesJointes: [{
           filename: `${attachmentBaseName}.doc`,
           file: {
             name: `${attachmentBaseName}.doc`,
@@ -582,7 +583,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
           },
           isNew: true,
         }],
-        files: [],
+        attachments: [],
       });
 
       const uploadFileStub = sinon.stub();
@@ -598,7 +599,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       };
       controller.storage = storageServiceStub;
 
-      const expectedAttachements = [{
+      const expectedPiecesJointes = [{
         filename: `${attachmentBaseName}.doc`,
         url: 'data:,',
         file: {
@@ -619,12 +620,12 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       }];
 
       // when
-      const newChallenge = await controller._handleAttachments(challenge);
+      const newChallenge = await controller._handlePiecesJointes(challenge);
 
       // then
       assert.ok(storageServiceStub.uploadFile.calledTwice);
       assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
-      assert.deepEqual(newChallenge.attachments, expectedAttachements);
+      assert.deepEqual(newChallenge.piecesJointes, expectedPiecesJointes);
     });
 
     test('it renames attachments', async function(assert) {
@@ -633,7 +634,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         id: 'recChallenge',
         attachmentBaseName: 'updated-base-name',
         baseNameUpdated: () => true,
-        files: [{
+        attachments: [{
           filename: attachmentBaseName + '.pdf',
           url: 'data:,',
           size: 123,
@@ -648,8 +649,8 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         }],
       });
 
-      challenge.files.forEach((file) => file.challenge = challenge);
-      challenge.attachments = challenge.files.filter((file) => file.type === 'attachment');
+      challenge.attachments.forEach((attachment) => attachment.challenge = challenge);
+      challenge.piecesJointes = challenge.attachments.filter((attachment) => attachment.type === 'attachment');
       storageServiceStub = {
         renameFile: sinon.stub().resolves(),
       };
@@ -673,10 +674,10 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       };
 
       // when
-      await controller._handleAttachments(challenge);
+      await controller._handlePiecesJointes(challenge);
 
       // then
-      assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedIllustration]);
+      assert.deepEqual(challenge.attachments, [expectedPdfAttachement, expectedIllustration]);
       assert.true(storageServiceStub.renameFile.calledOnce);
     });
   });

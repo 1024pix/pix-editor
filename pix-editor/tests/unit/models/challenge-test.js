@@ -254,13 +254,13 @@ module('Unit | Model | challenge', function(hooks) {
 
       // when
       const clonedChallenge = await challenge.duplicate();
-      const clonedFiles = await clonedChallenge.files;
+      const clonedAttachments = await clonedChallenge.attachments;
 
       // then
-      assert.strictEqual(clonedChallenge.files.length, 1);
-      assert.strictEqual(illustration.url, clonedFiles[0].url);
-      assert.notEqual(illustration.id, clonedFiles[0].id);
-      assert.ok(clonedFiles[0].cloneBeforeSave);
+      assert.strictEqual(clonedChallenge.attachments.length, 1);
+      assert.strictEqual(illustration.url, clonedAttachments[0].url);
+      assert.notEqual(illustration.id, clonedAttachments[0].id);
+      assert.ok(clonedAttachments[0].cloneBeforeSave);
     });
   });
 
@@ -288,13 +288,13 @@ module('Unit | Model | challenge', function(hooks) {
 
       // when
       const clonedChallenge = await challenge.copyForDifferentSkill();
-      const clonedFiles = await clonedChallenge.files;
+      const clonedAttachments = await clonedChallenge.attachments;
 
       // then
-      assert.strictEqual(clonedFiles.length, 1);
-      assert.strictEqual(illustration.url, clonedFiles[0].url);
-      assert.notEqual(illustration.id, clonedFiles[0].id);
-      assert.ok(clonedFiles[0].cloneBeforeSave);
+      assert.strictEqual(clonedAttachments.length, 1);
+      assert.strictEqual(illustration.url, clonedAttachments[0].url);
+      assert.notEqual(illustration.id, clonedAttachments[0].id);
+      assert.ok(clonedAttachments[0].cloneBeforeSave);
     });
   });
 

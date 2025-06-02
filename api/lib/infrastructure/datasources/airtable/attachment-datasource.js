@@ -29,6 +29,7 @@ export const attachmentDatasource = datasource.extend({
       mimeType: airtableRecord.get('mimeType'),
       filename: airtableRecord.get('filename'),
       challengeId: airtableRecord.get('challengeId persistant')?.[0],
+      airtableChallengeId: airtableRecord.get('challengeId')?.[0],
       localizedChallengeId: airtableRecord.get('localizedChallengeId'),
     };
   },
@@ -37,7 +38,7 @@ export const attachmentDatasource = datasource.extend({
     challengeId persistant                      (write "challengeId" instead)
    */
   toAirTableObject(model) {
-    return {
+    const body = {
       fields: {
         'url': model.url,
         'size': model.size,
@@ -48,6 +49,10 @@ export const attachmentDatasource = datasource.extend({
         'localizedChallengeId': model.localizedChallengeId,
       }
     };
+    if (model.id) {
+      body.id = model.id;
+    }
+    return body;
   },
 
   async filterByLocalizedChallengeId(localizedChallengeId) {

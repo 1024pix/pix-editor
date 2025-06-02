@@ -299,6 +299,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
           filename: 'fraise_des_bois',
           challengeId: newChallengeId,
           localizedChallengeId: newId,
+          airtableChallengeId: null,
         }),
         domainBuilder.buildAttachment({
           id: null,
@@ -310,6 +311,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
           filename: 'liste_de_courses',
           challengeId: newChallengeId,
           localizedChallengeId: newId,
+          airtableChallengeId: null,
         }),
       ]);
     });

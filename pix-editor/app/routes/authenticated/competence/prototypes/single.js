@@ -18,7 +18,7 @@ export default class SingleRoute extends Route {
     const skill = await model.skill;
     await model.localizedChallenges;
     if (!model) return;
-    await model?.files;
+    await model?.attachments;
     this.currentData.setPrototype(model);
     if (!this.versionManager.isV2) return;
 

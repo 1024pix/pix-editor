@@ -68,8 +68,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
-            files: {
-              data: [],
+            attachments: {
+              links: {
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
+              },
             },
           },
         }
@@ -144,8 +146,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
-            files: {
-              data: [],
+            attachments: {
+              links: {
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
+              },
             },
           },
         }]
@@ -242,8 +246,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              files: {
-                data: [],
+              attachments: {
+                links: {
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[0].id}`,
+                },
               },
             },
           },
@@ -273,8 +279,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              files: {
-                data: [],
+              attachments: {
+                links: {
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[1].id}`,
+                },
               },
             },
           }
@@ -374,8 +382,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               id: 'recChallenge0',
             },
           },
-          files: {
-            data: [],
+          attachments: {
+            links: {
+              related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId',
+            },
           },
         },
       });

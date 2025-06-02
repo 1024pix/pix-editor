@@ -40,7 +40,6 @@ const serializer = new Serializer('challenges', {
     'autoReply',
     'focusable',
     'skill',
-    'files',
     'updatedAt',
     'validatedAt',
     'archivedAt',
@@ -56,28 +55,34 @@ const serializer = new Serializer('challenges', {
     'toRephrase',
     'hasEmbedInternalValidation',
     'noValidationNeeded',
+    'attachments',
   ],
   typeForAttribute(attribute) {
-    if (attribute === 'files') return 'attachments';
     if (attribute === 'localizedChallenges') return 'localized-challenges';
+    if (attribute === 'attachments') return 'attachments';
   },
   skill: {
     ref(challenge, skillId) {
       return skillId;
     }
   },
-  files: {
-    ref(challenge, fileId) {
-      return fileId;
-    }
-  },
   localizedChallenges: {
     ref: 'id',
     included: false,
   },
+  attachments: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related: function(record, current, parent) {
+        return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
+      },
+    },
+  },
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
+    challenge.attachments = [];
     return challenge;
   }
 });
@@ -121,7 +126,7 @@ const deserializer = new Deserializer({
         illustrationAlt,
       },
     };
-    challenge.files = challenge.files?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
+    challenge.files = challenge.attachments?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
     return challenge;
   }
 });

@@ -149,7 +149,6 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
         status: LocalizedChallenge.STATUSES.PLAY,
         geography: 'BZ',
         urlsToConsult: ['https://urls.fr', 'pouet.fr'],
-        fileIds: ['attachment1', 'attachment2'],
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
@@ -179,24 +178,17 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'no-validation-needed': true,
           },
           relationships: {
-            files: {
-              data: [
-                {
-                  type: 'attachments',
-                  id: 'attachment1',
-                },
-                {
-                  type: 'attachments',
-                  id: 'attachment2',
-                }
-              ],
-            },
             challenge: {
               data: {
                 id: 'persistant id',
                 type: 'challenges',
               },
-            }
+            },
+            attachments: {
+              links: {
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
+              },
+            },
           }
         }
       };
@@ -236,6 +228,11 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
               data: {
                 id: `${localizedChallenge.challengeId}`,
                 type: 'challenges',
+              },
+            },
+            attachments: {
+              links: {
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
           },
@@ -285,6 +282,11 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                   type: 'challenges',
                 },
               },
+              attachments: {
+                links: {
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge1.id}`,
+                },
+              },
             },
           },
           {
@@ -303,6 +305,11 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                 data: {
                   id: `${localizedChallenge2.challengeId}`,
                   type: 'challenges',
+                },
+              },
+              attachments: {
+                links: {
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge2.id}`,
                 },
               },
             },

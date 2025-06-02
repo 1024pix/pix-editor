@@ -1,4 +1,4 @@
-import { attachmentDatasource, challengeDatasource, tutorialDatasource, } from '../datasources/airtable/index.js';
+import { attachmentDatasource, tutorialDatasource, } from '../datasources/airtable/index.js';
 import {
   areaRepository,
   challengeRepository,
@@ -70,15 +70,6 @@ export async function serializeEntity({ type, entity, translations }) {
     airtableObject: entity,
     tableName: type
   });
-
-  if (model === attachmentDatasource.path()) {
-    const [rawChallenge] = await challengeRepository.filter({ filter: { ids: [updatedRecord.challengeId] } });
-    const attachments = await attachmentDatasource.filterByLocalizedChallengeId(updatedRecord.challengeId);
-    const transformChallenge = createChallengeTransformer({ attachments });
-    const challenge = transformChallenge(rawChallenge);
-
-    return { updatedRecord: challenge, model: challengeDatasource.path() };
-  }
 
   if (!tablesTranslations[type]?.toDomain) return { updatedRecord, model };
 

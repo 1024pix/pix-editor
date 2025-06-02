@@ -168,8 +168,8 @@ export default class ChallengeForm extends Component {
       type: 'illustration',
     };
     const attachment = this.store.createRecord('attachment', attachmentData);
-    const files = await this.args.challenge.files;
-    files.push(attachment);
+    const attachments = await this.args.challenge.attachments;
+    attachments.push(attachment);
   }
 
   @action
@@ -182,8 +182,8 @@ export default class ChallengeForm extends Component {
       type: 'attachment',
     };
     const attachment = this.store.createRecord('attachment', attachmentData);
-    const files = await this.args.challenge.files;
-    files.push(attachment);
+    const attachments = await this.args.challenge.attachments;
+    attachments.push(attachment);
   }
 
   @action

@@ -6,6 +6,7 @@ export function buildAttachment({
   mimeType = 'image/jpeg',
   filename = 'nom_fichier',
   challengeId = 'challid1',
+  airtableChallengeId = 'challAirtableid1',
   createdAt = new Date().toISOString(),
   localizedChallengeId = challengeId,
 } = {}) {
@@ -15,6 +16,7 @@ export function buildAttachment({
     'fields': {
       'Record ID': id,
       'challengeId persistant': [challengeId],
+      'challengeId': [airtableChallengeId],
       createdAt,
       localizedChallengeId,
       type,

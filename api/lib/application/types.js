@@ -9,8 +9,16 @@ export function areaId() {
   return Joi.string().pattern(/^(rec|area)[a-zA-Z0-9]+$/);
 }
 
+export function attachmentId() {
+  return Joi.string().pattern(/^rec[a-zA-Z0-9]+$/);
+}
+
 export function frameworkId() {
   return Joi.string().pattern(/^(rec|framework)[a-zA-Z0-9]+$/);
+}
+
+export function challengeId() {
+  return Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/);
 }
 
 export function competenceId() {
@@ -19,6 +27,11 @@ export function competenceId() {
 
 export function locale() {
   return Joi.string().pattern(/^[a-z]{2}(-[a-z]{2})?$/);
+}
+
+export function localizedChallengeId() {
+  // the part "(-[a-zA-Z0-9]+)?" is just for the data in review apps, we got ids like recABC123-nl
+  return Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?$/);
 }
 
 export function skillId() {
@@ -45,16 +58,3 @@ export function tutorialsRelationship() {
 export function whitelistedUrlId() {
   return schemaPositiveInteger32bits;
 }
-
-/**
- * @deprecated use `import * as Types` instead
- */
-export const Types = Object.freeze({
-  areaId,
-  frameworkId,
-  competenceId,
-  locale,
-  skillId,
-  tubeId,
-  whitelistedUrlId,
-});

@@ -7,7 +7,7 @@ import {
   getCompetenceChallengesWorkbenchOverview
 } from '../../domain/usecases/index.js';
 import { competenceOverviewSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import { Types } from '../types.js';
+import * as Types from '../types.js';
 
 export async function register(server) {
   server.route([

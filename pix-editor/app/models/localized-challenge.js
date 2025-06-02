@@ -24,7 +24,7 @@ export default class LocalizedChallengeModel extends Model {
   @attr instruction;
 
   @belongsTo('challenge', { inverse: 'localizedChallenges', async: true }) challenge;
-  @hasMany('attachment', { inverse: 'localizedChallenge', async: true }) files;
+  @hasMany('attachment', { inverse: 'localizedChallenge', async: true }) attachments;
 
   static get STATUSES() {
     return {
@@ -37,15 +37,15 @@ export default class LocalizedChallengeModel extends Model {
     return this.challenge.get('id') === this.id;
   }
 
-  get attachments() {
-    const files = this.hasMany('files').value();
-    if (!files) return null;
-    return files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+  get piecesJointes() {
+    const attachments = this.hasMany('attachments').value();
+    if (!attachments) return null;
+    return attachments.filter((attachment) => attachment.type === 'attachment' && !attachment.isDeleted);
   }
 
   get illustration() {
-    const files = this.hasMany('files').value() ?? [];
-    return files.find((file) => file.type === 'illustration' && !file.isDeleted);
+    const attachments = this.hasMany('attachments').value() ?? [];
+    return attachments.find((attachment) => attachment.type === 'illustration' && !attachment.isDeleted);
   }
 
   get statusCSS() {
@@ -65,9 +65,9 @@ export default class LocalizedChallengeModel extends Model {
   }
 
   get _firstAttachmentBaseName() {
-    const attachments = this.attachments;
-    if (attachments && attachments.length > 0) {
-      return attachments[0].filename.replace(/\.[^/.]+$/, '');
+    const piecesJointes = this.piecesJointes;
+    if (piecesJointes && piecesJointes.length > 0) {
+      return piecesJointes[0].filename.replace(/\.[^/.]+$/, '');
     }
     return null;
   }
