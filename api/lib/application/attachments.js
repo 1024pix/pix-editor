@@ -119,7 +119,17 @@ export function register(server) {
         handler: async function(request, h) {
           try {
             const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
-            const updatedAttachment = await usecases.updateAttachment({ attachmentUpdateCommand, attachmentRepository, localizedChallengeRepository });
+            const updatedAttachment = await usecases.updateAttachment({
+              attachmentUpdateCommand,
+              attachmentRepository,
+              localizedChallengeRepository,
+              challengeRepository,
+              createChallengeTransformer,
+              updatedRecordNotifier,
+              pixApiClient,
+              logger,
+              Sentry,
+            });
             return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
           } catch (err) {
             logger.error(err);

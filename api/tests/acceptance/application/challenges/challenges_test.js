@@ -242,7 +242,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               },
               attachments: {
                 links: {
-                  related: '/api/attachments?filter[localizedChallengeIds]=my id',
+                  related: '/api/attachments?filter[localizedChallengeId]=my id',
                 },
               },
             }
@@ -464,7 +464,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               },
               attachments: {
                 links: {
-                  related: '/api/attachments?filter[localizedChallengeIds]=1',
+                  related: '/api/attachments?filter[localizedChallengeId]=1',
                 },
               },
             }
@@ -542,7 +542,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               },
               attachments: {
                 links: {
-                  related: '/api/attachments?filter[localizedChallengeIds]=2',
+                  related: '/api/attachments?filter[localizedChallengeId]=2',
                 },
               },
             }
@@ -786,7 +786,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: '/api/attachments?filter[localizedChallengeIds]=recChallengeId1',
+                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId1',
               },
             },
           }
@@ -1235,7 +1235,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: '/api/attachments?filter[localizedChallengeIds]=challengeId',
+                related: '/api/attachments?filter[localizedChallengeId]=challengeId',
               },
             },
           }
@@ -1733,7 +1733,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: '/api/attachments?filter[localizedChallengeIds]=recChallengeId',
+                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
               },
             },
           },
@@ -2007,7 +2007,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: '/api/attachments?filter[localizedChallengeIds]=recChallengeId',
+                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
               },
             },
           },

@@ -186,7 +186,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             },
             attachments: {
               links: {
-                related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
           }
@@ -232,7 +232,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             },
             attachments: {
               links: {
-                related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
           },
@@ -284,7 +284,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
               },
               attachments: {
                 links: {
-                  related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge1.id}`,
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge1.id}`,
                 },
               },
             },
@@ -309,7 +309,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
               },
               attachments: {
                 links: {
-                  related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge2.id}`,
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge2.id}`,
                 },
               },
             },

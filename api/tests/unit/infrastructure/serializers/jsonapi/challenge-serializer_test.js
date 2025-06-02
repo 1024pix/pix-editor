@@ -93,7 +93,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             },
             attachments : {
               links: {
-                related: `/api/attachments?filter[localizedChallengeIds]=${challenge.id}`,
+                related: `/api/attachments?filter[localizedChallengeId]=${challenge.id}`,
               },
             },
           },

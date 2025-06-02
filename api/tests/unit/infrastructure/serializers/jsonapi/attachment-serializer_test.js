@@ -20,7 +20,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             url: 'some.url.com',
             type: 'some type',
             'mime-type': 'some mime type',
-            'localized-challenge-id': 'I DONT CARE',
           },
           relationships: {
             'localized-challenge': {
@@ -59,7 +58,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             url: 'some.url.com',
             type: 'some type',
             'mime-type': 'some mime type',
-            'localized-challenge-id': 'I DONT CARE',
           },
           relationships: {
             challenge: {
@@ -102,7 +100,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             url: 'some.url.com',
             type: 'some type',
             'mime-type': 'some mime type',
-            'localized-challenge-id': 'I DONT CARE',
           },
           relationships: {
             'localized-challenge': {
@@ -143,7 +140,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             url: 'some.url.com',
             type: 'some type',
             'mime-type': 'some mime type',
-            'localized-challenge-id': 'I DONT CARE',
           },
           relationships: {
             challenge: {
@@ -214,7 +210,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           type: 'some type',
           'mime-type': 'some mime type',
           alt: 'coucou les zamis',
-          'localized-challenge-id': 'locId123',
         });
       });
       context('relationships', function() {
@@ -245,7 +240,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 type: 'some type',
                 'mime-type': 'some mime type',
                 alt: 'coucou les zamis',
-                'localized-challenge-id': 'challenge123',
               },
               relationships: {
                 challenge: {
@@ -291,7 +285,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 type: 'some type',
                 'mime-type': 'some mime type',
                 alt: 'coucou les zamis',
-                'localized-challenge-id': 'challenge123FR',
               },
               relationships: {
                 challenge: {
@@ -351,7 +344,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   url: 'some.url.com1',
                   type: 'some type1',
                   'mime-type': 'some mime type1',
-                  'localized-challenge-id': 'locId123',
                   alt: 'coucou les zamis1',
                 },
                 relationships: {
@@ -375,7 +367,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   url: 'some.url.com2',
                   type: 'some type2',
                   'mime-type': 'some mime type2',
-                  'localized-challenge-id': 'locId456',
                   alt: 'coucou les zamis2',
                 },
                 relationships: {

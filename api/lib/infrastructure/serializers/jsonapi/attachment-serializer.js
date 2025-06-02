@@ -11,7 +11,6 @@ const serializer = new Serializer('attachment', {
     'mimeType',
     'type',
     'alt',
-    'localizedChallengeId',
     'challenge',
     'localizedChallenge',
   ],
@@ -32,7 +31,6 @@ const serializer = new Serializer('attachment', {
       mimeType,
       type,
       alt,
-      localizedChallengeId,
       challenge,
       localizedChallenge,
     };

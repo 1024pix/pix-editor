@@ -70,7 +70,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
           },
@@ -148,7 +148,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             },
             attachments: {
               links: {
-                related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenge.id}`,
+                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
           },
@@ -248,7 +248,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               },
               attachments: {
                 links: {
-                  related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenges[0].id}`,
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[0].id}`,
                 },
               },
             },
@@ -281,7 +281,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               },
               attachments: {
                 links: {
-                  related: `/api/attachments?filter[localizedChallengeIds]=${localizedChallenges[1].id}`,
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[1].id}`,
                 },
               },
             },
@@ -384,7 +384,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           },
           attachments: {
             links: {
-              related: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId',
+              related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId',
             },
           },
         },
