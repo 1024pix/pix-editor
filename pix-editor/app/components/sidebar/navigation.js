@@ -14,7 +14,6 @@ export default class SidebarNavigationComponent extends Component {
   @service router;
   @service store;
 
-  @tracked _selectedFramework;
   @tracked newFramework;
   @tracked displayNewFrameworkPopIn;
 
@@ -67,7 +66,6 @@ export default class SidebarNavigationComponent extends Component {
       return;
     }
     this.currentData.setFramework(item.data);
-    this._selectedFramework = item;
   }
 
   @action
