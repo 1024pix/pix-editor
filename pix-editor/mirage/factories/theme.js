@@ -4,5 +4,5 @@ export default Factory.extend({
 
   name: 'nom',
   nameEnUs: 'nom en us',
-  index: '',
+  index: 0,
 });

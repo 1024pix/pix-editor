@@ -111,23 +111,21 @@ function routes() {
     return createdCompetence;
   });
 
-  this.get('/airtable/content/Thematiques/:id', (schema, request) => {
-    const theme = schema.themes.find(request.params.id);
-    return _serializeModel(theme, 'theme');
+  this.get('/thematics/:id', (schema, request) => {
+    return schema.themes.find(request.params.id);
   });
-
-  this.get('/airtable/content/Thematiques', (schema) => {
-    const records = schema.themes.all().models.map((theme) => {
-      return _serializeModel(theme, 'theme');
-    });
-    return { records };
+  this.get('/thematics', (schema) => {
+    return schema.themes.all();
   });
-
-  this.post('/airtable/content/Thematiques', (schema, request) => {
-    const themePayload = JSON.parse(request.requestBody);
-    const theme = _deserializePayload(themePayload, 'theme');
-    const createdTheme = schema.themes.create(theme);
-    return _serializeModel(createdTheme, 'theme');
+  this.post('/thematics', (schema) => {
+    const thematic = this.normalizedRequestAttrs();
+    thematic.index = 0;
+    return schema.themes.create(thematic);
+  });
+  this.patch('/thematics/:id', (schema) => {
+    const thematic = this.normalizedRequestAttrs();
+    thematic.index = 0;
+    return schema.themes.create(thematic);
   });
 
   this.get('/airtable/content/Tubes/:id', (schema, request) => {
