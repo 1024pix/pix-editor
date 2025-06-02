@@ -63,10 +63,9 @@ function routes() {
 
   this.get('/attachments', function(schema, request) {
     const {
-      'filter[localizedChallengeIds]': localizedChallengeIdsStr,
+      'filter[localizedChallengeId]': localizedChallengeId,
     } = request.queryParams;
-    const localizedChallengeIds = localizedChallengeIdsStr.split(',');
-    return schema.attachments.all().filter((attachment) => localizedChallengeIds.includes(attachment.localizedChallengeId));
+    return schema.attachments.all().filter((attachment) => [localizedChallengeId].includes(attachment.localizedChallengeId));
   });
   this.get('/attachments/:id');
   this.post('/attachments');

@@ -1,3 +1,3 @@
 export function findAttachments({ query, attachmentRepository }) {
-  return attachmentRepository.listByLocalizedChallengeIds(query.localizedChallengeIds);
+  return attachmentRepository.listByLocalizedChallengeIds([query.localizedChallengeId]);
 }

@@ -71,6 +71,6 @@ export function deserializeUpdateCommand({ data }) {
 export function deserializeQuery(query) {
   const extractedParams = extractParameters(query);
   return {
-    localizedChallengeIds: extractedParams.filter.localizedChallengeIds.split(','),
+    localizedChallengeId: extractedParams.filter.localizedChallengeId,
   };
 }

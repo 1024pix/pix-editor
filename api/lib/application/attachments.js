@@ -195,7 +195,7 @@ export function register(server) {
       config: {
         validate: {
           query: Joi.object({
-            'filter[localizedChallengeIds]': Joi.string().required(),
+            'filter[localizedChallengeId]': Joi.string().required(),
           }).required(),
         },
         handler: async function(request, h) {

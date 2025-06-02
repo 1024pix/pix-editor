@@ -177,12 +177,12 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
   describe('#deserializeQuery', () => {
     it('should deserialize query', () => {
       // Given
-      const query = { 'filter[localizedChallengeIds]': 'loc1Id,loc2Id' };
+      const query = { 'filter[localizedChallengeId]': 'loc1Id' };
 
       const deserializedQuery = deserializeQuery(query);
 
       expect(deserializedQuery).toStrictEqual({
-        localizedChallengeIds: ['loc1Id', 'loc2Id'],
+        localizedChallengeId: 'loc1Id',
       });
     });
   });

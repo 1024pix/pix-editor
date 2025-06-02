@@ -745,7 +745,7 @@ describe('Acceptance | Route | attachments', () => {
     });
   });
 
-  describe('GET /attachments?filter[localizedChallengeIds]=%', () => {
+  describe('GET /attachments?filter[localizedChallengeId]=%', () => {
     context('when user is NOT authenticated', () => {
       it('should respond with status 401', async () => {
         // given
@@ -754,7 +754,7 @@ describe('Acceptance | Route | attachments', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId1,localizedChallengeId3',
+          url: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId1',
         });
 
         // then
@@ -791,11 +791,6 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challenge123',
         locale: 'es',
       });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challenge456',
-        challengeId: 'challenge456',
-        locale: 'fr',
-      });
       await databaseBuilder.commit();
       const airtableAttachments = [];
       airtableAttachments.push(airtableBuilder.factory.buildAttachment({
@@ -809,21 +804,10 @@ describe('Acceptance | Route | attachments', () => {
         airtableChallengeId: 'challengeAirtable123',
         localizedChallengeId: 'localizedChallenge123',
       }));
-      airtableAttachments.push(airtableBuilder.factory.buildAttachment({
-        id: 'airtableAttachmentId2',
-        type: 'some type 2',
-        url: 'some url 2',
-        size: 456,
-        mimeType: 'some mime type 2',
-        filename: 'some filename 2',
-        challengeId: 'challengeId456',
-        airtableChallengeId: 'challengeAirtable456',
-        localizedChallengeId: 'challengeId456',
-      }));
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
         .query({
-          filterByFormula: 'OR({localizedChallengeId} = "localizedChallengeId123",{localizedChallengeId} = "challengeId456")',
+          filterByFormula: 'OR({localizedChallengeId} = "localizedChallengeId123")',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableAttachments });
@@ -832,7 +816,7 @@ describe('Acceptance | Route | attachments', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: '/api/attachments?filter[localizedChallengeIds]=localizedChallengeId123,challengeId456',
+        url: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId123',
         headers: generateAuthorizationHeader(readUser),
       });
 
@@ -861,33 +845,6 @@ describe('Acceptance | Route | attachments', () => {
               },
               challenge: {
                 data: null,
-              },
-            },
-          },
-          {
-            type: 'attachments',
-            id: 'airtableAttachmentId2',
-            attributes: {
-              type: 'some type 2',
-              url: 'some url 2',
-              size: 456,
-              'mime-type': 'some mime type 2',
-              filename: 'some filename 2',
-              'localized-challenge-id': 'challengeId456',
-              alt: null,
-            },
-            relationships: {
-              'localized-challenge': {
-                data: {
-                  type: 'localized-challenges',
-                  id: 'challengeId456',
-                },
-              },
-              challenge: {
-                data: {
-                  type: 'challenges',
-                  id: 'challengeId456',
-                },
               },
             },
           },
