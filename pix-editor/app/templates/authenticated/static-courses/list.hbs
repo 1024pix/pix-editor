@@ -27,51 +27,46 @@
 </header>
 <main class="page-body">
   <section class="page-section">
-    <form {{on "submit" this.submitFilters}} class="new-mission-form">
-      <PixFilterBanner
+    <PixFilterBanner
       @title="Filtres"
-      class="table-filter-banner"
+      class="table-filter-banner new-mission-form"
       @clearFiltersLabel="Réinitialiser les filtres"
       @onClearFilters={{this.clearFilters}}
       @isClearFilterButtonDisabled={{false}}
+      @loadFiltersLabel="Filtrer"
+      @onLoadFilters={{this.submitFilters}}
+    >
+      <PixInput
+        @id="static-course-filter-name"
+        placeholder="Nom"
+        @screenReaderOnly={{true}}
+        @value={{this.name}}
+        {{on "keyup" this.updateName}}
+      ><:label>Nom</:label></PixInput>
+      <PixMultiSelect
+        @id="filter-tags-selector"
+        @placeholder="Sélectionnez des tags"
+        @isSearchable="true"
+        @emptyMessage="Pas de résultats"
+        @screenReaderOnly={{true}}
+        @onChange={{this.selectTags}}
+        @values={{this.tempTagIds}}
+        @options={{this.tagOptions}}
       >
-        <PixInput
-          @id="static-course-filter-name"
-          placeholder="Nom"
-          @screenReaderOnly={{true}}
-          @value={{this.name}}
-          {{on "keyup" this.updateName}}
-        ><:label>Nom</:label></PixInput>
-        <PixMultiSelect
-          @id="filter-tags-selector"
-          @placeholder="Sélectionnez des tags"
-          @isSearchable="true"
-          @emptyMessage="Pas de résultats"
-          @screenReaderOnly={{true}}
-          @onChange={{this.selectTags}}
-          @values={{this.tempTagIds}}
-          @options={{this.tagOptions}}
-        >
-          <:label>Tags</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
-        <PixToggleButton
-          @inlineLabel={{true}}
-          @toggled={{this.showActiveOnly}}
-          @onChange={{this.toggleShowActiveOnly}}
-          @screenReaderOnly={{true}}
-        >
-          <:label>Statut</:label>
-          <:viewA>Actifs</:viewA>
-          <:viewB>Tous</:viewB>
-        </PixToggleButton>
-        <PixButton
-          @type="submit"
-        >
-          Filtrer
-        </PixButton>
-      </PixFilterBanner>
-    </form>
+        <:label>Tags</:label>
+        <:default as |option|>{{option.label}}</:default>
+      </PixMultiSelect>
+      <PixToggleButton
+        @inlineLabel={{true}}
+        @toggled={{this.showActiveOnly}}
+        @onChange={{this.toggleShowActiveOnly}}
+        @screenReaderOnly={{true}}
+      >
+        <:label>Statut</:label>
+        <:viewA>Actifs</:viewA>
+        <:viewB>Tous</:viewB>
+      </PixToggleButton>
+    </PixFilterBanner>
     <div class="panel-table-v2">
       <table class="content-text content-text--small">
         <colgroup class="table__column">
