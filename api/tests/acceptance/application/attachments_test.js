@@ -33,8 +33,11 @@ describe('Acceptance | Route | attachments', () => {
             'mime-type': 'some mime type',
           },
           relationships: {
-            challenge: {
-              data: null,
+            'challenge': {
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
             'localized-challenge': {
               data: {
@@ -102,17 +105,6 @@ describe('Acceptance | Route | attachments', () => {
         locale: 'es',
       });
       await databaseBuilder.commit();
-      const airtableAttachment = airtableBuilder.factory.buildAttachment({
-        id: 'airtableAttachmentId',
-        type: validPayload.data.attributes.type,
-        url: validPayload.data.attributes.url,
-        size: validPayload.data.attributes.size,
-        mimeType: validPayload.data.attributes['mime-type'],
-        filename: validPayload.data.attributes.filename,
-        challengeId: 'challenge123',
-        airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
-      });
       const airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -129,6 +121,17 @@ describe('Acceptance | Route | attachments', () => {
           }
         }]
         });
+      const airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'airtableAttachmentId',
+        type: validPayload.data.attributes.type,
+        url: validPayload.data.attributes.url,
+        size: validPayload.data.attributes.size,
+        mimeType: validPayload.data.attributes['mime-type'],
+        filename: validPayload.data.attributes.filename,
+        challengeId: 'challenge123',
+        airtableChallengeId: 'airtableChallenge123',
+        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
+      });
       const airtablePostAttachmentScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Attachments/', {
           records: [{
@@ -177,13 +180,16 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
       });
-      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
       expect(airtablePostAttachmentScope.isDone()).toBe(true);
+      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
     });
   });
 
@@ -203,7 +209,10 @@ describe('Acceptance | Route | attachments', () => {
           },
           relationships: {
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
             'localized-challenge': {
               data: {
@@ -368,7 +377,10 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
@@ -608,7 +620,10 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
@@ -714,7 +729,10 @@ describe('Acceptance | Route | attachments', () => {
                 },
               },
               challenge: {
-                data: null,
+                data: {
+                  type: 'challenges',
+                  id: 'challenge123',
+                },
               },
             },
           },

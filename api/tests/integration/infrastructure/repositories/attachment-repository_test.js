@@ -466,17 +466,17 @@ describe('Integration | Repository | attachment-repository', () => {
       return knex('localized_challenges-attachments').truncate();
     });
 
-    it('should create an attachment in airtable, in storage and the link to the localized challenge', async () => {
+    it('should create an attachment in airtable with relationship to airtable challenge and create the link to the localized challenge', async () => {
       // given
       const attachment = domainBuilder.buildAttachment({
         id: null,
-        url: 'url/to/clone/attachment',
+        url: 'url/to/attachment',
         type: 'some other type',
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachment_filename',
         challengeId: 'challengeId',
-        localizedChallengeId: 'localizedChallengeId',
+        localizedChallengeId: 'challengeIdES',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeId',
@@ -484,9 +484,9 @@ describe('Integration | Repository | attachment-repository', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId',
+        id: 'challengeIdES',
         challengeId: 'challengeId',
-        locale: 'nl',
+        locale: 'es',
       });
       await databaseBuilder.commit();
       const airtableIdsByIds = {
@@ -506,7 +506,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: attachment.mimeType,
           filename: attachment.filename,
           challengeId: ['airtableChallengeId'],
-          localizedChallengeId: attachment.localizedChallengeId,
+          localizedChallengeId: 'challengeIdES',
         } })
         ) expect.unreachable('Attachments to create to airtable wrong bodies');
         return {
@@ -520,7 +520,7 @@ describe('Integration | Repository | attachment-repository', () => {
             filename: attachment.filename,
             'challengeId persistant': ['challengeId'],
             'challengeId': ['airtableChallengeId'],
-            'localizedChallengeId': attachment.localizedChallengeId,
+            'localizedChallengeId': 'challengeIdES',
           },
           get: function(field) { return this.fields[field]; },
         };
@@ -538,7 +538,7 @@ describe('Integration | Repository | attachment-repository', () => {
         mimeType: attachment.mimeType,
         filename: attachment.filename,
         challengeId: 'challengeId',
-        localizedChallengeId: attachment.localizedChallengeId,
+        localizedChallengeId: 'challengeIdES',
         airtableChallengeId: 'airtableChallengeId',
       });
       expect(createdAttachment).toStrictEqual(expectedAttachment);

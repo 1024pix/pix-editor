@@ -17,11 +17,6 @@ const serializer = new Serializer('attachment', {
     if (attribute === 'localizedChallenge') return 'localized-challenges';
   },
   transform({ id, filename, size, url, mimeType, type, localizedChallengeId, challengeId }) {
-    let challenge = null;
-    const localizedChallenge = { id: localizedChallengeId };
-    if (localizedChallengeId === challengeId) {
-      challenge = { id: challengeId };
-    }
     return {
       id,
       filename,
@@ -29,8 +24,8 @@ const serializer = new Serializer('attachment', {
       url,
       mimeType,
       type,
-      challenge,
-      localizedChallenge,
+      challenge: { id: challengeId },
+      localizedChallenge: { id: localizedChallengeId },
     };
   },
   challenge: {

@@ -15,8 +15,8 @@ export function buildAttachment({
     id,
     'fields': {
       'Record ID': id,
-      'challengeId persistant': [challengeId],
-      'challengeId': [airtableChallengeId],
+      'challengeId persistant': challengeId ? [challengeId] : [],
+      'challengeId': airtableChallengeId ? [airtableChallengeId] : [],
       createdAt,
       localizedChallengeId,
       type,

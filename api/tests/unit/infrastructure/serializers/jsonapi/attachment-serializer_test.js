@@ -210,91 +210,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           'mime-type': 'some mime type',
         });
       });
-      context('relationships', function() {
-        it('should return a json with a filled with both challenge and localized challenge relationships when attachment is related to primary challenge (hence, localizedChallengeId and challengeId are the same)', function() {
-          // given
-          const attachment = domainBuilder.buildAttachment({
-            id: 'attachmentId',
-            filename: 'some filename',
-            size: 123,
-            url: 'some.url.com',
-            type: 'some type',
-            mimeType: 'some mime type',
-            localizedChallengeId: 'challenge123',
-            challengeId: 'challenge123',
-          });
-
-          const serializedAttachment = serialize(attachment);
-
-          expect(serializedAttachment).toStrictEqual({
-            data: {
-              type: 'attachments',
-              id: 'attachmentId',
-              attributes: {
-                filename: 'some filename',
-                size: 123,
-                url: 'some.url.com',
-                type: 'some type',
-                'mime-type': 'some mime type',
-              },
-              relationships: {
-                challenge: {
-                  data: {
-                    type: 'challenges',
-                    id: 'challenge123',
-                  },
-                },
-                'localized-challenge': {
-                  data: {
-                    type: 'localized-challenges',
-                    id: 'challenge123',
-                  },
-                },
-              },
-            },
-          });
-        });
-        it('should return a json with a filled with localized challenge relationship only when attachment is related to localized challenge (hence, localizedChallengeId and challengeId are NOT the same)', function() {
-          // given
-          const attachment = domainBuilder.buildAttachment({
-            id: 'attachmentId',
-            filename: 'some filename',
-            size: 123,
-            url: 'some.url.com',
-            type: 'some type',
-            mimeType: 'some mime type',
-            localizedChallengeId: 'challenge123FR',
-            challengeId: 'challenge123',
-          });
-
-          const serializedAttachment = serialize(attachment);
-
-          expect(serializedAttachment).toStrictEqual({
-            data: {
-              type: 'attachments',
-              id: 'attachmentId',
-              attributes: {
-                filename: 'some filename',
-                size: 123,
-                url: 'some.url.com',
-                type: 'some type',
-                'mime-type': 'some mime type',
-              },
-              relationships: {
-                challenge: {
-                  data: null,
-                },
-                'localized-challenge': {
-                  data: {
-                    type: 'localized-challenges',
-                    id: 'challenge123FR',
-                  },
-                },
-              },
-            },
-          });
-        });
-      });
     });
     context('when serializing several entities', function() {
       it('should return a json for several serialized entities', function() {
@@ -308,8 +223,8 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           mimeType: 'some mime type1',
           localizedChallengeId: 'locId123',
           challengeId: 'challenge123',
+          airtableChallengeId: 'airtableChallenge123',
         });
-        attachment1.airtableChallengeId = 'airtableChallenge123';
         const attachment2 = domainBuilder.buildAttachment({
           id: 'attachmentId2',
           filename: 'some filename2',
@@ -318,9 +233,9 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           type: 'some type2',
           mimeType: 'some mime type2',
           localizedChallengeId: 'locId456',
-          airtableChallengeId: 'challenge456',
+          challengeId: 'challenge456',
+          airtableChallengeId: 'airtableChallenge456',
         });
-        attachment2.airtableChallengeId = 'airtableChallenge456';
 
         const serializedAttachments = serialize([attachment1, attachment2]);
 
@@ -345,7 +260,10 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                     },
                   },
                   challenge: {
-                    data: null,
+                    data: {
+                      type: 'challenges',
+                      id: 'challenge123',
+                    },
                   },
                 },
               },
@@ -367,7 +285,10 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                     },
                   },
                   challenge: {
-                    data: null,
+                    data: {
+                      type: 'challenges',
+                      id: 'challenge456',
+                    },
                   },
                 },
               },
