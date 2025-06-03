@@ -86,7 +86,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify common attributes as well as quality attributes when challenge is a prototype', async function(assert) {
+    test('can modify attributes when challenge is a prototype', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -215,7 +215,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify common attributes, but cant modify quality attributes', async function(assert) {
+    test('can modify attributes', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -225,15 +225,25 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       await clickByText('Sans validation (Pix Junior)');
       await clickByText('Validation par l\'embed (Pix Junior)');
-      assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();
-      assert.dom(screen.queryByText('Épreuve de sensibilisation')).doesNotExist();
-      assert.dom(screen.queryByText('Formulation à revoir')).doesNotExist();
-      assert.dom(screen.queryByText('Incompatible iPad certif')).doesNotExist();
-      assert.dom(screen.queryByText('Sourds et malentendants')).doesNotExist();
-      assert.dom(screen.queryByText('Non voyant')).doesNotExist();
-      assert.dom(screen.queryByText('Daltonien')).doesNotExist();
-      assert.dom(screen.queryByText('Spoil')).doesNotExist();
-      assert.dom(screen.queryByText('Responsive')).doesNotExist();
+      await clickByText('Épreuve de sensibilisation');
+      await clickByText('Accès GAFAM requis');
+      await clickByText('Formulation à revoir');
+      await clickByText('Incompatible iPad certif');
+      await clickByText('Sourds et malentendants');
+      await click(await screen.findByRole('option', { name: 'RAS' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Non voyant');
+      await click(await screen.findByRole('option', { name: 'OK' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Daltonien');
+      await click(await screen.findByRole('option', { name: 'KO' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Spoil');
+      await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Responsive');
+      await click(await screen.findByRole('option', { name: 'Tablette' }));
+      await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
@@ -322,7 +332,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify common attributes, but cant modify quality attributes', async function(assert) {
+    test('can modify attributes', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -334,15 +344,25 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
       await clickByText('Sans validation (Pix Junior)');
       await clickByText('Validation par l\'embed (Pix Junior)');
-      assert.dom(screen.queryByText('Accès GAFAM requis')).doesNotExist();
-      assert.dom(screen.queryByText('Épreuve de sensibilisation')).doesNotExist();
-      assert.dom(screen.queryByText('Formulation à revoir')).doesNotExist();
-      assert.dom(screen.queryByText('Incompatible iPad certif')).doesNotExist();
-      assert.dom(screen.queryByText('Sourds et malentendants')).doesNotExist();
-      assert.dom(screen.queryByText('Non voyant')).doesNotExist();
-      assert.dom(screen.queryByText('Daltonien')).doesNotExist();
-      assert.dom(screen.queryByText('Spoil')).doesNotExist();
-      assert.dom(screen.queryByText('Responsive')).doesNotExist();
+      await clickByText('Épreuve de sensibilisation');
+      await clickByText('Accès GAFAM requis');
+      await clickByText('Formulation à revoir');
+      await clickByText('Incompatible iPad certif');
+      await clickByText('Sourds et malentendants');
+      await click(await screen.findByRole('option', { name: 'RAS' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Non voyant');
+      await click(await screen.findByRole('option', { name: 'OK' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Daltonien');
+      await click(await screen.findByRole('option', { name: 'KO' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Spoil');
+      await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
+      await waitForSelectToBeClosed(screen);
+      await clickByText('Responsive');
+      await waitForSelectToBeClosed(screen);
+      await click(await screen.findByRole('option', { name: 'Non' }));
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 

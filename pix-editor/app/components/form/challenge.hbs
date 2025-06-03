@@ -256,7 +256,7 @@
       @disabled={{not @edition}}
     />
   </div>
-  {{#if (this.shouldDisplayQualitySection @challenge)}}
+  {{#if @challenge.isPrototype}}
     <Field::Quality @edition={{@edition}} @challenge={{@challenge}} />
   {{/if}}
   <div class="field {{if @edition '' 'disabled'}}">
