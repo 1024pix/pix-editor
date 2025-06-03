@@ -81,7 +81,7 @@ export default class LocalizedChallengeForm extends Component {
         @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
         @displayField={{@displayUrlsToConsultField}}
         @setDisplayField={{@setDisplayUrlsToConsultField}}
-        @textToolTip="Ces URLs doit être trouvée par l’utilisateur car elle n’est pas communiquée dans la consigne ou les propositions."
+        @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont pas communiquées dans la consigne ou les propositions."
       >
         <Textarea
           @title="URLs externes nécessaires à la résolution de l'épreuve"
