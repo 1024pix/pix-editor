@@ -1,5 +1,23 @@
 
 
+## v3.207.0 (03/06/2025)
+
+
+### :rocket: Amélioration
+- [#1011](https://github.com/1024pix/pix-editor/pull/1011) [FEATURE] Ajouter les métadonnées en bas du formulaire d'un proto en édition et consultation (PIX-17955).
+- [#1009](https://github.com/1024pix/pix-editor/pull/1009) [FEATURE] ajout d'une tooltip + renommage d'un label (PIX-17954).
+- [#1007](https://github.com/1024pix/pix-editor/pull/1007) [FEATURE] Ajout d'une route pour récupérer les noms de pays (PIX-17982).
+
+### :building_construction: Tech
+- [#995](https://github.com/1024pix/pix-editor/pull/995) [TECH] Sortir les pièces jointes - attachments - du proxy Airtable (PIX-17824).
+
+### :bug: Correction
+- [#1012](https://github.com/1024pix/pix-editor/pull/1012) [BUGFIX] Autoriser les noms d'acquis avec accents dans les URLs à ne pas analyser (PIX-18071).
+
+### :arrow_up: Montée de version
+- [#1006](https://github.com/1024pix/pix-editor/pull/1006) [BUMP] Update dependency @1024pix/pix-ui to ^55.19.2 (pix-editor).
+- [#1003](https://github.com/1024pix/pix-editor/pull/1003) [BUMP] Update Node.js to v22.15.1.
+
 ## v3.206.0 (22/05/2025)
 
 
