@@ -196,7 +196,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           mimeType: 'some mime type',
           localizedChallengeId: 'locId123',
           challengeId: 'challenge123',
-          alt: 'coucou les zamis',
         });
 
         const serializedAttachment = serialize(attachment);
@@ -209,7 +208,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           url: 'some.url.com',
           type: 'some type',
           'mime-type': 'some mime type',
-          alt: 'coucou les zamis',
         });
       });
       context('relationships', function() {
@@ -224,7 +222,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             mimeType: 'some mime type',
             localizedChallengeId: 'challenge123',
             challengeId: 'challenge123',
-            alt: 'coucou les zamis',
           });
 
           const serializedAttachment = serialize(attachment);
@@ -239,7 +236,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 url: 'some.url.com',
                 type: 'some type',
                 'mime-type': 'some mime type',
-                alt: 'coucou les zamis',
               },
               relationships: {
                 challenge: {
@@ -269,7 +265,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
             mimeType: 'some mime type',
             localizedChallengeId: 'challenge123FR',
             challengeId: 'challenge123',
-            alt: 'coucou les zamis',
           });
 
           const serializedAttachment = serialize(attachment);
@@ -284,7 +279,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 url: 'some.url.com',
                 type: 'some type',
                 'mime-type': 'some mime type',
-                alt: 'coucou les zamis',
               },
               relationships: {
                 challenge: {
@@ -314,7 +308,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           mimeType: 'some mime type1',
           localizedChallengeId: 'locId123',
           challengeId: 'challenge123',
-          alt: 'coucou les zamis1',
         });
         attachment1.airtableChallengeId = 'airtableChallenge123';
         const attachment2 = domainBuilder.buildAttachment({
@@ -326,7 +319,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
           mimeType: 'some mime type2',
           localizedChallengeId: 'locId456',
           airtableChallengeId: 'challenge456',
-          alt: 'coucou les zamis2',
         });
         attachment2.airtableChallengeId = 'airtableChallenge456';
 
@@ -344,7 +336,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   url: 'some.url.com1',
                   type: 'some type1',
                   'mime-type': 'some mime type1',
-                  alt: 'coucou les zamis1',
                 },
                 relationships: {
                   'localized-challenge': {
@@ -367,7 +358,6 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                   url: 'some.url.com2',
                   type: 'some type2',
                   'mime-type': 'some mime type2',
-                  alt: 'coucou les zamis2',
                 },
                 relationships: {
                   'localized-challenge': {

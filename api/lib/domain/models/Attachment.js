@@ -4,7 +4,6 @@ export class Attachment {
     filename,
     url,
     type,
-    alt,
     size,
     mimeType,
     challengeId,
@@ -14,7 +13,6 @@ export class Attachment {
     this.id = id;
     this.url = url;
     this.type = type;
-    this.alt = alt;
     this.size = size;
     this.mimeType = mimeType;
     this.filename = filename;
@@ -39,7 +37,6 @@ export class Attachment {
       id: null,
       url: this.url,
       type: this.type,
-      alt: this.alt,
       size: this.size,
       mimeType: this.mimeType,
       filename: this.filename,

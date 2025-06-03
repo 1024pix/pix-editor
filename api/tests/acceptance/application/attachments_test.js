@@ -168,7 +168,6 @@ describe('Acceptance | Route | attachments', () => {
             'type': validPayload.data.attributes.type,
             'mime-type': validPayload.data.attributes['mime-type'],
             'filename': validPayload.data.attributes.filename,
-            'alt': null,
           },
           relationships: {
             'localized-challenge': {
@@ -360,7 +359,6 @@ describe('Acceptance | Route | attachments', () => {
             type: 'type avant',
             'mime-type': 'mimeType avant',
             filename: 'filename APRES',
-            alt: null,
           },
           relationships: {
             'localized-challenge': {
@@ -601,7 +599,6 @@ describe('Acceptance | Route | attachments', () => {
             size: 'some size',
             'mime-type': 'some mimeType',
             filename: 'some filename',
-            alt: null,
           },
           relationships: {
             'localized-challenge': {
@@ -708,7 +705,6 @@ describe('Acceptance | Route | attachments', () => {
               size: 123,
               'mime-type': 'some mime type 1',
               filename: 'some filename 1',
-              alt: null,
             },
             relationships: {
               'localized-challenge': {

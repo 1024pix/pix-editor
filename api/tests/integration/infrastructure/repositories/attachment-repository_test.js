@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
@@ -12,57 +12,9 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#list', () => {
-    it('should return the list of all attachments with an alt illustration', async () => {
+    it('should return the list of all attachments', async () => {
       // given
-      const challengeId1 = 'challengeId1';
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: challengeId1,
-        challengeId: challengeId1,
-        locale: 'fr',
-      });
-
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId1',
-        challengeId: challengeId1,
-        locale: 'fr-fr',
-      });
-
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId1Nl',
-        challengeId: challengeId1,
-        locale: 'nl',
-      });
-
-      const challengeId2 = 'challengeId2';
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: challengeId2,
-        challengeId: challengeId2,
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId2',
-        challengeId: challengeId2,
-        locale: 'en',
-      });
-
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeId1.illustrationAlt',
-        locale: 'fr-fr',
-        value: 'illustration text alt 1',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeId1.illustrationAlt',
-        locale: 'nl',
-        value: 'illustration text alt 1 nl',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeId2.illustrationAlt',
-        locale: 'en',
-        value: 'illustration text alt 2',
-      });
-
       const airtableScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([
-
         airtableBuilder.factory.buildAttachment({
           id: 'attachmentId1',
           type: 'illustration',
@@ -105,11 +57,19 @@ describe('Integration | Repository | attachment-repository', () => {
         }),
       ]).activate().nockScope;
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId1',
+        challengeId: 'challengeId1',
+      });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId: 'attachmentId1',
         localizedChallengeId: 'localizedChallengeId1'
       });
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId2',
+        challengeId: 'challengeId2',
+      });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId: 'attachmentId2',
         localizedChallengeId: 'localizedChallengeId2'
@@ -125,7 +85,6 @@ describe('Integration | Repository | attachment-repository', () => {
         domainBuilder.buildAttachment({
           id: 'attachmentId1',
           type: 'illustration',
-          alt: 'illustration text alt 1',
           mimeType: 'mimeType1',
           filename: 'filename_1',
           url: 'http://1',
@@ -136,7 +95,6 @@ describe('Integration | Repository | attachment-repository', () => {
         domainBuilder.buildAttachment({
           id: 'attachmentId1Nl',
           type: 'illustration',
-          alt: 'illustration text alt 1 nl',
           mimeType: 'mimeType1NL',
           filename: 'filename_1NL',
           url: 'http://1-nl',
@@ -147,7 +105,6 @@ describe('Integration | Repository | attachment-repository', () => {
         domainBuilder.buildAttachment({
           id: 'attachmentId2',
           type: 'illustration',
-          alt: 'illustration text alt 2',
           mimeType: 'mimeType2',
           filename: 'filename_2',
           url: 'http://2',
@@ -160,7 +117,6 @@ describe('Integration | Repository | attachment-repository', () => {
           type: 'attachment',
           mimeType: 'mimeType3',
           filename: 'filename_3',
-          alt: null,
           url: 'http://3',
           challengeId: 'challengeId2',
           airtableChallengeId: 'challengeAirtableId2',
@@ -196,16 +152,6 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: 'challengeA',
         localizedChallengeId: 'challengeA',
       };
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeA.illustrationAlt',
-        locale: 'fr',
-        value: 'La trad fr pour attachment FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeA.illustrationAlt',
-        locale: 'nl',
-        value: 'La trad nl pour attachment NL',
-      });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeA',
         challengeId: 'challengeA',
@@ -226,24 +172,9 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: 'challengeB',
         localizedChallengeId: 'challengeB',
       };
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeB.illustrationAlt',
-        locale: 'fr',
-        value: 'I SHOULD NOT EXIST BECAUSE ATTACHMENT IS NOT AN ILLUSTRATION',
-      });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeB',
         challengeId: 'challengeB',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeC.illustrationAlt',
-        locale: 'fr',
-        value: 'some irrelevant translation for unknown challenge',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeC',
-        challengeId: 'challengeC',
         locale: 'fr',
       });
       await databaseBuilder.commit();
@@ -308,7 +239,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: attachment_NL_forChallengeA_data.id,
           url: attachment_NL_forChallengeA_data.url,
           type: attachment_NL_forChallengeA_data.type,
-          alt: 'La trad nl pour attachment NL',
           size: attachment_NL_forChallengeA_data.size,
           mimeType: attachment_NL_forChallengeA_data.mimeType,
           filename: attachment_NL_forChallengeA_data.filename,
@@ -320,7 +250,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: attachment_FR_forChallengeA_data.id,
           url: attachment_FR_forChallengeA_data.url,
           type: attachment_FR_forChallengeA_data.type,
-          alt: 'La trad fr pour attachment FR',
           size: attachment_FR_forChallengeA_data.size,
           mimeType: attachment_FR_forChallengeA_data.mimeType,
           filename: attachment_FR_forChallengeA_data.filename,
@@ -332,7 +261,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: attachment_FR_forChallengeB_data.id,
           url: attachment_FR_forChallengeB_data.url,
           type: attachment_FR_forChallengeB_data.type,
-          alt: null,
           size: attachment_FR_forChallengeB_data.size,
           mimeType: attachment_FR_forChallengeB_data.mimeType,
           filename: attachment_FR_forChallengeB_data.filename,
@@ -345,11 +273,6 @@ describe('Integration | Repository | attachment-repository', () => {
 
     it('should return an empty array when no localized challenge ids provided', async () => {
       // given
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeA.illustrationAlt',
-        locale: 'nl',
-        value: 'La trad nl pour attachment NL',
-      });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeA',
         challengeId: 'challengeA',
@@ -394,33 +317,17 @@ describe('Integration | Repository | attachment-repository', () => {
       return knex('localized_challenges-attachments').truncate();
     });
 
-    it('should create several attachments in airtable, in storage and the links to the localized challenge', async () => {
+    it('should create several attachments in airtable and the links to the localized challenge', async () => {
       // given
       const attachmentA = domainBuilder.buildAttachment({
         id: null,
         url: 'url/to/clone/attachmentA',
         type: 'illustration',
-        alt: 'useless alt',
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachmentA_filename',
         challengeId: 'challengeA',
         localizedChallengeId: 'localizedChallengeA',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeA.illustrationAlt',
-        locale: 'fr',
-        value: 'wrong illustrationAlt, wrong locale',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeA.illustrationAlt',
-        locale: 'nl',
-        value: 'good illustrationAlt',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeA',
-        challengeId: 'challengeA',
-        locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeA',
@@ -431,7 +338,6 @@ describe('Integration | Repository | attachment-repository', () => {
         id: null,
         url: 'url/to/clone/attachmentB',
         type: 'attachment',
-        alt: null,
         size: 456,
         mimeType: 'text/csv',
         filename: 'attachmentB_filename',
@@ -519,7 +425,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: 'airtableIdAttachmentA',
           url: attachmentA.url,
           type: attachmentA.type,
-          alt: 'good illustrationAlt',
           size: attachmentA.size,
           mimeType: attachmentA.mimeType,
           filename: attachmentA.filename,
@@ -531,7 +436,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: 'airtableIdAttachmentB',
           url: attachmentB.url,
           type: attachmentB.type,
-          alt: null,
           size: attachmentB.size,
           mimeType: attachmentB.mimeType,
           filename: attachmentB.filename,
@@ -636,7 +540,6 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: 'challengeId',
         localizedChallengeId: attachment.localizedChallengeId,
         airtableChallengeId: 'airtableChallengeId',
-        alt: null,
       });
       expect(createdAttachment).toStrictEqual(expectedAttachment);
       const localizedChallengeAttachment = await knex('localized_challenges-attachments')
@@ -649,117 +552,6 @@ describe('Integration | Repository | attachment-repository', () => {
           localizedChallengeId: attachment.localizedChallengeId,
         },
       );
-    });
-
-    context('alt field', function() {
-      let attachmentToCreate, expectedAttachment;
-      beforeEach(function() {
-        // given
-        attachmentToCreate = domainBuilder.buildAttachment({
-          id: null,
-          url: 'url/to/clone/attachment',
-          size: 123,
-          mimeType: 'image/jpeg',
-          filename: 'attachment_filename',
-          challengeId: 'challengeId',
-          localizedChallengeId: 'localizedChallengeId',
-        });
-        const airtableIdsByIds = {
-          'challengeId': 'airtableChallengeId',
-        };
-        vi.spyOn(challengeDatasource, 'getAirtableIdsByIds').mockImplementation((necessaryChallengeIds) => {
-          if (necessaryChallengeIds.join('') !== 'challengeId')
-            expect.unreachable('Wrong challenge id for fetching corresponding airtable id');
-          return airtableIdsByIds;
-        });
-        vi.spyOn(airtableClient, 'createRecord').mockImplementation((tableName, airtableRequestBody) => {
-          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-          if (!_.isEqual(airtableRequestBody, {
-            fields: {
-              url: attachmentToCreate.url,
-              size: attachmentToCreate.size,
-              type: attachmentToCreate.type,
-              mimeType: attachmentToCreate.mimeType,
-              filename: attachmentToCreate.filename,
-              challengeId: ['airtableChallengeId'],
-              localizedChallengeId: attachmentToCreate.localizedChallengeId,
-            }
-          })
-          ) expect.unreachable('Attachments to create to airtable wrong bodies');
-          return {
-            id: 'airtableIdAttachment',
-            fields: {
-              'Record ID': 'airtableIdAttachment',
-              url: attachmentToCreate.url,
-              size: attachmentToCreate.size,
-              type: attachmentToCreate.type,
-              mimeType: attachmentToCreate.mimeType,
-              filename: attachmentToCreate.filename,
-              'challengeId persistant': ['challengeId'],
-              'challengeId': ['airtableChallengeId'],
-              'localizedChallengeId': attachmentToCreate.localizedChallengeId,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          };
-        });
-        expectedAttachment = domainBuilder.buildAttachment({
-          id: 'airtableIdAttachment',
-          url: attachmentToCreate.url,
-          size: attachmentToCreate.size,
-          mimeType: attachmentToCreate.mimeType,
-          filename: attachmentToCreate.filename,
-          challengeId: 'challengeId',
-          airtableChallengeId: 'airtableChallengeId',
-          localizedChallengeId: attachmentToCreate.localizedChallengeId,
-        });
-        databaseBuilder.factory.buildTranslation({
-          key: 'challenge.challengeId.illustrationAlt',
-          locale: 'fr',
-          value: 'wrong illustrationAlt, wrong locale',
-        });
-        databaseBuilder.factory.buildTranslation({
-          key: 'challenge.challengeId.illustrationAlt',
-          locale: 'nl',
-          value: 'good illustrationAlt',
-        });
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'challengeId',
-          challengeId: 'challengeId',
-          locale: 'fr',
-        });
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'localizedChallengeId',
-          challengeId: 'challengeId',
-          locale: 'nl',
-        });
-        return databaseBuilder.commit();
-      });
-
-      it('should fill the alt field when attachment is of type illustration', async function() {
-        attachmentToCreate.type = 'illustration';
-
-        // when
-        const createdAttachment = await attachmentRepository.create(attachmentToCreate);
-
-        // then
-        expectedAttachment.type = 'illustration';
-        expectedAttachment.alt = 'good illustrationAlt';
-        expect(createdAttachment).toStrictEqual(expectedAttachment);
-      });
-
-      it('should leave the alt field null when attachment is not of type illustration', async function() {
-        attachmentToCreate.type = 'NOTillustration';
-
-        // when
-        const createdAttachment = await attachmentRepository.create(attachmentToCreate);
-
-        // then
-        expectedAttachment.type = 'NOTillustration';
-        expectedAttachment.alt = null;
-        expect(createdAttachment).toStrictEqual(expectedAttachment);
-      });
     });
   });
 
@@ -839,7 +631,6 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: 'challengeId',
         localizedChallengeId: attachment.localizedChallengeId,
         airtableChallengeId: 'airtableChallengeId',
-        alt: null,
       });
       expect(updatedAttachment).toStrictEqual(expectedAttachment);
       const localizedChallengeAttachment = await knex('localized_challenges-attachments')
@@ -886,7 +677,6 @@ describe('Integration | Repository | attachment-repository', () => {
           challengeId: 'challengeId',
           localizedChallengeId: 'localizedChallengeId',
           airtableChallengeId: 'airtableChallengeId',
-          alt: null,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: 'challengeId',
