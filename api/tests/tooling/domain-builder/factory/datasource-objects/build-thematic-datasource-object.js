@@ -5,6 +5,7 @@ export function buildThematicDatasourceObject(
     competenceId = 'recCompetence0',
     competenceAirtableId = 'recAirtableCompetence0',
     tubeIds = ['recTube0'],
+    tubeAirtableIds = ['recAirtableTube0'],
     index = 0
   } = {}) {
   return {
@@ -13,6 +14,7 @@ export function buildThematicDatasourceObject(
     competenceId,
     competenceAirtableId,
     tubeIds,
+    tubeAirtableIds,
     index,
   };
 }

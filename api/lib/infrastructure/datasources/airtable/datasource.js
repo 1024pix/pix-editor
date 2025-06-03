@@ -25,6 +25,16 @@ const _DatasourcePrototype = {
     }
   },
 
+  async getManyByAirtableIds(ids) {
+    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+      filterByFormula: `OR(${ids.map((id) => `RECORD_ID() = ${airtable.stringValue(id)}`).join(', ')})`,
+      fields: this.usedFields,
+      sort: this.defaultSort(),
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
   async filter({ filter: { ids, formula } }) {
     const filterByFormula = ids ? (
       'OR(' + ids.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',') + ')'

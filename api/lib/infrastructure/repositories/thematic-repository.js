@@ -4,6 +4,7 @@ import * as translationRepository from './translation-repository.js';
 import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'thematic';
 
@@ -15,6 +16,15 @@ export async function list() {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function getByAirtableId(airtableId) {
+  const datasourceThematic = await thematicDatasource.find(airtableId);
+  if (!datasourceThematic) return null;
+
+  const translations = await translationRepository.listByEntity(model, datasourceThematic.id);
+
+  return toDomain(datasourceThematic, translations);
+}
+
 export async function getMany(ids) {
   const [datasourceThematics, translations] = await Promise.all([
     thematicDatasource.filter({ filter: { ids } }),
@@ -23,8 +33,23 @@ export async function getMany(ids) {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function getManyByAirtableIds(ids) {
+  if (!ids?.length) return [];
+  const datasourceThematics = await thematicDatasource.getManyByAirtableIds(ids);
+  if (!datasourceThematics) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
+  return toDomainList(datasourceThematics, translations);
+}
+
 export async function listByCompetenceId(competenceId) {
   const datasourceThematics = await thematicDatasource.listByCompetenceId(competenceId);
+  if (!datasourceThematics) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
+  return toDomainList(datasourceThematics, translations);
+}
+
+export async function listByCompetenceAirtableId(competenceAirtableId) {
+  const datasourceThematics = await thematicDatasource.listByCompetenceAirtableId(competenceAirtableId);
   if (!datasourceThematics) return [];
   const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
   return toDomainList(datasourceThematics, translations);
@@ -36,6 +61,20 @@ export async function create(thematic) {
   const translations = thematicTranslations.extractFromDomainObject(thematic);
   await translationRepository.save({ translations });
   return toDomain(createdThematicDTO, translations);
+}
+
+export async function update(thematic) {
+  return knex.transaction(async (transaction) => {
+    const updatedThematicDto = await thematicDatasource.update(thematic);
+    const translations = thematicTranslations.extractFromDomainObject(thematic);
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: `${thematicTranslations.prefix}${thematic.id}.`,
+      locales: ['fr', 'en'],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
+    return toDomain(updatedThematicDto, translations);
+  });
 }
 
 function toDomainList(datasourceThematics, translations) {

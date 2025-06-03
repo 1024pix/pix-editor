@@ -4,6 +4,7 @@ import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
 import { competenceRoutes } from './application/competences/index.js';
 import * as configRoute from './application/config.js';
+import * as embedsRoute from './application/embeds.js';
 import * as fileStorageTokenRoute from './application/file-storage-token/index.js';
 import * as frameworksRoute from './application/frameworks.js';
 import * as healthcheckRoute from './application/healthcheck/index.js';
@@ -17,8 +18,8 @@ import * as skillsRoute from './application/skills/index.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
 import * as staticRoute from './application/static/index.js';
+import * as thematicsRoutes from './application/thematics.js';
 import * as translationsRoute from './application/translations.js';
-import * as embedsRoute from './application/embeds.js';
 import * as usersRoute from './application/users.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
@@ -28,6 +29,7 @@ export const routes = [
   attachmentsRoute,
   challengesRoute,
   configRoute,
+  embedsRoute,
   fileStorageTokenRoute,
   frameworksRoute,
   heapdumpRoute,
@@ -41,8 +43,8 @@ export const routes = [
   staticCoursesRoute,
   staticCourseTagsRoute,
   staticRoute,
+  thematicsRoutes,
   translationsRoute,
-  embedsRoute,
   usersRoute,
   whitelistedUrlsRoute,
   ...competenceRoutes,

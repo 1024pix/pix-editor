@@ -14,6 +14,7 @@ export const thematicDatasource = datasource.extend({
     'Competence',
     'Competence (id persistant)',
     'Tubes (id persistant)',
+    'Tubes',
     'Index',
   ],
 
@@ -24,24 +25,36 @@ export const thematicDatasource = datasource.extend({
       competenceId: airtableRecord.get('Competence (id persistant)')[0],
       competenceAirtableId: airtableRecord.get('Competence')[0],
       tubeIds: airtableRecord.get('Tubes (id persistant)') ?? [],
+      tubeAirtableIds: airtableRecord.get('Tubes') ?? [],
       index: airtableRecord.get('Index'),
     };
   },
 
   toAirTableObject(model) {
-    return {
+    const airtableObject = {
       fields: {
         'id persistant': model.id,
         Competence: [model.competenceAirtableId],
         Index: model.index,
       },
     };
+    if (model.airtableId) airtableObject.id = model.airtableId;
+    return airtableObject;
   },
 
   async listByCompetenceId(competenceId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       fields: this.usedFields,
       filterByFormula: `{Competence (id persistant)} = ${stringValue(competenceId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
+  async listByCompetenceAirtableId(competenceAirtableId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `Competence = ${stringValue(competenceAirtableId)}`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);

@@ -1,16 +1,8 @@
-import AirtableAdapter from './airtable';
+import ApplicationAdapter from './application';
 
-export default class ThemeAdapter extends AirtableAdapter {
-
-  fields = [
-    'Record Id',
-    'id persistant',
-    'Tubes',
-    'Competence',
-    'Index',
-  ];
+export default class ThemeAdapter extends ApplicationAdapter {
 
   pathForType() {
-    return 'Thematiques';
+    return 'thematics';
   }
 }

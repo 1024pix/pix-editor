@@ -22,10 +22,10 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
       getByAirtableId: vi.fn(),
     };
     skillTransformer = {
-      filterSkillsFields: vi.fn().mockReturnValueOnce(['skillTransformed'])
+      filterSkillFields: vi.fn().mockReturnValueOnce('skillTransformed'),
     };
     updatedRecordNotifier = {
-      notify: vi.fn()
+      notify: vi.fn(),
     };
   });
 
@@ -57,7 +57,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
     expect(skillRepository.listByTubeId).toHaveBeenCalledWith('tube1');
     expect(skill.prepareForCreation).toHaveBeenCalledWith(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
     expect(skillRepository.create).toHaveBeenCalledWith(skill);
-    expect(skillTransformer.filterSkillsFields).toHaveBeenCalledWith([createdSkill]);
+    expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
     expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: 'skillTransformed' , model: 'skills', pixApiClient });
   });
 
