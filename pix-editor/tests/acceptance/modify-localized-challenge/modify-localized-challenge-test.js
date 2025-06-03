@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
+import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
 module('Acceptance | Modify-Localized-Challenge', function(hooks) {
@@ -16,7 +17,7 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
 
     const prototype = this.server.create('challenge', { id: 'recChallenge1' });
     this.server.create('localizedChallenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
-    this.server.create('localizedChallenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl' });
+    this.server.create('localizedChallenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', geography: 'NL' });
     const skill = this.server.create('skill', { id: 'recSkill1', name: '@trululu2', challengeIds: ['recChallenge1'] });
     const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -45,7 +46,7 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     return authenticateSession();
   });
 
-  test('visiting /', async function(assert) {
+  test('should modify attributes in localized challenge', async function(assert) {
     // when
     const store = this.owner.lookup('service:store');
 
@@ -60,12 +61,16 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     await clickByText('Modifier');
     await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
     await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\n mon-autre-url.com');
+    await clickByText('Géographie');
+    await click(await screen.findByRole('option', { name: 'Japon' }));
+    await waitForSelectToBeClosed(screen);
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
 
     assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : mon-autre-url.com');
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
+    assert.deepEqual(challenge.geography, 'JP');
 
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);

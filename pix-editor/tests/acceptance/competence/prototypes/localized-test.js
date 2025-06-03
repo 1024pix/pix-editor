@@ -132,7 +132,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
       await clickByText('Modifier');
 
       assert.dom(screen.getByRole('textbox', { name: /Embed URL/ })).exists();
-      assert.dom(screen.getByRole('combobox', { name: 'Géographie' })).exists();
+      assert.dom(screen.getByLabelText('Géographie')).exists();
     });
   });
 });

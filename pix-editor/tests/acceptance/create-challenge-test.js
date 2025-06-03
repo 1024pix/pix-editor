@@ -90,6 +90,9 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await clickByText('Responsive');
     await click(await screen.findByRole('option', { name: 'Non' }));
     await waitForSelectToBeClosed(screen);
+    await clickByText('Géographie');
+    await click(await screen.findByRole('option', { name: 'Japon' }));
+    await waitForSelectToBeClosed(screen);
     await click(find('[data-test-save-challenge-button]'));
 
     // then
@@ -105,6 +108,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     assert.strictEqual((await screen.getByLabelText('Non voyant')).childNodes[3].textContent, 'OK');
     assert.strictEqual((await screen.getByLabelText('Daltonien')).childNodes[3].textContent, 'KO');
     assert.strictEqual((await screen.getByLabelText('Spoil')).childNodes[3].textContent, 'Facilement Sp');
+    assert.strictEqual((await screen.getByLabelText('Géographie')).childNodes[3].textContent, 'Japon');
     assert.true(screen.getByRole('checkbox', { name: 'Épreuve de sensibilisation' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);

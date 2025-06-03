@@ -11,8 +11,6 @@ export class LocalizedChallenge {
     fileIds,
     locale,
     status,
-    // FIXME This is a geography code (not a country name !)
-    // remove me when all doubt is lifted (because in model challenge, geography references a country name !)
     geography,
     urlsToConsult,
     requireGafamWebsiteAccess,
@@ -117,7 +115,7 @@ export class LocalizedChallenge {
       status: LocalizedChallenge.STATUSES.PAUSE,
       embedUrl: null,
       fileIds: [],
-      geography: null,
+      geography: 'AA',
       urlsToConsult: null,
       requireGafamWebsiteAccess: false,
       isIncompatibleIpadCertif: false,

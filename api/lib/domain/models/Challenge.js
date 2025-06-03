@@ -1,4 +1,3 @@
-import { getCountryCode, getCountryName } from '../../infrastructure/repositories/country-repository.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
@@ -251,10 +250,6 @@ export class Challenge {
     return this.locale === this.primaryLocale;
   }
 
-  get geographyCode() {
-    return getCountryCode(this.geography);
-  }
-
   get isDeclinable() {
     return this.declinable !== Challenge.DECLINABLES.NON;
   }
@@ -391,7 +386,7 @@ export class Challenge {
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
-    this.geography = getCountryName(localizedChallenge.geography);
+    this.geography = localizedChallenge.geography;
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
     this.requireGafamWebsiteAccess = this.#primaryLocalizedChallenge.requireGafamWebsiteAccess;
     this.isIncompatibleIpadCertif = this.#primaryLocalizedChallenge.isIncompatibleIpadCertif;

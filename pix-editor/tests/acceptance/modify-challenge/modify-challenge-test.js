@@ -38,6 +38,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         instruction: 'Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        geography: 'FR',
       });
       this.server.create('challenge', {
         id: 'recChallenge2',
@@ -54,6 +55,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         version: 1,
         status: 'proposé',
         instruction: 'Cliquer sur instructions de la décli pour interagir avec',
+        geography: 'FR',
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1', 'recChallenge2'], status: 'en construction' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
@@ -117,6 +119,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Non' }));
       await waitForSelectToBeClosed(screen);
+      await clickByText('Géographie');
+      await click(await screen.findByRole('option', { name: 'Japon' }));
+      await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
@@ -129,6 +134,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.strictEqual((await screen.getByLabelText('Daltonien')).childNodes[3].textContent, 'KO');
       assert.strictEqual((await screen.getByLabelText('Spoil')).childNodes[3].textContent, 'Facilement Sp');
       assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
+      assert.strictEqual((await screen.getByLabelText('Géographie')).childNodes[3].textContent, 'Japon');
       assert.true(screen.getByRole('checkbox', { name: 'Épreuve de sensibilisation' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
@@ -187,6 +193,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        geography: 'FR',
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'actif' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
@@ -244,6 +251,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Tablette' }));
       await waitForSelectToBeClosed(screen);
+      await clickByText('Géographie');
+      await click(await screen.findByRole('option', { name: 'Japon' }));
+      await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
@@ -251,6 +261,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
       assert.dom(await find('[data-test-save-challenge-button]')).doesNotExist();
+      assert.deepEqual(challenge.geography, 'JP');
     });
 
     test('modify a challenge\'s urlsToConsult when playing around with the field', async function(assert) {
@@ -300,6 +311,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        geography: 'FR',
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
@@ -363,6 +375,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Responsive');
       await waitForSelectToBeClosed(screen);
       await click(await screen.findByRole('option', { name: 'Non' }));
+      await clickByText('Géographie');
+      await click(await screen.findByRole('option', { name: 'Japon' }));
+      await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
@@ -370,6 +385,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
       assert.dom(await find('[data-test-save-challenge-button]')).doesNotExist();
+      assert.deepEqual(challenge.geography, 'JP');
     });
   });
 
@@ -391,6 +407,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        geography: 'FR',
       });
       const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });

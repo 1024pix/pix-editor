@@ -143,7 +143,7 @@ export const challengeDatasource = datasource.extend({
         'Daltonien': model.accessibility2,
         'Spoil': model.spoil,
         'Responsive': model.responsive,
-        'Géographie': model.geography,
+        'Géographie': model.localizedChallenges?.[0]?.geography || 'AA',
         'files': model.files,
         'validated_at': model.validatedAt,
         'archived_at': model.archivedAt,

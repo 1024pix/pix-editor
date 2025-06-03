@@ -159,7 +159,7 @@ async function mockCurrentContent() {
     ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
-  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
+  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'AA', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
   expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
 

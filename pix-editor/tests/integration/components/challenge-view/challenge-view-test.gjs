@@ -43,7 +43,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         focusable: false,
         responsive: 'responsive',
         locales: 'languages',
-        geography: 'geography',
+        geography: 'FR',
         files: [],
         isAwarenessChallenge: true,
         requireGafamWebsiteAccess: true,
@@ -89,7 +89,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     assert.dom(screen.getByLabelText('Spoil')).hasValue('spoil');
     assert.dom(screen.getByLabelText('Déclinable')).hasValue('difficilement');
     assert.dom(screen.getByLabelText('Responsive')).hasValue('responsive');
-    assert.dom(screen.getByLabelText('Géographie')).hasValue('geography');
+    assert.dom(screen.getByLabelText('Géographie')).hasValue('FR');
     assert.dom(screen.getByLabelText('Non voyant')).hasValue('Ok');
     assert.dom(screen.getByLabelText('Daltonien')).hasValue('Ok');
     assert.dom(screen.getByLabelText('Sourds et malentendants')).hasValue('Ok');

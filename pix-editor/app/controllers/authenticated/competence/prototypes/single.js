@@ -34,6 +34,7 @@ export default class SingleController extends Controller {
   @service router;
   @service storage;
   @service store;
+  @service countries;
 
   @tracked invalidUrlsToConsult = '';
   @tracked invalidEmbedURL = '';
@@ -59,6 +60,13 @@ export default class SingleController extends Controller {
 
   get challenge() {
     return this.model;
+  }
+
+  get countryList() {
+    return this.countries.list.map((country) => ({
+      label: country.name,
+      value: country.code,
+    }));
   }
 
   get challengeTitle() {

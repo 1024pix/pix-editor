@@ -1,7 +1,6 @@
 import JsonapiSerializer from 'jsonapi-serializer';
 import Inflector from 'inflected';
 import { LocalizedChallenge } from '../../../domain/models/index.js';
-import { getCountryCode, getCountryName } from '../../repositories/country-repository.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 
@@ -56,7 +55,6 @@ const serializer = new Serializer('localized-challenges', {
       defaultEmbedUrl,
       challenge: { id: challengeId },
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
-      geography: getCountryName(localizedChallenge.geography),
       attachments: [],
     };
   }
@@ -110,7 +108,6 @@ export async function deserialize(localizedChallengeBody) {
   return new Promise((resolve, reject) => {
 
     deserializer.deserialize(localizedChallengeBody, (err, localizedChallengeObject) => {
-      localizedChallengeObject.geography = getCountryCode(localizedChallengeObject.geography);
       return err ? reject(err) : resolve(new LocalizedChallenge(localizedChallengeObject));
     });
   });

@@ -162,7 +162,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.responsive, prototype.responsive, 'champ responsive');
       assert.deepEqual(clonedChallenge.locales, prototype.locales, 'champ locales');
       assert.deepEqual(clonedChallenge.alternativeLocales, prototype.alternativeLocales, 'champ alternativeLocales');
-      assert.strictEqual(clonedChallenge.geography, prototype.geography, 'champ geography');
+      assert.strictEqual(clonedChallenge.geography, prototype.geography, 'FR');
       assert.deepEqual(clonedChallenge.urlsToConsult, prototype.urlsToConsult, 'champ urlsToConsult');
       assert.strictEqual(clonedChallenge.autoReply, prototype.autoReply, 'champ autoReply');
       assert.strictEqual(clonedChallenge.focusable, prototype.focusable, 'champ focusable');
@@ -222,7 +222,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.responsive, alternative.responsive, 'champ responsive');
       assert.deepEqual(clonedChallenge.locales, alternative.locales, 'champ locales');
       assert.deepEqual(clonedChallenge.alternativeLocales, alternative.alternativeLocales, 'champ alternativeLocales');
-      assert.strictEqual(clonedChallenge.geography, alternative.geography, 'champ geography');
+      assert.strictEqual(clonedChallenge.geography, alternative.geography, 'FR');
       assert.deepEqual(clonedChallenge.urlsToConsult, alternative.urlsToConsult, 'champ urlsToConsult');
       assert.strictEqual(clonedChallenge.autoReply, alternative.autoReply, 'champ autoReply');
       assert.strictEqual(clonedChallenge.focusable, alternative.focusable, 'champ focusable');

@@ -200,7 +200,7 @@ function generateBaseChallengeData(status, autoReply) {
     files: [],
     focusable: iterFor.focusable.next().value,
     format: iterFor.format.next().value,
-    geography: 'Monde',
+    geography: 'AA',
     pedagogy: iterFor.pedagogy.next().value,
     responsive: iterFor.responsive.next().value,
     shuffled: iterFor.shuffled.next().value,

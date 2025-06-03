@@ -1,6 +1,5 @@
 import JsonapiSerializer from 'jsonapi-serializer';
 import { Challenge, LocalizedChallenge } from '../../../domain/models/index.js';
-import { getCountryCode } from '../../repositories/country-repository.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 
@@ -139,7 +138,7 @@ export function deserialize(challengeBody) {
         challengeId: challengeObject.id,
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
-        geography: getCountryCode(challengeObject.geography),
+        geography: challengeObject.geography || 'AA',
         urlsToConsult: challengeObject.urlsToConsult,
         requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
         isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,
