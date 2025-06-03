@@ -64,11 +64,11 @@ export default class LocalizedChallengeForm extends Component {
       <PixSelect
         @id="localized-select-geography"
         @placeholder="Géographie"
-        @disabled={{not @edition}}
+        @isDisabled={{not @edition}}
         @onChange={{fn (mut @localizedChallenge.geography)}}
         @value={{this.localizedChallengeGeographyValue}}
         @options={{@countryList}}
-        @hideDefaultOption={{false}}
+        @hideDefaultOption={{true}}
       >
         <:label>Géographie</:label>
       </PixSelect>

@@ -98,6 +98,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       // then
       assert.dom(await screen.queryByText('Embed URL auto-générée', { exact: false })).doesNotExist();
     });
+
     test('should display an embed url if localized challenge has one', async function(assert) {
       // given
       this.server.create('localized-challenge', { id: 'recChallenge2ES', challengeId: 'recChallenge2', locale: 'es', embedURL: 'https://mon-site.fr/my-es-link.html' });
@@ -113,7 +114,6 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       const input = await screen.findByLabelText('Embed URL :');
       assert.strictEqual(input.value, 'https://mon-site.fr/my-es-link.html');
     });
-
   });
 
   module('When interacting with an alternative', function(hooks) {

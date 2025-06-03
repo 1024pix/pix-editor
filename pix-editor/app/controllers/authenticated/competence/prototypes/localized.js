@@ -32,7 +32,10 @@ export default class LocalizedController extends Controller {
   deletedFiles = [];
 
   get countryList() {
-    return this.countries.list;
+    return this.countries.list.map((country) => ({
+      label: country.name,
+      value: country.code,
+    }));
   }
 
   get challenge() {

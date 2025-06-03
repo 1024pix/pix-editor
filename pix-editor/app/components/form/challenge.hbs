@@ -1,4 +1,4 @@
-<form action="" class="ui form" class="challenge-form">
+<form action="" class="ui form challenge-form">
   <Field::Mde
     @title="Consigne"
     @value={{@challenge.instruction}}
@@ -279,8 +279,8 @@
           @onChange={{fn (mut @challenge.geography)}}
           @value={{this.challengeGeographyValue}}
           @options={{@countries}}
-          @disabled={{not @edition}}
-          @hideDefaultOption={{false}}
+          @isDisabled={{not @edition}}
+          @hideDefaultOption={{true}}
         >
           <:label>Géographie</:label>
         </PixSelect>

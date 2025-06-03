@@ -63,7 +63,10 @@ export default class SingleController extends Controller {
   }
 
   get countryList() {
-    return this.countries.list;
+    return this.countries.list.map((country) => ({
+      label: country.name,
+      value: country.code,
+    }));
   }
 
   get challengeTitle() {
