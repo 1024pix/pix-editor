@@ -229,4 +229,116 @@ describe('Application | Route | Tutorials', () => {
       });
     });
   });
+
+  describe('GET /api/tutorials/{tutorialAirtableId}', async () => {
+    let airtableGetTutorialScope;
+
+    context('when param is not in the right format', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tutorials/zouzou',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('when tutorial does not exist', function() {
+      it('should respond with status 404', async function() {
+        // given
+        const server = await createServer();
+        airtableGetTutorialScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tutorials/tutorialAirtableId',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+      });
+    });
+
+    context('success', function() {
+      it('should respond with status 200 and tutorial', async () => {
+        // given
+        const airtableTutorial = airtableBuilder.factory.buildTutorial({
+          id: 'tutorialId',
+          airtableId: 'tutorialAirtableId',
+          title: 'mon titre',
+          format: Tutorial.FORMATS.PDF,
+          duration: '12:01:02',
+          source: 'Mon grenier',
+          link: 'https://coucou.com',
+          language: 'fr',
+          license: Tutorial.LICENSES.C,
+          level: Tutorial.LEVELS.TWO,
+          crush: Tutorial.CRUSHES.YES,
+          tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
+        });
+        airtableGetTutorialScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableTutorial);
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tutorials/tutorialAirtableId',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response.result).toEqual({
+          data: {
+            type: 'tutorials',
+            id: 'tutorialAirtableId',
+            attributes: {
+              'title': 'mon titre',
+              'duration': '12:01:02',
+              'source': 'Mon grenier',
+              'format': Tutorial.FORMATS.PDF,
+              'link': 'https://coucou.com',
+              'license': Tutorial.LICENSES.C,
+              'level': Tutorial.LEVELS.TWO,
+              'crush': Tutorial.CRUSHES.YES,
+              'language': 'fr',
+              'pix-id': 'tutorialId',
+            },
+            relationships: {
+              tags: {
+                data: [
+                  {
+                    type: 'tags',
+                    id: 'tagAirtableId1',
+                  },
+                  {
+                    type: 'tags',
+                    id: 'tagAirtableId2',
+                  },
+                ],
+              },
+            },
+          },
+        });
+        expect(airtableGetTutorialScope.isDone()).toBe(true);
+      });
+    });
+  });
 });
