@@ -4,7 +4,6 @@ import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { logger } from '../infrastructure/logger.js';
 import { DomainError } from '../domain/errors.js';
-import { ConflictError } from '../infrastructure/errors.js';
 import * as tagSerializer from '../infrastructure/serializers/jsonapi/tag-serializer.js';
 import { tagRepository } from '../infrastructure/repositories/index.js';
 import { createTag } from '../domain/usecases/index.js';
@@ -36,7 +35,7 @@ export function register(server) {
         handler: async function(request, h) {
           try {
             const tag = await tagSerializer.deserialize(request.payload);
-            const createdTag = await createTag(tag, { tagRepository, ConflictError });
+            const createdTag = await createTag(tag, { tagRepository });
             return h.response(tagSerializer.serialize(createdTag)).code(201);
           } catch (err) {
             if (err instanceof DomainError) throw err;
@@ -75,13 +74,13 @@ export function register(server) {
       config: {
         validate: {
           query: Joi.object({
-            'filter[title]': Joi.string().required(),
-          }).required(),
+            'filter[title]': Joi.string(),
+          }),
         },
         handler: async function(request) {
           try {
             const params = extractParameters(request.query);
-            const tags = await tagRepository.findAllByPartialTitle(params.filter.title);
+            const tags = await tagRepository.searchByTitle(params.filter.title);
             return tagSerializer.serialize(tags);
           } catch (err) {
             logger.error(err);

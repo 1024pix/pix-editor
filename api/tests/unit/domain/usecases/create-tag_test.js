@@ -1,7 +1,7 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { createTag } from '../../../../lib/domain/usecases/index.js';
 import { Tag } from '../../../../lib/domain/models/index.js';
-import { ConflictError } from '../../../../lib/infrastructure/errors.js';
+import { TagTitleAlreadyUsedError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Use Cases | create-tag', () => {
   let tagRepository, dependencies;
@@ -13,7 +13,6 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
     };
     dependencies = {
       tagRepository,
-      ConflictError,
     };
   });
 
@@ -23,7 +22,7 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
       tagRepository.findByTitle.mockResolvedValue(new Tag({}));
 
       // when / then
-      await expect(createTag(new Tag({ title: 'titre recherché' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
+      await expect(createTag(new Tag({ title: 'titre recherché' }), dependencies)).rejects.to.deep.equal(new TagTitleAlreadyUsedError('titre recherché'));
       expect(tagRepository.findByTitle).toHaveBeenCalledWith('titre recherché');
     });
   });

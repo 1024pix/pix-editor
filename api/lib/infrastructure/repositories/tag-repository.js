@@ -14,16 +14,16 @@ export async function getByAirtableId(tagId) {
   return toDomain(datasourceTag);
 }
 
-export async function findAllByPartialTitle(title) {
-  const datasourceTags = await tagDatasource.searchByPartialTitle(title);
+export async function searchByTitle(title) {
+  const datasourceTags = await tagDatasource.searchByTitle(title);
   if (!datasourceTags) return [];
   return datasourceTags.map(toDomain);
 }
 
 export async function findByTitle(title) {
-  const datasourceTags = await tagDatasource.findByTitle(title);
-  if (!datasourceTags) return null;
-  return toDomain(datasourceTags[0]);
+  const datasourceTag = await tagDatasource.findByTitle(title);
+  if (!datasourceTag) return null;
+  return toDomain(datasourceTag);
 }
 
 function toDomain(datasourceTag) {

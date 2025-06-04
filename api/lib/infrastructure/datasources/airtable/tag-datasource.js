@@ -7,8 +7,6 @@ export const tagDatasource = datasource.extend({
 
   tableName: 'Tags',
 
-  airtableIdField: 'Record ID',
-
   usedFields: [
     'id persistant',
     'Nom',
@@ -42,7 +40,7 @@ export const tagDatasource = datasource.extend({
     return airtableObject;
   },
 
-  async searchByPartialTitle(title) {
+  async searchByTitle(title) {
     const filterByFormula = `FIND(${stringValue(title.toLowerCase())}, LOWER(Nom))`;
     const records = await findRecords(this.tableName, {
       filterByFormula,
@@ -65,6 +63,6 @@ export const tagDatasource = datasource.extend({
     });
 
     if (records.length === 0) return undefined;
-    return records.map(this.fromAirTableObject);
+    return this.fromAirTableObject(records[0]);
   },
 });
