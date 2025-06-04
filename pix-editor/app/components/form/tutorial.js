@@ -30,9 +30,9 @@ export default class TutorialForm extends Component {
   getSearchTagsResults(query) {
     const queryLowerCase = query.toLowerCase();
     return this.store.query('tag', {
-      filterByFormula: `FIND('${queryLowerCase}', LOWER(Nom))`,
-      maxRecords: 4,
-      sort: [{ field: 'Nom', direction: 'asc' }],
+      filter: {
+        title: queryLowerCase,
+      },
     })
       .then((tags) => {
         const results = tags.map((tag) => ({ title: tag.get('title'), id: tag.get('id') }));
@@ -72,7 +72,6 @@ export default class TutorialForm extends Component {
         const tag = await this.store.createRecord('tag', {
           title: title,
           notes: notes,
-          pixId: this.idGenerator.newId('tag'),
         }).save();
         tags.push(tag);
       } else {
