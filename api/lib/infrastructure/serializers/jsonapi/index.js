@@ -12,4 +12,5 @@ export * as skillSerializer from './skill-serializer.js';
 export * as staticCourseSerializer from './static-course-serializer.js';
 export * as staticCourseTagSerializer from './static-course-tag-serializer.js';
 export * as thematicSerializer from './thematic-serializer.js';
+export * as tubeSerializer from './tube-serializer.js';
 export * as userSerializer from './user-serializer.js';
