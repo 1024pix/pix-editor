@@ -32,7 +32,7 @@ describe('Application | Route | Tubes', () => {
     });
 
     context('when tube does not exist', function() {
-      it.fails('should respond with a status 404', async function() {
+      it('should respond with a status 404', async function() {
         const server = await createServer();
         airtableTubeScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tubes/recTube1')
@@ -53,7 +53,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    it.fails('should respond with status 200 and tube data', async () => {
+    it('should respond with status 200 and tube data', async () => {
       // given
       const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
         id: 'tube1',

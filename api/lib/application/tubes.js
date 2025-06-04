@@ -3,6 +3,8 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
+import { tubeRepository } from '../infrastructure/repositories/index.js';
+import { tubeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 
 export function register(server) {
   server.route([
@@ -15,9 +17,11 @@ export function register(server) {
             tubeAirtableId: Types.tubeId().required(),
           }),
         },
-        handler: async function() {
+        handler: async function(request) {
           try {
-            return {};
+            const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
+            if (!tube) return Boom.notFound('unknown tube id');
+            return tubeSerializer.serialize(tube);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);
