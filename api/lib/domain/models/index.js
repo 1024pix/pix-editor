@@ -11,5 +11,6 @@ export * from './Tag.js';
 export * from './Thematic.js';
 export * from './Translation.js';
 export * from './Tube.js';
+export * from './Tutorial.js';
 export * from './User.js';
 export * from './WhitelistedUrl.js';
