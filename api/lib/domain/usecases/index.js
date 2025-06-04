@@ -32,6 +32,7 @@ export * from './preview-challenge.js';
 export * from './proxy-delete-request-to-airtable.js';
 export * from './proxy-read-request-to-airtable.js';
 export * from './proxy-write-request-to-airtable.js';
+export * from './search-tutorials.js';
 export * from './update-attachment.js';
 export * from './update-challenge.js';
 export * from './update-competence.js';

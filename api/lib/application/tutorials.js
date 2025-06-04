@@ -8,7 +8,8 @@ import { tutorialRepository } from '../infrastructure/repositories/index.js';
 import { Tutorial } from '../domain/models/index.js';
 import * as Types from './types.js';
 import { tutorialSerializer } from '../infrastructure/serializers/jsonapi/index.js';
-import { createTutorial, updateTutorial } from '../domain/usecases/index.js';
+import { createTutorial, searchTutorials, updateTutorial } from '../domain/usecases/index.js';
+import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
 function checkUrl(value, helpers) {
   if (URL.canParse(value)) return value;
@@ -146,6 +147,32 @@ export function register(server) {
             const tutorial = await tutorialSerializer.deserialize(request.payload);
             const updatedTutorial = await updateTutorial(tutorial, { tutorialRepository });
             return h.response(tutorialSerializer.serialize(updatedTutorial));
+          } catch (err) {
+            if (err instanceof DomainError) throw err;
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/tutorials',
+      config: {
+        validate: {
+          query: Joi.object({
+            'filter[title]': Joi.string(),
+            'filter[source]': Joi.string(),
+            'filter[tagTitles][]': [Joi.string(), Joi.array().items(Joi.string())],
+          })
+            .xor('filter[title]', 'filter[source]', 'filter[tagTitles][]')
+        },
+        handler: async function(request, h) {
+          try {
+            const params = extractParameters(request.query);
+            const tutorials = await searchTutorials(params, { tutorialRepository });
+            return h.response(tutorialSerializer.serialize(tutorials));
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);
