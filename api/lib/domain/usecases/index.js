@@ -8,6 +8,7 @@ export * from './create-mission.js';
 export * from './create-skill.js';
 export * from './create-tag.js';
 export * from './create-thematic.js';
+export * from './create-tutorial.js';
 export * from './create-tube.js';
 export * from './delete-attachment.js';
 export * from './delete-unmentioned-keys-after-upload.js';
