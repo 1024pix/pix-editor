@@ -4,7 +4,6 @@ import nock from 'nock';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
-import { tagDatasource } from '../../../lib/infrastructure/datasources/airtable/tag-datasource.js';
 
 describe('Application | Route | Tags', () => {
   let editorUser, readonlyUser;
@@ -16,7 +15,7 @@ describe('Application | Route | Tags', () => {
   });
 
   describe('POST /api/tags', async () => {
-    let airtableCreateTagScope, airtableListTagsScope;
+    let airtableCreateTagScope, airtableSearchTagsScope;
 
     context('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
@@ -74,15 +73,18 @@ describe('Application | Route | Tags', () => {
         const airtableTags = [
           airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits' }),
         ];
-
-        airtableListTagsScope = nock('https://api.airtable.com')
+        airtableSearchTagsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags')
           .query({
-            fields: { '': tagDatasource.usedFields },
-            sort: [{ field: tagDatasource.sortField, direction: 'asc' }]
+            filterByFormula: 'FIND("fruits", LOWER(Nom))',
+            fields: { '': [ 'id persistant', 'Nom' ] },
+            sort: [{ field: 'Nom', direction: 'asc' }],
+            maxRecords: 4,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableTags });
+          .reply(200, {
+            records: airtableTags,
+          });
         const server = await createServer();
 
         // when
@@ -102,25 +104,25 @@ describe('Application | Route | Tags', () => {
 
         // then
         expect(response.statusCode).toBe(409);
-        expect(airtableListTagsScope.isDone()).toBe(true);
+        expect(airtableSearchTagsScope.isDone()).toBe(true);
       });
     });
 
     context('success', function() {
       it('should respond with status 201 and created tag', async () => {
         // given
-        const airtableTags = [
-          airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits' }),
-        ];
-
-        airtableListTagsScope = nock('https://api.airtable.com')
+        airtableSearchTagsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags')
           .query({
-            fields: { '': tagDatasource.usedFields },
-            sort: [{ field: tagDatasource.sortField, direction: 'asc' }]
+            filterByFormula: 'FIND("internet", LOWER(Nom))',
+            fields: { '': [ 'id persistant', 'Nom' ] },
+            sort: [{ field: 'Nom', direction: 'asc' }],
+            maxRecords: 4,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableTags });
+          .reply(200, {
+            records: [],
+          });
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
         generateNewId.mockReturnValue('tagId2');
         const createdAirtableTag = airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', name: 'Internet' });
@@ -166,7 +168,7 @@ describe('Application | Route | Tags', () => {
           },
         });
 
-        expect(airtableListTagsScope.isDone()).toBe(true);
+        expect(airtableSearchTagsScope.isDone()).toBe(true);
         expect(airtableCreateTagScope.isDone()).toBe(true);
       });
     });

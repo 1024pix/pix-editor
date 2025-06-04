@@ -8,7 +8,7 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
 
   beforeEach(() => {
     tagRepository = {
-      list: vi.fn(),
+      findAllByName: vi.fn(),
       create: vi.fn(),
     };
     dependencies = {
@@ -20,23 +20,20 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
   context('when name already taken', function() {
     it('should throw a ConflictError', async function() {
       // given
-      tagRepository.list.mockResolvedValue([
-        new Tag({ name: 'école' }),
-        new Tag({ name: 'SupErCassE' })
+      tagRepository.findAllByName.mockResolvedValue([
+        new Tag({}),
       ]);
 
       // when / then
-      await expect(createTag(new Tag({ name: 'ecole' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
-      await expect(createTag(new Tag({ name: 'supercassE' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
+      await expect(createTag(new Tag({ name: 'nom recherché' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
+      expect(tagRepository.findAllByName).toHaveBeenCalledWith('nom recherché');
     });
   });
 
   context('when name is available', function() {
     it('should return the createdTag', async function() {
       // given
-      tagRepository.list.mockResolvedValue([
-        new Tag({ name: 'école' }),
-      ]);
+      tagRepository.findAllByName.mockResolvedValue([]);
       tagRepository.create.mockResolvedValue(
         new Tag({ name: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' })
       );
