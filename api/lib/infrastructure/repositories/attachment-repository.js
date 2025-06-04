@@ -1,40 +1,23 @@
 import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
-import * as translationRepository from './translation-repository.js';
-import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 
 export async function get(id) {
   const datasourceAttachment = await attachmentDatasource.find(id);
   if (!datasourceAttachment) return null;
-  const translations = await translationRepository.listByPattern(`challenge.${datasourceAttachment.challengeId}.illustrationAlt`);
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [datasourceAttachment.challengeId] });
-
-  const [attachment] = toDomainList([datasourceAttachment], translations, localizedChallenges);
-  return attachment;
+  return toDomain(datasourceAttachment);
 }
 
 export async function list() {
-  const [datasourceAttachments, translations, localizedChallenges] = await Promise.all([
-    attachmentDatasource.list(),
-    translationRepository.listByPattern('challenge.%.illustrationAlt'),
-    localizedChallengeRepository.list(),
-  ]);
-
-  return toDomainList(datasourceAttachments, translations, localizedChallenges);
+  const datasourceAttachments = await attachmentDatasource.list();
+  return toDomainList(datasourceAttachments);
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const [datasourceAttachments, translations, localizedChallenges] = await Promise.all([
-    attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds),
-    translationRepository.listByPattern('challenge.%.illustrationAlt'),
-    localizedChallengeRepository.getMany({ ids: localizedChallengeIds }),
-  ]);
-
+  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds);
   if (!datasourceAttachments) return [];
-
-  return toDomainList(datasourceAttachments, translations, localizedChallenges);
+  return toDomainList(datasourceAttachments);
 }
 
 export async function createBatch(attachments) {
@@ -61,20 +44,19 @@ export async function createBatch(attachments) {
       attachmentId: createdAttachmentsDto.id,
     });
   }
-  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: attachments.map((attachment) => attachment.challengeId) });
-  return toDomainList(createdAttachmentsDtos, translations, localizedChallenges);
+  return toDomainList(createdAttachmentsDtos);
 }
 
 export async function create(attachment) {
   const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds([attachment.challengeId]);
+  const airtableChallengeId = airtableChallengeIdsByIds[attachment.challengeId];
   const attachmentDTO = {
     url: attachment.url,
     size: attachment.size,
     type: attachment.type,
     mimeType: attachment.mimeType,
     filename: attachment.filename,
-    challengeId: airtableChallengeIdsByIds[attachment.challengeId],
+    challengeId: airtableChallengeId,
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
@@ -82,11 +64,7 @@ export async function create(attachment) {
     localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
     attachmentId: createdAttachmentDTO.id,
   });
-  const translations = await translationRepository.listByPattern(`challenge.${createdAttachmentDTO.challengeId}.illustrationAlt`);
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [createdAttachmentDTO.challengeId] });
-
-  const [createdAttachment] = toDomainList([createdAttachmentDTO], translations, localizedChallenges);
-  return createdAttachment;
+  return toDomain(createdAttachmentDTO);
 }
 
 export async function update(attachment) {
@@ -101,11 +79,7 @@ export async function update(attachment) {
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
-  const translations = await translationRepository.listByPattern(`challenge.${updatedAttachmentDTO.challengeId}.illustrationAlt`);
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [updatedAttachmentDTO.challengeId] });
-
-  const [updatedAttachment] = toDomainList([updatedAttachmentDTO], translations, localizedChallenges);
-  return updatedAttachment;
+  return toDomain(updatedAttachmentDTO);
 }
 
 export async function remove(attachmentId) {
@@ -113,25 +87,10 @@ export async function remove(attachmentId) {
   await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
 }
 
-function toDomainList(datasourceAttachments, translations, localizedChallenges) {
-  const translationsByChallengeId = _.groupBy(translations, 'entityId');
-  const localizedChallengesById = _.keyBy(localizedChallenges, 'id');
-
-  return datasourceAttachments.map((attachment) => {
-    if (attachment.type !== Attachment.TYPES.ILLUSTRATION) {
-      return toDomain(attachment);
-    }
-    const challengeTranslations = translationsByChallengeId[attachment.challengeId];
-    const locale = localizedChallengesById[attachment.localizedChallengeId].locale;
-    const translation = challengeTranslations?.find((translation) => locale === translation.locale);
-
-    return toDomain(attachment, translation);
-  });
+function toDomainList(datasourceAttachments) {
+  return datasourceAttachments.map(toDomain);
 }
 
-export function toDomain(attachment, translation) {
-  return new Attachment({
-    ...attachment,
-    alt: translation?.value ?? null,
-  });
+export function toDomain(attachment) {
+  return new Attachment(attachment);
 }

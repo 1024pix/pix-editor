@@ -3,15 +3,12 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as usecases from '../domain/usecases/index.js';
-import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../infrastructure/pix-api-client.js';
-import { createChallengeTransformer } from '../infrastructure/transformers/index.js';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as attachmentSerializer from '../infrastructure/serializers/jsonapi/attachment-serializer.js';
 import * as attachmentRepository from '../infrastructure/repositories/attachment-repository.js';
 import * as localizedChallengeRepository from '../infrastructure/repositories/localized-challenge-repository.js';
-import * as challengeRepository from '../infrastructure/repositories/challenge-repository.js';
+import * as updatePixApiReleaseCache from '../domain/services/update-pix-api-release-cache.js';
 
 export function register(server) {
   server.route([
@@ -59,12 +56,7 @@ export function register(server) {
               attachmentCreationCommand,
               attachmentRepository,
               localizedChallengeRepository,
-              challengeRepository,
-              createChallengeTransformer,
-              updatedRecordNotifier,
-              pixApiClient,
-              logger,
-              Sentry,
+              updatePixApiReleaseCache,
             });
             return h.response(attachmentSerializer.serialize(createdAttachment)).code(201);
           } catch (err) {
@@ -122,13 +114,7 @@ export function register(server) {
             const updatedAttachment = await usecases.updateAttachment({
               attachmentUpdateCommand,
               attachmentRepository,
-              localizedChallengeRepository,
-              challengeRepository,
-              createChallengeTransformer,
-              updatedRecordNotifier,
-              pixApiClient,
-              logger,
-              Sentry,
+              updatePixApiReleaseCache,
             });
             return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
           } catch (err) {
@@ -159,12 +145,7 @@ export function register(server) {
             await usecases.deleteAttachment({
               attachmentId,
               attachmentRepository,
-              challengeRepository,
-              createChallengeTransformer,
-              updatedRecordNotifier,
-              pixApiClient,
-              logger,
-              Sentry,
+              updatePixApiReleaseCache,
             });
             return h.response().code(204);
           } catch (err) {

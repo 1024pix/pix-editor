@@ -2,14 +2,21 @@ import { afterEach, beforeEach, describe, describe as context, expect, it } from
 import nock from 'nock';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
+import * as config from '../../../lib/config.js';
 
 describe('Acceptance | Route | attachments', () => {
 
-  let editorUser, readUser;
+  let editorUser, readUser, originalPixApiUrlValue;
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     readUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('POST /attachments', () => {
@@ -26,8 +33,11 @@ describe('Acceptance | Route | attachments', () => {
             'mime-type': 'some mime type',
           },
           relationships: {
-            challenge: {
-              data: null,
+            'challenge': {
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
             'localized-challenge': {
               data: {
@@ -95,17 +105,6 @@ describe('Acceptance | Route | attachments', () => {
         locale: 'es',
       });
       await databaseBuilder.commit();
-      const airtableAttachment = airtableBuilder.factory.buildAttachment({
-        id: 'airtableAttachmentId',
-        type: validPayload.data.attributes.type,
-        url: validPayload.data.attributes.url,
-        size: validPayload.data.attributes.size,
-        mimeType: validPayload.data.attributes['mime-type'],
-        filename: validPayload.data.attributes.filename,
-        challengeId: 'challenge123',
-        airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
-      });
       const airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -122,6 +121,17 @@ describe('Acceptance | Route | attachments', () => {
           }
         }]
         });
+      const airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'airtableAttachmentId',
+        type: validPayload.data.attributes.type,
+        url: validPayload.data.attributes.url,
+        size: validPayload.data.attributes.size,
+        mimeType: validPayload.data.attributes['mime-type'],
+        filename: validPayload.data.attributes.filename,
+        challengeId: 'challenge123',
+        airtableChallengeId: 'airtableChallenge123',
+        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
+      });
       const airtablePostAttachmentScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Attachments/', {
           records: [{
@@ -139,67 +149,6 @@ describe('Acceptance | Route | attachments', () => {
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableAttachment] });
-      const airtableChallenge = airtableBuilder.factory.buildChallenge({
-        id: 'challenge123',
-        locales: ['fr', 'es'],
-      });
-      const airtableGetChallengeScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          filterByFormula: '{id persistant} = "challenge123"',
-          maxRecords: '1'
-        })
-        .reply(200, {
-          records: [
-            airtableChallenge,
-          ]
-        });
-      const airtableFindAttachmentsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
-        .query({
-          filterByFormula: 'OR({localizedChallengeId} = "challenge123ES")',
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableAttachment] });
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/challenge123ES',
-          {
-            id: 'challenge123ES',
-            alpha: null,
-            alternativeInstruction: '',
-            attachments: [ 'some.url.com' ],
-            autoReply: false,
-            competenceId: null,
-            delta: null,
-            embedUrl: null,
-            embedTitle: '',
-            format: 'mots',
-            illustrationAlt: null,
-            illustrationUrl: null,
-            instruction: '',
-            locales: [ 'es', 'fr' ],
-            proposals: '',
-            solution: '',
-            solutionToDisplay: '',
-            skillId: null,
-            t1Status: false,
-            t2Status: false,
-            t3Status: false,
-            requireGafamWebsiteAccess: false,
-            isIncompatibleIpadCertif: false,
-            deafAndHardOfHearing: 'RAS',
-            isAwarenessChallenge: false,
-            toRephrase: false,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false
-          })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
       const server = await createServer();
 
       // when
@@ -222,7 +171,6 @@ describe('Acceptance | Route | attachments', () => {
             'type': validPayload.data.attributes.type,
             'mime-type': validPayload.data.attributes['mime-type'],
             'filename': validPayload.data.attributes.filename,
-            'alt': null,
           },
           relationships: {
             'localized-challenge': {
@@ -232,16 +180,16 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
       });
-      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
       expect(airtablePostAttachmentScope.isDone()).toBe(true);
-      expect(airtableGetChallengeScope.isDone()).toBe(true);
-      expect(airtableFindAttachmentsScope.isDone()).toBe(true);
-      expect(apiCacheScope.isDone()).toBe(true);
+      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
     });
   });
 
@@ -261,7 +209,10 @@ describe('Acceptance | Route | attachments', () => {
           },
           relationships: {
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
             'localized-challenge': {
               data: {
@@ -395,67 +346,6 @@ describe('Acceptance | Route | attachments', () => {
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableAttachmentAfter] });
-      const airtableChallenge = airtableBuilder.factory.buildChallenge({
-        id: 'challenge123',
-        locales: ['fr', 'es'],
-      });
-      const airtableGetChallengeScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          filterByFormula: '{id persistant} = "challenge123"',
-          maxRecords: '1'
-        })
-        .reply(200, {
-          records: [
-            airtableChallenge,
-          ]
-        });
-      const airtableFindAttachmentsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
-        .query({
-          filterByFormula: 'OR({localizedChallengeId} = "challenge123ES")',
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableAttachmentAfter] });
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/challenge123ES',
-          {
-            id: 'challenge123ES',
-            alpha: null,
-            alternativeInstruction: '',
-            attachments: [ 'url avant' ],
-            autoReply: false,
-            competenceId: null,
-            delta: null,
-            embedUrl: null,
-            embedTitle: '',
-            format: 'mots',
-            illustrationAlt: null,
-            illustrationUrl: null,
-            instruction: '',
-            locales: [ 'es', 'fr' ],
-            proposals: '',
-            solution: '',
-            solutionToDisplay: '',
-            skillId: null,
-            t1Status: false,
-            t2Status: false,
-            t3Status: false,
-            requireGafamWebsiteAccess: false,
-            isIncompatibleIpadCertif: false,
-            deafAndHardOfHearing: 'RAS',
-            isAwarenessChallenge: false,
-            toRephrase: false,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false
-          })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
       const server = await createServer();
 
       // when
@@ -478,7 +368,6 @@ describe('Acceptance | Route | attachments', () => {
             type: 'type avant',
             'mime-type': 'mimeType avant',
             filename: 'filename APRES',
-            alt: null,
           },
           relationships: {
             'localized-challenge': {
@@ -488,16 +377,16 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
       });
       expect(airtableGetAttachmentScope.isDone()).toBe(true);
       expect(airtablePatchAttachmentScope.isDone()).toBe(true);
-      expect(airtableGetChallengeScope.isDone()).toBe(true);
-      expect(airtableFindAttachmentsScope.isDone()).toBe(true);
-      expect(apiCacheScope.isDone()).toBe(true);
     });
   });
 
@@ -599,66 +488,6 @@ describe('Acceptance | Route | attachments', () => {
             },
           ],
         });
-      const airtableChallenge = airtableBuilder.factory.buildChallenge({
-        id: 'challengeId',
-        locales: ['fr'],
-      });
-      const airtableGetChallengeScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          filterByFormula: '{id persistant} = "challengeId"',
-          maxRecords: '1'
-        })
-        .reply(200, {
-          records: [
-            airtableChallenge,
-          ]
-        });
-      const airtableFindAttachmentsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
-        .query({
-          filterByFormula: 'OR({localizedChallengeId} = "challengeId")',
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [] });
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/challengeId',
-          {
-            id: 'challengeId',
-            alpha: null,
-            alternativeInstruction: '',
-            autoReply: false,
-            competenceId: null,
-            delta: null,
-            embedUrl: null,
-            embedTitle: '',
-            format: 'mots',
-            illustrationAlt: null,
-            illustrationUrl: null,
-            instruction: '',
-            locales: [ 'fr' ],
-            proposals: '',
-            solution: '',
-            solutionToDisplay: '',
-            skillId: null,
-            t1Status: false,
-            t2Status: false,
-            t3Status: false,
-            requireGafamWebsiteAccess: false,
-            isIncompatibleIpadCertif: false,
-            deafAndHardOfHearing: 'RAS',
-            isAwarenessChallenge: false,
-            toRephrase: false,
-            hasEmbedInternalValidation: false,
-            noValidationNeeded: false
-          })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
       const server = await createServer();
 
       // when
@@ -672,9 +501,6 @@ describe('Acceptance | Route | attachments', () => {
       expect(response.statusCode).toBe(204);
       expect(airtableGetAttachmentScope.isDone()).toBe(true);
       expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
-      expect(airtableGetChallengeScope.isDone()).toBe(true);
-      expect(airtableFindAttachmentsScope.isDone()).toBe(true);
-      expect(apiCacheScope.isDone()).toBe(true);
     });
   });
 
@@ -785,7 +611,6 @@ describe('Acceptance | Route | attachments', () => {
             size: 'some size',
             'mime-type': 'some mimeType',
             filename: 'some filename',
-            alt: null,
           },
           relationships: {
             'localized-challenge': {
@@ -795,7 +620,10 @@ describe('Acceptance | Route | attachments', () => {
               },
             },
             challenge: {
-              data: null,
+              data: {
+                type: 'challenges',
+                id: 'challenge123',
+              },
             },
           },
         },
@@ -892,7 +720,6 @@ describe('Acceptance | Route | attachments', () => {
               size: 123,
               'mime-type': 'some mime type 1',
               filename: 'some filename 1',
-              alt: null,
             },
             relationships: {
               'localized-challenge': {
@@ -902,7 +729,10 @@ describe('Acceptance | Route | attachments', () => {
                 },
               },
               challenge: {
-                data: null,
+                data: {
+                  type: 'challenges',
+                  id: 'challenge123',
+                },
               },
             },
           },
