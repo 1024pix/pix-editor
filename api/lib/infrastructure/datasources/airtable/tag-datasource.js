@@ -12,6 +12,8 @@ export const tagDatasource = datasource.extend({
   usedFields: [
     'id persistant',
     'Nom',
+    'Acquis',
+    'Tutoriels',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -19,6 +21,8 @@ export const tagDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
+      skillAirtableIds: airtableRecord.get('Acquis') ?? [],
+      tutorialAirtableIds: airtableRecord.get('Tutoriels') ?? [],
     };
   },
 

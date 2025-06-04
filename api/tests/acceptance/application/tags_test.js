@@ -77,7 +77,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: 'FIND("fruits", LOWER(Nom))',
-            fields: { '': [ 'id persistant', 'Nom' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 4,
           })
@@ -115,7 +115,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: 'FIND("internet", LOWER(Nom))',
-            fields: { '': [ 'id persistant', 'Nom' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 4,
           })
@@ -164,6 +164,14 @@ describe('Application | Route | Tags', () => {
             attributes: {
               'pix-id': 'tagId2',
               'name': 'Internet',
+            },
+            relationships: {
+              skills: {
+                data: [],
+              },
+              tutorials: {
+                data: [],
+              },
             },
           },
         });
@@ -219,7 +227,7 @@ describe('Application | Route | Tags', () => {
     context('success', function() {
       it('should respond with status 200 and tag', async () => {
         // given
-        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits' });
+        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits', skillAirtableIds: ['skillAirtableId1'], tutorialAirtableIds: ['tutorialAirtableId1'] });
         airtableGetTagScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
           .query({})
@@ -243,6 +251,20 @@ describe('Application | Route | Tags', () => {
             attributes: {
               'pix-id': 'tagId1',
               'name': 'Fruits',
+            },
+            relationships: {
+              skills: {
+                data: [{
+                  type: 'skills',
+                  id: 'skillAirtableId1',
+                }],
+              },
+              tutorials: {
+                data: [{
+                  type: 'tutorials',
+                  id: 'tutorialAirtableId1',
+                }],
+              },
             },
           },
         });
@@ -284,7 +306,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: 'FIND("fr", LOWER(Nom))',
-            fields: { '': [ 'id persistant', 'Nom' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 4,
           })
@@ -312,6 +334,14 @@ describe('Application | Route | Tags', () => {
                 'pix-id': 'tagId3',
                 'name': 'france',
               },
+              relationships: {
+                skills: {
+                  data: [],
+                },
+                tutorials: {
+                  data: [],
+                },
+              },
             },
             {
               type: 'tags',
@@ -320,6 +350,14 @@ describe('Application | Route | Tags', () => {
                 'pix-id': 'tagId4',
                 'name': 'freT',
               },
+              relationships: {
+                skills: {
+                  data: [],
+                },
+                tutorials: {
+                  data: [],
+                },
+              },
             },
             {
               type: 'tags',
@@ -327,6 +365,14 @@ describe('Application | Route | Tags', () => {
               attributes: {
                 'pix-id': 'tagId2',
                 'name': 'frontieRe',
+              },
+              relationships: {
+                skills: {
+                  data: [],
+                },
+                tutorials: {
+                  data: [],
+                },
               },
             },
           ],

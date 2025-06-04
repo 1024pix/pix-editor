@@ -6,7 +6,13 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
   describe('#serialize', () => {
     it('serializes a tag', () => {
       // given
-      const tag = new Tag({ id: 'recTag1', airtableId: 'recAirtable1', name: 'Internet' });
+      const tag = new Tag({
+        id: 'recTag1',
+        airtableId: 'recAirtable1',
+        name: 'Internet',
+        skillAirtableIds: ['skillAirtableId1', 'skillAirtableId2'],
+        tutorialAirtableIds: ['tutorialAirtableId1', 'tutorialAirtableId2'],
+      });
 
       // when
       const serializedTag = serialize(tag);
@@ -19,6 +25,32 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
           attributes: {
             name: 'Internet',
             'pix-id': 'recTag1',
+          },
+          relationships: {
+            skills: {
+              data: [
+                {
+                  type: 'skills',
+                  id: 'skillAirtableId1',
+                },
+                {
+                  type: 'skills',
+                  id: 'skillAirtableId2',
+                },
+              ],
+            },
+            tutorials: {
+              data: [
+                {
+                  type: 'tutorials',
+                  id: 'tutorialAirtableId1',
+                },
+                {
+                  type: 'tutorials',
+                  id: 'tutorialAirtableId2',
+                },
+              ],
+            },
           },
         },
       });
