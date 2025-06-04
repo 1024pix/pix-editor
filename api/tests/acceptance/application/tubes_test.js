@@ -279,7 +279,7 @@ describe('Application | Route | Tubes', () => {
     });
 
     describe('when filtering by ids', () => {
-      it.fails('should respond with status 200 and tubes data', async () => {
+      it('should respond with status 200 and tubes data', async () => {
         // given
         const airtableTubes = [
           airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({

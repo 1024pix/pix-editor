@@ -5,6 +5,8 @@ import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import { tubeRepository } from '../infrastructure/repositories/index.js';
 import { tubeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import { listTubes } from '../domain/usecases/index.js';
+import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
 export function register(server) {
   server.route([
@@ -39,9 +41,10 @@ export function register(server) {
             'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())],
           }),
         },
-        handler: async function() {
+        handler: async function(request) {
           try {
-            const tubes = await tubeRepository.list();
+            const params = extractParameters(request.query);
+            const tubes = await listTubes(params);
             return tubeSerializer.serialize(tubes);
           } catch (err) {
             if (err instanceof DomainError) throw err;
