@@ -14,8 +14,8 @@ export async function getByAirtableId(tagId) {
   return toDomain(datasourceTag);
 }
 
-export async function findAllByName(name) {
-  const datasourceTags = await tagDatasource.searchByName(name);
+export async function findAllByTitle(title) {
+  const datasourceTags = await tagDatasource.searchByTitle(title);
   if (!datasourceTags) return [];
   return datasourceTags.map(toDomain);
 }

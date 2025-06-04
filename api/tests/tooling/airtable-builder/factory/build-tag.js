@@ -2,7 +2,7 @@ export function buildTag(
   {
     id,
     airtableId = id,
-    name,
+    title,
     skillAirtableIds = [],
     tutorialAirtableIds = [],
   } = {}) {
@@ -10,7 +10,7 @@ export function buildTag(
     id: airtableId,
     'fields': {
       'id persistant': id,
-      'Nom': name,
+      'Nom': title,
       'Acquis': skillAirtableIds,
       'Tutoriels': tutorialAirtableIds,
     },

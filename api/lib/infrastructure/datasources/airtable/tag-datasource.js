@@ -20,7 +20,7 @@ export const tagDatasource = datasource.extend({
     return {
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
-      name: airtableRecord.get('Nom'),
+      title: airtableRecord.get('Nom'),
       skillAirtableIds: airtableRecord.get('Acquis') ?? [],
       tutorialAirtableIds: airtableRecord.get('Tutoriels') ?? [],
     };
@@ -30,15 +30,15 @@ export const tagDatasource = datasource.extend({
     const airtableObject = {
       fields: {
         'id persistant': model.id,
-        Nom: model.name,
+        Nom: model.title,
       },
     };
     if (model.airtableId) airtableObject.id = model.airtableId;
     return airtableObject;
   },
 
-  async searchByName(name) {
-    const filterByFormula = `FIND(${stringValue(name.toLowerCase())}, LOWER(Nom))`;
+  async searchByTitle(title) {
+    const filterByFormula = `FIND(${stringValue(title.toLowerCase())}, LOWER(Nom))`;
     const records = await findRecords(this.tableName, {
       filterByFormula,
       fields: this.usedFields,

@@ -27,7 +27,7 @@ export function register(server) {
             data: {
               type: Joi.string().required().equal('tags'),
               attributes: {
-                'name': Joi.string().required(),
+                'title': Joi.string().required(),
               },
             },
           }),
@@ -74,13 +74,13 @@ export function register(server) {
       config: {
         validate: {
           query: Joi.object({
-            'filter[name]': Joi.string().required(),
+            'filter[title]': Joi.string().required(),
           }).required(),
         },
         handler: async function(request) {
           try {
             const params = extractParameters(request.query);
-            const tags = await tagRepository.findAllByName(params.filter.name);
+            const tags = await tagRepository.findAllByTitle(params.filter.title);
             return tagSerializer.serialize(tags);
           } catch (err) {
             logger.error(err);

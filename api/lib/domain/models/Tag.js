@@ -1,8 +1,8 @@
 export class Tag {
-  constructor({ id, airtableId, name, skillAirtableIds, tutorialAirtableIds }) {
+  constructor({ id, airtableId, title, skillAirtableIds, tutorialAirtableIds }) {
     this.id = id;
     this.airtableId = airtableId;
-    this.name = name;
+    this.title = title;
     this.skillAirtableIds = skillAirtableIds;
     this.tutorialAirtableIds = tutorialAirtableIds;
   }

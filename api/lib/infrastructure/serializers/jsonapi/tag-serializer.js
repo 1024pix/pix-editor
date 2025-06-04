@@ -6,7 +6,7 @@ const { Deserializer, Serializer } = Jsonapi;
 const serializer = new Serializer('tag', {
   attributes: [
     'pixId',
-    'name',
+    'title',
     'skills',
     'tutorials',
   ],
@@ -14,7 +14,7 @@ const serializer = new Serializer('tag', {
     return {
       id: tag.airtableId,
       pixId: tag.id,
-      name: tag.name,
+      title: tag.title,
       skills: tag.skillAirtableIds.map((skillAirtableId) => ({ id: skillAirtableId })),
       tutorials: tag.tutorialAirtableIds.map((tutorialAirtableId) => ({ id: tutorialAirtableId })),
     };

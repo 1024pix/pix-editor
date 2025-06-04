@@ -9,7 +9,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       const tag = new Tag({
         id: 'recTag1',
         airtableId: 'recAirtable1',
-        name: 'Internet',
+        title: 'Internet',
         skillAirtableIds: ['skillAirtableId1', 'skillAirtableId2'],
         tutorialAirtableIds: ['tutorialAirtableId1', 'tutorialAirtableId2'],
       });
@@ -23,7 +23,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
           type: 'tags',
           id: 'recAirtable1',
           attributes: {
-            name: 'Internet',
+            title: 'Internet',
             'pix-id': 'recTag1',
           },
           relationships: {
@@ -62,7 +62,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       // given
       const id = 'recAirtableTag1';
       const attributes = {
-        'name': 'Internet',
+        'title': 'Internet',
       };
       const payload = {
         data: {
@@ -79,7 +79,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       expect(deserializedTag).toStrictEqual(new Tag({
         id: null,
         airtableId: 'recAirtableTag1',
-        name: 'Internet',
+        title: 'Internet',
       }));
     });
   });

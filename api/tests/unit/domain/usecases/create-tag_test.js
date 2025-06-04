@@ -8,7 +8,7 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
 
   beforeEach(() => {
     tagRepository = {
-      findAllByName: vi.fn(),
+      findAllByTitle: vi.fn(),
       create: vi.fn(),
     };
     dependencies = {
@@ -17,33 +17,33 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
     };
   });
 
-  context('when name already taken', function() {
+  context('when title already taken', function() {
     it('should throw a ConflictError', async function() {
       // given
-      tagRepository.findAllByName.mockResolvedValue([
+      tagRepository.findAllByTitle.mockResolvedValue([
         new Tag({}),
       ]);
 
       // when / then
-      await expect(createTag(new Tag({ name: 'nom recherché' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
-      expect(tagRepository.findAllByName).toHaveBeenCalledWith('nom recherché');
+      await expect(createTag(new Tag({ title: 'titre recherché' }), dependencies)).rejects.to.deep.equal(new ConflictError('Nom de tag déjà pris'));
+      expect(tagRepository.findAllByTitle).toHaveBeenCalledWith('titre recherché');
     });
   });
 
-  context('when name is available', function() {
+  context('when title is available', function() {
     it('should return the createdTag', async function() {
       // given
-      tagRepository.findAllByName.mockResolvedValue([]);
+      tagRepository.findAllByTitle.mockResolvedValue([]);
       tagRepository.create.mockResolvedValue(
-        new Tag({ name: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' })
+        new Tag({ title: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' })
       );
 
       // when
-      const tag = new Tag({ name: 'Internet', airtableId: null, id: null });
-      const createdTag = await createTag(new Tag({ name: 'Internet', airtableId: null, id: null }), dependencies);
+      const tag = new Tag({ title: 'Internet', airtableId: null, id: null });
+      const createdTag = await createTag(new Tag({ title: 'Internet', airtableId: null, id: null }), dependencies);
 
       // then
-      expect(createdTag).toStrictEqual(new Tag({ name: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' }));
+      expect(createdTag).toStrictEqual(new Tag({ title: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' }));
       expect(tagRepository.create).toHaveBeenCalledWith(tag);
     });
   });
