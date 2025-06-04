@@ -27,6 +27,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         }),
         airtableBuilder.factory.buildTube({
           id: 'tubeId2',
@@ -42,7 +44,9 @@ describe('Integration | Repository | tube-repository', () => {
           },
           thematicAirtableId: 'thematicAirtableId2',
           competenceAirtableId: 'competenceAirtableId2',
-          competenceId: 'competenceId2'
+          competenceId: 'competenceId2',
+          skillAirtableIds: ['recSkill3', 'recSkill4'],
+          skillIds: ['skill3', 'skill4'],
         }),
       ]).activate().nockScope;
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -109,6 +113,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
@@ -126,6 +132,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId2',
           competenceAirtableId: 'competenceAirtableId2',
           competenceId: 'competenceId2',
+          skillAirtableIds: ['recSkill3', 'recSkill4'],
+          skillIds: ['skill3', 'skill4'],
         }),
       ]);
 
@@ -151,6 +159,8 @@ describe('Integration | Repository | tube-repository', () => {
         thematicAirtableId: 'thematicAirtableId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
       };
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
@@ -185,6 +195,8 @@ describe('Integration | Repository | tube-repository', () => {
             'Competences': [tube1.competenceAirtableId],
             'Competences (id persistant)': [tube1.competenceId],
             'Index': tube1.index,
+            'Acquis': tube1.skillAirtableIds,
+            'Acquis (id persistant)': tube1.skillIds,
           },
           get: function(field) { return this.fields[field]; },
         }];
@@ -211,6 +223,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         })
       ]);
     });
@@ -229,6 +243,8 @@ describe('Integration | Repository | tube-repository', () => {
         thematicAirtableId: 'thematicAirtableId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
         practicalTitle_i18n: {
           fr: 'le titre',
           en: 'the title',

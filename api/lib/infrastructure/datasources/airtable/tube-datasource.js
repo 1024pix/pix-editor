@@ -17,6 +17,8 @@ export const tubeDatasource = datasource.extend({
     'Competences',
     'Competences (id persistant)',
     'Index',
+    'Acquis',
+    'Acquis (id persistant)'
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -28,6 +30,8 @@ export const tubeDatasource = datasource.extend({
       thematicAirtableId: airtableRecord.get('Thematique')[0],
       competenceAirtableId: airtableRecord.get('Competences')[0],
       competenceId: airtableRecord.get('Competences (id persistant)')[0],
+      skillAirtableIds: airtableRecord.get('Acquis'),
+      skillIds: airtableRecord.get('Acquis (id persistant)'),
     };
   },
 

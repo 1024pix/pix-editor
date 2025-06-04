@@ -6,6 +6,8 @@ export function buildTube({
   thematicAirtableId,
   competenceAirtableId,
   competenceId,
+  skillAirtableIds,
+  skillIds,
 } = {}) {
 
   return {
@@ -17,6 +19,8 @@ export function buildTube({
       'Thematique': [thematicAirtableId],
       'Competences': [competenceAirtableId],
       'Competences (id persistant)': [competenceId],
+      'Acquis': skillAirtableIds,
+      'Acquis (id persistant)': skillIds,
     },
   };
 }

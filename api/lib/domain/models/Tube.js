@@ -9,6 +9,8 @@ export class Tube {
     thematicAirtableId,
     competenceAirtableId,
     competenceId,
+    skillAirtableIds,
+    skillIds,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -19,6 +21,8 @@ export class Tube {
     this.thematicAirtableId = thematicAirtableId;
     this.competenceAirtableId = competenceAirtableId;
     this.competenceId = competenceId;
+    this.skillAirtableIds = skillAirtableIds;
+    this.skillIds = skillIds;
   }
 
   static get WORKBENCH_NAME() {
