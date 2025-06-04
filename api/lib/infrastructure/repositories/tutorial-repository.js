@@ -8,6 +8,11 @@ export async function create(tutorial) {
   return toDomain(datasourceTutorial);
 }
 
+export async function update(tutorial) {
+  const datasourceTutorial = await tutorialDatasource.update(tutorial);
+  return toDomain(datasourceTutorial);
+}
+
 export async function getByAirtableId(tutorialId) {
   const datasourceTutorial = await tutorialDatasource.find(tutorialId);
   if (!datasourceTutorial) return null;

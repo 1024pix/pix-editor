@@ -72,4 +72,17 @@ export class Tutorial {
       NO: null,
     };
   }
+
+  update(tutorial) {
+    this.title = tutorial.title;
+    this.duration = tutorial.duration;
+    this.source = tutorial.source;
+    this.format = tutorial.format;
+    this.link = tutorial.link;
+    this.license = tutorial.license;
+    this.level = tutorial.level;
+    this.crush = tutorial.crush;
+    this.language = tutorial.language;
+    this.tagAirtableIds = tutorial.tagAirtableIds;
+  }
 }
