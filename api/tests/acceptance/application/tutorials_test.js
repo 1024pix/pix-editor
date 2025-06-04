@@ -5,6 +5,7 @@ import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '.
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { Tutorial } from '../../../lib/domain/models/index.js';
+import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Application | Route | Tutorials', () => {
   let editorUser, readonlyUser;
@@ -633,6 +634,375 @@ describe('Application | Route | Tutorials', () => {
           },
         });
         expect(airtableUpdateTutorialScope.isDone()).toBe(true);
+      });
+    });
+  });
+
+  describe('GET /api/tutorials', async () => {
+    let airtableSearchTutorialByTitleScope, airtableSearchTutorialByTagTitlesScope, airtableSearchTutorialBySourceScope;
+
+    context('when query param is not in the right format', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tutorials?filter[title]=jenepeuxpas&filter[tagTitles][]=mettre&filter[tagTitles][]=lesdeuxfiltres',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('success', function() {
+      context('when searching by tutorial title', function() {
+        it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
+          // given
+          const airtableTutorials = [
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId1',
+              airtableId: 'tutorialAirtableId1',
+              title: 'mon titre 1',
+              format: Tutorial.FORMATS.PDF,
+              duration: '12:01:02',
+              source: 'Mon grenier 1',
+              link: 'https://coucou1.com',
+              language: 'fr',
+              license: Tutorial.LICENSES.C,
+              level: Tutorial.LEVELS.ONE,
+              crush: Tutorial.CRUSHES.YES,
+              tagAirtableIds: ['tagAirtableId1'],
+            }),
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId2',
+              airtableId: 'tutorialAirtableId2',
+              title: 'mon titre 2',
+              format: Tutorial.FORMATS.FRISE,
+              duration: '12:50:50',
+              source: 'Mon grenier 2',
+              link: 'https://coucou2.com',
+              language: 'es',
+              license: Tutorial.LICENSES.CCBYSA,
+              level: Tutorial.LEVELS.TWO,
+              crush: Tutorial.CRUSHES.NO,
+              tagAirtableIds: [],
+            }),
+          ];
+          airtableSearchTutorialByTitleScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tutoriels')
+            .query({
+              filterByFormula: 'FIND("mon ti", LOWER(Titre))',
+              fields: { '': tutorialDatasource.usedFields },
+              sort: [{ field: 'Titre', direction: 'asc' }],
+              maxRecords: 100,
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTutorials,
+            });
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tutorials?filter[title]=Mon ti',
+            headers: generateAuthorizationHeader(readonlyUser),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId1',
+                attributes: {
+                  'title': 'mon titre 1',
+                  'duration': '12:01:02',
+                  'source': 'Mon grenier 1',
+                  'format': Tutorial.FORMATS.PDF,
+                  'link': 'https://coucou1.com',
+                  'license': Tutorial.LICENSES.C,
+                  'level': Tutorial.LEVELS.ONE,
+                  'crush': Tutorial.CRUSHES.YES,
+                  'language': 'fr',
+                  'pix-id': 'tutorialId1',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId2',
+                attributes: {
+                  'title': 'mon titre 2',
+                  'duration': '12:50:50',
+                  'source': 'Mon grenier 2',
+                  'format': Tutorial.FORMATS.FRISE,
+                  'link': 'https://coucou2.com',
+                  'license': Tutorial.LICENSES.CCBYSA,
+                  'level': Tutorial.LEVELS.TWO,
+                  'crush': Tutorial.CRUSHES.NO,
+                  'language': 'es',
+                  'pix-id': 'tutorialId2',
+                },
+                relationships: {
+                  tags: {
+                    data: [],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableSearchTutorialByTitleScope.isDone()).toBe(true);
+        });
+      });
+
+      context('when searching by tutorial source', function() {
+        it('should respond with status 200 and relevant tutorials, limited by 4 tutorials and sorted by title', async () => {
+          // given
+          const airtableTutorials = [
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId1',
+              airtableId: 'tutorialAirtableId1',
+              title: 'mon titre 1',
+              format: Tutorial.FORMATS.PDF,
+              duration: '12:01:02',
+              source: 'Mon grenier 1',
+              link: 'https://coucou1.com',
+              language: 'fr',
+              license: Tutorial.LICENSES.C,
+              level: Tutorial.LEVELS.ONE,
+              crush: Tutorial.CRUSHES.YES,
+              tagAirtableIds: ['tagAirtableId1'],
+            }),
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId2',
+              airtableId: 'tutorialAirtableId2',
+              title: 'mon titre 2',
+              format: Tutorial.FORMATS.FRISE,
+              duration: '12:50:50',
+              source: 'Mon grenier 2',
+              link: 'https://coucou2.com',
+              language: 'es',
+              license: Tutorial.LICENSES.CCBYSA,
+              level: Tutorial.LEVELS.TWO,
+              crush: Tutorial.CRUSHES.NO,
+              tagAirtableIds: [],
+            }),
+          ];
+          airtableSearchTutorialBySourceScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tutoriels')
+            .query({
+              filterByFormula: 'FIND("mon gren", LOWER(Source))',
+              fields: { '': tutorialDatasource.usedFields },
+              sort: [{ field: 'Titre', direction: 'asc' }],
+              maxRecords: 4,
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTutorials,
+            });
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tutorials?filter[source]=Mon Gren',
+            headers: generateAuthorizationHeader(readonlyUser),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId1',
+                attributes: {
+                  'title': 'mon titre 1',
+                  'duration': '12:01:02',
+                  'source': 'Mon grenier 1',
+                  'format': Tutorial.FORMATS.PDF,
+                  'link': 'https://coucou1.com',
+                  'license': Tutorial.LICENSES.C,
+                  'level': Tutorial.LEVELS.ONE,
+                  'crush': Tutorial.CRUSHES.YES,
+                  'language': 'fr',
+                  'pix-id': 'tutorialId1',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId2',
+                attributes: {
+                  'title': 'mon titre 2',
+                  'duration': '12:50:50',
+                  'source': 'Mon grenier 2',
+                  'format': Tutorial.FORMATS.FRISE,
+                  'link': 'https://coucou2.com',
+                  'license': Tutorial.LICENSES.CCBYSA,
+                  'level': Tutorial.LEVELS.TWO,
+                  'crush': Tutorial.CRUSHES.NO,
+                  'language': 'es',
+                  'pix-id': 'tutorialId2',
+                },
+                relationships: {
+                  tags: {
+                    data: [],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableSearchTutorialBySourceScope.isDone()).toBe(true);
+        });
+      });
+
+      context('when searching by tag titles', function() {
+        it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
+          // given
+          const airtableTutorials = [
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId1',
+              airtableId: 'tutorialAirtableId1',
+              title: 'mon titre 1',
+              format: Tutorial.FORMATS.PDF,
+              duration: '12:01:02',
+              source: 'Mon grenier 1',
+              link: 'https://coucou1.com',
+              language: 'fr',
+              license: Tutorial.LICENSES.C,
+              level: Tutorial.LEVELS.ONE,
+              crush: Tutorial.CRUSHES.YES,
+              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
+            }),
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId2',
+              airtableId: 'tutorialAirtableId2',
+              title: 'mon titre 2',
+              format: Tutorial.FORMATS.FRISE,
+              duration: '12:50:50',
+              source: 'Mon grenier 2',
+              link: 'https://coucou2.com',
+              language: 'es',
+              license: Tutorial.LICENSES.CCBYSA,
+              level: Tutorial.LEVELS.TWO,
+              crush: Tutorial.CRUSHES.NO,
+              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId3'],
+            }),
+          ];
+          airtableSearchTutorialByTagTitlesScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tutoriels')
+            .query({
+              filterByFormula: 'AND(FIND("lymotio", LOWER(Tags)),FIND("youtu", LOWER(Tags)))',
+              fields: { '': tutorialDatasource.usedFields },
+              sort: [{ field: 'Titre', direction: 'asc' }],
+              maxRecords: 100,
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTutorials,
+            });
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tutorials?filter[tagTitles][]=lYmoTio&filter[tagTitles][]=youTu',
+            headers: generateAuthorizationHeader(readonlyUser),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId1',
+                attributes: {
+                  'title': 'mon titre 1',
+                  'duration': '12:01:02',
+                  'source': 'Mon grenier 1',
+                  'format': Tutorial.FORMATS.PDF,
+                  'link': 'https://coucou1.com',
+                  'license': Tutorial.LICENSES.C,
+                  'level': Tutorial.LEVELS.ONE,
+                  'crush': Tutorial.CRUSHES.YES,
+                  'language': 'fr',
+                  'pix-id': 'tutorialId1',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId2',
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId2',
+                attributes: {
+                  'title': 'mon titre 2',
+                  'duration': '12:50:50',
+                  'source': 'Mon grenier 2',
+                  'format': Tutorial.FORMATS.FRISE,
+                  'link': 'https://coucou2.com',
+                  'license': Tutorial.LICENSES.CCBYSA,
+                  'level': Tutorial.LEVELS.TWO,
+                  'crush': Tutorial.CRUSHES.NO,
+                  'language': 'es',
+                  'pix-id': 'tutorialId2',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId3',
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableSearchTutorialByTagTitlesScope.isDone()).toBe(true);
+        });
       });
     });
   });

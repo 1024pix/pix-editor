@@ -19,6 +19,24 @@ export async function getByAirtableId(tutorialId) {
   return toDomain(datasourceTutorial);
 }
 
+export async function searchByTitle(title) {
+  const datasourceTutorials = await tutorialDatasource.searchByTitle(title);
+  if (!datasourceTutorials) return [];
+  return datasourceTutorials.map(toDomain);
+}
+
+export async function searchBySource(source) {
+  const datasourceTutorials = await tutorialDatasource.searchBySource(source);
+  if (!datasourceTutorials) return [];
+  return datasourceTutorials.map(toDomain);
+}
+
+export async function searchByTagTitles(tagTitles) {
+  const datasourceTutorials = await tutorialDatasource.searchByTagTitles(tagTitles);
+  if (!datasourceTutorials) return [];
+  return datasourceTutorials.map(toDomain);
+}
+
 function toDomain(datasourceTutorial) {
   return new Tutorial(datasourceTutorial);
 }

@@ -1,4 +1,5 @@
 import { datasource } from './datasource.js';
+import { findRecords, stringValue } from '../../airtable.js';
 
 export const tutorialDatasource = datasource.extend({
 
@@ -60,6 +61,47 @@ export const tutorialDatasource = datasource.extend({
     };
     if (model.airtableId) airtableObject.id = model.airtableId;
     return airtableObject;
+  },
+
+  async searchByTitle(title) {
+    const filterByFormula = `FIND(${stringValue(title.toLowerCase())}, LOWER(Titre))`;
+    const records = await findRecords(this.tableName, {
+      filterByFormula,
+      fields: this.usedFields,
+      sort: [{ field: 'Titre', direction: 'asc' }],
+      maxRecords: 100,
+    });
+
+    if (records.length === 0) return undefined;
+    return records.map(this.fromAirTableObject);
+  },
+
+  async searchBySource(source) {
+    const filterByFormula = `FIND(${stringValue(source.toLowerCase())}, LOWER(Source))`;
+    const records = await findRecords(this.tableName, {
+      filterByFormula,
+      fields: this.usedFields,
+      sort: [{ field: 'Titre', direction: 'asc' }],
+      maxRecords: 4,
+    });
+
+    if (records.length === 0) return undefined;
+    return records.map(this.fromAirTableObject);
+  },
+
+  async searchByTagTitles(tagTitles) {
+    // Note: LOWER(Tags) works because, in table Tags in Airtable, main column is the "title" column
+    const findQueries = tagTitles.map((tagTitle) => `FIND(${stringValue(tagTitle.toLowerCase())}, LOWER(Tags))`);
+    const filterByFormula = `AND(${findQueries.join(',')})`;
+    const records = await findRecords(this.tableName, {
+      filterByFormula,
+      fields: this.usedFields,
+      sort: [{ field: 'Titre', direction: 'asc' }],
+      maxRecords: 100,
+    });
+
+    if (records.length === 0) return undefined;
+    return records.map(this.fromAirTableObject);
   },
 });
 
