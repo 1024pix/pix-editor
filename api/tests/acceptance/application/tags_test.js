@@ -76,10 +76,10 @@ describe('Application | Route | Tags', () => {
         airtableSearchTagsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags')
           .query({
-            filterByFormula: 'FIND("fruits", LOWER(Nom))',
+            filterByFormula: '"fruits" = LOWER(Nom)',
             fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
-            maxRecords: 4,
+            maxRecords: 1,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, {
@@ -114,10 +114,10 @@ describe('Application | Route | Tags', () => {
         airtableSearchTagsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags')
           .query({
-            filterByFormula: 'FIND("internet", LOWER(Nom))',
+            filterByFormula: '"internet" = LOWER(Nom)',
             fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
-            maxRecords: 4,
+            maxRecords: 1,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, {

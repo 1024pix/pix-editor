@@ -80,7 +80,7 @@ export function register(server) {
         handler: async function(request) {
           try {
             const params = extractParameters(request.query);
-            const tags = await tagRepository.findAllByTitle(params.filter.title);
+            const tags = await tagRepository.findAllByPartialTitle(params.filter.title);
             return tagSerializer.serialize(tags);
           } catch (err) {
             logger.error(err);

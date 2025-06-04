@@ -1,6 +1,6 @@
 export async function createTag(tag, dependencies = { tagRepository, ConflictError }) {
-  const tagsWithIdenticalTitle = await dependencies.tagRepository.findAllByTitle(tag.title);
-  if (tagsWithIdenticalTitle.length > 0) {
+  const tagWithIdenticalTitle = await dependencies.tagRepository.findByTitle(tag.title);
+  if (tagWithIdenticalTitle) {
     throw new dependencies.ConflictError('Nom de tag déjà pris');
   }
   return dependencies.tagRepository.create(tag);
