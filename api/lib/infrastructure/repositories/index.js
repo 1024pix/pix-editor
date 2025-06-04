@@ -11,6 +11,7 @@ export * as releaseRepository from './release-repository.js';
 export * as skillRepository from './skill-repository.js';
 export * as staticCourseRepository from './static-course-repository.js';
 export * as staticCourseTagRepository from './static-course-tag-repository.js';
+export * as tagRepository from './tag-repository.js';
 export * as thematicRepository from './thematic-repository.js';
 export * as translationRepository from './translation-repository.js';
 export * as tubeRepository from './tube-repository.js';
