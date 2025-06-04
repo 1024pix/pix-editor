@@ -6,8 +6,10 @@ import {
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { logger } from '../../infrastructure/logger.js';
+import { child } from '../../infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
+
+const logger = child('updatePixApiReleaseCacheService', { event: 'lcms:patch-release' });
 
 export async function onAttachmentCreated({ attachment }) {
   if (pixApiClient.isPixApiCachePatchingEnabled()) {
