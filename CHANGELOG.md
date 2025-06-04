@@ -1,5 +1,18 @@
 
 
+## v3.208.0 (04/06/2025)
+
+
+### :rocket: Amélioration
+- [#1008](https://github.com/1024pix/pix-editor/pull/1008) [FEATURE] Utiliser une liste de pays normalisée dans l'édition d'un challenge (PIX-18043).
+
+### :building_construction: Tech
+- [#1002](https://github.com/1024pix/pix-editor/pull/1002) [TECH] Sortir les thématiques du proxy Airtable (PIX-17960).
+
+### :bug: Correction
+- [#1015](https://github.com/1024pix/pix-editor/pull/1015) [BUGFIX] L'édition d'attachments sur une épreuve traduite ne fonctionne pas (PIX-18096).
+- [#1010](https://github.com/1024pix/pix-editor/pull/1010) [BUGFIX] Problème d'actualisation du label framework dans la sidebar (PIX-12884).
+
 ## v3.207.0 (03/06/2025)
 
 
