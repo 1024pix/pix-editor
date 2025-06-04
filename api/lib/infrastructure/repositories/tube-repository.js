@@ -38,6 +38,14 @@ export async function getByAirtableId(airtableId) {
   return toDomain(datasourceTube, translations);
 }
 
+export async function getManyByAirtableIds(airtableIds) {
+  if (!airtableIds?.length) return [];
+  const datasourceTubes = await tubeDatasource.getManyByAirtableIds(airtableIds);
+  if (!datasourceTubes) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceTubes.map(({ id }) => id));
+  return toDomainList(datasourceTubes, translations);
+}
+
 export async function create(tube) {
   tube.id = idGenerator.generateNewId('tube');
   const createdTubeDTO = await tubeDatasource.create(tube);
