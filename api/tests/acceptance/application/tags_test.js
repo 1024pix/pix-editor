@@ -31,6 +31,7 @@ describe('Application | Route | Tags', () => {
               type: 'tags',
               attributes: {
                 'title': 'Internet',
+                'notes': 'une note',
               },
             },
           },
@@ -56,6 +57,7 @@ describe('Application | Route | Tags', () => {
               type: 'tags',
               attributes: {
                 'titlee': 'Internet',
+                'notes': 'une note',
               },
             },
           },
@@ -77,7 +79,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: '"fruits" = LOWER(Nom)',
-            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 1,
           })
@@ -96,6 +98,7 @@ describe('Application | Route | Tags', () => {
               type: 'tags',
               attributes: {
                 'title': 'FRUITS',
+                'notes': 'une note',
               },
             },
           },
@@ -115,7 +118,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: '"internet" = LOWER(Nom)',
-            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 1,
           })
@@ -125,13 +128,14 @@ describe('Application | Route | Tags', () => {
           });
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
         generateNewId.mockReturnValue('tagId2');
-        const createdAirtableTag = airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'Internet' });
+        const createdAirtableTag = airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'Internet', notes: 'une note' });
         airtableCreateTagScope = nock('https://api.airtable.com')
           .post('/v0/airtableBaseValue/Tags/', {
             records: [{
               fields: {
                 'id persistant': 'tagId2',
                 'Nom': 'Internet',
+                'Notes': 'une note',
               },
             }],
           })
@@ -149,6 +153,7 @@ describe('Application | Route | Tags', () => {
               type: 'tags',
               attributes: {
                 'title': 'Internet',
+                'notes': 'une note',
               },
             },
           },
@@ -164,6 +169,7 @@ describe('Application | Route | Tags', () => {
             attributes: {
               'pix-id': 'tagId2',
               'title': 'Internet',
+              'notes': 'une note',
             },
             relationships: {
               skills: {
@@ -227,7 +233,7 @@ describe('Application | Route | Tags', () => {
     context('success', function() {
       it('should respond with status 200 and tag', async () => {
         // given
-        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits', skillAirtableIds: ['skillAirtableId1'], tutorialAirtableIds: ['tutorialAirtableId1'] });
+        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits', notes: 'une note', description: 'une description', skillAirtableIds: ['skillAirtableId1'], tutorialAirtableIds: ['tutorialAirtableId1'] });
         airtableGetTagScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
           .query({})
@@ -251,6 +257,8 @@ describe('Application | Route | Tags', () => {
             attributes: {
               'pix-id': 'tagId1',
               'title': 'Fruits',
+              'notes': 'une note',
+              'description': 'une description',
             },
             relationships: {
               skills: {
@@ -298,7 +306,7 @@ describe('Application | Route | Tags', () => {
       it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
         // given
         const airtableTags = [
-          airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', title: 'france' }),
+          airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
           airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
           airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
         ];
@@ -306,7 +314,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: 'FIND("fr", LOWER(Nom))',
-            fields: { '': [ 'id persistant', 'Nom', 'Acquis', 'Tutoriels' ] },
+            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 4,
           })
@@ -333,6 +341,8 @@ describe('Application | Route | Tags', () => {
               attributes: {
                 'pix-id': 'tagId3',
                 'title': 'france',
+                'notes': 'une note',
+                'description': 'une description',
               },
               relationships: {
                 skills: {

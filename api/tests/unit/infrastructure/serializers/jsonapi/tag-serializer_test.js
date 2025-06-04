@@ -10,6 +10,8 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
         id: 'recTag1',
         airtableId: 'recAirtable1',
         title: 'Internet',
+        notes: 'une note',
+        description: 'une description',
         skillAirtableIds: ['skillAirtableId1', 'skillAirtableId2'],
         tutorialAirtableIds: ['tutorialAirtableId1', 'tutorialAirtableId2'],
       });
@@ -24,6 +26,8 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
           id: 'recAirtable1',
           attributes: {
             title: 'Internet',
+            notes: 'une note',
+            description: 'une description',
             'pix-id': 'recTag1',
           },
           relationships: {
@@ -63,6 +67,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       const id = 'recAirtableTag1';
       const attributes = {
         'title': 'Internet',
+        'notes': 'une note',
       };
       const payload = {
         data: {
@@ -80,6 +85,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
         id: null,
         airtableId: 'recAirtableTag1',
         title: 'Internet',
+        notes: 'une note',
       }));
     });
   });

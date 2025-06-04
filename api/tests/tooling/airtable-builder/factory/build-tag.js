@@ -3,6 +3,8 @@ export function buildTag(
     id,
     airtableId = id,
     title,
+    notes,
+    description,
     skillAirtableIds = [],
     tutorialAirtableIds = [],
   } = {}) {
@@ -11,6 +13,8 @@ export function buildTag(
     'fields': {
       'id persistant': id,
       'Nom': title,
+      'Notes': notes,
+      'Description': description,
       'Acquis': skillAirtableIds,
       'Tutoriels': tutorialAirtableIds,
     },

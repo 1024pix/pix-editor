@@ -7,6 +7,8 @@ const serializer = new Serializer('tag', {
   attributes: [
     'pixId',
     'title',
+    'notes',
+    'description',
     'skills',
     'tutorials',
   ],
@@ -15,6 +17,8 @@ const serializer = new Serializer('tag', {
       id: tag.airtableId,
       pixId: tag.id,
       title: tag.title,
+      notes: tag.notes,
+      description: tag.description,
       skills: tag.skillAirtableIds.map((skillAirtableId) => ({ id: skillAirtableId })),
       tutorials: tag.tutorialAirtableIds.map((tutorialAirtableId) => ({ id: tutorialAirtableId })),
     };

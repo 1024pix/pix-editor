@@ -17,6 +17,8 @@ export function buildTag({ title, index }) {
   return {
     id: tagId,
     title,
+    description: `description for ${tagId}`,
+    notes: `notes for ${tagId}`,
     skillAirtableIds: [],
     tutorialAirtableIds: [],
   };

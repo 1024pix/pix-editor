@@ -28,6 +28,7 @@ export function register(server) {
               type: Joi.string().required().equal('tags'),
               attributes: {
                 'title': Joi.string().required(),
+                'notes': Joi.string().allow(null),
               },
             },
           }),
