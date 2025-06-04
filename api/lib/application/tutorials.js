@@ -74,6 +74,29 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'GET',
+      path: '/api/tutorials/{tutorialAirtableId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            tutorialAirtableId: Types.tutorialId().required(),
+          }),
+        },
+        handler: async function(request) {
+          try {
+            const tutorial = await tutorialRepository.getByAirtableId(request.params.tutorialAirtableId);
+            if (!tutorial) return Boom.notFound('unknown tutorial id');
+            return tutorialSerializer.serialize(tutorial);
+          } catch (err) {
+            console.log(err);
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 
