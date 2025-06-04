@@ -29,21 +29,11 @@ export async function onAttachmentDeleted({ attachment }) {
 
 async function onAttachmentCreatedOrDeleted({ attachment }) {
   try {
-    let primaryChallengeId, localizedChallengeId, locale, shouldUpdatePrimary;
-    if (attachment.challengeId) {
-      primaryChallengeId = attachment.challengeId;
-      localizedChallengeId = attachment.challengeId;
-      shouldUpdatePrimary = true;
-    } else {
-      const localizedChallenge = await localizedChallengeRepository.get({ id: attachment.localizedChallengeId });
-      locale = localizedChallenge.locale;
-      primaryChallengeId = localizedChallenge.challengeId;
-      localizedChallengeId = attachment.localizedChallengeId;
-      shouldUpdatePrimary = false;
-    }
-    const primaryChallenge = await challengeRepository.get(primaryChallengeId);
+    const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
+    const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
+    const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
     const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
-    const challengeToTransform = shouldUpdatePrimary ? primaryChallenge : primaryChallenge.translate(locale);
+    const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
     const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
     const transformedChallenge = transformChallenge(challengeToTransform);
     await updatedRecordNotifier.notify({
