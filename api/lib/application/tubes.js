@@ -30,7 +30,23 @@ export function register(server) {
         },
       },
     },
-
+    {
+      method: 'GET',
+      path: '/api/tubes',
+      config: {
+        handler: async function() {
+          try {
+            const tubes = await tubeRepository.list();
+            return tubeSerializer.serialize(tubes);
+          } catch (err) {
+            if (err instanceof DomainError) throw err;
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 
