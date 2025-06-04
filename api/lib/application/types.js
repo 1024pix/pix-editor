@@ -47,6 +47,10 @@ export function skillId() {
   return Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/);
 }
 
+export function tagId() {
+  return Joi.string().pattern(/^(rec|tag)[a-zA-Z0-9]+$/);
+}
+
 export function thematicId() {
   return Joi.string().pattern(/^(rec|thematic)[a-zA-Z0-9]+$/);
 }

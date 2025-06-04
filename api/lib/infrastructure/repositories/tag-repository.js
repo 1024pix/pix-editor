@@ -13,6 +13,12 @@ export async function create(tag) {
   return toDomain(datasourceTag);
 }
 
+export async function getByAirtableId(tagId) {
+  const datasourceTag = await tagDatasource.find(tagId);
+  if (!datasourceTag) return null;
+  return toDomain(datasourceTag);
+}
+
 function toDomain(datasourceTag) {
   return new Tag(datasourceTag);
 }

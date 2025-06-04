@@ -107,7 +107,7 @@ describe('Application | Route | Tags', () => {
     });
 
     context('success', function() {
-      it('should respond with status 201 and created thematic', async () => {
+      it('should respond with status 201 and created tag', async () => {
         // given
         const airtableTags = [
           airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits' }),
@@ -168,6 +168,84 @@ describe('Application | Route | Tags', () => {
 
         expect(airtableListTagsScope.isDone()).toBe(true);
         expect(airtableCreateTagScope.isDone()).toBe(true);
+      });
+    });
+  });
+
+  describe('GET /api/tags/{tagAirtableId}', async () => {
+    let airtableGetTagScope;
+
+    context('when param is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tags/autreChose',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('when tag does not exist', function() {
+      it('should respond with status 404', async () => {
+        // given
+        airtableGetTagScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(404);
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tags/tagAirtableId1',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+      });
+    });
+
+    context('success', function() {
+      it('should respond with status 200 and tag', async () => {
+        // given
+        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', name: 'Fruits' });
+        airtableGetTagScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableTag);
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tags/tagAirtableId1',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response.result).toEqual({
+          data: {
+            type: 'tags',
+            id: 'tagAirtableId1',
+            attributes: {
+              'pix-id': 'tagId1',
+              'name': 'Fruits',
+            },
+          },
+        });
+
+        expect(airtableGetTagScope.isDone()).toBe(true);
       });
     });
   });
