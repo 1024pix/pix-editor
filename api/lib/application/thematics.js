@@ -40,7 +40,7 @@ export function register(server) {
       config: {
         validate: {
           query: Joi.object({
-            'filter[ids][]': Joi.array().items(Types.thematicId()),
+            'filter[ids][]': [Types.thematicId(), Joi.array().items(Types.thematicId())],
           }),
         },
         handler: async function(request) {

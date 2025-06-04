@@ -34,6 +34,11 @@ export function register(server) {
       method: 'GET',
       path: '/api/tubes',
       config: {
+        validate: {
+          query: Joi.object({
+            'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())],
+          }),
+        },
         handler: async function() {
           try {
             const tubes = await tubeRepository.list();
