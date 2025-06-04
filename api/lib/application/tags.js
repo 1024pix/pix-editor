@@ -9,6 +9,7 @@ import * as tagSerializer from '../infrastructure/serializers/jsonapi/tag-serial
 import { tagRepository } from '../infrastructure/repositories/index.js';
 import { createTag } from '../domain/usecases/index.js';
 import * as Types from './types.js';
+import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
 export function register(server) {
   server.route([
@@ -59,6 +60,28 @@ export function register(server) {
             const tag = await tagRepository.getByAirtableId(request.params.tagAirtableId);
             if (!tag) return Boom.notFound('unknown tag id');
             return tagSerializer.serialize(tag);
+          } catch (err) {
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/tags',
+      config: {
+        validate: {
+          query: Joi.object({
+            'filter[name]': Joi.string().required(),
+          }).required(),
+        },
+        handler: async function(request) {
+          try {
+            const params = extractParameters(request.query);
+            const tags = await tagRepository.findAllByName(params.filter.name);
+            return tagSerializer.serialize(tags);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);

@@ -249,4 +249,88 @@ describe('Application | Route | Tags', () => {
       });
     });
   });
+
+  describe('GET /api/tags', async () => {
+    let airtableSearchTagsScope;
+
+    context('when query param is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tags?filter[nameee]=coucou',
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('success', function() {
+      it('should respond with status 200 and related tags, limited by 4 tags and sorted by name', async () => {
+        // given
+        const airtableTags = [
+          airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', name: 'france' }),
+          airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', name: 'freT' }),
+          airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', name: 'frontieRe' }),
+        ];
+        airtableSearchTagsScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tags')
+          .query({
+            filterByFormula: 'FIND("fr", LOWER(Nom))',
+            fields: { '': [ 'id persistant', 'Nom' ] },
+            sort: [{ field: 'Nom', direction: 'asc' }],
+            maxRecords: 4,
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, {
+            records: airtableTags,
+          });
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/tags?filter[name]=fr',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'tags',
+              id: 'tagAirtableId3',
+              attributes: {
+                'pix-id': 'tagId3',
+                'name': 'france',
+              },
+            },
+            {
+              type: 'tags',
+              id: 'tagAirtableId4',
+              attributes: {
+                'pix-id': 'tagId4',
+                'name': 'freT',
+              },
+            },
+            {
+              type: 'tags',
+              id: 'tagAirtableId2',
+              attributes: {
+                'pix-id': 'tagId2',
+                'name': 'frontieRe',
+              },
+            },
+          ],
+        });
+        expect(airtableSearchTagsScope.isDone()).toBe(true);
+      });
+    });
+  });
 });
