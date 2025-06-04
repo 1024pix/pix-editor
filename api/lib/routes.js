@@ -21,6 +21,7 @@ import * as staticRoute from './application/static/index.js';
 import * as tagsRoute from './application/tags.js';
 import * as thematicsRoutes from './application/thematics.js';
 import * as translationsRoute from './application/translations.js';
+import * as tubesRoutes from './application/tubes.js';
 import * as usersRoute from './application/users.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
@@ -47,6 +48,7 @@ export const routes = [
   tagsRoute,
   thematicsRoutes,
   translationsRoute,
+  tubesRoutes,
   usersRoute,
   whitelistedUrlsRoute,
   ...competenceRoutes,
