@@ -1,5 +1,5 @@
 import Model, { attr, hasMany } from '@ember-data/model';
-import _ from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 export default class StaticCourseModel extends Model {
   @attr name;
@@ -18,6 +18,6 @@ export default class StaticCourseModel extends Model {
 
   get sortedChallengeSummaries() {
     const summaries = this.hasMany('challengeSummaries').value() || [];
-    return _.sortBy(summaries, 'index');
+    return sortBy(summaries, 'index');
   }
 }
