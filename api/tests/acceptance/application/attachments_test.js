@@ -50,7 +50,8 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    afterEach(function() {
+    afterEach(async function() {
+      await knex('attachments').truncate();
       return knex('localized_challenges-attachments').truncate();
     });
 

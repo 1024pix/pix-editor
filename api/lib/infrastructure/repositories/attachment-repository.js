@@ -66,6 +66,7 @@ export async function create(attachment) {
     localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
     attachmentId: createdAttachmentDTO.id,
   });
+  await knex('attachments').insert(fromDatasourceToDB(createdAttachmentDTO));
   return toDomain(createdAttachmentDTO);
 }
 
