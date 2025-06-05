@@ -10,7 +10,7 @@ export class Tutorial {
     license,
     level,
     crush,
-    language,
+    locale,
     tagAirtableIds,
   }) {
     this.id = id;
@@ -23,7 +23,7 @@ export class Tutorial {
     this.license = license;
     this.level = level;
     this.crush = crush;
-    this.language = language;
+    this.locale = locale;
     this.tagAirtableIds = tagAirtableIds;
   }
 
@@ -75,7 +75,7 @@ export class Tutorial {
     this.license = tutorial.license;
     this.level = tutorial.level;
     this.crush = tutorial.crush;
-    this.language = tutorial.language;
+    this.locale = tutorial.locale;
     this.tagAirtableIds = tutorial.tagAirtableIds;
   }
 }

@@ -29,7 +29,7 @@ const serializer = new Serializer('tutorial', {
       license: tutorial.license,
       level: tutorial.level,
       crush: tutorial.crush,
-      language: tutorial.language,
+      language: tutorial.locale,
       tags: tutorial.tagAirtableIds.map((tagAirtableId) => ({ id: tagAirtableId })),
     };
   },
@@ -52,6 +52,7 @@ const deserializer = new Deserializer({
   transform(tutorial) {
     return new Tutorial({
       ...tutorial,
+      locale: tutorial.language,
       id: tutorial.pixId,
       airtableId: tutorial.id ?? null,
       tagAirtableIds: tutorial.tags,

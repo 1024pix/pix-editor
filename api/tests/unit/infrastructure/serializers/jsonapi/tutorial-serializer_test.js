@@ -17,7 +17,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
         license: Tutorial.LICENSES.CCBYSA,
         level: Tutorial.LEVELS.THREE,
         crush: true,
-        language: 'fr',
+        locale: 'fr',
         tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
       });
 
@@ -111,7 +111,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
         license: Tutorial.LICENSES.CCBYSA,
         level: Tutorial.LEVELS.THREE,
         crush: true,
-        language: 'fr',
+        locale: 'fr',
         tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
       }));
     });
