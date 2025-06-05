@@ -495,10 +495,7 @@ describe('Application | Route | Tubes', () => {
               },
               relationships: {
                 'competence': {
-                  data: {
-                    id: 'recCompetence1',
-                    type: 'competences',
-                  },
+                  data: null
                 },
                 'theme': {
                   data: {
@@ -678,6 +675,279 @@ describe('Application | Route | Tubes', () => {
           { key: 'tube.tube3.practicalDescription', locale: 'fr', value: 'Description troisième tube' },
           { key: 'tube.tube3.practicalTitle', locale: 'en', value: 'Third tube’s title' },
           { key: 'tube.tube3.practicalTitle', locale: 'fr', value: 'Titre troisième tube' },
+        ]);
+      });
+    });
+  });
+
+  describe('PATCH /api/tubes/{tubeAirtableId}', async () => {
+    let airtableUpdateTubeScope, airtableTubeScope;
+
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/tubes/recTube1',
+          payload: {
+            data: {
+              type: 'tubes',
+              id: 'recTube1',
+              attributes: {
+                name: '@test',
+                index: 2,
+                'practical-title-fr': 'Titre du tube',
+                'practical-title-en': 'Tube’s title',
+                'practical-description-fr': 'Description du tube',
+                'practical-description-en': 'Tube’s description',
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
+                },
+                'theme': {
+                  data: {
+                    id: 'recThematic1',
+                    type: 'themes',
+                  },
+                },
+                'raw-skills': {
+                  data: [
+                    {
+                      id: 'recSkill1',
+                      type: 'skills',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+      });
+    });
+
+    context('when the payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/tubes/recTube1',
+          payload: {
+            data: {
+              type: 'sujets',
+              id: 'recTube1',
+              attributes: {
+                name: '@test',
+                index: 2,
+                'practical-title-fr': 'Titre du tube',
+                'practical-title-en': 'Tube’s title',
+                'practical-description-fr': 'Description du tube',
+                'practical-description-en': 'Tube’s description',
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
+                },
+                'theme': {
+                  data: {
+                    id: 'recThematic1',
+                    type: 'themes',
+                  },
+                },
+                'raw-skills': {
+                  data: [
+                    {
+                      id: 'recSkill1',
+                      type: 'skills',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('success', function() {
+      beforeEach(async () => {
+        const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+          id: 'tube1',
+          airtableId: 'recTube1',
+          name: '@test',
+          index: 1,
+          competenceAirtableId: 'recCompetence1',
+          thematicAirtableId: 'recThematic1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+        }));
+
+        airtableTubeScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Tubes/recTube1')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableTube);
+
+        databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Titre du tube' });
+        databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'en', value: 'Tube’s title' });
+        databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalDescription', locale: 'fr', value: 'Description du tube' });
+        databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalDescription', locale: 'en', value: 'Tube’s description' });
+
+        await databaseBuilder.commit();
+
+        const updatedAirtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+          id: 'tube1',
+          airtableId: 'recTube1',
+          name: '@pouet',
+          index: 2,
+          competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
+          thematicAirtableId: 'recThematic1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
+        }));
+
+        airtableUpdateTubeScope = nock('https://api.airtable.com')
+          .patch('/v0/airtableBaseValue/Tubes/', {
+            records: [{
+              fields: {
+                'id persistant': 'tube1',
+                'Nom': '@pouet',
+                'Index': 2,
+                'Competences': ['recCompetence1'],
+                'Thematique': ['recThematic1'],
+              },
+              id: 'recTube1',
+            }],
+          })
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [updatedAirtableTube] });
+      });
+
+      it.fails('should respond with status 200 and updated tube', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/tubes/recTube1',
+          payload: {
+            data: {
+              type: 'tubes',
+              id: 'recTube1',
+              attributes: {
+                'pix-id': 'tube1',
+                'name': '@pouet',
+                'index': 2,
+                'practical-title-fr': 'Titre tube après',
+                'practical-title-en': 'Tube’s title after',
+                'practical-description-fr': 'Description tube après',
+                'practical-description-en': 'Tube’s description after',
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    type: 'competences',
+                    id: 'recCompetence1',
+                  },
+                },
+                'theme': {
+                  data: {
+                    type: 'themes',
+                    id: 'recThematic1',
+                  },
+                },
+                'raw-skills': {
+                  data: [
+                    {
+                      type: 'skills',
+                      id: 'recSkill1',
+                    },
+                    {
+                      type: 'skills',
+                      id: 'recSkill2',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response.result).toEqual({
+          data: {
+            type: 'tubes',
+            id: 'recTube1',
+            attributes: {
+              'pix-id': 'tube1',
+              'name': '@pouet',
+              'index': 2,
+              'practical-title-fr': 'Titre tube après',
+              'practical-title-en': 'Tube’s title after',
+              'practical-description-fr': 'Description tube après',
+              'practical-description-en': 'Tube’s description after',
+            },
+            relationships: {
+              'competence': {
+                data: {
+                  type: 'competences',
+                  id: 'recCompetence1',
+                },
+              },
+              'theme': {
+                data: {
+                  type: 'themes',
+                  id: 'recThematic1',
+                },
+              },
+              'raw-skills': {
+                data: [
+                  {
+                    type: 'skills',
+                    id: 'recSkill1',
+                  },
+                  {
+                    type: 'skills',
+                    id: 'recSkill2',
+                  },
+                ],
+              },
+            },
+          },
+        });
+
+        expect(airtableUpdateTubeScope.isDone()).toBe(true);
+        expect(airtableTubeScope.isDone()).toBe(true);
+
+        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+          { key: 'tube.tube1.practicalDescription', locale: 'en', value: 'Tube’s description after' },
+          { key: 'tube.tube1.practicalDescription', locale: 'fr', value: 'Description tube après' },
+          { key: 'tube.tube1.practicalTitle', locale: 'en', value: 'Tube’s title after' },
+          { key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Titre tube après' },
         ]);
       });
     });

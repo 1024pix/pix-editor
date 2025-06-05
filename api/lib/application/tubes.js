@@ -94,6 +94,47 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/tubes/{tubeAirtableId}',
+      config: {
+        validate: {
+          params: Joi.object({
+            tubeAirtableId: Types.tubeId(),
+          }),
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().required().equal('tubes'),
+              id: Types.tubeId().required(),
+              attributes: Joi.object({
+                'name': Joi.string(),
+                'index': Joi.number(),
+                'practical-title-fr': Joi.string().allow(null),
+                'practical-title-en': Joi.string().allow(null),
+                'practical-description-fr': Joi.string().allow(null),
+                'practical-description-en': Joi.string().allow(null),
+              }).unknown(true),
+              relationships: Joi.object({
+                'competence': Types.competenceRelationship(),
+                'theme': Types.thematicRelationship(),
+                'raw-skills': Types.skillsRelationship(),
+              }),
+            }),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function() {
+          try {
+            return {};
+          } catch (err) {
+            if (err instanceof DomainError) throw err;
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
   ]);
 }
 
