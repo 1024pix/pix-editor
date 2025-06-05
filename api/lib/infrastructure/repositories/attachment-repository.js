@@ -92,6 +92,7 @@ export async function update(attachment) {
 
 export async function remove(attachmentId) {
   await attachmentDatasource.delete([attachmentId]);
+  await knex('attachments').where({ id: attachmentId }).del();
   await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
 }
 

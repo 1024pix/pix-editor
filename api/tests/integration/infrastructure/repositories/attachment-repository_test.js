@@ -1164,5 +1164,80 @@ describe('Integration | Repository | attachment-repository', () => {
         .pluck('attachmentId');
       expect(localizedChallengeAttachmentsLeft).toStrictEqual(['someOtherAttachmentId']);
     });
+
+    it('delete the attachment in DB if it exists beforehand', async function() {
+      // given
+      const attachmentId = 'attachmentId';
+      const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: 'chal1' }).id;
+      const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: 'chal2' }).id;
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId,
+        localizedChallengeId: loc1Id,
+      });
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId: 'someOtherAttachmentId',
+        localizedChallengeId: loc2Id,
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'deleteRecords').mockImplementation((tableName, recordIds) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (!_.isEqual(recordIds, ['attachmentId'])
+        ) expect.unreachable('Attachments to delete to airtable : wrong attachments');
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId',
+        challengeId: 'challengeId',
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildAttachment({
+        id: attachmentId,
+        airtableId: attachmentId,
+        filename: 'attachment_filename old',
+        url: 'url/to/attachment old',
+        type: 'attachment',
+        size: 321,
+        mimeType: 'text/csv',
+        challengeId: 'challengeId',
+        airtableChallengeId: 'challengeAirtableId',
+        localizedChallengeId: 'localizedChallengeId',
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2020-01-01'),
+      });
+      await databaseBuilder.commit();
+
+      // when
+      await attachmentRepository.remove(attachmentId);
+
+      // then
+      const attachmentDB = await knex('attachments').select('*').where({ id: 'recABC123' }).first();
+      expect(attachmentDB).to.be.undefined;
+    });
+
+    it('does not crash when trying to delete attachment that is not in DB', async function() {
+      // given
+      const attachmentId = 'attachmentId';
+      const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: 'chal1' }).id;
+      const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: 'chal2' }).id;
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId,
+        localizedChallengeId: loc1Id,
+      });
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId: 'someOtherAttachmentId',
+        localizedChallengeId: loc2Id,
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'deleteRecords').mockImplementation((tableName, recordIds) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (!_.isEqual(recordIds, ['attachmentId'])
+        ) expect.unreachable('Attachments to delete to airtable : wrong attachments');
+      });
+
+      // when
+      await attachmentRepository.remove(attachmentId);
+
+      // then
+      expect(true).to.be.true;
+    });
   });
 });
