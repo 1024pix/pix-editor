@@ -16,7 +16,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
         link: 'https://www.somelink.com',
         license: Tutorial.LICENSES.CCBYSA,
         level: Tutorial.LEVELS.THREE,
-        crush: Tutorial.CRUSHES.YES,
+        crush: true,
         language: 'fr',
         tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
       });
@@ -37,7 +37,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
             link: 'https://www.somelink.com',
             license: Tutorial.LICENSES.CCBYSA,
             level: Tutorial.LEVELS.THREE,
-            crush: Tutorial.CRUSHES.YES,
+            crush: true,
             language: 'fr',
             'pix-id': 'tutorialId'
           },
@@ -75,7 +75,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
             link: 'https://www.somelink.com',
             license: Tutorial.LICENSES.CCBYSA,
             level: Tutorial.LEVELS.THREE,
-            crush: Tutorial.CRUSHES.YES,
+            crush: true,
             language: 'fr',
             'pix-id': 'tutorialId'
           },
@@ -110,7 +110,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
         link: 'https://www.somelink.com',
         license: Tutorial.LICENSES.CCBYSA,
         level: Tutorial.LEVELS.THREE,
-        crush: Tutorial.CRUSHES.YES,
+        crush: true,
         language: 'fr',
         tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
       }));

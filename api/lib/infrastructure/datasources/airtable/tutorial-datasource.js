@@ -36,7 +36,7 @@ export const tutorialDatasource = datasource.extend({
       language: airtableRecord.get('Langue'),
       license: airtableRecord.get('License'),
       level: airtableRecord.get('niveau'),
-      crush: airtableRecord.get('CoupDeCoeur'),
+      crush: airtableRecord.get('CoupDeCoeur') === 'YES',
       tagAirtableIds: airtableRecord.get('Tags') ?? [],
       tutorialForSkills: airtableRecord.get('Solution à'),
       furtherInformation: airtableRecord.get('En savoir plus'),
@@ -55,7 +55,7 @@ export const tutorialDatasource = datasource.extend({
         'Langue': model.language,
         'License': model.license,
         'niveau': model.level,
-        'CoupDeCoeur': model.crush,
+        'CoupDeCoeur': model.crush ? 'YES' : null,
         'Tags': model.tagAirtableIds,
       },
     };

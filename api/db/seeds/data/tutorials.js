@@ -6,7 +6,7 @@ const iterFor = {
   'format': cycle(Object.values(Tutorial.FORMATS)),
   'level': cycle(Object.values(Tutorial.LEVELS)),
   'license': cycle(Object.values(Tutorial.LICENSES)),
-  'crush': cycle(Object.values(Tutorial.CRUSHES)),
+  'crush': cycle([true, false]),
 };
 let iterTags;
 let iterLocales;

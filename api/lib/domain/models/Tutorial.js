@@ -66,13 +66,6 @@ export class Tutorial {
     };
   }
 
-  static get CRUSHES() {
-    return {
-      YES: 'YES',
-      NO: null,
-    };
-  }
-
   update(tutorial) {
     this.title = tutorial.title;
     this.duration = tutorial.duration;

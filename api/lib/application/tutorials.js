@@ -47,7 +47,7 @@ export function register(server) {
                   }).required(),
                 'license': Joi.string().valid(...Object.values(Tutorial.LICENSES)).allow(null),
                 'level': Joi.string().valid(...Object.values(Tutorial.LEVELS)).required(),
-                'crush': Joi.string().valid(Tutorial.CRUSHES.YES).allow(null),
+                'crush': Joi.boolean().allow(null),
                 'language': Joi.string().required(),
               },
               relationships: {
@@ -127,7 +127,7 @@ export function register(server) {
                   }).required(),
                 'license': Joi.string().valid(...Object.values(Tutorial.LICENSES)).allow(null),
                 'level': Joi.string().valid(...Object.values(Tutorial.LEVELS)).required(),
-                'crush': Joi.string().valid(Tutorial.CRUSHES.YES).allow(null),
+                'crush': Joi.boolean().allow(null),
                 'language': Joi.string().required(),
                 'pix-id': Types.tutorialId().required(),
               },

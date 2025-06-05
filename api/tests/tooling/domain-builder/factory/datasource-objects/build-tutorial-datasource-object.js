@@ -14,7 +14,7 @@ export function buildTutorialDatasourceObject(
     language = 'fr-fr',
     license = Tutorial.LICENSES.C,
     level = Tutorial.LEVELS.THREE,
-    crush = Tutorial.CRUSHES.YES,
+    crush = true,
     tagAirtableIds = ['tagAirtableId1'],
     tutorialForSkills = ['skillId1'],
     furtherInformation = ['skillId2'],
