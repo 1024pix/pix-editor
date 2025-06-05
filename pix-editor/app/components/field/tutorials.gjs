@@ -38,13 +38,18 @@ export default class Tutorials extends Component {
       maxRecords: 100,
       sort: [{ field: 'Titre', direction: 'asc' }],
     });
+
+    if (tutorials.length === 0) {
+      this.setTutorialList([]);
+    }
+
     const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
     await Promise.all(tagsLoad);
     return tutorials.map((tutorial) => {
       const haveTags = tagSearch ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
       return {
         label: tutorial.title,
-        description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
+        category: `TAG : ${haveTags ? tutorial.tagsTitle : 'Aucun'}`,
         value: tutorial.id,
       };
     });

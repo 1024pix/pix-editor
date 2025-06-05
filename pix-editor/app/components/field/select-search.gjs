@@ -17,6 +17,10 @@ export default class SelectSearch extends Component {
         emptyMessage.innerHTML = 'Aucun résultat';
         this.args.setResultList([]);
       }
+
+      if (this.args.resultList.length === 0) {
+        emptyMessage.innerHTML = 'Aucun résultat';
+      }
     });
   }
 
