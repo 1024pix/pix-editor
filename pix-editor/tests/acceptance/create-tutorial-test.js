@@ -45,7 +45,6 @@ module('Acceptance | Create-Tutorial', function(hooks) {
   });
 
   test('create a new tutorial', async function(assert) {
-
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');
@@ -94,8 +93,8 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.dom(screen.getByLabelText('Durée (hh:mm:ss) *')).hasValue('12:30:00');
     assert.dom(screen.getByText('mon tag')).exists();
   });
-  test('verify if the url link is valid', async function(assert) {
 
+  test('verify if the url link is valid', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');
