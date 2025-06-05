@@ -1,6 +1,7 @@
 import {
   createChallengeTransformer,
   tubeTransformer,
+  tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
 import {
   attachmentRepository,
@@ -16,7 +17,6 @@ import * as Sentry from '@sentry/node';
 const logger = child('updatePixApiReleaseCacheService', { event: 'lcms:patch-release' });
 
 export async function onAttachmentCreated({ attachment }) {
-  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   await onAttachmentCreatedOrDeleted({ attachment });
 }
 
@@ -25,27 +25,52 @@ export async function onAttachmentUpdated({ attachment: _ }) {
 }
 
 export async function onAttachmentDeleted({ attachment }) {
-  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   await onAttachmentCreatedOrDeleted({ attachment });
 }
 
 async function onAttachmentCreatedOrDeleted({ attachment }) {
-  try {
-    const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
-    const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
-    const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
-    const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
-    const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
-    const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
-    const transformedChallenge = transformChallenge(challengeToTransform);
-    await updatedRecordNotifier.notify({
-      pixApiClient,
-      model: 'challenges',
-      updatedRecord: transformedChallenge,
-    });
-  } catch (err) {
-    logger.error(err);
-    Sentry.captureException(err);
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
+      const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
+      const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
+      const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
+      const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
+      const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
+      const transformedChallenge = transformChallenge(challengeToTransform);
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'challenges',
+        updatedRecord: transformedChallenge,
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+export async function onTutorialCreated({ tutorial }) {
+  await onTutorialCreatedOrUpdated({ tutorial });
+}
+
+export async function onTutorialUpdated({ tutorial }) {
+  await onTutorialCreatedOrUpdated({ tutorial });
+}
+
+async function onTutorialCreatedOrUpdated({ tutorial }) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      const [tutorialForRelease] = tutorialTransformer.filterTutorialsFields([tutorial]);
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'tutorials',
+        updatedRecord: tutorialForRelease,
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
   }
 }
 

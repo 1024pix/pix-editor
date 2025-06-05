@@ -1,4 +1,5 @@
 import { NotFoundError } from '../errors.js';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function updateTutorial(tutorialData, dependencies = { tutorialRepository }) {
   const tutorial = await dependencies.tutorialRepository.getByAirtableId(tutorialData.airtableId);
@@ -6,5 +7,7 @@ export async function updateTutorial(tutorialData, dependencies = { tutorialRepo
     throw new NotFoundError('unknown tutorial id');
   }
   tutorial.update(tutorialData);
-  return dependencies.tutorialRepository.update(tutorial);
+  const updatedTutorial = await dependencies.tutorialRepository.update(tutorial);
+  await updatePixApiReleaseCache.onTutorialUpdated({ tutorial: updatedTutorial });
+  return updatedTutorial;
 }

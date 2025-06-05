@@ -1,4 +1,4 @@
-import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
 
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
@@ -6,14 +6,21 @@ import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { Tutorial } from '../../../lib/domain/models/index.js';
 import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import * as config from '../../../lib/config.js';
 
 describe('Application | Route | Tutorials', () => {
-  let editorUser, readonlyUser;
+  let editorUser, readonlyUser, originalPixApiUrlValue;
 
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     readonlyUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('POST /api/tutorials', async () => {
