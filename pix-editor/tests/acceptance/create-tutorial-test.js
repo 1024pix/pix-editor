@@ -55,7 +55,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(createTutorialLink);
 
     await fillByLabel('Titre *', 'Titre de mon tutoriel');
-    await clickByText('Langue');
+    await clickByText('Langue *');
     await click(await screen.findByRole('option', { name: 'Français' }));
     await fillByLabel('Lien *', 'http://www.google.com');
 
@@ -87,9 +87,13 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.dom('[data-test-main-message]').hasText('Tutoriel créé');
 
     assert.dom(screen.getByText('Titre de mon tutoriel')).exists();
-    assert.dom(screen.getByText('Français')).exists();
+    const languageMenu = await screen.getByLabelText('Langue *').childNodes[3];
+    assert.strictEqual(languageMenu.textContent, 'Français');
+    assert.dom(languageMenu).selected;
     assert.dom(screen.getByLabelText('Lien *')).hasValue('http://www.google.com');
-    assert.dom(screen.getByText('jeu')).exists();
+    const formatMenu = await screen.getByLabelText('Format').childNodes[3];
+    assert.strictEqual(formatMenu.textContent, 'jeu');
+    assert.dom(formatMenu).selected;
     assert.dom(screen.getByLabelText('Durée (hh:mm:ss) *')).hasValue('12:30:00');
     assert.dom(screen.getByText('mon tag')).exists();
   });
@@ -105,7 +109,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(createTutorialLink);
 
     await fillByLabel('Titre *', 'Titre de mon tutoriel');
-    await clickByText('Langue');
+    await clickByText('Langue *');
     await click(await screen.findByRole('option', { name: 'Français' }));
     await fillByLabel('Lien *', 'PAS BON LE LINK');
 

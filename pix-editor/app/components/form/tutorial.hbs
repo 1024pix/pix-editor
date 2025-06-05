@@ -5,7 +5,15 @@
       <Input id="title_tutorial" @type="text" @value={{@tutorial.title}} placeholder="Titre" />
     </div>
     <div class="six wide field">
-      <Field::Select @title="Langue *" @defaultText="Langue" @value={{this.tutorialLanguage}} @options={{this.tutorialLanguageOptions}} @edition={{true}} @setValue={{this.setTutorialLanguage}}/>
+      <PixSelect
+        @placeholder="Langue"
+        @options={{this.tutorialLanguageOptions}}
+        @onChange={{this.setTutorialLanguage}}
+        @value={{this.tutorialLanguage}}
+        @hideDefaultOption={{true}}
+      >
+        <:label>Langue *</:label>
+      </PixSelect>
     </div>
   </div>
   <div class="three fields">
@@ -29,15 +37,37 @@
             {{result}}
       </PowerSelect>
     </div>
-    <Field::Select @title="Licence" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
+    <PixSelect
+      @placeholder="Licence"
+      @options={{this.options.license}}
+      @onChange={{fn (mut @tutorial.license)}}
+      @value={{@tutorial.license}}
+    >
+      <:label>Licence</:label>
+    </PixSelect>
   </div>
   <div class="three fields">
-    <Field::Select @title="Format *" @defaultText="Format" @value={{@tutorial.format}} @options={{this.options.format}} @edition={{true}} @setValue={{fn (mut @tutorial.format)}}/>
+    <PixSelect
+      @placeholder="Format *"
+      @options={{this.options.format}}
+      @onChange={{fn (mut @tutorial.format)}}
+      @value={{@tutorial.format}}
+    >
+      <:label>Format</:label>
+    </PixSelect>
     <div class="field">
       <label for="duration_tutorial">Durée (hh:mm:ss) *</label>
       <Input id="duration_tutorial" @type="text" @value={{@tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
     </div>
-    <Field::Select @title="Niveau" @defaultText="Niveau" @value={{@tutorial.level}} @options={{this.options.level}} @edition={{true}} @setValue={{fn (mut @tutorial.level)}}/>
+
+    <PixSelect
+      @placeholder="Niveau"
+      @options={{this.options.level}}
+      @onChange={{fn (mut @tutorial.level)}}
+      @value={{@tutorial.level}}
+    >
+      <:label>Niveau</:label>
+    </PixSelect>
   </div>
   <div class="three fields">
     <div data-test-tag-search class="field">
