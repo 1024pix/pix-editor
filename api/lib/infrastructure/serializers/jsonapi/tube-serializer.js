@@ -1,6 +1,7 @@
 import Jsonapi from 'jsonapi-serializer';
+import { Tube } from '../../../domain/models/index.js';
 
-const { Serializer } = Jsonapi;
+const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('tube', {
   attributes: [
@@ -54,4 +55,40 @@ const serializer = new Serializer('tube', {
 
 export function serialize(tubes) {
   return serializer.serialize(tubes);
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+  themes: {
+    valueForRelationship({ id }) {
+      return id;
+    },
+  },
+  transform({
+    id,
+    theme: thematicAirtableId,
+    practicalTitleFr,
+    practicalTitleEn,
+    practicalDescriptionFr,
+    practicalDescriptionEn,
+    ...tube
+  }) {
+    return new Tube({
+      ...tube,
+      airtableId: id,
+      practicalTitle_i18n: {
+        fr: practicalTitleFr,
+        en: practicalTitleEn,
+      },
+      practicalDescription_i18n: {
+        fr: practicalDescriptionFr,
+        en: practicalDescriptionEn,
+      },
+      thematicAirtableId,
+    });
+  },
+});
+
+export function deserialize(tubes) {
+  return deserializer.deserialize(tubes);
 }
