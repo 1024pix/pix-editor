@@ -32,4 +32,12 @@ export class Tube {
   get isWorkbench() {
     return this.name === Tube.WORKBENCH_NAME;
   }
+
+  /**
+   * @param {import('./Thematic.js').Thematic} thematic
+   */
+  prepareForCreation(thematic) {
+    this.competenceAirtableId = thematic.competenceAirtableId;
+    this.index = thematic.tubeAirtableIds.length;
+  }
 }

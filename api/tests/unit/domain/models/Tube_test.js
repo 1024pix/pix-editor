@@ -29,4 +29,28 @@ describe('Unit | Domain | Tube', () => {
       expect(isWorkbench).toBe(false);
     });
   });
+
+  describe('#prepareForCreation', () => {
+    it('computes fields for creation', () => {
+
+      // given
+      const tube = domainBuilder.buildTube({
+        thematicAirtableId: 'recThematic1',
+        competenceAirtableId: null,
+        index: null,
+      });
+      const thematic = domainBuilder.buildThematic({
+        id: 'recThematic1',
+        competenceAirtableId: 'recCompetence1',
+        tubeAirtableIds: ['recTube1', 'recTube2'],
+      });
+
+      // when
+      tube.prepareForCreation(thematic);
+
+      // then
+      expect(tube).toHaveProperty('competenceAirtableId', 'recCompetence1');
+      expect(tube).toHaveProperty('index', 2);
+    });
+  });
 });
