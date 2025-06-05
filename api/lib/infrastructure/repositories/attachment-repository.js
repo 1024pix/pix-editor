@@ -3,6 +3,9 @@ import { attachmentDatasource, challengeDatasource } from '../datasources/airtab
 import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { child } from '../logger.js';
+
+const logger = child('attachment-repository', { event: 'lcms:pg-migration-attachment' });
 
 export async function get(id) {
   const datasourceAttachment = await attachmentDatasource.find(id);
@@ -45,7 +48,11 @@ export async function createBatch(attachments) {
       attachmentId: createdAttachmentsDto.id,
     });
   }
-  await knex.batchInsert('attachments', createdAttachmentsDtos.map(fromDatasourceToDB));
+  try {
+    await knex.batchInsert('attachments', createdAttachmentsDtos.map(fromDatasourceToDB));
+  } catch (err) {
+    logger.error(err);
+  }
   return toDomainList(createdAttachmentsDtos);
 }
 
@@ -66,7 +73,11 @@ export async function create(attachment) {
     localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
     attachmentId: createdAttachmentDTO.id,
   });
-  await knex('attachments').insert(fromDatasourceToDB(createdAttachmentDTO));
+  try {
+    await knex('attachments').insert(fromDatasourceToDB(createdAttachmentDTO));
+  } catch (err) {
+    logger.error(err);
+  }
   return toDomain(createdAttachmentDTO);
 }
 
@@ -83,16 +94,24 @@ export async function update(attachment) {
   };
   const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
   // todo turn me into a real update when all attachments moved to table
-  await knex('attachments').insert({
-    ...fromDatasourceToDB(updatedAttachmentDTO),
-    updatedAt: new Date(),
-  }).onConflict('id').merge();
+  try {
+    await knex('attachments').insert({
+      ...fromDatasourceToDB(updatedAttachmentDTO),
+      updatedAt: new Date(),
+    }).onConflict('id').merge();
+  } catch (err) {
+    logger.error(err);
+  }
   return toDomain(updatedAttachmentDTO);
 }
 
 export async function remove(attachmentId) {
   await attachmentDatasource.delete([attachmentId]);
-  await knex('attachments').where({ id: attachmentId }).del();
+  try {
+    await knex('attachments').where({ id: attachmentId }).del();
+  } catch (err) {
+    logger.error(err);
+  }
   await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
 }
 
