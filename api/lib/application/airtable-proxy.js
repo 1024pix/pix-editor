@@ -12,9 +12,7 @@ import * as usecases from '../domain/usecases/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 
-const AIRTABLE_PROXY_TABLES = [
-  'Tutoriels',
-];
+const AIRTABLE_PROXY_TABLES = [];
 
 export async function register(server) {
   server.route([
