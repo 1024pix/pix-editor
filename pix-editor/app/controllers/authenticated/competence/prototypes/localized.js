@@ -342,7 +342,7 @@ export default class LocalizedController extends Controller {
     }
 
     const piecesJointes = await challenge.piecesJointes;
-    for (const pieceJointe of piecesJointes.toArray()) {
+    for (const pieceJointe of [...piecesJointes]) {
       pieceJointe.filename = this._getPieceJointeFullFilename(challenge, pieceJointe.filename);
       await this.storage.renameFile(pieceJointe.url, pieceJointe.filename);
     }

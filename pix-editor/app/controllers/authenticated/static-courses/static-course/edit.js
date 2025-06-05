@@ -8,7 +8,7 @@ export default class EditStaticCourseController extends Controller {
   @service notifications;
 
   get challengeIdsAsStringWithBreakLines() {
-    return this.model.staticCourse.sortedChallengeSummaries.toArray()
+    return [...this.model.staticCourse.sortedChallengeSummaries]
       .map((challengeSummary) => challengeSummary.id)
       .join('\n');
   }

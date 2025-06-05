@@ -65,13 +65,13 @@ export default class CurrentDataService extends Service {
     const frameworkAreas = await Promise.all(getAreas);
     const getCompetences = frameworkAreas.map((areas) => areas.map((area) => area.competences)).flat();
     const areaCompetences = await Promise.all(getCompetences);
-    return areaCompetences.flatMap((competences) => competences.toArray());
+    return areaCompetences.flatMap((competences) => [...competences]);
   }
 
   async getThematicsFromPix1DFramework() {
     const competences = await this.getCompetencesFromPix1DFramework();
     const getThemes = competences.map((competence) => competence.rawThemes);
     const themes = await Promise.all(getThemes);
-    return themes.flatMap((theme) => theme.toArray());
+    return themes.flatMap((theme) => [...theme]);
   }
 }
