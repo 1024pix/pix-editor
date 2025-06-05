@@ -77,7 +77,7 @@ export async function getLearningContentForReplication() {
   const transformedAreas = areaTransformer.filterAreasFields(areas);
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
-  const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
+  const transformedTubes = tubeTransformer.transformTubes(tubes, thematics, challenges);
 
   const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
