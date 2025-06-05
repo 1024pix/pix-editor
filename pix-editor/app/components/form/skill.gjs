@@ -58,7 +58,10 @@ export default class SkillForm extends Component {
     event.preventDefault();
 
     const loadedTutorials = await tutorials;
-    loadedTutorials.removeObject(tutorial);
+    const index = loadedTutorials.indexOf(tutorial);
+    if (index !== -1) {
+      loadedTutorials.splice(index, 1);
+    }
   }
 
   <template>
