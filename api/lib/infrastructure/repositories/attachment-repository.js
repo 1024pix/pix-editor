@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 export async function get(id) {
   const datasourceAttachment = await attachmentDatasource.find(id);
@@ -44,6 +45,7 @@ export async function createBatch(attachments) {
       attachmentId: createdAttachmentsDto.id,
     });
   }
+  await knex.batchInsert('attachments', createdAttachmentsDtos.map(fromDatasourceToDB));
   return toDomainList(createdAttachmentsDtos);
 }
 
@@ -93,4 +95,19 @@ function toDomainList(datasourceAttachments) {
 
 export function toDomain(attachment) {
   return new Attachment(attachment);
+}
+
+function fromDatasourceToDB(attachmentDatasource) {
+  return {
+    id: attachmentDatasource.id,
+    airtableId: attachmentDatasource.id,
+    filename: attachmentDatasource.filename,
+    url: attachmentDatasource.url,
+    type: attachmentDatasource.type,
+    size: attachmentDatasource.size,
+    mimeType: attachmentDatasource.mimeType,
+    challengeId: attachmentDatasource.challengeId,
+    airtableChallengeId: attachmentDatasource.airtableChallengeId,
+    localizedChallengeId: attachmentDatasource.localizedChallengeId,
+  };
 }

@@ -313,7 +313,8 @@ describe('Integration | Repository | attachment-repository', () => {
 
   describe('#createBatch', () => {
 
-    afterEach(() => {
+    afterEach(async () => {
+      await knex('attachments').truncate();
       return knex('localized_challenges-attachments').truncate();
     });
 
@@ -455,6 +456,142 @@ describe('Integration | Repository | attachment-repository', () => {
         {
           attachmentId: 'airtableIdAttachmentB',
           localizedChallengeId: attachmentB.localizedChallengeId,
+        },
+      ]);
+    });
+
+    it('should persist models in DB', async () => {
+      // given
+      const attachmentA = domainBuilder.buildAttachment({
+        id: null,
+        url: 'url/to/clone/attachmentA',
+        type: 'illustration',
+        size: 123,
+        mimeType: 'image/jpeg',
+        filename: 'attachmentA_filename',
+        challengeId: 'challengeA',
+        localizedChallengeId: 'localizedChallengeA',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeA',
+        challengeId: 'challengeA',
+        locale: 'nl',
+      });
+      const attachmentB = domainBuilder.buildAttachment({
+        id: null,
+        url: 'url/to/clone/attachmentB',
+        type: 'attachment',
+        size: 456,
+        mimeType: 'text/csv',
+        filename: 'attachmentB_filename',
+        challengeId: 'challengeB',
+        localizedChallengeId: 'challengeB',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeB',
+        challengeId: 'challengeB',
+        locale: 'fr',
+      });
+      await databaseBuilder.commit();
+      const airtableIdsByIds = {
+        'challengeA': 'airtableChallengeA',
+        'challengeB': 'airtableChallengeB',
+      };
+      vi.spyOn(challengeDatasource, 'getAirtableIdsByIds').mockImplementation((necessaryChallengeIds) => {
+        if (necessaryChallengeIds.join(',') !== 'challengeA,challengeB')
+          expect.unreachable('Wrong challenge ids for fetching corresponding airtable ids');
+        return airtableIdsByIds;
+      });
+      vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (
+          airtableRequestBodies.length !== 2
+          || !_.isEqual(airtableRequestBodies[0], { fields: {
+            url: attachmentA.url,
+            size: attachmentA.size,
+            type: attachmentA.type,
+            mimeType: attachmentA.mimeType,
+            filename: attachmentA.filename,
+            challengeId: ['airtableChallengeA'],
+            localizedChallengeId: attachmentA.localizedChallengeId,
+          } })
+          || !_.isEqual(airtableRequestBodies[1], { fields: {
+            url: attachmentB.url,
+            size: attachmentB.size,
+            type: attachmentB.type,
+            mimeType: attachmentB.mimeType,
+            filename: attachmentB.filename,
+            challengeId: ['airtableChallengeB'],
+            localizedChallengeId: attachmentB.localizedChallengeId,
+          } })
+        ) expect.unreachable('Attachments to create to airtable wrong bodies');
+        return [
+          {
+            id: 'airtableIdAttachmentA',
+            fields: {
+              'Record ID': 'airtableIdAttachmentA',
+              url: attachmentA.url,
+              size: attachmentA.size,
+              type: attachmentA.type,
+              mimeType: attachmentA.mimeType,
+              filename: attachmentA.filename,
+              'challengeId persistant': [attachmentA.challengeId],
+              'challengeId': ['airtableChallengeA'],
+              'localizedChallengeId': attachmentA.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          },
+          {
+            id: 'airtableIdAttachmentB',
+            fields: {
+              'Record ID': 'airtableIdAttachmentB',
+              url: attachmentB.url,
+              size: attachmentB.size,
+              type: attachmentB.type,
+              mimeType: attachmentB.mimeType,
+              filename: attachmentB.filename,
+              'challengeId persistant': [attachmentB.challengeId],
+              'challengeId': ['airtableChallengeB'],
+              'localizedChallengeId': attachmentB.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          },
+        ];
+      });
+
+      // when
+      await attachmentRepository.createBatch([attachmentA, attachmentB]);
+
+      // then
+      const attachmentsDB = await knex('attachments').select('*').orderBy('id');
+      expect(attachmentsDB).toMatchObject([
+        {
+          id: 'airtableIdAttachmentA',
+          airtableId: 'airtableIdAttachmentA',
+          filename: 'attachmentA_filename',
+          url: 'url/to/clone/attachmentA',
+          type: 'illustration',
+          size: 123,
+          mimeType: 'image/jpeg',
+          challengeId: 'challengeA',
+          airtableChallengeId: 'airtableChallengeA',
+          localizedChallengeId: 'localizedChallengeA',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+        {
+          id: 'airtableIdAttachmentB',
+          airtableId: 'airtableIdAttachmentB',
+          filename: 'attachmentB_filename',
+          url: 'url/to/clone/attachmentB',
+          type: 'attachment',
+          size: 456,
+          mimeType: 'text/csv',
+          challengeId: 'challengeB',
+          airtableChallengeId: 'airtableChallengeB',
+          localizedChallengeId: 'challengeB',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         },
       ]);
     });

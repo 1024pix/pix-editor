@@ -2110,6 +2110,7 @@ describe('Application | Route | Skills', () => {
     });
 
     afterEach(async () => {
+      await knex('attachments').truncate();
       await knex('translations').truncate();
     });
 
