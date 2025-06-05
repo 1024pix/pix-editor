@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import * as Sentry from '@sentry/node';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
+import * as securityPreHandlers from './security-pre-handlers.js';
 import { tubeRepository } from '../infrastructure/repositories/index.js';
 import { tubeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import { listTubes } from '../domain/usecases/index.js';
@@ -46,6 +47,42 @@ export function register(server) {
             const params = extractParameters(request.query);
             const tubes = await listTubes(params);
             return tubeSerializer.serialize(tubes);
+          } catch (err) {
+            if (err instanceof DomainError) throw err;
+            logger.error(err);
+            Sentry.captureException(err);
+            return Boom.internal(err);
+          }
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/tubes',
+      config: {
+        validate: {
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().required().equal('tubes'),
+              attributes: Joi.object({
+                'name': Joi.string(),
+                'practical-title-fr': Joi.string().allow(null),
+                'practical-title-en': Joi.string().allow(null),
+                'practical-description-fr': Joi.string().allow(null),
+                'practical-description-en': Joi.string().allow(null),
+              }).unknown(true),
+              relationships: Joi.object({
+                'competence': Types.competenceRelationship({ allow: [null] }),
+                'theme': Types.thematicRelationship(),
+                'raw-skills': Types.skillsRelationship(),
+              }),
+            }),
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function() {
+          try {
+            return {};
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);

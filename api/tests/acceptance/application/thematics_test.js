@@ -401,7 +401,7 @@ describe('Application | Route | Thematics', () => {
     });
 
     context('when payload is not formatted correctly', function() {
-      it('should respond with status 403', async function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 

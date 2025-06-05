@@ -1,15 +1,17 @@
-import {  beforeEach, describe, describe as context, expect, it } from 'vitest';
+import {  beforeEach, describe, describe as context, expect, it, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { tubeDatasource } from '../../../lib/infrastructure/datasources/airtable/tube-datasource.js';
+import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Application | Route | Tubes', () => {
-  let editorUser;
+  let editorUser, readonlyUser;
 
   beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
+    readonlyUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
   });
 
@@ -419,6 +421,264 @@ describe('Application | Route | Tubes', () => {
         });
 
         expect(airtableTubesScope.isDone()).toBe(true);
+      });
+    });
+  });
+
+  describe('POST /api/tubes', async () => {
+    let airtableCreateTubeScope, airtableThematicScope, pixApiCacheScope;
+
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/tubes',
+          payload: {
+            data: {
+              type: 'tubes',
+              attributes: {
+                name: '@test',
+                'practical-title-fr': 'Titre du tube',
+                'practical-title-en': 'Tube’s title',
+                'practical-description-fr': 'Description du tube',
+                'practical-description-en': 'Tube’s description',
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
+                },
+                'theme': {
+                  data: {
+                    id: 'recThematic1',
+                    type: 'themes',
+                  },
+                },
+                'raw-skills': {
+                  data: [],
+                },
+              }
+            },
+          },
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+      });
+    });
+
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/tubes',
+          payload: {
+            data: {
+              type: 'sujets',
+              attributes: {
+                name: '@test',
+                'practical-title-fr': 'Titre du tube',
+                'practical-title-en': 'Tube’s title',
+                'practical-description-fr': 'Description du tube',
+                'practical-description-en': 'Tube’s description',
+              },
+              relationships: {
+                'competence': {
+                  data: {
+                    id: 'recCompetence1',
+                    type: 'competences',
+                  },
+                },
+                'theme': {
+                  data: {
+                    id: 'recThematic1',
+                    type: 'themes',
+                  },
+                },
+                'raw-skills': {
+                  data: [],
+                },
+              }
+            },
+          },
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    context('success', function() {
+
+      beforeEach(async () => {
+        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          competenceAirtableId: 'recCompetence1',
+          tubeAirtableIds: ['recTube1', 'recTube2'],
+        }));
+
+        airtableThematicScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Thematiques/recThematic1')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableThematic);
+
+        const createdAirtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+          id: 'tube3',
+          airtableId: 'recTube3',
+          name: '@pouic',
+          index: 2,
+          competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
+          thematicAirtableId: 'recThematic1',
+          skillAirtableIds: [],
+          skillIds: [],
+        }));
+
+        airtableCreateTubeScope = nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Tubes/', {
+            records: [{
+              fields: {
+                'id persistant': 'tube3',
+                'Nom': '@pouic',
+                'Index': 2,
+                'Competences': ['recCompetence1'],
+                'Thematique': ['recThematic1'],
+              },
+            }],
+          })
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [createdAirtableTube] });
+
+        vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('tube3');
+
+        const pixApiToken = 'secret';
+        nock('https://api.test.pix.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        pixApiCacheScope = nock('https://api.test.pix.fr')
+          .patch('/api/cache/tubes/tube3', {
+            id: 'tube3',
+            name: '@pouic',
+            practicalTitle_i18n: {
+              fr: 'Titre troisième tube',
+              en: 'Third tube’s title',
+            },
+            practicalDescription_i18n: {
+              fr: 'Description troisième tube',
+              en: 'Third tube’s description',
+            },
+            competenceId: 'competence1',
+            thematicId: 'thematic1',
+            skillIds: [],
+            isMobileCompliant: false,
+            isTabletCompliant: false,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+      });
+
+      afterEach(async () => {
+        await knex('translations').truncate();
+      });
+
+      it.fails('should respond with status 201 and created thematic', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/tubes',
+          payload: {
+            data: {
+              type: 'tubes',
+              attributes: {
+                'name': '@pouic',
+                'practical-title-fr': 'Titre troisième tube',
+                'practical-title-en': 'Third tube’s title',
+                'practical-description-fr': 'Description troisième tube',
+                'practical-description-en': 'Third tube’s description',
+              },
+              relationships: {
+                'competence': {
+                  data: null,
+                },
+                'theme': {
+                  data: {
+                    type: 'themes',
+                    id: 'recThematic1',
+                  },
+                },
+                'raw-skills': {
+                  data: [],
+                },
+              },
+            },
+          },
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(201);
+        expect(response.result).toEqual({
+          data: {
+            type: 'tubes',
+            id: 'recTube3',
+            attributes: {
+              'pix-id': 'tube3',
+              'name': '@pouic',
+              'practical-title-fr': 'Titre troisième tube',
+              'practical-title-en': 'Third tube’s title',
+              'practical-description-fr': 'Description troisième tube',
+              'practical-description-en': 'Third tube’s description',
+              'index': 2,
+            },
+            relationships: {
+              competence: {
+                data: {
+                  id: 'recCompetence1',
+                  type: 'competences'
+                }
+              },
+              'theme': {
+                data: {
+                  type: 'themes',
+                  id: 'recThematic1',
+                },
+              },
+              'raw-skills': {
+                data: [],
+              },
+            },
+          },
+        });
+
+        expect(airtableCreateTubeScope.isDone()).toBe(true);
+        expect(airtableThematicScope.isDone()).toBe(true);
+        expect(pixApiCacheScope.isDone()).toBe(true);
+
+        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+          { key: 'tube.tube3.practicalDescription', locale: 'en', value: 'Third tube’s description' },
+          { key: 'tube.tube3.practicalDescription', locale: 'fr', value: 'Description troisième tube' },
+          { key: 'tube.tube3.practicalTitle', locale: 'en', value: 'Third tube’s title' },
+          { key: 'tube.tube3.practicalTitle', locale: 'fr', value: 'Titre troisième tube' },
+        ]);
       });
     });
   });
