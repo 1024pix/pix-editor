@@ -63,7 +63,7 @@ export default class StaticCourseForm extends Component {
     try {
       await this.args.onFormSubmitted(formData);
     } catch (err) {
-      this.errorMessages.pushObjects(err.message.split('\n'));
+      this.errorMessages.push(...err.message.split('\n'));
     } finally {
       this.isSubmitting = false;
     }

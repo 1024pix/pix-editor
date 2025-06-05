@@ -16,7 +16,7 @@ export default class PaginatedQueryService extends Service {
       }
       return store.query(model, parameters)
         .then((result) => {
-          current.pushObjects([...result]);
+          current.push(...result);
           if (result.meta && result.meta.offset) {
             parameters.offset = result.meta.offset;
             return queryPage(model, parameters, current);
@@ -42,7 +42,7 @@ export default class PaginatedQueryService extends Service {
     }
     return store.query(model, parameters)
       .then((result) => {
-        currentModel.pushObjects([...result]);
+        currentModel.push(...result);
         if (result.meta && result.meta.offset) {
           this.offset = result.meta.offset;
         } else {
