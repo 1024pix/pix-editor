@@ -1,3 +1,4 @@
+export * from './build-attachment.js';
 export * from './build-localized-challenge.js';
 export * from './build-localized-challenge-attachment.js';
 export * from './build-mission.js';

@@ -1,4 +1,4 @@
-import { afterEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
@@ -778,12 +778,16 @@ describe('Integration | Repository | attachment-repository', () => {
 
   describe('#update', () => {
 
+    afterEach(async () => {
+      await knex('attachments').truncate();
+    });
+
     it('should update an attachment in airtable', async () => {
       // given
       const attachment = domainBuilder.buildAttachment({
         id: 'recABC123',
         url: 'url/to/attachment',
-        type: 'some other type',
+        type: 'illustration',
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachment_filename',
@@ -864,6 +868,194 @@ describe('Integration | Repository | attachment-repository', () => {
           localizedChallengeId: attachment.localizedChallengeId,
         },
       );
+    });
+
+    context('when attachment was already in DB', function() {
+      beforeEach(function() {
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildAttachment({
+          id: 'recABC123',
+          airtableId: 'recABC123',
+          filename: 'attachment_filename old',
+          url: 'url/to/attachment old',
+          type: 'attachment',
+          size: 321,
+          mimeType: 'text/csv',
+          challengeId: 'challengeId',
+          airtableChallengeId: 'challengeAirtableId',
+          localizedChallengeId: 'localizedChallengeId',
+          createdAt: new Date('2020-01-01'),
+          updatedAt: new Date('2020-01-01'),
+        });
+        return databaseBuilder.commit();
+      });
+
+      it('should update the attachment in DB', async function() {
+        // given
+        const attachment = domainBuilder.buildAttachment({
+          id: 'recABC123',
+          url: 'url/to/attachment',
+          type: 'illustration',
+          size: 123,
+          mimeType: 'image/jpeg',
+          filename: 'attachment_filename',
+          challengeId: 'challengeId',
+          airtableChallengeId: 'challengeAirtableId',
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          attachmentId: 'recABC123',
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        await databaseBuilder.commit();
+        vi.spyOn(airtableClient, 'updateRecord').mockImplementation((tableName, airtableRequestBody) => {
+          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+          if (!_.isEqual(airtableRequestBody, {
+            id: attachment.id,
+            fields: {
+              url: attachment.url,
+              size: attachment.size,
+              type: attachment.type,
+              mimeType: attachment.mimeType,
+              filename: attachment.filename,
+              challengeId: ['challengeAirtableId'],
+              localizedChallengeId: attachment.localizedChallengeId,
+            },
+          })
+          ) expect.unreachable('Attachments to update to airtable wrong bodies');
+          return {
+            id: attachment.id,
+            fields: {
+              'Record ID': attachment.id,
+              url: attachment.url,
+              size: attachment.size,
+              type: attachment.type,
+              mimeType: attachment.mimeType,
+              filename: attachment.filename,
+              'challengeId persistant': ['challengeId'],
+              'challengeId': ['challengeAirtableId'],
+              'localizedChallengeId': attachment.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          };
+        });
+
+        // when
+        await attachmentRepository.update(attachment);
+
+        // then
+        const attachmentDB = await knex('attachments').select('*').where({ id: 'recABC123' }).first();
+        expect(attachmentDB).toMatchObject(
+          {
+            id: 'recABC123',
+            airtableId: 'recABC123',
+            filename: 'attachment_filename',
+            url: 'url/to/attachment',
+            type: 'illustration',
+            size: 123,
+            mimeType: 'image/jpeg',
+            challengeId: 'challengeId',
+            airtableChallengeId: 'challengeAirtableId',
+            localizedChallengeId: 'localizedChallengeId',
+            createdAt: new Date('2020-01-01'),
+            updatedAt: expect.any(Date),
+          },
+        );
+      });
+    });
+
+    context('when attachment was not in DB yet', function() {
+      it('should insert the attachment in DB', async function() {
+        // given
+        const attachment = domainBuilder.buildAttachment({
+          id: 'recABC123',
+          url: 'url/to/attachment',
+          type: 'illustration',
+          size: 123,
+          mimeType: 'image/jpeg',
+          filename: 'attachment_filename',
+          challengeId: 'challengeId',
+          airtableChallengeId: 'challengeAirtableId',
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          attachmentId: 'recABC123',
+          localizedChallengeId: 'localizedChallengeId',
+        });
+        await databaseBuilder.commit();
+        vi.spyOn(airtableClient, 'updateRecord').mockImplementation((tableName, airtableRequestBody) => {
+          if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+          if (!_.isEqual(airtableRequestBody, {
+            id: attachment.id,
+            fields: {
+              url: attachment.url,
+              size: attachment.size,
+              type: attachment.type,
+              mimeType: attachment.mimeType,
+              filename: attachment.filename,
+              challengeId: ['challengeAirtableId'],
+              localizedChallengeId: attachment.localizedChallengeId,
+            },
+          })
+          ) expect.unreachable('Attachments to update to airtable wrong bodies');
+          return {
+            id: attachment.id,
+            fields: {
+              'Record ID': attachment.id,
+              url: attachment.url,
+              size: attachment.size,
+              type: attachment.type,
+              mimeType: attachment.mimeType,
+              filename: attachment.filename,
+              'challengeId persistant': ['challengeId'],
+              'challengeId': ['challengeAirtableId'],
+              'localizedChallengeId': attachment.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          };
+        });
+
+        // when
+        await attachmentRepository.update(attachment);
+
+        // then
+        const attachmentDB = await knex('attachments').select('*').where({ id: 'recABC123' }).first();
+        expect(attachmentDB).toMatchObject(
+          {
+            id: 'recABC123',
+            airtableId: 'recABC123',
+            filename: 'attachment_filename',
+            url: 'url/to/attachment',
+            type: 'illustration',
+            size: 123,
+            mimeType: 'image/jpeg',
+            challengeId: 'challengeId',
+            airtableChallengeId: 'challengeAirtableId',
+            localizedChallengeId: 'localizedChallengeId',
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          },
+        );
+      });
     });
   });
 

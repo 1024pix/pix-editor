@@ -82,6 +82,11 @@ export async function update(attachment) {
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
+  // todo turn me into a real update when all attachments moved to table
+  await knex('attachments').insert({
+    ...fromDatasourceToDB(updatedAttachmentDTO),
+    updatedAt: new Date(),
+  }).onConflict('id').merge();
   return toDomain(updatedAttachmentDTO);
 }
 

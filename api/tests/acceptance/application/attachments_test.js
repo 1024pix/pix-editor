@@ -29,7 +29,7 @@ describe('Acceptance | Route | attachments', () => {
             filename: 'some filename',
             size: 123,
             url: 'some.url.com',
-            type: 'some type',
+            type: 'attachment',
             'mime-type': 'some mime type',
           },
           relationships: {
@@ -226,6 +226,10 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
+    afterEach(function() {
+      return knex('attachments').truncate();
+    });
+
     context('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
@@ -303,9 +307,9 @@ describe('Acceptance | Route | attachments', () => {
       await databaseBuilder.commit();
       const airtableAttachmentBefore = airtableBuilder.factory.buildAttachment({
         id: 'recABC123',
-        type: 'type avant',
+        type: 'illustration',
         url: 'url avant',
-        size: 'size avant',
+        size: 123,
         mimeType: 'mimeType avant',
         filename: 'filename avant',
         challengeId: 'challenge123',
@@ -314,9 +318,9 @@ describe('Acceptance | Route | attachments', () => {
       });
       const airtableAttachmentAfter = airtableBuilder.factory.buildAttachment({
         id: 'recABC123',
-        type: 'type avant',
+        type: 'illustration',
         url: 'url avant',
-        size: 'size avant',
+        size: 123,
         mimeType: 'mimeType avant',
         filename: validPayload.data.attributes.filename,
         challengeId: 'challenge123',
@@ -335,8 +339,8 @@ describe('Acceptance | Route | attachments', () => {
             id: 'recABC123',
             fields: {
               'url': 'url avant',
-              'size': 'size avant',
-              'type': 'type avant',
+              'size': 123,
+              'type': 'illustration',
               'mimeType': 'mimeType avant',
               'filename': 'filename APRES',
               'challengeId': ['challengeAirtable123'],
@@ -365,8 +369,8 @@ describe('Acceptance | Route | attachments', () => {
           id: 'recABC123',
           attributes: {
             url: 'url avant',
-            size: 'size avant',
-            type: 'type avant',
+            size: 123,
+            type: 'illustration',
             'mime-type': 'mimeType avant',
             filename: 'filename APRES',
           },
