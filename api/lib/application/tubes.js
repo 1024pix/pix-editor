@@ -6,7 +6,7 @@ import * as Types from './types.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { tubeRepository } from '../infrastructure/repositories/index.js';
 import { tubeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
-import { listTubes } from '../domain/usecases/index.js';
+import { createTube, listTubes } from '../domain/usecases/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
 export function register(server) {
@@ -80,9 +80,11 @@ export function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function() {
+        handler: async function(request, h) {
           try {
-            return {};
+            const tube = await tubeSerializer.deserialize(request.payload);
+            const createdTube = await createTube(tube);
+            return h.response(tubeSerializer.serialize(createdTube)).code(201);
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);

@@ -597,7 +597,7 @@ describe('Application | Route | Tubes', () => {
         await knex('translations').truncate();
       });
 
-      it.fails('should respond with status 201 and created thematic', async () => {
+      it('should respond with status 201 and created thematic', async () => {
         // given
         const server = await createServer();
 
