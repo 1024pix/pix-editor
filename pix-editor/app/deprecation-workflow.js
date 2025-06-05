@@ -4,10 +4,6 @@ setupDeprecationWorkflow({
   'workflow': [
     {
       'handler': 'silence',
-      'matchId': 'ember-data:deprecate-legacy-imports',
-    },
-    {
-      'handler': 'silence',
       'matchId': 'template-action',
     },
     {
