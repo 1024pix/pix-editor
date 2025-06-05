@@ -480,6 +480,20 @@ function routes() {
   this.get('/tags/:id');
   this.post('/tags');
 
+  this.get('/tutorials', function(schema, request) {
+    const {
+      'filter[title]': title,
+      'filter[source]': source,
+    } = request.queryParams;
+    if (title) {
+      return schema.tutorials.all().filter((tutorial) => tutorial.title.toLowerCase().includes(title.toLowerCase()));
+    }
+    return schema.tutorials.all().filter((tutorial) => tutorial.source.toLowerCase().includes(source.toLowerCase()));
+  });
+  this.get('/tutorials/:id');
+  this.post('/tutorials');
+  this.patch('/tutorials/:id');
+
   this.get('/whitelisted-urls');
   this.delete('/whitelisted-urls/:id');
   this.patch('/whitelisted-urls/:id', function(schema, request) {

@@ -17,24 +17,24 @@ export default class Tutorials extends Component {
   @service loader;
 
   async _searchTutorial(query) {
-    let tagSearch = false;
+    if (!query || query.length === 0 || query === '>') {
+      return [];
+    }
+    const filter = {};
     if (query.startsWith('>')) {
-      tagSearch = query
+      filter.tagTitles = query
         .split('>')
         .filter((tag) => tag)
-        .map((tag) => `FIND('${tag.trim()}', LOWER(Tags))`)
-        .join(', ');
+        .map((tag) => tag.trim());
+    } else {
+      filter.title = query.replace(/'/g, '\\\'');
     }
-    const tutorials = await this.store.query('tutorial', {
-      filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query.replace(/'/g, '\\\'')}', LOWER(Titre))`,
-      maxRecords: 100,
-      sort: [{ field: 'Titre', direction: 'asc' }],
-    });
+    const tutorials = await this.store.query('tutorial', { filter });
     const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
     await Promise.all(tagsLoad);
 
     const results = tutorials.map((tutorial) => {
-      const haveTags = tagSearch ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
+      const haveTags = filter.tagTitles ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
       return {
         title: tutorial.title,
         description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
@@ -53,11 +53,7 @@ export default class Tutorials extends Component {
   @action
   addTutorial(e) {
     e.preventDefault();
-    const date = new Date();
-    this.tutorial = this.store.createRecord('tutorial', {
-      pixId: this.idGenerator.newId('tutorial'),
-      date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`,
-    });
+    this.tutorial = this.store.createRecord('tutorial');
     this.displayTutorialPopin = true;
   }
 
