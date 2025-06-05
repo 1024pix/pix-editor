@@ -72,7 +72,7 @@ export default class ApplicationController extends Controller {
       const nodeMessage = document.getElementById(id);
       if (nodeMessage) {
         nodeMessage.addEventListener('transitionend', () => {
-          messages.removeAt(0);
+          messages.splice(0);
         });
         nodeMessage.style.transition = 'opacity .8s ease';
         nodeMessage.style.opacity = '0';
