@@ -54,7 +54,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     const storeResult = storeStub.createRecord.getCall(0).args;
     //stub createdAt
     storeResult[1].createdAt = date;
-    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelogEntry', expectedChangelog]);
+    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelog-entry', expectedChangelog]);
   });
 
   test('it should create a challenge changelogEntry', async function(assert) {
@@ -83,7 +83,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     const storeResult = storeStub.createRecord.getCall(0).args;
     //stub createdAt
     storeResult[1].createdAt = date;
-    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelogEntry', expectedChangelog]);
+    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelog-entry', expectedChangelog]);
   });
 
   test('it should clone skill with new location', async function(assert) {

@@ -30,7 +30,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
       locales: ['Francophone', 'Franco Français'],
       instruction: 'Some instructions 1',
     };
-    this.closeAction = function() {};
+    this.closeAction = function() { };
     this.challenge = challenge;
   });
 
@@ -55,7 +55,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
     //then
-    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args, ['changelogEntry', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
+    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args, ['changelog-entry', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
 
 });

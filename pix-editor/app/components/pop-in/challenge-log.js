@@ -143,7 +143,7 @@ export default class PopinChallengeLog extends Component {
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
-      return pq.query('changelogEntry', { filterByFormula: `AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+      return pq.query('changelog-entry', { filterByFormula: `AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then((entries) => {
           this.changelogEntries = entries;
           this.changelogLoaded = true;
