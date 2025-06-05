@@ -274,6 +274,7 @@
           @emptyMessage="Aucune langue sélectionnée"
           @values={{this.languages}}
           @options={{this.languageOptions}}
+          @isDisabled={{not @edition}}
         >
           <:label>Langue(s)</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -301,6 +302,7 @@
           @emptyMessage="Aucun champ sélectionné"
           @values={{this.args.challenge.contextualizedFields}}
           @options={{this.options.contextualizedFields}}
+          @isDisabled={{not @edition}}
         >
           <:label>Champs contextualisés</:label>
           <:default as |option|>{{option.label}}</:default>
