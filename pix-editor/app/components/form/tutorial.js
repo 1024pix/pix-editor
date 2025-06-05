@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
 export default class TutorialForm extends Component {
 
   @service config;
+  @service notify;
   @service store;
   @service idGenerator;
 
@@ -63,22 +64,30 @@ export default class TutorialForm extends Component {
     const tutorial = this.args.tutorial;
     const tags = await tutorial.tags;
     if (item.id === 'create') {
-      const value = document.querySelector('.tutorial-search .ember-power-select-search-input').value;
-      if (value.indexOf('[') !== -1) {
-        const pos = value.indexOf('[');
-        const length = value.length;
-        const title = value.slice(0, pos);
-        const notes = value.slice(pos + 1, length - 1);
-        const tag = await this.store.createRecord('tag', {
-          title: title,
-          notes: notes,
-        }).save();
-        tags.push(tag);
-      } else {
-        const tag = await this.store.createRecord('tag', {
-          title: value,
-        }).save();
-        tags.push(tag);
+      try {
+        const value = document.querySelector('.tutorial-search .ember-power-select-search-input').value;
+        if (value.indexOf('[') !== -1) {
+          const pos = value.indexOf('[');
+          const length = value.length;
+          const title = value.slice(0, pos);
+          const notes = value.slice(pos + 1, length - 1);
+          const tag = await this.store.createRecord('tag', {
+            title: title,
+            notes: notes,
+          }).save();
+          tags.push(tag);
+        } else {
+          const tag = await this.store.createRecord('tag', {
+            title: value,
+          }).save();
+          tags.push(tag);
+        }
+      } catch (err) {
+        if (err?.errors?.[0]?.status === '409') {
+          this.notify.error('Un tag avec ce nom là existe déjà');
+        } else {
+          this.notify.error('Erreur lors de la création du tag');
+        }
       }
     } else {
       const tag = await this.store.findRecord('tag', item.id);
