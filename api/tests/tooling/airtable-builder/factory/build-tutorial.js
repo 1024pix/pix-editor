@@ -27,7 +27,7 @@ export function buildTutorial({
       'Langue': locale ?? language,
       'License': license,
       'niveau': level,
-      'CoupDeCoeur': crush,
+      'CoupDeCoeur': crush ? 'YES' : null,
       'Tags': tagAirtableIds ?? [],
       'Solution à': tutorialForSkills,
       'En savoir plus': furtherInformation,
