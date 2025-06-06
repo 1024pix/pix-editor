@@ -1,5 +1,10 @@
 .challenge-form {
-  .pix-multi-select  {
+  .pix-select,
+  .pix-select__dropdown,
+  .pix-multi-select {
     width: 100%;
+  }
+  .pix-select-button {
+    margin-bottom: var(--pix-spacing-3x);
   }
 }
