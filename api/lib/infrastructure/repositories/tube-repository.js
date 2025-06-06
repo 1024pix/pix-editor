@@ -4,6 +4,7 @@ import * as translationRepository from './translation-repository.js';
 import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 import * as idGenerator from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'tube';
 
@@ -52,6 +53,20 @@ export async function create(tube) {
   const translations = tubeTranslations.extractFromDomainObject(tube);
   await translationRepository.save({ translations });
   return toDomain(createdTubeDTO, translations);
+}
+
+export async function update(tube) {
+  return knex.transaction(async (transaction) => {
+    const updatedTubeDto = await tubeDatasource.update(tube);
+    const translations = tubeTranslations.extractFromDomainObject(tube);
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: `${tubeTranslations.prefix}${tube.id}.`,
+      locales: ['fr', 'en'],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
+    return toDomain(updatedTubeDto, translations);
+  });
 }
 
 function toDomainList(datasourceTubes, translations) {

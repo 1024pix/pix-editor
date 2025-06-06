@@ -36,7 +36,7 @@ export const tubeDatasource = datasource.extend({
   },
 
   toAirTableObject(model) {
-    return {
+    const airtableObject = {
       fields: {
         'id persistant': model.id,
         Nom: model.name,
@@ -45,6 +45,8 @@ export const tubeDatasource = datasource.extend({
         Index: model.index,
       },
     };
+    if (model.airtableId) airtableObject.id = model.airtableId;
+    return airtableObject;
   },
 
   async listByCompetenceId(competenceId) {

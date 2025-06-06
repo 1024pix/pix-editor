@@ -410,4 +410,71 @@ describe('Integration | Repository | tube-repository', () => {
       });
     });
   });
+
+  describe('#update', () => {
+    it('should save tube to Airtable and translations to DB', async () => {
+      // given
+      const tubeUpdates = {
+        airtableId: 'recTube1',
+        id: 'tube1',
+        name: '@test',
+        practicalTitle_i18n: {
+          fr: 'Titre tube après',
+          en: 'Tube’s title after' ,
+        },
+        practicalDescription_i18n: {
+          fr: 'Description tube après',
+          en: 'Tube’s description after' ,
+        },
+        index: 2,
+        competenceAirtableId: 'recCompetence1',
+        thematicAirtableId: 'recThematic1',
+      };
+
+      const expectedTube = {
+        ...tubeUpdates,
+        competenceId: 'competence1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
+      };
+
+      const airtableTube = airtableBuilder.factory.buildTube(expectedTube);
+      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
+        new Airtable.Record('Tubes', airtableTube.id, airtableTube),
+      );
+
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'en', value: 'Tube’s title' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'fr', value: 'Titre tube' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'en', value: 'Tube’s description' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'fr', value: 'Description tube' });
+      await databaseBuilder.commit();
+
+      const tube = domainBuilder.buildTube(tubeUpdates);
+
+      // when
+      const updatedTube = await tubeRepository.update(tube);
+
+      // then
+      expect(updatedTube).toStrictEqual(domainBuilder.buildTube(expectedTube));
+      expect(updateRecordSpy).toHaveBeenCalledWith(
+        'Tubes',
+        {
+          id: tubeUpdates.airtableId,
+          fields: {
+            'id persistant': tubeUpdates.id,
+            Nom: tubeUpdates.name,
+            Competences: [tubeUpdates.competenceAirtableId],
+            Thematique: [tubeUpdates.thematicAirtableId],
+            Index: tubeUpdates.index,
+          },
+        },
+      );
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+        { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'en', value: tubeUpdates.practicalDescription_i18n.en },
+        { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'fr', value: tubeUpdates.practicalDescription_i18n.fr },
+        { key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'en', value: tubeUpdates.practicalTitle_i18n.en },
+        { key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'fr', value: tubeUpdates.practicalTitle_i18n.fr },
+      ]);
+    });
+  });
 });
