@@ -99,7 +99,8 @@ export const scheduledJobs = {
   createReleaseTime: process.env.CREATE_RELEASE_TIME,
   exportExternalUrlListTime: process.env.EXPORT_EXTERNAL_URL_LIST_TIME,
   attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
-  startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB)
+  startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB),
+  comparePgAirtable: process.env.COMPARE_PG_AIRTABLE_TIME,
 };
 
 export const database = {
