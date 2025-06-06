@@ -37,5 +37,6 @@ export * from './update-competence.js';
 export * from './update-mission.js';
 export * from './update-skill.js';
 export * from './update-thematic.js';
+export * from './update-tube.js';
 export * from './upload-translation-to-phrase.js';
 export * from './validate-urls-from-release.js';

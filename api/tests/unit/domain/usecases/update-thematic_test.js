@@ -39,7 +39,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
     updatedRecordNotifier.notify.mockResolvedValueOnce();
 
     // when
-    const result = updateThematic('recCompetence1', thematicUpdates, {
+    const result = updateThematic('recThematic1', thematicUpdates, {
       thematicRepository,
       thematicTransformer,
       updatedRecordNotifier,
@@ -49,11 +49,11 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
     // then
     await expect(result).resolves.toBe(updatedThematic);
 
-    expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recCompetence1');
+    expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
     expect(updateStub).toHaveBeenCalledWith(thematicUpdates);
     expect(thematicRepository.update).toHaveBeenCalledWith(thematic);
     expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(updatedThematic);
-    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic , model: 'thematics', pixApiClient });
+    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic, model: 'thematics', pixApiClient });
   });
 
   describe('when thematic is not found', () => {
@@ -62,13 +62,13 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
       thematicRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
 
       // when
-      const result = updateThematic('recCompetence1', thematicUpdates, {
+      const result = updateThematic('recThematic1', thematicUpdates, {
         thematicRepository,
       });
 
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown thematic id'));
-      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recCompetence1');
+      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
     });
   });
 
@@ -78,7 +78,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
       updatedRecordNotifier.notify.mockRejectedValueOnce(new Error());
 
       // when
-      const result = updateThematic('recCompetence1', thematicUpdates, {
+      const result = updateThematic('recThematic1', thematicUpdates, {
         thematicRepository,
         thematicTransformer,
         updatedRecordNotifier,
@@ -88,11 +88,11 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
       // then
       await expect(result).resolves.toBe(updatedThematic);
 
-      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recCompetence1');
+      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
       expect(updateStub).toHaveBeenCalledWith(thematicUpdates);
       expect(thematicRepository.update).toHaveBeenCalledWith(thematic);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(updatedThematic);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic , model: 'thematics', pixApiClient });
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic, model: 'thematics', pixApiClient });
     });
   });
 });
