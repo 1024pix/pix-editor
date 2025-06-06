@@ -271,7 +271,7 @@ export class Challenge {
   }
 
   get translations() {
-    return JSON.parse(JSON.stringify(this.#translations));
+    return this.#translations;
   }
 
   static getPrimaryLocale(locales) {
