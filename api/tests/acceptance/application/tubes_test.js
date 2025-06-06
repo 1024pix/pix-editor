@@ -426,7 +426,7 @@ describe('Application | Route | Tubes', () => {
   });
 
   describe('POST /api/tubes', async () => {
-    let airtableCreateTubeScope, airtableThematicScope, pixApiCacheScope;
+    let airtableCreateTubeScope, airtableThematicScope;
 
     context('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
@@ -562,32 +562,6 @@ describe('Application | Route | Tubes', () => {
           .reply(200, { records: [createdAirtableTube] });
 
         vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('tube3');
-
-        const pixApiToken = 'secret';
-        nock('https://api.test.pix.fr')
-          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
-        pixApiCacheScope = nock('https://api.test.pix.fr')
-          .patch('/api/cache/tubes/tube3', {
-            id: 'tube3',
-            name: '@pouic',
-            practicalTitle_i18n: {
-              fr: 'Titre troisième tube',
-              en: 'Third tube’s title',
-            },
-            practicalDescription_i18n: {
-              fr: 'Description troisième tube',
-              en: 'Third tube’s description',
-            },
-            competenceId: 'competence1',
-            thematicId: 'thematic1',
-            skillIds: [],
-            isMobileCompliant: false,
-            isTabletCompliant: false,
-          })
-          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-          .reply(200);
       });
 
       afterEach(async () => {
@@ -668,7 +642,6 @@ describe('Application | Route | Tubes', () => {
 
         expect(airtableCreateTubeScope.isDone()).toBe(true);
         expect(airtableThematicScope.isDone()).toBe(true);
-        expect(pixApiCacheScope.isDone()).toBe(true);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'tube.tube3.practicalDescription', locale: 'en', value: 'Third tube’s description' },

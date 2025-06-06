@@ -1,12 +1,9 @@
 import { thematicRepository, tubeRepository } from '../../infrastructure/repositories/index.js';
-import { tubeTransformer } from '../../infrastructure/transformers/index.js';
-import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
+
 import { NotFoundError } from '../errors.js';
 
-export async function createTube(tube, dependencies = { tubeRepository, thematicRepository, tubeTransformer, updatedRecordNotifier, pixApiClient }) {
+export async function createTube(tube, dependencies = { tubeRepository, thematicRepository, updatePixApiReleaseCache }) {
   const thematic = await dependencies.thematicRepository.getByAirtableId(tube.thematicAirtableId);
   if (!thematic) throw new NotFoundError('unknown thematic id');
 
@@ -14,16 +11,7 @@ export async function createTube(tube, dependencies = { tubeRepository, thematic
 
   const createdTube = await dependencies.tubeRepository.create(tube);
 
-  try {
-    await dependencies.updatedRecordNotifier.notify({
-      model: 'tubes',
-      updatedRecord: dependencies.tubeTransformer.transformTube(createdTube, thematic.id),
-      pixApiClient: dependencies.pixApiClient,
-    });
-  } catch (err) {
-    logger.error(err);
-    Sentry.captureException(err);
-  }
+  await dependencies.updatePixApiReleaseCache.onTubeCreated(createdTube, thematic.id);
 
   return createdTube;
 }
