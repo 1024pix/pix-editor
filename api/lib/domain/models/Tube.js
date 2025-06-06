@@ -40,4 +40,16 @@ export class Tube {
     this.competenceAirtableId = thematic.competenceAirtableId;
     this.index = thematic.tubeAirtableIds.length;
   }
+
+  /**
+   * @param {Tube} updates
+   */
+  update(updates) {
+    this.name = updates.name;
+    this.index = updates.index;
+    this.practicalTitle_i18n.fr = updates.practicalTitle_i18n.fr;
+    this.practicalTitle_i18n.en = updates.practicalTitle_i18n.en;
+    this.practicalDescription_i18n.fr = updates.practicalDescription_i18n.fr;
+    this.practicalDescription_i18n.en = updates.practicalDescription_i18n.en;
+  }
 }
