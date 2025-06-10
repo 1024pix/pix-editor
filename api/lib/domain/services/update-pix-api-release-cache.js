@@ -6,6 +6,7 @@ import {
   attachmentRepository,
   challengeRepository,
   localizedChallengeRepository,
+  thematicRepository,
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
@@ -58,6 +59,29 @@ export async function onTubeCreated(tube, thematicId) {
     await updatedRecordNotifier.notify({
       model: 'tubes',
       updatedRecord: tubeTransformer.transformTube(tube, thematicId),
+      pixApiClient,
+    });
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+  }
+}
+
+/**
+ * @param {import('../models'.Tube} tube
+ */
+export async function onTubeUpdated(tube) {
+  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
+
+  try {
+    const [thematic, challenges] = await Promise.all([
+      thematicRepository.getByAirtableId(tube.thematicAirtableId),
+      challengeRepository.listValidPrototypesBySkillIds(tube.skillIds),
+    ]);
+
+    await updatedRecordNotifier.notify({
+      model: 'tubes',
+      updatedRecord: tubeTransformer.transformTube(tube, thematic.id, challenges),
       pixApiClient,
     });
   } catch (err) {
