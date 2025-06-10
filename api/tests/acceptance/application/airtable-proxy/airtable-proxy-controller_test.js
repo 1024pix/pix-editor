@@ -52,7 +52,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
   });
 
   describe('when Table is unknown or should not use proxy', () => {
-    const oldOrUnknownTables = ['Missions', 'Referentiel', 'Domaine', 'Acquis', 'Thematiques'];
+    const oldOrUnknownTables = ['Missions', 'Referentiel', 'Domaine', 'Acquis', 'Thematiques', 'Tubes'];
 
     let headers, server;
 

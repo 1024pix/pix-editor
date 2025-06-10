@@ -3,25 +3,19 @@ import { buildTranslationsUtils } from './utils.js';
 export const prefix = 'tube.';
 
 const locales = [
-  { airtableLocale: 'fr-fr', locale: 'fr' },
-  { airtableLocale: 'en-us', locale: 'en' },
+  { locale: 'fr' },
+  { locale: 'en' },
 ];
 
 const fields = [
-  { airtableField: 'Titre pratique', field: 'practicalTitle' },
-  { airtableField: 'Description pratique', field: 'practicalDescription' },
+  { field: 'practicalTitle' },
+  { field: 'practicalDescription' },
 ];
 
-const idField = 'fields.id persistant';
-
-const tubeTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, idField });
+const tubeTranslationUtils = buildTranslationsUtils({ locales, fields, prefix });
 
 export const {
-  extractFromProxyObject,
   extractFromReleaseObject,
   extractFromDomainObject,
-  airtableObjectToProxyObject,
-  proxyObjectToAirtableObject,
-  prefixFor,
   toDomain,
 } = tubeTranslationUtils;

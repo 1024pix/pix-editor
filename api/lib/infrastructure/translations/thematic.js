@@ -11,26 +11,10 @@ const fields = [
   { field: 'name' },
 ];
 
-const localizedFields = [
-  {
-    airtableField: 'Nom',
-    field: 'name',
-    locale: 'fr',
-  },
-  {
-    airtableField: 'Titre en-us',
-    field: 'name',
-    locale: 'en',
-  },
-];
-
-const idField = 'fields.id persistant';
-
-const thematicTranslationUtils = buildTranslationsUtils({ locales, fields, localizedFields, prefix, idField });
+const thematicTranslationUtils = buildTranslationsUtils({ locales, fields, prefix });
 
 export const {
   extractFromDomainObject,
   extractFromReleaseObject,
   toDomain,
-  prefixFor,
 } = thematicTranslationUtils;
