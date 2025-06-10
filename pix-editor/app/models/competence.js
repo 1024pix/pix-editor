@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import sortBy from 'lodash/sortBy';
 
 export default class CompetenceModel extends Model {
 
@@ -36,7 +37,7 @@ export default class CompetenceModel extends Model {
   }
 
   get sortedThemes() {
-    return this.themes.sortBy('name').sortBy('index');
+    return sortBy(this.themes, ['name', 'index']);
   }
 
   get productionTubes() {
@@ -44,9 +45,7 @@ export default class CompetenceModel extends Model {
 
     if (rawTubes === null) return [];
 
-    return rawTubes
-      .filter((tube) => tube.hasProductionSkills)
-      .sortBy('index');
+    return sortBy(rawTubes.filter((tube) => tube.hasProductionSkills), 'index');
   }
 
   get areaCode() {
@@ -54,7 +53,7 @@ export default class CompetenceModel extends Model {
   }
 
   get sortedTubes() {
-    return this.tubes.sortBy('index');
+    return sortBy(this.tubes, 'index');
   }
 
   get tubeCount() {

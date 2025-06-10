@@ -95,7 +95,7 @@ export default class MissionForm extends Component {
     try {
       await this.args.onFormSubmitted(formData);
     } catch (err) {
-      this.errorMessages.pushObjects(err.message.split('\n'));
+      this.errorMessages.push(...err.message.split('\n'));
     } finally {
       this.isSubmitting = false;
     }
@@ -221,9 +221,9 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me');}
+  validate() { throw new Error('implement me'); }
 
-  getValueForSubmit() { throw new Error('implement me');}
+  getValueForSubmit() { throw new Error('implement me'); }
 }
 
 class ThematicIdsField extends FormField {
@@ -247,7 +247,7 @@ class ThematicIdsField extends FormField {
     return this.value?.split(',').every((thematicId) => this.availableThematicIds?.includes(thematicId.trim()));
   }
 
-  getValueForSubmit() { return this.value.split(',').map((element)=> element.trim()).join(','); }
+  getValueForSubmit() { return this.value.split(',').map((element) => element.trim()).join(','); }
 }
 
 class NameField extends FormField {

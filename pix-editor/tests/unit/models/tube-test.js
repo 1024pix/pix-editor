@@ -121,8 +121,8 @@ module('Unit | Model | tube', function(hooks) {
         version: 2,
       });
       const rawSkills = await tube.rawSkills;
-      rawSkills.pushObject(skillRecord1v2);
-      rawSkills.pushObject(skillRecord5v2);
+      rawSkills.push(skillRecord1v2);
+      rawSkills.push(skillRecord5v2);
       tube.rawSkills = rawSkills;
     });
 

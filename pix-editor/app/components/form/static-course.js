@@ -36,7 +36,7 @@ export default class StaticCourseForm extends Component {
       this.selectedTagIds = this.args.initialTagIds;
       this.updateDisplayedTags();
     }
-    for (const tag of this.args.staticCourseTags.toArray()) {
+    for (const tag of [...this.args.staticCourseTags]) {
       this.tagOptions.push({ value: tag.id, label: tag.label });
     }
     this.tagOptions.sort((a, b) => a.label.localeCompare(b.label));
@@ -63,7 +63,7 @@ export default class StaticCourseForm extends Component {
     try {
       await this.args.onFormSubmitted(formData);
     } catch (err) {
-      this.errorMessages.pushObjects(err.message.split('\n'));
+      this.errorMessages.push(...err.message.split('\n'));
     } finally {
       this.isSubmitting = false;
     }
@@ -107,7 +107,7 @@ export default class StaticCourseForm extends Component {
   }
 
   updateDisplayedTags() {
-    this.selectedTags = this.args.staticCourseTags.toArray()
+    this.selectedTags = [...this.args.staticCourseTags]
       .filter(({ id }) => this.selectedTagIds.includes(id))
       .sort((a, b) => a.label.localeCompare(b.label));
   }
@@ -142,9 +142,9 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me');}
+  validate() { throw new Error('implement me'); }
 
-  getValueForSubmit() { throw new Error('implement me');}
+  getValueForSubmit() { throw new Error('implement me'); }
 }
 
 class NameField extends FormField {

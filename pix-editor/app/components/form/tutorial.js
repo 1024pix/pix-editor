@@ -74,17 +74,17 @@ export default class TutorialForm extends Component {
           notes: notes,
           pixId: this.idGenerator.newId('tag'),
         }).save();
-        tags.pushObject(tag);
+        tags.push(tag);
       } else {
         const tag = await this.store.createRecord('tag', {
           title: value,
         }).save();
-        tags.pushObject(tag);
+        tags.push(tag);
       }
     } else {
       const tag = await this.store.findRecord('tag', item.id);
       if (tags.indexOf(tag) === -1) {
-        tags.pushObject(tag);
+        tags.push(tag);
       }
     }
   }

@@ -1,10 +1,10 @@
-import { A } from '@ember/array';
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import ENV from 'pixeditor/config/environment';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ApplicationController extends Controller {
   confirmCallback = null;
@@ -28,7 +28,7 @@ export default class ApplicationController extends Controller {
   @service session;
   @service versionManager;
 
-  messages = A([]);
+  messages = new TrackedArray([]);
 
   constructor() {
     super(...arguments);
@@ -67,12 +67,12 @@ export default class ApplicationController extends Controller {
   showMessage(content, positive) {
     const messages = this.messages;
     const id = 'message_' + Date.now();
-    messages.pushObject({ text: content, positive: positive ? true : false, id: id });
-    window.setTimeout(()=> {
+    messages.push({ text: content, positive: positive ? true : false, id: id });
+    window.setTimeout(() => {
       const nodeMessage = document.getElementById(id);
       if (nodeMessage) {
-        nodeMessage.addEventListener('transitionend', ()=>{
-          messages.removeAt(0);
+        nodeMessage.addEventListener('transitionend', () => {
+          messages.splice(0);
         });
         nodeMessage.style.transition = 'opacity .8s ease';
         nodeMessage.style.opacity = '0';

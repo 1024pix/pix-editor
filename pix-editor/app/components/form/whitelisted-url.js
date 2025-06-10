@@ -64,7 +64,7 @@ export default class WhitelistedUrlForm extends Component {
     try {
       await this.args.onFormSubmitted(formData);
     } catch (err) {
-      this.errorMessages.pushObjects(err.message.split('\n'));
+      this.errorMessages.push(...err.message.split('\n'));
     } finally {
       this.isSubmitting = false;
     }
@@ -132,9 +132,9 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me');}
+  validate() { throw new Error('implement me'); }
 
-  getValueForSubmit() { throw new Error('implement me');}
+  getValueForSubmit() { throw new Error('implement me'); }
 }
 
 class UrlField extends FormField {

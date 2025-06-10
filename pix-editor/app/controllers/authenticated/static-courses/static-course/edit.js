@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import sortBy from 'lodash/sortBy';
 
 export default class EditStaticCourseController extends Controller {
   @service store;
@@ -8,14 +9,14 @@ export default class EditStaticCourseController extends Controller {
   @service notifications;
 
   get challengeIdsAsStringWithBreakLines() {
-    return this.model.staticCourse.sortedChallengeSummaries.toArray()
+    return [...this.model.staticCourse.sortedChallengeSummaries]
       .map((challengeSummary) => challengeSummary.id)
       .join('\n');
   }
 
   get tagIds() {
     const tags = this.model.staticCourse.hasMany('tags').value();
-    const sortedTags = tags?.sortBy?.('label') ?? [];
+    const sortedTags = sortBy(tags, 'label');
     return sortedTags.map(({ id }) => id);
   }
 

@@ -14,7 +14,11 @@ NotificationMessageService.reopen({
     }
 
     notification.set('dismiss', true);
-    this.content.removeObject(notification);
+
+    const index = this.content.indexOf(notification);
+    if (index !== -1) {
+      this.content.splice(index, 1);
+    }
   },
 });
 

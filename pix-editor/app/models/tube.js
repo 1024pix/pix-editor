@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
-import _ from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 export default class TubeModel extends Model {
 
@@ -55,7 +55,7 @@ export default class TubeModel extends Model {
   }
 
   get sortedSkills() {
-    return _.sortBy(this.liveSkills, 'level');
+    return sortBy(this.liveSkills, 'level');
   }
 
   get filledSkills() {

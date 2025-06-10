@@ -431,7 +431,7 @@ export default class SingleController extends Controller {
   async _setSkill(prototype, skill) {
     const prototypeVersion = skill.getNextPrototypeVersion();
     const challenges = prototype.alternatives;
-    challenges.pushObject(prototype);
+    challenges.push(prototype);
     const updateChallenges = challenges.reduce((current, challenge) => {
       challenge.skill = skill;
       challenge.version = prototypeVersion;
