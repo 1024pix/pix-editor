@@ -1,18 +1,5 @@
-import AirtableAdapter from './airtable';
+import ApplicationAdapter from './application';
 
-export default class TubeAdapter extends AirtableAdapter {
-
-  fields = [
-    'Record Id',
-    'Nom',
-    'Competences',
-    'Acquis',
-    'Thematique',
-    'id persistant',
-    'Index',
-  ];
-
-  pathForType() {
-    return 'Tubes';
-  }
+export default class TubeAdapter extends ApplicationAdapter {
+  coalesceFindRequests = true;
 }

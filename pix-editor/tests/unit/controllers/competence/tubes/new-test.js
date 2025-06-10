@@ -30,15 +30,6 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
 
     this.owner.register('service:loader', LoaderService);
 
-    class CurrentDataService extends Service {
-      getCompetence() {
-        return {
-          name: 'Competence',
-        };
-      }
-    }
-    this.owner.register('service:currentData', CurrentDataService);
-
     deleteRecordStub = sinon.stub();
 
     class StoreService extends Service {
@@ -83,6 +74,8 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
 
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;
+    const competence = { name: 'Competence' };
+    controller.model.competence = competence;
 
     // when
     await controller.save();
@@ -93,7 +86,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyMessageStub.calledWith('Tube créé'));
-    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', { name: 'Competence' }, controller.model));
+    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', competence, controller.model));
   });
 
   test('it should catch an error if save action failed', async function(assert) {
