@@ -817,7 +817,7 @@ describe('Application | Route | Tubes', () => {
           .reply(200, { records: [updatedAirtableTube] });
       });
 
-      it.fails('should respond with status 200 and updated tube', async () => {
+      it('should respond with status 200 and updated tube', async () => {
         // given
         const server = await createServer();
 
