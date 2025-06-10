@@ -18,6 +18,7 @@ import * as skillsRoute from './application/skills/index.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
 import * as staticRoute from './application/static/index.js';
+import * as tagsRoute from './application/tags.js';
 import * as thematicsRoutes from './application/thematics.js';
 import * as translationsRoute from './application/translations.js';
 import * as usersRoute from './application/users.js';
@@ -43,6 +44,7 @@ export const routes = [
   staticCoursesRoute,
   staticCourseTagsRoute,
   staticRoute,
+  tagsRoute,
   thematicsRoutes,
   translationsRoute,
   usersRoute,

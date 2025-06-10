@@ -485,6 +485,15 @@ function routes() {
     return staticCourse;
   });
 
+  this.get('/tags', function(schema, request) {
+    const {
+      'filter[title]': title,
+    } = request.queryParams;
+    return schema.tags.all().filter((tag) => tag.title.toLowerCase().includes(title.toLowerCase()));
+  });
+  this.get('/tags/:id');
+  this.post('/tags');
+
   this.get('/whitelisted-urls');
   this.delete('/whitelisted-urls/:id');
   this.patch('/whitelisted-urls/:id', function(schema, request) {

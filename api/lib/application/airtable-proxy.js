@@ -15,7 +15,6 @@ const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 const AIRTABLE_PROXY_TABLES = [
   'Tubes',
   'Tutoriels',
-  'Tags',
 ];
 
 export async function register(server) {

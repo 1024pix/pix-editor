@@ -82,4 +82,10 @@ export class CommandWhitelistedUrlError extends DomainError {
   }
 }
 
+export class TagTitleAlreadyUsedError extends DomainError {
+  constructor({ title }) {
+    super(`Echec de création du tag : le titre "${title}" est déjà pris"`);
+  }
+}
+
 export class ForbiddenError extends DomainError {}

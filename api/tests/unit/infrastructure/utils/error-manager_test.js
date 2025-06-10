@@ -174,6 +174,20 @@ describe('Unit | Infrastructure | ErrorManager', function() {
             ],
           });
         }
+        else if (domainErrorName === 'TagTitleAlreadyUsedError') {
+          const errorTagTitleAlreadyUsed = new domainErrorClass({ title: 'Internet' });
+          const responseTagTitleAlreadyUsed = send(hFake, errorTagTitleAlreadyUsed);
+          expect(responseTagTitleAlreadyUsed.statusCode, expectErrorMessage).toStrictEqual(409);
+          expect(responseTagTitleAlreadyUsed.source).toStrictEqual({
+            errors: [
+              {
+                status: '409',
+                title: 'Conflict',
+                detail: 'Echec de création du tag : le titre "Internet" est déjà pris"',
+              },
+            ],
+          });
+        }
         else {
           expect(true, `Conversion for ${domainErrorName} not tested`).to.be.false;
         }
