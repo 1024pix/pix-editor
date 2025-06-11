@@ -25,12 +25,12 @@ export function competenceId() {
   return Joi.string().pattern(/^(rec|competence)[a-zA-Z0-9]+$/);
 }
 
-export function competenceRelationship() {
+export function competenceRelationship({ allow = [] } = {}) {
   return Joi.object({
     data: Joi.object({
       type: Joi.string().required().equal('competences'),
       id: competenceId().required(),
-    }),
+    }).allow(...allow),
   });
 }
 
@@ -47,12 +47,30 @@ export function skillId() {
   return Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/);
 }
 
+export function skillsRelationship() {
+  return Joi.object({
+    data: Joi.array().items(Joi.object({
+      type: Joi.string().required().equal('skills'),
+      id: skillId().required(),
+    })),
+  });
+}
+
 export function tagId() {
   return Joi.string().pattern(/^(rec|tag)[a-zA-Z0-9]+$/);
 }
 
 export function thematicId() {
   return Joi.string().pattern(/^(rec|thematic)[a-zA-Z0-9]+$/);
+}
+
+export function thematicRelationship() {
+  return Joi.object({
+    data: Joi.object({
+      type: Joi.string().required().equal('themes'),
+      id: thematicId().required(),
+    }),
+  });
 }
 
 export function tubeId() {

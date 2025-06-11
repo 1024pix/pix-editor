@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { listThematics } from '../../../../lib/domain/usecases/list-thematics';
 
-describe('Unit | Domain | Use Cases | list-thematic', () => {
+describe('Unit | Domain | Use Cases | list-thematics', () => {
 
   const allThematics = Symbol('allThematics');
   const thematicsByAirtableIds = Symbol('thematicsByAirtableIds');

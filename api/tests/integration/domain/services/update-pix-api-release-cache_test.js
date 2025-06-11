@@ -1,13 +1,19 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { Attachment } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge } from '../../../../lib/domain/models/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as config from '../../../../lib/config.js';
-import { airtableBuilder, databaseBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 
 describe('Integration | Service | update pix api release cache', function() {
-  let originalPixApiUrlValue;
+  let notifyStub, originalPixApiUrlValue;
+
+  beforeEach(() => {
+    notifyStub = vi.spyOn(updatedRecordNotifier, 'notify');
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+  });
 
   afterEach(function() {
     config.pixApi.baseUrl = originalPixApiUrlValue;
@@ -18,7 +24,6 @@ describe('Integration | Service | update pix api release cache', function() {
     context('when patchingPixApi is enabled', function() {
 
       beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
@@ -216,20 +221,15 @@ describe('Integration | Service | update pix api release cache', function() {
 
     context('when patchingPixApi is disabled', function() {
 
-      beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
-        delete config.pixApi.baseUrl;
-      });
-
       it('should not patch anything', async function() {
         // given
-        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+        config.pixApi.baseUrl = undefined;
 
         // when
         await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
 
         // then
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(notifyStub).not.toHaveBeenCalled();
       });
     });
   });
@@ -239,7 +239,6 @@ describe('Integration | Service | update pix api release cache', function() {
     context('when patchingPixApi is enabled', function() {
 
       beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
@@ -437,20 +436,15 @@ describe('Integration | Service | update pix api release cache', function() {
 
     context('when patchingPixApi is disabled', function() {
 
-      beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
-        delete config.pixApi.baseUrl;
-      });
-
       it('should not patch anything', async function() {
         // given
-        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+        config.pixApi.baseUrl = undefined;
 
         // when
         await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
 
         // then
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(notifyStub).not.toHaveBeenCalled();
       });
     });
   });
@@ -458,40 +452,181 @@ describe('Integration | Service | update pix api release cache', function() {
   describe('#onAttachmentUpdated', function() {
 
     context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
-        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
-      });
-
       it('not patch anything', async function() {
         // given
-        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
 
         // when
         await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
 
         // then
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(notifyStub).toHaveBeenCalledTimes(0);
       });
     });
 
     context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
-        originalPixApiUrlValue = config.pixApi.baseUrl;
-        delete config.pixApi.baseUrl;
-      });
-
       it('not patch anything', async function() {
         // given
-        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+        config.pixApi.baseUrl = undefined;
 
         // when
         await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
 
         // then
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(notifyStub).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('#onTubeCreated', function() {
+
+    context('when patching Pix API is enabled', function() {
+
+      beforeEach(function() {
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tube', async function() {
+        // given
+        const tube = domainBuilder.buildTube({
+          skillIds: [],
+        });
+        const thematicId = 'thematic123';
+
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch(`/api/cache/tubes/${tube.id}`, {
+            id: tube.id,
+            name: tube.name,
+            practicalTitle_i18n: tube.practicalTitle_i18n,
+            practicalDescription_i18n: tube.practicalDescription_i18n,
+            competenceId: tube.competenceId,
+            thematicId: thematicId,
+            skillIds: [],
+            isMobileCompliant: false,
+            isTabletCompliant: false,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onTubeCreated(tube, thematicId);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patching Pix API is disabled', function() {
+
+      it('should not patch anything', async function() {
+        // given
+        config.pixApi.baseUrl = undefined;
+
+        // when
+        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube(), 'recThematic1');
+
+        // then
+        expect(notifyStub).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('#onTubeUpdated', function() {
+    context('when patching Pix API is enabled', function() {
+
+      beforeEach(function() {
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tube', async function() {
+        // given
+        const tube = domainBuilder.buildTube();
+        const thematicId = 'thematicId';
+        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: thematicId,
+          airtableId: tube.thematicAirtableId,
+        }));
+        const challenge = domainBuilder.buildChallengeDatasourceObject({
+          skillId: tube.skillIds[0],
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
+        });
+        const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: challenge.id,
+          challengeId: challenge.id,
+          locale: challenge.locales[0],
+        });
+
+        const airtableThematicScope = nock('https://api.airtable.com')
+          .get(`/v0/airtableBaseValue/Thematiques/${tube.thematicAirtableId}`)
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableThematic);
+
+        const airtableChallengesScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Epreuves')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .query({
+            fields: {
+              '': challengeDatasource.usedFields,
+            },
+            filterByFormula: `AND(OR(${tube.skillIds.map((skillId) => `{Acquis (id persistant)} = "${skillId}"`).join(', ')}), {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}", {Statut} = "${Challenge.STATUSES.VALIDE}")`
+          })
+          .reply(200, {
+            records: [airtableChallenge],
+          });
+
+        await databaseBuilder.commit();
+
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch(`/api/cache/tubes/${tube.id}`, {
+            id: tube.id,
+            name: tube.name,
+            practicalTitle_i18n: tube.practicalTitle_i18n,
+            practicalDescription_i18n: tube.practicalDescription_i18n,
+            competenceId: tube.competenceId,
+            thematicId: thematicId,
+            skillIds: tube.skillIds,
+            isMobileCompliant: true,
+            isTabletCompliant: true,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onTubeUpdated(tube);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(airtableThematicScope.isDone()).to.be.true;
+        expect(airtableChallengesScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patching Pix API is disabled', function() {
+
+      it('should not patch anything', async function() {
+        // given
+        config.pixApi.baseUrl = undefined;
+
+        // when
+        await updatePixApiReleaseCache.onTubeUpdated(domainBuilder.buildTube());
+
+        // then
+        expect(notifyStub).not.toHaveBeenCalled();
       });
     });
   });

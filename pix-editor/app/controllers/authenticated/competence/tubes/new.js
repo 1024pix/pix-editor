@@ -22,26 +22,20 @@ export default class NewController extends Tube {
   }
 
   @action
-  save() {
-    this.loader.start();
-    const tube = this.tube;
-    const competence = this.currentData.getCompetence();
-    tube.competence = competence;
-    return tube.save()
-      .then(() => {
-        this.edition = false;
-        this.loader.stop();
-        this.notify.message('Tube créé');
-      })
-      .then(() => {
-        this.router.transitionTo('authenticated.competence.tubes.single', competence, tube);
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this.loader.stop();
-        this.notify.error('Erreur lors de la création du tube');
-      });
+  async save() {
+    try {
+      this.loader.start();
+      await this.tube.save();
+      this.edition = false;
+      this.notify.message('Tube créé');
+      this.router.transitionTo('authenticated.competence.tubes.single', await this.tube.competence, this.tube);
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.notify.error('Erreur lors de la création du tube');
+    } finally {
+      this.loader.stop();
+    }
   }
 
   @action

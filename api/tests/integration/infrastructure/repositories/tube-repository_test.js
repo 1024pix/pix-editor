@@ -5,6 +5,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import { tubeDatasource } from '../../../../lib/infrastructure/datasources/airtable/tube-datasource.js';
 
 describe('Integration | Repository | tube-repository', () => {
 
@@ -27,6 +28,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         }),
         airtableBuilder.factory.buildTube({
           id: 'tubeId2',
@@ -42,7 +45,9 @@ describe('Integration | Repository | tube-repository', () => {
           },
           thematicAirtableId: 'thematicAirtableId2',
           competenceAirtableId: 'competenceAirtableId2',
-          competenceId: 'competenceId2'
+          competenceId: 'competenceId2',
+          skillAirtableIds: ['recSkill3', 'recSkill4'],
+          skillIds: ['skill3', 'skill4'],
         }),
       ]).activate().nockScope;
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -109,6 +114,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
@@ -126,6 +133,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId2',
           competenceAirtableId: 'competenceAirtableId2',
           competenceId: 'competenceId2',
+          skillAirtableIds: ['recSkill3', 'recSkill4'],
+          skillIds: ['skill3', 'skill4'],
         }),
       ]);
 
@@ -151,6 +160,8 @@ describe('Integration | Repository | tube-repository', () => {
         thematicAirtableId: 'thematicAirtableId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
       };
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
@@ -185,6 +196,8 @@ describe('Integration | Repository | tube-repository', () => {
             'Competences': [tube1.competenceAirtableId],
             'Competences (id persistant)': [tube1.competenceId],
             'Index': tube1.index,
+            'Acquis': tube1.skillAirtableIds,
+            'Acquis (id persistant)': tube1.skillIds,
           },
           get: function(field) { return this.fields[field]; },
         }];
@@ -211,6 +224,8 @@ describe('Integration | Repository | tube-repository', () => {
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
         })
       ]);
     });
@@ -229,6 +244,8 @@ describe('Integration | Repository | tube-repository', () => {
         thematicAirtableId: 'thematicAirtableId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
         practicalTitle_i18n: {
           fr: 'le titre',
           en: 'the title',
@@ -324,6 +341,139 @@ describe('Integration | Repository | tube-repository', () => {
         { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: tube.practicalDescription_i18n.fr },
         { key: `tube.${tubeId}.practicalTitle`, locale: 'en', value: tube.practicalTitle_i18n.en },
         { key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: tube.practicalTitle_i18n.fr },
+      ]);
+    });
+  });
+
+  describe('#getManyByAirtableIds', () => {
+    it('should return domain tubes', async () => {
+      // given
+      const tubes = [
+        {
+          id: 'tube1',
+          airtableId: 'recTube1',
+          name: '@pouic',
+          practicalTitle_i18n: {
+            fr: 'Titre premier tube',
+            en: 'First tube’s title',
+          },
+          practicalDescription_i18n: {
+            fr: 'Description premier tube',
+            en: 'First tube’s description',
+          },
+          index: 1,
+          thematicAirtableId: 'recThematic1',
+          competenceId: 'competence1',
+          competenceAirtableId: 'recCompetence1',
+          skillIds: ['skill1', 'skill2'],
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+        },
+        {
+          id: 'tube2',
+          airtableId: 'recTube2',
+          name: '@pouet',
+          practicalTitle_i18n: {
+            fr: 'Titre deuxième tube',
+            en: 'Second tube’s title',
+          },
+          practicalDescription_i18n: {
+            fr: 'Description deuxième tube',
+            en: 'Second tube’s description',
+          },
+          index: 2,
+          thematicAirtableId: 'recThematic2',
+          competenceId: 'competence2',
+          competenceAirtableId: 'recCompetence2',
+          skillIds: ['skill3', 'skill4'],
+          skillAirtableIds: ['recSkill3', 'recSkill4'],
+        },
+      ];
+      const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
+      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableTubes.map((airtableTube) => new Airtable.Record(tubeDatasource.tableName, airtableTube.airtableId, airtableTube)));
+      for (const tube of tubes) {
+        databaseBuilder.factory.buildTranslation({ key: `tube.${tube.id}.practicalTitle`, locale: 'fr', value: tube.practicalTitle_i18n.fr });
+        databaseBuilder.factory.buildTranslation({ key: `tube.${tube.id}.practicalTitle`, locale: 'en', value: tube.practicalTitle_i18n.en });
+        databaseBuilder.factory.buildTranslation({ key: `tube.${tube.id}.practicalDescription`, locale: 'fr', value: tube.practicalDescription_i18n.fr });
+        databaseBuilder.factory.buildTranslation({ key: `tube.${tube.id}.practicalDescription`, locale: 'en', value: tube.practicalDescription_i18n.en });
+      }
+      await databaseBuilder.commit();
+
+      // when
+      const result = await tubeRepository.getManyByAirtableIds(tubes.map((tube) => tube.airtableId));
+
+      // then
+      expect(result).toStrictEqual(tubes.map((tube) => domainBuilder.buildTube(tube)));
+      expect(findRecordsSpy).toHaveBeenCalledWith(tubeDatasource.tableName, {
+        filterByFormula: 'OR(RECORD_ID() = "recTube1", RECORD_ID() = "recTube2")',
+        fields: tubeDatasource.usedFields,
+        sort: [{ direction: 'asc', field: tubeDatasource.sortField }]
+      });
+    });
+  });
+
+  describe('#update', () => {
+    it('should save tube to Airtable and translations to DB', async () => {
+      // given
+      const tubeUpdates = {
+        airtableId: 'recTube1',
+        id: 'tube1',
+        name: '@test',
+        practicalTitle_i18n: {
+          fr: 'Titre tube après',
+          en: 'Tube’s title after' ,
+        },
+        practicalDescription_i18n: {
+          fr: 'Description tube après',
+          en: 'Tube’s description after' ,
+        },
+        index: 2,
+        competenceAirtableId: 'recCompetence1',
+        thematicAirtableId: 'recThematic1',
+      };
+
+      const expectedTube = {
+        ...tubeUpdates,
+        competenceId: 'competence1',
+        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillIds: ['skill1', 'skill2'],
+      };
+
+      const airtableTube = airtableBuilder.factory.buildTube(expectedTube);
+      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
+        new Airtable.Record('Tubes', airtableTube.id, airtableTube),
+      );
+
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'en', value: 'Tube’s title' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'fr', value: 'Titre tube' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'en', value: 'Tube’s description' });
+      databaseBuilder.factory.buildTranslation({ key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'fr', value: 'Description tube' });
+      await databaseBuilder.commit();
+
+      const tube = domainBuilder.buildTube(tubeUpdates);
+
+      // when
+      const updatedTube = await tubeRepository.update(tube);
+
+      // then
+      expect(updatedTube).toStrictEqual(domainBuilder.buildTube(expectedTube));
+      expect(updateRecordSpy).toHaveBeenCalledWith(
+        'Tubes',
+        {
+          id: tubeUpdates.airtableId,
+          fields: {
+            'id persistant': tubeUpdates.id,
+            Nom: tubeUpdates.name,
+            Competences: [tubeUpdates.competenceAirtableId],
+            Thematique: [tubeUpdates.thematicAirtableId],
+            Index: tubeUpdates.index,
+          },
+        },
+      );
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+        { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'en', value: tubeUpdates.practicalDescription_i18n.en },
+        { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'fr', value: tubeUpdates.practicalDescription_i18n.fr },
+        { key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'en', value: tubeUpdates.practicalTitle_i18n.en },
+        { key: `tube.${tubeUpdates.id}.practicalTitle`, locale: 'fr', value: tubeUpdates.practicalTitle_i18n.fr },
       ]);
     });
   });

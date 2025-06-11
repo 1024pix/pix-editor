@@ -997,4 +997,42 @@ describe('Unit | Domain | Challenge', () => {
       expect(challengeToPerime).toStrictEqual(expectedObsoleteChallenge);
     });
   });
+
+  describe('#isMobileCompliant', () => {
+    it('returns true if challenge is compliant w/ mobile', () => {
+      // given
+      const challenges = [
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.NON }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.NONE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.TABLETTE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+      ];
+
+      // when
+      const compliants = challenges.map((challenge) => challenge.isMobileCompliant);
+
+      // then
+      expect(compliants).toStrictEqual([false, false, true, false, true]);
+    });
+  });
+
+  describe('#isTabletCompliant', () => {
+    it('returns true if challenge is compliant w/ mobile', () => {
+      // given
+      const challenges = [
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.NON }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.NONE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.TABLETTE }),
+        domainBuilder.buildChallenge({ responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+      ];
+
+      // when
+      const compliants = challenges.map((challenge) => challenge.isTabletCompliant);
+
+      // then
+      expect(compliants).toStrictEqual([false, false, false, true, true]);
+    });
+  });
 });

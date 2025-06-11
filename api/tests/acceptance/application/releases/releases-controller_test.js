@@ -256,8 +256,8 @@ async function mockCurrentContent() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    thematics: expectedCurrentContent.thematics.map(buildThematic),
-    tubes: [buildTube(expectedCurrentContent.tubes[0])],
+    thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
+    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
 
@@ -666,8 +666,8 @@ async function mockContentForRelease() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    thematics: expectedCurrentContent.thematics.map(buildThematic),
-    tubes: [buildTube(expectedCurrentContent.tubes[0])],
+    thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
+    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
 

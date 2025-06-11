@@ -6,6 +6,7 @@ import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor, } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
+import { stringValue } from '../airtable.js';
 
 const model = 'challenge';
 
@@ -165,6 +166,12 @@ export async function listPrototypesByCompetenceId(competenceId) {
   if (!challengeDTOs) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
   return toDomainList(challengeDTOs, translations, localizedChallenges);
+}
+
+export async function listValidPrototypesBySkillIds(skillIds) {
+  return filter({ filter: {
+    formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
+  } });
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {

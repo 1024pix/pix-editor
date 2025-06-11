@@ -4,7 +4,6 @@ import { cache } from '../lib/infrastructure/cache.js';
 import nock from 'nock';
 import { DatabaseBuilder } from './tooling/database-builder/database-builder.js';
 import { AirtableBuilder } from './tooling/airtable-builder/airtable-builder.js';
-import { InputOutputDataBuilder }  from './tooling/input-output-data-builder/input-output-data-builder.js';
 import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
 import { queues } from '../lib/infrastructure/scheduled-jobs/index.js';
@@ -27,9 +26,6 @@ export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/uti
 
 // Knex
 export { knex };
-
-// Input Data Builder
-export const inputOutputDataBuilder = new InputOutputDataBuilder();
 
 // DatabaseBuilder
 export const databaseBuilder = new DatabaseBuilder({ knex });

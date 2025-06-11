@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
 import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models/index.js';
 import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
-import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
+import Airtable from 'airtable';
 
 describe('Integration | Repository | challenge-repository', () => {
 
@@ -1931,6 +1933,49 @@ describe('Integration | Repository | challenge-repository', () => {
           value: 'illustrationAlt FR challengeToCreate',
         },
       ]);
+    });
+  });
+
+  describe('#listValidPrototypesBySkillIds', () => {
+    it('returns domain challenges', async () => {
+      // given
+      const challengeId = 'challengeId';
+      const expectedChallenges = [
+        domainBuilder.buildChallenge({
+          id: challengeId,
+          files: [],
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeId,
+              challengeId,
+              locale: 'fr',
+            }),
+          ],
+        }),
+      ];
+      const airtableChallenges = expectedChallenges.map((challenge) => airtableBuilder.factory.buildChallenge(challenge));
+      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableChallenges.map((airtableChallenge) => new Airtable.Record(challengeDatasource.tableName, airtableChallenge.airtableId, airtableChallenge)));
+      for (const challenge of expectedChallenges) {
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.instruction`, locale: 'fr', value: challenge.translations.fr.instruction });
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.alternativeInstruction`, locale: 'fr', value: challenge.translations.fr.alternativeInstruction });
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.proposals`, locale: 'fr', value: challenge.translations.fr.proposals });
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.solution`, locale: 'fr', value: challenge.translations.fr.solution });
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.solutionToDisplay`, locale: 'fr', value: challenge.translations.fr.solutionToDisplay });
+        databaseBuilder.factory.buildTranslation({ key: `challenge.${challenge.id}.embedTitle`, locale: 'fr', value: challenge.translations.fr.embedTitle });
+
+        databaseBuilder.factory.buildLocalizedChallenge(challenge.localizedChallenges[0]);
+      }
+      await databaseBuilder.commit();
+
+      // when
+      const result = await challengeRepository.listValidPrototypesBySkillIds(['skillId1', 'skillId2']);
+
+      // then
+      expect(result).toStrictEqual(expectedChallenges);
+      expect(findRecordsSpy).toHaveBeenCalledWith(challengeDatasource.tableName, {
+        filterByFormula: 'AND(OR({Acquis (id persistant)} = "skillId1", {Acquis (id persistant)} = "skillId2"), {Généalogie} = "Prototype 1", {Statut} = "validé")',
+        fields: challengeDatasource.usedFields,
+      });
     });
   });
 });

@@ -4,28 +4,27 @@ import * as Sentry from '@sentry/node';
 import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { thematicRepository } from '../infrastructure/repositories/index.js';
-import { thematicSerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import { tubeRepository } from '../infrastructure/repositories/index.js';
+import { tubeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import { createTube, listTubes, updateTube } from '../domain/usecases/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
-import { createThematic, listThematics, updateThematic } from '../domain/usecases/index.js';
-import { DomainError } from '../domain/errors.js';
 
 export function register(server) {
   server.route([
     {
       method: 'GET',
-      path: '/api/thematics/{thematicAirtableId}',
+      path: '/api/tubes/{tubeAirtableId}',
       config: {
         validate: {
           params: Joi.object({
-            thematicAirtableId: Types.thematicId().required(),
+            tubeAirtableId: Types.tubeId().required(),
           }),
         },
         handler: async function(request) {
           try {
-            const thematic = await thematicRepository.getByAirtableId(request.params.thematicAirtableId);
-            if (!thematic) return Boom.notFound('unknown thematic id');
-            return thematicSerializer.serialize(thematic);
+            const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
+            if (!tube) return Boom.notFound('unknown tube id');
+            return tubeSerializer.serialize(tube);
           } catch (err) {
             logger.error(err);
             Sentry.captureException(err);
@@ -36,18 +35,18 @@ export function register(server) {
     },
     {
       method: 'GET',
-      path: '/api/thematics',
+      path: '/api/tubes',
       config: {
         validate: {
           query: Joi.object({
-            'filter[ids][]': [Types.thematicId(), Joi.array().items(Types.thematicId())],
+            'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())],
           }),
         },
         handler: async function(request) {
           try {
             const params = extractParameters(request.query);
-            const thematics = await listThematics(params);
-            return thematicSerializer.serialize(thematics);
+            const tubes = await listTubes(params);
+            return tubeSerializer.serialize(tubes);
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);
@@ -59,20 +58,23 @@ export function register(server) {
     },
     {
       method: 'POST',
-      path: '/api/thematics',
+      path: '/api/tubes',
       config: {
         validate: {
           payload: Joi.object({
             data: Joi.object({
-              type: Joi.string().required().equal('themes'),
+              type: Joi.string().required().equal('tubes'),
               attributes: Joi.object({
-                'name': Joi.string().allow(null),
-                'name-en-us': Joi.string().allow(null),
-                'index': Joi.number().allow(null),
+                'name': Joi.string(),
+                'practical-title-fr': Joi.string().allow(null),
+                'practical-title-en': Joi.string().allow(null),
+                'practical-description-fr': Joi.string().allow(null),
+                'practical-description-en': Joi.string().allow(null),
               }).unknown(true),
               relationships: Joi.object({
-                'competence': Types.competenceRelationship(),
-                'raw-tubes': Types.tubesRelationship(),
+                'competence': Types.competenceRelationship({ allow: [null] }),
+                'theme': Types.thematicRelationship(),
+                'raw-skills': Types.skillsRelationship(),
               }),
             }),
           }),
@@ -80,9 +82,9 @@ export function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           try {
-            const thematic = await thematicSerializer.deserialize(request.payload);
-            const createdThematic = await createThematic(thematic);
-            return h.response(thematicSerializer.serialize(createdThematic)).code(201);
+            const tube = await tubeSerializer.deserialize(request.payload);
+            const createdTube = await createTube(tube);
+            return h.response(tubeSerializer.serialize(createdTube)).code(201);
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);
@@ -94,24 +96,28 @@ export function register(server) {
     },
     {
       method: 'PATCH',
-      path: '/api/thematics/{thematicAirtableId}',
+      path: '/api/tubes/{tubeAirtableId}',
       config: {
         validate: {
           params: Joi.object({
-            thematicAirtableId: Types.thematicId(),
+            tubeAirtableId: Types.tubeId(),
           }),
           payload: Joi.object({
             data: Joi.object({
-              type: Joi.string().required().equal('themes'),
-              id: Types.thematicId().required(),
+              type: Joi.string().required().equal('tubes'),
+              id: Types.tubeId().required(),
               attributes: Joi.object({
-                'name': Joi.string().allow(null),
-                'name-en-us': Joi.string().allow(null),
-                'index': Joi.number().allow(null),
+                'name': Joi.string(),
+                'index': Joi.number(),
+                'practical-title-fr': Joi.string().allow(null),
+                'practical-title-en': Joi.string().allow(null),
+                'practical-description-fr': Joi.string().allow(null),
+                'practical-description-en': Joi.string().allow(null),
               }).unknown(true),
               relationships: Joi.object({
                 'competence': Types.competenceRelationship(),
-                'raw-tubes': Types.tubesRelationship(),
+                'theme': Types.thematicRelationship(),
+                'raw-skills': Types.skillsRelationship(),
               }),
             }),
           }),
@@ -119,10 +125,9 @@ export function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request) {
           try {
-            const { thematicAirtableId } = request.params;
-            const thematicUpdates = await thematicSerializer.deserialize(request.payload);
-            const updatedThematic = await updateThematic(thematicAirtableId, thematicUpdates);
-            return thematicSerializer.serialize(updatedThematic);
+            const tube = await tubeSerializer.deserialize(request.payload);
+            const updatedTube = await updateTube(request.params.tubeAirtableId, tube);
+            return tubeSerializer.serialize(updatedTube);
           } catch (err) {
             if (err instanceof DomainError) throw err;
             logger.error(err);
@@ -135,4 +140,4 @@ export function register(server) {
   ]);
 }
 
-export const name = 'thematics';
+export const name = 'tubes';

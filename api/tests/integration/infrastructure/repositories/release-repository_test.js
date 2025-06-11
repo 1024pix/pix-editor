@@ -460,6 +460,7 @@ function _mockRichAirtableContent() {
   const airtableCompetence21 = airtableBuilder.factory.buildCompetence(competence21);
   const thematic111 = {
     id: 'thematic111',
+    airtableId: 'recThematic111',
     name_i18n: {
       fr: 'thematic111 name',
       en: 'thematic111 nameEnUs',
@@ -471,6 +472,7 @@ function _mockRichAirtableContent() {
   const airtableThematic111 = airtableBuilder.factory.buildThematic(thematic111);
   const thematic112 = {
     id: 'thematic112',
+    airtableId: 'recThematic112',
     name_i18n: {
       fr: 'thematic112 name',
       en: 'thematic112 nameEnUs',
@@ -482,6 +484,7 @@ function _mockRichAirtableContent() {
   const airtableThematic112 = airtableBuilder.factory.buildThematic(thematic112);
   const thematic121 = {
     id: 'thematic121',
+    airtableId: 'recThematic121',
     name_i18n: {
       fr: 'thematic121 name',
       en: 'thematic121 nameEnUs',
@@ -493,6 +496,7 @@ function _mockRichAirtableContent() {
   const airtableThematic121 = airtableBuilder.factory.buildThematic(thematic121);
   const thematic211 = {
     id: 'thematic211',
+    airtableId: 'recThematic211',
     name_i18n: {
       fr: 'thematic211 name',
       en: 'thematic211 nameEnUs',
@@ -516,6 +520,8 @@ function _mockRichAirtableContent() {
       en: 'tube1111 practicalDescriptionEnUs',
     },
     competenceId: 'competence11',
+    skillIds: ['skill11111', 'skill11112'],
+    thematicAirtableId: 'recThematic111',
   });
   const airtableTube1121 = airtableBuilder.factory.buildTube({
     id: 'tube1121',
@@ -531,6 +537,8 @@ function _mockRichAirtableContent() {
       en: 'tube1121 practicalDescriptionEnUs',
     },
     competenceId: 'competence11',
+    skillIds: [],
+    thematicAirtableId: 'recThematic112',
   });
   const airtableTube1211 = airtableBuilder.factory.buildTube({
     id: 'tube1211',
@@ -546,6 +554,8 @@ function _mockRichAirtableContent() {
       en: 'tube1211 practicalDescriptionEnUs',
     },
     competenceId: 'competence12',
+    skillIds: [],
+    thematicAirtableId: 'recThematic121',
   });
   const airtableTube1212 = airtableBuilder.factory.buildTube({
     id: 'tube1212',
@@ -561,6 +571,8 @@ function _mockRichAirtableContent() {
       en: 'tube1212 practicalDescriptionEnUs',
     },
     competenceId: 'competence12',
+    skillIds: ['skill12121'],
+    thematicAirtableId: 'recThematic121',
   });
   const airtableTube2111 = airtableBuilder.factory.buildTube({
     id: 'tube2111',
@@ -576,6 +588,8 @@ function _mockRichAirtableContent() {
       en: 'tube2111 practicalDescriptionEnUs',
     },
     competenceId: 'competence21',
+    skillIds: ['skill21111'],
+    thematicAirtableId: 'recThematic211',
   });
   const skill11111 = {
     id: 'skill11111',

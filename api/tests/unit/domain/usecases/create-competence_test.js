@@ -26,7 +26,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
     vi.spyOn(skillRepository, 'create');
     vi.spyOn(competenceTransformer, 'filterCompetenceFields');
     vi.spyOn(thematicTransformer, 'filterThematicFields');
-    vi.spyOn(tubeTransformer, 'filterTubeFields');
+    vi.spyOn(tubeTransformer, 'transformTube');
     vi.spyOn(skillTransformer, 'filterSkillFields');
     vi.spyOn(updatedRecordNotifier, 'notify');
     vi.spyOn(idGenerator, 'generateNewId');
@@ -88,7 +88,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
-      tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
@@ -139,7 +139,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
-      expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
@@ -191,7 +191,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
-      tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
@@ -242,7 +242,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
-      expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',
@@ -293,7 +293,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       skillRepository.create.mockResolvedValueOnce(createdSkill);
       competenceTransformer.filterCompetenceFields.mockReturnValueOnce(transformedCompetence);
       thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
-      tubeTransformer.filterTubeFields.mockReturnValueOnce(transformedTube);
+      tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.filterSkillFields.mockReturnValueOnce(transformedSkill);
       updatedRecordNotifier.notify.mockRejectedValue(new Error());
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
@@ -344,7 +344,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       }));
       expect(competenceTransformer.filterCompetenceFields).toHaveBeenCalledWith(createdCompetence);
       expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
-      expect(tubeTransformer.filterTubeFields).toHaveBeenCalledWith(createdTube);
+      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'competences',

@@ -414,6 +414,8 @@ describe('Acceptance | Route | competences', () => {
     let generateNewId;
     let pixApiCompetenceCacheScope;
     let pixApiThematicCacheScope;
+    // FIXME pixApiTubeCacheScope
+    // FIXME pixApiSkillCacheScope
 
     beforeEach(async () => {
       const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
@@ -587,7 +589,7 @@ describe('Acceptance | Route | competences', () => {
           },
           index: 0,
           competenceId: 'competence4',
-          tubeIds: [],
+          tubeIds: ['tube1'],
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);

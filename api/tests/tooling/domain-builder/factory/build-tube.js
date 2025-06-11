@@ -15,6 +15,8 @@ export function buildTube({
   thematicAirtableId = 'recAirFlqfqwl1231bd1',
   competenceAirtableId = 'recAirsvLz0W2ShyfD63',
   competenceId = 'recsvLz0W2ShyfD63',
+  skillAirtableIds = ['recSkill1231114871', 'recSkill41094182112'],
+  skillIds = ['skill1231114871', 'skill41094182112'],
   index = 1,
 } = {}) {
   return new Tube({
@@ -26,6 +28,8 @@ export function buildTube({
     thematicAirtableId,
     competenceAirtableId,
     competenceId,
+    skillAirtableIds,
+    skillIds,
     index,
   });
 }

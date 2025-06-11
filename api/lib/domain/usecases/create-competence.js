@@ -57,6 +57,12 @@ export async function createCompetence(competence) {
   createdCompetence.thematicAirtableIds = [createdWorkbenchThematic.airtableId];
   createdCompetence.tubeAirtableIds = [createdWorkbenchTube.airtableId];
 
+  createdWorkbenchThematic.tubeIds = [createdWorkbenchTube.id];
+  createdWorkbenchThematic.tubeAirtableIds = [createdWorkbenchTube.airtableId];
+
+  createdWorkbenchTube.skillIds = [createdWorkbenchSkill.id];
+  createdWorkbenchTube.skillAirtableIds = [createdWorkbenchSkill.airtableId];
+
   try {
     await Promise.all([
       updatedRecordNotifier.notify({
@@ -72,7 +78,7 @@ export async function createCompetence(competence) {
       updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tubes',
-        updatedRecord: tubeTransformer.filterTubeFields(createdWorkbenchTube),
+        updatedRecord: tubeTransformer.transformTube(createdWorkbenchTube, createdWorkbenchThematic.id),
       }),
       updatedRecordNotifier.notify({
         pixApiClient,

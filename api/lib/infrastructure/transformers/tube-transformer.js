@@ -1,65 +1,43 @@
-import { ChallengeForRelease } from '../../domain/models/release/index.js';
-import _ from 'lodash';
-
-export function transform({ tubes, skills, challenges, thematics }) {
-  return tubes.map(filterTubeFields)
-    .map((tube) => _addLinks({ tube, skills, thematics }))
-    .map((tube) => _addDeviceCompliance({ tube, skills, challenges }));
+/**
+ * @param {import('../../domain/models').Tube[]} tubes
+ * @param {import('../../domain/models').Thematic[]} thematics
+ * @param {import('../../domain/models').Challenge[]} challenges
+ */
+export function transformTubes(tubes, thematics, challenges) {
+  const thematicAirtableIdToId = Object.fromEntries(thematics.map((thematic) => [thematic.airtableId, thematic.id]));
+  return tubes.map((tube) => transformTube(tube, thematicAirtableIdToId[tube.thematicAirtableId], challenges));
 }
 
-function _addLinks({ tube, skills, thematics }) {
+/**
+ * @param {import('../../domain/models').Tube} tube
+ * @param {string} thematicId
+ * @param {import('../../domain/models').Challenge[]} challenges
+ */
+export function transformTube(tube, thematicId, challenges) {
+  const {
+    id,
+    competenceId,
+    name,
+    practicalDescription_i18n,
+    practicalTitle_i18n,
+    skillIds,
+  } = tube;
+
+  const tubeValidatedPrototypes = challenges?.filter((challenge) => (
+    skillIds.includes(challenge.skillId) && challenge.isPrototype && challenge.isValide
+  ));
+  const isMobileCompliant = tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isMobileCompliant);
+  const isTabletCompliant = tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isTabletCompliant);
+
   return {
-    ...tube,
-    thematicId: _findThematicId(tube.id, thematics),
-    skillIds: _findSkillIds(tube.id, skills),
+    id,
+    competenceId,
+    name,
+    practicalDescription_i18n,
+    practicalTitle_i18n,
+    skillIds,
+    thematicId,
+    isMobileCompliant,
+    isTabletCompliant,
   };
-}
-
-export function filterTubeFields(tube) {
-  const fieldsToInclude = [
-    'id',
-    'name',
-    'practicalTitle_i18n',
-    'practicalDescription_i18n',
-    'competenceId',
-  ];
-
-  return _.pick(tube, fieldsToInclude);
-}
-
-function _findThematicId(tubeId, thematics) {
-  const correspondingThematic = thematics.find((thematic) => thematic.tubeIds?.includes(tubeId));
-  return correspondingThematic?.id || null;
-}
-
-function _findSkillIds(tubeId, skills) {
-  return skills.filter((skill) => skill.tubeId === tubeId).map((skill) => skill.id);
-}
-
-function _addDeviceCompliance({ tube, skills, challenges }) {
-  const tubeChallenges = _filterValidatedPrototypeTubeChallenges(skills, challenges, tube.id);
-  return {
-    ...tube,
-    isMobileCompliant: tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeSmartphoneCompliant),
-    isTabletCompliant: tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeTabletCompliant),
-  };
-}
-
-function _filterValidatedPrototypeTubeChallenges(skills, challenges, tubeId) {
-  return challenges.filter((challenge) => {
-    if (challenge.status !== ChallengeForRelease.STATUSES.VALIDE) return false;
-    if (challenge.genealogy !== ChallengeForRelease.GENEALOGIES.PROTOTYPE) return false;
-    const skill = skills.find((skill) => skill.id === challenge.skillId);
-    return skill?.tubeId === tubeId;
-  });
-}
-
-function _isChallengeSmartphoneCompliant(challenge) {
-  return [ChallengeForRelease.RESPONSIVES.SMARTPHONE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
-    .includes(challenge.responsive);
-}
-
-function _isChallengeTabletCompliant(challenge) {
-  return [ChallengeForRelease.RESPONSIVES.TABLETTE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
-    .includes(challenge.responsive);
 }

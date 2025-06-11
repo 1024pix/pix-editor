@@ -254,6 +254,14 @@ export class Challenge {
     return this.declinable !== Challenge.DECLINABLES.NON;
   }
 
+  get isMobileCompliant() {
+    return [Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE, Challenge.RESPONSIVES.SMARTPHONE].includes(this.responsive);
+  }
+
+  get isTabletCompliant() {
+    return [Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE, Challenge.RESPONSIVES.TABLETTE].includes(this.responsive);
+  }
+
   get #primaryLocalizedChallenge() {
     return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale);
   }
@@ -263,7 +271,7 @@ export class Challenge {
   }
 
   get translations() {
-    return JSON.parse(JSON.stringify(this.#translations));
+    return this.#translations;
   }
 
   static getPrimaryLocale(locales) {
