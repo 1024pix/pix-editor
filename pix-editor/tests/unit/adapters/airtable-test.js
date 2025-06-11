@@ -33,7 +33,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       adapter.updateRecord(store, type, snapshot);
 
       assert.ok(adapter.ajax.called);
-      assert.ok(adapter.ajax.calledWith('/api/airtable/content/testTables/1', 'PATCH', { data: {} }));
+      assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables/1', 'PATCH', { data: {} }));
     });
 
     test('when the primaryKey is the persistant id, it uses the record id', function(assert) {
@@ -63,7 +63,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       adapter.updateRecord(store, type, snapshot);
 
       assert.ok(adapter.ajax.called);
-      assert.ok(adapter.ajax.calledWith('/api/airtable/content/testTables/myAirtableId', 'PATCH', { data: {} }));
+      assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables/myAirtableId', 'PATCH', { data: {} }));
     });
 
     test('when the primaryKey is set but the airtableId is null, it POST to create the record', function(assert) {
@@ -93,7 +93,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       adapter.updateRecord(store, type, snapshot);
 
       assert.ok(adapter.ajax.called);
-      assert.ok(adapter.ajax.calledWith('/api/airtable/content/testTables', 'POST', { data: {} }));
+      assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables', 'POST', { data: {} }));
     });
   });
 
@@ -118,7 +118,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       adapter.findMany(store, type, [1, 2, 3], [], MAX_IDS);
 
       assert.ok(adapter.ajax.called);
-      assert.ok(adapter.ajax.calledWith('/api/airtable/content/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
+      assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
     });
 
     test('split the ajax calls', function(assert) {
@@ -139,8 +139,8 @@ module('Unit | Adapter | airtable', function(hooks) {
       adapter.findMany(store, type, [1, 2, 3, 4], [], MAX_IDS);
 
       assert.ok(adapter.ajax.calledTwice);
-      assert.ok(adapter.ajax.getCalls()[0].calledWith('/api/airtable/content/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
-      assert.ok(adapter.ajax.getCalls()[1].calledWith('/api/airtable/content/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'4\')' } }));
+      assert.ok(adapter.ajax.getCalls()[0].calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
+      assert.ok(adapter.ajax.getCalls()[1].calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'4\')' } }));
     });
 
     test('returns response from ajax call', async function(assert) {

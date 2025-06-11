@@ -6,7 +6,7 @@ const ID_PERSISTANT_FIELD = 'id persistant';
 
 export default class AirtableAdapter extends RESTAdapter {
 
-  namespace = '/api/airtable/content';
+  namespace = '/api/airtable/changelog';
 
   @service session;
   @service config;

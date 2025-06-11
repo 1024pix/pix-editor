@@ -3,20 +3,16 @@ import { buildTranslationsUtils } from './utils.js';
 export const prefix = 'skill.';
 
 const locales = [
-  { airtableLocale: 'fr-fr', locale: 'fr' },
-  { airtableLocale: 'en-us', locale: 'en' },
+  { locale: 'fr' },
+  { locale: 'en' },
 ];
 
 const fields = [
-  { airtableField: 'Indice', field: 'hint' },
+  { field: 'hint' },
 ];
 
-const idField = 'fields.id persistant';
-
 export const {
-  extractFromProxyObject,
   extractFromReleaseObject,
   extractFromDomainObject,
-  prefixFor,
   toDomain,
-} = buildTranslationsUtils({ locales, fields, prefix, idField });
+} = buildTranslationsUtils({ locales, fields, prefix });

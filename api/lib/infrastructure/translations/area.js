@@ -3,22 +3,18 @@ import { buildTranslationsUtils } from './utils.js';
 export const prefix = 'area.';
 
 const locales = [
-  { airtableLocale: 'fr-fr', locale: 'fr' },
-  { airtableLocale: 'en-us', locale: 'en' },
+  { locale: 'fr' },
+  { locale: 'en' },
 ];
 
 const fields = [
-  { airtableField: 'Titre', field: 'title' },
+  { field: 'title' },
 ];
 
-const idField = 'fields.id persistant';
-
-const areaTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, idField });
+const areaTranslationUtils = buildTranslationsUtils({ locales, fields, prefix });
 
 export const {
-  extractFromProxyObject,
   extractFromReleaseObject,
-  prefixFor,
   toDomain,
   extractFromDomainObject,
 } = areaTranslationUtils;
