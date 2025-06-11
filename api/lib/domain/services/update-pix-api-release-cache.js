@@ -29,24 +29,23 @@ export async function onAttachmentDeleted({ attachment }) {
 }
 
 async function onAttachmentCreatedOrDeleted({ attachment }) {
-  if (pixApiClient.isPixApiCachePatchingEnabled()) {
-    try {
-      const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
-      const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
-      const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
-      const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
-      const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
-      const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
-      const transformedChallenge = transformChallenge(challengeToTransform);
-      await updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'challenges',
-        updatedRecord: transformedChallenge,
-      });
-    } catch (err) {
-      logger.error(err);
-      Sentry.captureException(err);
-    }
+  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
+  try {
+    const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
+    const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
+    const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
+    const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
+    const challengeToTransform = localizedChallenge.isPrimary ? primaryChallenge : primaryChallenge.translate(localizedChallenge.locale);
+    const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
+    const transformedChallenge = transformChallenge(challengeToTransform);
+    await updatedRecordNotifier.notify({
+      pixApiClient,
+      model: 'challenges',
+      updatedRecord: transformedChallenge,
+    });
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
   }
 }
 

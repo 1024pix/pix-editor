@@ -5,7 +5,7 @@ import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '.
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { Tutorial } from '../../../lib/domain/models/index.js';
-import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import { tubeDatasource, tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as config from '../../../lib/config.js';
 
 describe('Application | Route | Tutorials', () => {
@@ -87,9 +87,9 @@ describe('Application | Route | Tutorials', () => {
               type: 'tutorials',
               attributes: {
                 'title': 'mon titre',
-                'duration': '99:99:99',
+                'duration': '01:02:01',
                 'source': 'Mon grenier',
-                'format': Tutorial.FORMATS.PDF,
+                'format': 'coucou maman',
                 'link': 'https://coucou.com',
                 'license': Tutorial.LICENSES.C,
                 'level': Tutorial.LEVELS.TWO,
@@ -646,7 +646,7 @@ describe('Application | Route | Tutorials', () => {
   });
 
   describe('GET /api/tutorials', async () => {
-    let airtableSearchTutorialByTitleScope, airtableSearchTutorialByTagTitlesScope, airtableSearchTutorialBySourceScope;
+    let airtableSearchTutorialByTitleScope, airtableSearchTutorialByTagTitlesScope, airtableSearchTutorialBySourceScope, airtableGetManyTutorialsScope;
 
     context('when query param is not in the right format', function() {
       it('should respond with status 400', async function() {
@@ -1009,6 +1009,129 @@ describe('Application | Route | Tutorials', () => {
             ],
           });
           expect(airtableSearchTutorialByTagTitlesScope.isDone()).toBe(true);
+        });
+      });
+
+      context('when searching by ids', function() {
+        it('should respond with status 200 and relevant tutorials', async () => {
+          // given
+          const airtableTutorials = [
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId1',
+              airtableId: 'tutorialAirtableId1',
+              title: 'mon titre 1',
+              format: Tutorial.FORMATS.PDF,
+              duration: '12:01:02',
+              source: 'Mon grenier 1',
+              link: 'https://coucou1.com',
+              locale: 'fr',
+              license: Tutorial.LICENSES.C,
+              level: Tutorial.LEVELS.ONE,
+              crush: true,
+              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
+            }),
+            airtableBuilder.factory.buildTutorial({
+              id: 'tutorialId2',
+              airtableId: 'tutorialAirtableId2',
+              title: 'mon titre 2',
+              format: Tutorial.FORMATS.FRISE,
+              duration: '12:50:50',
+              source: 'Mon grenier 2',
+              link: 'https://coucou2.com',
+              locale: 'es',
+              license: Tutorial.LICENSES.CCBYSA,
+              level: Tutorial.LEVELS.TWO,
+              crush: false,
+              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId3'],
+            }),
+          ];
+          airtableGetManyTutorialsScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tutoriels')
+            .query({
+              filterByFormula: 'OR(RECORD_ID() = "tutorialId1", RECORD_ID() = "tutorialId2")',
+              fields: { '': tutorialDatasource.usedFields },
+              sort: [{ field: tubeDatasource.sortField, direction: 'asc' }]
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTutorials,
+            });
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tutorials?filter[ids][]=tutorialId1&filter[ids][]=tutorialId2',
+            headers: generateAuthorizationHeader(readonlyUser),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId1',
+                attributes: {
+                  'title': 'mon titre 1',
+                  'duration': '12:01:02',
+                  'source': 'Mon grenier 1',
+                  'format': Tutorial.FORMATS.PDF,
+                  'link': 'https://coucou1.com',
+                  'license': Tutorial.LICENSES.C,
+                  'level': Tutorial.LEVELS.ONE,
+                  'crush': true,
+                  'language': 'fr',
+                  'pix-id': 'tutorialId1',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId2',
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                type: 'tutorials',
+                id: 'tutorialAirtableId2',
+                attributes: {
+                  'title': 'mon titre 2',
+                  'duration': '12:50:50',
+                  'source': 'Mon grenier 2',
+                  'format': Tutorial.FORMATS.FRISE,
+                  'link': 'https://coucou2.com',
+                  'license': Tutorial.LICENSES.CCBYSA,
+                  'level': Tutorial.LEVELS.TWO,
+                  'crush': false,
+                  'language': 'es',
+                  'pix-id': 'tutorialId2',
+                },
+                relationships: {
+                  tags: {
+                    data: [
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId1',
+                      },
+                      {
+                        type: 'tags',
+                        id: 'tagAirtableId3',
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableGetManyTutorialsScope.isDone()).toBe(true);
         });
       });
     });

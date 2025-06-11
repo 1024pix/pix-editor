@@ -19,6 +19,13 @@ export async function getByAirtableId(tutorialId) {
   return toDomain(datasourceTutorial);
 }
 
+export async function getManyByAirtableIds(airtableIds) {
+  if (!airtableIds?.length) return [];
+  const datasourceTutorials = await tutorialDatasource.getManyByAirtableIds(airtableIds);
+  if (!datasourceTutorials) return [];
+  return datasourceTutorials.map(toDomain);
+}
+
 export async function searchByTitle(title) {
   const datasourceTutorials = await tutorialDatasource.searchByTitle(title);
   if (!datasourceTutorials) return [];

@@ -33,20 +33,15 @@ export function register(server) {
               type: Joi.string().required().equal('tutorials'),
               attributes: {
                 'title': Joi.string().required(),
-                'duration': Joi.string().pattern(
-                  /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/,
-                  'HH:MM:SS format'
-                ).messages({
-                  'string.pattern.name': 'Duration must be in HH:MM:SS format',
-                }),
+                'duration': Joi.string(),
                 'source': Joi.string().required(),
                 'format': Joi.string().valid(...Object.values(Tutorial.FORMATS)).required(),
                 'link': Joi.string().custom(checkUrl, 'URL Validation')
                   .messages({
                     'any.invalid': 'Must be a valid, absolute URL',
                   }).required(),
-                'license': Joi.string().valid(...Object.values(Tutorial.LICENSES)).allow(null),
-                'level': Joi.string().valid(...Object.values(Tutorial.LEVELS)).required(),
+                'license': Joi.string().allow(null),
+                'level': Joi.string().required(),
                 'crush': Joi.boolean().allow(null),
                 'language': Joi.string().required(),
               },
@@ -113,20 +108,15 @@ export function register(server) {
               id: Types.tutorialId().required(),
               attributes: {
                 'title': Joi.string().required(),
-                'duration': Joi.string().pattern(
-                  /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/,
-                  'HH:MM:SS format'
-                ).messages({
-                  'string.pattern.name': 'Duration must be in HH:MM:SS format',
-                }),
+                'duration': Joi.string(),
                 'source': Joi.string().required(),
                 'format': Joi.string().valid(...Object.values(Tutorial.FORMATS)).required(),
                 'link': Joi.string().custom(checkUrl, 'URL Validation')
                   .messages({
                     'any.invalid': 'Must be a valid, absolute URL',
                   }).required(),
-                'license': Joi.string().valid(...Object.values(Tutorial.LICENSES)).allow(null),
-                'level': Joi.string().valid(...Object.values(Tutorial.LEVELS)).required(),
+                'license': Joi.string().allow(null),
+                'level': Joi.string().required(),
                 'crush': Joi.boolean().allow(null),
                 'language': Joi.string().required(),
                 'pix-id': Types.tutorialId().required(),
@@ -165,8 +155,9 @@ export function register(server) {
             'filter[title]': Joi.string(),
             'filter[source]': Joi.string(),
             'filter[tagTitles][]': [Joi.string(), Joi.array().items(Joi.string())],
+            'filter[ids][]': [Joi.string(), Joi.array().items(Joi.string())],
           })
-            .xor('filter[title]', 'filter[source]', 'filter[tagTitles][]')
+            .xor('filter[title]', 'filter[source]', 'filter[tagTitles][]', 'filter[ids][]')
         },
         handler: async function(request, h) {
           try {

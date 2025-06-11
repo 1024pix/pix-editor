@@ -37,7 +37,7 @@ export function buildTutorial({ title, index, tagItems }) {
     license: iterFor.license.next().value,
     level: iterFor.level.next().value,
     crush: iterFor.crush.next().value,
-    language: iterLocales.next().value,
+    locale: iterLocales.next().value,
     tagAirtableIds: tagItems.map((tagItem) => tagItem.airtableId),
   };
 }
