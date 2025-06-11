@@ -14,6 +14,13 @@ export async function getByAirtableId(tagId) {
   return toDomain(datasourceTag);
 }
 
+export async function getManyByAirtableIds(airtableIds) {
+  if (!airtableIds?.length) return [];
+  const datasourceTags = await tagDatasource.getManyByAirtableIds(airtableIds);
+  if (!datasourceTags) return [];
+  return datasourceTags.map(toDomain);
+}
+
 export async function searchByTitle(title) {
   const datasourceTags = await tagDatasource.searchByTitle(title);
   if (!datasourceTags) return [];
