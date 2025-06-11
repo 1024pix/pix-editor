@@ -9,7 +9,6 @@ import {
   thematicRepository,
   tubeRepository,
 } from './index.js';
-import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   areaTransformer,
   competenceTransformer,
@@ -22,7 +21,6 @@ import {
   tubeTransformer,
   tutorialTransformer,
 } from '../transformers/index.js';
-import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
@@ -63,23 +61,6 @@ export async function getRelease(id) {
     .where('id', id);
 
   return _toDomain(release[0]);
-}
-
-export async function serializeEntity({ type, entity, translations }) {
-  const { updatedRecord, model } = airtableSerializer.serialize({
-    airtableObject: entity,
-    tableName: type
-  });
-
-  if (!tablesTranslations[type]?.toDomain) return { updatedRecord, model };
-
-  return {
-    updatedRecord: {
-      ...updatedRecord,
-      ...tablesTranslations[type].toDomain(translations, updatedRecord),
-    },
-    model,
-  };
 }
 
 function _toDomain(releaseDTO) {
