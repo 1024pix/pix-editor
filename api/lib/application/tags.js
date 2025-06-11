@@ -6,7 +6,7 @@ import { logger } from '../infrastructure/logger.js';
 import { DomainError } from '../domain/errors.js';
 import * as tagSerializer from '../infrastructure/serializers/jsonapi/tag-serializer.js';
 import { tagRepository } from '../infrastructure/repositories/index.js';
-import { createTag } from '../domain/usecases/index.js';
+import { createTag, searchTags } from '../domain/usecases/index.js';
 import * as Types from './types.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
@@ -75,12 +75,14 @@ export function register(server) {
         validate: {
           query: Joi.object({
             'filter[title]': Joi.string(),
-          }),
+            'filter[ids][]': [Joi.string(), Joi.array().items(Joi.string())],
+          })
+            .xor('filter[title]', 'filter[ids][]')
         },
         handler: async function(request) {
           try {
             const params = extractParameters(request.query);
-            const tags = await tagRepository.searchByTitle(params.filter.title);
+            const tags = await searchTags(params, { tagRepository });
             return tagSerializer.serialize(tags);
           } catch (err) {
             logger.error(err);

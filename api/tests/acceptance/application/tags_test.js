@@ -4,6 +4,7 @@ import nock from 'nock';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
+import { tagDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Application | Route | Tags', () => {
   let editorUser, readonlyUser;
@@ -303,91 +304,181 @@ describe('Application | Route | Tags', () => {
     });
 
     context('success', function() {
-      it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
-        // given
-        const airtableTags = [
-          airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
-          airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
-          airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
-        ];
-        airtableSearchTagsScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tags')
-          .query({
-            filterByFormula: 'FIND("fr", LOWER(Nom))',
-            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
-            sort: [{ field: 'Nom', direction: 'asc' }],
-            maxRecords: 4,
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, {
-            records: airtableTags,
+      context('when searching by titles', function() {
+        it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
+          // given
+          const airtableTags = [
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
+          ];
+          airtableSearchTagsScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tags')
+            .query({
+              filterByFormula: 'FIND("fr", LOWER(Nom))',
+              fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
+              sort: [{ field: 'Nom', direction: 'asc' }],
+              maxRecords: 4,
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTags,
+            });
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tags?filter[title]=fr',
+            headers: generateAuthorizationHeader(editorUser),
           });
-        const server = await createServer();
 
-        // when
-        const response = await server.inject({
-          method: 'GET',
-          url: '/api/tags?filter[title]=fr',
-          headers: generateAuthorizationHeader(editorUser),
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tags',
+                id: 'tagAirtableId3',
+                attributes: {
+                  'pix-id': 'tagId3',
+                  'title': 'france',
+                  'notes': 'une note',
+                  'description': 'une description',
+                },
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
+                },
+              },
+              {
+                type: 'tags',
+                id: 'tagAirtableId4',
+                attributes: {
+                  'pix-id': 'tagId4',
+                  'title': 'freT',
+                },
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
+                },
+              },
+              {
+                type: 'tags',
+                id: 'tagAirtableId2',
+                attributes: {
+                  'pix-id': 'tagId2',
+                  'title': 'frontieRe',
+                },
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableSearchTagsScope.isDone()).toBe(true);
         });
+      });
+      
+      context('when searching by ids', function() {
+        it('should respond with status 200 and related tags', async () => {
+          // given
+          const airtableTags = [
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
+          ];
+          airtableSearchTagsScope = nock('https://api.airtable.com')
+            .get('/v0/airtableBaseValue/Tags')
+            .query({
+              filterByFormula: 'OR(RECORD_ID() = "tagId3", RECORD_ID() = "tagId4", RECORD_ID() = "tagId2")',
+              fields: { '': tagDatasource.usedFields },
+              sort: [{ field: tagDatasource.sortField, direction: 'asc' }]
+            })
+            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+            .reply(200, {
+              records: airtableTags,
+            });
+          const server = await createServer();
 
-        // then
-        expect(response.statusCode).toBe(200);
-        expect(response.result).toEqual({
-          data: [
-            {
-              type: 'tags',
-              id: 'tagAirtableId3',
-              attributes: {
-                'pix-id': 'tagId3',
-                'title': 'france',
-                'notes': 'une note',
-                'description': 'une description',
-              },
-              relationships: {
-                skills: {
-                  data: [],
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: '/api/tags?filter[ids][]=tagId3&filter[ids][]=tagId4&filter[ids][]=tagId2',
+            headers: generateAuthorizationHeader(editorUser),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+          expect(response.result).toEqual({
+            data: [
+              {
+                type: 'tags',
+                id: 'tagAirtableId3',
+                attributes: {
+                  'pix-id': 'tagId3',
+                  'title': 'france',
+                  'notes': 'une note',
+                  'description': 'une description',
                 },
-                tutorials: {
-                  data: [],
-                },
-              },
-            },
-            {
-              type: 'tags',
-              id: 'tagAirtableId4',
-              attributes: {
-                'pix-id': 'tagId4',
-                'title': 'freT',
-              },
-              relationships: {
-                skills: {
-                  data: [],
-                },
-                tutorials: {
-                  data: [],
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
                 },
               },
-            },
-            {
-              type: 'tags',
-              id: 'tagAirtableId2',
-              attributes: {
-                'pix-id': 'tagId2',
-                'title': 'frontieRe',
-              },
-              relationships: {
-                skills: {
-                  data: [],
+              {
+                type: 'tags',
+                id: 'tagAirtableId4',
+                attributes: {
+                  'pix-id': 'tagId4',
+                  'title': 'freT',
                 },
-                tutorials: {
-                  data: [],
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
                 },
               },
-            },
-          ],
+              {
+                type: 'tags',
+                id: 'tagAirtableId2',
+                attributes: {
+                  'pix-id': 'tagId2',
+                  'title': 'frontieRe',
+                },
+                relationships: {
+                  skills: {
+                    data: [],
+                  },
+                  tutorials: {
+                    data: [],
+                  },
+                },
+              },
+            ],
+          });
+          expect(airtableSearchTagsScope.isDone()).toBe(true);
         });
-        expect(airtableSearchTagsScope.isDone()).toBe(true);
       });
     });
   });
