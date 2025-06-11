@@ -1,5 +1,5 @@
 import { Tag } from '../../domain/models/index.js';
-import { tagDatasource } from '../datasources/airtable/tag-datasource.js';
+import { tagDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
 export async function create(tag) {

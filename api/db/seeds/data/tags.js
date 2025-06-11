@@ -7,6 +7,8 @@ export async function buildTags({ airtableClient, logger }) {
   tagItems.push(buildTag({ title: 'fruits', index: i++ }));
   tagItems.push(buildTag({ title: 'légumes', index: i++ }));
   tagItems.push(buildTag({ title: 'animaux', index: i++ }));
+  tagItems.push(buildTag({ title: 'plantes', index: i++ }));
+  tagItems.push(buildTag({ title: 'minéraux', index: i++ }));
 
   await persistTags({ items: tagItems, airtableClient, logger });
   return tagItems;

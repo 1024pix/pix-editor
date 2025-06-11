@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
@@ -9,29 +8,6 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
 
     describe('error cases', () => {
 
-      it('should return airtable error status code', async () => {
-        // Given
-        const user = await createAdminUser();
-        nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Tutoriels', { param: 'value' })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .matchHeader('content-type', 'application/json')
-          .reply(401, 'Unauthorized');
-        const server = await createServer();
-
-        // When
-        const response = await server.inject({
-          method: 'POST',
-          url: '/api/airtable/content/Tutoriels',
-          headers: generateAuthorizationHeader(user),
-          payload: { param: 'value' }
-        });
-
-        // Then
-        expect(response.statusCode).to.equal(401);
-        expect(response.result).to.equal('Unauthorized');
-      });
-
       it('should forbid POST request with readonly access', async () => {
         // Given
         const user = await createReadonlyUser();
@@ -40,7 +16,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         // When
         const response = await server.inject({
           method: 'POST',
-          url: '/api/airtable/content/Tutoriels',
+          url: '/api/airtable/content/Tubes',
           headers: generateAuthorizationHeader(user),
           payload: { param: 'value' }
         });

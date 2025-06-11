@@ -19,6 +19,7 @@ import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
 import { buildTags } from './data/tags.js';
+import { buildTutorials } from './data/tutorials.js';
 
 export async function seed(knex) {
   const airtableClient = new Airtable({ apiKey: airtable.apiKey }).base(airtable.base);
@@ -64,7 +65,8 @@ export async function seed(knex) {
     await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
-    await buildTags({ airtableClient, logger });
+    const tagItems = await buildTags({ airtableClient, logger });
+    await buildTutorials({ airtableClient, logger, locales: learningContentConfig.locales, tagItems });
   } else {
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);

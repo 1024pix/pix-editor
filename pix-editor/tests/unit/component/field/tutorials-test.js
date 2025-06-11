@@ -28,9 +28,7 @@ module('Unit | Component | field/tutorials', function(hooks) {
       const results = await component.getSearchTutorialResults('Hello');
       assert.ok(queryStub.calledOnce);
       assert.ok(queryStub.calledWith('tutorial', {
-        filterByFormula: 'FIND(\'hello\', LOWER(Titre))',
-        maxRecords: 100,
-        sort: [{ field: 'Titre', direction: 'asc' }],
+        filter: { title: 'hello' },
       }));
       assert.deepEqual(results, [
         { title: 'test', description: false, id: 'tutorialId' },
@@ -46,9 +44,7 @@ module('Unit | Component | field/tutorials', function(hooks) {
 
       assert.ok(queryStub.calledOnce);
       assert.ok(queryStub.calledWith('tutorial', {
-        filterByFormula: 'AND(FIND(\'hello\', LOWER(Tags)))',
-        maxRecords: 100,
-        sort: [{ field: 'Titre', direction: 'asc' }],
+        filter: { tagTitles: ['hello'] },
       }));
       assert.deepEqual(results, [
         { title: 'test', description: 'TAG : ', id: 'tutorialId' },
@@ -64,9 +60,7 @@ module('Unit | Component | field/tutorials', function(hooks) {
 
       assert.ok(queryStub.calledOnce);
       assert.ok(queryStub.calledWith('tutorial', {
-        filterByFormula: 'AND(FIND(\'hello\', LOWER(Tags)), FIND(\'world\', LOWER(Tags)))',
-        maxRecords: 100,
-        sort: [{ field: 'Titre', direction: 'asc' }],
+        filter: { tagTitles: ['hello', 'world'] },
       }));
       assert.deepEqual(results, [
         { title: 'test', description: 'TAG : ', id: 'tutorialId' },
@@ -79,9 +73,7 @@ module('Unit | Component | field/tutorials', function(hooks) {
       await component.getSearchTutorialResults('Coco l\'asticot a mangé l\'abricot');
       assert.ok(queryStub.calledOnce);
       assert.ok(queryStub.calledWith('tutorial', {
-        filterByFormula: 'FIND(\'coco l\\\'asticot a mangé l\\\'abricot\', LOWER(Titre))',
-        maxRecords: 100,
-        sort: [{ field: 'Titre', direction: 'asc' }],
+        filter: { title: 'coco l\\\'asticot a mangé l\\\'abricot' },
       }));
     });
   });

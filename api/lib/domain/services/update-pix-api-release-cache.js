@@ -1,6 +1,7 @@
 import {
   createChallengeTransformer,
   tubeTransformer,
+  tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
 import {
   attachmentRepository,
@@ -16,7 +17,6 @@ import * as Sentry from '@sentry/node';
 const logger = child('updatePixApiReleaseCacheService', { event: 'lcms:patch-release' });
 
 export async function onAttachmentCreated({ attachment }) {
-  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   await onAttachmentCreatedOrDeleted({ attachment });
 }
 
@@ -25,11 +25,11 @@ export async function onAttachmentUpdated({ attachment: _ }) {
 }
 
 export async function onAttachmentDeleted({ attachment }) {
-  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   await onAttachmentCreatedOrDeleted({ attachment });
 }
 
 async function onAttachmentCreatedOrDeleted({ attachment }) {
+  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
     const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
     const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
@@ -46,6 +46,30 @@ async function onAttachmentCreatedOrDeleted({ attachment }) {
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);
+  }
+}
+
+export async function onTutorialCreated({ tutorial }) {
+  await onTutorialCreatedOrUpdated({ tutorial });
+}
+
+export async function onTutorialUpdated({ tutorial }) {
+  await onTutorialCreatedOrUpdated({ tutorial });
+}
+
+async function onTutorialCreatedOrUpdated({ tutorial }) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      const [tutorialForRelease] = tutorialTransformer.filterTutorialsFields([tutorial]);
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'tutorials',
+        updatedRecord: tutorialForRelease,
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
   }
 }
 

@@ -8,7 +8,6 @@ export default class TutorialModel extends Model {
   @attr link;
   @attr license;
   @attr level;
-  @attr date;
   @attr crush;
   @attr pixId;
   @attr language;

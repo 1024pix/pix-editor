@@ -1,17 +1,21 @@
 export function buildTutorial({
   id,
+  airtableId = id,
   title,
   format,
   duration,
   source,
   link,
   locale,
+  license,
+  level,
+  crush,
+  tagAirtableIds,
   tutorialForSkills,
   furtherInformation,
 } = {}) {
-
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
       'Titre': title,
@@ -20,6 +24,10 @@ export function buildTutorial({
       'Source': source,
       'Lien': link,
       'Langue': locale,
+      'License': license,
+      'niveau': level,
+      'CoupDeCoeur': crush ? 'YES' : null,
+      'Tags': tagAirtableIds ?? [],
       'Solution à': tutorialForSkills,
       'En savoir plus': furtherInformation,
     },
