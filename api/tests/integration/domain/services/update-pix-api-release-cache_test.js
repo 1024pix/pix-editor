@@ -5,7 +5,7 @@ import * as updatePixApiReleaseCache from '../../../../lib/domain/services/updat
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as config from '../../../../lib/config.js';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
-import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
+import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Integration | Service | update pix api release cache', function() {
   let notifyStub, originalPixApiUrlValue;
@@ -473,7 +473,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
 
         // then
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(notifyStub).toHaveBeenCalledTimes(0);
       });
     });
   });
@@ -616,9 +616,6 @@ describe('Integration | Service | update pix api release cache', function() {
       });
 
       it('should not patch anything', async function() {
-        // given
-        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
-
         // when
         await updatePixApiReleaseCache.onTutorialUpdated({ tutorial });
 

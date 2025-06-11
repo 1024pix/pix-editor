@@ -5,5 +5,8 @@ export async function searchTutorials(params, dependencies = { tutorialRepositor
   if (params.filter.source) {
     return dependencies.tutorialRepository.searchBySource(params.filter.source);
   }
+  if (params.filter.ids) {
+    return dependencies.tutorialRepository.getManyByAirtableIds(params.filter.ids);
+  }
   return dependencies.tutorialRepository.searchByTagTitles(params.filter.tagTitles);
 }
