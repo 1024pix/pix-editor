@@ -98,7 +98,7 @@ export function register(server) {
       },
     },
     {
-      method: 'PUT',
+      method: 'PATCH',
       path: '/api/tutorials/{tutorialAirtableId}',
       config: {
         pre: [{
