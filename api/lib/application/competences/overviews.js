@@ -1,7 +1,4 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
-import { logger } from '../../infrastructure/logger.js';
 import {
   getCompetenceChallengesProductionOverview,
   getCompetenceChallengesWorkbenchOverview
@@ -24,17 +21,11 @@ export async function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const competenceId = request.params.competenceId;
-            const locale = request.query.locale;
+          const competenceId = request.params.competenceId;
+          const locale = request.query.locale;
 
-            const competenceOverview = await getCompetenceChallengesProductionOverview({ competenceId, locale });
-            return competenceOverviewSerializer.serialize(competenceOverview);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const competenceOverview = await getCompetenceChallengesProductionOverview({ competenceId, locale });
+          return competenceOverviewSerializer.serialize(competenceOverview);
         },
       },
     },
@@ -48,16 +39,10 @@ export async function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const competenceId = request.params.competenceId;
+          const competenceId = request.params.competenceId;
 
-            const competenceOverview = await getCompetenceChallengesWorkbenchOverview({ competenceId });
-            return competenceOverviewSerializer.serialize(competenceOverview);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const competenceOverview = await getCompetenceChallengesWorkbenchOverview({ competenceId });
+          return competenceOverviewSerializer.serialize(competenceOverview);
         },
       },
     },

@@ -1,9 +1,6 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { logger } from '../infrastructure/logger.js';
-import { DomainError } from '../domain/errors.js';
+import { NotFoundError } from '../domain/errors.js';
 import { tutorialRepository } from '../infrastructure/repositories/index.js';
 import { Tutorial } from '../domain/models/index.js';
 import * as Types from './types.js';
@@ -57,16 +54,9 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const tutorial = await tutorialSerializer.deserialize(request.payload);
-            const createdTutorial = await createTutorial(tutorial, { tutorialRepository });
-            return h.response(tutorialSerializer.serialize(createdTutorial)).code(201);
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tutorial = await tutorialSerializer.deserialize(request.payload);
+          const createdTutorial = await createTutorial(tutorial, { tutorialRepository });
+          return h.response(tutorialSerializer.serialize(createdTutorial)).code(201);
         },
       },
     },
@@ -80,15 +70,9 @@ export function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const tutorial = await tutorialRepository.getByAirtableId(request.params.tutorialAirtableId);
-            if (!tutorial) return Boom.notFound('unknown tutorial id');
-            return tutorialSerializer.serialize(tutorial);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tutorial = await tutorialRepository.getByAirtableId(request.params.tutorialAirtableId);
+          if (!tutorial) return new NotFoundError('unknown tutorial id');
+          return tutorialSerializer.serialize(tutorial);
         },
       },
     },
@@ -133,16 +117,9 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const tutorial = await tutorialSerializer.deserialize(request.payload);
-            const updatedTutorial = await updateTutorial(tutorial, { tutorialRepository });
-            return h.response(tutorialSerializer.serialize(updatedTutorial));
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tutorial = await tutorialSerializer.deserialize(request.payload);
+          const updatedTutorial = await updateTutorial(tutorial, { tutorialRepository });
+          return h.response(tutorialSerializer.serialize(updatedTutorial));
         },
       },
     },
@@ -160,16 +137,9 @@ export function register(server) {
             .xor('filter[title]', 'filter[source]', 'filter[tagTitles][]', 'filter[ids][]')
         },
         handler: async function(request, h) {
-          try {
-            const params = extractParameters(request.query);
-            const tutorials = await searchTutorials(params, { tutorialRepository });
-            return h.response(tutorialSerializer.serialize(tutorials));
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const params = extractParameters(request.query);
+          const tutorials = await searchTutorials(params, { tutorialRepository });
+          return h.response(tutorialSerializer.serialize(tutorials));
         },
       },
     },

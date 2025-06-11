@@ -1,9 +1,6 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as usecases from '../domain/usecases/index.js';
-import { logger } from '../infrastructure/logger.js';
 import { areaRepository } from '../infrastructure/repositories/index.js';
 import { areaSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import * as Types from './types.js';
@@ -15,14 +12,8 @@ export function register(server) {
       path: '/api/areas',
       config: {
         handler: async function() {
-          try {
-            const areas = await areaRepository.list();
-            return areaSerializer.serialize(areas);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const areas = await areaRepository.list();
+          return areaSerializer.serialize(areas);
         },
       },
     },
@@ -51,17 +42,11 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const area = await areaSerializer.deserialize(request.payload);
+          const area = await areaSerializer.deserialize(request.payload);
 
-            const createdArea = await usecases.createArea(area);
+          const createdArea = await usecases.createArea(area);
 
-            return h.response(areaSerializer.serialize(createdArea)).code(201);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          return h.response(areaSerializer.serialize(createdArea)).code(201);
         },
       },
     },

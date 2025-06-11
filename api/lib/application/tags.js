@@ -1,14 +1,11 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { logger } from '../infrastructure/logger.js';
-import { DomainError } from '../domain/errors.js';
 import * as tagSerializer from '../infrastructure/serializers/jsonapi/tag-serializer.js';
 import { tagRepository } from '../infrastructure/repositories/index.js';
 import { createTag, searchTags } from '../domain/usecases/index.js';
 import * as Types from './types.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
+import { NotFoundError } from '../domain/errors.js';
 
 export function register(server) {
   server.route([
@@ -33,16 +30,9 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const tag = await tagSerializer.deserialize(request.payload);
-            const createdTag = await createTag(tag, { tagRepository });
-            return h.response(tagSerializer.serialize(createdTag)).code(201);
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tag = await tagSerializer.deserialize(request.payload);
+          const createdTag = await createTag(tag, { tagRepository });
+          return h.response(tagSerializer.serialize(createdTag)).code(201);
         },
       },
     },
@@ -56,15 +46,9 @@ export function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const tag = await tagRepository.getByAirtableId(request.params.tagAirtableId);
-            if (!tag) return Boom.notFound('unknown tag id');
-            return tagSerializer.serialize(tag);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tag = await tagRepository.getByAirtableId(request.params.tagAirtableId);
+          if (!tag) return new NotFoundError('unknown tag id');
+          return tagSerializer.serialize(tag);
         },
       },
     },
@@ -80,15 +64,9 @@ export function register(server) {
             .xor('filter[title]', 'filter[ids][]')
         },
         handler: async function(request) {
-          try {
-            const params = extractParameters(request.query);
-            const tags = await searchTags(params, { tagRepository });
-            return tagSerializer.serialize(tags);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const params = extractParameters(request.query);
+          const tags = await searchTags(params, { tagRepository });
+          return tagSerializer.serialize(tags);
         },
       },
     },
