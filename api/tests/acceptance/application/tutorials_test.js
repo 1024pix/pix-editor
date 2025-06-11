@@ -351,7 +351,7 @@ describe('Application | Route | Tutorials', () => {
     });
   });
 
-  describe('PUT /api/tutorials/{tutorialAirtableId}', async () => {
+  describe('PATCH /api/tutorials/{tutorialAirtableId}', async () => {
     let airtableGetTutorialScope, airtableUpdateTutorialScope;
 
     context('when user has not the right to do the operation', function() {
@@ -361,7 +361,7 @@ describe('Application | Route | Tutorials', () => {
 
         // when
         const response = await server.inject({
-          method: 'PUT',
+          method: 'PATCH',
           url: '/api/tutorials/tutorialAirtableId',
           payload: {
             data: {
@@ -410,7 +410,7 @@ describe('Application | Route | Tutorials', () => {
 
         // when
         const response = await server.inject({
-          method: 'PUT',
+          method: 'PATCH',
           url: '/api/tutorials/tutorialAirtableId',
           payload: {
             data: {
@@ -464,7 +464,7 @@ describe('Application | Route | Tutorials', () => {
 
         // when
         const response = await server.inject({
-          method: 'PUT',
+          method: 'PATCH',
           url: '/api/tutorials/tutorialAirtableId',
           payload: {
             data: {
@@ -569,7 +569,7 @@ describe('Application | Route | Tutorials', () => {
 
         // when
         const response = await server.inject({
-          method: 'PUT',
+          method: 'PATCH',
           url: '/api/tutorials/tutorialAirtableId',
           payload: {
             data: {
