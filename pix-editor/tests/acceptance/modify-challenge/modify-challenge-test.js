@@ -360,24 +360,31 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
       await clickByText('Incompatible iPad certif');
+
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
       await waitForSelectToBeClosed(screen);
+
       await clickByText('Non voyant');
       await click(await screen.findByRole('option', { name: 'OK' }));
       await waitForSelectToBeClosed(screen);
+
       await clickByText('Daltonien');
       await click(await screen.findByRole('option', { name: 'KO' }));
       await waitForSelectToBeClosed(screen);
+
       await clickByText('Spoil');
       await click(await screen.findByRole('option', { name: 'Facilement Sp' }));
       await waitForSelectToBeClosed(screen);
+
       await clickByText('Responsive');
-      await waitForSelectToBeClosed(screen);
       await click(await screen.findByRole('option', { name: 'Non' }));
+      await waitForSelectToBeClosed(screen);
+
       await clickByText('Géographie');
       await click(await screen.findByRole('option', { name: 'Japon' }));
       await waitForSelectToBeClosed(screen);
+
       await click(find('[data-test-save-challenge-button]'));
       await click(find('[data-test-confirm-log-approve]'));
 
