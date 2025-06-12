@@ -16,49 +16,45 @@ export default class Tutorials extends Component {
   @tracked tutorialList = [];
   @tracked displayTutorialPopin = false;
   @tracked tutorial = null;
-  defaultTitle = '';
+  @tracked isTutorialQueryOngoing = false;
 
   @service store;
-
   @service idGenerator;
   @service notify;
   @service loader;
 
   async _searchTutorial(query) {
-    let tagSearch = false;
+    this.emptyTutorialList();
+    if (!query || query.length === 0 || query === '>') {
+      return;
+    }
+    this.isTutorialQueryOngoing = true;
+    const filter = {};
     if (query.startsWith('>')) {
-      tagSearch = query
+      filter.tagTitles = query
         .split('>')
         .filter((tag) => tag)
-        .map((tag) => `FIND('${tag.trim()}', LOWER(Tags))`)
-        .join(', ');
+        .map((tag) => tag.trim());
+    } else {
+      filter.title = query.replace(/'/g, '\\\'');
     }
-    const tutorials = await this.store.query('tutorial', {
-      filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query.replace(/'/g, '\\\'')}', LOWER(Titre))`,
-      maxRecords: 100,
-      sort: [{ field: 'Titre', direction: 'asc' }],
-    });
-
-    if (tutorials.length === 0) {
-      this.setTutorialList([]);
+    try {
+      const tutorials = await this.store.query('tutorial', { filter });
+      const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
+      await Promise.all(tagsLoad);
+      this.tutorialList = [...tutorials];
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.isTutorialQueryOngoing = false;
     }
-
-    const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
-    await Promise.all(tagsLoad);
-    return tutorials.map((tutorial) => {
-      const haveTags = tagSearch ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
-      return {
-        label: tutorial.title,
-        category: `TAG : ${haveTags ? tutorial.tagsTitle : 'Aucun'}`,
-        value: tutorial.id,
-      };
-    });
   }
 
   @action
-  async attachTutorial(itemId) {
-    const tutorial = await this.store.findRecord('tutorial', itemId);
+  async attachTutorial(tutorialOption) {
+    const tutorial = await this.store.findRecord('tutorial', tutorialOption.id);
     this.args.addTutorial(this.args.tutorials, tutorial);
+    this.emptyTutorialList();
   }
 
   @action
@@ -76,7 +72,7 @@ export default class Tutorials extends Component {
 
   @action
   async getSearchTutorialResults(query) {
-    this.tutorialList = await this._searchTutorial(query.toLowerCase());
+    await this._searchTutorial(query.toLowerCase());
   }
 
   @action
@@ -112,12 +108,8 @@ export default class Tutorials extends Component {
   }
 
   @action
-  setTutorialList(list) {
-    this.tutorialList = list;
-  }
-
-  get selectId() {
-    return `select-tutorial-${this.args.searchId}`;
+  emptyTutorialList() {
+    this.tutorialList = [];
   }
 
   get searchLabel() {
@@ -126,19 +118,24 @@ export default class Tutorials extends Component {
 
   <template>
     <div class="field {{if this.edition "" " disabled"}}">
-      <label for={{this.selectId}}>
-        {{@title}}
-      </label>
       {{#if @edition}}
         <SelectSearch
-          @selectId={{this.selectId}}
-          @resultList={{this.tutorialList}}
-          @setResultList={{this.setTutorialList}}
-          @onChange={{this.attachTutorial}}
+          @onSearch={{this.getSearchTutorialResults}}
+          @onSelect={{this.attachTutorial}}
+          @options={{this.tutorialList}}
+          @isLoading={{this.isTutorialQueryOngoing}}
+          @searchPlaceholder="Exemple: Rédiger un e-mail"
           @searchLabel={{this.searchLabel}}
-          @searchPlaceholder="Commencer la recherche par > pour rechercher par Tag"
-          @getResults={{this.getSearchTutorialResults}}
-        />
+        >
+          <:option as |tutorial|>
+            <p class="tutorial-option">
+              <span class="tutorial-option__title">{{tutorial.title}}</span>
+              <span class="tutorial-option__tags">{{tutorial.tagsTitle}}</span>
+            </p>
+          </:option>
+        </SelectSearch>
+      {{else}}
+        <p class="pix-label">{{@title}}</p>
       {{/if}}
 
     </div>
@@ -177,9 +174,9 @@ export default class Tutorials extends Component {
               </div>
             </div>
           {{else if (not @edition)}}
-            <div class="card">
+              <div class="card">
               <div class="content">
-                aucun élément
+                Aucun tutoriel
               </div>
             </div>
           {{/each}}

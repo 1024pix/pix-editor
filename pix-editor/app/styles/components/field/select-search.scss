@@ -1,0 +1,39 @@
+@use 'pix-design-tokens/shadows' as *;
+
+.select-search {
+  position: relative;
+
+  .pix-search-input {
+    width: 50%;
+  }
+
+  .results-list {
+    position: absolute;
+    z-index: 10;
+    max-height: 150px;
+    width: 50%;
+    overflow-y: auto;
+    background: var(--pix-neutral-0);
+    border-radius: 0.25rem;
+    @extend %pix-shadow-xs;
+  }
+
+  .result-option {
+    padding: 0.75rem;
+    width: 100%;
+    text-align: start;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--pix-neutral-100);
+    }
+
+    &:hover {
+      color: var(--pix-tertiary-500);
+      background: var(--pix-neutral-20);
+    }
+  }
+
+  .result-info {
+    padding: 0.75rem;
+  }
+}

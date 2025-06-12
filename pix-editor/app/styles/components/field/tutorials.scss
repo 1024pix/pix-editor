@@ -30,3 +30,18 @@
 #container-select-tutorial-more {
   width: 100%;
 }
+
+.tutorial-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__title {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  &__tags {
+    color: var(--pix-neutral-500);
+  }
+}
