@@ -189,10 +189,10 @@ export default class SingleController extends Controller {
     const challenges = this.skill.challengesArray;
     return this.confirm.ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
       .then(() => {
-        this._displayChangelogPopIn(this.intl.t('skill.changelog.archive'), (changelogValue)=>{
+        this._displayChangelogPopIn(this.intl.t('skill.changelog.archive'), (changelogValue) => {
           this.loader.start(this.intl.t('skill.archive.loader_start'));
           return this.skill.archive()
-            .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
+            .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
             .then(() => {
               this.close();
               this.notify.message(this.intl.t('skill.archive.success'));
@@ -200,7 +200,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter((challenge) => challenge.isDraft).map((challenge) => {
                 return challenge.archive()
-                  .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name })))
+                  .then(() => this._handleChallengeChangelog(challenge, this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message(this.intl.t('skill.archive.challenge.prototype'));
@@ -240,7 +240,7 @@ export default class SingleController extends Controller {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.obsolete'), (changelogValue) => {
           this.loader.start(this.intl.t('skill.obsolete.loader_start'));
           return this.skill.obsolete()
-            .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
+            .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
               this.notify.message(this.intl.t('skill.obsolete.success'));
@@ -248,7 +248,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter((challenge) => !challenge.isObsolete).map((challenge) => {
                 return challenge.obsolete()
-                  .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
+                  .then(() => this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message(this.intl.t('skill.obsolete.challenge.prototype'));
@@ -309,7 +309,7 @@ export default class SingleController extends Controller {
     if (!changelogValue) {
       return;
     }
-    const entry = this.store.createRecord('changelogEntry', {
+    const entry = this.store.createRecord('changelog-entry', {
       text: changelogValue,
       recordId: skill.pixId,
       skillName: skill.name,
@@ -323,7 +323,7 @@ export default class SingleController extends Controller {
   }
 
   _handleChallengeChangelog(challenge, changelogValue) {
-    const entry = this.store.createRecord('changelogEntry', {
+    const entry = this.store.createRecord('changelog-entry', {
       text: changelogValue,
       recordId: challenge.id,
       author: this.config.author,

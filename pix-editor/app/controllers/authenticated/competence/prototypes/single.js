@@ -744,7 +744,7 @@ export default class SingleController extends Controller {
     if (!changelog) {
       return;
     }
-    const entry = this.store.createRecord('changelogEntry', {
+    const entry = this.store.createRecord('changelog-entry', {
       text: changelog,
       recordId: challenge.id,
       author: this.config.author,

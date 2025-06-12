@@ -254,7 +254,7 @@ function routes() {
     const skill = schema.skills.find(skillId);
     challenge.updatedAt = new Date();
 
-    const createdChallenge = schema.challenges.create(challenge);
+    const createdChallenge = schema.challenges.create({ ...challenge, id: challenge.data.id });
     createdChallenge.skill = skill;
 
     skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
