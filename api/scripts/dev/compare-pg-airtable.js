@@ -1,0 +1,20 @@
+import { Script } from '../../lib/application/scripts/script.js';
+import { ScriptRunner } from '../../lib/application/scripts/script-runner.js';
+import compareContentPgAirtableJobProcessor
+  from '../../lib/infrastructure/scheduled-jobs/compare-content-pg-airtable-job-processor.js';
+
+export class ComparePgAirtable extends Script {
+  constructor() {
+    super({
+      description: 'Manual trigger of the job "compare-content-pg-airtable-job-processor.js"',
+      permanent: false,
+      options: {},
+    });
+  }
+
+  async handle({ options: _, logger }) {
+    await compareContentPgAirtableJobProcessor({ logger });
+  }
+}
+
+await ScriptRunner.execute(import.meta.url, ComparePgAirtable);
