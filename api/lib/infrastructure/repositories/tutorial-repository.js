@@ -44,6 +44,11 @@ export async function searchByTagTitles(tagTitles) {
   return datasourceTutorials.map(toDomain);
 }
 
+export async function list() {
+  const datasourceTutorials = await tutorialDatasource.list();
+  return datasourceTutorials.map(toDomain);
+}
+
 function toDomain(datasourceTutorial) {
   return new Tutorial(datasourceTutorial);
 }
