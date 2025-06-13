@@ -43,7 +43,7 @@ export default class SelectSearch extends Component {
   }
 
   <template>
-    <div id={{this.selectSearchId}} class="select-search">
+    <div id={{this.selectSearchId}} class="select-search" ...attributes>
       <PixSearchInput
         @placeholder={{@searchPlaceholder}}
         @debounceTimeInMs={{this.debounce}}

@@ -126,6 +126,7 @@ export default class Tutorials extends Component {
           @isLoading={{this.isTutorialQueryOngoing}}
           @searchPlaceholder="Exemple: Rédiger un e-mail"
           @searchLabel={{this.searchLabel}}
+          class="tutorial-search"
         >
           <:option as |tutorial|>
             <p class="tutorial-option">

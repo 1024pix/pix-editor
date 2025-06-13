@@ -4,14 +4,14 @@
   position: relative;
 
   .pix-search-input {
-    width: 50%;
+    width: 100%;
   }
 
   .results-list {
     position: absolute;
     z-index: 10;
     max-height: 150px;
-    width: 50%;
+    width: 100%;
     overflow-y: auto;
     background: var(--pix-neutral-0);
     border-radius: 0.25rem;
