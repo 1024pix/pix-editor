@@ -50,7 +50,7 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
     expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith('recTube1');
     expect(updateStub).toHaveBeenCalledWith(tubeUpdates, thematicDestination);
     expect(tubeRepository.update).toHaveBeenCalledWith(tube);
-    expect(updatePixApiReleaseCache.onTubeUpdated).toHaveBeenCalledWith(updatedTube);
+    expect(updatePixApiReleaseCache.onTubeUpdated).toHaveBeenCalledWith(updatedTube, thematicDestination);
   });
 
   describe('when tube is not found', () => {

@@ -7,7 +7,6 @@ import {
   attachmentRepository,
   challengeRepository,
   localizedChallengeRepository,
-  thematicRepository,
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
@@ -16,6 +15,7 @@ import * as Sentry from '@sentry/node';
 
 /**
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
+ * @typedef {import('../../../lib/domain/models').Thematic} Thematic
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
  */
@@ -102,14 +102,14 @@ async function onTutorialCreatedOrUpdated(tutorial) {
 
 /**
  * @param {Tube} tube
- * @param {string} thematicId
+ * @param {Thematic} thematic
  */
-export async function onTubeCreated(tube, thematicId) {
+export async function onTubeCreated(tube, thematic) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
     await updatedRecordNotifier.notify({
       model: 'tubes',
-      updatedRecord: tubeTransformer.transformTube(tube, thematicId),
+      updatedRecord: tubeTransformer.forRelease(tube, thematic, []),
       pixApiClient,
     });
   } catch (err) {
@@ -120,19 +120,16 @@ export async function onTubeCreated(tube, thematicId) {
 
 /**
  * @param {Tube} tube
+ * @param {Thematic} thematic
  */
-export async function onTubeUpdated(tube) {
+export async function onTubeUpdated(tube, thematic) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
 
   try {
-    const [thematic, challenges] = await Promise.all([
-      thematicRepository.getByAirtableId(tube.thematicAirtableId),
-      challengeRepository.listValidPrototypesBySkillIds(tube.skillIds),
-    ]);
-
+    const challenges = await challengeRepository.listValidPrototypesBySkillIds(tube.skillIds);
     await updatedRecordNotifier.notify({
       model: 'tubes',
-      updatedRecord: tubeTransformer.transformTube(tube, thematic.id, challenges),
+      updatedRecord: tubeTransformer.forRelease(tube, thematic, challenges),
       pixApiClient,
     });
   } catch (err) {

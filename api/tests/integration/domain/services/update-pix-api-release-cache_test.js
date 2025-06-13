@@ -636,9 +636,10 @@ describe('Integration | Service | update pix api release cache', function() {
       it('should patch the tube', async function() {
         // given
         const tube = domainBuilder.buildTube({
+          thematicAirtableId: 'recThematicId',
           skillIds: [],
         });
-        const thematicId = 'thematic123';
+        const thematic = domainBuilder.buildThematic({ id: 'thematic123', airtableId: 'recThematicId' });
 
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
@@ -652,7 +653,7 @@ describe('Integration | Service | update pix api release cache', function() {
             practicalTitle_i18n: tube.practicalTitle_i18n,
             practicalDescription_i18n: tube.practicalDescription_i18n,
             competenceId: tube.competenceId,
-            thematicId: thematicId,
+            thematicId: thematic.id,
             skillIds: [],
             isMobileCompliant: false,
             isTabletCompliant: false,
@@ -661,7 +662,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(tube, thematicId);
+        await updatePixApiReleaseCache.onTubeCreated(tube, thematic);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -675,7 +676,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube(), 'recThematic1');
+        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube(), domainBuilder.buildThematic());
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -692,12 +693,8 @@ describe('Integration | Service | update pix api release cache', function() {
 
       it('should patch the tube', async function() {
         // given
-        const tube = domainBuilder.buildTube();
-        const thematicId = 'thematicId';
-        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
-          id: thematicId,
-          airtableId: tube.thematicAirtableId,
-        }));
+        const tube = domainBuilder.buildTube({ thematicAirtableId: 'recThematicId', });
+        const thematic = domainBuilder.buildThematic({ id: 'thematic123', airtableId: 'recThematicId' });
         const challenge = domainBuilder.buildChallengeDatasourceObject({
           skillId: tube.skillIds[0],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -711,12 +708,6 @@ describe('Integration | Service | update pix api release cache', function() {
           challengeId: challenge.id,
           locale: challenge.locales[0],
         });
-
-        const airtableThematicScope = nock('https://api.airtable.com')
-          .get(`/v0/airtableBaseValue/Thematiques/${tube.thematicAirtableId}`)
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableThematic);
 
         const airtableChallengesScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Epreuves')
@@ -745,7 +736,7 @@ describe('Integration | Service | update pix api release cache', function() {
             practicalTitle_i18n: tube.practicalTitle_i18n,
             practicalDescription_i18n: tube.practicalDescription_i18n,
             competenceId: tube.competenceId,
-            thematicId: thematicId,
+            thematicId: thematic.id,
             skillIds: tube.skillIds,
             isMobileCompliant: true,
             isTabletCompliant: true,
@@ -754,11 +745,10 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTubeUpdated(tube);
+        await updatePixApiReleaseCache.onTubeUpdated(tube, thematic);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
-        expect(airtableThematicScope.isDone()).to.be.true;
         expect(airtableChallengesScope.isDone()).to.be.true;
       });
     });

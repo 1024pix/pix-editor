@@ -1,4 +1,4 @@
-import { tubeRepository, thematicRepository } from '../../infrastructure/repositories/index.js';
+import { thematicRepository, tubeRepository } from '../../infrastructure/repositories/index.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 import { NotFoundError } from '../errors.js';
 
@@ -10,6 +10,6 @@ export async function updateTube(tubeAirtableId, tubeUpdates, dependencies = { t
 
   const updatedTube = await dependencies.tubeRepository.update(tube);
 
-  await dependencies.updatePixApiReleaseCache.onTubeUpdated(updatedTube);
+  await dependencies.updatePixApiReleaseCache.onTubeUpdated(updatedTube, thematic);
   return updatedTube;
 }

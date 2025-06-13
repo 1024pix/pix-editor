@@ -78,7 +78,6 @@ export async function getLearningContentForReplication() {
   const transformedAreas = areaTransformer.filterAreasFields(areas);
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
-  const transformedTubes = tubeTransformer.transformTubes(tubes, thematics, challenges);
 
   const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
@@ -123,7 +122,7 @@ export async function getLearningContentForReplication() {
     areas: transformedAreas,
     competences: transformedCompetences,
     thematics: transformedThematics,
-    tubes: transformedTubes,
+    tubes: tubeTransformer.forReplication(tubes, thematics, challenges),
     skills,
     challenges: allTranslatedChallenges,
     attachments: translatedAttachments,
