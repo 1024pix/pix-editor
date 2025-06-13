@@ -66,7 +66,7 @@ export default class ChallengeViewProduction extends Component {
         @value={{@challenge.type}}
         @isDisabled={{true}}
       >
-        <:label>Type</:label>
+        <:label>Modalité</:label>
       </PixSelect>
 
       {{#if @challenge.isTextBased}}

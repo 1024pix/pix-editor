@@ -16,7 +16,7 @@ export default class CompetencesList extends SortedList {
     name: 'Consigne',
     valuePath: 'instruction',
   }, {
-    name: 'Type',
+    name: 'Modalité',
     valuePath: 'type',
     maxWidth: 150,
   }, {
@@ -33,13 +33,13 @@ export default class CompetencesList extends SortedList {
     'status': 'string',
   };
 
+  get current() {
+    return this.currentData.getPrototype();
+  }
+
   @action
   selectRow(row) {
     this.router.transitionTo(this.args.link, this.args.competenceModel, row);
-  }
-
-  get current() {
-    return this.currentData.getPrototype();
   }
 
 }
