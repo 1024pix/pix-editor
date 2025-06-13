@@ -9,5 +9,5 @@ export async function deleteAttachment({
   if (!attachmentToDelete)
     throw new NotFoundError(`Attachment d'id ${attachmentId} n'existe pas`);
   await attachmentRepository.remove(attachmentId);
-  await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: attachmentToDelete });
+  await updatePixApiReleaseCache.onAttachmentDeleted(attachmentToDelete);
 }
