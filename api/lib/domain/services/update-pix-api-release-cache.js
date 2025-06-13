@@ -87,7 +87,7 @@ export async function onTutorialUpdated(tutorial) {
 async function onTutorialCreatedOrUpdated(tutorial) {
   if (pixApiClient.isPixApiCachePatchingEnabled()) {
     try {
-      const [tutorialForRelease] = tutorialTransformer.filterTutorialsFields([tutorial]);
+      const tutorialForRelease = tutorialTransformer.forRelease(tutorial);
       await updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tutorials',

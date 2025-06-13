@@ -1,4 +1,4 @@
-import { attachmentDatasource, tutorialDatasource, } from '../datasources/airtable/index.js';
+import { attachmentDatasource, } from '../datasources/airtable/index.js';
 import {
   areaRepository,
   challengeRepository,
@@ -8,6 +8,7 @@ import {
   skillRepository,
   thematicRepository,
   tubeRepository,
+  tutorialRepository,
 } from './index.js';
 import {
   areaTransformer,
@@ -96,7 +97,7 @@ async function _getCurrentContent() {
     skillRepository.list(),
     thematicRepository.list(),
     tubeRepository.list(),
-    tutorialDatasource.list(),
+    tutorialRepository.list(),
     getStaticCourses(),
     missionRepository.list(),
   ]);
@@ -114,7 +115,6 @@ async function _getCurrentContent() {
 
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
-  const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
@@ -125,7 +125,7 @@ async function _getCurrentContent() {
     tubes: transformedTubes,
     skills: filteredSkills,
     challenges: transformedChallenges,
-    tutorials: filteredTutorials,
+    tutorials: tutorialTransformer.forRelease(tutorials),
     courses,
     missions: transformedMissions,
   };

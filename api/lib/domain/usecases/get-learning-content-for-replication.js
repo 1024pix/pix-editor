@@ -1,4 +1,3 @@
-import { tutorialDatasource } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
   attachmentRepository,
@@ -10,6 +9,7 @@ import {
   thematicRepository,
   translationRepository,
   tubeRepository,
+  tutorialRepository,
 } from '../../infrastructure/repositories/index.js';
 import {
   areaTransformer,
@@ -19,6 +19,7 @@ import {
   missionTransformer,
   thematicTransformer,
   tubeTransformer,
+  tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import { prefixFor } from '../../infrastructure/translations/challenge.js';
@@ -61,7 +62,7 @@ export async function getLearningContentForReplication() {
     skillRepository.list(),
     challengeRepository.list(),
     attachmentRepository.list(),
-    tutorialDatasource.list(),
+    tutorialRepository.list(),
     _getCoursesFromPGForReplication(),
     missionRepository.list(),
     translationRepository.list(),
@@ -126,7 +127,7 @@ export async function getLearningContentForReplication() {
     skills,
     challenges: allTranslatedChallenges,
     attachments: translatedAttachments,
-    tutorials,
+    tutorials: tutorialTransformer.forReplication(tutorials),
     courses,
     missions: transformedMissions,
     translations: translationsForReplication.sort(byKeyAndLocale),
