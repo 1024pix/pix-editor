@@ -75,7 +75,7 @@ async function onTutorialCreatedOrUpdated({ tutorial }) {
 
 /**
  * @param {import('../models'.Tube)} tube
- * @param {string} thematicAirtableId
+ * @param {string} thematicId
  */
 export async function onTubeCreated(tube, thematicId) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
@@ -92,7 +92,7 @@ export async function onTubeCreated(tube, thematicId) {
 }
 
 /**
- * @param {import('../models'.Tube} tube
+ * @param {import('../models'.Tube)} tube
  */
 export async function onTubeUpdated(tube) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
