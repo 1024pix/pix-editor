@@ -43,13 +43,16 @@ export class Tube {
 
   /**
    * @param {Tube} updates
+   * @param {import('./Thematic.js').Thematic} thematic
    */
-  update(updates) {
+  update(updates, thematic) {
     this.name = updates.name;
     this.index = updates.index;
     this.practicalTitle_i18n.fr = updates.practicalTitle_i18n.fr;
     this.practicalTitle_i18n.en = updates.practicalTitle_i18n.en;
     this.practicalDescription_i18n.fr = updates.practicalDescription_i18n.fr;
     this.practicalDescription_i18n.en = updates.practicalDescription_i18n.en;
+    this.thematicAirtableId = thematic.airtableId;
+    this.competenceAirtableId = thematic.competenceAirtableId;
   }
 }

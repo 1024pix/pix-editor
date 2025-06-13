@@ -3,7 +3,7 @@ import nock from 'nock';
 
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
-import { tubeDatasource } from '../../../lib/infrastructure/datasources/airtable/tube-datasource.js';
+import { tubeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Application | Route | Tubes', () => {
@@ -769,9 +769,18 @@ describe('Application | Route | Tubes', () => {
           airtableId: 'recTube1',
           name: '@test',
           index: 1,
-          competenceAirtableId: 'recCompetence1',
-          thematicAirtableId: 'recThematic1',
+          competenceAirtableId: 'recCompetence0',
+          thematicAirtableId: 'recThematic0',
           skillAirtableIds: ['recSkill1', 'recSkill2'],
+        }));
+        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          competenceId: 'recCompetence1',
+          competenceAirtableId: 'recCompetence1',
+          tubeIds: ['tubeId0'],
+          tubeAirtableIds: ['recTube0'],
+          index: 0
         }));
 
         airtableTubeScope = nock('https://api.airtable.com')
@@ -780,10 +789,18 @@ describe('Application | Route | Tubes', () => {
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, airtableTube);
 
+        airtableTubeScope = nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Thematiques/recThematic1')
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableThematic);
+
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Titre du tube' });
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'en', value: 'Tube’s title' });
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalDescription', locale: 'fr', value: 'Description du tube' });
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalDescription', locale: 'en', value: 'Tube’s description' });
+
+        databaseBuilder.factory.buildTranslation({ key: 'thematic.thematic1.name', locale: 'fr', value: 'Nom de la thématique' });
 
         await databaseBuilder.commit();
 
@@ -839,12 +856,6 @@ describe('Application | Route | Tubes', () => {
                 'practical-description-en': 'Tube’s description after',
               },
               relationships: {
-                'competence': {
-                  data: {
-                    type: 'competences',
-                    id: 'recCompetence1',
-                  },
-                },
                 'theme': {
                   data: {
                     type: 'themes',
@@ -917,6 +928,7 @@ describe('Application | Route | Tubes', () => {
         expect(airtableTubeScope.isDone()).toBe(true);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+          { key: 'thematic.thematic1.name', locale: 'fr', value: 'Nom de la thématique' },
           { key: 'tube.tube1.practicalDescription', locale: 'en', value: 'Tube’s description after' },
           { key: 'tube.tube1.practicalDescription', locale: 'fr', value: 'Description tube après' },
           { key: 'tube.tube1.practicalTitle', locale: 'en', value: 'Tube’s title after' },
