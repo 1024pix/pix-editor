@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { TutorialForRelease } from '../../domain/models/release/index.js';
 import { TutorialForReplication } from '../../domain/models/replication/index.js';
 
@@ -8,37 +7,24 @@ import { TutorialForReplication } from '../../domain/models/replication/index.js
  * @typedef {import('../../../lib/domain/models/replication').TutorialForReplication} TutorialForReplication
  */
 
-export function filterTutorialsFields(tutorials) {
-  const fieldsToInclude = [
-    'id',
-    'duration',
-    'format',
-    'link',
-    'source',
-    'title',
-    'locale',
-  ];
-  return tutorials.map((tutorial) => _.pick(tutorial, fieldsToInclude));
-}
-
 /**
- * @param {Tutorial|Tutorial[]} tutorial
+ * @param {Tutorial|Tutorial[]} tutorials
  * @returns {TutorialForRelease|TutorialForRelease[]}
  */
-export function forRelease(tutorial) {
-  if (Array.isArray(tutorial)) {
-    return tutorial.map((oneTutorial) => new TutorialForRelease(oneTutorial));
+export function forRelease(tutorials) {
+  if (Array.isArray(tutorials)) {
+    return tutorials.map((tutorial) => new TutorialForRelease(tutorial));
   }
-  return new TutorialForRelease(tutorial);
+  return new TutorialForRelease(tutorials);
 }
 
 /**
- * @param {Tutorial|Tutorial[]} tutorial
+ * @param {Tutorial|Tutorial[]} tutorials
  * @returns {TutorialForReplication|TutorialForReplication[]}
  */
-export function forReplication(tutorial) {
-  if (Array.isArray(tutorial)) {
-    return tutorial.map((oneTutorial) => new TutorialForReplication(oneTutorial));
+export function forReplication(tutorials) {
+  if (Array.isArray(tutorials)) {
+    return tutorials.map((tutorial) => new TutorialForReplication(tutorial));
   }
-  return new TutorialForReplication(tutorial);
+  return new TutorialForReplication(tutorials);
 }

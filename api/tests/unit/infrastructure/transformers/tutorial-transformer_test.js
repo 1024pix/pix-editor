@@ -1,27 +1,11 @@
 import { describe, describe as context, expect, it } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
-import {
-  filterTutorialsFields,
-  forRelease,
-  forReplication
-} from '../../../../lib/infrastructure/transformers/tutorial-transformer.js';
+import { forRelease, forReplication } from '../../../../lib/infrastructure/transformers/tutorial-transformer.js';
 import { Tutorial } from '../../../../lib/domain/models/index.js';
 import { TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 import { TutorialForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Unit | Infrastructure | tutorial-transformer', function() {
-
-  it('should only keep useful fields', function() {
-    const airtableTutorials = [domainBuilder.buildTutorialDatasourceObject()];
-
-    const tutorials = filterTutorialsFields(airtableTutorials);
-
-    expect(tutorials.length).to.equal(1);
-    expect(tutorials[0].duration).to.exist;
-    expect(tutorials[0].tutorialForSkills).to.not.exist;
-    expect(tutorials[0].furtherInformation).to.not.exist;
-  });
-
+  
   describe('#forRelease', function() {
     context('when providing a single Tutorial', function() {
       it('should transform it into a single TutorialForRelease', function() {
