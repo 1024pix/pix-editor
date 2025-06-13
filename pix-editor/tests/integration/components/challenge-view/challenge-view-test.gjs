@@ -71,7 +71,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     // then
     assert.dom(screen.getByLabelText('Consigne')).hasText('instructions');
     assert.dom(screen.getByLabelText('Alternative textuelle')).hasText('alternativeInstruction');
-    assert.dom(screen.getByLabelText('Type')).hasText('QROC');
+    assert.dom(screen.getByLabelText('Modalité')).hasText('QROC');
     assert.dom(screen.getByLabelText('Format')).hasValue('format');
     assert.dom(screen.getByLabelText('Propositions')).hasText('suggestion');
     assert.dom(screen.getByLabelText('Réponses')).hasText('answers');

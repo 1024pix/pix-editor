@@ -59,7 +59,7 @@ module('Integration | Component | challenge-form', function(hooks) {
 
     // When
     screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
-    await click(screen.getByRole('button', { name: 'Type' }));
+    await click(screen.getByRole('button', { name: 'Modalité' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));
 
@@ -87,7 +87,7 @@ module('Integration | Component | challenge-form', function(hooks) {
 
     // When
     screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
-    await click(screen.getByRole('button', { name: 'Type' }));
+    await click(screen.getByRole('button', { name: 'Modalité' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));
 
