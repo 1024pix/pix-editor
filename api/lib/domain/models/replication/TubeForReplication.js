@@ -1,4 +1,4 @@
-export class TubeForRelease {
+export class TubeForReplication {
   constructor({
     id,
     name,

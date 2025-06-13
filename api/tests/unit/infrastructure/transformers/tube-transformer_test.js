@@ -1,9 +1,302 @@
-import { describe, expect, it } from 'vitest';
+import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import {  transformTube, transformTubes } from '../../../../lib/infrastructure/transformers/tube-transformer.js';
-import { Challenge } from '../../../../lib/domain/models/Challenge.js';
+import {
+  forRelease,
+  forReplication,
+  transformTube,
+  transformTubes
+} from '../../../../lib/infrastructure/transformers/tube-transformer.js';
+import { Challenge } from '../../../../lib/domain/models/index.js';
+import { TubeForRelease } from '../../../../lib/domain/models/release/index.js';
+import { TubeForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Unit | Infrastructure | tube-transformer', function() {
+
+  describe('#forRelease', function() {
+
+    context('when providing a single Tube', function() {
+      it('should transform it into a single TubeForRelease', function() {
+        // given
+        const tube = domainBuilder.buildTube({
+          id: 'tube1',
+          competenceId: 'competence1',
+          name: '@test',
+          practicalTitle_i18n: {
+            fr: 'Titre',
+            en: 'Title',
+          },
+          practicalDescription_i18n: {
+            fr: 'La description',
+            en: 'The description',
+          },
+          skillIds: ['skill1', 'skill2'],
+        });
+        const thematic = domainBuilder.buildThematic({ id: 'thematic1' });
+        const challenges = [
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        ];
+
+        // when
+        const actualTubeForRelease = forRelease(tube, thematic, challenges);
+
+        // then
+        expect(actualTubeForRelease).toStrictEqual(new TubeForRelease({
+          id: 'tube1',
+          competenceId: 'competence1',
+          thematicId: 'thematic1',
+          name: '@test',
+          practicalTitle_i18n: {
+            fr: 'Titre',
+            en: 'Title',
+          },
+          practicalDescription_i18n: {
+            fr: 'La description',
+            en: 'The description',
+          },
+          skillIds: ['skill1', 'skill2'],
+          isMobileCompliant: true,
+          isTabletCompliant: false,
+        }));
+      });
+    });
+
+    context('when providing several Tubes', function() {
+      it('should transform them into several TubesForRelease', function() {
+        // given
+        const tubes = [
+          domainBuilder.buildTube({
+            id: 'tube1',
+            thematicAirtableId: 'recThematic1',
+            competenceId: 'competence1',
+            name: '@test',
+            practicalTitle_i18n: {
+              fr: 'Titre 1',
+              en: 'Title 1',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 1',
+              en: 'The description 1',
+            },
+            skillIds: ['skill1'],
+          }),
+          domainBuilder.buildTube({
+            id: 'tube2',
+            thematicAirtableId: 'recThematic2',
+            competenceId: 'competence2',
+            name: '@pouet',
+            practicalTitle_i18n: {
+              fr: 'Titre 2',
+              en: 'Title 2',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 2',
+              en: 'The description 2',
+            },
+            skillIds: ['skill2'],
+          }),
+        ];
+        const thematics = [
+          domainBuilder.buildThematic({ airtableId: 'recThematic1', id: 'thematic1' }),
+          domainBuilder.buildThematic({ airtableId: 'recThematic2', id: 'thematic2' }),
+        ];
+        const challenges = [
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        ];
+
+        // when
+        const actualTubesForRelease = forRelease(tubes, thematics, challenges);
+
+        // then
+        expect(actualTubesForRelease).toStrictEqual([
+          new TubeForRelease({
+            id: 'tube1',
+            competenceId: 'competence1',
+            thematicId: 'thematic1',
+            name: '@test',
+            practicalTitle_i18n: {
+              fr: 'Titre 1',
+              en: 'Title 1',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 1',
+              en: 'The description 1',
+            },
+            skillIds: ['skill1'],
+            isMobileCompliant: true,
+            isTabletCompliant: false,
+          }),
+          new TubeForRelease({
+            id: 'tube2',
+            competenceId: 'competence2',
+            thematicId: 'thematic2',
+            name: '@pouet',
+            practicalTitle_i18n: {
+              fr: 'Titre 2',
+              en: 'Title 2',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 2',
+              en: 'The description 2',
+            },
+            skillIds: ['skill2'],
+            isMobileCompliant: true,
+            isTabletCompliant: true,
+          }),
+        ]);
+      });
+    });
+  });
+
+  describe('#forReplication', function() {
+
+    context('when providing a single Tube', function() {
+      it('should transform it into a single TubeForReplication', function() {
+        // given
+        const tube = domainBuilder.buildTube({
+          id: 'tube1',
+          competenceId: 'competence1',
+          name: '@test',
+          practicalTitle_i18n: {
+            fr: 'Titre',
+            en: 'Title',
+          },
+          practicalDescription_i18n: {
+            fr: 'La description',
+            en: 'The description',
+          },
+          skillIds: ['skill1', 'skill2'],
+        });
+        const thematic = domainBuilder.buildThematic({ id: 'thematic1' });
+        const challenges = [
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        ];
+
+        // when
+        const actualTubeForReplication = forReplication(tube, thematic, challenges);
+
+        // then
+        expect(actualTubeForReplication).toStrictEqual(new TubeForReplication({
+          id: 'tube1',
+          competenceId: 'competence1',
+          thematicId: 'thematic1',
+          name: '@test',
+          practicalTitle_i18n: {
+            fr: 'Titre',
+            en: 'Title',
+          },
+          practicalDescription_i18n: {
+            fr: 'La description',
+            en: 'The description',
+          },
+          skillIds: ['skill1', 'skill2'],
+          isMobileCompliant: true,
+          isTabletCompliant: false,
+        }));
+      });
+    });
+
+    context('when providing several Tubes', function() {
+      it('should transform them into several TubesForReplication', function() {
+        // given
+        const tubes = [
+          domainBuilder.buildTube({
+            id: 'tube1',
+            thematicAirtableId: 'recThematic1',
+            competenceId: 'competence1',
+            name: '@test',
+            practicalTitle_i18n: {
+              fr: 'Titre 1',
+              en: 'Title 1',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 1',
+              en: 'The description 1',
+            },
+            skillIds: ['skill1'],
+          }),
+          domainBuilder.buildTube({
+            id: 'tube2',
+            thematicAirtableId: 'recThematic2',
+            competenceId: 'competence2',
+            name: '@pouet',
+            practicalTitle_i18n: {
+              fr: 'Titre 2',
+              en: 'Title 2',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 2',
+              en: 'The description 2',
+            },
+            skillIds: ['skill2'],
+          }),
+        ];
+        const thematics = [
+          domainBuilder.buildThematic({ airtableId: 'recThematic1', id: 'thematic1' }),
+          domainBuilder.buildThematic({ airtableId: 'recThematic2', id: 'thematic2' }),
+        ];
+        const challenges = [
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
+          domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        ];
+
+        // when
+        const actualTubesForReplication = forReplication(tubes, thematics, challenges);
+
+        // then
+        expect(actualTubesForReplication).toStrictEqual([
+          new TubeForReplication({
+            id: 'tube1',
+            competenceId: 'competence1',
+            thematicId: 'thematic1',
+            name: '@test',
+            practicalTitle_i18n: {
+              fr: 'Titre 1',
+              en: 'Title 1',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 1',
+              en: 'The description 1',
+            },
+            skillIds: ['skill1'],
+            isMobileCompliant: true,
+            isTabletCompliant: false,
+          }),
+          new TubeForReplication({
+            id: 'tube2',
+            competenceId: 'competence2',
+            thematicId: 'thematic2',
+            name: '@pouet',
+            practicalTitle_i18n: {
+              fr: 'Titre 2',
+              en: 'Title 2',
+            },
+            practicalDescription_i18n: {
+              fr: 'La description 2',
+              en: 'The description 2',
+            },
+            skillIds: ['skill2'],
+            isMobileCompliant: true,
+            isTabletCompliant: true,
+          }),
+        ]);
+      });
+    });
+  });
 
   describe('#transformTube', () => {
     it('transforms tube for release', function() {
