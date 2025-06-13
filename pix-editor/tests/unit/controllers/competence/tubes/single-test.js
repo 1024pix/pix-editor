@@ -179,7 +179,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyMessageStub.calledWith('Tube mis à jour'));
-      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', newCompetence, controller.model));
+      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', newCompetence.id));
       assert.deepEqual(competence, newCompetence);
       assert.deepEqual(theme, newTheme);
     });

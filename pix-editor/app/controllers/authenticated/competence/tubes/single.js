@@ -128,7 +128,7 @@ export default class SingleController extends Controller {
       .then(() => {
         this.loader.stop();
         this.notify.message('Tube mis à jour');
-        this.router.transitionTo('authenticated.competence.tubes.single', newCompetence, tube);
+        this.router.transitionTo('authenticated.competence.skills', newCompetence.id);
       })
       .catch((error) => {
         console.error(error);
