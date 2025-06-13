@@ -19,9 +19,7 @@ export async function list() {
 export async function getByAirtableId(airtableId) {
   const datasourceThematic = await thematicDatasource.find(airtableId);
   if (!datasourceThematic) return null;
-
   const translations = await translationRepository.listByEntity(model, datasourceThematic.id);
-
   return toDomain(datasourceThematic, translations);
 }
 

@@ -7,14 +7,23 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
 
   const updatedTube = Symbol('updatedTube');
   const tubeUpdates = Symbol('tubeUpdates');
+  const thematicDestination = {
+    thematicAirtableId: 'thematicAirtableId',
+    competenceAirtableId: 'competenceAirtableId'
+  };
 
-  let tubeRepository, tube, updateStub, updatePixApiReleaseCache;
+  let tubeRepository, thematicRepository, tube, updateStub, updatePixApiReleaseCache;
 
   beforeEach(() => {
     tubeRepository = {
       getByAirtableId: vi.fn(),
       update: vi.fn(),
     };
+
+    thematicRepository = {
+      getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination)
+    };
+
     updatePixApiReleaseCache = {
       onTubeUpdated: vi.fn().mockResolvedValueOnce(),
     };
@@ -27,10 +36,11 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
     tubeRepository.update.mockResolvedValueOnce(updatedTube);
   });
 
-  it('updates thematic and saves it', async () => {
+  it('updates tube and saves it', async () => {
     // when
     const result = updateTube('recTube1', tubeUpdates, {
       tubeRepository,
+      thematicRepository,
       updatePixApiReleaseCache,
     });
 
@@ -38,12 +48,12 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
     await expect(result).resolves.toBe(updatedTube);
 
     expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith('recTube1');
-    expect(updateStub).toHaveBeenCalledWith(tubeUpdates);
+    expect(updateStub).toHaveBeenCalledWith(tubeUpdates, thematicDestination);
     expect(tubeRepository.update).toHaveBeenCalledWith(tube);
     expect(updatePixApiReleaseCache.onTubeUpdated).toHaveBeenCalledWith(updatedTube);
   });
 
-  describe('when thematic is not found', () => {
+  describe('when tube is not found', () => {
     it('throws a NotFoundError', async () => {
       // given
       tubeRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);

@@ -82,8 +82,18 @@ describe('Unit | Domain | Tube', () => {
         },
       });
 
+      const thematicDestination = domainBuilder.buildThematicDatasourceObject({
+        id: 'thematic1',
+        airtableId: 'recThematic1',
+        competenceId: 'recCompetence1',
+        competenceAirtableId: 'recCompetence1',
+        tubeIds: ['tubeId0'],
+        tubeAirtableIds: ['recTube0'],
+        index: 0
+      });
+
       // when
-      tube.update(tubeUpdates);
+      tube.update(tubeUpdates, thematicDestination);
 
       // then
       expect(tube).toHaveProperty('name', '@pouet');
@@ -92,6 +102,9 @@ describe('Unit | Domain | Tube', () => {
       expect(tube).toHaveProperty('practicalTitle_i18n.en', 'Title after');
       expect(tube).toHaveProperty('practicalDescription_i18n.fr', 'Description après');
       expect(tube).toHaveProperty('practicalDescription_i18n.en', 'Description after');
+
+      expect(tube).toHaveProperty('thematicAirtableId', 'recThematic1');
+      expect(tube).toHaveProperty('competenceAirtableId', 'recCompetence1');
     });
   });
 });
