@@ -109,7 +109,6 @@ async function _getCurrentContent() {
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
-  const transformedAreas = areaTransformer.filterAreasFields(areas);
 
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
@@ -117,7 +116,7 @@ async function _getCurrentContent() {
 
   return {
     frameworks: frameworkTransformer.forRelease(frameworks),
-    areas: transformedAreas,
+    areas: areaTransformer.forRelease(areas),
     competences: filteredCompetences,
     thematics: transformedThematics,
     tubes: tubeTransformer.forRelease(tubes, thematics, challenges),
