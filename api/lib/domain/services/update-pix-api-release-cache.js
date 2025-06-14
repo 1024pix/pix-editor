@@ -1,5 +1,6 @@
 import {
   createChallengeTransformer,
+  frameworkTransformer,
   tubeTransformer,
   tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -16,6 +17,7 @@ import * as Sentry from '@sentry/node';
 
 /**
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
+ * @typedef {import('../../../lib/domain/models').Framework} Framework
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
  **/
@@ -64,6 +66,24 @@ async function onAttachmentCreatedOrDeleted(attachment) {
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);
+  }
+}
+
+/**
+ * @param {Framework} framework
+ */
+export async function onFrameworkCreated(framework) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'frameworks',
+        updatedRecord: frameworkTransformer.forRelease(framework),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
   }
 }
 
