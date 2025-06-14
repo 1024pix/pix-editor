@@ -5,14 +5,21 @@ import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationH
 import { createServer } from '../../../server.js';
 import { thematicDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
+import * as config from '../../../lib/config.js';
 
 describe('Application | Route | Thematics', () => {
-  let editorUser, readonlyUser;
+  let editorUser, readonlyUser, originalPixApiUrlValue;
 
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     readonlyUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('GET /api/thematics/{thematicAirtableId}', () => {
@@ -361,7 +368,7 @@ describe('Application | Route | Thematics', () => {
   });
 
   describe('POST /api/thematics', async () => {
-    let airtableCreateThematicScope, airtableThematicsScope, pixApiCacheScope;
+    let airtableCreateThematicScope, airtableThematicsScope;
 
     context('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
@@ -491,25 +498,6 @@ describe('Application | Route | Thematics', () => {
           .reply(200, { records: [createdAirtableThematic] });
 
         vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('thematic3');
-
-        const pixApiToken = 'secret';
-        nock('https://api.test.pix.fr')
-          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
-        pixApiCacheScope = nock('https://api.test.pix.fr')
-          .patch('/api/cache/thematics/thematic3', {
-            id: createdAirtableThematic.fields['id persistant'],
-            name_i18n: {
-              fr: 'Troisième thématique',
-              en: 'Third thematic',
-            },
-            index: 2,
-            competenceId: 'competence1',
-            tubeIds: [],
-          })
-          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-          .reply(200);
       });
 
       afterEach(async () => {
@@ -575,7 +563,6 @@ describe('Application | Route | Thematics', () => {
 
         expect(airtableCreateThematicScope.isDone()).toBe(true);
         expect(airtableThematicsScope.isDone()).toBe(true);
-        expect(pixApiCacheScope.isDone()).toBe(true);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'thematic.thematic3.name', locale: 'en', value: 'Third thematic' },
@@ -586,7 +573,7 @@ describe('Application | Route | Thematics', () => {
   });
 
   describe('PATCH /api/thematics/{thematicAirtableId}', async () => {
-    let airtableUpdateThematicScope, airtableThematicScope, pixApiCacheScope;
+    let airtableUpdateThematicScope, airtableThematicScope;
 
     context('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
@@ -785,25 +772,6 @@ describe('Application | Route | Thematics', () => {
           .query({})
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, { records: [updatedAirtableThematic] });
-
-        const pixApiToken = 'secret';
-        nock('https://api.test.pix.fr')
-          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
-        pixApiCacheScope = nock('https://api.test.pix.fr')
-          .patch('/api/cache/thematics/thematic1', {
-            id: 'thematic1',
-            name_i18n: {
-              fr: '1ère thématique',
-              en: '1st thematic',
-            },
-            index: 2,
-            competenceId: 'competence1',
-            tubeIds: ['tube1', 'tube2'],
-          })
-          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-          .reply(200);
       });
 
       it('should respond with status 201 and created thematic', async () => {
@@ -886,7 +854,6 @@ describe('Application | Route | Thematics', () => {
 
         expect(airtableUpdateThematicScope.isDone()).toBe(true);
         expect(airtableThematicScope.isDone()).toBe(true);
-        expect(pixApiCacheScope.isDone()).toBe(true);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'thematic.thematic1.name', locale: 'en', value: '1st thematic' },
