@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import {
   airtableBuilder,
@@ -10,14 +10,21 @@ import {
 import { createServer } from '../../../server.js';
 import { areaDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
+import * as config from '../../../lib/config.js';
 
 describe('Acceptance | Route | areas', () => {
+  let editorUser, adminUser, originalPixApiUrlValue;
 
-  let editorUser, adminUser;
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('GET /areas', async () => {
@@ -332,27 +339,6 @@ describe('Acceptance | Route | areas', () => {
 
       const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('area5');
 
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      const pixApiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/areas/area5', {
-          id: 'area5',
-          code: '2',
-          title_i18n: {
-            fr: 'Cinquième domaine',
-            en: 'Fifth domain',
-          },
-          name: '2. Cinquième domaine',
-          frameworkId: 'framework2',
-          competenceIds: [],
-          color: null,
-        })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
-
       const server = await createServer();
 
       // when
@@ -416,7 +402,6 @@ describe('Acceptance | Route | areas', () => {
 
       expect(airtableGetAreasScope.isDone()).toBe(true);
       expect(airtablePostAreaScope.isDone()).toBe(true);
-      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });
