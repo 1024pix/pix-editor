@@ -11,11 +11,7 @@ import {
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
-import {
-  skillTransformer,
-  thematicTransformer,
-  tubeTransformer
-} from '../../../../lib/infrastructure/transformers/index.js';
+import { skillTransformer, tubeTransformer } from '../../../../lib/infrastructure/transformers/index.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
 import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
@@ -23,7 +19,6 @@ import * as updatePixApiReleaseCache from '../../../../lib/domain/services/updat
 
 describe('Unit | Domain | Usecases | create competence', function() {
 
-  const transformedThematic = Symbol('transformedThematic');
   const transformedTube = Symbol('transformedTube');
   const skillForRelease = Symbol('skillForRelease');
 
@@ -34,12 +29,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
     vi.spyOn(thematicRepository, 'create');
     vi.spyOn(tubeRepository, 'create');
     vi.spyOn(skillRepository, 'create');
-    vi.spyOn(thematicTransformer, 'filterThematicFields');
     vi.spyOn(tubeTransformer, 'transformTube');
     vi.spyOn(skillTransformer, 'forRelease');
     vi.spyOn(updatedRecordNotifier, 'notify');
     vi.spyOn(idGenerator, 'generateNewId');
     vi.spyOn(updatePixApiReleaseCache, 'onCompetenceCreated');
+    vi.spyOn(updatePixApiReleaseCache, 'onThematicCreated');
   });
 
   describe('when area id is unknown', () => {
@@ -96,11 +91,11 @@ describe('Unit | Domain | Usecases | create competence', function() {
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
       skillRepository.create.mockResolvedValueOnce(createdSkill);
-      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.forRelease.mockReturnValueOnce(skillForRelease);
       updatedRecordNotifier.notify.mockResolvedValue();
       updatePixApiReleaseCache.onCompetenceCreated.mockResolvedValue();
+      updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
@@ -147,15 +142,10 @@ describe('Unit | Domain | Usecases | create competence', function() {
         tubeAirtableId: createdTube.airtableId,
         hint_i18n: {},
       }));
-      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
       expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
-        model: 'thematics',
-        pixApiClient,
-        updatedRecord: transformedThematic,
-      });
+      updatePixApiReleaseCache.onThematicCreated.mockResolvedValue(createdThematic);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'tubes',
         pixApiClient,
@@ -194,11 +184,11 @@ describe('Unit | Domain | Usecases | create competence', function() {
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
       skillRepository.create.mockResolvedValueOnce(createdSkill);
-      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.forRelease.mockReturnValueOnce(skillForRelease);
       updatedRecordNotifier.notify.mockResolvedValue();
       updatePixApiReleaseCache.onCompetenceCreated.mockResolvedValue();
+      updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
@@ -245,15 +235,10 @@ describe('Unit | Domain | Usecases | create competence', function() {
         tubeAirtableId: createdTube.airtableId,
         hint_i18n: {},
       }));
-      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
       expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
-        model: 'thematics',
-        pixApiClient,
-        updatedRecord: transformedThematic,
-      });
+      expect(updatePixApiReleaseCache.onThematicCreated).toHaveBeenCalledWith(createdThematic);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'tubes',
         pixApiClient,
@@ -291,11 +276,11 @@ describe('Unit | Domain | Usecases | create competence', function() {
       thematicRepository.create.mockResolvedValueOnce(createdThematic);
       tubeRepository.create.mockResolvedValueOnce(createdTube);
       skillRepository.create.mockResolvedValueOnce(createdSkill);
-      thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
       tubeTransformer.transformTube.mockReturnValueOnce(transformedTube);
       skillTransformer.forRelease.mockReturnValueOnce(skillForRelease);
       updatedRecordNotifier.notify.mockRejectedValue(new Error());
       updatePixApiReleaseCache.onCompetenceCreated.mockResolvedValue();
+      updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
       const competence = domainBuilder.buildCompetence({
@@ -342,15 +327,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
         tubeAirtableId: createdTube.airtableId,
         hint_i18n: {},
       }));
-      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(createdThematic);
-      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
-        model: 'thematics',
-        pixApiClient,
-        updatedRecord: transformedThematic,
-      });
+      expect(updatePixApiReleaseCache.onThematicCreated).toHaveBeenCalledWith(createdThematic);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'tubes',
         pixApiClient,

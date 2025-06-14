@@ -9,11 +9,7 @@ import {
   thematicRepository,
   tubeRepository
 } from '../../infrastructure/repositories/index.js';
-import {
-  skillTransformer,
-  thematicTransformer,
-  tubeTransformer
-} from '../../infrastructure/transformers/index.js';
+import { skillTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
 import { Skill, Thematic, Tube } from '../models/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
@@ -77,11 +73,7 @@ export async function createCompetence(competence) {
   try {
     await Promise.all([
       updatePixApiReleaseCache.onCompetenceCreated(createdCompetence),
-      updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'thematics',
-        updatedRecord: thematicTransformer.filterThematicFields(createdWorkbenchThematic),
-      }),
+      updatePixApiReleaseCache.onThematicCreated(createdWorkbenchThematic),
       updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tubes',
