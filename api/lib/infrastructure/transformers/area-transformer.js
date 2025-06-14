@@ -1,9 +1,5 @@
 import { AreaForRelease } from '../../domain/models/release/index.js';
-import { AreaForReplication } from '../../domain/models/replication/index.js'; /**
- * @typedef {import('../../../lib/domain/models').Area} Area
- * @typedef {import('../../../lib/domain/models/release').AreaForRelease} AreaForRelease
- * @typedef {import('../../../lib/domain/models/replication').AreaForReplication} AreaForReplication
- */
+import { AreaForReplication } from '../../domain/models/replication/index.js';
 
 /**
  * @typedef {import('../../../lib/domain/models').Area} Area
@@ -31,28 +27,4 @@ export function forReplication(areas) {
     return areas.map((area) => new AreaForReplication(area));
   }
   return new AreaForReplication(areas);
-}
-
-export function filterAreaFields({
-  id,
-  code,
-  title_i18n,
-  name,
-  competenceIds,
-  color,
-  frameworkId,
-}) {
-  return {
-    id,
-    code,
-    title_i18n,
-    name,
-    competenceIds,
-    color,
-    frameworkId,
-  };
-}
-
-export function filterAreasFields(frameworks) {
-  return frameworks.map(filterAreaFields);
 }
