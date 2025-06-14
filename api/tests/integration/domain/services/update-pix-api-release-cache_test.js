@@ -1,6 +1,14 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { Area, Attachment, Challenge, Competence, Framework, Tutorial } from '../../../../lib/domain/models/index.js';
+import {
+  Area,
+  Attachment,
+  Challenge,
+  Competence,
+  Framework,
+  Thematic,
+  Tutorial
+} from '../../../../lib/domain/models/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as config from '../../../../lib/config.js';
@@ -755,6 +763,144 @@ describe('Integration | Service | update pix api release cache', function() {
 
         // when
         await updatePixApiReleaseCache.onCompetenceUpdated(competence);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onThematicCreated', function() {
+    let thematic;
+
+    beforeEach(function() {
+      thematic = new Thematic({
+        id: 'thematicId',
+        airtableId: 'recThematicId',
+        name_i18n: { fr: 'name fr thematicId', en: 'name en thematicId' },
+        index: 1,
+        competenceId: 'competenceId',
+        competenceAirtableId: 'recCompetenceId',
+        tubeIds: ['tubeId1', 'tubeId2'],
+        tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/thematics/thematicId', {
+            id: 'thematicId',
+            name_i18n: { fr: 'name fr thematicId', en: 'name en thematicId' },
+            index: 1,
+            competenceId: 'competenceId',
+            tubeIds: ['tubeId1', 'tubeId2'],
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onThematicCreated(thematic);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onThematicCreated(thematic);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onThematicUpdated', function() {
+    let thematic;
+
+    beforeEach(function() {
+      thematic = new Thematic({
+        id: 'thematicId',
+        airtableId: 'recThematicId',
+        name_i18n: { fr: 'name fr thematicId', en: 'name en thematicId' },
+        index: 1,
+        competenceId: 'competenceId',
+        competenceAirtableId: 'recCompetenceId',
+        tubeIds: ['tubeId1', 'tubeId2'],
+        tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/thematics/thematicId', {
+            id: 'thematicId',
+            name_i18n: { fr: 'name fr thematicId', en: 'name en thematicId' },
+            index: 1,
+            competenceId: 'competenceId',
+            tubeIds: ['tubeId1', 'tubeId2'],
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onThematicUpdated(thematic);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onThematicUpdated(thematic);
 
         // then
         expect(spy).toHaveBeenCalledTimes(0);
