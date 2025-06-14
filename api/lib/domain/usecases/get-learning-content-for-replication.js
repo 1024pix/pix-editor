@@ -74,7 +74,6 @@ export async function getLearningContentForReplication() {
     entityId: translation.entityId,
     sourceEntityId: null,
   }));
-  const transformedFrameworks = frameworkTransformer.filterFrameworksFields(frameworks);
   const transformedAreas = areaTransformer.filterAreasFields(areas);
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
@@ -118,7 +117,7 @@ export async function getLearningContentForReplication() {
 
   await setImmediatePromise();
   return {
-    frameworks: transformedFrameworks,
+    frameworks: frameworkTransformer.forReplication(frameworks),
     areas: transformedAreas,
     competences: transformedCompetences,
     thematics: transformedThematics,
