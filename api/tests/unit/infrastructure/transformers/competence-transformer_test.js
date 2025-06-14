@@ -1,10 +1,5 @@
 import { describe, describe as context, expect, it } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
-import {
-  filterCompetencesFields,
-  forRelease,
-  forReplication
-} from '../../../../lib/infrastructure/transformers/competence-transformer.js';
+import { forRelease, forReplication } from '../../../../lib/infrastructure/transformers/competence-transformer.js';
 import { CompetenceForReplication } from '../../../../lib/domain/models/replication/index.js';
 import { Competence } from '../../../../lib/domain/models/index.js';
 import { CompetenceForRelease } from '../../../../lib/domain/models/release/index.js';
@@ -204,13 +199,5 @@ describe('Unit | Infrastructure | competence-transformer', function() {
         ]);
       });
     });
-  });
-
-  it('should only keep useful fields', function() {
-    const airtableCompetences = [domainBuilder.buildCompetenceDatasourceObject()];
-
-    const competences = filterCompetencesFields(airtableCompetences);
-
-    expect(competences.length).to.equal(1);
   });
 });
