@@ -15,6 +15,6 @@ export async function createAttachment({
     localizedChallengeId: attachmentCreationCommand.localizedChallengeId ?? attachmentCreationCommand.challengeId,
   });
   const createdAttachment = await attachmentRepository.create(attachmentToCreate);
-  await updatePixApiReleaseCache.onAttachmentCreated({ attachment: createdAttachment });
+  await updatePixApiReleaseCache.onAttachmentCreated(createdAttachment);
   return createdAttachment;
 }

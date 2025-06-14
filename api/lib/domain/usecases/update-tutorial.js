@@ -8,6 +8,6 @@ export async function updateTutorial(tutorialData, dependencies = { tutorialRepo
   }
   tutorial.update(tutorialData);
   const updatedTutorial = await dependencies.tutorialRepository.update(tutorial);
-  await updatePixApiReleaseCache.onTutorialUpdated({ tutorial: updatedTutorial });
+  await updatePixApiReleaseCache.onTutorialUpdated(updatedTutorial);
   return updatedTutorial;
 }
