@@ -7,14 +7,6 @@ import { FrameworkForReplication } from '../../domain/models/replication/index.j
  * @typedef {import('../../../lib/domain/models/replication').FrameworkForReplication} FrameworkForReplication
  */
 
-export function filterFrameworkFields({ id, name }) {
-  return { id, name };
-}
-
-export function filterFrameworksFields(frameworks) {
-  return frameworks.map(filterFrameworkFields);
-}
-
 /**
  * @param {Framework|Framework[]} frameworks
  * @returns {FrameworkForRelease|FrameworkForRelease[]}
