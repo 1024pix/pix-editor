@@ -2,6 +2,6 @@ import * as updatePixApiReleaseCache from '../services/update-pix-api-release-ca
 
 export async function createTutorial(tutorial, dependencies = { tutorialRepository }) {
   const createdTutorial = await dependencies.tutorialRepository.create(tutorial);
-  await updatePixApiReleaseCache.onTutorialCreated({ tutorial: createdTutorial });
+  await updatePixApiReleaseCache.onTutorialCreated(createdTutorial);
   return createdTutorial;
 }

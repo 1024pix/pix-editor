@@ -112,7 +112,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }) });
+          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -209,7 +209,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }) });
+          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -226,7 +226,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -327,7 +327,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }) });
+          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -424,7 +424,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }) });
+          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -441,7 +441,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -457,7 +457,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
 
         // when
-        await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentUpdated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).toHaveBeenCalledTimes(0);
@@ -470,7 +470,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentUpdated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).toHaveBeenCalledTimes(0);
@@ -526,7 +526,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTutorialCreated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialCreated(tutorial);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -545,7 +545,7 @@ describe('Integration | Service | update pix api release cache', function() {
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
         // when
-        await updatePixApiReleaseCache.onTutorialCreated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialCreated(tutorial);
 
         // then
         expect(spy).toHaveBeenCalledTimes(0);
@@ -601,7 +601,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTutorialUpdated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -617,7 +617,7 @@ describe('Integration | Service | update pix api release cache', function() {
 
       it('should not patch anything', async function() {
         // when
-        await updatePixApiReleaseCache.onTutorialUpdated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
