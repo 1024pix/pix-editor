@@ -1,5 +1,6 @@
 import {
   createChallengeTransformer,
+  frameworkTransformer,
   tubeTransformer,
   tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -15,6 +16,7 @@ import * as Sentry from '@sentry/node';
 
 /**
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
+ * @typedef {import('../../../lib/domain/models').Framework} Framework
  * @typedef {import('../../../lib/domain/models').Thematic} Thematic
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
@@ -68,6 +70,24 @@ async function onAttachmentCreatedOrDeleted(attachment) {
 }
 
 /**
+ * @param {Framework} framework
+ */
+export async function onFrameworkCreated(framework) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'frameworks',
+        updatedRecord: frameworkTransformer.forRelease(framework),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+/**
  * @param {Tutorial} tutorial
  */
 export async function onTutorialCreated(tutorial) {
@@ -87,11 +107,10 @@ export async function onTutorialUpdated(tutorial) {
 async function onTutorialCreatedOrUpdated(tutorial) {
   if (pixApiClient.isPixApiCachePatchingEnabled()) {
     try {
-      const tutorialForRelease = tutorialTransformer.forRelease(tutorial);
       await updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tutorials',
-        updatedRecord: tutorialForRelease,
+        updatedRecord: tutorialTransformer.forRelease(tutorial),
       });
     } catch (err) {
       logger.error(err);

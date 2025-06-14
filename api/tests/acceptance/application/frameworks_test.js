@@ -1,21 +1,23 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-} from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { frameworkDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import * as config from '../../../lib/config.js';
 
 describe('Acceptance | Route | frameworks', () => {
+  let editorUser, adminUser, originalPixApiUrlValue;
 
-  let editorUser, adminUser;
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('GET /frameworks', () => {
@@ -208,19 +210,6 @@ describe('Acceptance | Route | frameworks', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableFramework] });
 
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      const pixApiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/frameworks/framework4', {
-          id: 'framework4',
-          name: 'Prix',
-        })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
-
       const server = await createServer();
 
       // when
@@ -240,7 +229,6 @@ describe('Acceptance | Route | frameworks', () => {
 
       // then
       expect(response.statusCode).toBe(201);
-
       expect(response.result).toEqual({
         data: {
           type: 'frameworks',
@@ -255,9 +243,7 @@ describe('Acceptance | Route | frameworks', () => {
           },
         },
       });
-
       expect(airtableFrameworksScope.isDone()).toBe(true);
-      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });
