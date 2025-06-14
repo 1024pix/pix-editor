@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { Area, Attachment, Challenge, Framework, Tutorial } from '../../../../lib/domain/models/index.js';
+import { Area, Attachment, Challenge, Competence, Framework, Tutorial } from '../../../../lib/domain/models/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as config from '../../../../lib/config.js';
@@ -603,6 +603,158 @@ describe('Integration | Service | update pix api release cache', function() {
 
         // when
         await updatePixApiReleaseCache.onAreaCreated(area);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onCompetenceCreated', function() {
+    let competence;
+
+    beforeEach(function() {
+      competence = new Competence({
+        id: 'competenceId',
+        airtableId: 'recCompetenceId',
+        index: 1,
+        origin: 'Pix+Fruits',
+        areaId: 'areaId',
+        areaAirtableId: 'recAreaId',
+        thematicIds: ['thematicId1', 'thematicId2'],
+        thematicAirtableIds: ['recThematicId1', 'recThematicId2'],
+        tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
+        skillIds: ['skillId1', 'skillId2'],
+        name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+        description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/competences/competenceId', {
+            id: 'competenceId',
+            index: 1,
+            origin: 'Pix+Fruits',
+            areaId: 'areaId',
+            thematicIds: ['thematicId1', 'thematicId2'],
+            skillIds: ['skillId1', 'skillId2'],
+            name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+            description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onCompetenceCreated(competence);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onCompetenceCreated(competence);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onCompetenceUpdated', function() {
+    let competence;
+
+    beforeEach(function() {
+      competence = new Competence({
+        id: 'competenceId',
+        airtableId: 'recCompetenceId',
+        index: 1,
+        origin: 'Pix+Fruits',
+        areaId: 'areaId',
+        areaAirtableId: 'recAreaId',
+        thematicIds: ['thematicId1', 'thematicId2'],
+        thematicAirtableIds: ['recThematicId1', 'recThematicId2'],
+        tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
+        skillIds: ['skillId1', 'skillId2'],
+        name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+        description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/competences/competenceId', {
+            id: 'competenceId',
+            index: 1,
+            origin: 'Pix+Fruits',
+            areaId: 'areaId',
+            thematicIds: ['thematicId1', 'thematicId2'],
+            skillIds: ['skillId1', 'skillId2'],
+            name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+            description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onCompetenceUpdated(competence);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onCompetenceUpdated(competence);
 
         // then
         expect(spy).toHaveBeenCalledTimes(0);
