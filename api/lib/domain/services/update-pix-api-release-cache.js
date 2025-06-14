@@ -1,5 +1,6 @@
 import {
   areaTransformer,
+  competenceTransformer,
   createChallengeTransformer,
   frameworkTransformer,
   tubeTransformer,
@@ -19,6 +20,7 @@ import * as Sentry from '@sentry/node';
 /**
  * @typedef {import('../../../lib/domain/models').Area} Area
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
+ * @typedef {import('../../../lib/domain/models').Competence} Competence
  * @typedef {import('../../../lib/domain/models').Framework} Framework
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
@@ -99,6 +101,38 @@ export async function onAreaCreated(area) {
         pixApiClient,
         model: 'areas',
         updatedRecord: areaTransformer.forRelease(area),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+/**
+ * @param {Competence} competence
+ */
+export async function onCompetenceCreated(competence) {
+  await onCompetenceCreatedOrUpdated(competence);
+}
+
+/**
+ @param {Competence} competence
+ */
+export async function onCompetenceUpdated(competence) {
+  await onCompetenceCreatedOrUpdated(competence);
+}
+
+/**
+ * @param {Competence} competence
+ */
+async function onCompetenceCreatedOrUpdated(competence) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'competences',
+        updatedRecord: competenceTransformer.forRelease(competence),
       });
     } catch (err) {
       logger.error(err);
