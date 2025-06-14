@@ -74,7 +74,6 @@ export async function getLearningContentForReplication() {
     entityId: translation.entityId,
     sourceEntityId: null,
   }));
-  const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
 
   const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
@@ -118,7 +117,7 @@ export async function getLearningContentForReplication() {
   return {
     frameworks: frameworkTransformer.forReplication(frameworks),
     areas: areaTransformer.forReplication(areas),
-    competences: transformedCompetences,
+    competences: competenceTransformer.forReplication(competences),
     thematics: transformedThematics,
     tubes: tubeTransformer.forReplication(tubes, thematics, challenges),
     skills,
