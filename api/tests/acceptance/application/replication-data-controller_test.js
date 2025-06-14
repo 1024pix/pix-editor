@@ -3,7 +3,11 @@ import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationH
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
-import { FrameworkForReplication, SkillForReplication } from '../../../lib/domain/models/replication/index.js';
+import {
+  AreaForReplication,
+  FrameworkForReplication,
+  SkillForReplication
+} from '../../../lib/domain/models/replication/index.js';
 
 const {
   buildFramework,
@@ -44,6 +48,8 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const result = JSON.parse(response.result);
       const resultWithoutTranslations = _.omit(result, 'translations');
       const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
+      expect(resultWithoutTranslations.frameworks).toStrictEqual(expectedCurrentContentWithoutTranslations.frameworks);
+      expect(resultWithoutTranslations.areas).toStrictEqual(expectedCurrentContentWithoutTranslations.areas);
       expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(expectedCurrentContent.translations.map((translation) => ({
         ...translation,
@@ -64,12 +70,12 @@ async function mockCurrentContent() {
   const expectedCurrentContent = {
     translations: [],
   };
-  const expectedFramework = omit(['areaIds'], new FrameworkForReplication(domainBuilder.buildFramework()));
-  expectedCurrentContent.frameworks = [expectedFramework];
+  const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework());
+  expectedCurrentContent.frameworks = [{ ...expectedFramework }];
 
   const area = domainBuilder.buildArea();
-  const expectedArea = omit(['airtableId', 'competenceAirtableIds'], { name: area.name, ...area });
-  expectedCurrentContent.areas = [expectedArea];
+  const expectedArea = new AreaForReplication({ name: area.name, ...area });
+  expectedCurrentContent.areas = [{ ...expectedArea }];
 
   const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'areaAirtableId'], domainBuilder.buildCompetence({
     name_i18n: {
