@@ -10,14 +10,21 @@ import {
 import { createServer } from '../../../../server.js';
 import { competenceDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import * as config from '../../../../lib/config.js';
 
 describe('Acceptance | Route | competences', () => {
 
-  let editorUser, adminUser;
+  let editorUser, adminUser, originalPixApiUrlValue;
   beforeEach(async function() {
+    originalPixApiUrlValue = config.pixApi.baseUrl;
+    delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
     adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
+  });
+
+  afterEach(function() {
+    config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('GET /competences', async () => {
@@ -412,7 +419,6 @@ describe('Acceptance | Route | competences', () => {
     let airtableCreateTubeScope;
     let airtableCreateSkillScope;
     let generateNewId;
-    let pixApiCompetenceCacheScope;
     let pixApiThematicCacheScope;
     // FIXME pixApiTubeCacheScope
     // FIXME pixApiSkillCacheScope
@@ -559,26 +565,6 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': pixApiToken })
         .persist();
-
-      pixApiCompetenceCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/competences/competence4', {
-          id: 'competence4',
-          index: '2.2',
-          areaId: 'area2',
-          skillIds: [],
-          thematicIds: ['thematic1'],
-          origin: 'Pix',
-          name_i18n: {
-            fr: 'Quatrième compétence',
-            en: 'Fourth competence'
-          },
-          'description_i18n': {
-            fr: 'C’est la quatrième',
-            en: 'It’s the fourth one'
-          }
-        })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
 
       pixApiThematicCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/thematics/thematic1', {
@@ -749,13 +735,12 @@ describe('Acceptance | Route | competences', () => {
       expect(airtableCreateThematicScope.isDone()).toBe(true);
       expect(airtableCreateTubeScope.isDone()).toBe(true);
       expect(airtableCreateSkillScope.isDone()).toBe(true);
-      expect(pixApiCompetenceCacheScope.isDone()).toBe(true);
       expect(pixApiThematicCacheScope.isDone()).toBe(true);
     });
   });
 
   describe('PATCH /competences/{id}', async () => {
-    let airtableCompetence, airtableCompetenceScope, pixApiCacheScope;
+    let airtableCompetence, airtableCompetenceScope;
 
     beforeEach(async () => {
       airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
@@ -783,31 +768,6 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildTranslation({ key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' });
 
       await databaseBuilder.commit();
-
-      const pixApiToken = 'secret';
-      nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
-      pixApiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/competences/competence4', {
-          id: 'competence4',
-          index: '2.2',
-          areaId: 'area2',
-          skillIds: ['skill7', 'skill8', 'skill8'],
-          thematicIds: ['thematic9'],
-          origin: 'Pix',
-          name_i18n: {
-            fr: '4ème compétence',
-            en: '4th competence',
-          },
-          'description_i18n': {
-            fr: 'C’est la 4ème',
-            en: null,
-          }
-        })
-        .matchHeader('Authorization', `Bearer ${pixApiToken}`)
-        .reply(200);
     });
 
     describe('when payload is NOT valid', () => {
@@ -1071,7 +1031,6 @@ describe('Acceptance | Route | competences', () => {
       ]);
 
       expect(airtableCompetenceScope.isDone()).toBe(true);
-      expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });
 });
