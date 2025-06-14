@@ -3,7 +3,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationH
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
-import { SkillForReplication } from '../../../lib/domain/models/replication/index.js';
+import { FrameworkForReplication, SkillForReplication } from '../../../lib/domain/models/replication/index.js';
 
 const {
   buildFramework,
@@ -64,7 +64,7 @@ async function mockCurrentContent() {
   const expectedCurrentContent = {
     translations: [],
   };
-  const expectedFramework = omit(['areaIds'], domainBuilder.buildFramework());
+  const expectedFramework = omit(['areaIds'], new FrameworkForReplication(domainBuilder.buildFramework()));
   expectedCurrentContent.frameworks = [expectedFramework];
 
   const area = domainBuilder.buildArea();
