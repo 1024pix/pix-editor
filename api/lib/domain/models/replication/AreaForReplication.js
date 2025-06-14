@@ -1,0 +1,19 @@
+export class AreaForReplication {
+  constructor({
+    id,
+    code,
+    title_i18n,
+    name,
+    competenceIds,
+    color,
+    frameworkId,
+  }) {
+    this.id = id;
+    this.code = code;
+    this.title_i18n = title_i18n;
+    this.competenceIds = competenceIds;
+    this.name = name;
+    this.color = color;
+    this.frameworkId = frameworkId;
+  }
+}
