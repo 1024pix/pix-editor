@@ -5,6 +5,7 @@ import { Skill } from '../../../../lib/domain/models/index.js';
 import * as transformers from '../../../../lib/infrastructure/transformers/index.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
+import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
 describe('Unit | Domain | Usecases | clone-skill', () => {
   let attachmentRepository, skillRepository, challengeRepository, tubeRepository, generateNewIdFnc, updatedRecordNotifier, transformChallenge, filterSkillsFields;
@@ -42,7 +43,8 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
     };
     transformChallenge = vi.fn();
     vi.spyOn(transformers, 'createChallengeTransformer').mockReturnValue(transformChallenge);
-    filterSkillsFields = vi.spyOn(transformers.skillTransformer, 'filterSkillsFields');
+    vi.spyOn(updatePixApiReleaseCache, 'onSkillCreated');
+    updatePixApiReleaseCache.onSkillCreated.mockResolvedValue();
   });
 
   describe('pre-checks KO', () => {
@@ -224,8 +226,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         clonedChallenges,
         clonedAttachments,
       });
-      const transformedSkill = Symbol('transformedSkill');
-      filterSkillsFields.mockReturnValue([transformedSkill]);
       const transformedChallenge =  Symbol('transformedChallenge');
       transformChallenge.mockReturnValue(transformedChallenge);
 
@@ -233,13 +233,11 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       await cloneSkill({ cloneCommand, dependencies });
 
       // then
-      expect(filterSkillsFields).toHaveBeenCalledOnce();
-      expect(filterSkillsFields).toHaveBeenCalledWith([clonedSkill]);
+      updatePixApiReleaseCache.onSkillCreated.mockResolvedValue(clonedSkill);
       expect(transformChallenge).toHaveBeenCalledOnce();
       expect(transformChallenge).toHaveBeenCalledWith(clonedChallenge);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(2);
-      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedSkill, model: 'skills', pixApiClient });
-      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(2, { updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
+      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
     });
 
     describe('when patching fails', () => {
@@ -261,8 +259,8 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
           clonedChallenges,
           clonedAttachments: [],
         });
-        const transformedSkill = Symbol('transformedSkill');
-        filterSkillsFields.mockReturnValue([transformedSkill]);
+        const transformedChallenge = Symbol('transformedChallenge');
+        transformChallenge.mockReturnValue(transformedChallenge);
         const error = Symbol('error');
         updatedRecordNotifier.notify.mockRejectedValue(error);
 
@@ -270,10 +268,8 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         await cloneSkill({ cloneCommand, dependencies });
 
         // then
-        expect(filterSkillsFields).toHaveBeenCalledOnce();
-        expect(filterSkillsFields).toHaveBeenCalledWith([clonedSkill]);
         expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
-        expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedSkill, model: 'skills', pixApiClient });
+        expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
         expect(logError).toHaveBeenCalledWith(error);
         expect(Sentry.captureException).toHaveBeenCalledWith(error);
       });

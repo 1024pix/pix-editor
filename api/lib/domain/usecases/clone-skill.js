@@ -1,15 +1,11 @@
-import {
-  createChallengeTransformer,
-  skillTransformer,
-} from '../../infrastructure/transformers/index.js';
+import { createChallengeTransformer, } from '../../infrastructure/transformers/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 // TODO LIST
 // industrialiser les utils translations pour gérer les objets du domaine
 // factoriser du code entre pix-api-client et storage et faire un peu mieux (separation of concerns etc...)
-// les objets du domaine devraient maintenant avoir un id (id persistant) et un airtableId (record id de airtable)
-// tester les répos mieux (parce que là on a déconné)
 
 export async function cloneSkill({
   cloneCommand,
@@ -98,10 +94,8 @@ async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRe
 }
 
 async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier }) {
+  await updatePixApiReleaseCache.onSkillCreated(clonedSkill);
   try {
-    const [transformedSkill] = skillTransformer.filterSkillsFields([clonedSkill]);
-    await updatedRecordNotifier.notify({ updatedRecord: transformedSkill, model: 'skills', pixApiClient });
-
     const primaryChallenges = clonedChallenges.filter((challenge) => challenge.isPrimary);
     const transformChallenge = createChallengeTransformer({ attachments: clonedAttachments });
     const transformedChallenges = primaryChallenges.map((challenge) => transformChallenge(challenge));
@@ -111,5 +105,5 @@ async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedA
   } catch (err) {
     logger.error(err);
     Sentry.captureException(err);
-  };
+  }
 }
