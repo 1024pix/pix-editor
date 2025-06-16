@@ -1,7 +1,5 @@
 import Joi from 'joi';
 import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
-import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { tubeRepository } from '../infrastructure/repositories/index.js';
@@ -21,15 +19,9 @@ export function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
-            if (!tube) return Boom.notFound('unknown tube id');
-            return tubeSerializer.serialize(tube);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
+          if (!tube) return Boom.notFound('unknown tube id');
+          return tubeSerializer.serialize(tube);
         },
       },
     },
@@ -43,16 +35,9 @@ export function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const params = extractParameters(request.query);
-            const tubes = await listTubes(params);
-            return tubeSerializer.serialize(tubes);
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const params = extractParameters(request.query);
+          const tubes = await listTubes(params);
+          return tubeSerializer.serialize(tubes);
         },
       },
     },
@@ -81,16 +66,9 @@ export function register(server) {
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
-          try {
-            const tube = await tubeSerializer.deserialize(request.payload);
-            const createdTube = await createTube(tube);
-            return h.response(tubeSerializer.serialize(createdTube)).code(201);
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tube = await tubeSerializer.deserialize(request.payload);
+          const createdTube = await createTube(tube);
+          return h.response(tubeSerializer.serialize(createdTube)).code(201);
         },
       },
     },
@@ -124,16 +102,9 @@ export function register(server) {
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request) {
-          try {
-            const tube = await tubeSerializer.deserialize(request.payload);
-            const updatedTube = await updateTube(request.params.tubeAirtableId, tube);
-            return tubeSerializer.serialize(updatedTube);
-          } catch (err) {
-            if (err instanceof DomainError) throw err;
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const tube = await tubeSerializer.deserialize(request.payload);
+          const updatedTube = await updateTube(request.params.tubeAirtableId, tube);
+          return tubeSerializer.serialize(updatedTube);
         },
       },
     },

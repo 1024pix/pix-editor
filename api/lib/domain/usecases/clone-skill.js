@@ -1,9 +1,7 @@
-import {
-  createChallengeTransformer,
-  skillTransformer,
-} from '../../infrastructure/transformers/index.js';
+import { createChallengeTransformer, skillTransformer, } from '../../infrastructure/transformers/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
+import { CloneSkillError } from '../errors.js';
 
 // TODO LIST
 // industrialiser les utils translations pour gérer les objets du domaine
@@ -65,18 +63,18 @@ export async function cloneSkill({
 
 async function _checkIfCloningIsPossible({ level, tubeId, skillIdToClone, tubeRepository, skillRepository }) {
   if (level < 1 || level > 7) {
-    throw new Error('Le niveau doit être compris entre 1 et 7');
+    throw new CloneSkillError('Le niveau doit être compris entre 1 et 7');
   }
   const tube = await tubeRepository.get(tubeId);
   if (!tube) {
-    throw new Error(`Le sujet d'id "${tubeId}" n'existe pas`);
+    throw new CloneSkillError(`Le sujet d'id "${tubeId}" n'existe pas`);
   }
   const skillToClone = await skillRepository.get(skillIdToClone);
   if (!skillToClone) {
-    throw new Error(`L'acquis d'id "${skillIdToClone}" n'existe pas`);
+    throw new CloneSkillError(`L'acquis d'id "${skillIdToClone}" n'existe pas`);
   }
   if (!skillToClone.isLive) {
-    throw new Error('Impossible de cloner un acquis qui ne soit ni en construction ni actif');
+    throw new CloneSkillError('Impossible de cloner un acquis qui ne soit ni en construction ni actif');
   }
   return {
     tube,

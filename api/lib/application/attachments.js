@@ -1,9 +1,6 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as usecases from '../domain/usecases/index.js';
-import { logger } from '../infrastructure/logger.js';
 import * as Types from './types.js';
 import * as attachmentSerializer from '../infrastructure/serializers/jsonapi/attachment-serializer.js';
 import * as attachmentRepository from '../infrastructure/repositories/attachment-repository.js';
@@ -50,20 +47,14 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
-            const createdAttachment = await usecases.createAttachment({
-              attachmentCreationCommand,
-              attachmentRepository,
-              localizedChallengeRepository,
-              updatePixApiReleaseCache,
-            });
-            return h.response(attachmentSerializer.serialize(createdAttachment)).code(201);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
+          const createdAttachment = await usecases.createAttachment({
+            attachmentCreationCommand,
+            attachmentRepository,
+            localizedChallengeRepository,
+            updatePixApiReleaseCache,
+          });
+          return h.response(attachmentSerializer.serialize(createdAttachment)).code(201);
         },
       },
     },
@@ -109,19 +100,13 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
-            const updatedAttachment = await usecases.updateAttachment({
-              attachmentUpdateCommand,
-              attachmentRepository,
-              updatePixApiReleaseCache,
-            });
-            return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
+          const updatedAttachment = await usecases.updateAttachment({
+            attachmentUpdateCommand,
+            attachmentRepository,
+            updatePixApiReleaseCache,
+          });
+          return h.response(attachmentSerializer.serialize(updatedAttachment)).code(200);
         },
       },
     },
@@ -140,19 +125,13 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const attachmentId = request.params.attachmentId;
-            await usecases.deleteAttachment({
-              attachmentId,
-              attachmentRepository,
-              updatePixApiReleaseCache,
-            });
-            return h.response().code(204);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const attachmentId = request.params.attachmentId;
+          await usecases.deleteAttachment({
+            attachmentId,
+            attachmentRepository,
+            updatePixApiReleaseCache,
+          });
+          return h.response().code(204);
         },
       },
     },
@@ -166,15 +145,9 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const id = request.params.attachmentId;
-            const attachment = await usecases.findAttachment({ id, attachmentRepository });
-            return h.response(attachmentSerializer.serialize(attachment));
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const id = request.params.attachmentId;
+          const attachment = await usecases.findAttachment({ id, attachmentRepository });
+          return h.response(attachmentSerializer.serialize(attachment));
         },
       },
     },
@@ -188,15 +161,9 @@ export function register(server) {
           }).required(),
         },
         handler: async function(request, h) {
-          try {
-            const query = attachmentSerializer.deserializeQuery(request.query);
-            const attachments = await usecases.findAttachments({ query, attachmentRepository });
-            return h.response(attachmentSerializer.serialize(attachments));
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const query = attachmentSerializer.deserializeQuery(request.query);
+          const attachments = await usecases.findAttachments({ query, attachmentRepository });
+          return h.response(attachmentSerializer.serialize(attachments));
         },
       },
     },

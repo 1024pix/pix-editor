@@ -1,8 +1,5 @@
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as usecases from '../domain/usecases/index.js';
-import { logger } from '../infrastructure/logger.js';
 import { frameworkRepository } from '../infrastructure/repositories/index.js';
 import { frameworkSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import Joi from 'joi';
@@ -14,14 +11,8 @@ export function register(server) {
       path: '/api/frameworks',
       config: {
         handler: async function() {
-          try {
-            const frameworks = await frameworkRepository.list();
-            return frameworkSerializer.serialize(frameworks);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const frameworks = await frameworkRepository.list();
+          return frameworkSerializer.serialize(frameworks);
         },
       },
     },
@@ -41,19 +32,13 @@ export function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const framework = await frameworkSerializer.deserialize(request.payload);
+          const framework = await frameworkSerializer.deserialize(request.payload);
 
-            const createdFramework = await usecases.createFramework(framework);
+          const createdFramework = await usecases.createFramework(framework);
 
-            return h
-              .response(frameworkSerializer.serialize(createdFramework))
-              .code(201);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          return h
+            .response(frameworkSerializer.serialize(createdFramework))
+            .code(201);
         },
       },
     },

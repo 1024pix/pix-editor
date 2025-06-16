@@ -1,9 +1,6 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
-import * as Sentry from '@sentry/node';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as usecases from '../../domain/usecases/index.js';
-import { logger } from '../../infrastructure/logger.js';
 import { competenceSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { competenceRepository } from '../../infrastructure/repositories/index.js';
 import * as Types from '../types.js';
@@ -16,14 +13,8 @@ export async function register(server) {
       path: '/api/competences',
       config: {
         handler: async function() {
-          try {
-            const competences = await competenceRepository.list();
-            return competenceSerializer.serialize(competences);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const competences = await competenceRepository.list();
+          return competenceSerializer.serialize(competences);
         },
       },
     },
@@ -37,15 +28,9 @@ export async function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
-            if (!competence) throw new NotFoundError('unknown competence');
-            return competenceSerializer.serialize(competence);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
+          if (!competence) throw new NotFoundError('unknown competence');
+          return competenceSerializer.serialize(competence);
         },
       },
     },
@@ -76,15 +61,9 @@ export async function register(server) {
           }),
         },
         handler: async function(request, h) {
-          try {
-            const competence = await competenceSerializer.deserialize(request.payload);
-            const createdCompetence = await usecases.createCompetence(competence);
-            return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          const competence = await competenceSerializer.deserialize(request.payload);
+          const createdCompetence = await usecases.createCompetence(competence);
+          return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
         },
       },
     },
@@ -112,17 +91,11 @@ export async function register(server) {
           }),
         },
         handler: async function(request) {
-          try {
-            const competenceUpdates = await competenceSerializer.deserialize(request.payload);
+          const competenceUpdates = await competenceSerializer.deserialize(request.payload);
 
-            const updatedCompetence = await usecases.updateCompetence(request.params.competenceAirtableId, competenceUpdates);
+          const updatedCompetence = await usecases.updateCompetence(request.params.competenceAirtableId, competenceUpdates);
 
-            return competenceSerializer.serialize(updatedCompetence);
-          } catch (err) {
-            logger.error(err);
-            Sentry.captureException(err);
-            return Boom.internal(err);
-          }
+          return competenceSerializer.serialize(updatedCompetence);
         },
       },
     },

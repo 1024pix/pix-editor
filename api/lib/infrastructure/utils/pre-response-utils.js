@@ -2,6 +2,8 @@ import * as errorManager from './error-manager.js';
 import { DomainError } from '../../domain/errors.js';
 import { InfrastructureError } from '../errors.js';
 import * as config from '../../config.js';
+import { logger } from '../logger.js';
+import * as Sentry from '@sentry/node';
 
 export function catchDomainAndInfrastructureErrors(request, h) {
   const response = request.response;
@@ -15,6 +17,9 @@ export function catchDomainAndInfrastructureErrors(request, h) {
         !request.path.startsWith('/api')) {
       return h.file(`${config.hapi.publicDir}/pix-editor/index.html`).code(200);
     }
+    const err = response?.message ?? response;
+    logger.error(err);
+    Sentry.captureException(err);
   }
 
   return h.continue;

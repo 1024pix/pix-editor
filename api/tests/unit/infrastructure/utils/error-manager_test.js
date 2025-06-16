@@ -97,12 +97,12 @@ describe('Unit | Infrastructure | ErrorManager', function() {
           });
         }
         else if (domainErrorName === 'InvalidStaticCourseCreationOrUpdateError') {
-          const errorStaticCourse = new domainErrorClass();
-          errorStaticCourse.addError({ attribute: 'name', detail: 'Un texte détaillant une erreur' });
-          errorStaticCourse.addError({ attribute: 'challengeIds', detail: 'le détail d\'une autre erreur' });
-          const responseStaticCourse = send(hFake, errorStaticCourse);
-          expect(responseStaticCourse.statusCode, expectErrorMessage).toStrictEqual(422);
-          expect(responseStaticCourse.source).toStrictEqual({
+          const errorInstance = new domainErrorClass();
+          errorInstance.addError({ attribute: 'name', detail: 'Un texte détaillant une erreur' });
+          errorInstance.addError({ attribute: 'challengeIds', detail: 'le détail d\'une autre erreur' });
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(422);
+          expect(responseForError.source).toStrictEqual({
             errors: [
               {
                 status: '422',
@@ -160,10 +160,10 @@ describe('Unit | Infrastructure | ErrorManager', function() {
           });
         }
         else if (domainErrorName === 'CommandWhitelistedUrlError') {
-          const errorCommandWhitelistedUrl = new domainErrorClass({ message, attribute });
-          const responseCommandWhitelistedUrl = send(hFake, errorCommandWhitelistedUrl);
-          expect(responseCommandWhitelistedUrl.statusCode, expectErrorMessage).toStrictEqual(422);
-          expect(responseCommandWhitelistedUrl.source).toStrictEqual({
+          const errorInstance = new domainErrorClass({ message, attribute });
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(422);
+          expect(responseForError.source).toStrictEqual({
             errors: [
               {
                 status: '422',
@@ -175,15 +175,29 @@ describe('Unit | Infrastructure | ErrorManager', function() {
           });
         }
         else if (domainErrorName === 'TagTitleAlreadyUsedError') {
-          const errorTagTitleAlreadyUsed = new domainErrorClass({ title: 'Internet' });
-          const responseTagTitleAlreadyUsed = send(hFake, errorTagTitleAlreadyUsed);
-          expect(responseTagTitleAlreadyUsed.statusCode, expectErrorMessage).toStrictEqual(409);
-          expect(responseTagTitleAlreadyUsed.source).toStrictEqual({
+          const errorInstance = new domainErrorClass({ title: 'Internet' });
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(409);
+          expect(responseForError.source).toStrictEqual({
             errors: [
               {
                 status: '409',
                 title: 'Conflict',
                 detail: 'Echec de création du tag : le titre "Internet" est déjà pris"',
+              },
+            ],
+          });
+        }
+        else if (domainErrorName === 'CloneSkillError') {
+          const errorInstance = new domainErrorClass('mon message');
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(400);
+          expect(responseForError.source).toStrictEqual({
+            errors: [
+              {
+                status: '400',
+                title: 'Bad Request',
+                detail: 'mon message',
               },
             ],
           });

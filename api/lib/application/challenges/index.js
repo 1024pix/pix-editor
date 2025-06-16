@@ -1,4 +1,3 @@
-import Boom from '@hapi/boom';
 import Joi from 'joi';
 import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
@@ -16,6 +15,7 @@ import {
   updateChallenge,
 } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import { NotFoundError } from '../../domain/errors.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
@@ -61,7 +61,7 @@ export async function register(server) {
           const params = { filter: { ids: [challengeId] } };
           const challenges = await challengeRepository.filter(params);
           if (challenges.length === 0) {
-            return Boom.notFound();
+            return new NotFoundError();
           }
           return challengeSerializer.serialize(challenges[0]);
         },

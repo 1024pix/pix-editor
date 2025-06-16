@@ -88,4 +88,10 @@ export class TagTitleAlreadyUsedError extends DomainError {
   }
 }
 
+export class CloneSkillError extends DomainError {
+  constructor(message) {
+    super(message);
+  }
+}
+
 export class ForbiddenError extends DomainError {}
