@@ -1,7 +1,3 @@
-import * as Sentry from '@sentry/node';
-import { logger } from '../../infrastructure/logger.js';
-import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import {
   areaRepository,
   competenceRepository,
@@ -9,7 +5,6 @@ import {
   thematicRepository,
   tubeRepository
 } from '../../infrastructure/repositories/index.js';
-import { skillTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
 import { Skill, Thematic, Tube } from '../models/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
@@ -70,21 +65,12 @@ export async function createCompetence(competence) {
   createdWorkbenchTube.skillIds = [createdWorkbenchSkill.id];
   createdWorkbenchTube.skillAirtableIds = [createdWorkbenchSkill.airtableId];
 
-  try {
-    await Promise.all([
-      updatePixApiReleaseCache.onCompetenceCreated(createdCompetence),
-      updatePixApiReleaseCache.onThematicCreated(createdWorkbenchThematic),
-      updatePixApiReleaseCache.onTubeCreated(createdWorkbenchTube),
-      updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'skills',
-        updatedRecord: skillTransformer.filterSkillFields(createdWorkbenchSkill),
-      }),
-    ]);
-  } catch (err) {
-    logger.error(err);
-    Sentry.captureException(err);
-  }
+  await Promise.all([
+    updatePixApiReleaseCache.onCompetenceCreated(createdCompetence),
+    updatePixApiReleaseCache.onThematicCreated(createdWorkbenchThematic),
+    updatePixApiReleaseCache.onTubeCreated(createdWorkbenchTube),
+    updatePixApiReleaseCache.onSkillCreated(createdWorkbenchSkill),
+  ]);
 
   return createdCompetence;
 }
