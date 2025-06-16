@@ -114,7 +114,8 @@ export default class SkillForm extends Component {
         @searchClass="solution"
         @edition={{@edition}}
         @addTutorial={{this.addTutorial}}
-        @removeTutorial={{this.removeTutorial}}/>
+        @removeTutorial={{this.removeTutorial}}
+      />
       <Tutorials
         @title="Pour en savoir plus"
         @skill={{@skill}}
@@ -122,7 +123,8 @@ export default class SkillForm extends Component {
         @edition={{@edition}}
         @searchClass="more"
         @addTutorial={{this.addTutorial}}
-        @removeTutorial={{this.removeTutorial}}/>
+        @removeTutorial={{this.removeTutorial}}
+      />
       <PixSelect
         @id="select-i18n-option"
         @value={{@skill.i18n}}

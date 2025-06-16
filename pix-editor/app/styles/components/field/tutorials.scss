@@ -1,0 +1,52 @@
+#tutorials-field {
+  .header {
+    align-items: center;
+    display: flex;
+    justify-content:  space-between;
+
+    span {
+      align-items: center;
+      display: flex;
+    }
+
+    .tutorial-link {
+      padding: 0.4rem;
+
+      svg {
+        height: 1.3rem;
+        width: 1.3rem;
+      }
+    }
+  }
+
+  .favorite svg {
+    fill: var(--pix-error-500);
+  }
+}
+
+#select-tutorial-solution,
+#select-tutorial-more,
+#container-select-tutorial-solution,
+#container-select-tutorial-more {
+  width: 100%;
+}
+
+.tutorial-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__title {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  &__tags {
+    color: var(--pix-neutral-500);
+  }
+
+}
+
+.tutorial-search {
+  width: 50%;
+}

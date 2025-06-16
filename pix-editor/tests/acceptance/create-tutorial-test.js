@@ -47,8 +47,8 @@ module('Acceptance | Create-Tutorial', function(hooks) {
   test('create a new tutorial', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
-    await clickByText('Modifier');
-    const createTutorialLink = screen.getByRole('link', {
+    await click(screen.getByRole('button', { name: 'Modifier' }));
+    const createTutorialLink = screen.getByRole('button', {
       name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
     });
 
@@ -98,7 +98,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');
-    const createTutorialLink = screen.getByRole('link', {
+    const createTutorialLink = screen.getByRole('button', {
       name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
     });
 
