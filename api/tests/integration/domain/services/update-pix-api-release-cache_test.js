@@ -6,6 +6,7 @@ import {
   Challenge,
   Competence,
   Framework,
+  Skill,
   Thematic,
   Tutorial
 } from '../../../../lib/domain/models/index.js';
@@ -763,6 +764,184 @@ describe('Integration | Service | update pix api release cache', function() {
 
         // when
         await updatePixApiReleaseCache.onCompetenceUpdated(competence);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onSkillCreated', function() {
+    let skill;
+
+    beforeEach(function() {
+      skill = domainBuilder.buildSkill({
+        id: 'skillId',
+        airtableId: 'recSkillId',
+        name: '@fruits2',
+        description: 'la super description',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
+        tutorialIds: ['tutorialId1', 'tutorialId2'],
+        tutorialAirtableIds: ['recTutorialId1', 'recTutorialId2'],
+        learningMoreTutorialIds: ['tutorialId3'],
+        learningMoreTutorialAirtableIds: ['recTutorialId3'],
+        competenceId: 'competenceId',
+        pixValue: 1.5,
+        status: Skill.STATUSES.ARCHIVE,
+        tubeId: 'tubeId',
+        tubeAirtableId: 'recTubeId',
+        level: 2,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        version: 1,
+        challengeIds: ['challengeId1'],
+        createdAt: new Date('2020-01-01'),
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/skills/skillId', {
+            id: 'skillId',
+            name: '@fruits2',
+            hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            tutorialIds: ['tutorialId1', 'tutorialId2'],
+            learningMoreTutorialIds: ['tutorialId3'],
+            pixValue: 1.5,
+            competenceId: 'competenceId',
+            status: Skill.STATUSES.ARCHIVE,
+            tubeId: 'tubeId',
+            version: 1,
+            level: 2,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onSkillCreated(skill);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onSkillCreated(skill);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onSkillUpdated', function() {
+    let skill;
+
+    beforeEach(function() {
+      skill = domainBuilder.buildSkill({
+        id: 'skillId',
+        airtableId: 'recSkillId',
+        name: '@fruits2',
+        description: 'la super description',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
+        tutorialIds: ['tutorialId1', 'tutorialId2'],
+        tutorialAirtableIds: ['recTutorialId1', 'recTutorialId2'],
+        learningMoreTutorialIds: ['tutorialId3'],
+        learningMoreTutorialAirtableIds: ['recTutorialId3'],
+        competenceId: 'competenceId',
+        pixValue: 1.5,
+        status: Skill.STATUSES.ARCHIVE,
+        tubeId: 'tubeId',
+        tubeAirtableId: 'recTubeId',
+        level: 2,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        version: 1,
+        challengeIds: ['challengeId1'],
+        createdAt: new Date('2020-01-01'),
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/skills/skillId', {
+            id: 'skillId',
+            name: '@fruits2',
+            hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            tutorialIds: ['tutorialId1', 'tutorialId2'],
+            learningMoreTutorialIds: ['tutorialId3'],
+            pixValue: 1.5,
+            competenceId: 'competenceId',
+            status: Skill.STATUSES.ARCHIVE,
+            tubeId: 'tubeId',
+            version: 1,
+            level: 2,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onSkillUpdated(skill);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onSkillUpdated(skill);
 
         // then
         expect(spy).toHaveBeenCalledTimes(0);

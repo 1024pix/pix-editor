@@ -3,6 +3,7 @@ import {
   competenceTransformer,
   createChallengeTransformer,
   frameworkTransformer,
+  skillTransformer,
   thematicTransformer,
   tubeTransformer,
   tutorialTransformer,
@@ -23,6 +24,7 @@ import * as Sentry from '@sentry/node';
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
  * @typedef {import('../../../lib/domain/models').Competence} Competence
  * @typedef {import('../../../lib/domain/models').Framework} Framework
+ * @typedef {import('../../../lib/domain/models').Skill} Skill
  * @typedef {import('../../../lib/domain/models').Thematic} Thematic
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
@@ -135,6 +137,38 @@ async function onCompetenceCreatedOrUpdated(competence) {
         pixApiClient,
         model: 'competences',
         updatedRecord: competenceTransformer.forRelease(competence),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+/**
+ * @param {Skill} skill
+ */
+export async function onSkillCreated(skill) {
+  await onSkillCreatedOrUpdated(skill);
+}
+
+/**
+ @param {Skill} skill
+ */
+export async function onSkillUpdated(skill) {
+  await onSkillCreatedOrUpdated(skill);
+}
+
+/**
+ * @param {Skill} skill
+ */
+async function onSkillCreatedOrUpdated(skill) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'skills',
+        updatedRecord: skillTransformer.forRelease(skill),
       });
     } catch (err) {
       logger.error(err);
