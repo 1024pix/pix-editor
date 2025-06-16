@@ -1068,7 +1068,16 @@ describe('Integration | Service | update pix api release cache', function() {
         const tube = domainBuilder.buildTube({
           skillIds: [],
         });
-        const thematicId = 'thematic123';
+        const thematicId = 'thematicId';
+        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
+          id: thematicId,
+          airtableId: tube.thematicAirtableId,
+        }));
+        const airtableThematicScope = nock('https://api.airtable.com')
+          .get(`/v0/airtableBaseValue/Thematiques/${tube.thematicAirtableId}`)
+          .query({})
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableThematic);
 
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
@@ -1091,9 +1100,10 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(tube, thematicId);
+        await updatePixApiReleaseCache.onTubeCreated(tube);
 
         // then
+        expect(airtableThematicScope.isDone()).to.be.true;
         expect(pixApiCacheScope.isDone()).to.be.true;
       });
     });
@@ -1105,7 +1115,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube(), 'recThematic1');
+        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube());
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();

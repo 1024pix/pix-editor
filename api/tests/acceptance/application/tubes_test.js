@@ -1,4 +1,4 @@
-import {  beforeEach, describe, describe as context, expect, it, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe as context, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
@@ -568,7 +568,7 @@ describe('Application | Route | Tubes', () => {
         await knex('translations').truncate();
       });
 
-      it('should respond with status 201 and created thematic', async () => {
+      it('should respond with status 201 and created tube', async () => {
         // given
         const server = await createServer();
 

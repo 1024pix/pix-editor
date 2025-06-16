@@ -48,7 +48,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
     expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
     expect(prepareForCreationStub).toHaveBeenCalledWith(thematic);
     expect(tubeRepository.create).toHaveBeenCalledWith(tube);
-    expect(updatePixApiReleaseCache.onTubeCreated).toHaveBeenCalledWith(createdTube, 'thematic1');
+    expect(updatePixApiReleaseCache.onTubeCreated).toHaveBeenCalledWith(createdTube);
   });
 
   describe('when thematic id is not found', () => {

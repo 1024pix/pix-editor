@@ -210,14 +210,14 @@ async function onTutorialCreatedOrUpdated(tutorial) {
 
 /**
  * @param {Tube} tube
- * @param {string} thematicId
  */
-export async function onTubeCreated(tube, thematicId) {
+export async function onTubeCreated(tube) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
+    const thematic = await thematicRepository.getByAirtableId(tube.thematicAirtableId);
     await updatedRecordNotifier.notify({
       model: 'tubes',
-      updatedRecord: tubeTransformer.transformTube(tube, thematicId),
+      updatedRecord: tubeTransformer.forRelease(tube, thematic, []),
       pixApiClient,
     });
   } catch (err) {
