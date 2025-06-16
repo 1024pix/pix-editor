@@ -17,6 +17,7 @@ import {
   fillAlternativeQualityFieldsFromMatchingProto,
   frameworkTransformer,
   missionTransformer,
+  skillTransformer,
   thematicTransformer,
   tubeTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -123,7 +124,7 @@ export async function getLearningContentForReplication() {
     competences: transformedCompetences,
     thematics: transformedThematics,
     tubes: transformedTubes,
-    skills,
+    skills: skillTransformer.forReplication(skills),
     challenges: allTranslatedChallenges,
     attachments: translatedAttachments,
     tutorials,
