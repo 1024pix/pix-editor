@@ -83,6 +83,8 @@ async function mockCurrentContent() {
   expectedCurrentContent.competences = [expectedCompetence];
 
   const expectedThematic = omit(['airtableId'], domainBuilder.buildThematic({
+    id: 'thematicId',
+    airtableId: 'recThematicId',
     name_i18n: {
       fr: 'Thématique en fr',
       en: 'Thematic in en',
@@ -90,7 +92,7 @@ async function mockCurrentContent() {
   }));
   expectedCurrentContent.thematics = [expectedThematic];
 
-  const expectedTube = omit(['airtableId', 'index'], domainBuilder.buildTube());
+  const expectedTube = omit(['airtableId', 'index'], domainBuilder.buildTube({ thematicAirtableId: 'recThematicId' }));
   expectedCurrentContent.tubes = [expectedTube];
 
   expectedCurrentContent.skills = [{ ...domainBuilder.buildSkill({ id: 'recSkill1' }) }];
@@ -231,7 +233,7 @@ async function mockCurrentContent() {
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     areas: [buildArea(expectedCurrentContent.areas[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
+    thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: 'recThematicId' })],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [{
       ...airtableSkill,

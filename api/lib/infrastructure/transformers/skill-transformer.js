@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export function filterSkillsFields(skills) {
   return skills.map(filterSkillFields);
 }

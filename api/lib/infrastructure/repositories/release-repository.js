@@ -107,7 +107,6 @@ async function _getCurrentContent() {
   ]);
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
-  const transformedTubes = tubeTransformer.transformTubes(tubes, thematics, challenges);
 
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
@@ -118,7 +117,7 @@ async function _getCurrentContent() {
     areas: areaTransformer.forRelease(areas),
     competences: competenceTransformer.forRelease(competences),
     thematics: thematicTransformer.forRelease(thematics),
-    tubes: transformedTubes,
+    tubes: tubeTransformer.forRelease(tubes, thematics, challenges),
     skills: filteredSkills,
     challenges: transformedChallenges,
     tutorials: filteredTutorials,
