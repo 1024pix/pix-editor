@@ -414,7 +414,6 @@ describe('Acceptance | Route | competences', () => {
     let generateNewId;
     let pixApiCompetenceCacheScope;
     let pixApiThematicCacheScope;
-    // FIXME pixApiTubeCacheScope
     // FIXME pixApiSkillCacheScope
 
     beforeEach(async () => {
