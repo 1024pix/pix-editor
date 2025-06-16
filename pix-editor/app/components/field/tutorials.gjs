@@ -175,7 +175,7 @@ export default class Tutorials extends Component {
               </div>
             </div>
           {{else if (not @edition)}}
-              <div class="card">
+            <div class="card">
               <div class="content">
                 Aucun tutoriel
               </div>
