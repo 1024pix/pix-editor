@@ -2,14 +2,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { createSkill } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
 describe('Unit | Domain | Use Cases | create-skill', () => {
 
   const createdSkill = Symbol('createdSkill');
   const tubeSkills = Symbol('');
 
-  let skillRepository, tubeRepository, skillTransformer, updatedRecordNotifier;
-  const pixApiClient = Symbol('pixApiClient');
+  let skillRepository, tubeRepository;
   const generateNewIdFnc = Symbol('generateNewIdFnc');
   const normalizeNonBreakingSpaceFnc = Symbol('normalizeNonBreakingSpaceFnc');
 
@@ -21,12 +21,8 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
     tubeRepository = {
       getByAirtableId: vi.fn(),
     };
-    skillTransformer = {
-      filterSkillFields: vi.fn().mockReturnValueOnce('skillTransformed'),
-    };
-    updatedRecordNotifier = {
-      notify: vi.fn(),
-    };
+    vi.spyOn(updatePixApiReleaseCache, 'onSkillCreated');
+    updatePixApiReleaseCache.onSkillCreated.mockResolvedValue();
   });
 
   it('should set skill computed fields and save skill', async () => {
@@ -43,9 +39,6 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
     const result = await createSkill(skill, {
       skillRepository,
       tubeRepository,
-      skillTransformer,
-      updatedRecordNotifier,
-      pixApiClient,
       generateNewIdFnc,
       normalizeNonBreakingSpaceFnc,
     });
@@ -57,8 +50,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
     expect(skillRepository.listByTubeId).toHaveBeenCalledWith('tube1');
     expect(skill.prepareForCreation).toHaveBeenCalledWith(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
     expect(skillRepository.create).toHaveBeenCalledWith(skill);
-    expect(skillTransformer.filterSkillFields).toHaveBeenCalledWith(createdSkill);
-    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: 'skillTransformed' , model: 'skills', pixApiClient });
+    updatePixApiReleaseCache.onSkillCreated.mockResolvedValue(createdSkill);
   });
 
   describe('when tube is not found', () => {

@@ -25,7 +25,6 @@ import {
   localizedChallengeSerializer,
   skillSerializer
 } from '../../infrastructure/serializers/jsonapi/index.js';
-import { skillTransformer } from '../../infrastructure/transformers/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 export async function clone(request, h) {
@@ -104,9 +103,6 @@ export async function create(req, h) {
     const createdSkill = await createSkill(skill, {
       skillRepository,
       tubeRepository,
-      skillTransformer,
-      updatedRecordNotifier,
-      pixApiClient,
       generateNewIdFnc: generateNewId,
       normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
     });
@@ -135,11 +131,6 @@ export async function update(req, h) {
     };
     const updatedSkill = await updateSkill(updateSkillCommand, {
       skillRepository,
-      skillTransformer,
-      updatedRecordNotifier,
-      pixApiClient,
-      logger,
-      Sentry,
       normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
     });
 

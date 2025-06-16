@@ -1,15 +1,9 @@
 import { NotFoundError } from '../errors.js';
-import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function createSkill(skill, dependencies = {
   skillRepository,
   tubeRepository,
-  skillTransformer,
-  updatedRecordNotifier,
-  pixApiClient,
   generateNewIdFnc,
   normalizeNonBreakingSpaceFnc,
 }) {
@@ -20,12 +14,6 @@ export async function createSkill(skill, dependencies = {
   skill.prepareForCreation(tube, tubeSkills, dependencies.generateNewIdFnc, dependencies.normalizeNonBreakingSpaceFnc);
 
   const createdSkill = await dependencies.skillRepository.create(skill);
-  try {
-    const skillForRelease = dependencies.skillTransformer.filterSkillFields(createdSkill);
-    await dependencies.updatedRecordNotifier.notify({ updatedRecord: skillForRelease , model: 'skills', pixApiClient: dependencies.pixApiClient });
-  } catch (err) {
-    logger.error(err);
-    Sentry.captureException(err);
-  }
+  await updatePixApiReleaseCache.onSkillCreated(createdSkill);
   return createdSkill;
 }
