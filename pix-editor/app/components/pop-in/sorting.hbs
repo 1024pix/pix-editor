@@ -1,14 +1,14 @@
 <PixModal data-test-sorting-pop-in-title
           @title={{this.title}}
-          @onCloseButtonClick={{fn this.onDeny @model}}
+          @onCloseButtonClick={{this.onDeny}}
           @showModal={{@showModal}}
 >
   <:content>
     <div data-test-sorting-pop-in-content class="sortable-content">
       <ul {{sortable-group onChange=this.reorderItems}}>
-        {{#each this.models as |modelItem|}}
-          <li {{sortable-item model=modelItem}} {{sortable-handle}}>
-            <i class="ellipsis vertical icon"></i><span>{{modelItem.name}}</span><i class="ellipsis vertical icon"></i>
+        {{#each this.models as |model|}}
+          <li {{sortable-item model=model}} {{sortable-handle}}>
+            <i class="ellipsis vertical icon"></i><span>{{model.name}}</span><i class="ellipsis vertical icon"></i>
           </li>
         {{/each}}
       </ul>
@@ -18,13 +18,13 @@
     <PixButton data-test-sorting-pop-in-deny
                @backgroundColor="transparent-light"
                @isBorderVisible={{true}}
-               @triggerAction={{fn this.onDeny @model}}
+               @triggerAction={{this.onDeny}}
     >
       <i class="remove icon" ></i>
       {{t 'common.cancel'}}
     </PixButton>
     <PixButton data-test-sorting-pop-in-approve
-               @triggerAction={{fn this.onApprove @model}}
+               @triggerAction={{this.onApprove}}
     >
       <i class="checkmark icon" ></i>
       Ok

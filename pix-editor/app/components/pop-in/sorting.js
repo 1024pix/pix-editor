@@ -1,17 +1,11 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import _ from 'lodash';
 
 export default class PopInSortingComponent extends Component {
 
-  @tracked sortedModel;
-
-  // force tracking of model sorting
   get models() {
-    if (this.sortedModel) {
-      return this.sortedModel;
-    }
-    return this.args.model;
+    return _.sortBy(this.args.model, 'index');
   }
 
   get title() {
@@ -21,22 +15,17 @@ export default class PopInSortingComponent extends Component {
   @action
   reorderItems(models) {
     models.forEach((model, index) => model.index = index);
-    this.sortedModel = models;
   }
 
   @action
-  onDeny(models) {
-    if (this.args.onDeny) {
-      this.args.onDeny(models);
-    }
+  onDeny() {
+    this.args.onDeny?.(this.args.model);
     return null;
   }
 
   @action
-  onApprove(models) {
-    if (this.args.onApprove) {
-      this.args.onApprove(models);
-    }
+  onApprove() {
+    this.args.onApprove?.(this.args.model);
     return null;
   }
 }
