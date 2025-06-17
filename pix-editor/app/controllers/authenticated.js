@@ -61,7 +61,7 @@ export default class ApplicationController extends Controller {
   }
 
   get isV2() {
-    return this.versionManager.getV2();
+    return this.versionManager.getV2() && this.router.currentRouteName.includes('v2');
   }
 
   showMessage(content, positive) {
