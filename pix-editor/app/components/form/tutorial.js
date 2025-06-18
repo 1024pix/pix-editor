@@ -20,7 +20,7 @@ export default class TutorialForm extends Component {
   }
 
   get tutorialLanguage() {
-    return this.config.tutorialLocaleToLanguageMap[this.args.tutorial.language];
+    return this.config.tutorialLocaleToLanguageMap[this.args.tutorial.normalizedLanguage];
   }
 
   get tutorialLanguageOptions() {
