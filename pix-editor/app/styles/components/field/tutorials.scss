@@ -19,8 +19,18 @@
     }
   }
 
-  .favorite svg {
-    fill: var(--pix-error-500);
+  .favorite {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .flag {
+      font-size: 1.3rem;
+    }
+
+    svg {
+      fill: var(--pix-error-500);
+    }
   }
 }
 

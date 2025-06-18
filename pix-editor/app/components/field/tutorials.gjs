@@ -8,6 +8,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import { not } from 'ember-truth-helpers';
+import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 
 import PopInTutorialComponent from '../pop-in/tutorial';
 import SelectSearch from './select-search';
@@ -166,6 +167,7 @@ export default class Tutorials extends Component {
                   <div>Durée : {{tutorial.duration}}</div>
                   <div>Source : {{tutorial.source}}
                     <div class="ui right floated favorite">
+                      <span class="flag" aria-label={{tutorial.language}}>{{flagForLanguage tutorial.normalizedLanguage}}</span>
                       {{#if tutorial.crush}}
                         <PixIcon @name="favorite" @plainIcon={{true}} />
                       {{/if}}

@@ -18,4 +18,9 @@ export default class TutorialModel extends Model {
     const tags = this.hasMany('tags').value() || [];
     return tags.map((tag) => tag.title).join(' | ');
   }
+
+  get normalizedLanguage() {
+    // Il y a au moins 1 tuto avec une langue null😢
+    return this.language?.split('-')?.[0];
+  }
 }
