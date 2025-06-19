@@ -370,31 +370,6 @@ describe('Unit | Domain | Skill', () => {
     });
   });
 
-  describe('#archiveSkillAndChallenges', () => {
-    it('should archive skill', () => {
-      // given
-      const challenge1 = domainBuilder.buildChallenge();
-      const challenge2 = domainBuilder.buildChallenge();
-      vi.spyOn(challenge1, 'archive').mockImplementation(() => true);
-      vi.spyOn(challenge2, 'archive').mockImplementation(() => true);
-      const skillChallenges = [challenge1, challenge2];
-      const skillToArchive = domainBuilder.buildSkill({
-        status: Skill.STATUSES.ACTIF,
-      });
-
-      // when
-      skillToArchive.archiveSkillAndChallenges({ skillChallenges });
-
-      // then
-      const expectedArchivedSkill = domainBuilder.buildSkill({
-        status: Skill.STATUSES.ARCHIVE,
-      });
-      expect(skillToArchive).toStrictEqual(expectedArchivedSkill);
-      expect(challenge1.archive).toHaveBeenCalledTimes(1);
-      expect(challenge2.archive).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('#prepareForCreation', () => {
     const createdSkillId = 'createdSkillId';
     let generateNewIdFnc, normalizeNonBreakingSpaceFnc;

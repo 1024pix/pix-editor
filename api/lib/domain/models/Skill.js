@@ -202,13 +202,6 @@ export class Skill {
     };
   }
 
-  archiveSkillAndChallenges({ skillChallenges }) {
-    this.status = Skill.STATUSES.ARCHIVE;
-    for (const challenge of skillChallenges) {
-      challenge.archive();
-    }
-  }
-
   update(command, normalizeNonBreakingSpaceFnc) {
     this.description = command.description;
     this.descriptionStatus = command.descriptionStatus;

@@ -1,11 +1,6 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import {
-  filterSkillFields,
-  filterSkillsFields,
-  forRelease,
-  forReplication,
-} from '../../../../lib/infrastructure/transformers/skill-transformer.js';
+import { forRelease, forReplication, } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { SkillForReplication } from '../../../../lib/domain/models/replication/index.js';
@@ -316,33 +311,6 @@ describe('Unit | Infrastructure | skill-transformer', function() {
           }),
         ]);
       });
-    });
-  });
-
-  describe('#filterSkillFields', () => {
-    it('filters skill fields for release', () => {
-      // given
-      const skill = domainBuilder.buildSkill();
-
-      // when
-      const filteredSkill = filterSkillFields(skill);
-
-      // then
-      expect(filteredSkill).toEqual(domainBuilder.buildSkillForRelease(skill));
-    });
-  });
-
-  describe('#filterSkillsFields', () => {
-    it('filters skills fields for release', function() {
-      // given
-      const skill1 = domainBuilder.buildSkill({ id: 'skill1' });
-      const skill2 = domainBuilder.buildSkill({ id: 'skill2' });
-
-      // when
-      const filteredSkills = filterSkillsFields([skill1, skill2]);
-
-      // then
-      expect(filteredSkills).toEqual([domainBuilder.buildSkillForRelease(skill1), domainBuilder.buildSkillForRelease(skill2)]);
     });
   });
 });
