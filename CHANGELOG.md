@@ -1,5 +1,46 @@
 
 
+## v3.209.0 (19/06/2025)
+
+
+### :rocket: Amélioration
+- [#1040](https://github.com/1024pix/pix-editor/pull/1040) [FEATURE] Modifier le terme "Type" en "Modalité" dans les formulaires et dans la vue atelier de l'atelier sur PixEditor (PIX-17961).
+- [#1017](https://github.com/1024pix/pix-editor/pull/1017) [FEATURE] Sortir les tubes du proxy Airtable (PIX-17907).
+
+### :building_construction: Tech
+- [#974](https://github.com/1024pix/pix-editor/pull/974) [TECH] Refacto de la dropdown de recherche dans l'édition d'un acquis (PIX-17729).
+- [#1036](https://github.com/1024pix/pix-editor/pull/1036) [TECH] Centraliser la gestion d'erreurs imprévues côté API dans le pre-response-utils.
+- [#1038](https://github.com/1024pix/pix-editor/pull/1038) [TECH] Nettoyer régulièrement le contenu de la table "releases" (PIX-18203).
+- [#1031](https://github.com/1024pix/pix-editor/pull/1031) [TECH] Suppression de dépréciations ember.
+- [#1035](https://github.com/1024pix/pix-editor/pull/1035) [TECH] Suppression des routes du proxy Airtable.
+- [#1034](https://github.com/1024pix/pix-editor/pull/1034) [TECH] Grouper les recherches de tags par id.
+- [#1033](https://github.com/1024pix/pix-editor/pull/1033) [TECH] Sortir les tutoriels du proxy (PIX-18099).
+- [#1016](https://github.com/1024pix/pix-editor/pull/1016) [TECH] Sortir les tags du proxy Airtable (PIX-18097).
+- [#1023](https://github.com/1024pix/pix-editor/pull/1023) [TECH] Correction des deprecations EmberJs - Array sur Pix Editor (PIX-17909).
+- [#1000](https://github.com/1024pix/pix-editor/pull/1000) [TECH] Remplacer ember-select par PixSelect dans l'édition d'un challenge (PIX-17925).
+- [#1019](https://github.com/1024pix/pix-editor/pull/1019) [TECH] Supprime test flacky sur la modification d'épreuve.
+
+### :bug: Correction
+- [#1047](https://github.com/1024pix/pix-editor/pull/1047) [BUGFIX] Corriger l'affichage des drapeaux des tutoriels (PIX-18325).
+- [#1045](https://github.com/1024pix/pix-editor/pull/1045) [BUGFIX] L’état de la popin de tri ne se réinitialise pas correctement (PIX-18296).
+- [#1043](https://github.com/1024pix/pix-editor/pull/1043) [BUGFIX] L’ordre d’affichage des thématiques n’est pas le bon (PIX-18287).
+- [#1039](https://github.com/1024pix/pix-editor/pull/1039) [BUGFIX] Corriger le déplacement d'un sujet (PIX-18209).
+- [#1037](https://github.com/1024pix/pix-editor/pull/1037) [BUGFIX] Le niveau du tuto n’est pas obligatoire (PIX-18193).
+- [#1032](https://github.com/1024pix/pix-editor/pull/1032) [BUGFIX] Correction de flaky sur test acceptance modify-challenge.
+
+### :arrow_up: Montée de version
+- [#1028](https://github.com/1024pix/pix-editor/pull/1028) [BUMP] Update Node.js to v22.16.0.
+- [#1027](https://github.com/1024pix/pix-editor/pull/1027) [BUMP] Update dependency postgres to v15.13.
+- [#1026](https://github.com/1024pix/pix-editor/pull/1026) [BUMP] Update dependency @playwright/test to v1.52.0.
+- [#1025](https://github.com/1024pix/pix-editor/pull/1025) [BUMP] Update dependency @1024pix/pix-ui to ^55.21.0 (pix-editor).
+- [#1024](https://github.com/1024pix/pix-editor/pull/1024) [BUMP] Update dependency redis to v7.2.9.
+- [#1021](https://github.com/1024pix/pix-editor/pull/1021) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.32 (pix-editor).
+- [#1020](https://github.com/1024pix/pix-editor/pull/1020) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.5 (pix-editor).
+- [#934](https://github.com/1024pix/pix-editor/pull/934) [BUMP] Update dependency globals to v16 (api).
+- [#1005](https://github.com/1024pix/pix-editor/pull/1005) [BUMP] Update dependency vitest to v3 (challenge-parser).
+- [#1004](https://github.com/1024pix/pix-editor/pull/1004) [BUMP] Update dependency vitest to v3 (api).
+- [#968](https://github.com/1024pix/pix-editor/pull/968) [BUMP] Update dependency base-x to v5.0.1 [SECURITY].
+
 ## v3.208.0 (04/06/2025)
 
 
