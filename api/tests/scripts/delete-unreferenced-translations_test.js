@@ -1,8 +1,7 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder } from '../test-helper.js';
 import nock from 'nock';
-import Airtable from 'airtable';
-import { deleteUnreferencedTranslationsInAirtable } from '../../scripts/delete-unreferenced-translations/index.js';
+import { DeleteUnreferencedTranslations } from '../../scripts/delete-unreferenced-translations.js';
 
 const {
   buildArea,
@@ -16,7 +15,6 @@ const {
 } = airtableBuilder.factory;
 
 describe('Script | delete-unreferenced-translations', () => {
-  let airtableClient;
 
   beforeEach(() => {
     const currentContent = {
@@ -169,9 +167,6 @@ describe('Script | delete-unreferenced-translations', () => {
       tutorials: [],
       translations,
     });
-    airtableClient = new Airtable({
-      apiKey: 'airtableApiKeyValue',
-    }).base('airtableBaseValue');
   });
 
   it('should delete translations that are not linked to any entities in Airtable when dryRun disabled', async() => {
@@ -193,7 +188,11 @@ describe('Script | delete-unreferenced-translations', () => {
       });
 
     // when
-    await deleteUnreferencedTranslationsInAirtable({ dryRun: false, airtableClient });
+    const script = new DeleteUnreferencedTranslations();
+    await script.handle({
+      options: { dryRun: false },
+      logger: { info: vi.fn() },
+    });
 
     // then
     expect(deleteCommand.isDone()).to.be.true;
@@ -218,7 +217,11 @@ describe('Script | delete-unreferenced-translations', () => {
       });
 
     // when
-    await deleteUnreferencedTranslationsInAirtable({ airtableClient });
+    const script = new DeleteUnreferencedTranslations();
+    await script.handle({
+      options: { dryRun: true },
+      logger: { info: vi.fn() },
+    });
 
     // then
     expect(deleteCommand.isDone()).to.be.false;
