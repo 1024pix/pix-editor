@@ -214,6 +214,30 @@ export class Challenge {
     return 'challenge';
   }
 
+  static get PROTO_FIELDS() {
+    return [
+      'accessibility1',
+      'accessibility2',
+      'autoReply',
+      'contextualizedFields',
+      'deafAndHardOfHearing',
+      'declinable',
+      'focusable',
+      'hasEmbedInternalValidation',
+      'isAwarenessChallenge',
+      'isIncompatibleIpadCertif',
+      'noValidationNeeded',
+      'pedagogy',
+      'requireGafamWebsiteAccess',
+      'responsive',
+      'shuffled',
+      'spoil',
+      'timer',
+      'toRephrase',
+      'type',
+    ];
+  }
+
   get isPropose() {
     return this.status === Challenge.STATUSES.PROPOSE;
   }
