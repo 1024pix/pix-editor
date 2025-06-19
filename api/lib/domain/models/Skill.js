@@ -23,6 +23,9 @@ export class Skill {
     level,
     challengeIds,
     createdAt,
+    activatedAt,
+    archivedAt,
+    obsoletedAt,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -45,6 +48,9 @@ export class Skill {
     this.internationalisation = internationalisation;
     this.challengeIds = challengeIds;
     this.createdAt = createdAt;
+    this.activatedAt = activatedAt;
+    this.archivedAt = archivedAt;
+    this.obsoletedAt = obsoletedAt;
   }
 
   static get STATUSES() {
@@ -210,7 +216,20 @@ export class Skill {
     this.hint_i18n = { fr: normalizeNonBreakingSpaceFnc(command.clue), en: command.clueEn };
     this.internationalisation = command.i18n;
     this.learningMoreTutorialAirtableIds = command.tutoMoreAirtableIds;
+    const oldStatus = this.status;
     this.status = command.status;
     this.tutorialAirtableIds = command.tutoSolutionAirtableIds;
+    if (oldStatus !== this.status) {
+      const now = new Date();
+      if (this.status === Skill.STATUSES.ARCHIVE) {
+        this.archivedAt = now;
+      }
+      if (this.status === Skill.STATUSES.ACTIF) {
+        this.activatedAt = now;
+      }
+      if (this.status === Skill.STATUSES.PERIME) {
+        this.obsoletedAt = now;
+      }
+    }
   }
 }

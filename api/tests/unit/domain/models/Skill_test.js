@@ -1,4 +1,4 @@
-import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 
@@ -475,10 +475,19 @@ describe('Unit | Domain | Skill', () => {
   });
 
   describe('#update', () => {
-    let normalizeNonBreakingSpaceFnc;
+    let normalizeNonBreakingSpaceFnc, now;
 
     beforeEach(function() {
       normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
+      now = new Date('2024-10-29T03:04:00Z');
+      vi.useFakeTimers({
+        now,
+        toFake: ['Date'],
+      });
+    });
+
+    afterEach(function() {
+      vi.useRealTimers();
     });
 
     it('should set specific fields for update', function() {
@@ -540,7 +549,90 @@ describe('Unit | Domain | Skill', () => {
         tutorialAirtableIds: ['newTutoAirtableId'],
         learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
         status: Skill.STATUSES.ARCHIVE,
+        archivedAt: now,
       }));
+    });
+
+    it('should set "activatedAt" date when status turns into actif', function() {
+      // given
+      const skill = domainBuilder.buildSkill({
+        createdAt: new Date('2023-10-05T18:08:00Z'),
+        status: Skill.STATUSES.EN_CONSTRUCTION,
+      });
+
+      // when
+      skill.update({
+        status: Skill.STATUSES.ACTIF,
+      }, normalizeNonBreakingSpaceFnc);
+
+      // then
+      expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
+      expect(skill.activatedAt).toStrictEqual(now);
+      expect(skill.archivedAt).toStrictEqual(null);
+      expect(skill.obsoletedAt).toStrictEqual(null);
+    });
+
+    it('should set "archivedAt" date when status turns into archivé', function() {
+      // given
+      const skill = domainBuilder.buildSkill({
+        createdAt: new Date('2023-10-05T18:08:00Z'),
+        activatedAt: new Date('2023-11-06T18:08:00Z'),
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      skill.update({
+        status: Skill.STATUSES.ARCHIVE,
+      }, normalizeNonBreakingSpaceFnc);
+
+      // then
+      expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
+      expect(skill.activatedAt).toStrictEqual(new Date('2023-11-06T18:08:00Z'));
+      expect(skill.archivedAt).toStrictEqual(now);
+      expect(skill.obsoletedAt).toStrictEqual(null);
+    });
+
+    it('should set "obsoletedAt" date when status turns into périmé', function() {
+      // given
+      const skill = domainBuilder.buildSkill({
+        createdAt: new Date('2023-10-05T18:08:00Z'),
+        activatedAt: new Date('2023-11-06T18:08:00Z'),
+        archivedAt: new Date('2023-12-07T18:08:00Z'),
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      skill.update({
+        status: Skill.STATUSES.PERIME,
+      }, normalizeNonBreakingSpaceFnc);
+
+      // then
+      expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
+      expect(skill.activatedAt).toStrictEqual(new Date('2023-11-06T18:08:00Z'));
+      expect(skill.archivedAt).toStrictEqual(new Date('2023-12-07T18:08:00Z'));
+      expect(skill.obsoletedAt).toStrictEqual(now);
+    });
+
+    it('should not alter any dates if status remains unchanged', function() {
+      // given
+      const skill = domainBuilder.buildSkill({
+        createdAt: new Date('2023-10-05T18:08:00Z'),
+        activatedAt: new Date('2023-11-06T18:08:00Z'),
+        archivedAt: new Date('2023-12-07T18:08:00Z'),
+        obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+        status: Skill.STATUSES.PERIME,
+      });
+
+      // when
+      skill.update({
+        status: Skill.STATUSES.PERIME,
+      }, normalizeNonBreakingSpaceFnc);
+
+      // then
+      expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
+      expect(skill.activatedAt).toStrictEqual(new Date('2023-11-06T18:08:00Z'));
+      expect(skill.archivedAt).toStrictEqual(new Date('2023-12-07T18:08:00Z'));
+      expect(skill.obsoletedAt).toStrictEqual(new Date('2024-01-08T18:08:00Z'));
     });
 
     context('hint', function() {

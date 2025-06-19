@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, describe as context, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
@@ -59,6 +59,13 @@ describe('Integration | Repository | skill-repository', () => {
         }),
       ]).activate().nockScope;
 
+      databaseBuilder.factory.buildSkill({
+        id: 'skill1',
+        airtableId: 'recId1',
+        activatedAt: new Date('2023-11-06T18:08:00Z'),
+        archivedAt: new Date('2023-12-07T18:08:00Z'),
+        obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+      });
       databaseBuilder.factory.buildTranslation({
         key: 'skill.skill1.hint',
         locale: 'fr',
@@ -112,6 +119,9 @@ describe('Integration | Repository | skill-repository', () => {
           version: '1',
           challengeIds: ['challenge123184r9124'],
           createdAt: '2025-01-01T09:58:57.465Z',
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
         }),
         domainBuilder.buildSkill({
           id: 'skill2',
@@ -639,7 +649,8 @@ describe('Integration | Repository | skill-repository', () => {
 
   describe('#update', () => {
 
-    afterEach(() => {
+    afterEach(async () => {
+      await knex('skills').truncate();
       return knex('translations').truncate();
     });
 
@@ -658,6 +669,9 @@ describe('Integration | Repository | skill-repository', () => {
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: 'hint fr', en: 'hint en' },
+        activatedAt: new Date('2023-11-06T18:08:00Z'),
+        archivedAt: new Date('2023-12-07T18:08:00Z'),
+        obsoletedAt: new Date('2024-01-08T18:08:00Z'),
       });
 
       vi.spyOn(skillDatasource, 'update')
@@ -691,6 +705,7 @@ describe('Integration | Repository | skill-repository', () => {
       expect(skillDatasource.update).toHaveBeenCalledTimes(1);
       expect(skillDatasource.update).toHaveBeenNthCalledWith(1, skillToSave);
     });
+
     it('should handle translations correctly', async function() {
       // given
       const skillAlterHintFrDeleteHintEn_A = domainBuilder.buildSkill({
@@ -736,6 +751,74 @@ describe('Integration | Repository | skill-repository', () => {
           value: skillAddHint_B.hint_i18n.fr,
         },
       ]);
+    });
+    context('PG', function() {
+      it('should insert the row in PG if it was not in it yet', async function() {
+        // given
+        const skillToSave = domainBuilder.buildSkill({
+          id: 'skillIdPersistant',
+          airtableId: 'skillAirtableId',
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+        });
+
+        vi.spyOn(skillDatasource, 'update')
+          .mockImplementationOnce(() => ({
+            id: skillToSave.id,
+            airtableId: skillToSave.airtableId,
+          }));
+
+        // when
+        await skillRepository.update(skillToSave);
+
+        // when
+        const skillInPG = await knex('skills').select('*').where({ id: 'skillIdPersistant' }).first();
+        expect(skillInPG).toStrictEqual({
+          id: 'skillIdPersistant',
+          airtableId: 'skillAirtableId',
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+        });
+      });
+
+      it('should update the row in PG if it was already in it', async function() {
+        // given
+        const skillToSave = domainBuilder.buildSkill({
+          id: 'skillIdPersistant',
+          airtableId: 'skillAirtableId',
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: null,
+        });
+        databaseBuilder.factory.buildSkill({
+          id: 'skillIdPersistant',
+          airtableId: 'skillAirtableId',
+          activatedAt: null,
+          archivedAt: null,
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+        });
+        await databaseBuilder.commit();
+        vi.spyOn(skillDatasource, 'update')
+          .mockImplementationOnce(() => ({
+            id: skillToSave.id,
+            airtableId: skillToSave.airtableId,
+          }));
+
+        // when
+        await skillRepository.update(skillToSave);
+
+        // when
+        const skillInPG = await knex('skills').select('*').where({ id: 'skillIdPersistant' }).first();
+        expect(skillInPG).toStrictEqual({
+          id: 'skillIdPersistant',
+          airtableId: 'skillAirtableId',
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: null,
+        });
+      });
     });
   });
 
