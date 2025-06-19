@@ -1,5 +1,11 @@
 
 
+## v3.210.1 (19/06/2025)
+
+
+### :bug: Correction
+- [#1050](https://github.com/1024pix/pix-editor/pull/1050) [BUGFIX] Script de détection des incohérences au sein d'une grappe d'épreuves ne marche pas lorsque l'attribut "contextualizedFields" est null.
+
 ## v3.210.0 (19/06/2025)
 
 
