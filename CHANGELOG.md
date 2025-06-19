@@ -1,5 +1,12 @@
 
 
+## v3.210.0 (19/06/2025)
+
+
+### :building_construction: Tech
+- [#1049](https://github.com/1024pix/pix-editor/pull/1049) [TECH] Ajout d'un script pour détecter les incohérences sur les attributs commun d'une même grappe d'épreuves (PIX-18358).
+- [#1048](https://github.com/1024pix/pix-editor/pull/1048) [TECH] Nettoyage et conversion de scripts.
+
 ## v3.209.0 (19/06/2025)
 
 
