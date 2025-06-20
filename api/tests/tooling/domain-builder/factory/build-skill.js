@@ -25,6 +25,9 @@ export function buildSkill({
   version = 1,
   challengeIds = ['challenge0aADHQIWCQ123', 'challengeLQdqjcpoqnefc'],
   createdAt = '2025-01-06T08:58:57.465Z',
+  activatedAt = null,
+  archivedAt = null,
+  obsoletedAt = null,
 } = {}) {
   return new Skill({
     id,
@@ -48,5 +51,8 @@ export function buildSkill({
     version,
     challengeIds,
     createdAt,
+    activatedAt,
+    archivedAt,
+    obsoletedAt,
   });
 }

@@ -113,7 +113,6 @@ async function _getCurrentContent() {
   const transformedAreas = areaTransformer.filterAreasFields(areas);
 
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
-  const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
@@ -123,7 +122,7 @@ async function _getCurrentContent() {
     competences: filteredCompetences,
     thematics: transformedThematics,
     tubes: transformedTubes,
-    skills: filteredSkills,
+    skills: skillTransformer.forRelease(skills),
     challenges: transformedChallenges,
     tutorials: filteredTutorials,
     courses,

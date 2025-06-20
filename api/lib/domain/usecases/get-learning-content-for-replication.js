@@ -17,6 +17,7 @@ import {
   fillAlternativeQualityFieldsFromMatchingProto,
   frameworkTransformer,
   missionTransformer,
+  skillTransformer,
   thematicTransformer,
   tubeTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -109,9 +110,12 @@ export async function getLearningContentForReplication() {
   }
 
   const translatedAttachments = attachments.map((attachment) => ({
-    ...attachment,
+    type: attachment.type,
+    url: attachment.url,
+    size: attachment.size,
+    filename: attachment.filename,
     challengeId: attachment.localizedChallengeId,
-    alt: allTranslatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
+    alt: allTranslatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt,
   }));
 
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
@@ -123,7 +127,7 @@ export async function getLearningContentForReplication() {
     competences: transformedCompetences,
     thematics: transformedThematics,
     tubes: transformedTubes,
-    skills,
+    skills: skillTransformer.forReplication(skills),
     challenges: allTranslatedChallenges,
     attachments: translatedAttachments,
     tutorials,

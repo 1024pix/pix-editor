@@ -1583,6 +1583,10 @@ describe('Application | Route | Skills', () => {
       await databaseBuilder.commit();
     });
 
+    afterEach(function() {
+      return knex('skills').truncate();
+    });
+
     it('should patch skill', async () => {
       // Given
       const skillToUpdateFromAirtableScope = nock('https://api.airtable.com')

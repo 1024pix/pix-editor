@@ -368,26 +368,6 @@ export class Challenge {
     };
   }
 
-  archive() {
-    const now = new Date().toISOString();
-    if (this.isPropose) {
-      this.status = Challenge.STATUSES.PERIME;
-      this.madeObsoleteAt = now;
-      return;
-    }
-    if (this.isValide) {
-      this.status = Challenge.STATUSES.ARCHIVE;
-      this.archivedAt = now;
-    }
-  }
-
-  obsolete() {
-    if (!this.isPerime) {
-      this.status = Challenge.STATUSES.PERIME;
-      this.madeObsoleteAt = new Date().toISOString();
-    }
-  }
-
   translate(locale) {
     const challenge = new Challenge({
       ...this,

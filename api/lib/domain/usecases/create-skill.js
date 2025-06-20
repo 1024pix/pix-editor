@@ -21,7 +21,7 @@ export async function createSkill(skill, dependencies = {
 
   const createdSkill = await dependencies.skillRepository.create(skill);
   try {
-    const skillForRelease = dependencies.skillTransformer.filterSkillFields(createdSkill);
+    const skillForRelease = dependencies.skillTransformer.forRelease(createdSkill);
     await dependencies.updatedRecordNotifier.notify({ updatedRecord: skillForRelease , model: 'skills', pixApiClient: dependencies.pixApiClient });
   } catch (err) {
     logger.error(err);

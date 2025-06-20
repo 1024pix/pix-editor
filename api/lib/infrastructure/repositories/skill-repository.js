@@ -14,7 +14,8 @@ export async function list() {
     skillDatasource.list(),
     translationRepository.listByModel(model),
   ]);
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*');
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function get(id) {
@@ -23,14 +24,16 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
   if (!skillDTO) return null;
-  return toDomain(skillDTO, translations);
+  const skillDataFromPG = await knex('skills').select('*').where({ id }).first();
+  return toDomain(skillDTO, translations, skillDataFromPG);
 }
 
 export async function getByAirtableId(id) {
   const datasourceSkill = await skillDatasource.find(id);
   if (!datasourceSkill) return null;
   const translations = await translationRepository.listByEntity(model, datasourceSkill.id);
-  return toDomain(datasourceSkill, translations);
+  const skillDataFromPG = await knex('skills').select('*').where({ id: datasourceSkill.id }).first();
+  return toDomain(datasourceSkill, translations, skillDataFromPG);
 }
 
 export async function getManyByAirtableIds(ids) {
@@ -38,35 +41,40 @@ export async function getManyByAirtableIds(ids) {
   const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listByTubeId(tubeId) {
   const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listActiveByCompetenceId(competenceId) {
   const datasourceSkills = await skillDatasource.listActiveByCompetenceId(competenceId);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listByCompetenceId(competenceId) {
   const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function search(params) {
   const datasourceSkills = await skillDatasource.search(params);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  return toDomainList(datasourceSkills, translations);
+  const skillsDataFromPG = await knex('skills').select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function create(skill) {
@@ -81,7 +89,8 @@ export async function create(skill) {
     }));
   }
   await translationRepository.save({ translations });
-  return toDomain(createdSkillDTO, translations);
+  const skillDataFromPG = await knex('skills').select('*').where({ id: createdSkillDTO.id }).first();
+  return toDomain(createdSkillDTO, translations, skillDataFromPG);
 }
 
 export async function update(skill) {
@@ -93,22 +102,37 @@ export async function update(skill) {
       locales: ['fr', 'en'],
       transaction,
     });
+    const skillDataToSaveInPG = extractDataForPG(skill);
+    const [skillDataFromPG] = await knex('skills').insert(skillDataToSaveInPG).onConflict('id').merge().returning('*');
     await translationRepository.save({ translations, transaction });
-
-    return toDomain(updatedSkillDto, translations);
+    return toDomain(updatedSkillDto, translations, skillDataFromPG);
   });
 }
 
-function toDomainList(datasourceSkills, translations) {
+function toDomainList(datasourceSkills, translations, skillsDataFromPG) {
   const translationsBySkillId = _.groupBy(translations, 'entityId');
+  const skillDataFromPGBySkillId = _.groupBy(skillsDataFromPG, 'id');
   return datasourceSkills.map(
-    (datasourceSkill) => toDomain(datasourceSkill, translationsBySkillId[datasourceSkill.id]),
+    (datasourceSkill) => toDomain(datasourceSkill, translationsBySkillId[datasourceSkill.id], skillDataFromPGBySkillId[datasourceSkill.id]?.[0] ?? null),
   );
 }
 
-function toDomain(datasourceSkill, translations = []) {
+function toDomain(datasourceSkill, translations = [], skillDataFromPG) {
   return new Skill({
     ...datasourceSkill,
     ...skillTranslations.toDomain(translations),
+    activatedAt: skillDataFromPG?.activatedAt ?? null,
+    archivedAt: skillDataFromPG?.archivedAt ?? null,
+    obsoletedAt: skillDataFromPG?.obsoletedAt ?? null,
   });
+}
+
+function extractDataForPG(skill) {
+  return {
+    id: skill.id,
+    airtableId: skill.airtableId,
+    activatedAt: skill.activatedAt,
+    archivedAt: skill.archivedAt,
+    obsoletedAt: skill.obsoletedAt,
+  };
 }

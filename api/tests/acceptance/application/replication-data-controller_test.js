@@ -3,6 +3,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationH
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
+import { SkillForReplication } from '../../../lib/domain/models/replication/index.js';
 
 const {
   buildFramework,
@@ -42,7 +43,7 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       // then
       const result = JSON.parse(response.result);
       const resultWithoutTranslations = _.omit(result, 'translations');
-      const expectedCurrentContentWithoutTranslations = _.omit(result, 'translations');
+      const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
       expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(expectedCurrentContent.translations.map((translation) => ({
         ...translation,
@@ -82,7 +83,7 @@ async function mockCurrentContent() {
   }));
   expectedCurrentContent.competences = [expectedCompetence];
 
-  const expectedThematic = omit(['airtableId'], domainBuilder.buildThematic({
+  const expectedThematic = omit(['airtableId', 'competenceAirtableId', 'tubeAirtableIds'], domainBuilder.buildThematic({
     name_i18n: {
       fr: 'Thématique en fr',
       en: 'Thematic in en',
@@ -90,10 +91,30 @@ async function mockCurrentContent() {
   }));
   expectedCurrentContent.thematics = [expectedThematic];
 
-  const expectedTube = omit(['airtableId', 'index'], domainBuilder.buildTube());
-  expectedCurrentContent.tubes = [expectedTube];
+  const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube());
+  expectedCurrentContent.tubes = [{
+    ...expectedTube,
+    isMobileCompliant: false,
+    isTabletCompliant: false,
+  }];
 
-  expectedCurrentContent.skills = [{ ...domainBuilder.buildSkill({ id: 'recSkill1' }) }];
+  const baseSkill = domainBuilder.buildSkill({
+    id: 'recSkill1',
+    airtableId: 'recSkill1',
+    createdAt: '2023-10-05T18:08:00Z',
+    activatedAt: '2023-11-06T18:08:00.000Z',
+    archivedAt: '2023-12-07T18:08:00.000Z',
+    obsoletedAt: '2024-01-08T18:08:00.000Z',
+  });
+  expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill) }];
+
+  databaseBuilder.factory.buildSkill({
+    id: 'recSkill1',
+    airtableId: 'recSkill1',
+    activatedAt: new Date('2023-11-06T18:08:00Z'),
+    archivedAt: new Date('2023-12-07T18:08:00Z'),
+    obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+  });
 
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
@@ -141,8 +162,8 @@ async function mockCurrentContent() {
   };
   const expectedChallenge = {
     ...challenge,
-    geography: 'Brésil',
-    area: 'Brésil',
+    geography: 'BR',
+    area: 'BR',
     urlsToConsult: [
       'https://example.com/',
       'https://pix.org/nl-be',
@@ -152,14 +173,15 @@ async function mockCurrentContent() {
   delete expectedChallenge.localizedChallenges;
   const expectedAlternativeChallenge = {
     ...alternativeChallenge,
-    area: 'Neutre',
+    geography: null,
+    area: null,
     files: [],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
     ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
-  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'AA', area: 'Neutre' };
+  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'RO', area: 'RO' };
   delete expectedChallengeNl.localizedChallenges;
   expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
 
@@ -184,11 +206,11 @@ async function mockCurrentContent() {
     localizedChallengeId: 'localized-challenge-id',
   };
   expectedCurrentContent.attachments = [
-    { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
-    {
+    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId', 'id'], { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, }),
+    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId', 'id'], {
       ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
       alt: 'alt_nl'
-    },
+    }),
   ];
 
   expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject()];
@@ -328,13 +350,14 @@ async function mockCurrentContent() {
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
     isAwarenessChallenge: true,
     toRephrase: false,
+    geography: null,
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
     challengeId: challenge.id,
     locale: 'nl',
     status: LocalizedChallenge.STATUSES.PLAY,
-    geography: null,
+    geography: 'RO',
     requireGafamWebsiteAccess: false,
     isIncompatibleIpadCertif: false,
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,

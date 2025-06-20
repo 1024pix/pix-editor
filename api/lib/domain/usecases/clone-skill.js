@@ -97,8 +97,8 @@ async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRe
 
 async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier }) {
   try {
-    const [transformedSkill] = skillTransformer.filterSkillsFields([clonedSkill]);
-    await updatedRecordNotifier.notify({ updatedRecord: transformedSkill, model: 'skills', pixApiClient });
+    const skillForRelease = skillTransformer.forRelease(clonedSkill);
+    await updatedRecordNotifier.notify({ updatedRecord: skillForRelease, model: 'skills', pixApiClient });
 
     const primaryChallenges = clonedChallenges.filter((challenge) => challenge.isPrimary);
     const transformChallenge = createChallengeTransformer({ attachments: clonedAttachments });
