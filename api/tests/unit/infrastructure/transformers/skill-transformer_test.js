@@ -178,7 +178,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
           internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           version: 1,
           challengeIds: ['challengeId1'],
-          createdAt: new Date('2020-01-01'),
+          createdAt: new Date('2020-01-01T18:08:00Z'),
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
         });
 
         // when
@@ -200,6 +203,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
           version: 1,
           internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           level: 2,
+          createdAt: new Date('2020-01-01T18:08:00Z'),
+          activatedAt: new Date('2023-11-06T18:08:00Z'),
+          archivedAt: new Date('2023-12-07T18:08:00Z'),
+          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
         }));
       });
     });
@@ -229,7 +236,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
             version: 1,
             challengeIds: ['challengeId1'],
-            createdAt: new Date('2020-01-01'),
+            createdAt: new Date('2020-01-01T18:08:00Z'),
+            activatedAt: new Date('2023-11-06T18:08:00Z'),
+            archivedAt: new Date('2023-12-07T18:08:00Z'),
+            obsoletedAt: new Date('2024-01-08T18:08:00Z'),
           }),
           domainBuilder.buildSkill({
             id: 'skillIdB',
@@ -252,7 +262,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
             version: 2,
             challengeIds: ['challengeId2'],
-            createdAt: new Date('2020-01-02'),
+            createdAt: new Date('2010-01-01T18:08:00Z'),
+            activatedAt: new Date('2013-11-06T18:08:00Z'),
+            archivedAt: new Date('2013-12-07T18:08:00Z'),
+            obsoletedAt: new Date('2014-01-08T18:08:00Z'),
           }),
         ];
 
@@ -276,6 +289,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             version: 1,
             level: 2,
             internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            createdAt: new Date('2020-01-01T18:08:00Z'),
+            activatedAt: new Date('2023-11-06T18:08:00Z'),
+            archivedAt: new Date('2023-12-07T18:08:00Z'),
+            obsoletedAt: new Date('2024-01-08T18:08:00Z'),
           }),
           new SkillForReplication({
             id: 'skillIdB',
@@ -292,6 +309,10 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             version: 2,
             level: 3,
             internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            createdAt: new Date('2010-01-01T18:08:00Z'),
+            activatedAt: new Date('2013-11-06T18:08:00Z'),
+            archivedAt: new Date('2013-12-07T18:08:00Z'),
+            obsoletedAt: new Date('2014-01-08T18:08:00Z'),
           }),
         ]);
       });

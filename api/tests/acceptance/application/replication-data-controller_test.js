@@ -93,7 +93,22 @@ async function mockCurrentContent() {
   const expectedTube = omit(['airtableId', 'index'], domainBuilder.buildTube());
   expectedCurrentContent.tubes = [expectedTube];
 
-  expectedCurrentContent.skills = [{ ...domainBuilder.buildSkill({ id: 'recSkill1' }) }];
+  expectedCurrentContent.skills = [{ ...domainBuilder.buildSkill({
+    id: 'recSkill1',
+    airtableId: 'recSkill1',
+    createdAt: new Date('2023-10-05T18:08:00Z'),
+    activatedAt: new Date('2023-11-06T17:08:00Z'),
+    archivedAt: new Date('2023-12-07T18:08:00Z'),
+    obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+  }) }];
+
+  databaseBuilder.factory.buildSkill({
+    id: 'recSkill1',
+    airtableId: 'recSkill1',
+    activatedAt: new Date('2023-11-06T18:08:00Z'),
+    archivedAt: new Date('2023-12-07T18:08:00Z'),
+    obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+  });
 
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
