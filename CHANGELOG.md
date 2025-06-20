@@ -1,5 +1,14 @@
 
 
+## v3.211.0 (20/06/2025)
+
+
+### :building_construction: Tech
+- [#1053](https://github.com/1024pix/pix-editor/pull/1053) [TECH] Horodater les changements de statut des acquis et exposer ces dates dans la release et la réplication (PIX-17342).
+
+### :arrow_up: Montée de version
+- [#1054](https://github.com/1024pix/pix-editor/pull/1054) [BUMP] Update dependency googleapis to v150 (api).
+
 ## v3.210.2 (20/06/2025)
 
 
