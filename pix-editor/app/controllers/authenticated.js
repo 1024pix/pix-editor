@@ -60,7 +60,7 @@ export default class ApplicationController extends Controller {
     return (this.router.currentRouteName === 'authenticated.index');
   }
 
-  get isV2() {
+  get shouldApplyV2Styles() {
     return this.versionManager.getV2() && this.router.currentRouteName.includes('v2');
   }
 
