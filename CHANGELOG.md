@@ -1,5 +1,11 @@
 
 
+## v3.210.2 (20/06/2025)
+
+
+### :bug: Correction
+- [#1052](https://github.com/1024pix/pix-editor/pull/1052) [BUGFIX] La release ne fonctionne pas lorsqu'il existe un tube qui n'a pas d'acquis (PIX-18375).
+
 ## v3.210.1 (19/06/2025)
 
 
