@@ -1,5 +1,6 @@
 import {
   createChallengeTransformer,
+  frameworkTransformer,
   tubeTransformer,
   tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -14,21 +15,40 @@ import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { child } from '../../infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
 
+/**
+ * @typedef {import('../../../lib/domain/models').Attachment} Attachment
+ * @typedef {import('../../../lib/domain/models').Framework} Framework
+ * @typedef {import('../../../lib/domain/models').Tube} Tube
+ * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
+ **/
+
 const logger = child('updatePixApiReleaseCacheService', { event: 'lcms:patch-release' });
 
-export async function onAttachmentCreated({ attachment }) {
-  await onAttachmentCreatedOrDeleted({ attachment });
+/**
+ * @param {Attachment} attachment
+ */
+export async function onAttachmentCreated(attachment) {
+  await onAttachmentCreatedOrDeleted(attachment);
 }
 
-export async function onAttachmentUpdated({ attachment: _ }) {
+/**
+ * @param {Attachment} _
+ */
+export async function onAttachmentUpdated(_) {
   // do nothing cause fields allowed to be updated in attachment are not exposed in release
 }
 
-export async function onAttachmentDeleted({ attachment }) {
-  await onAttachmentCreatedOrDeleted({ attachment });
+/**
+ * @param {Attachment} attachment
+ */
+export async function onAttachmentDeleted(attachment) {
+  await onAttachmentCreatedOrDeleted(attachment);
 }
 
-async function onAttachmentCreatedOrDeleted({ attachment }) {
+/**
+ * @param {Attachment} attachment
+ */
+async function onAttachmentCreatedOrDeleted(attachment) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
     const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
@@ -49,15 +69,42 @@ async function onAttachmentCreatedOrDeleted({ attachment }) {
   }
 }
 
-export async function onTutorialCreated({ tutorial }) {
-  await onTutorialCreatedOrUpdated({ tutorial });
+/**
+ * @param {Framework} framework
+ */
+export async function onFrameworkCreated(framework) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'frameworks',
+        updatedRecord: frameworkTransformer.forRelease(framework),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
 }
 
-export async function onTutorialUpdated({ tutorial }) {
-  await onTutorialCreatedOrUpdated({ tutorial });
+/**
+ * @param {Tutorial} tutorial
+ */
+export async function onTutorialCreated(tutorial) {
+  await onTutorialCreatedOrUpdated(tutorial);
 }
 
-async function onTutorialCreatedOrUpdated({ tutorial }) {
+/**
+ * @param {Tutorial} tutorial
+ */
+export async function onTutorialUpdated(tutorial) {
+  await onTutorialCreatedOrUpdated(tutorial);
+}
+
+/**
+ * @param {Tutorial} tutorial
+ */
+async function onTutorialCreatedOrUpdated(tutorial) {
   if (pixApiClient.isPixApiCachePatchingEnabled()) {
     try {
       const [tutorialForRelease] = tutorialTransformer.filterTutorialsFields([tutorial]);
@@ -74,8 +121,8 @@ async function onTutorialCreatedOrUpdated({ tutorial }) {
 }
 
 /**
- * @param {import('../models'.Tube)} tube
- * @param {string} thematicAirtableId
+ * @param {Tube} tube
+ * @param {string} thematicId
  */
 export async function onTubeCreated(tube, thematicId) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
@@ -92,7 +139,7 @@ export async function onTubeCreated(tube, thematicId) {
 }
 
 /**
- * @param {import('../models'.Tube} tube
+ * @param {Tube} tube
  */
 export async function onTubeUpdated(tube) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;

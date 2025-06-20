@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { Attachment, Challenge, Tutorial } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge, Framework, Tutorial } from '../../../../lib/domain/models/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as config from '../../../../lib/config.js';
@@ -112,7 +112,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }) });
+          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -209,7 +209,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }) });
+          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -226,7 +226,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentCreated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -327,7 +327,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }) });
+          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -424,7 +424,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }) });
+          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -441,7 +441,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentDeleted({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -457,7 +457,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
 
         // when
-        await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentUpdated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).toHaveBeenCalledTimes(0);
@@ -470,10 +470,71 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: new Attachment({ challengeId: 'challengeIdA' }) });
+        await updatePixApiReleaseCache.onAttachmentUpdated(new Attachment({ challengeId: 'challengeIdA' }));
 
         // then
         expect(notifyStub).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('#onFrameworkCreated', function() {
+    let framework;
+
+    beforeEach(function() {
+      framework = new Framework({
+        id: 'frameworkABC123',
+        name: 'Nom de mon framework',
+        areaIds: ['areaId1', 'areaId2'],
+      });
+    });
+
+    context('when patchingPixApi is enabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        config.pixApi.baseUrl = 'https://some-api-base-url.fr';
+      });
+
+      it('should patch the tutorial', async function() {
+        // given
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { 'access_token': pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch('/api/cache/frameworks/frameworkABC123', {
+            id: 'frameworkABC123',
+            name: 'Nom de mon framework',
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onFrameworkCreated(framework);
+
+        // then
+        expect(pixApiCacheScope.isDone()).to.be.true;
+      });
+    });
+
+    context('when patchingPixApi is disabled', function() {
+
+      beforeEach(function() {
+        originalPixApiUrlValue = config.pixApi.baseUrl;
+        delete config.pixApi.baseUrl;
+      });
+
+      it('should not patch anything', async function() {
+        // given
+        const spy = vi.spyOn(updatedRecordNotifier, 'notify');
+
+        // when
+        await updatePixApiReleaseCache.onFrameworkCreated(framework);
+
+        // then
+        expect(spy).toHaveBeenCalledTimes(0);
       });
     });
   });
@@ -526,7 +587,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTutorialCreated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialCreated(tutorial);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -545,7 +606,7 @@ describe('Integration | Service | update pix api release cache', function() {
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
         // when
-        await updatePixApiReleaseCache.onTutorialCreated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialCreated(tutorial);
 
         // then
         expect(spy).toHaveBeenCalledTimes(0);
@@ -601,7 +662,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTutorialUpdated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -617,7 +678,7 @@ describe('Integration | Service | update pix api release cache', function() {
 
       it('should not patch anything', async function() {
         // when
-        await updatePixApiReleaseCache.onTutorialUpdated({ tutorial });
+        await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();

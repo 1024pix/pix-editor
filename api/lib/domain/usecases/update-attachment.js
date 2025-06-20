@@ -10,6 +10,6 @@ export async function updateAttachment({
     throw new NotFoundError(`Attachment d'id ${attachmentUpdateCommand.id} n'existe pas`);
   attachment.update(attachmentUpdateCommand);
   const updatedAttachment = await attachmentRepository.update(attachment);
-  await updatePixApiReleaseCache.onAttachmentUpdated({ attachment: updatedAttachment });
+  await updatePixApiReleaseCache.onAttachmentUpdated(updatedAttachment);
   return updatedAttachment;
 }
