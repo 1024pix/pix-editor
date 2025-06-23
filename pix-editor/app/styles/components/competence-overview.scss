@@ -3,8 +3,7 @@
 
 .competence-overview {
   background: var(--pix-primary-10);
-  width: 100%;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .competence-overview-main {
@@ -65,6 +64,7 @@
   grid-template-columns: repeat(9, 1fr);
   border: 1px solid var(--pix-neutral-500);
   border-radius: var(--pix-spacing-2x);
+  overflow: auto;
 
   h3, h4 {
     background: var(--pix-neutral-20);
@@ -119,11 +119,17 @@
   }
 }
 
+//hide fake scrollbar for ios
+.competence-overview-grid::-webkit-scrollbar:vertical {
+  display: none;
+}
+
+
 .thematic {
   display: grid;
   grid-column: 1 / span 9;
   grid-template-columns: subgrid;
-  grid-template-rows: repeat(var(--tubes-count), 45px);
+  grid-template-rows:  max-content;
 
   h3 {
     grid-row: span var(--tubes-count);
