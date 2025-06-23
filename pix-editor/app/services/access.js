@@ -158,11 +158,11 @@ export default class AccessService extends Service {
   }
 
   mayAccessWhitelistedUrls() {
-    return this.isAdmin();
+    return this.isEditor();
   }
 
   mayCreateOrEditWhitelistedUrl() {
-    return this.isAdmin();
+    return this.isEditor();
   }
 
   mayCreateOrEditStaticCourse() {
