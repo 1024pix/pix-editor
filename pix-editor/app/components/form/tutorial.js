@@ -1,9 +1,10 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class TutorialForm extends Component {
-
+  @tracked sourceList = [];
   @service config;
   @service notify;
   @service store;
@@ -42,10 +43,21 @@ export default class TutorialForm extends Component {
       });
   }
 
+  get sourceListOptions() {
+    return this.sourceList.map((item) => ({
+      label: item,
+      value: item,
+    }));
+  }
+
   @action
-  getSearchSourceResults(query) {
+  async getSearchSourceResults(query) {
+    if (!query) {
+      this.sourceList = [];
+      return;
+    }
     const queryLowerCaseWithEscapedQuote = query.toLowerCase().replaceAll('\'', '\\\'');
-    return this.store.query('tutorial', {
+    this.sourceList = await this.store.query('tutorial', {
       filter: {
         source: queryLowerCaseWithEscapedQuote,
       },
