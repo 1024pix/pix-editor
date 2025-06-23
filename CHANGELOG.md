@@ -1,5 +1,18 @@
 
 
+## v3.211.1 (23/06/2025)
+
+
+### :building_construction: Tech
+- [#1042](https://github.com/1024pix/pix-editor/pull/1042) [TECH] Clarifier la construction des projections de réplication et de release du modèle Framework.
+- [#1055](https://github.com/1024pix/pix-editor/pull/1055) [TECH] Supprimer un test e2e trop instable.
+
+### :bug: Correction
+- [#1057](https://github.com/1024pix/pix-editor/pull/1057) [BUGFIX] Ajouter l'id de l'attachment pour la réplication (PIX-18403).
+
+### :coffee: Autre
+- [#1056](https://github.com/1024pix/pix-editor/pull/1056)  [BUGFIX] Problème visuel lorsque la V2 est choisit mais que la route n'existe pas (PIX-17282) 2e :).
+
 ## v3.211.0 (20/06/2025)
 
 
