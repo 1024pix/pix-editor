@@ -109,6 +109,7 @@ export async function getLearningContentForReplication() {
   }
 
   const translatedAttachments = attachments.map((attachment) => ({
+    id: attachment.id,
     type: attachment.type,
     url: attachment.url,
     size: attachment.size,

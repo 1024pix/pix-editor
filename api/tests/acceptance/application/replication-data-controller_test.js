@@ -206,8 +206,8 @@ async function mockCurrentContent() {
     localizedChallengeId: 'localized-challenge-id',
   };
   expectedCurrentContent.attachments = [
-    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId', 'id'], { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, }),
-    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId', 'id'], {
+    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, }),
+    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
       ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
       alt: 'alt_nl'
     }),
