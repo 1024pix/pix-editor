@@ -9,10 +9,11 @@
         @placeholder="Langue"
         @options={{this.tutorialLanguageOptions}}
         @onChange={{this.setTutorialLanguage}}
+        @requiredLabel={{"Champ obligatoire"}}
         @value={{this.tutorialLanguage}}
         @hideDefaultOption={{true}}
       >
-        <:label>Langue *</:label>
+        <:label>Langue</:label>
       </PixSelect>
     </div>
   </div>
@@ -22,20 +23,20 @@
       <Input id="text_tutorial" @type="text" @value={{@tutorial.link}} placeholder="Lien" />
     </div>
     <div class="field" data-test-select-source-for-tutorial>
-      <label>Source *</label>
-      <PowerSelect
-              @searchEnabled={{true}}
-              @selected={{@tutorial.source}}
-              @search={{this.getSearchSourceResults}}
-              @placeholder="Source"
-              @onChange={{fn (mut @tutorial.source)}}
-              @dropdownClass="search-result tutorial-search"
-              @triggerComponent={{ component "power-select/custom-trigger" }}
-              @searchMessage=""
-              @searchPlaceholder="Rechercher..."
-              @loadingMessage="Recherche en cours..." as |result|>
-            {{result}}
-      </PowerSelect>
+      <PixSelect
+        @className={{"search-result tutorial-search"}}
+        @placeholder="Source"
+        @options={{this.sourceListOptions}}
+        @onChange={{fn (mut @tutorial.source)}}
+        @onSearch={{this.getSearchSourceResults}}
+        @value={{@tutorial.source}}
+        @isSearchable={{true}}
+        @searchLabel={{"Rechercher une source"}}
+        @searchPlaceholder="Rechercher..."
+        @requiredLabel={{"Champ obligatoire"}}
+      >
+        <:label>Source</:label>
+      </PixSelect>
     </div>
     <PixSelect
       @placeholder="Licence"
