@@ -31,4 +31,46 @@ describe('Unit | Domain | User', () => {
       expect(isAdmin).to.be.false;
     });
   });
+
+  describe('#get isEditor', () => {
+    it('should return true when user is editor', () => {
+      // given
+      const user = domainBuilder.buildUser({
+        access: User.ROLES.EDITOR,
+      });
+
+      // when
+      const isEditor = user.isEditor;
+
+      // then
+      expect(isEditor).to.be.true;
+    });
+
+    it('should return true when user is admin', () => {
+      // given
+      const user = domainBuilder.buildUser({
+        access: User.ROLES.ADMIN,
+      });
+
+      // when
+      const isEditor = user.isEditor;
+
+      // then
+      expect(isEditor).to.be.true;
+    });
+
+    it.each(Object.keys(User.ROLES).filter((roleKey) => ![User.ROLES.ADMIN, User.ROLES.EDITOR].includes(User.ROLES[roleKey]))
+    )('should return false when role key is %s', (roleKey) => {
+      // given
+      const user  = domainBuilder.buildUser({
+        access: User.ROLES[roleKey],
+      });
+
+      // when
+      const isEditor = user.isEditor;
+
+      // then
+      expect(isEditor).to.be.false;
+    });
+  });
 });
