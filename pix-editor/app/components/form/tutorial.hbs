@@ -71,31 +71,32 @@
     </PixSelect>
   </div>
   <div class="three fields">
-    <div data-test-tag-search class="field">
-      <label>Rechercher tags</label>
-      <PowerSelect
-        @searchEnabled={{true}}
-        @search={{this.getSearchTagsResults}}
-        @placeholder="Nom"
-        @onChange={{this.selectTag}}
-        @dropdownClass="search-result tutorial-search"
-        @triggerComponent={{ component "power-select/custom-trigger" }}
-        @searchMessage=""
-        @searchPlaceholder="Rechercher..."
-        @loadingMessage="Recherche en cours..." as |result|>
-        <div class="search-title">
-          {{#if (eq result.id "create")}}
-            {{result.title}} <i class="add icon"></i>
-          {{else}}
-            {{result.title}}
-          {{/if}}
-        </div>
-        <div class="search-description">
-          {{#if result.description}}
-            {{result.description}}
-          {{/if}}
-        </div>
-      </PowerSelect>
+    <div data-test-tag-search class="field tutorial-tags-select">
+      <PixMultiSelect
+        @isSearchable={{true}}
+        @onSearch={{this.getSearchTagsResults}}
+        @placeholder="cloud clavier ..."
+        @onChange={{this.onChangeTags}}
+        @values={{this.tutorialTagIds}}
+        @emptyMessage="Aucun tag"
+        @options={{this.tagListOptions}}
+      >
+        <:label>Rechercher tags</:label>
+        <:default as |option|>
+          <div class="search-title">
+            {{#if (eq option.value "create")}}
+              {{option.label}} <i class="add icon"></i>
+            {{else}}
+              {{option.label}}
+            {{/if}}
+          </div>
+          <div class="search-description">
+            {{#if option.description}}
+              {{option.description}}
+            {{/if}}
+          </div>
+        </:default>
+      </PixMultiSelect>
     </div>
     <div class="twelve wide field">
       {{#if @tutorial.tags.length}}

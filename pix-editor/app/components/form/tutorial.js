@@ -3,8 +3,21 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
+function parseTitleAndNotes(query) {
+  const hasNote = query.includes('[');
+
+  if (!hasNote) {
+    return { title: query, notes: null };
+  }
+
+  const [, title, notes] = query.match(/^(.+?)\[(.+?)\]/);
+  return { title, notes };
+}
+
 export default class TutorialForm extends Component {
   @tracked sourceList = [];
+  @tracked tagListOptions = [];
+  @tracked currentQuery;
   @service config;
   @service notify;
   @service store;
@@ -28,17 +41,24 @@ export default class TutorialForm extends Component {
     return Object.entries(this.config.tutorialLocaleToLanguageMap).map(([value, label]) => ({ value, label }));
   }
 
+  get tutorialTagIds() {
+    const tags = this.args.tutorial.hasMany('tags').value() ?? [];
+    return tags.map(({ id }) => id);
+  }
+
   @action
-  getSearchTagsResults(query) {
+  async getSearchTagsResults(query) {
+    this.currentQuery = query;
+    if (!query || query.length === 0) return;
     const queryLowerCase = query.toLowerCase();
-    return this.store.query('tag', {
+    this.tagListOptions = await this.store.query('tag', {
       filter: {
         title: queryLowerCase,
       },
     })
       .then((tags) => {
-        const results = tags.map((tag) => ({ title: tag.get('title'), id: tag.get('id') }));
-        results.push({ title: 'Ajouter', description: 'Créer un tag[note]', id: 'create' });
+        const results = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
+        results.push({ label: 'Ajouter', description: 'Créer un tag[note]', value: 'create' });
         return results;
       });
   }
@@ -72,28 +92,22 @@ export default class TutorialForm extends Component {
   }
 
   @action
-  async selectTag(item) {
-    const tutorial = this.args.tutorial;
-    const tags = await tutorial.tags;
-    if (item.id === 'create') {
+  async onChangeTags(selectedTagIds) {
+    if (!selectedTagIds || selectedTagIds.length === 0) {
+      this.args.tutorial.tags = [];
+      return;
+    }
+    const tags = await this.args.tutorial.tags;
+    const shouldCreate = selectedTagIds.includes('create');
+    if (shouldCreate) {
       try {
-        const value = document.querySelector('.tutorial-search .ember-power-select-search-input').value;
-        if (value.indexOf('[') !== -1) {
-          const pos = value.indexOf('[');
-          const length = value.length;
-          const title = value.slice(0, pos);
-          const notes = value.slice(pos + 1, length - 1);
-          const tag = await this.store.createRecord('tag', {
-            title: title,
-            notes: notes,
-          }).save();
-          tags.push(tag);
-        } else {
-          const tag = await this.store.createRecord('tag', {
-            title: value,
-          }).save();
-          tags.push(tag);
-        }
+        const { title, notes } = parseTitleAndNotes(this.currentQuery);
+        const storedTag = await this.store.createRecord('tag', {
+          title,
+          notes,
+        }).save();
+        tags.push(storedTag);
+        this.tagListOptions.push({ label: storedTag.title, value: storedTag.id });
       } catch (err) {
         if (err?.errors?.[0]?.status === '409') {
           this.notify.error('Un tag avec ce nom là existe déjà');
@@ -102,17 +116,17 @@ export default class TutorialForm extends Component {
         }
       }
     } else {
-      const tag = await this.store.findRecord('tag', item.id);
-      if (tags.indexOf(tag) === -1) {
-        tags.push(tag);
-      }
+      this.args.tutorial.tags = await this.store.query('tag', {
+        filter: {
+          ids: selectedTagIds,
+        },
+      });
     }
   }
 
   @action
   async unselectTag(id) {
-    const tutorial = this.args.tutorial;
-    const tags = await tutorial.tags;
+    const tags = await this.args.tutorial.tags;
     this.args.tutorial.tags = tags.filter((tag) => tag.id !== id);
   }
 

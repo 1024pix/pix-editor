@@ -1,0 +1,6 @@
+.tutorial-tags-select {
+  input[type="checkbox"]:has(+ span .add) {
+    background: pink !important;
+    display: none !important;
+  }
+}
