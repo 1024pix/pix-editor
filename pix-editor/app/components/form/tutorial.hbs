@@ -1,4 +1,4 @@
-<form class="ui form">
+<form class="tutorial-form">
   <div class="fields">
     <div class="twelve wide field">
       <label for="title_tutorial">Titre *</label>
@@ -103,16 +103,19 @@
     <div class="twelve wide field">
       {{#if @tutorial.tags.length}}
         <label>Tags</label>
-        {{#each @tutorial.tags as |tag|}}
-          <div class="ui mini labeled button btn-selected-tag" tabindex="0">
-            <div {{on "click" (fn this.unselectTag tag.id)}} class="ui icon button">
-              <i class="close icon"></i>
-            </div>
-            <p class="ui basic label">
+        <section class="tags">
+          {{#each @tutorial.tags as |tag|}}
+            <span  class="tag">
               {{tag.title}}
-            </p>
-          </div>
-        {{/each}}
+              <PixIconButton
+                @iconName="close"
+                @triggerAction="{{this.unselectTag tag.id}}"
+                @size="small"
+                class="delete-tag-button">
+              </PixIconButton>
+            </span>
+          {{/each}}
+        </section>
       {{/if}}
     </div>
   </div>

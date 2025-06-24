@@ -1,6 +1,24 @@
 .tutorial-tags-select {
   input[type="checkbox"]:has(+ span .add) {
-    background: pink !important;
     display: none !important;
   }
 }
+
+.tutorial-form {
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+
+  .tag {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    background-color: var(--pix-neutral-0);
+    border-radius: var(--pix-spacing-2x);
+    border: 1px solid var(--pix-neutral-500);
+    padding-left: var(--pix-spacing-2x) ;
+    width: fit-content;
+  }
+  }
+ }
