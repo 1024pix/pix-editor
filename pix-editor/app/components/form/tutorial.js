@@ -2,6 +2,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { value } from 'lodash/seq';
 
 function parseTitleAndNotes(query) {
   const hasNote = query.includes('[');
@@ -14,6 +15,10 @@ function parseTitleAndNotes(query) {
   return { title, notes };
 }
 
+function formattedOptionList(list) {
+  return list.map((option) => ({ label: option, value: option }));
+}
+
 export default class TutorialForm extends Component {
   @tracked sourceList = [];
   @tracked tagListOptions = [];
@@ -24,10 +29,22 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options = {
-    'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
-    'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    'license': ['CC-BY-SA', '(c)', 'Youtube'],
+    format: ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
+    level: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    license: ['CC-BY-SA', '(c)', 'Youtube'],
   };
+
+  get formattedFormatOptionList() {
+    return formattedOptionList(this.options.format);
+  }
+
+  get formattedLevelOptionList() {
+    return formattedOptionList(this.options.level);
+  }
+
+  get formattedLicenseOptionList() {
+    return formattedOptionList(this.options.license);
+  }
 
   get hasSelectedTag() {
     return this.selectedTags.length > 0;
