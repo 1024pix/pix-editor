@@ -100,6 +100,7 @@ const deserializer = new Deserializer({
       challengeId: challenge,
       embedUrl: embedUrl === '' ? null : embedUrl,
       fileIds: files,
+      validatedAt: null,
     });
   }
 });

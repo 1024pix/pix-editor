@@ -75,6 +75,7 @@ export async function update({
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    validatedAt,
   },
   transaction: knexConnection = knex
 }) {
@@ -91,6 +92,7 @@ export async function update({
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    validatedAt,
   }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
@@ -121,6 +123,7 @@ function _adaptModelsForDB(localizedChallenges, generateId) {
       toRephrase: localizedChallenge.toRephrase,
       hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
       noValidationNeeded: localizedChallenge.noValidationNeeded,
+      validatedAt: localizedChallenge.validatedAt,
     };
   });
 }

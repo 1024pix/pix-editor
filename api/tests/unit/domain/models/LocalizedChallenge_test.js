@@ -147,6 +147,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        validatedAt: null,
       });
     });
     it('should build a primary localized challenge with default values when some not filled', function() {
@@ -183,6 +184,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: null,
       });
     });
   });
@@ -215,6 +217,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: null,
       });
     });
   });
@@ -241,6 +244,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        validatedAt: new Date('2020-01-01'),
       });
       const attachments = [
         domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
@@ -286,6 +290,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        validatedAt: null,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
       expect(clonedAttachments).toStrictEqual([

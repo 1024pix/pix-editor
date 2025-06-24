@@ -534,6 +534,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           toRephrase: false,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
+          validatedAt: null,
         },
         {
           id: expect.stringMatching(/^challenge.*$/),
@@ -550,6 +551,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           toRephrase: false,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
+          validatedAt: null,
         },
       ]);
     });

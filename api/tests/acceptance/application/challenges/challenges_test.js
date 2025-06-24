@@ -1258,6 +1258,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          validatedAt: null,
         }
       ]);
       const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
@@ -2029,6 +2030,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           toRephrase: true,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
+          validatedAt: null,
         },
       ]);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([

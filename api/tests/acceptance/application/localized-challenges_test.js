@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
@@ -299,6 +299,19 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
   });
 
   describe('PATCH /localized-challenges/{id}', () => {
+    let now;
+    beforeEach(function() {
+      now = new Date('2024-10-29T03:04:00Z');
+      vi.useFakeTimers({
+        now,
+        toFake: ['Date'],
+      });
+    });
+
+    afterEach(function() {
+      vi.useRealTimers();
+    });
+
     it('should modify localized challenge of given ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
@@ -405,6 +418,118 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: now,
+      });
+    });
+
+    it('should not modify validatedAt if status does not change for PLAY', async () => {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/',
+      });
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+        embedUrl: null,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+        status: LocalizedChallenge.STATUSES.PLAY,
+        validatedAt: new Date('1990-04-01T09:05:00Z'),
+      });
+
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const patchLocalizedChallengeOptions = {
+        method: 'PATCH',
+        url: '/api/localized-challenges/localizedChallengeId',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'localized-challenges',
+            id: localizedChallenge.id,
+            attributes: {
+              'embed-url': 'https://cassoulet.com/',
+              locale: 'should-not-update',
+              'challenge-id': 'should-not-update',
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
+              'has-embed-internal-validation': false,
+              'no-validation-needed': false,
+              status: LocalizedChallenge.STATUSES.PLAY,
+            },
+          },
+        },
+      };
+
+      // When
+      const response = await server.inject(patchLocalizedChallengeOptions);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result.data).to.deep.equal({
+        type: 'localized-challenges',
+        id: 'localizedChallengeId',
+        attributes: {
+          'default-embed-url': 'https://choucroute.com/?lang=nl',
+          'embed-url': 'https://cassoulet.com/',
+          geography: 'AA',
+          locale: 'nl',
+          status: LocalizedChallenge.STATUSES.PLAY,
+          translations: '/api/challenges/recChallenge0/translations/nl',
+          'urls-to-consult': null,
+          'require-gafam-website-access': false,
+          'is-incompatible-ipad-certif': false,
+          'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          'is-awareness-challenge': false,
+          'to-rephrase': false,
+          'has-embed-internal-validation': false,
+          'no-validation-needed': false,
+        },
+        relationships: {
+          challenge: {
+            data: {
+              type: 'challenges',
+              id: 'recChallenge0',
+            },
+          },
+          attachments: {
+            links: {
+              related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId',
+            },
+          },
+        },
+      });
+      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
+      expect(updatedLocalizedChallenge).to.deep.equal({
+        id: localizedChallenge.id,
+        challengeId: localizedChallenge.challengeId,
+        locale: 'nl',
+        embedUrl: 'https://cassoulet.com/',
+        status: LocalizedChallenge.STATUSES.PLAY,
+        geography: 'AA',
+        urlsToConsult: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+        validatedAt: new Date('1990-04-01T09:05:00Z'),
       });
     });
 

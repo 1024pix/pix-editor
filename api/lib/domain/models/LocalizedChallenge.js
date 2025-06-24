@@ -20,6 +20,7 @@ export class LocalizedChallenge {
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    validatedAt,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -37,6 +38,7 @@ export class LocalizedChallenge {
     this.toRephrase = toRephrase;
     this.hasEmbedInternalValidation = hasEmbedInternalValidation;
     this.noValidationNeeded = noValidationNeeded;
+    this.validatedAt = validatedAt;
   }
 
   static get STATUSES() {
@@ -104,6 +106,7 @@ export class LocalizedChallenge {
       toRephrase: toRephrase ?? false,
       hasEmbedInternalValidation: hasEmbedInternalValidation ?? false,
       noValidationNeeded: noValidationNeeded ?? false,
+      validatedAt: null,
     });
   }
 
@@ -124,6 +127,7 @@ export class LocalizedChallenge {
       toRephrase: false,
       hasEmbedInternalValidation: false,
       noValidationNeeded: false,
+      validatedAt: null,
     });
   }
 
@@ -145,6 +149,7 @@ export class LocalizedChallenge {
       toRephrase: this.toRephrase,
       hasEmbedInternalValidation: this.hasEmbedInternalValidation,
       noValidationNeeded: this.noValidationNeeded,
+      validatedAt: null,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
