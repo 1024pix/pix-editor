@@ -152,9 +152,9 @@ module('Unit | Service | access', function(hooks) {
   });
 
   module('mayAccessWhitelistedUrls', function() {
-    test('it should return `false` when is not admin', function(assert) {
+    test('it should return `false` when is not editor', function(assert) {
       // given
-      _stubAccessLevel(EDITOR, this.owner);
+      _stubAccessLevel(REPLICATOR, this.owner);
 
       //when
       const accessResult = accessService.mayAccessWhitelistedUrls();
@@ -163,22 +163,22 @@ module('Unit | Service | access', function(hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` when is admin', function(assert) {
-      // given
+    test('it should return `true` when is editor or above', function(assert) {
       _stubAccessLevel(ADMIN, this.owner);
-
-      //when
-      const accessResult = accessService.mayAccessWhitelistedUrls();
+      const accessResultAsAdmin = accessService.mayAccessWhitelistedUrls();
+      _stubAccessLevel(EDITOR, this.owner);
+      const accessResultAsEditor = accessService.mayAccessWhitelistedUrls();
 
       //then
-      assert.ok(accessResult);
+      assert.ok(accessResultAsAdmin);
+      assert.ok(accessResultAsEditor);
     });
   });
 
   module('mayCreateOrEditWhitelistedUrl', function() {
-    test('it should return `false` when is not admin', function(assert) {
+    test('it should return `false` when is not editor', function(assert) {
       // given
-      _stubAccessLevel(EDITOR, this.owner);
+      _stubAccessLevel(REPLICATOR, this.owner);
 
       //when
       const accessResult = accessService.mayCreateOrEditWhitelistedUrl();
@@ -187,15 +187,15 @@ module('Unit | Service | access', function(hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` when is admin', function(assert) {
-      // given
+    test('it should return `true` when is editor or above', function(assert) {
       _stubAccessLevel(ADMIN, this.owner);
-
-      //when
-      const accessResult = accessService.mayCreateOrEditWhitelistedUrl();
+      const accessResultAsAdmin = accessService.mayCreateOrEditWhitelistedUrl();
+      _stubAccessLevel(EDITOR, this.owner);
+      const accessResultAsEditor = accessService.mayCreateOrEditWhitelistedUrl();
 
       //then
-      assert.ok(accessResult);
+      assert.ok(accessResultAsAdmin);
+      assert.ok(accessResultAsEditor);
     });
   });
 });

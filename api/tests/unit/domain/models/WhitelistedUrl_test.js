@@ -54,7 +54,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     describe('can', function() {
       it('should not throw when all conditions are reunited', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
           deletedAt: null,
           deletedBy: null,
@@ -68,9 +68,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       });
     });
     describe('cannot', function() {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
+        const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
           deletedAt: null,
           deletedBy: null,
@@ -89,7 +89,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlConflictError when whitelisted url has already been deleted', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
           deletedAt: new Date('2021-01-01'),
           deletedBy: 456,
@@ -148,7 +148,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     describe('can', function() {
       it('should not throw when all conditions are reunited', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const existingWhitelistedUrls = [
           domainBuilder.buildWhitelistedUrl({
             id: 123,
@@ -183,9 +183,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       });
     });
     describe('cannot', function() {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
+        const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const creationCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -206,7 +206,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when url is not valid in creation command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
           url: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
@@ -252,7 +252,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in creation command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
           url: 'https://www.brioche.com',
           relatedSkillNames: 123456.12,
@@ -287,7 +287,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when comment is not in valid format in creation command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -309,7 +309,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when checkType is not valid in creation command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
           url: 'https://www.brioche.com',
           checkType: 'autre_type',
@@ -356,7 +356,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
           url: 'https://www.brioche.com',
         })];
@@ -383,7 +383,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
   describe('#static create', () => {
     it('should return a newly created whitelisted url', function() {
       // given
-      const user = domainBuilder.buildUser({ id: 444, access: User.ROLES.ADMIN });
+      const user = domainBuilder.buildUser({ id: 444, access: User.ROLES.EDITOR });
       const creationCommand = {
         url: 'https://www.brioche.com',
         relatedSkillNames: '@proie2,@cancre5',
@@ -415,7 +415,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     describe('can', function() {
       it('should not throw when all conditions are reunited', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           id: 123,
           url: 'https://www.url-origine.com',
@@ -464,9 +464,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       });
     });
     describe('cannot', function() {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not admin', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not at least editor', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
+        const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const updateCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -491,7 +491,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when url is not valid in update command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
           url: null,
           checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
@@ -541,7 +541,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in update command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
           url: 'https://www.brioche.com',
           relatedSkillNames: 123456.12,
@@ -580,7 +580,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when comment is not in valid format in update command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -606,7 +606,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlError when checkType is not valid in update command', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
           url: 'https://www.brioche.com',
           checkType: 'autre_type',
@@ -657,7 +657,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({
           id: 123,
           url: 'https://www.brioche.com',
@@ -687,7 +687,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
 
       it('should throw a NotFoundWhitelistedUrlError when whitelisted url is deleted', function() {
         // given
-        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,

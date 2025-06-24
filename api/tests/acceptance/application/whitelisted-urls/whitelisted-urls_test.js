@@ -18,13 +18,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
   });
 
   describe('GET /whitelisted-urls', () => {
-    let adminUser, server;
+    let editorUser, server;
     beforeEach(async function() {
-      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
         deletedBy: null,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -49,9 +49,9 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
-        deletedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
+        deletedBy: editorUser.id,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
@@ -64,16 +64,16 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       server = await createServer();
     });
 
-    it('should return a 403 status code when user is not admin', async () => {
+    it('should return a 403 status code when user is not editor', async () => {
       // given
-      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      const notEditorUser = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
 
       // when
       const response = await server.inject({
         method: 'GET',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(notAdminUser)
+        headers: generateAuthorizationHeader(notEditorUser)
       });
 
       // Then
@@ -94,7 +94,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'GET',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(adminUser)
+        headers: generateAuthorizationHeader(editorUser)
       });
 
       // Then
@@ -121,8 +121,8 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
             attributes: {
               'created-at': new Date('2020-01-01'),
               'updated-at':new Date('2022-02-02'),
-              'creator-name': 'Madame Admin',
-              'latest-updator-name': 'Madame Admin',
+              'creator-name': 'Madame Editor',
+              'latest-updator-name': 'Madame Editor',
               'url': 'https://www.google.com',
               'related-skill-names': '@morse2,@saumon5',
               'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
@@ -134,13 +134,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
     });
   });
   describe('DELETE /whitelisted-urls/{whitelistedUrlId}', () => {
-    let adminUser, server;
+    let editorUser, server;
     beforeEach(async function() {
-      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
         deletedBy: null,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -165,9 +165,9 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
-        deletedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
+        deletedBy: editorUser.id,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
@@ -180,16 +180,16 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       server = await createServer();
     });
 
-    it('should return a 403 status code when user is not admin', async () => {
+    it('should return a 403 status code when user is not editor', async () => {
       // given
-      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      const notEditorUser = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
 
       // when
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/123456',
-        headers: generateAuthorizationHeader(notAdminUser)
+        headers: generateAuthorizationHeader(notEditorUser)
       });
 
       // Then
@@ -210,7 +210,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/coucoumaman',
-        headers: generateAuthorizationHeader(adminUser)
+        headers: generateAuthorizationHeader(editorUser)
       });
 
       // Then
@@ -227,7 +227,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/777',
-        headers: generateAuthorizationHeader(adminUser)
+        headers: generateAuthorizationHeader(editorUser)
       });
 
       // Then
@@ -248,7 +248,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/789',
-        headers: generateAuthorizationHeader(adminUser)
+        headers: generateAuthorizationHeader(editorUser)
       });
 
       // Then
@@ -269,7 +269,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/123',
-        headers: generateAuthorizationHeader(adminUser)
+        headers: generateAuthorizationHeader(editorUser)
       });
 
       // Then
@@ -279,13 +279,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
     });
   });
   describe('POST /whitelisted-urls', () => {
-    let adminUser, server, validPayload;
+    let editorUser, server, validPayload;
     beforeEach(async function() {
-      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
         deletedBy: null,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -310,9 +310,9 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
-        deletedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
+        deletedBy: editorUser.id,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
@@ -335,16 +335,16 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       };
     });
 
-    it('should return a 403 status code when user is not admin', async () => {
+    it('should return a 403 status code when user is not editor', async () => {
       // given
-      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      const notEditorUser = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
 
       // when
       const response = await server.inject({
         method: 'POST',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(notAdminUser),
+        headers: generateAuthorizationHeader(notEditorUser),
         payload: validPayload,
       });
 
@@ -368,7 +368,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'POST',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(adminUser),
+        headers: generateAuthorizationHeader(editorUser),
         payload: invalidPayload,
       });
 
@@ -391,7 +391,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'POST',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(adminUser),
+        headers: generateAuthorizationHeader(editorUser),
         payload: validPayload,
       });
 
@@ -405,8 +405,8 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
           attributes: {
             'created-at': now,
             'updated-at': now,
-            'creator-name': 'Madame Admin',
-            'latest-updator-name': 'Madame Admin',
+            'creator-name': 'Madame Editor',
+            'latest-updator-name': 'Madame Editor',
             url: 'https://super-casserole.com',
             'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',
@@ -417,13 +417,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
     });
   });
   describe('PATCH /whitelisted-urls/{whitelistedUrlId}', () => {
-    let adminUser, server, validPayload;
+    let editorUser, server, validPayload;
     beforeEach(async function() {
-      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
         deletedBy: null,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
@@ -448,9 +448,9 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
-        createdBy: adminUser.id,
-        latestUpdatedBy: adminUser.id,
-        deletedBy: adminUser.id,
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
+        deletedBy: editorUser.id,
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2022-02-02'),
         deletedAt: new Date('2023-01-01'),
@@ -473,16 +473,16 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       };
     });
 
-    it('should return a 403 status code when user is not admin', async () => {
+    it('should return a 403 status code when user is not editor', async () => {
       // given
-      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      const notEditorUser = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
 
       // when
       const response = await server.inject({
         method: 'PATCH',
         url: '/api/whitelisted-urls/456',
-        headers: generateAuthorizationHeader(notAdminUser),
+        headers: generateAuthorizationHeader(notEditorUser),
         payload: validPayload,
       });
 
@@ -506,7 +506,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'PATCH',
         url: '/api/whitelisted-urls/456',
-        headers: generateAuthorizationHeader(adminUser),
+        headers: generateAuthorizationHeader(editorUser),
         payload: invalidPayload,
       });
 
@@ -529,7 +529,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
       const response = await server.inject({
         method: 'PATCH',
         url: '/api/whitelisted-urls/456',
-        headers: generateAuthorizationHeader(adminUser),
+        headers: generateAuthorizationHeader(editorUser),
         payload: validPayload,
       });
 
@@ -543,7 +543,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {let now;
             'created-at': new Date('2020-12-12'),
             'updated-at': now,
             'creator-name': null,
-            'latest-updator-name': 'Madame Admin',
+            'latest-updator-name': 'Madame Editor',
             url: 'https://super-casserole.com',
             'related-skill-names': '@feutre2,@crayon1',
             comment: 'Un super commentaire',

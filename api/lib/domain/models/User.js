@@ -30,4 +30,8 @@ export class User {
   get isAdmin() {
     return this.access === User.ROLES.ADMIN;
   }
+
+  get isEditor() {
+    return this.access === User.ROLES.EDITOR || this.isAdmin;
+  }
 }

@@ -12,7 +12,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/whitelisted-urls',
       config: {
-        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
           return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls_read));
@@ -28,7 +28,7 @@ export async function register(server) {
             whitelistedUrlId: Types.whitelistedUrlId().required(),
           }),
         },
-        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const whitelistedUrlId = request.params.whitelistedUrlId;
@@ -47,7 +47,7 @@ export async function register(server) {
       method: 'POST',
       path: '/api/whitelisted-urls',
       config: {
-        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;
@@ -75,7 +75,7 @@ export async function register(server) {
             whitelistUrlId: Types.whitelistedUrlId().required(),
           }),
         },
-        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;

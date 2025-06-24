@@ -45,7 +45,7 @@ export class WhitelistedUrl {
 
   static canCreate(creationCommand, user, existingWhitelistedUrls) {
     const activeExistingWhitelistedUrls = existingWhitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
-    if (!user.isAdmin) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour ajouter une URL à ne pas analyser');
+    if (!user.isEditor) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour ajouter une URL à ne pas analyser');
     if (!isUrlValid(creationCommand.url)) throw new CommandWhitelistedUrlError({ message: 'URL invalide', attribute: 'url' });
     if (!isRelatedSkillNamesValid(creationCommand.relatedSkillNames)) throw new CommandWhitelistedUrlError({ message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide', attribute: 'relatedSkillNames' });
     if (!isCommentValid(creationCommand.comment)) throw new CommandWhitelistedUrlError({ message: 'Commentaire invalide. Doit être un texte ou vide', attribute: 'comment' });
@@ -71,7 +71,7 @@ export class WhitelistedUrl {
   }
 
   canDelete(user) {
-    if (!user.isAdmin) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour supprimer cette URL');
+    if (!user.isEditor) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour supprimer cette URL');
     if (this.deletedAt) throw new CommandWhitelistedUrlConflictError('L\'URL a déjà été supprimée');
   }
 
@@ -85,7 +85,7 @@ export class WhitelistedUrl {
 
   canUpdate(updateCommand, user, existingWhitelistedUrls) {
     const activeOtherExistingWhitelistedUrls = existingWhitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive && whitelistedUrl.id !== this.id);
-    if (!user.isAdmin) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL');
+    if (!user.isEditor) throw new CommandWhitelistedUrlForbiddenError('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL');
     if (this.deletedAt) throw new NotFoundWhitelistedUrlError('L\'URL n\'existe pas');
     if (!isUrlValid(updateCommand.url)) throw new CommandWhitelistedUrlError({ message: 'URL invalide', attribute: 'url' });
     if (!isRelatedSkillNamesValid(updateCommand.relatedSkillNames)) throw new CommandWhitelistedUrlError({ message: 'Liste d\'acquis invalide. Doit être une suite d\'acquis séparés par des virgules ou vide', attribute: 'relatedSkillNames' });
