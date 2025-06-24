@@ -7,7 +7,7 @@ import { buildAreasFromConfig } from './data/areas.js';
 import { buildChallengesFromConfig } from './data/challenges.js';
 import { buildCompetencesFromConfig } from './data/competences.js';
 import { buildFrameworksFromConfig } from './data/frameworks.js';
-import { buildPix1D } from './data/pix-1d.js';
+import { buildPixJunior } from './data/pix-junior.js';
 import { buildSkillsFromConfig } from './data/skills.js';
 import { buildThematicsFromConfig } from './data/thematics.js';
 import { buildTubesFromConfig } from './data/tubes.js';
@@ -64,7 +64,7 @@ export async function seed(knex) {
     await buildTubesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
+    await buildPixJunior({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
     const tagItems = await buildTags({ airtableClient, logger });
     await buildTutorials({ airtableClient, logger, locales: learningContentConfig.locales, tagItems });
   } else {

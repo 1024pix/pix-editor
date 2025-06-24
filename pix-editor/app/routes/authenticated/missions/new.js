@@ -14,7 +14,7 @@ export default class MissionNewRoute extends Route {
   }
 
   async model() {
-    const competences = await this.currentData.getCompetencesFromPix1DFramework();
+    const competences = await this.currentData.getCompetencesFromPixJuniorFramework();
     const mission = this.store.createRecord('mission');
 
     return {
@@ -24,6 +24,6 @@ export default class MissionNewRoute extends Route {
   }
 
   afterModel() {
-    return this.currentData.getThematicsFromPix1DFramework();
+    return this.currentData.getThematicsFromPixJuniorFramework();
   }
 }

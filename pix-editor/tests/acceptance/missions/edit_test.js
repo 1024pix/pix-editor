@@ -20,7 +20,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       code: '1',
       competenceIds: ['recCompetence1.1'],
     });
-    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
+    this.server.create('framework', { id: 'recFrameworkPixJunior', name: 'Pix Junior', areaIds: ['recArea1'] });
     this.server.create('mission', {
       id: 2,
       name: 'Mission 1',

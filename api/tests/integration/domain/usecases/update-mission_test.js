@@ -31,7 +31,7 @@ describe('Integration | Usecases | Update mission', function() {
           status: Skill.STATUSES.EN_CONSTRUCTION
         })],
       tubes: [
-        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@PixJunior-recherche_di' }),
       ],
       thematics: [
         airtableBuilder.factory.buildThematic({
@@ -54,7 +54,7 @@ describe('Integration | Usecases | Update mission', function() {
     const result = await updateMission(updatedMission);
 
     // then
-    expect(result).to.deep.equal({ mission: updatedMission, warnings: ['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'] });
+    expect(result).to.deep.equal({ mission: updatedMission, warnings: ['L\'activité \'@PixJunior-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'] });
   });
 
   it('when mission is not valid, should throw an error', async () => {

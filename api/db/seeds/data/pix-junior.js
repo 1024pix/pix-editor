@@ -7,13 +7,13 @@ import { buildTube, persistTubes } from './tubes.js';
 import { buildSkill, persistSkills } from './skills.js';
 import { buildChallenge, persistChallenges } from './challenges.js';
 
-export async function buildPix1D({ airtableClient, databaseBuilder, logger, locales, indexFramework }) {
-  logger.info('About to create whole framework Pix 1D...');
-  const pix1DFrameworkItem = buildFramework({ name: 'Pix 1D' });
-  await persistFrameworks({ items: [pix1DFrameworkItem], airtableClient, logger });
+export async function buildPixJunior({ airtableClient, databaseBuilder, logger, locales, indexFramework }) {
+  logger.info('About to create whole framework Pix Junior...');
+  const pixJuniorFrameworkItem = buildFramework({ name: 'Pix Junior' });
+  await persistFrameworks({ items: [pixJuniorFrameworkItem], airtableClient, logger });
 
-  const areaItem1 = buildArea({ indexFramework, indexArea: 0, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
-  const areaItem2 = buildArea({ indexFramework, indexArea: 1, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
+  const areaItem1 = buildArea({ indexFramework, indexArea: 0, frameworkItem: pixJuniorFrameworkItem, databaseBuilder, locales });
+  const areaItem2 = buildArea({ indexFramework, indexArea: 1, frameworkItem: pixJuniorFrameworkItem, databaseBuilder, locales });
   await persistAreas({ items: [areaItem1, areaItem2], airtableClient, logger });
 
   const competenceItems = [];

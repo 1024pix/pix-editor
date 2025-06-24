@@ -16,7 +16,7 @@ module('Acceptance | Missions | Creation', function(hooks) {
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence', source: 'Pix+' });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
-    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
+    this.server.create('framework', { id: 'recFrameworkPixJunior', name: 'Pix Junior', areaIds: ['recArea1'] });
     this.server.create('mission-summary', { name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
     this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
   });
@@ -33,8 +33,8 @@ module('Acceptance | Missions | Creation', function(hooks) {
       const screen = await visit('/');
       await clickByName('Sélectionner un référentiel');
       await screen.findByRole('listbox');
-      await click(screen.getByRole('option', { name: 'Pix 1D' }));
-      await clickByName('Missions Pix 1D');
+      await click(screen.getByRole('option', { name: 'Pix Junior' }));
+      await clickByName('Missions Pix Junior');
 
       // then
       assert.dom(screen.queryByText('Créer une nouvelle mission')).doesNotExist();
@@ -55,8 +55,8 @@ module('Acceptance | Missions | Creation', function(hooks) {
       const screen = await visit('/');
       await clickByName('Sélectionner un référentiel');
       await screen.findByRole('listbox');
-      await click(screen.getByRole('option', { name: 'Pix 1D' }));
-      await clickByName('Missions Pix 1D');
+      await click(screen.getByRole('option', { name: 'Pix Junior' }));
+      await clickByName('Missions Pix Junior');
 
       // when
       await clickByName('Créer une nouvelle mission');

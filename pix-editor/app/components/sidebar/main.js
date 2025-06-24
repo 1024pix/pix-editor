@@ -49,7 +49,7 @@ export default class SidebarMain extends Component {
   }
 
   get shouldShowMissionsLink() {
-    return this.currentData?.getFramework()?.name.toLowerCase() === FrameworkModel.pix1DFrameworkName.toLowerCase();
+    return this.currentData?.getFramework()?.name.toLowerCase() === FrameworkModel.pixJuniorFrameworkName.toLowerCase();
   }
 
   get isV2() {

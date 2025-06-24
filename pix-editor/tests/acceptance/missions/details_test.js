@@ -17,7 +17,7 @@ module('Acceptance | Missions | Details', function(hooks) {
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence' });
     this.server.create('area', { id: 'recArea1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
-    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
+    this.server.create('framework', { id: 'recFrameworkPixJunior', name: 'Pix Junior', areaIds: ['recArea1'] });
     this.server.create('mission-summary', { id: 1, name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
     this.server.create('mission', { id: 1, name: 'Mission 1', competenceId: 'pixIdRecCompetence1.1', createdAt: '2023/12/11', status: 'ACTIVE', learningObjectives: 'Tout savoir', validatedObjectives: 'Jusque là, rien', documentationUrl: 'http://url-example.net' });
     this.server.create('mission-summary', { id: 2, name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
@@ -25,7 +25,7 @@ module('Acceptance | Missions | Details', function(hooks) {
     return authenticateSession();
   });
 
-  test('it displays all Pix 1D missions', async function(assert) {
+  test('it displays all Pix Junior missions', async function(assert) {
     // when
     const screen = await visit('/missions');
     await click(screen.getAllByRole('row')[1]);

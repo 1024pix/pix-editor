@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 
 module('Unit | Service | current-data', function(hooks) {
   setupTest(hooks);
-  let competence, service, pixFramework, pixFranceFramework, pix1dFramework, pixArea, pix1dArea, pixFranceArea, pix1dThematic, pix1dCompetence, prototype;
+  let competence, service, pixFramework, pixFranceFramework, pixJuniorFramework, pixArea, pixJuniorArea, pixFranceArea, pixJuniorThematic, pixJuniorCompetence, prototype;
 
   hooks.beforeEach(function() {
     const store = this.owner.lookup('service:store');
@@ -17,13 +17,13 @@ module('Unit | Service | current-data', function(hooks) {
       id: 'competence',
     });
 
-    pix1dThematic = store.createRecord('theme', {
+    pixJuniorThematic = store.createRecord('theme', {
       id: 'thematic',
     });
 
-    pix1dCompetence = store.createRecord('competence', {
-      id: 'pix1dCompetence',
-      rawThemes: [pix1dThematic],
+    pixJuniorCompetence = store.createRecord('competence', {
+      id: 'pixJuniorCompetence',
+      rawThemes: [pixJuniorThematic],
     });
 
     pixFranceArea = store.createRecord('area', {
@@ -36,10 +36,10 @@ module('Unit | Service | current-data', function(hooks) {
       code: '2',
     });
 
-    pix1dArea = store.createRecord('area', {
-      id: 'pix1dArea',
+    pixJuniorArea = store.createRecord('area', {
+      id: 'pixJuniorArea',
       code: '3',
-      competences: [pix1dCompetence],
+      competences: [pixJuniorCompetence],
     });
 
     pixFranceFramework = store.createRecord('framework', {
@@ -54,16 +54,16 @@ module('Unit | Service | current-data', function(hooks) {
       areas: [pixArea],
     });
 
-    pix1dFramework = store.createRecord('framework', {
-      id: 'pix1dFramework',
-      name: 'Pix 1D',
-      areas: [pix1dArea],
+    pixJuniorFramework = store.createRecord('framework', {
+      id: 'pixJuniorFramework',
+      name: 'Pix Junior',
+      areas: [pixJuniorArea],
     });
 
     service = this.owner.lookup('service:current-data');
-    service.setFrameworks([pixFramework, pixFranceFramework, pix1dFramework]);
+    service.setFrameworks([pixFramework, pixFranceFramework, pixJuniorFramework]);
     service.setFramework(pixFramework);
-    service.setAreas([pixArea, pixFranceArea, pix1dArea]);
+    service.setAreas([pixArea, pixFranceArea, pixJuniorArea]);
     service.setCompetence(competence);
     service.setPrototype(prototype);
   });
@@ -73,7 +73,7 @@ module('Unit | Service | current-data', function(hooks) {
     const frameworks = service.getFrameworks();
 
     // then
-    assert.deepEqual(frameworks, [pixFramework, pixFranceFramework, pix1dFramework]);
+    assert.deepEqual(frameworks, [pixFramework, pixFranceFramework, pixJuniorFramework]);
   });
 
   test('it should return one framework', function(assert) {
@@ -89,7 +89,7 @@ module('Unit | Service | current-data', function(hooks) {
     const areas = service.getAreas(false);
 
     // then
-    assert.deepEqual(areas, [pixArea, pixFranceArea, pix1dArea]);
+    assert.deepEqual(areas, [pixArea, pixFranceArea, pixJuniorArea]);
   });
 
   test('it should return areas of set framework when have no argument ', async function(assert) {
@@ -135,19 +135,19 @@ module('Unit | Service | current-data', function(hooks) {
     assert.notOk(isPixFrameworkResult);
   });
 
-  test('it should return competences for pix1d', async function(assert) {
+  test('it should return competences for pixJunior', async function(assert) {
     // when
-    const competencesResult = await service.getCompetencesFromPix1DFramework();
+    const competencesResult = await service.getCompetencesFromPixJuniorFramework();
 
     // then
-    assert.deepEqual(competencesResult, [pix1dCompetence]);
+    assert.deepEqual(competencesResult, [pixJuniorCompetence]);
   });
 
-  test('it should return thematics for pix1d', async function(assert) {
+  test('it should return thematics for pixJunior', async function(assert) {
     // when
-    const thematicsResult = await service.getThematicsFromPix1DFramework();
+    const thematicsResult = await service.getThematicsFromPixJuniorFramework();
 
     // then
-    assert.deepEqual(thematicsResult, [pix1dThematic]);
+    assert.deepEqual(thematicsResult, [pixJuniorThematic]);
   });
 });

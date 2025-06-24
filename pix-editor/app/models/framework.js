@@ -2,7 +2,7 @@ import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class FrameworkModel extends Model {
 
-  static pix1DFrameworkName = 'Pix 1D';
+  static pixJuniorFrameworkName = 'Pix Junior';
 
   @attr name;
   @hasMany('area', { async: true, inverse: 'framework' }) areas;

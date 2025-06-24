@@ -13,7 +13,7 @@ module('Acceptance | Missions | List', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
-    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D' });
+    this.server.create('framework', { id: 'recFrameworkPixJunior', name: 'Pix Junior' });
     this.server.create('mission-summary', { name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'VALIDATED' });
     this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
     this.server.create('mission-summary', { name: 'Mission 3', competence: 'Autres', createdAt: '2023/11/11', status: 'EXPERIMENTAL' });
@@ -21,13 +21,13 @@ module('Acceptance | Missions | List', function(hooks) {
     return authenticateSession();
   });
 
-  test('it displays all Pix 1D missions', async function(assert) {
+  test('it displays all Pix Junior missions', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await screen.findByRole('listbox');
-    await click(screen.getByRole('option', { name: 'Pix 1D' }));
-    await clickByName('Missions Pix 1D');
+    await click(screen.getByRole('option', { name: 'Pix Junior' }));
+    await clickByName('Missions Pix Junior');
 
     // then
     assert.strictEqual(currentURL(), '/missions');
@@ -40,8 +40,8 @@ module('Acceptance | Missions | List', function(hooks) {
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await screen.findByRole('listbox');
-    await click(screen.getByRole('option', { name: 'Pix 1D' }));
-    await clickByName('Missions Pix 1D');
+    await click(screen.getByRole('option', { name: 'Pix Junior' }));
+    await clickByName('Missions Pix Junior');
     await click(screen.getByLabelText('Statut'));
     await click(await screen.findByRole('checkbox', { name: 'Validée' }));
 
@@ -55,8 +55,8 @@ module('Acceptance | Missions | List', function(hooks) {
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await screen.findByRole('listbox');
-    await click(screen.getByRole('option', { name: 'Pix 1D' }));
-    await clickByName('Missions Pix 1D');
+    await click(screen.getByRole('option', { name: 'Pix Junior' }));
+    await clickByName('Missions Pix Junior');
     await click(screen.getByLabelText('Statut'));
     await click(await screen.findByRole('checkbox', { name: 'Validée' }));
     await click(await screen.findByRole('checkbox', { name: 'Expérimentale' }));

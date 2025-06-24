@@ -14,7 +14,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
     this.set('closeMenu', function() {});
     this.owner.register('service:currentData', class MockService extends Service {
       getFramework() {
-        return { name: 'Pix 1D' };
+        return { name: 'Pix Junior' };
       }
       getAreas() {
         return [];
@@ -27,11 +27,11 @@ module('Integration | Component | main-sidebar', function(hooks) {
     assert.dom('.main-sidebar').exists();
   });
 
-  module('the pix1d framework is selected', function() {
+  module('the pixJunior framework is selected', function() {
     test('displays mission tab', async function(assert) {
       this.owner.register('service:currentData', class MockService extends Service {
         getFramework() {
-          return { name: 'Pix 1D' };
+          return { name: 'Pix Junior' };
         }
         getAreas() {
           return [];
@@ -44,12 +44,12 @@ module('Integration | Component | main-sidebar', function(hooks) {
       const screen = await render(hbs`<Sidebar::Main @openLogout={{this.openLogout}}
                                     @open={{this.menuOpen}}
                                     @close={{this.closeMenu}} />`);
-      assert.dom(screen.getByText('Missions Pix 1D')).exists();
+      assert.dom(screen.getByText('Missions Pix Junior')).exists();
     });
   });
 
-  module('the pix1d framework is not selected', function() {
-    test('does not display the Mission Pix 1D', async function(assert) {
+  module('the pixJunior framework is not selected', function() {
+    test('does not display the Mission Pix Junior', async function(assert) {
       this.owner.register('service:currentData', class MockService extends Service {
         getFramework() {
           return { name: 'Pix+ Droit' };
@@ -66,7 +66,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
                                     @open={{this.menuOpen}}
                                     @close={{this.closeMenu}} />`);
 
-      assert.dom(screen.queryByText('Missions Pix 1D')).doesNotExist();
+      assert.dom(screen.queryByText('Missions Pix Junior')).doesNotExist();
     });
   });
 });

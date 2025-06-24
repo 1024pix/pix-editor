@@ -57,13 +57,13 @@ describe('Unit | Transformer | mission-transformer', function() {
       ];
       tubes = [
         new Tube({ id: 'aTubeWithoutName' }),
-        domainBuilder.buildTube({ id: 'tubeTuto1', name: '@Pix1D-recherche_di' }),
-        domainBuilder.buildTube({ id: 'tubeTraining1', name: '@Pix1D-recherche_en' }),
-        domainBuilder.buildTube({ id: 'tubeValidation1', name: '@Pix1D-recherche_va' }),
-        domainBuilder.buildTube({ id: 'tubeTuto2', name: '@Pix1D-recherche-2_di' }),
-        domainBuilder.buildTube({ id: 'tubeTraining2', name: '@Pix1D-recherche-2_en' }),
-        domainBuilder.buildTube({ id: 'tubeValidation2', name: '@Pix1D-recherche-2_va' }),
-        domainBuilder.buildTube({ id: 'tubeDare', name: '@Pix1D-recherche_de' }),
+        domainBuilder.buildTube({ id: 'tubeTuto1', name: '@PixJunior-recherche_di' }),
+        domainBuilder.buildTube({ id: 'tubeTraining1', name: '@PixJunior-recherche_en' }),
+        domainBuilder.buildTube({ id: 'tubeValidation1', name: '@PixJunior-recherche_va' }),
+        domainBuilder.buildTube({ id: 'tubeTuto2', name: '@PixJunior-recherche-2_di' }),
+        domainBuilder.buildTube({ id: 'tubeTraining2', name: '@PixJunior-recherche-2_en' }),
+        domainBuilder.buildTube({ id: 'tubeValidation2', name: '@PixJunior-recherche-2_va' }),
+        domainBuilder.buildTube({ id: 'tubeDare', name: '@PixJunior-recherche_de' }),
       ];
       thematics = [
         domainBuilder.buildThematic({

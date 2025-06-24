@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { describe as context } from '@vitest/runner';
-import {  Mission, Skill } from '../../../../lib/domain/models/index.js';
+import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionValidator from '../../../../lib/domain/services/mission-validator.js';
 import { InvalidMissionContentError, MissionIntroductionMediaError } from '../../../../lib/domain/errors.js';
 import { airtableBuilder } from '../../../test-helper.js';
@@ -14,7 +14,7 @@ describe('Integration | Validator | Mission', function() {
             airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
           ],
           tubes: [
-            airtableBuilder.factory.buildTube({ id: 'tubeTuto1', name: '@Pix1D-recherche_di' }),
+            airtableBuilder.factory.buildTube({ id: 'tubeTuto1', name: '@PixJunior-recherche_di' }),
           ],
           thematics: [
             airtableBuilder.factory.buildThematic({
@@ -134,7 +134,7 @@ describe('Integration | Validator | Mission', function() {
             const mockedLearningContent = {
               skills: [skill1, skill1Bis],
               tubes: [
-                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@PixJunior-recherche_di' }),
               ],
               thematics: [
                 airtableBuilder.factory.buildThematic({
@@ -186,7 +186,7 @@ describe('Integration | Validator | Mission', function() {
             const mockedLearningContent = {
               skills: [skill1, skill1Bis],
               tubes: [
-                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@PixJunior-recherche_di' }),
               ],
               thematics: [
                 airtableBuilder.factory.buildThematic({
@@ -244,7 +244,7 @@ describe('Integration | Validator | Mission', function() {
             const mockedLearningContent = {
               skills: [skill1, skill1Bis, skill2],
               tubes: [
-                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@PixJunior-recherche_di' }),
               ],
               thematics: [
                 airtableBuilder.factory.buildThematic({
@@ -275,7 +275,7 @@ describe('Integration | Validator | Mission', function() {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            expect(warnings).to.deep.equal(['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
+            expect(warnings).to.deep.equal(['L\'activité \'@PixJunior-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
           });
         });
         context('when there is several skills with "en construction"', function() {
@@ -296,7 +296,7 @@ describe('Integration | Validator | Mission', function() {
             const mockedLearningContent = {
               skills: [skill1, skill2],
               tubes: [
-                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+                airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@PixJunior-recherche_di' }),
               ],
               thematics: [
                 airtableBuilder.factory.buildThematic({
@@ -329,8 +329,8 @@ describe('Integration | Validator | Mission', function() {
             // then
             expect(warnings).to.deep.equal(
               [
-                'L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 1.',
-                'L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'
+                'L\'activité \'@PixJunior-recherche_di\' n\'a pas d\'acquis actif pour le niveau 1.',
+                'L\'activité \'@PixJunior-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'
               ]);
           });
         });
