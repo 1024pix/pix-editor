@@ -40,7 +40,7 @@
     </div>
     <PixSelect
       @placeholder="Licence"
-      @options={{this.options.license}}
+      @options={{this.formattedLicenseOptionList}}
       @onChange={{fn (mut @tutorial.license)}}
       @value={{@tutorial.license}}
     >
@@ -49,10 +49,12 @@
   </div>
   <div class="three fields">
     <PixSelect
-      @placeholder="Format *"
-      @options={{this.options.format}}
+      @placeholder="Format"
+      @options={{this.formattedFormatOptionList}}
       @onChange={{fn (mut @tutorial.format)}}
       @value={{@tutorial.format}}
+      @requiredLabel={{"Champ obligatoire"}}
+      @hideDefaultOption={{true}}
     >
       <:label>Format</:label>
     </PixSelect>
@@ -63,7 +65,7 @@
 
     <PixSelect
       @placeholder="Niveau"
-      @options={{this.options.level}}
+      @options={{this.formattedLevelOptionList}}
       @onChange={{fn (mut @tutorial.level)}}
       @value={{@tutorial.level}}
     >
