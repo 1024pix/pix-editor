@@ -156,4 +156,19 @@ export default class TutorialForm extends Component {
   setTutorialLanguage(language) {
     this.args.tutorial.language = language.value;
   }
+
+  @action
+  setLink(inputEvent) {
+    this.args.tutorial.link = inputEvent.target.value;
+  }
+
+  @action
+  setTitle(inputEvent) {
+    this.args.tutorial.title = inputEvent.target.value;
+  }
+
+  @action
+  setDuration(inputEvent) {
+    this.args.tutorial.duration = inputEvent.target.value;
+  }
 }
