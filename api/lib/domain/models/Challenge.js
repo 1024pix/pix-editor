@@ -397,6 +397,7 @@ export class Challenge {
 
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);
+    this.validatedAt = this.#translateValidatedAt(localizedChallenge);
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = localizedChallenge.geography;
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
@@ -424,6 +425,11 @@ export class Challenge {
   #translateUrlsToConsult(localizedChallenge) {
     if (!this.#primaryUrlsToConsult) return null;
     return localizedChallenge.urlsToConsult;
+  }
+
+  #translateValidatedAt(localizedChallenge) {
+    if (this.isPrimary) return this.validatedAt;
+    return localizedChallenge.validatedAt;
   }
 }
 
