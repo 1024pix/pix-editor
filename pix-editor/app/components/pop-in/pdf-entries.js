@@ -14,7 +14,7 @@ export default class PopinPDFEntries extends Component {
     if (this.language) {
       return this.language;
     }
-    return this.options.language.find((option) => option.value === 'fr');
+    return this.options.language.find((option) => option.value === 'fr')?.value;
   }
 
   @action
@@ -23,9 +23,14 @@ export default class PopinPDFEntries extends Component {
   }
 
   @action
+  setTitle(inputEvent) {
+    this.title = inputEvent.target.value;
+  }
+
+  @action
   validate(e) {
     e.preventDefault();
-    this.args.validateAction(this.title, this.selectedLanguage.value);
+    this.args.validateAction(this.title, this.selectedLanguage);
     this.closeModal();
   }
 

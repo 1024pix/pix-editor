@@ -1,4 +1,5 @@
-import { click, fillIn, render } from '@ember/test-helpers';
+import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -7,7 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in/pdf-entries', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let callBackActionStub, closeTitleInputStub;
+  let screen, callBackActionStub, closeTitleInputStub;
 
   hooks.beforeEach(async function() {
     // given
@@ -17,15 +18,16 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
     this.closeTitleInput = closeTitleInputStub;
 
     // when
-    await render(hbs `<PopIn::PdfEntries
-                       @validateAction={{this.callBackAction}}
-                       @close={{this.closeTitleInput}}
-                       />`);
+    screen = await render(hbs `<PopIn::PdfEntries
+      @validateAction={{this.callBackAction}}
+      @close={{this.closeTitleInput}}
+      @showModal={{true}}
+    />`);
   });
 
   test('it should set default title and language on validate', async function(assert) {
     // when
-    await click('[data-test-validate-pdf-entries]');
+    await clickByText('Valider');
 
     // then
     assert.ok(callBackActionStub.calledOnce);
@@ -35,10 +37,10 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
 
   test('it should set custom title and selected language on validate', async function(assert) {
     // when
-    await fillIn('[data-test-pdf-title-field] input', 'mont titre');
-    await click('[data-test-pdf-language-field] .ember-basic-dropdown-trigger');
-    await click('.ember-power-select-option');
-    await click('[data-test-validate-pdf-entries]');
+    await fillByLabel('Titre', 'mont titre');
+    await clickByText('Langue');
+    await click(await screen.findByRole('option', { name: 'Anglais' }));
+    await clickByText('Valider');
 
     // then
     assert.ok(callBackActionStub.calledOnce);

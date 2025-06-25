@@ -49,6 +49,7 @@
 @use 'components/form/tutorial';
 @use 'components/dropdown-menu';
 @use 'components/pop-in/tutorial' as tutorial-pop-in;
+@use 'components/pop-in/pdf-entries';
 @use 'components/select-location';
 @use 'globals/global' as globals-global;
 @use 'globals/notification';

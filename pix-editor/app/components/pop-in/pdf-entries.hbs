@@ -4,38 +4,41 @@
   @showModal={{@showModal}}
 >
   <:content>
-    <form class="ui form" {{on "submit" this.validate}}>
-      <div class="field">
-        <Field::Input @title={{t 'target_profile.pdf_export.field.title'}}
-                      @value={{this.title}}
-                      @edition={{true}}
-                      data-test-pdf-title-field
-        />
+    <form class="pdf-entries" {{on "submit" this.validate}}>
+      <div>
+        <PixInput
+          @value={{this.title}}
+          class="field"
+          {{on "input" this.setTitle}}
+        >
+          <:label>Titre</:label>
+        </PixInput>
       </div>
-      <div class="field">
-        <Field::Select @title={{t 'target_profile.pdf_export.field.language'}}
-                       @value={{this.selectedLanguage}}
-                       @options={{this.options.language}}
-                       @edition={{true}}
-                       @setValue={{this.setLanguage}}
-                       data-test-pdf-language-field
-        />
+      <div>
+        <PixSelect
+          @value={{this.selectedLanguage}}
+          @options={{this.options.language}}
+          @onChange={{this.setLanguage}}
+          @hideDefaultOption={{true}}
+          class="field"
+        >
+          <:label>{{t 'target_profile.pdf_export.field.language'}}</:label>
+        </PixSelect>
       </div>
     </form>
   </:content>
   <:footer>
-    <PixButton @backgroundColor="transparent-light"
-               @isBorderVisible={{true}}
-               @triggerAction={{this.closeModal}}
+    <PixButton
+      @backgroundColor="transparent-light"
+      @isBorderVisible={{true}}
+      @triggerAction={{this.closeModal}}
     >
       {{t 'common.cancel'}}
     </PixButton>
-    <PixButton data-test-validate-pdf-entries
-               @triggerAction={{this.validate}}
+    <PixButton
+      @triggerAction={{this.validate}}
+      @iconBefore="check"
     >
-      <i class="checkmark icon"
-         aria-hidden="true"
-      ></i>
       {{t 'common.validate'}}
     </PixButton>
   </:footer>
