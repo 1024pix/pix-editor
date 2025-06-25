@@ -369,6 +369,9 @@ export class Challenge {
   }
 
   translate(locale) {
+    if (this.locale !== this.primaryLocale) {
+      throw new Error('Illegal operation : trying to translate an already translated challenge');
+    }
     const challenge = new Challenge({
       ...this,
       files: this.#allFiles,
@@ -384,7 +387,6 @@ export class Challenge {
     this.locales = locale === this.primaryLocale
       ? this.#primaryLocales
       : [locale];
-
     this.instruction = this.#translations[this.locale]?.instruction ?? '';
     this.alternativeInstruction = this.#translations[this.locale]?.alternativeInstruction ?? '';
     this.proposals = this.#translations[this.locale]?.proposals ?? '';
