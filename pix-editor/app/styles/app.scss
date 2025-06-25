@@ -51,6 +51,7 @@
 @use 'components/pop-in/tutorial' as tutorial-pop-in;
 @use 'components/pop-in/pdf-entries';
 @use 'components/select-location';
+@use 'components/sidebar/navigation';
 @use 'globals/global' as globals-global;
 @use 'globals/notification';
 @use 'globals/page';

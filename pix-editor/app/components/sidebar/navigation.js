@@ -29,23 +29,19 @@ export default class SidebarNavigationComponent extends Component {
     return this.currentData.getFramework();
   }
 
-  get selectedFramework() {
-    return this.frameworkList.find((item) => {
-      if (this.currentData.getFramework()) {
-        return item.label === this.currentData.getFramework().name;
-      }
-    });
+  get selectedFrameworkId() {
+    return this.framework?.id;
   }
 
-  get frameworkList() {
+  get frameworkOptionList() {
     const frameworkList = this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework,
+      value: framework.id,
     }));
     if (this.access.isAdmin()) {
       frameworkList.push({
         label: this.addFrameworkLabel,
-        data: 'create',
+        value: 'create',
       });
     }
     return frameworkList;
@@ -60,12 +56,13 @@ export default class SidebarNavigationComponent extends Component {
   }
 
   @action
-  setFramework(item) {
-    if (item.data === 'create') {
+  setFramework(frameworkId) {
+    if (frameworkId === 'create') {
       this._openNewFrameworkPopIn();
       return;
     }
-    this.currentData.setFramework(item.data);
+    const framework = this.frameworks.find(({ id }) => id === frameworkId);
+    this.currentData.setFramework(framework);
   }
 
   @action
@@ -86,16 +83,13 @@ export default class SidebarNavigationComponent extends Component {
       const router = this.router;
       this.loader.start();
       await this.newFramework.save();
-      this.setFramework({
-        label: this.newFramework.name,
-        data: this.newFramework,
-      });
+      this.setFramework(this.newFramework.id);
       this.notify.message('Référentiel créé');
       this.displayNewFrameworkPopIn = false;
       router.transitionTo('authenticated');
     } catch (error) {
       Sentry.captureException(error);
-      console.log(error);
+      console.error(error);
       this.notify.error('Erreur lors de la création du Référentiel');
     } finally {
       this.loader.stop();

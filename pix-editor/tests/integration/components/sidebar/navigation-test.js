@@ -1,6 +1,6 @@
-import { clickByName } from '@1024pix/ember-testing-library';
+import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, findAll, render } from '@ember/test-helpers';
+import { click, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -37,10 +37,12 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       }];
 
       pixFramework = {
+        id: 'patate',
         name: 'Pix',
       };
 
       pixFranceFramework = {
+        id: 'patate +',
         name: 'Pix +',
       };
 
@@ -67,19 +69,19 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display a list of frameworks with a creation item', async function(assert) {
-      assert.expect(3);
+      assert.expect(4);
       // given
-      const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
+      const expectedFrameworks = ['Sélectionner un référentiel', 'Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
+      const screen = await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
 
       await clickByName('Sélectionner un référentiel');
 
       // then
-      const sourcesList = findAll('.ember-power-select-option');
-      sourcesList.forEach((source) => {
-        assert.ok(expectedFrameworks.includes(source.textContent.trim()));
+      const frameworksList = await screen.findAllByRole('option');
+      frameworksList.forEach((framework) => {
+        assert.ok(expectedFrameworks.includes(framework.textContent.trim()));
       });
     });
 

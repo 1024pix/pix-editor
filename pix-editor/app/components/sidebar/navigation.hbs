@@ -1,5 +1,17 @@
 {{#if @displayFrameworkList}}
-  <Field::Select id="select-framework" @value={{this.selectedFramework}} @options={{this.frameworkList}} @setValue={{this.setFramework}} @edition={{true}} @ariaLabel="Sélectionner un référentiel"/>
+  <PixSelect
+    @id="select-framework"
+    @value={{this.selectedFrameworkId}}
+    @options={{this.frameworkOptionList}}
+    @onChange={{this.setFramework}}
+    @placeholder={{"Sélectionner un référentiel"}}
+    @placement="bottom"
+    class="select-framework"
+  >
+    <:label>
+      <span class="sr-only">Sélectionner un référentiel</span>
+    </:label>
+  </PixSelect>
 {{/if}}
 <AccordionList as |accordion|>
     {{#each this.areas as |area|}}
@@ -41,9 +53,11 @@
       <LinkTo data-test-add-area @route="authenticated.area-management.new" @model={{this.framework.id}} class="item" {{on "click" @close}}><i class="plus square icon"></i>Ajouter un domaine</LinkTo>
     {{/if}}
 </AccordionList>
-<PopIn::NewFramework
-  @framework={{this.newFramework}}
-  @close={{this.closeNewFrameworkPopIn}}
-  @save={{this.saveFramework}}
-  @showModal={{this.displayNewFrameworkPopIn}}
-/>
+{{#if this.displayNewFrameworkPopIn}}
+  <PopIn::NewFramework
+    @framework={{this.newFramework}}
+    @close={{this.closeNewFrameworkPopIn}}
+    @save={{this.saveFramework}}
+    @showModal={{this.displayNewFrameworkPopIn}}
+  />
+{{/if}}

@@ -1,12 +1,12 @@
-import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find, findAll } from '@ember/test-helpers';
+import { clickByName, clickByText, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, fillIn, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Search', function(hooks) {
+module('Acceptance | Create-Framework', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
@@ -27,7 +27,7 @@ module('Acceptance | Search', function(hooks) {
     // when
     await visit('/');
     await clickByName('Sélectionner un référentiel');
-    await click(findAll('.ember-power-select-option')[1]);
+    await clickByText('Créer un nouveau référentiel');
     await fillIn('[data-test-framework-name-input] input', newFrameworkName);
     await click(find('[data-test-save-action]'));
 
