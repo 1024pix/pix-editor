@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { value } from 'lodash/seq';
+import * as Sentry from '@sentry/ember';
 
 function parseTitleAndNotes(query) {
   const hasNote = query.includes('[');
@@ -48,10 +48,6 @@ export default class TutorialForm extends Component {
 
   get hasSelectedTag() {
     return this.selectedTags.length > 0;
-  }
-
-  get tutorialLanguage() {
-    return this.config.tutorialLocaleToLanguageMap[this.args.tutorial.normalizedLanguage];
   }
 
   get tutorialLanguageOptions() {
@@ -130,6 +126,7 @@ export default class TutorialForm extends Component {
           this.notify.error('Un tag avec ce nom là existe déjà');
         } else {
           this.notify.error('Erreur lors de la création du tag');
+          Sentry.captureException(err);
         }
       }
     } else {
@@ -142,9 +139,9 @@ export default class TutorialForm extends Component {
   }
 
   @action
-  async unselectTag(id) {
+  async unselectTag(tagId) {
     const tags = await this.args.tutorial.tags;
-    this.args.tutorial.tags = tags.filter((tag) => tag.id !== id);
+    this.args.tutorial.tags = tags.filter((tag) => tag.id !== tagId);
   }
 
   @action
@@ -154,7 +151,7 @@ export default class TutorialForm extends Component {
 
   @action
   setTutorialLanguage(language) {
-    this.args.tutorial.language = language.value;
+    this.args.tutorial.language = language;
   }
 
   @action

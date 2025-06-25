@@ -10,11 +10,10 @@
     </PixInput>
   </div>
   <PixSelect
-    @placeholder="Langue"
     @options={{this.tutorialLanguageOptions}}
     @onChange={{this.setTutorialLanguage}}
     @requiredLabel={{"Champ obligatoire"}}
-    @value={{this.tutorialLanguage}}
+    @value={{@tutorial.normalizedLanguage}}
     @hideDefaultOption={{true}}
   >
     <:label>Langue</:label>
@@ -28,7 +27,6 @@
     <:label>Lien</:label>
   </PixInput>
   <PixSelect
-    @placeholder="Source"
     @options={{this.sourceListOptions}}
     @onChange={{fn (mut @tutorial.source)}}
     @onSearch={{this.getSearchSourceResults}}
@@ -42,7 +40,6 @@
     <:label>Source</:label>
   </PixSelect>
   <PixSelect
-    @placeholder="Licence"
     @options={{this.formattedLicenseOptionList}}
     @onChange={{fn (mut @tutorial.license)}}
     @value={{@tutorial.license}}
@@ -50,7 +47,6 @@
     <:label>Licence</:label>
   </PixSelect>
   <PixSelect
-    @placeholder="Format"
     @options={{this.formattedFormatOptionList}}
     @onChange={{fn (mut @tutorial.format)}}
     @value={{@tutorial.format}}
@@ -68,14 +64,13 @@
     <:label>Durée (hh:mm:ss)</:label>
   </PixInput>
   <PixSelect
-    @placeholder="Niveau"
     @options={{this.formattedLevelOptionList}}
     @onChange={{fn (mut @tutorial.level)}}
     @value={{@tutorial.level}}
   >
     <:label>Niveau</:label>
   </PixSelect>
-  <div data-test-tag-search class="span-two tutorial-tags-select">
+  <div class="tutorial-tags-select">
     <PixMultiSelect
       @isSearchable={{true}}
       @onSearch={{this.getSearchTagsResults}}
@@ -102,7 +97,7 @@
       </:default>
     </PixMultiSelect>
   </div>
-  <div class="twelve wide field">
+  <div class="span-two">
     {{#if @tutorial.tags.length}}
       <label>Tags</label>
       <section class="tags">
@@ -110,8 +105,9 @@
           <span class="tag">
             {{tag.title}}
             <PixIconButton
+              @ariaLabel="Supprimer le tag: {{tag.title}}"
               @iconName="close"
-              @triggerAction="{{this.unselectTag tag.id}}"
+              @triggerAction={{(fn this.unselectTag tag.id)}}
               @size="small"
               class="delete-tag-button">
             </PixIconButton>
@@ -120,7 +116,7 @@
       </section>
     {{/if}}
   </div>
-  <label>
+  <label class="span-three">
     Coup de coeur
     <PixIconButton
       @ariaLabel={{"Coup de coeur"}}
