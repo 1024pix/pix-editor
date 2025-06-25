@@ -1,4 +1,4 @@
-import { clickByName, render } from '@1024pix/ember-testing-library';
+import { clickByText, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -18,13 +18,15 @@ module('Integration | Component | tutorial-form', function(hooks) {
       }
     }
     this.owner.register('service:config', ConfigService);
+    const store = this.owner.lookup('service:store');
 
-    this.set('tutorial', { license: false, format: false, level: false });
+    const tutorial = store.createRecord('tutorial', { id: 'rectTuto1', source: 'ma source' });
+    this.set('tutorial', tutorial);
 
     const screen = await render(hbs`<Form::Tutorial @tutorial={{this.tutorial}} />`);
 
-    await clickByName('Langue *');
-    assert.ok(screen.getByRole('listbox', { option: 'Première Langue' }));
-    assert.ok(screen.getByRole('listbox', { option: 'Autre Langue' }));
+    await clickByText('Langue');
+    assert.dom(await screen.findByRole('option', { name: 'Première langue' })).exists();
+    assert.dom(await screen.findByRole('option', { name: 'Autre Langue' })).exists();
   });
 });
