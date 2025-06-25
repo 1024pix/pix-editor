@@ -5,6 +5,18 @@
 }
 
 .tutorial-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+
+  .pix-input, .pix-select {
+    width: 100% !important;
+
+    input {
+      height: 100%;
+    }
+  }
+
   .tags {
     display: flex;
     flex-wrap: wrap;
@@ -35,5 +47,13 @@
       background: rgba(255, 0, 0, 0.1);
       outline: 2px solid red;
     }
+  }
+
+  .span-two {
+    grid-column: span 2;
+  }
+
+  .span-three {
+    grid-column: span 3;
   }
 }

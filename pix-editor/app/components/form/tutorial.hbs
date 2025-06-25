@@ -1,157 +1,135 @@
 <form class="tutorial-form">
-  <div class="fields">
-    <div class="twelve wide field">
-      <PixInput
-        @requiredLabel={{"Le titre est requis"}}
-        @value={{@tutorial.title}}
-        placeholder="Comment manger une pomme"
-        {{on "input" this.setTitle}}
-      >
-        <:label>Titre</:label>
-      </PixInput>
-    </div>
-    <div class="six wide field">
-      <PixSelect
-        @placeholder="Langue"
-        @options={{this.tutorialLanguageOptions}}
-        @onChange={{this.setTutorialLanguage}}
-        @requiredLabel={{"Champ obligatoire"}}
-        @value={{this.tutorialLanguage}}
-        @hideDefaultOption={{true}}
-      >
-        <:label>Langue</:label>
-      </PixSelect>
-    </div>
-  </div>
-  <div class="three fields">
-    <div class="field">
-      <PixInput
-        @requiredLabel={{"Le lien est requis"}}
-        @value={{@tutorial.link}}
-        placeholder="http://example.org"
-        {{on "input" this.setLink}}
-      >
-        <:label>Lien</:label>
-      </PixInput>
-    </div>
-    <div class="field" data-test-select-source-for-tutorial>
-      <PixSelect
-        @className={{"search-result tutorial-search"}}
-        @placeholder="Source"
-        @options={{this.sourceListOptions}}
-        @onChange={{fn (mut @tutorial.source)}}
-        @onSearch={{this.getSearchSourceResults}}
-        @value={{@tutorial.source}}
-        @isSearchable={{true}}
-        @searchLabel={{"Rechercher une source"}}
-        @searchPlaceholder="Rechercher..."
-        @requiredLabel={{"Champ obligatoire"}}
-        @hideDefaultOption={{true}}
-      >
-        <:label>Source</:label>
-      </PixSelect>
-    </div>
-    <PixSelect
-      @placeholder="Licence"
-      @options={{this.formattedLicenseOptionList}}
-      @onChange={{fn (mut @tutorial.license)}}
-      @value={{@tutorial.license}}
+  <div class="span-two">
+    <PixInput
+      @requiredLabel={{"Le titre est requis"}}
+      @value={{@tutorial.title}}
+      placeholder="Comment manger une pomme"
+      {{on "input" this.setTitle}}
     >
-      <:label>Licence</:label>
-    </PixSelect>
+      <:label>Titre</:label>
+    </PixInput>
   </div>
-  <div class="three fields">
-    <PixSelect
-      @placeholder="Format"
-      @options={{this.formattedFormatOptionList}}
-      @onChange={{fn (mut @tutorial.format)}}
-      @value={{@tutorial.format}}
-      @requiredLabel={{"Champ obligatoire"}}
-      @hideDefaultOption={{true}}
+  <PixSelect
+    @placeholder="Langue"
+    @options={{this.tutorialLanguageOptions}}
+    @onChange={{this.setTutorialLanguage}}
+    @requiredLabel={{"Champ obligatoire"}}
+    @value={{this.tutorialLanguage}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Langue</:label>
+  </PixSelect>
+  <PixInput
+    @requiredLabel={{"Le lien est requis"}}
+    @value={{@tutorial.link}}
+    placeholder="http://example.org"
+    {{on "input" this.setLink}}
+  >
+    <:label>Lien</:label>
+  </PixInput>
+  <PixSelect
+    @placeholder="Source"
+    @options={{this.sourceListOptions}}
+    @onChange={{fn (mut @tutorial.source)}}
+    @onSearch={{this.getSearchSourceResults}}
+    @value={{@tutorial.source}}
+    @isSearchable={{true}}
+    @searchLabel={{"Rechercher une source"}}
+    @searchPlaceholder="Rechercher..."
+    @requiredLabel={{"Champ obligatoire"}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Source</:label>
+  </PixSelect>
+  <PixSelect
+    @placeholder="Licence"
+    @options={{this.formattedLicenseOptionList}}
+    @onChange={{fn (mut @tutorial.license)}}
+    @value={{@tutorial.license}}
+  >
+    <:label>Licence</:label>
+  </PixSelect>
+  <PixSelect
+    @placeholder="Format"
+    @options={{this.formattedFormatOptionList}}
+    @onChange={{fn (mut @tutorial.format)}}
+    @value={{@tutorial.format}}
+    @requiredLabel={{"Champ obligatoire"}}
+    @hideDefaultOption={{true}}
+  >
+    <:label>Format</:label>
+  </PixSelect>
+  <PixInput
+    @requiredLabel={{"La durée est requise"}}
+    @value={{@tutorial.duration}}
+    placeholder="03:54:39"
+    {{on "input" this.setDuration}}
+  >
+    <:label>Durée (hh:mm:ss)</:label>
+  </PixInput>
+  <PixSelect
+    @placeholder="Niveau"
+    @options={{this.formattedLevelOptionList}}
+    @onChange={{fn (mut @tutorial.level)}}
+    @value={{@tutorial.level}}
+  >
+    <:label>Niveau</:label>
+  </PixSelect>
+  <div data-test-tag-search class="span-two tutorial-tags-select">
+    <PixMultiSelect
+      @isSearchable={{true}}
+      @onSearch={{this.getSearchTagsResults}}
+      @placeholder="cloud clavier ..."
+      @onChange={{this.onChangeTags}}
+      @values={{this.tutorialTagIds}}
+      @emptyMessage="Aucun tag"
+      @options={{this.tagListOptions}}
     >
-      <:label>Format</:label>
-    </PixSelect>
-    <div class="field">
-      <PixInput
-        @requiredLabel={{"La durée est requise"}}
-        @value={{@tutorial.duration}}
-        placeholder="03:54:39"
-        {{on "input" this.setDuration}}
-      >
-        <:label>Durée (hh:mm:ss)</:label>
-      </PixInput>
-    </div>
-
-    <PixSelect
-      @placeholder="Niveau"
-      @options={{this.formattedLevelOptionList}}
-      @onChange={{fn (mut @tutorial.level)}}
-      @value={{@tutorial.level}}
-    >
-      <:label>Niveau</:label>
-    </PixSelect>
+      <:label>Rechercher tags</:label>
+      <:default as |option|>
+        <div class="search-title">
+          {{#if (eq option.value "create")}}
+            {{option.label}} <i class="add icon"></i>
+          {{else}}
+            {{option.label}}
+          {{/if}}
+        </div>
+        <div class="search-description">
+          {{#if option.description}}
+            {{option.description}}
+          {{/if}}
+        </div>
+      </:default>
+    </PixMultiSelect>
   </div>
-  <div class="three fields">
-    <div data-test-tag-search class="field tutorial-tags-select">
-      <PixMultiSelect
-        @isSearchable={{true}}
-        @onSearch={{this.getSearchTagsResults}}
-        @placeholder="cloud clavier ..."
-        @onChange={{this.onChangeTags}}
-        @values={{this.tutorialTagIds}}
-        @emptyMessage="Aucun tag"
-        @options={{this.tagListOptions}}
-      >
-        <:label>Rechercher tags</:label>
-        <:default as |option|>
-          <div class="search-title">
-            {{#if (eq option.value "create")}}
-              {{option.label}} <i class="add icon"></i>
-            {{else}}
-              {{option.label}}
-            {{/if}}
-          </div>
-          <div class="search-description">
-            {{#if option.description}}
-              {{option.description}}
-            {{/if}}
-          </div>
-        </:default>
-      </PixMultiSelect>
-    </div>
-    <div class="twelve wide field">
-      {{#if @tutorial.tags.length}}
-        <label>Tags</label>
-        <section class="tags">
-          {{#each @tutorial.tags as |tag|}}
-            <span  class="tag">
-              {{tag.title}}
-              <PixIconButton
-                @iconName="close"
-                @triggerAction="{{this.unselectTag tag.id}}"
-                @size="small"
-                class="delete-tag-button">
-              </PixIconButton>
-            </span>
-          {{/each}}
-        </section>
-      {{/if}}
-    </div>
+  <div class="twelve wide field">
+    {{#if @tutorial.tags.length}}
+      <label>Tags</label>
+      <section class="tags">
+        {{#each @tutorial.tags as |tag|}}
+          <span class="tag">
+            {{tag.title}}
+            <PixIconButton
+              @iconName="close"
+              @triggerAction="{{this.unselectTag tag.id}}"
+              @size="small"
+              class="delete-tag-button">
+            </PixIconButton>
+          </span>
+        {{/each}}
+      </section>
+    {{/if}}
   </div>
-  <div class="fields">
-    <div class="field">
-      <label>
-        Coup de coeur
-        <PixIconButton
-          @ariaLabel={{"Coup de coeur"}}
-          @iconName="favorite"
-          @plainIcon={{@tutorial.crush}}
-          @triggerAction={{this.toggleCrush}}
-          @size="big"
-          class="crush-button"
-        />
-      </label>
-    </div>
-  </div>
-  <p>* champ obligatoire</p>
+  <label>
+    Coup de coeur
+    <PixIconButton
+      @ariaLabel={{"Coup de coeur"}}
+      @iconName="favorite"
+      @plainIcon={{@tutorial.crush}}
+      @triggerAction={{this.toggleCrush}}
+      @size="big"
+      class="crush-button"
+    />
+  </label>
+  <p class="span-three">* champ obligatoire</p>
 </form>
