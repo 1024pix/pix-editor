@@ -1,8 +1,14 @@
 <form class="tutorial-form">
   <div class="fields">
     <div class="twelve wide field">
-      <label for="title_tutorial">Titre *</label>
-      <Input id="title_tutorial" @type="text" @value={{@tutorial.title}} placeholder="Titre" />
+      <PixInput
+        @requiredLabel={{"Le titre est requis"}}
+        @value={{@tutorial.title}}
+        placeholder="Comment manger une pomme"
+        {{on "input" this.setTitle}}
+      >
+        <:label>Titre</:label>
+      </PixInput>
     </div>
     <div class="six wide field">
       <PixSelect
@@ -19,8 +25,14 @@
   </div>
   <div class="three fields">
     <div class="field">
-      <label for="text_tutorial">Lien *</label>
-      <Input id="text_tutorial" @type="text" @value={{@tutorial.link}} placeholder="Lien" />
+      <PixInput
+        @requiredLabel={{"Le lien est requis"}}
+        @value={{@tutorial.link}}
+        placeholder="http://example.org"
+        {{on "input" this.setLink}}
+      >
+        <:label>Lien</:label>
+      </PixInput>
     </div>
     <div class="field" data-test-select-source-for-tutorial>
       <PixSelect
@@ -34,6 +46,7 @@
         @searchLabel={{"Rechercher une source"}}
         @searchPlaceholder="Rechercher..."
         @requiredLabel={{"Champ obligatoire"}}
+        @hideDefaultOption={{true}}
       >
         <:label>Source</:label>
       </PixSelect>
@@ -59,8 +72,14 @@
       <:label>Format</:label>
     </PixSelect>
     <div class="field">
-      <label for="duration_tutorial">Durée (hh:mm:ss) *</label>
-      <Input id="duration_tutorial" @type="text" @value={{@tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
+      <PixInput
+        @requiredLabel={{"La durée est requise"}}
+        @value={{@tutorial.duration}}
+        placeholder="03:54:39"
+        {{on "input" this.setDuration}}
+      >
+        <:label>Durée (hh:mm:ss)</:label>
+      </PixInput>
     </div>
 
     <PixSelect
@@ -121,10 +140,17 @@
   </div>
   <div class="fields">
     <div class="field">
-      <label>Coup de coeur</label>
-      <div {{on "click" this.toggleCrush}} class="ui circular icon button crush">
-        <i class="icon red heart {{if @tutorial.crush "" "outline" }}"></i>
-      </div>
+      <label>
+        Coup de coeur
+        <PixIconButton
+          @ariaLabel={{"Coup de coeur"}}
+          @iconName="favorite"
+          @plainIcon={{@tutorial.crush}}
+          @triggerAction={{this.toggleCrush}}
+          @size="big"
+          class="crush-button"
+        />
+      </label>
     </div>
   </div>
   <p>* champ obligatoire</p>
