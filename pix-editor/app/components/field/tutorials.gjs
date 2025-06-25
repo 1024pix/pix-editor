@@ -1,6 +1,7 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -25,7 +26,6 @@ export default class Tutorials extends Component {
   @service loader;
 
   async _searchTutorial(query) {
-    this.emptyTutorialList();
     if (!query || query.length === 0 || query === '>') {
       return;
     }
@@ -52,10 +52,14 @@ export default class Tutorials extends Component {
   }
 
   @action
-  async attachTutorial(tutorialOption) {
-    const tutorial = await this.store.findRecord('tutorial', tutorialOption.id);
-    this.args.addTutorial(this.args.tutorials, tutorial);
-    this.emptyTutorialList();
+  async attachTutorials(tutorialIds) {
+    const tutorials = await this.store.query('tutorial', {
+      filter: {
+        ids: tutorialIds,
+      },
+    });
+
+    this.args.setTutorials(tutorials);
   }
 
   @action
@@ -108,34 +112,47 @@ export default class Tutorials extends Component {
     }
   }
 
-  @action
-  emptyTutorialList() {
-    this.tutorialList = [];
-  }
-
   get searchLabel() {
     return `Rechercher un tutoriel ${this.args.title.toLowerCase()}`;
   }
 
+  get tutorialIds() {
+    if (this.args.tutorials.isPending) return [];
+    console.log('not loading', this.args.tutorials.content);
+    return this.args.tutorials.content.map(({ id }) => id);
+  }
+
+  get tutorialOptionList() {
+    return this.tutorialList.map((tutorial) => ({
+      value: tutorial.id,
+      label: tutorial.title,
+      tags: tutorial.tagsTitle,
+    }));
+  }
+
   <template>
     <div class="field {{if this.edition "" " disabled"}}">
+      {{log this.tutorialIds}}
       {{#if @edition}}
-        <SelectSearch
+        <PixMultiSelect
+          @isSearchable={{true}}
+          @hideDefaultOption={{true}}
+          @placeholder={{"Exemple: Rédiger un e-mail"}}
+          @options={{this.tutorialOptionList}}
+          @values={{this.tutorialIds}}
           @onSearch={{this.getSearchTutorialResults}}
-          @onSelect={{this.attachTutorial}}
-          @options={{this.tutorialList}}
-          @isLoading={{this.isTutorialQueryOngoing}}
-          @searchPlaceholder="Exemple: Rédiger un e-mail"
-          @searchLabel={{this.searchLabel}}
+          @onChange={{this.attachTutorials}}
+          @emptyMessage={{"Aucun résultat"}}
           class="tutorial-search"
         >
-          <:option as |tutorial|>
+          <:label>{{this.searchLabel}}</:label>
+          <:default as |tutorialOption|>
             <p class="tutorial-option">
-              <span class="tutorial-option__title">{{tutorial.title}}</span>
-              <span class="tutorial-option__tags">{{tutorial.tagsTitle}}</span>
+              <span class="tutorial-option__title">{{tutorialOption.label}}</span>
+              <span class="tutorial-option__tags">{{tutorialOption.tags}}</span>
             </p>
-          </:option>
-        </SelectSearch>
+          </:default>
+        </PixMultiSelect>
       {{else}}
         <p class="pix-label">{{@title}}</p>
       {{/if}}

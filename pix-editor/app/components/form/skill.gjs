@@ -49,11 +49,18 @@ export default class SkillForm extends Component {
     this.args.skill.i18n = value;
   }
 
-  async addTutorial(tutorials, tutorial) {
-    const loadedTutorials = await tutorials;
-    loadedTutorials.push(tutorial);
+  @action
+  async setTutoMoreList(newTutorials) {
+    console.log(this.args.skill);
+    this.args.skill.tutoMore = newTutorials;
   }
 
+  @action
+  async setTutoSolutionList(newTutorials) {
+    this.args.skill.tutoSolution = newTutorials;
+  }
+
+  @action
   async removeTutorial(tutorials, tutorial, event) {
     event.preventDefault();
 
@@ -113,7 +120,7 @@ export default class SkillForm extends Component {
         @tutorials={{@skill.tutoSolution}}
         @searchClass="solution"
         @edition={{@edition}}
-        @addTutorial={{this.addTutorial}}
+        @setTutorials={{this.setTutoSolutionList}}
         @removeTutorial={{this.removeTutorial}}
       />
       <Tutorials
@@ -122,7 +129,7 @@ export default class SkillForm extends Component {
         @tutorials={{@skill.tutoMore}}
         @edition={{@edition}}
         @searchClass="more"
-        @addTutorial={{this.addTutorial}}
+        @setTutorials={{this.setTutoMoreList}}
         @removeTutorial={{this.removeTutorial}}
       />
       <PixSelect
