@@ -3,7 +3,8 @@ import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../tes
 import { createServer } from '../../../../server.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | Controller | whitelisted-urls', () => {let now;
+describe('Acceptance | Controller | whitelisted-urls', () => {
+  let now;
   beforeEach(function() {
     now = new Date('2024-10-29T03:04:00Z');
     vi.useFakeTimers({

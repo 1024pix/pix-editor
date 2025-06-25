@@ -163,6 +163,28 @@ export class LocalizedChallenge {
       clonedAttachments,
     };
   }
+
+  /**
+   * @param {LocalizedChallenge|Object} updates
+   */
+  update(updates) {
+    const oldStatus = this.status;
+    if (updates.status === LocalizedChallenge.STATUSES.PLAY && updates.status !== oldStatus) {
+      this.validatedAt = new Date();
+    }
+    this.locale = updates.locale;
+    this.embedUrl = updates.embedUrl;
+    this.status = updates.status;
+    this.geography = updates.geography;
+    this.urlsToConsult = updates.urlsToConsult;
+    this.requireGafamWebsiteAccess = updates.requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = updates.isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = updates.deafAndHardOfHearing;
+    this.isAwarenessChallenge = updates.isAwarenessChallenge;
+    this.toRephrase = updates.toRephrase;
+    this.hasEmbedInternalValidation = updates.hasEmbedInternalValidation;
+    this.noValidationNeeded = updates.noValidationNeeded;
+  }
 }
 
 function hasLocaleInFirstPathSegment(url) {

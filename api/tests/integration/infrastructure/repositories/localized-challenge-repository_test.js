@@ -960,7 +960,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id,
-        challengeId: 'differentChallengeId should not be updated',
+        challengeId: 'challengeId',
         embedUrl: 'my-new-url.html',
         locale: 'ar',
         status: LocalizedChallenge.STATUSES.PRIMARY,
@@ -1040,6 +1040,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id,
+        challengeId,
         embedUrl: null,
         locale: 'nl',
       });
@@ -1073,7 +1074,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id,
-          challengeId: 'differentChallengeId should not be updated',
+          challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
           status: LocalizedChallenge.STATUSES.PRIMARY,

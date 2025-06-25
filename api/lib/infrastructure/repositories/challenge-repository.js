@@ -110,27 +110,28 @@ export async function createBatch(challenges) {
     return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);
   });
 }
-
+// TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
+// là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
 export async function update(challenge, knexConn = knex) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction: knexConn });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
   const oldPrimaryLocale = primaryLocalizedChallenge.locale;
-  if (oldPrimaryLocale !== challenge.primaryLocale) {
-    primaryLocalizedChallenge.locale = challenge.primaryLocale;
-  }
-
-  primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
-  primaryLocalizedChallenge.geography = challenge.geography;
-  primaryLocalizedChallenge.urlsToConsult = challenge.urlsToConsult;
-  primaryLocalizedChallenge.requireGafamWebsiteAccess = challenge.requireGafamWebsiteAccess;
-  primaryLocalizedChallenge.isIncompatibleIpadCertif = challenge.isIncompatibleIpadCertif;
-  primaryLocalizedChallenge.deafAndHardOfHearing = challenge.deafAndHardOfHearing;
-  primaryLocalizedChallenge.isAwarenessChallenge = challenge.isAwarenessChallenge;
-  primaryLocalizedChallenge.toRephrase = challenge.toRephrase;
-  primaryLocalizedChallenge.hasEmbedInternalValidation = challenge.hasEmbedInternalValidation;
-  primaryLocalizedChallenge.noValidationNeeded = challenge.noValidationNeeded;
+  const updateLocalizedChallengePOJO = {
+    locale: oldPrimaryLocale !== challenge.primaryLocale ? challenge.primaryLocale : oldPrimaryLocale,
+    embedUrl: challenge.embedUrl,
+    geography: challenge.geography,
+    urlsToConsult: challenge.urlsToConsult,
+    requireGafamWebsiteAccess: challenge.requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif: challenge.isIncompatibleIpadCertif,
+    deafAndHardOfHearing: challenge.deafAndHardOfHearing,
+    isAwarenessChallenge: challenge.isAwarenessChallenge,
+    toRephrase: challenge.toRephrase,
+    hasEmbedInternalValidation: challenge.hasEmbedInternalValidation,
+    noValidationNeeded: challenge.noValidationNeeded,
+  };
+  primaryLocalizedChallenge.update(updateLocalizedChallengePOJO);
 
   await localizedChallengeRepository.update({
     localizedChallenge: primaryLocalizedChallenge,
