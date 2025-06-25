@@ -54,24 +54,30 @@ export default class TargetProfileController extends Controller {
     if (this._selectedFrameworks) {
       return this._selectedFrameworks;
     }
-    return [this.frameworkList.find((item) => (item.data === this.currentData.getFramework()))];
+    const currentFramework = this.currentData.getFramework();
+    if (currentFramework) return [currentFramework];
+    return [];
+    // return [this.frameworks.find((framework) => framework.id === this.currentData.getFramework().id)];
   }
 
-  get frameworkList() {
+  get selectedFrameworkIds() {
+    return this.selectedFrameworks.map(({ id }) => id);
+  }
+
+  get frameworkOptionList() {
     return this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework,
+      value: framework.id,
     }));
   }
 
   get areas() {
-    const selectedFrameworkData = this.selectedFrameworks.map((framework) => framework.data);
-    return selectedFrameworkData.map((framework) => framework.hasMany('areas').value() ?? []).flat();
+    return this.selectedFrameworks.map((framework) => framework.hasMany('areas').value() ?? []).flat();
   }
 
   @action
-  selectFrameworks(values) {
-    this._selectedFrameworks = values;
+  selectFrameworks(frameworkIds) {
+    this._selectedFrameworks = this.frameworks.filter((framework) => frameworkIds.includes(framework.id));
   }
 
   @action
@@ -334,7 +340,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _updateSelectedFrameworks(frameworksName) {
-    this._selectedFrameworks = this.frameworkList.filter((framework) => frameworksName.includes(framework.label));
+    this._selectedFrameworks = this.frameworks.filter((framework) => frameworksName.includes(framework.name));
   }
 
   @action
