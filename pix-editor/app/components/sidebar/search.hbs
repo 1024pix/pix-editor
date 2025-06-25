@@ -1,21 +1,18 @@
-{{#if @displaySearch}}
-  <div data-test-sidebar-search class="sidebar-search">
-    <PowerSelect
-      @searchEnabled={{true}}
-      @search={{this.getSearchResults}}
-      @placeholder="Acquix ou recordId"
-      @onChange={{this.linkTo}}
-      @renderInPlace={{true}}
-      @triggerComponent={{ component "power-select/custom-trigger" }}
-      @searchMessage=""
-      @searchPlaceholder="Rechercher..."
-      @loadingMessage="Recherche en cours..."
-      @noMatchesMessage="Pas de résultat" as |result|>
-      {{#if result.isSkill}}
-        {{result.title}} v{{result.version}}<span class="skill-result-status {{result.statusCSS}}" title={{result.status}}></span>
-      {{else}}
-        {{result.title}}
-      {{/if}}
-    </PowerSelect>
-  </div>
-{{/if}}
+<PixSelect
+  @isSearchable={{true}}
+  @searchLabel="Rechercher..."
+  @searchPlaceholder={{"@patate1, recABCD1234"}}
+  @placeholder={{"Acquix ou recordId"}}
+  @options={{this.searchResultOptions}}
+  @onSearch={{this.getSearchResults}}
+  @onChange={{this.linkToModelId}}
+  @iconName="search"
+  @value=""
+  @hideDefaultOption={{true}}
+  class="sidebar-search"
+  @emptySearchMessage={{"Pas de résultat"}}
+>
+  <:label>
+    <span class="sr-only">Rechercher un acquis ou une épreuve...</span>
+  </:label>
+</PixSelect>
