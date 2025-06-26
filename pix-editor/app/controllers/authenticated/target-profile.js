@@ -57,7 +57,6 @@ export default class TargetProfileController extends Controller {
     const currentFramework = this.currentData.getFramework();
     if (currentFramework) return [currentFramework];
     return [];
-    // return [this.frameworks.find((framework) => framework.id === this.currentData.getFramework().id)];
   }
 
   get selectedFrameworkIds() {

@@ -36,9 +36,9 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
         assert.dom('[data-test-target-profile-link]').exists();
       });
 
-      test('it should display search bar', function(assert) {
+      test('it should display search bar', async function(assert) {
         // then
-        assert.dom('.sidebar-search').exists();
+        assert.dom(await screen.findByLabelText('Rechercher un acquis ou une épreuve...')).exists();
       });
     });
   }

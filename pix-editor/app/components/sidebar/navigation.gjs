@@ -113,6 +113,7 @@ export default class SidebarNavigationComponent extends Component {
         @placeholder={{"Sélectionner un référentiel"}}
         @placement="bottom"
         class="select-framework"
+        @hideDefaultOption={{true}}
       >
         <:label>
           <span class="sr-only">Sélectionner un référentiel</span>

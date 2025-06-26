@@ -48,17 +48,20 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
       frameworks = [pixFramework, pixFranceFramework];
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return true;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFramework;
-        }
-        get isPixFramework() {
-          return true;
         }
       });
       this.owner.register('service:access', class MockService extends Service {
@@ -69,9 +72,9 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display a list of frameworks with a creation item', async function(assert) {
-      assert.expect(4);
+      assert.expect(3);
       // given
-      const expectedFrameworks = ['Sélectionner un référentiel', 'Pix', 'Pix +', 'Créer un nouveau référentiel'];
+      const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
       const screen = await render(<template><SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}}/></template>);
@@ -104,17 +107,20 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     test('it should display a button to create area if `source` is not `Pix`', async function(assert) {
       // given
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return false;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFranceFramework;
-        }
-        get isPixFramework() {
-          return false;
         }
       });
 
@@ -144,17 +150,20 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     test('it should display a button to create competence if `source` is not `Pix`', async function(assert) {
       // given
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return false;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFranceFramework;
-        }
-        get isPixFramework() {
-          return false;
         }
       });
 

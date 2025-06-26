@@ -62,7 +62,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByText('Acquix ou recordId');
+    await clickByText('Rechercher un acquis ou une épreuve...');
     await fillByLabel('Rechercher...', '  recChallenge1  ');
     await click(await screen.findByRole('option', { name: 'recChallenge1' }));
 
@@ -76,7 +76,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByText('Acquix ou recordId');
+    await clickByText('Rechercher un acquis ou une épreuve...');
     await fillByLabel('Rechercher...', '  challengeChallenge1  ');
     await click(await screen.findByRole('option', { name: 'challengeChallenge1' }));
 
@@ -90,7 +90,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByText('Acquix ou recordId');
+    await clickByText('Rechercher un acquis ou une épreuve...');
     await fillByLabel('Rechercher...', '  challengeLocalizedChallenge1  ');
     await click(await screen.findByRole('option', { name: 'challengeLocalizedChallenge1' }));
 
@@ -104,7 +104,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByText('Acquix ou recordId');
+    await clickByText('Rechercher un acquis ou une épreuve...');
     await fillByLabel('Rechercher...', 'test');
     await click(await screen.findByRole('option', { name: 'test' }));
 
@@ -118,7 +118,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByText('Acquix ou recordId');
+    await clickByText('Rechercher un acquis ou une épreuve...');
     await fillByLabel('Rechercher...', '@skill1');
     await click(await screen.findByRole('option', { name: '🟢 @skill1 v1' }));
 

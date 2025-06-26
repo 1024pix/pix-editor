@@ -33,7 +33,7 @@ export default class SidebarSearch extends Component {
       const icon = this.statusToIcon[result.statusCSS];
       return {
         value: result.transition.model,
-        label: `${icon} ${result.title} v${result.version}`,
+        label: `${icon} ${result.title}${result.version ? ` v${result.version}` : ''}`,
       };
     });
   }
