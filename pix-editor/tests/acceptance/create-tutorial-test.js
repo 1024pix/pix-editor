@@ -68,6 +68,9 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await clickByText('Format');
     await click(await screen.findByRole('option', { name: 'jeu' }));
 
+    await clickByText('Niveau');
+    await click(await screen.findByRole('option', { name: '2' }));
+
     await fillByLabel('Durée (hh:mm:ss) *', '12:30:00');
 
     await clickByText('Rechercher tags');
@@ -99,6 +102,11 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.dom(formatMenu).selected;
 
     assert.dom(screen.getByLabelText('Durée (hh:mm:ss) *')).hasValue('12:30:00');
+    await clickByText('Niveau');
+    assert.dom(await screen.findByRole('option', { name: '2' })).hasAria('selected', 'true');
+    await clickByText('Niveau');
+    await clickByText('Licence');
+    assert.dom(await screen.findByRole('option', { name: 'Licence non renseignée' })).hasAria('selected', 'true');
 
     assert.strictEqual(screen.getAllByText('Super tag').length, 2);
   });

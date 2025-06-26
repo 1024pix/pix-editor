@@ -66,6 +66,13 @@ export default class TutorialForm extends Component {
     return tags.map(({ id }) => id);
   }
 
+  get sourceListOptions() {
+    return this.sourceList.map((item) => ({
+      label: item,
+      value: item,
+    }));
+  }
+
   @action
   async getSearchTagsResults(query) {
     this.currentQuery = query;
@@ -81,13 +88,6 @@ export default class TutorialForm extends Component {
         results.push({ label: 'Ajouter', description: 'Créer un tag[note]', value: 'create' });
         return results;
       });
-  }
-
-  get sourceListOptions() {
-    return this.sourceList.map((item) => ({
-      label: item,
-      value: item,
-    }));
   }
 
   @action
@@ -222,6 +222,8 @@ export default class TutorialForm extends Component {
         @options={{this.formattedLicenseOptionList}}
         @onChange={{fn (mut @tutorial.license)}}
         @value={{@tutorial.license}}
+        @hideDefaultOption={{false}}
+        @placeholder="Licence non renseignée"
       >
         <:label>Licence</:label>
       </PixSelect>
@@ -246,6 +248,8 @@ export default class TutorialForm extends Component {
         @options={{this.formattedLevelOptionList}}
         @onChange={{fn (mut @tutorial.level)}}
         @value={{@tutorial.level}}
+        @hideDefaultOption={{false}}
+        @placeholder="Niveau non renseigné"
       >
         <:label>Niveau</:label>
       </PixSelect>
