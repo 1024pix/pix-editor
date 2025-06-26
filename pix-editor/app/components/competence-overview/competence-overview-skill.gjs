@@ -33,7 +33,7 @@ export default class CompetenceOverviewSkill extends Component {
           @model={{@skillOverview.airtableId}}
           {{on "click" this.skillClicked}}
         >
-          <span class="production-skill-overview__name">{{@skillOverview.name}}</span>
+          <span>{{@skillOverview.name}}</span>
           <span class="production-skill-overview__details">
             <span title="Nombre d'épreuves en production">
               {{@skillOverview.validatedChallengesCount}}

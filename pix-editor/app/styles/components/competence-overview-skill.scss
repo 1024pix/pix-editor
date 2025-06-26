@@ -5,8 +5,10 @@
 
   &-action {
     display: flex;
+    justify-content: center;
     flex-direction: column;
     height: 100%;
+    padding: 0 var(--pix-spacing-1x);
 
     &--empty {
       background-color: var(--pix-error-100);
@@ -16,10 +18,6 @@
       &.active {
         color: inherit;
         background-color: hsl(from var(--pix-error-100) h s calc(l - 25));
-
-        & > .production-skill-overview__name {
-          font-weight: var(--pix-font-bold);
-        }
       }
     }
 
@@ -31,10 +29,6 @@
       &.active {
         color: inherit;
         background-color: hsl(from var(--pix-info-100) h s calc(l - 25));
-
-        & > .production-skill-overview__name {
-          font-weight: var(--pix-font-bold);
-        }
       }
     }
 
@@ -46,10 +40,6 @@
       &.active {
         color: inherit;
         background-color: hsl(from var(--pix-success-100) h s calc(l - 25));
-
-        & > .production-skill-overview__name {
-          font-weight: var(--pix-font-bold);
-        }
       }
     }
   }
