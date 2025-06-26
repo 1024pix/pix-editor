@@ -24,6 +24,10 @@ export default class Tutorials extends Component {
   @service notify;
   @service loader;
 
+  get searchLabel() {
+    return `Rechercher un tutoriel ${this.args.title.toLowerCase()}`;
+  }
+
   async _searchTutorial(query) {
     this.emptyTutorialList();
     if (!query || query.length === 0 || query === '>') {
@@ -78,8 +82,12 @@ export default class Tutorials extends Component {
 
   @action
   closeTutorialPopin() {
-    this.tutorial.rollbackAttributes();
     this.displayTutorialPopin = false;
+    if (this.tutorial.id) {
+      this.tutorial.rollbackAttributes();
+    } else {
+      this.store.deleteRecord(this.tutorial);
+    }
   }
 
   @action
@@ -90,6 +98,8 @@ export default class Tutorials extends Component {
         this.tutorial.link = this.tutorial.link.replaceAll(' ', '');
         new URL(this.tutorial.link);
       }
+      this.tutorial.license = this.tutorial.license || null;
+      this.tutorial.level = this.tutorial.level || null;
     } catch {
       this.loader.stop();
       this.notify.error('Lien du tutoriel non valide');
@@ -111,10 +121,6 @@ export default class Tutorials extends Component {
   @action
   emptyTutorialList() {
     this.tutorialList = [];
-  }
-
-  get searchLabel() {
-    return `Rechercher un tutoriel ${this.args.title.toLowerCase()}`;
   }
 
   <template>
@@ -195,11 +201,13 @@ export default class Tutorials extends Component {
         </div>
       {{/if}}
     </div>
-    <PopInTutorialComponent
-      @tutorial={{this.tutorial}}
-      @close={{this.closeTutorialPopin}}
-      @saveTutorial={{this.saveTutorial}}
-      @showModal={{this.displayTutorialPopin}}
-    />
+    {{#if this.displayTutorialPopin}}
+      <PopInTutorialComponent
+        @tutorial={{this.tutorial}}
+        @close={{this.closeTutorialPopin}}
+        @saveTutorial={{this.saveTutorial}}
+        @showModal={{this.displayTutorialPopin}}
+      />
+    {{/if}}
   </template>
 }

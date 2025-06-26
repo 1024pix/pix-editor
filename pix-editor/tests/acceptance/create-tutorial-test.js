@@ -1,5 +1,5 @@
-import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
-import { click, fillIn, find, waitUntil } from '@ember/test-helpers';
+import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -55,43 +55,62 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(createTutorialLink);
 
     await fillByLabel('Titre *', 'Titre de mon tutoriel');
+
     await clickByText('Langue');
     await click(await screen.findByRole('option', { name: 'Français' }));
+
     await fillByLabel('Lien *', 'http://www.google.com');
 
-    await click(find('[data-test-select-source-for-tutorial] .ember-basic-dropdown-trigger'));
-    await fillIn('input.ember-power-select-search-input', 'ma source');
-    await waitUntil(function() {
-      return find('.tutorial-search li');
-    }, { timeout: 1000 });
-    await click(find('.tutorial-search li'));
+    await clickByText('Source');
+    await fillByLabel('Rechercher une source', 'ma source');
+    await click(await screen.findByRole('option', { name: 'ma source' }));
 
     await clickByText('Format');
     await click(await screen.findByRole('option', { name: 'jeu' }));
 
+    await clickByText('Niveau');
+    await click(await screen.findByRole('option', { name: '2' }));
+
     await fillByLabel('Durée (hh:mm:ss) *', '12:30:00');
 
-    await click(find('[data-test-tag-search] .ember-basic-dropdown-trigger'));
-    await fillIn('input.ember-power-select-search-input', 'mon tag');
-    await waitUntil(function() {
-      return find('.tutorial-search li');
-    }, { timeout: 1000 });
-    await click(find('.tutorial-search li'));
+    await clickByText('Rechercher tags');
+    await fillByLabel('Rechercher tags', 'Super tag');
+    await clickByText('Ajouter');
 
-    await click(find('[data-test-save-tutorial-button]'));
+    assert.strictEqual(screen.getAllByText('Super tag').length, 2);
+    assert.dom(screen.getByRole('button', { name: 'Supprimer le tag: Super tag' })).exists();
 
-    const modifieButton = await screen.findByRole('button', { name: 'Modifier le tutoriel' });
-    await click(modifieButton);
+    const dialog = screen.getByRole('dialog', { name: 'Créer un tutoriel' });
+    // BUG : need one click to lose focus, then another click to the button WE DONT KNOW WHY
+    await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
+    await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
+
+    const modifyButton = await screen.findByRole('button', { name: 'Modifier le tutoriel' });
+    await click(modifyButton);
 
     // then
     assert.dom('[data-test-main-message]').hasText('Tutoriel créé');
 
     assert.dom(screen.getByText('Titre de mon tutoriel')).exists();
-    assert.dom(screen.getByText('Français')).exists();
+
+    const languageMenu = await screen.getByLabelText('Langue *');
+    assert.strictEqual(languageMenu.textContent.trim(), 'Français');
+    assert.dom(languageMenu).selected;
+
     assert.dom(screen.getByLabelText('Lien *')).hasValue('http://www.google.com');
-    assert.dom(screen.getByText('jeu')).exists();
+
+    const formatMenu = await screen.getByLabelText('Format *');
+    assert.strictEqual(formatMenu.textContent.trim(), 'jeu');
+    assert.dom(formatMenu).selected;
+
     assert.dom(screen.getByLabelText('Durée (hh:mm:ss) *')).hasValue('12:30:00');
-    assert.dom(screen.getByText('mon tag')).exists();
+    await clickByText('Niveau');
+    assert.dom(await screen.findByRole('option', { name: '2' })).hasAria('selected', 'true');
+    await clickByText('Niveau');
+    await clickByText('Licence');
+    assert.dom(await screen.findByRole('option', { name: 'Licence non renseignée' })).hasAria('selected', 'true');
+
+    assert.strictEqual(screen.getAllByText('Super tag').length, 2);
   });
 
   test('verify if the url link is valid', async function(assert) {
@@ -105,27 +124,26 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(createTutorialLink);
 
     await fillByLabel('Titre *', 'Titre de mon tutoriel');
+
     await clickByText('Langue');
     await click(await screen.findByRole('option', { name: 'Français' }));
+
     await fillByLabel('Lien *', 'PAS BON LE LINK');
 
-    await click(find('[data-test-select-source-for-tutorial] .ember-basic-dropdown-trigger'));
-    await fillIn('input.ember-power-select-search-input', 'ma source');
-    await waitUntil(function() {
-      return find('.tutorial-search li');
-    }, { timeout: 1000 });
-    await click(find('.tutorial-search li'));
+    await clickByText('Source');
+    await fillByLabel('Rechercher une source', 'ma source');
+    await click(await screen.findByRole('option', { name: 'ma source' }));
 
     await clickByText('Format');
     await click(await screen.findByRole('option', { name: 'jeu' }));
 
     await fillByLabel('Durée (hh:mm:ss) *', '12:30:00');
 
-    await click(find('[data-test-save-tutorial-button]'));
+    const dialog = screen.getByRole('dialog', { name: 'Créer un tutoriel' });
+    await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
 
     assert.dom(screen.getByText('Lien du tutoriel non valide')).exists();
     assert.dom(screen.getByLabelText('Lien *')).hasValue('PASBONLELINK');
-
   });
 });
 

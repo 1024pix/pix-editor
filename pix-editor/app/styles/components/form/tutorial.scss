@@ -1,0 +1,55 @@
+.tutorial-tags-select {
+  input[type="checkbox"]:has(+ span .add) {
+    display: none !important;
+  }
+}
+
+.tutorial-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+
+  .pix-input, .pix-select, .pix-multi-select {
+    width: 100% !important;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+
+    .tag {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      background-color: var(--pix-neutral-0);
+      border-radius: var(--pix-spacing-2x);
+      border: 1px solid var(--pix-neutral-500);
+      padding-left: var(--pix-spacing-2x) ;
+      width: fit-content;
+    }
+  }
+
+  .crush-button {
+    color: red;
+
+    &:active {
+      color: red;
+      background: rgba(255, 0, 0, 0.1);
+    }
+
+    &:focus {
+      color: red;
+      background: rgba(255, 0, 0, 0.1);
+      outline: 2px solid red;
+    }
+  }
+
+  .span-two {
+    grid-column: span 2;
+  }
+
+  .span-three {
+    grid-column: span 3;
+  }
+}
