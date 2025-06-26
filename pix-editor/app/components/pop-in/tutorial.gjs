@@ -28,6 +28,7 @@ export default class TutorialPopIn extends Component {
 
   <template>
     <PixModal
+      class="tutorial-pop-in"
       @title={{this.title}}
       @onCloseButtonClick={{@close}}
       @showModal={{@showModal}}
