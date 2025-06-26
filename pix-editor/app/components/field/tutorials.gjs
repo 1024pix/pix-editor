@@ -82,8 +82,12 @@ export default class Tutorials extends Component {
 
   @action
   closeTutorialPopin() {
-    this.tutorial.rollbackAttributes();
     this.displayTutorialPopin = false;
+    if (this.tutorial.id) {
+      this.tutorial.rollbackAttributes();
+    } else {
+      this.store.deleteRecord(this.tutorial);
+    }
   }
 
   @action
@@ -197,11 +201,13 @@ export default class Tutorials extends Component {
         </div>
       {{/if}}
     </div>
-    <PopInTutorialComponent
-      @tutorial={{this.tutorial}}
-      @close={{this.closeTutorialPopin}}
-      @saveTutorial={{this.saveTutorial}}
-      @showModal={{this.displayTutorialPopin}}
-    />
+    {{#if this.displayTutorialPopin}}
+      <PopInTutorialComponent
+        @tutorial={{this.tutorial}}
+        @close={{this.closeTutorialPopin}}
+        @saveTutorial={{this.saveTutorial}}
+        @showModal={{this.displayTutorialPopin}}
+      />
+    {{/if}}
   </template>
 }

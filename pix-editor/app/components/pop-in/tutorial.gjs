@@ -34,7 +34,7 @@ export default class TutorialPopIn extends Component {
     >
       <:content>
         {{#if @tutorial}}
-          <TutorialForm @tutorial={{@tutorial}} />
+          <TutorialForm @tutorial={{@tutorial}} @onSubmit={{@saveTutorial}}/>
         {{/if}}
       </:content>
       <:footer>
@@ -46,9 +46,10 @@ export default class TutorialPopIn extends Component {
           {{t 'common.cancel'}}
         </PixButton>
         <PixButton
+          @type="submit"
           data-test-save-tutorial-button
-          @triggerAction={{@saveTutorial}}
           @isDisabled={{this.hasEmptyMandatoryField}}
+          form="tutorial-form"
         >
           Enregistrer
           <i class="save icon"></i>

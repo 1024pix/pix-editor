@@ -81,6 +81,8 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.dom(screen.getByRole('button', { name: 'Supprimer le tag: Super tag' })).exists();
 
     const dialog = screen.getByRole('dialog', { name: 'Créer un tutoriel' });
+    // BUG : need one click to lose focus, then another click to the button WE DONT KNOW WHY
+    await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
     await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
 
     const modifyButton = await screen.findByRole('button', { name: 'Modifier le tutoriel' });

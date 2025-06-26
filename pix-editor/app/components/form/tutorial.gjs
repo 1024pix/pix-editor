@@ -41,6 +41,15 @@ export default class TutorialForm extends Component {
     license: ['CC-BY-SA', '(c)', 'Youtube'],
   };
 
+  constructor() {
+    super(...arguments);
+    if (this.args.tutorial.source) {
+      this.sourceList.push(this.args.tutorial.source);
+    }
+    const tags = this.args.tutorial.hasMany('tags').value() ?? [];
+    this.tagListOptions = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
+  }
+
   get formattedFormatOptionList() {
     return formattedOptionList(this.options.format);
   }
@@ -76,7 +85,11 @@ export default class TutorialForm extends Component {
   @action
   async getSearchTagsResults(query) {
     this.currentQuery = query;
-    if (!query || query.length === 0) return;
+    if (!query || query.length === 0) {
+      const tags = this.args.tutorial.hasMany('tags').value() ?? [];
+      this.tagListOptions = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
+      return;
+    }
     const queryLowerCase = query.toLowerCase();
     this.tagListOptions = await this.store.query('tag', {
       filter: {
@@ -176,8 +189,18 @@ export default class TutorialForm extends Component {
     this.args.tutorial.duration = inputEvent.target.value;
   }
 
+  @action
+  onSubmit(e) {
+    e.preventDefault();
+    this.args.onSubmit();
+  }
+
   <template>
-    <form class="tutorial-form">
+    <form
+      id="tutorial-form"
+      class="tutorial-form"
+      {{on 'submit' this.onSubmit}}
+    >
       <div class="span-two">
         <PixInput
           @requiredLabel={{"Le titre est requis"}}
