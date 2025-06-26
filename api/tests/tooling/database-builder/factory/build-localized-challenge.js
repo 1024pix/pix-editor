@@ -15,6 +15,7 @@ export function buildLocalizedChallenge({
   urlsToConsult = null,
   hasEmbedInternalValidation = false,
   noValidationNeeded = false,
+  validatedAt = null,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'localized_challenges',
@@ -33,6 +34,7 @@ export function buildLocalizedChallenge({
       toRephrase,
       hasEmbedInternalValidation,
       noValidationNeeded,
+      validatedAt,
     },
   });
 }

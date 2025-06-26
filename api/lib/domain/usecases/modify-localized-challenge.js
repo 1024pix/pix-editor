@@ -6,11 +6,12 @@ export async function modifyLocalizedChallenge({ isAdmin, localizedChallenge }, 
   return knex.transaction(async (transaction) => {
     const originalLocalizedChallenge = await dependencies.localizedChallengeRepository.get({
       id: localizedChallenge.id,
-      transaction
+      transaction,
     });
     if (!isAdmin && localizedChallenge.status !== originalLocalizedChallenge.status) {
       throw new ForbiddenError();
     }
-    return dependencies.localizedChallengeRepository.update({ localizedChallenge, transaction });
+    originalLocalizedChallenge.update(localizedChallenge);
+    return dependencies.localizedChallengeRepository.update({ localizedChallenge: originalLocalizedChallenge, transaction });
   });
 }

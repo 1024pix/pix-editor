@@ -150,6 +150,7 @@ async function mockCurrentContent() {
     ],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
+    validatedAt: '2023-01-02T18:08:08.000Z',
   });
   const expectedPrimaryProtoQualityAttributes = {
     requireGafamWebsiteAccess: true,
@@ -363,6 +364,7 @@ async function mockCurrentContent() {
     deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
     isAwarenessChallenge: false,
     toRephrase: false,
+    validatedAt: new Date('2023-01-02T18:08:08Z'),
   });
 
   expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({

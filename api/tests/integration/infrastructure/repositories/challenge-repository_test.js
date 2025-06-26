@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models/index.js';
 import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
-import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import Airtable from 'airtable';
 
 describe('Integration | Repository | challenge-repository', () => {
@@ -1257,6 +1257,7 @@ describe('Integration | Repository | challenge-repository', () => {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: null,
       });
       const challengeB_data = {
         id: 'challengeB_id',
@@ -1587,6 +1588,7 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          validatedAt: null,
         },
         {
           id: localizedChallengeNL_challengeA.id,
@@ -1603,6 +1605,7 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: false,
           hasEmbedInternalValidation: true,
           noValidationNeeded: false,
+          validatedAt: null,
         },
         {
           id: challengeB_data.id,
@@ -1619,6 +1622,7 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: false,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
+          validatedAt: null,
         },
       ]);
       const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')
@@ -1887,6 +1891,7 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          validatedAt: null,
         },
       ]);
       const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')

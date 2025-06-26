@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe as context, describe, expect, it, vi } from 'vitest';
 import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
@@ -334,6 +334,46 @@ describe('Unit | Domain | Challenge', () => {
   });
 
   describe('#translate', () => {
+    it('should throw an Error when trying to translate from an already translated Challenge', () => {
+      // given
+      const challengeId = 'challengeId';
+      const dutchChallengeId = 'challengeIdNl';
+
+      const frenchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr',
+      });
+      const dutchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: dutchChallengeId,
+        challengeId,
+        locale: 'nl',
+      });
+      const localizedChallenges = [
+        frenchLocalizedChallenge,
+        dutchLocalizedChallenge,
+      ];
+
+      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [
+        locale,
+        {},
+      ]));
+      const challenge = domainBuilder.buildChallenge({
+        id: challengeId,
+        locales: ['fr-fr', 'fr'],
+        status: Challenge.STATUSES.VALIDE,
+        localizedChallenges,
+        translations,
+        files: [],
+      });
+
+      // when
+      const dutchChallenge = challenge.translate('nl');
+
+      // then
+      expect(() => dutchChallenge.translate('fr')).toThrow('Illegal operation : trying to translate an already translated challenge');
+    });
+
     it('should return a translated challenge', () => {
       // given
       const challengeId = 'challengeId';
@@ -430,6 +470,7 @@ describe('Unit | Domain | Challenge', () => {
           ...englishFiles,
         ],
         geography: 'FR',
+        validatedAt: null,
       });
 
       const expectedDutchChallenge = {
@@ -448,6 +489,7 @@ describe('Unit | Domain | Challenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: true,
+        validatedAt: null,
       };
 
       const expectedEnglishChallenge = {
@@ -466,11 +508,11 @@ describe('Unit | Domain | Challenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: true,
+        validatedAt: null,
       };
 
       // when
       const dutchChallenge = challenge.translate('nl');
-      const refrenchChallenge = dutchChallenge.translate('fr');
       const englishChallenge = challenge.translate('en');
 
       // then
@@ -487,18 +529,17 @@ describe('Unit | Domain | Challenge', () => {
       expect(dutchChallenge).toHaveProperty('hasEmbedInternalValidation', false);
       expect(dutchChallenge).toHaveProperty('noValidationNeeded', true);
 
-      expect(refrenchChallenge).toEqual(challenge);
-      expect(refrenchChallenge).toHaveProperty('primaryLocale', 'fr');
-      expect(refrenchChallenge).toHaveProperty('alternativeLocales', ['nl', 'en']);
-      expect(refrenchChallenge).toHaveProperty('locale', 'fr');
-      expect(refrenchChallenge).toHaveProperty('isPrimary', true);
-      expect(refrenchChallenge).toHaveProperty('requireGafamWebsiteAccess', true);
-      expect(refrenchChallenge).toHaveProperty('isIncompatibleIpadCertif', true);
-      expect(refrenchChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
-      expect(refrenchChallenge).toHaveProperty('isAwarenessChallenge', true);
-      expect(refrenchChallenge).toHaveProperty('toRephrase', true);
-      expect(refrenchChallenge).toHaveProperty('hasEmbedInternalValidation', false);
-      expect(refrenchChallenge).toHaveProperty('noValidationNeeded', true);
+      expect(challenge).toHaveProperty('primaryLocale', 'fr');
+      expect(challenge).toHaveProperty('alternativeLocales', ['nl', 'en']);
+      expect(challenge).toHaveProperty('locale', 'fr');
+      expect(challenge).toHaveProperty('isPrimary', true);
+      expect(challenge).toHaveProperty('requireGafamWebsiteAccess', true);
+      expect(challenge).toHaveProperty('isIncompatibleIpadCertif', true);
+      expect(challenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
+      expect(challenge).toHaveProperty('isAwarenessChallenge', true);
+      expect(challenge).toHaveProperty('toRephrase', true);
+      expect(challenge).toHaveProperty('hasEmbedInternalValidation', false);
+      expect(challenge).toHaveProperty('noValidationNeeded', true);
 
       expect(englishChallenge).toEqual(expectedEnglishChallenge);
       expect(englishChallenge).toHaveProperty('primaryLocale', 'fr');
@@ -558,6 +599,52 @@ describe('Unit | Domain | Challenge', () => {
 
         // then
         expect(translatedChallenge.status).toBe(expectedTranslatedStatus);
+      });
+    });
+
+    context('when translating validatedAt field', function() {
+      let expectedFrValidatdAt, expectedNlValidatedAt, challenge;
+      beforeEach(function() {
+        expectedNlValidatedAt = new Date('2022-02-02T00:00:00Z');
+        expectedFrValidatdAt = new Date('2023-03-03T00:00:00Z');
+        const primaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+          validatedAt: new Date('2021-01-01T00:00:00Z'),
+        });
+        const secondaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'challengeId-NL',
+          challengeId: 'challengeId',
+          locale: 'nl',
+          validatedAt: expectedNlValidatedAt,
+        });
+        challenge = domainBuilder.buildChallenge({
+          id: 'challengeId',
+          locales: ['fr', 'nl'],
+          localizedChallenges: [primaryLocalizedChallenge, secondaryLocalizedChallenge],
+          translations: Object.fromEntries([primaryLocalizedChallenge, secondaryLocalizedChallenge].map(({ locale }) => [locale, {}])),
+          files: [],
+          validatedAt: expectedFrValidatdAt,
+        });
+      });
+      context('when translating to primary locale', function() {
+        it('should have the value of the Challenge\'s validatedAt, ignoring the one in primary Localized Challenge', function() {
+          // when
+          const translatedToPrimaryChallenge = challenge.translate('fr');
+
+          // then
+          expect(translatedToPrimaryChallenge.validatedAt).toStrictEqual(expectedFrValidatdAt);
+        });
+      });
+      context('when translating to an other locale', function() {
+        it('should have the value of the corresponding Localized Challenge\'s validatedAt', function() {
+          // when
+          const translatedToPrimaryChallenge = challenge.translate('nl');
+
+          // then
+          expect(translatedToPrimaryChallenge.validatedAt).toStrictEqual(expectedNlValidatedAt);
+        });
       });
     });
   });

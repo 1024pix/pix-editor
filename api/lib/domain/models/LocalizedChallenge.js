@@ -20,6 +20,7 @@ export class LocalizedChallenge {
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    validatedAt,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -37,6 +38,7 @@ export class LocalizedChallenge {
     this.toRephrase = toRephrase;
     this.hasEmbedInternalValidation = hasEmbedInternalValidation;
     this.noValidationNeeded = noValidationNeeded;
+    this.validatedAt = validatedAt;
   }
 
   static get STATUSES() {
@@ -104,6 +106,7 @@ export class LocalizedChallenge {
       toRephrase: toRephrase ?? false,
       hasEmbedInternalValidation: hasEmbedInternalValidation ?? false,
       noValidationNeeded: noValidationNeeded ?? false,
+      validatedAt: null,
     });
   }
 
@@ -124,6 +127,7 @@ export class LocalizedChallenge {
       toRephrase: false,
       hasEmbedInternalValidation: false,
       noValidationNeeded: false,
+      validatedAt: null,
     });
   }
 
@@ -145,6 +149,7 @@ export class LocalizedChallenge {
       toRephrase: this.toRephrase,
       hasEmbedInternalValidation: this.hasEmbedInternalValidation,
       noValidationNeeded: this.noValidationNeeded,
+      validatedAt: null,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
@@ -157,6 +162,28 @@ export class LocalizedChallenge {
       clonedLocalizedChallenge,
       clonedAttachments,
     };
+  }
+
+  /**
+   * @param {LocalizedChallenge|Object} updates
+   */
+  update(updates) {
+    const oldStatus = this.status;
+    if (updates.status === LocalizedChallenge.STATUSES.PLAY && updates.status !== oldStatus) {
+      this.validatedAt = new Date();
+    }
+    this.locale = updates.locale;
+    this.embedUrl = updates.embedUrl;
+    this.status = updates.status;
+    this.geography = updates.geography;
+    this.urlsToConsult = updates.urlsToConsult;
+    this.requireGafamWebsiteAccess = updates.requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = updates.isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = updates.deafAndHardOfHearing;
+    this.isAwarenessChallenge = updates.isAwarenessChallenge;
+    this.toRephrase = updates.toRephrase;
+    this.hasEmbedInternalValidation = updates.hasEmbedInternalValidation;
+    this.noValidationNeeded = updates.noValidationNeeded;
   }
 }
 

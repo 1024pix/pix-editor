@@ -108,6 +108,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: null,
       }),
       new LocalizedChallenge({
         id: null,
@@ -125,6 +126,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         toRephrase: false,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        validatedAt: null,
       }),
     ] });
   });

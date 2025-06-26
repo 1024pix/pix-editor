@@ -17,7 +17,7 @@ export async function create({ localizedChallenges = [], generateId = _generateI
   if (localizedChallenges.length === 0) {
     return;
   }
-  const dataToInsert = _adaptModelsForDB(localizedChallenges, generateId);
+  const dataToInsert = adaptModelsForDB(localizedChallenges, generateId);
   await knexConnection('localized_challenges').insert(dataToInsert).onConflict().ignore();
 }
 
@@ -60,69 +60,47 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
 }
 
 export async function update({
-  localizedChallenge: {
-    id,
-    locale,
-    embedUrl,
-    status,
-    fileIds,
-    geography,
-    urlsToConsult,
-    requireGafamWebsiteAccess,
-    isIncompatibleIpadCertif,
-    deafAndHardOfHearing,
-    isAwarenessChallenge,
-    toRephrase,
-    hasEmbedInternalValidation,
-    noValidationNeeded,
-  },
+  localizedChallenge,
   transaction: knexConnection = knex
 }) {
-  const [dto] = await knexConnection('localized_challenges').where('id', id).update({
-    locale,
-    embedUrl,
-    status,
-    geography,
-    urlsToConsult,
-    requireGafamWebsiteAccess,
-    isIncompatibleIpadCertif,
-    deafAndHardOfHearing,
-    isAwarenessChallenge,
-    toRephrase,
-    hasEmbedInternalValidation,
-    noValidationNeeded,
-  }).returning('*');
+  const localizedChallengeForDB = adaptModelForDB(localizedChallenge);
+  delete localizedChallengeForDB.id;
+  const [dto] = await knexConnection('localized_challenges')
+    .where('id', localizedChallenge.id)
+    .update(localizedChallengeForDB).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
   const [primaryEmbedUrl] = await knexConnection('localized_challenges').where({ id: dto.challengeId }).pluck('embedUrl');
 
-  return _toDomain({ ...dto, primaryEmbedUrl, fileIds });
+  return _toDomain({ ...dto, primaryEmbedUrl, fileIds: localizedChallenge.fileIds });
 }
 
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
 }
 
-function _adaptModelsForDB(localizedChallenges, generateId) {
-  return localizedChallenges.map((localizedChallenge) => {
-    return {
-      id: localizedChallenge.id ?? generateId(),
-      challengeId: localizedChallenge.challengeId,
-      embedUrl: localizedChallenge.embedUrl,
-      locale: localizedChallenge.locale,
-      status: localizedChallenge.status,
-      geography: localizedChallenge.geography,
-      urlsToConsult: localizedChallenge.urlsToConsult,
-      requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
-      isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
-      deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
-      isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
-      toRephrase: localizedChallenge.toRephrase,
-      hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
-      noValidationNeeded: localizedChallenge.noValidationNeeded,
-    };
-  });
+function adaptModelsForDB(localizedChallenges, generateId) {
+  return localizedChallenges.map((localizedChallenge) => adaptModelForDB(localizedChallenge, generateId));
+}
+
+function adaptModelForDB(localizedChallenge, generateId) {return {
+  id: localizedChallenge.id ?? generateId(),
+  challengeId: localizedChallenge.challengeId,
+  embedUrl: localizedChallenge.embedUrl,
+  locale: localizedChallenge.locale,
+  status: localizedChallenge.status,
+  geography: localizedChallenge.geography,
+  urlsToConsult: localizedChallenge.urlsToConsult,
+  requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
+  isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
+  deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
+  isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
+  toRephrase: localizedChallenge.toRephrase,
+  hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
+  noValidationNeeded: localizedChallenge.noValidationNeeded,
+  validatedAt: localizedChallenge.validatedAt,
+};
 }
 
 function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {

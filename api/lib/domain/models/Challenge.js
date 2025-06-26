@@ -369,6 +369,9 @@ export class Challenge {
   }
 
   translate(locale) {
+    if (this.locale !== this.primaryLocale) {
+      throw new Error('Illegal operation : trying to translate an already translated challenge');
+    }
     const challenge = new Challenge({
       ...this,
       files: this.#allFiles,
@@ -384,7 +387,6 @@ export class Challenge {
     this.locales = locale === this.primaryLocale
       ? this.#primaryLocales
       : [locale];
-
     this.instruction = this.#translations[this.locale]?.instruction ?? '';
     this.alternativeInstruction = this.#translations[this.locale]?.alternativeInstruction ?? '';
     this.proposals = this.#translations[this.locale]?.proposals ?? '';
@@ -397,6 +399,7 @@ export class Challenge {
 
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);
+    this.validatedAt = this.#translateValidatedAt(localizedChallenge);
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = localizedChallenge.geography;
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
@@ -424,6 +427,11 @@ export class Challenge {
   #translateUrlsToConsult(localizedChallenge) {
     if (!this.#primaryUrlsToConsult) return null;
     return localizedChallenge.urlsToConsult;
+  }
+
+  #translateValidatedAt(localizedChallenge) {
+    if (this.isPrimary) return this.validatedAt;
+    return localizedChallenge.validatedAt;
   }
 }
 

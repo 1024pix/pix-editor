@@ -36,6 +36,7 @@ export function buildLocalizedChallenge({
   toRephrase = false,
   hasEmbedInternalValidation = false,
   noValidationNeeded = false,
+  validatedAt = null,
 }) {
   return new LocalizedChallenge({
     id,
@@ -54,5 +55,6 @@ export function buildLocalizedChallenge({
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    validatedAt,
   });
 }
