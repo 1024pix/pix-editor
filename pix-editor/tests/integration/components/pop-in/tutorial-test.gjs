@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import { hbs } from 'ember-cli-htmlbars';
+import TutorialPopin from 'pixeditor/components/pop-in/tutorial';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
@@ -19,14 +19,13 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
 
   test('save input should be disabled if mandatory field are empty', async function(assert) {
     //given
-    this.set('close', () => {});
-    this.set('saveTutorial', () => {});
+    const closeFn = () => {};
+    const saveTutorialFn = () => {};
 
     const emptyTutorial = store.createRecord('tutorial', {});
-    this.set('tutorial', emptyTutorial);
 
     //when
-    const screen = await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}} @showModal={{true}} />`);
+    const screen = await render(<template><TutorialPopin @close={{closeFn}} @tutorial={{emptyTutorial}} @saveTutorial={{saveTutorialFn}} @showModal={{true}} /></template>);
 
     //then
     assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).hasAria('disabled', 'true');
@@ -34,8 +33,8 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
 
   test('save input should not be disabled if mandatory field are empty', async function(assert) {
     //given
-    this.set('close', () => {});
-    this.set('saveTutorial', () => {});
+    const closeFn = () => {};
+    const saveTutorialFn = () => {};
     const filledTutorial = store.createRecord('tutorial', {
       title: 'title',
       language: 'fr',
@@ -44,10 +43,9 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
       format: 'image',
       duration: '00:20:00',
     });
-    this.set('tutorial', filledTutorial);
 
     //when
-    const screen = await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}} @showModal={{true}} />`);
+    const screen = await render(<template><TutorialPopin @close={{closeFn}} @tutorial={{filledTutorial}} @saveTutorial={{saveTutorialFn}} @showModal={{true}} /></template>);
 
     // then
     assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).hasAria('disabled', 'false');
