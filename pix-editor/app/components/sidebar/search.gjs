@@ -1,10 +1,11 @@
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { uniqBy } from 'lodash';
 
-export default class SidebarSearchComponent extends Component {
+export default class SidebarSearch extends Component {
 
   routeModel = null;
 
@@ -137,4 +138,25 @@ export default class SidebarSearchComponent extends Component {
     this.args.close();
     this.router.transitionTo(model.transition.route, model.transition.model);
   }
+
+  <template>
+    <PixSelect
+      @isSearchable={{true}}
+      @searchLabel="Rechercher..."
+      @searchPlaceholder={{"@patate1, recABCD1234"}}
+      @placeholder={{"Acquix ou recordId"}}
+      @options={{this.searchResultOptions}}
+      @onSearch={{this.getSearchResults}}
+      @onChange={{this.linkToModelId}}
+      @iconName="search"
+      @value=""
+      @hideDefaultOption={{true}}
+      class="sidebar-search"
+      @emptySearchMessage={{"Pas de résultat"}}
+    >
+      <:label>
+        <span class="sr-only">Rechercher un acquis ou une épreuve...</span>
+      </:label>
+    </PixSelect>
+  </template>
 }

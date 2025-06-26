@@ -1,7 +1,7 @@
 import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, findAll } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+import SidebarNavigation from 'pixeditor/components/sidebar/navigation';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -10,11 +10,11 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | sidebar/navigation', function(hooks) {
   setupIntlRenderingTest(hooks);
   module('#isAdmin', function(hooks) {
-    let areas, frameworks, pixFramework, pixFranceFramework;
+    let areas, frameworks, pixFramework, pixFranceFramework, closeAction, displayFrameworkList;
 
     hooks.beforeEach(function() {
-      this.closeAction = sinon.stub();
-      this.displayFrameworkList = sinon.stub().returns(true);
+      closeAction = sinon.stub();
+      displayFrameworkList = sinon.stub().returns(true);
 
       areas = [{
         name: 'area_1',
@@ -74,7 +74,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedFrameworks = ['Sélectionner un référentiel', 'Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
-      const screen = await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
+      const screen = await render(<template><SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}}/></template>);
 
       await clickByName('Sélectionner un référentiel');
 
@@ -91,7 +91,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedAreas = ['area_1', 'area_2'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
       const areasList = findAll('[data-test-area-item]');
@@ -119,7 +119,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
       assert.dom('[data-test-add-area]').exists();
@@ -130,7 +130,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
       await click(findAll('[data-test-area-item] button')[0]);
 
       // then
@@ -159,7 +159,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
       await click(findAll('[data-test-area-item]')[0]);
 
       // then

@@ -1,6 +1,6 @@
 import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+import PopinPdfEntries from 'pixeditor/components/pop-in/pdf-entries';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -14,15 +14,13 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
     // given
     callBackActionStub = sinon.stub();
     closeTitleInputStub = sinon.stub();
-    this.callBackAction = callBackActionStub;
-    this.closeTitleInput = closeTitleInputStub;
 
     // when
-    screen = await render(hbs `<PopIn::PdfEntries
-      @validateAction={{this.callBackAction}}
-      @close={{this.closeTitleInput}}
+    screen = await render(<template><PopinPdfEntries
+      @validateAction={{callBackActionStub}}
+      @close={{closeTitleInputStub}}
       @showModal={{true}}
-    />`);
+    /></template>);
   });
 
   test('it should set default title and language on validate', async function(assert) {
@@ -32,7 +30,7 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
     // then
     assert.ok(callBackActionStub.calledOnce);
     assert.ok(closeTitleInputStub.calledOnce);
-    assert.deepEqual(this.callBackAction.getCall(0).args, ['Liste des thèmes et des sujets abordés dans Pix', 'fr']);
+    assert.deepEqual(callBackActionStub.getCall(0).args, ['Liste des thèmes et des sujets abordés dans Pix', 'fr']);
   });
 
   test('it should set custom title and selected language on validate', async function(assert) {
@@ -45,6 +43,6 @@ module('Integration | Component | pop-in/pdf-entries', function(hooks) {
     // then
     assert.ok(callBackActionStub.calledOnce);
     assert.ok(closeTitleInputStub.calledOnce);
-    assert.deepEqual(this.callBackAction.getCall(0).args, ['mont titre', 'en']);
+    assert.deepEqual(callBackActionStub.getCall(0).args, ['mont titre', 'en']);
   });
 });

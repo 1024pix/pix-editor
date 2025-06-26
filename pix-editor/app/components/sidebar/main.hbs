@@ -9,7 +9,7 @@
   </div>
   <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
   {{#if this.maySearch}}
-    <Sidebar::Search />
+    <Sidebar::Search @close={{@close}} />
   {{/if}}
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}}/>
   <div class="secondary-links">
