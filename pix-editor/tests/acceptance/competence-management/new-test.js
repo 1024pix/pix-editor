@@ -1,3 +1,4 @@
+import { clickByName, clickByText } from '@1024pix/ember-testing-library';
 import { click, currentURL, fillIn, find, findAll, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -37,8 +38,8 @@ module('Acceptance | competence-management/new', function(hooks) {
 
     // when
     await visit('/');
-    await click(findAll('.ember-basic-dropdown-trigger')[1]);
-    await click(find('.ember-power-select-option'));
+    await clickByName('Sélectionner un référentiel');
+    await clickByText('Pix+');
     await click(find('[data-test-area-item]'));
     await click(find('[data-test-add-competence]'));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);

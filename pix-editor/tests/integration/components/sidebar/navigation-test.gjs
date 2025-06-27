@@ -1,7 +1,7 @@
-import { clickByName } from '@1024pix/ember-testing-library';
+import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, findAll, render } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+import { click, findAll } from '@ember/test-helpers';
+import SidebarNavigation from 'pixeditor/components/sidebar/navigation';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -10,11 +10,11 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | sidebar/navigation', function(hooks) {
   setupIntlRenderingTest(hooks);
   module('#isAdmin', function(hooks) {
-    let areas, frameworks, pixFramework, pixFranceFramework;
+    let areas, frameworks, pixFramework, pixFranceFramework, closeAction, displayFrameworkList;
 
     hooks.beforeEach(function() {
-      this.closeAction = sinon.stub();
-      this.displayFrameworkList = sinon.stub().returns(true);
+      closeAction = sinon.stub();
+      displayFrameworkList = sinon.stub().returns(true);
 
       areas = [{
         name: 'area_1',
@@ -37,26 +37,31 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       }];
 
       pixFramework = {
+        id: 'patate',
         name: 'Pix',
       };
 
       pixFranceFramework = {
+        id: 'patate +',
         name: 'Pix +',
       };
 
       frameworks = [pixFramework, pixFranceFramework];
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return true;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFramework;
-        }
-        get isPixFramework() {
-          return true;
         }
       });
       this.owner.register('service:access', class MockService extends Service {
@@ -72,14 +77,14 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
+      const screen = await render(<template><SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}}/></template>);
 
       await clickByName('Sélectionner un référentiel');
 
       // then
-      const sourcesList = findAll('.ember-power-select-option');
-      sourcesList.forEach((source) => {
-        assert.ok(expectedFrameworks.includes(source.textContent.trim()));
+      const frameworksList = await screen.findAllByRole('option');
+      frameworksList.forEach((framework) => {
+        assert.ok(expectedFrameworks.includes(framework.textContent.trim()));
       });
     });
 
@@ -89,7 +94,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedAreas = ['area_1', 'area_2'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
       const areasList = findAll('[data-test-area-item]');
@@ -102,22 +107,25 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     test('it should display a button to create area if `source` is not `Pix`', async function(assert) {
       // given
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return false;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFranceFramework;
-        }
-        get isPixFramework() {
-          return false;
         }
       });
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
       assert.dom('[data-test-add-area]').exists();
@@ -128,7 +136,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
       await click(findAll('[data-test-area-item] button')[0]);
 
       // then
@@ -142,22 +150,25 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     test('it should display a button to create competence if `source` is not `Pix`', async function(assert) {
       // given
       this.owner.register('service:currentData', class MockService extends Service {
+        get isPixFramework() {
+          return false;
+        }
+
         getAreas() {
           return areas;
         }
+
         getFrameworks() {
           return frameworks;
         }
+
         getFramework() {
           return pixFranceFramework;
-        }
-        get isPixFramework() {
-          return false;
         }
       });
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
       await click(findAll('[data-test-area-item]')[0]);
 
       // then

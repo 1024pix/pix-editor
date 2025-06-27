@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+import SearchSidebar from 'pixeditor/components/sidebar/search';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -10,10 +10,10 @@ module('Integration | Component | sidebar/search', function(hooks) {
 
   test('it renders', async function(assert) {
     // given
-    this.maySearch = sinon.stub().returns(true);
+    const maySearch = sinon.stub().returns(true);
 
     // when
-    await render(hbs`<Sidebar::Search @displaySearch={{this.maySearch}} />`);
+    await render(<template><SearchSidebar @displaySearch={{maySearch}} /></template>);
 
     // then
     assert.dom('.sidebar-search').exists();

@@ -8,7 +8,7 @@ import { setupApplicationTest } from '../setup-application-rendering';
 module('Acceptance | Navigate through frameworks', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let apiKey;
+  let apiKey, screen;
   hooks.beforeEach(function() {
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -18,8 +18,6 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
   for (const role of ['readonly', 'replicator', 'editor', 'admin']) {
     module(`when user is ${role}`, function(hooks) {
-      let screen;
-
       hooks.beforeEach(async function() {
         //given
         this.server.create('user', { apiKey, trigram: 'ABC', access: role });
@@ -30,7 +28,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
       test('it should display select framework', async function(assert) {
         // then
-        assert.dom(await screen.findByRole('combobox', { name: 'Sélectionner un référentiel' })).exists();
+        assert.dom(await screen.findByLabelText('Sélectionner un référentiel')).exists();
       });
 
       test('it should display generator target profile link', async function(assert) {
@@ -38,9 +36,9 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
         assert.dom('[data-test-target-profile-link]').exists();
       });
 
-      test('it should display search bar', function(assert) {
+      test('it should display search bar', async function(assert) {
         // then
-        assert.dom('[data-test-sidebar-search]').exists();
+        assert.dom(await screen.findByLabelText('Rechercher un acquis ou une épreuve...')).exists();
       });
     });
   }
@@ -51,12 +49,12 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
       this.server.create('user', { apiKey, trigram: 'ABC', access: 'readpixonly' });
 
       // when
-      await visit('/');
+      screen = await visit('/');
     });
 
     test('it should not have access to framework list', async function(assert) {
       // then
-      assert.dom('[data-test-frameworks-select]').doesNotExist();
+      assert.strictEqual(await screen.queryByLabelText('Sélectionner un référentiel'), null);
     });
 
     test('it should not display generator target profile link', async function(assert) {
@@ -66,7 +64,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
     test('it should not display search bar', function(assert) {
       // then
-      assert.dom('[data-test-sidebar-search]').doesNotExist();
+      assert.dom('.sidebar-search').doesNotExist();
     });
   });
 });

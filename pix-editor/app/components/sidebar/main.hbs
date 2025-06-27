@@ -8,7 +8,9 @@
     </PixToggleButton>
   </div>
   <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
-  <Sidebar::Search @displaySearch={{this.maySearch}} @close={{@close}} />
+  {{#if this.maySearch}}
+    <Sidebar::Search @close={{@close}} />
+  {{/if}}
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}}/>
   <div class="secondary-links">
     {{#if this.maySynchronizeTranslations}}

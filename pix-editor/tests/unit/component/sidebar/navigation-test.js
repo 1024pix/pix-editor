@@ -71,16 +71,19 @@ module('unit | Component | sidebar/navigation', function(hooks) {
       component.router = {
         transitionTo: transitionToStub,
       };
-      const setFrameworkStub = sinon.stub();
-      component.currentData = {
-        setFramework: setFrameworkStub,
-      };
       const saveStub = sinon.stub().resolves();
       const framework = {
+        id: 'patate +',
         name: 'pix +',
         save: saveStub,
       };
       component.newFramework = framework;
+      const setFrameworkStub = sinon.stub();
+      const getFrameworksStub = sinon.stub().returns([framework]);
+      component.currentData = {
+        setFramework: setFrameworkStub,
+        getFrameworks: getFrameworksStub,
+      };
 
       // when
       await component.saveFramework();

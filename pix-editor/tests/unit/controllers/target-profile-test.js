@@ -194,7 +194,7 @@ module('Unit | Controller | target-profile', function(hooks) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
-    controller._selectedFrameworks = [{ data: framework }];
+    controller._selectedFrameworks = [framework];
 
     // when
     controller.generate('title');
@@ -208,7 +208,7 @@ module('Unit | Controller | target-profile', function(hooks) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
-    controller._selectedFrameworks = [{ data: framework }];
+    controller._selectedFrameworks = [framework];
 
     // when
     controller.generateThematicResult('title');
@@ -222,7 +222,7 @@ module('Unit | Controller | target-profile', function(hooks) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
-    controller._selectedFrameworks = [{ data: framework }];
+    controller._selectedFrameworks = [framework];
 
     const expectedResult = JSON.stringify([
       {
@@ -328,10 +328,7 @@ module('Unit | Controller | target-profile', function(hooks) {
         },
       ];
 
-      const explectedSelectedFrameworks = [
-        { data: framework, label: 'Pix' },
-        { data: framework2, label: 'Pix+' },
-      ];
+      const expectedSelectedFrameworks = [framework, framework2];
 
       // when
       await controller._buildTargetProfileFromFile(fileContent);
@@ -340,17 +337,14 @@ module('Unit | Controller | target-profile', function(hooks) {
       assert.strictEqual(tube1.selectedLevel, 6);
       assert.notOk(tube2.selectedLevel);
       assert.strictEqual(tube3.selectedLevel, 2);
-      assert.deepEqual(controller._selectedFrameworks, explectedSelectedFrameworks);
+      assert.deepEqual(controller._selectedFrameworks, expectedSelectedFrameworks);
     });
 
     test('it should build a profile state from orga json file', async function(assert) {
       // given
       const fileContent = ['pix123456', 'pix666457'];
 
-      const explectedSelectedFrameworks = [
-        { data: framework, label: 'Pix' },
-        { data: framework2, label: 'Pix+' },
-      ];
+      const expectedSelectedFrameworks = [framework, framework2];
 
       // when
       await controller._buildTargetProfileFromFile(fileContent);
@@ -359,7 +353,7 @@ module('Unit | Controller | target-profile', function(hooks) {
       assert.strictEqual(tube1.selectedLevel, 6);
       assert.notOk(tube2.selectedLevel);
       assert.strictEqual(tube3.selectedLevel, 6);
-      assert.deepEqual(controller._selectedFrameworks, explectedSelectedFrameworks);
+      assert.deepEqual(controller._selectedFrameworks, expectedSelectedFrameworks);
     });
   });
 });
