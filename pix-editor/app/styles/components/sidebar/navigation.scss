@@ -32,3 +32,47 @@
     }
   }
 }
+
+.area-accordion {
+  .pix-accordions {
+    color: white;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+
+    &:focus, &:focus-within {
+      outline: 1px solid var(--pix-info-100);
+    }
+
+    &__title {
+      color: white;
+      background: transparent;
+      border: none;
+      border-radius: 0 !important;
+      padding: 0.5rem 0;
+      font-size: 0.875rem;
+      flex-direction: row-reverse;
+      justify-content: start;
+      gap: 0.375rem;
+
+      &:hover {
+        background: #3B8DCC;
+      }
+    }
+
+    &__content {
+      background: #3B8DCC;
+      padding: 0;
+    }
+  }
+
+  .area-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: white;
+
+    &:hover {
+      background: #3683BE;
+    }
+  }
+}

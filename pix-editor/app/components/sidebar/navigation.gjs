@@ -1,3 +1,4 @@
+import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
@@ -7,7 +8,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
-import AccordionList from 'ember-a11y-accordion/components/accordion-list';
 
 import PopInNewFrameworkComponent from '../pop-in/new-framework';
 
@@ -120,46 +120,51 @@ export default class SidebarNavigationComponent extends Component {
         </:label>
       </PixSelect>
     {{/if}}
-    <AccordionList as |accordion|>
+    <div class="area-accordion">
       {{#each this.areas as |area|}}
-        <accordion.item as |accordionItem|>
-          <accordionItem.header data-test-area-item @class="title">
-            <i class="dropdown icon"></i>
-            <span>{{area.name}}</span>
-          </accordionItem.header>
-          <accordionItem.panel>
-            <div class="content">
-              {{#each area.sortedCompetences as |competence|}}
-                <LinkTo
-                  data-test-competence-item
-                  @route="authenticated.competence"
-                  @model={{competence.id}}
-                  class="item"
-                  @query={{hash leftMaximized=false}}
-                  {{on "click" @close}}
-                >
-                  {{competence.name}}
-                </LinkTo>
-              {{/each}}
-              {{#if this.mayCreateCompetence}}
-                <LinkTo
-                  data-test-add-competence
-                  @route="authenticated.competence-management.new"
-                  @model={{area.id}}
-                  class="item"
-                  {{on "click" @close}}
-                >
-                  <i class="plus square icon"></i>Ajouter une compétence
-                </LinkTo>
-              {{/if}}
-            </div>
-          </accordionItem.panel>
-        </accordion.item>
+        <PixAccordions>
+          <:title>
+            <span data-test-area-item>
+              {{area.name}}
+            </span>
+          </:title>
+          <:content>
+            {{#each area.sortedCompetences as |competence|}}
+              <LinkTo
+                data-test-competence-item
+                @route="authenticated.competence"
+                @model={{competence.id}}
+                @query={{hash leftMaximized=false}}
+                class="area-link"
+                {{on "click" @close}}
+              >
+                {{competence.name}}
+              </LinkTo>
+            {{/each}}
+            {{#if this.mayCreateCompetence}}
+              <LinkTo
+                @route="authenticated.competence-management.new"
+                @model={{area.id}}
+                class="area-link"
+                {{on "click" @close}}
+              >
+                <i class="plus square icon"></i>Ajouter une compétence
+              </LinkTo>
+            {{/if}}
+          </:content>
+        </PixAccordions>
       {{/each}}
       {{#if this.mayCreateArea}}
-        <LinkTo data-test-add-area @route="authenticated.area-management.new" @model={{this.framework.id}} class="item" {{on "click" @close}}><i class="plus square icon"></i>Ajouter un domaine</LinkTo>
+        <LinkTo
+          @route="authenticated.area-management.new"
+          @model={{this.framework.id}}
+          class="area-link"
+          {{on "click" @close}}
+        >
+          <i class="plus square icon"></i>Ajouter un domaine
+        </LinkTo>
       {{/if}}
-    </AccordionList>
+    </div>
     {{#if this.displayNewFrameworkPopIn}}
       <PopInNewFrameworkComponent
         @framework={{this.newFramework}}
