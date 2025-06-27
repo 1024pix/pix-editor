@@ -57,17 +57,3 @@
 @use 'globals/notification';
 @use 'globals/page';
 @use 'globals/table';
-
-// ember-power-select
-@use 'custom-select';
-@use 'ember-power-select' with (
-  // stylelint-disable color-no-hex, color-named
-  $ember-power-select-border-color: rgba(34, 36, 38, 0.15),
-  $ember-power-select-trigger-ltr-padding: .3em 16px .3em .3em,
-  $ember-power-select-dropdown-box-shadow: 0 4px 10px rgba(34, 36, 38, 0.4),
-  $ember-power-select-disabled-background-color: #f9f9f9
-);
-
-// basic-dropdown
-@use 'custom-basic-dropdown';
-@use 'ember-basic-dropdown';
