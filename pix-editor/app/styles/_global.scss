@@ -58,7 +58,7 @@ a, p, span, li {
 }
 
 .ui.menu.main-menu {
-  border-right: 1px solid rgba(34, 36, 38, 0.15);
+  border-right: 1px solid rgb(34, 36, 38 / 0.15);
   border-radius: 0;
 
   .ui.icon.button {
@@ -147,7 +147,7 @@ a, p, span, li {
     &.menu:not(.tabular) {
       background-color: #F9FAFB;
       border: none;
-      border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+      border-bottom: 1px solid rgb(34, 36, 38 / 0.15);
     }
 
     .ui.button.item.left.first {
@@ -156,7 +156,7 @@ a, p, span, li {
 
     + .ui.attached.menu:not(.top) {
       display: flex;
-      border-top: 1px solid rgba(34, 36, 38, 0.15);
+      border-top: 1px solid rgb(34, 36, 38 / 0.15);
 
       .item.competence-info {
         flex: 1;
@@ -199,7 +199,7 @@ a, p, span, li {
   box-sizing: border-box;
   padding: 10px;
   background-color: #3498db;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  border-bottom: 1px solid rgb(34, 36, 38 / 0.15);
 
   &.lite {
     background-color: #7C0E6A;
@@ -291,7 +291,7 @@ footer.ui.attached.header {
   background-color: transparent;
 
   &:hover, &:focus {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgb(0, 0, 0 / 0.03);
   }
 }
 

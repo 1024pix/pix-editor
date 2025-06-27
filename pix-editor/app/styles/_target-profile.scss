@@ -5,12 +5,12 @@
     align-items: center;
     float: right;
     margin-top: 2px;
-    color: rgba(255, 255, 255, .5);
+    color: rgb(255, 255, 255 / 0.5);
     font-weight: normal;
     font-size: 14px;
 
     &.active {
-      color: rgba(255, 255, 255, .9);
+      color: rgb(255, 255, 255 / 0.9);
     }
 
     .ui.toggle.checkbox {
@@ -67,7 +67,7 @@
 
     .competence-info {
       .ui.basic.button {
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        border: 1px solid rgb(255, 255, 255 / 0.6);
         border-radius: 50%;
         box-shadow: none;
 
@@ -112,7 +112,7 @@
       display: flex;
 
       &:hover {
-        background: rgba(50, 170, 220, .1);
+        background: rgb(50, 170, 220 / 0.1);
         cursor: pointer;
       }
 
@@ -155,7 +155,7 @@
           height: 100%;
 
           &.active {
-            background-color: rgba(87, 200, 130, .3);
+            background-color: rgb(87, 200, 130 / 0.3);
           }
 
           &__color-red {
@@ -169,7 +169,7 @@
         padding: 10px 50px 10px 5px;
 
         &.active {
-          background-color: rgba(87, 200, 130, .3);
+          background-color: rgb(87, 200, 130 / 0.3);
         }
       }
 
@@ -181,13 +181,13 @@
         .practicalTitle-profile {
 
           &.active {
-            background-color: rgba(63, 123, 196, .3);
+            background-color: rgb(63, 123, 196 / 0.3);
           }
         }
 
         .practicalDescription-profile {
           &.active {
-            background-color: rgba(63, 123, 196, .3);
+            background-color: rgb(63, 123, 196 / 0.3);
           }
         }
       }
@@ -220,7 +220,7 @@
       cursor: pointer;
 
       &.selected {
-        background-color: rgba(87, 200, 130, 0.5);
+        background-color: rgb(87, 200, 130 / 0.5);
       }
 
       &.disabled {
@@ -234,7 +234,7 @@
     .levels {
       .level {
         &.selected {
-          background-color: rgba(63, 123, 196, .3);
+          background-color: rgb(63, 123, 196 / 0.3);
         }
       }
     }
