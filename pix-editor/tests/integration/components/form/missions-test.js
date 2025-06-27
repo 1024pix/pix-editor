@@ -50,6 +50,6 @@ module('Integration | Component | mission', function(hooks) {
 
     const button = screen.getByRole('button', { name: 'Créer la mission' });
 
-    assert.dom(button).hasAttribute('disabled');
+    assert.dom(button).hasAria('disabled', 'true');
   });
 });

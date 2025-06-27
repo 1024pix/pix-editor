@@ -48,6 +48,6 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     const screen = await render(<template><TutorialPopin @close={{closeFn}} @tutorial={{filledTutorial}} @saveTutorial={{saveTutorialFn}} @showModal={{true}} /></template>);
 
     // then
-    assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).hasAria('disabled', 'false');
+    assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).doesNotHaveAttribute('aria-disabled');
   });
 });

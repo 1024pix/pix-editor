@@ -66,7 +66,7 @@ module('Acceptance | Static Courses | Activation', function(hooks) {
 
       // then
       const button = screen.getByText('Désactiver');
-      assert.dom(button).isDisabled();
+      assert.dom(button).hasAria('disabled', 'true');
     });
   });
 

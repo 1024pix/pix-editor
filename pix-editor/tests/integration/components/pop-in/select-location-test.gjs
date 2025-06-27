@@ -249,33 +249,33 @@ module('Integration | Component | pop-in-select-location / form-select-location'
 
     test('move button is disabled if no location is selected', async function(assert) {
       // when
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same skill
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // same skill
 
       await click(screen.getByLabelText('Sujet'));
       await click(await screen.findByRole('option', { name: 'tube1_2_1_2' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no skill
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // no skill
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Acquis'));
       await click(await screen.findByRole('option', { name: 'skill1_2_1_2_1 (v.1) 🟢' }));
 
-      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // different skill
+      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // different skill
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Sujet'));
       await click(await screen.findByRole('option', { name: 'tube1_2_1_1' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no skill
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // no skill
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Acquis'));
       await click(await screen.findByRole('option', { name: 'skill1_2_1_1_2 (v.1) 🟢' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same skill
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // same skill
     });
 
     test('it should call @onSubmit with new skill location argument', async function(assert) {
@@ -342,12 +342,12 @@ module('Integration | Component | pop-in-select-location / form-select-location'
 
     test('duplicate button is disabled when form is not submittable', async function(assert) {
       // when
-      assert.true(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('disabled'));
+      assert.true(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('aria-disabled', 'true'));
 
       await click(screen.getByLabelText('Niveau'));
       await click(await screen.findByRole('option', { name: '2' }));
 
-      assert.false(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('disabled'));
+      assert.false(screen.getByRole('button', { name: 'Dupliquer' }).hasAttribute('aria-disabled', 'true'));
     });
 
     test('it should call @onSubmit with skill copy location', async function(assert) {
@@ -417,33 +417,33 @@ module('Integration | Component | pop-in-select-location / form-select-location'
 
     test('move button is disabled when form is not submittable', async function(assert) {
       // when
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same theme
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // same theme
 
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no theme
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // no theme
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       await click(await screen.findByRole('option', { name: 'theme1_1_1_1' }));
 
-      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // different theme
+      assert.false(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // different theme
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Compétence'));
       await click(await screen.findByRole('option', { name: '2.1 competence1_2_1' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // no theme
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // no theme
 
       await waitForSelectToBeClosed(screen);
 
       await click(screen.getByLabelText('Thématique *'));
       await click(await screen.findByRole('option', { name: 'theme1_2_1_1' }));
 
-      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('disabled')); // same theme
+      assert.true(screen.getByRole('button', { name: 'Déplacer' }).hasAttribute('aria-disabled', 'true')); // same theme
     });
 
     test('it should call @onSubmit with a competence and a theme', async function(assert) {

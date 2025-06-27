@@ -20,7 +20,7 @@ module('Integration | Component | pop-in/new-framework', function(hooks) {
 
     //then
     const saveButton = find('[data-test-save-action]');
-    assert.ok(saveButton.disabled);
+    assert.dom(saveButton).hasAria('disabled', 'true');
   });
 
   test('it should unable save button if name field is fill', async function(assert) {
@@ -36,6 +36,6 @@ module('Integration | Component | pop-in/new-framework', function(hooks) {
 
     //then
     const saveButton = find('[data-test-save-action]');
-    assert.notOk(saveButton.disabled);
+    assert.dom(saveButton).doesNotHaveAttribute('aria-disabled');
   });
 });
