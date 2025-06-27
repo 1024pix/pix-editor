@@ -1,5 +1,19 @@
 
 
+## v3.212.0 (27/06/2025)
+
+
+### :rocket: Amélioration
+- [#1061](https://github.com/1024pix/pix-editor/pull/1061) [FEATURE] Horodater la mise en production d'une épreuve traduite et l'exposer dans la répli (PIX-17638).
+- [#1059](https://github.com/1024pix/pix-editor/pull/1059) [FEATURE] Permettre aux éditeurs de gérer la liste des URLs à ne pas analyser (PIX-18418).
+
+### :building_construction: Tech
+- [#1063](https://github.com/1024pix/pix-editor/pull/1063) [TECH] Migrer le composant de connexion vers gjs.
+- [#1022](https://github.com/1024pix/pix-editor/pull/1022) [TECH] Remplacer ember-select par PixSelect dans l'édition et l'ajout d'un tutoriel (PIX-18101).
+
+### :bug: Correction
+- [#1058](https://github.com/1024pix/pix-editor/pull/1058) [BUGFIX] Correction de partie innaccessible sur de petit écrans (PIX-17627).
+
 ## v3.211.1 (23/06/2025)
 
 
