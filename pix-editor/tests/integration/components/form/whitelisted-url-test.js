@@ -74,7 +74,7 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
 
-  test('should disable create mission button when no complete informations', async function(assert) {
+  test('should disable create whitelisted URL button when no complete informations', async function(assert) {
 
     this.set('submitButtonText', 'Ajouter');
 
@@ -88,11 +88,11 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
       />`);
 
     const button = screen.getByRole('button', { name: 'Ajouter' });
-    assert.dom(button).hasAttribute('disabled');
+    assert.dom(button).hasAria('disabled', 'true');
 
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');
     await fillByLabel('Commentaire', 'Ça rend la chose plus claire');
-    assert.dom(button).hasAttribute('disabled');
+    assert.dom(button).hasAria('disabled', 'true');
   });
 
   test('should display errors when input values are unexpected', async function(assert) {
