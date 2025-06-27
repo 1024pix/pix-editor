@@ -50,9 +50,9 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
   });
 
   test('it should display the challenge', async function(assert) {
-    await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    const screen = await visit('/');
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
 
     assert.dom('time').hasAttribute('datetime', '2021-10-04T14:00:00.000Z');

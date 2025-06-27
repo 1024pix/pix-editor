@@ -1,5 +1,6 @@
+import { visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, find, findAll, visit } from '@ember/test-helpers';
+import { click, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { runTask } from 'ember-lifeline';
@@ -57,9 +58,9 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    const screen = await visit('/');
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
 
@@ -95,9 +96,9 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
     // when
     // adding illustrationA
-    await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    const screen = await visit('/');
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
     await selectFiles('[data-test-file-input-illustration] input', illustrationA);
@@ -223,4 +224,3 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
   });
 
 });
-

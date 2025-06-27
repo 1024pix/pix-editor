@@ -124,14 +124,11 @@ export default class SidebarNavigationComponent extends Component {
       {{#each this.areas as |area|}}
         <PixAccordions>
           <:title>
-            <span data-test-area-item>
-              {{area.name}}
-            </span>
+            {{area.name}}
           </:title>
           <:content>
             {{#each area.sortedCompetences as |competence|}}
               <LinkTo
-                data-test-competence-item
                 @route="authenticated.competence"
                 @model={{competence.id}}
                 @query={{hash leftMaximized=false}}

@@ -1,5 +1,5 @@
-import { clickByName, clickByText } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find, findAll, visit } from '@ember/test-helpers';
+import { clickByName, clickByText, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, fillIn, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -37,11 +37,11 @@ module('Acceptance | competence-management/new', function(hooks) {
     const newCompetenceTitle = 'Nouveau titre';
 
     // when
-    await visit('/');
+    const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await clickByText('Pix+');
-    await click(find('[data-test-area-item]'));
-    await click(find('[data-test-add-competence]'));
+    await click(screen.getByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Ajouter une compétence' }));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
     await click(find('[data-test-save-button]'));
 
@@ -69,10 +69,10 @@ module('Acceptance | competence-management/new', function(hooks) {
     confirmStub.returns(false);
 
     // when
-    await visit('/competence-management/new/recArea1');
+    const screen = await visit('/competence-management/new/recArea1');
     await click(find('.bars.icon'));
-    await click(find('[data-test-area-item]'));
-    await click(find('[data-test-competence-item]'));
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Titre' }));
 
     // then
     assert.strictEqual(currentURL(), '/competence-management/new/recArea1');

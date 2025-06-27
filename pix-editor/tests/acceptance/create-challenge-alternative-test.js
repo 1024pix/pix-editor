@@ -1,5 +1,6 @@
+import { visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, find, findAll, visit } from '@ember/test-helpers';
+import { click, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -58,9 +59,9 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    const screen = await visit('/');
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('.alternatives'));
     await click(find('[data-test-new-alternative-action]'));
@@ -90,9 +91,9 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     sinon.stub(storageServiceStub, 'cloneFile').resolves('data:2,');
 
     // when
-    await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    const screen = await visit('/');
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('.alternatives'));
     await click(find('[data-test-new-alternative-action]'));

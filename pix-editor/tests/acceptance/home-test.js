@@ -1,4 +1,4 @@
-import { findAll, visit } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -27,12 +27,10 @@ module('Acceptance | Home', function(hooks) {
 
   test('visiting /', async function(assert) {
     // when
-    await visit('/');
+    const screen = await visit('/');
 
     // then
-    assert.dom(findAll('[data-test-area-item]')[0]).hasText('1. Information et données');
-    assert.dom(findAll('[data-test-area-item]')[1]).hasText('2. Communication et collaboration');
-    assert.dom('[data-test-area-item]').exists({ count: 2 });
+    assert.ok(await screen.findByRole('button', { name: '1. Information et données' }));
+    assert.ok(screen.getByRole('button', { name: '2. Communication et collaboration' }));
   });
 });
-
