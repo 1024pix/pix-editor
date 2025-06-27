@@ -51,7 +51,6 @@
     "base-x": "^5.0.0",
     "canvg": "^4.0.1",
     "countries-list": "^3.1.1",
-    "ember-a11y-accordion": "^3.0.0",
     "ember-aria-tabs": "^7.0.0",
     "ember-auto-import": "^2.6.3",
     "ember-cli": "^6.0.0",
