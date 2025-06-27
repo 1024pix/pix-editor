@@ -45,7 +45,7 @@
     "@embroider/webpack": "^4.0.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@playwright/test": "1.52.0",
+    "@playwright/test": "1.53.1",
     "@sentry/ember": "^9.0.0",
     "acorn": "^8.8.1",
     "base-x": "^5.0.0",
