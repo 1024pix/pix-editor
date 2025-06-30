@@ -35,8 +35,8 @@
       padding: 10px;
       text-align: left;
       background-color: #F9FAFB;
-      border-bottom: 1px solid rgb(34, 36, 38 / 0.1);
-      border-left: 1px solid rgb(34, 36, 38 / 0.1);
+      border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+      border-left: 1px solid rgba(34, 36, 38, 0.1);
 
       .et-sort-indicator {
 
@@ -60,8 +60,8 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      border-bottom: 1px solid rgb(34, 36, 38 / 0.1);
-      border-left: 1px solid rgb(34, 36, 38 / 0.1);
+      border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+      border-left: 1px solid rgba(34, 36, 38, 0.1);
       cursor: pointer;
 
       &.suggested {

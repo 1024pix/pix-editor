@@ -13,7 +13,7 @@
       cursor: pointer;
 
       &.ember-tabs__tab--selected {
-        border: 1px solid rgb(212, 212, 213);
+        border: 1px solid rgba(212, 212, 213, 1);
         border-bottom-color: white;
         border-radius: 5px 5px 0 0;
       }
