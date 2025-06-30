@@ -4,6 +4,7 @@
   ],
   "rules": {
     "alpha-value-notation": null,
+    "color-function-alias-notation": "with-alpha",
     "color-function-notation": null,
     "font-family-no-missing-generic-family-keyword": null,
     "no-descending-specificity": null,

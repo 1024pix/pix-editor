@@ -12,7 +12,7 @@
     }
 
     &:focus, &:focus-within {
-      outline-color: rgb(var(--pix-info-100-inline) / 0.5);
+      outline-color: rgba(var(--pix-info-100-inline), 0.5);
     }
   }
 
