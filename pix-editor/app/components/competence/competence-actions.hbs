@@ -5,27 +5,34 @@
         <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>
           En production
           {{#if @languageFilter}}
-            <i class="info circle icon">
-              <EmberTooltip @side="right-start" @tooltipClass="custom-tooltip language-filter-info">
-               <table class="ui table skillSection">
-                 <thead>
-                 <tr>
-                   <th colspan="2"> Pour la langue sélectionnée</th>
-                 </tr>
-                 </thead>
-                 <tbody>
-                   <tr>
-                     <td class="color warning"></td>
-                     <td>L'acquis possède un des deux types de tutoriel</td>
-                   </tr>
-                   <tr>
-                     <td class="color danger"></td>
-                     <td>L'acquis ne possède pas de tutoriel</td>
-                   </tr>
-                 </tbody>
-               </table>
-              </EmberTooltip>
-            </i>
+              <PixTooltip
+                @id="language-filter-info"
+                @position="right"
+                @isLight ={{true}}
+              >
+                <:triggerElement>
+                  <PixIcon aria-describedby="language-filter-info" @name="info"/>
+                </:triggerElement>
+                <:tooltip>
+                  <table class="ui table skillSection">
+                  <thead>
+                  <tr>
+                    <th colspan="2"> Pour la langue sélectionnée</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td class="color warning"></td>
+                    <td>L'acquis possède un des deux types de tutoriel</td>
+                  </tr>
+                  <tr>
+                    <td class="color danger"></td>
+                    <td>L'acquis ne possède pas de tutoriel</td>
+                  </tr>
+                  </tbody>
+                </table>
+                </:tooltip>
+              </PixTooltip>
           {{/if}}
         </div>
         <div class="item workbench {{if (eq @view "workbench") "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
@@ -41,8 +48,17 @@
         <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>
           En production
           {{#if @languageFilter}}
-            <i class="info circle icon">
-              <EmberTooltip @side="right-start" @tooltipClass="custom-tooltip language-filter-info">
+            <PixTooltip
+              @id="language-filter-info"
+              @position="right"
+              @isInline ={{true}}
+              @isLight ={{true}}
+              className="custom-tooltip language-filter-info"
+            >
+              <:triggerElement>
+                <PixIcon aria-describedby="language-filter-info" @name="info"/>
+              </:triggerElement>
+              <:tooltip>
                 <table class="ui table challengeSection">
                   <thead>
                   <tr>
@@ -60,8 +76,8 @@
                   </tr>
                   </tbody>
                 </table>
-              </EmberTooltip>
-            </i>
+              </:tooltip>
+            </PixTooltip>
           {{/if}}
         </div>
         <div class="item workbench {{if (or (eq @view "workbench") (eq @view "workbench-list")) "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
