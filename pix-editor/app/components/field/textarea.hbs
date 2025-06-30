@@ -13,14 +13,21 @@
       </button>
       {{#if @helpContent}}
         <div class="ui compact icon right floated button basic">
-          <i class="help icon">
-            <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
+          <PixTooltip
+            @id="info-tooltip"
+            @position="left"
+            @isInline ={{true}}
+          >
+            <:triggerElement>
+              <PixIcon aria-describedby="info-tooltip" @name="help"/>
+            </:triggerElement>
+            <:tooltip>
               {{this.safeHelpContent}}
-            </EmberTooltip>
-          </i>
+            </:tooltip>
+          </PixTooltip>
         </div>
       {{/if}}
     {{/if}}
   </div>
-  <Textarea id={{@id}} @value={{@value}} rows="4" readonly={{not @edition}} class="attached" {{on "change" this.change}}/>
+  <PixTextarea id={{@id}} @value={{@value}} rows="4" readonly={{not @edition}} class="attached" {{on "change" this.change}}/>
 </div>
