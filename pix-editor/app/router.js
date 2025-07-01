@@ -8,6 +8,7 @@ export default class Router extends EmberRouter {
 
 Router.map(function () {
   this.route('login', { path: 'connexion' });
+  this.route('admin', { path: 'administration' });
   this.route('authenticated', { path: '' }, function () {
     this.route('v2', { path: '/v2/competences/:competence_id' }, function () {
       this.route('competence-overview', { path: '/:overview' }, function () {

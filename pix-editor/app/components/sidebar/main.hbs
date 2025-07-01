@@ -1,0 +1,61 @@
+<div class="ui inverted left wide sidebar {{if @open "visible "}}main-sidebar menu vertical {{if this.config.lite "lite"""}}">
+  <div class="main-sidebar__header">
+    <h1>Pix Editor</h1>
+    <PixToggleButton @size="small" @screenReaderOnly={{true}} @onChange={{this.switchVersion}} @toggled={{this.isV2}}>
+      <:label>changer de version</:label>
+      <:viewA>V2</:viewA>
+      <:viewB>V1</:viewB>
+    </PixToggleButton>
+  </div>
+  <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
+  {{#if this.maySearch}}
+    <Sidebar::Search @close={{@close}} />
+  {{/if}}
+  <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}}/>
+  <div class="secondary-links">
+    {{#if this.maySynchronizeTranslations}}
+      <LinkTo @route="authenticated.synchronize-translations" {{on "click" @close}}>
+        <i class="sync icon"></i> Récupérer les traductions
+      </LinkTo>
+    {{/if}}
+    {{#if this.shouldShowMissionsLink}}
+      <LinkTo @route="authenticated.missions" {{on "click" @close}}>
+        <i class="graduation cap icon"></i> Missions Pix 1D
+      </LinkTo>
+    {{/if}}
+    {{#if this.mayAccessStaticCourses}}
+      <LinkTo class="secondary-links--action" @route="authenticated.static-courses" {{on "click" @close}}>
+        <PixIcon @name="assignment" @ariaHidden={{true}}/>
+        Tests statiques
+      </LinkTo>
+    {{/if}}
+    {{#if this.mayGenerateTargetProfile}}
+      <LinkTo data-test-target-profile-link @route="authenticated.target-profile" {{on "click" @close}}>
+        <i class="crosshairs icon"></i> Générateur de profil cible
+      </LinkTo>
+    {{/if}}
+    {{#if this.mayAccessWhitelistedUrls}}
+      <LinkTo class="secondary-links--action" data-test-whitelisted-urls-link @route="authenticated.whitelisted-urls" {{on "click" @close}}>
+        <PixIcon @name="bookAlt" @ariaHidden={{true}}/>
+        URLs à ne pas analyser
+      </LinkTo>
+    {{/if}}
+    <Sidebar::Export @areas={{this.areas}}/>
+    <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
+      <i class="chart bar icon"></i> Statistiques
+    </LinkTo>
+    <div class="secondary-links">
+      <LinkTo data-test-link-to-event-log @route="authenticated.events-log"><i class="book icon"></i> Journal</LinkTo>
+      <LinkTo @route="admin"><i class="shield icon"></i> Administration</LinkTo>
+    </div>
+  </div>
+  <div class="ui labelled icon menu">
+    <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion
+    </button>
+    <div class="right item">
+      {{#if this.author}}
+        {{this.author}} -
+      {{/if}}
+      Version {{this.version}}</div>
+  </div>
+</div>
