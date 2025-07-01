@@ -358,6 +358,10 @@
   }
 }
 
+.quality-icons {
+  display: flex;
+}
+
 #language-filter-info {
   max-width: 470px;
 
@@ -396,8 +400,9 @@
   }
 }
 
-.quality-tooltip {
-  max-width: 350px;
+#quality-tooltip {
+  max-width: 250px;
+  z-index: 10;
 }
 
 .flag.fr-fr {
