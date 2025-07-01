@@ -1,6 +1,6 @@
 import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import CompetenceProfile from 'pixeditor/components/target-profile/competence-profile';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
@@ -33,11 +33,10 @@ module('Integration | Component | target-profile/competence-profile', function(h
       code: '1',
       sortedThemes: [theme_1, theme_2, theme_3],
     });
-    this.set('competence', competence);
-    this.set('filter', true);
+    const filter = true;
 
     // when
-    await render(hbs`<TargetProfile::CompetenceProfile @competence={{this.competence}} @filter={{this.filter}}/>`);
+    await render(<template><CompetenceProfile @competence={{competence}} @filter={{filter}}/></template>);
 
     // then
     assert.dom('.competence-title').hasText('competence_title');
@@ -64,10 +63,9 @@ module('Integration | Component | target-profile/competence-profile', function(h
       code: '1',
       sortedThemes: [theme_1, theme_2],
     });
-    this.set('competence', competence);
 
     // when
-    await render(hbs`<TargetProfile::CompetenceProfile @competence={{this.competence}}/>`);
+    await render(<template><CompetenceProfile @competence={{competence}}/></template>);
 
     // then
     assert.dom('[data-test-theme-profile]').exists({ count: 1 });
