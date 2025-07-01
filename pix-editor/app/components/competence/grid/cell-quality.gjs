@@ -1,5 +1,9 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { LinkTo } from '@ember/routing';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
+import { and, not } from 'ember-truth-helpers';
 
 export default class CellQuality extends Component {
 
@@ -135,4 +139,54 @@ export default class CellQuality extends Component {
     }
     return 'Non testé';
   }
+
+  <template>
+    <td class="skill-cell quality-skill-cell">
+      <LinkTo @route="authenticated.competence.quality.single" @model={{@skill}} class="skill-cell__link">
+        <div class="quality {{this.qualityClassColor}}">
+          <div class=" quality-indication">
+            <span>{{@skill.name}}</span>
+            <span>
+              {{#if this.loadingChallenges}}
+                ...
+              {{else}}
+                {{this.qualityIndication}}
+              {{/if}}
+            </span>
+          </div>
+          <div class="quality-icons">
+            {{#unless this.loadingChallenges}}
+              <PixTooltip
+                @id="quality-tooltip"
+                @position="bottom"
+                @isLight={{true}}
+                @isWide={{true}}
+              >
+                <:triggerElement>
+                  <PixIcon aria-describedby="quality-tooltip" @name="info"/>
+                </:triggerElement>
+                <:tooltip>
+                  <table class="quality-indication-details">
+                    <tbody>
+                    {{this.popupBuild}}
+                    </tbody>
+                  </table>
+                </:tooltip>
+              </PixTooltip>
+            {{/unless}}
+            {{#if this.classTutorial}}
+              <i class="lab icon {{this.classTutorial}}"></i>
+            {{/if}}
+            {{#if @skill.productionPrototype.timer }}
+              <i class="time icon"></i>
+            {{/if}}
+          </div>
+          {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
+            <br>
+          {{/if}}
+        </div>
+      </LinkTo>
+    </td>
+
+  </template>
 }
