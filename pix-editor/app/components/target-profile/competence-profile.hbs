@@ -7,12 +7,19 @@
       <div class="competence-title">{{@competence.title}}</div>
     </div>
     <div class="column center competence-info">
-      <div class="ui compact icon button basic">
-        <EmberTooltip @tooltipClass="custom-tooltip large" @side="right-start">
+      <PixTooltip
+        @id="info-tooltip"
+        @position="left"
+        @isWide ={{true}}
+        @isLight ={{true}}
+      >
+        <:triggerElement>
+          <PixIcon aria-describedby="info-tooltip" @name="info"/>
+        </:triggerElement>
+        <:tooltip>
           {{@competence.description}}
-        </EmberTooltip>
-        <i class="info icon"></i>
-      </div>
+        </:tooltip>
+      </PixTooltip>
     </div>
   </h2>
   {{#each this.filteredTheme as |theme|}}
