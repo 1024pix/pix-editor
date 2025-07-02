@@ -1,5 +1,25 @@
 
 
+## v3.213.0 (02/07/2025)
+
+
+### :building_construction: Tech
+- [#1073](https://github.com/1024pix/pix-editor/pull/1073) [TECH] Suppression de `ember-a11y-accordion` (PIX-18504).
+- [#1062](https://github.com/1024pix/pix-editor/pull/1062) [TECH] Remplacement des dernières utilisations de `ember-power-select` (PIX-17726).
+
+### :bug: Correction
+- [#1076](https://github.com/1024pix/pix-editor/pull/1076) [BUGFIX] Fix sur la notation des couleurs rgba.
+
+### :arrow_up: Montée de version
+- [#1074](https://github.com/1024pix/pix-editor/pull/1074) [BUMP] Update dependency ember-simple-auth to v8 (pix-editor).
+- [#1072](https://github.com/1024pix/pix-editor/pull/1072) [BUMP] Update dependency stylelint-config-standard-scss to v15 (pix-editor).
+- [#1070](https://github.com/1024pix/pix-editor/pull/1070) [BUMP] Update dependency axios-cookiejar-support to v6 (api).
+- [#1069](https://github.com/1024pix/pix-editor/pull/1069) [BUMP] Update dependency @playwright/test to v1.53.1.
+- [#923](https://github.com/1024pix/pix-editor/pull/923) [BUMP] Update dependency ember-simple-auth to v7 (pix-editor).
+- [#1067](https://github.com/1024pix/pix-editor/pull/1067) [BUMP] Update dependency @1024pix/pix-ui to ^55.23.1 (pix-editor).
+- [#1064](https://github.com/1024pix/pix-editor/pull/1064) [BUMP] PixEditor : ember-intl de la version 7.0.0 vers 7.3.1 ET ember-file-upload de la version 9.0.0 vers 9.5.0 ET ember-inflector de 4.0.2 vers 4.0.3.
+- [#1066](https://github.com/1024pix/pix-editor/pull/1066) [BUMP] Update dependency form-data to v4.0.3 (api).
+
 ## v3.212.0 (27/06/2025)
 
 
