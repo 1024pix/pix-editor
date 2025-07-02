@@ -73,8 +73,8 @@ module('Acceptance | Localized-Challenge', function(hooks) {
     test('should display a default embedUrl if is empty but not for primary', async function(assert) {
       // when
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: 'Code Title' }));
       await click(findAll('[data-test-skill-cell-link]')[0]);
       await clickByText('Version nl');
 
@@ -90,8 +90,8 @@ module('Acceptance | Localized-Challenge', function(hooks) {
 
       // when
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: 'Code Title' }));
       await click(findAll('[data-test-skill-cell-link]')[1]);
       await clickByText('Version nl');
 
@@ -105,8 +105,8 @@ module('Acceptance | Localized-Challenge', function(hooks) {
 
       // when
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: 'Code Title' }));
       await click(findAll('[data-test-skill-cell-link]')[1]);
       await clickByText('Version es');
 

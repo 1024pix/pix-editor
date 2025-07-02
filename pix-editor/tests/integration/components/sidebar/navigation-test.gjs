@@ -1,6 +1,6 @@
 import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, findAll } from '@ember/test-helpers';
+import { click } from '@ember/test-helpers';
 import SidebarNavigation from 'pixeditor/components/sidebar/navigation';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -94,14 +94,14 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedAreas = ['area_1', 'area_2'];
 
       // when
-      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
-      const areasList = findAll('[data-test-area-item]');
+      const areasList = screen.getAllByRole('button');
       areasList.forEach((area) => {
         assert.ok(expectedAreas.includes(area.textContent.trim()));
       });
-      assert.dom('[data-test-add-area]').doesNotExist();
+      assert.dom(await screen.queryByRole('link', { name: 'Ajouter un domaine' })).doesNotExist();
     });
 
     test('it should display a button to create area if `source` is not `Pix`', async function(assert) {
@@ -125,10 +125,10 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
 
       // when
-      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
 
       // then
-      assert.dom('[data-test-add-area]').exists();
+      assert.dom(screen.getByRole('link', { name: 'Ajouter un domaine' })).exists();
     });
 
     test('it should display only a list of competences', async function(assert) {
@@ -136,15 +136,14 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
       // when
-      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
-      await click(findAll('[data-test-area-item] button')[0]);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      await click(screen.getByRole('button', { name: 'area_1' }));
 
       // then
-      const competencesList = findAll('[data-test-competence-item]');
+      const competencesList = screen.getAllByRole('link');
       assert.ok(expectedCompenteces.includes(competencesList[0].textContent.trim()));
       assert.ok(expectedCompenteces.includes(competencesList[1].textContent.trim()));
-      assert.dom('[data-test-add-competence]').doesNotExist();
-
+      assert.dom(await screen.queryByRole('link', { name: 'Ajouter une compétence' })).doesNotExist();
     });
 
     test('it should display a button to create competence if `source` is not `Pix`', async function(assert) {
@@ -168,11 +167,12 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
 
       // when
-      await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
-      await click(findAll('[data-test-area-item]')[0]);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+
+      await click(screen.getByRole('button', { name: 'area_1' }));
 
       // then
-      assert.dom('[data-test-add-competence]').exists();
+      assert.dom(screen.getByRole('link', { name: 'Ajouter une compétence' })).exists();
     });
   });
 });

@@ -1,4 +1,5 @@
-import { click, currentURL, fillIn, find, visit } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, fillIn, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -67,11 +68,11 @@ module('Acceptance | competence-management/single', function(hooks) {
     confirmStub.returns(false);
 
     // when
-    await visit('/competence-management/recCompetence1.1');
+    const screen = await visit('/competence-management/recCompetence1.1');
     await click(find('[data-test-edit-button]'));
     await click(find('.bars.icon'));
-    await click(find('[data-test-area-item]'));
-    await click(find('[data-test-competence-item]'));
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code Titre' }));
 
     // then
     assert.strictEqual(currentURL(), '/competence-management/recCompetence1.1');

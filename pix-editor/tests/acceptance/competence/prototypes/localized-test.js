@@ -55,8 +55,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
 
   test('it should display the localized challenge', async function(assert) {
     const screen = await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: '1.1 Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
     const versionEn = screen.getByText('Version en');
@@ -77,8 +77,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
 
   test('it should go back to the original challenge', async function(assert) {
     const screen = await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: '1.1 Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(screen.getByText('Version en'));
@@ -90,8 +90,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
   module('#edit localized challenge status', function() {
     test('should set localized status to `validé`', async function(assert) {
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: '1.1 Title' }));
       await click(findAll('[data-test-skill-cell-link]')[0]);
       await click(screen.getByText('Version en'));
 
@@ -106,8 +106,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     test('should set localized status to `proposé`', async function(assert) {
       localizedChallenge.update({ status: 'validé' });
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: '1.1 Title' }));
       await click(findAll('[data-test-skill-cell-link]')[0]);
       await click(screen.getByText('Version en'));
 
@@ -124,8 +124,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
   module('#edit localized challenge', function() {
     test('should display edition form', async function(assert) {
       const screen = await visit('/');
-      await click(findAll('[data-test-area-item]')[0]);
-      await click(findAll('[data-test-competence-item]')[0]);
+      await click(await screen.findByRole('button', { name: '1. Information et données' }));
+      await click(screen.getByRole('link', { name: '1.1 Title' }));
       await click(findAll('[data-test-skill-cell-link]')[0]);
       await click(screen.getByText('Version en'));
 

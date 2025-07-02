@@ -30,37 +30,6 @@
     color: #00DBFF;
   }
 
-  .a11y-accordion-list {
-    font-size: .9rem;
-
-
-    .a11y-accordion {
-      &-header {
-        &__trigger {
-          padding: .5rem 0;
-          color: white;
-          cursor: pointer;
-
-          &:hover {
-            background: rgba(0, 0, 0, 0.08);
-          }
-        }
-      }
-    }
-
-    .a11y-accordion-panel-content {
-      background: rgba(0, 0, 0, 0.08);
-
-      .item {
-        padding: .8rem;
-
-        &:hover, &.active, &.active:hover {
-          background: rgba(0, 0, 0, 0.08) !important;
-        }
-      }
-    }
-  }
-
   .ui.menu {
     align-items: end;
     width: 100%;

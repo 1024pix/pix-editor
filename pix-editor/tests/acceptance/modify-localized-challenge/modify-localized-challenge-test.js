@@ -51,8 +51,8 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     const store = this.owner.lookup('service:store');
 
     const screen = await visit('/');
-    await click(findAll('[data-test-area-item]')[0]);
-    await click(findAll('[data-test-competence-item]')[0]);
+    await click(await screen.findByRole('button', { name: '1. Information et données' }));
+    await click(screen.getByRole('link', { name: 'Code ma competence' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await clickByText('Version nl');
 
@@ -78,4 +78,3 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     assert.dom('[data-test-invalid-urls-to-consult]').doesNotExist();
   });
 });
-
