@@ -1,5 +1,11 @@
 
 
+## v3.213.1 (02/07/2025)
+
+
+### :bug: Correction
+- [#1078](https://github.com/1024pix/pix-editor/pull/1078) [BUGFIX] Le texte de l'accordéon de sélection de domaine n'est pas correctement aligné (PIX-18561).
+
 ## v3.213.0 (02/07/2025)
 
 
