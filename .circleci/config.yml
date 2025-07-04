@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.5.3
+  browser-tools: circleci/browser-tools@2.1.2
 
 executors:
   node-docker:
@@ -75,7 +75,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/pix-editor
-      - browser-tools/install-chrome
+      - browser-tools/install_chrome
       - run: cat package*.json > cachekey
       - restore_cache:
           keys:
