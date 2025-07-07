@@ -30,6 +30,18 @@ describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
     expect(result2).toBe('Descartes a dit : « Je pense, donc je suis. »');
   });
 
+  it('should not replace space in select option', () => {
+    // given
+    const proposition = 'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
+    const expectedResult = 'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
+
+    // when
+    const result = normalizeNonBreakingSpace(normalizeNonBreakingSpace(proposition));
+
+    // then
+    expect(result).toBe(expectedResult);
+  });
+
   it('should not break when passing null or empty values', () => {
     // given
     const nullValue = null;
