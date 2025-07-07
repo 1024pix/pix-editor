@@ -27,8 +27,8 @@ export const areaDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
       code: airtableRecord.get('Code'),
-      competenceIds: airtableRecord.get('Competences (identifiants) (id persistant)'),
-      competenceAirtableIds: airtableRecord.get('Competences (identifiants)'),
+      competenceIds: airtableRecord.get('Competences (identifiants) (id persistant)') ?? [],
+      competenceAirtableIds: airtableRecord.get('Competences (identifiants)') ?? [],
       color: airtableRecord.get('Couleur'),
       frameworkId: airtableRecord.get('Referentiel')[0],
     };
