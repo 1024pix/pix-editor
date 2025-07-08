@@ -1,5 +1,17 @@
 
 
+## v3.213.2 (08/07/2025)
+
+
+### :bug: Correction
+- [#1083](https://github.com/1024pix/pix-editor/pull/1083) [BUGFIX] Ne pas normaliser les espace contenu dans les option d'un select (PIX-18638).
+- [#1082](https://github.com/1024pix/pix-editor/pull/1082) [BUGFIX] Domaine vide : Release erronée (PIX-18641).
+
+### :arrow_up: Montée de version
+- [#1080](https://github.com/1024pix/pix-editor/pull/1080) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.33 (pix-editor).
+- [#1079](https://github.com/1024pix/pix-editor/pull/1079) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.6 (pix-editor).
+- [#1071](https://github.com/1024pix/pix-editor/pull/1071) [BUMP] Update dependency browser-tools to v2 (.circleci).
+
 ## v3.213.1 (02/07/2025)
 
 
