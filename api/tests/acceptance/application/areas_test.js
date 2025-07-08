@@ -347,7 +347,7 @@ describe('Acceptance | Route | areas', () => {
           },
           name: '2. Cinquième domaine',
           frameworkId: 'framework2',
-          competenceIds: null,
+          competenceIds: [],
           color: null,
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
@@ -401,7 +401,7 @@ describe('Acceptance | Route | areas', () => {
               },
             },
             competences: {
-              data: null,
+              data: [],
             },
           },
         },
