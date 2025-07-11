@@ -19,9 +19,14 @@
   .pix-select__dropdown {
     // Prevents weird layout behaviour :(
     transform: translate(0, 54px) !important;
+    min-width: auto;
   }
 
   .pix-select-list-category__option {
+    width: 100%;
+    overflow-x: hidden;
+    white-space: normal;
+
     &--selected {
       background: var(--pix-info-50);
       color: var(--pix-info-900);
