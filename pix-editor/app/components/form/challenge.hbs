@@ -248,7 +248,7 @@
     <Field::Checkbox
       @label="Timer"
       @checked={{@challenge.timerOn}}
-      @disabled={{not @edition}}
+      @disabled={{this.isReadonly}}
     />
     {{#if @challenge.timer}}
       <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
@@ -258,7 +258,7 @@
     <Field::Checkbox
       @label="Focus"
       @checked={{@challenge.focusable}}
-      @disabled={{not @edition}}
+      @disabled={{this.isReadonly}}
     />
   </div>
   {{#if @challenge.isPrototype}}

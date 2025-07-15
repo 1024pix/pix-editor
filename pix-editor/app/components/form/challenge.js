@@ -153,6 +153,10 @@ export default class ChallengeForm extends Component {
     return this.args.edition || this.args.challenge.urlsToConsult;
   }
 
+  get isReadonly() {
+    return !this.args.challenge.isPrototype;
+  }
+
   shouldDisplayQualitySection = (challenge) => challenge.isDraft && challenge.isPrototype;
 
   @action
