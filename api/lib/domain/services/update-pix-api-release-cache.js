@@ -1,4 +1,5 @@
 import {
+  areaTransformer,
   createChallengeTransformer,
   frameworkTransformer,
   tubeTransformer,
@@ -16,6 +17,7 @@ import { child } from '../../infrastructure/logger.js';
 import * as Sentry from '@sentry/node';
 
 /**
+ * @typedef {import('../../../lib/domain/models').Area} Area
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
  * @typedef {import('../../../lib/domain/models').Framework} Framework
  * @typedef {import('../../../lib/domain/models').Tube} Tube
@@ -79,6 +81,24 @@ export async function onFrameworkCreated(framework) {
         pixApiClient,
         model: 'frameworks',
         updatedRecord: frameworkTransformer.forRelease(framework),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+/**
+ * @param {Area} area
+ */
+export async function onAreaCreated(area) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'areas',
+        updatedRecord: areaTransformer.forRelease(area),
       });
     } catch (err) {
       logger.error(err);
