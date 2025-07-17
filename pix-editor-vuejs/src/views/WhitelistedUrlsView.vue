@@ -1,14 +1,25 @@
 <script setup>
 import {onMounted} from "vue";
+import {api} from "../api";
+import { camel } from 'kitsu-core'
+import WhitelistedUrl from "../models/WhitelistedUrl.js";
+
+
 
 onMounted(async () => {
-  const dataApi = await fetch('http://localhost:3002/api/whitelisted-urls', {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    },
-  }).then(res => res.json())
-  console.log('LIST', dataApi)
+  const {data:whitelistedUrls} = await api.get('whitelisted-urls');
+  console.log('LIST', whitelistedUrls);
+
+  const result = whitelistedUrls.map(whitelistedUrl => {
+    const object = {};
+    Object.keys(whitelistedUrl).forEach(key => {
+      const camelisedKey = camel(key);
+      object[camelisedKey] = whitelistedUrl[key];
+    })
+    return new WhitelistedUrl(object);
+  })
+  console.log(result);
+
 })
 </script>
 
