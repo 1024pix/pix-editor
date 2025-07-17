@@ -1,6 +1,15 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import {onMounted} from "vue";
+
+onMounted(async () => {
+  const dataApi = await fetch('http://localhost:3002/api', {
+    method: "GET",
+    headers: {"Content-Type": "application/json"},
+  }).then(res => res.json())
+  console.log(dataApi)
+})
 </script>
 
 <template>
