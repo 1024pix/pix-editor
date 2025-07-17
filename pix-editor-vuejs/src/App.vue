@@ -11,6 +11,7 @@ import HelloWorld from './components/HelloWorld.vue'
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/whitelisted-urls">Whitelisted URLs</RouterLink>
+        <RouterLink to="/frameworks">Référentiels</RouterLink>
       </nav>
     </div>
   </header>

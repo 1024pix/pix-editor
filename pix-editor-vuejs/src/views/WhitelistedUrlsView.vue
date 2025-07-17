@@ -4,8 +4,6 @@ import {api} from "../api";
 import { camel } from 'kitsu-core'
 import WhitelistedUrl from "../models/WhitelistedUrl.js";
 
-
-
 onMounted(async () => {
   const {data:whitelistedUrls} = await api.get('whitelisted-urls');
   console.log('LIST', whitelistedUrls);

@@ -11,6 +11,7 @@ export function register(server) {
       method: 'GET',
       path: '/api/areas',
       config: {
+        auth: false,
         handler: async function() {
           const areas = await areaRepository.list();
           return areaSerializer.serialize(areas);

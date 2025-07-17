@@ -10,6 +10,7 @@ export function register(server) {
       method: 'GET',
       path: '/api/frameworks',
       config: {
+        auth: false,
         handler: async function() {
           const frameworks = await frameworkRepository.list();
           return frameworkSerializer.serialize(frameworks);
