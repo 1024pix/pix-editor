@@ -1,27 +1,16 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import {onMounted} from "vue";
-
-onMounted(async () => {
-  const dataApi = await fetch('http://localhost:3002/api', {
-    method: "GET",
-    headers: {"Content-Type": "application/json"},
-  }).then(res => res.json())
-  console.log(dataApi)
-})
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/whitelisted-urls">Whitelisted URLs</RouterLink>
       </nav>
     </div>
   </header>

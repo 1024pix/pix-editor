@@ -12,7 +12,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/whitelisted-urls',
       config: {
-        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        // pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        auth: false,
         handler: async function(request, h) {
           const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
           return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls_read));
