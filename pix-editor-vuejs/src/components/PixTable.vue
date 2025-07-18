@@ -28,7 +28,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits('row-click');
+const emits = defineEmits(['row-click']);
 
 const hasOnRowClick = computed(() => {
   return !!getCurrentInstance()?.vnode.props?.onRowClick
@@ -36,7 +36,7 @@ const hasOnRowClick = computed(() => {
 
 function onClick(row, event) {
   event.stopPropagation();
-  if (hasOnRowClick) {
+  if (hasOnRowClick.value) {
     emits('row-click', row);
   }
 }

@@ -36,5 +36,8 @@
       @onDeleteItemClicked={{this.deleteUrl}}
       @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
     />
+    <Generated::WhitelistedUrlsTable
+      @whitelistedUrls={{this.filteredWhitelistedUrls}}
+    />
   </section>
 </main>

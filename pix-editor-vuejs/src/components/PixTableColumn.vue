@@ -66,7 +66,7 @@ const iconLabel = computed(() => {
 });
 
 const ariaSort = computed(() => {
-  if (!sortable) {
+  if (!sortable.value) {
     return undefined;
   }
   if (!props.sortOrder) {
@@ -100,9 +100,11 @@ const ariaSort = computed(() => {
   }">
     <slot name="cell"></slot>
   </th>
-  <td v-else class={{this.typeClass}}>
+  <td v-else :class="{
+    [`pix-table-column--${type}`]: !!type,
+  }">
     <slot name="cell"></slot>
-    <p v-if="!!slots.subcell">
+    <p v-if="!!slots?.subcell">
       <slot name="subcell"></slot>
     </p>
   </td>

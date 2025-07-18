@@ -130,6 +130,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.6.13",
     "countries-list": "^3.1.1",
-    "kitsu-core": "^11.0.1"
+    "kitsu-core": "^11.0.1",
+    "vue": "^3.5.17"
   }
 }
