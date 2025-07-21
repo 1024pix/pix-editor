@@ -1,5 +1,14 @@
 
 
+## v3.214.0 (21/07/2025)
+
+
+### :building_construction: Tech
+- [#1044](https://github.com/1024pix/pix-editor/pull/1044) [TECH] Clarifier la construction des projections de réplication et de release du modèle Area.
+
+### :bug: Correction
+- [#1084](https://github.com/1024pix/pix-editor/pull/1084) [BUGFIX] Lorsque le resultat d'une recherche est long alors une barre de scroll apparait (PIX-18612).
+
 ## v3.213.2 (08/07/2025)
 
 
