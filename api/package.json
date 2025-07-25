@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "engines": {
-    "node": "^22.16.0"
+    "node": "^22.17.1"
   },
   "directories": {
     "doc": "docs",
