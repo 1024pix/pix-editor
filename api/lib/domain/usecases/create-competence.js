@@ -10,7 +10,6 @@ import {
   tubeRepository
 } from '../../infrastructure/repositories/index.js';
 import {
-  competenceTransformer,
   skillTransformer,
   thematicTransformer,
   tubeTransformer
@@ -18,6 +17,7 @@ import {
 import { BadRequestError } from '../../infrastructure/errors.js';
 import { Skill, Thematic, Tube } from '../models/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function createCompetence(competence) {
   const [area, competences] = await Promise.all([
@@ -76,11 +76,7 @@ export async function createCompetence(competence) {
 
   try {
     await Promise.all([
-      updatedRecordNotifier.notify({
-        pixApiClient,
-        model: 'competences',
-        updatedRecord: competenceTransformer.filterCompetenceFields(createdCompetence),
-      }),
+      updatePixApiReleaseCache.onCompetenceCreated(createdCompetence),
       updatedRecordNotifier.notify({
         pixApiClient,
         model: 'thematics',
