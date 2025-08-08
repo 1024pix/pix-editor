@@ -1,12 +1,8 @@
 import { thematicRepository } from '../../infrastructure/repositories/index.js';
-import { thematicTransformer } from '../../infrastructure/transformers/index.js';
-import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import * as pixApiClient from '../../infrastructure/pix-api-client.js';
-import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 import { NotFoundError } from '../errors.js';
+import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
-export async function updateThematic(thematicAirtableId, thematicUpdates, dependencies = { thematicRepository, thematicTransformer, updatedRecordNotifier, pixApiClient }) {
+export async function updateThematic(thematicAirtableId, thematicUpdates, dependencies = { thematicRepository }) {
   const thematic = await dependencies.thematicRepository.getByAirtableId(thematicAirtableId);
 
   if (!thematic) {
@@ -14,19 +10,8 @@ export async function updateThematic(thematicAirtableId, thematicUpdates, depend
   }
 
   thematic.update(thematicUpdates);
-
   const updatedThematic = await dependencies.thematicRepository.update(thematic);
 
-  try {
-    await dependencies.updatedRecordNotifier.notify({
-      model: 'thematics',
-      updatedRecord: dependencies.thematicTransformer.filterThematicFields(updatedThematic),
-      pixApiClient: dependencies.pixApiClient,
-    });
-  } catch (err) {
-    logger.error(err);
-    Sentry.captureException(err);
-  }
-
+  await updatePixApiReleaseCache.onThematicUpdated(updatedThematic);
   return updatedThematic;
 }

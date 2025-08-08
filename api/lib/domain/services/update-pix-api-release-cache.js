@@ -3,6 +3,7 @@ import {
   competenceTransformer,
   createChallengeTransformer,
   frameworkTransformer,
+  thematicTransformer,
   tubeTransformer,
   tutorialTransformer,
 } from '../../infrastructure/transformers/index.js';
@@ -22,6 +23,7 @@ import * as Sentry from '@sentry/node';
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
  * @typedef {import('../../../lib/domain/models').Competence} Competence
  * @typedef {import('../../../lib/domain/models').Framework} Framework
+ * @typedef {import('../../../lib/domain/models').Thematic} Thematic
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
  **/
@@ -133,6 +135,38 @@ async function onCompetenceCreatedOrUpdated(competence) {
         pixApiClient,
         model: 'competences',
         updatedRecord: competenceTransformer.forRelease(competence),
+      });
+    } catch (err) {
+      logger.error(err);
+      Sentry.captureException(err);
+    }
+  }
+}
+
+/**
+ * @param {Thematic} thematic
+ */
+export async function onThematicCreated(thematic) {
+  await onThematicCreatedOrUpdated(thematic);
+}
+
+/**
+ @param {Thematic} thematic
+ */
+export async function onThematicUpdated(thematic) {
+  await onThematicCreatedOrUpdated(thematic);
+}
+
+/**
+ * @param {Thematic} thematic
+ */
+async function onThematicCreatedOrUpdated(thematic) {
+  if (pixApiClient.isPixApiCachePatchingEnabled()) {
+    try {
+      await updatedRecordNotifier.notify({
+        pixApiClient,
+        model: 'thematics',
+        updatedRecord: thematicTransformer.forRelease(thematic),
       });
     } catch (err) {
       logger.error(err);

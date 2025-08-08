@@ -2,48 +2,35 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { updateThematic } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
 describe('Unit | Domain | Use Cases | update-thematic', () => {
 
-  const pixApiClient = Symbol('pixApiClient');
   const updatedThematic = Symbol('updatedThematic');
-  const transformedThematic = Symbol('transformedThematic');
   const thematicUpdates = Symbol('thematicUpdates');
 
-  let thematicRepository, thematic, updateStub, thematicTransformer, updatedRecordNotifier;
+  let thematicRepository, thematic, updateStub;
 
   beforeEach(() => {
+    vi.spyOn(updatePixApiReleaseCache, 'onThematicUpdated');
     thematicRepository = {
       getByAirtableId: vi.fn(),
       update: vi.fn(),
     };
-    thematicTransformer = {
-      filterThematicFields: vi.fn(),
-    };
-    updatedRecordNotifier = {
-      notify: vi.fn(),
-    };
 
     thematic = domainBuilder.buildThematic();
     updateStub = vi.spyOn(thematic, 'update').mockReturnValueOnce();
-
     thematicRepository.getByAirtableId.mockResolvedValueOnce(thematic);
-
     thematicRepository.update.mockResolvedValueOnce(updatedThematic);
-
-    thematicTransformer.filterThematicFields.mockReturnValueOnce(transformedThematic);
   });
 
   it('updates thematic and saves it', async () => {
     // given
-    updatedRecordNotifier.notify.mockResolvedValueOnce();
+    updatePixApiReleaseCache.onThematicUpdated.mockResolvedValueOnce();
 
     // when
     const result = updateThematic('recThematic1', thematicUpdates, {
       thematicRepository,
-      thematicTransformer,
-      updatedRecordNotifier,
-      pixApiClient,
     });
 
     // then
@@ -52,8 +39,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
     expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
     expect(updateStub).toHaveBeenCalledWith(thematicUpdates);
     expect(thematicRepository.update).toHaveBeenCalledWith(thematic);
-    expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(updatedThematic);
-    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic, model: 'thematics', pixApiClient });
+    expect(updatePixApiReleaseCache.onThematicUpdated).toHaveBeenCalledWith(updatedThematic);
   });
 
   describe('when thematic is not found', () => {
@@ -69,30 +55,6 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown thematic id'));
       expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
-    });
-  });
-
-  describe('when record update notify fails', () => {
-    it('does not fail', async () => {
-      // given
-      updatedRecordNotifier.notify.mockRejectedValueOnce(new Error());
-
-      // when
-      const result = updateThematic('recThematic1', thematicUpdates, {
-        thematicRepository,
-        thematicTransformer,
-        updatedRecordNotifier,
-        pixApiClient,
-      });
-
-      // then
-      await expect(result).resolves.toBe(updatedThematic);
-
-      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
-      expect(updateStub).toHaveBeenCalledWith(thematicUpdates);
-      expect(thematicRepository.update).toHaveBeenCalledWith(thematic);
-      expect(thematicTransformer.filterThematicFields).toHaveBeenCalledWith(updatedThematic);
-      expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: transformedThematic, model: 'thematics', pixApiClient });
     });
   });
 });
