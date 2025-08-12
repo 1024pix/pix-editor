@@ -77,6 +77,7 @@ export default class SidebarMain extends Component {
           <i class="chart bar icon"></i>
           Statistiques
         </LinkTo>
+        <LinkTo @route="admin"><i class="shield icon"></i> Administration</LinkTo>
       </div>
       <div class="ui labelled icon menu">
         <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion
