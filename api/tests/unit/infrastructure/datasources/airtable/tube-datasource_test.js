@@ -40,5 +40,22 @@ describe('Unit | Infrastructure | Datasource | Airtable | TubeDatasource', () =>
       // then
       expect(tube).to.deep.equal(expectedTube);
     });
+
+    it('should create a Tube from the AirtableRecord even when Tube has no thematic', () => {
+      // given
+      const expectedTube = domainBuilder.buildTubeDatasourceObject({
+        thematicAirtableId: [],
+      });
+      const airtableTube = airtableBuilder.factory.buildTube({
+        ...expectedTube,
+      });
+      const tubeRecord = new AirtableRecord('Tube', airtableTube.id, airtableTube);
+      tubeRecord.set('Thematique', undefined);
+      // when
+      const tube = tubeDatasource.fromAirTableObject(tubeRecord);
+
+      // then
+      expect(tube).to.deep.equal(expectedTube);
+    });
   });
 });

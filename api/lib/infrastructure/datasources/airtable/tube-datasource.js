@@ -26,7 +26,7 @@ export const tubeDatasource = datasource.extend({
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
       index: airtableRecord.get('Index'),
-      thematicAirtableId: airtableRecord.get('Thematique')[0],
+      thematicAirtableId: airtableRecord.get('Thematique') ? airtableRecord.get('Thematique')[0] : [],
       competenceAirtableId: airtableRecord.get('Competences')[0],
       competenceId: airtableRecord.get('Competences (id persistant)')[0],
       skillAirtableIds: airtableRecord.get('Acquis') ?? [],
