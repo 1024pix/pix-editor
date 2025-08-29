@@ -1,12 +1,9 @@
-import chai from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-chai.use(sinonChai);
-const expect = chai.expect;
+import { describe, expect, it, vi } from 'vitest';
 import _ from 'lodash';
-import { parseData, findAirtableIds, updateRecords, clearDifficultyAndDiscriminant } from './index.js';
 import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
+
+import { parseData, findAirtableIds, updateRecords, clearDifficultyAndDiscriminant } from './index.js';
 
 describe('Populate alpha and delta column', function() {
   describe('#parseData', function() {
@@ -55,8 +52,8 @@ describe('Populate alpha and delta column', function() {
       ];
 
       const base = {
-        select: sinon.stub().returns({
-          all: sinon.stub().resolves(airtableData)
+        select: vi.fn().mockReturnValue({
+          all: vi.fn().mockResolvedValue(airtableData)
         }),
       };
 
@@ -72,7 +69,7 @@ describe('Populate alpha and delta column', function() {
 
       const result = await findAirtableIds(base, data);
 
-      expect(base.select).to.have.been.calledWith({
+      expect(base.select).toHaveBeenCalledWith({
         fields: ['Record ID', 'id persistant'],
         filterByFormula: 'OR(\'recPix1\' = {id persistant},\'recPix2\' = {id persistant})',
       });
@@ -92,25 +89,30 @@ describe('Populate alpha and delta column', function() {
         delta: 0.98765432166556,
       }];
       const base = {
-        update: sinon.stub().yields(),
+        update: vi.fn().mockImplementation((_, cb) => {
+          cb();
+        }),
       };
       await updateRecords(base, data);
-      expect(base.update).to.be.calledWith([
-        {
-          id: 'recAirtableId1',
-          fields: {
-            'Difficulté calculée': '0.654321',
-            'Discrimination calculée': '0.123'
+      expect(base.update).toHaveBeenCalledWith(
+        [
+          {
+            id: 'recAirtableId1',
+            fields: {
+              'Difficulté calculée': '0.654321',
+              'Discrimination calculée': '0.123'
+            }
+          },
+          {
+            id: 'recAirtableId2',
+            fields: {
+              'Difficulté calculée': '0.98765432166556',
+              'Discrimination calculée': '-0.321'
+            }
           }
-        },
-        {
-          id: 'recAirtableId2',
-          fields: {
-            'Difficulté calculée': '0.98765432166556',
-            'Discrimination calculée': '-0.321'
-          }
-        }
-      ]);
+        ],
+        expect.any(Function),
+      );
     });
 
     it('should batch updates with up to 10 records at a time', async function() {
@@ -122,10 +124,12 @@ describe('Populate alpha and delta column', function() {
         };
       });
       const base = {
-        update: sinon.stub().yields(),
+        update: vi.fn().mockImplementation((_, cb) => {
+          cb();
+        }),
       };
       await updateRecords(base, data);
-      expect(base.update).to.have.been.calledTwice;
+      expect(base.update).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -141,17 +145,16 @@ describe('Populate alpha and delta column', function() {
           }
         }));
 
-      const all = sinon.stub().resolves(records);
       const base = {
-        update: sinon.stub(),
-        select: () => ({
-          all
-        })
+        update: vi.fn(),
+        select: vi.fn().mockReturnValue({
+          all: vi.fn().mockResolvedValue(records),
+        }),
       };
 
       const updatedRecords = [];
 
-      base.update.callsFake((records) => {
+      base.update.mockImplementation((records) => {
         expect(records.length).to.be.lessThanOrEqual(10, 'Update should be called with at least 10 records');
         updatedRecords.push(...records);
       });

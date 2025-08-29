@@ -1,10 +1,7 @@
-import chai from 'chai';
-import { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } from './index.js';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
-chai.use(sinonChai);
-const expect = chai.expect;
+
+import { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } from './index.js';
 
 describe('Scripts | Compare Release Integrity', function() {
   describe('#replaceAttachmentsUrlByChecksum', function() {
@@ -18,8 +15,8 @@ describe('Scripts | Compare Release Integrity', function() {
         ],
       };
 
-      const remoteChecksumComputerStub = sinon.stub();
-      remoteChecksumComputerStub.resolves('sha1');
+      const remoteChecksumComputerStub = vi.fn();
+      remoteChecksumComputerStub.mockResolvedValue('sha1');
 
       const challenge = await replaceAttachmentsUrlByChecksum(initialChallenge, remoteChecksumComputerStub);
 
@@ -28,10 +25,10 @@ describe('Scripts | Compare Release Integrity', function() {
         illustrationUrl: 'sha1',
         attachments: ['sha1', 'sha1'],
       });
-      expect(remoteChecksumComputerStub.callCount).to.equal(3);
-      expect(remoteChecksumComputerStub).to.be.calledWith('illustration-url');
-      expect(remoteChecksumComputerStub).to.be.calledWith('attachments-url-1');
-      expect(remoteChecksumComputerStub).to.be.calledWith('attachments-url-2');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledTimes(3);
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('illustration-url');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('attachments-url-1');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('attachments-url-2');
     });
 
     it('should works when there is no attachments', async function() {
@@ -40,8 +37,8 @@ describe('Scripts | Compare Release Integrity', function() {
         illustrationUrl: 'illustration-url',
       };
 
-      const remoteChecksumComputerStub = sinon.stub();
-      remoteChecksumComputerStub.resolves('sha1');
+      const remoteChecksumComputerStub = vi.fn();
+      remoteChecksumComputerStub.mockResolvedValue('sha1');
 
       const challenge = await replaceAttachmentsUrlByChecksum(initialChallenge, remoteChecksumComputerStub);
 
@@ -49,8 +46,8 @@ describe('Scripts | Compare Release Integrity', function() {
         some: 'property',
         illustrationUrl: 'sha1',
       });
-      expect(remoteChecksumComputerStub.callCount).to.equal(1);
-      expect(remoteChecksumComputerStub).to.be.calledWith('illustration-url');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledTimes(1);
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('illustration-url');
     });
 
     it('should works when there is no illustrations', async function() {
@@ -62,8 +59,8 @@ describe('Scripts | Compare Release Integrity', function() {
         ],
       };
 
-      const remoteChecksumComputerStub = sinon.stub();
-      remoteChecksumComputerStub.resolves('sha1');
+      const remoteChecksumComputerStub = vi.fn();
+      remoteChecksumComputerStub.mockResolvedValue('sha1');
 
       const challenge = await replaceAttachmentsUrlByChecksum(initialChallenge, remoteChecksumComputerStub);
 
@@ -71,9 +68,9 @@ describe('Scripts | Compare Release Integrity', function() {
         some: 'property',
         attachments: ['sha1', 'sha1'],
       });
-      expect(remoteChecksumComputerStub.callCount).to.equal(2);
-      expect(remoteChecksumComputerStub).to.be.calledWith('attachments-url-1');
-      expect(remoteChecksumComputerStub).to.be.calledWith('attachments-url-2');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledTimes(2);
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('attachments-url-1');
+      expect(remoteChecksumComputerStub).toHaveBeenCalledWith('attachments-url-2');
     });
   });
 
@@ -84,7 +81,7 @@ describe('Scripts | Compare Release Integrity', function() {
     });
 
     it('should return an empty table when there is no differences', async function() {
-      const remoteChecksumComputer = sinon.stub();
+      const remoteChecksumComputer = vi.fn();
       const productionRelease = {
         content: {
           challenges: [{ id: 1 }]
@@ -112,12 +109,12 @@ describe('Scripts | Compare Release Integrity', function() {
       );
 
       expect(differences).to.deep.equal([]);
-      url1Scope.isDone();
-      url2Scope.isDone();
+      expect(url1Scope.isDone()).toBe(true);
+      expect(url2Scope.isDone()).toBe(true);
     });
 
     it('should return an empty table when there is no differences when challenges are not ordered', async function() {
-      const remoteChecksumComputer = sinon.stub();
+      const remoteChecksumComputer = vi.fn();
       const productionRelease = {
         content: {
           challenges: [
@@ -151,12 +148,12 @@ describe('Scripts | Compare Release Integrity', function() {
       );
 
       expect(differences).to.deep.equal([]);
-      url1Scope.isDone();
-      url2Scope.isDone();
+      expect(url1Scope.isDone()).toBe(true);
+      expect(url2Scope.isDone()).toBe(true);
     });
 
     it('should ignore text with space before new line', async function() {
-      const remoteChecksumComputer = sinon.stub();
+      const remoteChecksumComputer = vi.fn();
       const productionRelease = {
         content: {
           challenges: [{ id: 1, illustrationAlt: 'alternative text . \ntest' }]
@@ -189,9 +186,9 @@ describe('Scripts | Compare Release Integrity', function() {
     });
 
     it('should return the differences', async function() {
-      const remoteChecksumComputer = sinon.stub()
-        .onFirstCall().resolves('sha1')
-        .onSecondCall().resolves('sha2');
+      const remoteChecksumComputer = vi.fn()
+        .mockResolvedValueOnce('sha1')
+        .mockResolvedValueOnce('sha2');
 
       const expectedDifference = 'recCorruptedChallenge';
 
@@ -229,9 +226,9 @@ describe('Scripts | Compare Release Integrity', function() {
     });
 
     it('should return the differences when the number of challenges differ', async function() {
-      const remoteChecksumComputer = sinon.stub()
-        .onFirstCall().resolves('sha1')
-        .onSecondCall().resolves('sha2');
+      const remoteChecksumComputer = vi.fn()
+        .mockResolvedValueOnce('sha1')
+        .mockResolvedValueOnce('sha2');
 
       const expectedDifference = ['2', '4', '5'];
 
@@ -290,7 +287,7 @@ describe('Scripts | Compare Release Integrity', function() {
       const hash = await remoteChecksumComputer('http://example.net/file.jpg');
 
       expect(hash).to.equal('a94a8fe5ccb19ba61c4c0873d391e987982fbbd3');
-      requestCall.isDone();
+      expect(requestCall.isDone()).toBe(true);
     });
 
     it('returns an error when the server returns an error', async function() {
@@ -300,7 +297,7 @@ describe('Scripts | Compare Release Integrity', function() {
       const hash = await remoteChecksumComputer('http://example.net/file.jpg');
 
       expect(hash).to.equal('http://example.net/file.jpg');
-      requestCall.isDone();
+      expect(requestCall.isDone()).toBe(true);
     });
   });
 });
