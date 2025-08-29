@@ -1,9 +1,6 @@
-import chai from 'chai';
+import { describe, expect, it, vi } from 'vitest';
+
 import { checkChallengeAttachments } from './index.js';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-chai.use(sinonChai);
-const expect = chai.expect;
 
 describe('checkChallengeAttachments', function() {
 
@@ -39,7 +36,7 @@ describe('checkChallengeAttachments', function() {
       'id': 'reczu9rZzvVD07Gme'
     };
 
-    const remoteChecksumComputer = sinon.stub().resolves('sha1');
+    const remoteChecksumComputer = vi.fn().mockResolvedValue('sha1');
 
     const attachments = [attachment];
 
@@ -90,9 +87,8 @@ describe('checkChallengeAttachments', function() {
       'type': 'illustration',
     };
 
-    const remoteChecksumComputer = sinon.stub();
-    remoteChecksumComputer.onFirstCall().resolves('checksum')
-      .onSecondCall().resolves('different-checksum');
+    const remoteChecksumComputer = vi.fn();
+    remoteChecksumComputer.mockResolvedValueOnce('checksum').mockResolvedValueOnce('different-checksum');
 
     const differences = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
 
@@ -127,8 +123,8 @@ describe('checkChallengeAttachments', function() {
       'type': 'illustration',
     };
     
-    const remoteChecksumComputer = sinon.stub();
-    remoteChecksumComputer.resolves('checksum');
+    const remoteChecksumComputer = vi.fn();
+    remoteChecksumComputer.mockResolvedValue('checksum');
 
     const differences = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
 
@@ -161,8 +157,8 @@ describe('checkChallengeAttachments', function() {
       'type': 'attachment',
     };
 
-    const remoteChecksumComputer = sinon.stub();
-    remoteChecksumComputer.resolves('checksum');
+    const remoteChecksumComputer = vi.fn();
+    remoteChecksumComputer.mockResolvedValue('checksum');
 
     const differences = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
 
@@ -203,8 +199,8 @@ describe('checkChallengeAttachments', function() {
 
     const attachments = [attachment];
     
-    const remoteChecksumComputer = sinon.stub();
-    remoteChecksumComputer.resolves('checksum');
+    const remoteChecksumComputer = vi.fn();
+    remoteChecksumComputer.mockResolvedValue('checksum');
 
     const differences = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
 

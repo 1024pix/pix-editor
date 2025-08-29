@@ -1,5 +1,7 @@
-import { setHeadersToAttachments } from './index.js';
+import { describe, it } from 'vitest';
 import nock from 'nock';
+
+import { setHeadersToAttachments } from './index.js';
 
 describe('Set headers to attachments', function() {
   it('set header Content-Disposition only to type attachments', async function() {

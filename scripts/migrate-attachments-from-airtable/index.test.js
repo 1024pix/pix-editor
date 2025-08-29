@@ -1,4 +1,4 @@
-import chai from 'chai';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   attachmentUrl,
@@ -6,11 +6,6 @@ import {
   challengesAttachmentsToCsv,
   renameFileToImport,
 } from './index.js';
-
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-chai.use(sinonChai);
-const expect = chai.expect;
 
 describe('Scripts | Migrate attachment from Airtable', function() {
   describe('challengeAttachmentsToCsv', function() {
@@ -287,11 +282,11 @@ describe('Scripts | Migrate attachment from Airtable', function() {
         },
       };
 
-      const stubRenameSync = sinon.stub();
+      const stubRenameSync = vi.fn();
 
       renameFileToImport(challenge, stubRenameSync);
 
-      expect(stubRenameSync).to.be.calledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id_illustration_mailPJ.png');
+      expect(stubRenameSync).toHaveBeenCalledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id_illustration_mailPJ.png');
     });
 
     it('should rename attachment', function() {
@@ -313,11 +308,11 @@ describe('Scripts | Migrate attachment from Airtable', function() {
         },
       };
 
-      const stubRenameSync = sinon.stub();
+      const stubRenameSync = vi.fn();
 
       renameFileToImport(challenge, stubRenameSync);
 
-      expect(stubRenameSync).to.be.calledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id2_attachment_Pix_etoile.odp');
+      expect(stubRenameSync).toHaveBeenCalledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id2_attachment_Pix_etoile.odp');
     });
 
     it('should rename illustration and attachments', function() {
@@ -355,13 +350,13 @@ describe('Scripts | Migrate attachment from Airtable', function() {
         },
       };
 
-      const stubRenameSync = sinon.stub();
+      const stubRenameSync = vi.fn();
 
       renameFileToImport(challenge, stubRenameSync);
 
-      expect(stubRenameSync).to.be.calledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id3_illustration_mailPJ.png');
-      expect(stubRenameSync).to.be.calledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id3_attachment_Pix_etoile.odp');
-      expect(stubRenameSync).to.be.calledWith('attLwY7ni4a6Naboz.pptx', 'some-challenge-id3_attachment_Pix_etoile.pptx');
+      expect(stubRenameSync).toHaveBeenCalledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id3_illustration_mailPJ.png');
+      expect(stubRenameSync).toHaveBeenCalledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id3_attachment_Pix_etoile.odp');
+      expect(stubRenameSync).toHaveBeenCalledWith('attLwY7ni4a6Naboz.pptx', 'some-challenge-id3_attachment_Pix_etoile.pptx');
     });
   });
 

@@ -1,8 +1,4 @@
-import chai from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-chai.use(sinonChai);
-const expect = chai.expect;
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
@@ -37,13 +33,13 @@ describe('Copy skills and set challenges as focusable', function() {
         }),
       ];
       const base = {
-        select: sinon.stub().returns({
-          all: sinon.stub().resolves(airtableData)
+        select: vi.fn().mockReturnValue({
+          all: vi.fn().mockResolvedValue(airtableData)
         }),
       };
       const skill = await findSkill(base, persistentId);
 
-      expect(base.select).to.have.been.calledWith({
+      expect(base.select).toHaveBeenCalledWith({
         fields: USEFUL_SKILL_FIELDS,
         filterByFormula : '{id persistant} = \'1\'',
         maxRecords: 1
@@ -66,14 +62,14 @@ describe('Copy skills and set challenges as focusable', function() {
         new AirtableRecord('Skill', 'recNewSkillId'),
       ];
       const base = {
-        create: sinon.stub().resolves(createdAirtableData),
+        create: vi.fn().mockResolvedValue(createdAirtableData),
       };
       const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
 
       const createdSkill = await duplicateSkill(base, idGenerator, skill);
 
       expect(createdSkill).to.deep.equal(createdAirtableData[0]);
-      expect(base.create).to.have.been.calledWith([{
+      expect(base.create).toHaveBeenCalledWith([{
         fields: {
           'id persistant': 'skillIdPersistantRandom',
           'Version': 3,
@@ -98,14 +94,14 @@ describe('Copy skills and set challenges as focusable', function() {
         }),
       ];
       const base = {
-        select: sinon.stub().returns({
-          all: sinon.stub().resolves(airtableData)
+        select: vi.fn().mockReturnValue({
+          all: vi.fn().mockResolvedValue(airtableData)
         }),
       };
 
       await findChallengesFromASkill(base, skillPersistentId);
 
-      expect(base.select).to.have.been.calledWith({
+      expect(base.select).toHaveBeenCalledWith({
         fields: USEFUL_CHALLENGE_FIELDS,
         filterByFormula : 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), {Statut} = \'validé\'))',
       });
@@ -169,10 +165,10 @@ describe('Copy skills and set challenges as focusable', function() {
         new AirtableRecord('Attachments', 'recNewAttachmentAirtableId2'),
       ];
       const base = {
-        select: sinon.stub().returns({
-          all: sinon.stub().resolves(airtableAttachments)
+        select: vi.fn().mockReturnValue({
+          all: vi.fn().mockResolvedValue(airtableAttachments)
         }),
-        create: sinon.stub().resolves(newAirtableAttachments),
+        create: vi.fn().mockResolvedValue(newAirtableAttachments),
       };
 
       const token = 'TOKEN';
@@ -189,7 +185,7 @@ describe('Copy skills and set challenges as focusable', function() {
 
       const result = await cloneAttachmentsFromAChallenge(base, token, challengePersistantId, { now() { return '123456'; } });
 
-      expect(base.select).to.have.been.calledWith({
+      expect(base.select).toHaveBeenCalledWith({
         fields: [
           'filename',
           'size',
@@ -204,7 +200,7 @@ describe('Copy skills and set challenges as focusable', function() {
       cloneFileCall.done();
       cloneFileCall2.done();
 
-      expect(base.create).to.have.been.calledWith([
+      expect(base.create).toHaveBeenCalledWith([
         {
           fields: {
             filename: 'attachment.pdf',
@@ -244,12 +240,12 @@ describe('Copy skills and set challenges as focusable', function() {
         }),
       ];
       const base = {
-        update: sinon.stub(),
+        update: vi.fn(),
       };
 
       await archiveChallenges(base, challenges);
 
-      expect(base.update).to.have.been.calledWith([
+      expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
           fields: {
@@ -277,12 +273,12 @@ describe('Copy skills and set challenges as focusable', function() {
         },
       });
       const base = {
-        update: sinon.stub(),
+        update: vi.fn(),
       };
 
       await archiveSkill(base, skill);
 
-      expect(base.update).to.have.been.calledWith([
+      expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
           fields: {
@@ -304,12 +300,12 @@ describe('Copy skills and set challenges as focusable', function() {
         },
       });
       const base = {
-        update: sinon.stub(),
+        update: vi.fn(),
       };
 
       await activateSkill(base, skill);
 
-      expect(base.update).to.have.been.calledWith([
+      expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
           fields: {
@@ -324,25 +320,25 @@ describe('Copy skills and set challenges as focusable', function() {
     it('should create the records and return the result', async function() {
       const expectedResult = [Symbol()];
       const base = {
-        create: sinon.stub().resolves(expectedResult),
+        create: vi.fn().mockResolvedValue(expectedResult),
       };
       const records = [1];
 
       const result = await bulkCreate(base, records);
-      expect(base.create).to.have.been.calledWith([1]);
+      expect(base.create).toHaveBeenCalledWith([1]);
       expect(result).to.deep.equal(expectedResult);
     });
 
     it('should create the records by batch of 10 and return the result', async function() {
       const expectedResult = [Symbol()];
       const base = {
-        create: sinon.stub().resolves(expectedResult),
+        create: vi.fn().mockResolvedValue(expectedResult),
       };
       const records = _.times(11).map((i) => i);
 
       const result = await bulkCreate(base, records);
-      expect(base.create).to.have.been.calledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-      expect(base.create).to.have.been.calledWith([10]);
+      expect(base.create).toHaveBeenCalledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(base.create).toHaveBeenCalledWith([10]);
       expect(result).to.deep.equal(expectedResult.concat(expectedResult));
     });
   });
@@ -351,36 +347,36 @@ describe('Copy skills and set challenges as focusable', function() {
     it('should update the records and return the result', async function() {
       const expectedResult = [{ id: 'rec123' }];
       const base = {
-        update: sinon.stub().resolves(expectedResult),
+        update: vi.fn().mockResolvedValue(expectedResult),
       };
       const records = [{ id: 1 }];
 
       const result = await bulkUpdate(base, records);
-      expect(base.update).to.have.been.calledWith([{ id: 1 }]);
+      expect(base.update).toHaveBeenCalledWith([{ id: 1 }]);
       expect(result).to.deep.equal(expectedResult);
     });
 
     it('should remove duplicate records before update', async function() {
       const expectedResult = [{ id: 'rec123' }];
       const base = {
-        update: sinon.stub().resolves(expectedResult),
+        update: vi.fn().mockResolvedValue(expectedResult),
       };
       const records = [{ id: 1 }, { id: 1 }];
 
       const result = await bulkUpdate(base, records);
-      expect(base.update).to.have.been.calledWith([{ id: 1 }]);
+      expect(base.update).toHaveBeenCalledWith([{ id: 1 }]);
       expect(result).to.deep.equal(expectedResult);
     });
 
     it('should update the records by batch of 10 and return the result', async function() {
       const expectedResult = [Symbol()];
       const base = {
-        update: sinon.stub().resolves(expectedResult),
+        update: vi.fn().mockResolvedValue(expectedResult),
       };
       const records = _.times(11).map((i) => { return { id: i }; });
 
       const result = await bulkUpdate(base, records);
-      expect(base.update).to.have.been.calledWith([
+      expect(base.update).toHaveBeenCalledWith([
         { id: 0 },
         { id: 1 },
         { id: 2 },
@@ -392,7 +388,7 @@ describe('Copy skills and set challenges as focusable', function() {
         { id: 8 },
         { id: 9 },
       ]);
-      expect(base.update).to.have.been.calledWith([{ id: 10 }]);
+      expect(base.update).toHaveBeenCalledWith([{ id: 10 }]);
       expect(result).to.deep.equal(expectedResult.concat(expectedResult));
     });
   });

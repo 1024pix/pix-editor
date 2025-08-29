@@ -1,12 +1,9 @@
-import chai from 'chai';
-import { shouldBeMigrated, cloneFile, updateRecord } from './index.js';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-chai.use(sinonChai);
-const expect = chai.expect;
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
+
+import { shouldBeMigrated, cloneFile, updateRecord } from './index.js';
 
 describe('Migrate attachments in subfolder', function() {
 
@@ -96,17 +93,22 @@ describe('Migrate attachments in subfolder', function() {
   describe('#updateRecord', function() {
     it('updates url in attachment record', async function() {
       const base = {
-        update: sinon.stub().yields(),
+        update: vi.fn().mockImplementation((_, cb) => {
+          cb();
+        }),
       };
       await updateRecord(base, 'rec123', 'https://dl.pix.fr/6789/toto.ods');
-      expect(base.update).to.be.calledWith([
-        {
-          id: 'rec123',
-          fields: {
-            url: 'https://dl.pix.fr/6789/toto.ods'
+      expect(base.update).toHaveBeenCalledWith(
+        [
+          {
+            id: 'rec123',
+            fields: {
+              url: 'https://dl.pix.fr/6789/toto.ods'
+            }
           }
-        }
-      ]);
+        ],
+        expect.any(Function),
+      );
     });
   });
 });
