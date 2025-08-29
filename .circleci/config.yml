@@ -53,20 +53,6 @@ executors:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: redis:7.2.9-alpine
     resource_class: medium
-  playwright-redis-postgres-docker:
-    parameters:
-      playwright-version:
-        # renovate datasource=npm depName=@playwright/test
-        default: 1.53.1
-        type: string
-    docker:
-      - image: mcr.microsoft.com/playwright:v<<parameters.playwright-version>>-noble
-      - image: postgres:15.13-alpine
-        environment:
-          POSTGRES_USER: circleci
-          POSTGRES_HOST_AUTH_METHOD: trust
-      - image: redis:7.2.9-alpine@sha256:3ce533b2b057f74b235d1d8697ae08b1b6ff0a5e16827ea6a377b6365693c7ed
-    resource_class: medium
 
 jobs:
   pix-editor-test:
@@ -153,7 +139,7 @@ jobs:
             npm test
 
   e2e_test:
-    executor: playwright-redis-postgres-docker
+    executor: node-browsers-redis-postgres-docker
     working_directory: ~/pix-editor/pix-editor
     steps:
       - attach_workspace:
@@ -166,7 +152,7 @@ jobs:
       - restore_cache:
           name: Restore npm cache
           keys:
-            - v8-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
+            - v9-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
 
       - run:
           name: Install Pix Editor
@@ -180,21 +166,26 @@ jobs:
           command: npm start
 
       - run:
+          name: Install Browsers
+          command: npx playwright install --with-deps
+
+      - run:
           name: Install Pix Editor API
           working_directory: ~/pix-editor/api
           command: npm ci
 
       - save_cache:
           name: Save npm cache
-          key: v8-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
+          key: v9-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
           paths:
             - ~/.npm
+            - ~/.cache/ms-playwright
 
       - run:
-          name: Install and start Pix Editor API
+          name: Start Pix Editor API
           working_directory: ~/pix-editor/api
           environment:
-            DATABASE_URL: 'postgres://circleci@localhost:5432/circleci'
+            DATABASE_URL: "postgres://circleci@localhost:5432/circleci"
           background: true
           command: npm run db:reset && npm start
 
