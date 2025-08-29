@@ -4,7 +4,6 @@ import { domainBuilder } from '../../../test-helper.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import * as transformers from '../../../../lib/infrastructure/transformers/index.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 
 describe('Unit | Domain | Usecases | clone-skill', () => {
   let attachmentRepository, skillRepository, challengeRepository, tubeRepository, generateNewIdFnc, updatedRecordNotifier, transformChallenge, forRelease;
@@ -247,9 +246,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
 
       beforeEach(() => {
         logError = vi.spyOn(logger, 'error');
-        vi.mock('@sentry/node', () => ({
-          captureException: vi.fn(),
-        }));
       });
 
       it('should still resolve', async () => {
@@ -275,7 +271,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
         expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: skillForRelease, model: 'skills', pixApiClient });
         expect(logError).toHaveBeenCalledWith(error);
-        expect(Sentry.captureException).toHaveBeenCalledWith(error);
       });
     });
   });

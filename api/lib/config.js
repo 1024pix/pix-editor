@@ -85,15 +85,6 @@ export let storage = {
   user: process.env.STORAGE_USER,
 };
 
-export const sentry = {
-  enabled: isFeatureEnabled(process.env.SENTRY_ENABLED),
-  dsn: process.env.SENTRY_DSN,
-  environment: (process.env.SENTRY_ENVIRONMENT || 'development'),
-  maxBreadcrumbs: _getNumber(process.env.SENTRY_MAX_BREADCRUMBS, 100),
-  debug: isFeatureEnabled(process.env.SENTRY_DEBUG),
-  maxValueLength: 1000,
-};
-
 export const scheduledJobs = {
   redisUrl: process.env.REDIS_URL,
   createReleaseTime: process.env.CREATE_RELEASE_TIME,

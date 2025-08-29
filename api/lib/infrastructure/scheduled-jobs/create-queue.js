@@ -1,5 +1,4 @@
 import { logger } from '../logger.js';
-import * as Sentry from '@sentry/node';
 import Queue from 'bull';
 import * as config from '../../config.js';
 
@@ -7,7 +6,6 @@ export const queues = [];
 
 const queueError = (queueName, err, ...messages) => {
   logger.error(err, queueName, ...messages);
-  Sentry.captureException(err);
 };
 const queueMessage = (queueName, message) => {
   logger.info(queueName + ': ' + message);

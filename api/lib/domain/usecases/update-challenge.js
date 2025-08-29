@@ -5,7 +5,6 @@ import { createChallengeTransformer } from '../../infrastructure/transformers/in
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 
 export async function updateChallenge(challenge, dependencies = { challengeRepository, attachmentDatasource }) {
   if (challenge.locales.includes('fr') || challenge.locales.includes('fr-fr')) {
@@ -29,7 +28,6 @@ export async function updateChallenge(challenge, dependencies = { challengeRepos
     });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
   return updatedChallenge;
 }

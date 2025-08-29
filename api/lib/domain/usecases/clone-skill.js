@@ -1,6 +1,5 @@
 import { createChallengeTransformer, skillTransformer, } from '../../infrastructure/transformers/index.js';
 import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 import { CloneSkillError } from '../errors.js';
 
 // TODO LIST
@@ -108,6 +107,5 @@ async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedA
     }
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   };
 }
