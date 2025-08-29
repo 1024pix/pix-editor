@@ -53,7 +53,7 @@
     "@hapi/hapi": "^21.3.0",
     "@hapi/inert": "^7.0.0",
     "@hapi/vision": "^7.0.0",
-    "@sentry/node": "^9.0.0",
+    "@sentry/node": "^10.0.0",
     "adminjs": "^7.8.13",
     "airtable": "^0.12.2",
     "axios": "^1.0.0",
