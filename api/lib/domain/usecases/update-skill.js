@@ -10,7 +10,6 @@ export async function updateSkill(updateCommand, dependencies) {
     await dependencies.updatedRecordNotifier.notify({ updatedRecord: skillForRelease , model: 'skills', pixApiClient: dependencies.pixApiClient });
   } catch (err) {
     dependencies.logger.error(err);
-    dependencies.Sentry.captureException(err);
   }
 
   return updatedSkill;

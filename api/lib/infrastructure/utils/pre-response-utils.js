@@ -3,7 +3,6 @@ import { DomainError } from '../../domain/errors.js';
 import { InfrastructureError } from '../errors.js';
 import * as config from '../../config.js';
 import { logger } from '../logger.js';
-import * as Sentry from '@sentry/node';
 
 export function catchDomainAndInfrastructureErrors(request, h) {
   const response = request.response;
@@ -19,7 +18,6 @@ export function catchDomainAndInfrastructureErrors(request, h) {
     }
     const err = response?.message ?? response;
     logger.error(err);
-    Sentry.captureException(err);
   }
 
   return h.continue;

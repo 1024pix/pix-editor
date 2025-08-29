@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node';
 import Boom from '@hapi/boom';
 
 import {
@@ -46,7 +45,6 @@ export async function clone(request, h) {
     return h.response().redirect(`/api/skills/${newSkill.airtableId}`);
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
     return h.response(err).code(400);
   }
 }
@@ -121,7 +119,6 @@ export async function update(req, h) {
     updatedRecordNotifier,
     pixApiClient,
     logger,
-    Sentry,
     normalizeNonBreakingSpaceFnc: normalizeNonBreakingSpace,
   });
 

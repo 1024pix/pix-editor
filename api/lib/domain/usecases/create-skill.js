@@ -2,7 +2,6 @@ import { NotFoundError } from '../errors.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 
 export async function createSkill(skill, dependencies = {
   skillRepository,
@@ -25,7 +24,6 @@ export async function createSkill(skill, dependencies = {
     await dependencies.updatedRecordNotifier.notify({ updatedRecord: skillForRelease , model: 'skills', pixApiClient: dependencies.pixApiClient });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
   return createdSkill;
 }

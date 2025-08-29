@@ -16,7 +16,6 @@ import {
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { child } from '../../infrastructure/logger.js';
-import * as Sentry from '@sentry/node';
 
 /**
  * @typedef {import('../../../lib/domain/models').Area} Area
@@ -71,7 +70,6 @@ async function onAttachmentCreatedOrDeleted(attachment) {
     });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
 }
 
@@ -88,7 +86,6 @@ export async function onFrameworkCreated(framework) {
       });
     } catch (err) {
       logger.error(err);
-      Sentry.captureException(err);
     }
   }
 }
@@ -106,7 +103,6 @@ export async function onAreaCreated(area) {
       });
     } catch (err) {
       logger.error(err);
-      Sentry.captureException(err);
     }
   }
 }
@@ -138,7 +134,6 @@ async function onCompetenceCreatedOrUpdated(competence) {
       });
     } catch (err) {
       logger.error(err);
-      Sentry.captureException(err);
     }
   }
 }
@@ -170,7 +165,6 @@ async function onThematicCreatedOrUpdated(thematic) {
       });
     } catch (err) {
       logger.error(err);
-      Sentry.captureException(err);
     }
   }
 }
@@ -203,7 +197,6 @@ async function onTutorialCreatedOrUpdated(tutorial) {
       });
     } catch (err) {
       logger.error(err);
-      Sentry.captureException(err);
     }
   }
 }
@@ -222,7 +215,6 @@ export async function onTubeCreated(tube, thematicId) {
     });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
 }
 
@@ -245,6 +237,5 @@ export async function onTubeUpdated(tube) {
     });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
 }

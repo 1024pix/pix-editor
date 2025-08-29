@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
 import { challengeRepository } from '../../infrastructure/repositories/index.js';
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
@@ -30,7 +29,6 @@ async function _refreshCache({ challenge }) {
     await updatedRecordNotifier.notify({ updatedRecord: newChallenge, model, pixApiClient });
   } catch (err) {
     logger.error(err);
-    Sentry.captureException(err);
   }
 }
 
