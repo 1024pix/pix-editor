@@ -102,6 +102,6 @@
     "parse-multipart-data": "^1.5.0",
     "split2": "^4.1.0",
     "vitest": "^3.0.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   }
 }
