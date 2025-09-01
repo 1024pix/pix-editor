@@ -5,7 +5,7 @@ describe('Unit | Utils | URL Utils', function() {
   describe('#findUrlsInMarkdown', function() {
     it('should return URLs in markdown text', function() {
       // given
-      const markdownText = 'instructions [link](https://example.net/) further instructions [https://other_example.net?mode=a&lang=fr](https://other_example.net?mode=a&lang=fr) <a href="https://from_link_example.net?mode=a&lang=en">ici</a>';
+      const markdownText = 'instructions [link](https://example.net/) further instructions [https://other_example.net?mode=a&lang=fr](https://other_example.net?mode=a&lang=fr) <a href="https://from_link_example.net?mode=a&lang=en">ici</a> « https://thirdexample.com/ »';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
@@ -14,7 +14,8 @@ describe('Unit | Utils | URL Utils', function() {
       expect(urls).toStrictEqual([
         'https://example.net/',
         'https://other_example.net?mode=a&lang=fr',
-        'https://from_link_example.net?mode=a&lang=en'
+        'https://from_link_example.net?mode=a&lang=en',
+        'https://thirdexample.com/',
       ]);
     });
 
