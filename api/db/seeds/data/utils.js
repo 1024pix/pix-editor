@@ -21,6 +21,7 @@ export async function saveInAirtable({ tableName, data, logger, airtableClient }
     progression = progression + chunk.length;
     logProgression(progression, data.length);
   }
+  process.stdout.cursorTo(0);
   logger.info('Done !');
   return records;
 }
