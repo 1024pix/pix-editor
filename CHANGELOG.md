@@ -1,5 +1,33 @@
 
 
+## v3.215.0 (02/09/2025)
+
+
+### :building_construction: Tech
+- [#1106](https://github.com/1024pix/pix-editor/pull/1106) [TECH] Migration des tests des scripts en vitest.
+- [#1087](https://github.com/1024pix/pix-editor/pull/1087) [TECH] Clarifier la construction des projections de réplication et de release du modèle Thematic.
+- [#1085](https://github.com/1024pix/pix-editor/pull/1085) [TECH] Clarifier la construction des projections de réplication et de release du modèle Competence.
+
+### :arrow_up: Montée de version
+- [#1108](https://github.com/1024pix/pix-editor/pull/1108) [BUMP] Update dependency @1024pix/pix-ui to ^55.25.3 (pix-editor).
+- [#1107](https://github.com/1024pix/pix-editor/pull/1107) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.35 (pix-editor).
+- [#1096](https://github.com/1024pix/pix-editor/pull/1096) [BUMP] Update dependency googleapis to v157 (api).
+- [#1103](https://github.com/1024pix/pix-editor/pull/1103) [BUMP] Supprimer Sentry dans l’API.
+- [#1104](https://github.com/1024pix/pix-editor/pull/1104) [BUMP] Update dependency tough-cookie to v6 (api).
+- [#1105](https://github.com/1024pix/pix-editor/pull/1105) [BUMP] Update dependency yargs to v18 (api).
+- [#1098](https://github.com/1024pix/pix-editor/pull/1098) [BUMP] Update dependency fast-csv to v5.0.5 (api).
+- [#1099](https://github.com/1024pix/pix-editor/pull/1099) [BUMP] Update dependency @playwright/test to v1.55.0.
+- [#1101](https://github.com/1024pix/pix-editor/pull/1101) [BUMP] Update dependency nyc to v17 (api).
+- [#1102](https://github.com/1024pix/pix-editor/pull/1102) [BUMP] Update dependency p-limit to v7 (scripts).
+- [#1100](https://github.com/1024pix/pix-editor/pull/1100) [BUMP] Update dependency npm-run-all2 to v8 (pix-editor).
+- [#1097](https://github.com/1024pix/pix-editor/pull/1097) [BUMP] Update dependency joi to v18 (api).
+- [#1095](https://github.com/1024pix/pix-editor/pull/1095) [BUMP] Update dependency dotenv to v17 (api).
+- [#1091](https://github.com/1024pix/pix-editor/pull/1091) [BUMP] Update dependency browser-tools to v2.3.1 (.circleci).
+- [#1093](https://github.com/1024pix/pix-editor/pull/1093) [BUMP] Update actions/checkout action to v5 (workflows).
+- [#1092](https://github.com/1024pix/pix-editor/pull/1092) [BUMP] Update Node.js to v22.18.0.
+- [#1090](https://github.com/1024pix/pix-editor/pull/1090) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.8 (pix-editor).
+- [#1086](https://github.com/1024pix/pix-editor/pull/1086) [BUMP] Update dependency form-data to v4.0.4 [SECURITY].
+
 ## v3.214.0 (21/07/2025)
 
 
