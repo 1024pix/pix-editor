@@ -47,7 +47,7 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
         },
       });
 
-      await expect(knex.select('*').from('frameworks')).resolves.toStrictEqual([
+      await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
         {
           id,
           name,
