@@ -24,5 +24,8 @@ export async function create(framework) {
 }
 
 function toDomain(frameworkDto) {
-  return new Framework(frameworkDto);
+  return new Framework({
+    ...frameworkDto,
+    areaIds: frameworkDto.areaAirtableIds,
+  });
 }

@@ -31,21 +31,25 @@ describe('Acceptance | Route | frameworks', () => {
           id: 'framework1',
           name: 'Pix',
           areaIds: ['area1', 'area2'],
+          areaAirtableIds: ['recArea1', 'recArea2'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework3',
           name: 'Poux',
           areaIds: ['area8', 'area7', 'area6'],
+          areaAirtableIds: ['recArea8', 'recArea7', 'recArea6'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework2',
           name: 'Paix',
           areaIds: ['area4', 'area3', 'area5'],
+          areaAirtableIds: ['recArea4', 'recArea3', 'recArea5'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework4',
           name: 'Prix',
           areaIds: null,
+          areaAirtableIds: null,
         })),
       ];
 
@@ -84,8 +88,8 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area1', type: 'areas' },
-                  { id: 'area2', type: 'areas' },
+                  { id: 'recArea1', type: 'areas' },
+                  { id: 'recArea2', type: 'areas' },
                 ],
               },
             },
@@ -99,9 +103,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area8', type: 'areas' },
-                  { id: 'area7', type: 'areas' },
-                  { id: 'area6', type: 'areas' },
+                  { id: 'recArea8', type: 'areas' },
+                  { id: 'recArea7', type: 'areas' },
+                  { id: 'recArea6', type: 'areas' },
                 ],
               },
             },
@@ -115,9 +119,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area4', type: 'areas' },
-                  { id: 'area3', type: 'areas' },
-                  { id: 'area5', type: 'areas' },
+                  { id: 'recArea4', type: 'areas' },
+                  { id: 'recArea3', type: 'areas' },
+                  { id: 'recArea5', type: 'areas' },
                 ],
               },
             },
@@ -202,6 +206,7 @@ describe('Acceptance | Route | frameworks', () => {
         id: 'framework4',
         name: 'Prix',
         areaIds: null,
+        areaAirtableIds: null,
       }));
 
       const airtableFrameworksScope = nock('https://api.airtable.com')
