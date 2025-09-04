@@ -9,7 +9,8 @@ import axios from 'axios';
 const GENERIC_URL_REGEX_IN_TEXT = new RegExp(urlRegex({ strict: true, parens: true, returnString: true }), 'i');
 
 export function findUrlsInMarkdown(value) {
-  const safeValue = value || '';
+  let safeValue = value ?? '';
+  safeValue = safeValue.replace(/\u00a0/g, ' ');
   const converter = new showdown.Converter();
   const html = converter.makeHtml(safeValue);
   return findUrlsInText(html);
