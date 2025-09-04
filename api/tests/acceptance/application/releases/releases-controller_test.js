@@ -254,12 +254,15 @@ async function mockCurrentContent() {
       files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
     })],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
+    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
     tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
+
+  databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
+  databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -664,12 +667,15 @@ async function mockContentForRelease() {
       }),
     ],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
+    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
     tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
+
+  databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
+  databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',

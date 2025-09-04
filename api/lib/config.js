@@ -145,6 +145,10 @@ export const airtableSeedsConfig = {
   locales: _getStringArray(process.env.AIRTABLE_SEEDS_LOCALES, ['fr', 'en']),
 };
 
+export const migrationFromAirtable = {
+  throwOnPostgresDifference: false,
+};
+
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';
@@ -189,7 +193,6 @@ if (process.env.NODE_ENV === 'test') {
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.projectId = 'MY_PHRASE_PROJECT_ID';
   phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID' }];
-}
 
-// amandeNoix3
-// amandeCajou1
+  migrationFromAirtable.throwOnPostgresDifference = true;
+}

@@ -407,9 +407,14 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
 }
 
 function _mockRichAirtableContent() {
+  databaseBuilder.factory.buildFramework({
+    id: 'frameworkA',
+    name: 'FrameworkA',
+  });
   const airtableFrameworkA = airtableBuilder.factory.buildFramework({
     id: 'frameworkA',
     name: 'FrameworkA',
+    areaIds: ['area1', 'area2'],
   });
   const area1 = {
     id: 'area1',
@@ -420,6 +425,7 @@ function _mockRichAirtableContent() {
     color: Area.COLORS.JAFFA,
     frameworkId: 'frameworkA',
   };
+  databaseBuilder.factory.buildArea(area1);
   const airtableArea1 = airtableBuilder.factory.buildArea(area1);
   const area2 = {
     id: 'area2',
@@ -430,6 +436,7 @@ function _mockRichAirtableContent() {
     color: Area.COLORS.EMERALD,
     frameworkId: 'frameworkA',
   };
+  databaseBuilder.factory.buildArea(area2);
   const airtableArea2 = airtableBuilder.factory.buildArea(area2);
   const competence11 = {
     id: 'competence11',
