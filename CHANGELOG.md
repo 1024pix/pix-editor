@@ -1,5 +1,22 @@
 
 
+## v3.216.0 (05/09/2025)
+
+
+### :bug: Correction
+- [#1110](https://github.com/1024pix/pix-editor/pull/1110) [BUGFIX] Erreur à l'interprétation d'une URL entourée de guillemets avec espaces insécables (PIX-18420).
+
+### :arrow_up: Montée de version
+- [#1119](https://github.com/1024pix/pix-editor/pull/1119) [BUMP] Update dependency @1024pix/pix-ui to ^55.26.9 (pix-editor).
+- [#1118](https://github.com/1024pix/pix-editor/pull/1118) [BUMP] Update dependency @1024pix/stylelint-config to ~5.1.37 (pix-editor).
+- [#1117](https://github.com/1024pix/pix-editor/pull/1117) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.10 (pix-editor).
+- [#1116](https://github.com/1024pix/pix-editor/pull/1116) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.9 (pix-editor).
+- [#1115](https://github.com/1024pix/pix-editor/pull/1115) [BUMP] Update dependency googleapis to v159 (api).
+- [#1114](https://github.com/1024pix/pix-editor/pull/1114) [BUMP] Update dependency globals to v16 (scripts).
+- [#1113](https://github.com/1024pix/pix-editor/pull/1113) [BUMP] Update dependency globals to v16 (pix-editor).
+- [#1112](https://github.com/1024pix/pix-editor/pull/1112) [BUMP] Update dependency nock to v14 (scripts).
+- [#1109](https://github.com/1024pix/pix-editor/pull/1109) [BUMP] Update dependency @sentry/ember to v10 (pix-editor).
+
 ## v3.215.0 (02/09/2025)
 
 
