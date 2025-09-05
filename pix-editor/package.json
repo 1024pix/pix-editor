@@ -93,7 +93,7 @@
     "eslint-plugin-n": "^17.16.2",
     "eslint-plugin-qunit": "^8.1.2",
     "file-saver": "2.0.5",
-    "globals": "^15.9.0",
+    "globals": "^16.0.0",
     "http-proxy": "^1.18.1",
     "js-crypto-random": "^1.0.4",
     "js-yaml": "^4.1.0",
