@@ -64,7 +64,7 @@
     "dotenv": "^17.0.0",
     "fast-csv": "^5.0.5",
     "file-saver": "^2.0.5",
-    "googleapis": "^157.0.0",
+    "googleapis": "^158.0.0",
     "hapi-pino": "^8.4.0",
     "joi": "^18.0.0",
     "js-crypto-random": "^1.0.4",
