@@ -44,6 +44,18 @@ export async function searchByTagTitles(tagTitles) {
   return datasourceTutorials.map(toDomain);
 }
 
+export async function getMany(ids) {
+  const datasourceTutorials = await tutorialDatasource.filter({ filter: { ids } });
+  return datasourceTutorials.map(toDomain);
+}
+
+async function _delete(ids) {
+  const airtableIds = Object.entries(await tutorialDatasource.getAirtableIdsByIds(ids)).map(([, airtableId]) => airtableId);
+  await tutorialDatasource.delete(airtableIds);
+}
+
+export { _delete as delete };
+
 function toDomain(datasourceTutorial) {
   return new Tutorial(datasourceTutorial);
 }
