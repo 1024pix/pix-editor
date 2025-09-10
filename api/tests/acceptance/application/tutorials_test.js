@@ -5,7 +5,7 @@ import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '.
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { Tutorial } from '../../../lib/domain/models/index.js';
-import { tubeDatasource, tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as config from '../../../lib/config.js';
 
 describe('Application | Route | Tutorials', () => {
@@ -1050,7 +1050,7 @@ describe('Application | Route | Tutorials', () => {
             .query({
               filterByFormula: 'OR(RECORD_ID() = "tutorialId1", RECORD_ID() = "tutorialId2")',
               fields: { '': tutorialDatasource.usedFields },
-              sort: [{ field: tubeDatasource.sortField, direction: 'asc' }]
+              sort: [{ field: tutorialDatasource.sortField, direction: 'asc' }]
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
             .reply(200, {
