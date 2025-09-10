@@ -1,5 +1,18 @@
 
 
+## v3.217.0 (10/09/2025)
+
+
+### :rocket: Amélioration
+- [#1126](https://github.com/1024pix/pix-editor/pull/1126) [FEATURE] Script de suppression de tutoriels (PIX-18830).
+
+### :arrow_up: Montée de version
+- [#1124](https://github.com/1024pix/pix-editor/pull/1124) [BUMP] Update dependency @1024pix/pix-ui to ^55.26.11 (pix-editor).
+- [#1123](https://github.com/1024pix/pix-editor/pull/1123) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.11 (pix-editor).
+- [#1122](https://github.com/1024pix/pix-editor/pull/1122) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.12 (pix-editor).
+- [#1121](https://github.com/1024pix/pix-editor/pull/1121) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.11 (pix-editor).
+- [#1120](https://github.com/1024pix/pix-editor/pull/1120) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.10 (pix-editor).
+
 ## v3.216.0 (05/09/2025)
 
 
