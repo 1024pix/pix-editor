@@ -22,33 +22,8 @@ export function createQueue(queueName) {
   queue.on('paused', () => queueMessage(queueName, 'The queue has been paused'));
   queue.on('resumed', () => queueMessage(queueName, 'The queue has been resumed'));
   queue.on('cleaned', () => queueMessage(queueName, 'The queue has been cleaned'));
-  queue.on('drained', async function() {
-    queueMessage(queueName, 'The queue has been drained');
-    await cleanQueue(queues.find((queue) => queue.name === queueName));
-  });
+  queue.on('drained', () => queueMessage(queueName, 'The queue has been drained'));
   queue.on('removed', () => queueMessage(queueName, 'A job has been removed'));
   queues.push(queue);
   return queue;
-}
-
-async function cleanQueue(queue) {
-  if (!queue.childPool) {
-    logger.info(`No childPool to clean up for queue '${queue.name}'`);
-    return;
-  }
-
-  const freeProcesses = queue.childPool?.getAllFree();
-  if (!freeProcesses || freeProcesses.length === 0) {
-    logger.info(`No free process to clean up in childPool for queue '${queue.name}'`);
-    return;
-  }
-
-  logger.info(`About to kill ${freeProcesses.length} free Bull processes to free memory in queue '${queue.name}'...`);
-  for (const freeProcess of freeProcesses) {
-    try {
-      await queue.childPool.kill(freeProcess, 'SIGTERM');
-    } catch (error) {
-      logger.error(`Error while killing free bull process in queue '${queue.name}'`, error);
-    }
-  }
 }
