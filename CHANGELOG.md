@@ -1,5 +1,11 @@
 
 
+## v3.217.1 (12/09/2025)
+
+
+### :building_construction: Tech
+- [#1128](https://github.com/1024pix/pix-editor/pull/1128) [TECH] Revert: Nettoyage des jobs Bulls.
+
 ## v3.217.0 (10/09/2025)
 
 
