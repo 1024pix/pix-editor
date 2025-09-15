@@ -1,5 +1,11 @@
 
 
+## v3.217.2 (15/09/2025)
+
+
+### :building_construction: Tech
+- [#1132](https://github.com/1024pix/pix-editor/pull/1132) [TECH] Corriger les problèmes de mémoires de bull.
+
 ## v3.217.1 (12/09/2025)
 
 
