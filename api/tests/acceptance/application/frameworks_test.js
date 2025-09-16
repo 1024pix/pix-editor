@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { frameworkDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as config from '../../../lib/config.js';
+
+const TABLE_NAME = 'frameworks';
 
 describe('Acceptance | Route | frameworks', () => {
   let editorUser, adminUser, originalPixApiUrlValue;
@@ -140,6 +142,10 @@ describe('Acceptance | Route | frameworks', () => {
   });
 
   describe('POST /frameworks', () => {
+    beforeEach(async () => {
+      await knex.delete().from(TABLE_NAME);
+    });
+
     describe('when user is NOT admin', () => {
       it('should respond with status 403', async () => {
         // given
@@ -244,6 +250,14 @@ describe('Acceptance | Route | frameworks', () => {
         },
       });
       expect(airtableFrameworksScope.isDone()).toBe(true);
+      await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
+        {
+          id: 'framework4',
+          name: 'Prix',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
     });
   });
 });

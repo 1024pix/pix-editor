@@ -10,7 +10,7 @@ import { buildChallenge, persistChallenges } from './challenges.js';
 export async function buildPix1D({ airtableClient, databaseBuilder, logger, locales, indexFramework }) {
   logger.info('About to create whole framework Pix 1D...');
   const pix1DFrameworkItem = buildFramework({ name: 'Pix 1D' });
-  await persistFrameworks({ items: [pix1DFrameworkItem], airtableClient, logger });
+  await persistFrameworks({ items: [pix1DFrameworkItem], airtableClient, databaseBuilder, logger });
 
   const areaItem1 = buildArea({ indexFramework, indexArea: 0, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
   const areaItem2 = buildArea({ indexFramework, indexArea: 1, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
