@@ -73,7 +73,7 @@ export async function upsertRecords(tableName, records, fieldsToMergeOn) {
 export async function deleteRecords(tableName, recordIds) {
   logger.info({ tableName }, 'Deleting records in Airtable');
   for (const chunk of chunks(recordIds, 10)) {
-    return _airtableClient().table(tableName).destroy(chunk);
+    await _airtableClient().table(tableName).destroy(chunk);
   }
 }
 
