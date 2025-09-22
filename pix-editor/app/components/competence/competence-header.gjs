@@ -18,28 +18,40 @@ export default class CompetenceHeader extends Component {
   },
   ];
 
-  languageOptions = [{
-    label: 'Anglais',
-    value: 'en',
-  }, {
-    label: 'Espagnol',
-    value: 'es',
-  }, {
-    label: 'Francophone',
-    value: 'fr',
-  }, {
-    label: 'Franco Français',
-    value: 'fr-fr',
-  }, {
-    label: 'Italie',
-    value: 'it',
-  }, {
-    label: 'Portugais',
-    value: 'pt',
-  }, {
-    label: 'Néerlandais',
-    value: 'nl',
-  }];
+  languageOptions = [
+    {
+      label: 'Anglais',
+      value: 'en',
+    },
+    {
+      label: 'Espagnol',
+      value: 'es',
+    },
+    {
+      label: 'Espagnol (Amérique latine)',
+      value: 'es-419',
+    },
+    {
+      label: 'Francophone',
+      value: 'fr',
+    },
+    {
+      label: 'Franco Français',
+      value: 'fr-fr',
+    },
+    {
+      label: 'Italie',
+      value: 'it',
+    },
+    {
+      label: 'Portugais',
+      value: 'pt',
+    },
+    {
+      label: 'Néerlandais',
+      value: 'nl',
+    },
+  ];
 
   get liteClass() {
     return this.config.lite ? ' lite ' : '';
