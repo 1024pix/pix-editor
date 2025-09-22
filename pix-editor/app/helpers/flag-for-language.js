@@ -5,6 +5,7 @@ const flagsForLanguages = {
   'fr-fr': '🇫🇷',
   en: '🇬🇧',
   es: '🇪🇸',
+  'es-419': '🌎',
   nl: '🇳🇱',
 };
 

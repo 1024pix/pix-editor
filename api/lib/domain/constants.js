@@ -7,6 +7,7 @@ export const LOCALE = {
   PORTUGUESE_SPOKEN: 'pt',
   SPANISH_SPOKEN: 'es',
   DUTCH_SPOKEN: 'nl',
+  URUGUAYAN_SPOKEN: 'es-419',
 };
 
 export const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
@@ -18,6 +19,7 @@ export const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
   [LOCALE.ITALIAN_SPOKEN]: 'Italie',
   [LOCALE.DUTCH_SPOKEN]: 'Néerlandais',
   [LOCALE.PORTUGUESE_SPOKEN]: 'Portugais',
+  [LOCALE.URUGUAYAN_SPOKEN]: 'Espagnol (Amérique latine)',
 });
 
 export const TUTORIAL_LOCALE_TO_LANGUAGE_MAP = Object.freeze({

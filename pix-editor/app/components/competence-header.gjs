@@ -57,6 +57,10 @@ export default class CompetenceHeader extends Component {
       value: 'es',
     },
     {
+      label: 'Espagnol (Amérique latine)',
+      value: 'es-419',
+    },
+    {
       label: 'Néerlandais',
       value: 'nl',
     },
