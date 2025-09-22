@@ -1,5 +1,22 @@
 
 
+## v3.218.0 (22/09/2025)
+
+
+### :rocket: Amélioration
+- [#1135](https://github.com/1024pix/pix-editor/pull/1135) [FEATURE] Ajout de la locale Espagnol d'Amérique latine (PIX-19575).
+
+### :building_construction: Tech
+- [#1127](https://github.com/1024pix/pix-editor/pull/1127) [TECH] Écrire les frameworks dans la base postgres (PIX-19507).
+
+### :bug: Correction
+- [#1134](https://github.com/1024pix/pix-editor/pull/1134) [BUGFIX] Script de suppression de tutos: ne supprime que les 10 1ers ids (PIX-19619).
+
+### :arrow_up: Montée de version
+- [#1125](https://github.com/1024pix/pix-editor/pull/1125) [BUMP] Update Node.js to v22.19.0.
+- [#1129](https://github.com/1024pix/pix-editor/pull/1129) [BUMP] Update dependency axios to v1.12.0 [SECURITY].
+- [#1130](https://github.com/1024pix/pix-editor/pull/1130) [BUMP] Update dependency axios to v1.12.0 [SECURITY].
+
 ## v3.217.2 (15/09/2025)
 
 
