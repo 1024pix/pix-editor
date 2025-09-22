@@ -12,6 +12,7 @@ module('Unit | Helpers | convert language as flag', function() {
     { expected: 'de', language: 'de' },
     { expected: 'pt', language: 'pt' },
     { expected: 'es', language: 'es' },
+    { expected: 'es', language: 'es-419' },
   ].forEach((item) => {
     test(`it should return ${item.expected} if language is ${item.language}`, function(assert) {
       // when

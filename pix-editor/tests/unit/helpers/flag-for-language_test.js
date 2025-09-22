@@ -26,6 +26,14 @@ module('Unit | Helpers | flag for language', function() {
     assert.strictEqual(result, '🇪🇸');
   });
 
+  test('it should return the expected flag emoji for language "es-419"', function(assert) {
+    // when
+    const result = flagForLanguage(['es-419']);
+
+    // then
+    assert.strictEqual(result, '🌎');
+  });
+
   test('it should return the expected flag emoji for language "nl"', function(assert) {
     // when
     const result = flagForLanguage(['nl']);
