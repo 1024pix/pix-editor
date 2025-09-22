@@ -196,4 +196,4 @@ function isSupportedLocale(s) {
   return SUPPORTED_LOCALES.includes(s);
 }
 
-const SUPPORTED_LOCALES = ['en', 'es', 'fr', 'fr-BE', 'fr-FR', 'nl-BE', 'nl'];
+const SUPPORTED_LOCALES = ['en', 'es', 'es-419', 'fr', 'fr-BE', 'fr-FR', 'nl-BE', 'nl'];
