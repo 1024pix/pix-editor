@@ -249,7 +249,7 @@ function addPrimaryLocalizedChallenge(challengeData, databaseBuilder) {
 }
 
 function addTranslationFor(challengeData, locale, status, databaseBuilder, shouldAddAttachment, typeForAttachment, attachments) {
-  const localizedChallengeId = `${challengeData.id}${locale.toUpperCase()}`;
+  const localizedChallengeId = `${challengeData.id}-${locale}`;
   if (shouldAddAttachment) {
     attachments.push(buildAttachment({ challengeId: challengeData.id, localizedChallengeId, type: typeForAttachment, databaseBuilder, locale }));
   }
