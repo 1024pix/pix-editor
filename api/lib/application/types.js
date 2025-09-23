@@ -35,7 +35,7 @@ export function competenceRelationship({ allow = [] } = {}) {
 }
 
 export function locale() {
-  return Joi.string().pattern(/^[a-z]{2}(-[a-z]{2})?$/);
+  return Joi.string().min(2);
 }
 
 export function localizedChallengeId() {

@@ -825,8 +825,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges/:id/preview', () => {
     const challengeId = 'challenge123';
-    const localizedChallengeId = challengeId + '_nl';
-    const locale = 'nl';
+    const localizedChallengeId = challengeId + '_es-419';
+    const locale = 'es-419';
     let airtableChallengeScope;
     let airtableAttachmentScope;
     let attachment;
@@ -851,37 +851,37 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
         locale,
-        value: 'instruction for nl',
+        value: 'instruction for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.alternativeInstruction`,
         locale,
-        value: 'alternative instruction for nl',
+        value: 'alternative instruction for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.solution`,
         locale,
-        value: 'solution for nl',
+        value: 'solution for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.solutionToDisplay`,
         locale,
-        value: 'solution to display for nl',
+        value: 'solution to display for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.proposals`,
         locale,
-        value: 'proposals for nl',
+        value: 'proposals for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.embedTitle`,
         locale,
-        value: 'embed title for nl',
+        value: 'embed title for es',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.illustrationAlt`,
         locale,
-        value: 'illustration alt for nl',
+        value: 'illustration alt for es',
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -925,22 +925,22 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const apiCacheScope = nock('https://api.test.pix.fr')
         .patch(`/api/cache/challenges/${localizedChallengeId}`,
           {
-            id: 'challenge123_nl',
+            id: 'challenge123_es-419',
             alpha: null,
-            alternativeInstruction: 'alternative instruction for nl',
+            alternativeInstruction: 'alternative instruction for es',
             autoReply: false,
             competenceId: null,
             delta: null,
             embedUrl: null,
-            embedTitle: 'embed title for nl',
+            embedTitle: 'embed title for es',
             format: Challenge.FORMATS.MOTS,
-            illustrationAlt: 'illustration alt for nl',
+            illustrationAlt: 'illustration alt for es',
             illustrationUrl: attachment.fields.url,
-            instruction: 'instruction for nl',
-            locales: ['nl'],
-            proposals: 'proposals for nl',
-            solution: 'solution for nl',
-            solutionToDisplay: 'solution to display for nl',
+            instruction: 'instruction for es',
+            locales: ['es-419'],
+            proposals: 'proposals for es',
+            solution: 'solution for es',
+            solutionToDisplay: 'solution to display for es',
             skillId: null,
             t1Status: false,
             t2Status: false,

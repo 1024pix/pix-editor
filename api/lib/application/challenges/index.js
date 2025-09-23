@@ -75,7 +75,7 @@ export async function register(server) {
             id: challengeIdType,
           }),
           query: Joi.object({
-            locale: Joi.string().min(2).max(5)
+            locale: Joi.string().min(2)
           }),
         },
         handler: async function(request, h) {
@@ -95,7 +95,7 @@ export async function register(server) {
         validate: {
           params: Joi.object({
             id: challengeIdType,
-            locale: Joi.string().min(2).max(5),
+            locale: Joi.string().min(2),
             areaCode: Joi.number(),
           }),
         },
