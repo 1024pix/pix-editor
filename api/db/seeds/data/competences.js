@@ -30,21 +30,18 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
     name: competenceName,
     description: competenceDescription,
   };
+  databaseBuilder.factory.buildCompetence(competenceItem);
   locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `competence.${competenceItem.id}.name`,
-        value: `${competenceItem.name} ${locale}`,
-      }
-    );
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `competence.${competenceItem.id}.description`,
-        value: `${competenceItem.description} ${locale}`,
-      }
-    );
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `competence.${competenceItem.id}.name`,
+      value: `${competenceItem.name} ${locale}`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `competence.${competenceItem.id}.description`,
+      value: `${competenceItem.description} ${locale}`,
+    });
   });
   return competenceItem;
 }
