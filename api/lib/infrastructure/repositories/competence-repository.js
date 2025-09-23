@@ -5,8 +5,10 @@ import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'competence';
+const TABLE_NAME = 'competences';
 
 export async function list() {
   const [datasourceCompetences, translations] = await Promise.all([
@@ -52,6 +54,12 @@ export async function create(competence) {
   const translations = competenceTranslations.extractFromDomainObject(competence);
 
   const createdCompetenceDto = await competenceDatasource.create(competence);
+
+  await knex.insert({
+    id: competence.id,
+    index: competence.index,
+    areaId: createdCompetenceDto.areaId,
+  }).into(TABLE_NAME);
 
   await translationRepository.save({ translations });
 
