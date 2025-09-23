@@ -1,22 +1,36 @@
 import _ from 'lodash';
+
 import { areaDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as areaTranslations from '../translations/area.js';
 import { Area } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
+const TABLE_NAME = 'areas';
 const model = 'area';
 
+/**
+ * @param {Area} area
+ */
 export async function create(area) {
-  area.id = idGenerator.generateNewId('area');
+  return knex.transaction(async (trx) => {
+    area.id = idGenerator.generateNewId('area');
 
-  const translations = areaTranslations.extractFromDomainObject(area);
+    const translations = areaTranslations.extractFromDomainObject(area);
 
-  const createdAreaDto = await areaDatasource.create(area);
+    const [createdAreaDto] = await Promise.all([
+      areaDatasource.create(area),
+      trx.insert({
+        id: area.id,
+        code: area.code,
+        frameworkId: area.frameworkId,
+      }).into(TABLE_NAME),
+      translationRepository.save({ translations, transaction: trx }),
+    ]);
 
-  await translationRepository.save({ translations });
-
-  return toDomain(createdAreaDto, translations);
+    return toDomain(createdAreaDto, translations);
+  });
 }
 
 export async function list() {

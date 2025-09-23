@@ -216,6 +216,10 @@ describe('Acceptance | Route | areas', () => {
   });
 
   describe('POST /areas', () => {
+    afterEach(async () => {
+      await knex.delete().from('areas');
+    });
+
     describe('when user is NOT admin', () => {
       it('should respond with status 403', async () => {
         // given
@@ -292,6 +296,16 @@ describe('Acceptance | Route | areas', () => {
         competenceIds: null,
         color: null,
       }));
+
+      databaseBuilder.factory.buildFramework({
+        id: 'framework1',
+        name: 'Ref 1',
+      });
+      databaseBuilder.factory.buildFramework({
+        id: 'framework2',
+        name: 'Ref 2',
+      });
+      await databaseBuilder.commit();
 
       const airtableAreas = [
         airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({

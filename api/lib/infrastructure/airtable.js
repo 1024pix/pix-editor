@@ -101,6 +101,9 @@ async function getBaseName() {
 }
 
 export async function canSeedOrEmptyAirtableBase() {
+  if (config.airtableSeedsConfig.force) {
+    return true;
+  }
   let airtableBaseName;
   try {
     airtableBaseName = await getBaseName();

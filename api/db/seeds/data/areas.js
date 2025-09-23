@@ -19,22 +19,29 @@ export async function buildAreasFromConfig({ airtableClient, databaseBuilder, lo
 }
 
 export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBuilder, locales }) {
-  const areaId = `areaF${indexFramework}A${indexArea}`;
-  const areaTitle = `${areaId} title`;
-  const areaItem = {
-    id: areaId,
-    code: `${indexArea + 1}`,
-    frameworkId: frameworkItem.airtableId,
-    title: areaTitle,
-  };
-  locales.forEach((locale) => databaseBuilder.factory.buildTranslation(
-    {
+  const id = `areaF${indexFramework}A${indexArea}`;
+  const code = `${indexArea + 1}`;
+  const title = `${id} title`;
+
+  databaseBuilder.factory.buildArea({
+    id: id,
+    code,
+    frameworkId: frameworkItem.id,
+  });
+
+  locales.forEach((locale) => {
+    databaseBuilder.factory.buildTranslation({
       locale,
-      key: `area.${areaItem.id}.title`,
-      value: `${areaItem.title} ${locale}`,
-    }
-  ));
-  return areaItem;
+      key: `area.${id}.title`,
+      value: `${title} ${locale}`,
+    });
+  });
+
+  return {
+    id,
+    code,
+    frameworkId: frameworkItem.airtableId,
+  };
 }
 
 export async function persistAreas({ items, airtableClient, logger }) {

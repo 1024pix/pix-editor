@@ -2,7 +2,7 @@ export function staticCoursesBuilder(databaseBuilder) {
   const staticCourseId1 = databaseBuilder.factory.buildStaticCourse({
     name: 'Static Course 1',
     description: 'Static Course 1 description',
-    challengeIds: 'challenge1NQqfx9mYKUQEO,challengeTYFrFy5EGYEet,challenge1rSPsnisQ8ft4W',
+    challengeIds: 'challengeF0A0C0Th0Tu0S0ActCh0,challengeF0A0C0Th0Tu0S0ActCh1,challengeF0A0C0Th0Tu0S0ActCh2',
     createdAt: new Date(),
     isActive: true,
   }).id;
@@ -10,7 +10,7 @@ export function staticCoursesBuilder(databaseBuilder) {
   databaseBuilder.factory.buildStaticCourse({
     name: 'Static Course 2',
     description: 'Static Course 2 description',
-    challengeIds: 'challenge1NQqfx9mYKUQEO',
+    challengeIds: 'challengeF0A0C0Th0Tu0S0ActCh0',
     createdAt: new Date('2021-01-01'),
     isActive: false,
     deactivationReason: 'Les épreuves sont trop faciles',
@@ -19,7 +19,7 @@ export function staticCoursesBuilder(databaseBuilder) {
   const staticCourseId3 = databaseBuilder.factory.buildStaticCourse({
     name: 'Static Course 3 PLEIN DE TAGS',
     description: 'Static Course 3 description',
-    challengeIds: 'challenge1NQqfx9mYKUQEO,challengeTYFrFy5EGYEet',
+    challengeIds: 'challengeF0A0C0Th0Tu0S0ActCh0,challengeF0A0C0Th0Tu0S0ActCh1',
     createdAt: new Date('2022-01-01'),
     isActive: true,
     deactivationReason: 'Les épreuves sont trop cools',
