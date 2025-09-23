@@ -1,5 +1,14 @@
 
 
+## v3.218.1 (23/09/2025)
+
+
+### :building_construction: Tech
+- [#1133](https://github.com/1024pix/pix-editor/pull/1133) [TECH] Écrire les domaines dans la base postgres (PIX-19536).
+
+### :bug: Correction
+- [#1136](https://github.com/1024pix/pix-editor/pull/1136) [BUGFIX]  Pouvoir avoir une locale en query params qui dépasse 5 caractères (PIX-19652).
+
 ## v3.218.0 (22/09/2025)
 
 
