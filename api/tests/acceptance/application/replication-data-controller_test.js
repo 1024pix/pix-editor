@@ -73,7 +73,7 @@ async function mockCurrentContent() {
   const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework());
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
 
-  const area = domainBuilder.buildArea();
+  const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id });
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
@@ -255,16 +255,16 @@ async function mockCurrentContent() {
     },
   ];
 
-  const airtableSkill = buildSkill(expectedCurrentContent.skills[0]);
+  databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
+  databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
+
   airtableBuilder.mockLists({
-    frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
+    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     areas: [buildArea(expectedCurrentContent.areas[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
-    skills: [{
-      ...airtableSkill,
-    }],
+    skills: [buildSkill(expectedCurrentContent.skills[0])],
     challenges: [buildChallenge({
       ...expectedChallenge,
       files: [

@@ -11,13 +11,15 @@ export const frameworkDatasource = datasource.extend({
   usedFields: [
     'Nom',
     'Domaines (identifiants)',
+    'Domaines (identifiants) (id persistant)',
   ],
 
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.id,
       name: airtableRecord.get('Nom'),
-      areaIds: airtableRecord.get('Domaines (identifiants)'),
+      areaAirtableIds: airtableRecord.get('Domaines (identifiants)'),
+      areaIds: airtableRecord.get('Domaines (identifiants) (id persistant)'),
     };
   },
 
@@ -29,4 +31,3 @@ export const frameworkDatasource = datasource.extend({
     };
   },
 });
-

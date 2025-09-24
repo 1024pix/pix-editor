@@ -26,26 +26,44 @@ describe('Acceptance | Route | frameworks', () => {
     let airtableFrameworksScope;
 
     beforeEach(async () => {
+      databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix', createdAt: '20250905T07:20:00Z' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildFramework({ id: 'framework2', name: 'Paix', createdAt: '20250905T07:22:00Z' });
+      databaseBuilder.factory.buildArea({ id: 'area3', code: '3', frameworkId: 'framework2' });
+      databaseBuilder.factory.buildArea({ id: 'area4', code: '4', frameworkId: 'framework2' });
+      databaseBuilder.factory.buildArea({ id: 'area5', code: '5', frameworkId: 'framework2' });
+      databaseBuilder.factory.buildFramework({ id: 'framework3', name: 'Poux', createdAt: '20250905T07:21:00Z' });
+      databaseBuilder.factory.buildArea({ id: 'area6', code: '6', frameworkId: 'framework3' });
+      databaseBuilder.factory.buildArea({ id: 'area7', code: '7', frameworkId: 'framework3' });
+      databaseBuilder.factory.buildArea({ id: 'area8', code: '8', frameworkId: 'framework3' });
+      databaseBuilder.factory.buildFramework({ id: 'framework4', name: 'Prix', createdAt: '20250905T07:23:00Z' });
+      await databaseBuilder.commit();
+
       const airtableFrameworks = [
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework1',
           name: 'Pix',
           areaIds: ['area1', 'area2'],
+          areaAirtableIds: ['recArea1', 'recArea2'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework3',
           name: 'Poux',
-          areaIds: ['area8', 'area7', 'area6'],
+          areaIds: ['area6', 'area7', 'area8'],
+          areaAirtableIds: ['recArea6', 'recArea7', 'recArea8'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework2',
           name: 'Paix',
-          areaIds: ['area4', 'area3', 'area5'],
+          areaIds: ['area3', 'area4', 'area5'],
+          areaAirtableIds: ['recArea3', 'recArea4', 'recArea5'],
         })),
         airtableBuilder.factory.buildFramework(domainBuilder.buildFrameworkDatasourceObject({
           id: 'framework4',
           name: 'Prix',
           areaIds: null,
+          areaAirtableIds: null,
         })),
       ];
 
@@ -84,8 +102,8 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area1', type: 'areas' },
-                  { id: 'area2', type: 'areas' },
+                  { id: 'recArea1', type: 'areas' },
+                  { id: 'recArea2', type: 'areas' },
                 ],
               },
             },
@@ -99,9 +117,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area8', type: 'areas' },
-                  { id: 'area7', type: 'areas' },
-                  { id: 'area6', type: 'areas' },
+                  { id: 'recArea6', type: 'areas' },
+                  { id: 'recArea7', type: 'areas' },
+                  { id: 'recArea8', type: 'areas' },
                 ],
               },
             },
@@ -115,9 +133,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'area4', type: 'areas' },
-                  { id: 'area3', type: 'areas' },
-                  { id: 'area5', type: 'areas' },
+                  { id: 'recArea3', type: 'areas' },
+                  { id: 'recArea4', type: 'areas' },
+                  { id: 'recArea5', type: 'areas' },
                 ],
               },
             },
@@ -202,6 +220,7 @@ describe('Acceptance | Route | frameworks', () => {
         id: 'framework4',
         name: 'Prix',
         areaIds: null,
+        areaAirtableIds: null,
       }));
 
       const airtableFrameworksScope = nock('https://api.airtable.com')
