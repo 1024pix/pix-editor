@@ -23,7 +23,9 @@ export function compareDtosLists(airtableDtos, pgDtos, compareFunc) {
     }
     return;
   }
-  airtableDtos.forEach((airtableDto, i) => compareDtos(airtableDto, pgDtos[i], compareFunc));
+  const sortedAirtableDtos = airtableDtos.toSorted(byId);
+  const sortedPgDtos = pgDtos.toSorted(byId);
+  sortedAirtableDtos.forEach((airtableDto, i) => compareDtos(airtableDto, sortedPgDtos[i], compareFunc));
 }
 
 export function compareDtos(airtableDto, pgDto, compareFunc) {
@@ -43,4 +45,8 @@ export function areArrayEquals(array1, array2) {
   if (array1.length !== array2.length) return false;
   const sortedArray2 = array2.toSorted();
   return array1.toSorted().every((value, i) => value === sortedArray2[i]);
+}
+
+function byId(dto1, dto2) {
+  return dto1.id < dto2.id ? -1 : +1;
 }

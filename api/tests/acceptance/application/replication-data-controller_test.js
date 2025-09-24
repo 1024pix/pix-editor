@@ -73,7 +73,7 @@ async function mockCurrentContent() {
   const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework());
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
 
-  const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id });
+  const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id, competenceIds: ['recCompetence1'] });
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
@@ -85,7 +85,7 @@ async function mockCurrentContent() {
     description_i18n: {
       fr: 'Description française',
       en: 'Description anglaise',
-    }
+    },
   }));
   expectedCurrentContent.competences = [expectedCompetence];
 
@@ -257,6 +257,7 @@ async function mockCurrentContent() {
 
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
+  databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
 
   airtableBuilder.mockLists({
     frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],

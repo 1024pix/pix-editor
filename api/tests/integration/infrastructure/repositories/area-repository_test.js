@@ -115,6 +115,14 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
         }),
       ]).activate().nockScope;
 
+      databaseBuilder.factory.buildFramework({ id: 'frameworkId1', name: 'Fmk' });
+      databaseBuilder.factory.buildArea({ id: 'areaId1', code: '1', color: Area.COLORS.BUTTERFLY_BUSH, frameworkId: 'frameworkId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId11', index: '1.1', areaId: 'areaId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId12', index: '1.2', areaId: 'areaId1' });
+      databaseBuilder.factory.buildArea({ id: 'areaId2', code: '2', color: Area.COLORS.WILD_STRAWBERRY, frameworkId: 'frameworkId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId21', index: '2.1', areaId: 'areaId2' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId22', index: '2.2', areaId: 'areaId2' });
+
       databaseBuilder.factory.buildTranslation({
         key: 'area.areaId1.title',
         locale: 'fr',

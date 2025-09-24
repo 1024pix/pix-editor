@@ -79,6 +79,22 @@ describe('Acceptance | Route | areas', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableAreas });
 
+      databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence4', index: '2.2', areaId: 'area2' });
+      databaseBuilder.factory.buildArea({ id: 'area3', code: '3', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence5', index: '3.1', areaId: 'area3' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence6', index: '3.2', areaId: 'area3' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence7', index: '3.3', areaId: 'area3' });
+      databaseBuilder.factory.buildFramework({ id: 'framework2', name: 'Fmk 2' });
+      databaseBuilder.factory.buildArea({ id: 'area4', code: '1', frameworkId: 'framework2' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence8', index: '1.1', areaId: 'area4' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence9', index: '1.2', areaId: 'area4' });
+
       databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'Premier domaine' });
       databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'en', value: 'First domain' });
       databaseBuilder.factory.buildTranslation({ key: 'area.area2.title', locale: 'fr', value: 'Deuxième domaine' });
@@ -301,30 +317,51 @@ describe('Acceptance | Route | areas', () => {
         id: 'framework1',
         name: 'Ref 1',
       });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'framework1',
+      });
+      databaseBuilder.factory.buildArea({
+        id: 'area2',
+        code: '2',
+        frameworkId: 'framework1',
+      });
       databaseBuilder.factory.buildFramework({
         id: 'framework2',
         name: 'Ref 2',
+      });
+      databaseBuilder.factory.buildArea({
+        id: 'area4',
+        code: '1',
+        frameworkId: 'framework2',
       });
       await databaseBuilder.commit();
 
       const airtableAreas = [
         airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
           id: 'area1',
-          airtableId: 'recArea2',
+          airtableId: 'recArea1',
           code: '1',
+          color: null,
           frameworkId: 'framework1',
+          competenceIds: null,
         })),
         airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
           id: 'area4',
           airtableId: 'recArea4',
           code: '1',
+          color: null,
           frameworkId: 'framework2',
+          competenceIds: null,
         })),
         airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
           id: 'area2',
           airtableId: 'recArea2',
           code: '2',
+          color: null,
           frameworkId: 'framework1',
+          competenceIds: null,
         })),
       ];
 

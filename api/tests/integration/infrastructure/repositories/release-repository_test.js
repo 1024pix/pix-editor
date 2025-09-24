@@ -446,6 +446,7 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic111', 'thematic112'],
     origin: 'FrameworkA',
   };
+  databaseBuilder.factory.buildCompetence(competence11);
   const airtableCompetence11 = airtableBuilder.factory.buildCompetence(competence11);
   const competence12 = {
     id: 'competence12',
@@ -455,6 +456,7 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic121'],
     origin: 'FrameworkA',
   };
+  databaseBuilder.factory.buildCompetence(competence12);
   const airtableCompetence12 = airtableBuilder.factory.buildCompetence(competence12);
   const competence21 = {
     id: 'competence21',
@@ -464,6 +466,7 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic211'],
     origin: 'FrameworkA',
   };
+  databaseBuilder.factory.buildCompetence(competence21);
   const airtableCompetence21 = airtableBuilder.factory.buildCompetence(competence21);
   const thematic111 = {
     id: 'thematic111',
