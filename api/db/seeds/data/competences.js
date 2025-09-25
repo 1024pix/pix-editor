@@ -55,3 +55,19 @@ export async function persistCompetences({ items, airtableClient, logger }) {
     item.origin = record.fields['Origine2'];
   });
 }
+
+export async function copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableCompetences = await  airtableClient.table('Competences').select({ fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'] }).all();
+
+  logger.info(`Copying ${airtableCompetences.length} competences from airtable...`);
+
+  airtableCompetences.forEach((record) => {
+    databaseBuilder.factory.buildCompetence({
+      id: record.get('id persistant'),
+      index: record.get('Sous-domaine'),
+      areaId: record.get('Domaine (id persistant)')[0],
+      createdAt: record._rawJson.createdTime,
+      updatedAt: new Date(),
+    });
+  });
+}

@@ -41,3 +41,18 @@ export async function persistFrameworks({ items, airtableClient, databaseBuilder
     item.id = airtableId;
   });
 }
+
+export async function copyFrameworksFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableFrameworks = await airtableClient.table('Referentiel').select({ fields: ['Nom'] }).all();
+
+  logger.info(`Copying ${airtableFrameworks.length} frameworks from airtable...`);
+
+  airtableFrameworks.forEach((record) => {
+    databaseBuilder.factory.buildFramework({
+      id: record.id,
+      name: record.get('Nom'),
+      createdAt: record._rawJson.createdTime,
+      updatedAt: new Date(),
+    });
+  });
+}

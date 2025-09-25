@@ -51,3 +51,20 @@ export async function persistAreas({ items, airtableClient, logger }) {
     item.airtableId = records.shift().id;
   });
 }
+
+export async function copyAreasFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableAreas = await airtableClient.table('Domaines').select({ fields: ['id persistant', 'Code', 'Couleur', 'Referentiel'] }).all();
+
+  logger.info(`Copying ${airtableAreas.length} areas from airtable...`);
+
+  airtableAreas.forEach((record) => {
+    databaseBuilder.factory.buildArea({
+      id: record.get('id persistant'),
+      code: record.get('Code'),
+      color: record.get('Couleur'),
+      frameworkId: record.get('Referentiel')[0],
+      createdAt: record._rawJson.createdTime,
+      updatedAt: new Date(),
+    });
+  });
+}
