@@ -7,6 +7,7 @@ import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'thematic';
+const TABLE_NAME = 'thematics';
 
 export async function list() {
   const [datasourceThematics, translations] = await Promise.all([
@@ -54,17 +55,31 @@ export async function listByCompetenceAirtableId(competenceAirtableId) {
 }
 
 export async function create(thematic) {
-  thematic.id = idGenerator.generateNewId('thematic');
-  const createdThematicDTO = await thematicDatasource.create(thematic);
-  const translations = thematicTranslations.extractFromDomainObject(thematic);
-  await translationRepository.save({ translations });
-  return toDomain(createdThematicDTO, translations);
+  return knex.transaction(async (trx) => {
+    thematic.id = idGenerator.generateNewId('thematic');
+
+    const createdThematicDTO = await thematicDatasource.create(thematic);
+
+    const translations = thematicTranslations.extractFromDomainObject(thematic);
+
+    await Promise.all([
+      trx.insert({
+        id: thematic.id,
+        index: thematic.index,
+        competenceId: createdThematicDTO.competenceId,
+      }).into(TABLE_NAME),
+      translationRepository.save({ translations, transaction: trx })
+    ]);
+
+    return toDomain(createdThematicDTO, translations);
+  });
 }
 
 export async function update(thematic) {
   return knex.transaction(async (transaction) => {
     const updatedThematicDto = await thematicDatasource.update(thematic);
     const translations = thematicTranslations.extractFromDomainObject(thematic);
+    await transaction(TABLE_NAME).update({ index: thematic.index, updatedAt: transaction.fn.now() }).where('id', thematic.id);
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${thematicTranslations.prefix}${thematic.id}.`,
       locales: ['fr', 'en'],
