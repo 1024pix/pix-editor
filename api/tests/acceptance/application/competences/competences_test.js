@@ -430,6 +430,9 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, airtableArea);
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+
       const airtableCompetences = [
         airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
           id: 'competence3',
@@ -593,9 +596,12 @@ describe('Acceptance | Route | competences', () => {
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);
+
+      await databaseBuilder.commit();
     });
 
     afterEach(async () => {
+      await knex('competences').truncate();
       await knex('translations').truncate();
     });
 
@@ -733,6 +739,10 @@ describe('Acceptance | Route | competences', () => {
       expect(generateNewId).toHaveBeenCalledWith('thematic');
       expect(generateNewId).toHaveBeenCalledWith('tube');
       expect(generateNewId).toHaveBeenCalledWith('skill');
+
+      await expect(knex.select('*').from('competences')).resolves.toStrictEqual([
+        { id: 'competence4', index: '2.2', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
 
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' },

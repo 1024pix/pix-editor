@@ -1,6 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import Airtable from 'airtable';
+
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper';
 import * as competenceRepository from '../../../../lib/infrastructure/repositories/competence-repository.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import * as airtable from '../../../../lib/infrastructure/airtable.js';
+import { Competence } from '../../../../lib/domain/models/index.js';
+
+const TABLE_NAME = 'competences';
+const AIRTABLE_NAME = 'Competences';
 
 describe('Integration | Repository | competence-repository', () => {
 
@@ -231,6 +239,109 @@ describe('Integration | Repository | competence-repository', () => {
       // then
       expect(competence).toStrictEqual(null);
       airtableScope.done();
+    });
+  });
+
+  describe('#create', () => {
+    afterEach(async () => {
+      await knex.delete().from(TABLE_NAME);
+    });
+
+    it('inserts competence in airtable and postgres w/ its translations', async () => {
+      // given
+      const airtableId = 'rec123Abc';
+      const id = 'competence123Abc';
+      const index = '2';
+      const nameFr = 'Nouvelle compétence';
+      const nameEn = 'New competence';
+      const descriptionFr = 'Description nouvelle compétence';
+      const descriptionEn = 'New competence description';
+      const frameworkId = 'recFmk123';
+      const frameworkName = 'Un référentiel';
+      const areaId = 'recArea123';
+      const areaAirtableId = 'rec456Def';
+
+      const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(id);
+
+      const createRecord = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
+        new Airtable.Record(AIRTABLE_NAME, airtableId, {
+          fields: {
+            'id persistant': id,
+            'Sous-domaine': index,
+            Domaine: [areaAirtableId],
+            'Domaine (id persistant)': [areaId],
+            Origine2: [frameworkName],
+          },
+        }),
+      );
+
+      databaseBuilder.factory.buildFramework({
+        id: frameworkId,
+        name: frameworkName,
+      });
+      databaseBuilder.factory.buildArea({
+        id: areaId,
+        code: '1',
+        frameworkId,
+      });
+      await databaseBuilder.commit();
+
+      const competence = new Competence({
+        index,
+        name_i18n: {
+          fr: nameFr,
+          en: nameEn,
+        },
+        description_i18n: {
+          fr: descriptionFr,
+          en: descriptionEn,
+        },
+        areaAirtableId,
+      });
+
+      // when
+      const createdCompetence = await competenceRepository.create(competence);
+
+      // then
+      expect(createdCompetence).toStrictEqual(new Competence({
+        airtableId,
+        id,
+        index,
+        name_i18n: {
+          fr: nameFr,
+          en: nameEn,
+        },
+        description_i18n: {
+          fr: descriptionFr,
+          en: descriptionEn,
+        },
+        areaId,
+        areaAirtableId,
+        origin: frameworkName,
+        skillIds: [],
+        thematicAirtableIds: [],
+        thematicIds: [],
+        tubeAirtableIds: [],
+      }));
+
+      expect(generateNewId).toHaveBeenCalledExactlyOnceWith('competence');
+      expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+        fields: {
+          'id persistant': id,
+          'Sous-domaine': index,
+          Domaine: [areaAirtableId],
+        },
+      });
+
+      await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
+        {
+          id,
+          index,
+          areaId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
     });
   });
 });

@@ -3,10 +3,10 @@ import { canSeedOrEmptyAirtableBase } from '../../lib/infrastructure/airtable.js
 import Airtable from 'airtable';
 import { airtable, airtableSeedsConfig } from '../../lib/config.js';
 import { logger } from '../../lib/infrastructure/logger.js';
-import { buildAreasFromConfig } from './data/areas.js';
+import { buildAreasFromConfig, copyAreasFromAirtable } from './data/areas.js';
 import { buildChallengesFromConfig } from './data/challenges.js';
-import { buildCompetencesFromConfig } from './data/competences.js';
-import { buildFrameworksFromConfig } from './data/frameworks.js';
+import { buildCompetencesFromConfig, copyCompetencesFromAirtable } from './data/competences.js';
+import { buildFrameworksFromConfig, copyFrameworksFromAirtable } from './data/frameworks.js';
 import { buildPix1D } from './data/pix-1d.js';
 import { buildSkillsFromConfig } from './data/skills.js';
 import { buildThematicsFromConfig } from './data/thematics.js';
@@ -68,6 +68,10 @@ export async function seed(knex) {
     const tagItems = await buildTags({ airtableClient, logger });
     await buildTutorials({ airtableClient, logger, locales: learningContentConfig.locales, tagItems });
   } else {
+    await copyFrameworksFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyAreasFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger });
+
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);
     await localizedChallengesAttachmentsBuilder(databaseBuilder);
