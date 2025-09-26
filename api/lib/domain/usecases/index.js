@@ -20,7 +20,6 @@ export * from './get-phrase-translations-url.js';
 export * from './get-competence-challenges-production-overview.js';
 export * from './get-competence-challenges-workbench-overview.js';
 export * from './get-skill-challenges-production.js';
-export * from './get-skill-localized-challenges-production.js';
 export * from './find-attachment.js';
 export * from './find-attachments.js';
 export * from './import-translations.js';

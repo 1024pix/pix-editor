@@ -23,47 +23,24 @@ export default class LocalizedChallengesProduction extends Component {
   @service router;
   @tracked shouldDisplayObsoleteChallenges = false;
 
-  get sortedChallenges() {
+  get localizedChallengeDataItems() {
     const excludeStatuses = [];
     if (!this.shouldDisplayObsoleteChallenges) {
       excludeStatuses.push(Challenge.STATUSES.PERIME);
     }
-    return this.args.challenges
-      .filter((challenge) => !excludeStatuses.includes(challenge.status))
-      .filter((challenge) => challenge.locales.includes(this.args.locale) || challenge.locales.includes('fr'))
-      .sort(byAlternativeVersion);
-  }
 
-  get localizedChallengeDataItems() {
-    return this.sortedChallenges.map((challenge) => {
-      const localizedChallengeForLocale = this.args.localizedChallenges.find((localizedChallenge) =>
-        localizedChallenge.challenge.id === challenge.id && localizedChallenge.locale === this.args.locale);
-      const isPrimaryInLocale = challenge.locales.includes(this.args.locale);
-      const localizedStatus = isPrimaryInLocale ? PRIMARY_IN_LOCALE_STATUS
-        : localizedChallengeForLocale ? localizedChallengeForLocale.status : NOT_TRANSLATED_STATUS;
-      return {
-        version: challenge.isPrototype ? 'Proto' : challenge.alternativeVersion,
-        instruction: localizedChallengeForLocale?.instruction ?? challenge.instruction,
-        primaryUpdatedAt: challenge.updatedAt,
-        primaryAuthor: challenge.author,
-        translationsUrl: this.getTranslationsUrl({ isPrimaryInLocale, challenge }),
-        primaryStatusColor: this.getPrimaryStatusColor(challenge.status),
-        primaryStatusText: this.getPrimaryStatusText(challenge.status),
-        localizedStatusColor: this.getLocalizedStatusColor(localizedStatus),
-        localizedStatusText: this.getLocalizedStatusText(localizedStatus),
-        primaryPreviewUrl: new URL(challenge.preview, window.location).href,
-        localizedPreviewUrl: localizedChallengeForLocale ? new URL(`${challenge.preview}?locale=${localizedChallengeForLocale.locale}`, window.location).href : null,
-        primaryId: challenge.id,
-        localizedId: localizedChallengeForLocale?.id,
-        isNotTranslated: !isPrimaryInLocale && localizedChallengeForLocale,
-      };
-    });
-  }
-
-  getTranslationsUrl({ isPrimaryInLocale, challenge }) {
-    if (this.args.locale === 'fr-fr') return null;
-    if (isPrimaryInLocale) return null;
-    return `/api/challenges/${challenge.id}/translations/${this.args.locale}/area-code/${this.args.areaCode}`;
+    return this.args.localizedChallenges
+      .filter((localizedChallenge) => !excludeStatuses.includes(localizedChallenge.primaryStatus))
+      .map((localizedChallenge) => {
+        const status = localizedChallenge.status ?? NOT_TRANSLATED_STATUS;
+        return {
+          ...localizedChallenge,
+          primaryStatusColor: this.getPrimaryStatusColor(localizedChallenge.primaryStatus),
+          primaryStatusText: this.getPrimaryStatusText(localizedChallenge.primaryStatus),
+          localizedStatusColor: localizedChallenge.isPrimaryInLocale ? this.getLocalizedStatusColor(PRIMARY_IN_LOCALE_STATUS) : this.getLocalizedStatusColor(status),
+          localizedStatusText: localizedChallenge.isPrimaryInLocale ? this.getLocalizedStatusText(PRIMARY_IN_LOCALE_STATUS) : this.getLocalizedStatusText(status),
+        }
+      });
   }
 
   getPrimaryStatusColor(primaryStatus) {
@@ -256,14 +233,4 @@ export default class LocalizedChallengesProduction extends Component {
       </div>
     </section>
   </template>
-}
-
-function byAlternativeVersion(challengeA, challengeB) {
-  if (challengeA.isPrototype) {
-    return -1;
-  }
-  if (challengeB.isPrototype) {
-    return 1;
-  }
-  return challengeA.alternativeVersion - challengeB.alternativeVersion;
 }

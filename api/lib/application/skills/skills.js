@@ -13,7 +13,6 @@ import {
   cloneSkill,
   createSkill,
   getSkillChallengesProduction,
-  getSkillLocalizedChallengesProduction,
   listSkills,
   updateSkill,
 } from '../../domain/usecases/index.js';
@@ -22,7 +21,6 @@ import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
 import {
   challengeSerializer,
-  localizedChallengeSerializer,
   skillSerializer
 } from '../../infrastructure/serializers/jsonapi/index.js';
 import { skillTransformer } from '../../infrastructure/transformers/index.js';
@@ -59,18 +57,6 @@ export async function getProductionChallenges(request, h) {
     },
   });
   return h.response(challengeSerializer.serialize(challenges));
-}
-
-export async function getProductionLocalizedChallenges(request, h) {
-  const skillId = request.params.skillId;
-  const localizedChallenges = await getSkillLocalizedChallengesProduction({
-    skillId,
-    dependencies: {
-      challengeRepository,
-      logger,
-    },
-  });
-  return h.response(localizedChallengeSerializer.serializeRead(localizedChallenges));
 }
 
 export async function list(req) {
