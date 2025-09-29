@@ -1,5 +1,12 @@
 
 
+## v3.219.0 (29/09/2025)
+
+
+### :building_construction: Tech
+- [#1138](https://github.com/1024pix/pix-editor/pull/1138) [TECH] Écrire les compétences dans la base postgres (PIX-19655).
+- [#1137](https://github.com/1024pix/pix-editor/pull/1137) [TECH] Double lecture des frameworks (PIX-19654).
+
 ## v3.218.1 (23/09/2025)
 
 
