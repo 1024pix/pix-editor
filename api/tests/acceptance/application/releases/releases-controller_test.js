@@ -46,7 +46,7 @@ async function mockCurrentContent() {
         en: 'Nom de la Compétence - en',
         nl: 'Nom de la Compétence - nl',
       },
-      areaId: '1',
+      areaId: 'recArea0',
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
@@ -263,6 +263,7 @@ async function mockCurrentContent() {
 
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
+  databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -434,7 +435,7 @@ async function mockContentForRelease() {
     competences: [{
       id: 'recCompetence0',
       index: '1.1',
-      areaId: '1',
+      areaId: 'recArea0',
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
@@ -676,6 +677,7 @@ async function mockContentForRelease() {
 
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
+  databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',

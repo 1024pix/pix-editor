@@ -10,11 +10,13 @@ export async function list() {
     frameworkDatasource.list(),
     knex.select(
       '*',
-      knex
-        .select(knex.raw('json_agg(??)', knex.ref('areas.id')))
-        .from('areas')
-        .where('areas.frameworkId', '=', knex.ref('frameworks.id'))
-        .as('areaIds'),
+      knex.raw(
+        'coalesce((??), \'[]\') as "areaIds"',
+        knex
+          .select(knex.raw('json_agg(??)', knex.ref('areas.id')))
+          .from('areas')
+          .where('areas.frameworkId', '=', knex.ref(`${TABLE_NAME}.id`)),
+      ),
     ).from(TABLE_NAME).orderBy('createdAt'),
   ]);
 

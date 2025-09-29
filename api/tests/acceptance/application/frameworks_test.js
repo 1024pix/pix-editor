@@ -148,7 +148,7 @@ describe('Acceptance | Route | frameworks', () => {
             },
             relationships: {
               areas: {
-                data: null,
+                data: [],
               },
             },
           },
@@ -263,7 +263,7 @@ describe('Acceptance | Route | frameworks', () => {
           },
           relationships: {
             areas: {
-              data: null,
+              data: [],
             },
           },
         },

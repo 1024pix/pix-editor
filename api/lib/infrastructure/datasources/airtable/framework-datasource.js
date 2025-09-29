@@ -18,8 +18,8 @@ export const frameworkDatasource = datasource.extend({
     return {
       id: airtableRecord.id,
       name: airtableRecord.get('Nom'),
-      areaAirtableIds: airtableRecord.get('Domaines (identifiants)'),
-      areaIds: airtableRecord.get('Domaines (identifiants) (id persistant)'),
+      areaAirtableIds: airtableRecord.get('Domaines (identifiants)') ?? [],
+      areaIds: airtableRecord.get('Domaines (identifiants) (id persistant)') ?? [],
     };
   },
 

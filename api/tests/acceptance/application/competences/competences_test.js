@@ -422,6 +422,10 @@ describe('Acceptance | Route | competences', () => {
         id: 'area2',
         airtableId: 'recArea2',
         code: '2',
+        color: null,
+        competenceIds: ['competence3'],
+        competenceAirtableIds: ['recCompetence3'],
+        frameworkId: 'recFmk1',
       }));
 
       airtableAreaScope = nock('https://api.airtable.com')
@@ -432,6 +436,7 @@ describe('Acceptance | Route | competences', () => {
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk' });
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
 
       const airtableCompetences = [
         airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
@@ -740,7 +745,8 @@ describe('Acceptance | Route | competences', () => {
       expect(generateNewId).toHaveBeenCalledWith('tube');
       expect(generateNewId).toHaveBeenCalledWith('skill');
 
-      await expect(knex.select('*').from('competences')).resolves.toStrictEqual([
+      await expect(knex.select('*').from('competences').orderBy('index')).resolves.toStrictEqual([
+        { id: 'competence3', index: '2.1', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { id: 'competence4', index: '2.2', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
       ]);
 
