@@ -36,8 +36,10 @@ export function buildThematic({ indexThematic, competenceItem, databaseBuilder, 
     id: thematicId,
     index: isWorkbench ? 0 : indexThematic,
     competenceAirtableId: competenceItem.airtableId,
+    competenceId: competenceItem.id,
     name: thematicName,
   };
+  databaseBuilder.factory.buildThematic(thematicItem);
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation(
       {
@@ -66,4 +68,20 @@ function toAirtableObject(item) {
       Competence: [item.competenceAirtableId],
     }
   };
+}
+
+export async function copyThematicsFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableThematics = await  airtableClient.table('Thematiques').select({ fields: ['id persistant', 'Index', 'Competence (id persistant)'] }).all();
+
+  logger.info(`Copying ${airtableThematics.length} thematics from airtable...`);
+
+  airtableThematics.forEach((record) => {
+    databaseBuilder.factory.buildThematic({
+      id: record.get('id persistant'),
+      index: record.get('Index'),
+      competenceId: record.get('Competence (id persistant)')[0],
+      createdAt: record._rawJson.createdTime,
+      updatedAt: new Date(),
+    });
+  });
 }
