@@ -1,5 +1,11 @@
 
 
+## v3.220.1 (30/09/2025)
+
+
+### :bug: Correction
+- [#1142](https://github.com/1024pix/pix-editor/pull/1142) [BUGFIX] Migration Airtable : Comparaison des champs nullables.
+
 ## v3.220.0 (30/09/2025)
 
 
