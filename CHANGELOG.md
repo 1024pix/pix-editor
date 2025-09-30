@@ -1,5 +1,11 @@
 
 
+## v3.220.0 (30/09/2025)
+
+
+### :rocket: Amélioration
+- [#1140](https://github.com/1024pix/pix-editor/pull/1140) [FEATURE] Double lecture des domaines (PIX-19656).
+
 ## v3.219.0 (29/09/2025)
 
 
