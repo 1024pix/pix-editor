@@ -43,14 +43,14 @@
         data-test-no-validation-needed-checkbox={{@challenge.id}}
       />
     </div>
-  {{/if}}
-  {{#if this.typeIsQCUOrQCM}}
-    <Field::Checkbox
-      @label="Afficher aléatoirement l'ordre des propositions"
-      @checked={{@challenge.shuffled}}
-      @disabled={{not @edition}}
-      data-test-checkbox-shuffle
-    />
+    {{#if this.typeIsQCUOrQCM}}
+      <Field::Checkbox
+        @label="Afficher aléatoirement l'ordre des propositions"
+        @checked={{@challenge.shuffled}}
+        @disabled={{not @edition}}
+        data-test-checkbox-shuffle
+      />
+    {{/if}}
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
     <PixSelect
@@ -232,8 +232,6 @@
     >
       <:label>Type pédagogie</:label>
     </PixSelect>
-  {{/if}}
-  {{#if @challenge.isPrototype}}
     <PixSelect
       @options={{this.options.declinable}}
       @onChange={{fn (mut @challenge.declinable)}}
@@ -243,25 +241,23 @@
     >
       <:label>Déclinable</:label>
     </PixSelect>
-  {{/if}}
-  <div class="field {{if @edition '' 'disabled'}}">
-    <Field::Checkbox
-      @label="Timer"
-      @checked={{@challenge.timerOn}}
-      @disabled={{not @edition}}
-    />
-    {{#if @challenge.timer}}
-      <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
-    {{/if}}
-  </div>
-  <div class="field {{if @edition '' 'disabled'}}">
-    <Field::Checkbox
-      @label="Focus"
-      @checked={{@challenge.focusable}}
-      @disabled={{not @edition}}
-    />
-  </div>
-  {{#if @challenge.isPrototype}}
+    <div class="field {{if @edition '' 'disabled'}}">
+      <Field::Checkbox
+        @label="Timer"
+        @checked={{@challenge.timerOn}}
+        @disabled={{not @edition}}
+      />
+      {{#if @challenge.timer}}
+        <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
+      {{/if}}
+    </div>
+    <div class="field {{if @edition '' 'disabled'}}">
+      <Field::Checkbox
+        @label="Focus"
+        @checked={{@challenge.focusable}}
+        @disabled={{not @edition}}
+      />
+    </div>
     <Field::Quality @edition={{@edition}} @challenge={{@challenge}} />
   {{/if}}
   <div class="field {{if @edition '' 'disabled'}}">
