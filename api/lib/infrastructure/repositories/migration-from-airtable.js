@@ -47,6 +47,11 @@ export function areArrayEquals(array1, array2) {
   return array1.toSorted().every((value, i) => value === sortedArray2[i]);
 }
 
+export function areNullableValuesEqual(value1, value2) {
+  if (value1 == null && value2 == null) return true;
+  return value1 === value2;
+}
+
 function byId(dto1, dto2) {
   return dto1.id < dto2.id ? -1 : +1;
 }

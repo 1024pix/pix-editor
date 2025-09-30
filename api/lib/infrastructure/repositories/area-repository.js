@@ -6,7 +6,7 @@ import * as areaTranslations from '../translations/area.js';
 import { Area } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, compareDtos, compareDtosLists } from './migration-from-airtable.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'areas';
 const model = 'area';
@@ -103,7 +103,7 @@ function compareAreaDtos(airtableDto, pgDto) {
   const diff = [];
   if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (airtableDto.code !== pgDto.code) diff.push(`airtable code "${airtableDto.code}" != postgres code "${pgDto.code}"`);
-  if (airtableDto.color !== pgDto.color) diff.push(`airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
+  if (!areNullableValuesEqual(airtableDto.color, pgDto.color)) diff.push(`airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
   if (airtableDto.frameworkId !== pgDto.frameworkId) diff.push(`airtable frameworkId "${airtableDto.frameworkId}" != postgres frameworkId "${pgDto.frameworkId}"`);
   if (!areArrayEquals(airtableDto.competenceIds, pgDto.competenceIds)) diff.push(`airtable competenceIds "${airtableDto.competenceIds}" != postgres competenceIds "${pgDto.competenceIds}"`);
   return diff;
