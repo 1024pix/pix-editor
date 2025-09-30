@@ -256,8 +256,8 @@ describe('Integration | Repository | thematic-repository', () => {
 
   describe('#create', () => {
     afterEach(() => {
-      return knex('thematics').truncate();
-      return knex('translations').truncate();
+      return knex('thematics').delete();
+      return knex('translations').delete();
     });
 
     it('should save new thematic to Airtable and translations to DB', async () => {
