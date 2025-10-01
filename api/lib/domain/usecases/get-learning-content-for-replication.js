@@ -74,7 +74,7 @@ export async function getLearningContentForReplication() {
     entityId: translation.entityId,
     sourceEntityId: null,
   }));
-  const transformedTubes = tubeTransformer.transformTubes(tubes, thematics, challenges);
+  const transformedTubes = tubeTransformer.transformTubes(tubes, challenges);
 
   const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);

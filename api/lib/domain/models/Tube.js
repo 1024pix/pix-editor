@@ -7,6 +7,7 @@ export class Tube {
     practicalDescription_i18n,
     index,
     thematicAirtableId,
+    thematicId,
     competenceAirtableId,
     competenceId,
     skillAirtableIds,
@@ -19,6 +20,7 @@ export class Tube {
     this.practicalDescription_i18n = practicalDescription_i18n;
     this.index = index;
     this.thematicAirtableId = thematicAirtableId;
+    this.thematicId = thematicId;
     this.competenceAirtableId = competenceAirtableId;
     this.competenceId = competenceId;
     this.skillAirtableIds = skillAirtableIds;

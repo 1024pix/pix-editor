@@ -10,6 +10,7 @@ describe('Unit | Infrastructure | tube-transformer', function() {
       // given
       const tube = domainBuilder.buildTube({
         id: 'tube1',
+        thematicId: 'thematic1',
         competenceId: 'competence1',
         name: '@test',
         practicalTitle_i18n: {
@@ -22,7 +23,6 @@ describe('Unit | Infrastructure | tube-transformer', function() {
         },
         skillIds: ['skill1', 'skill2'],
       });
-      const thematicId = 'thematic1';
       const challenges = [
         domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
         domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
@@ -32,7 +32,7 @@ describe('Unit | Infrastructure | tube-transformer', function() {
       ];
 
       // when
-      const transformedTube = transformTube(tube, thematicId, challenges);
+      const transformedTube = transformTube(tube, challenges);
 
       // then
       expect(transformedTube).toStrictEqual({
@@ -61,7 +61,7 @@ describe('Unit | Infrastructure | tube-transformer', function() {
       const tubes = [
         domainBuilder.buildTube({
           id: 'tube1',
-          thematicAirtableId: 'recThematic1',
+          thematicId: 'thematic1',
           competenceId: 'competence1',
           name: '@test',
           practicalTitle_i18n: {
@@ -76,7 +76,7 @@ describe('Unit | Infrastructure | tube-transformer', function() {
         }),
         domainBuilder.buildTube({
           id: 'tube2',
-          thematicAirtableId: 'recThematic2',
+          thematicId: 'thematic2',
           competenceId: 'competence2',
           name: '@pouet',
           practicalTitle_i18n: {
@@ -90,10 +90,6 @@ describe('Unit | Infrastructure | tube-transformer', function() {
           skillIds: ['skill2'],
         }),
       ];
-      const thematics = [
-        domainBuilder.buildThematic({ airtableId: 'recThematic1', id: 'thematic1' }),
-        domainBuilder.buildThematic({ airtableId: 'recThematic2', id: 'thematic2' }),
-      ];
       const challenges = [
         domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
         domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
@@ -103,7 +99,7 @@ describe('Unit | Infrastructure | tube-transformer', function() {
       ];
 
       // when
-      const transformedTubes = transformTubes(tubes, thematics, challenges);
+      const transformedTubes = transformTubes(tubes, challenges);
 
       // then
       expect(transformedTubes).toStrictEqual([

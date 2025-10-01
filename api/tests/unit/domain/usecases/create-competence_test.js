@@ -142,7 +142,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
         tubeAirtableId: createdTube.airtableId,
         hint_i18n: {},
       }));
-      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
+      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue(createdThematic);
@@ -235,7 +235,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
         tubeAirtableId: createdTube.airtableId,
         hint_i18n: {},
       }));
-      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube, createdThematic.id);
+      expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
       expect(updatePixApiReleaseCache.onThematicCreated).toHaveBeenCalledWith(createdThematic);

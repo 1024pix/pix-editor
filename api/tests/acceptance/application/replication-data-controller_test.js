@@ -48,8 +48,6 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const result = JSON.parse(response.result);
       const resultWithoutTranslations = _.omit(result, 'translations');
       const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
-      expect(resultWithoutTranslations.frameworks).toStrictEqual(expectedCurrentContentWithoutTranslations.frameworks);
-      expect(resultWithoutTranslations.areas).toStrictEqual(expectedCurrentContentWithoutTranslations.areas);
       expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(expectedCurrentContent.translations.map((translation) => ({
         ...translation,

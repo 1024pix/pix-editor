@@ -11,7 +11,6 @@ import {
   attachmentRepository,
   challengeRepository,
   localizedChallengeRepository,
-  thematicRepository,
 } from '../../infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
@@ -203,14 +202,13 @@ async function onTutorialCreatedOrUpdated(tutorial) {
 
 /**
  * @param {Tube} tube
- * @param {string} thematicId
  */
-export async function onTubeCreated(tube, thematicId) {
+export async function onTubeCreated(tube) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
     await updatedRecordNotifier.notify({
       model: 'tubes',
-      updatedRecord: tubeTransformer.transformTube(tube, thematicId),
+      updatedRecord: tubeTransformer.transformTube(tube),
       pixApiClient,
     });
   } catch (err) {
@@ -225,14 +223,11 @@ export async function onTubeUpdated(tube) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
 
   try {
-    const [thematic, challenges] = await Promise.all([
-      thematicRepository.getByAirtableId(tube.thematicAirtableId),
-      challengeRepository.listValidPrototypesBySkillIds(tube.skillIds),
-    ]);
+    const challenges = await challengeRepository.listValidPrototypesBySkillIds(tube.skillIds);
 
     await updatedRecordNotifier.notify({
       model: 'tubes',
-      updatedRecord: tubeTransformer.transformTube(tube, thematic.id, challenges),
+      updatedRecord: tubeTransformer.transformTube(tube, challenges),
       pixApiClient,
     });
   } catch (err) {
