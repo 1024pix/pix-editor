@@ -96,8 +96,145 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 related: `/api/attachments?filter[localizedChallengeId]=${challenge.id}`,
               },
             },
+            'challenge-locales': {
+              data: [
+                {
+                  id: 'recwWzTquPlvIl4So-en',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-es',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-es-419',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-fr',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-fr-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-fr-FR',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-nl-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recwWzTquPlvIl4So-nl',
+                  type: 'challenge-locales',
+                },
+              ],
+            },
           },
         },
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'recwWzTquPlvIl4So-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'recwWzTquPlvIl4So-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'recwWzTquPlvIl4So-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'recwWzTquPlvIl4So-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'recwWzTquPlvIl4So',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'recwWzTquPlvIl4So-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'recwWzTquPlvIl4So-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'recwWzTquPlvIl4So-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'recwWzTquPlvIl4So-nl',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       };
       // When
       const json = serialize({ ...challenge, alternativeLocales });
@@ -166,8 +303,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'validated-at': '2023-02-02T14:17:30.820Z',
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
-            'shuffled': false,
-            'contextualizedFields': [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
+            shuffled: false,
+            contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
             'require-gafam-website-access': true,
             'is-incompatible-ipad-certif': true,
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
@@ -193,7 +330,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
               data: [
                 {
                   type: 'localizedChallenges',
-                  'id': `${expectedDeserializedChallenge.id}`,
+                  id: `${expectedDeserializedChallenge.id}`,
                 }
               ]
             }

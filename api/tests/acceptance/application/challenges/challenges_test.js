@@ -245,7 +245,147 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   related: '/api/attachments?filter[localizedChallengeId]=my id',
                 },
               },
+              'challenge-locales': {
+                data: [
+                  {
+                    id: 'my id-en',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-es',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-es-419',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-fr',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-fr-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-fr-FR',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-nl-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: 'my id-nl',
+                    type: 'challenge-locales',
+                  },
+                ],
+              },
             }
+          },
+        ],
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'my id-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'my id-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'my id-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'my id-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'my id',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'my id-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'my id-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'my id-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'my id-nl',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'my id_nl',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
           },
         ],
       });
@@ -467,6 +607,42 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   related: '/api/attachments?filter[localizedChallengeId]=1',
                 },
               },
+              'challenge-locales': {
+                data: [
+                  {
+                    id: '1-en',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-es',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-es-419',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-fr',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-fr-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-fr-FR',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-nl-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '1-nl',
+                    type: 'challenge-locales',
+                  },
+                ],
+              },
             }
           },
           {
@@ -545,9 +721,248 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   related: '/api/attachments?filter[localizedChallengeId]=2',
                 },
               },
+              'challenge-locales': {
+                data: [
+                  {
+                    id: '2-en',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-es',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-es-419',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-fr',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-fr-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-fr-FR',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-nl-BE',
+                    type: 'challenge-locales',
+                  },
+                  {
+                    id: '2-nl',
+                    type: 'challenge-locales',
+                  },
+                ],
+              },
             }
           }
-        ]
+        ],
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: '1-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: '1-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: '1-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: '1-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: '1',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: '1-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: '1-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: '1-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: '1-nl',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: '2-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: '2-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: '2-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: '2-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: '2',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: '2-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: '2-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: '2-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: '2-nl',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: '2_nl',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       });
     });
 
@@ -789,8 +1204,148 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 related: '/api/attachments?filter[localizedChallengeId]=recChallengeId1',
               },
             },
+            'challenge-locales': {
+              data: [
+                {
+                  id: 'recChallengeId1-en',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-es',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-es-419',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-fr',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-fr-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-fr-FR',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-nl-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId1-nl',
+                  type: 'challenge-locales',
+                },
+              ],
+            },
           }
         },
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'recChallengeId1-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'recChallengeId1-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'recChallengeId1-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'recChallengeId1-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'recChallengeId1',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'recChallengeId1-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'recChallengeId1-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'recChallengeId1-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'recChallengeId1-nl',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'localizedChallengeId2',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       });
       expect(airtableCall.isDone()).to.be.true;
     });
@@ -921,7 +1476,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const apiTokenScope = nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': apiToken });
+        .reply(200, { access_token: apiToken });
       const apiCacheScope = nock('https://api.test.pix.fr')
         .patch(`/api/cache/challenges/${localizedChallengeId}`,
           {
@@ -1238,8 +1793,145 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 related: '/api/attachments?filter[localizedChallengeId]=challengeId',
               },
             },
+            'challenge-locales': {
+              data: [
+                {
+                  id: 'challengeId-en',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-es',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-es-419',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-fr',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-fr-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-fr-FR',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-nl-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'challengeId-nl',
+                  type: 'challenge-locales',
+                },
+              ],
+            },
           }
         },
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'challengeId-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'challengeId-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'challengeId-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'challengeId-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'challengeId',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'challengeId-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'challengeId-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'challengeId-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'challengeId-nl',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       });
       const localizedChallenges = await knex('localized_challenges').select();
       expect(localizedChallenges).to.deep.equal([
@@ -1737,8 +2429,148 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
               },
             },
+            'challenge-locales': {
+              data: [
+                {
+                  id: 'recChallengeId-en',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-es',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-es-419',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr-FR',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-nl-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-nl',
+                  type: 'challenge-locales',
+                },
+              ],
+            },
           },
         },
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'recChallengeId-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'recChallengeId-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'recChallengeId-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'recChallengeId-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'recChallengeId',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'recChallengeId-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'recChallengeId-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'recChallengeId-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'recChallengeId-nl',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'challenge_localized_nl',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       });
       const localizedChallenge = await knex('localized_challenges').select().where('id', challengeId).first();
       expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
@@ -2011,8 +2843,145 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
               },
             },
+            'challenge-locales': {
+              data: [
+                {
+                  id: 'recChallengeId-en',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-es',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-es-419',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-fr-FR',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-nl-BE',
+                  type: 'challenge-locales',
+                },
+                {
+                  id: 'recChallengeId-nl',
+                  type: 'challenge-locales',
+                },
+              ],
+            },
           },
         },
+        included: [
+          {
+            attributes: {
+              locale: 'en',
+            },
+            id: 'recChallengeId-en',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es',
+            },
+            id: 'recChallengeId-es',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'es-419',
+            },
+            id: 'recChallengeId-es-419',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr',
+            },
+            id: 'recChallengeId-fr',
+            relationships: {
+              'localized-challenge': {
+                data: {
+                  id: 'recChallengeId',
+                  type: 'localized-challenges',
+                },
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-BE',
+            },
+            id: 'recChallengeId-fr-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'fr-FR',
+            },
+            id: 'recChallengeId-fr-FR',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl-BE',
+            },
+            id: 'recChallengeId-nl-BE',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+          {
+            attributes: {
+              locale: 'nl',
+            },
+            id: 'recChallengeId-nl',
+            relationships: {
+              'localized-challenge': {
+                data: null,
+              },
+            },
+            type: 'challenge-locales',
+          },
+        ],
       });
       await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
         {

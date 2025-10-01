@@ -56,6 +56,7 @@ export default class ChallengeModel extends Model {
   @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
   @hasMany('attachment', { inverse: 'challenge', async: true }) attachments;
   @hasMany('localized-challenge', { inverse: 'challenge', async: true }) localizedChallenges;
+  @hasMany('challenge-locale', { inverse: 'challenge', async: false }) challengeLocales;
 
   @service('store') myStore;
   @service config;
@@ -82,6 +83,12 @@ export default class ChallengeModel extends Model {
       UNUSED_FRANCOPHONE: 'FRANCOPHONE',
       NONE: '',
     };
+  }
+
+  async getChallengeForLocale(locale) {
+    const challengeLocale = this.challengeLocales.find((challengeLocale) => challengeLocale.locale === locale);
+    await challengeLocale.localizedChallenge;
+    return challengeLocale;
   }
 
   get illustration() {

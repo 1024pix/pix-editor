@@ -9,7 +9,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | challenges-production | localized-challenges-production', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let screen, store, skill, challenges, localizedChallenges, locale, areaCode;
+  let screen, store, skill, challengeLocalesNl, challengeLocalesFr, challengeLocalesEs, competence;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
@@ -17,6 +17,11 @@ module('Integration | Component | challenges-production | localized-challenges-p
       id: 'skillAId',
       name: '@skillA1',
       version: 3,
+    });
+
+    competence = store.createRecord('competence', {
+      id: 'competenceAId',
+      code: '1.1',
     });
 
     // proto
@@ -45,6 +50,23 @@ module('Integration | Component | challenges-production | localized-challenges-p
       status: LocalizedChallenge.STATUSES.PLAY,
       instruction: 'Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie.',
     });
+    const challengeLocaleProtoValideFr = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId1',
+      locale: 'fr',
+      localizedChallenge: localizedProtoValideFr,
+      challenge: challengeProtoValide,
+    });
+    const challengeLocaleProtoValideeNl = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId2',
+      locale: 'nl',
+      localizedChallenge: localizedProtoValideNl,
+      challenge: challengeProtoValide,
+    });
+    const challengeLocaleProtoValideeEs = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId21',
+      locale: 'es',
+      challenge: challengeProtoValide,
+    });
 
     // trad en pause
     const challengeDecliArchivee = store.createRecord('challenge', {
@@ -72,6 +94,23 @@ module('Integration | Component | challenges-production | localized-challenges-p
       status: LocalizedChallenge.STATUSES.PAUSE,
       instruction: 'consigne NL challengeDecliArchivee',
     });
+    const challengeLocaleDecliArchiveeFr = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId3',
+      locale: 'fr',
+      localizedChallenge: localizedDecliArchiveeFr,
+      challenge: challengeDecliArchivee,
+    });
+    const challengeLocaleDecliArchiveeNl = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId4',
+      locale: 'nl',
+      localizedChallenge: localizedDecliArchiveeNl,
+      challenge: challengeDecliArchivee,
+    });
+    const challengeLocaleDecliArchiveeEs = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId41',
+      locale: 'es',
+      challenge: challengeDecliArchivee,
+    });
 
     // primary deja nl
     const challengeDecliNl = store.createRecord('challenge', {
@@ -91,6 +130,12 @@ module('Integration | Component | challenges-production | localized-challenges-p
       locale: 'nl',
       status: null,
       instruction: 'consigne challengeDecliNl',
+    });
+    const challengeLocaleDecliNl = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId5',
+      locale: 'nl',
+      localizedChallenge: localizedDecliNl,
+      challenge: challengeDecliNl,
     });
 
     // localized pas nl
@@ -117,6 +162,23 @@ module('Integration | Component | challenges-production | localized-challenges-p
       challenge: challengeDecliProposee,
       locale: 'es',
       status: LocalizedChallenge.STATUSES.PAUSE,
+    });
+    const challengeLocaleDecliProposeeFr = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId6',
+      locale: 'fr',
+      localizedChallenge: localizedDecliProposeeFr,
+      challenge: challengeDecliProposee,
+    });
+    const challengeLocaleDecliProposeeEs = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId7',
+      locale: 'es',
+      localizedChallenge: localizedDecliProposeeEs,
+      challenge: challengeDecliProposee,
+    });
+    const challengeLocaleDecliProposeeNl = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId71',
+      locale: 'nl',
+      challenge: challengeDecliProposee,
     });
 
     // primary périmé
@@ -146,27 +208,45 @@ module('Integration | Component | challenges-production | localized-challenges-p
       instruction: 'consigne NL challengeDecliObsolete',
       status: LocalizedChallenge.STATUSES.PAUSE,
     });
+    const challengeLocaleDecliObsoleteFr = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId8',
+      locale: 'fr',
+      localizedChallenge: localizedDecliObsoleteFr,
+      challenge: challengeDecliObsolete,
+    });
+    const challengeLocaleDecliObsoleteNl = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId9',
+      locale: 'nl',
+      localizedChallenge: localizedDecliObsoleteNl,
+      challenge: challengeDecliObsolete,
+    });
+    const challengeLocaleDecliObsoleteEs = store.createRecord('challenge-locale', {
+      id: 'challengeLocaleId91',
+      locale: 'es',
+      challenge: challengeDecliObsolete,
+    });
 
-    challenges = [
-      challengeProtoValide,
-      challengeDecliArchivee,
-      challengeDecliNl,
-      challengeDecliProposee,
-      challengeDecliObsolete,
+    challengeLocalesNl = [
+      challengeLocaleProtoValideeNl,
+      challengeLocaleDecliArchiveeNl,
+      challengeLocaleDecliNl,
+      challengeLocaleDecliProposeeNl,
+      challengeLocaleDecliObsoleteNl,
     ];
-    localizedChallenges = [
-      localizedProtoValideFr,
-      localizedProtoValideNl,
-      localizedDecliArchiveeFr,
-      localizedDecliArchiveeNl,
-      localizedDecliNl,
-      localizedDecliProposeeFr,
-      localizedDecliProposeeEs,
-      localizedDecliObsoleteFr,
-      localizedDecliObsoleteNl,
+
+    challengeLocalesFr = [
+      challengeLocaleProtoValideFr,
+      challengeLocaleDecliArchiveeFr,
+      challengeLocaleDecliProposeeFr,
+      challengeLocaleDecliObsoleteFr,
     ];
-    locale = 'nl';
-    areaCode = '1';
+
+    challengeLocalesEs = [
+      challengeLocaleProtoValideeEs,
+      challengeLocaleDecliArchiveeEs,
+      challengeLocaleDecliProposeeEs,
+      challengeLocaleDecliObsoleteEs,
+    ];
   });
 
   module('list item', function(hooks) {
@@ -174,10 +254,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       screen = await render(<template>
         <LocalizedChallengesProduction
           @skill={{skill}}
-          @challenges={{challenges}}
-          @localizedChallenges={{localizedChallenges}}
-          @locale={{locale}}
-          @areaCode={{areaCode}}
+          @challengeLocales={{challengeLocalesNl}}
+          @competence={{competence}}
         />
       </template>);
     });
@@ -258,16 +336,13 @@ module('Integration | Component | challenges-production | localized-challenges-p
   module('when displaying the list', function() {
     test('it should display only challenge who has selected locale or fr', async function(assert) {
       // given
-      locale = 'es';
 
       // when
       screen = await render(<template>
         <LocalizedChallengesProduction
           @skill={{skill}}
-          @challenges={{challenges}}
-          @localizedChallenges={{localizedChallenges}}
-          @locale={{locale}}
-          @areaCode={{areaCode}}
+          @challengeLocales={{challengeLocalesEs}}
+          @competence={{competence}}
         />
       </template>);
 
@@ -280,16 +355,13 @@ module('Integration | Component | challenges-production | localized-challenges-p
     module('when locale is not in phrase', function() {
       test('when locale is not in phrase', async function(assert) {
         // given
-        locale = 'fr-fr';
 
         // when
         screen = await render(<template>
           <LocalizedChallengesProduction
             @skill={{skill}}
-            @challenges={{challenges}}
-            @localizedChallenges={{localizedChallenges}}
-            @locale={{locale}}
-            @areaCode={{areaCode}}
+            @challengeLocales={{challengeLocalesFr}}
+            @competence={{competence}}
           />
         </template>);
 
@@ -306,10 +378,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
         screen = await render(<template>
           <LocalizedChallengesProduction
             @skill={{skill}}
-            @challenges={{challenges}}
-            @localizedChallenges={{localizedChallenges}}
-            @locale={{locale}}
-            @areaCode={{areaCode}}
+            @challengeLocales={{challengeLocalesNl}}
+            @competence={{competence}}
           />
         </template>);
 
@@ -331,10 +401,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
         screen = await render(<template>
           <LocalizedChallengesProduction
             @skill={{skill}}
-            @challenges={{challenges}}
-            @localizedChallenges={{localizedChallenges}}
-            @locale={{locale}}
-            @areaCode={{areaCode}}
+            @challengeLocales={{challengeLocalesNl}}
+            @competence={{competence}}
           />
         </template>);
 

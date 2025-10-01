@@ -88,6 +88,15 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       instruction: 'hallo mama',
       challenge: challengeProduction,
     });
+
+    const challengeLocale = this.server.create('challenge-locale', {
+      id: 'challengeLocaleId',
+      locale: 'nl',
+      localizedChallenge: localizedChallengeProduction,
+    });
+
+    challengeProduction.update({ challengeLocales: [challengeLocale] });
+
     skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProduction] });
 
     return authenticateSession();

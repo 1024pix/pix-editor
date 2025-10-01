@@ -58,6 +58,10 @@ export class LocalizedChallenge {
     };
   }
 
+  static get SUPPORTED_LOCALES() {
+    return SUPPORTED_LOCALES;
+  }
+
   get isPrimary() {
     return this.id === this.challengeId;
   }

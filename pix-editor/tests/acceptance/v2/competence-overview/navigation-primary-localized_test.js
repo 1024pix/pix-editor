@@ -111,6 +111,18 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
       locale: 'nl',
       status: LocalizedChallenge.STATUSES.PAUSE,
     });
+    const challengeLocale = this.server.create('challenge-locale', {
+      id: 'challengeLocaleId1',
+      locale: 'fr',
+      localizedChallenge: localizedChallengeProductionFr,
+    });
+    const challengeLocaleNl = this.server.create('challenge-locale', {
+      id: 'challengeLocaleId',
+      locale: 'nl',
+      localizedChallenge: localizedChallengeProductionNl,
+    });
+
+    challengeProduction.update({ challengeLocales: [challengeLocaleNl, challengeLocale] });
     skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProductionFr, localizedChallengeProductionNl] });
 
     return authenticateSession();
