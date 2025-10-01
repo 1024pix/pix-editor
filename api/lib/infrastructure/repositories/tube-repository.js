@@ -7,6 +7,7 @@ import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 const model = 'tube';
+const TABLE_NAME = 'tubes';
 
 export async function list() {
   const [datasourceTubes, translations] = await Promise.all([
@@ -48,17 +49,32 @@ export async function getManyByAirtableIds(airtableIds) {
 }
 
 export async function create(tube) {
-  tube.id = idGenerator.generateNewId('tube');
-  const createdTubeDTO = await tubeDatasource.create(tube);
-  const translations = tubeTranslations.extractFromDomainObject(tube);
-  await translationRepository.save({ translations });
-  return toDomain(createdTubeDTO, translations);
+  return knex.transaction(async (transaction) => {
+    tube.id = idGenerator.generateNewId('tube');
+    const createdTubeDTO = await tubeDatasource.create(tube);
+    const translations = tubeTranslations.extractFromDomainObject(tube);
+    await Promise.all([
+      transaction.insert({
+        id: tube.id,
+        name: tube.name,
+        index: tube.index,
+        thematicId: createdTubeDTO.thematicId,
+      }).into(TABLE_NAME),
+      translationRepository.save({ translations, transaction }),
+    ]);
+    return toDomain(createdTubeDTO, translations);
+  });
 }
 
 export async function update(tube) {
   return knex.transaction(async (transaction) => {
     const updatedTubeDto = await tubeDatasource.update(tube);
     const translations = tubeTranslations.extractFromDomainObject(tube);
+    await transaction(TABLE_NAME).update({
+      name: tube.name,
+      index: tube.index,
+      thematicId: updatedTubeDto.thematicId,
+    }).where('id', tube.id);
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${tubeTranslations.prefix}${tube.id}.`,
       locales: ['fr', 'en'],
