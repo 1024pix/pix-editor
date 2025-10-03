@@ -1,5 +1,12 @@
 
 
+## v3.221.0 (03/10/2025)
+
+
+### :rocket: Amélioration
+- [#1141](https://github.com/1024pix/pix-editor/pull/1141) [FEATURE] Écriture des thématiques dans Postgres (PIX-19727).
+- [#1143](https://github.com/1024pix/pix-editor/pull/1143) [FEATURE] Cacher les champs timer, focus et shuffled pour les déclinaisons (PIX-18221).
+
 ## v3.220.1 (30/09/2025)
 
 
