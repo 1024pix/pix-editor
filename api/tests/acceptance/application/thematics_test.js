@@ -447,6 +447,13 @@ describe('Application | Route | Thematics', () => {
     context('success', function() {
 
       beforeEach(async () => {
+        databaseBuilder.factory.buildFramework({ id:'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id:'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id:'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id:'thematic1', index: 0, competenceId: 'competence1' });
+        databaseBuilder.factory.buildThematic({ id:'thematic2', index: 1, competenceId: 'competence1' });
+        await databaseBuilder.commit();
+
         const airtableThematics = [
           airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
             id: 'thematic1',
@@ -501,7 +508,8 @@ describe('Application | Route | Thematics', () => {
       });
 
       afterEach(async () => {
-        await knex('translations').truncate();
+        await knex('thematics').delete();
+        await knex('translations').delete();
       });
 
       it('should respond with status 201 and created thematic', async () => {
@@ -563,6 +571,12 @@ describe('Application | Route | Thematics', () => {
 
         expect(airtableCreateThematicScope.isDone()).toBe(true);
         expect(airtableThematicsScope.isDone()).toBe(true);
+
+        await expect(knex.select('*').from('thematics').orderBy('index')).resolves.toStrictEqual([
+          { id: 'thematic1', index: 0, competenceId: 'competence1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { id: 'thematic2', index: 1, competenceId: 'competence1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { id: 'thematic3', index: 2, competenceId: 'competence1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        ]);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'thematic.thematic3.name', locale: 'en', value: 'Third thematic' },
@@ -729,6 +743,11 @@ describe('Application | Route | Thematics', () => {
 
     context('success', function() {
       beforeEach(async () => {
+        databaseBuilder.factory.buildFramework({ id:'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id:'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id:'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1', createdAt: '2025-09-29T13:20:25Z' });
+
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
@@ -854,6 +873,10 @@ describe('Application | Route | Thematics', () => {
 
         expect(airtableUpdateThematicScope.isDone()).toBe(true);
         expect(airtableThematicScope.isDone()).toBe(true);
+
+        await expect(knex.select('*').from('thematics')).resolves.toStrictEqual([
+          { id: 'thematic1', index: 2, competenceId: 'competence1', createdAt: new Date('2025-09-29T13:20:25Z'), updatedAt: expect.any(Date) },
+        ]);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'thematic.thematic1.name', locale: 'en', value: '1st thematic' },

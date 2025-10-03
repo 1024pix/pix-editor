@@ -606,8 +606,9 @@ describe('Acceptance | Route | competences', () => {
     });
 
     afterEach(async () => {
-      await knex('competences').truncate();
-      await knex('translations').truncate();
+      await knex('thematics').delete();
+      await knex('competences').delete();
+      await knex('translations').delete();
     });
 
     describe('when payload is NOT valid', () => {
@@ -748,6 +749,10 @@ describe('Acceptance | Route | competences', () => {
       await expect(knex.select('*').from('competences').orderBy('index')).resolves.toStrictEqual([
         { id: 'competence3', index: '2.1', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { id: 'competence4', index: '2.2', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
+
+      await expect(knex.select('*').from('thematics')).resolves.toStrictEqual([
+        { id: 'thematic1', index: 0, competenceId: 'competence4', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
       ]);
 
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([

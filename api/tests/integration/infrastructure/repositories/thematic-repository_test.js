@@ -6,6 +6,9 @@ import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import { thematicDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
+const TABLE_NAME = 'thematics';
+const AIRTABLE_NAME = 'Thematiques';
+
 describe('Integration | Repository | thematic-repository', () => {
 
   describe('#list', () => {
@@ -253,36 +256,58 @@ describe('Integration | Repository | thematic-repository', () => {
 
   describe('#create', () => {
     afterEach(() => {
+      return knex('thematics').truncate();
       return knex('translations').truncate();
     });
 
     it('should save new thematic to Airtable and translations to DB', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      await databaseBuilder.commit();
+
       const thematicId = 'thematic45267428';
       vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(thematicId);
       const thematic = domainBuilder.buildThematic({
         airtableId: null,
         id: null,
+        competenceId: null,
+        tubeAirtableIds: null,
+        tubeIds: null,
       });
       const airtableThematic = airtableBuilder.factory.buildThematic({
         ...thematic,
         airtableId: 'recThematic1',
         id: thematicId,
+        competenceId: 'competence1',
       });
       const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
-        new Airtable.Record('Thematiques', airtableThematic.id, airtableThematic),
+        new Airtable.Record(AIRTABLE_NAME, airtableThematic.id, airtableThematic),
       );
 
       // when
       const createdThematic = await thematicRepository.create(thematic);
 
       // then
+      await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
+        {
+          id: thematicId,
+          index: thematic.index,
+          competenceId: 'competence1',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
       expect(createdThematic).toStrictEqual(domainBuilder.buildThematic({
         ...thematic,
+        competenceId: 'competence1',
         airtableId: 'recThematic1',
+        tubeAirtableIds: [],
+        tubeIds: [],
       }));
       expect(createRecordSpy).toHaveBeenCalledWith(
-        'Thematiques',
+        AIRTABLE_NAME,
         {
           fields: {
             'id persistant': thematicId,
@@ -403,6 +428,12 @@ describe('Integration | Repository | thematic-repository', () => {
   describe('#update', () => {
     it('should save thematic to Airtable and translations to DB', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1', createdAt: '2025-09-26T14:26:10Z' });
+      await databaseBuilder.commit();
+
       const thematicUpdates = {
         airtableId: 'recThematic1',
         id: 'thematic1',
@@ -436,6 +467,16 @@ describe('Integration | Repository | thematic-repository', () => {
       const updatedThematic = await thematicRepository.update(thematic);
 
       // then
+      await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
+        {
+          id: 'thematic1',
+          index: 2,
+          competenceId: 'competence1',
+          createdAt: new Date('2025-09-26T14:26:10Z'),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
       expect(updatedThematic).toStrictEqual(domainBuilder.buildThematic(expectedThematic));
       expect(updateRecordSpy).toHaveBeenCalledWith(
         'Thematiques',
