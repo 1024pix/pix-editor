@@ -21,16 +21,29 @@ export default class LocalizedChallengesRoute extends Route {
     const { skill_id } = params;
     const skill = await this.store.findRecord('skill', skill_id);
     const challenges = await skill.challengesProduction;
-    const localizedChallenges = await skill.localizedChallengesProduction;
+
+    const challengeLocales = await Promise.all(
+      challenges
+        .filter((challenge) => challenge.locales.includes(locale) || challenge.locales.includes('fr'))
+        .sort(byAlternativeVersion)
+        .map((challenge) => challenge.getChallengeForLocale(locale)),
+    );
 
     return {
-      challenges,
+      challengeLocales,
       skill,
-      localizedChallenges,
-      locale,
-      areaCode: competence.areaCode,
-      competenceId: competence.id,
+      competence,
       overview,
     };
   }
+}
+
+function byAlternativeVersion(challengeA, challengeB) {
+  if (challengeA.isPrototype) {
+    return -1;
+  }
+  if (challengeB.isPrototype) {
+    return 1;
+  }
+  return challengeA.alternativeVersion - challengeB.alternativeVersion;
 }

@@ -55,10 +55,13 @@ const serializer = new Serializer('challenges', {
     'hasEmbedInternalValidation',
     'noValidationNeeded',
     'attachments',
+    'challengeLocales',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenges') return 'localized-challenges';
+    if (attribute === 'localizedChallenge') return 'localized-challenges';
     if (attribute === 'attachments') return 'attachments';
+    if (attribute === 'challengeLocales') return 'challenge-locales';
   },
   skill: {
     ref(challenge, skillId) {
@@ -78,10 +81,32 @@ const serializer = new Serializer('challenges', {
       },
     },
   },
+  challengeLocales: {
+    ref: 'id',
+    included: true,
+    attributes: [
+      'locale',
+      'localizedChallenge',
+    ],
+    localizedChallenge: {
+      ref: 'id',
+      included: false,
+    },
+  },
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
     challenge.attachments = [];
+    challenge.challengeLocales = LocalizedChallenge.SUPPORTED_LOCALES.map((locale) => {
+      const localizedChallenge = challenge.localizedChallenges.find((localizedChallenge) => localizedChallenge.locale === locale);
+      return {
+        id: `${challenge.id}-${locale}`,
+        locale,
+        localizedChallenge: {
+          id: localizedChallenge?.id,
+        },
+      };
+    });
     return challenge;
   }
 });
