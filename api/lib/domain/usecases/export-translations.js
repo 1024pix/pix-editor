@@ -10,7 +10,7 @@ import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function exportTranslations(stream, { areaCode }, dependencies) {
+export async function exportTranslations(stream, filters, dependencies) {
   const release = dependencies.release;
   const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
   const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
@@ -43,11 +43,13 @@ export async function exportTranslations(stream, { areaCode }, dependencies) {
     createTranslationsStream(filteredValidatedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
 
-  const csvLinesStream = translationsStreams
-    .filter(({ translation }) => translation.locale === localeToExtract)
-    .filter(keepPixFramework)
-    .filter(keepSpecifiedArea(areaCode))
-    .map(translationAndTagsToCSVLine);
+  let csvLinesStream = translationsStreams.filter(({ translation }) => translation.locale === localeToExtract);
+
+  if (filters) {
+    csvLinesStream = csvLinesStream.filter(makeTranslationsFilters(filters));
+  }
+
+  csvLinesStream = csvLinesStream.map(translationAndTagsToCSVLine);
 
   pipeline(
     csvLinesStream,
@@ -60,21 +62,15 @@ export async function exportTranslations(stream, { areaCode }, dependencies) {
   );
 }
 
-function keepSpecifiedArea(areaCode) {
-  return ({ tags }) => {
-    if (!areaCode) return true;
-    return tags.includes(`Pix-${areaCode}`);
-  };
+function makeTranslationsFilters({ frameworkName, areaCode }) {
+  if (!areaCode) return ({ tags }) => tags.includes(toTag(frameworkName));
+  return ({ tags }) => tags.includes(`${toTag(frameworkName)}-${toTag(areaCode)}`);
 }
 
 function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
   return Readable.from(entities)
     .map(extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag))
     .flatMap(extractTranslationsFromObject(extractTranslationsFn));
-}
-
-function keepPixFramework({ tags }) {
-  return tags.includes('Pix');
 }
 
 function toTag(tagName) {

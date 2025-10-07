@@ -10,11 +10,11 @@ const ImportExportComponent = () => {
   const sendNotice = useNotice();
   const [currentAdmin] = useCurrentAdmin();
 
-  async function exportTranslations() {
+  async function exportTranslations(frameworkName) {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      const { data } = await axios.get('/api/translations.csv', {
+      const { data } = await axios.get(`/api/translations.csv?frameworkName=${frameworkName}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -94,7 +94,7 @@ const ImportExportComponent = () => {
       <Box mb={30}>
         <H3>Export</H3>
         <Button
-          onClick={exportTranslations}
+          onClick={() => exportTranslations('Pix')}
           variant="outlined"
           disabled={isFetching}
         >
@@ -103,11 +103,20 @@ const ImportExportComponent = () => {
         <br/>
         <Button
           mt={10}
+          onClick={() => exportTranslations('Numérique Responsable')}
+          variant="outlined"
+          disabled={isFetching}
+        >
+          Exporter les traductions FR du référentiel Numérique Responsable dans un fichier CSV
+        </Button>
+        <br/>
+        <Button
+          mt={10}
           onClick={exportTranslationToPhrase}
           variant="outlined"
           disabled={isFetching}
         >
-          Exporter les traductions FR du référentiel Pix dans Phrase
+          Exporter toutes les traductions FR dans Phrase
         </Button>
       </Box>
       <Box>

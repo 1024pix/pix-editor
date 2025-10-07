@@ -19,9 +19,9 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
 
   const release = await releaseRepository.getLatestRelease();
 
-  for (const { projectId, areaCode } of projects) {
+  for (const { projectId, areaCode, frameworkName } of projects) {
     const stream = new PassThrough();
-    await exportTranslations(stream, { areaCode }, { release, localizedChallengeRepository, baseUrl });
+    await exportTranslations(stream, { areaCode, frameworkName }, { release, localizedChallengeRepository, baseUrl });
     const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
 
     const configuration = new phraseApi.Configuration({
