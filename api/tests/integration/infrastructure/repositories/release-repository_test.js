@@ -477,8 +477,9 @@ function _mockRichAirtableContent() {
     },
     competenceId: 'competence11',
     tubeIds: ['tube1111'],
-    index: 'thematic111 index',
+    index: 111,
   };
+  databaseBuilder.factory.buildThematic(thematic111);
   const airtableThematic111 = airtableBuilder.factory.buildThematic(thematic111);
   const thematic112 = {
     id: 'thematic112',
@@ -489,8 +490,9 @@ function _mockRichAirtableContent() {
     },
     competenceId: 'competence11',
     tubeIds: ['tube1121'],
-    index: 'thematic112 index',
+    index: 112,
   };
+  databaseBuilder.factory.buildThematic(thematic112);
   const airtableThematic112 = airtableBuilder.factory.buildThematic(thematic112);
   const thematic121 = {
     id: 'thematic121',
@@ -501,8 +503,9 @@ function _mockRichAirtableContent() {
     },
     competenceId: 'competence12',
     tubeIds: ['tube1211', 'tube1212'],
-    index: 'thematic121 index',
+    index: 121,
   };
+  databaseBuilder.factory.buildThematic(thematic121);
   const airtableThematic121 = airtableBuilder.factory.buildThematic(thematic121);
   const thematic211 = {
     id: 'thematic211',
@@ -513,10 +516,11 @@ function _mockRichAirtableContent() {
     },
     competenceId: 'competence21',
     tubeIds: ['tube2111'],
-    index: 'thematic211 index',
+    index: 211,
   };
+  databaseBuilder.factory.buildThematic(thematic211);
   const airtableThematic211 = airtableBuilder.factory.buildThematic(thematic211);
-  const airtableTube1111 = airtableBuilder.factory.buildTube({
+  const tube1111 = {
     id: 'tube1111',
     name: 'tube1111 name',
     title: 'tube1111 title',
@@ -533,8 +537,10 @@ function _mockRichAirtableContent() {
     skillIds: ['skill11111', 'skill11112'],
     thematicAirtableId: 'recThematic111',
     thematicId: 'thematic111',
-  });
-  const airtableTube1121 = airtableBuilder.factory.buildTube({
+  };
+  databaseBuilder.factory.buildTube(tube1111);
+  const airtableTube1111 = airtableBuilder.factory.buildTube(tube1111);
+  const tube1121 = {
     id: 'tube1121',
     name: 'tube1121 name',
     title: 'tube1121 title',
@@ -551,8 +557,10 @@ function _mockRichAirtableContent() {
     skillIds: [],
     thematicAirtableId: 'recThematic112',
     thematicId: 'thematic112',
-  });
-  const airtableTube1211 = airtableBuilder.factory.buildTube({
+  };
+  databaseBuilder.factory.buildTube(tube1121);
+  const airtableTube1121 = airtableBuilder.factory.buildTube(tube1121);
+  const tube1211 = {
     id: 'tube1211',
     name: 'tube1211 name',
     title: 'tube1211 title',
@@ -569,8 +577,10 @@ function _mockRichAirtableContent() {
     skillIds: [],
     thematicAirtableId: 'recThematic121',
     thematicId: 'thematic121',
-  });
-  const airtableTube1212 = airtableBuilder.factory.buildTube({
+  };
+  databaseBuilder.factory.buildTube(tube1211);
+  const airtableTube1211 = airtableBuilder.factory.buildTube(tube1211);
+  const tube1212 = {
     id: 'tube1212',
     name: 'tube1212 name',
     title: 'tube1212 title',
@@ -587,8 +597,10 @@ function _mockRichAirtableContent() {
     skillIds: ['skill12121'],
     thematicAirtableId: 'recThematic121',
     thematicId: 'thematic121',
-  });
-  const airtableTube2111 = airtableBuilder.factory.buildTube({
+  };
+  databaseBuilder.factory.buildTube(tube1212);
+  const airtableTube1212 = airtableBuilder.factory.buildTube(tube1212);
+  const tube2111 = {
     id: 'tube2111',
     name: 'tube2111 name',
     title: 'tube2111 title',
@@ -604,7 +616,9 @@ function _mockRichAirtableContent() {
     competenceId: 'competence21',
     skillIds: ['skill21111'],
     thematicId: 'thematic211',
-  });
+  };
+  databaseBuilder.factory.buildTube(tube2111);
+  const airtableTube2111 = airtableBuilder.factory.buildTube(tube2111);
   const skill11111 = {
     id: 'skill11111',
     name: 'skill11111 name',
@@ -1039,7 +1053,7 @@ function _getRichCurrentContentDTO() {
       tubeIds: [
         'tube1111',
       ],
-      index: 'thematic111 index',
+      index: 111,
     },
     {
       id: 'thematic112',
@@ -1051,7 +1065,7 @@ function _getRichCurrentContentDTO() {
       tubeIds: [
         'tube1121',
       ],
-      index: 'thematic112 index',
+      index: 112,
     },
     {
       id: 'thematic121',
@@ -1064,7 +1078,7 @@ function _getRichCurrentContentDTO() {
         'tube1211',
         'tube1212',
       ],
-      index: 'thematic121 index',
+      index: 121,
     },
     {
       id: 'thematic211',
@@ -1076,7 +1090,7 @@ function _getRichCurrentContentDTO() {
       tubeIds: [
         'tube2111',
       ],
-      index: 'thematic211 index',
+      index: 211,
     },
   ];
   const expectedTubeDTOs = [

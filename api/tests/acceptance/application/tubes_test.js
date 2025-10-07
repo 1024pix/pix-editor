@@ -524,13 +524,17 @@ describe('Application | Route | Tubes', () => {
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
         databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
         databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', index: 0, thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', index: 1, thematicId: 'thematic1' });
         await databaseBuilder.commit();
 
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
           competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
         }));
 
         airtableThematicScope = nock('https://api.airtable.com')
@@ -652,6 +656,8 @@ describe('Application | Route | Tubes', () => {
         expect(airtableThematicScope.isDone()).toBe(true);
 
         await expect(knex.select('*').from('tubes').orderBy('id')).resolves.toStrictEqual([
+          { id: 'tube1', name: '@foo', index: 0, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { id: 'tube2', name: '@bar', index: 1, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
           { id: 'tube3', name: '@pouic', index: 2, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         ]);
 
@@ -797,10 +803,10 @@ describe('Application | Route | Tubes', () => {
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
-          competenceId: 'recCompetence1',
+          competenceId: 'competence1',
           competenceAirtableId: 'recCompetence1',
-          tubeIds: ['tubeId0'],
-          tubeAirtableIds: ['recTube0'],
+          tubeIds: [],
+          tubeAirtableIds: [],
           index: 0
         }));
 

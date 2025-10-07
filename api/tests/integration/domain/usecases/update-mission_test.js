@@ -22,7 +22,26 @@ describe('Integration | Usecases | Update mission', function() {
   });
 
   it('when mission is partially valid, should update mission with warnings', async () => {
-    const mockedLearningContent = {
+    // given
+    const thematic = {
+      id: 'Thematic',
+      competenceId: 'competence1',
+      tubeIds: ['tubeTuto'],
+    };
+    const tube = {
+      id: 'tubeTuto',
+      name: '@Pix1D-recherche_di',
+      thematicId: 'Thematic',
+    };
+
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic(thematic);
+    databaseBuilder.factory.buildTube(tube);
+    await databaseBuilder.commit();
+
+    airtableBuilder.mockLists({
       skills: [
         airtableBuilder.factory.buildSkill({
           id: 'skillTuto2',
@@ -30,20 +49,10 @@ describe('Integration | Usecases | Update mission', function() {
           tubeId: 'tubeTuto',
           status: Skill.STATUSES.EN_CONSTRUCTION
         })],
-      tubes: [
-        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
-      ],
-      thematics: [
-        airtableBuilder.factory.buildThematic({
-          id: 'Thematic',
-          tubeIds: ['tubeTuto']
-        }),
-      ],
-    };
+      tubes: [airtableBuilder.factory.buildTube(tube)],
+      thematics: [airtableBuilder.factory.buildThematic(thematic)],
+    });
 
-    airtableBuilder.mockLists(mockedLearningContent);
-
-    // given
     const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
     await databaseBuilder.commit();
 
@@ -58,19 +67,24 @@ describe('Integration | Usecases | Update mission', function() {
   });
 
   it('when mission is not valid, should throw an error', async () => {
-    const mockedLearningContent = {
-      thematics: [
-        airtableBuilder.factory.buildThematic({
-          id: 'Thematic',
-          tubeIds: [],
-        }),
-      ],
+    // given
+    const thematic = {
+      id: 'Thematic',
+      competenceId: 'competence1',
+      tubeIds: [],
     };
 
-    airtableBuilder.mockLists(mockedLearningContent);
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic(thematic);
+    await databaseBuilder.commit();
 
-    // given
-    const mission = databaseBuilder.factory.buildMission();
+    airtableBuilder.mockLists({
+      thematics: [airtableBuilder.factory.buildThematic(thematic)],
+    });
+
+    const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
     await databaseBuilder.commit();
 
     const updatedMission = await missionRepository.getById(mission.id);

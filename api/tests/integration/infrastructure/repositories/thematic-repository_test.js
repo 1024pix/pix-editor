@@ -14,12 +14,24 @@ describe('Integration | Repository | thematic-repository', () => {
   describe('#list', () => {
     it('should return the list of all thematics', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competenceId1' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId1', name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId2', name: '@bar', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', index: 2, competenceId: 'competenceId2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId3', name: '@fizz', thematicId: 'thematic2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId4', name: '@buzz', thematicId: 'thematic2' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic3', index: 3, competenceId: 'competenceId2' });
+
       const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([
         airtableBuilder.factory.buildThematic({
           id: 'thematic1',
           competenceId: 'competenceId1',
           competenceAirtableId: 'recCompetenceId1',
-          index: '1',
+          index: 1,
           tubeIds: ['tubeId1', 'tubeId2'],
           tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
         }),
@@ -27,7 +39,7 @@ describe('Integration | Repository | thematic-repository', () => {
           id: 'thematic2',
           competenceId: 'competenceId2',
           competenceAirtableId: 'recCompetenceId2',
-          index: '2',
+          index: 2,
           tubeIds: ['tubeId3', 'tubeId4'],
           tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
         }),
@@ -35,7 +47,7 @@ describe('Integration | Repository | thematic-repository', () => {
           id: 'thematic3',
           competenceId: 'competenceId2',
           competenceAirtableId: 'recCompetenceId2',
-          index: '3',
+          index: 3,
           tubeIds: null,
           tubeAirtableIds: null,
         }),
@@ -84,7 +96,7 @@ describe('Integration | Repository | thematic-repository', () => {
           airtableId: 'thematic1',
           competenceId: 'competenceId1',
           competenceAirtableId: 'recCompetenceId1',
-          index: '1',
+          index: 1,
           tubeIds: ['tubeId1', 'tubeId2'],
           tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
           name_i18n: {
@@ -97,7 +109,7 @@ describe('Integration | Repository | thematic-repository', () => {
           airtableId: 'thematic2',
           competenceId: 'competenceId2',
           competenceAirtableId: 'recCompetenceId2',
-          index: '2',
+          index: 2,
           tubeIds: ['tubeId3', 'tubeId4'],
           tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
           name_i18n: {
@@ -110,7 +122,7 @@ describe('Integration | Repository | thematic-repository', () => {
           airtableId: 'thematic3',
           competenceId: 'competenceId2',
           competenceAirtableId: 'recCompetenceId2',
-          index: '3',
+          index: 3,
           tubeIds: [],
           tubeAirtableIds: [],
           name_i18n: {
@@ -230,17 +242,29 @@ describe('Integration | Repository | thematic-repository', () => {
 
   describe('#getMany', () => {
     it('should return corresponding thematics', async () => {
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId2', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', index: 2, competenceId: 'competenceId2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId3', name: '@foo', thematicId: 'thematic2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId4', name: '@bar', thematicId: 'thematic2' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId3', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic3', index: 3, competenceId: 'competenceId3' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId5', name: '@fizz', thematicId: 'thematic3' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId6', name: '@buzz', thematicId: 'thematic3' });
+      await databaseBuilder.commit();
+
       const thematic2 = airtableBuilder.factory.buildThematic({
         id: 'thematic2',
         competenceId: 'competenceId2',
-        index: '2',
+        index: 2,
         tubeIds: ['tubeId3', 'tubeId4'],
         tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
       });
       const thematic3 = airtableBuilder.factory.buildThematic({
         id: 'thematic3',
         competenceId: 'competenceId3',
-        index: '3',
+        index: 3,
         tubeIds: ['tubeId5', 'tubeId6'],
         tubeAirtableIds: ['recTubeId5', 'recTubeId6'],
       });
@@ -355,6 +379,12 @@ describe('Integration | Repository | thematic-repository', () => {
           tubeIds: ['tube1', 'tube2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
         };
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic(thematic);
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
         const findRecordSpy = vi.spyOn(airtable, 'findRecord').mockResolvedValueOnce(
           new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),

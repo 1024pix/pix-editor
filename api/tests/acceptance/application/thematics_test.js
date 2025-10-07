@@ -65,12 +65,21 @@ describe('Application | Route | Thematics', () => {
 
     it('should respond with status 200 and thematic data', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
+
       const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
         id: 'thematic1',
         airtableId: 'recThematic1',
         index: 1,
         competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
         tubeAirtableIds: ['recTube1', 'recTube2'],
+        tubeIds: ['tube1', 'tube2'],
       }));
 
       airtableThematicScope = nock('https://api.airtable.com')
@@ -134,20 +143,35 @@ describe('Application | Route | Thematics', () => {
     describe('when using no filters', () => {
       it('should respond with status 200 and thematics data', async () => {
         // given
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic2', index: 2, competenceId: 'competence2' });
+        databaseBuilder.factory.buildTube({ id: 'tube3', name: '@fizz', thematicId: 'thematic2' });
+        databaseBuilder.factory.buildTube({ id: 'tube4', name: '@buzz', thematicId: 'thematic2' });
+
         const airtableThematics = [
           airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
             id: 'thematic1',
             airtableId: 'recThematic1',
             index: 1,
             competenceAirtableId: 'recCompetence1',
+            competenceId: 'competence1',
             tubeAirtableIds: ['recTube1', 'recTube2'],
+            tubeIds: ['tube1', 'tube2'],
           })),
           airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
             id: 'thematic2',
             airtableId: 'recThematic2',
             index: 2,
             competenceAirtableId: 'recCompetence2',
+            competenceId: 'competence2',
             tubeAirtableIds: ['recTube3', 'recTube4'],
+            tubeIds: ['tube3', 'tube4'],
           })),
         ];
 
@@ -747,13 +771,17 @@ describe('Application | Route | Thematics', () => {
         databaseBuilder.factory.buildArea({ id:'area1', code: '1', frameworkId: 'recFmk1' });
         databaseBuilder.factory.buildCompetence({ id:'competence1', index: '1.1', areaId: 'area1' });
         databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1', createdAt: '2025-09-29T13:20:25Z' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
 
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
           index: 1,
           competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
         }));
 
         airtableThematicScope = nock('https://api.airtable.com')

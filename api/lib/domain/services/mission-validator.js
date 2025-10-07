@@ -47,4 +47,3 @@ async function _validateMissionContent(mission) {
   }
   return warnings;
 }
-
