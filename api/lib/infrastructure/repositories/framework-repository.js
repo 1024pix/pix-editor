@@ -20,13 +20,7 @@ export async function list() {
     ).from(TABLE_NAME).orderBy('createdAt'),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, (airtableDto, pgDto) => {
-    const diff = [];
-    if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-    if (airtableDto.name !== pgDto.name) diff.push(`airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
-    if (!areArrayEquals(airtableDto.areaIds, pgDto.areaIds)) diff.push(`airtable areaIds "${airtableDto.areaIds}" != postgres areaIds "${pgDto.areaIds}"`);
-    return diff;
-  });
+  compareDtosLists(airtableDtos, pgDtos, compareFrameworkDtos);
 
   return airtableDtos.map(toDomain);
 }
@@ -43,6 +37,14 @@ export async function create(framework) {
   }).into(TABLE_NAME);
 
   return toDomain(createdFrameworkDto);
+}
+
+function compareFrameworkDtos(airtableFramework, pgFramework) {
+  const diff = [];
+  if (airtableFramework.id !== pgFramework.id) diff.push(`framework airtable id "${airtableFramework.id}" != postgres id "${pgFramework.id}"`);
+  if (airtableFramework.name !== pgFramework.name) diff.push(`framework airtable name "${airtableFramework.name}" != postgres name "${pgFramework.name}"`);
+  if (!areArrayEquals(airtableFramework.areaIds, pgFramework.areaIds)) diff.push(`framework airtable areaIds "${airtableFramework.areaIds}" != postgres areaIds "${pgFramework.areaIds}"`);
+  return diff;
 }
 
 function toDomain(frameworkDto) {
