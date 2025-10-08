@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { PgClient } from '../PgClient.js';
 import { PGSQL_NON_EXISTENT_DATABASE_ERROR } from '../../db/pgsql-errors.js';
 

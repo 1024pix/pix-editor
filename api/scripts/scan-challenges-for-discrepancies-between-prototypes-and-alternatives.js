@@ -1,6 +1,5 @@
 import { Script } from '../lib/application/scripts/script.js';
 import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
-import 'dotenv/config';
 import { challengeRepository } from '../lib/infrastructure/repositories/index.js';
 import { Challenge } from '../lib/domain/models/index.js';
 

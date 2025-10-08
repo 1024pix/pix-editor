@@ -2,7 +2,6 @@ import Airtable from 'airtable';
 import { Script } from '../lib/application/scripts/script.js';
 import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
 import _ from 'lodash';
-import 'dotenv/config';
 import * as config from '../lib/config.js';
 
 const MAX_RECORDS_ALLOWED = 10;

@@ -1,12 +1,7 @@
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
 import { writeFile } from 'node:fs/promises';
-import * as dotenv from 'dotenv';
 import { logger } from '../../lib/infrastructure/logger.js';
 import basesToCompare from './bases-to-compare.js';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-dotenv.config({ path: resolve(__dirname, '../../.env') });
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;

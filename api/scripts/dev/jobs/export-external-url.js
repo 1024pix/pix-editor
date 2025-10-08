@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import exportExternalUrlsJobProcessor
   from '../../../lib/infrastructure/scheduled-jobs/export-external-url-list-job-processor.js';
 import { Script } from '../../../lib/application/scripts/script.js';

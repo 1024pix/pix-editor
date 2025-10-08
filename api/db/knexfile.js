@@ -1,8 +1,5 @@
-import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-import * as dotenv from 'dotenv';
-dotenv.config({ path: resolve(__dirname, '../.env') });
+import { loadEnvFileIfExists } from '../lib/shared/load-env-file-if-exists.js';
+loadEnvFileIfExists();
 
 function localPostgresEnv(databaseUrl) {
   return {
