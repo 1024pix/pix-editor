@@ -128,6 +128,7 @@ export const phrase = {
     { frameworkName: 'Pix', areaCode: 3, projectId: process.env.PHRASE_PIX_THIRD_AREA_PROJECT_ID },
     { frameworkName: 'Pix', areaCode: 4, projectId: process.env.PHRASE_PIX_FOURTH_AREA_PROJECT_ID },
     { frameworkName: 'Pix', areaCode: 5, projectId: process.env.PHRASE_PIX_FIFTH_AREA_PROJECT_ID },
+    { frameworkName: 'Numérique Responsable', projectId: process.env.PHRASE_PIX_NR_PROJECT_ID },
   ].filter(({ projectId }) => projectId),
 };
 
