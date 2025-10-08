@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import fs from 'node:fs';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';

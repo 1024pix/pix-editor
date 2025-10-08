@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { emptyAllTables as emptyPG } from '../../db/knex-database-connection.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 

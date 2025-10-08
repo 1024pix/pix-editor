@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import checkUrlsJobProcessor from '../../../lib/infrastructure/scheduled-jobs/check-urls-job-processor.js';
 import { Script } from '../../../lib/application/scripts/script.js';
 import { ScriptRunner } from '../../../lib/application/scripts/script-runner.js';

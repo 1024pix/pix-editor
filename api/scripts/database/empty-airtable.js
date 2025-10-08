@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { emptyAllTables as emptyAirtable } from '../../lib/infrastructure/airtable.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 

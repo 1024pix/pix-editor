@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 import Joi from 'joi';
 
 import { logger as defaultLogger } from '../../infrastructure/logger.js';
