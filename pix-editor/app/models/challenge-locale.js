@@ -56,7 +56,7 @@ export default class ChallengeLocaleModel extends Model {
   getTranslationsUrl = (competence) => {
     if (this.isPrimaryInLocale) return null;
     if (this.locale === 'fr-fr') return null;
-    return `/api/challenges/${this.challenge.id}/translations/${this.locale}/area-code/${competence.areaCode}`;
+    return `/api/challenges/${this.challenge.id}/translations/${this.locale}/framework-name/${competence.source}/area-code/${competence.areaCode}`;
   };
 
   get isTranslated() {
