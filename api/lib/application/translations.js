@@ -17,8 +17,8 @@ export async function register(server) {
       config: {
         validate:{
           query:  Joi.object({
-            areaCode: Joi.number()
-          })
+            frameworkName: Joi.string().required(),
+          }).required(),
         },
         handler: async function(request, h) {
           const stream = new PassThrough();
@@ -66,4 +66,3 @@ export async function importTranslationsHandler(request, h) {
 }
 
 export const name = 'translations-api';
-

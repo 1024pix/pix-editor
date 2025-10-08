@@ -123,11 +123,11 @@ export const exportExternalUrlsJob = {
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
   projects: [
-    { areaCode: 1, projectId: process.env.PHRASE_PIX_FIRST_AREA_PROJECT_ID },
-    { areaCode: 2, projectId: process.env.PHRASE_PIX_SECOND_AREA_PROJECT_ID },
-    { areaCode: 3, projectId: process.env.PHRASE_PIX_THIRD_AREA_PROJECT_ID },
-    { areaCode: 4, projectId: process.env.PHRASE_PIX_FOURTH_AREA_PROJECT_ID },
-    { areaCode: 5, projectId: process.env.PHRASE_PIX_FIFTH_AREA_PROJECT_ID },
+    { frameworkName: 'Pix', areaCode: 1, projectId: process.env.PHRASE_PIX_FIRST_AREA_PROJECT_ID },
+    { frameworkName: 'Pix', areaCode: 2, projectId: process.env.PHRASE_PIX_SECOND_AREA_PROJECT_ID },
+    { frameworkName: 'Pix', areaCode: 3, projectId: process.env.PHRASE_PIX_THIRD_AREA_PROJECT_ID },
+    { frameworkName: 'Pix', areaCode: 4, projectId: process.env.PHRASE_PIX_FOURTH_AREA_PROJECT_ID },
+    { frameworkName: 'Pix', areaCode: 5, projectId: process.env.PHRASE_PIX_FIFTH_AREA_PROJECT_ID },
   ].filter(({ projectId }) => projectId),
 };
 
@@ -190,8 +190,7 @@ if (process.env.NODE_ENV === 'test') {
   notifications.slack.enable = false;
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
-  phrase.projectId = 'MY_PHRASE_PROJECT_ID';
-  phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID' }];
+  phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }];
 
   migrationFromAirtable.throwOnPostgresDifference = true;
 }

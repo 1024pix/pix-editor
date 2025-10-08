@@ -8,8 +8,7 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
 
   const { apiKey, projects } = config.phrase;
 
-  const projectsByArea = projects.filter((project) => !Number.isNaN(parseInt(project.areaCode)));
-  if (!apiKey || !projectsByArea.length) {
+  if (!apiKey || !projects.length) {
     logger.info('Phrase API Key or Projects is empty or doesn\'t contain areaCode. Skipping download translations.');
     return;
   }
@@ -18,7 +17,7 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
     apiKey: `token ${apiKey}`,
   });
 
-  for (const { projectId } of projectsByArea) {
+  for (const { projectId } of projects) {
     try {
       const localesApi = new phraseApi.LocalesApi(configuration);
 

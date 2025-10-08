@@ -33,19 +33,6 @@ describe('Unit | Domain | Usecases | download-translation-from-phrase', () => {
     expect(ConfigurationStub).not.toHaveBeenCalled();
   });
 
-  it('should not download from Phrase when projects don\'t have areaCode', async () => {
-    // given
-    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'PIX_🍓_REFERENTIEL_❤️' }]);
-
-    const ConfigurationStub = vi.fn();
-
-    // when
-    await downloadTranslationFromPhrase({ Configuration: ConfigurationStub });
-
-    // then
-    expect(ConfigurationStub).not.toHaveBeenCalled();
-  });
-
   it('should not download from Phrase when projects is empty', async () => {
     // given
     vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([]);

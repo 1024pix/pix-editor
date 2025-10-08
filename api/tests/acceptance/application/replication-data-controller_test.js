@@ -45,6 +45,7 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const response = await server.inject(currentContentOptions);
 
       // then
+      console.log('ICI', response.result);
       const result = JSON.parse(response.result);
       const resultWithoutTranslations = _.omit(result, 'translations');
       const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
