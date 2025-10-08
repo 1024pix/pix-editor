@@ -15,6 +15,11 @@ import * as scheduleDeleteUnmentionedKeysAfterUploadJob
 
 describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/upload', () => {
+    beforeEach(()=> {
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
+        { projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' },
+      ]);
+    });
 
     it('should upload the translations to phrase', async () => {
       // Given
@@ -403,8 +408,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/download', () => {
     beforeEach(()=> {
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-        { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1 },
-        { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2 },
+        { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' },
+        { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' },
       ]);
     });
 

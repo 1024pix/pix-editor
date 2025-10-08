@@ -34,7 +34,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     expect(exportTranslationsStub).toHaveBeenCalledTimes(1);
     expect(exportTranslationsStub).toHaveBeenCalledWith(
       expect.anything(),
-      { areaCode: undefined },
+      { areaCode: undefined, frameworkName: 'Pix' },
       {
         baseUrl: 'http://test.site',
         localizedChallengeRepository,

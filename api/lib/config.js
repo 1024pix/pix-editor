@@ -190,7 +190,7 @@ if (process.env.NODE_ENV === 'test') {
   notifications.slack.enable = false;
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
-  phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID' }];
+  phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }];
 
   migrationFromAirtable.throwOnPostgresDifference = true;
 }
