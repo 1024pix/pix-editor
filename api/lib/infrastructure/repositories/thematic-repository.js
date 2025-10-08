@@ -65,10 +65,17 @@ export async function getManyByAirtableIds(airtableIds) {
 }
 
 export async function listByCompetenceId(competenceId) {
-  const datasourceThematics = await thematicDatasource.listByCompetenceId(competenceId);
-  if (!datasourceThematics) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
-  return toDomainList(datasourceThematics, translations);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    thematicDatasource.listByCompetenceId(competenceId),
+    selectThematics().where('competenceId', competenceId).orderBy('id'),
+  ]);
+  if (!airtableDtos) return [];
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  const translations = await translationRepository.listByEntities(model, airtableDtos.map(({ id }) => id));
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function listByCompetenceAirtableId(competenceAirtableId) {

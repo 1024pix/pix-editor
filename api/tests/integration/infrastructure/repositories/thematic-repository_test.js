@@ -141,6 +141,14 @@ describe('Integration | Repository | thematic-repository', () => {
       //given
       const competenceId = 'competenceId1';
       const thematicId = 'recThematic1';
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: thematicId, index: 1, competenceId });
+      databaseBuilder.factory.buildTube({ id: 'tubeId1', name: '@foo', thematicId });
+      databaseBuilder.factory.buildTube({ id: 'tubeId2', name: '@bar', thematicId });
+
       databaseBuilder.factory.buildTranslation({
         key: 'thematic.recThematic1.name',
         locale: 'fr',
