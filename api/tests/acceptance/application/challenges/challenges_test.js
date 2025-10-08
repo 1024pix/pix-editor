@@ -1531,13 +1531,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
   });
 
-  describe('GET /challenges/:id/translations/:locale/area-code/:code', () => {
+  describe('GET /challenges/:id/translations/:locale/framework-name/:frameworkName/area-code/:code', () => {
 
     it('should redirect to the phrase project corresponding to area code', async () => {
       // given
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-        { areaCode: 1, projectId: 'PHRASE_PROJECT_ID_AREA_1' },
-        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_2' },
+        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_3', frameworkName: 'Pix+' },
+        { areaCode: 1, projectId: 'PHRASE_PROJECT_ID_AREA_1', frameworkName: 'Pix' },
+        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_2', frameworkName: 'Pix' },
       ]);
       const challengeId = 'challenge123';
       const locale = 'nl';
@@ -1595,7 +1596,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: `/api/challenges/${challengeId}/translations/${locale}/area-code/2`,
+        url: `/api/challenges/${challengeId}/translations/${locale}/framework-name/Pix/area-code/2`,
       });
 
       // then
