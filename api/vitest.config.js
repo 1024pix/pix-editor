@@ -10,6 +10,9 @@ export default defineConfig({
       forks: {
         singleFork: true,
       },
-    }
+    },
+    setupFiles: [
+      'tests/setup-tests.js',
+    ],
   },
 });
