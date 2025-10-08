@@ -48,12 +48,20 @@ export async function getMany(ids) {
   return toDomainList(airtableDtos, translations);
 }
 
-export async function getManyByAirtableIds(ids) {
-  if (!ids?.length) return [];
-  const datasourceThematics = await thematicDatasource.getManyByAirtableIds(ids);
-  if (!datasourceThematics) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
-  return toDomainList(datasourceThematics, translations);
+export async function getManyByAirtableIds(airtableIds) {
+  if (!airtableIds?.length) return [];
+  const airtableDtos = await thematicDatasource.getManyByAirtableIds(airtableIds);
+  if (!airtableDtos) return [];
+
+  const ids = airtableDtos.map(({ id }) => id);
+  const [pgDtos, translations] = await Promise.all([
+    selectThematics().whereIn('id', ids).orderBy('id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function listByCompetenceId(competenceId) {

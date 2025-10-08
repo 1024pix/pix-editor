@@ -436,6 +436,45 @@ describe('Integration | Repository | thematic-repository', () => {
       ];
       const airtableThematics = thematics.map((thematic) => airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic)));
       const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableThematics.map((airtableThematic) => new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic)));
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence2',
+        index: '1.2',
+        areaId: 'area1',
+      });
+      thematics.forEach((thematic) =>
+        databaseBuilder.factory.buildThematic(thematic),
+      );
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@foo',
+        thematicId: 'thematic1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube2',
+        name: '@bar',
+        thematicId: 'thematic1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube3',
+        name: '@baz',
+        thematicId: 'thematic2',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube4',
+        name: '@foz',
+        thematicId: 'thematic2',
+      });
       for (const thematic of thematics) {
         databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'fr', value: thematic.name_i18n.fr });
         databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'en', value: thematic.name_i18n.en });
