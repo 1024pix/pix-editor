@@ -1,5 +1,15 @@
 
 
+## v3.222.0 (08/10/2025)
+
+
+### :building_construction: Tech
+- [#1145](https://github.com/1024pix/pix-editor/pull/1145) [TECH] Écritures des tubes dans Postgres (PIX-19728).
+- [#1146](https://github.com/1024pix/pix-editor/pull/1146) [TECH] Supprime la dépendence dotenv.
+- [#1147](https://github.com/1024pix/pix-editor/pull/1147) [TECH] Corrige les erreurs de lint dans Pix Editor.
+- [#1139](https://github.com/1024pix/pix-editor/pull/1139) [TECH] Migrer le composant CopyLink vers le format gjs.
+- [#1144](https://github.com/1024pix/pix-editor/pull/1144) [TECH] Revoir le chargement des traductions des épreuves (PIX-19685).
+
 ## v3.221.0 (03/10/2025)
 
 
