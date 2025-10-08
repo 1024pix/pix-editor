@@ -61,7 +61,6 @@
     "blipp": "^4.0.2",
     "bull": "^4.10.4",
     "countries-list": "^3.0.6",
-    "dotenv": "^17.0.0",
     "fast-csv": "^5.0.5",
     "file-saver": "^2.0.5",
     "googleapis": "^159.0.0",
