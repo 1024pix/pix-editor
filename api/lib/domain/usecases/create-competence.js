@@ -76,7 +76,7 @@ export async function createCompetence(competence) {
       updatedRecordNotifier.notify({
         pixApiClient,
         model: 'tubes',
-        updatedRecord: tubeTransformer.transformTube(createdWorkbenchTube, createdWorkbenchThematic.id),
+        updatedRecord: tubeTransformer.transformTube(createdWorkbenchTube),
       }),
       updatedRecordNotifier.notify({
         pixApiClient,

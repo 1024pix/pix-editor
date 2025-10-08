@@ -10,7 +10,7 @@ import { buildFrameworksFromConfig, copyFrameworksFromAirtable } from './data/fr
 import { buildPix1D } from './data/pix-1d.js';
 import { buildSkillsFromConfig } from './data/skills.js';
 import { buildThematicsFromConfig, copyThematicsFromAirtable } from './data/thematics.js';
-import { buildTubesFromConfig } from './data/tubes.js';
+import { buildTubesFromConfig, copyTubesFromAirtable } from './data/tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 
@@ -72,6 +72,7 @@ export async function seed(knex) {
     await copyAreasFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyThematicsFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyTubesFromAirtable({ airtableClient, databaseBuilder, logger });
 
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);

@@ -1,21 +1,19 @@
 /**
  * @param {import('../../domain/models').Tube[]} tubes
- * @param {import('../../domain/models').Thematic[]} thematics
  * @param {import('../../domain/models').Challenge[]} challenges
  */
-export function transformTubes(tubes, thematics, challenges) {
-  const thematicAirtableIdToId = Object.fromEntries(thematics.map((thematic) => [thematic.airtableId, thematic.id]));
-  return tubes.map((tube) => transformTube(tube, thematicAirtableIdToId[tube.thematicAirtableId], challenges));
+export function transformTubes(tubes, challenges) {
+  return tubes.map((tube) => transformTube(tube, challenges));
 }
 
 /**
  * @param {import('../../domain/models').Tube} tube
- * @param {string} thematicId
  * @param {import('../../domain/models').Challenge[]} challenges
  */
-export function transformTube(tube, thematicId, challenges) {
+export function transformTube(tube, challenges) {
   const {
     id,
+    thematicId,
     competenceId,
     name,
     practicalDescription_i18n,

@@ -109,15 +109,18 @@ export function buildTube({ indexTube , suffix = '', thematicItem, databaseBuild
   const tubePracticalDescription = `${tubeId} practicalDescription`;
   const tubePracticalTitle = `${tubeId} practicalTitle`;
   const tubeName = isWorkbench ? '@workbench' : `@${pickTubeName.next().value}${suffix}`;
+  const tubeIndex = isWorkbench ? null : indexTube;
   const tubeItem = {
     id: tubeId,
-    index: isWorkbench ? null : indexTube,
+    index: tubeIndex,
     name: tubeName,
     competenceAirtableId: thematicItem.competenceAirtableId,
     thematicAirtableId: thematicItem.airtableId,
+    thematicId: thematicItem.id,
     practicalDescription: tubePracticalDescription,
     practicalTitle: tubePracticalTitle,
   };
+  databaseBuilder.factory.buildTube(tubeItem);
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation(
       {
@@ -142,5 +145,22 @@ export async function persistTubes({ items, airtableClient, logger }) {
   const records = await saveInAirtable({ tableName: 'Tubes', data: airtableItems, logger, airtableClient });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
+  });
+}
+
+export async function copyTubesFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableTubes = await  airtableClient.table('Tubes').select({ fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'] }).all();
+
+  logger.info(`Copying ${airtableTubes.length} tubes from airtable...`);
+
+  airtableTubes.forEach((record) => {
+    databaseBuilder.factory.buildTube({
+      id: record.get('id persistant'),
+      name: record.get('Nom'),
+      index: record.get('Index'),
+      thematicId: record.get('Thematique (id persistant)')[0],
+      createdAt: record._rawJson.createdTime,
+      updatedAt: new Date(),
+    });
   });
 }

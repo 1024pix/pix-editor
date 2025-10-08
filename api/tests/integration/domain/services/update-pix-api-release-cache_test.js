@@ -1068,7 +1068,6 @@ describe('Integration | Service | update pix api release cache', function() {
         const tube = domainBuilder.buildTube({
           skillIds: [],
         });
-        const thematicId = 'thematic123';
 
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
@@ -1082,7 +1081,7 @@ describe('Integration | Service | update pix api release cache', function() {
             practicalTitle_i18n: tube.practicalTitle_i18n,
             practicalDescription_i18n: tube.practicalDescription_i18n,
             competenceId: tube.competenceId,
-            thematicId: thematicId,
+            thematicId: tube.thematicId,
             skillIds: [],
             isMobileCompliant: false,
             isTabletCompliant: false,
@@ -1091,7 +1090,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(tube, thematicId);
+        await updatePixApiReleaseCache.onTubeCreated(tube);
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
@@ -1105,7 +1104,7 @@ describe('Integration | Service | update pix api release cache', function() {
         config.pixApi.baseUrl = undefined;
 
         // when
-        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube(), 'recThematic1');
+        await updatePixApiReleaseCache.onTubeCreated(domainBuilder.buildTube());
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
@@ -1123,11 +1122,6 @@ describe('Integration | Service | update pix api release cache', function() {
       it('should patch the tube', async function() {
         // given
         const tube = domainBuilder.buildTube();
-        const thematicId = 'thematicId';
-        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
-          id: thematicId,
-          airtableId: tube.thematicAirtableId,
-        }));
         const challenge = domainBuilder.buildChallengeDatasourceObject({
           skillId: tube.skillIds[0],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -1141,12 +1135,6 @@ describe('Integration | Service | update pix api release cache', function() {
           challengeId: challenge.id,
           locale: challenge.locales[0],
         });
-
-        const airtableThematicScope = nock('https://api.airtable.com')
-          .get(`/v0/airtableBaseValue/Thematiques/${tube.thematicAirtableId}`)
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableThematic);
 
         const airtableChallengesScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Epreuves')
@@ -1175,7 +1163,7 @@ describe('Integration | Service | update pix api release cache', function() {
             practicalTitle_i18n: tube.practicalTitle_i18n,
             practicalDescription_i18n: tube.practicalDescription_i18n,
             competenceId: tube.competenceId,
-            thematicId: thematicId,
+            thematicId: tube.thematicId,
             skillIds: tube.skillIds,
             isMobileCompliant: true,
             isTabletCompliant: true,
@@ -1188,7 +1176,6 @@ describe('Integration | Service | update pix api release cache', function() {
 
         // then
         expect(pixApiCacheScope.isDone()).to.be.true;
-        expect(airtableThematicScope.isDone()).to.be.true;
         expect(airtableChallengesScope.isDone()).to.be.true;
       });
     });

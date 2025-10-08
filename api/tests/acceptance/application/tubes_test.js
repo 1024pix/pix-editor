@@ -520,6 +520,12 @@ describe('Application | Route | Tubes', () => {
     context('success', function() {
 
       beforeEach(async () => {
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'fmk1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
+        await databaseBuilder.commit();
+
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
@@ -541,6 +547,7 @@ describe('Application | Route | Tubes', () => {
           competenceAirtableId: 'recCompetence1',
           competenceId: 'competence1',
           thematicAirtableId: 'recThematic1',
+          thematicId: 'thematic1',
           skillAirtableIds: [],
           skillIds: [],
         }));
@@ -565,7 +572,8 @@ describe('Application | Route | Tubes', () => {
       });
 
       afterEach(async () => {
-        await knex('translations').truncate();
+        await knex('tubes').delete();
+        await knex('translations').delete();
       });
 
       it('should respond with status 201 and created thematic', async () => {
@@ -642,6 +650,10 @@ describe('Application | Route | Tubes', () => {
 
         expect(airtableCreateTubeScope.isDone()).toBe(true);
         expect(airtableThematicScope.isDone()).toBe(true);
+
+        await expect(knex.select('*').from('tubes').orderBy('id')).resolves.toStrictEqual([
+          { id: 'tube3', name: '@pouic', index: 2, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        ]);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'tube.tube3.practicalDescription', locale: 'en', value: 'Third tube’s description' },
@@ -764,6 +776,15 @@ describe('Application | Route | Tubes', () => {
 
     context('success', function() {
       beforeEach(async () => {
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence0', index: '1.0', areaId: 'area1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic0', index: 0, competenceId: 'competence0' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@test', index: 1, thematicId: 'thematic0' });
+        await databaseBuilder.commit();
+
         const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
           id: 'tube1',
           airtableId: 'recTube1',
@@ -812,6 +833,7 @@ describe('Application | Route | Tubes', () => {
           competenceAirtableId: 'recCompetence1',
           competenceId: 'competence1',
           thematicAirtableId: 'recThematic1',
+          thematicId: 'thematic1',
           skillAirtableIds: ['recSkill1', 'recSkill2'],
           skillIds: ['skill1', 'skill2'],
         }));
@@ -926,6 +948,10 @@ describe('Application | Route | Tubes', () => {
 
         expect(airtableUpdateTubeScope.isDone()).toBe(true);
         expect(airtableTubeScope.isDone()).toBe(true);
+
+        await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
+          { id: 'tube1', name: '@pouet', index: 2, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        ]);
 
         await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
           { key: 'thematic.thematic1.name', locale: 'fr', value: 'Nom de la thématique' },

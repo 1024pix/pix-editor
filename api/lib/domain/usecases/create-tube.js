@@ -11,7 +11,7 @@ export async function createTube(tube, dependencies = { tubeRepository, thematic
 
   const createdTube = await dependencies.tubeRepository.create(tube);
 
-  await dependencies.updatePixApiReleaseCache.onTubeCreated(createdTube, thematic.id);
+  await dependencies.updatePixApiReleaseCache.onTubeCreated(createdTube);
 
   return createdTube;
 }

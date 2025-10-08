@@ -481,8 +481,11 @@ describe('Acceptance | Route | competences', () => {
         id: 'tube1',
         airtableId: 'recTube1',
         name: '@workbench',
+        competenceAirtableId: 'recCompetence4',
         competenceId: 'competence4',
         index: null,
+        thematicAirtableId: 'recThematic1',
+        thematicId: 'thematic1',
       }));
 
       const airtableSkill = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
@@ -606,6 +609,7 @@ describe('Acceptance | Route | competences', () => {
     });
 
     afterEach(async () => {
+      await knex('tubes').delete();
       await knex('thematics').delete();
       await knex('competences').delete();
       await knex('translations').delete();

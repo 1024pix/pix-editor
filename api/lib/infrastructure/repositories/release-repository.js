@@ -107,7 +107,7 @@ async function _getCurrentContent() {
   ]);
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
-  const transformedTubes = tubeTransformer.transformTubes(tubes, thematics, challenges);
+  const transformedTubes = tubeTransformer.transformTubes(tubes, challenges);
 
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
   const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });

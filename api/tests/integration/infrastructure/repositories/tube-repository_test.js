@@ -26,6 +26,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: 'practicalDescriptionEnUs tube1',
           },
           thematicAirtableId: 'thematicAirtableId1',
+          thematicId: 'thematicId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
           skillAirtableIds: ['recSkill1', 'recSkill2'],
@@ -44,6 +45,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: 'practicalDescriptionEnUs tube2',
           },
           thematicAirtableId: 'thematicAirtableId2',
+          thematicId: 'thematicId2',
           competenceAirtableId: 'competenceAirtableId2',
           competenceId: 'competenceId2',
           skillAirtableIds: ['recSkill3', 'recSkill4'],
@@ -112,6 +114,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube1DescriptionEn.value,
           },
           thematicAirtableId: 'thematicAirtableId1',
+          thematicId: 'thematicId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
           skillAirtableIds: ['recSkill1', 'recSkill2'],
@@ -131,6 +134,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube2DescriptionEn.value,
           },
           thematicAirtableId: 'thematicAirtableId2',
+          thematicId: 'thematicId2',
           competenceAirtableId: 'competenceAirtableId2',
           competenceId: 'competenceId2',
           skillAirtableIds: ['recSkill3', 'recSkill4'],
@@ -157,6 +161,7 @@ describe('Integration | Repository | tube-repository', () => {
           fr: 'practicalDescriptionFrFr tube1',
           en: 'practicalDescriptionEnUs tube1',
         },
+        thematicId: 'thematicId1',
         thematicAirtableId: 'thematicAirtableId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
@@ -193,6 +198,7 @@ describe('Integration | Repository | tube-repository', () => {
             'id persistant': tube1.id,
             'Nom': tube1.name,
             'Thematique': [tube1.thematicAirtableId],
+            'Thematique (id persistant)': [tube1.thematicId],
             'Competences': [tube1.competenceAirtableId],
             'Competences (id persistant)': [tube1.competenceId],
             'Index': tube1.index,
@@ -221,6 +227,7 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
+          thematicId: 'thematicId1',
           thematicAirtableId: 'thematicAirtableId1',
           competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
@@ -242,6 +249,7 @@ describe('Integration | Repository | tube-repository', () => {
         name: '@test',
         index: 3,
         thematicAirtableId: 'thematicAirtableId1',
+        thematicId: 'thematicId1',
         competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
         skillAirtableIds: ['recSkill1', 'recSkill2'],
@@ -295,22 +303,31 @@ describe('Integration | Repository | tube-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(() => {
-      return knex('translations').truncate();
+    afterEach(async () => {
+      await knex('tubes').delete();
+      await knex('translations').delete();
     });
 
     it('should save new tube to Airtable and translations to DB', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
+      await databaseBuilder.commit();
+
       const tubeId = 'tube45267428';
       vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(tubeId);
       const tube = domainBuilder.buildTube({
         airtableId: null,
         id: null,
+        thematicId: null,
       });
       const airtableTube = airtableBuilder.factory.buildTube({
         ...tube,
         airtableId: 'recTube1',
         id: tubeId,
+        thematicId: 'thematic1',
       });
       const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
         new Airtable.Record('Tubes', airtableTube.id, airtableTube),
@@ -323,6 +340,7 @@ describe('Integration | Repository | tube-repository', () => {
       expect(createdTube).toStrictEqual(domainBuilder.buildTube({
         ...tube,
         airtableId: 'recTube1',
+        thematicId: 'thematic1',
       }));
       expect(createRecordSpy).toHaveBeenCalledWith(
         'Tubes',
@@ -336,6 +354,11 @@ describe('Integration | Repository | tube-repository', () => {
           },
         },
       );
+
+      await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
+        { id: tubeId, name: tube.name, index: tube.index, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
+
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
         { key: `tube.${tubeId}.practicalDescription`, locale: 'en', value: tube.practicalDescription_i18n.en },
         { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: tube.practicalDescription_i18n.fr },
@@ -363,6 +386,7 @@ describe('Integration | Repository | tube-repository', () => {
           },
           index: 1,
           thematicAirtableId: 'recThematic1',
+          thematicId: 'thematic1',
           competenceId: 'competence1',
           competenceAirtableId: 'recCompetence1',
           skillIds: ['skill1', 'skill2'],
@@ -382,6 +406,7 @@ describe('Integration | Repository | tube-repository', () => {
           },
           index: 2,
           thematicAirtableId: 'recThematic2',
+          thematicId: 'thematic2',
           competenceId: 'competence2',
           competenceAirtableId: 'recCompetence2',
           skillIds: ['skill3', 'skill4'],
@@ -414,6 +439,14 @@ describe('Integration | Repository | tube-repository', () => {
   describe('#update', () => {
     it('should save tube to Airtable and translations to DB', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', index: 0, competenceId: 'competence2' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@avant', index: 0, thematicId: 'thematic2' });
+
       const tubeUpdates = {
         airtableId: 'recTube1',
         id: 'tube1',
@@ -434,6 +467,7 @@ describe('Integration | Repository | tube-repository', () => {
       const expectedTube = {
         ...tubeUpdates,
         competenceId: 'competence1',
+        thematicId: 'thematic1',
         skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
       };
@@ -469,6 +503,11 @@ describe('Integration | Repository | tube-repository', () => {
           },
         },
       );
+
+      await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
+        { id: 'tube1', name: '@test', index: 2, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
+
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
         { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'en', value: tubeUpdates.practicalDescription_i18n.en },
         { key: `tube.${tubeUpdates.id}.practicalDescription`, locale: 'fr', value: tubeUpdates.practicalDescription_i18n.fr },
