@@ -93,10 +93,14 @@ async function mockCurrentContent() {
       fr: 'Thématique en fr',
       en: 'Thematic in en',
     },
+    competenceId: expectedCompetence.id,
+    tubeIds: ['tubeTIddrkopID23Fp'],
   }));
   expectedCurrentContent.thematics = [expectedThematic];
 
-  const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube());
+  const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube({
+    thematicId: expectedThematic.id,
+  }));
   expectedCurrentContent.tubes = [{
     ...expectedTube,
     isMobileCompliant: false,
@@ -257,6 +261,8 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
   databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
+  databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
+  databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
 
   airtableBuilder.mockLists({
     frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],

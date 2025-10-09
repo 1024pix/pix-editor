@@ -5,53 +5,92 @@ import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'thematic';
 const TABLE_NAME = 'thematics';
 
 export async function list() {
-  const [datasourceThematics, translations] = await Promise.all([
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
     thematicDatasource.list(),
+    selectThematics().orderBy('id'),
     translationRepository.listByModel(model),
   ]);
-  return toDomainList(datasourceThematics, translations);
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function getByAirtableId(airtableId) {
-  const datasourceThematic = await thematicDatasource.find(airtableId);
-  if (!datasourceThematic) return null;
-  const translations = await translationRepository.listByEntity(model, datasourceThematic.id);
-  return toDomain(datasourceThematic, translations);
+  const airtableDto = await thematicDatasource.find(airtableId);
+  if (!airtableDto) return null;
+
+  const [pgDto, translations] = await Promise.all([
+    selectThematics().where('id', airtableDto.id).first(),
+    translationRepository.listByEntity(model, airtableDto.id),
+  ]);
+
+  compareDtos(airtableDto, pgDto, compareThematicDtos);
+
+  return toDomain(airtableDto, translations);
 }
 
 export async function getMany(ids) {
-  const [datasourceThematics, translations] = await Promise.all([
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
     thematicDatasource.filter({ filter: { ids } }),
+    selectThematics().whereIn('id', ids).orderBy('id'),
     translationRepository.listByEntities(model, ids),
   ]);
-  return toDomainList(datasourceThematics, translations);
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
-export async function getManyByAirtableIds(ids) {
-  if (!ids?.length) return [];
-  const datasourceThematics = await thematicDatasource.getManyByAirtableIds(ids);
-  if (!datasourceThematics) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
-  return toDomainList(datasourceThematics, translations);
+export async function getManyByAirtableIds(airtableIds) {
+  if (!airtableIds?.length) return [];
+  const airtableDtos = await thematicDatasource.getManyByAirtableIds(airtableIds);
+  if (!airtableDtos) return [];
+
+  const ids = airtableDtos.map(({ id }) => id);
+  const [pgDtos, translations] = await Promise.all([
+    selectThematics().whereIn('id', ids).orderBy('id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function listByCompetenceId(competenceId) {
-  const datasourceThematics = await thematicDatasource.listByCompetenceId(competenceId);
-  if (!datasourceThematics) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
-  return toDomainList(datasourceThematics, translations);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    thematicDatasource.listByCompetenceId(competenceId),
+    selectThematics().where('competenceId', competenceId).orderBy('id'),
+  ]);
+  if (!airtableDtos) return [];
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  const translations = await translationRepository.listByEntities(model, airtableDtos.map(({ id }) => id));
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function listByCompetenceAirtableId(competenceAirtableId) {
-  const datasourceThematics = await thematicDatasource.listByCompetenceAirtableId(competenceAirtableId);
-  if (!datasourceThematics) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
-  return toDomainList(datasourceThematics, translations);
+  const airtableDtos = await thematicDatasource.listByCompetenceAirtableId(competenceAirtableId);
+  if (!airtableDtos) return [];
+
+  const ids = airtableDtos.map(({ id }) => id);
+  const [pgDtos, translations] = await Promise.all([
+    selectThematics().whereIn('id', ids).orderBy('id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function create(thematic) {
@@ -88,6 +127,28 @@ export async function update(thematic) {
     await translationRepository.save({ translations, transaction });
     return toDomain(updatedThematicDto, translations);
   });
+}
+
+function selectThematics(knexConn = knex) {
+  return knexConn.select(
+    '*',
+    knexConn.raw(
+      'coalesce((??), \'[]\') as "tubeIds"',
+      knexConn
+        .select(knexConn.raw('json_agg(??)', knexConn.ref('tubes.id')))
+        .from('tubes')
+        .where('tubes.thematicId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
+    ),
+  ).from(TABLE_NAME);
+}
+
+function compareThematicDtos(airtableThematic, pgThematic) {
+  const diff = [];
+  if (airtableThematic.id !== pgThematic.id) diff.push(`thematic airtable id "${airtableThematic.id}" != postgres id "${pgThematic.id}"`);
+  if (!areNullableValuesEqual(airtableThematic.index, pgThematic.index)) diff.push(`thematic airtable index "${airtableThematic.index}" != postgres index "${pgThematic.index}"`);
+  if (airtableThematic.competenceId !== pgThematic.competenceId) diff.push(`thematic airtable competenceId "${airtableThematic.competenceId}" != postgres competenceId "${pgThematic.competenceId}"`);
+  if (!areArrayEquals(airtableThematic.tubeIds, pgThematic.tubeIds)) diff.push(`thematic airtable tubeIds "${airtableThematic.tubeIds}" != postgres tubeIds "${pgThematic.tubeIds}"`);
+  return diff;
 }
 
 function toDomainList(datasourceThematics, translations) {

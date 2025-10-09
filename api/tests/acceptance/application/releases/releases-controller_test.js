@@ -264,6 +264,8 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
   databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
+  databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
+  databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -678,6 +680,8 @@ async function mockContentForRelease() {
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
   databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
+  databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
+  databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',

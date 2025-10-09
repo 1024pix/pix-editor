@@ -26,6 +26,10 @@ describe('Acceptance | Route | competence-overviews', () => {
     beforeEach(async function() {
       competenceId = 'recCompetence1';
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
+
       const airtableCompetences = [
         airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
       ];
@@ -46,11 +50,16 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableCompetences });
 
+      databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematic2', index: 1, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematic3', index: 3, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematic4', index: 4, competenceId });
+
       const airtableThematics = [
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2', 'recTube3'] })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube4', 'recTube5'] })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic4', airtableId: 'recAirtableThematic4', index: 4, tubeIds: ['recTube6'] })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2', 'recTube3'], competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube4', 'recTube5'], competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null, competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic4', airtableId: 'recAirtableThematic4', index: 4, tubeIds: ['recTube6'], competenceId })),
       ];
 
       airtableThematicsScope = nock('https://api.airtable.com')
@@ -74,6 +83,13 @@ describe('Acceptance | Route | competence-overviews', () => {
         locale: 'fr',
         value: 'Thématique 2',
       });
+
+      databaseBuilder.factory.buildTube({ id: 'recTube1', name: '@tube1', index: 2, thematicId: 'recThematic1' });
+      databaseBuilder.factory.buildTube({ id: 'recTube2', name: '@tube2', index: 1, thematicId: 'recThematic1' });
+      databaseBuilder.factory.buildTube({ id: 'recTube3', name: '@tube3', index: 3, thematicId: 'recThematic1' });
+      databaseBuilder.factory.buildTube({ id: 'recTube4', name: '@tube4', index: 1, thematicId: 'recThematic2' });
+      databaseBuilder.factory.buildTube({ id: 'recTube5', name: '@tube5', index: 2, thematicId: 'recThematic2' });
+      databaseBuilder.factory.buildTube({ id: 'recTube6', name: '@tube6', index: 1, thematicId: 'recThematic4' });
 
       const airtableTubes = [
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2 })),
@@ -456,6 +472,10 @@ describe('Acceptance | Route | competence-overviews', () => {
     beforeEach(async function() {
       competenceId = 'recCompetence1';
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
+
       const airtableCompetences = [
         airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
       ];
@@ -476,11 +496,16 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableCompetences });
 
+      databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematic2', index: 1, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematic3', index: 3, competenceId });
+      databaseBuilder.factory.buildThematic({ id: 'recThematicWorkbench', index: 4, competenceId });
+
       const airtableThematics = [
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'] })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube3', 'recTube4'] })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematicWorkbench', airtableId: 'recAirtableThematicWorkbench', index: 4, tubeIds: ['recTubeWorkbench'] })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'], competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube3', 'recTube4'], competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null, competenceId })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematicWorkbench', airtableId: 'recAirtableThematicWorkbench', index: 4, tubeIds: ['recTubeWorkbench'], competenceId })),
       ];
 
       airtableThematicsScope = nock('https://api.airtable.com')
@@ -504,6 +529,12 @@ describe('Acceptance | Route | competence-overviews', () => {
         locale: 'fr',
         value: 'Thématique 2',
       });
+
+      databaseBuilder.factory.buildTube({ id: 'recTube1', name: '@tube1', index: 2, thematicId: 'recThematic1' });
+      databaseBuilder.factory.buildTube({ id: 'recTube2', name: '@tube2', index: 1, thematicId: 'recThematic1' });
+      databaseBuilder.factory.buildTube({ id: 'recTube3', name: '@tube3', index: 3, thematicId: 'recThematic2' });
+      databaseBuilder.factory.buildTube({ id: 'recTube4', name: '@tube4', index: 4, thematicId: 'recThematic2' });
+      databaseBuilder.factory.buildTube({ id: 'recTubeWorkbench', name: '@workbench', index: 5, thematicId: 'recThematicWorkbench' });
 
       const airtableTubes = [
         airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2 })),
