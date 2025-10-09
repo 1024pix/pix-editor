@@ -11,6 +11,7 @@ export function buildTutorial({
   level,
   crush,
   tagAirtableIds,
+  tagIds,
   tutorialForSkills,
   furtherInformation,
 } = {}) {
@@ -28,6 +29,7 @@ export function buildTutorial({
       'niveau': level,
       'CoupDeCoeur': crush ? 'YES' : null,
       'Tags': tagAirtableIds ?? [],
+      'Tags (id persistant)': tagIds ?? [],
       'Solution à': tutorialForSkills,
       'En savoir plus': furtherInformation,
     },

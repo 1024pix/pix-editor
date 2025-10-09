@@ -12,6 +12,7 @@ export class Tutorial {
     crush,
     locale,
     tagAirtableIds,
+    tagIds,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -25,6 +26,7 @@ export class Tutorial {
     this.crush = crush;
     this.locale = locale;
     this.tagAirtableIds = tagAirtableIds;
+    this.tagIds = tagIds;
   }
 
   static get FORMATS() {
