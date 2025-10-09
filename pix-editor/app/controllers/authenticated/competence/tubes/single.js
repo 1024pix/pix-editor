@@ -24,14 +24,9 @@ export default class SingleController extends Controller {
   }
 
   @service access;
-  @service config;
   @service loader;
   @service notify;
   @service router;
-
-  get mayAccessAirtable() {
-    return this.access.mayAccessAirtable();
-  }
 
   get mayEdit() {
     return this.access.mayEditSkills();
@@ -46,10 +41,6 @@ export default class SingleController extends Controller {
       return false;
     }
     return this.isEmptyMandatoryField;
-  }
-
-  get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableTubes}/${this.tube.id}`;
   }
 
   @action

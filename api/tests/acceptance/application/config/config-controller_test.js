@@ -32,10 +32,6 @@ describe('Acceptance | Controller | config', () => {
       it('should return config', async () => {
         // Given
         vi.spyOn(config, 'pixEditor', 'get').mockReturnValue({
-          'airtableUrl': 'airtableUrlValue',
-          'tableChallenges': 'tableChallengesValue',
-          'tableSkills': 'tableSkillsValue',
-          'tableTubes': 'tableTubesValue',
           'storagePost': 'storagePostValue',
           'storageBucket': 'storageBucketValue',
           'localeToLanguageMap': 'localeToLanguageMap',
@@ -46,10 +42,6 @@ describe('Acceptance | Controller | config', () => {
           data: {
             type: 'configs',
             attributes: {
-              'airtable-url': 'airtableUrlValue',
-              'table-challenges': 'tableChallengesValue',
-              'table-skills': 'tableSkillsValue',
-              'table-tubes': 'tableTubesValue',
               'storage-post': 'storagePostValue',
               'storage-bucket': 'storageBucketValue',
               'locale-to-language-map': 'localeToLanguageMap',
@@ -91,4 +83,3 @@ describe('Acceptance | Controller | config', () => {
   });
 
 });
-

@@ -116,12 +116,6 @@
         Dupliquer
       </button>
     {{/if}}
-    {{#if this.mayAccessAirtable}}
-      <a class="ui button item" href={{this.airtableUrl}} target="_blank" rel="noopener noreferrer">
-        <i class="table icon"></i>
-        Airtable
-      </a>
-    {{/if}}
     {{#if this.mayAccessAlternatives}}
       <button class="ui button item alternatives" {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>

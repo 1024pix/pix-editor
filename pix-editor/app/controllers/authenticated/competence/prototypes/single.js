@@ -91,10 +91,6 @@ export default class SingleController extends Controller {
     return this.access.mayAccessLog(this.challenge);
   }
 
-  get mayAccessAirtable() {
-    return this.access.mayAccessAirtable();
-  }
-
   get mayValidate() {
     return this.access.mayValidate(this.challenge);
   }
@@ -122,10 +118,6 @@ export default class SingleController extends Controller {
     } else {
       return false;
     }
-  }
-
-  get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${this.challenge.airtableId}`;
   }
 
   get lastUpdatedAtISO() {
