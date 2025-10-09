@@ -80,7 +80,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: '"fruits" = LOWER(Nom)',
-            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
+            fields: { '': tagDatasource.usedFields },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 1,
           })
@@ -119,7 +119,7 @@ describe('Application | Route | Tags', () => {
           .get('/v0/airtableBaseValue/Tags')
           .query({
             filterByFormula: '"internet" = LOWER(Nom)',
-            fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
+            fields: { '': tagDatasource.usedFields },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 1,
           })
@@ -171,14 +171,6 @@ describe('Application | Route | Tags', () => {
               'pix-id': 'tagId2',
               'title': 'Internet',
               'notes': 'une note',
-            },
-            relationships: {
-              skills: {
-                data: [],
-              },
-              tutorials: {
-                data: [],
-              },
             },
           },
         });
@@ -241,7 +233,12 @@ describe('Application | Route | Tags', () => {
     context('success', function() {
       it('should respond with status 200 and tag', async () => {
         // given
-        const airtableTag = airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits', notes: 'une note', description: 'une description', skillAirtableIds: ['skillAirtableId1'], tutorialAirtableIds: ['tutorialAirtableId1'] });
+        const airtableTag = airtableBuilder.factory.buildTag({
+          id: 'tagId1',
+          airtableId: 'tagAirtableId1',
+          title: 'Fruits',
+          notes: 'une note',
+        });
         airtableGetTagScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
           .query({})
@@ -266,21 +263,6 @@ describe('Application | Route | Tags', () => {
               'pix-id': 'tagId1',
               'title': 'Fruits',
               'notes': 'une note',
-              'description': 'une description',
-            },
-            relationships: {
-              skills: {
-                data: [{
-                  type: 'skills',
-                  id: 'skillAirtableId1',
-                }],
-              },
-              tutorials: {
-                data: [{
-                  type: 'tutorials',
-                  id: 'tutorialAirtableId1',
-                }],
-              },
             },
           },
         });
@@ -315,7 +297,7 @@ describe('Application | Route | Tags', () => {
         it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
           // given
           const airtableTags = [
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
             airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
           ];
@@ -323,7 +305,7 @@ describe('Application | Route | Tags', () => {
             .get('/v0/airtableBaseValue/Tags')
             .query({
               filterByFormula: 'FIND("fr", LOWER(Nom))',
-              fields: { '': [ 'id persistant', 'Nom', 'Notes', 'Description', 'Acquis', 'Tutoriels' ] },
+              fields: { '': tagDatasource.usedFields },
               sort: [{ field: 'Nom', direction: 'asc' }],
               maxRecords: 4,
             })
@@ -351,15 +333,6 @@ describe('Application | Route | Tags', () => {
                   'pix-id': 'tagId3',
                   'title': 'france',
                   'notes': 'une note',
-                  'description': 'une description',
-                },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
                 },
               },
               {
@@ -369,14 +342,6 @@ describe('Application | Route | Tags', () => {
                   'pix-id': 'tagId4',
                   'title': 'freT',
                 },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
-                },
               },
               {
                 type: 'tags',
@@ -384,14 +349,6 @@ describe('Application | Route | Tags', () => {
                 attributes: {
                   'pix-id': 'tagId2',
                   'title': 'frontieRe',
-                },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
                 },
               },
             ],
@@ -404,7 +361,7 @@ describe('Application | Route | Tags', () => {
         it('should respond with status 200 and related tags', async () => {
           // given
           const airtableTags = [
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', description: 'une description', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
             airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
           ];
@@ -439,15 +396,6 @@ describe('Application | Route | Tags', () => {
                   'pix-id': 'tagId3',
                   'title': 'france',
                   'notes': 'une note',
-                  'description': 'une description',
-                },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
                 },
               },
               {
@@ -457,14 +405,6 @@ describe('Application | Route | Tags', () => {
                   'pix-id': 'tagId4',
                   'title': 'freT',
                 },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
-                },
               },
               {
                 type: 'tags',
@@ -472,14 +412,6 @@ describe('Application | Route | Tags', () => {
                 attributes: {
                   'pix-id': 'tagId2',
                   'title': 'frontieRe',
-                },
-                relationships: {
-                  skills: {
-                    data: [],
-                  },
-                  tutorials: {
-                    data: [],
-                  },
                 },
               },
             ],

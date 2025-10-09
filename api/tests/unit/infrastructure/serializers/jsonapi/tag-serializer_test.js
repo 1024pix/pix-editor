@@ -11,9 +11,6 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
         airtableId: 'recAirtable1',
         title: 'Internet',
         notes: 'une note',
-        description: 'une description',
-        skillAirtableIds: ['skillAirtableId1', 'skillAirtableId2'],
-        tutorialAirtableIds: ['tutorialAirtableId1', 'tutorialAirtableId2'],
       });
 
       // when
@@ -27,34 +24,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
           attributes: {
             title: 'Internet',
             notes: 'une note',
-            description: 'une description',
             'pix-id': 'recTag1',
-          },
-          relationships: {
-            skills: {
-              data: [
-                {
-                  type: 'skills',
-                  id: 'skillAirtableId1',
-                },
-                {
-                  type: 'skills',
-                  id: 'skillAirtableId2',
-                },
-              ],
-            },
-            tutorials: {
-              data: [
-                {
-                  type: 'tutorials',
-                  id: 'tutorialAirtableId1',
-                },
-                {
-                  type: 'tutorials',
-                  id: 'tutorialAirtableId2',
-                },
-              ],
-            },
           },
         },
       });
