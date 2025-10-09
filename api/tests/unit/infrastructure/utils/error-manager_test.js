@@ -175,7 +175,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
           });
         }
         else if (domainErrorName === 'TagTitleAlreadyUsedError') {
-          const errorInstance = new domainErrorClass({ title: 'Internet' });
+          const errorInstance = new domainErrorClass('Internet');
           const responseForError = send(hFake, errorInstance);
           expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(409);
           expect(responseForError.source).toStrictEqual({

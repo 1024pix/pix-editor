@@ -38,10 +38,10 @@ export async function getManyByAirtableIds(airtableIds) {
 }
 
 export async function searchByTitle(title) {
-  const airtableDtos = await tagDatasource.searchByTitle(title);
-  if (!airtableDtos) return [];
-
-  const pgDtos = await knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`);
+  const [airtableDtos = [], pgDtos] = await Promise.all([
+    tagDatasource.searchByTitle(title),
+    knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`),
+  ]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTagDtos);
 
@@ -49,9 +49,16 @@ export async function searchByTitle(title) {
 }
 
 export async function findByTitle(title) {
-  const datasourceTag = await tagDatasource.findByTitle(title);
-  if (!datasourceTag) return null;
-  return toDomain(datasourceTag);
+  const [airtableDto, pgDto] = await Promise.all([
+    tagDatasource.findByTitle(title),
+    knex.select('*').from(TABLE_NAME).where(knex.raw('LOWER(??)', 'title'), title.toLowerCase()).first(),
+  ]);
+
+  compareDtos(airtableDto, pgDto, compareTagDtos);
+
+  if (!airtableDto) return null;
+
+  return toDomain(airtableDto);
 }
 
 function compareTagDtos(airtableTag, pgTag) {

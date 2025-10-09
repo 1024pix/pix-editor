@@ -45,7 +45,7 @@ describe('Application | Route | Tags', () => {
     });
 
     context('when payload is not formatted correctly', function() {
-      it('should respond with status 403', async function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -73,6 +73,9 @@ describe('Application | Route | Tags', () => {
     context('when tag title already taken', function() {
       it('should respond with status 409', async () => {
         // given
+        databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'Fruits' });
+        await databaseBuilder.commit();
+
         const airtableTags = [
           airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits' }),
         ];
