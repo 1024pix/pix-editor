@@ -3,9 +3,10 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { concat, fn } from '@ember/helper';
+import { array, concat, fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -58,9 +59,11 @@ export default class LocalizedChallengesProduction extends Component {
                 Consigne
               </:header>
               <:cell>
-                <div class="challenges-production-table__consigne">
-                  {{challengeLocale.instruction}}
-                </div>
+                <LinkTo @route="authenticated.v2.localized-challenge" @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}>
+                  <div class="challenges-production-table__consigne">
+                    {{challengeLocale.instruction}}
+                  </div>
+                </LinkTo>
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>

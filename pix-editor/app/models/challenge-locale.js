@@ -15,6 +15,10 @@ export default class ChallengeLocaleModel extends Model {
     return this.belongsTo('localizedChallenge').value();
   }
 
+  get localizedChallengeId() {
+    return this.localizedChallengeValue.id;
+  }
+
   get isPrimaryInLocale() {
     return this.challenge.locales.includes(this.locale);
   }
