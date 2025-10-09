@@ -302,6 +302,11 @@ describe('Application | Route | Tags', () => {
       context('when searching by titles', function() {
         it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
           // given
+          databaseBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' });
+          databaseBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' });
+          databaseBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' });
+          await databaseBuilder.commit();
+
           const airtableTags = [
             airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
