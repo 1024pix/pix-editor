@@ -59,7 +59,10 @@ export default class LocalizedChallengesProduction extends Component {
                 Consigne
               </:header>
               <:cell>
-                <LinkTo @route="authenticated.v2.localized-challenge" @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}>
+                <LinkTo
+                  @route="{{if challengeLocale.isPrimaryInLocale "authenticated.v2.challenge" "authenticated.v2.localized-challenge"}}"
+                  @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}
+                >
                   <div class="challenges-production-table__consigne">
                     {{challengeLocale.instruction}}
                   </div>
