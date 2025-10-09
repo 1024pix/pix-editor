@@ -203,6 +203,10 @@ describe('Integration | Repository | thematic-repository', () => {
   describe('#listByCompetenceAirtableId', () => {
     it('should retrieve all thematics by competence id', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+
       const thematic = {
         id: 'thematic1',
         airtableId: 'recThematic1',
@@ -216,6 +220,9 @@ describe('Integration | Repository | thematic-repository', () => {
         tubeIds: ['tube1', 'tube2'],
         tubeAirtableIds: ['recTube1', 'recTube2'],
       };
+      databaseBuilder.factory.buildThematic(thematic);
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
 
       const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
       const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([

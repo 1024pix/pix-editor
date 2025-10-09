@@ -543,6 +543,7 @@ describe('Application | Route | Thematics', () => {
             index: 0,
             competenceAirtableId: 'recCompetence1',
             competenceId: 'competence1',
+            tubeIds: [],
           })),
           airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
             id: 'thematic2',
@@ -550,6 +551,7 @@ describe('Application | Route | Thematics', () => {
             index: 1,
             competenceAirtableId: 'recCompetence1',
             competenceId: 'competence1',
+            tubeIds: [],
           })),
         ];
 
