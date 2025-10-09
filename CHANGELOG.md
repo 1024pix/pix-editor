@@ -1,5 +1,15 @@
 
 
+## v3.224.0 (09/10/2025)
+
+
+### :rocket: Amélioration
+- [#1153](https://github.com/1024pix/pix-editor/pull/1153) [FEATURE] Enlever le bouton "Airtable" sur les tubes, acquis et épreuves (PIX-19954).
+
+### :building_construction: Tech
+- [#1154](https://github.com/1024pix/pix-editor/pull/1154) [TECH] Double lecture des tags de tutos (PIX-19962).
+- [#1152](https://github.com/1024pix/pix-editor/pull/1152) [TECH] Ecrit les tags de tutorial dans postgres (PIX-19559).
+
 ## v3.223.0 (09/10/2025)
 
 
