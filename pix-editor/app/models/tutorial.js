@@ -12,7 +12,7 @@ export default class TutorialModel extends Model {
   @attr pixId;
   @attr language;
 
-  @hasMany('tag', { async: true, inverse: 'tutorials' }) tags;
+  @hasMany('tag', { async: true, inverse: null }) tags;
 
   get tagsTitle() {
     const tags = this.hasMany('tags').value() || [];

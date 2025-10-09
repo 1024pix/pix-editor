@@ -29,6 +29,23 @@ export function compareDtosLists(airtableDtos, pgDtos, compareFunc) {
 }
 
 export function compareDtos(airtableDto, pgDto, compareFunc) {
+  if (airtableDto == null && pgDto == null) return;
+  if (airtableDto == null && pgDto != null) {
+    logger.warn('airtable dto empty whereas postgres dto not empty');
+    if (config.migrationFromAirtable.throwOnPostgresDifference) {
+      console.error('airtable dto empty whereas postgres dto not empty');
+      throw new Error('airtable dto empty whereas postgres dto not empty');
+    }
+    return;
+  }
+  if (airtableDto != null && pgDto == null) {
+    logger.warn('airtable dto not empty whereas postgres dto empty');
+    if (config.migrationFromAirtable.throwOnPostgresDifference) {
+      console.error('airtable dto not empty whereas postgres dto empty');
+      throw new Error('airtable dto not empty whereas postgres dto empty');
+    }
+    return;
+  }
   const diff = compareFunc(airtableDto, pgDto);
   if (diff.length === 0) return;
   logger.warn({ diff }, 'difference between airtable and postgres dtos');
