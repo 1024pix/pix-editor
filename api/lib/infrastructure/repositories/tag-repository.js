@@ -2,7 +2,7 @@ import { Tag } from '../../domain/models/index.js';
 import { tagDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areNullableValuesEqual, compareDtos } from './migration-from-airtable.js';
+import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'tutorial_tags';
 
@@ -28,9 +28,13 @@ export async function getByAirtableId(tagId) {
 
 export async function getManyByAirtableIds(airtableIds) {
   if (!airtableIds?.length) return [];
-  const datasourceTags = await tagDatasource.getManyByAirtableIds(airtableIds);
-  if (!datasourceTags) return [];
-  return datasourceTags.map(toDomain);
+  const airtableDtos = await tagDatasource.getManyByAirtableIds(airtableIds);
+  if (!airtableDtos) return [];
+  const pgDtos = await knex.select('*').from(TABLE_NAME).whereIn('id', airtableDtos.map((tag) => tag.id)).orderBy('id');
+
+  compareDtosLists(airtableDtos, pgDtos, compareTagDtos);
+
+  return airtableDtos.map(toDomain);
 }
 
 export async function searchByTitle(title) {

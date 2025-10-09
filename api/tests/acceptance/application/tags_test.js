@@ -366,6 +366,11 @@ describe('Application | Route | Tags', () => {
       context('when searching by ids', function() {
         it('should respond with status 200 and related tags', async () => {
           // given
+          databaseBuilder.factory.buildTag({ id: 'tagId3', notes: 'une note', title: 'france' });
+          databaseBuilder.factory.buildTag({ id: 'tagId4', title: 'freT' });
+          databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'frontieRe' });
+          await databaseBuilder.commit();
+
           const airtableTags = [
             airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
