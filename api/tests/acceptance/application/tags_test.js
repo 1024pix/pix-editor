@@ -1,7 +1,7 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
 
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { tagDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
@@ -185,6 +185,13 @@ describe('Application | Route | Tags', () => {
 
         expect(airtableSearchTagsScope.isDone()).toBe(true);
         expect(airtableCreateTagScope.isDone()).toBe(true);
+        await expect(knex('tutorial_tags').select().first()).resolves.toEqual({
+          id: 'tagId2',
+          title: 'Internet',
+          notes: 'une note',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        });
       });
     });
   });
@@ -392,7 +399,7 @@ describe('Application | Route | Tags', () => {
           expect(airtableSearchTagsScope.isDone()).toBe(true);
         });
       });
-      
+
       context('when searching by ids', function() {
         it('should respond with status 200 and related tags', async () => {
           // given
