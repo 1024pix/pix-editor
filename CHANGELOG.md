@@ -1,5 +1,16 @@
 
 
+## v3.223.0 (09/10/2025)
+
+
+### :rocket: Amélioration
+- [#1150](https://github.com/1024pix/pix-editor/pull/1150) [FEATURE] Ajouter le référentiel numérique responsable aux projet phrase. (PIX-19900).
+- [#1149](https://github.com/1024pix/pix-editor/pull/1149) [FEATURE] Ajout du nom du référentiel dans l'url de traduction (PIX-19899).
+
+### :building_construction: Tech
+- [#1151](https://github.com/1024pix/pix-editor/pull/1151) [TECH] Double lecture des thématiques (PIX-19896).
+- [#1148](https://github.com/1024pix/pix-editor/pull/1148) [TECH] exporter les traductions en prenant en compte leur référentiel (PIX-19898).
+
 ## v3.222.0 (08/10/2025)
 
 
