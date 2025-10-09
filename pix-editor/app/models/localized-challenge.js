@@ -72,7 +72,7 @@ export default class LocalizedChallengeModel extends Model {
     return null;
   }
 
-  get attachmpiecesJointesentBaseName() {
+  get attachmentBaseName() {
     if (this._definedBaseName) {
       return this._definedBaseName;
     }

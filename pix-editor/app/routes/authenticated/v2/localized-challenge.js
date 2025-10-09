@@ -29,6 +29,8 @@ export default class ChallengeRoute extends Route {
     );
     const challengeLocale = challengeLocales.find((challengeLocale) => challengeLocale.localizedChallengeValue.id === localized_challenge_id);
     const localizedChallenge = challengeLocale.localizedChallengeValue;
+    await challengeLocale.challenge.attachments;
+    await localizedChallenge.attachments;
     return { challengeLocale, localizedChallenge, challengeLocales, competence, overview, skill };
   }
 }

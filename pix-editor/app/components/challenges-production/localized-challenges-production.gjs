@@ -18,11 +18,9 @@ import ChallengesProductionHeader from './challenges-production-header';
 
 export default class LocalizedChallengesProduction extends Component {
   @service router;
-  @tracked shouldDisplayObsoleteChallenges = false;
+  @service multipanelManager;
 
-  get primaryChallenge() {
-    return this.args.challengeLocale.challenge;
-  }
+  @tracked shouldDisplayObsoleteChallenges = false;
 
   get challengeLocales() {
     const excludeStatuses = [];
@@ -46,7 +44,7 @@ export default class LocalizedChallengesProduction extends Component {
 
   <template>
     <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competence.id}} @canExpand={{@canExpand}} />
-    <section class="challenges-production">
+    <section class="challenges-production {{if this.multipanelManager.tableShouldBeMinimized "challenges-production--hidden" ""}}">
       <div class="challenges-production-table">
         <PixTable @condensed={{true}} @data={{this.challengeLocales}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}>
           <:columns as |challengeLocale context|>
@@ -66,7 +64,7 @@ export default class LocalizedChallengesProduction extends Component {
                 {{#if challengeLocale.isPrimaryInLocale}}
                   <LinkTo
                     @route="authenticated.v2.challenge"
-                    @models={{array @overview @skill.id this.primaryChallenge.id}}
+                    @models={{array @overview @skill.id challengeLocale.challenge.id}}
                     @query={{hash locale=undefined }}
                   >
                     <div class="challenges-production-table__consigne">
