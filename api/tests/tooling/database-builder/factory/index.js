@@ -8,6 +8,7 @@ export * from './build-release.js';
 export * from './build-skill.js';
 export * from './build-static-course.js';
 export * from './build-static-course-tag.js';
+export * from './build-tag.js';
 export * from './build-thematic.js';
 export * from './build-tube.js';
 export * from './build-translation.js';
