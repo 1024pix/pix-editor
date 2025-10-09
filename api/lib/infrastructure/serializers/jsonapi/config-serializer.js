@@ -4,11 +4,6 @@ const { Serializer } = JsonapiSerializer;
 
 const serializer = new Serializer('config', {
   attributes: [
-    'airtableUrl',
-    'airtableBase',
-    'tableChallenges',
-    'tableSkills',
-    'tableTubes',
     'storagePost',
     'storageBucket',
     'localeToLanguageMap',

@@ -84,12 +84,6 @@
           Modifier
         </button>
       {{/if}}
-      {{#if this.mayAccessAirtable}}
-        <a class="ui button item" href={{this.airtableUrl}} target="_blank"  rel="noopener noreferrer">
-          <i class="table icon"></i>
-          Airtable
-        </a>
-      {{/if}}
       {{#unless this.skill.isLive}}
         <button class="ui button item" {{on "click" this.displayChallenges}} type="button">
           <i class="archive icon"></i>
@@ -123,4 +117,3 @@
   @showModal={{this.displayConfirmLog}}
 />
 {{outlet}}
-

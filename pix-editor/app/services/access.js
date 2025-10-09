@@ -108,10 +108,6 @@ export default class AccessService extends Service {
     return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
-  mayAccessAirtable() {
-    return this.isAdmin();
-  }
-
   mayValidate(challenge) {
     return this.isAdmin() && challenge.isDraft && !challenge.isWorkbench;
   }

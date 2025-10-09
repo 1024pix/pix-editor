@@ -66,11 +66,6 @@ export const lcms = {
 };
 
 export const pixEditor = {
-  airtableUrl: process.env.AIRTABLE_URL,
-  airtableBase: process.env.AIRTABLE_BASE,
-  tableChallenges: process.env.TABLE_CHALLENGES,
-  tableSkills: process.env.TABLE_SKILLS,
-  tableTubes: process.env.TABLE_TUBES,
   storagePost: process.env.STORAGE_POST,
   storageBucket: process.env.STORAGE_BUCKET,
   localeToLanguageMap: LOCALE_TO_LANGUAGE_MAP,

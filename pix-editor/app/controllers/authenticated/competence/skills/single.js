@@ -45,10 +45,6 @@ export default class SingleController extends Controller {
     return this.access.mayEditSkill(this.skill);
   }
 
-  get mayAccessAirtable() {
-    return this.access.mayAccessAirtable();
-  }
-
   get mayDuplicate() {
     return this.access.mayDuplicateSkill(this.skill);
   }
@@ -64,10 +60,6 @@ export default class SingleController extends Controller {
   get previewPrototypeUrl() {
     const prototype = this.skill.productionPrototype;
     return prototype.preview;
-  }
-
-  get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableSkills}/${this.skill.id}`;
   }
 
   get defaultSaveChangelog() {
