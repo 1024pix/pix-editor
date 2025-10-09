@@ -233,6 +233,12 @@ describe('Application | Route | Tags', () => {
     context('success', function() {
       it('should respond with status 200 and tag', async () => {
         // given
+        databaseBuilder.factory.buildTag({
+          id: 'tagId1',
+          title: 'Fruits',
+          notes: 'une note',
+        });
+        await databaseBuilder.commit();
         const airtableTag = airtableBuilder.factory.buildTag({
           id: 'tagId1',
           airtableId: 'tagAirtableId1',
