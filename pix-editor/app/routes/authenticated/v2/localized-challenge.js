@@ -17,8 +17,8 @@ export default class ChallengeRoute extends Route {
 
   async model(params) {
     const { locale, competence_id } = this.paramsFor('authenticated.v2');
-    const { overview, skill_id } = params;
-    const competence = this.store.findRecord('competence', competence_id);
+    const { overview, skill_id, localized_challenge_id } = params;
+    const competence = await this.store.findRecord('competence', competence_id);
     const skill = await this.store.findRecord('skill', skill_id, { backgroundReload: false });
     const challenges = await skill.hasMany('challengesProduction').load();
     const challengeLocales = await Promise.all(
@@ -27,7 +27,9 @@ export default class ChallengeRoute extends Route {
         .sort(byAlternativeVersion)
         .map((challenge) => challenge.getChallengeForLocale(locale)),
     );
-    return { challengeLocales, competence, overview, skill };
+    const challengeLocale = challengeLocales.find((challengeLocale) => challengeLocale.localizedChallengeValue.id === localized_challenge_id);
+    const localizedChallenge = challengeLocale.localizedChallengeValue;
+    return { challengeLocale, localizedChallenge, challengeLocales, competence, overview, skill };
   }
 }
 

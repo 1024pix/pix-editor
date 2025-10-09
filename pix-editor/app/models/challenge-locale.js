@@ -16,15 +16,23 @@ export default class ChallengeLocaleModel extends Model {
   }
 
   get localizedChallengeId() {
-    return this.localizedChallengeValue.id;
+    return this.localizedChallengeValue?.id;
   }
 
   get isPrimaryInLocale() {
     return this.challenge.locales.includes(this.locale);
   }
 
+  get isPrototype() {
+    return this.challenge.isPrototype;
+  }
+
+  get alternativeVersion() {
+    return this.isPrototype ? 'Proto' : this.challenge.alternativeVersion;
+  }
+
   get version() {
-    return this.challenge.isPrototype ? 'Proto' : this.challenge.alternativeVersion;
+    return this.challenge.version;
   }
 
   get instruction() {

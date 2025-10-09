@@ -3,7 +3,7 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { array, concat, fn } from '@ember/helper';
+import { array, concat, fn, hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
@@ -19,6 +19,10 @@ import ChallengesProductionHeader from './challenges-production-header';
 export default class LocalizedChallengesProduction extends Component {
   @service router;
   @tracked shouldDisplayObsoleteChallenges = false;
+
+  get primaryChallenge() {
+    return this.args.challengeLocale.challenge;
+  }
 
   get challengeLocales() {
     const excludeStatuses = [];
@@ -51,7 +55,7 @@ export default class LocalizedChallengesProduction extends Component {
                 Version
               </:header>
               <:cell>
-                {{challengeLocale.version}}
+                {{challengeLocale.alternativeVersion}}
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}} class="challenges-production-table__consigne">
@@ -59,14 +63,30 @@ export default class LocalizedChallengesProduction extends Component {
                 Consigne
               </:header>
               <:cell>
-                <LinkTo
-                  @route="{{if challengeLocale.isPrimaryInLocale "authenticated.v2.challenge" "authenticated.v2.localized-challenge"}}"
-                  @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}
-                >
+                {{#if challengeLocale.isPrimaryInLocale}}
+                  <LinkTo
+                    @route="authenticated.v2.challenge"
+                    @models={{array @overview @skill.id this.primaryChallenge.id}}
+                    @query={{hash locale=undefined }}
+                  >
+                    <div class="challenges-production-table__consigne">
+                      {{challengeLocale.instruction}}
+                    </div>
+                  </LinkTo>
+                {{else if challengeLocale.localizedChallengeValue}}
+                  <LinkTo
+                    @route="authenticated.v2.localized-challenge"
+                    @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}
+                  >
+                    <div class="challenges-production-table__consigne">
+                      {{challengeLocale.instruction}}
+                    </div>
+                  </LinkTo>
+               {{else}}
                   <div class="challenges-production-table__consigne">
                     {{challengeLocale.instruction}}
                   </div>
-                </LinkTo>
+                {{/if}}
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>
@@ -152,7 +172,7 @@ export default class LocalizedChallengesProduction extends Component {
                 </DropdownMenu>
                 {{#let (challengeLocale.getTranslationsUrl @competence) as |translationsUrl|}}
                   {{#if translationsUrl}}
-                    <a class="ui button item" href={{translationsUrl}} target="_blank" rel="noopener noreferrer" aria-label={{concat "traduction de l'épreuve de version " challengeLocale.version}}>
+                    <a class="ui button item" href={{translationsUrl}} target="_blank" rel="noopener noreferrer" aria-label={{concat "traduction de l'épreuve de version " challengeLocale.alternativeVersion}}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M15.7046 0H5.35587C4.63273 0 6.50052 2.45604 6.50052 2.45604H15.7008C16.9204 2.45604 17.9096 3.4452 17.9115 4.6648V14.2398C17.9115 15.4594 16.9223 16.4486 15.7008 16.4486H13.7356C13.5558 16.4486 13.4078 16.5947 13.4078 16.7764V18.5768C13.4078 18.7585 13.5539 18.9046 13.7356 18.9046H15.7008C18.2768 18.9046 20.3656 16.8157 20.3656 14.2398V4.6648C20.3656 2.08885 18.2768 0 15.7008 0H15.7046Z" fill="black"/>
                         <path d="M10.0773 23.7251L5.02476 19.8471C4.37843 19.3525 4 18.5844 4 17.7714V1.31155C4 0.226846 5.24582 -0.387633 6.10759 0.273681L11.1602 4.15164C11.8065 4.6481 12.1849 5.41432 12.1849 6.22926V22.6891C12.1849 23.7738 10.9391 24.3882 10.0773 23.7269V23.7251Z" fill="#03EAB3"/>
