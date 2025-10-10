@@ -609,6 +609,7 @@ describe('Acceptance | Route | competences', () => {
     });
 
     afterEach(async () => {
+      await knex('skills').delete();
       await knex('tubes').delete();
       await knex('thematics').delete();
       await knex('competences').delete();
@@ -758,6 +759,27 @@ describe('Acceptance | Route | competences', () => {
       await expect(knex.select('*').from('thematics')).resolves.toStrictEqual([
         { id: 'thematic1', index: 0, competenceId: 'competence4', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
       ]);
+
+      await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
+        { id: 'tube1', name: '@workbench', index: null, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
+
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([{
+        id: 'skill1',
+        description: 'Acquis pour l\'atelier de la compétence 2.2 Pix',
+        descriptionStatus: null,
+        hintStatus: null,
+        internationalisation: null,
+        level: null,
+        status: null,
+        version: null,
+        tubeId: 'tube1',
+        activatedAt: null,
+        archivedAt: null,
+        obsoletedAt: null,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      }]);
 
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' },

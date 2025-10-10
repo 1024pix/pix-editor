@@ -837,16 +837,25 @@ describe('Integration | Repository | skill-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(() => {
-      return knex('translations').truncate();
+    afterEach(async () => {
+      await knex('skills').delete();
+      await knex('translations').delete();
     });
 
-    it('should save new skill to Airtable and translations to DB', async () => {
+    it('should save new skill and translations', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      await databaseBuilder.commit();
+
       const skill = domainBuilder.buildSkill({
         airtableId: null,
+        tubeId: null,
       });
-      const airtableSkill = airtableBuilder.factory.buildSkill({ ...skill, airtableId: 'recSkillPouet' });
+      const airtableSkill = airtableBuilder.factory.buildSkill({ ...skill, airtableId: 'recSkillPouet', tubeId: 'tube1' });
       const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
         new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
       );
@@ -858,24 +867,48 @@ describe('Integration | Repository | skill-repository', () => {
       expect(createdSkill).toStrictEqual(domainBuilder.buildSkill({
         ...skill,
         airtableId: 'recSkillPouet',
+        tubeId: 'tube1',
       }));
       expect(createRecordSpy).toHaveBeenCalledWith(
         'Acquis',
+        { fields: {
+          'id persistant': skill.id,
+          'Statut de l\'indice': skill.hintStatus,
+          'Comprendre': skill.tutorialAirtableIds,
+          'En savoir plus': skill.learningMoreTutorialAirtableIds,
+          'Status': skill.status,
+          'Tube': [skill.tubeAirtableId],
+          'Description': skill.description,
+          'Statut de la description': skill.descriptionStatus,
+          'Level': skill.level,
+          'Internationalisation': skill.internationalisation,
+          'Version': skill.version,
+        } },
+      );
+
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
         {
-          fields: {
-            'id persistant': skill.id,
-            'Statut de l\'indice': skill.hintStatus,
-            'Comprendre': skill.tutorialAirtableIds,
-            'En savoir plus': skill.learningMoreTutorialAirtableIds,
-            'Status': skill.status,
-            'Tube': [skill.tubeAirtableId],
-            'Description': skill.description,
-            'Statut de la description': skill.descriptionStatus,
-            'Level': skill.level,
-            'Internationalisation': skill.internationalisation,
-            'Version': skill.version,
-          },
-        });
+          id: skill.id,
+          description: skill.description,
+          descriptionStatus: skill.descriptionStatus,
+          hintStatus: skill.hintStatus,
+          internationalisation: skill.internationalisation,
+          level: skill.level,
+          status: skill.status,
+          tubeId: 'tube1',
+          version: 1,
+          activatedAt: null,
+          archivedAt: null,
+          obsoletedAt: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en },
+        { key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr },
+      ]);
     });
   });
 });
