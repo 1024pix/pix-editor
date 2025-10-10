@@ -777,6 +777,16 @@ describe('Integration | Repository | skill-repository', () => {
           activatedAt: new Date('2023-11-06T18:08:00Z'),
           archivedAt: new Date('2023-12-07T18:08:00Z'),
           obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+          description: null,
+          descriptionStatus: null,
+          hintStatus: null,
+          internationalisation: null,
+          level: null,
+          status: null,
+          tubeId: null,
+          version: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         });
       });
 
@@ -811,6 +821,16 @@ describe('Integration | Repository | skill-repository', () => {
           activatedAt: new Date('2023-11-06T18:08:00Z'),
           archivedAt: new Date('2023-12-07T18:08:00Z'),
           obsoletedAt: null,
+          description: null,
+          descriptionStatus: null,
+          hintStatus: null,
+          internationalisation: null,
+          level: null,
+          status: null,
+          tubeId: null,
+          version: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         });
       });
     });
