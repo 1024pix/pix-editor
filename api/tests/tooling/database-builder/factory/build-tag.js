@@ -1,6 +1,6 @@
 import { databaseBuffer } from '../database-buffer.js';
 
-export function buildTag({ id, title, notes , createdAt, updatedAt } = {}) {
+export function buildTag({ id, title, notes, createdAt, updatedAt } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'tutorial_tags',
     autoId: false,

@@ -38,8 +38,37 @@ export async function create(tutorial) {
 }
 
 export async function update(tutorial) {
-  const datasourceTutorial = await tutorialDatasource.update(tutorial);
-  return toDomain(datasourceTutorial);
+  return knex.transaction(async (transaction) => {
+    const [airtableDto] = await Promise.all([
+      tutorialDatasource.update(tutorial),
+      transaction(TABLE_NAME).update({
+        title: tutorial.title,
+        duration: tutorial.duration,
+        source: tutorial.source,
+        format: tutorial.format,
+        link: tutorial.link,
+        license: tutorial.license,
+        level: tutorial.level,
+        crush: tutorial.crush,
+        locale: tutorial.locale,
+        updatedAt: transaction.fn.now(),
+      }).where('id', tutorial.id),
+    ]);
+
+    await transaction.delete().from(TAGS_RELATION_TABLE_NAME).where('tutorialId', tutorial.id).whereNotIn('tutorialTagId', airtableDto.tagIds);
+    if (airtableDto.tagIds.length !== 0) {
+      await transaction.insert(airtableDto.tagIds.map((tutorialTagId) => ({
+        tutorialId: tutorial.id,
+        tutorialTagId,
+        updatedAt: transaction.fn.now(),
+      })))
+        .into(TAGS_RELATION_TABLE_NAME)
+        .onConflict(['tutorialId', 'tutorialTagId'])
+        .merge();
+    }
+
+    return toDomain(airtableDto);
+  });
 }
 
 export async function getByAirtableId(tutorialId) {

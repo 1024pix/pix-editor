@@ -542,6 +542,26 @@ describe('Application | Route | Tutorials', () => {
     context('success', function() {
       it('should respond with status 200 and updated tutorial', async () => {
         // given
+        databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'title1' });
+        databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'title2' });
+        databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'title3' });
+
+        databaseBuilder.factory.buildTutorial({
+          id: 'tutorialId',
+          title: 'mon titre old',
+          format: Tutorial.FORMATS.FRISE,
+          duration: '06:06:06',
+          source: 'Mon grenier old',
+          link: 'https://coucou.old',
+          locale: 'nl',
+          license: Tutorial.LICENSES.YOUTUBE,
+          level: Tutorial.LEVELS.FOUR,
+          crush: false,
+          tagIds: ['tagId3']
+        });
+
+        await databaseBuilder.commit();
+
         const originalAirtableTutorial = airtableBuilder.factory.buildTutorial({
           id: 'tutorialId',
           airtableId: 'tutorialAirtableId',
@@ -574,6 +594,7 @@ describe('Application | Route | Tutorials', () => {
           level: Tutorial.LEVELS.TWO,
           crush: true,
           tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
+          tagIds: ['tagId1', 'tagId2'],
         });
         airtableUpdateTutorialScope = nock('https://api.airtable.com')
           .patch('/v0/airtableBaseValue/Tutoriels/', {
@@ -673,6 +694,28 @@ describe('Application | Route | Tutorials', () => {
           },
         });
         expect(airtableUpdateTutorialScope.isDone()).toBe(true);
+
+        await expect(knex.select('*').from('tutorials')).resolves.toStrictEqual([
+          {
+            id: 'tutorialId',
+            title: 'mon titre',
+            format: Tutorial.FORMATS.PDF,
+            duration: '12:01:02',
+            source: 'Mon grenier',
+            link: 'https://coucou.com',
+            locale: 'fr',
+            license: Tutorial.LICENSES.C,
+            level: Tutorial.LEVELS.TWO,
+            crush: true,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          },
+        ]);
+
+        await expect(knex('tutorials-tutorial_tags').select().orderBy('tutorialTagId')).resolves.toStrictEqual([
+          { tutorialId: 'tutorialId', tutorialTagId: 'tagId1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tutorialId', tutorialTagId: 'tagId2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        ]);
       });
     });
   });
