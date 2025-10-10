@@ -104,16 +104,31 @@ export async function create(skill) {
 
 export async function update(skill) {
   return knex.transaction(async (transaction) => {
-    const updatedSkillDto = await skillDatasource.update(skill);
+
+    const [updatedSkillDto, [skillDataFromPG]] = await Promise.all([
+      skillDatasource.update(skill),
+      transaction(TABLE_NAME).update({
+        status: skill.status,
+        hintStatus: skill.hintStatus,
+        descriptionStatus: skill.descriptionStatus,
+        description: skill.description,
+        level: skill.level,
+        internationalisation: skill.internationalisation,
+        version: skill.version,
+        activatedAt: skill.activatedAt,
+        archivedAt: skill.archivedAt,
+        obsoletedAt: skill.obsoletedAt,
+      }).where('id', skill.id).returning(['activatedAt', 'archivedAt', 'obsoletedAt']),
+    ]);
+
     const translations = skillTranslations.extractFromDomainObject(skill);
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${skillTranslations.prefix}${skill.id}.`,
       locales: ['fr', 'en'],
       transaction,
     });
-    const skillDataToSaveInPG = extractDataForPG(skill);
-    const [skillDataFromPG] = await knex(TABLE_NAME).insert(skillDataToSaveInPG).onConflict('id').merge().returning('*');
     await translationRepository.save({ translations, transaction });
+
     return toDomain(updatedSkillDto, translations, skillDataFromPG);
   });
 }
@@ -134,13 +149,4 @@ function toDomain(datasourceSkill, translations = [], skillDataFromPG) {
     archivedAt: skillDataFromPG?.archivedAt ?? null,
     obsoletedAt: skillDataFromPG?.obsoletedAt ?? null,
   });
-}
-
-function extractDataForPG(skill) {
-  return {
-    id: skill.id,
-    activatedAt: skill.activatedAt,
-    archivedAt: skill.archivedAt,
-    obsoletedAt: skill.obsoletedAt,
-  };
 }

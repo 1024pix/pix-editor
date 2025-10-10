@@ -1,4 +1,4 @@
-import { afterEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
@@ -650,189 +650,88 @@ describe('Integration | Repository | skill-repository', () => {
 
     afterEach(async () => {
       await knex('skills').truncate();
-      return knex('translations').truncate();
+      await knex('translations').delete();
     });
 
-    it('should update the skill', async function() {
+    it('should save skill and translations', async () => {
       // given
-      const skillToSave = domainBuilder.buildSkill({
-        id: 'skillIdPersistant',
-        airtableId: 'skillAirtableId',
-        hintStatus: Skill.HINT_STATUSES.PROPOSE,
-        tutorialAirtableIds: ['tutorialAirtableId'],
-        learningMoreTutorialAirtableIds: ['learningMoreTutorialAirtableId'],
-        status: Skill.STATUSES.ACTIF,
-        tubeAirtableId: 'tubeAirtableId',
-        description: 'ma nouvelle description',
-        level: 4,
-        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-        version: 2,
-        hint_i18n: { fr: 'hint fr', en: 'hint en' },
-        activatedAt: new Date('2023-11-06T18:08:00Z'),
-        archivedAt: new Date('2023-12-07T18:08:00Z'),
-        obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-      });
+      const skill = domainBuilder.buildSkill();
 
-      vi.spyOn(skillDatasource, 'update')
-        .mockImplementationOnce(() => ({
-          id: skillToSave.id,
-          airtableId: skillToSave.airtableId,
-          name: 'Nom computé depuis Airtable',
-          hintStatus: skillToSave.hintStatus,
-          tutorialIds: ['tutorialIdPersistant'],
-          tutorialAirtableIds: skillToSave.tutorialAirtableIds,
-          learningMoreTutorialIds: ['learningMoreTutorialIdPersistant'],
-          learningMoreTutorialAirtableIds: skillToSave.learningMoreTutorialAirtableIds,
-          pixValue: 789,
-          competenceId: 'competenceIdPersistant',
-          status: skillToSave.status,
-          tubeId: 'tubeIdPersistant',
-          tubeAirtableId: skillToSave.tubeAirtableId,
-          description: skillToSave.description,
-          level: skillToSave.level,
-          internationalisation: skillToSave.internationalisation,
-          version: skillToSave.version,
-          createdAt: new Date('2020-01-01'),
-          descriptionStatus: skillToSave.descriptionStatus,
-          challengeIds: ['someChallengeIdPersistant'],
-        }));
-
-      // when
-      await skillRepository.update(skillToSave);
-
-      // when
-      expect(skillDatasource.update).toHaveBeenCalledTimes(1);
-      expect(skillDatasource.update).toHaveBeenNthCalledWith(1, skillToSave);
-    });
-
-    it('should handle translations correctly', async function() {
-      // given
-      const skillAlterHintFrDeleteHintEn_A = domainBuilder.buildSkill({
-        id: 'skillIdPersistantA',
-        airtableId: 'skillAirtableIdA',
-        hint_i18n: { fr: 'hint après A FR', en: '' },
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantA.hint',
-        locale: 'fr',
-        value: 'hint avant A FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skillIdPersistantA.hint',
-        locale: 'en',
-        value: 'hint avant A EN',
-      });
-      const skillAddHint_B = domainBuilder.buildSkill({
-        id: 'skillIdPersistantB',
-        airtableId: 'skillAirtableIdB',
-        hint_i18n: { fr: 'nouveau hint B FR', en: '' },
-      });
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: skill.tubeId, name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill(skill);
+      databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
+      databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
       await databaseBuilder.commit();
 
-      vi.spyOn(skillDatasource, 'update')
-        .mockImplementationOnce(() => skillAlterHintFrDeleteHintEn_A)
-        .mockImplementationOnce(() => skillAddHint_B);
+      const expectedSkill = domainBuilder.buildSkill({
+        description: 'skill description new',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
+        hintStatus: Skill.HINT_STATUSES.A_RETRAVAILLER,
+        hint_i18n: { fr: 'nouvel indice', en: 'new hint' },
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        status: Skill.STATUSES.EN_CONSTRUCTION,
+        archivedAt: new Date('2025-10-10T15:20:23Z'),
+        activatedAt: new Date('2025-10-11T15:20:23Z'),
+        obsoletedAt: new Date('2025-10-12T15:20:23Z'),
+      });
+
+      const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
+      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
+        new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
+      );
 
       // when
-      await skillRepository.update(skillAlterHintFrDeleteHintEn_A);
-      await skillRepository.update(skillAddHint_B);
+      const updatedSkill = await skillRepository.update(expectedSkill);
 
-      // when
-      const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy('key', 'locale');
-      expect(allTranslations).toEqual([
+      // then
+      expect(updatedSkill).toStrictEqual(expectedSkill);
+      expect(updateRecordSpy).toHaveBeenCalledWith(
+        'Acquis',
         {
-          key: 'skill.skillIdPersistantA.hint',
-          locale: 'fr',
-          value: skillAlterHintFrDeleteHintEn_A.hint_i18n.fr,
-        },{
-          key: 'skill.skillIdPersistantB.hint',
-          locale: 'fr',
-          value: skillAddHint_B.hint_i18n.fr,
+          id: skill.airtableId,
+          fields: {
+            'id persistant': skill.id,
+            'Statut de l\'indice': expectedSkill.hintStatus,
+            'Status': expectedSkill.status,
+            'Description': expectedSkill.description,
+            'Statut de la description': expectedSkill.descriptionStatus,
+            'Level': expectedSkill.level,
+            'Internationalisation': expectedSkill.internationalisation,
+            'Version': expectedSkill.version,
+            'Tube': [skill.tubeAirtableId],
+            'Comprendre': skill.tutorialAirtableIds,
+            'En savoir plus': skill.learningMoreTutorialAirtableIds,
+          },
+        },
+      );
+
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
+        {
+          id: skill.id,
+          description: expectedSkill.description,
+          descriptionStatus: expectedSkill.descriptionStatus,
+          hintStatus: expectedSkill.hintStatus,
+          internationalisation: expectedSkill.internationalisation,
+          level: expectedSkill.level,
+          status: expectedSkill.status,
+          version: expectedSkill.version,
+          tubeId: skill.tubeId,
+          activatedAt: expectedSkill.activatedAt,
+          archivedAt: expectedSkill.archivedAt,
+          obsoletedAt: expectedSkill.obsoletedAt,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         },
       ]);
-    });
-    context('PG', function() {
-      it('should insert the row in PG if it was not in it yet', async function() {
-        // given
-        const skillToSave = domainBuilder.buildSkill({
-          id: 'skillIdPersistant',
-          airtableId: 'skillAirtableId',
-          activatedAt: new Date('2023-11-06T18:08:00Z'),
-          archivedAt: new Date('2023-12-07T18:08:00Z'),
-          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-        });
 
-        vi.spyOn(skillDatasource, 'update')
-          .mockImplementationOnce(() => ({
-            id: skillToSave.id,
-            airtableId: skillToSave.airtableId,
-          }));
-
-        // when
-        await skillRepository.update(skillToSave);
-
-        // when
-        await expect(knex('skills').select('*').where({ id: 'skillIdPersistant' }).first()).resolves.toStrictEqual({
-          id: 'skillIdPersistant',
-          activatedAt: new Date('2023-11-06T18:08:00Z'),
-          archivedAt: new Date('2023-12-07T18:08:00Z'),
-          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-          description: null,
-          descriptionStatus: null,
-          hintStatus: null,
-          internationalisation: null,
-          level: null,
-          status: null,
-          tubeId: null,
-          version: null,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        });
-      });
-
-      it('should update the row in PG if it was already in it', async function() {
-        // given
-        const skillToSave = domainBuilder.buildSkill({
-          id: 'skillIdPersistant',
-          airtableId: 'skillAirtableId',
-          activatedAt: new Date('2023-11-06T18:08:00Z'),
-          archivedAt: new Date('2023-12-07T18:08:00Z'),
-          obsoletedAt: null,
-        });
-        databaseBuilder.factory.buildSkill({
-          id: 'skillIdPersistant',
-          activatedAt: null,
-          archivedAt: null,
-          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-        });
-        await databaseBuilder.commit();
-        vi.spyOn(skillDatasource, 'update')
-          .mockImplementationOnce(() => ({
-            id: skillToSave.id,
-            airtableId: skillToSave.airtableId,
-          }));
-
-        // when
-        await skillRepository.update(skillToSave);
-
-        // when
-        await expect(knex('skills').select('*').where({ id: 'skillIdPersistant' }).first()).resolves.toStrictEqual({
-          id: 'skillIdPersistant',
-          activatedAt: new Date('2023-11-06T18:08:00Z'),
-          archivedAt: new Date('2023-12-07T18:08:00Z'),
-          obsoletedAt: null,
-          description: null,
-          descriptionStatus: null,
-          hintStatus: null,
-          internationalisation: null,
-          level: null,
-          status: null,
-          tubeId: null,
-          version: null,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        });
-      });
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: `skill.${skill.id}.hint`, locale: 'en', value: expectedSkill.hint_i18n.en },
+        { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr },
+      ]);
     });
   });
 
@@ -895,8 +794,8 @@ describe('Integration | Repository | skill-repository', () => {
           internationalisation: skill.internationalisation,
           level: skill.level,
           status: skill.status,
+          version: skill.version,
           tubeId: 'tube1',
-          version: 1,
           activatedAt: null,
           archivedAt: null,
           obsoletedAt: null,
