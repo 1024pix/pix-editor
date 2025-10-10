@@ -1,5 +1,22 @@
-.mde.maximized {
-  >div:nth-child(2) {
-    height: 100% !important;
+.mde {
+  &.maximized {
+    > div:nth-child(2) {
+      height: 100% !important;
+    }
+  }
+}
+
+.ui.form .field.mde > label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > span {
+    display: flex;
+    align-items: center;
+
+    > * {
+      margin: 0;
+    }
   }
 }

@@ -423,3 +423,18 @@
 .ui.icon.menu .item > .icon:not(.dropdown) {
   margin-right: .5em;
 }
+
+.ui.icon.menu .item.production {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  .pix-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .pix-tooltip__trigger-element {
+    display: flex;
+  }
+}

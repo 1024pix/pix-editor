@@ -3,7 +3,6 @@ import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import { LinkTo } from '@ember/routing';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
-import { and, not } from 'ember-truth-helpers';
 
 export default class CellQuality extends Component {
 
@@ -181,9 +180,6 @@ export default class CellQuality extends Component {
               <i class="time icon"></i>
             {{/if}}
           </div>
-          {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
-            <br>
-          {{/if}}
         </div>
       </LinkTo>
     </td>
