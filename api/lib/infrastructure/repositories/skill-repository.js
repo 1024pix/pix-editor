@@ -130,7 +130,6 @@ function toDomain(datasourceSkill, translations = [], skillDataFromPG) {
 function extractDataForPG(skill) {
   return {
     id: skill.id,
-    airtableId: skill.airtableId,
     activatedAt: skill.activatedAt,
     archivedAt: skill.archivedAt,
     obsoletedAt: skill.obsoletedAt,

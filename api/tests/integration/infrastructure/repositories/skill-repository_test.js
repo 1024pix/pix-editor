@@ -61,7 +61,6 @@ describe('Integration | Repository | skill-repository', () => {
 
       databaseBuilder.factory.buildSkill({
         id: 'skill1',
-        airtableId: 'recId1',
         activatedAt: new Date('2023-11-06T18:08:00Z'),
         archivedAt: new Date('2023-12-07T18:08:00Z'),
         obsoletedAt: new Date('2024-01-08T18:08:00Z'),
@@ -773,10 +772,8 @@ describe('Integration | Repository | skill-repository', () => {
         await skillRepository.update(skillToSave);
 
         // when
-        const skillInPG = await knex('skills').select('*').where({ id: 'skillIdPersistant' }).first();
-        expect(skillInPG).toStrictEqual({
+        await expect(knex('skills').select('*').where({ id: 'skillIdPersistant' }).first()).resolves.toStrictEqual({
           id: 'skillIdPersistant',
-          airtableId: 'skillAirtableId',
           activatedAt: new Date('2023-11-06T18:08:00Z'),
           archivedAt: new Date('2023-12-07T18:08:00Z'),
           obsoletedAt: new Date('2024-01-08T18:08:00Z'),
@@ -794,7 +791,6 @@ describe('Integration | Repository | skill-repository', () => {
         });
         databaseBuilder.factory.buildSkill({
           id: 'skillIdPersistant',
-          airtableId: 'skillAirtableId',
           activatedAt: null,
           archivedAt: null,
           obsoletedAt: new Date('2024-01-08T18:08:00Z'),
@@ -810,10 +806,8 @@ describe('Integration | Repository | skill-repository', () => {
         await skillRepository.update(skillToSave);
 
         // when
-        const skillInPG = await knex('skills').select('*').where({ id: 'skillIdPersistant' }).first();
-        expect(skillInPG).toStrictEqual({
+        await expect(knex('skills').select('*').where({ id: 'skillIdPersistant' }).first()).resolves.toStrictEqual({
           id: 'skillIdPersistant',
-          airtableId: 'skillAirtableId',
           activatedAt: new Date('2023-11-06T18:08:00Z'),
           archivedAt: new Date('2023-12-07T18:08:00Z'),
           obsoletedAt: null,
