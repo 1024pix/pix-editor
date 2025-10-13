@@ -1028,6 +1028,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         hasEmbedInternalValidation: true,
         noValidationNeeded: false,
         validatedAt: new Date('2021-01-01T18:00:00Z'),
+        instruction: 'not updated',
       });
 
       // when

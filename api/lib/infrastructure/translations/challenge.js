@@ -12,6 +12,19 @@ export const fields = [
   'illustrationAlt',
 ];
 
+export function extractFromLocalizedChallenge(localizedChallenge) {
+  const locale = localizedChallenge.locale;
+  return fields
+    .filter((field) => localizedChallenge[field])
+    .map((field) => {
+      return new Translation({
+        key: `${prefixForDeux(localizedChallenge)}${field}`,
+        locale: locale,
+        value: localizedChallenge[field],
+      });
+    });
+}
+
 export function extractFromChallenge(challenge) {
   const locale = Challenge.getPrimaryLocale(challenge.locales);
   return fields
@@ -27,4 +40,8 @@ export function extractFromChallenge(challenge) {
 
 export function prefixFor(challenge) {
   return `${prefix}${challenge.id}.`;
+}
+
+export function prefixForDeux(localizedChallenge) {
+  return `${prefix}${localizedChallenge.challengeId}.`;
 }

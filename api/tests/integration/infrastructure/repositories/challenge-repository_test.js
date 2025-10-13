@@ -1,11 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  knex,
-} from '../../../test-helper.js';
-import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import {
   Challenge,
@@ -126,7 +120,7 @@ describe('Integration | Repository | challenge-repository', () => {
         attachmentId: 'attachmentB',
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -215,11 +209,14 @@ describe('Integration | Repository | challenge-repository', () => {
             domainBuilder.buildLocalizedChallenge({
               id: challengeA_data.localizedEsId,
               challengeId: challengeA_data.id,
+              instruction: 'instruction ES challengeA',
               ...esLoc_challengeA_data,
             }),
             domainBuilder.buildLocalizedChallenge({
               id: challengeA_data.id,
               challengeId: challengeA_data.id,
+              instruction: 'instruction FR challengeA',
+              solution: 'solution FR challengeA',
               ...primaryLoc_challengeA_data,
             }),
           ],
@@ -235,13 +232,6 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
-          translations: {
-            fr: {
-              instruction: 'instruction FR challengeA',
-              solution: 'solution FR challengeA',
-            },
-            es: { instruction: 'instruction ES challengeA' },
-          },
           type: challengeA_data.type,
           updatedAt: challengeA_data.updatedAt,
           validatedAt: challengeA_data.validatedAt,
@@ -251,7 +241,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
     it('should throw a NotFound error when no challenge exist for given id', async () => {
       // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -438,7 +428,7 @@ describe('Integration | Repository | challenge-repository', () => {
           ...primaryLoc_challengeB_data,
         });
         await databaseBuilder.commit();
-        vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+        vi.spyOn(airtable, 'findRecords').mockImplementation(
           (tableName, options) => {
             if (tableName !== 'Epreuves')
               expect.unreachable('Airtable tableName should be Epreuves');
@@ -580,11 +570,14 @@ describe('Integration | Repository | challenge-repository', () => {
               domainBuilder.buildLocalizedChallenge({
                 id: challengeA_data.localizedEsId,
                 challengeId: challengeA_data.id,
+                instruction: 'instruction ES challengeA',
                 ...esLoc_challengeA_data,
               }),
               domainBuilder.buildLocalizedChallenge({
                 id: challengeA_data.id,
                 challengeId: challengeA_data.id,
+                instruction: 'instruction FR challengeA',
+                solution: 'solution FR challengeA',
                 ...primaryLoc_challengeA_data,
               }),
             ],
@@ -600,13 +593,6 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeA_data.t2Status,
             t3Status: challengeA_data.t3Status,
             timer: challengeA_data.timer,
-            translations: {
-              fr: {
-                instruction: 'instruction FR challengeA',
-                solution: 'solution FR challengeA',
-              },
-              es: { instruction: 'instruction ES challengeA' },
-            },
             type: challengeA_data.type,
             updatedAt: challengeA_data.updatedAt,
             validatedAt: challengeA_data.validatedAt,
@@ -638,6 +624,8 @@ describe('Integration | Repository | challenge-repository', () => {
               domainBuilder.buildLocalizedChallenge({
                 id: challengeB_data.id,
                 challengeId: challengeB_data.id,
+                instruction: 'instruction FR challengeB',
+                proposals: 'proposals FR challengeB',
                 ...primaryLoc_challengeB_data,
               }),
             ],
@@ -653,12 +641,6 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeB_data.t2Status,
             t3Status: challengeB_data.t3Status,
             timer: challengeB_data.timer,
-            translations: {
-              fr: {
-                instruction: 'instruction FR challengeB',
-                proposals: 'proposals FR challengeB',
-              },
-            },
             type: challengeB_data.type,
             updatedAt: challengeB_data.updatedAt,
             validatedAt: challengeB_data.validatedAt,
@@ -844,7 +826,7 @@ describe('Integration | Repository | challenge-repository', () => {
             value: 'solution FR challengeC ToTO but solution not in the search fields',
           });
           await databaseBuilder.commit();
-          vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+          vi.spyOn(airtable, 'findRecords').mockImplementation(
             (tableName, options) => {
               if (tableName !== 'Epreuves')
                 expect.unreachable('Airtable tableName should be Epreuves');
@@ -986,11 +968,14 @@ describe('Integration | Repository | challenge-repository', () => {
                 domainBuilder.buildLocalizedChallenge({
                   id: challengeA_data.localizedEsId,
                   challengeId: challengeA_data.id,
+                  instruction: 'instruction ES challengeA',
                   ...esLoc_challengeA_data,
                 }),
                 domainBuilder.buildLocalizedChallenge({
                   id: challengeA_data.id,
                   challengeId: challengeA_data.id,
+                  instruction: 'instruction FR challengeA TotO',
+                  solution: 'solution FR challengeA',
                   ...primaryLoc_challengeA_data,
                 }),
               ],
@@ -1006,13 +991,6 @@ describe('Integration | Repository | challenge-repository', () => {
               t2Status: challengeA_data.t2Status,
               t3Status: challengeA_data.t3Status,
               timer: challengeA_data.timer,
-              translations: {
-                fr: {
-                  instruction: 'instruction FR challengeA TotO',
-                  solution: 'solution FR challengeA',
-                },
-                es: { instruction: 'instruction ES challengeA' },
-              },
               type: challengeA_data.type,
               updatedAt: challengeA_data.updatedAt,
               validatedAt: challengeA_data.validatedAt,
@@ -1044,6 +1022,8 @@ describe('Integration | Repository | challenge-repository', () => {
                 domainBuilder.buildLocalizedChallenge({
                   id: challengeB_data.id,
                   challengeId: challengeB_data.id,
+                  instruction: 'instruction FR challengeB',
+                  proposals: 'proposals FR challengeB TotO',
                   ...primaryLoc_challengeB_data,
                 }),
               ],
@@ -1059,12 +1039,6 @@ describe('Integration | Repository | challenge-repository', () => {
               t2Status: challengeB_data.t2Status,
               t3Status: challengeB_data.t3Status,
               timer: challengeB_data.timer,
-              translations: {
-                fr: {
-                  instruction: 'instruction FR challengeB',
-                  proposals: 'proposals FR challengeB TotO',
-                },
-              },
               type: challengeB_data.type,
               updatedAt: challengeB_data.updatedAt,
               validatedAt: challengeB_data.validatedAt,
@@ -1174,7 +1148,7 @@ describe('Integration | Repository | challenge-repository', () => {
             attachmentId: 'attachmentB',
           });
           await databaseBuilder.commit();
-          vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+          vi.spyOn(airtable, 'findRecords').mockImplementation(
             (tableName, options) => {
               if (tableName !== 'Epreuves')
                 expect.unreachable('Airtable tableName should be Epreuves');
@@ -1267,11 +1241,14 @@ describe('Integration | Repository | challenge-repository', () => {
                 domainBuilder.buildLocalizedChallenge({
                   id: challengeA_data.localizedEsId,
                   challengeId: challengeA_data.id,
+                  instruction: 'instruction ES challengeA',
                   ...esLoc_challengeA_data,
                 }),
                 domainBuilder.buildLocalizedChallenge({
                   id: challengeA_data.id,
                   challengeId: challengeA_data.id,
+                  instruction: 'instruction FR challengeA',
+                  solution: 'solution FR challengeA',
                   ...primaryLoc_challengeA_data,
                 }),
               ],
@@ -1287,13 +1264,6 @@ describe('Integration | Repository | challenge-repository', () => {
               t2Status: challengeA_data.t2Status,
               t3Status: challengeA_data.t3Status,
               timer: challengeA_data.timer,
-              translations: {
-                fr: {
-                  instruction: 'instruction FR challengeA',
-                  solution: 'solution FR challengeA',
-                },
-                es: { instruction: 'instruction ES challengeA' },
-              },
               type: challengeA_data.type,
               updatedAt: challengeA_data.updatedAt,
               validatedAt: challengeA_data.validatedAt,
@@ -1307,7 +1277,7 @@ describe('Integration | Repository | challenge-repository', () => {
     describe('when no challenge found for given filters', () => {
       it('should return an empty array', async () => {
         // given
-        vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+        vi.spyOn(airtable, 'findRecords').mockImplementation(
           (tableName, options) => {
             if (tableName !== 'Epreuves')
               expect.unreachable('Airtable tableName should be Epreuves');
@@ -1496,7 +1466,7 @@ describe('Integration | Repository | challenge-repository', () => {
           ...primaryLoc_challengeB_data,
         });
         await databaseBuilder.commit();
-        vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+        vi.spyOn(airtable, 'findRecords').mockImplementation(
           (tableName) => {
             if (tableName !== 'Epreuves')
               expect.unreachable('Airtable tableName should be Epreuves');
@@ -1634,11 +1604,14 @@ describe('Integration | Repository | challenge-repository', () => {
               domainBuilder.buildLocalizedChallenge({
                 id: challengeA_data.localizedEsId,
                 challengeId: challengeA_data.id,
+                instruction: 'instruction ES challengeA',
                 ...esLoc_challengeA_data,
               }),
               domainBuilder.buildLocalizedChallenge({
                 id: challengeA_data.id,
                 challengeId: challengeA_data.id,
+                instruction: 'instruction FR challengeA',
+                solution: 'solution FR challengeA',
                 ...primaryLoc_challengeA_data,
               }),
             ],
@@ -1654,13 +1627,6 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeA_data.t2Status,
             t3Status: challengeA_data.t3Status,
             timer: challengeA_data.timer,
-            translations: {
-              fr: {
-                instruction: 'instruction FR challengeA',
-                solution: 'solution FR challengeA',
-              },
-              es: { instruction: 'instruction ES challengeA' },
-            },
             type: challengeA_data.type,
             updatedAt: challengeA_data.updatedAt,
             validatedAt: challengeA_data.validatedAt,
@@ -1692,6 +1658,8 @@ describe('Integration | Repository | challenge-repository', () => {
               domainBuilder.buildLocalizedChallenge({
                 id: challengeB_data.id,
                 challengeId: challengeB_data.id,
+                instruction: 'instruction FR challengeB',
+                proposals: 'proposals FR challengeB',
                 ...primaryLoc_challengeB_data,
               }),
             ],
@@ -1707,12 +1675,6 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeB_data.t2Status,
             t3Status: challengeB_data.t3Status,
             timer: challengeB_data.timer,
-            translations: {
-              fr: {
-                instruction: 'instruction FR challengeB',
-                proposals: 'proposals FR challengeB',
-              },
-            },
             type: challengeB_data.type,
             updatedAt: challengeB_data.updatedAt,
             validatedAt: challengeB_data.validatedAt,
@@ -1892,7 +1854,7 @@ describe('Integration | Repository | challenge-repository', () => {
         ...primaryLoc_challengeB_data,
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -2128,7 +2090,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
     it('should return an empty array when no challenges found for provided skill id', async () => {
       // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -2318,7 +2280,7 @@ describe('Integration | Repository | challenge-repository', () => {
         ...primaryLoc_challengeB_data,
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -2456,11 +2418,14 @@ describe('Integration | Repository | challenge-repository', () => {
             domainBuilder.buildLocalizedChallenge({
               id: challengeA_data.localizedEsId,
               challengeId: challengeA_data.id,
+              instruction: 'instruction ES challengeA',
               ...esLoc_challengeA_data,
             }),
             domainBuilder.buildLocalizedChallenge({
               id: challengeA_data.id,
               challengeId: challengeA_data.id,
+              instruction: 'instruction FR challengeA',
+              solution: 'solution FR challengeA',
               ...primaryLoc_challengeA_data,
             }),
           ],
@@ -2476,13 +2441,6 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
-          translations: {
-            fr: {
-              instruction: 'instruction FR challengeA',
-              solution: 'solution FR challengeA',
-            },
-            es: { instruction: 'instruction ES challengeA' },
-          },
           type: challengeA_data.type,
           updatedAt: challengeA_data.updatedAt,
           validatedAt: challengeA_data.validatedAt,
@@ -2514,6 +2472,8 @@ describe('Integration | Repository | challenge-repository', () => {
             domainBuilder.buildLocalizedChallenge({
               id: challengeB_data.id,
               challengeId: challengeB_data.id,
+              instruction: 'instruction FR challengeB',
+              proposals: 'proposals FR challengeB',
               ...primaryLoc_challengeB_data,
             }),
           ],
@@ -2529,12 +2489,6 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
-          translations: {
-            fr: {
-              instruction: 'instruction FR challengeB',
-              proposals: 'proposals FR challengeB',
-            },
-          },
           type: challengeB_data.type,
           updatedAt: challengeB_data.updatedAt,
           validatedAt: challengeB_data.validatedAt,
@@ -2545,7 +2499,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
     it('should return an empty array when no challenges found for provided skill id', async () => {
       // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -2735,7 +2689,7 @@ describe('Integration | Repository | challenge-repository', () => {
         attachmentId: 'attachmentDraftB',
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -2978,7 +2932,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
     it('should return an empty array when no challenges found for provided competence id', async () => {
       // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -3149,7 +3103,7 @@ describe('Integration | Repository | challenge-repository', () => {
         attachmentId: 'attachmentProtoA',
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -3383,7 +3337,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
     it('should return an empty array when no challenges found for provided competence id', async () => {
       // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation(
+      vi.spyOn(airtable, 'findRecords').mockImplementation(
         (tableName, options) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -3434,6 +3388,8 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          instruction: 'instruction FR challengeA',
+          solution: 'solution FR challengeA',
         });
       const localizedChallengeNL_challengeA =
         domainBuilder.buildLocalizedChallenge({
@@ -3455,6 +3411,7 @@ describe('Integration | Repository | challenge-repository', () => {
           toRephrase: false,
           hasEmbedInternalValidation: true,
           noValidationNeeded: false,
+          instruction: 'instruction NL challengeA',
         });
       const challengeA_data = {
         id: 'challengeA_id',
@@ -3505,13 +3462,6 @@ describe('Integration | Repository | challenge-repository', () => {
           primaryLocalizedChallenge_challengeA,
           localizedChallengeNL_challengeA,
         ],
-        translations: {
-          fr: {
-            instruction: 'instruction FR challengeA',
-            solution: 'solution FR challengeA',
-          },
-          nl: { instruction: 'instruction NL challengeA' },
-        },
       });
       const primaryLocalizedChallenge_challengeB =
         domainBuilder.buildLocalizedChallenge({
@@ -3532,6 +3482,8 @@ describe('Integration | Repository | challenge-repository', () => {
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
           validatedAt: null,
+          instruction: 'instruction FR challengeB',
+          proposals: 'proposals FR challengeB',
         });
       const challengeB_data = {
         id: 'challengeB_id',
@@ -3579,12 +3531,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeB = domainBuilder.buildChallenge({
         ...challengeB_data,
         localizedChallenges: [primaryLocalizedChallenge_challengeB],
-        translations: {
-          fr: {
-            instruction: 'instruction FR challengeB',
-            proposals: 'proposals FR challengeB',
-          },
-        },
       });
       const airtableIdsByIds = {
         skillId1: 'airtableSkillId1',
@@ -3599,7 +3545,7 @@ describe('Integration | Repository | challenge-repository', () => {
           return airtableIdsByIds;
         },
       );
-      vi.spyOn(airtableClient, 'createRecords').mockImplementation(
+      vi.spyOn(airtable, 'createRecords').mockImplementation(
         (tableName, airtableRequestBodies) => {
           if (tableName !== 'Epreuves')
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -3825,7 +3771,6 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
-          translations: challengeA.translations,
           type: challengeA_data.type,
           updatedAt: challengeA_data.updatedAt,
           validatedAt: challengeA_data.validatedAt,
@@ -3866,13 +3811,13 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
-          translations: challengeB.translations,
           type: challengeB_data.type,
           updatedAt: challengeB_data.updatedAt,
           validatedAt: challengeB_data.validatedAt,
           version: challengeB_data.version,
         }),
       ]);
+
       const allLocalizedChallenges = await knex('localized_challenges')
         .select('*')
         .orderBy(['challengeId', 'id']);
@@ -3932,10 +3877,12 @@ describe('Integration | Repository | challenge-repository', () => {
           validatedAt: null,
         },
       ]);
+
       const allLocalizedChallengesAttachments = await knex(
         'localized_challenges-attachments',
       ).select('*');
       expect(allLocalizedChallengesAttachments.length).toStrictEqual(0);
+
       const allTranslations = await knex('translations')
         .select('key', 'locale', 'value')
         .orderBy(['key', 'locale']);
@@ -4026,30 +3973,24 @@ describe('Integration | Repository | challenge-repository', () => {
         urlsToConsult: ['http://challengeToCreate_id.urlToConsult.com'],
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
-        deafAndHardOfHearing:
-          LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
         isAwarenessChallenge: true,
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        instruction: 'instruction FR challengeToCreate',
+        solution: 'solution FR challengeToCreate',
+        alternativeInstruction: 'alternativeInstruction FR challengeToCreate',
+        proposals: 'proposals FR challengeToCreate',
+        solutionToDisplay: 'solutionToDisplay FR challengeToCreate',
+        embedTitle: 'embedTitle FR challengeToCreate',
+        illustrationAlt: 'illustrationAlt FR challengeToCreate',
       });
       const challengeToCreate = domainBuilder.buildChallenge({
         ...challengeToCreate_data,
         localizedChallenges: [localizedChallengeToCreate],
-        translations: {
-          fr: {
-            instruction: 'instruction FR challengeToCreate',
-            solution: 'solution FR challengeToCreate',
-            alternativeInstruction:
-              'alternativeInstruction FR challengeToCreate',
-            proposals: 'proposals FR challengeToCreate',
-            solutionToDisplay: 'solutionToDisplay FR challengeToCreate',
-            embedTitle: 'embedTitle FR challengeToCreate',
-            illustrationAlt: 'illustrationAlt FR challengeToCreate',
-          },
-        },
       });
-      vi.spyOn(airtableClient, 'createRecord').mockImplementation(
+      vi.spyOn(airtable, 'createRecord').mockImplementation(
         (tableName, airtableRequestBody) => {
           if (tableName !== 'Epreuves') {
             expect.unreachable('Airtable tableName should be Epreuves');
@@ -4059,11 +4000,9 @@ describe('Integration | Repository | challenge-repository', () => {
               fields: {
                 'id persistant': challengeToCreate_data.id,
                 'Type d\'épreuve': challengeToCreate_data.type,
-                'T1 - Espaces, casse & accents':
-                  challengeToCreate_data.t1StatusAirtable,
+                'T1 - Espaces, casse & accents': challengeToCreate_data.t1StatusAirtable,
                 'T2 - Ponctuation': challengeToCreate_data.t2StatusAirtable,
-                'T3 - Distance d\'édition':
-                  challengeToCreate_data.t3StatusAirtable,
+                'T3 - Distance d\'édition': challengeToCreate_data.t3StatusAirtable,
                 Statut: challengeToCreate_data.status,
                 'Embed URL': challengeToCreate.localizedChallenges[0].embedUrl,
                 'Embed height': challengeToCreate_data.embedHeight,
@@ -4078,8 +4017,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 Auteur: challengeToCreate_data.author,
                 Déclinable: challengeToCreate_data.declinable,
                 'Version prototype': challengeToCreate_data.version,
-                'Version déclinaison':
-                  challengeToCreate_data.alternativeVersion,
+                'Version déclinaison': challengeToCreate_data.alternativeVersion,
                 'Non voyant': challengeToCreate_data.accessibility1,
                 Daltonien: challengeToCreate_data.accessibility2,
                 Spoil: challengeToCreate_data.spoil,
@@ -4090,8 +4028,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 archived_at: challengeToCreate_data.archivedAt,
                 made_obsolete_at: challengeToCreate_data.madeObsoleteAt,
                 shuffled: challengeToCreate_data.shuffled,
-                contextualizedFields:
-                  challengeToCreate_data.contextualizedFields,
+                contextualizedFields: challengeToCreate_data.contextualizedFields,
               },
             })
           ) {
@@ -4286,14 +4223,13 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           id: challengeId,
           files: [],
-          translations: { fr: frTranslations },
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
               id: challengeId,
               challengeId,
               locale: 'fr',
               alternativeInstruction: '',
-              ...frTranslations
+              ...frTranslations,
             }),
           ],
         }),
@@ -4317,32 +4253,32 @@ describe('Integration | Repository | challenge-repository', () => {
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.instruction`,
           locale: 'fr',
-          value: challenge.translations.fr.instruction,
+          value: frTranslations.instruction,
         });
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.alternativeInstruction`,
           locale: 'fr',
-          value: challenge.translations.fr.alternativeInstruction,
+          value: frTranslations.alternativeInstruction,
         });
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.proposals`,
           locale: 'fr',
-          value: challenge.translations.fr.proposals,
+          value: frTranslations.proposals,
         });
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.solution`,
           locale: 'fr',
-          value: challenge.translations.fr.solution,
+          value: frTranslations.solution,
         });
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.solutionToDisplay`,
           locale: 'fr',
-          value: challenge.translations.fr.solutionToDisplay,
+          value: frTranslations.solutionToDisplay,
         });
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.embedTitle`,
           locale: 'fr',
-          value: challenge.translations.fr.embedTitle,
+          value: frTranslations.embedTitle,
         });
 
         databaseBuilder.factory.buildLocalizedChallenge(
@@ -4367,6 +4303,163 @@ describe('Integration | Repository | challenge-repository', () => {
           fields: challengeDatasource.usedFields,
         },
       );
+    });
+  });
+
+  describe('#update', () => {
+    it.only('should change many attributes including translatable fields', async () => {
+      // given
+      const id = 'challengeIdA';
+
+      const challengeUpdates = {
+        instruction: 'instruction fr new',
+        author: ['ABC', 'DEF'],
+      };
+
+      const airtableChallengeA = airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id, ...challengeUpdates }));
+
+      const challenge = domainBuilder.buildChallenge({
+        id,
+        ...challengeUpdates,
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge(challenge.localizedChallenges[0]);
+
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.instruction', locale: 'fr', value: 'instruction fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.alternativeInstruction', locale: 'fr', value: 'alternativeInstruction fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.proposals', locale: 'fr', value: 'proposals fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.solution', locale: 'fr', value: 'solution fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.solutionToDisplay', locale: 'fr', value: 'solutionToDisplay fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.embedTitle', locale: 'fr', value: 'embedTitle fr' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeIdA.illustrationAlt', locale: 'fr', value: 'illustrationAlt fr' });
+
+      await databaseBuilder.commit();
+
+      const updateRecordSpy = vi
+        .spyOn(airtable, 'updateRecord')
+        .mockResolvedValueOnce(
+          new Airtable.Record('Epreuves', airtableChallengeA.id, airtableChallengeA),
+        );
+
+      // when
+      const updatedChallenge = await challengeRepository.update(challenge);
+
+      // then
+      expect(updatedChallenge).toStrictEqual(domainBuilder.buildChallenge({
+        id,
+        locales: ['fr'],
+        instruction: 'instruction fr new',
+        author: ['ABC', 'DEF'],
+      }));
+
+      await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
+        {
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'my-new-url.html',
+          locale: 'ar',
+          status: LocalizedChallenge.STATUSES.PRIMARY,
+          geography: 'AR',
+          urlsToConsult: ['my-new-link'],
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: false,
+          validatedAt: new Date('2021-01-01T18:00:00Z'),
+        },
+      ]);
+
+      expect(updateRecordSpy).toHaveBeenCalledWith(
+        challengeDatasource.tableName,
+        {
+          filterByFormula:
+            'AND(OR({Acquis (id persistant)} = "skillId1", {Acquis (id persistant)} = "skillId2"), {Généalogie} = "Prototype 1", {Statut} = "validé")',
+          fields: challengeDatasource.usedFields,
+        },
+      );
+    });
+
+    it('should fetch primary embed URL after updating', async () => {
+      // Given
+      const challengeId = 'recChallengeId';
+      const locale = 'fr';
+      const challenge = {
+        ...domainBuilder.buildChallengeDatasourceObject({ id: challengeId, locales: [locale] }),
+        instruction: 'consigne',
+        alternativeInstruction: 'consigne alternative',
+        solution: 'solution',
+        solutionToDisplay: 'solution à afficher',
+        proposals: 'propositions',
+        embedTitle: 'Titre d\'embed',
+        geography: 'NL',
+      };
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        embedUrl: 'old_url',
+        urlsToConsult: ['pouet'],
+        locale,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge_localized_nl',
+        challengeId,
+        embedUrl: 'url_nl',
+        urlsToConsult: ['toot'],
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.instruction`,
+        locale,
+        value: 'Ancienne valeur de l\'instruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.alternativeInstruction`,
+        locale,
+        value: challenge.alternativeInstruction,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solution`,
+        locale,
+        value: challenge.solution,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solutionToDisplay`,
+        locale,
+        value: challenge.solutionToDisplay,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.proposals`,
+        locale,
+        value: challenge.proposals,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.embedTitle`,
+        locale,
+        value: challenge.embedTitle,
+      });
+      await databaseBuilder.commit();
+
+      const updatedChallenge = {
+        ...challenge,
+        author: ['SPS', 'NEW'],
+        instruction: 'NOUVELLE consigne',
+      };
+
+      // When
+      const expectedChallenge = challengeRepository.update({ updatedChallenge });
+
+      // Then
+      expect(result).toStrictEqual(expectedChallenge);
     });
   });
 });

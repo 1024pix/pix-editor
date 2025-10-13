@@ -3,12 +3,7 @@ import { Challenge } from '../../../../lib/domain/models/index.js';
 
 export function buildChallenge({
   id = 'persistant id',
-  instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-  alternativeInstruction = '',
-  proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
   type = Challenge.TYPES.QCM,
-  solution = '1, 5',
-  solutionToDisplay = '1',
   t1Status = true,
   t2Status = false,
   t3Status = true,
@@ -16,7 +11,6 @@ export function buildChallenge({
   timer = 1234,
   competenceId = 'recsvLz0W2ShyfD63',
   embedUrl = 'https://github.io/page/epreuve.html',
-  embedTitle = 'Epreuve de selection de dossier',
   embedHeight = 500,
   format = Challenge.FORMATS.MOTS,
   autoReply = false,
@@ -49,18 +43,6 @@ export function buildChallenge({
   skillId = 'recSkillId',
   alpha = 0.5,
   delta = 0.2,
-  illustrationAlt = null,
-  translations = {
-    [Challenge.getPrimaryLocale(locales)]: {
-      instruction,
-      alternativeInstruction,
-      proposals,
-      solution,
-      solutionToDisplay,
-      embedTitle,
-      illustrationAlt,
-    },
-  },
   localizedChallenges = [{
     id,
     challengeId: id,
@@ -104,7 +86,6 @@ export function buildChallenge({
     createdAt,
     shuffled,
     contextualizedFields,
-    translations,
     skillId,
     alpha,
     delta,

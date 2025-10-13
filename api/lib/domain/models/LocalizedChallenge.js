@@ -108,6 +108,13 @@ export class LocalizedChallenge {
     toRephrase,
     hasEmbedInternalValidation,
     noValidationNeeded,
+    instruction,
+    alternativeInstruction,
+    proposals,
+    solution,
+    solutionToDisplay,
+    embedTitle,
+    illustrationAlt,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -126,6 +133,13 @@ export class LocalizedChallenge {
       hasEmbedInternalValidation: hasEmbedInternalValidation ?? false,
       noValidationNeeded: noValidationNeeded ?? false,
       validatedAt: null,
+      instruction,
+      alternativeInstruction,
+      proposals,
+      solution,
+      solutionToDisplay,
+      embedTitle,
+      illustrationAlt,
     });
   }
 
@@ -169,6 +183,13 @@ export class LocalizedChallenge {
       hasEmbedInternalValidation: this.hasEmbedInternalValidation,
       noValidationNeeded: this.noValidationNeeded,
       validatedAt: null,
+      alternativeInstruction: this.alternativeInstruction,
+      embedTitle: this.embedTitle,
+      instruction: this.instruction,
+      proposals: this.proposals,
+      solution: this.solution,
+      solutionToDisplay: this.solutionToDisplay,
+      illustrationAlt: this.illustrationAlt,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);

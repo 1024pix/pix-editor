@@ -64,24 +64,6 @@ export function serialize(localizedChallenge) {
   return serializer.serialize(localizedChallenge);
 }
 
-export function serializeRead(localizedChallengeRead) {
-  let dataToSerialize;
-  if (Array.isArray(localizedChallengeRead)) {
-    dataToSerialize = localizedChallengeRead.map((localizedChallenge) => ({
-      challengeId: localizedChallenge.challengeId,
-      defaultEmbedUrl: null,
-      ...localizedChallenge,
-    }));
-  } else {
-    dataToSerialize = {
-      challengeId: localizedChallengeRead.challengeId,
-      defaultEmbedUrl: null,
-      ...localizedChallengeRead,
-    };
-  }
-  return serializer.serialize(dataToSerialize);
-}
-
 const deserializer = new Deserializer({
   keyForAttribute: 'camelCase',
   challenges: {

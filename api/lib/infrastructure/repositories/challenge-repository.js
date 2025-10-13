@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge, Translation } from '../../domain/models/index.js';
+import { Challenge } from '../../domain/models/index.js';
 import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
-import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor, } from '../translations/challenge.js';
+import { extractFromLocalizedChallenge as extractTranslationsFromLocalizedChallenge, prefixFor, extractFromChallenge as extractTranslationsFromChallenge } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { stringValue } from '../airtable.js';
 
@@ -91,18 +91,8 @@ export async function createBatch(challenges) {
   }
   const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
   const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
-  const allTranslations = challenges.flatMap((challenge) => {
-    const translationModels = [];
-    for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
-      for (const [field, value] of Object.entries(translationsForLocale)) {
-        translationModels.push(new Translation({
-          key: `${prefixFor(challenge)}${field}`,
-          locale,
-          value,
-        }));
-      }
-    }
-    return translationModels;
+  const allTranslations = allLocalizedChallenges.flatMap((localizedChallenge) => {
+    return extractTranslationsFromLocalizedChallenge(localizedChallenge);
   });
   return knex.transaction(async (transaction) => {
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
@@ -112,8 +102,10 @@ export async function createBatch(challenges) {
 }
 // TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
 // là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
+// TODO : TEST ME
 export async function update(challenge, knexConn = knex) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
+
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction: knexConn });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 

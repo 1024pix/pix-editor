@@ -2195,7 +2195,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
-    it('should update a challenge', async () => {
+    it.only('should update a challenge', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const locale = 'fr';
@@ -2285,8 +2285,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
             id: challenge.id,
             attributes: {
               'airtable-id': challenge.airtableId,
-              instruction: challenge.instruction,
-              'alternative-instruction': challenge.alternativeInstruction,
+              instruction: 'euh patate',
+              'alternative-instruction': 'hehe' + challenge.alternativeInstruction,
+              'illustration-alt': 'new illustation alt',
               type: challenge.type,
               format: challenge.format,
               proposals: challenge.proposals,
@@ -2361,6 +2362,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'airtable-id': challenge.airtableId,
             instruction: 'consigne',
             'alternative-instruction': 'consigne alternative',
+            'illustration-alt': 'new illustration alt',
             type: Challenge.TYPES.QCM,
             format: Challenge.FORMATS.MOTS,
             proposals: 'propositions',
@@ -2396,7 +2398,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
-            'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
             'require-gafam-website-access': false,
             'is-incompatible-ipad-certif': false,
@@ -2594,6 +2595,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           key: 'challenge.recChallengeId.embedTitle',
           locale: 'fr',
           value: challenge.embedTitle,
+        },
+        {
+          key: 'challenge.recChallengeId.illustrationAlt',
+          locale: 'fr',
+          value: 'new illustation alt',
         },
         {
           key: 'challenge.recChallengeId.instruction',

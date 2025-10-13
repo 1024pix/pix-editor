@@ -105,23 +105,24 @@ function adaptModelsForDB(localizedChallenges, generateId) {
   return localizedChallenges.map((localizedChallenge) => adaptModelForDB(localizedChallenge, generateId));
 }
 
-function adaptModelForDB(localizedChallenge, generateId) {return {
-  id: localizedChallenge.id ?? generateId(),
-  challengeId: localizedChallenge.challengeId,
-  embedUrl: localizedChallenge.embedUrl,
-  locale: localizedChallenge.locale,
-  status: localizedChallenge.status,
-  geography: localizedChallenge.geography,
-  urlsToConsult: localizedChallenge.urlsToConsult,
-  requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
-  isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
-  deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
-  isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
-  toRephrase: localizedChallenge.toRephrase,
-  hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
-  noValidationNeeded: localizedChallenge.noValidationNeeded,
-  validatedAt: localizedChallenge.validatedAt,
-};
+function adaptModelForDB(localizedChallenge, generateId) {
+  return {
+    id: localizedChallenge.id ?? generateId(),
+    challengeId: localizedChallenge.challengeId,
+    embedUrl: localizedChallenge.embedUrl,
+    locale: localizedChallenge.locale,
+    status: localizedChallenge.status,
+    geography: localizedChallenge.geography,
+    urlsToConsult: localizedChallenge.urlsToConsult,
+    requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
+    deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
+    isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
+    toRephrase: localizedChallenge.toRephrase,
+    hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
+    noValidationNeeded: localizedChallenge.noValidationNeeded,
+    validatedAt: localizedChallenge.validatedAt,
+  };
 }
 
 function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {

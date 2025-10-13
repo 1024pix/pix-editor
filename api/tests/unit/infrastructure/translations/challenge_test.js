@@ -10,19 +10,19 @@ describe('Unit | Infrastructure | Challenge translations', () => {
       const challengeId = 'test';
       const challenge = new Challenge({
         id: challengeId,
-        translations: {
-          fr: {
+        locales: ['fr'],
+        localizedChallenges: [
+          new LocalizedChallenge({
+            id: challengeId,
+            challengeId,
+            locale: 'fr',
             instruction: 'consigne en français',
             alternativeInstruction: 'consigne alternative en français',
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
             embedTitle: 'titre du simulateur',
-          }
-        },
-        locales: ['fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
+          }),
         ],
       });
       const translations = extractFromChallenge(challenge);
@@ -64,18 +64,18 @@ describe('Unit | Infrastructure | Challenge translations', () => {
       const challengeId = 'test';
       const challenge = new Challenge({
         id: challengeId,
-        translations: {
-          fr: {
+        locales: ['fr-fr', 'fr'],
+        localizedChallenges: [
+          new LocalizedChallenge({
+            id: challengeId,
+            challengeId,
+            locale: 'fr',
             instruction: 'consigne en français',
             alternativeInstruction: 'consigne alternative en français',
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
-          }
-        },
-        locales: ['fr-fr', 'fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
+          }),
         ],
       });
       const translations = extractFromChallenge(challenge);
@@ -100,18 +100,18 @@ describe('Unit | Infrastructure | Challenge translations', () => {
       const challengeId = 'test';
       const challenge = new Challenge({
         id: challengeId,
-        translations: {
-          fr: {
+        locales: ['fr'],
+        localizedChallenges: [
+          new LocalizedChallenge({
+            id: challengeId,
+            challengeId,
+            locale: 'fr',
             instruction: 'consigne en français',
             alternativeInstruction: '',
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
-          }
-        },
-        locales: ['fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
+          }),
         ],
       });
       const translations = extractFromChallenge(challenge);

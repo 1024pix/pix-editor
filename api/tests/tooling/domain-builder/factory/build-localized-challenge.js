@@ -1,23 +1,4 @@
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
-import { LocalizedChallenge as LocalizedChallengeRead } from '../../../../lib/domain/readmodels/index.js';
-
-export function buildLocalizedChallengeRead({
-  id = 'persistant id',
-  challengeId = 'persistant id',
-  locale = 'fr',
-  geography = 'AA',
-  instruction = 'une instruction par défaut',
-  status = LocalizedChallenge.STATUSES.PRIMARY,
-}) {
-  return new LocalizedChallengeRead({
-    id,
-    challengeId,
-    locale,
-    geography,
-    instruction,
-    status,
-  });
-}
 
 export function buildLocalizedChallenge({
   id = 'persistant id',

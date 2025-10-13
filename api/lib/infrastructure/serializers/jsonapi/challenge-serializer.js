@@ -129,51 +129,38 @@ const deserializer = new Deserializer({
   },
   transform({
     skill,
-    instruction,
-    alternativeInstruction,
-    proposals,
-    solution,
-    solutionToDisplay,
-    embedTitle,
-    illustrationAlt,
+    attachments,
     ...challenge
   }) {
-    challenge.skills = skill ? [skill] : [];
-    challenge.translations = {
-      [Challenge.getPrimaryLocale(challenge.locales)]: {
-        instruction,
-        alternativeInstruction,
-        proposals,
-        solution,
-        solutionToDisplay,
-        embedTitle,
-        illustrationAlt,
-      },
-    };
-    challenge.files = challenge.attachments?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
-    return challenge;
+    return new Challenge({
+      ...challenge,
+      skills: skill ? [skill] : [],
+      files: attachments?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id })),
+      localizedChallenges:  [LocalizedChallenge.buildPrimary({
+        challengeId: challenge.id,
+        locale: Challenge.getPrimaryLocale(challenge.locales),
+        embedUrl: challenge.embedUrl,
+        geography: challenge.geography,
+        urlsToConsult: challenge.urlsToConsult,
+        requireGafamWebsiteAccess: challenge.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challenge.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challenge.deafAndHardOfHearing,
+        isAwarenessChallenge: challenge.isAwarenessChallenge,
+        toRephrase: challenge.toRephrase,
+        hasEmbedInternalValidation: challenge.hasEmbedInternalValidation,
+        noValidationNeeded: challenge.noValidationNeeded,
+        instruction: challenge.instruction,
+        alternativeInstruction: challenge.alternativeInstruction,
+        proposals: challenge.proposals,
+        solution: challenge.solution,
+        solutionToDisplay: challenge.solutionToDisplay,
+        embedTitle: challenge.embedTitle,
+        illustrationAlt: challenge.illustrationAlt,
+      })],
+    });
   }
 });
 
-export function deserialize(challengeBody) {
-  return new Promise((resolve, reject) => {
-
-    deserializer.deserialize(challengeBody, (err, challengeObject) => {
-      challengeObject.localizedChallenges = [LocalizedChallenge.buildPrimary({
-        challengeId: challengeObject.id,
-        locale: Challenge.getPrimaryLocale(challengeObject.locales),
-        embedUrl: challengeObject.embedUrl,
-        geography: challengeObject.geography,
-        urlsToConsult: challengeObject.urlsToConsult,
-        requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
-        isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,
-        deafAndHardOfHearing: challengeObject.deafAndHardOfHearing,
-        isAwarenessChallenge: challengeObject.isAwarenessChallenge,
-        toRephrase: challengeObject.toRephrase,
-        hasEmbedInternalValidation: challengeObject.hasEmbedInternalValidation,
-        noValidationNeeded: challengeObject.noValidationNeeded,
-      })];
-      return err ? reject(err) : resolve(new Challenge(challengeObject));
-    });
-  });
+export function deserialize(payload) {
+  return deserializer.deserialize(payload);
 }

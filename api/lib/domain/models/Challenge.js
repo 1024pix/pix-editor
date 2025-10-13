@@ -6,7 +6,6 @@ export class Challenge {
   #allFiles;
   #primaryLocales;
   #primaryStatus;
-  #translations;
 
   constructor({
     accessibility1,
@@ -43,7 +42,6 @@ export class Challenge {
     t2Status,
     t3Status,
     timer,
-    translations,
     type,
     updatedAt,
     validatedAt,
@@ -89,7 +87,6 @@ export class Challenge {
     this.#allFiles = files;
     this.#primaryLocales = Challenge.defaultLocales(locales);
     this.#primaryStatus = status;
-    this.#translations = translations;
 
     this.#translate(this.primaryLocale);
   }
@@ -294,10 +291,6 @@ export class Challenge {
     return this.#primaryLocalizedChallenge.urlsToConsult;
   }
 
-  get translations() {
-    return this.#translations;
-  }
-
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }
@@ -316,14 +309,10 @@ export class Challenge {
       status: LocalizedChallenge.STATUSES.PRIMARY,
       attachments,
     });
-    const primaryTranslation = {
-      [this.primaryLocale]:  _.cloneDeep(this.translations[this.primaryLocale])
-    };
 
     const clonedChallenge =  new Challenge({
       id,
       airtableId: null,
-      translations: primaryTranslation,
       localizedChallenges: [clonedLocalizedChallenge],
       locales: this.locales,
       files: [],
@@ -377,7 +366,6 @@ export class Challenge {
       files: this.#allFiles,
       locales: this.#primaryLocales,
       status: this.#primaryStatus,
-      translations: this.#translations,
     });
     challenge.#translate(locale);
     return challenge;
@@ -387,15 +375,16 @@ export class Challenge {
     this.locales = locale === this.primaryLocale
       ? this.#primaryLocales
       : [locale];
-    this.instruction = this.#translations[this.locale]?.instruction ?? '';
-    this.alternativeInstruction = this.#translations[this.locale]?.alternativeInstruction ?? '';
-    this.proposals = this.#translations[this.locale]?.proposals ?? '';
-    this.solution = this.#translations[this.locale]?.solution ?? '';
-    this.solutionToDisplay = this.#translations[this.locale]?.solutionToDisplay ?? '';
-    this.embedTitle = this.#translations[this.locale]?.embedTitle ?? '';
-    this.illustrationAlt = this.#translations[this.locale]?.illustrationAlt ?? null;
 
     const localizedChallenge = findCorrespondingLocalizedChallenge(this.localizedChallenges, this.locale);
+
+    this.instruction = localizedChallenge.instruction ?? '';
+    this.alternativeInstruction = localizedChallenge.alternativeInstruction ?? '';
+    this.proposals = localizedChallenge.proposals ?? '';
+    this.solution = localizedChallenge.solution ?? '';
+    this.solutionToDisplay = localizedChallenge.solutionToDisplay ?? '';
+    this.embedTitle = localizedChallenge.embedTitle ?? '';
+    this.illustrationAlt = localizedChallenge.illustrationAlt ?? null;
 
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);

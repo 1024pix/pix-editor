@@ -28,10 +28,18 @@ describe('Unit | Domain | Usecases | create challenge', function() {
     ['other', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
   ])('should normalize breaking space when challenge is `fr` or `fr-fr`', async (locale, expected) => {
     const challenge = domainBuilder.buildChallenge({
+      id: 'challengeId',
       locales: [locale],
-      instruction: 'Ça va ?',
-      proposals: 'Oui !',
-      alternativeInstruction: 'Et donc ; voilà'
+      localizedChallenges: [
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale,
+          instruction: 'Ça va ?',
+          proposals: 'Oui !',
+          alternativeInstruction: 'Et donc ; voilà'
+        })
+      ]
     });
     const challengeRepositoryStub = {
       create: vi.fn().mockResolvedValueOnce(challenge)

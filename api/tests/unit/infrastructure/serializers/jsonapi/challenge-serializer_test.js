@@ -18,6 +18,13 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        instruction: 'instruction',
+        alternativeInstruction: 'alternativeInstruction',
+        proposals: 'proposals',
+        solution: 'solution',
+        solutionToDisplay: 'solutionToDisplay',
+        embedTitle: 'embedTitle',
+        illustrationAlt: 'illustrationAlt',
       });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -31,14 +38,14 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
           id: `${challenge.id}`,
           attributes: {
             'airtable-id': challenge.airtableId,
-            instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-            'alternative-instruction': '',
-            'illustration-alt': null,
+            instruction: 'instruction',
+            'alternative-instruction': 'alternativeInstruction',
+            'illustration-alt': 'illustrationAlt',
             type: Challenge.TYPES.QCM,
             format: Challenge.FORMATS.MOTS,
-            proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
-            solution: '1, 5',
-            'solution-to-display': '1',
+            proposals: 'proposals',
+            solution: 'solution',
+            'solution-to-display': 'solutionToDisplay',
             't1-status': true,
             't2-status': false,
             't3-status': true,
@@ -51,7 +58,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             preview: '/api/challenges/recwWzTquPlvIl4So/preview',
             timer: 1234,
             'embed-url': localizedChallenge.embedUrl,
-            'embed-title': 'Epreuve de selection de dossier',
+            'embed-title': 'embedTitle',
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: Challenge.ACCESSIBILITY1.OK,
@@ -258,6 +265,13 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         toRephrase: true,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+        alternativeInstruction: '',
+        proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
+        solution: '1, 5',
+        solutionToDisplay: '1',
+        embedTitle: 'Epreuve de selection de dossier',
+        illustrationAlt: 'pouet',
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
@@ -312,6 +326,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'illustration-alt': 'pouet',
           },
           relationships: {
             skill: {

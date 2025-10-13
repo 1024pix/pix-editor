@@ -147,11 +147,6 @@ async function mockCurrentContent() {
     id: 'localized-challenge-id',
     locales: ['nl'],
     embedUrl: 'https://github.io/page/epreuve.html?lang=nl',
-    translations: {
-      nl: {
-        instruction: 'Consigne en nl',
-      },
-    },
     files: [
       { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
@@ -190,7 +185,7 @@ async function mockCurrentContent() {
     ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
-  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'RO', area: 'RO' };
+  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', instruction: 'Consigne en nl', geography: 'RO', area: 'RO' };
   delete expectedChallengeNl.localizedChallenges;
   expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
 

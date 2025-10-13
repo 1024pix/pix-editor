@@ -4,98 +4,6 @@ import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Domain | Challenge', () => {
-
-  const fields = ['instruction', 'alternativeInstruction', 'proposals', 'solution', 'solutionToDisplay'];
-
-  for (const field of fields) {
-    describe(`#get ${field}`, () => {
-      it(`should return ${field} from translations`, () => {
-        // given
-        const challengeId = 'challengeId';
-        const tests = [
-          {
-            challenge: new Challenge({
-              id: challengeId,
-              translations: {
-                fr: { [field]: `${field} fr` },
-                en: { [field]: `${field} en` },
-              },
-              locales: ['en'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: `${challengeId}Fr`, challengeId, locale: 'fr' }),
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'en' }),
-              ],
-            }),
-            expected: `${field} en`,
-          },
-          {
-            challenge: new Challenge({
-              id: challengeId,
-              translations: {
-                fr: { [field]: `${field} fr` },
-                en: { [field]: `${field} en` },
-              },
-              locales: ['fr'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-                new LocalizedChallenge({ id: `${challengeId}En`, challengeId, locale: 'en' }),
-              ],
-            }),
-            expected: `${field} fr`,
-          },
-          {
-            challenge: new Challenge({
-              id: challengeId,
-              translations: {
-                fr: { [field]: `${field} fr` },
-                'fr-fr': { [field]: `${field} fr-fr` },
-              },
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-                new LocalizedChallenge({ id: `${challengeId}FrFr`, challengeId, locale: 'fr-fr' }),
-              ],
-            }),
-            expected: `${field} fr`,
-          },
-          {
-            challenge: new Challenge({
-              id: challengeId,
-              translations: {
-                fr: { [field]: `${field} fr` },
-              },
-              locales: ['fr-fr', 'fr'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              ],
-            }),
-            expected: `${field} fr`,
-          },
-          {
-            challenge: new Challenge({
-              id: challengeId,
-              translations: {
-                fr: {},
-              },
-              locales: ['fr'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              ],
-            }),
-            expected: '',
-          },
-        ];
-
-        for (const { challenge, expected } of tests) {
-          // when
-          const actual = challenge[field];
-
-          // then
-          expect.soft(actual).toBe(expected);
-        }
-      });
-    });
-  }
-
   describe('#get isPropose', () => {
     it('should return true when challenge is propose', () => {
       // given
@@ -241,67 +149,6 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
-  describe('#get instruction', () => {
-    it('should return instruction from translations', () => {
-      // given
-      const challengeId = 'challengeId';
-      const tests = [
-        {
-          challenge: new Challenge({
-            id: challengeId,
-            translations: {
-              fr: { instruction: 'instruction fr' },
-              en: { instruction: 'instruction en' },
-            },
-            locales: ['en'],
-            localizedChallenges: [
-              new LocalizedChallenge({ id: `${challengeId}Fr`, challengeId, locale: 'fr' }),
-              new LocalizedChallenge({ id: challengeId, challengeId, locale: 'en' }),
-            ],
-          }),
-          expected: 'instruction en',
-        },
-        {
-          challenge: new Challenge({
-            id: challengeId,
-            translations: {
-              fr: { instruction: 'instruction fr' },
-              en: { instruction: 'instruction en' },
-            },
-            locales: ['fr'],
-            localizedChallenges: [
-              new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              new LocalizedChallenge({ id: `${challengeId}En`, challengeId, locale: 'en' }),
-            ],
-          }),
-          expected: 'instruction fr',
-        },
-        {
-          challenge: new Challenge({
-            id: challengeId,
-            translations: {
-              fr: { instruction: 'instruction fr' },
-              'fr-fr': { instruction: 'instruction fr-fr' },
-            },
-            localizedChallenges: [
-              new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              new LocalizedChallenge({ id: `${challengeId}FrFr`, challengeId, locale: 'fr-fr' }),
-            ],
-          }),
-          expected: 'instruction fr',
-        },
-      ];
-
-      for (const { challenge, expected } of tests) {
-        // when
-        const actual = challenge.instruction;
-
-        // then
-        expect.soft(actual).toBe(expected);
-      }
-    });
-  });
-
   describe('#embedUrl', () => {
     it('should return embedUrl from localized challenge', () => {
       // given
@@ -394,6 +241,13 @@ describe('Unit | Domain | Challenge', () => {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: true,
+        alternativeInstruction: 'alternativeInstruction fr',
+        embedTitle: 'embedTitle fr',
+        instruction: 'instruction fr',
+        proposals: 'proposals fr',
+        solution: 'solution fr',
+        solutionToDisplay: 'solutionToDisplay fr',
+        illustrationAlt: 'illustrationAlt fr',
       });
       const dutchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: dutchChallengeId,
@@ -410,6 +264,13 @@ describe('Unit | Domain | Challenge', () => {
         toRephrase: false,
         hasEmbedInternalValidation: true,
         noValidationNeeded: false,
+        alternativeInstruction: 'alternativeInstruction nl',
+        embedTitle: 'embedTitle nl',
+        instruction: 'instruction nl',
+        proposals: 'proposals nl',
+        solution: 'solution nl',
+        solutionToDisplay: 'solutionToDisplay nl',
+        illustrationAlt: 'illustrationAlt nl',
       });
       const englishLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: englishChallengeId,
@@ -426,6 +287,13 @@ describe('Unit | Domain | Challenge', () => {
         toRephrase: false,
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
+        alternativeInstruction: 'alternativeInstruction en',
+        embedTitle: 'embedTitle en',
+        instruction: 'instruction en',
+        proposals: 'proposals en',
+        solution: 'solution en',
+        solutionToDisplay: 'solutionToDisplay en',
+        illustrationAlt: 'illustrationAlt en',
       });
       const localizedChallenges = [
         frenchLocalizedChallenge,
@@ -446,24 +314,11 @@ describe('Unit | Domain | Challenge', () => {
         { fileId: 'fileId2En', localizedChallengeId: englishChallengeId },
       ];
 
-      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [
-        locale,
-        {
-          alternativeInstruction: `alternativeInstruction ${locale}`,
-          embedTitle: `embedTitle ${locale}`,
-          instruction: `instruction ${locale}`,
-          proposals: `proposals ${locale}`,
-          solution: `solution ${locale}`,
-          solutionToDisplay: `solutionToDisplay ${locale}`,
-        },
-      ]));
-
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
         locales: ['fr-fr', 'fr'],
         status: Challenge.STATUSES.VALIDE,
         localizedChallenges,
-        translations,
         files: [
           ...frenchFiles,
           ...dutchFiles,
@@ -478,7 +333,13 @@ describe('Unit | Domain | Challenge', () => {
         id: dutchChallengeId,
         locales: ['nl'],
         status: Challenge.STATUSES.PROPOSE,
-        ...translations.nl,
+        alternativeInstruction: 'alternativeInstruction nl',
+        embedTitle: 'embedTitle nl',
+        instruction: 'instruction nl',
+        proposals: 'proposals nl',
+        solution: 'solution nl',
+        solutionToDisplay: 'solutionToDisplay nl',
+        illustrationAlt: 'illustrationAlt nl',
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
         geography: 'NL',
@@ -497,7 +358,13 @@ describe('Unit | Domain | Challenge', () => {
         id: englishChallengeId,
         locales: ['en'],
         status: Challenge.STATUSES.VALIDE,
-        ...translations.en,
+        alternativeInstruction: 'alternativeInstruction en',
+        embedTitle: 'embedTitle en',
+        instruction: 'instruction en',
+        proposals: 'proposals en',
+        solution: 'solution en',
+        solutionToDisplay: 'solutionToDisplay en',
+        illustrationAlt: 'illustrationAlt en',
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
         geography: 'GB',
@@ -590,7 +457,6 @@ describe('Unit | Domain | Challenge', () => {
           locales: ['fr'],
           status: challengeStatus,
           localizedChallenges,
-          translations: Object.fromEntries(localizedChallenges.map(({ locale }) => [locale, {}])),
           files: [],
         });
 
@@ -816,22 +682,6 @@ describe('Unit | Domain | Challenge', () => {
 
       const challenge = new Challenge({
         id: 'challengeId',
-        translations: {
-          fr: {
-            instruction: 'instruction FR',
-            alternativeInstruction: 'alternativeInstruction FR',
-            proposals: 'proposals FR',
-            solution: 'solution FR',
-            solutionToDisplay: 'solutionToDisplay FR',
-          },
-          nl: {
-            instruction: 'instruction NL',
-            alternativeInstruction: 'alternativeInstruction NL',
-            proposals: 'proposals NL',
-            solution: 'solution NL',
-            solutionToDisplay: 'solutionToDisplay NL',
-          },
-        },
         locales,
         localizedChallenges: [
           new LocalizedChallenge({
@@ -850,6 +700,13 @@ describe('Unit | Domain | Challenge', () => {
             toRephrase: true,
             hasEmbedInternalValidation: true,
             noValidationNeeded: true,
+            embedTitle: 'embedTitle FR',
+            instruction: 'instruction FR',
+            alternativeInstruction: 'alternativeInstruction FR',
+            proposals: 'proposals FR',
+            solution: 'solution FR',
+            solutionToDisplay: 'solutionToDisplay FR',
+            illustrationAlt: 'illustrationAlt FR',
           }),
           new LocalizedChallenge({
             id: 'locNLChallengeId',
@@ -867,6 +724,13 @@ describe('Unit | Domain | Challenge', () => {
             toRephrase: false,
             hasEmbedInternalValidation: false,
             noValidationNeeded: false,
+            embedTitle: 'embedTitle NL',
+            instruction: 'instruction NL',
+            alternativeInstruction: 'alternativeInstruction NL',
+            proposals: 'proposals NL',
+            solution: 'solution NL',
+            solutionToDisplay: 'solutionToDisplay NL',
+            illustrationAlt: 'illustrationAlt NL',
           }),
         ],
         files: [{
@@ -917,16 +781,6 @@ describe('Unit | Domain | Challenge', () => {
 
       expect(clonedChallenge.files).toStrictEqual([]);
 
-      expect(clonedChallenge.translations).toStrictEqual({
-        fr: {
-          instruction: 'instruction FR',
-          alternativeInstruction: 'alternativeInstruction FR',
-          proposals: 'proposals FR',
-          solution: 'solution FR',
-          solutionToDisplay: 'solutionToDisplay FR',
-        }
-      });
-
       expect(clonedChallenge.localizedChallenges).toStrictEqual([
         domainBuilder.buildLocalizedChallenge({
           id: clonedChallengeId,
@@ -944,6 +798,13 @@ describe('Unit | Domain | Challenge', () => {
           toRephrase: challenge.localizedChallenges[0].toRephrase,
           hasEmbedInternalValidation: challenge.localizedChallenges[0].hasEmbedInternalValidation,
           noValidationNeeded: challenge.localizedChallenges[0].noValidationNeeded,
+          embedTitle: challenge.localizedChallenges[0].embedTitle,
+          instruction: challenge.localizedChallenges[0].instruction,
+          alternativeInstruction: challenge.localizedChallenges[0].alternativeInstruction,
+          proposals: challenge.localizedChallenges[0].proposals,
+          solution: challenge.localizedChallenges[0].solution,
+          solutionToDisplay: challenge.localizedChallenges[0].solutionToDisplay,
+          illustrationAlt: challenge.localizedChallenges[0].illustrationAlt,
         }),
       ]);
 

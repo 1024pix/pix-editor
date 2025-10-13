@@ -13,13 +13,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const attachments = [];
       const challenge = domainBuilder.buildChallenge({
         id: 'challenge-id',
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: 'A tester',
@@ -36,6 +29,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             toRephrase: true,
             hasEmbedInternalValidation: true,
             noValidationNeeded: true,
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
           })
         ]
       });
@@ -69,13 +65,16 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         ];
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
-          translations: {
-            fr: {
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: 'challenge-id',
+              challengeId: 'challenge-id',
+              locale: 'fr',
               instruction: 'Consigne',
               alternativeInstruction: 'Consigne alternative',
               proposals: 'Propositions',
-            },
-          },
+            }),
+          ],
           locales: ['fr', 'fr-fr'],
           files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
         });
@@ -125,16 +124,16 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         ];
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
-          translations: {
-            fr: {
-              instruction: 'Consigne',
-              alternativeInstruction: 'Consigne alternative',
-              proposals: 'Propositions',
-              illustrationAlt: 'Un chien qui fait des bulles avec son museau'
-            },
-          },
           locales: ['fr', 'fr-fr'],
-          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: 'challenge-id',
+              challengeId: 'challenge-id',
+              locale: 'fr',
+              illustrationAlt: 'Un chien qui fait des bulles avec son museau'
+            }),
+          ],
         });
 
         // when
@@ -168,13 +167,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProto1Skill1DTO = {
         id: 'challengeProto1Skill1',
         skillId: skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeProto1Skill1',
           challengeId: 'challengeProto1Skill1',
@@ -183,6 +175,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
           isAwarenessChallenge: false,
           toRephrase: false,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -194,16 +189,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative1Skill1DTO = {
         id: 'challengeAlternative1Skill1',
         skillId:  skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeAlternative1Skill1',
           challengeId: 'challengeAlternative1Skill1',
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -216,13 +207,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProto2Skill1DTO = {
         id: 'challengeProto2Skill1',
         skillId: skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeProto2Skill1',
           challengeId: 'challengeProto2Skill1',
@@ -231,6 +215,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
           isAwarenessChallenge: true,
           toRephrase: true,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -242,16 +229,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative2Skill1DTO = {
         id: 'challengeAlternative2Skill1',
         skillId: skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeAlternative2Skill1',
           challengeId: 'challengeAlternative2Skill1',
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -264,13 +247,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProto1Skill2DTO = {
         id: 'challengeProto1Skill2',
         skillId: skill2.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeProto1Skill2',
           challengeId: 'challengeProto1Skill2',
@@ -281,6 +257,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -292,16 +271,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative1Skill2DTO = {
         id: 'challengeAlternative1Skill2',
         skillId: skill2.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeAlternative1Skill2',
           challengeId: 'challengeAlternative1Skill2',
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -393,13 +368,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProtoWorkbench1DTO  = {
         id: 'challengeProtoWorkbench1',
         skillId: workbenchSkill.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeProtoWorkbench1',
           challengeId: 'challengeProtoWorkbench1',
@@ -410,6 +378,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -423,13 +394,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProtoWorkbench2DTO  = {
         id: 'challengeProtoWorkbench2',
         skillId: workbenchSkill.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeProtoWorkbench2',
           challengeId: 'challengeProtoWorkbench2',
@@ -440,6 +404,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           toRephrase: false,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -477,13 +444,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative1Skill1DTO = {
         id: 'challengeAlternative3Skill1',
         skillId: skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeAlternative3Skill1',
           challengeId: 'challengeAlternative3Skill1',
@@ -494,6 +454,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
@@ -506,13 +469,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative2Skill1DTO = {
         id: 'challengeAlternative3Skill1',
         skillId: skill1.id,
-        translations: {
-          fr: {
-            instruction: 'Consigne',
-            alternativeInstruction: 'Consigne alternative',
-            proposals: 'Propositions',
-          },
-        },
         localizedChallenges: [domainBuilder.buildLocalizedChallenge({
           id: 'challengeAlternative3Skill1',
           challengeId: 'challengeAlternative3Skill1',
@@ -523,6 +479,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           toRephrase: false,
           hasEmbedInternalValidation: false,
           noValidationNeeded: false,
+          instruction: 'Consigne',
+          alternativeInstruction: 'Consigne alternative',
+          proposals: 'Propositions',
         })],
         locales: ['fr', 'fr-fr'],
         files: [],
