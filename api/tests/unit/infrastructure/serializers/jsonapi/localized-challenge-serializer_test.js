@@ -168,6 +168,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'embed-url': localizedChallenge.embedUrl,
             'default-embed-url': 'https://example.com/path/to/page.html?lang=en',
             geography: 'BZ',
+            instruction: undefined,
             'urls-to-consult': localizedChallenge.urlsToConsult,
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,

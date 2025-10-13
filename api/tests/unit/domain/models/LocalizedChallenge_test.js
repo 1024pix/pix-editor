@@ -131,7 +131,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       });
 
       // then
-      expect(primaryLocalizedChallenge).to.deep.equal({
+      expect(primaryLocalizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
         id: 'idDuChallenge',
         challengeId: 'idDuChallenge',
         embedUrl: 'mon/embed.url',
@@ -148,7 +148,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
         validatedAt: null,
-      });
+      }));
     });
     it('should build a primary localized challenge with default values when some not filled', function() {
       // given
@@ -168,7 +168,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       });
 
       // then
-      expect(primaryLocalizedChallenge).to.deep.equal({
+      expect(primaryLocalizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
         id: 'idDuChallenge',
         challengeId: 'idDuChallenge',
         embedUrl: 'mon/embed.url',
@@ -185,7 +185,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         validatedAt: null,
-      });
+      }));
     });
   });
 
@@ -201,7 +201,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       const primaryLocalizedChallenge = LocalizedChallenge.buildAlternativeFromTranslation(translation);
 
       // then
-      expect(primaryLocalizedChallenge).to.deep.equal({
+      expect(primaryLocalizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
         id: null,
         challengeId: 'idDuChallenge',
         locale: 'fr',
@@ -218,7 +218,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         validatedAt: null,
-      });
+      }));
     });
   });
 

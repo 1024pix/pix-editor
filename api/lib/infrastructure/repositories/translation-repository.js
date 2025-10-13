@@ -27,17 +27,6 @@ export async function save({ translations, transaction: knexConnection = knex, s
   }
 }
 
-/**
- * @deprecated use one of {@link listByModel}, {@link listByEntity} or {@link listByEntities}
- */
-export async function listByPrefix(prefix, { transaction = knex } = {}) {
-  const translationDtos = await transaction
-    .select(projection)
-    .from('translations')
-    .whereLike('key', `${prefix}%`);
-  return translationDtos.map(_toDomain);
-}
-
 export async function listByModel(model, { knexConn = knex } = {}) {
   const translationDtos = await knexConn
     .select(projection)

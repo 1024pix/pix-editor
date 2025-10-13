@@ -60,6 +60,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            instruction: undefined,
           },
           relationships: {
             challenge: {
@@ -138,6 +139,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            instruction: undefined,
           },
           relationships: {
             challenge: {
@@ -238,6 +240,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'to-rephrase': false,
               'has-embed-internal-validation': false,
               'no-validation-needed': false,
+              instruction: undefined,
             },
             relationships: {
               challenge: {
@@ -271,6 +274,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'to-rephrase': true,
               'has-embed-internal-validation': true,
               'no-validation-needed': true,
+              instruction: undefined,
             },
             relationships: {
               challenge: {
@@ -387,6 +391,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           'to-rephrase': false,
           'has-embed-internal-validation': false,
           'no-validation-needed': false,
+          instruction: undefined,
         },
         relationships: {
           challenge: {
@@ -498,6 +503,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           'to-rephrase': false,
           'has-embed-internal-validation': false,
           'no-validation-needed': false,
+          instruction: undefined,
         },
         relationships: {
           challenge: {

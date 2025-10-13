@@ -37,6 +37,13 @@ export function buildLocalizedChallenge({
   hasEmbedInternalValidation = false,
   noValidationNeeded = false,
   validatedAt = null,
+  instruction,
+  alternativeInstruction,
+  proposals,
+  solution,
+  solutionToDisplay,
+  embedTitle,
+  illustrationAlt,
 }) {
   return new LocalizedChallenge({
     id,
@@ -56,5 +63,12 @@ export function buildLocalizedChallenge({
     hasEmbedInternalValidation,
     noValidationNeeded,
     validatedAt,
+    instruction,
+    alternativeInstruction,
+    proposals,
+    solution,
+    solutionToDisplay,
+    embedTitle,
+    illustrationAlt,
   });
 }

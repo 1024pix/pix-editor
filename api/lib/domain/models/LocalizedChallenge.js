@@ -21,6 +21,13 @@ export class LocalizedChallenge {
     hasEmbedInternalValidation,
     noValidationNeeded,
     validatedAt,
+    instruction,
+    alternativeInstruction,
+    proposals,
+    solution,
+    solutionToDisplay,
+    embedTitle,
+    illustrationAlt,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -39,6 +46,14 @@ export class LocalizedChallenge {
     this.hasEmbedInternalValidation = hasEmbedInternalValidation;
     this.noValidationNeeded = noValidationNeeded;
     this.validatedAt = validatedAt;
+
+    this.instruction = instruction;
+    this.alternativeInstruction = alternativeInstruction;
+    this.proposals = proposals;
+    this.solution = solution;
+    this.solutionToDisplay = solutionToDisplay;
+    this.embedTitle = embedTitle;
+    this.illustrationAlt = illustrationAlt;
   }
 
   static get STATUSES() {

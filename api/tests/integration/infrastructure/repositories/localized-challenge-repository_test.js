@@ -24,6 +24,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
         isAwarenessChallenge: true,
         toRephrase: true,
       });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.instruction`, locale: 'fr', value: 'instruction fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.alternativeInstruction`, locale: 'fr', value: 'alternativeInstruction fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.proposals`, locale: 'fr', value: 'proposals fr' });
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
@@ -40,6 +43,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         toRephrase: false,
         validatedAt: new Date('2021-01-01T18:00:00Z'),
       });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.solution`, locale: 'fr-fr', value: 'solution fr-fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.solutionToDisplay`, locale: 'fr-fr', value: 'solutionToDisplay fr-fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.embedTitle`, locale: 'fr-fr', value: 'embedTitle fr-fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.illustrationAlt`, locale: 'fr-fr', value: 'illustrationAlt fr-fr' });
+
       await databaseBuilder.commit();
 
       // when
@@ -62,6 +70,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
           isAwarenessChallenge: true,
           toRephrase: true,
           validatedAt: null,
+          instruction: 'instruction fr',
+          alternativeInstruction: 'alternativeInstruction fr',
+          proposals: 'proposals fr',
         }),
         domainBuilder.buildLocalizedChallenge({
           id: 'challengeNewid',
@@ -78,6 +89,10 @@ describe('Integration | Repository | localized-challenge-repository', function()
           isAwarenessChallenge: false,
           toRephrase: false,
           validatedAt: new Date('2021-01-01T18:00:00Z'),
+          solution: 'solution fr-fr',
+          solutionToDisplay: 'solutionToDisplay fr-fr',
+          embedTitle: 'embedTitle fr-fr',
+          illustrationAlt: 'illustrationAlt fr-fr',
         })
       ]);
     });
@@ -393,6 +408,10 @@ describe('Integration | Repository | localized-challenge-repository', function()
         urlsToConsult: ['linkNl1', 'linkNl2'],
       });
 
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.instruction`, locale: 'nl', value: 'instruction nl' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.alternativeInstruction`, locale: 'nl', value: 'alternativeInstruction nl' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.proposals`, locale: 'nl', value: 'proposals nl' });
+
       await databaseBuilder.commit();
 
       // when
@@ -405,6 +424,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale,
         embedUrl: null,
         urlsToConsult: ['linkNl1', 'linkNl2'],
+        proposals: 'proposals nl',
+        alternativeInstruction: 'alternativeInstruction nl',
+        instruction: 'instruction nl',
       }));
     });
 
@@ -541,6 +563,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'fr',
         embedUrl,
       });
+
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId1}.instruction`, locale: 'fr-fr', value: 'instruction fr-fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId1}.alternativeInstruction`, locale: 'fr-fr', value: 'alternativeInstruction fr-fr' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId1}.proposals`, locale: 'fr-fr', value: 'proposals fr-fr' });
+
       await databaseBuilder.commit();
 
       // when
@@ -568,6 +595,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
           toRephrase: true,
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
+          alternativeInstruction: 'alternativeInstruction fr-fr',
+          instruction: 'instruction fr-fr',
+          proposals: 'proposals fr-fr'
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId1}Nl`,
@@ -717,6 +747,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'fr-fr',
         embedUrl,
       });
+
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeA}.instruction`, locale: 'en', value: 'instruction en' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeA}.alternativeInstruction`, locale: 'en', value: 'alternativeInstruction en' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeA}.proposals`, locale: 'en', value: 'proposals en' });
+
       await databaseBuilder.commit();
 
       // when
@@ -730,6 +765,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'en',
           embedUrl,
           urlsToConsult: null,
+          proposals: 'proposals en',
+          instruction: 'instruction en',
+          alternativeInstruction: 'alternativeInstruction en',
         }),
         domainBuilder.buildLocalizedChallenge({
           id: id1,
@@ -844,6 +882,10 @@ describe('Integration | Repository | localized-challenge-repository', function()
         embedUrl: 'mon-url.com',
         locale: 'bz',
       });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.instruction`, locale: 'bz', value: 'instruction bz' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.alternativeInstruction`, locale: 'bz', value: 'alternativeInstruction bz' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId}.proposals`, locale: 'bz', value: 'proposals bz' });
+
       await databaseBuilder.commit();
 
       // when
@@ -856,6 +898,9 @@ describe('Integration | Repository | localized-challenge-repository', function()
         embedUrl: 'mon-url.com',
         locale: 'bz',
         urlsToConsult: null,
+        alternativeInstruction: 'alternativeInstruction bz',
+        instruction: 'instruction bz',
+        proposals: 'proposals bz',
       }));
     });
 
@@ -956,6 +1001,15 @@ describe('Integration | Repository | localized-challenge-repository', function()
         noValidationNeeded: true,
         validatedAt: null,
       });
+
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.instruction', locale: 'ar', value: 'instruction ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.alternativeInstruction', locale: 'ar', value: 'alternativeInstruction ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.proposals', locale: 'ar', value: 'proposals ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.solution', locale: 'ar', value: 'solution ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.solutionToDisplay', locale: 'ar', value: 'solutionToDisplay ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.embedTitle', locale: 'ar', value: 'embedTitle ar' });
+      databaseBuilder.factory.buildTranslation({ key: 'challenge.challengeId.illustrationAlt', locale: 'ar', value: 'illustrationAlt ar' });
+
       await databaseBuilder.commit();
 
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -1017,6 +1071,13 @@ describe('Integration | Repository | localized-challenge-repository', function()
           hasEmbedInternalValidation: true,
           noValidationNeeded: false,
           validatedAt: new Date('2021-01-01T18:00:00Z'),
+          instruction: 'instruction ar',
+          alternativeInstruction: 'alternativeInstruction ar',
+          proposals: 'proposals ar',
+          solution: 'solution ar',
+          solutionToDisplay: 'solutionToDisplay ar',
+          embedTitle: 'embedTitle ar',
+          illustrationAlt: 'illustrationAlt ar',
         }));
     });
 

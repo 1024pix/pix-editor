@@ -2035,11 +2035,14 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeA_data.localizedEsId,
               challengeId: challengeA_data.id,
               ...esLoc_challengeA_data,
+              instruction : 'instruction ES challengeA',
             }),
             domainBuilder.buildLocalizedChallenge({
               id: challengeA_data.id,
               challengeId: challengeA_data.id,
               ...primaryLoc_challengeA_data,
+              instruction: 'instruction FR challengeA',
+              solution: 'solution FR challengeA',
             }),
           ],
           madeObsoleteAt: challengeA_data.madeObsoleteAt,
@@ -2093,6 +2096,8 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeB_data.id,
               challengeId: challengeB_data.id,
               ...primaryLoc_challengeB_data,
+              instruction: 'instruction FR challengeB',
+              proposals: 'proposals FR challengeB',
             }),
           ],
           madeObsoleteAt: challengeB_data.madeObsoleteAt,
@@ -2880,11 +2885,14 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeDraftA_data.localizedEsId,
               challengeId: challengeDraftA_data.id,
               ...esLoc_challengeDraftA_data,
+              instruction : 'instruction ES challengeDraftA',
             }),
             domainBuilder.buildLocalizedChallenge({
               id: challengeDraftA_data.id,
               challengeId: challengeDraftA_data.id,
               ...primaryLoc_challengeDraftA_data,
+              instruction: 'instruction FR challengeDraftA',
+              solution: 'solution FR challengeDraftA',
             }),
           ],
           madeObsoleteAt: challengeDraftA_data.madeObsoleteAt,
@@ -2938,6 +2946,8 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeActiveA_data.id,
               challengeId: challengeActiveA_data.id,
               ...primaryLoc_challengeActiveA_data,
+              instruction: 'instruction FR challengeActiveA',
+              solution: 'solution FR challengeActiveA',
             }),
           ],
           madeObsoleteAt: challengeActiveA_data.madeObsoleteAt,
@@ -3287,6 +3297,8 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeProtoA_data.id,
               challengeId: challengeProtoA_data.id,
               ...primaryLoc_ProtoA_data,
+              instruction: 'instruction FR challengeProtoA',
+              solution: 'solution FR challengeProtoA',
             }),
           ],
           madeObsoleteAt: challengeProtoA_data.madeObsoleteAt,
@@ -3339,6 +3351,8 @@ describe('Integration | Repository | challenge-repository', () => {
               id: challengeProtoB_data.id,
               challengeId: challengeProtoB_data.id,
               ...primaryLoc_ProtoB_data,
+              instruction: 'instruction FR challengeProtoB',
+              solution: 'solution FR challengeProtoB',
             }),
           ],
           madeObsoleteAt: challengeProtoB_data.madeObsoleteAt,
@@ -4258,15 +4272,28 @@ describe('Integration | Repository | challenge-repository', () => {
     it('returns domain challenges', async () => {
       // given
       const challengeId = 'challengeId';
+
+      const frTranslations = {
+        instruction: 'Comment casser des noisettes',
+        alternativeInstruction: 'Les choses à ne pas faire au parc aquatique',
+        proposals: 'Une épargne révolutionnaire: la tirelire à gros mots',
+        solution: 'La musique là ouais',
+        solutionToDisplay: 'Ouais',
+        embedTitle: 'Pif paf et pouf',
+      };
+
       const expectedChallenges = [
         domainBuilder.buildChallenge({
           id: challengeId,
           files: [],
+          translations: { fr: frTranslations },
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
               id: challengeId,
               challengeId,
               locale: 'fr',
+              alternativeInstruction: '',
+              ...frTranslations
             }),
           ],
         }),

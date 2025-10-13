@@ -2,11 +2,13 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
+import * as translationRepository from './translation-repository.js';
 
 export async function list() {
   const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment()
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
-  return localizedChallengeDtos.map(_toDomain);
+  const translations = await loadTranslationsForLocalizedChallenges(localizedChallengeDtos);
+  return toDomainList(localizedChallengeDtos, translations);
 }
 
 function _generateId() {
@@ -30,15 +32,18 @@ export async function getByChallengeIdAndLocale({ challengeId, locale }) {
     .first();
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
+  const translations = await loadTranslationsForLocalizedChallenges([dto]);
 
-  return _toDomain(dto);
+  return toDomain(dto, translations);
 }
 
 export async function listByChallengeIds({ challengeIds, transaction: knexConnection = knex }) {
   const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection)
     .whereIn('localized_challenges.challengeId', challengeIds)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
-  return dtos.map(_toDomain);
+
+  const translations = await loadTranslationsForLocalizedChallenges(dtos);
+  return toDomainList(dtos, translations);
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
@@ -48,7 +53,9 @@ export async function get({ id, transaction: knexConnection = knex }) {
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomain(dto);
+  const translations = await loadTranslationsForLocalizedChallenges([dto]);
+
+  return toDomain(dto, translations);
 }
 
 export async function getMany({ ids, transaction: knexConnection = knex }) {
@@ -56,7 +63,9 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
     .whereIn('localized_challenges.id', ids)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
 
-  return dtos.map(_toDomain);
+  const translations = await loadTranslationsForLocalizedChallenges(dtos);
+
+  return toDomainList(dtos, translations);
 }
 
 export async function update({
@@ -73,11 +82,23 @@ export async function update({
 
   const [primaryEmbedUrl] = await knexConnection('localized_challenges').where({ id: dto.challengeId }).pluck('embedUrl');
 
-  return _toDomain({ ...dto, primaryEmbedUrl, fileIds: localizedChallenge.fileIds });
+  const translations = await loadTranslationsForLocalizedChallenges([dto], knexConnection);
+
+  return toDomain({ ...dto, primaryEmbedUrl, fileIds: localizedChallenge.fileIds }, translations);
 }
 
-function _toDomain(dto) {
-  return new LocalizedChallenge(dto);
+function toDomainList(dtos, translations) {
+  return dtos.map((dto) => toDomain(dto, translations));
+}
+
+function toDomain(dto, translations) {
+  const localizedChallengeTranslations = translations.filter(
+    (translation) => translation.key.startsWith(`challenge.${dto.challengeId}.`) && translation.locale === dto.locale,
+  );
+  const translatedFields = Object.fromEntries(
+    localizedChallengeTranslations.map((translation) => [translation.key.split('.').at(-1), translation.value])
+  );
+  return new LocalizedChallenge({ ...dto, ...translatedFields });
 }
 
 function adaptModelsForDB(localizedChallenges, generateId) {
@@ -113,4 +134,10 @@ function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
         .groupBy('localizedChallengeId')
         .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
       { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' });
+}
+
+async function loadTranslationsForLocalizedChallenges(localizedChallenges, knexConn) {
+  const challengeIds = localizedChallenges.map((localizedChallenge) => localizedChallenge.challengeId);
+  const translations = await translationRepository.listByEntities('challenge', challengeIds, { knexConn });
+  return translations;
 }
