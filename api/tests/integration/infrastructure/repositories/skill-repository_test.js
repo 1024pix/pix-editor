@@ -737,23 +737,28 @@ describe('Integration | Repository | skill-repository', () => {
 
   describe('#create', () => {
     afterEach(async () => {
+      await knex('skills-tutorials').delete();
       await knex('skills').delete();
       await knex('translations').delete();
     });
 
     it('should save new skill and translations', async () => {
       // given
+      const skill = domainBuilder.buildSkill({
+        airtableId: null,
+        tubeId: null,
+      });
+
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      [...skill.tutorialIds, ...skill.learningMoreTutorialIds].forEach((id) => databaseBuilder.factory.buildTutorial({
+        id, title: `title ${id}`, duration: `duration ${id}`, source: `source ${id}`, format: `format ${id}`, link: `link ${id}`, locale: 'fr',
+      }));
       await databaseBuilder.commit();
 
-      const skill = domainBuilder.buildSkill({
-        airtableId: null,
-        tubeId: null,
-      });
       const airtableSkill = airtableBuilder.factory.buildSkill({ ...skill, airtableId: 'recSkillPouet', tubeId: 'tube1' });
       const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
         new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
@@ -807,6 +812,11 @@ describe('Integration | Repository | skill-repository', () => {
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en },
         { key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr },
+      ]);
+
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        ...skill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...skill.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
       ]);
     });
   });

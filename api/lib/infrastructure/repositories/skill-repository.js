@@ -7,6 +7,11 @@ import { Skill } from '../../domain/models/Skill.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 const TABLE_NAME = 'skills';
+const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
+const TUTORIAL_RELATION_TYPES = {
+  UNDERSTANDING: 'understanding',
+  LEARNING_MORE: 'learningMore',
+};
 const model = 'skill';
 
 export async function list() {
@@ -81,22 +86,28 @@ export async function create(skill) {
   return knex.transaction(async (transaction) => {
     const createdSkillDTO = await skillDatasource.create(skill);
 
-    const translations = skillTranslations.extractFromDomainObject(skill);
+    await transaction.insert({
+      id: skill.id,
+      status: skill.status,
+      hintStatus: skill.hintStatus,
+      descriptionStatus: skill.descriptionStatus,
+      description: skill.description,
+      level: skill.level,
+      internationalisation: skill.internationalisation,
+      version: skill.version,
+      tubeId: createdSkillDTO.tubeId,
+    }).into(TABLE_NAME);
 
-    await Promise.all([
-      transaction.insert({
-        id: skill.id,
-        status: skill.status,
-        hintStatus: skill.hintStatus,
-        descriptionStatus: skill.descriptionStatus,
-        description: skill.description,
-        level: skill.level,
-        internationalisation: skill.internationalisation,
-        version: skill.version,
-        tubeId: createdSkillDTO.tubeId,
-      }).into(TABLE_NAME),
-      translationRepository.save({ translations, transaction }),
-    ]);
+    const translations = skillTranslations.extractFromDomainObject(skill);
+    await translationRepository.save({ translations, transaction });
+
+    const skillTutorials = [
+      ...createdSkillDTO.tutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.UNDERSTANDING })),
+      ...createdSkillDTO.learningMoreTutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.LEARNING_MORE })),
+    ];
+    if (skillTutorials.length > 0) {
+      await transaction.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME);
+    }
 
     return toDomain(createdSkillDTO, translations);
   });

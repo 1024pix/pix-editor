@@ -495,6 +495,10 @@ describe('Acceptance | Route | competences', () => {
         tubeAirtableId: 'recTube1',
         tubeId: 'tube1',
         description: 'Acquis pour l\'atelier de la compétence 2.2 Pix',
+        tutorialAirtableIds: [],
+        tutorialIds: [],
+        learningMoreTutorialAirtableIds: [],
+        learningMoreTutorialIds: [],
       }));
 
       airtableCreateCompetenceScope = nock('https://api.airtable.com')
