@@ -40,7 +40,7 @@ export async function getManyByAirtableIds(airtableIds) {
 export async function searchByTitle(title) {
   const [airtableDtos = [], pgDtos] = await Promise.all([
     tagDatasource.searchByTitle(title),
-    knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`).orderBy('title').limit(4),
+    knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`).orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(4),
   ]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTagDtos);
@@ -63,9 +63,9 @@ export async function findByTitle(title) {
 
 function compareTagDtos(airtableTag, pgTag) {
   const diff = [];
-  if (airtableTag.id !== pgTag.id) diff.push(`thematic airtable id "${airtableTag.id}" != postgres id "${pgTag.id}"`);
-  if (airtableTag.title !== pgTag.title) diff.push(`thematic airtable title "${airtableTag.title}" != postgres title "${pgTag.title}"`);
-  if (!areNullableValuesEqual(airtableTag.notes, pgTag.notes)) diff.push(`thematic airtable notes "${airtableTag.notes}" != postgres notes "${pgTag.notes}"`);
+  if (airtableTag.id !== pgTag.id) diff.push(`tag airtable id "${airtableTag.id}" != postgres id "${pgTag.id}"`);
+  if (airtableTag.title !== pgTag.title) diff.push(`tag airtable title "${airtableTag.title}" != postgres title "${pgTag.title}"`);
+  if (!areNullableValuesEqual(airtableTag.notes, pgTag.notes)) diff.push(`tag airtable notes "${airtableTag.notes}" != postgres notes "${pgTag.notes}"`);
   return diff;
 }
 

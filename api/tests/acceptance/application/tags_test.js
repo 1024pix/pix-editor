@@ -305,15 +305,18 @@ describe('Application | Route | Tags', () => {
       context('when searching by titles', function() {
         it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
           // given
-          databaseBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' });
-          databaseBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' });
-          databaseBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' });
+          databaseBuilder.factory.buildTag({ id: 'tagId3', notes: 'une note', title: 'france' });
+          databaseBuilder.factory.buildTag({ id: 'tagId4', title: 'freT' });
+          databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'frontieRe' });
+          databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'ééééfréééé' });
+          databaseBuilder.factory.buildTag({ id: 'tagId5', title: 'FR' });
           await databaseBuilder.commit();
 
           const airtableTags = [
+            airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'ééééfréééé' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId5', airtableId: 'tagAirtableId5', title: 'FR' }),
             airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
           ];
           airtableSearchTagsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Tags')
@@ -342,6 +345,22 @@ describe('Application | Route | Tags', () => {
             data: [
               {
                 type: 'tags',
+                id: 'tagAirtableId1',
+                attributes: {
+                  'pix-id': 'tagId1',
+                  'title': 'ééééfréééé',
+                },
+              },
+              {
+                type: 'tags',
+                id: 'tagAirtableId5',
+                attributes: {
+                  'pix-id': 'tagId5',
+                  'title': 'FR',
+                },
+              },
+              {
+                type: 'tags',
                 id: 'tagAirtableId3',
                 attributes: {
                   'pix-id': 'tagId3',
@@ -355,14 +374,6 @@ describe('Application | Route | Tags', () => {
                 attributes: {
                   'pix-id': 'tagId4',
                   'title': 'freT',
-                },
-              },
-              {
-                type: 'tags',
-                id: 'tagAirtableId2',
-                attributes: {
-                  'pix-id': 'tagId2',
-                  'title': 'frontieRe',
                 },
               },
             ],
