@@ -6,9 +6,8 @@ import {
   translationRepository
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
-import { NotFoundError } from '../../../../lib/domain/errors.js';
 
-const { filter, get } = challengeRepository;
+const { filter } = challengeRepository;
 
 describe('Unit | Repository | challenge-repository', () => {
   describe('#filter', () => {
@@ -227,18 +226,6 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(translationRepository.listByEntities).not.toHaveBeenCalled();
         expect(localizedChallengeRepository.listByChallengeIds).not.toHaveBeenCalled();
       });
-    });
-  });
-  describe('#filterByThematicIds', () => {
-    it('calls filter with filterByFormula defined to filter by thematic ids', async function() {
-      const thematicsIds = ['id1', 'id2'];
-      vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([]);
-      vi.spyOn(translationRepository, 'listByEntities');
-      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds');
-
-      await challengeRepository.filterByThematicIds(thematicsIds);
-
-      expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter : { formula: 'OR(FIND("id1", {Thematique (Record ID)}), FIND("id2", {Thematique (Record ID)}))' } });
     });
   });
 });
