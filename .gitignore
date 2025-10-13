@@ -39,6 +39,9 @@ pix-editor/app/config-private-test.js
 # intellij
 **/.idea
 
+# zed
+**/.zed
+
 # MACOS
 .DS_Store
 
