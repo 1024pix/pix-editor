@@ -649,7 +649,7 @@ describe('Integration | Repository | skill-repository', () => {
   describe('#update', () => {
 
     afterEach(async () => {
-      await knex('skills').truncate();
+      await knex('skills').delete();
       await knex('translations').delete();
     });
 

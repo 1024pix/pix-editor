@@ -1350,7 +1350,7 @@ describe('Application | Route | Skills', () => {
     });
 
     afterEach(function() {
-      return knex('skills').truncate();
+      return knex('skills').delete();
     });
 
     it('should patch skill', async () => {
