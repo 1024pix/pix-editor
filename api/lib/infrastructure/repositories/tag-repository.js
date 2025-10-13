@@ -40,7 +40,7 @@ export async function getManyByAirtableIds(airtableIds) {
 export async function searchByTitle(title) {
   const [airtableDtos = [], pgDtos] = await Promise.all([
     tagDatasource.searchByTitle(title),
-    knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`).orderBy('title').limit(4),
+    knex.select('*').from(TABLE_NAME).whereILike('title', `%${title}%`).orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(4),
   ]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTagDtos);
