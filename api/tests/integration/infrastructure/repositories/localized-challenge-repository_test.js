@@ -7,7 +7,7 @@ import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 describe('Integration | Repository | localized-challenge-repository', function() {
 
   context('#list', function() {
-    it('should return all localized challenges', async function() {
+    it('should return all localized challenges ordered by challenge id and locale', async function() {
       // given
       const challengeId = 'challengeId';
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -129,7 +129,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         const localizedChallenges = await localizedChallengeRepository.list();
 
         // then
-        expect(localizedChallenges).toStrictEqual([expectedFrenchChallenge, expectedBzChallenge, expectedNlChallenge]);
+        expect(localizedChallenges).toStrictEqual([expectedBzChallenge, expectedFrenchChallenge, expectedNlChallenge]);
       });
     });
   });
