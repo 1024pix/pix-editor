@@ -19,6 +19,7 @@ export const tutorialDatasource = datasource.extend({
     'niveau',
     'CoupDeCoeur',
     'Tags',
+    'Tags (id persistant)',
     'Solution à',
     'En savoir plus',
   ],
@@ -37,6 +38,7 @@ export const tutorialDatasource = datasource.extend({
       level: airtableRecord.get('niveau'),
       crush: airtableRecord.get('CoupDeCoeur') === 'YES',
       tagAirtableIds: airtableRecord.get('Tags') ?? [],
+      tagIds: airtableRecord.get('Tags (id persistant)') ?? [],
       tutorialForSkills: airtableRecord.get('Solution à'),
       furtherInformation: airtableRecord.get('En savoir plus'),
     };
@@ -103,4 +105,3 @@ export const tutorialDatasource = datasource.extend({
     return records.map(this.fromAirTableObject);
   },
 });
-

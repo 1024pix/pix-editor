@@ -15,10 +15,10 @@ export function buildTutorialDatasourceObject(
     level = Tutorial.LEVELS.THREE,
     crush = true,
     tagAirtableIds = ['tagAirtableId1'],
+    tagIds = ['tagId1'],
     tutorialForSkills = ['skillId1'],
     furtherInformation = ['skillId2'],
   } = {}) {
-
   return {
     id,
     airtableId,
@@ -32,6 +32,7 @@ export function buildTutorialDatasourceObject(
     level,
     crush,
     tagAirtableIds,
+    tagIds,
     tutorialForSkills,
     furtherInformation,
   };

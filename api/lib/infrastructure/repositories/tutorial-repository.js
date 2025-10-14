@@ -1,16 +1,74 @@
 import { Tutorial } from '../../domain/models/index.js';
 import { tutorialDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
+import { knex } from '../../../db/knex-database-connection.js';
+
+const TABLE_NAME = 'tutorials';
+const TAGS_RELATION_TABLE_NAME = 'tutorials-tutorial_tags';
 
 export async function create(tutorial) {
-  tutorial.id = generateNewId('tutorial');
-  const datasourceTutorial = await tutorialDatasource.create(tutorial);
-  return toDomain(datasourceTutorial);
+  return knex.transaction(async (transaction) => {
+    tutorial.id = generateNewId('tutorial');
+
+    const [airtableDto] = await Promise.all([
+      tutorialDatasource.create(tutorial),
+      transaction.insert({
+        id: tutorial.id,
+        title: tutorial.title,
+        duration: tutorial.duration,
+        source: tutorial.source,
+        format: tutorial.format,
+        link: tutorial.link,
+        license: tutorial.license,
+        level: tutorial.level,
+        crush: tutorial.crush,
+        locale: tutorial.locale,
+      }).into(TABLE_NAME),
+    ]);
+
+    if (airtableDto.tagIds.length !== 0) {
+      await transaction.insert(airtableDto.tagIds.map((tutorialTagId) => ({
+        tutorialId: tutorial.id,
+        tutorialTagId,
+      }))).into(TAGS_RELATION_TABLE_NAME);
+    }
+
+    return toDomain(airtableDto);
+  });
 }
 
 export async function update(tutorial) {
-  const datasourceTutorial = await tutorialDatasource.update(tutorial);
-  return toDomain(datasourceTutorial);
+  return knex.transaction(async (transaction) => {
+    const [airtableDto] = await Promise.all([
+      tutorialDatasource.update(tutorial),
+      transaction(TABLE_NAME).update({
+        title: tutorial.title,
+        duration: tutorial.duration,
+        source: tutorial.source,
+        format: tutorial.format,
+        link: tutorial.link,
+        license: tutorial.license,
+        level: tutorial.level,
+        crush: tutorial.crush,
+        locale: tutorial.locale,
+        updatedAt: transaction.fn.now(),
+      }).where('id', tutorial.id),
+    ]);
+
+    await transaction.delete().from(TAGS_RELATION_TABLE_NAME).where('tutorialId', tutorial.id).whereNotIn('tutorialTagId', airtableDto.tagIds);
+    if (airtableDto.tagIds.length !== 0) {
+      await transaction.insert(airtableDto.tagIds.map((tutorialTagId) => ({
+        tutorialId: tutorial.id,
+        tutorialTagId,
+        updatedAt: transaction.fn.now(),
+      })))
+        .into(TAGS_RELATION_TABLE_NAME)
+        .onConflict(['tutorialId', 'tutorialTagId'])
+        .merge();
+    }
+
+    return toDomain(airtableDto);
+  });
 }
 
 export async function getByAirtableId(tutorialId) {

@@ -25,6 +25,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
             niveau: 'niveau 1',
             CoupDeCoeur: 'YES',
             Tags: ['recTag1', 'recTag2'],
+            'Tags (id persistant)': ['tag1', 'tag2'],
             'Solution à': ['recSkill1', 'recSkill2'],
             'En savoir plus': ['recSkill1', 'recSkill3'],
           },
@@ -42,6 +43,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
             niveau: 'niveau 2',
             CoupDeCoeur: 'NON',
             Tags: ['recTag2', 'recTag3'],
+            'Tags (id persistant)': ['tag2', 'tag3'],
           },
         }),
       ]);
@@ -64,6 +66,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
           level: 'niveau 1',
           crush: true,
           tagAirtableIds: ['recTag1', 'recTag2'],
+          tagIds: ['tag1', 'tag2'],
         }),
         new Tutorial({
           airtableId: 'recTuto2',
@@ -78,6 +81,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
           level: 'niveau 2',
           crush: false,
           tagAirtableIds: ['recTag2', 'recTag3'],
+          tagIds: ['tag2', 'tag3'],
         }),
       ]);
 
