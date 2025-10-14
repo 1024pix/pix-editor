@@ -1,1 +1,7 @@
+/.circleci
+/.githooks
+/.github
+/.vscode
+/challenge-parser
 /pix-editor
+/docs
