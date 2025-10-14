@@ -55,7 +55,7 @@ export default class LocalizedController extends Controller {
   }
 
   get translationsUrl() {
-    return new URL(`${this.localizedChallenge.translations}/area-code/${this.competence.areaCode}`, window.location).href;
+    return new URL(`${this.localizedChallenge.translations}/framework-name/${this.competence.source}/area-code/${this.competence.areaCode}`, window.location).href;
   }
 
   get challengeRoute() {
