@@ -10,13 +10,15 @@ export function buildSkill({
   internationalisation,
   version,
   tubeId,
+  tutorialIds,
+  learningMoreTutorialIds,
   activatedAt,
   archivedAt,
   obsoletedAt,
   createdAt,
   updatedAt,
 } = {}) {
-  return databaseBuffer.pushInsertable({
+  const skill = databaseBuffer.pushInsertable({
     tableName: 'skills',
     values: {
       id,
@@ -35,4 +37,15 @@ export function buildSkill({
       updatedAt,
     },
   });
+  tutorialIds?.forEach((tutorialId) => databaseBuffer.pushInsertable({
+    tableName: 'skills-tutorials',
+    autoId: false,
+    values: { skillId: id, tutorialId, type: 'understanding', createdAt, updatedAt },
+  }));
+  learningMoreTutorialIds?.forEach((tutorialId) => databaseBuffer.pushInsertable({
+    tableName: 'skills-tutorials',
+    autoId: false,
+    values: { skillId: id, tutorialId, type: 'learningMore', createdAt, updatedAt },
+  }));
+  return { ...skill, tutorialIds, learningMoreTutorialIds };
 }

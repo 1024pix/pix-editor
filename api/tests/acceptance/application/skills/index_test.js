@@ -1345,6 +1345,9 @@ describe('Application | Route | Skills', () => {
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: skillDataObject.tubeId, name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialIdPersistant', title: 'title tuto1', duration: 'duration tuto1', source: 'source tuto1', format: 'format tuto1', link: 'link tuto1', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialLMIdPersistant', title: 'title tuto2', duration: 'duration tuto2', source: 'source tuto2', format: 'format tuto2', link: 'link tuto2', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialLMNewIdPersistant', title: 'title tuto3', duration: 'duration tuto3', source: 'source tuto3', format: 'format tuto3', link: 'link tuto3', locale: 'fr' });
       databaseBuilder.factory.buildSkill(skillDataObject);
 
       databaseBuilder.factory.buildTranslation({
@@ -1361,10 +1364,6 @@ describe('Application | Route | Skills', () => {
       await databaseBuilder.commit();
     });
 
-    afterEach(function() {
-      return knex('skills').delete();
-    });
-
     it('should patch skill', async () => {
       // Given
       const skillToUpdateFromAirtableScope = nock('https://api.airtable.com')
@@ -1375,7 +1374,7 @@ describe('Application | Route | Skills', () => {
       const skillPatched = {
         ...skillDataObject,
         hintStatus: skillPayload.data.attributes['clue-status'],
-        learningMoreTutorialIds: ['tutorialLMIdPersistant', 'recNewTuto'],
+        learningMoreTutorialIds: ['tutorialLMIdPersistant', 'tutorialLMNewIdPersistant'],
         learningMoreTutorialAirtableIds: ['tutorialLMAirtableId', 'tutorialLMNewAirtableId'],
         status: skillPayload.data.attributes.status,
         description: skillPayload.data.attributes.description,
@@ -1477,7 +1476,14 @@ describe('Application | Route | Skills', () => {
         locale: 'fr',
         value: 'new clue'
       }]);
+
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        { type: 'learningMore', skillId: 'skillIdPersistant', tutorialId: 'tutorialLMIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'learningMore', skillId: 'skillIdPersistant', tutorialId: 'tutorialLMNewIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'understanding', skillId: 'skillIdPersistant', tutorialId: 'tutorialIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
     });
+
     describe('when resources doesn\'t exists', () => {
       it('Should not patch and return 404 code', async () => {
         // Given

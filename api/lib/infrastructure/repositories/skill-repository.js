@@ -140,6 +140,18 @@ export async function update(skill) {
     });
     await translationRepository.save({ translations, transaction });
 
+    const skillTutorials = [
+      ...updatedSkillDto.tutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.UNDERSTANDING })),
+      ...updatedSkillDto.learningMoreTutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.LEARNING_MORE })),
+    ];
+    await transaction.delete().from(TUTORIALS_RELATION_TABLE_NAME).whereNotIn(
+      ['skillId', 'tutorialId', 'type'],
+      skillTutorials.map(({ skillId, tutorialId, type }) => [skillId, tutorialId, type]),
+    );
+    if (skillTutorials.length > 0) {
+      await transaction.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME).onConflict(['skillId', 'tutorialId', 'type']).merge({ updatedAt: transaction.fn.now() });
+    }
+
     return toDomain(updatedSkillDto, translations, skillDataFromPG);
   });
 }

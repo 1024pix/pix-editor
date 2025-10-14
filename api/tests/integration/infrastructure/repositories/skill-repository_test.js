@@ -647,21 +647,24 @@ describe('Integration | Repository | skill-repository', () => {
   });
 
   describe('#update', () => {
-
-    afterEach(async () => {
-      await knex('skills').delete();
-      await knex('translations').delete();
-    });
-
     it('should save skill and translations', async () => {
       // given
-      const skill = domainBuilder.buildSkill();
+      const skill = domainBuilder.buildSkill({
+        tutorialIds: ['tuto1', 'tuto2'],
+        tutorialAirtableIds: ['recTuto1', 'recTuto2'],
+        learningMoreTutorialIds: ['tuto3'],
+        learningMoreTutorialAirtableIds: ['recTuto3'],
+      });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: skill.tubeId, name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto1', title: 'title tuto1', duration: 'duration tuto1', source: 'source tuto1', format: 'format tuto1', link: 'link tuto1', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto2', title: 'title tuto2', duration: 'duration tuto2', source: 'source tuto2', format: 'format tuto2', link: 'link tuto2', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto3', title: 'title tuto3', duration: 'duration tuto3', source: 'source tuto3', format: 'format tuto3', link: 'link tuto3', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto4', title: 'title tuto4', duration: 'duration tuto4', source: 'source tuto4', format: 'format tuto4', link: 'link tuto4', locale: 'fr' });
       databaseBuilder.factory.buildSkill(skill);
       databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
       databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
@@ -677,6 +680,10 @@ describe('Integration | Repository | skill-repository', () => {
         archivedAt: new Date('2025-10-10T15:20:23Z'),
         activatedAt: new Date('2025-10-11T15:20:23Z'),
         obsoletedAt: new Date('2025-10-12T15:20:23Z'),
+        tutorialIds: ['tuto2', 'tuto4'],
+        tutorialAirtableIds: ['recTuto2', 'recTuto4'],
+        learningMoreTutorialIds: ['tuto1', 'tuto2'],
+        learningMoreTutorialAirtableIds: ['recTuto1', 'recTuto2'],
       });
 
       const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
@@ -703,8 +710,8 @@ describe('Integration | Repository | skill-repository', () => {
             'Internationalisation': expectedSkill.internationalisation,
             'Version': expectedSkill.version,
             'Tube': [skill.tubeAirtableId],
-            'Comprendre': skill.tutorialAirtableIds,
-            'En savoir plus': skill.learningMoreTutorialAirtableIds,
+            'Comprendre': expectedSkill.tutorialAirtableIds,
+            'En savoir plus': expectedSkill.learningMoreTutorialAirtableIds,
           },
         },
       );
@@ -731,6 +738,11 @@ describe('Integration | Repository | skill-repository', () => {
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: `skill.${skill.id}.hint`, locale: 'en', value: expectedSkill.hint_i18n.en },
         { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr },
+      ]);
+
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        ...expectedSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...expectedSkill.tutorialIds.toSorted().map((tutorialId) => ({ type: 'understanding', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
       ]);
     });
   });
