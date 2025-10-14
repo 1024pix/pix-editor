@@ -1,5 +1,15 @@
 
 
+## v3.225.0 (14/10/2025)
+
+
+### :building_construction: Tech
+- [#1155](https://github.com/1024pix/pix-editor/pull/1155) [TECH] Écriture des tutoriels dans Postgres (PIX-19960).
+
+### :bug: Correction
+- [#1160](https://github.com/1024pix/pix-editor/pull/1160) [BUGFIX] Correction type colonne `tutorials.link` (PIX-20010).
+- [#1158](https://github.com/1024pix/pix-editor/pull/1158) [BUGFIX] Correction ordre de tri des tags de tutos (PIX-19995).
+
 ## v3.224.0 (09/10/2025)
 
 
