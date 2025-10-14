@@ -1,4 +1,4 @@
-import { google } from 'googleapis';
+import * as google from '@googleapis/sheets';
 import { logger } from '../logger.js';
 import * as config from '../../config.js';
 import { knex } from '../../../db/knex-database-connection.js';
@@ -8,14 +8,12 @@ const sheets = google.sheets('v4');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const DELETE_EXTERNAL_URL_SHEET_DELAY_MONTHS = 3;
 
-async function getAuthToken(credentials) {
-  const auth = new google.auth.GoogleAuth({
+async function getAuthClient(credentials) {
+  const googleAuth = new google.auth.GoogleAuth({
     scopes: SCOPES,
     credentials,
   });
-
-  const authToken = await auth.getClient();
-  return authToken;
+  return googleAuth.getClient();
 }
 
 async function clearSpreadsheetValues({ spreadsheetId, auth, range }) {
@@ -40,7 +38,7 @@ async function setSpreadsheetValues({ spreadsheetId, auth, range, valueInputOpti
 
 async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   try {
-    const auth = await getAuthToken(config.googleAuthCredentials);
+    const auth = await getAuthClient(config.googleAuthCredentials);
     await clearSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
@@ -62,7 +60,7 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
 
 async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
   try {
-    const auth = await getAuthToken(config.googleAuthCredentials);
+    const auth = await getAuthClient(config.googleAuthCredentials);
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
     const isNameForNewSheetAvailable = spreadsheet.data.sheets
       .filter((sheet) => sheet.properties.title === sheetName).length === 0;
@@ -90,7 +88,7 @@ async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
 
 async function clearOlderSheets(spreadsheetId) {
   try {
-    const auth = await getAuthToken(config.googleAuthCredentials);
+    const auth = await getAuthClient(config.googleAuthCredentials);
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
     const limitDate = new Date();
     limitDate.setMonth(new Date().getMonth() - DELETE_EXTERNAL_URL_SHEET_DELAY_MONTHS);
