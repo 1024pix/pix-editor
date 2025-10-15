@@ -64,7 +64,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         locale: 'en',
         embedURL: `${challenge.embedURL}?lang=en`,
         status: LocalizedChallenge.STATUSES.PLAY,
-        attachments: [attachment],
+        attachments: [attachment, store.createRecord('attachment', { type: 'illustration' })],
       });
     chalengeLocale = store.createRecord('challenge-locale', {
       challenge,
@@ -72,6 +72,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
       locale: 'en',
     });
   });
+
   test('it should display readonly form', async function(assert) {
     // when
     screen = await render(<template>
@@ -88,7 +89,32 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     // then
     assert.dom(screen.getByLabelText('Embed URL')).hasValue('https://mon-site.fr/my-link.html?lang=en');
     assert.dom(screen.getByText('Pièces jointes')).exists();
-
+    assert.dom(screen.getByText('Illustration')).exists();
+    assert.dom(screen.getByLabelText('Géographie')).hasText('Neutre');
+    assert.dom(screen.getByLabelText('Consigne')).hasText('instructions');
+    assert.dom(screen.getByLabelText('Alternative textuelle')).hasText('alternativeInstruction');
+    assert.dom(screen.getByLabelText('Modalité')).hasText('QROC');
+    assert.dom(screen.getByLabelText('Format')).hasValue('format');
+    assert.dom(screen.getByLabelText('Propositions')).hasText('suggestion');
+    assert.dom(screen.getByLabelText('Réponses')).hasText('answers');
+    assert.dom(screen.getByLabelText('T1 (espaces/casse/accents)')).isNotChecked();
+    assert.dom(screen.getByLabelText('T2 (ponctuation)')).isChecked();
+    assert.dom(screen.getByLabelText('T3 (distance d\'édition)')).isNotChecked();
+    assert.dom(screen.getByLabelText('Hauteur')).hasValue('800');
+    assert.dom(screen.getByLabelText('Titre')).hasValue('embedTitle');
+    assert.dom(screen.getByLabelText('Type pédagogie')).hasValue('pedagogy');
+    assert.dom(screen.getByLabelText('Timer')).isChecked();
+    assert.dom(screen.getByLabelText('Durée du timer')).hasValue('10');
+    assert.dom(screen.getByLabelText('Focus')).isNotChecked();
+    assert.dom(screen.getByLabelText('Langue(s)')).hasValue('languages');
+    assert.dom(screen.getByLabelText('Spoil')).hasValue('spoil');
+    assert.dom(screen.getByLabelText('Déclinable')).hasValue('difficilement');
+    assert.dom(screen.getByLabelText('Responsive')).hasValue('responsive');
+    assert.dom(screen.getByLabelText('Non voyant')).hasValue('Ok');
+    assert.dom(screen.getByLabelText('Daltonien')).hasValue('Ok');
+    assert.dom(screen.getByLabelText('Sourds et malentendants')).hasValue('Ok');
+    assert.dom(screen.getByLabelText('Champs contextualisés')).hasValue('contextualizedFields');
+    assert.dom(screen.getByLabelText('Id')).hasValue('localizedChallengeId');
   });
 
   module('when challenge has no embed URL', function() {
@@ -110,9 +136,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
       // then
       assert.dom(screen.queryByLabelText('Embed URL')).doesNotExist();
-
     });
   });
+
   module('when challenge has no attachment', function() {
     test('it should not display attachment input', async function(assert) {
       // given
@@ -132,7 +158,6 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
       // then
       assert.dom(screen.queryByText('Pièces jointes')).doesNotExist();
-
     });
   });
 });

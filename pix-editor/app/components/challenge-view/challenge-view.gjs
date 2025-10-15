@@ -230,7 +230,7 @@ export default class ChallengeViewProduction extends Component {
           </PixInput>
         </fieldset>
         <fieldset>
-          <legend>certification</legend>
+          <legend>Certification</legend>
           <div class="challenge-view-quality__certification">
             <PixCheckbox
               @checked={{@challenge.isAwarenessChallenge}}
