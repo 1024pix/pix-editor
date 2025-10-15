@@ -147,8 +147,11 @@ describe('Application | Route | Tubes', () => {
             name: '@test',
             index: 1,
             competenceAirtableId: 'recCompetence1',
+            competenceId: 'competence1',
             thematicAirtableId: 'recThematic1',
+            thematicId: 'thematic1',
             skillAirtableIds: ['recSkill1', 'recSkill2'],
+            skillIds: ['skill1', 'skill2'],
           })),
           airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
             id: 'tube2',
@@ -156,8 +159,11 @@ describe('Application | Route | Tubes', () => {
             name: '@pouet',
             index: 2,
             competenceAirtableId: 'recCompetence2',
+            competenceId: 'competence2',
             thematicAirtableId: 'recThematic2',
+            thematicId: 'thematic2',
             skillAirtableIds: ['recSkill3', 'recSkill4'],
+            skillIds: ['skill3', 'skill4'],
           })),
         ];
 
@@ -169,6 +175,19 @@ describe('Application | Route | Tubes', () => {
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, { records: airtableTubes });
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@test', index: 1, thematicId: 'thematic1' });
+        databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+        databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@pouet', index: 2, thematicId: 'thematic2' });
+        databaseBuilder.factory.buildSkill({ id: 'skill3', tubeId: 'tube2' });
+        databaseBuilder.factory.buildSkill({ id: 'skill4', tubeId: 'tube2' });
 
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Titre premier tube' });
         databaseBuilder.factory.buildTranslation({ key: 'tube.tube1.practicalTitle', locale: 'en', value: 'First tube’s title' });

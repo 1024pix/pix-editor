@@ -5,16 +5,21 @@ import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'tube';
 const TABLE_NAME = 'tubes';
 
 export async function list() {
-  const [datasourceTubes, translations] = await Promise.all([
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
     tubeDatasource.list(),
+    selectTubes().orderBy(`${TABLE_NAME}.id`),
     translationRepository.listByModel(model),
   ]);
-  return toDomainList(datasourceTubes, translations);
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function get(id) {
@@ -83,6 +88,31 @@ export async function update(tube) {
     await translationRepository.save({ translations, transaction });
     return toDomain(updatedTubeDto, translations);
   });
+}
+
+function selectTubes() {
+  return knex.select(
+    `${TABLE_NAME}.*`,
+    'thematics.competenceId',
+    knex.raw(
+      'coalesce((??), \'[]\') as "skillIds"',
+      knex
+        .select(knex.raw('json_agg(??)', 'skills.id'))
+        .from('skills')
+        .where('skills.tubeId', '=', knex.ref(`${TABLE_NAME}.id`)),
+    ),
+  ).from(TABLE_NAME).join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`);
+}
+
+function compareSkillDtos(airtableSkill, pgSkill) {
+  const diff = [];
+  if (airtableSkill.id !== pgSkill.id) diff.push(`tube airtable id "${airtableSkill.id}" != postgres id "${pgSkill.id}"`);
+  if (airtableSkill.name !== pgSkill.name) diff.push(`tube airtable name "${airtableSkill.name}" != postgres name "${pgSkill.name}"`);
+  if (!areNullableValuesEqual(airtableSkill.index, pgSkill.index)) diff.push(`tube airtable index "${airtableSkill.index}" != postgres index "${pgSkill.index}"`);
+  if (airtableSkill.thematicId !== pgSkill.thematicId) diff.push(`tube airtable thematicId "${airtableSkill.thematicId}" != postgres thematicId "${pgSkill.thematicId}"`);
+  if (airtableSkill.competenceId !== pgSkill.competenceId) diff.push(`tube airtable competenceId "${airtableSkill.competenceId}" != postgres competenceId "${pgSkill.competenceId}"`);
+  if (!areArrayEquals(airtableSkill.skillIds, pgSkill.skillIds)) diff.push(`tube airtable skillIds "${airtableSkill.skillIds}" != postgres skillIds "${pgSkill.skillIds}"`);
+  return diff;
 }
 
 function toDomainList(datasourceTubes, translations) {

@@ -52,6 +52,20 @@ describe('Integration | Repository | tube-repository', () => {
           skillIds: ['skill3', 'skill4'],
         }),
       ]).activate().nockScope;
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId1', competenceId: 'competenceId1' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId1', name: '@tube1', index: 1, thematicId: 'thematicId1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tubeId1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tubeId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId2', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId2', competenceId: 'competenceId2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId2', name: '@tube2', index: 2, thematicId: 'thematicId2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill3', tubeId: 'tubeId2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill4', tubeId: 'tubeId2' });
+
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
         locale: 'en',

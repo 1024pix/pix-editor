@@ -145,15 +145,26 @@ async function mockCurrentContent() {
         noValidationNeeded: false,
       }
     ],
-    tutorials: [{
-      id: 'recTutorial0',
-      duration: 'Durée du Tutoriel',
-      format: TutorialForRelease.FORMATS.FRISE,
-      link: 'Lien du Tutoriel',
-      source: 'Source du Tutoriel',
-      title: 'Titre du Tutoriel',
-      locale: 'Langue du Tutoriel',
-    }],
+    tutorials: [
+      {
+        id: 'recTutorial0',
+        duration: 'Durée du Tutoriel 0',
+        format: TutorialForRelease.FORMATS.FRISE,
+        link: 'Lien du Tutoriel 0',
+        source: 'Source du Tutoriel 0',
+        title: 'Titre du Tutoriel 0',
+        locale: 'Langue du Tutoriel 0',
+      },
+      {
+        id: 'recTutorial1',
+        duration: 'Durée du Tutoriel 1',
+        format: TutorialForRelease.FORMATS.AUDIO,
+        link: 'Lien du Tutoriel 1',
+        source: 'Source du Tutoriel 1',
+        title: 'Titre du Tutoriel 1',
+        locale: 'Langue du Tutoriel 1',
+      },
+    ],
     courses: [{
       id: 'recCourse0',
       name: 'Nom du Course',
@@ -258,7 +269,7 @@ async function mockCurrentContent() {
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
     tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
-    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
+    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
 
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
@@ -266,6 +277,8 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
   databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
   databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
+  expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
+  databaseBuilder.factory.buildSkill(expectedCurrentContent.skills[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -578,15 +591,26 @@ async function mockContentForRelease() {
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
       },],
-    tutorials: [{
-      id: 'recTutorial0',
-      duration: 'Durée du Tutoriel',
-      format: TutorialForRelease.FORMATS.VIDEO,
-      link: 'Lien du Tutoriel',
-      source: 'Source du Tutoriel',
-      title: 'Titre du Tutoriel',
-      locale: 'Langue du Tutoriel',
-    }],
+    tutorials: [
+      {
+        id: 'recTutorial0',
+        duration: 'Durée du Tutoriel 0',
+        format: TutorialForRelease.FORMATS.VIDEO,
+        link: 'Lien du Tutoriel 0',
+        source: 'Source du Tutoriel 0',
+        title: 'Titre du Tutoriel 0',
+        locale: 'Langue du Tutoriel 0',
+      },
+      {
+        id: 'recTutorial1',
+        duration: 'Durée du Tutoriel 1',
+        format: TutorialForRelease.FORMATS.IMAGE,
+        link: 'Lien du Tutoriel 1',
+        source: 'Source du Tutoriel 1',
+        title: 'Titre du Tutoriel 1',
+        locale: 'Langue du Tutoriel 1',
+      },
+    ],
     courses: [{
       id: 'recCourse0',
       name: 'Nom du Course',
@@ -674,14 +698,16 @@ async function mockContentForRelease() {
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
     tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
-    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
+    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
 
-  databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
-  databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
-  databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
-  databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
-  databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
+  expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
+  expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
+  expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
+  expectedCurrentContent.thematics.forEach(databaseBuilder.factory.buildThematic);
+  expectedCurrentContent.tubes.forEach(databaseBuilder.factory.buildTube);
+  expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
+  expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
