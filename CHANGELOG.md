@@ -1,5 +1,15 @@
 
 
+## v3.225.1 (15/10/2025)
+
+
+### :building_construction: Tech
+- [#1162](https://github.com/1024pix/pix-editor/pull/1162) [TECH] Réduction de la taille du container Scalingo.
+- [#1159](https://github.com/1024pix/pix-editor/pull/1159) [TECH] Convertir les tests unitaires de repositories en tests d'intégration.
+
+### :bug: Correction
+- [#1161](https://github.com/1024pix/pix-editor/pull/1161) [BUGFIX] Refaire fonctionner le bouton Traductions vers Phrase de la V1 (PIX-20009).
+
 ## v3.225.0 (14/10/2025)
 
 
