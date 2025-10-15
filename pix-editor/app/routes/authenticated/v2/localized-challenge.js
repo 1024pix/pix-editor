@@ -9,9 +9,11 @@ export default class ChallengeRoute extends Route {
   beforeModel(transition) {
     const locale = transition.to.queryParams.locale;
     if (!locale) {
+      const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
       const overview = transition.to.params.overview;
       const skillId = transition.to.params.skill_id;
-      // TODO si pas de locale transition vers challenge
+
+      this.router.transitionTo('authenticated.v2.competence-overview.challenges', competenceId, overview, skillId);
     }
   }
 
@@ -21,6 +23,7 @@ export default class ChallengeRoute extends Route {
     const competence = await this.store.findRecord('competence', competence_id);
     const skill = await this.store.findRecord('skill', skill_id, { backgroundReload: false });
     const challenges = await skill.hasMany('challengesProduction').load();
+
     const challengeLocales = await Promise.all(
       challenges
         .filter((challenge) => challenge.locales.includes(locale) || challenge.locales.includes('fr'))
