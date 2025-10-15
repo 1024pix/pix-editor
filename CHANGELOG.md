@@ -1,5 +1,11 @@
 
 
+## v3.226.0 (15/10/2025)
+
+
+### :building_construction: Tech
+- [#1156](https://github.com/1024pix/pix-editor/pull/1156) [TECH] Écriture des acquis dans Postgres (PIX-19729).
+
 ## v3.225.1 (15/10/2025)
 
 
