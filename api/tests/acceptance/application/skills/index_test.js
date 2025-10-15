@@ -981,6 +981,16 @@ describe('Application | Route | Skills', () => {
     let airtableGetTubeScope, airtableGetSkillsScope, airtableCreateSkillScope, pixApiCacheScope, dataToPost;
 
     beforeEach(async () => {
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto1', title: 'title tuto1', duration: 'duration tuto1', source: 'source tuto1', format: 'format tuto1', link: 'link tuto1', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto2', title: 'title tuto2', duration: 'duration tuto2', source: 'source tuto2', format: 'format tuto2', link: 'link tuto2', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tuto3', title: 'title tuto3', duration: 'duration tuto3', source: 'source tuto3', format: 'format tuto3', link: 'link tuto3', locale: 'fr' });
+      await databaseBuilder.commit();
+
       dataToPost = {
         level: 1,
         description: 'La description de mon nouvel acquis',
@@ -1040,10 +1050,13 @@ describe('Application | Route | Skills', () => {
         name: '@tube1',
         hintStatus: dataToPost.hintStatus,
         tutorialAirtableIds: dataToPost.tutorialAirtableIds,
+        tutorialIds: ['tuto1', 'tuto3'],
         learningMoreTutorialAirtableIds: dataToPost.learningMoreTutorialAirtableIds,
+        learningMoreTutorialIds: ['tuto2'],
         pixValue: 3,
         status: 'en construction',
         tubeAirtableId: dataToPost.tubeAirtableId,
+        tubeId: 'tube1',
         descriptionStatus: dataToPost.descriptionStatus,
         level: 1,
         internationalisation: dataToPost.internationalisation,
@@ -1102,7 +1115,9 @@ describe('Application | Route | Skills', () => {
     });
 
     afterEach(async () => {
-      await knex('translations').truncate();
+      await knex('skills-tutorials').delete();
+      await knex('skills').delete();
+      await knex('translations').delete();
     });
 
     it('should respond with status 201 and created skill', async () => {
@@ -1162,10 +1177,6 @@ describe('Application | Route | Skills', () => {
       });
 
       // then
-      expect(airtableGetTubeScope.isDone()).to.be.true;
-      expect(airtableGetSkillsScope.isDone()).to.be.true;
-      expect(airtableCreateSkillScope.isDone()).to.be.true;
-      expect(pixApiCacheScope.isDone()).to.be.true;
       expect(response.statusCode).toBe(201);
       expect(response.result).toEqual({
         data: {
@@ -1224,11 +1235,40 @@ describe('Application | Route | Skills', () => {
         }
       });
 
+      expect(airtableGetTubeScope.isDone()).to.be.true;
+      expect(airtableGetSkillsScope.isDone()).to.be.true;
+      expect(airtableCreateSkillScope.isDone()).to.be.true;
+      expect(pixApiCacheScope.isDone()).to.be.true;
+
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
+        {
+          id: 'nouvelAcquis',
+          description: 'La description de mon nouvel acquis',
+          descriptionStatus: 'Un statut de description pour mon nouvel acquis',
+          hintStatus: 'Le statut de l indice de mon nouvel acquis',
+          internationalisation: 'Internationalisation de mon nouvel acquis',
+          level: 1,
+          status: 'en construction',
+          tubeId: 'tube1',
+          version: 2,
+          activatedAt: null,
+          archivedAt: null,
+          obsoletedAt: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: 'skill.nouvelAcquis.hint', locale: 'en', value: 'L indice EN de mon nouvel acquis' },
         { key: 'skill.nouvelAcquis.hint', locale: 'fr', value: 'L indice de mon nouvel acquis' },
       ]);
 
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        { type: 'learningMore', skillId: 'nouvelAcquis', tutorialId: 'tuto2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'understanding', skillId: 'nouvelAcquis', tutorialId: 'tuto1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'understanding', skillId: 'nouvelAcquis', tutorialId: 'tuto3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
     });
   });
 
@@ -1300,6 +1340,16 @@ describe('Application | Route | Skills', () => {
         },
       };
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: skillDataObject.tubeId, name: '@foo', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialIdPersistant', title: 'title tuto1', duration: 'duration tuto1', source: 'source tuto1', format: 'format tuto1', link: 'link tuto1', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialLMIdPersistant', title: 'title tuto2', duration: 'duration tuto2', source: 'source tuto2', format: 'format tuto2', link: 'link tuto2', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({ id: 'tutorialLMNewIdPersistant', title: 'title tuto3', duration: 'duration tuto3', source: 'source tuto3', format: 'format tuto3', link: 'link tuto3', locale: 'fr' });
+      databaseBuilder.factory.buildSkill(skillDataObject);
+
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
         key: 'skill.skillIdPersistant.hint',
@@ -1314,10 +1364,6 @@ describe('Application | Route | Skills', () => {
       await databaseBuilder.commit();
     });
 
-    afterEach(function() {
-      return knex('skills').truncate();
-    });
-
     it('should patch skill', async () => {
       // Given
       const skillToUpdateFromAirtableScope = nock('https://api.airtable.com')
@@ -1325,16 +1371,18 @@ describe('Application | Route | Skills', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, airtableSkill);
 
-      const airtableSkillPatched = airtableBuilder.factory.buildSkill({
+      const skillPatched = {
         ...skillDataObject,
         hintStatus: skillPayload.data.attributes['clue-status'],
-        learningMoreTutorialIds: ['tutorialLMIdPersistant', 'recNewTuto'],
+        learningMoreTutorialIds: ['tutorialLMIdPersistant', 'tutorialLMNewIdPersistant'],
         learningMoreTutorialAirtableIds: ['tutorialLMAirtableId', 'tutorialLMNewAirtableId'],
         status: skillPayload.data.attributes.status,
         description: skillPayload.data.attributes.description,
         descriptionStatus: skillPayload.data.attributes['description-status'],
         internationalisation: skillPayload.data.attributes.i18n
-      });
+      };
+
+      const airtableSkillPatched = airtableBuilder.factory.buildSkill(skillPatched);
 
       const airtablePatchScope = nock('https://api.airtable.com')
         .patch('/v0/airtableBaseValue/Acquis/?', {
@@ -1400,12 +1448,26 @@ describe('Application | Route | Skills', () => {
       expect(airtablePatchScope.isDone()).toBe(true);
       expect(pixApiCacheScope.isDone()).toBe(true);
 
-      const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
-        column: 'key',
-        order: 'asc'
-      }, { column: 'locale', order: 'asc' }]);
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
+        {
+          id: skillPatched.id,
+          description: skillPatched.description,
+          descriptionStatus: skillPatched.descriptionStatus,
+          hintStatus: skillPatched.hintStatus,
+          internationalisation: skillPatched.internationalisation,
+          level: skillPatched.level,
+          status: skillPatched.status,
+          tubeId: skillPatched.tubeId,
+          version: skillPatched.version,
+          activatedAt: null,
+          archivedAt: null,
+          obsoletedAt: null,
+          createdAt: new Date(skillPatched.createdAt),
+          updatedAt: expect.any(Date),
+        },
+      ]);
 
-      expect(translations).to.deep.equal([{
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale'])).resolves.toStrictEqual([{
         key: 'skill.skillIdPersistant.hint',
         locale: 'en',
         value: 'new clueEn'
@@ -1414,7 +1476,14 @@ describe('Application | Route | Skills', () => {
         locale: 'fr',
         value: 'new clue'
       }]);
+
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        { type: 'learningMore', skillId: 'skillIdPersistant', tutorialId: 'tutorialLMIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'learningMore', skillId: 'skillIdPersistant', tutorialId: 'tutorialLMNewIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { type: 'understanding', skillId: 'skillIdPersistant', tutorialId: 'tutorialIdPersistant', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
     });
+
     describe('when resources doesn\'t exists', () => {
       it('Should not patch and return 404 code', async () => {
         // Given
@@ -1435,12 +1504,7 @@ describe('Application | Route | Skills', () => {
         expect(skillToUpdateFromAirtableScope.isDone()).toBe(true);
         expect(response.statusCode).to.equal(404);
 
-        const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
-          column: 'key',
-          order: 'asc'
-        }, { column: 'locale', order: 'asc' }]);
-
-        expect(translations).to.deep.equal([{
+        await expect(knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale'])).resolves.toStrictEqual([{
           key: 'skill.skillIdPersistant.hint',
           locale: 'en',
           value: 'Toot'
@@ -1466,10 +1530,29 @@ describe('Application | Route | Skills', () => {
       airtableCreateAttachmentsScope,
       pixApiCacheSkillUpdateScope,
       pixApiCacheChallengeUpdateScope,
-      dataToPost;
+      dataToPost,
+      skillToClone;
 
     beforeEach(async () => {
       // given
+      skillToClone = domainBuilder.buildSkillDatasourceObject({
+        id: 'skill1Tube1',
+        airtableId: 'recSkill1Tube1',
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        level: 1,
+        version: 1,
+      });
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+      [...skillToClone.tutorialIds, ...skillToClone.learningMoreTutorialIds].forEach((id) => databaseBuilder.factory.buildTutorial({
+        id, title: `title ${id}`, duration: `duration ${id}`, source: `source ${id}`, format: `format ${id}`, link: `link ${id}`, locale: 'fr',
+      }));
+
       dataToPost = {
         level: 2,
         skillIdToClone: 'skill1Tube1',
@@ -1482,14 +1565,8 @@ describe('Application | Route | Skills', () => {
         index: 5,
         competenceId: 'recCompetence1',
       }));
-      const airtableSkillToClone = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
-        id: 'skill1Tube1',
-        airtableId: 'recSkill1Tube1',
-        tubeId: 'tube1',
-        tubeAirtableId: 'recTube1',
-        level: 1,
-        version: 1,
-      }));
+
+      const airtableSkillToClone = airtableBuilder.factory.buildSkill(skillToClone);
       const airtableSkillAlreadyAtDestinationTubeLevel = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
         id: 'skill2Tube1',
         airtableId: 'recSkill2Tube1',
@@ -1845,7 +1922,9 @@ describe('Application | Route | Skills', () => {
     });
 
     afterEach(async () => {
-      await knex('translations').truncate();
+      await knex('skills-tutorials').delete();
+      await knex('skills').delete();
+      await knex('translations').delete();
     });
 
     it('should respond with status 302 with cloned skill redirection', async () => {
@@ -1870,6 +1949,36 @@ describe('Application | Route | Skills', () => {
       });
 
       // then
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe('/api/skills/recClonedSkillAirtableId');
+
+      await expect(knex.select('*').from('skills').where('id', 'clonedAcquisId').first()).resolves.toStrictEqual({
+        description: 'skill description',
+        descriptionStatus: 'Validé',
+        hintStatus: 'Validé',
+        id: 'clonedAcquisId',
+        internationalisation: 'Monde',
+        level: 2,
+        status: 'en construction',
+        tubeId: 'tube1',
+        version: 2,
+        activatedAt: null,
+        archivedAt: null,
+        obsoletedAt: null,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+        { key: 'challenge.clonedChallengeId.instruction', locale: 'fr', value: 'Juste une trad ?' },
+        { key: 'challenge.validatedChallengeProto.instruction', locale: 'fr', value: 'Juste une trad ?' },
+        { key: 'challenge.validatedChallengeProto.instruction', locale: 'nl', value: 'Slechts een vertaling ?' },
+        { key: 'skill.clonedAcquisId.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
+        { key: 'skill.clonedAcquisId.hint', locale: 'fr', value: 'C\'est chaud-nen' },
+        { key: 'skill.skill1Tube1.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
+        { key: 'skill.skill1Tube1.hint', locale: 'fr', value: 'C\'est chaud-nen' },
+      ]);
+
       expect(airtableGetTubeByIdScope.isDone()).to.be.true;
       expect(airtableGetSkillByIdScope.isDone()).to.be.true;
       expect(airtableGetTubeSkillsScope.isDone()).to.be.true;
@@ -1882,17 +1991,10 @@ describe('Application | Route | Skills', () => {
       expect(airtableCreateAttachmentsScope.isDone()).to.be.true;
       expect(pixApiCacheSkillUpdateScope.isDone()).to.be.true;
       expect(pixApiCacheChallengeUpdateScope.isDone()).to.be.true;
-      expect(response.statusCode).toBe(302);
-      expect(response.headers.location).toMatch('/api/skills/');
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
-        { key: 'challenge.clonedChallengeId.instruction', locale: 'fr', value: 'Juste une trad ?' },
-        { key: 'challenge.validatedChallengeProto.instruction', locale: 'fr', value: 'Juste une trad ?' },
-        { key: 'challenge.validatedChallengeProto.instruction', locale: 'nl', value: 'Slechts een vertaling ?' },
-        { key: 'skill.clonedAcquisId.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
-        { key: 'skill.clonedAcquisId.hint', locale: 'fr', value: 'C\'est chaud-nen' },
-        { key: 'skill.skill1Tube1.hint', locale: 'en', value: 'AIRTABLE IS SO FUN OMG 🥰' },
-        { key: 'skill.skill1Tube1.hint', locale: 'fr', value: 'C\'est chaud-nen' },
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        ...skillToClone.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...skillToClone.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
       ]);
     });
   });

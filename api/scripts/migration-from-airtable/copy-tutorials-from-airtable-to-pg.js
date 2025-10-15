@@ -74,7 +74,7 @@ export class CopyTutorialsFromAirtableToPg extends Script {
       );
     logger.info({ count: deletedRelationsCount }, 'Deleted tutorials tutorial_tags relations into postgres');
 
-    await knex.insert(tutorialsTagsRelations).into('tutorials-tutorial_tags').onConflict(['tutorialId', 'tutorialTagId']).merge();
+    await knex.insert(tutorialsTagsRelations).into('tutorials-tutorial_tags').onConflict(['tutorialId', 'tutorialTagId']).merge({ updatedAt: knex.fn.now() });
     logger.info({ count: tutorialsTagsRelations.length }, 'Inserted tutorials tutorial_tags relations into postgres');
   }
 }

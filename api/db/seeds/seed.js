@@ -8,7 +8,7 @@ import { buildChallengesFromConfig } from './data/challenges.js';
 import { buildCompetencesFromConfig, copyCompetencesFromAirtable } from './data/competences.js';
 import { buildFrameworksFromConfig, copyFrameworksFromAirtable } from './data/frameworks.js';
 import { buildPix1D } from './data/pix-1d.js';
-import { buildSkillsFromConfig } from './data/skills.js';
+import { buildSkillsFromConfig, copySkillsFromAirtable } from './data/skills.js';
 import { buildThematicsFromConfig, copyThematicsFromAirtable } from './data/thematics.js';
 import { buildTubesFromConfig, copyTubesFromAirtable } from './data/tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
@@ -62,11 +62,11 @@ export async function seed(knex) {
     await buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildTubesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
+    const tagItems = await buildTags({ airtableClient, logger, databaseBuilder });
+    const tutorialItems = await buildTutorials({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, tagItems });
+    await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData, tutorialItems });
     await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
     await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
-    const tagItems = await buildTags({ airtableClient, logger, databaseBuilder });
-    await buildTutorials({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, tagItems });
   } else {
     await copyFrameworksFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyAreasFromAirtable({ airtableClient, databaseBuilder, logger });
@@ -75,6 +75,7 @@ export async function seed(knex) {
     await copyTubesFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyTutorialTagsFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyTutorialsFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copySkillsFromAirtable({ airtableClient, databaseBuilder, logger });
 
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);

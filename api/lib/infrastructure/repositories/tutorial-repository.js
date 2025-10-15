@@ -64,7 +64,7 @@ export async function update(tutorial) {
       })))
         .into(TAGS_RELATION_TABLE_NAME)
         .onConflict(['tutorialId', 'tutorialTagId'])
-        .merge();
+        .merge({ updatedAt: transaction.fn.now() });
     }
 
     return toDomain(airtableDto);
