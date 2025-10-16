@@ -442,6 +442,18 @@ describe('Integration | Repository | tube-repository', () => {
           skillAirtableIds: ['recSkill3', 'recSkill4'],
         },
       ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+      tubes.forEach((tube) => {
+        databaseBuilder.factory.buildTube(tube);
+        tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
+      });
+
       const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
       const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableTubes.map((airtableTube) => new Airtable.Record(tubeDatasource.tableName, airtableTube.airtableId, airtableTube)));
       for (const tube of tubes) {

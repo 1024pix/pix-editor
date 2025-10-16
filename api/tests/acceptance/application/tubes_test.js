@@ -314,26 +314,45 @@ describe('Application | Route | Tubes', () => {
     describe('when filtering by ids', () => {
       it('should respond with status 200 and tubes data', async () => {
         // given
-        const airtableTubes = [
-          airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+        const tubes = [
+          {
             id: 'tube1',
             airtableId: 'recTube1',
             name: '@test',
             index: 1,
             competenceAirtableId: 'recCompetence1',
+            competenceId: 'competence1',
             thematicAirtableId: 'recThematic1',
+            thematicId: 'thematic1',
             skillAirtableIds: ['recSkill1', 'recSkill2'],
-          })),
-          airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+            skillIds: ['skill1', 'skill2'],
+          },
+          {
             id: 'tube2',
             airtableId: 'recTube2',
             name: '@pouet',
             index: 2,
             competenceAirtableId: 'recCompetence2',
+            competenceId: 'competence2',
             thematicAirtableId: 'recThematic2',
+            thematicId: 'thematic2',
             skillAirtableIds: ['recSkill3', 'recSkill4'],
-          })),
+            skillIds: ['skill3', 'skill4'],
+          },
         ];
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+        tubes.forEach((tube) => {
+          databaseBuilder.factory.buildTube(tube);
+          tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
+        });
+
+        const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
 
         const airtableTubesScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tubes')

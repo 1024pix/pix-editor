@@ -1566,7 +1566,6 @@ describe('Application | Route | Skills', () => {
         airtableId: 'recTube1',
         name: '@tube',
         index: 5,
-        // competenceAirtableId: 'recCompetence1',
         competenceId: 'competence1',
         thematicId: 'thematic1',
       };

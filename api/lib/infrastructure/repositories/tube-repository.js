@@ -17,7 +17,7 @@ export async function list() {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -29,7 +29,7 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareSkillDtos);
+  compareDtos(airtableDto, pgDto, compareTubeDtos);
 
   if (!airtableDto) return null;
 
@@ -42,7 +42,7 @@ export async function listByCompetenceId(competenceId) {
     selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id'),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
 
   if (!airtableDtos) return [];
 
@@ -60,17 +60,27 @@ export async function getByAirtableId(airtableId) {
     translationRepository.listByEntity(model, airtableDto.id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareSkillDtos);
+  compareDtos(airtableDto, pgDto, compareTubeDtos);
 
   return toDomain(airtableDto, translations);
 }
 
 export async function getManyByAirtableIds(airtableIds) {
   if (!airtableIds?.length) return [];
-  const datasourceTubes = await tubeDatasource.getManyByAirtableIds(airtableIds);
-  if (!datasourceTubes) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceTubes.map(({ id }) => id));
-  return toDomainList(datasourceTubes, translations);
+
+  const airtableDtos = await tubeDatasource.getManyByAirtableIds(airtableIds);
+  if (!airtableDtos) return [];
+
+  const ids = airtableDtos.map(({ id }) => id);
+
+  const [pgDtos, translations] = await Promise.all([
+    selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
+
+  return toDomainList(airtableDtos, translations);
 }
 
 export async function create(tube) {
@@ -124,7 +134,7 @@ function selectTubes() {
   ).from(TABLE_NAME).join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`);
 }
 
-function compareSkillDtos(airtableSkill, pgSkill) {
+function compareTubeDtos(airtableSkill, pgSkill) {
   const diff = [];
   if (airtableSkill.id !== pgSkill.id) diff.push(`tube airtable id "${airtableSkill.id}" != postgres id "${pgSkill.id}"`);
   if (airtableSkill.name !== pgSkill.name) diff.push(`tube airtable name "${airtableSkill.name}" != postgres name "${pgSkill.name}"`);
