@@ -165,6 +165,7 @@ describe('Integration | Validator | Mission', function() {
               id: 'tubeTuto',
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
+              competenceId: 'competence1',
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -227,6 +228,7 @@ describe('Integration | Validator | Mission', function() {
               id: 'tubeTuto',
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
+              competenceId: 'competence1',
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -295,6 +297,7 @@ describe('Integration | Validator | Mission', function() {
               id: 'tubeTuto',
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
+              competenceId: 'competence1',
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });

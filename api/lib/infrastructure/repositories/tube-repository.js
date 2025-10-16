@@ -5,7 +5,7 @@ import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, areNullableValuesEqual, compareDtosLists } from './migration-from-airtable.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'tube';
 const TABLE_NAME = 'tubes';
@@ -23,12 +23,17 @@ export async function list() {
 }
 
 export async function get(id) {
-  const [[tubeDTO], translations] = await Promise.all([
+  const [[airtableDto], pgDto, translations] = await Promise.all([
     tubeDatasource.filter({ filter: { ids: [id] } }),
+    selectTubes().where('tubes.id', id).first(),
     translationRepository.listByEntity(model, id),
   ]);
-  if (!tubeDTO) return null;
-  return toDomain(tubeDTO, translations);
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  if (!airtableDto) return null;
+
+  return toDomain(airtableDto, translations);
 }
 
 export async function listByCompetenceId(competenceId) {

@@ -1548,7 +1548,6 @@ describe('Application | Route | Skills', () => {
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
       [...skillToClone.tutorialIds, ...skillToClone.learningMoreTutorialIds].forEach((id) => databaseBuilder.factory.buildTutorial({
         id, title: `title ${id}`, duration: `duration ${id}`, source: `source ${id}`, format: `format ${id}`, link: `link ${id}`, locale: 'fr',
       }));
@@ -1558,13 +1557,19 @@ describe('Application | Route | Skills', () => {
         skillIdToClone: 'skill1Tube1',
         tubeDestinationId: 'tube1',
       };
-      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+      const tube = {
         id: 'tube1',
         airtableId: 'recTube1',
         name: '@tube',
         index: 5,
-        competenceId: 'recCompetence1',
-      }));
+        // competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
+        thematicId: 'thematic1',
+      };
+      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
+      databaseBuilder.factory.buildTube(tube);
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: tube.id });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: tube.id });
 
       const airtableSkillToClone = airtableBuilder.factory.buildSkill(skillToClone);
       const airtableSkillAlreadyAtDestinationTubeLevel = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
@@ -1704,7 +1709,7 @@ describe('Application | Route | Skills', () => {
         tutorialIds: createdAirtableSkill.fields['Comprendre (id persistant)'] ,
         learningMoreTutorialIds: createdAirtableSkill.fields['En savoir plus (id persistant)'] ,
         pixValue: null,
-        competenceId: 'recCompetence1',
+        competenceId: 'competence1',
         status: createdAirtableSkill.fields['Status'],
         tubeId: createdAirtableSkill.fields['Tube (id persistant)'][0],
         level: createdAirtableSkill.fields['Level'],
@@ -1719,7 +1724,7 @@ describe('Application | Route | Skills', () => {
         alpha: null,
         alternativeInstruction: '',
         autoReply: false,
-        competenceId: 'recCompetence1',
+        competenceId: 'competence1',
         delta: null,
         embedUrl: 'https://github.io/page/epreuve.html',
         embedTitle: '',
