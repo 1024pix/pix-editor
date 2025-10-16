@@ -286,6 +286,13 @@ describe('Integration | Repository | tube-repository', () => {
         },
       };
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: tube.competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: tube.thematicId, competenceId: tube.competenceId });
+      databaseBuilder.factory.buildTube(tube);
+      tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
+
       airtableScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes/recTube1')
         .query({})

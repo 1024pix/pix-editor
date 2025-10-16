@@ -52,10 +52,17 @@ export async function listByCompetenceId(competenceId) {
 }
 
 export async function getByAirtableId(airtableId) {
-  const datasourceTube = await tubeDatasource.find(airtableId);
-  if (!datasourceTube) return null;
-  const translations = await translationRepository.listByEntity(model, datasourceTube.id);
-  return toDomain(datasourceTube, translations);
+  const airtableDto = await tubeDatasource.find(airtableId);
+  if (!airtableDto) return null;
+
+  const [pgDto, translations] = await Promise.all([
+    selectTubes().where('tubes.id', airtableDto.id).first(),
+    translationRepository.listByEntity(model, airtableDto.id),
+  ]);
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  return toDomain(airtableDto, translations);
 }
 
 export async function getManyByAirtableIds(airtableIds) {

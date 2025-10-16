@@ -58,15 +58,27 @@ describe('Application | Route | Tubes', () => {
 
     it('should respond with status 200 and tube data', async () => {
       // given
-      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
+      const tube = {
         id: 'tube1',
         airtableId: 'recTube1',
         name: '@test',
         index: 1,
         competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
         thematicAirtableId: 'recThematic1',
+        thematicId: 'thematic1',
         skillAirtableIds: ['recSkill1', 'recSkill2'],
-      }));
+        skillIds: ['skill1', 'skill2'],
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: tube.competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: tube.thematicId, competenceId: tube.competenceId });
+      databaseBuilder.factory.buildTube(tube);
+      tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
+
+      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
 
       airtableTubeScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes/recTube1')
@@ -801,24 +813,30 @@ describe('Application | Route | Tubes', () => {
 
     context('success', function() {
       beforeEach(async () => {
+        const tube = {
+          id: 'tube1',
+          airtableId: 'recTube1',
+          name: '@test',
+          index: 1,
+          competenceAirtableId: 'recCompetence0',
+          competenceId: 'competence0',
+          thematicAirtableId: 'recThematic0',
+          thematicId: 'thematic0',
+          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillIds: ['skill1', 'skill2'],
+        };
+
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
         databaseBuilder.factory.buildCompetence({ id: 'competence0', index: '1.0', areaId: 'area1' });
         databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
         databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
         databaseBuilder.factory.buildThematic({ id: 'thematic0', index: 0, competenceId: 'competence0' });
-        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@test', index: 1, thematicId: 'thematic0' });
+        databaseBuilder.factory.buildTube(tube);
+        tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
         await databaseBuilder.commit();
 
-        const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
-          id: 'tube1',
-          airtableId: 'recTube1',
-          name: '@test',
-          index: 1,
-          competenceAirtableId: 'recCompetence0',
-          thematicAirtableId: 'recThematic0',
-          skillAirtableIds: ['recSkill1', 'recSkill2'],
-        }));
+        const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
         const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
           id: 'thematic1',
           airtableId: 'recThematic1',
