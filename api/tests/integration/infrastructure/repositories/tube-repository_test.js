@@ -182,6 +182,14 @@ describe('Integration | Repository | tube-repository', () => {
         skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: tube1.competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: tube1.thematicId, competenceId: tube1.competenceId });
+      databaseBuilder.factory.buildTube(tube1);
+      tube1.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube1.id }));
+
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
         locale: 'en',
