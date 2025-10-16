@@ -30,7 +30,10 @@ export default class ChallengeRoute extends Route {
         .sort(byAlternativeVersion)
         .map((challenge) => challenge.getChallengeForLocale(locale)),
     );
-    const challengeLocale = challengeLocales.find((challengeLocale) => challengeLocale.localizedChallengeValue.id === localized_challenge_id);
+    const challengeLocale = challengeLocales.find((challengeLocale) => challengeLocale?.localizedChallengeValue?.id === localized_challenge_id);
+    if (!challengeLocale) {
+      return this.router.transitionTo('authenticated.v2.competence-overview.challenges', competence_id, overview, skill_id);
+    }
     const localizedChallenge = challengeLocale.localizedChallengeValue;
     await challengeLocale.challenge.attachments;
     await localizedChallenge.attachments;
