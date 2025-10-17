@@ -19,6 +19,7 @@ export function buildCompetenceDatasourceObject({
   thematicIds = ['recFvllz2Ckz'],
   thematicAirtableIds = ['recpq782rf2h3df'],
   tubeAirtableIds = ['recP12434hvf34', 'recO01dh3298cf'],
+  tubeIds = ['tubeP12434hvf34', 'tubeO01dh3298cf'],
 } = {}) {
 
   return {
@@ -32,5 +33,6 @@ export function buildCompetenceDatasourceObject({
     thematicIds,
     thematicAirtableIds,
     tubeAirtableIds,
+    tubeIds,
   };
 }

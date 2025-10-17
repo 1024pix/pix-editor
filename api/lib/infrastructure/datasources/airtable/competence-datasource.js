@@ -17,6 +17,7 @@ export const competenceDatasource = datasource.extend({
     'Thematiques (id persistant)',
     'Origine2',
     'Tubes',
+    'Tubes (id persistant)',
   ],
 
   sortField: 'Sous-domaine',
@@ -33,6 +34,7 @@ export const competenceDatasource = datasource.extend({
       thematicAirtableIds: airtableRecord.get('Thematiques') ?? [],
       origin: airtableRecord.get('Origine2')[0],
       tubeAirtableIds: airtableRecord.get('Tubes') ?? [],
+      tubeIds: airtableRecord.get('Tubes (id persistant)') ?? [],
     };
   },
 
