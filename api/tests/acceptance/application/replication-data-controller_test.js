@@ -99,6 +99,8 @@ async function mockCurrentContent() {
 
   const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube({
     thematicId: expectedThematic.id,
+    competenceId: expectedCompetence.id,
+    skillIds: ['recSkill1'],
   }));
   expectedCurrentContent.tubes = [{
     ...expectedTube,
@@ -109,20 +111,15 @@ async function mockCurrentContent() {
   const baseSkill = domainBuilder.buildSkill({
     id: 'recSkill1',
     airtableId: 'recSkill1',
+    tubeId: expectedTube.id,
+    tutorialIds: ['recTuto1'],
+    learningMoreTutorialIds: ['recTuto2'],
     createdAt: '2023-10-05T18:08:00Z',
     activatedAt: '2023-11-06T18:08:00.000Z',
     archivedAt: '2023-12-07T18:08:00.000Z',
     obsoletedAt: '2024-01-08T18:08:00.000Z',
   });
   expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill) }];
-
-  databaseBuilder.factory.buildSkill({
-    id: 'recSkill1',
-    airtableId: 'recSkill1',
-    activatedAt: new Date('2023-11-06T18:08:00Z'),
-    archivedAt: new Date('2023-12-07T18:08:00Z'),
-    obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-  });
 
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
@@ -222,7 +219,10 @@ async function mockCurrentContent() {
     }),
   ];
 
-  expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject()];
+  expectedCurrentContent.tutorials = [
+    domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }),
+    domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] }),
+  ];
 
   expectedCurrentContent.courses = [
     {
@@ -257,18 +257,20 @@ async function mockCurrentContent() {
     },
   ];
 
-  databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
-  databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
-  databaseBuilder.factory.buildCompetence(expectedCurrentContent.competences[0]);
-  databaseBuilder.factory.buildThematic(expectedCurrentContent.thematics[0]);
-  databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
+  expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
+  expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
+  expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
+  expectedCurrentContent.thematics.forEach(databaseBuilder.factory.buildThematic);
+  expectedCurrentContent.tubes.forEach(databaseBuilder.factory.buildTube);
+  expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
+  expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
 
   airtableBuilder.mockLists({
     frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     areas: [buildArea(expectedCurrentContent.areas[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    tubes: [buildTube(expectedCurrentContent.tubes[0])],
+    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], competenceId: expectedCompetence.id, skillIds: [expectedCurrentContent.skills[0].id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     challenges: [buildChallenge({
       ...expectedChallenge,
@@ -291,7 +293,7 @@ async function mockCurrentContent() {
       buildAttachment(expectedAttachment),
       buildAttachment(expectedAttachmentNl)
     ],
-    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
+    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',

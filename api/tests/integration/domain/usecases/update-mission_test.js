@@ -32,6 +32,7 @@ describe('Integration | Usecases | Update mission', function() {
       id: 'tubeTuto',
       name: '@Pix1D-recherche_di',
       thematicId: 'Thematic',
+      competenceId: 'competence1',
     };
 
     databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });

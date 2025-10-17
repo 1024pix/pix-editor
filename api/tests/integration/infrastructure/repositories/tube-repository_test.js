@@ -52,6 +52,20 @@ describe('Integration | Repository | tube-repository', () => {
           skillIds: ['skill3', 'skill4'],
         }),
       ]).activate().nockScope;
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId1', competenceId: 'competenceId1' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId1', name: '@tube1', index: 1, thematicId: 'thematicId1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tubeId1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tubeId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId2', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId2', competenceId: 'competenceId2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId2', name: '@tube2', index: 2, thematicId: 'thematicId2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill3', tubeId: 'tubeId2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill4', tubeId: 'tubeId2' });
+
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
         locale: 'en',
@@ -168,6 +182,14 @@ describe('Integration | Repository | tube-repository', () => {
         skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: tube1.competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: tube1.thematicId, competenceId: tube1.competenceId });
+      databaseBuilder.factory.buildTube(tube1);
+      tube1.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube1.id }));
+
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
         locale: 'en',
@@ -263,6 +285,13 @@ describe('Integration | Repository | tube-repository', () => {
           en: 'the description',
         },
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: tube.competenceId, index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: tube.thematicId, competenceId: tube.competenceId });
+      databaseBuilder.factory.buildTube(tube);
+      tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
 
       airtableScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes/recTube1')
@@ -413,6 +442,18 @@ describe('Integration | Repository | tube-repository', () => {
           skillAirtableIds: ['recSkill3', 'recSkill4'],
         },
       ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+      tubes.forEach((tube) => {
+        databaseBuilder.factory.buildTube(tube);
+        tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
+      });
+
       const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
       const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableTubes.map((airtableTube) => new Airtable.Record(tubeDatasource.tableName, airtableTube.airtableId, airtableTube)));
       for (const tube of tubes) {

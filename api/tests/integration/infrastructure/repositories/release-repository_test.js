@@ -619,6 +619,32 @@ function _mockRichAirtableContent() {
   };
   databaseBuilder.factory.buildTube(tube2111);
   const airtableTube2111 = airtableBuilder.factory.buildTube(tube2111);
+  const tutorial1 = {
+    id: 'tutorial1',
+    title: 'tutorial1 title',
+    format: TutorialForRelease.FORMATS.IMAGE,
+    duration: 'tutorial1 duration',
+    source: 'tutorial1 source',
+    link: 'tutorial1 link',
+    locale: 'fr',
+    tutorialForSkills: 'tutorial1 tutorialForSkills',
+    furtherInformation: 'tutorial1 furtherInformation',
+  };
+  databaseBuilder.factory.buildTutorial(tutorial1);
+  const airtableTutorial1 = airtableBuilder.factory.buildTutorial(tutorial1);
+  const tutorial2 = {
+    id: 'tutorial2',
+    title: 'tutorial2 title',
+    format: TutorialForRelease.FORMATS.VIDEO,
+    duration: 'tutorial2 duration',
+    source: 'tutorial2 source',
+    link: 'tutorial2 link',
+    locale: 'fr-fr',
+    tutorialForSkills: 'tutorial2 tutorialForSkills',
+    furtherInformation: 'tutorial2 furtherInformation',
+  };
+  databaseBuilder.factory.buildTutorial(tutorial2);
+  const airtableTutorial2 = airtableBuilder.factory.buildTutorial(tutorial2);
   const skill11111 = {
     id: 'skill11111',
     name: 'skill11111 name',
@@ -632,8 +658,9 @@ function _mockRichAirtableContent() {
     description: 'skill11111 description',
     level: 4,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
-    version: 'skill11111 version',
+    version: 11111,
   };
+  databaseBuilder.factory.buildSkill(skill11111);
   const airtableSkill11111 = airtableBuilder.factory.buildSkill(skill11111);
   const skill11112 = {
     id: 'skill11112',
@@ -648,8 +675,9 @@ function _mockRichAirtableContent() {
     description: 'skill11112 description',
     level: 3,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.FRANCE,
-    version: 'skill11112 version',
+    version: 11112,
   };
+  databaseBuilder.factory.buildSkill(skill11112);
   const airtableSkill11112 = airtableBuilder.factory.buildSkill(skill11112);
   const skill12121 = {
     id: 'skill12121',
@@ -664,8 +692,9 @@ function _mockRichAirtableContent() {
     description: 'skill12121 description',
     level: 2,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.UNION_EUROPEENNE,
-    version: 'skill12121 version',
+    version: 12121,
   };
+  databaseBuilder.factory.buildSkill(skill12121);
   const airtableSkill12121 = airtableBuilder.factory.buildSkill(skill12121);
   const skill21111 = {
     id: 'skill21111',
@@ -680,8 +709,9 @@ function _mockRichAirtableContent() {
     description: 'skill21111 description',
     level: 1,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
-    version: 'skill21111 version',
+    version: 21111,
   };
+  databaseBuilder.factory.buildSkill(skill21111);
   const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
   const challenge121211 = {
     id: 'challenge121211',
@@ -873,28 +903,6 @@ function _mockRichAirtableContent() {
     shuffled: false,
   };
   const airtableChallenge211113 = airtableBuilder.factory.buildChallenge(challenge211113);
-  const airtableTutorial1 = airtableBuilder.factory.buildTutorial({
-    id: 'tutorial1',
-    title: 'tutorial1 title',
-    format: TutorialForRelease.FORMATS.IMAGE,
-    duration: 'tutorial1 duration',
-    source: 'tutorial1 source',
-    link: 'tutorial1 link',
-    locale: 'fr',
-    tutorialForSkills: 'tutorial1 tutorialForSkills',
-    furtherInformation: 'tutorial1 furtherInformation',
-  });
-  const airtableTutorial2 = airtableBuilder.factory.buildTutorial({
-    id: 'tutorial2',
-    title: 'tutorial2 title',
-    format: TutorialForRelease.FORMATS.VIDEO,
-    duration: 'tutorial2 duration',
-    source: 'tutorial2 source',
-    link: 'tutorial2 link',
-    locale: 'fr-fr',
-    tutorialForSkills: 'tutorial2 tutorialForSkills',
-    furtherInformation: 'tutorial2 furtherInformation',
-  });
   const airtableAttachment1 = airtableBuilder.factory.buildAttachment({
     id: 'attachment1',
     type: Attachment.TYPES.ATTACHMENT,
@@ -1196,7 +1204,7 @@ function _getRichCurrentContentDTO() {
       status: SkillForRelease.STATUSES.ACTIF,
       tubeId: 'tube1111',
       level: 4,
-      version: 'skill11111 version',
+      version: 11111,
     },
     {
       id: 'skill11112',
@@ -1213,7 +1221,7 @@ function _getRichCurrentContentDTO() {
       tubeId: 'tube1111',
       status: SkillForRelease.STATUSES.ACTIF,
       level: 3,
-      version: 'skill11112 version',
+      version: 11112,
     },
     {
       id: 'skill12121',
@@ -1230,7 +1238,7 @@ function _getRichCurrentContentDTO() {
       tubeId: 'tube1212',
       status: SkillForRelease.STATUSES.ACTIF,
       level: 2,
-      version: 'skill12121 version',
+      version: 12121,
     },
     {
       id: 'skill21111',
@@ -1247,7 +1255,7 @@ function _getRichCurrentContentDTO() {
       tubeId: 'tube2111',
       status: SkillForRelease.STATUSES.ACTIF,
       level: 1,
-      version: 'skill21111 version',
+      version: 21111,
     },
   ];
   const expectedChallengeDTOs = [

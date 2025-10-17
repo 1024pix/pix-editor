@@ -84,20 +84,27 @@ describe('Acceptance | Route | competence-overviews', () => {
         value: 'Thématique 2',
       });
 
-      databaseBuilder.factory.buildTube({ id: 'recTube1', name: '@tube1', index: 2, thematicId: 'recThematic1' });
-      databaseBuilder.factory.buildTube({ id: 'recTube2', name: '@tube2', index: 1, thematicId: 'recThematic1' });
-      databaseBuilder.factory.buildTube({ id: 'recTube3', name: '@tube3', index: 3, thematicId: 'recThematic1' });
-      databaseBuilder.factory.buildTube({ id: 'recTube4', name: '@tube4', index: 1, thematicId: 'recThematic2' });
-      databaseBuilder.factory.buildTube({ id: 'recTube5', name: '@tube5', index: 2, thematicId: 'recThematic2' });
-      databaseBuilder.factory.buildTube({ id: 'recTube6', name: '@tube6', index: 1, thematicId: 'recThematic4' });
+      const tube1 = { id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2, thematicId: 'recThematic1', skillIds: ['recSkill1', 'recSkill2'] };
+      const tube2 = { id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1, thematicId: 'recThematic1', skillIds: ['recSkill3'] };
+      const tube3 = { id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3, thematicId: 'recThematic1', skillIds: [] };
+      const tube4 = { id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1, thematicId: 'recThematic2', skillIds: ['recSkill4'] };
+      const tube5 = { id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2, thematicId: 'recThematic2', skillIds: ['recSkill5'] };
+      const tube6 = { id: 'recTube6', airtableId: 'recAirtableTube6', competenceId, name: '@tube6', index: 1, thematicId: 'recThematic4', skillIds: [] };
+
+      databaseBuilder.factory.buildTube(tube1);
+      databaseBuilder.factory.buildTube(tube2);
+      databaseBuilder.factory.buildTube(tube3);
+      databaseBuilder.factory.buildTube(tube4);
+      databaseBuilder.factory.buildTube(tube5);
+      databaseBuilder.factory.buildTube(tube6);
 
       const airtableTubes = [
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube6', airtableId: 'recAirtableTube6', competenceId, name: '@tube6', index: 1 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube1)),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube2)),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube3)),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube4)),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube5)),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube6)),
       ];
 
       airtableTubesScope = nock('https://api.airtable.com')
@@ -111,13 +118,25 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableTubes });
 
+      const skill1 = { id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' };
+      const skill2 = { id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' };
+      const skill3 = { id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' };
+      const skill4 = { id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube41', level: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube4' };
+      const skill5 = { id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube56', level: 6, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube5' };
+
       const airtableSkills = [
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube41', level: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube4' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube56', level: 6, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube5' })),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill1)),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill2)),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill3)),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill4)),
+        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill5)),
       ];
+
+      databaseBuilder.factory.buildSkill(skill1);
+      databaseBuilder.factory.buildSkill(skill2);
+      databaseBuilder.factory.buildSkill(skill3);
+      databaseBuilder.factory.buildSkill(skill4);
+      databaseBuilder.factory.buildSkill(skill5);
 
       airtableSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
@@ -496,17 +515,16 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableCompetences });
 
-      databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematic2', index: 1, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematic3', index: 3, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematicWorkbench', index: 4, competenceId });
-
-      const airtableThematics = [
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'], competenceId })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube3', 'recTube4'], competenceId })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null, competenceId })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematicWorkbench', airtableId: 'recAirtableThematicWorkbench', index: 4, tubeIds: ['recTubeWorkbench'], competenceId })),
+      const thematics = [
+        { id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2'], competenceId },
+        { id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube3', 'recTube4'], competenceId },
+        { id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: null, competenceId },
+        { id: 'recThematicWorkbench', airtableId: 'recAirtableThematicWorkbench', index: 4, tubeIds: ['recTubeWorkbench'], competenceId },
       ];
+
+      thematics.forEach(databaseBuilder.factory.buildThematic);
+
+      const airtableThematics = thematics.map((thematic) => airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic)));
 
       airtableThematicsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Thematiques')
@@ -530,19 +548,17 @@ describe('Acceptance | Route | competence-overviews', () => {
         value: 'Thématique 2',
       });
 
-      databaseBuilder.factory.buildTube({ id: 'recTube1', name: '@tube1', index: 2, thematicId: 'recThematic1' });
-      databaseBuilder.factory.buildTube({ id: 'recTube2', name: '@tube2', index: 1, thematicId: 'recThematic1' });
-      databaseBuilder.factory.buildTube({ id: 'recTube3', name: '@tube3', index: 3, thematicId: 'recThematic2' });
-      databaseBuilder.factory.buildTube({ id: 'recTube4', name: '@tube4', index: 4, thematicId: 'recThematic2' });
-      databaseBuilder.factory.buildTube({ id: 'recTubeWorkbench', name: '@workbench', index: 5, thematicId: 'recThematicWorkbench' });
-
-      const airtableTubes = [
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 4 })),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTubeWorkbench', airtableId: 'recAirtableTubeWorkbench', competenceId, name: '@workbench', index: 5 })),
+      const tubes = [
+        { id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2, thematicId: 'recThematic1', skillIds: ['recSkill1', 'recSkill2'] },
+        { id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1, thematicId: 'recThematic1', skillIds: ['recSkill3', 'recSkill4', 'recSkill5'] },
+        { id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3, thematicId: 'recThematic2', skillIds: ['recSkill6', 'recSkill7'] },
+        { id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 4, thematicId: 'recThematic2', skillIds: [] },
+        { id: 'recTubeWorkbench', airtableId: 'recAirtableTubeWorkbench', competenceId, name: '@workbench', index: 5, thematicId: 'recThematicWorkbench', skillIds: ['recSkillWorkbench'] },
       ];
+
+      tubes.forEach(databaseBuilder.factory.buildTube);
+
+      const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
 
       airtableTubesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes')
@@ -555,16 +571,20 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableTubes });
 
-      const airtableSkills = [
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, version: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, version: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, version: 1, status: Skill.STATUSES.ARCHIVE, competenceId, tubeId: 'recTube2' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube27', level: 7, version: 2, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube27', level: 7, version: 3, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube2' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill6', airtableId: 'recAirtableSkill6', name: '@tube32', level: 2, version: 1, status: Skill.STATUSES.PERIME, competenceId, tubeId: 'recTube3' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkill7', airtableId: 'recAirtableSkill7', name: '@tube35', level: 5, version: 1, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube3' })),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({ id: 'recSkillWorkbench', airtableId: 'recAirtableSkillWorkbench', name: '@workbench', competenceId, tubeId: 'recTubeWorkbench' })),
+      const skills = [
+        { id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, version: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' },
+        { id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, version: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' },
+        { id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, version: 1, status: Skill.STATUSES.ARCHIVE, competenceId, tubeId: 'recTube2' },
+        { id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube27', level: 7, version: 2, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' },
+        { id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube27', level: 7, version: 3, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube2' },
+        { id: 'recSkill6', airtableId: 'recAirtableSkill6', name: '@tube32', level: 2, version: 1, status: Skill.STATUSES.PERIME, competenceId, tubeId: 'recTube3' },
+        { id: 'recSkill7', airtableId: 'recAirtableSkill7', name: '@tube35', level: 5, version: 1, status: Skill.STATUSES.EN_CONSTRUCTION, competenceId, tubeId: 'recTube3' },
+        { id: 'recSkillWorkbench', airtableId: 'recAirtableSkillWorkbench', name: '@workbench', competenceId, tubeId: 'recTubeWorkbench' },
       ];
+
+      skills.forEach(databaseBuilder.factory.buildSkill);
+
+      const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
 
       airtableSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
