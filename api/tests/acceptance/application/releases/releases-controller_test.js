@@ -47,7 +47,7 @@ async function mockCurrentContent() {
         nl: 'Nom de la Compétence - nl',
       },
       areaId: 'recArea0',
-      origin: 'Pix',
+      origin: 'Nom du referentiel',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
       description_i18n: {
@@ -264,7 +264,7 @@ async function mockCurrentContent() {
       ...expectedCurrentContent.challenges[0],
       files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
     })],
-    competences: [buildCompetence(expectedCurrentContent.competences[0])],
+    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
     frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
@@ -451,7 +451,7 @@ async function mockContentForRelease() {
       id: 'recCompetence0',
       index: '1.1',
       areaId: 'recArea0',
-      origin: 'Pix',
+      origin: 'Nom du referentiel',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
       name_i18n: {
@@ -693,11 +693,11 @@ async function mockContentForRelease() {
         version: 8,
       }),
     ],
-    competences: [buildCompetence(expectedCurrentContent.competences[0])],
+    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
     frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
-    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0] + 'Airtable' })],
+    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
+    tubes: [buildTube(expectedCurrentContent.tubes[0])],
     tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
 

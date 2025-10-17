@@ -24,53 +24,91 @@ describe('Acceptance | Route | competences', () => {
     let airtableCompetencesScope;
 
     beforeEach(async () => {
-      const airtableCompetences = [
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+      const competences = [
+        {
           id: 'competence1',
           airtableId: 'recCompetence1',
           index: '1.1',
           areaAirtableId: 'recArea1',
+          areaId: 'area1',
           origin: 'Pix',
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
+          thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTube5'],
-        })),
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          tubeIds: ['tube1', 'tube2', 'tube3', 'tube4', 'tube5'],
+          skillAirtableIds: [],
+          skillIds: [],
+        },
+        {
           id: 'competence11',
           airtableId: 'recCompetence11',
           index: '1.1',
           areaAirtableId: 'recArea11',
+          areaId: 'area11',
           origin: 'Pix Junior',
           thematicAirtableIds: ['recThematic11', 'recThematic12'],
+          thematicIds: ['thematic11', 'thematic12'],
           tubeAirtableIds: ['recTube11', 'recTube12', 'recTube13'],
-        })),
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          tubeIds: ['tube11', 'tube12', 'tube13'],
+          skillAirtableIds: [],
+          skillIds: [],
+        },
+        {
           id: 'competence2',
           airtableId: 'recCompetence2',
           index: '1.2',
           areaAirtableId: 'recArea1',
+          areaId: 'area1',
           origin: 'Pix',
           thematicAirtableIds: ['recThematic3'],
+          thematicIds: ['thematic3'],
           tubeAirtableIds: ['recTube6', 'recTube7'],
-        })),
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          tubeIds: ['tube6', 'tube7'],
+          skillAirtableIds: [],
+          skillIds: [],
+        },
+        {
           id: 'competence12',
           airtableId: 'recCompetence12',
           index: '1.2',
           areaAirtableId: 'recArea11',
+          areaId: 'area11',
           origin: 'Pix Junior',
           thematicAirtableIds: ['recThematic13', 'recThematic14'],
+          thematicIds: ['thematic13', 'thematic14'],
           tubeAirtableIds: ['recTube14', 'recTube15', 'recTube16', 'recTube17'],
-        })),
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          tubeIds: ['tube14', 'tube15', 'tube16', 'tube17'],
+          skillAirtableIds: [],
+          skillIds: [],
+        },
+        {
           id: 'competence3',
           airtableId: 'recCompetence3',
           index: '2.1',
           areaAirtableId: 'recArea2',
+          areaId: 'area2',
           origin: 'Pix',
           thematicAirtableIds: ['recThematic4', 'recThematic5'],
+          thematicIds: ['thematic4', 'thematic5'],
           tubeAirtableIds: ['recTube8', 'recTube9'],
-        })),
+          tubeIds: ['tube8', 'tube9'],
+          skillAirtableIds: [],
+          skillIds: [],
+        },
       ];
+
+      databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
+      databaseBuilder.factory.buildFramework({ id: 'junior', name: 'Pix Junior' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'pix' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'pix' });
+      databaseBuilder.factory.buildArea({ id: 'area11', code: '1', frameworkId: 'junior' });
+      competences.forEach((competence) => {
+        databaseBuilder.factory.buildCompetence(competence);
+        competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+        competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+      });
+
+      const airtableCompetences = competences.map((competence) => airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence)));
 
       airtableCompetencesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Competences')

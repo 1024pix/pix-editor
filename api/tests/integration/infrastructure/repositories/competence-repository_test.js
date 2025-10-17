@@ -15,8 +15,8 @@ describe('Integration | Repository | competence-repository', () => {
   describe('#list', () => {
     it('should return the list of all competences', async () => {
       // given
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
-        airtableBuilder.factory.buildCompetence({
+      const competences = [
+        {
           id: 'competence1',
           index: '1.1',
           origin: 'Pix',
@@ -27,8 +27,8 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
           tubeIds: ['tube1', 'tube2'],
-        }),
-        airtableBuilder.factory.buildCompetence({
+        },
+        {
           id: 'competence2',
           index: '1.2',
           origin: 'Pix',
@@ -39,8 +39,22 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
           tubeIds: ['tube3', 'tube4'],
-        }),
-      ]).activate().nockScope;
+        },
+      ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      competences.forEach((competence) => {
+        databaseBuilder.factory.buildCompetence(competence);
+        competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+        competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+        competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+      });
+
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns(
+        competences.map((competence) => airtableBuilder.factory.buildCompetence(competence)),
+      ).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence1.name',
@@ -86,10 +100,10 @@ describe('Integration | Repository | competence-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const competences = await competenceRepository.list();
+      const actualCompetences = await competenceRepository.list();
 
       // then
-      expect(competences).toEqual([
+      expect(actualCompetences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',
           airtableId: 'competence1',
