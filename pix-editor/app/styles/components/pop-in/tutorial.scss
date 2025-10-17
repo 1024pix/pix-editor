@@ -1,3 +1,14 @@
 .tutorial-pop-in {
   width: min(48rem, 100% - var(--pix-spacing-4x));
+
+  .pix-button {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tutorial-form label.span-three {
+    align-items: center;
+    display: flex;
+  }
 }
