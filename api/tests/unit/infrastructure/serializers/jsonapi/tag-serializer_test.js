@@ -9,8 +9,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       const tag = new Tag({
         id: 'recTag1',
         airtableId: 'recAirtable1',
-        title: 'Internet',
-        notes: 'une note',
+        title: 'Internet'
       });
 
       // when
@@ -23,7 +22,6 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
           id: 'recAirtable1',
           attributes: {
             title: 'Internet',
-            notes: 'une note',
             'pix-id': 'recTag1',
           },
         },
@@ -37,7 +35,6 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
       const id = 'recAirtableTag1';
       const attributes = {
         'title': 'Internet',
-        'notes': 'une note',
       };
       const payload = {
         data: {
@@ -55,7 +52,6 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
         id: null,
         airtableId: 'recAirtableTag1',
         title: 'Internet',
-        notes: 'une note',
       }));
     });
   });

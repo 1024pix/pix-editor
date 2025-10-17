@@ -31,7 +31,6 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
           fields: {
             'id persistant': 'tag123',
             Nom: '@azerty',
-            Notes: 'notes de tag',
           },
           createdTime: '2025-10-06T00:00:00Z',
         }),
@@ -39,7 +38,6 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
           fields: {
             'id persistant': 'tag456',
             Nom: '@qwerty',
-            Notes: 'autres notes de tag',
           },
           createdTime: '2025-10-06T13:58:00Z',
         }),
@@ -49,20 +47,18 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
       await script.handle({ options, logger });
 
       // then
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Nom', 'Notes'] });
+      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Nom'] });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
         {
           id: 'tag123',
           title: '@azerty',
-          notes: 'notes de tag',
           createdAt: new Date('2025-10-06T00:00:00Z'),
           updatedAt: expect.any(Date),
         },
         {
           id: 'tag456',
           title: '@qwerty',
-          notes: 'autres notes de tag',
           createdAt: new Date('2025-10-06T13:58:00Z'),
           updatedAt: expect.any(Date),
         },
@@ -79,7 +75,6 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
             fields: {
               'id persistant': 'tag123',
               Nom: '@azerty',
-              Notes: 'notes de tag',
             },
             createdTime: '2025-10-06T00:00:00Z',
           }),
@@ -87,17 +82,16 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
             fields: {
               'id persistant': 'tag456',
               Nom: '@qwerty',
-              Notes: 'autres notes de tag',
             },
             createdTime: '2025-10-06T13:58:00Z',
           }),
         ]);
-        
+
         // when
         await script.handle({ options, logger });
 
         // then
-        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Nom', 'Notes'] });
+        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Nom'] });
 
         await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([]);
       });

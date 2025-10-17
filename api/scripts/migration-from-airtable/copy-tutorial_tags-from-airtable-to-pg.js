@@ -24,14 +24,13 @@ export class CopyTutorialTagsFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableTutorialTags = await airtable.findRecords('Tags', {
-      fields: ['id persistant', 'Nom', 'Notes'],
+      fields: ['id persistant', 'Nom'],
     });
     logger.info({ count: airtableTutorialTags.length }, 'Loaded tutorial tags from airtable');
 
     const tutorialTags = airtableTutorialTags.map((record) => ({
       id: record.get('id persistant'),
       title: record.get('Nom'),
-      notes: record.get('Notes'),
       createdAt: record._rawJson.createdTime,
       updatedAt: knex.fn.now(),
     }));
