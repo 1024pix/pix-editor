@@ -12,6 +12,7 @@ export function buildCompetence({
   thematicIds = ['recThematic1'],
   thematicAirtableIds = ['recpq782rf2h3df'],
   tubeAirtableIds = ['recP12434hvf34', 'recO01dh3298cf'],
+  tubeIds = ['tubeP12434hvf34', 'tubeO01dh3298cf'],
   origin = 'Pix',
 } = {}) {
   return new Competence({
@@ -26,6 +27,7 @@ export function buildCompetence({
     thematicIds,
     thematicAirtableIds,
     tubeAirtableIds,
+    tubeIds,
     origin,
   });
 }

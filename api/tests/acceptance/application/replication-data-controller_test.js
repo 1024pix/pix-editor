@@ -75,7 +75,7 @@ async function mockCurrentContent() {
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
-  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'areaAirtableId'], domainBuilder.buildCompetence({
+  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'tubeIds', 'areaAirtableId'], domainBuilder.buildCompetence({
     name_i18n: {
       fr: 'Français',
       en: 'English',

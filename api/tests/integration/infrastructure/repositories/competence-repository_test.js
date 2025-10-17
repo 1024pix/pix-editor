@@ -26,6 +26,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
         }),
         airtableBuilder.factory.buildCompetence({
           id: 'competence2',
@@ -37,6 +38,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           thematicIds: ['thematic3', 'thematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
         }),
       ]).activate().nockScope;
 
@@ -99,6 +101,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic1', 'thematic2'],
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
           name_i18n: {
             fr: 'Nom compétence 1',
             en: 'Competence 1 name',
@@ -119,6 +122,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
           name_i18n: {
             fr: 'Nom compétence 2',
             en: 'Competence 2 name',
@@ -148,6 +152,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
         }),
         airtableBuilder.factory.buildCompetence({
           id: 'competence2',
@@ -159,6 +164,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           thematicIds: ['thematic3', 'thematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
         }),
       ]).activate().nockScope;
 
@@ -231,6 +237,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic1', 'thematic2'],
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
           name_i18n: {
             fr: 'Nom compétence 1',
             en: 'Competence 1 name',
@@ -251,6 +258,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
           name_i18n: {
             fr: 'Nom compétence 2',
             en: 'Competence 2 name',
@@ -281,6 +289,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
+          tubeIds: ['tube1', 'tube2', 'tube3'],
         }),
       ]).activate().nockScope;
 
@@ -342,6 +351,7 @@ describe('Integration | Repository | competence-repository', () => {
         thematicIds: ['thematic3', 'thematic4'],
         thematicAirtableIds: ['recThematic3', 'recThematic4'],
         tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
+        tubeIds: ['tube1', 'tube2', 'tube3'],
         name_i18n: {
           fr: 'Nom compétence 2',
           en: 'Competence 2 name',
@@ -454,6 +464,7 @@ describe('Integration | Repository | competence-repository', () => {
         thematicAirtableIds: [],
         thematicIds: [],
         tubeAirtableIds: [],
+        tubeIds: [],
       }));
 
       expect(generateNewId).toHaveBeenCalledExactlyOnceWith('competence');
