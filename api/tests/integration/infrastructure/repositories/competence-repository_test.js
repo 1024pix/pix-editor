@@ -306,19 +306,29 @@ describe('Integration | Repository | competence-repository', () => {
     it('should return the competence by its id', async () => {
       // given
       const competenceId = 'competence2';
+
+      const competence = {
+        id: competenceId,
+        index: '1.2',
+        origin: 'Pix',
+        areaId: 'area2',
+        areaAirtableId: 'recArea2',
+        skillIds: ['skill3', 'skill4'],
+        thematicIds: ['thematic3', 'thematic4'],
+        thematicAirtableIds: ['recThematic3', 'recThematic4'],
+        tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
+        tubeIds: ['tube1', 'tube2', 'tube3'],
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence(competence);
+      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+      competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+
       const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
-        airtableBuilder.factory.buildCompetence({
-          id: 'competence2',
-          index: '1.2',
-          origin: 'Pix',
-          areaId: 'area2',
-          areaAirtableId: 'recArea2',
-          skillIds: ['skill3', 'skill4'],
-          thematicIds: ['thematic3', 'thematic4'],
-          thematicAirtableIds: ['recThematic3', 'recThematic4'],
-          tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
-          tubeIds: ['tube1', 'tube2', 'tube3'],
-        }),
+        airtableBuilder.factory.buildCompetence(competence),
       ]).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
@@ -365,10 +375,10 @@ describe('Integration | Repository | competence-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const competence = await competenceRepository.get(competenceId);
+      const actualCompetence = await competenceRepository.get(competenceId);
 
       // then
-      expect(competence).toStrictEqual(domainBuilder.buildCompetence({
+      expect(actualCompetence).toStrictEqual(domainBuilder.buildCompetence({
         id: 'competence2',
         airtableId: 'competence2',
         index: '1.2',

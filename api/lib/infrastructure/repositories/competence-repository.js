@@ -6,7 +6,7 @@ import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, compareDtosLists } from './migration-from-airtable.js';
+import { areArrayEquals, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'competence';
 const TABLE_NAME = 'competences';
@@ -36,12 +36,17 @@ export async function getMany(ids) {
 }
 
 export async function get(id) {
-  const [[competenceDTO], translations] = await Promise.all([
+  const [[airtableDto], pgDto, translations] = await Promise.all([
     competenceDatasource.filter({ filter: { ids: [id] } }),
+    selectCompetences().where('competences.id', id).first(),
     translationRepository.listByEntity(model, id),
   ]);
-  if (!competenceDTO) return null;
-  return toDomain(competenceDTO, translations);
+
+  compareDtos(airtableDto, pgDto, compareCompetenceDtos);
+
+  if (!airtableDto) return null;
+
+  return toDomain(airtableDto, translations);
 }
 
 export async function getByAirtableId(airtableId) {
