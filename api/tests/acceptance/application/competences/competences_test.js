@@ -340,15 +340,28 @@ describe('Acceptance | Route | competences', () => {
     let airtableCompetence, airtableCompetenceScope;
 
     beforeEach(async () => {
-      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+      const competence = {
         id: 'competence2',
         airtableId: 'recCompetence2',
         index: '1.2',
+        areaId: 'area1',
         areaAirtableId: 'recArea1',
         origin: 'Pix',
         thematicAirtableIds: ['recThematic3'],
+        thematicIds: ['thematic3'],
         tubeAirtableIds: ['recTube6', 'recTube7'],
-      }));
+        tubeIds: ['tube6', 'tube7'],
+        skillAirtableIds: [],
+        skillIds: [],
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'pix' });
+      databaseBuilder.factory.buildCompetence(competence);
+      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+
+      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence));
 
       airtableCompetenceScope = nock('https://api.airtable.com')
         .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
@@ -847,7 +860,7 @@ describe('Acceptance | Route | competences', () => {
     let airtableCompetence, airtableCompetenceScope, pixApiCacheScope;
 
     beforeEach(async () => {
-      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+      const competence = {
         id: 'competence4',
         airtableId: 'recCompetence4',
         index: '2.2',
@@ -857,8 +870,18 @@ describe('Acceptance | Route | competences', () => {
         thematicIds: ['thematic9'],
         thematicAirtableIds: ['recThematic9'],
         tubeAirtableIds: ['recTube8', 'recTube9'],
-        skillIds: ['skill7', 'skill8', 'skill8'],
-      }));
+        tubeIds: ['tube8', 'tube9'],
+        skillIds: ['skill7', 'skill8', 'skill9'],
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'pix' });
+      databaseBuilder.factory.buildCompetence(competence);
+      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+      competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+
+      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence));
 
       airtableCompetenceScope = nock('https://api.airtable.com')
         .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
@@ -883,7 +906,7 @@ describe('Acceptance | Route | competences', () => {
           id: 'competence4',
           index: '2.2',
           areaId: 'area2',
-          skillIds: ['skill7', 'skill8', 'skill8'],
+          skillIds: ['skill7', 'skill8', 'skill9'],
           thematicIds: ['thematic9'],
           origin: 'Pix',
           name_i18n: {

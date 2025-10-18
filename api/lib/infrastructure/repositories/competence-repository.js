@@ -50,10 +50,17 @@ export async function get(id) {
 }
 
 export async function getByAirtableId(airtableId) {
-  const competenceDTO = await competenceDatasource.find(airtableId);
-  if (!competenceDTO) return null;
-  const translations = await translationRepository.listByEntity(model, competenceDTO.id);
-  return toDomain(competenceDTO, translations);
+  const airtableDto = await competenceDatasource.find(airtableId);
+  if (!airtableDto) return null;
+
+  const [pgDto, translations] = await Promise.all([
+    selectCompetences().where('competences.id', airtableDto.id).first(),
+    translationRepository.listByEntity(model, airtableDto.id),
+  ]);
+
+  compareDtos(airtableDto, pgDto, compareCompetenceDtos);
+
+  return toDomain(airtableDto, translations);
 }
 
 export async function listByAreaAirtableId(areaAirtableId) {
