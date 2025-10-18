@@ -457,7 +457,6 @@ describe('Acceptance | Route | competences', () => {
 
   describe('POST /competences', async () => {
     let airtableAreaScope;
-    let airtableCompetencesScope;
     let airtableCreateCompetenceScope;
     let airtableCreateThematicScope;
     let airtableCreateTubeScope;
@@ -488,24 +487,6 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk' });
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
-
-      const airtableCompetences = [
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
-          id: 'competence3',
-          airtableId: 'recCompetence3',
-          index: '2.1',
-          areaAirtableId: 'recArea2',
-        })),
-      ];
-
-      airtableCompetencesScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Competences')
-        .query({
-          fields: { '': competenceDatasource.usedFields },
-          filterByFormula: 'Domaine = "recArea2"',
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableCompetences });
 
       const airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
         id: 'competence4',
@@ -846,7 +827,6 @@ describe('Acceptance | Route | competences', () => {
       ]);
 
       expect(airtableAreaScope.isDone()).toBe(true);
-      expect(airtableCompetencesScope.isDone()).toBe(true);
       expect(airtableCreateCompetenceScope.isDone()).toBe(true);
       expect(airtableCreateThematicScope.isDone()).toBe(true);
       expect(airtableCreateTubeScope.isDone()).toBe(true);
