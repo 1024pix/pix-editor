@@ -26,7 +26,7 @@ export async function list() {
 export async function getMany(ids) {
   const [airtableDtos, pgDtos, translations] = await Promise.all([
     competenceDatasource.filter({ filter: { ids } }),
-    selectCompetences().whereIn('competences.id').orderBy('competences.index'),
+    selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'),
     translationRepository.listByEntities(model, ids),
   ]);
 
