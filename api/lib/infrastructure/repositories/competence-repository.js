@@ -63,12 +63,6 @@ export async function getByAirtableId(airtableId) {
   return toDomain(airtableDto, translations);
 }
 
-export async function listByAreaAirtableId(areaAirtableId) {
-  const competenceDTOs = await competenceDatasource.listByAreaAirtableId(areaAirtableId);
-  const translations = await translationRepository.listByEntities(model, competenceDTOs.map(({ id }) => id));
-  return toDomainList(competenceDTOs, translations);
-}
-
 export async function create(competence) {
   competence.id = idGenerator.generateNewId('competence');
 
