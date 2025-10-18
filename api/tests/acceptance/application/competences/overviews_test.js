@@ -31,7 +31,16 @@ describe('Acceptance | Route | competence-overviews', () => {
       databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
 
       const airtableCompetences = [
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          id: competenceId,
+          airtableId: 'recAirtableCompetence1',
+          index: '2.2',
+          origin: 'Fmk 1',
+          areaId: 'area1',
+          thematicIds: ['recThematic1', 'recThematic2', 'recThematic3', 'recThematic4'],
+          tubeIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTube5', 'recTube6'],
+          skillIds: ['recSkill1', 'recSkill2', 'recSkill3', 'recSkill4', 'recSkill5'],
+        })),
       ];
       databaseBuilder.factory.buildTranslation({
         key: 'competence.recCompetence1.name',
@@ -496,7 +505,16 @@ describe('Acceptance | Route | competence-overviews', () => {
       databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
 
       const airtableCompetences = [
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({ id: competenceId, airtableId: 'recAirtableCompetence1', index: '2.2' })),
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
+          id: competenceId,
+          airtableId: 'recAirtableCompetence1',
+          index: '2.2',
+          origin: 'Fmk 1',
+          areaId: 'area1',
+          thematicIds: ['recThematic1', 'recThematic2', 'recThematic3', 'recThematicWorkbench'],
+          tubeIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTubeWorkbench'],
+          skillIds: ['recSkill1', 'recSkill2', 'recSkill3', 'recSkill4', 'recSkill5', 'recSkill6', 'recSkill7', 'recSkillWorkbench'],
+        })),
       ];
       databaseBuilder.factory.buildTranslation({
         key: 'competence.recCompetence1.name',
