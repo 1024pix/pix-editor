@@ -742,8 +742,8 @@ describe('Application | Route | Tutorials', () => {
       context('when searching by tutorial title', function() {
         it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
           // given
-          const airtableTutorials = [
-            airtableBuilder.factory.buildTutorial({
+          const tutorials = [
+            {
               id: 'tutorialId1',
               airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
@@ -756,8 +756,9 @@ describe('Application | Route | Tutorials', () => {
               level: Tutorial.LEVELS.ONE,
               crush: true,
               tagAirtableIds: ['tagAirtableId1'],
-            }),
-            airtableBuilder.factory.buildTutorial({
+              tagIds: ['tagId1'],
+            },
+            {
               id: 'tutorialId2',
               airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
@@ -769,9 +770,15 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.CCBYSA,
               level: Tutorial.LEVELS.TWO,
               crush: false,
-              tagAirtableIds: [],
-            }),
+              tagIds: [],
+            },
           ];
+
+          databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'tag 1' });
+          tutorials.forEach(databaseBuilder.factory.buildTutorial);
+          await databaseBuilder.commit();
+
+          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
           airtableSearchTutorialByTitleScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Tutoriels')
             .query({

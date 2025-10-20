@@ -96,9 +96,15 @@ export async function getManyByAirtableIds(airtableIds) {
 }
 
 export async function searchByTitle(title) {
-  const datasourceTutorials = await tutorialDatasource.searchByTitle(title);
-  if (!datasourceTutorials) return [];
-  return datasourceTutorials.map(toDomain);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    tutorialDatasource.searchByTitle(title),
+    selectTutorials().whereILike('title', `%${title}%`).orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(100),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
+
+  if (!airtableDtos) return [];
+  return airtableDtos.map(toDomain);
 }
 
 export async function searchBySource(source) {
