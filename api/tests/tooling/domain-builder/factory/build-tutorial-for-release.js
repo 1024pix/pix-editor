@@ -9,8 +9,6 @@ export function buildTutorialForRelease(
     source = 'Source Example, Example',
     title = 'Communiquer',
     locale = 'fr-fr',
-    tutorialForSkills = ['skillId1'],
-    furtherInformation = ['skillId2'],
   } = {}) {
   return new TutorialForRelease({
     id,
@@ -20,7 +18,5 @@ export function buildTutorialForRelease(
     source,
     title,
     locale,
-    tutorialForSkills,
-    furtherInformation,
   });
 }

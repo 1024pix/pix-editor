@@ -11,7 +11,5 @@ describe('Unit | Infrastructure | tutorial-transformer', function() {
 
     expect(tutorials.length).to.equal(1);
     expect(tutorials[0].duration).to.exist;
-    expect(tutorials[0].tutorialForSkills).to.not.exist;
-    expect(tutorials[0].furtherInformation).to.not.exist;
   });
 });

@@ -26,8 +26,6 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
             CoupDeCoeur: 'YES',
             Tags: ['recTag1', 'recTag2'],
             'Tags (id persistant)': ['tag1', 'tag2'],
-            'Solution à': ['recSkill1', 'recSkill2'],
-            'En savoir plus': ['recSkill1', 'recSkill3'],
           },
         }),
         new Airtable.Record(AIRTABLE_NAME, 'recTuto2', {
