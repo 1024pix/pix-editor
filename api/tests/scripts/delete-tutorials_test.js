@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
 
-import { airtableBuilder } from '../test-helper.js';
+import { airtableBuilder, databaseBuilder } from '../test-helper.js';
 import { DeleteTutorials } from '../../scripts/delete-tutorials.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { tutorialDatasource } from '../../lib/infrastructure/datasources/airtable/index.js';
@@ -22,16 +22,33 @@ describe('Script | DeleteTutorials', () => {
         id: ['tuto1', 'tuto2', 'tuto3']
       };
 
-      const records = [
-        airtableBuilder.factory.buildTutorial({
+      const tutorials = [
+        {
           airtableId: 'recTuto1',
           id: 'tuto1',
-        }),
-        airtableBuilder.factory.buildTutorial({
+          title: 'title 1',
+          duration: 'duration 1',
+          source: 'source 1',
+          format: 'format 1',
+          link: 'link 1',
+          locale: 'locale 1',
+        },
+        {
           airtableId: 'recTuto3',
           id: 'tuto3',
-        }),
+          title: 'title 3',
+          duration: 'duration 3',
+          source: 'source 3',
+          format: 'format 3',
+          link: 'link 3',
+          locale: 'locale 3',
+        },
       ];
+
+      tutorials.forEach(databaseBuilder.factory.buildTutorial);
+      await databaseBuilder.commit();
+
+      const records = tutorials.map(airtableBuilder.factory.buildTutorial);
 
       const getManyScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tutoriels')
@@ -85,16 +102,33 @@ describe('Script | DeleteTutorials', () => {
           id: ['tuto1', 'tuto2', 'tuto3']
         };
 
-        const records = [
-          airtableBuilder.factory.buildTutorial({
+        const tutorials = [
+          {
             airtableId: 'recTuto1',
             id: 'tuto1',
-          }),
-          airtableBuilder.factory.buildTutorial({
+            title: 'title 1',
+            duration: 'duration 1',
+            source: 'source 1',
+            format: 'format 1',
+            link: 'link 1',
+            locale: 'locale 1',
+          },
+          {
             airtableId: 'recTuto3',
             id: 'tuto3',
-          }),
+            title: 'title 3',
+            duration: 'duration 3',
+            source: 'source 3',
+            format: 'format 3',
+            link: 'link 3',
+            locale: 'locale 3',
+          },
         ];
+
+        tutorials.forEach(databaseBuilder.factory.buildTutorial);
+        await databaseBuilder.commit();
+
+        const records = tutorials.map(airtableBuilder.factory.buildTutorial);
 
         const getManyScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tutoriels')
