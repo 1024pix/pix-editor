@@ -114,8 +114,14 @@ export async function searchByTagTitles(tagTitles) {
 }
 
 export async function getMany(ids) {
-  const datasourceTutorials = await tutorialDatasource.filter({ filter: { ids } });
-  return datasourceTutorials.map(toDomain);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    tutorialDatasource.filter({ filter: { ids } }),
+    selectTutorials().whereIn('id', ids).orderBy('id'),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+
+  return airtableDtos.map(toDomain);
 }
 
 async function _delete(ids) {
