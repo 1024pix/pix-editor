@@ -2,7 +2,7 @@ import { Tutorial } from '../../domain/models/index.js';
 import { tutorialDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, areNullableValuesEqual, compareDtos } from './migration-from-airtable.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'tutorials';
 const TAGS_RELATION_TABLE_NAME = 'tutorials-tutorial_tags';
@@ -85,9 +85,14 @@ export async function getByAirtableId(airtableId) {
 
 export async function getManyByAirtableIds(airtableIds) {
   if (!airtableIds?.length) return [];
-  const datasourceTutorials = await tutorialDatasource.getManyByAirtableIds(airtableIds);
-  if (!datasourceTutorials) return [];
-  return datasourceTutorials.map(toDomain);
+  const airtableDtos = await tutorialDatasource.getManyByAirtableIds(airtableIds);
+  if (!airtableDtos) return [];
+
+  const pgDtos = await selectTutorials().whereIn('id', airtableDtos.map(({ id }) => id)).orderBy('id');
+
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+
+  return airtableDtos.map(toDomain);
 }
 
 export async function searchByTitle(title) {
