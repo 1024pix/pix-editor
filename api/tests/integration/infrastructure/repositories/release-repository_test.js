@@ -630,8 +630,6 @@ function _mockRichAirtableContent() {
     source: 'tutorial1 source',
     link: 'tutorial1 link',
     locale: 'fr',
-    tutorialForSkills: 'tutorial1 tutorialForSkills',
-    furtherInformation: 'tutorial1 furtherInformation',
   };
   databaseBuilder.factory.buildTutorial(tutorial1);
   const airtableTutorial1 = airtableBuilder.factory.buildTutorial(tutorial1);
@@ -643,8 +641,6 @@ function _mockRichAirtableContent() {
     source: 'tutorial2 source',
     link: 'tutorial2 link',
     locale: 'fr-fr',
-    tutorialForSkills: 'tutorial2 tutorialForSkills',
-    furtherInformation: 'tutorial2 furtherInformation',
   };
   databaseBuilder.factory.buildTutorial(tutorial2);
   const airtableTutorial2 = airtableBuilder.factory.buildTutorial(tutorial2);

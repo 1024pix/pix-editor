@@ -12,8 +12,6 @@ export function buildTutorial({
   crush,
   tagAirtableIds,
   tagIds,
-  tutorialForSkills,
-  furtherInformation,
 } = {}) {
   return {
     id: airtableId,
@@ -30,8 +28,6 @@ export function buildTutorial({
       'CoupDeCoeur': crush ? 'YES' : null,
       'Tags': tagAirtableIds ?? [],
       'Tags (id persistant)': tagIds ?? [],
-      'Solution à': tutorialForSkills,
-      'En savoir plus': furtherInformation,
     },
   };
 }
