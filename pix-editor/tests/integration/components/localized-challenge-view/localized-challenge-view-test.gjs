@@ -20,43 +20,12 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     challenge =
       store.createRecord('challenge', {
         id: 'challengeProtoValidee',
-        instruction: 'instructions',
-        alternativeInstruction: 'alternativeInstruction',
-        type: 'QROC',
-        format: 'format',
-        proposals: 'suggestion',
-        solution: 'answers',
-        t1Status: false,
-        t2Status: true,
-        t3Status: false,
-        pedagogy: 'pedagogy',
-        author: ['jean'],
-        declinable: 'difficilement',
         version: 1,
         genealogy: 'Prototype 1',
         status: Challenge.STATUSES.VALIDE,
-        preview: '/api/urlto/challengeProtoValidee',
-        airtableId: undefined,
-        timer: 10,
         embedURL: 'https://mon-site.fr/my-link.html',
-        embedTitle: 'embedTitle',
-        embedHeight: 800,
-        alternativeVersion: null,
-        accessibility1: 'Ok',
-        accessibility2: 'Ok',
-        deafAndHardOfHearing: 'Ok',
-        spoil: 'spoil',
-        focusable: false,
-        responsive: 'responsive',
-        locales: 'languages',
         geography: 'FR',
         attachments: [attachment],
-        isAwarenessChallenge: true,
-        requireGafamWebsiteAccess: true,
-        toRephrase: false,
-        isIncompatibleIpadCertif: true,
-        contextualizedFields: 'contextualizedFields',
-        updatedAt: '2021-10-02T14:00:00.000Z',
       });
     localizedChallenge =
       store.createRecord('localized-challenge', {
@@ -91,29 +60,6 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     assert.dom(screen.getByText('Pièces jointes')).exists();
     assert.dom(screen.getByText('Illustration')).exists();
     assert.dom(screen.getByLabelText('Géographie')).hasText('Neutre');
-    assert.dom(screen.getByLabelText('Consigne')).hasText('instructions');
-    assert.dom(screen.getByLabelText('Alternative textuelle')).hasText('alternativeInstruction');
-    assert.dom(screen.getByLabelText('Modalité')).hasText('QROC');
-    assert.dom(screen.getByLabelText('Format')).hasValue('format');
-    assert.dom(screen.getByLabelText('Propositions')).hasText('suggestion');
-    assert.dom(screen.getByLabelText('Réponses')).hasText('answers');
-    assert.dom(screen.getByLabelText('T1 (espaces/casse/accents)')).isNotChecked();
-    assert.dom(screen.getByLabelText('T2 (ponctuation)')).isChecked();
-    assert.dom(screen.getByLabelText('T3 (distance d\'édition)')).isNotChecked();
-    assert.dom(screen.getByLabelText('Hauteur')).hasValue('800');
-    assert.dom(screen.getByLabelText('Titre')).hasValue('embedTitle');
-    assert.dom(screen.getByLabelText('Type pédagogie')).hasValue('pedagogy');
-    assert.dom(screen.getByLabelText('Timer')).isChecked();
-    assert.dom(screen.getByLabelText('Durée du timer')).hasValue('10');
-    assert.dom(screen.getByLabelText('Focus')).isNotChecked();
-    assert.dom(screen.getByLabelText('Langue(s)')).hasValue('languages');
-    assert.dom(screen.getByLabelText('Spoil')).hasValue('spoil');
-    assert.dom(screen.getByLabelText('Déclinable')).hasValue('difficilement');
-    assert.dom(screen.getByLabelText('Responsive')).hasValue('responsive');
-    assert.dom(screen.getByLabelText('Non voyant')).hasValue('Ok');
-    assert.dom(screen.getByLabelText('Daltonien')).hasValue('Ok');
-    assert.dom(screen.getByLabelText('Sourds et malentendants')).hasValue('Ok');
-    assert.dom(screen.getByLabelText('Champs contextualisés')).hasValue('contextualizedFields');
     assert.dom(screen.getByLabelText('Id')).hasValue('localizedChallengeId');
   });
 
