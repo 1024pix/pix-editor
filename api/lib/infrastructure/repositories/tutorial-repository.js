@@ -2,6 +2,7 @@ import { Tutorial } from '../../domain/models/index.js';
 import { tutorialDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtos } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'tutorials';
 const TAGS_RELATION_TABLE_NAME = 'tutorials-tutorial_tags';
@@ -71,10 +72,15 @@ export async function update(tutorial) {
   });
 }
 
-export async function getByAirtableId(tutorialId) {
-  const datasourceTutorial = await tutorialDatasource.find(tutorialId);
-  if (!datasourceTutorial) return null;
-  return toDomain(datasourceTutorial);
+export async function getByAirtableId(airtableId) {
+  const airtableDto = await tutorialDatasource.find(airtableId);
+  if (!airtableDto) return null;
+
+  const pgDto = await selectTutorials().where('id', airtableDto.id).first();
+
+  compareDtos(airtableDto, pgDto, compareTutorialDtos);
+
+  return toDomain(airtableDto);
 }
 
 export async function getManyByAirtableIds(airtableIds) {
@@ -113,6 +119,35 @@ async function _delete(ids) {
 }
 
 export { _delete as delete };
+
+function selectTutorials() {
+  return knex.select(
+    '*',
+    knex.raw(
+      'coalesce((??), \'[]\') as "tagIds"',
+      knex
+        .select(knex.raw('json_agg(??)', 'tutorials-tutorial_tags.tutorialTagId'))
+        .from('tutorials-tutorial_tags')
+        .where('tutorials-tutorial_tags.tutorialId', '=', knex.ref('tutorials.id')),
+    ),
+  ).from('tutorials');
+}
+
+function compareTutorialDtos(airtableTutorial, pgTutorial) {
+  const diff = [];
+  if (airtableTutorial.id !== pgTutorial.id) diff.push(`tutorial airtable id "${airtableTutorial.id}" != postgres id "${pgTutorial.id}"`);
+  if (airtableTutorial.title !== pgTutorial.title) diff.push(`tutorial airtable title "${airtableTutorial.title}" != postgres title "${pgTutorial.title}"`);
+  if (airtableTutorial.duration !== pgTutorial.duration) diff.push(`tutorial airtable duration "${airtableTutorial.duration}" != postgres duration "${pgTutorial.duration}"`);
+  if (airtableTutorial.source !== pgTutorial.source) diff.push(`tutorial airtable source "${airtableTutorial.source}" != postgres source "${pgTutorial.source}"`);
+  if (airtableTutorial.format !== pgTutorial.format) diff.push(`tutorial airtable format "${airtableTutorial.format}" != postgres format "${pgTutorial.format}"`);
+  if (airtableTutorial.link !== pgTutorial.link) diff.push(`tutorial airtable link "${airtableTutorial.link}" != postgres link "${pgTutorial.link}"`);
+  if (!areNullableValuesEqual(airtableTutorial.license, pgTutorial.license)) diff.push(`tutorial airtable license "${airtableTutorial.license}" != postgres license "${pgTutorial.license}"`);
+  if (!areNullableValuesEqual(airtableTutorial.level, pgTutorial.level)) diff.push(`tutorial airtable level "${airtableTutorial.level}" != postgres level "${pgTutorial.level}"`);
+  if (airtableTutorial.crush !== pgTutorial.crush) diff.push(`tutorial airtable crush "${airtableTutorial.crush}" != postgres crush "${pgTutorial.crush}"`);
+  if (!areNullableValuesEqual(airtableTutorial.locale, pgTutorial.locale)) diff.push(`tutorial airtable locale "${airtableTutorial.locale}" != postgres locale "${pgTutorial.locale}"`);
+  if (!areArrayEquals(airtableTutorial.tagIds, pgTutorial.tagIds)) diff.push(`tutorial airtable tagIds "${airtableTutorial.tagIds}" != postgres tagIds "${pgTutorial.tagIds}"`);
+  return diff;
+}
 
 function toDomain(datasourceTutorial) {
   return new Tutorial(datasourceTutorial);
