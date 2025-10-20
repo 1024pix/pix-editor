@@ -120,9 +120,27 @@ export async function searchBySource(source) {
 }
 
 export async function searchByTagTitles(tagTitles) {
-  const datasourceTutorials = await tutorialDatasource.searchByTagTitles(tagTitles);
-  if (!datasourceTutorials) return [];
-  return datasourceTutorials.map(toDomain);
+  let tutorialsQuery = selectTutorials().orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(100);
+
+  for (const tagTitle of tagTitles) {
+    tutorialsQuery = tutorialsQuery.whereIn(
+      'id',
+      knex.select('tutorials-tutorial_tags.tutorialId')
+        .from('tutorial_tags')
+        .join('tutorials-tutorial_tags', 'tutorials-tutorial_tags.tutorialTagId', 'tutorial_tags.id')
+        .whereILike('tutorial_tags.title', `%${tagTitle}%`),
+    );
+  }
+
+  const [airtableDtos, pgDtos] = await Promise.all([
+    tutorialDatasource.searchByTagTitles(tagTitles),
+    tutorialsQuery,
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
+
+  if (!airtableDtos) return [];
+  return airtableDtos.map(toDomain);
 }
 
 export async function getMany(ids) {
