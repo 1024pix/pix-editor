@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
 
-import { airtableBuilder, databaseBuilder } from '../test-helper.js';
+import { airtableBuilder, databaseBuilder, knex } from '../test-helper.js';
 import { DeleteTutorials } from '../../scripts/delete-tutorials.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { tutorialDatasource } from '../../lib/infrastructure/datasources/airtable/index.js';
@@ -15,13 +15,9 @@ describe('Script | DeleteTutorials', () => {
   });
 
   describe('#handle', () => {
-    it('deletes existing tutorials corresponding to given ids', async () => {
-      // given
-      const options = {
-        dryRun: false,
-        id: ['tuto1', 'tuto2', 'tuto3']
-      };
+    let getManyScope, getAirtableIdsByIdsScope, deleteScope;
 
+    beforeEach(async () => {
       const tutorials = [
         {
           airtableId: 'recTuto1',
@@ -32,6 +28,7 @@ describe('Script | DeleteTutorials', () => {
           format: 'format 1',
           link: 'link 1',
           locale: 'locale 1',
+          tagIds: ['tag1', 'tag2'],
         },
         {
           airtableId: 'recTuto3',
@@ -42,15 +39,30 @@ describe('Script | DeleteTutorials', () => {
           format: 'format 3',
           link: 'link 3',
           locale: 'locale 3',
+          tagIds: ['tag2', 'tag3'],
         },
       ];
 
+      databaseBuilder.factory.buildTag({ id: 'tag1', title: 'tag 1' });
+      databaseBuilder.factory.buildTag({ id: 'tag2', title: 'tag 2' });
+      databaseBuilder.factory.buildTag({ id: 'tag3', title: 'tag 3' });
       tutorials.forEach(databaseBuilder.factory.buildTutorial);
+      databaseBuilder.factory.buildTutorial({
+        airtableId: 'recTuto4',
+        id: 'tuto4',
+        title: 'title 4',
+        duration: 'duration 4',
+        source: 'source 4',
+        format: 'format 4',
+        link: 'link 4',
+        locale: 'locale 4',
+        tagIds: ['tag1', 'tag3'],
+      });
       await databaseBuilder.commit();
 
       const records = tutorials.map(airtableBuilder.factory.buildTutorial);
 
-      const getManyScope = nock('https://api.airtable.com')
+      getManyScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tutoriels')
         .query({
           filterByFormula: 'OR("tuto1" = {id persistant},"tuto2" = {id persistant},"tuto3" = {id persistant})',
@@ -59,7 +71,7 @@ describe('Script | DeleteTutorials', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records });
 
-      const getAirtableIdsByIdsScope = nock('https://api.airtable.com')
+      getAirtableIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tutoriels')
         .query({
           filterByFormula: 'OR("tuto1" = {id persistant},"tuto3" = {id persistant})',
@@ -74,7 +86,7 @@ describe('Script | DeleteTutorials', () => {
           },
         })) });
 
-      const deleteScope = nock('https://api.airtable.com')
+      deleteScope = nock('https://api.airtable.com')
         .delete('/v0/airtableBaseValue/Tutoriels')
         .query({
           'records[]': ['recTuto1', 'recTuto3'],
@@ -84,11 +96,40 @@ describe('Script | DeleteTutorials', () => {
           { deleted: true, id: 'recTuto1', },
           { deleted: true, id: 'recTuto3', },
         ] });
+    });
+
+    it('deletes existing tutorials corresponding to given ids', async () => {
+      // given
+      const options = {
+        dryRun: false,
+        id: ['tuto1', 'tuto2', 'tuto3']
+      };
 
       // when
       await script.handle({ options, logger });
 
       // then
+      await expect(knex.select('*').from('tutorials').orderBy('id')).resolves.toStrictEqual([
+        {
+          id: 'tuto4',
+          title: 'title 4',
+          duration: 'duration 4',
+          source: 'source 4',
+          format: 'format 4',
+          link: 'link 4',
+          locale: 'locale 4',
+          crush: false,
+          level: null,
+          license: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+      await expect(knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+        { tutorialId: 'tuto4', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        { tutorialId: 'tuto4', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      ]);
+
       expect(getManyScope.isDone()).toBe(true);
       expect(getAirtableIdsByIdsScope.isDone()).toBe(true);
       expect(deleteScope.isDone()).toBe(true);
@@ -102,9 +143,12 @@ describe('Script | DeleteTutorials', () => {
           id: ['tuto1', 'tuto2', 'tuto3']
         };
 
-        const tutorials = [
+        // when
+        await script.handle({ options, logger });
+
+        // then
+        await expect(knex.select('*').from('tutorials').orderBy('id')).resolves.toStrictEqual([
           {
-            airtableId: 'recTuto1',
             id: 'tuto1',
             title: 'title 1',
             duration: 'duration 1',
@@ -112,9 +156,13 @@ describe('Script | DeleteTutorials', () => {
             format: 'format 1',
             link: 'link 1',
             locale: 'locale 1',
+            crush: false,
+            level: null,
+            license: null,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
           {
-            airtableId: 'recTuto3',
             id: 'tuto3',
             title: 'title 3',
             duration: 'duration 3',
@@ -122,28 +170,39 @@ describe('Script | DeleteTutorials', () => {
             format: 'format 3',
             link: 'link 3',
             locale: 'locale 3',
+            crush: false,
+            level: null,
+            license: null,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
-        ];
+          {
+            id: 'tuto4',
+            title: 'title 4',
+            duration: 'duration 4',
+            source: 'source 4',
+            format: 'format 4',
+            link: 'link 4',
+            locale: 'locale 4',
+            crush: false,
+            level: null,
+            license: null,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          },
+        ]);
+        await expect(knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+          { tutorialId: 'tuto1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tuto1', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tuto3', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tuto4', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+          { tutorialId: 'tuto4', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        ]);
 
-        tutorials.forEach(databaseBuilder.factory.buildTutorial);
-        await databaseBuilder.commit();
-
-        const records = tutorials.map(airtableBuilder.factory.buildTutorial);
-
-        const getManyScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tutoriels')
-          .query({
-            filterByFormula: 'OR("tuto1" = {id persistant},"tuto2" = {id persistant},"tuto3" = {id persistant})',
-            'fields[]': tutorialDatasource.usedFields,
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records });
-
-        // when
-        await script.handle({ options, logger });
-
-        // then
         expect(getManyScope.isDone()).toBe(true);
+        expect(getAirtableIdsByIdsScope.isDone()).toBe(false);
+        expect(deleteScope.isDone()).toBe(false);
       });
     });
   });

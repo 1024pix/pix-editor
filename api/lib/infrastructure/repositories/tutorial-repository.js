@@ -127,6 +127,8 @@ export async function getMany(ids) {
 async function _delete(ids) {
   const airtableIds = Object.entries(await tutorialDatasource.getAirtableIdsByIds(ids)).map(([, airtableId]) => airtableId);
   await tutorialDatasource.delete(airtableIds);
+  await knex.delete().from('tutorials-tutorial_tags').whereIn('tutorialId', ids);
+  await knex.delete().from('tutorials').whereIn('id', ids);
 }
 
 export { _delete as delete };
