@@ -123,4 +123,3 @@ export default class CompetenceHeader extends Component {
     </div>
   </template>
 }
-

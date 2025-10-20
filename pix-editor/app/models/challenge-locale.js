@@ -20,7 +20,9 @@ export default class ChallengeLocaleModel extends Model {
   }
 
   get isPrimaryInLocale() {
-    return this.challenge.locales.includes(this.locale);
+    return this.challenge.locales
+      .map((locale) => Intl.getCanonicalLocales(locale).toString())
+      .includes(this.locale);
   }
 
   get isPrototype() {
