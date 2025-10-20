@@ -5,6 +5,7 @@
   padding: var(--pix-spacing-4x) var(--pix-spacing-6x);
   gap: var(--pix-spacing-3x);
   overflow: auto;
+  flex: 2;
 
   .pix-checkbox {
     margin-top: 0;
