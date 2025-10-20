@@ -316,7 +316,7 @@ describe('Application | Route | Tutorials', () => {
     context('success', function() {
       it('should respond with status 200 and tutorial', async () => {
         // given
-        const airtableTutorial = airtableBuilder.factory.buildTutorial({
+        const tutorial = {
           id: 'tutorialId',
           airtableId: 'tutorialAirtableId',
           title: 'mon titre',
@@ -328,8 +328,15 @@ describe('Application | Route | Tutorials', () => {
           license: Tutorial.LICENSES.C,
           level: Tutorial.LEVELS.TWO,
           crush: true,
+          tagIds: ['tagId1', 'tagId2'],
           tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
-        });
+        };
+
+        tutorial.tagIds.forEach((id) => databaseBuilder.factory.buildTag({ id, title: `${id} title` }));
+        databaseBuilder.factory.buildTutorial(tutorial);
+        await databaseBuilder.commit();
+
+        const airtableTutorial = airtableBuilder.factory.buildTutorial(tutorial);
         airtableGetTutorialScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
           .query({})
@@ -546,23 +553,7 @@ describe('Application | Route | Tutorials', () => {
         databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'title2' });
         databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'title3' });
 
-        databaseBuilder.factory.buildTutorial({
-          id: 'tutorialId',
-          title: 'mon titre old',
-          format: Tutorial.FORMATS.FRISE,
-          duration: '06:06:06',
-          source: 'Mon grenier old',
-          link: 'https://coucou.old',
-          locale: 'nl',
-          license: Tutorial.LICENSES.YOUTUBE,
-          level: Tutorial.LEVELS.FOUR,
-          crush: false,
-          tagIds: ['tagId3']
-        });
-
-        await databaseBuilder.commit();
-
-        const originalAirtableTutorial = airtableBuilder.factory.buildTutorial({
+        const tutorial = {
           id: 'tutorialId',
           airtableId: 'tutorialAirtableId',
           title: 'mon titre old',
@@ -574,8 +565,15 @@ describe('Application | Route | Tutorials', () => {
           license: Tutorial.LICENSES.YOUTUBE,
           level: Tutorial.LEVELS.FOUR,
           crush: false,
+          tagIds: ['tagId3'],
           tagAirtableIds: ['tagAirtableId3'],
-        });
+        };
+
+        databaseBuilder.factory.buildTutorial(tutorial);
+
+        await databaseBuilder.commit();
+
+        const originalAirtableTutorial = airtableBuilder.factory.buildTutorial(tutorial);
         airtableGetTutorialScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
           .query({})
