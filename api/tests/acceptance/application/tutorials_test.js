@@ -1088,8 +1088,8 @@ describe('Application | Route | Tutorials', () => {
       context('when searching by ids', function() {
         it('should respond with status 200 and relevant tutorials', async () => {
           // given
-          const airtableTutorials = [
-            airtableBuilder.factory.buildTutorial({
+          const tutorials = [
+            {
               id: 'tutorialId1',
               airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
@@ -1102,8 +1102,9 @@ describe('Application | Route | Tutorials', () => {
               level: Tutorial.LEVELS.ONE,
               crush: true,
               tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
-            }),
-            airtableBuilder.factory.buildTutorial({
+              tagIds: ['tagId1', 'tagId2'],
+            },
+            {
               id: 'tutorialId2',
               airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
@@ -1116,8 +1117,17 @@ describe('Application | Route | Tutorials', () => {
               level: Tutorial.LEVELS.TWO,
               crush: false,
               tagAirtableIds: ['tagAirtableId1', 'tagAirtableId3'],
-            }),
+              tagIds: ['tagId1', 'tagId3'],
+            },
           ];
+
+          databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'tag 1' });
+          databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'tag 2' });
+          databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'tag 3' });
+          tutorials.forEach(databaseBuilder.factory.buildTutorial);
+          await databaseBuilder.commit();
+
+          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
           airtableGetManyTutorialsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Tutoriels')
             .query({
