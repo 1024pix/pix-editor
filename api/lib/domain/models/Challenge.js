@@ -63,7 +63,7 @@ export class Challenge {
     this.delta = delta;
     this.embedHeight = embedHeight;
     this.focusable = focusable;
-    this.format = format;
+    this.format = format ?? Challenge.FORMATS.MOTS;
     this.genealogy = genealogy;
     this.id = id;
     this.madeObsoleteAt = madeObsoleteAt;

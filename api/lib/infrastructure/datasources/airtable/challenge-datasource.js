@@ -87,7 +87,7 @@ export const challengeDatasource = datasource.extend({
       embedHeight: airtableRecord.get('Embed height'),
       timer,
       competenceId,
-      format: airtableRecord.get('Format') || Challenge.FORMATS.MOTS,
+      format: airtableRecord.get('Format'),
       files,
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: convertLanguagesToLocales(airtableRecord.get('Langues') || []),
