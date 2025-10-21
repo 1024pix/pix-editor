@@ -1,5 +1,29 @@
 
 
+## v3.227.0 (21/10/2025)
+
+
+### :rocket: Amélioration
+- [#1169](https://github.com/1024pix/pix-editor/pull/1169) [FEATURE] Double lecture des tutoriels (PIX-19963).
+
+### :building_construction: Tech
+- [#1167](https://github.com/1024pix/pix-editor/pull/1167) [TECH] Double lecture des compétences (PIX-19945).
+- [#1157](https://github.com/1024pix/pix-editor/pull/1157) [TECH] Suppression de la dépendance ember-tooltip.
+- [#1164](https://github.com/1024pix/pix-editor/pull/1164) [TECH] Double lecture des tubes (PIX-19946).
+
+### :bug: Correction
+- [#1165](https://github.com/1024pix/pix-editor/pull/1165) [BUGFIX] Réparer l'alignement du bouton dans la création/modification d'un tutoriel (PIX-20035).
+
+### :arrow_up: Montée de version
+- [#1176](https://github.com/1024pix/pix-editor/pull/1176) [BUMP] Update dependency ember-concurrency to v5 (pix-editor).
+- [#1177](https://github.com/1024pix/pix-editor/pull/1177) [BUMP] Update dependency ember-truth-helpers to v5 (pix-editor).
+- [#1175](https://github.com/1024pix/pix-editor/pull/1175) [BUMP] Update Node.js to v22.20.0.
+- [#1174](https://github.com/1024pix/pix-editor/pull/1174) [BUMP] Update dependency @playwright/test to v1.56.0.
+- [#1173](https://github.com/1024pix/pix-editor/pull/1173) [BUMP] Update dependency p-queue to v8.1.1 (pix-editor).
+- [#1172](https://github.com/1024pix/pix-editor/pull/1172) [BUMP] Update dependency @1024pix/pix-ui to ^55.29.5 (pix-editor).
+- [#1171](https://github.com/1024pix/pix-editor/pull/1171) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.12 (pix-editor).
+- [#1170](https://github.com/1024pix/pix-editor/pull/1170) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.21 (pix-editor).
+
 ## v3.226.0 (15/10/2025)
 
 
