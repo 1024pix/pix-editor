@@ -65,7 +65,7 @@
     "ember-cli-notifications": "^9.0.0",
     "ember-cli-sass": "^11.0.1",
     "ember-cli-showdown": "^9.0.0",
-    "ember-concurrency": "^4.0.1",
+    "ember-concurrency": "^5.0.0",
     "ember-data": "^5.3.8",
     "ember-dayjs": "^0.12.1",
     "ember-eslint-parser": "^0.5.3",
