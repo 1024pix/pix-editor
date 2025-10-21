@@ -10,8 +10,8 @@ describe('Integration | Repository | whitelisted-url-read-repository', () => {
 
     it('should retrieve active whitelisted url readmodels ordered by url', async () => {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
@@ -126,8 +126,8 @@ describe('Integration | Repository | whitelisted-url-read-repository', () => {
 
     it('should retrieve given read whitelisted url by its id', async () => {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
@@ -188,8 +188,8 @@ describe('Integration | Repository | whitelisted-url-read-repository', () => {
 
     it('should return null when whitelisted url has been deleted', async () => {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
