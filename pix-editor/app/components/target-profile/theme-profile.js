@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
-export default class TargetProfileThemeProfileComponent extends Component {
+export default class ThemeProfile extends Component {
 
   get filteredTubes() {
     const theme = this.args.theme;

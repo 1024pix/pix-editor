@@ -358,8 +358,12 @@
   }
 }
 
-.language-filter-info {
-  max-width: 400px;
+.quality-icons {
+  display: flex;
+}
+
+#language-filter-info {
+  max-width: 470px;
 
   .table {
     width: 330px;
@@ -396,8 +400,9 @@
   }
 }
 
-.quality-tooltip {
-  max-width: 350px;
+#quality-tooltip {
+  z-index: 10;
+  max-width: 250px;
 }
 
 .flag.fr-fr {
@@ -417,4 +422,19 @@
 
 .ui.icon.menu .item > .icon:not(.dropdown) {
   margin-right: .5em;
+}
+
+.ui.icon.menu .item.production {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  .pix-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .pix-tooltip__trigger-element {
+    display: flex;
+  }
 }

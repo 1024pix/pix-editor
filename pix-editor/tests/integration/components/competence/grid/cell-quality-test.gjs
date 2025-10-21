@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import CellQuality from 'pixeditor/components/competence/grid/cell-quality';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
@@ -16,11 +16,10 @@ module('Integration | Component | quality-view', function(hooks) {
       challenges: [],
     };
 
-    this.skill = skill;
     // when
-    await render(hbs`<Competence::Grid::CellQuality @skill={{this.skill}} />`);
+    await render(<template><CellQuality @skill={{skill}} /></template>);
 
     // then
-    assert.dom(this.element).hasText('0');
+    assert.dom(this.element).hasText('0 Spoil Non testé Responsive Non testé Non/Mal voyant Non testé Daltonien Non testé Indice Pas d\'indice');
   });
 });

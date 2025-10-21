@@ -65,6 +65,12 @@ module('Acceptance | skill | single', function(hooks) {
       const descriptionInput = await screen.findByLabelText('Description');
       await fillIn(descriptionInput, skillDescription);
 
+      const i18nButton = await screen.getByRole('button', { name: 'Internationalisation' });
+      await i18nButton.click();
+
+      const frOption = await screen.findByRole('option', { name: 'France' });
+      await frOption.click();
+
       const saveButton = await screen.getByRole('button', { name: 'Enregistrer l\'acquis @tube2' });
       await saveButton.click();
 
