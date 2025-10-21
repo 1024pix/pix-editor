@@ -72,13 +72,46 @@ export async function filterByThematicIds(thematicIds) {
 }
 
 export async function create(challenge) {
-  const createdChallengeDto = await challengeDatasource.create(challenge);
-  const primaryLocalizedChallenge = challenge.localizedChallenges[0];
-  await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge] });
+  return knex.transaction(async (transaction) => {
+    const createdChallengeDto = await challengeDatasource.create(challenge);
 
-  const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.save({ translations });
-  return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+    await transaction.insert({
+      id: challenge.id,
+      type: challenge.type,
+      t1Status: challenge.t1Status,
+      t2Status: challenge.t2Status,
+      t3Status: challenge.t3Status,
+      status: challenge.status,
+      skillId: createdChallengeDto.skillId,
+      embedHeight: challenge.embedHeight,
+      timer: challenge.timer,
+      format: challenge.format,
+      autoReply: challenge.autoReply,
+      locales: challenge.locales,
+      focusable: challenge.focusable,
+      genealogy: challenge.genealogy,
+      pedagogy: challenge.pedagogy,
+      author: challenge.author,
+      declinable: challenge.declinable,
+      version: challenge.version,
+      alternativeVersion: challenge.alternativeVersion,
+      accessibility1: challenge.accessibility1,
+      accessibility2: challenge.accessibility2,
+      spoil: challenge.spoil,
+      responsive: challenge.responsive,
+      delta: challenge.delta,
+      alpha: challenge.alpha,
+      shuffled: challenge.shuffled,
+      contextualizedFields: challenge.contextualizedFields,
+    }).into('challenges');
+
+    const primaryLocalizedChallenge = challenge.localizedChallenges[0];
+    await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge], transaction });
+
+    const translations = extractTranslationsFromChallenge(challenge);
+    await translationRepository.save({ translations, transaction });
+    return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+  });
 }
 
 export async function createBatch(challenges) {

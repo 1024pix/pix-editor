@@ -3956,6 +3956,10 @@ describe('Integration | Repository | challenge-repository', () => {
   });
 
   describe('#create', () => {
+    afterEach(async () => {
+      await knex.delete().from('challenges');
+    });
+
     it('should create a challenge, its localized challenge primary and its translated attributes', async function() {
       // given
       const challengeToCreate_data = {
@@ -3971,14 +3975,14 @@ describe('Integration | Repository | challenge-repository', () => {
         validatedAt: null,
         madeObsoleteAt: null,
         updatedAt: null,
-        author: 'MOI',
+        author: ['MOI'],
         autoReply: true,
         competenceId: 'Unused competenceId',
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        embedHeight: 'embedHeight challengeToCreate',
+        embedHeight: 666,
         files: [],
-        focusable: 'focusable challengeToCreate',
+        focusable: true,
         format: Challenge.FORMATS.MOTS,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         geography: 'FR',
@@ -3986,7 +3990,7 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
-        shuffled: 'shuffled challengeToCreate',
+        shuffled: false,
         skillId: 'skillId1',
         skills: ['airtableSkillId1'],
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -4035,6 +4039,15 @@ describe('Integration | Repository | challenge-repository', () => {
           },
         },
       });
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeToCreate_data.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
+
       vi.spyOn(airtableClient, 'createRecord').mockImplementation(
         (tableName, airtableRequestBody) => {
           if (tableName !== 'Epreuves') {
@@ -4183,6 +4196,44 @@ describe('Integration | Repository | challenge-repository', () => {
           version: challengeToCreate_data.version,
         }),
       );
+
+      await expect(knex.select('*').from('challenges')).resolves.toStrictEqual([
+        {
+          accessibility1: challengeToCreate_data.accessibility1,
+          accessibility2: challengeToCreate_data.accessibility2,
+          alternativeVersion: challengeToCreate_data.alternativeVersion,
+          alpha: null,
+          archivedAt: challengeToCreate_data.archivedAt,
+          author: challengeToCreate_data.author,
+          autoReply: challengeToCreate_data.autoReply,
+          contextualizedFields: challengeToCreate_data.contextualizedFields,
+          createdAt: expect.any(Date),
+          declinable: challengeToCreate_data.declinable,
+          delta: null,
+          embedHeight: challengeToCreate_data.embedHeight,
+          focusable: challengeToCreate_data.focusable,
+          format: challengeToCreate_data.format,
+          genealogy: challengeToCreate_data.genealogy,
+          id: challengeToCreate_data.id,
+          locales: challengeToCreate_data.locales,
+          madeObsoleteAt: challengeToCreate_data.madeObsoleteAt,
+          pedagogy: challengeToCreate_data.pedagogy,
+          responsive: challengeToCreate_data.responsive,
+          shuffled: challengeToCreate_data.shuffled,
+          skillId: challengeToCreate_data.skillId,
+          spoil: challengeToCreate_data.spoil,
+          status: challengeToCreate_data.status,
+          t1Status: challengeToCreate_data.t1Status,
+          t2Status: challengeToCreate_data.t2Status,
+          t3Status: challengeToCreate_data.t3Status,
+          timer: challengeToCreate_data.timer,
+          type: challengeToCreate_data.type,
+          updatedAt: expect.any(Date),
+          validatedAt: challengeToCreate_data.validatedAt,
+          version: challengeToCreate_data.version,
+        },
+      ]);
+
       const localizedChallenges = await knex('localized_challenges')
         .select('*')
         .orderBy(['challengeId', 'id']);

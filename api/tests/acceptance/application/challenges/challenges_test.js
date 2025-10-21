@@ -1612,13 +1612,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('POST /challenges', () => {
     let user;
+
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
+
     afterEach(async function() {
-      await knex('translations').truncate();
+      await knex('translations').delete();
       await knex('localized_challenges').delete();
+      await knex('challenges').delete();
     });
 
     it('should create a challenge', async () => {
@@ -1636,6 +1639,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challengeData);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
       const expectedBody = { records: [expectedBodyChallenge] };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeData.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
@@ -1934,8 +1945,43 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         ],
       });
-      const localizedChallenges = await knex('localized_challenges').select();
-      expect(localizedChallenges).to.deep.equal([
+      await expect(knex.select('*').from('challenges')).resolves.toStrictEqual([
+        {
+          accessibility1: challengeData.accessibility1,
+          accessibility2: challengeData.accessibility2,
+          alternativeVersion: challengeData.alternativeVersion,
+          alpha: null,
+          archivedAt: null,
+          author: challengeData.author,
+          autoReply: challengeData.autoReply,
+          contextualizedFields: challengeData.contextualizedFields,
+          createdAt: expect.any(Date),
+          declinable: challengeData.declinable,
+          delta: null,
+          embedHeight: challengeData.embedHeight,
+          focusable: challengeData.focusable,
+          format: challengeData.format,
+          genealogy: challengeData.genealogy,
+          id: challengeData.id,
+          locales: challengeData.locales,
+          madeObsoleteAt: null,
+          pedagogy: challengeData.pedagogy,
+          responsive: challengeData.responsive,
+          shuffled: challengeData.shuffled,
+          skillId: challengeData.skillId,
+          spoil: challengeData.spoil,
+          status: challengeData.status,
+          t1Status: challengeData.t1Status,
+          t2Status: challengeData.t2Status,
+          t3Status: challengeData.t3Status,
+          timer: challengeData.timer,
+          type: challengeData.type,
+          updatedAt: expect.any(Date),
+          validatedAt: null,
+          version: challengeData.version,
+        },
+      ]);
+      await expect(knex('localized_challenges').select()).resolves.toStrictEqual([
         {
           id: 'challengeId',
           challengeId: 'challengeId',
@@ -1954,8 +2000,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: null,
         }
       ]);
-      const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
-      expect(translations).to.deep.equal([
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.toStrictEqual([
         {
           key: 'challenge.challengeId.alternativeInstruction',
           locale: 'fr',
@@ -2004,6 +2049,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
       const expectedBody = { records: [expectedBodyChallenge] };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
@@ -2107,6 +2160,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
         const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
         const expectedBody = { records: [expectedBodyChallenge] };
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+        await databaseBuilder.commit();
 
         const airtableCall = nock('https://api.airtable.com')
           .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
