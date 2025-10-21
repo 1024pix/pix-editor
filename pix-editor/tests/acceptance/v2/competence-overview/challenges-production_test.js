@@ -161,7 +161,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
   test('it should navigate to localized-challenge view', async function(assert) {
     await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
     await clickByText('@tube1');
-    await clickByText('hallo mama');
+    await clickByText('Proto');
 
     assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
 

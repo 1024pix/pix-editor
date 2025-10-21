@@ -53,7 +53,15 @@ export default class LocalizedChallengesProduction extends Component {
                 Version
               </:header>
               <:cell>
-                {{challengeLocale.alternativeVersion}}
+                <LinkTo
+                @route="authenticated.v2.localized-challenge"
+                @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}>
+                  {{#if challengeLocale.isPrototype}}
+                    Proto
+                  {{else}}
+                    {{challengeLocale.alternativeVersion}}
+                  {{/if}}
+                </LinkTo>
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}} class="challenges-production-table__consigne">
