@@ -444,6 +444,7 @@ function _mockRichAirtableContent() {
     areaId: 'area1',
     skillIds: ['skill11111', 'skill11112'],
     thematicIds: ['thematic111', 'thematic112'],
+    tubeIds: ['tube1111', 'tube1121'],
     origin: 'FrameworkA',
   };
   databaseBuilder.factory.buildCompetence(competence11);
@@ -454,6 +455,7 @@ function _mockRichAirtableContent() {
     areaId: 'area1',
     skillIds: ['skill12121'],
     thematicIds: ['thematic121'],
+    tubeIds: ['tube1211', 'tube1212'],
     origin: 'FrameworkA',
   };
   databaseBuilder.factory.buildCompetence(competence12);
@@ -464,6 +466,7 @@ function _mockRichAirtableContent() {
     areaId: 'area2',
     skillIds: ['skill21111'],
     thematicIds: ['thematic211'],
+    tubeIds: ['tube2111'],
     origin: 'FrameworkA',
   };
   databaseBuilder.factory.buildCompetence(competence21);

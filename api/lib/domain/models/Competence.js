@@ -9,6 +9,7 @@ export class Competence {
     thematicIds,
     thematicAirtableIds,
     tubeAirtableIds,
+    tubeIds,
     skillIds,
     name_i18n,
     description_i18n,
@@ -22,6 +23,7 @@ export class Competence {
     this.thematicIds = thematicIds;
     this.thematicAirtableIds = thematicAirtableIds;
     this.tubeAirtableIds = tubeAirtableIds;
+    this.tubeIds = tubeIds;
     this.skillIds = skillIds;
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;

@@ -9,6 +9,7 @@ export function buildCompetence({
   thematicAirtableIds,
   origin,
   tubeAirtableIds,
+  tubeIds,
 } = {}) {
   return {
     id: airtableId ?? id,
@@ -22,6 +23,7 @@ export function buildCompetence({
       'Thematiques': thematicAirtableIds,
       'Origine2': [origin],
       'Tubes': tubeAirtableIds,
+      'Tubes (id persistant)': tubeIds,
     },
   };
 }

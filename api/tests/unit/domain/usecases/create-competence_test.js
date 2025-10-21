@@ -24,7 +24,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
   beforeEach(() => {
     vi.spyOn(areaRepository, 'getByAirtableId');
-    vi.spyOn(competenceRepository, 'listByAreaAirtableId');
     vi.spyOn(competenceRepository, 'create');
     vi.spyOn(thematicRepository, 'create');
     vi.spyOn(tubeRepository, 'create');
@@ -43,7 +42,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
       const areaAirtableId = 'unknown area id';
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(undefined);
-      competenceRepository.listByAreaAirtableId.mockResolvedValueOnce([]);
 
       const competence = domainBuilder.buildCompetence({
         areaAirtableId,
@@ -57,7 +55,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
       await expect(result).rejects.toHaveProperty('message', 'unknown area');
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
-      expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);
     });
   });
 
@@ -68,14 +65,8 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
         code: '24',
+        competenceIds: ['competence1', 'competence2', 'competence3', 'competence4', 'competence5']
       }));
-      competenceRepository.listByAreaAirtableId.mockResolvedValueOnce([
-        domainBuilder.buildCompetence(),
-        domainBuilder.buildCompetence(),
-        domainBuilder.buildCompetence(),
-        domainBuilder.buildCompetence(),
-        domainBuilder.buildCompetence(),
-      ]);
       const createdCompetence = domainBuilder.buildCompetence({
         areaAirtableId,
         thematicIds: [],
@@ -119,7 +110,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
-      expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
         name_i18n: { fr: 'workbench_24_6' },
@@ -167,8 +157,8 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
         code: '24',
+        competenceIds: [],
       }));
-      competenceRepository.listByAreaAirtableId.mockResolvedValueOnce([]);
       const createdCompetence = domainBuilder.buildCompetence({
         areaAirtableId,
         thematicIds: [],
@@ -212,7 +202,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
-      expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
         name_i18n: { fr: 'workbench_24_1' },
@@ -259,9 +248,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
       const areaAirtableId = 'areaAirtableId';
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
-        code: '24'
+        code: '24',
+        competenceIds: [],
       }));
-      competenceRepository.listByAreaAirtableId.mockResolvedValueOnce([]);
       const createdCompetence = domainBuilder.buildCompetence({
         thematicIds: [],
         thematicAirtableIds: [],
@@ -304,7 +293,6 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
-      expect(competenceRepository.listByAreaAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
         name_i18n: { fr: 'workbench_24_1' },

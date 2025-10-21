@@ -15,16 +15,13 @@ import * as idGenerator from '../../infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function createCompetence(competence) {
-  const [area, competences] = await Promise.all([
-    areaRepository.getByAirtableId(competence.areaAirtableId),
-    competenceRepository.listByAreaAirtableId(competence.areaAirtableId),
-  ]);
+  const area = await areaRepository.getByAirtableId(competence.areaAirtableId);
 
   if (!area) {
     throw new BadRequestError('unknown area');
   }
 
-  const indexInArea = (competences?.length ?? 0) + 1;
+  const indexInArea = (area.competenceIds?.length ?? 0) + 1;
   competence.index = `${area.code}.${indexInArea}`;
 
   const createdCompetence = await competenceRepository.create(competence);

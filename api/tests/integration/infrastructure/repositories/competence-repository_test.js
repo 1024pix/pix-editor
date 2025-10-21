@@ -15,8 +15,8 @@ describe('Integration | Repository | competence-repository', () => {
   describe('#list', () => {
     it('should return the list of all competences', async () => {
       // given
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
-        airtableBuilder.factory.buildCompetence({
+      const competences = [
+        {
           id: 'competence1',
           index: '1.1',
           origin: 'Pix',
@@ -26,8 +26,9 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
-        }),
-        airtableBuilder.factory.buildCompetence({
+          tubeIds: ['tube1', 'tube2'],
+        },
+        {
           id: 'competence2',
           index: '1.2',
           origin: 'Pix',
@@ -37,8 +38,23 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           thematicIds: ['thematic3', 'thematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
-        }),
-      ]).activate().nockScope;
+          tubeIds: ['tube3', 'tube4'],
+        },
+      ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      competences.forEach((competence) => {
+        databaseBuilder.factory.buildCompetence(competence);
+        competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+        competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+        competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+      });
+
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns(
+        competences.map((competence) => airtableBuilder.factory.buildCompetence(competence)),
+      ).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence1.name',
@@ -84,10 +100,10 @@ describe('Integration | Repository | competence-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const competences = await competenceRepository.list();
+      const actualCompetences = await competenceRepository.list();
 
       // then
-      expect(competences).toEqual([
+      expect(actualCompetences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',
           airtableId: 'competence1',
@@ -99,6 +115,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic1', 'thematic2'],
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
           name_i18n: {
             fr: 'Nom compétence 1',
             en: 'Competence 1 name',
@@ -119,6 +136,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
           name_i18n: {
             fr: 'Nom compétence 2',
             en: 'Competence 2 name',
@@ -137,8 +155,8 @@ describe('Integration | Repository | competence-repository', () => {
   describe('getMany', () => {
     it('should return the list of all competences having given ids with translations', async () => {
       // given
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
-        airtableBuilder.factory.buildCompetence({
+      const competences = [
+        {
           id: 'competence1',
           index: '1.1',
           origin: 'Pix',
@@ -148,8 +166,9 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
-        }),
-        airtableBuilder.factory.buildCompetence({
+          tubeIds: ['tube1', 'tube2'],
+        },
+        {
           id: 'competence2',
           index: '1.2',
           origin: 'Pix',
@@ -159,8 +178,23 @@ describe('Integration | Repository | competence-repository', () => {
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           thematicIds: ['thematic3', 'thematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
-        }),
-      ]).activate().nockScope;
+          tubeIds: ['tube3', 'tube4'],
+        },
+      ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      competences.forEach((competence) => {
+        databaseBuilder.factory.buildCompetence(competence);
+        competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+        competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+        competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+      });
+
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns(
+        competences.map(airtableBuilder.factory.buildCompetence)
+      ).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence1.name',
@@ -216,10 +250,10 @@ describe('Integration | Repository | competence-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const competences = await competenceRepository.getMany(['competence1', 'competence2']);
+      const actualCompetences = await competenceRepository.getMany(['competence1', 'competence2']);
 
       // then
-      expect(competences).toEqual([
+      expect(actualCompetences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',
           airtableId: 'competence1',
@@ -231,6 +265,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic1', 'thematic2'],
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
           name_i18n: {
             fr: 'Nom compétence 1',
             en: 'Competence 1 name',
@@ -251,6 +286,7 @@ describe('Integration | Repository | competence-repository', () => {
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
           tubeAirtableIds: ['recTube3', 'recTube4'],
+          tubeIds: ['tube3', 'tube4'],
           name_i18n: {
             fr: 'Nom compétence 2',
             en: 'Competence 2 name',
@@ -270,18 +306,29 @@ describe('Integration | Repository | competence-repository', () => {
     it('should return the competence by its id', async () => {
       // given
       const competenceId = 'competence2';
+
+      const competence = {
+        id: competenceId,
+        index: '1.2',
+        origin: 'Pix',
+        areaId: 'area2',
+        areaAirtableId: 'recArea2',
+        skillIds: ['skill3', 'skill4'],
+        thematicIds: ['thematic3', 'thematic4'],
+        thematicAirtableIds: ['recThematic3', 'recThematic4'],
+        tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
+        tubeIds: ['tube1', 'tube2', 'tube3'],
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence(competence);
+      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
+      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+      competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+
       const airtableScope = airtableBuilder.mockList({ tableName: 'Competences' }).returns([
-        airtableBuilder.factory.buildCompetence({
-          id: 'competence2',
-          index: '1.2',
-          origin: 'Pix',
-          areaId: 'area2',
-          areaAirtableId: 'recArea2',
-          skillIds: ['skill3', 'skill4'],
-          thematicIds: ['thematic3', 'thematic4'],
-          thematicAirtableIds: ['recThematic3', 'recThematic4'],
-          tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
-        }),
+        airtableBuilder.factory.buildCompetence(competence),
       ]).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
@@ -328,10 +375,10 @@ describe('Integration | Repository | competence-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const competence = await competenceRepository.get(competenceId);
+      const actualCompetence = await competenceRepository.get(competenceId);
 
       // then
-      expect(competence).toStrictEqual(domainBuilder.buildCompetence({
+      expect(actualCompetence).toStrictEqual(domainBuilder.buildCompetence({
         id: 'competence2',
         airtableId: 'competence2',
         index: '1.2',
@@ -342,6 +389,7 @@ describe('Integration | Repository | competence-repository', () => {
         thematicIds: ['thematic3', 'thematic4'],
         thematicAirtableIds: ['recThematic3', 'recThematic4'],
         tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
+        tubeIds: ['tube1', 'tube2', 'tube3'],
         name_i18n: {
           fr: 'Nom compétence 2',
           en: 'Competence 2 name',
@@ -454,6 +502,7 @@ describe('Integration | Repository | competence-repository', () => {
         thematicAirtableIds: [],
         thematicIds: [],
         tubeAirtableIds: [],
+        tubeIds: [],
       }));
 
       expect(generateNewId).toHaveBeenCalledExactlyOnceWith('competence');

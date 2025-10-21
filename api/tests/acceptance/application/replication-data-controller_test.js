@@ -75,7 +75,7 @@ async function mockCurrentContent() {
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
-  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'areaAirtableId'], domainBuilder.buildCompetence({
+  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'tubeIds', 'areaAirtableId'], domainBuilder.buildCompetence({
     name_i18n: {
       fr: 'Français',
       en: 'English',
@@ -84,20 +84,24 @@ async function mockCurrentContent() {
       fr: 'Description française',
       en: 'Description anglaise',
     },
+    skillIds: ['recSkill1'],
+    origin: 'Nom du referentiel',
   }));
   expectedCurrentContent.competences = [expectedCompetence];
 
   const expectedThematic = omit(['airtableId', 'competenceAirtableId', 'tubeAirtableIds'], domainBuilder.buildThematic({
+    id: 'recThematic1',
     name_i18n: {
       fr: 'Thématique en fr',
       en: 'Thematic in en',
     },
     competenceId: expectedCompetence.id,
-    tubeIds: ['tubeTIddrkopID23Fp'],
+    tubeIds: ['recTube1'],
   }));
   expectedCurrentContent.thematics = [expectedThematic];
 
   const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube({
+    id: 'recTube1',
     thematicId: expectedThematic.id,
     competenceId: expectedCompetence.id,
     skillIds: ['recSkill1'],
@@ -266,11 +270,11 @@ async function mockCurrentContent() {
   expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
 
   airtableBuilder.mockLists({
-    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
-    areas: [buildArea(expectedCurrentContent.areas[0])],
-    competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], competenceId: expectedCompetence.id, skillIds: [expectedCurrentContent.skills[0].id] })],
+    frameworks: [buildFramework({ ...expectedFramework, areaIds: [expectedArea.id] })],
+    areas: [buildArea(expectedArea)],
+    competences: [buildCompetence({ ...expectedCompetence, tubeIds: [expectedTube.id] })],
+    thematics: [buildThematic(expectedThematic)],
+    tubes: [buildTube({ ...expectedTube, competenceId: expectedCompetence.id, skillIds: [baseSkill.id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     challenges: [buildChallenge({
       ...expectedChallenge,
