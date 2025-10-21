@@ -1,4 +1,3 @@
-import 'jspdf-autotable';
 import '../../vendor/AmpleSoft-bold.js';
 import '../../vendor/AmpleSoft-normal.js';
 import '../../vendor/Roboto-normal.js';
@@ -11,6 +10,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { Canvg, presets } from 'canvg';
 import jsPDF from 'jspdf';
+import { applyPlugin } from 'jspdf-autotable';
 import { isEmpty } from 'lodash';
 
 import {
@@ -47,6 +47,7 @@ const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
 const defaultLanguage = 'fr';
 
 function createOffscreenCanvas(width, height) {
+  applyPlugin(jsPDF);
   let canvas;
   if (window.OffscreenCanvas) {
     canvas = new OffscreenCanvas(width, height);
@@ -180,7 +181,7 @@ export default class TargetProfilePdfExportComponent extends Component {
             margin: { top: margin, left: margin, right: margin, bottom: 0 },
           });
 
-          const newY = pdf.autoTable.previous.finalY;
+          const newY = pdf.lastAutoTable.finalY;
 
           // Test if is a page break
           if (newY < y) {
@@ -206,7 +207,7 @@ export default class TargetProfilePdfExportComponent extends Component {
           });
 
           // Draw separation between header and body
-          const positionHead = pdf.autoTable.previous.head[0].height;
+          const positionHead = pdf.lastAutoTable.head[0].height;
           pdf.setDrawColor(255, 255, 255);
           pdf.setLineWidth(2);
           pdf.line(0, y + positionHead, pdfWidth, y + positionHead);
@@ -216,14 +217,14 @@ export default class TargetProfilePdfExportComponent extends Component {
           themes.forEach((theme) => {
             const tubes = hasSelectedTubes ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
             indexCell += tubes.length;
-            const positionCell = pdf.autoTable.previous.body[indexCell]?.cells[0];
+            const positionCell = pdf.lastAutoTable.body[indexCell]?.cells[0];
             if (positionCell) {
               pdf.setDrawColor(255, 255, 255);
               pdf.setLineWidth(1);
               pdf.line(positionCell.x, positionCell.y + 2.5, pdfWidth - positionCell.x, positionCell.y + 2.5);
             }
           });
-          y = 15 + pdf.autoTable.previous.finalY;
+          y = 15 + pdf.lastAutoTable.finalY;
 
         });
         pdf.addPage();
