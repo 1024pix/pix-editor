@@ -1,25 +1,22 @@
-const mocha = require('eslint-plugin-mocha');
-const globals = require('globals');
-const babelParser = require('@babel/eslint-parser');
+import globals from 'globals';
+import mocha from 'eslint-plugin-mocha';
+import babelParser from '@babel/eslint-parser';
 
-module.exports = [
+export default [
   {
-    plugins: {
-      mocha,
-    },
-
+    ignores: ['.adminjs/*', '.idea/*', 'docs/*'],
+  },
+  {
+    files: ['**/*.js', '**/*.cjs'],
     languageOptions: {
       globals: {
         ...globals.node,
       },
-
       parser: babelParser,
-      ecmaVersion: 2020,
-      sourceType: 'module',
-
       parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
         requireConfigFile: false,
-
         babelOptions: {
           parserOpts: {
             plugins: ['importAssertions'],
@@ -27,11 +24,6 @@ module.exports = [
         },
       },
     },
-
-    files: ['**/*.js', '**/*.cjs'],
-
-    ignores: ['.adminjs/*', '.idea/*', 'docs/*'],
-
     rules: {
       'arrow-parens': ['error', 'always'],
       'computed-property-spacing': ['error', 'never'],
@@ -47,9 +39,6 @@ module.exports = [
 
       'keyword-spacing': ['error'],
       'linebreak-style': ['error', 'unix'],
-      'mocha/no-exclusive-tests': ['error'],
-      'mocha/no-identical-title': ['error'],
-      'mocha/no-skipped-tests': ['warn'],
 
       'no-multiple-empty-lines': [
         'error',
@@ -96,4 +85,13 @@ module.exports = [
       ],
     },
   },
-];
+  {
+    ...mocha.configs.recommended,
+    files: ['tests/**/*.js'],
+    rules: {
+      ...mocha.configs.recommended.rules,
+      'mocha/no-identical-title': 'error',
+      'mocha/no-exclusive-tests': 'error',
+    },
+  },
+]
