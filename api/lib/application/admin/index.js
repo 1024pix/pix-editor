@@ -1,4 +1,5 @@
 import * as adminController from './admin-controller.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
 
 export async function register(server) {
   server.route([
@@ -6,8 +7,17 @@ export async function register(server) {
       method: 'GET',
       path: '/api/admin/schemas',
       config: {
-        auth: false,
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
         handler: adminController.getSchemas,
+        tags: ['api', 'admin']
+      }
+    },
+    {
+      method: 'GET',
+      path: '/api/admin/entities',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        handler: adminController.getEntities,
         tags: ['api', 'admin']
       }
     },

@@ -1,9 +1,9 @@
 import ApplicationAdapter from './application';
 
-export default class AdminSchemaAdapter extends ApplicationAdapter {
+export default class AdminEntityAdapter extends ApplicationAdapter {
   namespace = 'api/admin';
 
   pathForType() {
-    return 'schemas';
+    return 'entities';
   }
 }

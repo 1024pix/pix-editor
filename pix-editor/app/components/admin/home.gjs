@@ -17,7 +17,8 @@ import { LinkTo } from '@ember/routing';
         <:navElements>
           {{#each @schemas as |schema|}}
             <PixNavigationButton
-              @route="admin"
+              @route="admin.entity"
+              @model={{schema.id}}
             >
               {{schema.label}}
             </PixNavigationButton>

@@ -3,13 +3,14 @@ import { databaseBuilder, generateAuthorizationHeader } from '../../../test-help
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | admin', () => {
-
   describe('GET api/admin/schemas', () => {
     let user;
+
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
+
     it('should return the list of schemas', async () => {
       // given
       const server = await createServer();
@@ -43,4 +44,3 @@ describe('Acceptance | Controller | admin', () => {
   });
 
 });
-

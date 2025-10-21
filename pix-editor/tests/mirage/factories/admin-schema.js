@@ -1,8 +1,8 @@
 import { Factory } from 'miragejs';
 
 export default Factory.extend({
+  id: 'entity',
   label: 'une entité',
-  entityName: 'entity',
   editable: true,
   deletable: true,
   creatable: true,
