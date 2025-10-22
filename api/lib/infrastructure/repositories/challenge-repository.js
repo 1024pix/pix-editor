@@ -115,29 +115,59 @@ export async function create(challenge) {
 }
 
 export async function createBatch(challenges) {
-  if (!challenges || challenges.length === 0) return [];
-  const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
-  const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
-  for (const challenge of challenges) {
-    challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
-    challenge.files = [];
-  }
-  const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
-  const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
-  const allTranslations = challenges.flatMap((challenge) => {
-    const translationModels = [];
-    for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
-      for (const [field, value] of Object.entries(translationsForLocale)) {
-        translationModels.push(new Translation({
-          key: `${prefixFor(challenge)}${field}`,
-          locale,
-          value,
-        }));
-      }
-    }
-    return translationModels;
-  });
   return knex.transaction(async (transaction) => {
+    if (!challenges || challenges.length === 0) return [];
+    const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
+    const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
+    for (const challenge of challenges) {
+      challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
+      challenge.files = [];
+    }
+    const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
+    const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
+    const allTranslations = challenges.flatMap((challenge) => {
+      const translationModels = [];
+      for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
+        for (const [field, value] of Object.entries(translationsForLocale)) {
+          translationModels.push(new Translation({
+            key: `${prefixFor(challenge)}${field}`,
+            locale,
+            value,
+          }));
+        }
+      }
+      return translationModels;
+    });
+
+    await Promise.all(challenges.map((challenge) => transaction.insert({
+      id: challenge.id,
+      type: challenge.type,
+      t1Status: challenge.t1Status,
+      t2Status: challenge.t2Status,
+      t3Status: challenge.t3Status,
+      status: challenge.status,
+      skillId: challenge.skillId,
+      embedHeight: challenge.embedHeight,
+      timer: challenge.timer,
+      format: challenge.format,
+      autoReply: challenge.autoReply,
+      locales: challenge.locales,
+      focusable: challenge.focusable,
+      genealogy: challenge.genealogy,
+      pedagogy: challenge.pedagogy,
+      author: challenge.author,
+      declinable: challenge.declinable,
+      version: challenge.version,
+      alternativeVersion: challenge.alternativeVersion,
+      accessibility1: challenge.accessibility1,
+      accessibility2: challenge.accessibility2,
+      spoil: challenge.spoil,
+      responsive: challenge.responsive,
+      delta: challenge.delta,
+      alpha: challenge.alpha,
+      shuffled: challenge.shuffled,
+      contextualizedFields: challenge.contextualizedFields,
+    }).into('challenges')));
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
     await translationRepository.save({ translations: allTranslations, transaction });
     return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);

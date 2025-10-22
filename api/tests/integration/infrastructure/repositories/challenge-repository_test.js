@@ -3395,9 +3395,10 @@ describe('Integration | Repository | challenge-repository', () => {
 
   describe('#createBatch', () => {
     afterEach(async () => {
-      await knex('localized_challenges-attachments').del();
-      await knex('localized_challenges').del();
-      return knex('translations').del();
+      await knex('localized_challenges-attachments').delete();
+      await knex('localized_challenges').delete();
+      await knex('challenges').delete();
+      await knex('translations').delete();
     });
 
     it('should create several challenges in airtable and its localized challenges and translations in PG', async () => {
@@ -3455,14 +3456,14 @@ describe('Integration | Repository | challenge-repository', () => {
         validatedAt: null,
         madeObsoleteAt: null,
         updatedAt: null,
-        author: 'MOI',
+        author: ['MOI'],
         autoReply: true,
         competenceId: 'Unused competenceId',
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        embedHeight: 'embedHeight challengeA',
+        embedHeight: 666,
         files: [],
-        focusable: 'focusable challengeA',
+        focusable: true,
         format: Challenge.FORMATS.MOTS,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         geography: 'FR',
@@ -3470,7 +3471,7 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
-        shuffled: 'shuffled challengeA',
+        shuffled: false,
         skillId: 'skillId1',
         skills: [],
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -3532,14 +3533,14 @@ describe('Integration | Repository | challenge-repository', () => {
         validatedAt: null,
         madeObsoleteAt: null,
         updatedAt: null,
-        author: 'LUI',
+        author: ['LUI'],
         autoReply: false,
         competenceId: 'Unused competenceId',
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         declinable: Challenge.DECLINABLES.NON,
-        embedHeight: 'embedHeight challengeB',
+        embedHeight: 777,
         files: [],
-        focusable: 'focusable challengeB',
+        focusable: false,
         format: Challenge.FORMATS.MOTS,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         geography: 'FR',
@@ -3547,7 +3548,7 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
         responsive: Challenge.RESPONSIVES.TABLETTE,
-        shuffled: 'shuffled challengeB',
+        shuffled: true,
         skillId: 'skillId2',
         skills: [],
         spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -3572,6 +3573,16 @@ describe('Integration | Repository | challenge-repository', () => {
           },
         },
       });
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildSkill({ id: challengeB_data.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
+
       const airtableIdsByIds = {
         skillId1: 'airtableSkillId1',
         skillId2: 'airtableSkillId2',
@@ -3918,14 +3929,81 @@ describe('Integration | Repository | challenge-repository', () => {
           validatedAt: null,
         },
       ]);
-      const allLocalizedChallengesAttachments = await knex(
-        'localized_challenges-attachments',
-      ).select('*');
-      expect(allLocalizedChallengesAttachments.length).toStrictEqual(0);
-      const allTranslations = await knex('translations')
-        .select('key', 'locale', 'value')
-        .orderBy(['key', 'locale']);
-      expect(allTranslations).toStrictEqual([
+
+      await expect(knex.select('*').from('challenges').orderBy('id')).resolves.toStrictEqual([
+        {
+          accessibility1: challengeA_data.accessibility1,
+          accessibility2: challengeA_data.accessibility2,
+          alternativeVersion: challengeA_data.alternativeVersion,
+          alpha: null,
+          archivedAt: challengeA_data.archivedAt,
+          author: challengeA_data.author,
+          autoReply: challengeA_data.autoReply,
+          contextualizedFields: challengeA_data.contextualizedFields,
+          createdAt: expect.any(Date),
+          declinable: challengeA_data.declinable,
+          delta: null,
+          embedHeight: challengeA_data.embedHeight,
+          focusable: challengeA_data.focusable,
+          format: challengeA_data.format,
+          genealogy: challengeA_data.genealogy,
+          id: challengeA_data.id,
+          locales: challengeA_data.locales,
+          madeObsoleteAt: challengeA_data.madeObsoleteAt,
+          pedagogy: challengeA_data.pedagogy,
+          responsive: challengeA_data.responsive,
+          shuffled: challengeA_data.shuffled,
+          skillId: challengeA_data.skillId,
+          spoil: challengeA_data.spoil,
+          status: challengeA_data.status,
+          t1Status: challengeA_data.t1Status,
+          t2Status: challengeA_data.t2Status,
+          t3Status: challengeA_data.t3Status,
+          timer: challengeA_data.timer,
+          type: challengeA_data.type,
+          updatedAt: expect.any(Date),
+          validatedAt: challengeA_data.validatedAt,
+          version: challengeA_data.version,
+        },
+        {
+          accessibility1: challengeB_data.accessibility1,
+          accessibility2: challengeB_data.accessibility2,
+          alternativeVersion: challengeB_data.alternativeVersion,
+          alpha: null,
+          archivedAt: challengeB_data.archivedAt,
+          author: challengeB_data.author,
+          autoReply: challengeB_data.autoReply,
+          contextualizedFields: challengeB_data.contextualizedFields,
+          createdAt: expect.any(Date),
+          declinable: challengeB_data.declinable,
+          delta: null,
+          embedHeight: challengeB_data.embedHeight,
+          focusable: challengeB_data.focusable,
+          format: challengeB_data.format,
+          genealogy: challengeB_data.genealogy,
+          id: challengeB_data.id,
+          locales: challengeB_data.locales,
+          madeObsoleteAt: challengeB_data.madeObsoleteAt,
+          pedagogy: challengeB_data.pedagogy,
+          responsive: challengeB_data.responsive,
+          shuffled: challengeB_data.shuffled,
+          skillId: challengeB_data.skillId,
+          spoil: challengeB_data.spoil,
+          status: challengeB_data.status,
+          t1Status: challengeB_data.t1Status,
+          t2Status: challengeB_data.t2Status,
+          t3Status: challengeB_data.t3Status,
+          timer: challengeB_data.timer,
+          type: challengeB_data.type,
+          updatedAt: expect.any(Date),
+          validatedAt: challengeB_data.validatedAt,
+          version: challengeB_data.version,
+        },
+      ]);
+
+      await expect(knex('localized_challenges-attachments').select('*')).resolves.toStrictEqual([]);
+
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         {
           key: 'challenge.challengeA_id.instruction',
           locale: 'fr',

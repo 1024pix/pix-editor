@@ -1931,12 +1931,15 @@ describe('Application | Route | Skills', () => {
 
     afterEach(async () => {
       await knex('skills-tutorials').delete();
+      await knex('localized_challenges-attachments').delete();
+      await knex('localized_challenges').delete();
+      await knex('challenges').delete();
       await knex('skills').delete();
       await knex('translations').delete();
     });
 
     it('should respond with status 302 with cloned skill redirection', async () => {
-    // given
+      // given
       const server = await createServer();
 
       // when
@@ -1977,6 +1980,72 @@ describe('Application | Route | Skills', () => {
         updatedAt: expect.any(Date),
       });
 
+      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+        ...skillToClone.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...skillToClone.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+      ]);
+
+      await expect(knex.select('*').from('challenges').where('skillId', 'clonedAcquisId')).resolves.toStrictEqual([
+        {
+          accessibility1: 'OK',
+          accessibility2: 'RAS',
+          alpha: null,
+          alternativeVersion: null,
+          archivedAt: null,
+          author: ['SPS'],
+          autoReply: false,
+          contextualizedFields: ['instruction', 'illustration'],
+          createdAt: expect.any(Date),
+          declinable: 'facilement',
+          delta: null,
+          embedHeight: 500,
+          focusable: false,
+          format: 'mots',
+          genealogy: 'Prototype 1',
+          id: 'clonedChallengeId',
+          locales: ['fr'],
+          madeObsoleteAt: null,
+          pedagogy: 'q-situation',
+          responsive: 'Non',
+          shuffled: false,
+          skillId: 'clonedAcquisId',
+          spoil: 'Non Sp',
+          status: 'proposé',
+          t1Status: true,
+          t2Status: false,
+          t3Status: true,
+          timer: 1234,
+          type: 'QCM',
+          updatedAt: expect.any(Date),
+          validatedAt: null,
+          version: 1,
+        },
+      ]);
+
+      await expect(knex.select('*').from('localized_challenges').where('challengeId', 'clonedChallengeId')).resolves.toStrictEqual([
+        {
+          challengeId: 'clonedChallengeId',
+          deafAndHardOfHearing: 'RAS',
+          embedUrl: 'https://github.io/page/epreuve.html',
+          geography: 'FR',
+          hasEmbedInternalValidation: false,
+          id: 'clonedChallengeId',
+          isAwarenessChallenge: false,
+          isIncompatibleIpadCertif: false,
+          locale: 'fr',
+          noValidationNeeded: false,
+          requireGafamWebsiteAccess: false,
+          status: null,
+          toRephrase: false,
+          urlsToConsult: null,
+          validatedAt: null,
+        },
+      ]);
+
+      await expect(knex.select('*').from('localized_challenges-attachments').where('localizedChallengeId', 'clonedChallengeId')).resolves.toStrictEqual([
+        { attachmentId: 'recOsef', localizedChallengeId: 'clonedChallengeId' },
+      ]);
+
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
         { key: 'challenge.clonedChallengeId.instruction', locale: 'fr', value: 'Juste une trad ?' },
         { key: 'challenge.validatedChallengeProto.instruction', locale: 'fr', value: 'Juste une trad ?' },
@@ -1999,11 +2068,6 @@ describe('Application | Route | Skills', () => {
       expect(airtableCreateAttachmentsScope.isDone()).to.be.true;
       expect(pixApiCacheSkillUpdateScope.isDone()).to.be.true;
       expect(pixApiCacheChallengeUpdateScope.isDone()).to.be.true;
-
-      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
-        ...skillToClone.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
-        ...skillToClone.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
-      ]);
     });
   });
 });
