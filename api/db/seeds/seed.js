@@ -4,7 +4,7 @@ import Airtable from 'airtable';
 import { airtable, airtableSeedsConfig } from '../../lib/config.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { buildAreasFromConfig, copyAreasFromAirtable } from './data/areas.js';
-import { buildChallengesFromConfig } from './data/challenges.js';
+import { buildChallengesFromConfig, copyChallengesFromAirtable } from './data/challenges.js';
 import { buildCompetencesFromConfig, copyCompetencesFromAirtable } from './data/competences.js';
 import { buildFrameworksFromConfig, copyFrameworksFromAirtable } from './data/frameworks.js';
 import { buildPix1D } from './data/pix-1d.js';
@@ -76,6 +76,7 @@ export async function seed(knex) {
     await copyTutorialTagsFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyTutorialsFromAirtable({ airtableClient, databaseBuilder, logger });
     await copySkillsFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyChallengesFromAirtable({ airtableClient, databaseBuilder, logger });
 
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);
