@@ -38,10 +38,19 @@ describe('Integration | Service | update pix api release cache', function() {
       context('when attachment is from the primary challenge', function() {
         it('should patch the primary challenge accordingly', async function() {
           // given
-          const airtableChallenge = airtableBuilder.factory.buildChallenge({
+          const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
             locales: ['fr'],
+            skillId: 'skill1',
           });
+          const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildLocalizedChallenge({
             id: 'challengeIdA',
             challengeId: 'challengeIdA',
@@ -57,7 +66,7 @@ describe('Integration | Service | update pix api release cache', function() {
             .reply(200, {
               records: [
                 airtableChallenge,
-              ]
+              ],
             });
           const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
             id: 'airtableAttachmentIdA',
@@ -88,28 +97,38 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
-              alpha: null,
+              alpha: 0.5,
               alternativeInstruction: '',
               attachments: [ 'http://url-piecejointe.com' ],
               autoReply: false,
-              competenceId: null,
-              delta: null,
+              competenceId: 'recsvLz0W2ShyfD63',
+              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
+              embedHeight: 500,
               focusable: false,
               format: 'mots',
+              genealogy: 'Prototype 1',
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
               locales: [ 'fr' ],
               proposals: '',
               shuffled: false,
+              responsive: 'Non',
               solution: '',
               solutionToDisplay: '',
-              skillId: null,
-              t1Status: false,
+              status: 'validé',
+              skillId: 'skill1',
+              t1Status: true,
               t2Status: false,
-              t3Status: false,
+              t3Status: true,
+              timer: 1234,
+              type: 'QCM',
+              shuffled: false,
+              alternativeVersion: 2,
+              accessibility1: 'OK',
+              accessibility2: 'RAS',
               requireGafamWebsiteAccess: false,
               isIncompatibleIpadCertif: false,
               deafAndHardOfHearing: 'RAS',
@@ -134,10 +153,19 @@ describe('Integration | Service | update pix api release cache', function() {
       context('when attachment is from a localized challenge', function() {
         it('should patch the translated challenge accordingly', async function() {
           // given
-          const airtableChallenge = airtableBuilder.factory.buildChallenge({
+          const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
             locales: ['fr', 'es'],
+            skillId: 'skill1',
           });
+          const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildLocalizedChallenge({
             id: 'challengeIdA',
             challengeId: 'challengeIdA',
@@ -187,28 +215,37 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
-              alpha: null,
+              alpha: 0.5,
               alternativeInstruction: '',
               attachments: [ 'http://url-piecejointe.com' ],
               autoReply: false,
-              competenceId: null,
-              delta: null,
+              competenceId: 'recsvLz0W2ShyfD63',
+              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
+              embedHeight: 500,
               focusable: false,
               format: 'mots',
+              genealogy: 'Prototype 1',
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
               locales: [ 'es', 'fr' ],
               proposals: '',
+              responsive: 'Non',
               shuffled: false,
               solution: '',
               solutionToDisplay: '',
-              skillId: null,
-              t1Status: false,
+              status: 'validé',
+              skillId: 'skill1',
+              t1Status: true,
               t2Status: false,
-              t3Status: false,
+              t3Status: true,
+              timer: 1234,
+              type: 'QCM',
+              alternativeVersion: 2,
+              accessibility1: 'OK',
+              accessibility2: 'RAS',
               requireGafamWebsiteAccess: false,
               isIncompatibleIpadCertif: false,
               deafAndHardOfHearing: 'RAS',
@@ -257,10 +294,19 @@ describe('Integration | Service | update pix api release cache', function() {
       context('when attachment is from the primary challenge', function() {
         it('should patch the primary challenge accordingly', async function() {
           // given
-          const airtableChallenge = airtableBuilder.factory.buildChallenge({
+          const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
             locales: ['fr'],
+            skillId: 'skill1',
           });
+          const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildLocalizedChallenge({
             id: 'challengeIdA',
             challengeId: 'challengeIdA',
@@ -307,28 +353,37 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
-              alpha: null,
+              alpha: 0.5,
               alternativeInstruction: '',
               attachments: [ 'http://url-piecejointe.com' ],
               autoReply: false,
-              competenceId: null,
-              delta: null,
+              competenceId: 'recsvLz0W2ShyfD63',
+              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
+              embedHeight: 500,
               focusable: false,
               format: 'mots',
+              genealogy: 'Prototype 1',
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
               locales: [ 'fr' ],
               proposals: '',
+              responsive: 'Non',
               shuffled: false,
               solution: '',
               solutionToDisplay: '',
-              skillId: null,
-              t1Status: false,
+              status: 'validé',
+              skillId: 'skill1',
+              t1Status: true,
               t2Status: false,
-              t3Status: false,
+              t3Status: true,
+              timer: 1234,
+              type: 'QCM',
+              alternativeVersion: 2,
+              accessibility1: 'OK',
+              accessibility2: 'RAS',
               requireGafamWebsiteAccess: false,
               isIncompatibleIpadCertif: false,
               deafAndHardOfHearing: 'RAS',
@@ -353,10 +408,19 @@ describe('Integration | Service | update pix api release cache', function() {
       context('when attachment is from a localized challenge', function() {
         it('should patch the translated challenge accordingly', async function() {
           // given
-          const airtableChallenge = airtableBuilder.factory.buildChallenge({
+          const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
             locales: ['fr', 'es'],
+            skillId: 'skill1',
           });
+          const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildLocalizedChallenge({
             id: 'challengeIdA',
             challengeId: 'challengeIdA',
@@ -406,28 +470,37 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
-              alpha: null,
+              alpha: 0.5,
               alternativeInstruction: '',
               attachments: [ 'http://url-piecejointe.com' ],
               autoReply: false,
-              competenceId: null,
-              delta: null,
+              competenceId: 'recsvLz0W2ShyfD63',
+              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
+              embedHeight: 500,
               focusable: false,
               format: 'mots',
+              genealogy: 'Prototype 1',
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
               locales: [ 'es', 'fr' ],
               proposals: '',
+              responsive: 'Non',
               shuffled: false,
               solution: '',
               solutionToDisplay: '',
-              skillId: null,
-              t1Status: false,
+              status: 'validé',
+              skillId: 'skill1',
+              t1Status: true,
               t2Status: false,
-              t3Status: false,
+              t3Status: true,
+              timer: 1234,
+              type: 'QCM',
+              alternativeVersion: 2,
+              accessibility1: 'OK',
+              accessibility2: 'RAS',
               requireGafamWebsiteAccess: false,
               isIncompatibleIpadCertif: false,
               deafAndHardOfHearing: 'RAS',
@@ -1129,15 +1202,22 @@ describe('Integration | Service | update pix api release cache', function() {
 
       it('should patch the tube', async function() {
         // given
-        const tube = domainBuilder.buildTube();
+        const tube = domainBuilder.buildTube({ thematicId: 'thematic1', skillIds: ['skill1'] });
         const challenge = domainBuilder.buildChallengeDatasourceObject({
-          skillId: tube.skillIds[0],
+          skillId: 'skill1',
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           status: Challenge.STATUSES.VALIDE,
           responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
         });
         const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
 
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube(tube);
+        databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: tube.id });
+        databaseBuilder.factory.buildChallenge(challenge);
         databaseBuilder.factory.buildLocalizedChallenge({
           id: challenge.id,
           challengeId: challenge.id,
