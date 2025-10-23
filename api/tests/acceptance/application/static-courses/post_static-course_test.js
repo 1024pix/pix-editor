@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
@@ -12,6 +12,17 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       toFake: ['Date'],
     });
     user = databaseBuilder.factory.buildAdminUser();
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+    databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+    const challenge2 = domainBuilder.buildChallenge({ id: 'challengeid2' });
+    databaseBuilder.factory.buildSkill({ id: challenge2.skillId, tubeId: 'tube1' });
+    databaseBuilder.factory.buildChallenge(challenge2);
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id: 'challengeid1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id: 'challengeid3' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id: 'challengeid4' }));
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'challengeid1',
       challengeId: 'challengeid1',

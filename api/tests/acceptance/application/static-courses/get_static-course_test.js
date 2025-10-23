@@ -3,6 +3,7 @@ import {
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
+  domainBuilder,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
@@ -31,11 +32,22 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       locale: 'fr',
       value: 'instruction for challengeid2',
     });
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+    databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+    const challenge1 = domainBuilder.buildChallenge({ id: 'challengeid1' });
+    const challenge2 = domainBuilder.buildChallenge({ id: 'challengeid2' });
+    databaseBuilder.factory.buildSkill({ id: challenge1.skillId, tubeId: 'tube1' });
+
+    databaseBuilder.factory.buildChallenge(challenge1);
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'challengeid1',
       challengeId: 'challengeid1',
       locale: 'fr',
     });
+    databaseBuilder.factory.buildChallenge(challenge2);
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'challengeid2',
       challengeId: 'challengeid2',
