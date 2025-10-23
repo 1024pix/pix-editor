@@ -22,6 +22,13 @@ describe('Application | Route | Skills', () => {
       // given
       const server = await createServer();
       const skillId = 'recSkill1';
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: skillId, tubeId: 'tube1' });
+
       const challengeProtoPerime = domainBuilder.buildChallengeDatasourceObject({
         id: 'challengeProtoPerimeId',
         version: 1,
@@ -30,6 +37,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoPerime);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoPerimeId',
         challengeId: 'challengeProtoPerimeId',
@@ -44,6 +52,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoPerimeDecliPerime);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoPerimeDecliPerimeId',
         challengeId: 'challengeProtoPerimeDecliPerimeId',
@@ -58,6 +67,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoPropose);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoProposeId',
         challengeId: 'challengeProtoProposeId',
@@ -72,6 +82,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoProposeDecliPropose);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoProposeDecliProposeId',
         challengeId: 'challengeProtoProposeDecliProposeId',
@@ -86,6 +97,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoArchive);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoArchiveId',
         challengeId: 'challengeProtoArchiveId',
@@ -100,6 +112,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoArchiveDecliArchive);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoArchiveDecliArchiveId',
         challengeId: 'challengeProtoArchiveDecliArchiveId',
@@ -114,6 +127,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoValide);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoValideId',
         challengeId: 'challengeProtoValideId',
@@ -136,6 +150,7 @@ describe('Application | Route | Skills', () => {
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
       });
+      databaseBuilder.factory.buildChallenge(challengeProtoValideDecliValide);
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeProtoValideDecliValideId',
         challengeId: 'challengeProtoValideDecliValideId',
@@ -1568,11 +1583,13 @@ describe('Application | Route | Skills', () => {
         index: 5,
         competenceId: 'competence1',
         thematicId: 'thematic1',
+        skillIds: ['skill1', 'skill2', 'skill1Tube1'],
       };
       const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
       databaseBuilder.factory.buildTube(tube);
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: tube.id });
       databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: tube.id });
+      databaseBuilder.factory.buildSkill(skillToClone);
 
       const airtableSkillToClone = airtableBuilder.factory.buildSkill(skillToClone);
       const airtableSkillAlreadyAtDestinationTubeLevel = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
@@ -1598,7 +1615,7 @@ describe('Application | Route | Skills', () => {
         value: 'AIRTABLE IS SO FUN OMG 🥰',
       });
       const protoId = 'validatedChallengeProto';
-      const validatedChallengeProtoToClone = airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({
+      const validatedDomainChallengeProtoToClone = domainBuilder.buildChallengeDatasourceObject({
         id: protoId,
         airtableId: 'recChallengeValidated',
         status: 'validé',
@@ -1606,7 +1623,9 @@ describe('Application | Route | Skills', () => {
         skillId: airtableSkillToClone.fields['id persistant'],
         skills: [airtableSkillToClone.id],
         competenceId: 'recCompetence123',
-      }));
+      });
+      const validatedChallengeProtoToClone = airtableBuilder.factory.buildChallenge(validatedDomainChallengeProtoToClone);
+      databaseBuilder.factory.buildChallenge(validatedDomainChallengeProtoToClone);
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${protoId}.instruction`,
         locale: 'fr',
@@ -1980,7 +1999,7 @@ describe('Application | Route | Skills', () => {
         updatedAt: expect.any(Date),
       });
 
-      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+      await expect(knex.select('*').from('skills-tutorials').where('skillId', 'clonedAcquisId').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
         ...skillToClone.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
         ...skillToClone.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: 'clonedAcquisId', tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
       ]);
