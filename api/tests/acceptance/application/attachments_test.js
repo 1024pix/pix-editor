@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as config from '../../../lib/config.js';
 
@@ -94,6 +94,14 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 201 and created attachment', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
         challengeId: 'challenge123',
@@ -289,6 +297,14 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 200 and updated attachment', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
         challengeId: 'challenge123',
@@ -448,6 +464,14 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 204', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', skillId: 'skill1' }));
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeId',
         challengeId: 'challengeId',
@@ -563,6 +587,14 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 200 and the attachment', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
         challengeId: 'challenge123',
@@ -668,6 +700,14 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with found attachments', async () => {
       // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
         challengeId: 'challenge123',
