@@ -97,6 +97,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .returns(airtableChallenges)
         .activate();
 
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challenge);
+
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.my id.instruction',
         locale: 'fr',
@@ -409,6 +417,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
             airtableBuilder.factory.buildChallenge(challenge2),
           ]
         });
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge1.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challenge1);
+      databaseBuilder.factory.buildChallenge(challenge2);
 
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.1.instruction',
@@ -1041,6 +1058,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
         ],
         geography: 'XX',
       });
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challenge);
+
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
@@ -1384,17 +1410,28 @@ describe('Acceptance | Controller | challenges-controller', () => {
     const locale = 'es-419';
     let airtableChallengeScope;
     let airtableAttachmentScope;
+    let challenge;
+    let primaryLocalizedChallenge;
     let attachment;
 
     beforeEach(async function() {
+      challenge = domainBuilder.buildChallengeDatasourceObject({
+        id: challengeId,
+        locales: ['fr', 'fr-fr'],
+        status: Challenge.STATUSES.VALIDE,
+      });
+
       airtableChallengeScope = airtableBuilder.mockList({ tableName: 'Epreuves' }).returns([
-        airtableBuilder.factory.buildChallenge({
-          id: challengeId,
-          locales: ['fr', 'fr-fr'],
-          status: Challenge.STATUSES.VALIDE,
-          geography: 'XX',
-        })
+        airtableBuilder.factory.buildChallenge(challenge)
       ]).activate().nockScope;
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challenge);
 
       attachment = airtableBuilder.factory.buildAttachment({
         challengeId,
@@ -1439,7 +1476,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'illustration alt for es',
       });
 
-      databaseBuilder.factory.buildLocalizedChallenge({
+      primaryLocalizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
         locale: 'fr',
@@ -1481,35 +1518,43 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .patch(`/api/cache/challenges/${localizedChallengeId}`,
           {
             id: 'challenge123_es-419',
-            alpha: null,
+            alpha: challenge.alpha,
             alternativeInstruction: 'alternative instruction for es',
-            autoReply: false,
-            competenceId: null,
-            delta: null,
+            autoReply: challenge.autoReply,
+            competenceId: 'recsvLz0W2ShyfD63',
+            delta: challenge.delta,
             embedUrl: null,
             embedTitle: 'embed title for es',
-            focusable: false,
-            format: Challenge.FORMATS.MOTS,
+            embedHeight: challenge.embedHeight,
+            focusable: challenge.focusable,
+            format: challenge.format,
+            genealogy: challenge.genealogy,
             illustrationAlt: 'illustration alt for es',
-            illustrationUrl: attachment.fields.url,
+            illustrationUrl: 'url/to/attachment',
             instruction: 'instruction for es',
-            locales: ['es-419'],
+            locales: [ 'es-419' ],
             proposals: 'proposals for es',
-            shuffled: false,
+            responsive: challenge.responsive,
             solution: 'solution for es',
             solutionToDisplay: 'solution to display for es',
-            skillId: null,
-            t1Status: false,
-            t2Status: false,
-            t3Status: false,
-            status: Challenge.STATUSES.PROPOSE,
-            requireGafamWebsiteAccess: true,
-            isIncompatibleIpadCertif: true,
-            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-            isAwarenessChallenge: false,
-            toRephrase: true,
-            hasEmbedInternalValidation: true,
-            noValidationNeeded: true,
+            status: 'proposé',
+            skillId: challenge.skillId,
+            t1Status: challenge.t1Status,
+            t2Status: challenge.t2Status,
+            t3Status: challenge.t3Status,
+            timer: challenge.timer,
+            type: challenge.type,
+            shuffled: challenge.shuffled,
+            alternativeVersion: challenge.alternativeVersion,
+            accessibility1: challenge.accessibility1,
+            accessibility2: challenge.accessibility2,
+            requireGafamWebsiteAccess: primaryLocalizedChallenge.requireGafamWebsiteAccess,
+            isIncompatibleIpadCertif: primaryLocalizedChallenge.isIncompatibleIpadCertif,
+            deafAndHardOfHearing: primaryLocalizedChallenge.deafAndHardOfHearing,
+            isAwarenessChallenge: primaryLocalizedChallenge.isAwarenessChallenge,
+            toRephrase: primaryLocalizedChallenge.toRephrase,
+            hasEmbedInternalValidation: primaryLocalizedChallenge.hasEmbedInternalValidation,
+            noValidationNeeded: primaryLocalizedChallenge.noValidationNeeded,
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);
@@ -1534,7 +1579,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
   });
 
   describe('GET /challenges/:id/translations/:locale/framework-name/:frameworkName/area-code/:code', () => {
-
     it('should redirect to the phrase project corresponding to area code', async () => {
       // given
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
@@ -1544,6 +1588,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
       const challengeId = 'challenge123';
       const locale = 'nl';
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }));
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1607,9 +1659,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       expect(phraseAccountsApiScope.isDone()).toBe(true);
       expect(phraseLocalesApiScope.isDone()).toBe(true);
-
     });
-
   });
 
   describe('POST /challenges', () => {
