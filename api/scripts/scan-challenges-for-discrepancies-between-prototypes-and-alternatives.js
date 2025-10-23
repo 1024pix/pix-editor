@@ -6,7 +6,8 @@ import { Challenge } from '../lib/domain/models/index.js';
 export class ScanChallengesForDiscrepanciesBetweenPrototypesAndAlternatives extends Script {
   constructor() {
     super({
-      description: 'Script pour détecter les différences dans les champs communs entre le prototype et les déclinaisons d\'une même version',
+      description:
+        "Script pour détecter les différences dans les champs communs entre le prototype et les déclinaisons d'une même version",
       permanent: false,
       options: {},
     });
@@ -25,12 +26,19 @@ export class ScanChallengesForDiscrepanciesBetweenPrototypesAndAlternatives exte
       for (const alternative of alternativesForProto) {
         for (const commonField of Challenge.PROTO_FIELDS) {
           if (commonField === 'contextualizedFields') {
-            if (JSON.stringify(alternative[commonField]?.sort() ?? '') !== JSON.stringify(prototype[commonField]?.sort() ?? '')) {
-              logger.error(`Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`);
+            if (
+              JSON.stringify(alternative[commonField]?.sort() ?? '') !==
+              JSON.stringify(prototype[commonField]?.sort() ?? '')
+            ) {
+              logger.error(
+                `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,
+              );
             }
           } else {
             if (alternative[commonField] !== prototype[commonField]) {
-              logger.error(`Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`);
+              logger.error(
+                `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,
+              );
             }
           }
         }

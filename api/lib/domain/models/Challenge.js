@@ -2,7 +2,6 @@ import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
 export class Challenge {
-
   #allFiles;
   #primaryLocales;
   #primaryStatus;
@@ -305,7 +304,14 @@ export class Challenge {
     return [...locales].sort();
   }
 
-  cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
+  cloneChallengeAndAttachments({
+    competenceId,
+    skillId,
+    generateNewIdFnc,
+    alternativeVersion,
+    prototypeVersion,
+    attachments,
+  }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
     const localizedChallengePrimary = this.#primaryLocalizedChallenge;
     const { clonedLocalizedChallenge, clonedAttachments } = localizedChallengePrimary.clone({
@@ -315,10 +321,10 @@ export class Challenge {
       attachments,
     });
     const primaryTranslation = {
-      [this.primaryLocale]:  _.cloneDeep(this.translations[this.primaryLocale])
+      [this.primaryLocale]: _.cloneDeep(this.translations[this.primaryLocale]),
     };
 
-    const clonedChallenge =  new Challenge({
+    const clonedChallenge = new Challenge({
       id,
       airtableId: null,
       translations: primaryTranslation,
@@ -333,7 +339,7 @@ export class Challenge {
       author: this.author,
       autoReply: this.autoReply,
       competenceId: competenceId,
-      contextualizedFields : this.contextualizedFields,
+      contextualizedFields: this.contextualizedFields,
       createdAt: null,
       declinable: this.declinable,
       delta: null,
@@ -382,9 +388,7 @@ export class Challenge {
   }
 
   #translate(locale) {
-    this.locales = locale === this.primaryLocale
-      ? this.#primaryLocales
-      : [locale];
+    this.locales = locale === this.primaryLocale ? this.#primaryLocales : [locale];
     this.instruction = this.#translations[this.locale]?.instruction ?? '';
     this.alternativeInstruction = this.#translations[this.locale]?.alternativeInstruction ?? '';
     this.proposals = this.#translations[this.locale]?.proposals ?? '';
@@ -406,8 +410,8 @@ export class Challenge {
     this.deafAndHardOfHearing = this.#primaryLocalizedChallenge.deafAndHardOfHearing;
     this.isAwarenessChallenge = this.#primaryLocalizedChallenge.isAwarenessChallenge;
     this.toRephrase = this.#primaryLocalizedChallenge.toRephrase;
-    this.hasEmbedInternalValidation  = this.#primaryLocalizedChallenge.hasEmbedInternalValidation;
-    this.noValidationNeeded  = this.#primaryLocalizedChallenge.noValidationNeeded;
+    this.hasEmbedInternalValidation = this.#primaryLocalizedChallenge.hasEmbedInternalValidation;
+    this.noValidationNeeded = this.#primaryLocalizedChallenge.noValidationNeeded;
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)
@@ -416,7 +420,10 @@ export class Challenge {
 
   #translateStatus(localizedChallenge) {
     if (this.isPrimary) return this.#primaryStatus;
-    if ([Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY) {
+    if (
+      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) ||
+      localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY
+    ) {
       return this.status;
     }
     return localizedChallenge.status;

@@ -27,8 +27,7 @@ const argv = yargs(process.argv.slice(2))
   .example('$0 -f release.txt', 'Dump the latest release in the given destination file')
   .example('$0 -f release.txt --createRelease', 'Create a release then dump it in the given destination file')
   .help('h')
-  .alias('h', 'help')
-  .argv;
+  .alias('h', 'help').argv;
 
 async function getLatestRelease({ shouldCreateRelease, destFile }) {
   if (shouldCreateRelease) {

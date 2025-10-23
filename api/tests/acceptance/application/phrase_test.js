@@ -4,18 +4,23 @@ import _ from 'lodash';
 import { Buffer } from 'node:buffer';
 import multipart from 'parse-multipart-data';
 import nock from 'nock';
-import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
+import {
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  knex,
+  streamToPromiseArray,
+} from '../../test-helper';
 import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
 import { Area, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 import * as config from '../../../lib/config.js';
 
-import * as scheduleDeleteUnmentionedKeysAfterUploadJob
-  from '../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
+import * as scheduleDeleteUnmentionedKeysAfterUploadJob from '../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/upload', () => {
-    beforeEach(()=> {
+    beforeEach(() => {
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
         { projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' },
       ]);
@@ -23,210 +28,230 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
     it('should upload the translations to phrase', async () => {
       // Given
-      const spyScheduleDeleteUnmentionedKeysAfterUploadJob = vi.spyOn(scheduleDeleteUnmentionedKeysAfterUploadJob, 'schedule');
+      const spyScheduleDeleteUnmentionedKeysAfterUploadJob = vi.spyOn(
+        scheduleDeleteUnmentionedKeysAfterUploadJob,
+        'schedule',
+      );
       const user = databaseBuilder.factory.buildAdminUser();
       const releaseContent = {
-        frameworks: [{
-          id: 'recFramework0',
-          name: 'Pix'
-        }, {
-          id: 'recFramework1',
-          name: 'Pix+'
-        }],
-        areas: [{
-          id: 'recArea0',
-          name: '1. Titre du Domaine - fr',
-          code: '1',
-          title_i18n: {
-            fr: 'Titre du Domaine - fr',
-            en: 'Titre du Domaine - en',
+        frameworks: [
+          {
+            id: 'recFramework0',
+            name: 'Pix',
           },
-          competenceIds: ['recCompetence0'],
-          color: Area.COLORS.JAFFA,
-          frameworkId: 'recFramework0',
-        },
-        {
-          id: 'recArea1',
-          name: '1. Titre du Domaine Pix+ - fr',
-          code: '1',
-          title_i18n: {
-            fr: 'Titre du Domaine Pix+ - fr',
-            en: 'Titre du Domaine Pix+ - en',
+          {
+            id: 'recFramework1',
+            name: 'Pix+',
           },
-          competenceIds: ['recCompetence1'],
-          color: Area.COLORS.NONE,
-          frameworkId: 'recFramework1',
-        }],
-        competences: [{
-          id: 'recCompetence0',
-          index: '1.1',
-          name_i18n: {
-            fr: 'Nom de la Compétence - fr',
-            en: 'Nom de la Compétence - en',
+        ],
+        areas: [
+          {
+            id: 'recArea0',
+            name: '1. Titre du Domaine - fr',
+            code: '1',
+            title_i18n: {
+              fr: 'Titre du Domaine - fr',
+              en: 'Titre du Domaine - en',
+            },
+            competenceIds: ['recCompetence0'],
+            color: Area.COLORS.JAFFA,
+            frameworkId: 'recFramework0',
           },
-          areaId: 'recArea0',
-          origin: 'Pix',
-          skillIds: ['recSkill0'],
-          thematicIds: ['recThematic0'],
-          description_i18n: {
-            fr: 'Description de la compétence - fr',
-            en: 'Description de la compétence - en',
-          }
-        },
-        {
-          id: 'recCompetence1',
-          index: '1.1',
-          name_i18n: {
-            fr: 'Nom de la Compétence - fr',
-            en: 'Nom de la Compétence - en',
+          {
+            id: 'recArea1',
+            name: '1. Titre du Domaine Pix+ - fr',
+            code: '1',
+            title_i18n: {
+              fr: 'Titre du Domaine Pix+ - fr',
+              en: 'Titre du Domaine Pix+ - en',
+            },
+            competenceIds: ['recCompetence1'],
+            color: Area.COLORS.NONE,
+            frameworkId: 'recFramework1',
           },
-          areaId: 'recArea1',
-          origin: 'Pix+',
-          skillIds: [],
-          thematicIds: [],
-          description_i18n: {
-            fr: 'Description de la compétence - fr',
-            en: 'Description de la compétence - en',
-          }
-        }],
-        thematics: [{
-          id: 'recThematic0',
-          name_i18n: {
-            fr: 'Nom',
-            en: 'name',
+        ],
+        competences: [
+          {
+            id: 'recCompetence0',
+            index: '1.1',
+            name_i18n: {
+              fr: 'Nom de la Compétence - fr',
+              en: 'Nom de la Compétence - en',
+            },
+            areaId: 'recArea0',
+            origin: 'Pix',
+            skillIds: ['recSkill0'],
+            thematicIds: ['recThematic0'],
+            description_i18n: {
+              fr: 'Description de la compétence - fr',
+              en: 'Description de la compétence - en',
+            },
           },
-          competenceId: 'recCompetence0',
-          tubeIds: ['recTube0'],
-          index: 0
-        }],
-        tubes: [{
-          id: 'recTube0',
-          name: '@acquis',
-          practicalTitle_i18n: {
-            fr: 'Titre pratique du Tube - fr',
-            en: 'Titre pratique du Tube - en',
+          {
+            id: 'recCompetence1',
+            index: '1.1',
+            name_i18n: {
+              fr: 'Nom de la Compétence - fr',
+              en: 'Nom de la Compétence - en',
+            },
+            areaId: 'recArea1',
+            origin: 'Pix+',
+            skillIds: [],
+            thematicIds: [],
+            description_i18n: {
+              fr: 'Description de la compétence - fr',
+              en: 'Description de la compétence - en',
+            },
           },
-          practicalDescription_i18n: {
-            fr: 'Description pratique du Tube - fr',
-            en: 'Description pratique du Tube - en',
+        ],
+        thematics: [
+          {
+            id: 'recThematic0',
+            name_i18n: {
+              fr: 'Nom',
+              en: 'name',
+            },
+            competenceId: 'recCompetence0',
+            tubeIds: ['recTube0'],
+            index: 0,
           },
-          competenceId: 'recCompetence0',
-          thematicId: 'recThematic0',
-          skillIds: ['recSkill0'],
-          isMobileCompliant: true,
-          isTabletCompliant: false,
-        }],
-        skills: [{
-          id: 'recSkill0',
-          name: '@acquis1',
-          hint_i18n: {
-            fr: 'Indice - fr',
-            en: 'Indice - en',
+        ],
+        tubes: [
+          {
+            id: 'recTube0',
+            name: '@acquis',
+            practicalTitle_i18n: {
+              fr: 'Titre pratique du Tube - fr',
+              en: 'Titre pratique du Tube - en',
+            },
+            practicalDescription_i18n: {
+              fr: 'Description pratique du Tube - fr',
+              en: 'Description pratique du Tube - en',
+            },
+            competenceId: 'recCompetence0',
+            thematicId: 'recThematic0',
+            skillIds: ['recSkill0'],
+            isMobileCompliant: true,
+            isTabletCompliant: false,
           },
-          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-          pixValue: 8,
-          competenceId: 'recCompetence0',
-          status: SkillForRelease.STATUSES.ACTIF,
-          tubeId: 'recTube0',
-          version: 1,
-          level: 1,
-        },{
-          id: 'recSkill1',
-          name: '@superacquis1',
-          hint_i18n: {
-            fr: 'Indice - fr',
-            en: 'Indice - en',
+        ],
+        skills: [
+          {
+            id: 'recSkill0',
+            name: '@acquis1',
+            hint_i18n: {
+              fr: 'Indice - fr',
+              en: 'Indice - en',
+            },
+            hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+            pixValue: 8,
+            competenceId: 'recCompetence0',
+            status: SkillForRelease.STATUSES.ACTIF,
+            tubeId: 'recTube0',
+            version: 1,
+            level: 1,
           },
-          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-          pixValue: 8,
-          competenceId: 'recCompetence0',
-          status: SkillForRelease.STATUSES.ARCHIVE,
-          tubeId: 'recTube0',
-          version: 1,
-          level: 1,
-        },{
-          id: 'recSkill2',
-          name: '@superacquis2',
-          hint_i18n: {
-            fr: 'Indice - fr',
-            en: 'Indice - en',
+          {
+            id: 'recSkill1',
+            name: '@superacquis1',
+            hint_i18n: {
+              fr: 'Indice - fr',
+              en: 'Indice - en',
+            },
+            hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+            pixValue: 8,
+            competenceId: 'recCompetence0',
+            status: SkillForRelease.STATUSES.ARCHIVE,
+            tubeId: 'recTube0',
+            version: 1,
+            level: 1,
           },
-          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-          pixValue: 8,
-          competenceId: 'recCompetence0',
-          status: SkillForRelease.STATUSES.PERIME,
-          tubeId: 'recTube0',
-          version: 1,
-          level: 1,
-        }],
-        challenges: [{
-          id: 'recChallenge0',
-          instruction: 'Consigne du Challenge',
-          proposals: 'Propositions du Challenge',
-          type: ChallengeForRelease.TYPES.QCM,
-          solution: 'Bonnes réponses du Challenge',
-          solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
-          t1Status: false,
-          t2Status: true,
-          t3Status: false,
-          status: ChallengeForRelease.STATUSES.VALIDE,
-          skillId: 'recSkill0',
-          embedUrl: 'Embed URL',
-          embedTitle: 'Embed title',
-          embedHeight: null,
-          timer: 12,
-          illustrationUrl: 'url de l‘illustration',
-          attachments: ['url de la pièce jointe'],
-          competenceId: 'recCompetence0',
-          illustrationAlt: 'Texte alternatif illustration',
-          format: ChallengeForRelease.FORMATS.MOTS,
-          autoReply: false,
-          locales: ['fr'],
-          alternativeInstruction: 'Consigne alternative',
-          focusable: false,
-          delta: 0.5,
-          alpha: 0.9,
-          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
-          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
-          shuffled: false,
-        },
-        {
-          id: 'recChallenge66',
-          instruction: 'Consigne du Challenge66',
-          proposals: 'Propositions du Challenge66',
-          type: ChallengeForRelease.TYPES.QCU,
-          solution: 'Bonnes réponses du Challenge66',
-          solutionToDisplay: 'Bonnes réponses du Challenge à afficher66',
-          t1Status: false,
-          t2Status: true,
-          t3Status: false,
-          status: ChallengeForRelease.STATUSES.PROPOSE,
-          skillId: 'recSkill0',
-          embedUrl: 'Embed URL66',
-          embedTitle: 'Embed title66',
-          embedHeight: 66,
-          timer: 12,
-          illustrationUrl: 'url de l‘illustration66',
-          attachments: ['url de la pièce jointe66'],
-          competenceId: 'recCompetence0',
-          illustrationAlt: 'Texte alternatif illustration66',
-          format: ChallengeForRelease.FORMATS.MOTS,
-          autoReply: false,
-          locales: ['fr'],
-          alternativeInstruction: 'Consigne alternative66',
-          focusable: false,
-          delta: 0.5,
-          alpha: 0.9,
-          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
-          genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
-          shuffled: true,
-        }],
+          {
+            id: 'recSkill2',
+            name: '@superacquis2',
+            hint_i18n: {
+              fr: 'Indice - fr',
+              en: 'Indice - en',
+            },
+            hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+            pixValue: 8,
+            competenceId: 'recCompetence0',
+            status: SkillForRelease.STATUSES.PERIME,
+            tubeId: 'recTube0',
+            version: 1,
+            level: 1,
+          },
+        ],
+        challenges: [
+          {
+            id: 'recChallenge0',
+            instruction: 'Consigne du Challenge',
+            proposals: 'Propositions du Challenge',
+            type: ChallengeForRelease.TYPES.QCM,
+            solution: 'Bonnes réponses du Challenge',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: ChallengeForRelease.STATUSES.VALIDE,
+            skillId: 'recSkill0',
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: null,
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration',
+            format: ChallengeForRelease.FORMATS.MOTS,
+            autoReply: false,
+            locales: ['fr'],
+            alternativeInstruction: 'Consigne alternative',
+            focusable: false,
+            delta: 0.5,
+            alpha: 0.9,
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+            shuffled: false,
+          },
+          {
+            id: 'recChallenge66',
+            instruction: 'Consigne du Challenge66',
+            proposals: 'Propositions du Challenge66',
+            type: ChallengeForRelease.TYPES.QCU,
+            solution: 'Bonnes réponses du Challenge66',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher66',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: ChallengeForRelease.STATUSES.PROPOSE,
+            skillId: 'recSkill0',
+            embedUrl: 'Embed URL66',
+            embedTitle: 'Embed title66',
+            embedHeight: 66,
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration66',
+            attachments: ['url de la pièce jointe66'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration66',
+            format: ChallengeForRelease.FORMATS.MOTS,
+            autoReply: false,
+            locales: ['fr'],
+            alternativeInstruction: 'Consigne alternative66',
+            focusable: false,
+            delta: 0.5,
+            alpha: 0.9,
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+            genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
+            shuffled: true,
+          },
+        ],
       };
       databaseBuilder.factory.buildRelease({ content: releaseContent });
 
@@ -291,7 +316,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .post('/v2/projects/MY_PHRASE_PROJECT_ID/uploads', (body) => {
           const parsedBody = parseFormData(body);
           csvContent = findFormDataParameter(parsedBody, 'file').data.toString();
-          return matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId') &&
+          return (
+            matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId') &&
             matchFormDataParameter(parsedBody, 'file_format', 'csv') &&
             matchFormDataParameter(parsedBody, 'update_descriptions', 'true') &&
             matchFormDataParameter(parsedBody, 'update_translations', 'true') &&
@@ -300,7 +326,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
             matchFormDataParameter(parsedBody, 'format_options[key_index]', '1') &&
             matchFormDataParameter(parsedBody, 'format_options[tag_column]', '3') &&
             matchFormDataParameter(parsedBody, 'format_options[comment_index]', '4') &&
-            matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true');
+            matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true')
+          );
         })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(201, { id: 'uplaodId' });
@@ -324,98 +351,86 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
       expect(_.orderBy(data, '0')).to.deep.equal([
-        [
-          'area.recArea0.title',
-          'Titre du Domaine - fr',
-          'domaine,Pix-1,Pix',
-          ''
-        ],
+        ['area.recArea0.title', 'Titre du Domaine - fr', 'domaine,Pix-1,Pix', ''],
         [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.embedTitle',
           'Embed title',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.illustrationAlt',
           'Texte alternatif illustration',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.proposals',
           'Propositions du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solution',
           'Bonnes réponses du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solutionToDisplay',
           'Bonnes réponses du Challenge à afficher',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'competence.recCompetence0.description',
           'Description de la compétence - fr',
           'competence,Pix-1-1.1,Pix-1,Pix',
-          ''
+          '',
         ],
-        [
-          'competence.recCompetence0.name',
-          'Nom de la Compétence - fr',
-          'competence,Pix-1-1.1,Pix-1,Pix',
-          ''
-        ],
+        ['competence.recCompetence0.name', 'Nom de la Compétence - fr', 'competence,Pix-1-1.1,Pix-1,Pix', ''],
         [
           'skill.recSkill0.hint',
           'Indice - fr',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          ''
-        ],
-        [
-          'thematic.recThematic0.name',
-          'Nom',
-          'thematique,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
+        ['thematic.recThematic0.name', 'Nom', 'thematique,Pix-1-1.1,Pix-1,Pix', ''],
         [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          ''
+          '',
         ],
         [
           'tube.recTube0.practicalTitle',
           'Titre pratique du Tube - fr',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          ''
+          '',
         ],
       ]);
 
-      expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({ uploadId: 'uplaodId', projectId: 'MY_PHRASE_PROJECT_ID' });
+      expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({
+        uploadId: 'uplaodId',
+        projectId: 'MY_PHRASE_PROJECT_ID',
+      });
     });
   });
 
   describe('POST /phrase/download', () => {
-    beforeEach(()=> {
+    beforeEach(() => {
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
         { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' },
         { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' },
@@ -435,13 +450,17 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge1nwE8BcKcmiNvR', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'challenge1nwE8BcKcmiNvR', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildArea({ id: 'recDesCodesLaAreaDeux', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '2.1', areaId: 'recDesCodesLaAreaDeux' });
       databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
       databaseBuilder.factory.buildTube({ id: 'tube2', name: '@tube', thematicId: 'thematic2' });
       databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube2' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challengeDeLAreaDeux', skillId: 'skill2' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'challengeDeLAreaDeux', skillId: 'skill2' }),
+      );
       await databaseBuilder.commit();
 
       const phraseAPIAreaOneLocales = nock('https://api.phrase.com')
@@ -478,7 +497,11 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/nlLocaleId/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(200, 'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
+        .reply(
+          200,
+          'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
+          { 'Content-type': 'text/csv' },
+        );
 
       const phraseAPIAreaTwoLocales = nock('https://api.phrase.com')
         .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales')
@@ -514,14 +537,18 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/nlLocaleId/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(200, 'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n', { 'Content-type': 'text/csv' });
+        .reply(
+          200,
+          'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
+          { 'Content-type': 'text/csv' },
+        );
 
       const server = await createServer();
       const postPhraseDownloadOptions = {
         method: 'POST',
         url: '/api/phrase/download',
         headers: {
-          ...generateAuthorizationHeader(user)
+          ...generateAuthorizationHeader(user),
         },
       };
 
@@ -542,12 +569,14 @@ describe('Acceptance | Controller | phrase-controller', () => {
         {
           key: 'challenge.challenge1nwE8BcKcmiNvR.instruction',
           locale: 'nl',
-          value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
+          value:
+            'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n',
         },
         {
           key: 'challenge.challengeDeLAreaDeux.instruction',
           locale: 'nl',
-          value: 'Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n'
+          value:
+            'Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n',
         },
       ]);
       await expect(knex('localized_challenges').select().orderBy('challengeId', 'asc')).resolves.toEqual([

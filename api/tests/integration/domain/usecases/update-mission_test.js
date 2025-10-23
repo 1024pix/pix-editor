@@ -5,7 +5,7 @@ import { airtableBuilder, databaseBuilder } from '../../../test-helper.js';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionRepository from '../../../../lib/infrastructure/repositories/mission-repository.js';
 
-describe('Integration | Usecases | Update mission', function() {
+describe('Integration | Usecases | Update mission', function () {
   it('when mission is totally valid, should update mission without warnings', async () => {
     // given
     const mission = databaseBuilder.factory.buildMission();
@@ -48,8 +48,9 @@ describe('Integration | Usecases | Update mission', function() {
           id: 'skillTuto2',
           level: 2,
           tubeId: 'tubeTuto',
-          status: Skill.STATUSES.EN_CONSTRUCTION
-        })],
+          status: Skill.STATUSES.EN_CONSTRUCTION,
+        }),
+      ],
       tubes: [airtableBuilder.factory.buildTube(tube)],
       thematics: [airtableBuilder.factory.buildThematic(thematic)],
     });
@@ -64,7 +65,10 @@ describe('Integration | Usecases | Update mission', function() {
     const result = await updateMission(updatedMission);
 
     // then
-    expect(result).to.deep.equal({ mission: updatedMission, warnings: ['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'] });
+    expect(result).to.deep.equal({
+      mission: updatedMission,
+      warnings: ["L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2."],
+    });
   });
 
   it('when mission is not valid, should throw an error', async () => {
@@ -95,6 +99,8 @@ describe('Integration | Usecases | Update mission', function() {
     const promise = updateMission(updatedMission);
 
     // then
-    await expect(promise).rejects.to.deep.equal(new InvalidMissionContentError('La mission ne peut pas être mise à jour car elle n\'a pas de sujet'));
+    await expect(promise).rejects.to.deep.equal(
+      new InvalidMissionContentError("La mission ne peut pas être mise à jour car elle n'a pas de sujet"),
+    );
   });
 });

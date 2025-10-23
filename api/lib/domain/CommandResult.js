@@ -11,11 +11,19 @@ export class CommandResult {
   }
 
   static Success({ value }) {
-    return new CommandResult({ state: COMMAND_RESULT_STATES.SUCCESS, value, error: null });
+    return new CommandResult({
+      state: COMMAND_RESULT_STATES.SUCCESS,
+      value,
+      error: null,
+    });
   }
 
   static Failure({ value, error }) {
-    return new CommandResult({ state: COMMAND_RESULT_STATES.FAILURE, value, error });
+    return new CommandResult({
+      state: COMMAND_RESULT_STATES.FAILURE,
+      value,
+      error,
+    });
   }
 
   isSuccess() {

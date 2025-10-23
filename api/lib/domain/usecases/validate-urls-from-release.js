@@ -1,11 +1,21 @@
 import _ from 'lodash';
 
-export async function validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils }) {
+export async function validateUrlsFromRelease({
+  releaseRepository,
+  urlRepository,
+  localizedChallengeRepository,
+  whitelistedUrlRepository,
+  UrlUtils,
+}) {
   const release = await releaseRepository.getLatestRelease();
   const whitelistedUrls = await whitelistedUrlRepository.list();
   const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
 
-  await checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }, activeWhitelistedUrls);
+  await checkAndUploadKOUrlsFromChallenges(
+    release,
+    { urlRepository, localizedChallengeRepository, UrlUtils },
+    activeWhitelistedUrls,
+  );
   await checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, activeWhitelistedUrls);
 }
 
@@ -28,9 +38,10 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
             release.findSkillNameForChallenge(challenge) ?? '',
             challenge.id,
             challenge.status,
-            challenge.locales[0]
+            challenge.locales[0],
           ].join(';'),
-          url };
+          url,
+        };
       });
     return _.uniqBy(urls, 'url');
   });
@@ -42,7 +53,7 @@ function findUrlsFromTutorials(tutorials, release, UrlUtils) {
       id: [
         release.findCompetenceNamesForTutorial(tutorial).join(' '),
         release.findSkillNamesForTutorial(tutorial).join(' '),
-        tutorial.id
+        tutorial.id,
       ].join(';'),
       url: UrlUtils.findUrlsInText(tutorial.link)[0],
     };
@@ -50,18 +61,26 @@ function findUrlsFromTutorials(tutorials, release, UrlUtils) {
 }
 
 function keepAndFormatKOUrls(analyzedLines) {
-  return analyzedLines.filter((line) => {
-    return line.status === 'KO';
-  }).map((line) => {
-    return [...line.id.split(';'), line.url, line.status, line.error, line.comments];
-  });
+  return analyzedLines
+    .filter((line) => {
+      return line.status === 'KO';
+    })
+    .map((line) => {
+      return [...line.id.split(';'), line.url, line.status, line.error, line.comments];
+    });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }, whitelistedUrls) {
+async function checkAndUploadKOUrlsFromChallenges(
+  release,
+  { urlRepository, localizedChallengeRepository, UrlUtils },
+  whitelistedUrls,
+) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
-  const finalUrlList = urlList.filter(({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
+  const finalUrlList = urlList.filter(
+    ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
+  );
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateChallenges(formattedKOChallengeUrls);
@@ -70,7 +89,9 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, loca
 async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
   const tutorials = release.content.tutorials;
   const urlList = findUrlsFromTutorials(tutorials, release, UrlUtils);
-  const finalUrlList = urlList.filter(({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
+  const finalUrlList = urlList.filter(
+    ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
+  );
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateTutorials(formattedKOTutorialUrls);

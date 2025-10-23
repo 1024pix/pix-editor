@@ -6,7 +6,6 @@ import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../d
 import { Challenge, Skill } from '../../../domain/models/index.js';
 
 export const challengeDatasource = datasource.extend({
-
   modelName: 'Challenge',
 
   tableName: 'Epreuves',
@@ -15,10 +14,10 @@ export const challengeDatasource = datasource.extend({
     'id persistant',
     'Compétences (via tube) (id persistant)',
     'Timer',
-    'Type d\'épreuve',
+    "Type d'épreuve",
     'T1 - Espaces, casse & accents',
     'T2 - Ponctuation',
-    'T3 - Distance d\'édition',
+    "T3 - Distance d'édition",
     'Statut',
     'Acquix (id persistant)',
     'Embed URL',
@@ -54,7 +53,6 @@ export const challengeDatasource = datasource.extend({
   ],
 
   fromAirTableObject(airtableRecord) {
-
     let competenceId;
     if (airtableRecord.get('Compétences (via tube) (id persistant)')) {
       competenceId = airtableRecord.get('Compétences (via tube) (id persistant)')[0];
@@ -67,19 +65,20 @@ export const challengeDatasource = datasource.extend({
 
     const filesIds = airtableRecord.get('files');
     const filesLocalizedChallengeIds = airtableRecord.get('filesLocalizedChallengeIds');
-    const files = filesIds?.map((fileId, index) => {
-      return {
-        fileId,
-        localizedChallengeId: filesLocalizedChallengeIds[index],
-      };
-    }) ?? [];
+    const files =
+      filesIds?.map((fileId, index) => {
+        return {
+          fileId,
+          localizedChallengeId: filesLocalizedChallengeIds[index],
+        };
+      }) ?? [];
 
     return {
       id: airtableRecord.get('id persistant'),
-      type: airtableRecord.get('Type d\'épreuve'),
+      type: airtableRecord.get("Type d'épreuve"),
       t1Status: _convertAirtableValueToBoolean(airtableRecord.get('T1 - Espaces, casse & accents')),
       t2Status: _convertAirtableValueToBoolean(airtableRecord.get('T2 - Ponctuation')),
-      t3Status: _convertAirtableValueToBoolean(airtableRecord.get('T3 - Distance d\'édition')),
+      t3Status: _convertAirtableValueToBoolean(airtableRecord.get("T3 - Distance d'édition")),
       status: airtableRecord.get('Statut'),
       skills: airtableRecord.get('Acquix') || [],
       skillId: (airtableRecord.get('Acquix (id persistant)') || [])[0],
@@ -120,37 +119,37 @@ export const challengeDatasource = datasource.extend({
     const body = {
       fields: {
         'id persistant': model.id,
-        'Type d\'épreuve': model.type,
+        "Type d'épreuve": model.type,
         'T1 - Espaces, casse & accents': _convertBooleanToAirtableValue(model.t1Status),
         'T2 - Ponctuation': _convertBooleanToAirtableValue(model.t2Status),
-        'T3 - Distance d\'édition': _convertBooleanToAirtableValue(model.t3Status),
-        'Statut': model.status,
+        "T3 - Distance d'édition": _convertBooleanToAirtableValue(model.t3Status),
+        Statut: model.status,
         'Embed URL': model.embedUrl,
         'Embed height': model.embedHeight,
-        'Timer': model.timer,
-        'Format': model.format,
+        Timer: model.timer,
+        Format: model.format,
         'Réponse automatique': model.autoReply,
-        'Langues': convertLocalesToLanguages(model.locales),
-        'Focalisée': model.focusable,
-        'Acquix': model.skills,
-        'Généalogie': model.genealogy,
+        Langues: convertLocalesToLanguages(model.locales),
+        Focalisée: model.focusable,
+        Acquix: model.skills,
+        Généalogie: model.genealogy,
         'Type péda': model.pedagogy,
-        'Auteur': model.author,
-        'Déclinable': model.declinable,
+        Auteur: model.author,
+        Déclinable: model.declinable,
         'Version prototype': model.version,
         'Version déclinaison': model.alternativeVersion,
         'Non voyant': model.accessibility1,
-        'Daltonien': model.accessibility2,
-        'Spoil': model.spoil,
-        'Responsive': model.responsive,
-        'Géographie': model.localizedChallenges?.[0]?.geography || 'AA',
-        'files': model.files,
-        'validated_at': model.validatedAt,
-        'archived_at': model.archivedAt,
-        'made_obsolete_at': model.madeObsoleteAt,
-        'shuffled': model.shuffled,
-        'contextualizedFields': model.contextualizedFields,
-      }
+        Daltonien: model.accessibility2,
+        Spoil: model.spoil,
+        Responsive: model.responsive,
+        Géographie: model.localizedChallenges?.[0]?.geography || 'AA',
+        files: model.files,
+        validated_at: model.validatedAt,
+        archived_at: model.archivedAt,
+        made_obsolete_at: model.madeObsoleteAt,
+        shuffled: model.shuffled,
+        contextualizedFields: model.contextualizedFields,
+      },
     };
     if (model.airtableId) {
       body.id = model.airtableId;
@@ -161,10 +160,15 @@ export const challengeDatasource = datasource.extend({
   async search(params) {
     const options = {
       fields: this.usedFields,
-      filterByFormula: `FIND(${stringValue(params.filter.search)}, LOWER(CONCATENATE({Embed URL})))`
+      filterByFormula: `FIND(${stringValue(params.filter.search)}, LOWER(CONCATENATE({Embed URL})))`,
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
-      options.filterByFormula = 'OR(' + options.filterByFormula + ', ' + params.filter.ids.map((id) => `${stringValue(id)} = {id persistant}`).join(',') + ')';
+      options.filterByFormula =
+        'OR(' +
+        options.filterByFormula +
+        ', ' +
+        params.filter.ids.map((id) => `${stringValue(id)} = {id persistant}`).join(',') +
+        ')';
     }
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;

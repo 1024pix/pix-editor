@@ -19,8 +19,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'UnprocessableEntityError') {
+        } else if (infraErrorName === 'UnprocessableEntityError') {
           // without attribute
           const errorWithoutAttribute = new infraErrorClass({ message });
           const serializedErrorWithoutAttribute = serialize(errorWithoutAttribute);
@@ -58,8 +57,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'PreconditionFailedError') {
+        } else if (infraErrorName === 'PreconditionFailedError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -69,8 +67,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'ConflictError') {
+        } else if (infraErrorName === 'ConflictError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -80,8 +77,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'MissingQueryParamError') {
+        } else if (infraErrorName === 'MissingQueryParamError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -91,8 +87,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'MissingQueryParamError') {
+        } else if (infraErrorName === 'MissingQueryParamError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -102,8 +97,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'NotFoundError') {
+        } else if (infraErrorName === 'NotFoundError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -113,8 +107,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'UnauthorizedError') {
+        } else if (infraErrorName === 'UnauthorizedError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -124,8 +117,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'ForbiddenError') {
+        } else if (infraErrorName === 'ForbiddenError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -135,8 +127,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'BadRequestError') {
+        } else if (infraErrorName === 'BadRequestError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -146,8 +137,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else {
+        } else {
           expect(true, `Serialization for ${infraErrorName} not tested`).to.be.false;
         }
       }
@@ -175,8 +165,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'UnprocessableEntityError') {
+        } else if (infraErrorName === 'UnprocessableEntityError') {
           const error1Infra = new infraErrorClass({ message: message1 });
           const error2Infra = new infraErrorClass({ message: message2 });
           const serializedError = serialize([error1Infra, error2Infra]);
@@ -194,8 +183,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'PreconditionFailedError') {
+        } else if (infraErrorName === 'PreconditionFailedError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -210,8 +198,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'ConflictError') {
+        } else if (infraErrorName === 'ConflictError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -226,8 +213,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'MissingQueryParamError') {
+        } else if (infraErrorName === 'MissingQueryParamError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -242,8 +228,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'MissingQueryParamError') {
+        } else if (infraErrorName === 'MissingQueryParamError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -258,8 +243,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'NotFoundError') {
+        } else if (infraErrorName === 'NotFoundError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -274,8 +258,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'UnauthorizedError') {
+        } else if (infraErrorName === 'UnauthorizedError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -290,8 +273,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'ForbiddenError') {
+        } else if (infraErrorName === 'ForbiddenError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -306,8 +288,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else if (infraErrorName === 'BadRequestError') {
+        } else if (infraErrorName === 'BadRequestError') {
           expect(serializedError, `Bad serialization for ${infraErrorName}`).toStrictEqual({
             errors: [
               {
@@ -322,8 +303,7 @@ describe('Unit | Serializer | JSONAPI | error-serializer', () => {
               },
             ],
           });
-        }
-        else {
+        } else {
           expect(true, `Serialization for ${infraErrorName} not tested`).to.be.false;
         }
       }

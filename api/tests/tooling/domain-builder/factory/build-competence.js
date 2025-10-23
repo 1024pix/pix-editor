@@ -5,7 +5,7 @@ export function buildCompetence({
   airtableId = 'recAirtableCompetence1',
   name_i18n = { fr: 'nameFrCompetence1', en: 'nameUsCompetence1' },
   index = '1.1',
-  description_i18n = { fr: 'descriptionFrCompetence1', en:'descriptionUsCompetence1' },
+  description_i18n = { fr: 'descriptionFrCompetence1', en: 'descriptionUsCompetence1' },
   areaId = 'recArea1',
   areaAirtableId = 'recr32j23d3djp1d',
   skillIds = ['recSkill1', 'recSkill2'],

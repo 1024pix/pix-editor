@@ -6,8 +6,7 @@ import { competenceRepository } from '../../../../lib/infrastructure/repositorie
 import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
-describe('Unit | Domain | Usecases | update competence', function() {
-
+describe('Unit | Domain | Usecases | update competence', function () {
   const competenceUpdates = Symbol('competenceUpdates');
   const updatedCompetence = Symbol('updatedCompetence');
 
@@ -18,7 +17,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
   });
 
   describe('when competence id is unknown', () => {
-    it('should throw a NotFoundError', async() => {
+    it('should throw a NotFoundError', async () => {
       // given
       const competenceAirtableId = 'unknown competence id';
 
@@ -35,7 +34,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
     });
   });
 
-  it('should update competence', async () =>{
+  it('should update competence', async () => {
     // given
     const competenceAirtableId = 'competenceAirtableId';
     const existingCompetence = {

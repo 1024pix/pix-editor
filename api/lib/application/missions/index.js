@@ -8,7 +8,8 @@ export async function register(server) {
       config: {
         handler: missionController.findMissions,
       },
-    },{
+    },
+    {
       method: 'GET',
       path: '/api/missions/{id}',
       config: {

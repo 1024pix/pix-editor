@@ -6,7 +6,7 @@ export function transform({ missions, challenges, tubes, thematics, skills }) {
     const thematicIds = mission.thematicIds?.split(',') ?? [];
     const content = {
       dareChallenges: [],
-      steps: []
+      steps: [],
     };
 
     thematicIds.forEach((thematicId, index) => {
@@ -59,18 +59,25 @@ function _getChallengeIdsForActivity(missionStatus, missionTubes, skills, challe
     return [];
   }
 
-  return activitySkills.map((activitySkill) => {
-    const alternatives = challenges
-      .filter((challenge) => activitySkill.id === challenge.skillId)
-      .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()))
-      .filter((challenge) => (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE) || missionStatus !== Mission.status.VALIDATED);
+  return activitySkills
+    .map((activitySkill) => {
+      const alternatives = challenges
+        .filter((challenge) => activitySkill.id === challenge.skillId)
+        .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()))
+        .filter(
+          (challenge) =>
+            (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE) ||
+            missionStatus !== Mission.status.VALIDATED,
+        );
 
-    if (alternatives.length === 0) {
-      logger.warn({ activitySkill }, 'No challenges found for activitySkill');
-    }
-    return alternatives.sort(_byAlternativeVersion).map(({ id }) => id);
-  }).filter((activitySkills) => activitySkills.length > 0);
+      if (alternatives.length === 0) {
+        logger.warn({ activitySkill }, 'No challenges found for activitySkill');
+      }
+      return alternatives.sort(_byAlternativeVersion).map(({ id }) => id);
+    })
+    .filter((activitySkills) => activitySkills.length > 0);
 }
 
 const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
-const _byAlternativeVersion = (challengeA, challengeB) => (challengeA.alternativeVersion ?? 0) - (challengeB.alternativeVersion ?? 0);
+const _byAlternativeVersion = (challengeA, challengeB) =>
+  (challengeA.alternativeVersion ?? 0) - (challengeB.alternativeVersion ?? 0);

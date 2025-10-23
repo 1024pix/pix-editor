@@ -4,8 +4,6 @@ const { Serializer } = JsonapiSerializer;
 
 export function serialize(staticCourseTag) {
   return new Serializer('static-course-tags', {
-    attributes: [
-      'label',
-    ],
+    attributes: ['label'],
   }).serialize(staticCourseTag);
 }

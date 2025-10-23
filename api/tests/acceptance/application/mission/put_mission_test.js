@@ -1,22 +1,17 @@
 import _ from 'lodash';
 import { afterEach, describe, describe as context, expect, it } from 'vitest';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
-
-  afterEach(async function() {
+describe('Acceptance | API | mission | PATCH /api/missions/{id}', function () {
+  afterEach(async function () {
     await knex('missions').delete();
     await knex('translations').delete();
   });
 
-  context('when user has rights to update a mission', function() {
-    it('updates the mission and returns its id', async function() {
+  context('when user has rights to update a mission', function () {
+    it('updates the mission and returns its id', async function () {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       const missionToUpdateId = databaseBuilder.factory.buildMission().id;
@@ -32,7 +27,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
             status: Mission.status.EXPERIMENTAL,
             'learning-objectives': 'Une chose',
             'validated-objectives': null,
-            'introductionMediaAlt': null
+            introductionMediaAlt: null,
           },
         },
       };
@@ -54,7 +49,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
         data: {
           type: 'missions',
           id: missionId.toString(),
-          'attributes': {
+          attributes: {
             'card-image-url': 'https://example.com/image.png',
             'competence-id': 'TYUI',
             'documentation-url': null,
@@ -62,19 +57,19 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
             'introduction-media-type': null,
             'introduction-media-url': null,
             'learning-objectives': 'Une chose',
-            'name': 'Mission à mettre à jour',
-            'status': 'EXPERIMENTAL',
+            name: 'Mission à mettre à jour',
+            status: 'EXPERIMENTAL',
             'thematic-ids': '',
             'validated-objectives': null,
-            'warnings': [],
+            warnings: [],
           },
         },
       });
     });
   });
 
-  context('when user no has rights to update a mission', function() {
-    it('does not allow the update', async function() {
+  context('when user no has rights to update a mission', function () {
+    it('does not allow the update', async function () {
       // given
       const user = databaseBuilder.factory.buildReadonlyUser();
       const missionId = databaseBuilder.factory.buildMission().id;
@@ -89,9 +84,9 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
             'thematic-id': null,
             status: Mission.status.INACTIVE,
             'learning-objectives': 'Autre chose',
-            'validated-objectives': 'Très bien'
+            'validated-objectives': 'Très bien',
           },
-          id: missionId.toString()
+          id: missionId.toString(),
         },
       };
 

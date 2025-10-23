@@ -5,45 +5,45 @@ import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { Tube } from '../../../../lib/domain/models/Tube.js';
 
-describe('Unit | Transformer | mission-transformer', function() {
-  describe('#listActive', function() {
+describe('Unit | Transformer | mission-transformer', function () {
+  describe('#listActive', function () {
     let challenges, skills, tubes, thematics;
-    beforeEach(async function() {
+    beforeEach(async function () {
       challenges = [
         domainBuilder.buildChallenge({
           id: 'challengeTuto1',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillTuto1'
+          skillId: 'skillTuto1',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeTraining1',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillTraining1'
+          skillId: 'skillTraining1',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeValidation1',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillValidation1'
+          skillId: 'skillValidation1',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeTuto2',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillTuto2'
+          skillId: 'skillTuto2',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeTraining2',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillTraining2'
+          skillId: 'skillTraining2',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeValidation2',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillValidation2'
+          skillId: 'skillValidation2',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeDare',
           status: Challenge.STATUSES.VALIDE,
-          skillId: 'skillDare'
+          skillId: 'skillDare',
         }),
       ];
       skills = [
@@ -71,18 +71,18 @@ describe('Unit | Transformer | mission-transformer', function() {
           name_i18n: {
             fr: 'Thématique du step 1',
           },
-          tubeIds: ['aTubeWithoutName', 'tubeTuto1', 'tubeTraining1', 'tubeValidation1' ]
+          tubeIds: ['aTubeWithoutName', 'tubeTuto1', 'tubeTraining1', 'tubeValidation1'],
         }),
         domainBuilder.buildThematic({
           id: 'thematicStep2',
           name_i18n: {
             fr: 'Thématique du step 2',
           },
-          tubeIds: ['tubeTuto2', 'tubeTraining2', 'tubeValidation2']
+          tubeIds: ['tubeTuto2', 'tubeTraining2', 'tubeValidation2'],
         }),
         domainBuilder.buildThematic({
           id: 'thematicDefi',
-          tubeIds: ['tubeDare']
+          tubeIds: ['tubeDare'],
         }),
         domainBuilder.buildThematic({
           id: 'thematicDefiVide',
@@ -91,177 +91,182 @@ describe('Unit | Transformer | mission-transformer', function() {
         domainBuilder.buildThematic({
           id: 'thematicWithNoNameTube',
           tubeIds: ['aTubeWithoutName'],
-        })
+        }),
       ];
-
     });
 
-    context('with inactive, proposal, and active challenges', function() {
-      context('when mission is EXPERIMENTAL', function() {
-        it('should return proposal and active challenges only', function() {
+    context('with inactive, proposal, and active challenges', function () {
+      context('when mission is EXPERIMENTAL', function () {
+        it('should return proposal and active challenges only', function () {
           challenges = [
             domainBuilder.buildChallenge({
               id: 'challengeValidationValidéStep1',
               status: Challenge.STATUSES.VALIDE,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationPériméStep1',
               status: Challenge.STATUSES.PERIME,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationProposéStep2',
               status: Challenge.STATUSES.PROPOSE,
-              skillId: 'skillValidation2'
+              skillId: 'skillValidation2',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationArchivéStep2',
               status: Challenge.STATUSES.ARCHIVE,
-              skillId: 'skillValidation2'
+              skillId: 'skillValidation2',
             }),
           ];
 
-          const missions = [domainBuilder.buildMission({
-            id: 2,
-            name: 'Alt name',
-            status: Mission.status.EXPERIMENTAL,
-            learningObjectives: 'Alt objectives',
-            validatedObjectives: 'Alt validated objectives',
-            thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
-            competenceId: 'competenceId',
-            createdAt: new Date('2010-01-04'),
-          })];
+          const missions = [
+            domainBuilder.buildMission({
+              id: 2,
+              name: 'Alt name',
+              status: Mission.status.EXPERIMENTAL,
+              learningObjectives: 'Alt objectives',
+              validatedObjectives: 'Alt validated objectives',
+              thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
+              competenceId: 'competenceId',
+              createdAt: new Date('2010-01-04'),
+            }),
+          ];
 
           const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-          expect(result).to.deep.equal([{
-            id: 2,
-            cardImageUrl: null,
-            name_i18n: { fr: 'Alt name' },
-            competenceId: 'competenceId',
-            thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
-            learningObjectives_i18n: { fr: 'Alt objectives' },
-            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-            introductionMediaUrl: null,
-            introductionMediaAlt_i18n: { fr: null },
-            introductionMediaType: null,
-            documentationUrl: null,
-            status: Mission.status.EXPERIMENTAL,
-            createdAt: new Date('2010-01-04'),
-            content: {
-              steps: [{
-                name_i18n: { fr: 'Thématique du step 1' },
-                tutorialChallenges: [],
-                trainingChallenges: [],
-                validationChallenges: [
-                  ['challengeValidationValidéStep1'],
+          expect(result).to.deep.equal([
+            {
+              id: 2,
+              cardImageUrl: null,
+              name_i18n: { fr: 'Alt name' },
+              competenceId: 'competenceId',
+              thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
+              learningObjectives_i18n: { fr: 'Alt objectives' },
+              validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+              introductionMediaUrl: null,
+              introductionMediaAlt_i18n: { fr: null },
+              introductionMediaType: null,
+              documentationUrl: null,
+              status: Mission.status.EXPERIMENTAL,
+              createdAt: new Date('2010-01-04'),
+              content: {
+                steps: [
+                  {
+                    name_i18n: { fr: 'Thématique du step 1' },
+                    tutorialChallenges: [],
+                    trainingChallenges: [],
+                    validationChallenges: [['challengeValidationValidéStep1']],
+                  },
+                  {
+                    name_i18n: { fr: 'Thématique du step 2' },
+                    tutorialChallenges: [],
+                    trainingChallenges: [],
+                    validationChallenges: [['challengeValidationProposéStep2']],
+                  },
                 ],
+                dareChallenges: [],
               },
-              {
-                name_i18n: { fr: 'Thématique du step 2' },
-                tutorialChallenges: [],
-                trainingChallenges: [],
-                validationChallenges: [
-                  ['challengeValidationProposéStep2'],
-                ],
-              }],
-              dareChallenges: [],
             },
-          }]);
+          ]);
         });
       });
 
-      context('when mission is validated', function() {
-        it('should return active challenges only', async function() {
+      context('when mission is validated', function () {
+        it('should return active challenges only', async function () {
           challenges = [
             domainBuilder.buildChallenge({
               id: 'challengeValidationValidé',
               status: Challenge.STATUSES.VALIDE,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationProposé',
               status: Challenge.STATUSES.PROPOSE,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationPérimé',
               status: Challenge.STATUSES.PERIME,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
             domainBuilder.buildChallenge({
               id: 'challengeValidationArchivé',
               status: Challenge.STATUSES.ARCHIVE,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation1',
             }),
           ];
 
-          const missions = [domainBuilder.buildMission({
-            id: 2,
-            competenceId: 'competenceId',
-            name: 'Alt name',
-            status: Mission.status.VALIDATED,
-            learningObjectives: 'Alt objectives',
-            validatedObjectives: 'Alt validated objectives',
-            thematicIds: 'thematicStep1,thematicDefiVide',
-            createdAt: new Date('2010-01-04'),
-          })];
+          const missions = [
+            domainBuilder.buildMission({
+              id: 2,
+              competenceId: 'competenceId',
+              name: 'Alt name',
+              status: Mission.status.VALIDATED,
+              learningObjectives: 'Alt objectives',
+              validatedObjectives: 'Alt validated objectives',
+              thematicIds: 'thematicStep1,thematicDefiVide',
+              createdAt: new Date('2010-01-04'),
+            }),
+          ];
 
           const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-          expect(result).to.deep.equal([{
-            id: 2,
-            cardImageUrl: null,
-            name_i18n: { fr: 'Alt name' },
-            competenceId: 'competenceId',
-            thematicIds: 'thematicStep1,thematicDefiVide',
-            learningObjectives_i18n: { fr: 'Alt objectives' },
-            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-            introductionMediaUrl: null,
-            introductionMediaAlt_i18n: { fr: null },
-            introductionMediaType: null,
-            documentationUrl: null,
-            status: Mission.status.VALIDATED,
-            createdAt: new Date('2010-01-04'),
-            content: {
-              steps: [{
-                name_i18n: { fr: 'Thématique du step 1' },
-                tutorialChallenges: [],
-                trainingChallenges: [],
-                validationChallenges: [
-                  ['challengeValidationValidé'],
+          expect(result).to.deep.equal([
+            {
+              id: 2,
+              cardImageUrl: null,
+              name_i18n: { fr: 'Alt name' },
+              competenceId: 'competenceId',
+              thematicIds: 'thematicStep1,thematicDefiVide',
+              learningObjectives_i18n: { fr: 'Alt objectives' },
+              validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+              introductionMediaUrl: null,
+              introductionMediaAlt_i18n: { fr: null },
+              introductionMediaType: null,
+              documentationUrl: null,
+              status: Mission.status.VALIDATED,
+              createdAt: new Date('2010-01-04'),
+              content: {
+                steps: [
+                  {
+                    name_i18n: { fr: 'Thématique du step 1' },
+                    tutorialChallenges: [],
+                    trainingChallenges: [],
+                    validationChallenges: [['challengeValidationValidé']],
+                  },
                 ],
-              }],
-              dareChallenges: [],
+                dareChallenges: [],
+              },
             },
-          }]);
+          ]);
         });
       });
     });
 
-    context('with inactive, proposal, and active skills', async function() {
-      it('should return in progress and active skill challenges only', async function() {
+    context('with inactive, proposal, and active skills', async function () {
+      it('should return in progress and active skill challenges only', async function () {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'challengeSkillActif',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation1Active'
+            skillId: 'skillValidation1Active',
           }),
           domainBuilder.buildChallenge({
             id: 'challengeSkillEnConstruction',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation2InProgress'
+            skillId: 'skillValidation2InProgress',
           }),
           domainBuilder.buildChallenge({
             id: 'challengeSkillPérimé',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation3Deprecated'
+            skillId: 'skillValidation3Deprecated',
           }),
           domainBuilder.buildChallenge({
             id: 'challengeSkillArchivé',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation3Archived'
+            skillId: 'skillValidation3Archived',
           }),
         ];
         skills = [
@@ -271,25 +276,25 @@ describe('Unit | Transformer | mission-transformer', function() {
             id: 'skillValidation1Active',
             status: SkillForRelease.STATUSES.ACTIF,
             level: 1,
-            tubeId: 'tubeValidation1'
+            tubeId: 'tubeValidation1',
           }),
           domainBuilder.buildSkill({
             id: 'skillValidation2InProgress',
             status: SkillForRelease.STATUSES.EN_CONSTRUCTION,
             level: 2,
-            tubeId: 'tubeValidation1'
+            tubeId: 'tubeValidation1',
           }),
           domainBuilder.buildSkill({
             id: 'skillValidation3Deprecated',
             status: SkillForRelease.STATUSES.PERIME,
             level: 3,
-            tubeId: 'tubeValidation1'
+            tubeId: 'tubeValidation1',
           }),
           domainBuilder.buildSkill({
             id: 'skillValidation3Archived',
             status: SkillForRelease.STATUSES.ARCHIVE,
             level: 4,
-            tubeId: 'tubeValidation1'
+            tubeId: 'tubeValidation1',
           }),
           domainBuilder.buildSkill({ id: 'skillTuto2', level: 1, tubeId: 'tubeTuto2' }),
           domainBuilder.buildSkill({ id: 'skillTraining2', level: 1, tubeId: 'tubeTraining2' }),
@@ -297,71 +302,74 @@ describe('Unit | Transformer | mission-transformer', function() {
           domainBuilder.buildSkill({ id: 'skillDare', level: 1, tubeId: 'tubeDare' }),
         ];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          competenceId: 'competenceId',
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            competenceId: 'competenceId',
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: null },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              name_i18n: { fr: 'Thématique du step 1' },
-              tutorialChallenges: [],
-              trainingChallenges: [],
-              validationChallenges: [
-                ['challengeSkillActif'],
-                ['challengeSkillEnConstruction'],
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: null },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [
+                {
+                  name_i18n: { fr: 'Thématique du step 1' },
+                  tutorialChallenges: [],
+                  trainingChallenges: [],
+                  validationChallenges: [['challengeSkillActif'], ['challengeSkillEnConstruction']],
+                },
               ],
-            }],
-            dareChallenges: [],
+              dareChallenges: [],
+            },
           },
-        }]);
+        ]);
       });
     });
 
-    context('with multiple challenges in activities', async function() {
-      it('should return ordered challenges', async function() {
+    context('with multiple challenges in activities', async function () {
+      it('should return ordered challenges', async function () {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'secondChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation2'
+            skillId: 'skillValidation2',
           }),
           domainBuilder.buildChallenge({
             id: 'firstChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation1'
+            skillId: 'skillValidation1',
           }),
           domainBuilder.buildChallenge({
             id: 'fourthChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation4'
+            skillId: 'skillValidation4',
           }),
           domainBuilder.buildChallenge({
             id: 'thirdChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
-            skillId: 'skillValidation3'
+            skillId: 'skillValidation3',
           }),
         ];
         skills = [
@@ -371,59 +379,65 @@ describe('Unit | Transformer | mission-transformer', function() {
           domainBuilder.buildSkill({ id: 'skillValidation3', level: 3, tubeId: 'tubeValidation1' }),
         ];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          competenceId: 'competenceId',
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            competenceId: 'competenceId',
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: null },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              name_i18n: { fr: 'Thématique du step 1' },
-              tutorialChallenges: [],
-              trainingChallenges: [],
-              validationChallenges: [
-                ['firstChallengeValidation'],
-                ['secondChallengeValidation'],
-                ['thirdChallengeValidation'],
-                ['fourthChallengeValidation'],
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: null },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [
+                {
+                  name_i18n: { fr: 'Thématique du step 1' },
+                  tutorialChallenges: [],
+                  trainingChallenges: [],
+                  validationChallenges: [
+                    ['firstChallengeValidation'],
+                    ['secondChallengeValidation'],
+                    ['thirdChallengeValidation'],
+                    ['fourthChallengeValidation'],
+                  ],
+                },
               ],
-            }],
-            dareChallenges: [],
+              dareChallenges: [],
+            },
           },
-        }]);
+        ]);
       });
     });
 
-    context('with alternative challenges in activities', async function() {
-      it('should return ordered alternative challenges', async function() {
+    context('with alternative challenges in activities', async function () {
+      it('should return ordered alternative challenges', async function () {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'secondAltChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
             skillId: 'skillValidation1',
-            alternativeVersion: 1
+            alternativeVersion: 1,
           }),
           {
             ...domainBuilder.buildChallenge({
@@ -437,325 +451,363 @@ describe('Unit | Transformer | mission-transformer', function() {
             id: 'fourthAltChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
             skillId: 'skillValidation1',
-            alternativeVersion: 3
+            alternativeVersion: 3,
           }),
           domainBuilder.buildChallenge({
             id: 'thirdAltChallengeValidation',
             status: Challenge.STATUSES.VALIDE,
             skillId: 'skillValidation1',
-            alternativeVersion: 2
+            alternativeVersion: 2,
           }),
         ];
-        skills = [
-          domainBuilder.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
+        skills = [domainBuilder.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' })];
+
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            competenceId: 'competenceId',
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            createdAt: new Date('2010-01-04'),
+          }),
         ];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          competenceId: 'competenceId',
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          createdAt: new Date('2010-01-04'),
-        })];
-
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.VALIDATED,
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt_i18n: { fr: null },
-          documentationUrl: null,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              name_i18n: { fr: 'Thématique du step 1' },
-              tutorialChallenges: [],
-              trainingChallenges: [],
-              validationChallenges: [
-                ['firstAltChallengeValidation', 'secondAltChallengeValidation', 'thirdAltChallengeValidation', 'fourthAltChallengeValidation'],
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            status: Mission.status.VALIDATED,
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt_i18n: { fr: null },
+            documentationUrl: null,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [
+                {
+                  name_i18n: { fr: 'Thématique du step 1' },
+                  tutorialChallenges: [],
+                  trainingChallenges: [],
+                  validationChallenges: [
+                    [
+                      'firstAltChallengeValidation',
+                      'secondAltChallengeValidation',
+                      'thirdAltChallengeValidation',
+                      'fourthAltChallengeValidation',
+                    ],
+                  ],
+                },
               ],
-            }],
-            dareChallenges: [],
+              dareChallenges: [],
+            },
           },
-        }]);
+        ]);
       });
     });
 
-    context('Without challenges for skills', async function() {
-      it('Should return missions', async function() {
+    context('Without challenges for skills', async function () {
+      it('Should return missions', async function () {
         challenges = [];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          competenceId: 'competenceId',
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            competenceId: 'competenceId',
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt_i18n: { fr: null },
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              name_i18n: { fr: 'Thématique du step 1' },
-              trainingChallenges: [],
-              validationChallenges: [],
-              tutorialChallenges: [],
-            }],
-            dareChallenges: [],
-          }
-        }]);
-
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt_i18n: { fr: null },
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [
+                {
+                  name_i18n: { fr: 'Thématique du step 1' },
+                  trainingChallenges: [],
+                  validationChallenges: [],
+                  tutorialChallenges: [],
+                },
+              ],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
-    context('Without skills in tubes', async function() {
-      it('Should return missions', async function() {
+    context('Without skills in tubes', async function () {
+      it('Should return missions', async function () {
         skills = [];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          competenceId: 'competenceId',
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          createdAt: new Date('2010-01-04'),
-
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            competenceId: 'competenceId',
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: null },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              name_i18n: { fr: 'Thématique du step 1' },
-              trainingChallenges: [],
-              validationChallenges: [],
-              tutorialChallenges: [],
-            }],
-            dareChallenges: [],
-          }
-        }]);
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: null },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [
+                {
+                  name_i18n: { fr: 'Thématique du step 1' },
+                  trainingChallenges: [],
+                  validationChallenges: [],
+                  tutorialChallenges: [],
+                },
+              ],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
-    context('Without tubes', async function() {
-      it('Should return missions', async function() {
+    context('Without tubes', async function () {
+      it('Should return missions', async function () {
         tubes = [];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          competenceId: 'competenceId',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            competenceId: 'competenceId',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt_i18n: { fr: null },
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [],
-            dareChallenges: [],
-          }
-        }]);
-
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt_i18n: { fr: null },
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
-    context('Without tubes in thematic', async function() {
-      it('Should return missions', async function() {
-        thematics = [domainBuilder.buildThematic({
-          id: 'thematicStep1',
-          tubeIds: undefined
-        }, { id: 'thematicDefiVide', tubeIds: undefined })];
+    context('Without tubes in thematic', async function () {
+      it('Should return missions', async function () {
+        thematics = [
+          domainBuilder.buildThematic(
+            {
+              id: 'thematicStep1',
+              tubeIds: undefined,
+            },
+            { id: 'thematicDefiVide', tubeIds: undefined },
+          ),
+        ];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          competenceId: 'competenceId',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            competenceId: 'competenceId',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt_i18n: { fr: null },
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [],
-            dareChallenges: [],
-          }
-        }]);
-
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt_i18n: { fr: null },
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
-    context('Without thematic', async function() {
-      it('Should return missions', async function() {
+    context('Without thematic', async function () {
+      it('Should return missions', async function () {
         thematics = [];
 
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          competenceId: 'competenceId',
-          createdAt: new Date('2010-01-04'),
-        })];
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            competenceId: 'competenceId',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: null },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [],
-            dareChallenges: [],
-          }
-        }]);
-
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: null },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
-    context('Without thematicID in mission', async function() {
-      it('Should return missions', async function() {
-
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: null,
-          competenceId: 'competenceId',
-          createdAt: new Date('2010-01-04'),
-        })];
+    context('Without thematicID in mission', async function () {
+      it('Should return missions', async function () {
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: null,
+            competenceId: 'competenceId',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
-        expect(result).to.deep.equal([{
-          id: 2,
-          name_i18n: { fr: 'Alt name' },
-          cardImageUrl: null,
-          competenceId: 'competenceId',
-          thematicIds: null,
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt_i18n: { fr: null },
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [],
-            dareChallenges: [],
-          }
-        }]);
+        expect(result).to.deep.equal([
+          {
+            id: 2,
+            name_i18n: { fr: 'Alt name' },
+            cardImageUrl: null,
+            competenceId: 'competenceId',
+            thematicIds: null,
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt_i18n: { fr: null },
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [],
+              dareChallenges: [],
+            },
+          },
+        ]);
       });
     });
 
-    context('With no name tube in thematic', function() {
-      it('Should return empty conten', async function() {
-        const missions = [domainBuilder.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicWithNoNameTube',
-          competenceId: 'competenceId',
-          createdAt: new Date('2010-01-04'),
-        })];
+    context('With no name tube in thematic', function () {
+      it('Should return empty conten', async function () {
+        const missions = [
+          domainBuilder.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicWithNoNameTube',
+            competenceId: 'competenceId',
+            createdAt: new Date('2010-01-04'),
+          }),
+        ];
 
         const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
 
         expect(result[0].content).to.deep.equal({
-          'dareChallenges': [],
-          'steps': []
+          dareChallenges: [],
+          steps: [],
         });
       });
     });

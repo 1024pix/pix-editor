@@ -2,10 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
 import axios from 'axios';
 
-describe('Unit | Infrastructure | SlackNotifier', function() {
-  describe('#constructor', function() {
-    it('should throw an error when webhookUrl is not defined', function() {
-
+describe('Unit | Infrastructure | SlackNotifier', function () {
+  describe('#constructor', function () {
+    it('should throw an error when webhookUrl is not defined', function () {
       // when
       try {
         new SlackNotifier(null);
@@ -17,8 +16,8 @@ describe('Unit | Infrastructure | SlackNotifier', function() {
     });
   });
 
-  describe('#send', function() {
-    it('should send slack notifications with given blocks', function() {
+  describe('#send', function () {
+    it('should send slack notifications with given blocks', function () {
       // given
       const webhookUrl = 'https://webhook.url';
       const slackNotifier = new SlackNotifier(webhookUrl);
@@ -29,8 +28,9 @@ describe('Unit | Infrastructure | SlackNotifier', function() {
       slackNotifier.send(blocks);
 
       // then
-      expect(stubAxiosPost).toHaveBeenCalledWith(webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+      expect(stubAxiosPost).toHaveBeenCalledWith(webhookUrl, blocks, {
+        headers: { 'content-type': 'application/json' },
+      });
     });
   });
-
 });

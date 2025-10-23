@@ -20,7 +20,7 @@ const deleteUnmentionedKeysAfterUploadJobOptions = {
   backoff: { type: 'exponential', delay: 100 },
   removeOnComplete: true,
   removeOnFail: true,
-  delay: 3 * 60 * 1000
+  delay: 3 * 60 * 1000,
 };
 
 export function schedule({ uploadId, projectId }) {

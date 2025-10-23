@@ -2,24 +2,36 @@ import { databaseBuffer } from '../database-buffer.js';
 import { Mission } from '../../../../lib/domain/models/Mission.js';
 import { buildTranslation } from './build-translation.js';
 
-export function buildMission({
-  id = databaseBuffer.nextId++,
-  name = 'Ma première mission',
-  cardImageUrl = null,
-  competenceId = 'competenceId',
-  learningObjectives = 'Que tu sois le meilleur',
-  thematicIds = 'thematicIds',
-  validatedObjectives = 'Rien',
-  status = Mission.status.INACTIVE,
-  introductionMediaUrl = null,
-  introductionMediaAlt = 'Message alternatif',
-  introductionMediaType = null,
-  documentationUrl = null,
+export function buildMission(
+  {
+    id = databaseBuffer.nextId++,
+    name = 'Ma première mission',
+    cardImageUrl = null,
+    competenceId = 'competenceId',
+    learningObjectives = 'Que tu sois le meilleur',
+    thematicIds = 'thematicIds',
+    validatedObjectives = 'Rien',
+    status = Mission.status.INACTIVE,
+    introductionMediaUrl = null,
+    introductionMediaAlt = 'Message alternatif',
+    introductionMediaType = null,
+    documentationUrl = null,
 
-  createdAt = new Date('2010-01-04'),
-} = {}, shouldBuildTranslations = true) {
-
-  const values = { id, cardImageUrl, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, documentationUrl };
+    createdAt = new Date('2010-01-04'),
+  } = {},
+  shouldBuildTranslations = true,
+) {
+  const values = {
+    id,
+    cardImageUrl,
+    competenceId,
+    thematicIds,
+    createdAt,
+    status,
+    introductionMediaUrl,
+    introductionMediaType,
+    documentationUrl,
+  };
   if (shouldBuildTranslations) {
     buildTranslation({
       key: `mission.${id}.name`,

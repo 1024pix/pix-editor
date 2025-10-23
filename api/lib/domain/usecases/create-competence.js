@@ -6,7 +6,7 @@ import {
   competenceRepository,
   skillRepository,
   thematicRepository,
-  tubeRepository
+  tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import { skillTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { BadRequestError } from '../../infrastructure/errors.js';
@@ -27,7 +27,7 @@ export async function createCompetence(competence) {
   const createdCompetence = await competenceRepository.create(competence);
 
   const workbenchThematic = new Thematic({
-    name_i18n: { fr:`workbench_${area.code}_${indexInArea}` },
+    name_i18n: { fr: `workbench_${area.code}_${indexInArea}` },
     competenceAirtableId: createdCompetence.airtableId,
     index: 0,
   });

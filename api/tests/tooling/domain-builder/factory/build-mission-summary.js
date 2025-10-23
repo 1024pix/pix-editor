@@ -8,7 +8,7 @@ export function buildMissionSummary({
   createdAt = new Date('2023-10-14'),
   status = Mission.status.VALIDATED,
 } = {}) {
-  return new MissionSummary ({
+  return new MissionSummary({
     id,
     name,
     competence,

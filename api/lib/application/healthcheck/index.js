@@ -8,8 +8,8 @@ export async function register(server) {
       config: {
         auth: false,
         handler: healthcheckController.get,
-        tags: ['api']
-      }
+        tags: ['api'],
+      },
     },
   ]);
 }

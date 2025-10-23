@@ -34,18 +34,18 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
 
       const attributes = {
         'pix-id': expectedSkill.id,
-        'name': expectedSkill.name,
-        'description': expectedSkill.description,
+        name: expectedSkill.name,
+        description: expectedSkill.description,
         'description-status': Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
-        'clue': expectedSkill.hint_i18n.fr,
+        clue: expectedSkill.hint_i18n.fr,
         'clue-en': expectedSkill.hint_i18n.en,
         'clue-status': Skill.HINT_STATUSES.A_RETRAVAILLER,
         'pix-value': expectedSkill.pixValue,
         'competence-id': expectedSkill.competenceId,
-        'i18n': Skill.INTERNATIONALISATIONS.FRANCE,
-        'status': Skill.STATUSES.ACTIF,
-        'version': expectedSkill.version,
-        'level': expectedSkill.level,
+        i18n: Skill.INTERNATIONALISATIONS.FRANCE,
+        status: Skill.STATUSES.ACTIF,
+        version: expectedSkill.version,
+        level: expectedSkill.level,
         'challenge-ids': expectedSkill.challengeIds,
         'created-at': expectedSkill.createdAt,
       };
@@ -56,7 +56,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
           id: expectedSkill.airtableId,
           attributes,
           relationships: {
-            'tube': {
+            tube: {
               data: {
                 type: 'tubes',
                 id: expectedSkill.tubeAirtableId,
@@ -67,19 +67,19 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
                 {
                   type: 'tutorials',
                   id: expectedSkill.learningMoreTutorialAirtableIds[0],
-                }
-              ]
+                },
+              ],
             },
             'tuto-solution': {
               data: [
                 {
                   type: 'tutorials',
                   id: expectedSkill.tutorialAirtableIds[0],
-                }
+                },
               ],
             },
-          }
-        }
+          },
+        },
       };
 
       // when
@@ -91,7 +91,6 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
 
   describe('#serialize', () => {
     it('should serialize a skill', () => {
-
       const skill = new Skill({
         id: 'skillId',
         airtableId: 'skillAirtableId',
@@ -121,16 +120,16 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
 
       const attributes = {
         'pix-id': skill.id,
-        'name': '@skill1',
-        'description': 'description skill1',
+        name: '@skill1',
+        description: 'description skill1',
         'description-status': Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
-        'clue': skill.hint_i18n.fr,
+        clue: skill.hint_i18n.fr,
         'clue-en': skill.hint_i18n.en,
         'clue-status': Skill.HINT_STATUSES.A_RETRAVAILLER,
-        'i18n': Skill.INTERNATIONALISATIONS.FRANCE,
-        'status': Skill.STATUSES.ACTIF,
-        'version': 2,
-        'level': 1,
+        i18n: Skill.INTERNATIONALISATIONS.FRANCE,
+        status: Skill.STATUSES.ACTIF,
+        version: 2,
+        level: 1,
         'created-at': new Date('2023-10-23T18:06:00Z'),
       };
 
@@ -140,7 +139,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
           id: skill.airtableId,
           attributes,
           relationships: {
-            'tube': {
+            tube: {
               data: {
                 type: 'tubes',
                 id: skill.tubeAirtableId,
@@ -151,36 +150,36 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
                 {
                   type: 'tutorials',
                   id: skill.learningMoreTutorialAirtableIds[0],
-                }
-              ]
+                },
+              ],
             },
             'tuto-solution': {
               data: [
                 {
                   type: 'tutorials',
                   id: skill.tutorialAirtableIds[0],
-                }
+                },
               ],
             },
-            'challenges': {
-              'data': [
+            challenges: {
+              data: [
                 {
-                  'id': skill.challengeIds[0],
-                  'type': 'challenges',
+                  id: skill.challengeIds[0],
+                  type: 'challenges',
                 },
                 {
-                  'id': skill.challengeIds[1],
-                  'type': 'challenges',
+                  id: skill.challengeIds[1],
+                  type: 'challenges',
                 },
               ],
             },
             'challenges-production': {
-              'links': {
-                'related': '/api/skills/skillId/challenges-production',
+              links: {
+                related: '/api/skills/skillId/challenges-production',
               },
             },
-          }
-        }
+          },
+        },
       };
 
       const serializedSkill = serialize(skill);

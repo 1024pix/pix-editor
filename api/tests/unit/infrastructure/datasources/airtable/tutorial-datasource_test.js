@@ -7,7 +7,6 @@ const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | TutorialDatasource', () => {
   describe('#fromAirTableObject', () => {
-
     it('should create a Tutorial from the AirtableRecord', () => {
       // given
       const expectedTutorial = domainBuilder.buildTutorialDatasourceObject();

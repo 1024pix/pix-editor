@@ -27,30 +27,15 @@ export class DeleteUnreferencedTranslations extends Script {
     const airtableClient = new Airtable({
       apiKey: config.airtable.apiKey,
     }).base(config.airtable.base);
-    const translations = await airtableClient
-      .table('translations')
-      .select()
-      .all();
+    const translations = await airtableClient.table('translations').select().all();
 
-    const competences = await airtableClient
-      .table('Competences')
-      .select()
-      .all();
+    const competences = await airtableClient.table('Competences').select().all();
 
-    const areas = await airtableClient
-      .table('Domaines')
-      .select()
-      .all();
+    const areas = await airtableClient.table('Domaines').select().all();
 
-    const challenges = await airtableClient
-      .table('Epreuves')
-      .select()
-      .all();
+    const challenges = await airtableClient.table('Epreuves').select().all();
 
-    const skills = await airtableClient
-      .table('Acquis')
-      .select()
-      .all();
+    const skills = await airtableClient.table('Acquis').select().all();
 
     const translationKeys = translations.map(({ fields }) => fields.key);
     const baseKeys = [

@@ -4,8 +4,10 @@ import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
 export async function list() {
-  const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment()
-    .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
+  const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment().orderBy([
+    'localized_challenges.challengeId',
+    'localized_challenges.locale',
+  ]);
   return localizedChallengeDtos.map(_toDomain);
 }
 
@@ -13,7 +15,11 @@ function _generateId() {
   return generateNewId('challenge');
 }
 
-export async function create({ localizedChallenges = [], generateId = _generateId, transaction: knexConnection = knex }) {
+export async function create({
+  localizedChallenges = [],
+  generateId = _generateId,
+  transaction: knexConnection = knex,
+}) {
   if (localizedChallenges.length === 0) {
     return;
   }
@@ -42,9 +48,7 @@ export async function listByChallengeIds({ challengeIds, transaction: knexConnec
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
-  const dto = await _queryLocalizedChallengeWithAttachment(knexConnection)
-    .where('localized_challenges.id', id)
-    .first();
+  const dto = await _queryLocalizedChallengeWithAttachment(knexConnection).where('localized_challenges.id', id).first();
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
@@ -59,21 +63,25 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
   return dtos.map(_toDomain);
 }
 
-export async function update({
-  localizedChallenge,
-  transaction: knexConnection = knex
-}) {
+export async function update({ localizedChallenge, transaction: knexConnection = knex }) {
   const localizedChallengeForDB = adaptModelForDB(localizedChallenge);
   delete localizedChallengeForDB.id;
   const [dto] = await knexConnection('localized_challenges')
     .where('id', localizedChallenge.id)
-    .update(localizedChallengeForDB).returning('*');
+    .update(localizedChallengeForDB)
+    .returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  const [primaryEmbedUrl] = await knexConnection('localized_challenges').where({ id: dto.challengeId }).pluck('embedUrl');
+  const [primaryEmbedUrl] = await knexConnection('localized_challenges')
+    .where({ id: dto.challengeId })
+    .pluck('embedUrl');
 
-  return _toDomain({ ...dto, primaryEmbedUrl, fileIds: localizedChallenge.fileIds });
+  return _toDomain({
+    ...dto,
+    primaryEmbedUrl,
+    fileIds: localizedChallenge.fileIds,
+  });
 }
 
 function _toDomain(dto) {
@@ -84,23 +92,24 @@ function adaptModelsForDB(localizedChallenges, generateId) {
   return localizedChallenges.map((localizedChallenge) => adaptModelForDB(localizedChallenge, generateId));
 }
 
-function adaptModelForDB(localizedChallenge, generateId) {return {
-  id: localizedChallenge.id ?? generateId(),
-  challengeId: localizedChallenge.challengeId,
-  embedUrl: localizedChallenge.embedUrl,
-  locale: localizedChallenge.locale,
-  status: localizedChallenge.status,
-  geography: localizedChallenge.geography,
-  urlsToConsult: localizedChallenge.urlsToConsult,
-  requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
-  isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
-  deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
-  isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
-  toRephrase: localizedChallenge.toRephrase,
-  hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
-  noValidationNeeded: localizedChallenge.noValidationNeeded,
-  validatedAt: localizedChallenge.validatedAt,
-};
+function adaptModelForDB(localizedChallenge, generateId) {
+  return {
+    id: localizedChallenge.id ?? generateId(),
+    challengeId: localizedChallenge.challengeId,
+    embedUrl: localizedChallenge.embedUrl,
+    locale: localizedChallenge.locale,
+    status: localizedChallenge.status,
+    geography: localizedChallenge.geography,
+    urlsToConsult: localizedChallenge.urlsToConsult,
+    requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
+    deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
+    isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
+    toRephrase: localizedChallenge.toRephrase,
+    hasEmbedInternalValidation: localizedChallenge.hasEmbedInternalValidation,
+    noValidationNeeded: localizedChallenge.noValidationNeeded,
+    validatedAt: localizedChallenge.validatedAt,
+  };
 }
 
 function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
@@ -112,5 +121,8 @@ function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
         .as('localized_challenges-attachments')
         .groupBy('localizedChallengeId')
         .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
-      { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' });
+      {
+        'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id',
+      },
+    );
 }

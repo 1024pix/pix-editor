@@ -1,13 +1,5 @@
 export class User {
-  constructor({
-    id,
-    name,
-    trigram,
-    apiKey,
-    access,
-    createdAt,
-    updatedAt,
-  } = {}) {
+  constructor({ id, name, trigram, apiKey, access, createdAt, updatedAt } = {}) {
     this.id = id;
     this.name = name;
     this.trigram = trigram;
@@ -25,7 +17,7 @@ export class User {
       EDITOR: 'editor',
       ADMIN: 'admin',
     };
-  };
+  }
 
   get isAdmin() {
     return this.access === User.ROLES.ADMIN;

@@ -70,7 +70,9 @@ describe('Integration | Scripts | CopyCompetencesFromAirtableToPg', () => {
       await script.handle({ options, logger });
 
       // then
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'] });
+      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+        fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'],
+      });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
         {
@@ -141,7 +143,9 @@ describe('Integration | Scripts | CopyCompetencesFromAirtableToPg', () => {
         await script.handle({ options, logger });
 
         // then
-        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'] });
+        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+          fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'],
+        });
 
         await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
           {

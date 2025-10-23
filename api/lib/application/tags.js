@@ -13,22 +13,24 @@ export function register(server) {
       method: 'POST',
       path: '/api/tags',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           payload: Joi.object({
             data: {
               type: Joi.string().required().equal('tags'),
               attributes: {
-                'title': Joi.string().required(),
+                title: Joi.string().required(),
               },
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const tag = await tagSerializer.deserialize(request.payload);
           const createdTag = await createTag(tag, { tagRepository });
           return h.response(tagSerializer.serialize(createdTag)).code(201);
@@ -44,7 +46,7 @@ export function register(server) {
             tagAirtableId: Types.tagId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const tag = await tagRepository.getByAirtableId(request.params.tagAirtableId);
           if (!tag) return new NotFoundError('unknown tag id');
           return tagSerializer.serialize(tag);
@@ -59,10 +61,9 @@ export function register(server) {
           query: Joi.object({
             'filter[title]': Joi.string(),
             'filter[ids][]': [Joi.string(), Joi.array().items(Joi.string())],
-          })
-            .xor('filter[title]', 'filter[ids][]')
+          }).xor('filter[title]', 'filter[ids][]'),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const params = extractParameters(request.query);
           const tags = await searchTags(params, { tagRepository });
           return tagSerializer.serialize(tags);

@@ -1,6 +1,6 @@
 import JsonapiSerializer from 'jsonapi-serializer';
 
-const { Serializer  } = JsonapiSerializer;
+const { Serializer } = JsonapiSerializer;
 
 const serializer = new Serializer('', {});
 

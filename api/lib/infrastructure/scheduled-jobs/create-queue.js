@@ -22,7 +22,7 @@ export function createQueue(queueName) {
   queue.on('paused', () => queueMessage(queueName, 'The queue has been paused'));
   queue.on('resumed', () => queueMessage(queueName, 'The queue has been resumed'));
   queue.on('cleaned', () => queueMessage(queueName, 'The queue has been cleaned'));
-  queue.on('drained', async function() {
+  queue.on('drained', async function () {
     queueMessage(queueName, 'The queue has been drained');
     await cleanQueue(queues.find((queue) => queue.name === queueName));
   });

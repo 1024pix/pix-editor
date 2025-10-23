@@ -10,7 +10,7 @@ export function register(server) {
       method: 'GET',
       path: '/api/frameworks',
       config: {
-        handler: async function() {
+        handler: async function () {
           const frameworks = await frameworkRepository.list();
           return frameworkSerializer.serialize(frameworks);
         },
@@ -31,14 +31,12 @@ export function register(server) {
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const framework = await frameworkSerializer.deserialize(request.payload);
 
           const createdFramework = await usecases.createFramework(framework);
 
-          return h
-            .response(frameworkSerializer.serialize(createdFramework))
-            .code(201);
+          return h.response(frameworkSerializer.serialize(createdFramework)).code(201);
         },
       },
     },

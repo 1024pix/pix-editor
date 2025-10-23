@@ -1,12 +1,5 @@
 export class ChallengeSummary {
-  constructor({
-    id,
-    instruction,
-    skillName,
-    status,
-    index,
-    previewUrl,
-  }) {
+  constructor({ id, instruction, skillName, status, index, previewUrl }) {
     this.id = id;
     this.instruction = instruction;
     this.skillName = skillName;

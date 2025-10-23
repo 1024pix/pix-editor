@@ -1,15 +1,5 @@
 export class Attachment {
-  constructor({
-    id,
-    filename,
-    url,
-    type,
-    size,
-    mimeType,
-    challengeId,
-    airtableChallengeId,
-    localizedChallengeId,
-  }) {
+  constructor({ id, filename, url, type, size, mimeType, challengeId, airtableChallengeId, localizedChallengeId }) {
     this.id = id;
     this.url = url;
     this.type = type;

@@ -4,7 +4,6 @@ import { createSkill } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Use Cases | create-skill', () => {
-
   const createdSkill = Symbol('createdSkill');
   const tubeSkills = Symbol('');
 
@@ -55,10 +54,19 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
 
     expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith(skill.tubeAirtableId);
     expect(skillRepository.listByTubeId).toHaveBeenCalledWith('tube1');
-    expect(skill.prepareForCreation).toHaveBeenCalledWith(tube, tubeSkills, generateNewIdFnc, normalizeNonBreakingSpaceFnc);
+    expect(skill.prepareForCreation).toHaveBeenCalledWith(
+      tube,
+      tubeSkills,
+      generateNewIdFnc,
+      normalizeNonBreakingSpaceFnc,
+    );
     expect(skillRepository.create).toHaveBeenCalledWith(skill);
     expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
-    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({ updatedRecord: 'skillForRelease' , model: 'skills', pixApiClient });
+    expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
+      updatedRecord: 'skillForRelease',
+      model: 'skills',
+      pixApiClient,
+    });
   });
 
   describe('when tube is not found', () => {

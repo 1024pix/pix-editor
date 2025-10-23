@@ -5,21 +5,25 @@ import {
   getCurrentContent,
   getLatestRelease,
   getLatestReleaseDate,
-  getRelease
+  getRelease,
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
 import { Area, Attachment, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
-import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
+import {
+  ChallengeForRelease,
+  SkillForRelease,
+  TutorialForRelease,
+} from '../../../../lib/domain/models/release/index.js';
 
-describe('Integration | Repository | release-repository', function() {
-  afterEach(function() {
+describe('Integration | Repository | release-repository', function () {
+  afterEach(function () {
     return knex('releases').delete();
   });
 
-  describe('#create', function() {
-    it('should save current content as a new release', async function() {
+  describe('#create', function () {
+    it('should save current content as a new release', async function () {
       // Given
       const currentContent = { some: 'property' };
-      const fakeGetCurrentContent = async function() {
+      const fakeGetCurrentContent = async function () {
         return currentContent;
       };
 
@@ -32,7 +36,7 @@ describe('Integration | Repository | release-repository', function() {
       expect(releasesInDb[0].content).to.deep.equal(currentContent);
     });
 
-    it('should return the saved release ID', async function() {
+    it('should return the saved release ID', async function () {
       // Given
       const currentContentDTO = {
         areas: [],
@@ -43,9 +47,9 @@ describe('Integration | Repository | release-repository', function() {
         skills: [],
         thematics: [],
         tubes: [],
-        tutorials: []
+        tutorials: [],
       };
-      const fakeGetCurrentContent = async function() {
+      const fakeGetCurrentContent = async function () {
         return currentContentDTO;
       };
 
@@ -58,8 +62,8 @@ describe('Integration | Repository | release-repository', function() {
     });
   });
 
-  describe('#getLatestRelease', function() {
-    it('should return content of newest created release', async function() {
+  describe('#getLatestRelease', function () {
+    it('should return content of newest created release', async function () {
       // Given
       const newestReleaseContentDTO = {
         areas: [],
@@ -70,18 +74,18 @@ describe('Integration | Repository | release-repository', function() {
         skills: [],
         thematics: [],
         tubes: [],
-        tutorials: []
+        tutorials: [],
       };
       const oldestReleaseContentDTO = { some: 'old-property' };
       databaseBuilder.factory.buildRelease({
         id: 1,
         createdAt: new Date('2021-02-02'),
-        content: newestReleaseContentDTO
+        content: newestReleaseContentDTO,
       });
       databaseBuilder.factory.buildRelease({
         id: 2,
         createdAt: new Date('2020-01-01'),
-        content: oldestReleaseContentDTO
+        content: oldestReleaseContentDTO,
       });
       await databaseBuilder.commit();
 
@@ -93,14 +97,14 @@ describe('Integration | Repository | release-repository', function() {
       const expectedRelease = domainBuilder.buildDomainRelease({
         id: 1,
         createdAt: new Date('2021-02-02'),
-        content: expectedContent
+        content: expectedContent,
       });
       expect(latestRelease).toEqualInstance(expectedRelease);
     });
   });
 
-  describe('#getLatestReleaseDate', function() {
-    it('should return the date of the latest release', async function() {
+  describe('#getLatestReleaseDate', function () {
+    it('should return the date of the latest release', async function () {
       // Given
       databaseBuilder.factory.buildRelease({
         createdAt: new Date('2022-01-01'),
@@ -124,8 +128,8 @@ describe('Integration | Repository | release-repository', function() {
     });
   });
 
-  describe('#getRelease', function() {
-    it('should return content of given release', async function() {
+  describe('#getRelease', function () {
+    it('should return content of given release', async function () {
       // Given
       const otherReleaseContentDTO = { some: 'property' };
       const expectedReleaseContentDTO = {
@@ -138,18 +142,18 @@ describe('Integration | Repository | release-repository', function() {
         skills: [],
         thematics: [],
         tubes: [],
-        tutorials: []
+        tutorials: [],
       };
 
       databaseBuilder.factory.buildRelease({
         id: 11,
         createdAt: new Date('2021-01-01'),
-        content: otherReleaseContentDTO
+        content: otherReleaseContentDTO,
       });
       databaseBuilder.factory.buildRelease({
         id: 12,
         createdAt: new Date('2020-01-01'),
-        content: expectedReleaseContentDTO
+        content: expectedReleaseContentDTO,
       });
       await databaseBuilder.commit();
 
@@ -161,20 +165,20 @@ describe('Integration | Repository | release-repository', function() {
       const expectedRelease = domainBuilder.buildDomainRelease({
         id: 12,
         createdAt: new Date('2020-01-01'),
-        content: expectedContent
+        content: expectedContent,
       });
       expect(givenRelease).toEqualInstance(expectedRelease);
     });
 
-    context('with a rich and realistic content', function() {
-      it('should return a well formed release', async function() {
+    context('with a rich and realistic content', function () {
+      it('should return a well formed release', async function () {
         // Given
         _mockRichAirtableContent();
         const richCurrentContentDTO = _getRichCurrentContentDTO();
         databaseBuilder.factory.buildRelease({
           id: 1,
           createdAt: new Date('2021-01-01'),
-          content: richCurrentContentDTO
+          content: richCurrentContentDTO,
         });
         await databaseBuilder.commit();
 
@@ -186,16 +190,15 @@ describe('Integration | Repository | release-repository', function() {
         const expectedRelease = domainBuilder.buildDomainRelease({
           id: 1,
           createdAt: new Date('2021-01-01'),
-          content: expectedContent
+          content: expectedContent,
         });
         expect(givenRelease).toEqualInstance(expectedRelease);
       });
     });
   });
 
-  describe('#getCurrentContent', function() {
-
-    beforeEach(function() {
+  describe('#getCurrentContent', function () {
+    beforeEach(function () {
       const { areas, competences, thematics, tubeIds, skills, challenges } = _mockRichAirtableContent();
 
       buildAreasTranslations(areas);
@@ -228,7 +231,7 @@ describe('Integration | Repository | release-repository', function() {
         thematicIds: 'thematicIds',
         validatedObjectives: 'Rien',
         status: Mission.status.VALIDATED,
-        documentationUrl: 'http://url-example.net'
+        documentationUrl: 'http://url-example.net',
       });
 
       databaseBuilder.factory.buildMission({
@@ -244,7 +247,7 @@ describe('Integration | Repository | release-repository', function() {
       return databaseBuilder.commit();
     });
 
-    it('should return current content as DTO', async function() {
+    it('should return current content as DTO', async function () {
       // When
       const currentContentDTO = await getCurrentContent();
 
@@ -400,7 +403,9 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
     status: LocalizedChallenge.STATUSES.PLAY,
     requireGafamWebsiteAccess: !isAlternative,
     isIncompatibleIpadCertif: isPrimary,
-    deafAndHardOfHearing: isPrimary ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK : LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+    deafAndHardOfHearing: isPrimary
+      ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK
+      : LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
     isAwarenessChallenge: isPrimary,
     toRephrase: isPrimary,
   });
@@ -940,7 +945,13 @@ function _mockRichAirtableContent() {
     thematics: [airtableThematic111, airtableThematic112, airtableThematic121, airtableThematic211],
     tubes: [airtableTube1111, airtableTube1121, airtableTube1211, airtableTube1212, airtableTube2111],
     skills: [airtableSkill11111, airtableSkill11112, airtableSkill12121, airtableSkill21111],
-    challenges: [airtableChallenge121211, airtableChallenge121212, airtableChallenge211111, airtableChallenge211112, airtableChallenge211113],
+    challenges: [
+      airtableChallenge121211,
+      airtableChallenge121212,
+      airtableChallenge211111,
+      airtableChallenge211112,
+      airtableChallenge211113,
+    ],
     tutorials: [airtableTutorial1, airtableTutorial2],
     attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3, airtableAttachment4],
   });
@@ -962,34 +973,32 @@ function _getRichCurrentContentDTO() {
       name: 'FrameworkA',
     },
   ];
-  const expectedAreaDTOs = [{
-    id: 'area1',
-    competenceIds: [
-      'competence11',
-      'competence12',
-    ],
-    title_i18n: {
-      fr: 'area1 titleFrFr',
-      en: 'area1 titleEnUs',
+  const expectedAreaDTOs = [
+    {
+      id: 'area1',
+      competenceIds: ['competence11', 'competence12'],
+      title_i18n: {
+        fr: 'area1 titleFrFr',
+        en: 'area1 titleEnUs',
+      },
+      code: '1',
+      name: '1. area1 titleFrFr',
+      color: Area.COLORS.JAFFA,
+      frameworkId: 'frameworkA',
     },
-    code: '1',
-    name: '1. area1 titleFrFr',
-    color: Area.COLORS.JAFFA,
-    frameworkId: 'frameworkA',
-  }, {
-    id: 'area2',
-    competenceIds: [
-      'competence21',
-    ],
-    title_i18n: {
-      fr: 'area2 titleFrFr',
-      en: 'area2 titleEnUs',
+    {
+      id: 'area2',
+      competenceIds: ['competence21'],
+      title_i18n: {
+        fr: 'area2 titleFrFr',
+        en: 'area2 titleEnUs',
+      },
+      code: '2',
+      name: '2. area2 titleFrFr',
+      color: Area.COLORS.EMERALD,
+      frameworkId: 'frameworkA',
     },
-    code: '2',
-    name: '2. area2 titleFrFr',
-    color: Area.COLORS.EMERALD,
-    frameworkId: 'frameworkA',
-  }];
+  ];
   const expectedCompetenceDTOs = [
     {
       id: 'competence11',
@@ -1003,14 +1012,8 @@ function _getRichCurrentContentDTO() {
         en: 'competence11 descriptionEnUs',
       },
       areaId: 'area1',
-      skillIds: [
-        'skill11111',
-        'skill11112',
-      ],
-      thematicIds: [
-        'thematic111',
-        'thematic112',
-      ],
+      skillIds: ['skill11111', 'skill11112'],
+      thematicIds: ['thematic111', 'thematic112'],
       origin: 'FrameworkA',
     },
     {
@@ -1025,12 +1028,8 @@ function _getRichCurrentContentDTO() {
         en: 'competence12 descriptionEnUs',
       },
       areaId: 'area1',
-      skillIds: [
-        'skill12121',
-      ],
-      thematicIds: [
-        'thematic121',
-      ],
+      skillIds: ['skill12121'],
+      thematicIds: ['thematic121'],
       origin: 'FrameworkA',
     },
     {
@@ -1045,12 +1044,8 @@ function _getRichCurrentContentDTO() {
         en: 'competence21 descriptionEnUs',
       },
       areaId: 'area2',
-      skillIds: [
-        'skill21111',
-      ],
-      thematicIds: [
-        'thematic211',
-      ],
+      skillIds: ['skill21111'],
+      thematicIds: ['thematic211'],
       origin: 'FrameworkA',
     },
   ];
@@ -1062,9 +1057,7 @@ function _getRichCurrentContentDTO() {
         en: 'thematic111 nameEnUs',
       },
       competenceId: 'competence11',
-      tubeIds: [
-        'tube1111',
-      ],
+      tubeIds: ['tube1111'],
       index: 111,
     },
     {
@@ -1074,9 +1067,7 @@ function _getRichCurrentContentDTO() {
         en: 'thematic112 nameEnUs',
       },
       competenceId: 'competence11',
-      tubeIds: [
-        'tube1121',
-      ],
+      tubeIds: ['tube1121'],
       index: 112,
     },
     {
@@ -1086,10 +1077,7 @@ function _getRichCurrentContentDTO() {
         en: 'thematic121 nameEnUs',
       },
       competenceId: 'competence12',
-      tubeIds: [
-        'tube1211',
-        'tube1212',
-      ],
+      tubeIds: ['tube1211', 'tube1212'],
       index: 121,
     },
     {
@@ -1099,9 +1087,7 @@ function _getRichCurrentContentDTO() {
         en: 'thematic211 nameEnUs',
       },
       competenceId: 'competence21',
-      tubeIds: [
-        'tube2111',
-      ],
+      tubeIds: ['tube2111'],
       index: 211,
     },
   ];

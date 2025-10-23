@@ -20,16 +20,13 @@ function buildBaseReadQuery() {
 }
 
 export async function list() {
-  const whitelistedUrlDtos = await buildBaseReadQuery()
-    .orderBy('url');
+  const whitelistedUrlDtos = await buildBaseReadQuery().orderBy('url');
 
   return toDomainList(whitelistedUrlDtos);
 }
 
 export async function find(id) {
-  const whitelistedUrlDto = await buildBaseReadQuery()
-    .where('whitelisted_urls.id', id)
-    .first();
+  const whitelistedUrlDto = await buildBaseReadQuery().where('whitelisted_urls.id', id).first();
 
   if (!whitelistedUrlDto) return null;
   return toDomain(whitelistedUrlDto);

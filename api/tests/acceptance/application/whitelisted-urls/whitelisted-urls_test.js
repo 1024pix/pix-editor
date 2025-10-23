@@ -5,7 +5,7 @@ import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | whitelisted-urls', () => {
   let now;
-  beforeEach(function() {
+  beforeEach(function () {
     now = new Date('2024-10-29T03:04:00Z');
     vi.useFakeTimers({
       now,
@@ -13,14 +13,14 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     vi.useRealTimers();
     return knex('whitelisted_urls').del();
   });
 
   describe('GET /whitelisted-urls', () => {
     let editorUser, server;
-    beforeEach(async function() {
+    beforeEach(async function () {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -74,7 +74,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(notEditorUser)
+        headers: generateAuthorizationHeader(notEditorUser),
       });
 
       // Then
@@ -95,7 +95,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/whitelisted-urls',
-        headers: generateAuthorizationHeader(editorUser)
+        headers: generateAuthorizationHeader(editorUser),
       });
 
       // Then
@@ -110,9 +110,9 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
               'updated-at': new Date('2022-08-08'),
               'creator-name': null,
               'latest-updator-name': null,
-              'url': 'https://www.editor.pix.fr',
+              url: 'https://www.editor.pix.fr',
               'related-skill-names': null,
-              'comment': 'Mon site préféré',
+              comment: 'Mon site préféré',
               'check-type': 'exact_match',
             },
           },
@@ -121,12 +121,12 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             id: '123',
             attributes: {
               'created-at': new Date('2020-01-01'),
-              'updated-at':new Date('2022-02-02'),
+              'updated-at': new Date('2022-02-02'),
               'creator-name': 'Madame Editor',
               'latest-updator-name': 'Madame Editor',
-              'url': 'https://www.google.com',
+              url: 'https://www.google.com',
               'related-skill-names': '@morse2,@saumon5',
-              'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
+              comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
               'check-type': 'starts_with',
             },
           },
@@ -136,7 +136,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('DELETE /whitelisted-urls/{whitelistedUrlId}', () => {
     let editorUser, server;
-    beforeEach(async function() {
+    beforeEach(async function () {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -190,7 +190,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/123456',
-        headers: generateAuthorizationHeader(notEditorUser)
+        headers: generateAuthorizationHeader(notEditorUser),
       });
 
       // Then
@@ -211,7 +211,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/coucoumaman',
-        headers: generateAuthorizationHeader(editorUser)
+        headers: generateAuthorizationHeader(editorUser),
       });
 
       // Then
@@ -228,7 +228,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/777',
-        headers: generateAuthorizationHeader(editorUser)
+        headers: generateAuthorizationHeader(editorUser),
       });
 
       // Then
@@ -238,7 +238,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
           {
             status: '404',
             title: 'Not Found',
-            detail: 'L\'URL d\'id 777 n\'existe pas',
+            detail: "L'URL d'id 777 n'existe pas",
           },
         ],
       });
@@ -249,7 +249,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/789',
-        headers: generateAuthorizationHeader(editorUser)
+        headers: generateAuthorizationHeader(editorUser),
       });
 
       // Then
@@ -259,7 +259,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
           {
             status: '409',
             title: 'Conflict',
-            detail: 'L\'URL a déjà été supprimée',
+            detail: "L'URL a déjà été supprimée",
           },
         ],
       });
@@ -270,7 +270,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/api/whitelisted-urls/123',
-        headers: generateAuthorizationHeader(editorUser)
+        headers: generateAuthorizationHeader(editorUser),
       });
 
       // Then
@@ -281,7 +281,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('POST /whitelisted-urls', () => {
     let editorUser, server, validPayload;
-    beforeEach(async function() {
+    beforeEach(async function () {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -419,7 +419,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('PATCH /whitelisted-urls/{whitelistedUrlId}', () => {
     let editorUser, server, validPayload;
-    beforeEach(async function() {
+    beforeEach(async function () {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,

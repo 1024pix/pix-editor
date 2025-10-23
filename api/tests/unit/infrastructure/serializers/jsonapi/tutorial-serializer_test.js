@@ -39,7 +39,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
             level: Tutorial.LEVELS.THREE,
             crush: true,
             language: 'fr',
-            'pix-id': 'tutorialId'
+            'pix-id': 'tutorialId',
           },
           relationships: {
             tags: {
@@ -77,7 +77,7 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
             level: Tutorial.LEVELS.THREE,
             crush: true,
             language: 'fr',
-            'pix-id': 'tutorialId'
+            'pix-id': 'tutorialId',
           },
           relationships: {
             tags: {
@@ -100,20 +100,22 @@ describe('Unit | Serializer | JSONAPI | tutorial-serializer', () => {
       const deserializedTutorial = await deserialize(payload);
 
       // then
-      expect(deserializedTutorial).toStrictEqual(new Tutorial({
-        id: 'tutorialId',
-        airtableId: 'tutorialAirtableId',
-        title: 'mon titre',
-        duration: '01:00:05',
-        source: 'Mon grenier',
-        format: Tutorial.FORMATS.AUDIO,
-        link: 'https://www.somelink.com',
-        license: Tutorial.LICENSES.CCBYSA,
-        level: Tutorial.LEVELS.THREE,
-        crush: true,
-        locale: 'fr',
-        tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
-      }));
+      expect(deserializedTutorial).toStrictEqual(
+        new Tutorial({
+          id: 'tutorialId',
+          airtableId: 'tutorialAirtableId',
+          title: 'mon titre',
+          duration: '01:00:05',
+          source: 'Mon grenier',
+          format: Tutorial.FORMATS.AUDIO,
+          link: 'https://www.somelink.com',
+          license: Tutorial.LICENSES.CCBYSA,
+          level: Tutorial.LEVELS.THREE,
+          crush: true,
+          locale: 'fr',
+          tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
+        }),
+      );
     });
   });
 });

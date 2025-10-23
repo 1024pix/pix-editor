@@ -12,10 +12,12 @@ export function mergeStreams(...inputStreams) {
       inputStream.on('error', reject);
     });
   });
-  Promise.all(promises).then(() => {
-    stream.end();
-  }).catch((e) => {
-    stream.emit('error', e);
-  });
+  Promise.all(promises)
+    .then(() => {
+      stream.end();
+    })
+    .catch((e) => {
+      stream.emit('error', e);
+    });
   return stream;
 }

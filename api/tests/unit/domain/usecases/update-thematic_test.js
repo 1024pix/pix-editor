@@ -5,7 +5,6 @@ import { NotFoundError } from '../../../../lib/domain/errors.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
 describe('Unit | Domain | Use Cases | update-thematic', () => {
-
   const updatedThematic = Symbol('updatedThematic');
   const thematicUpdates = Symbol('thematicUpdates');
 

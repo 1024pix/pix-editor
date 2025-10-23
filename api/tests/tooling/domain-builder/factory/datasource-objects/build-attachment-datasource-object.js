@@ -5,7 +5,6 @@ export function buildAttachmentDatasourceObject({
   challengeId = 'recChallengeId',
   localizedChallengeId = challengeId,
 } = {}) {
-
   return {
     id,
     url,

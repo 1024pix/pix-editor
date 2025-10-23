@@ -2,7 +2,6 @@ import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
 
 export const tutorialDatasource = datasource.extend({
-
   modelName: 'Tutorial',
 
   tableName: 'Tutoriels',
@@ -44,16 +43,16 @@ export const tutorialDatasource = datasource.extend({
     const airtableObject = {
       fields: {
         'id persistant': model.id,
-        'Durée': model.duration,
-        'Format': model.format,
-        'Lien': model.link,
-        'Source': model.source,
-        'Titre': model.title,
-        'Langue': model.locale,
-        'License': model.license,
-        'niveau': model.level,
-        'CoupDeCoeur': model.crush ? 'YES' : null,
-        'Tags': model.tagAirtableIds,
+        Durée: model.duration,
+        Format: model.format,
+        Lien: model.link,
+        Source: model.source,
+        Titre: model.title,
+        Langue: model.locale,
+        License: model.license,
+        niveau: model.level,
+        CoupDeCoeur: model.crush ? 'YES' : null,
+        Tags: model.tagAirtableIds,
       },
     };
     if (model.airtableId) airtableObject.id = model.airtableId;

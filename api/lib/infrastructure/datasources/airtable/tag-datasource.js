@@ -2,15 +2,11 @@ import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
 
 export const tagDatasource = datasource.extend({
-
   modelName: 'Tag',
 
   tableName: 'Tags',
 
-  usedFields: [
-    'id persistant',
-    'Nom',
-  ],
+  usedFields: ['id persistant', 'Nom'],
 
   fromAirTableObject(airtableRecord) {
     return {

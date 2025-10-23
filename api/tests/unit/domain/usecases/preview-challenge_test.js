@@ -3,8 +3,7 @@ import { domainBuilder } from '../../../test-helper.js';
 import { previewChallenge } from '../../../../lib/domain/usecases/index.js';
 import * as config from '../../../../lib/config.js';
 
-describe('Unit | Domain | Usecases | preview-challenge', function() {
-
+describe('Unit | Domain | Usecases | preview-challenge', function () {
   it('should return a preview url for challengeId and locale', async () => {
     // given
     vi.spyOn(config.pixApp, 'baseUrlOrg', 'get').mockReturnValue('https://preview.url.org');

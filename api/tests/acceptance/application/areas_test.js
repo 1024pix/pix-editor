@@ -15,7 +15,7 @@ import * as config from '../../../lib/config.js';
 describe('Acceptance | Route | areas', () => {
   let editorUser, adminUser, originalPixApiUrlValue;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -23,7 +23,7 @@ describe('Acceptance | Route | areas', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
@@ -32,49 +32,57 @@ describe('Acceptance | Route | areas', () => {
 
     beforeEach(async () => {
       const airtableAreas = [
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area1',
-          airtableId: 'recArea1',
-          code: '1',
-          frameworkId: 'framework1',
-          competenceAirtableIds: ['recCompetence1', 'recCompetence2'],
-          competenceIds: ['competence1', 'competence2'],
-          color: null,
-        })),
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area4',
-          airtableId: 'recArea4',
-          code: '1',
-          frameworkId: 'framework2',
-          competenceAirtableIds: ['recCompetence8', 'recCompetence9'],
-          competenceIds: ['competence8', 'competence9'],
-          color: null,
-        })),
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area2',
-          airtableId: 'recArea2',
-          code: '2',
-          frameworkId: 'framework1',
-          competenceAirtableIds: ['recCompetence4', 'recCompetence3'],
-          competenceIds: ['competence4', 'competence3'],
-          color: null,
-        })),
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area3',
-          airtableId: 'recArea3',
-          code: '3',
-          frameworkId: 'framework1',
-          competenceAirtableIds: ['recCompetence7', 'recCompetence5', 'recCompetence6'],
-          competenceIds: ['competence7', 'competence5', 'competence6'],
-          color: null,
-        })),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area1',
+            airtableId: 'recArea1',
+            code: '1',
+            frameworkId: 'framework1',
+            competenceAirtableIds: ['recCompetence1', 'recCompetence2'],
+            competenceIds: ['competence1', 'competence2'],
+            color: null,
+          }),
+        ),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area4',
+            airtableId: 'recArea4',
+            code: '1',
+            frameworkId: 'framework2',
+            competenceAirtableIds: ['recCompetence8', 'recCompetence9'],
+            competenceIds: ['competence8', 'competence9'],
+            color: null,
+          }),
+        ),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area2',
+            airtableId: 'recArea2',
+            code: '2',
+            frameworkId: 'framework1',
+            competenceAirtableIds: ['recCompetence4', 'recCompetence3'],
+            competenceIds: ['competence4', 'competence3'],
+            color: null,
+          }),
+        ),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area3',
+            airtableId: 'recArea3',
+            code: '3',
+            frameworkId: 'framework1',
+            competenceAirtableIds: ['recCompetence7', 'recCompetence5', 'recCompetence6'],
+            competenceIds: ['competence7', 'competence5', 'competence6'],
+            color: null,
+          }),
+        ),
       ];
 
       airtableAreasScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Domaines')
         .query({
           fields: { '': areaDatasource.usedFields },
-          sort: [{ field: areaDatasource.sortField, direction: 'asc' }]
+          sort: [{ field: areaDatasource.sortField, direction: 'asc' }],
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableAreas });
@@ -303,15 +311,17 @@ describe('Acceptance | Route | areas', () => {
 
     it('should respond with status 201 and created area', async () => {
       // given
-      const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-        id: 'area5',
-        airtableId: 'recArea5',
-        code: '2',
-        frameworkId: 'framework2',
-        competenceAirtableIds: null,
-        competenceIds: null,
-        color: null,
-      }));
+      const airtableArea = airtableBuilder.factory.buildArea(
+        domainBuilder.buildAreaDatasourceObject({
+          id: 'area5',
+          airtableId: 'recArea5',
+          code: '2',
+          frameworkId: 'framework2',
+          competenceAirtableIds: null,
+          competenceIds: null,
+          color: null,
+        }),
+      );
 
       databaseBuilder.factory.buildFramework({
         id: 'framework1',
@@ -339,30 +349,36 @@ describe('Acceptance | Route | areas', () => {
       await databaseBuilder.commit();
 
       const airtableAreas = [
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area1',
-          airtableId: 'recArea1',
-          code: '1',
-          color: null,
-          frameworkId: 'framework1',
-          competenceIds: null,
-        })),
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area4',
-          airtableId: 'recArea4',
-          code: '1',
-          color: null,
-          frameworkId: 'framework2',
-          competenceIds: null,
-        })),
-        airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-          id: 'area2',
-          airtableId: 'recArea2',
-          code: '2',
-          color: null,
-          frameworkId: 'framework1',
-          competenceIds: null,
-        })),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area1',
+            airtableId: 'recArea1',
+            code: '1',
+            color: null,
+            frameworkId: 'framework1',
+            competenceIds: null,
+          }),
+        ),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area4',
+            airtableId: 'recArea4',
+            code: '1',
+            color: null,
+            frameworkId: 'framework2',
+            competenceIds: null,
+          }),
+        ),
+        airtableBuilder.factory.buildArea(
+          domainBuilder.buildAreaDatasourceObject({
+            id: 'area2',
+            airtableId: 'recArea2',
+            code: '2',
+            color: null,
+            frameworkId: 'framework1',
+            competenceIds: null,
+          }),
+        ),
       ];
 
       const airtableGetAreasScope = nock('https://api.airtable.com')
@@ -376,13 +392,15 @@ describe('Acceptance | Route | areas', () => {
 
       const airtablePostAreaScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Domaines/', {
-          records: [{
-            fields: {
-              'id persistant': 'area5',
-              Code: '2',
-              Referentiel: ['framework2'],
+          records: [
+            {
+              fields: {
+                'id persistant': 'area5',
+                Code: '2',
+                Referentiel: ['framework2'],
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -446,10 +464,12 @@ describe('Acceptance | Route | areas', () => {
 
       expect(generateNewId).toHaveBeenCalledWith('area');
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual([
-        { key: 'area.area5.title', locale: 'en', value: 'Fifth domain' },
-        { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' },
-      ]);
+      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual(
+        [
+          { key: 'area.area5.title', locale: 'en', value: 'Fifth domain' },
+          { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' },
+        ],
+      );
 
       expect(airtableGetAreasScope.isDone()).toBe(true);
       expect(airtablePostAreaScope.isDone()).toBe(true);

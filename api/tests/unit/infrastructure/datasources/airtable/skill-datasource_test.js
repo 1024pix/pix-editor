@@ -6,9 +6,7 @@ import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () => {
-
   describe('#fromAirTableObject', () => {
-
     it('should create a Skill from the AirtableRecord', () => {
       // given
       const expectedSkill = domainBuilder.buildSkillDatasourceObject();
@@ -22,5 +20,4 @@ describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () =
       expect(skill).to.deep.equal(expectedSkill);
     });
   });
-
 });

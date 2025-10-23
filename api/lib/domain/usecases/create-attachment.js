@@ -1,10 +1,6 @@
 import { Attachment } from '../models/index.js';
 
-export async function createAttachment({
-  attachmentCreationCommand,
-  attachmentRepository,
-  updatePixApiReleaseCache,
-}) {
+export async function createAttachment({ attachmentCreationCommand, attachmentRepository, updatePixApiReleaseCache }) {
   const attachmentToCreate = new Attachment({
     filename: attachmentCreationCommand.filename,
     size: attachmentCreationCommand.size,

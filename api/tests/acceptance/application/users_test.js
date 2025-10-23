@@ -3,9 +3,7 @@ import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.
 import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | users-controller', () => {
-
   describe('GET /users/me - get authenticated user details', () => {
-
     it('should return authenticated user details', async () => {
       // Given
       const user = databaseBuilder.factory.buildAdminUser();
@@ -15,19 +13,19 @@ describe('Acceptance | Controller | users-controller', () => {
           type: 'users',
           id: `${user.id}`,
           attributes: {
-            'name': user.name,
-            'trigram': user.trigram,
-            'access': user.access,
+            name: user.name,
+            trigram: user.trigram,
+            access: user.access,
             'created-at': user.createdAt,
             'updated-at': user.updatedAt,
           },
-        }
+        },
       };
       const server = await createServer();
       const getUsersMeOptions = {
         method: 'GET',
         url: '/api/users/me',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       };
 
       // When
@@ -37,8 +35,5 @@ describe('Acceptance | Controller | users-controller', () => {
       expect(response.statusCode).to.equal(200);
       expect(response.result).to.deep.equal(expectedAuthenticatedUser);
     });
-
   });
-
 });
-

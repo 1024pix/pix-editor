@@ -1,12 +1,23 @@
 import { competenceDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { saveInAirtable } from './utils.js';
 
-export async function buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+export async function buildCompetencesFromConfig({
+  airtableClient,
+  databaseBuilder,
+  logger,
+  learningContentConfig,
+  learningContentData,
+}) {
   const competenceItems = [];
   const allAreas = learningContentData.flatMap((framework) => framework.areas);
   for (const areaItem of allAreas) {
     for (let i = 0; i < learningContentConfig.cntCompetencesPerArea; ++i) {
-      const competenceItem = buildCompetence({ indexCompetence: i, areaItem, databaseBuilder, locales: learningContentConfig.locales });
+      const competenceItem = buildCompetence({
+        indexCompetence: i,
+        areaItem,
+        databaseBuilder,
+        locales: learningContentConfig.locales,
+      });
       areaItem.competences.push(competenceItem);
       competenceItems.push(competenceItem);
     }
@@ -48,7 +59,12 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
 
 export async function persistCompetences({ items, airtableClient, logger }) {
   const airtableItems = items.map(competenceDatasource.toAirTableObject);
-  const records = await saveInAirtable({ tableName: 'Competences', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Competences',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     const record = records.shift();
     item.airtableId = record.id;
@@ -57,7 +73,12 @@ export async function persistCompetences({ items, airtableClient, logger }) {
 }
 
 export async function copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableCompetences = await  airtableClient.table('Competences').select({ fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'] }).all();
+  const airtableCompetences = await airtableClient
+    .table('Competences')
+    .select({
+      fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'],
+    })
+    .all();
 
   logger.info(`Copying ${airtableCompetences.length} competences from airtable...`);
 

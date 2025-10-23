@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { listSkills } from '../../../../lib/domain/usecases/list-skills';
 
 describe('Unit | Domain | Use Cases | list-skills', () => {
-
   const allSkills = Symbol('allSkills');
   const skillsByAirtableIds = Symbol('skillsByAirtableIds');
   const foundSKills = Symbol('foundSKills');

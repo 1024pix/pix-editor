@@ -3,10 +3,10 @@ import { Tutorial } from '../../../lib/domain/models/index.js';
 import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
 const iterFor = {
-  'format': cycle(Object.values(Tutorial.FORMATS)),
-  'level': cycle(Object.values(Tutorial.LEVELS)),
-  'license': cycle(Object.values(Tutorial.LICENSES)),
-  'crush': cycle([true, false]),
+  format: cycle(Object.values(Tutorial.FORMATS)),
+  level: cycle(Object.values(Tutorial.LEVELS)),
+  license: cycle(Object.values(Tutorial.LICENSES)),
+  crush: cycle([true, false]),
 };
 let iterTags;
 let iterLocales;
@@ -15,11 +15,46 @@ export async function buildTutorials({ airtableClient, databaseBuilder, logger, 
   iterLocales = cycle(locales);
   const tutorialItems = [];
   let i = 0;
-  tutorialItems.push(buildTutorial({ databaseBuilder, title: 'Faire ses courses', index: i++, tagItems: [] }));
-  tutorialItems.push(buildTutorial({ databaseBuilder, title: 'Se laver les dents', index: i++, tagItems: [iterTags.next().value] }));
-  tutorialItems.push(buildTutorial({ databaseBuilder, title: 'Payer ses impôts', index: i++, tagItems: [iterTags.next().value, iterTags.next().value] }));
-  tutorialItems.push(buildTutorial({ databaseBuilder, title: 'Faire son lit', index: i++, tagItems: [] }));
-  tutorialItems.push(buildTutorial({ databaseBuilder, title: 'Saluer ses voisins', index: i++, tagItems: [iterTags.next().value] }));
+  tutorialItems.push(
+    buildTutorial({
+      databaseBuilder,
+      title: 'Faire ses courses',
+      index: i++,
+      tagItems: [],
+    }),
+  );
+  tutorialItems.push(
+    buildTutorial({
+      databaseBuilder,
+      title: 'Se laver les dents',
+      index: i++,
+      tagItems: [iterTags.next().value],
+    }),
+  );
+  tutorialItems.push(
+    buildTutorial({
+      databaseBuilder,
+      title: 'Payer ses impôts',
+      index: i++,
+      tagItems: [iterTags.next().value, iterTags.next().value],
+    }),
+  );
+  tutorialItems.push(
+    buildTutorial({
+      databaseBuilder,
+      title: 'Faire son lit',
+      index: i++,
+      tagItems: [],
+    }),
+  );
+  tutorialItems.push(
+    buildTutorial({
+      databaseBuilder,
+      title: 'Saluer ses voisins',
+      index: i++,
+      tagItems: [iterTags.next().value],
+    }),
+  );
 
   await persistTutorials({ items: tutorialItems, airtableClient, logger });
   return tutorialItems;
@@ -47,26 +82,36 @@ export function buildTutorial({ databaseBuilder, title, index, tagItems }) {
 
 export async function persistTutorials({ items, airtableClient, logger }) {
   const airtableItems = items.map(tutorialDatasource.toAirTableObject);
-  const records = await saveInAirtable({ tableName: 'Tutoriels', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Tutoriels',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
   });
 }
 
 export async function copyTutorialsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableTutorials = await  airtableClient.table('Tutoriels').select({ fields: [
-    'id persistant',
-    'Durée',
-    'Format',
-    'Lien',
-    'Source',
-    'Titre',
-    'Langue',
-    'License',
-    'niveau',
-    'CoupDeCoeur',
-    'Tags (id persistant)',
-  ] }).all();
+  const airtableTutorials = await airtableClient
+    .table('Tutoriels')
+    .select({
+      fields: [
+        'id persistant',
+        'Durée',
+        'Format',
+        'Lien',
+        'Source',
+        'Titre',
+        'Langue',
+        'License',
+        'niveau',
+        'CoupDeCoeur',
+        'Tags (id persistant)',
+      ],
+    })
+    .all();
 
   logger.info(`Copying ${airtableTutorials.length} tutorials from airtable...`);
 

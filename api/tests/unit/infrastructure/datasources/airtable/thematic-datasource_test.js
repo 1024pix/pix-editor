@@ -7,7 +7,6 @@ const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | ThematicDatasource', () => {
   describe('#fromAirTableObject', () => {
-
     it('should create a Thematic from the AirtableRecord', () => {
       // given
       const expectedThematic = domainBuilder.buildThematicDatasourceObject();

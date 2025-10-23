@@ -2,16 +2,11 @@ import _ from 'lodash';
 import { Attachment, Skill } from '../../domain/models/index.js';
 
 export function createChallengeTransformer({ attachments }) {
-  return _.flow(
-    _addAttachmentsToChallenge({ attachments }),
-    _filterChallengeFields,
-  );
+  return _.flow(_addAttachmentsToChallenge({ attachments }), _filterChallengeFields);
 }
 
 export function fillAlternativeQualityFieldsFromMatchingProto(challenges, skills) {
-  const workbenchSkillIds = skills
-    .filter((skill) => skill.name === Skill.WORKBENCH_NAME)
-    .map(({ id }) => id);
+  const workbenchSkillIds = skills.filter((skill) => skill.name === Skill.WORKBENCH_NAME).map(({ id }) => id);
 
   const workbenchSkillIdsSet = new Set(workbenchSkillIds);
 
@@ -99,7 +94,9 @@ function _filterChallengeFields(challenge) {
 function _addAttachmentsToChallenge({ attachments }) {
   return (challenge) => {
     const newChallenge = { ...challenge, illustrationUrl: null };
-    const challengeAttachments = attachments.filter(({ localizedChallengeId }) => localizedChallengeId === challenge.id);
+    const challengeAttachments = attachments.filter(
+      ({ localizedChallengeId }) => localizedChallengeId === challenge.id,
+    );
     challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
     return newChallenge;
   };

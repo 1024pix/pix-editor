@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import {  transformTube, transformTubes } from '../../../../lib/infrastructure/transformers/tube-transformer.js';
+import { transformTube, transformTubes } from '../../../../lib/infrastructure/transformers/tube-transformer.js';
 import { Challenge } from '../../../../lib/domain/models/Challenge.js';
 
-describe('Unit | Infrastructure | tube-transformer', function() {
-
+describe('Unit | Infrastructure | tube-transformer', function () {
   describe('#transformTube', () => {
-    it('transforms tube for release', function() {
+    it('transforms tube for release', function () {
       // given
       const tube = domainBuilder.buildTube({
         id: 'tube1',
@@ -24,11 +23,36 @@ describe('Unit | Infrastructure | tube-transformer', function() {
         skillIds: ['skill1', 'skill2'],
       });
       const challenges = [
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill2',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill3',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.PROPOSE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
       ];
 
       // when
@@ -91,11 +115,36 @@ describe('Unit | Infrastructure | tube-transformer', function() {
         }),
       ];
       const challenges = [
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.SMARTPHONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE, responsive: Challenge.RESPONSIVES.NONE }),
-        domainBuilder.buildChallenge({ skillId: 'skill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE, responsive: Challenge.RESPONSIVES.NONE }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill2',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill3',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
+        domainBuilder.buildChallenge({
+          skillId: 'skill1',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.PROPOSE,
+          responsive: Challenge.RESPONSIVES.NONE,
+        }),
       ];
 
       // when

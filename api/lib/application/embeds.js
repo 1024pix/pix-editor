@@ -8,10 +8,12 @@ export async function register(server) {
       method: 'GET',
       path: '/api/embeds.csv',
       config: {
-        pre:[{
-          method: securityPreHandlers.checkUserHasAdminAccess,
-        }],
-        handler: async function(request, h) {
+        pre: [
+          {
+            method: securityPreHandlers.checkUserHasAdminAccess,
+          },
+        ],
+        handler: async function (request, h) {
           const stream = new PassThrough();
           await getEmbedList(stream);
           return h.response(stream).header('Content-type', 'text/csv');

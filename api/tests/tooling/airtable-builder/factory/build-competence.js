@@ -13,16 +13,16 @@ export function buildCompetence({
 } = {}) {
   return {
     id: airtableId ?? id,
-    'fields': {
+    fields: {
       'id persistant': id,
       'Sous-domaine': index,
       'Domaine (id persistant)': [areaId],
-      'Domaine': [areaAirtableId],
+      Domaine: [areaAirtableId],
       'Acquis (via Tubes) (id persistant)': skillIds,
       'Thematiques (id persistant)': thematicIds,
-      'Thematiques': thematicAirtableIds,
-      'Origine2': [origin],
-      'Tubes': tubeAirtableIds,
+      Thematiques: thematicAirtableIds,
+      Origine2: [origin],
+      Tubes: tubeAirtableIds,
       'Tubes (id persistant)': tubeIds,
     },
   };

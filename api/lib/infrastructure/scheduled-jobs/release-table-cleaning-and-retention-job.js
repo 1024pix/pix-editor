@@ -29,7 +29,9 @@ const releaseTableCleaningAndRetentionJobOptions = {
 
 export function schedule() {
   if (!config.scheduledJobs.cleanReleasesTableTime) {
-    logger.info('Scheduled releases cleaning and retention is not enabled - check `CLEAN_RELEASES_TABLE_TIME` variable');
+    logger.info(
+      'Scheduled releases cleaning and retention is not enabled - check `CLEAN_RELEASES_TABLE_TIME` variable',
+    );
     return;
   }
   queue.add({}, releaseTableCleaningAndRetentionJobOptions);

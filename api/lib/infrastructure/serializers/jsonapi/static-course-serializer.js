@@ -4,13 +4,7 @@ const { Serializer } = JsonapiSerializer;
 
 export function serializeSummary(staticCourseSummary, meta) {
   return new Serializer('static-course-summaries', {
-    attributes: [
-      'name',
-      'createdAt',
-      'challengeCount',
-      'isActive',
-      'tags',
-    ],
+    attributes: ['name', 'createdAt', 'challengeCount', 'isActive', 'tags'],
     tags: {
       ref: 'id',
       included: true,
@@ -33,7 +27,7 @@ const serializer = new Serializer('static-courses', {
     'createdAt',
     'updatedAt',
     'challengeSummaries',
-    'tags'
+    'tags',
   ],
   challengeSummaries: {
     ref: 'id',
@@ -48,7 +42,7 @@ const serializer = new Serializer('static-courses', {
   typeForAttribute(attribute) {
     if (attribute === 'challengeSummaries') return 'challenge-summaries';
     if (attribute === 'tags') return 'static-course-tags';
-  }
+  },
 });
 
 export function serialize(staticCourse) {

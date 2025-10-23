@@ -8,10 +8,11 @@ export function register(server) {
       path: '/api/heapdump',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
-        handler: async function(_, h) {
-          return h.response(getHeapSnapshot())
+        handler: async function (_, h) {
+          return h
+            .response(getHeapSnapshot())
             .header('Content-type', 'application/json')
-            .header('Content-disposition', `attachment; filename=lcms-api-${(new Date()).toISOString()}.heapsnapshot`);
+            .header('Content-disposition', `attachment; filename=lcms-api-${new Date().toISOString()}.heapsnapshot`);
         },
       },
     },

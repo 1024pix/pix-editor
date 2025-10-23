@@ -1,10 +1,6 @@
 import { databaseBuffer } from '../database-buffer.js';
 
-export function buildStaticCourseTag({
-  id = databaseBuffer.nextId++,
-  label,
-} = {}) {
-
+export function buildStaticCourseTag({ id = databaseBuffer.nextId++, label } = {}) {
   const values = { id, label };
 
   return databaseBuffer.pushInsertable({
@@ -13,10 +9,7 @@ export function buildStaticCourseTag({
   });
 }
 
-export function linkTagsTo({
-  staticCourseTagIds,
-  staticCourseId,
-} = {}) {
+export function linkTagsTo({ staticCourseTagIds, staticCourseId } = {}) {
   for (const staticCourseTagId of staticCourseTagIds) {
     databaseBuffer.pushInsertable({
       tableName: 'static_courses_tags_link',

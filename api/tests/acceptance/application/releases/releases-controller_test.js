@@ -5,7 +5,11 @@ import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Attachment, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
-import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
+import {
+  ChallengeForRelease,
+  SkillForRelease,
+  TutorialForRelease,
+} from '../../../../lib/domain/models/release/index.js';
 
 const {
   buildArea,
@@ -21,89 +25,101 @@ const {
 
 async function mockCurrentContent() {
   const expectedCurrentContent = {
-    frameworks: [{
-      id: 'recFramework0',
-      name: 'Nom du referentiel'
-    }],
-    areas: [{
-      id: 'recArea0',
-      name: '1. Titre du Domaine - fr',
-      code: '1',
-      title_i18n: {
-        fr: 'Titre du Domaine - fr',
-        en: 'Titre du Domaine - en',
-        nl: 'Titre du Domaine - nl',
+    frameworks: [
+      {
+        id: 'recFramework0',
+        name: 'Nom du referentiel',
       },
-      competenceIds: ['recCompetence0'],
-      color: Area.COLORS.JAFFA,
-      frameworkId: 'recFramework0',
-    }],
-    competences: [{
-      id: 'recCompetence0',
-      index: '1.1',
-      name_i18n: {
-        fr: 'Nom de la Compétence - fr',
-        en: 'Nom de la Compétence - en',
-        nl: 'Nom de la Compétence - nl',
+    ],
+    areas: [
+      {
+        id: 'recArea0',
+        name: '1. Titre du Domaine - fr',
+        code: '1',
+        title_i18n: {
+          fr: 'Titre du Domaine - fr',
+          en: 'Titre du Domaine - en',
+          nl: 'Titre du Domaine - nl',
+        },
+        competenceIds: ['recCompetence0'],
+        color: Area.COLORS.JAFFA,
+        frameworkId: 'recFramework0',
       },
-      areaId: 'recArea0',
-      origin: 'Nom du referentiel',
-      skillIds: ['recSkill0'],
-      thematicIds: ['recThematic0'],
-      description_i18n: {
-        fr: 'Description de la compétence - fr',
-        en: 'Description de la compétence - en',
-        nl: 'Nom de la Compétence - nl',
-      }
-    }],
-    thematics: [{
-      id: 'recThematic0',
-      name_i18n: {
-        fr: 'Nom',
-        en: 'name',
-        nl: 'name nl',
+    ],
+    competences: [
+      {
+        id: 'recCompetence0',
+        index: '1.1',
+        name_i18n: {
+          fr: 'Nom de la Compétence - fr',
+          en: 'Nom de la Compétence - en',
+          nl: 'Nom de la Compétence - nl',
+        },
+        areaId: 'recArea0',
+        origin: 'Nom du referentiel',
+        skillIds: ['recSkill0'],
+        thematicIds: ['recThematic0'],
+        description_i18n: {
+          fr: 'Description de la compétence - fr',
+          en: 'Description de la compétence - en',
+          nl: 'Nom de la Compétence - nl',
+        },
       },
-      competenceId: 'recCompetence0',
-      tubeIds: ['recTube0'],
-      index: 0
-    }],
-    tubes: [{
-      id: 'recTube0',
-      name: 'Nom du Tube',
-      practicalTitle_i18n: {
-        fr: 'Titre pratique du Tube - fr',
-        en: 'Titre pratique du Tube - en',
-        nl: 'Titre pratique du Tube - nl',
+    ],
+    thematics: [
+      {
+        id: 'recThematic0',
+        name_i18n: {
+          fr: 'Nom',
+          en: 'name',
+          nl: 'name nl',
+        },
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
       },
-      practicalDescription_i18n: {
-        fr: 'Description pratique du Tube - fr',
-        en: 'Description pratique du Tube - en',
-        nl: 'Description pratique du Tube - nl',
+    ],
+    tubes: [
+      {
+        id: 'recTube0',
+        name: 'Nom du Tube',
+        practicalTitle_i18n: {
+          fr: 'Titre pratique du Tube - fr',
+          en: 'Titre pratique du Tube - en',
+          nl: 'Titre pratique du Tube - nl',
+        },
+        practicalDescription_i18n: {
+          fr: 'Description pratique du Tube - fr',
+          en: 'Description pratique du Tube - en',
+          nl: 'Description pratique du Tube - nl',
+        },
+        competenceId: 'recCompetence0',
+        thematicId: 'recThematic0',
+        skillIds: ['recSkill0'],
+        isMobileCompliant: true,
+        isTabletCompliant: false,
       },
-      competenceId: 'recCompetence0',
-      thematicId: 'recThematic0',
-      skillIds: ['recSkill0'],
-      isMobileCompliant: true,
-      isTabletCompliant: false,
-    }],
-    skills: [{
-      id: 'recSkill0',
-      name: 'Nom de l‘Acquis',
-      hint_i18n: {
-        fr: 'Indice - fr',
-        en: 'Indice - en',
-        nl: 'Indice - nl',
+    ],
+    skills: [
+      {
+        id: 'recSkill0',
+        name: 'Nom de l‘Acquis',
+        hint_i18n: {
+          fr: 'Indice - fr',
+          en: 'Indice - en',
+          nl: 'Indice - nl',
+        },
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+        tutorialIds: ['recTutorial0'],
+        learningMoreTutorialIds: ['recTutorial1'],
+        pixValue: 8,
+        competenceId: 'recCompetence0',
+        status: SkillForRelease.STATUSES.ACTIF,
+        tubeId: 'recTube0',
+        version: 1,
+        level: 1,
       },
-      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-      tutorialIds: ['recTutorial0'],
-      learningMoreTutorialIds: ['recTutorial1'],
-      pixValue: 8,
-      competenceId: 'recCompetence0',
-      status: SkillForRelease.STATUSES.ACTIF,
-      tubeId: 'recTube0',
-      version: 1,
-      level: 1,
-    }],
+    ],
     challenges: [
       {
         id: 'recChallenge0',
@@ -144,7 +160,7 @@ async function mockCurrentContent() {
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         shuffled: false,
-      }
+      },
     ],
     tutorials: [
       {
@@ -166,13 +182,15 @@ async function mockCurrentContent() {
         locale: 'Langue du Tutoriel 1',
       },
     ],
-    courses: [{
-      id: 'recCourse0',
-      name: 'Nom du Course',
-      description: 'Description du Course',
-      isActive: true,
-      challenges: ['recChallenge0'],
-    }],
+    courses: [
+      {
+        id: 'recCourse0',
+        name: 'Nom du Course',
+        description: 'Description du Course',
+        isActive: true,
+        challenges: ['recChallenge0'],
+      },
+    ],
     missions: [
       {
         id: 1,
@@ -231,7 +249,7 @@ async function mockCurrentContent() {
           steps: [],
         },
       },
-    ]
+    ],
   };
 
   const attachments = [
@@ -255,21 +273,37 @@ async function mockCurrentContent() {
       type: Attachment.TYPES.ATTACHMENT,
       challengeId: 'recChallenge0',
       localizedChallengeId: 'recChallenge0En',
-    }
+    },
   ];
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge({
-      ...expectedCurrentContent.challenges[0],
-      files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
-    })],
-    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
-    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
+    challenges: [
+      buildChallenge({
+        ...expectedCurrentContent.challenges[0],
+        files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
+      }),
+    ],
+    competences: [
+      buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] }),
+    ],
+    frameworks: [
+      buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
+    ],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    thematics: [buildThematic({ ...expectedCurrentContent.thematics[0], airtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
-    tubes: [buildTube({ ...expectedCurrentContent.tubes[0], thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable' })],
+    thematics: [
+      buildThematic({
+        ...expectedCurrentContent.thematics[0],
+        airtableId: expectedCurrentContent.thematics[0].id + 'Airtable',
+      }),
+    ],
+    tubes: [
+      buildTube({
+        ...expectedCurrentContent.tubes[0],
+        thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable',
+      }),
+    ],
     tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
 
@@ -432,95 +466,107 @@ async function mockCurrentContent() {
 
 async function mockContentForRelease() {
   const expectedCurrentContent = {
-    frameworks: [{
-      id: 'recFramework0',
-      name: 'Nom du referentiel'
-    }],
-    areas: [{
-      id: 'recArea0',
-      name: '1. Titre du Domaine - fr',
-      code: '1',
-      competenceIds: ['recCompetence0'],
-      color: Area.COLORS.JAFFA,
-      frameworkId: 'recFramework0',
-      title_i18n: {
-        en: 'Titre du Domaine - en',
-        fr: 'Titre du Domaine - fr',
-        nl: 'Titre du Domaine - nl',
+    frameworks: [
+      {
+        id: 'recFramework0',
+        name: 'Nom du referentiel',
       },
-    }],
-    competences: [{
-      id: 'recCompetence0',
-      index: '1.1',
-      areaId: 'recArea0',
-      origin: 'Nom du referentiel',
-      skillIds: ['recSkill0'],
-      thematicIds: ['recThematic0'],
-      name_i18n: {
-        en: 'Nom de la Compétence - en',
-        fr: 'Nom de la Compétence - fr',
-        nl: 'Nom de la Compétence - nl',
+    ],
+    areas: [
+      {
+        id: 'recArea0',
+        name: '1. Titre du Domaine - fr',
+        code: '1',
+        competenceIds: ['recCompetence0'],
+        color: Area.COLORS.JAFFA,
+        frameworkId: 'recFramework0',
+        title_i18n: {
+          en: 'Titre du Domaine - en',
+          fr: 'Titre du Domaine - fr',
+          nl: 'Titre du Domaine - nl',
+        },
       },
-      description_i18n: {
-        en: 'Description de la compétence - en',
-        fr: 'Description de la compétence - fr',
-        nl: 'Description de la compétence - nl',
+    ],
+    competences: [
+      {
+        id: 'recCompetence0',
+        index: '1.1',
+        areaId: 'recArea0',
+        origin: 'Nom du referentiel',
+        skillIds: ['recSkill0'],
+        thematicIds: ['recThematic0'],
+        name_i18n: {
+          en: 'Nom de la Compétence - en',
+          fr: 'Nom de la Compétence - fr',
+          nl: 'Nom de la Compétence - nl',
+        },
+        description_i18n: {
+          en: 'Description de la compétence - en',
+          fr: 'Description de la compétence - fr',
+          nl: 'Description de la compétence - nl',
+        },
       },
-    }],
-    thematics: [{
-      id: 'recThematic0',
-      competenceId: 'recCompetence0',
-      tubeIds: ['recTube0'],
-      index: 0,
-      name_i18n: {
-        en: 'name',
-        fr: 'Nom',
-        nl: 'name nl',
+    ],
+    thematics: [
+      {
+        id: 'recThematic0',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+        name_i18n: {
+          en: 'name',
+          fr: 'Nom',
+          nl: 'name nl',
+        },
       },
-    }],
-    tubes: [{
-      id: 'recTube0',
-      name: 'Nom du Tube',
-      competenceId: 'recCompetence0',
-      thematicId: 'recThematic0',
-      skillIds: ['recSkill0'],
-      isMobileCompliant: true,
-      isTabletCompliant: false,
-      practicalTitle_i18n: {
-        en: 'Titre pratique du Tube - en',
-        fr: 'Titre pratique du Tube - fr',
-        nl: 'Titre pratique du Tube - nl',
+    ],
+    tubes: [
+      {
+        id: 'recTube0',
+        name: 'Nom du Tube',
+        competenceId: 'recCompetence0',
+        thematicId: 'recThematic0',
+        skillIds: ['recSkill0'],
+        isMobileCompliant: true,
+        isTabletCompliant: false,
+        practicalTitle_i18n: {
+          en: 'Titre pratique du Tube - en',
+          fr: 'Titre pratique du Tube - fr',
+          nl: 'Titre pratique du Tube - nl',
+        },
+        practicalDescription_i18n: {
+          en: 'Description pratique du Tube - en',
+          fr: 'Description pratique du Tube - fr',
+          nl: 'Description pratique du Tube - nl',
+        },
       },
-      practicalDescription_i18n: {
-        en: 'Description pratique du Tube - en',
-        fr: 'Description pratique du Tube - fr',
-        nl: 'Description pratique du Tube - nl',
+    ],
+    skills: [
+      {
+        id: 'recSkill0',
+        name: 'Nom de l‘Acquis',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+        tutorialIds: ['recTutorial0'],
+        learningMoreTutorialIds: ['recTutorial1'],
+        pixValue: 8,
+        competenceId: 'recCompetence0',
+        status: SkillForRelease.STATUSES.ACTIF,
+        tubeId: 'recTube0',
+        version: 1,
+        level: 1,
+        hint_i18n: {
+          en: 'Indice - en',
+          fr: 'Indice - fr',
+          nl: 'Indice - nl',
+        },
       },
-    }],
-    skills: [{
-      id: 'recSkill0',
-      name: 'Nom de l‘Acquis',
-      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-      tutorialIds: ['recTutorial0'],
-      learningMoreTutorialIds: ['recTutorial1'],
-      pixValue: 8,
-      competenceId: 'recCompetence0',
-      status: SkillForRelease.STATUSES.ACTIF,
-      tubeId: 'recTube0',
-      version: 1,
-      level: 1,
-      hint_i18n: {
-        en: 'Indice - en',
-        fr: 'Indice - fr',
-        nl: 'Indice - nl',
-      },
-    }],
+    ],
     challenges: [
       {
         id: 'recChallenge0',
         instruction: 'Consigne du Challenge - fr-fr',
         proposals: 'Propositions du Challenge - fr-fr',
-        type: 'Type d\'épreuve',
+        type: "Type d'épreuve",
         solution: 'Bonnes réponses du Challenge - fr-fr',
         solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
         t1Status: false,
@@ -560,7 +606,7 @@ async function mockContentForRelease() {
         id: 'recChallenge0_1',
         instruction: 'Consigne du Challenge - fr-fr',
         proposals: 'Propositions du Challenge - fr-fr',
-        type: 'Type d\'épreuve',
+        type: "Type d'épreuve",
         solution: 'Bonnes réponses du Challenge - fr-fr',
         solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
         t1Status: false,
@@ -616,71 +662,81 @@ async function mockContentForRelease() {
         locale: 'Langue du Tutoriel 1',
       },
     ],
-    courses: [{
-      id: 'recCourse0',
-      name: 'Nom du Course',
-      description: 'Description du Course',
-      isActive: true,
-      challenges: ['recChallenge0'],
-    }],
-    missions: [new MissionForRelease({
-      id: 1,
-      name_i18n: { fr: 'Ma première mission' },
-      cardImageUrl: 'https://example.com/image2.png',
-      competenceId: 'competenceId',
-      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-      validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.VALIDATED,
-      introductionMediaUrl: 'http://example.com',
-      introductionMediaType: 'image',
-      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-      documentationUrl: null,
-    }), new MissionForRelease({
-      id: 2,
-      name_i18n: { fr: 'Alt name' },
-      cardImageUrl: 'https://example.com/image2.png',
-      competenceId: 'competenceId',
-      learningObjectives_i18n: { fr: 'Alt objectives' },
-      validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-      status: Mission.status.EXPERIMENTAL,
-      introductionMediaUrl: null,
-      introductionMediaType: null,
-      introductionMediaAlt_i18n: { fr: 'Alt Message alternatif' },
-      documentationUrl: 'http://url-example.net',
-    }), new MissionForRelease({
-      id: 3,
-      name_i18n: { fr: 'Alt name' },
-      cardImageUrl: 'https://example.com/image2.png',
-      competenceId: 'competenceId',
-      learningObjectives_i18n: { fr: 'Alt objectives' },
-      validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-      status: Mission.status.INACTIVE,
-      introductionMediaUrl: null,
-      introductionMediaType: null,
-      introductionMediaAlt_i18n: { fr: 'Alt Message alternatif inactive' },
-      documentationUrl: null,
-    })],
+    courses: [
+      {
+        id: 'recCourse0',
+        name: 'Nom du Course',
+        description: 'Description du Course',
+        isActive: true,
+        challenges: ['recChallenge0'],
+      },
+    ],
+    missions: [
+      new MissionForRelease({
+        id: 1,
+        name_i18n: { fr: 'Ma première mission' },
+        cardImageUrl: 'https://example.com/image2.png',
+        competenceId: 'competenceId',
+        learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+        validatedObjectives_i18n: { fr: 'Rien' },
+        status: Mission.status.VALIDATED,
+        introductionMediaUrl: 'http://example.com',
+        introductionMediaType: 'image',
+        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+        documentationUrl: null,
+      }),
+      new MissionForRelease({
+        id: 2,
+        name_i18n: { fr: 'Alt name' },
+        cardImageUrl: 'https://example.com/image2.png',
+        competenceId: 'competenceId',
+        learningObjectives_i18n: { fr: 'Alt objectives' },
+        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        status: Mission.status.EXPERIMENTAL,
+        introductionMediaUrl: null,
+        introductionMediaType: null,
+        introductionMediaAlt_i18n: { fr: 'Alt Message alternatif' },
+        documentationUrl: 'http://url-example.net',
+      }),
+      new MissionForRelease({
+        id: 3,
+        name_i18n: { fr: 'Alt name' },
+        cardImageUrl: 'https://example.com/image2.png',
+        competenceId: 'competenceId',
+        learningObjectives_i18n: { fr: 'Alt objectives' },
+        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        status: Mission.status.INACTIVE,
+        introductionMediaUrl: null,
+        introductionMediaType: null,
+        introductionMediaAlt_i18n: { fr: 'Alt Message alternatif inactive' },
+        documentationUrl: null,
+      }),
+    ],
   };
 
-  const attachments = [{
-    id: 'attid1',
-    url: 'url de l‘illustration',
-    type: Attachment.TYPES.ILLUSTRATION,
-    challengeId: 'recChallenge0',
-    localizedChallengeId: 'recChallenge0',
-  }, {
-    id: 'attid2',
-    url: 'url de la pièce jointe',
-    type: Attachment.TYPES.ATTACHMENT,
-    challengeId: 'recChallenge0',
-    localizedChallengeId: 'recChallenge0',
-  }, {
-    id: 'attid3',
-    url: 'url de la pièce jointe',
-    type: Attachment.TYPES.ATTACHMENT,
-    challengeId: 'recChallenge0',
-    localizedChallengeId: 'recChallenge0En',
-  }];
+  const attachments = [
+    {
+      id: 'attid1',
+      url: 'url de l‘illustration',
+      type: Attachment.TYPES.ILLUSTRATION,
+      challengeId: 'recChallenge0',
+      localizedChallengeId: 'recChallenge0',
+    },
+    {
+      id: 'attid2',
+      url: 'url de la pièce jointe',
+      type: Attachment.TYPES.ATTACHMENT,
+      challengeId: 'recChallenge0',
+      localizedChallengeId: 'recChallenge0',
+    },
+    {
+      id: 'attid3',
+      url: 'url de la pièce jointe',
+      type: Attachment.TYPES.ATTACHMENT,
+      challengeId: 'recChallenge0',
+      localizedChallengeId: 'recChallenge0En',
+    },
+  ];
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
@@ -698,8 +754,12 @@ async function mockContentForRelease() {
         version: 8,
       }),
     ],
-    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
-    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
+    competences: [
+      buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] }),
+    ],
+    frameworks: [
+      buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
+    ],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
@@ -809,11 +869,17 @@ async function mockContentForRelease() {
       challengeId: challenge.id,
       locale: 'fr-fr',
       embedUrl: challenge.embedUrl,
-      requireGafamWebsiteAccess: isAlternative ? !challenge.requireGafamWebsiteAccess : challenge.requireGafamWebsiteAccess,
-      isIncompatibleIpadCertif: isAlternative ? !challenge.isIncompatibleIpadCertif : challenge.isIncompatibleIpadCertif,
+      requireGafamWebsiteAccess: isAlternative
+        ? !challenge.requireGafamWebsiteAccess
+        : challenge.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: isAlternative
+        ? !challenge.isIncompatibleIpadCertif
+        : challenge.isIncompatibleIpadCertif,
       isAwarenessChallenge: isAlternative ? !challenge.isAwarenessChallenge : challenge.isAwarenessChallenge,
       toRephrase: isAlternative ? !challenge.toRephrase : challenge.toRephrase,
-      deafAndHardOfHearing: isAlternative ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS : challenge.deafAndHardOfHearing,
+      deafAndHardOfHearing: isAlternative
+        ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS
+        : challenge.deafAndHardOfHearing,
     });
   }
 
@@ -822,11 +888,10 @@ async function mockContentForRelease() {
 }
 
 describe('Acceptance | Controller | release-controller', () => {
-
   describe('GET /current-content - Returns release from current Airtable data', () => {
     context('nominal case', () => {
       let user;
-      beforeEach(async function() {
+      beforeEach(async function () {
         user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });
@@ -875,7 +940,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
   describe('GET /releases/latest - Returns latest release', () => {
     let user;
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
     });
     context('nominal case', () => {
@@ -926,14 +991,17 @@ describe('Acceptance | Controller | release-controller', () => {
       });
     });
 
-    context('with if-modified-since header', function() {
-      it('should return a 304 when no latest release exist after given if-modified-since date', async function() {
+    context('with if-modified-since header', function () {
+      it('should return a 304 when no latest release exist after given if-modified-since date', async function () {
         // given
         const server = await createServer();
         const latestReleaseDate = new Date('2023-01-01T00:00:00Z');
         databaseBuilder.factory.buildRelease({ createdAt: latestReleaseDate, content: '{"value":"coucouLatest"}' });
         databaseBuilder.factory.buildRelease({ createdAt: new Date('2021-01-01'), content: '{"value":"coucouOld"}' });
-        databaseBuilder.factory.buildRelease({ createdAt: new Date('2020-01-01'), content: '{"value":"coucouSuperOld"}' });
+        databaseBuilder.factory.buildRelease({
+          createdAt: new Date('2020-01-01'),
+          content: '{"value":"coucouSuperOld"}',
+        });
         await databaseBuilder.commit();
 
         // when
@@ -949,7 +1017,7 @@ describe('Acceptance | Controller | release-controller', () => {
         expect(response.statusCode).to.equal(304);
         expect(response.result).to.be.null;
       });
-      it('should return the latest release if the release is newer than given if-modified-since date', async function() {
+      it('should return the latest release if the release is newer than given if-modified-since date', async function () {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({
           content: {
@@ -1001,12 +1069,11 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
-
-    beforeEach(function() {
+    beforeEach(function () {
       vi.spyOn(axios, 'post').mockResolvedValue();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       return knex('releases').delete();
     });
 
@@ -1105,7 +1172,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
   describe('GET /releases/:id - Returns given release', () => {
     let user;
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
@@ -1123,14 +1190,14 @@ describe('Acceptance | Controller | release-controller', () => {
             skills: [],
             thematics: [],
             tubes: [],
-            tutorials: []
+            tutorials: [],
           },
-          createdAt: new Date('2021-01-01')
+          createdAt: new Date('2021-01-01'),
         });
         databaseBuilder.factory.buildRelease({
           id: 43,
           content: { some: 'other-release' },
-          createdAt: new Date('2022-01-01')
+          createdAt: new Date('2022-01-01'),
         });
 
         const expectedContent = {

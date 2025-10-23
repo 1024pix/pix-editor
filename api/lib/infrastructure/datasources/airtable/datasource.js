@@ -36,16 +36,13 @@ const _DatasourcePrototype = {
   },
 
   async filter({ filter: { ids, formula } }) {
-    const filterByFormula = ids ? (
-      'OR(' + ids.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',') + ')'
-    ) : formula;
-    const airtableRawObjects = await airtable.findRecords(
-      this.tableName,
-      {
-        fields: this.usedFields,
-        filterByFormula,
-      },
-    );
+    const filterByFormula = ids
+      ? 'OR(' + ids.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',') + ')'
+      : formula;
+    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula,
+    });
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
@@ -72,7 +69,9 @@ const _DatasourcePrototype = {
     const allAirtableRawObjects = [];
     for (const chunk of chunks(airtableRecords, 10)) {
       const airtableRawObjects = await airtable.upsertRecords(this.tableName, chunk, this.fieldsToMergeOn);
-      allAirtableRawObjects.push(...airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject)));
+      allAirtableRawObjects.push(
+        ...airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject)),
+      );
     }
     return allAirtableRawObjects;
   },
@@ -86,9 +85,12 @@ const _DatasourcePrototype = {
       fields: [this.airtableIdField, 'id persistant'],
       filterByFormula: `OR(${entityIds.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',')})`,
     });
-    return Object
-      .fromEntries(airtableRawObjects
-        .map((airtableObject) => [airtableObject.get('id persistant'), airtableObject.get(this.airtableIdField)]));
+    return Object.fromEntries(
+      airtableRawObjects.map((airtableObject) => [
+        airtableObject.get('id persistant'),
+        airtableObject.get(this.airtableIdField),
+      ]),
+    );
   },
 
   defaultSort() {
@@ -103,7 +105,6 @@ function* chunks(array, chunkSize) {
 }
 
 export const datasource = {
-
   extend(props) {
     props.sortField = props.sortField || 'id persistant';
     props.airtableIdField = props.airtableIdField || 'Record ID';
@@ -111,5 +112,4 @@ export const datasource = {
     _.bindAll(result, _.functions(result));
     return result;
   },
-
 };

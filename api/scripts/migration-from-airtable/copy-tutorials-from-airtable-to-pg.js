@@ -4,7 +4,6 @@ import { Script } from '../../lib/application/scripts/script.js';
 import * as airtable from '../../lib/infrastructure/airtable.js';
 
 export class CopyTutorialsFromAirtableToPg extends Script {
-
   constructor() {
     super({
       description: 'Copie des tutoriels de Airtable vers Postgres',
@@ -55,18 +54,22 @@ export class CopyTutorialsFromAirtableToPg extends Script {
       updatedAt: knex.fn.now(),
     }));
 
-    const tutorialsTagsRelations = airtableTutorials.flatMap((record) => record.get('Tags (id persistant)')?.map((tutorialTagId) => ({
-      tutorialId: record.get('id persistant'),
-      tutorialTagId,
-      updatedAt: knex.fn.now(),
-    })) ?? []);
+    const tutorialsTagsRelations = airtableTutorials.flatMap(
+      (record) =>
+        record.get('Tags (id persistant)')?.map((tutorialTagId) => ({
+          tutorialId: record.get('id persistant'),
+          tutorialTagId,
+          updatedAt: knex.fn.now(),
+        })) ?? [],
+    );
 
     if (options.dryRun) return;
 
     await knex.insert(tutorials).into('tutorials').onConflict('id').merge();
     logger.info({ count: tutorials.length }, 'Inserted tutorials into postgres');
 
-    const deletedRelationsCount = await knex.delete()
+    const deletedRelationsCount = await knex
+      .delete()
       .from('tutorials-tutorial_tags')
       .whereNotIn(
         knex.raw('(??, ??)', [knex.ref('tutorialId'), knex.ref('tutorialTagId')]),
@@ -74,7 +77,11 @@ export class CopyTutorialsFromAirtableToPg extends Script {
       );
     logger.info({ count: deletedRelationsCount }, 'Deleted tutorials tutorial_tags relations into postgres');
 
-    await knex.insert(tutorialsTagsRelations).into('tutorials-tutorial_tags').onConflict(['tutorialId', 'tutorialTagId']).merge({ updatedAt: knex.fn.now() });
+    await knex
+      .insert(tutorialsTagsRelations)
+      .into('tutorials-tutorial_tags')
+      .onConflict(['tutorialId', 'tutorialTagId'])
+      .merge({ updatedAt: knex.fn.now() });
     logger.info({ count: tutorialsTagsRelations.length }, 'Inserted tutorials tutorial_tags relations into postgres');
   }
 }

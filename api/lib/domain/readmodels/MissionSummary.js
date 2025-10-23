@@ -1,11 +1,5 @@
 export class MissionSummary {
-  constructor({
-    id,
-    name,
-    competence,
-    createdAt,
-    status,
-  }) {
+  constructor({ id, name, competence, createdAt, status }) {
     this.id = id;
     this.name = name;
     this.competence = competence;

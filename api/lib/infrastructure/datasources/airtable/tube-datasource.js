@@ -2,7 +2,6 @@ import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
 
 export const tubeDatasource = datasource.extend({
-
   modelName: 'Tube',
 
   tableName: 'Tubes',
@@ -18,7 +17,7 @@ export const tubeDatasource = datasource.extend({
     'Competences (id persistant)',
     'Index',
     'Acquis',
-    'Acquis (id persistant)'
+    'Acquis (id persistant)',
   ],
 
   fromAirTableObject(airtableRecord) {

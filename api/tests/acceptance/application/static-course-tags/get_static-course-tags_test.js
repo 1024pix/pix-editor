@@ -1,12 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader,
-} from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | static course tags | GET /api/static-course-tags', function() {
-  it('Return the list of all static course tags', async function() {
+describe('Acceptance | API | static course tags | GET /api/static-course-tags', function () {
+  it('Return the list of all static course tags', async function () {
     // Given
     const server = await createServer();
     const user = databaseBuilder.factory.buildReadonlyUser();
@@ -43,7 +40,7 @@ describe('Acceptance | API | static course tags | GET /api/static-course-tags', 
             label: tagA.label,
           },
         },
-      ]
+      ],
     });
   });
 });

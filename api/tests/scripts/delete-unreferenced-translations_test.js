@@ -15,13 +15,14 @@ const {
 } = airtableBuilder.factory;
 
 describe('Script | delete-unreferenced-translations', () => {
-
   beforeEach(() => {
     const currentContent = {
-      frameworks: [{
-        id: 'recFramework0',
-        name: 'Nom du referentiel'
-      }],
+      frameworks: [
+        {
+          id: 'recFramework0',
+          name: 'Nom du referentiel',
+        },
+      ],
       areas: [
         {
           id: 'recArea0',
@@ -34,7 +35,7 @@ describe('Script | delete-unreferenced-translations', () => {
           competenceIds: ['recCompetence1'],
           competenceAirtableIds: ['recCompetence456'],
           frameworkId: 'recFramework0',
-        }
+        },
       ],
       competences: [
         {
@@ -48,7 +49,7 @@ describe('Script | delete-unreferenced-translations', () => {
           areaId: '1',
           skillIds: ['recSkill1'],
           thematicIds: ['recThematic1'],
-        }
+        },
       ],
       thematics: [
         {
@@ -60,7 +61,7 @@ describe('Script | delete-unreferenced-translations', () => {
           id: 'recThematic1',
           competenceId: 'recCompetence1',
           tubeIds: ['recTube1'],
-        }
+        },
       ],
       tubes: [
         {
@@ -74,7 +75,7 @@ describe('Script | delete-unreferenced-translations', () => {
           competenceId: 'recCompetence1',
           thematicId: 'recThematic1',
           skillIds: ['recSkill1'],
-        }
+        },
       ],
       skills: [
         {
@@ -90,7 +91,7 @@ describe('Script | delete-unreferenced-translations', () => {
           learningMoreTutorialIds: [],
           competenceId: 'recCompetence1',
           tubeId: 'recTube1',
-        }
+        },
       ],
       challenges: [
         {
@@ -102,7 +103,7 @@ describe('Script | delete-unreferenced-translations', () => {
           id: 'recChallenge1',
           skillId: 'recSkill1',
           competenceId: 'recCompetence1',
-        }
+        },
       ],
     };
     const translations = [
@@ -169,7 +170,7 @@ describe('Script | delete-unreferenced-translations', () => {
     });
   });
 
-  it('should delete translations that are not linked to any entities in Airtable when dryRun disabled', async() => {
+  it('should delete translations that are not linked to any entities in Airtable when dryRun disabled', async () => {
     // given
     const deletedIds = ['translationArea2', 'translationCompetence2', 'translationChallenge2', 'translationSkill2'];
     const deleteCommand = nock('https://api.airtable.com')
@@ -177,14 +178,15 @@ describe('Script | delete-unreferenced-translations', () => {
       .query({
         records: {
           '': deletedIds,
-        } })
+        },
+      })
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
       .matchHeader('content-type', 'application/json')
       .reply(200, {
         records: deletedIds.map((id) => ({
           deleted: true,
           id,
-        }))
+        })),
       });
 
     // when
@@ -198,7 +200,7 @@ describe('Script | delete-unreferenced-translations', () => {
     expect(deleteCommand.isDone()).to.be.true;
   });
 
-  it('should not delete anything if dryRun enabled', async() => {
+  it('should not delete anything if dryRun enabled', async () => {
     // given
     const deletedIds = ['translationArea2', 'translationCompetence2', 'translationChallenge2', 'translationSkill2'];
     const deleteCommand = nock('https://api.airtable.com')
@@ -206,14 +208,15 @@ describe('Script | delete-unreferenced-translations', () => {
       .query({
         records: {
           '': deletedIds,
-        } })
+        },
+      })
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
       .matchHeader('content-type', 'application/json')
       .reply(200, {
         records: deletedIds.map((id) => ({
           deleted: true,
           id,
-        }))
+        })),
       });
 
     // when

@@ -15,7 +15,7 @@ export function buildMission({
   documentationUrl = null,
   status = Mission.status.VALIDATED,
 } = {}) {
-  return new Mission ({
+  return new Mission({
     id,
     name_i18n: { fr: name },
     cardImageUrl,

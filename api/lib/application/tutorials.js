@@ -19,43 +19,55 @@ export function register(server) {
       method: 'POST',
       path: '/api/tutorials',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           payload: Joi.object({
             data: {
               type: Joi.string().required().equal('tutorials'),
               attributes: {
-                'title': Joi.string().required(),
-                'duration': Joi.string(),
-                'source': Joi.string().required(),
-                'format': Joi.string().valid(...Object.values(Tutorial.FORMATS)).required(),
-                'link': Joi.string().custom(checkUrl, 'URL Validation')
+                title: Joi.string().required(),
+                duration: Joi.string(),
+                source: Joi.string().required(),
+                format: Joi.string()
+                  .valid(...Object.values(Tutorial.FORMATS))
+                  .required(),
+                link: Joi.string()
+                  .custom(checkUrl, 'URL Validation')
                   .messages({
                     'any.invalid': 'Must be a valid, absolute URL',
-                  }).required(),
-                'license': Joi.string().allow(null),
-                'level': Joi.string().allow(null),
-                'crush': Joi.boolean().allow(null),
-                'language': Joi.string().required(),
+                  })
+                  .required(),
+                license: Joi.string().allow(null),
+                level: Joi.string().allow(null),
+                crush: Joi.boolean().allow(null),
+                language: Joi.string().required(),
               },
               relationships: {
                 tags: {
-                  data: Joi.array().items(Joi.object({
-                    type: Joi.string().required().equal('tags'),
-                    id: Types.tagId(),
-                  })).allow(null),
+                  data: Joi.array()
+                    .items(
+                      Joi.object({
+                        type: Joi.string().required().equal('tags'),
+                        id: Types.tagId(),
+                      }),
+                    )
+                    .allow(null),
                 },
               },
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const tutorial = await tutorialSerializer.deserialize(request.payload);
-          const createdTutorial = await createTutorial(tutorial, { tutorialRepository });
+          const createdTutorial = await createTutorial(tutorial, {
+            tutorialRepository,
+          });
           return h.response(tutorialSerializer.serialize(createdTutorial)).code(201);
         },
       },
@@ -69,7 +81,7 @@ export function register(server) {
             tutorialAirtableId: Types.tutorialId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const tutorial = await tutorialRepository.getByAirtableId(request.params.tutorialAirtableId);
           if (!tutorial) return new NotFoundError('unknown tutorial id');
           return tutorialSerializer.serialize(tutorial);
@@ -80,45 +92,57 @@ export function register(server) {
       method: 'PATCH',
       path: '/api/tutorials/{tutorialAirtableId}',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           payload: Joi.object({
             data: {
               type: Joi.string().required().equal('tutorials'),
               id: Types.tutorialId().required(),
               attributes: {
-                'title': Joi.string().required(),
-                'duration': Joi.string(),
-                'source': Joi.string().required(),
-                'format': Joi.string().valid(...Object.values(Tutorial.FORMATS)).required(),
-                'link': Joi.string().custom(checkUrl, 'URL Validation')
+                title: Joi.string().required(),
+                duration: Joi.string(),
+                source: Joi.string().required(),
+                format: Joi.string()
+                  .valid(...Object.values(Tutorial.FORMATS))
+                  .required(),
+                link: Joi.string()
+                  .custom(checkUrl, 'URL Validation')
                   .messages({
                     'any.invalid': 'Must be a valid, absolute URL',
-                  }).required(),
-                'license': Joi.string().allow(null),
-                'level': Joi.string().allow(null),
-                'crush': Joi.boolean().allow(null),
-                'language': Joi.string().required(),
+                  })
+                  .required(),
+                license: Joi.string().allow(null),
+                level: Joi.string().allow(null),
+                crush: Joi.boolean().allow(null),
+                language: Joi.string().required(),
                 'pix-id': Types.tutorialId().required(),
               },
               relationships: {
                 tags: {
-                  data: Joi.array().items(Joi.object({
-                    type: Joi.string().required().equal('tags'),
-                    id: Types.tagId(),
-                  })).allow(null),
+                  data: Joi.array()
+                    .items(
+                      Joi.object({
+                        type: Joi.string().required().equal('tags'),
+                        id: Types.tagId(),
+                      }),
+                    )
+                    .allow(null),
                 },
               },
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const tutorial = await tutorialSerializer.deserialize(request.payload);
-          const updatedTutorial = await updateTutorial(tutorial, { tutorialRepository });
+          const updatedTutorial = await updateTutorial(tutorial, {
+            tutorialRepository,
+          });
           return h.response(tutorialSerializer.serialize(updatedTutorial));
         },
       },
@@ -133,12 +157,13 @@ export function register(server) {
             'filter[source]': Joi.string(),
             'filter[tagTitles][]': [Joi.string(), Joi.array().items(Joi.string())],
             'filter[ids][]': [Joi.string(), Joi.array().items(Joi.string())],
-          })
-            .xor('filter[title]', 'filter[source]', 'filter[tagTitles][]', 'filter[ids][]')
+          }).xor('filter[title]', 'filter[source]', 'filter[tagTitles][]', 'filter[ids][]'),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const params = extractParameters(request.query);
-          const tutorials = await searchTutorials(params, { tutorialRepository });
+          const tutorials = await searchTutorials(params, {
+            tutorialRepository,
+          });
           return h.response(tutorialSerializer.serialize(tutorials));
         },
       },

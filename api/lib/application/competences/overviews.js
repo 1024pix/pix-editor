@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {
   getCompetenceChallengesProductionOverview,
-  getCompetenceChallengesWorkbenchOverview
+  getCompetenceChallengesWorkbenchOverview,
 } from '../../domain/usecases/index.js';
 import { competenceOverviewSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as Types from '../types.js';
@@ -20,11 +20,14 @@ export async function register(server) {
             locale: Types.locale(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const competenceId = request.params.competenceId;
           const locale = request.query.locale;
 
-          const competenceOverview = await getCompetenceChallengesProductionOverview({ competenceId, locale });
+          const competenceOverview = await getCompetenceChallengesProductionOverview({
+            competenceId,
+            locale,
+          });
           return competenceOverviewSerializer.serialize(competenceOverview);
         },
       },
@@ -38,7 +41,7 @@ export async function register(server) {
             competenceId: Types.competenceId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const competenceId = request.params.competenceId;
 
           const competenceOverview = await getCompetenceChallengesWorkbenchOverview({ competenceId });

@@ -5,7 +5,6 @@ import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | whitelisted-url-repository', () => {
   describe('#list', () => {
-
     it('should retrieve all whitelisted urls ordered by url', async () => {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
@@ -108,7 +107,6 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
   });
 
   describe('#find', () => {
-
     it('should retrieve given whitelisted url by its id', async () => {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
@@ -158,19 +156,21 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       const whitelistedUrl = await whitelistedUrlRepository.find(123);
 
       // then
-      expect(whitelistedUrl).toStrictEqual(domainBuilder.buildWhitelistedUrl({
-        id: 123,
-        createdBy: adminUser1.id,
-        latestUpdatedBy: adminUser2.id,
-        deletedBy: null,
-        createdAt: new Date('2020-01-01'),
-        updatedAt: new Date('2022-02-02'),
-        deletedAt: null,
-        url: 'https://www.google.com',
-        relatedSkillNames: '@bidule3,@chose2',
-        comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
-        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
-      }));
+      expect(whitelistedUrl).toStrictEqual(
+        domainBuilder.buildWhitelistedUrl({
+          id: 123,
+          createdBy: adminUser1.id,
+          latestUpdatedBy: adminUser2.id,
+          deletedBy: null,
+          createdAt: new Date('2020-01-01'),
+          updatedAt: new Date('2022-02-02'),
+          deletedAt: null,
+          url: 'https://www.google.com',
+          relatedSkillNames: '@bidule3,@chose2',
+          comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        }),
+      );
     });
 
     it('should return null when no entity found for id', async () => {
@@ -211,13 +211,12 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       expect(whitelistedUrl).toStrictEqual(null);
     });
   });
-  describe('#save', function() {
-
-    afterEach(function() {
+  describe('#save', function () {
+    afterEach(function () {
       return knex('whitelisted_urls').del();
     });
 
-    it('should update the whitelisted url', async function() {
+    it('should update the whitelisted url', async function () {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
       const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
@@ -257,7 +256,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       expect(savedWhitelistedUrl).toStrictEqual(whitelistedUrlToSave);
     });
 
-    it('should insert a new whitelisted url', async function() {
+    it('should insert a new whitelisted url', async function () {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
       const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
@@ -281,10 +280,12 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
 
       // then
       const savedWhitelistedUrl = await whitelistedUrlRepository.find(id);
-      expect(savedWhitelistedUrl).toStrictEqual(domainBuilder.buildWhitelistedUrl({
-        ...whitelistedUrlToSave,
-        id,
-      }));
+      expect(savedWhitelistedUrl).toStrictEqual(
+        domainBuilder.buildWhitelistedUrl({
+          ...whitelistedUrlToSave,
+          id,
+        }),
+      );
     });
   });
 });

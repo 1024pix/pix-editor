@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
-import * as whitelistedUrlReadRepository
-  from '../../../../lib/infrastructure/repositories/whitelisted-url-read-repository.js';
+import * as whitelistedUrlReadRepository from '../../../../lib/infrastructure/repositories/whitelisted-url-read-repository.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | whitelisted-url-read-repository', () => {
-
   describe('#list', () => {
-
     it('should retrieve active whitelisted url readmodels ordered by url', async () => {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
@@ -123,7 +120,6 @@ describe('Integration | Repository | whitelisted-url-read-repository', () => {
   });
 
   describe('#find', () => {
-
     it('should retrieve given read whitelisted url by its id', async () => {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
@@ -173,17 +169,19 @@ describe('Integration | Repository | whitelisted-url-read-repository', () => {
       const whitelistedUrl = await whitelistedUrlReadRepository.find(123);
 
       // then
-      expect(whitelistedUrl).toStrictEqual(domainBuilder.buildWhitelistedUrlRead({
-        id: 123,
-        createdAt: new Date('2020-01-01'),
-        updatedAt: new Date('2022-02-02'),
-        creatorName: 'Madame Admin 1',
-        latestUpdatorName: 'Madame Admin 2',
-        url: 'https://www.google.com',
-        relatedSkillNames: '@bidule3,@chose2',
-        comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
-        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
-      }));
+      expect(whitelistedUrl).toStrictEqual(
+        domainBuilder.buildWhitelistedUrlRead({
+          id: 123,
+          createdAt: new Date('2020-01-01'),
+          updatedAt: new Date('2022-02-02'),
+          creatorName: 'Madame Admin 1',
+          latestUpdatorName: 'Madame Admin 2',
+          url: 'https://www.google.com',
+          relatedSkillNames: '@bidule3,@chose2',
+          comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        }),
+      );
     });
 
     it('should return null when whitelisted url has been deleted', async () => {

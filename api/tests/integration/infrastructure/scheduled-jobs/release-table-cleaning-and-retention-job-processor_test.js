@@ -1,11 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import releasesTableCleaningAndRetention
-  from '../../../../lib/infrastructure/scheduled-jobs/release-table-cleaning-and-retention-job-processor.js';
+import releasesTableCleaningAndRetention from '../../../../lib/infrastructure/scheduled-jobs/release-table-cleaning-and-retention-job-processor.js';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 
-describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleaning-and-retention-job', function() {
+describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleaning-and-retention-job', function () {
   let logger;
-  beforeEach(function() {
+  beforeEach(function () {
     logger = {
       info: vi.fn(),
       error: vi.fn(),
@@ -15,11 +14,11 @@ describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleanin
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     vi.useRealTimers();
   });
 
-  it('keeps all releases within 3 months and first release of each month for the older ones', async function() {
+  it('keeps all releases within 3 months and first release of each month for the older ones', async function () {
     // given
     // releases within 3 months
     databaseBuilder.factory.buildRelease({ id: 1, createdAt: new Date('2021-02-15T00:00:00Z'), content: {} }); // keep

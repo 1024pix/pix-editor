@@ -24,7 +24,9 @@ describe('Unit | Infrastructure | Utils | Promise Streamer', () => {
 
   it('should end the stream with an error when an error occured', async () => {
     //Given
-    const promise = async() => { throw new Error(); };
+    const promise = async () => {
+      throw new Error();
+    };
     const writableStream = new PassThrough();
     const streamPromise = streamToPromise(writableStream);
 

@@ -13,21 +13,23 @@ export function register(server) {
       method: 'POST',
       path: '/api/attachments',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           payload: Joi.object({
             data: {
               type: Joi.string().required().equal('attachments'),
               attributes: {
-                'filename': Joi.string(),
-                'size': Joi.number(),
-                'url': Joi.string(),
+                filename: Joi.string(),
+                size: Joi.number(),
+                url: Joi.string(),
                 'mime-type': Joi.string(),
-                'type': Joi.string(),
+                type: Joi.string(),
               },
               relationships: {
                 challenge: {
@@ -46,7 +48,7 @@ export function register(server) {
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
           const createdAttachment = await usecases.createAttachment({
             attachmentCreationCommand,
@@ -62,11 +64,13 @@ export function register(server) {
       method: 'PATCH',
       path: '/api/attachments/{attachmentId}',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           params: Joi.object({
             attachmentId: Types.attachmentId().required(),
@@ -76,11 +80,11 @@ export function register(server) {
               id: Types.attachmentId().required(),
               type: Joi.string().required().equal('attachments'),
               attributes: {
-                'filename': Joi.string(),
-                'size': Joi.number(),
-                'url': Joi.string(),
+                filename: Joi.string(),
+                size: Joi.number(),
+                url: Joi.string(),
                 'mime-type': Joi.string(),
-                'type': Joi.string(),
+                type: Joi.string(),
               },
               relationships: {
                 challenge: {
@@ -99,7 +103,7 @@ export function register(server) {
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
           const updatedAttachment = await usecases.updateAttachment({
             attachmentUpdateCommand,
@@ -114,17 +118,19 @@ export function register(server) {
       method: 'DELETE',
       path: '/api/attachments/{attachmentId}',
       config: {
-        pre: [{
-          method: (request, h) => {
-            return securityPreHandlers.checkUserHasWriteAccess(request, h);
-          }
-        }],
+        pre: [
+          {
+            method: (request, h) => {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            },
+          },
+        ],
         validate: {
           params: Joi.object({
             attachmentId: Types.attachmentId().required(),
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const attachmentId = request.params.attachmentId;
           await usecases.deleteAttachment({
             attachmentId,
@@ -144,9 +150,12 @@ export function register(server) {
             attachmentId: Types.attachmentId().required(),
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const id = request.params.attachmentId;
-          const attachment = await usecases.findAttachment({ id, attachmentRepository });
+          const attachment = await usecases.findAttachment({
+            id,
+            attachmentRepository,
+          });
           return h.response(attachmentSerializer.serialize(attachment));
         },
       },
@@ -160,9 +169,12 @@ export function register(server) {
             'filter[localizedChallengeId]': Joi.string().required(),
           }).required(),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const query = attachmentSerializer.deserializeQuery(request.query);
-          const attachments = await usecases.findAttachments({ query, attachmentRepository });
+          const attachments = await usecases.findAttachments({
+            query,
+            attachmentRepository,
+          });
           return h.response(attachmentSerializer.serialize(attachments));
         },
       },

@@ -10,7 +10,6 @@ import { SlackNotifier } from '../../../../lib/infrastructure/notifications/Slac
 import * as config from '../../../../lib/config.js';
 
 describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
-
   describe('#createRelease', () => {
     const resolvedCreatedRelease = new Release({ id: 1, content: 'JSON content', createdAt: new Date() });
 
@@ -29,7 +28,6 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
     });
 
     describe('when release creation succeeded', () => {
-
       const resolvedCreatedReleaseId = 1;
 
       beforeEach(() => {
@@ -61,16 +59,21 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should send a Slack success notification if slack notification is enabled', async () => {
         // given
-        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ webhookUrl: 'http://webook.url', enable: true });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          webhookUrl: 'http://webook.url',
+          enable: true,
+        });
 
         // when
         await releaseJobProcessor({ data: { slackNotification: true } });
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).toHaveBeenCalledWith(new SlackNotifier('http://webook.url'));
+        expect(learningContentNotification.notifyReleaseCreationSuccess).toHaveBeenCalledWith(
+          new SlackNotifier('http://webook.url'),
+        );
       });
 
-      it('should not send a slack success notification if slack notification is is globally disabled', async function() {
+      it('should not send a slack success notification if slack notification is is globally disabled', async function () {
         // given
         vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
 
@@ -81,7 +84,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
-      it('should not send a slack success notification if slack notification is locally disabled', async function() {
+      it('should not send a slack success notification if slack notification is locally disabled', async function () {
         // given
         vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(true);
 
@@ -105,7 +108,6 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
     });
 
     describe('when release creation failed', () => {
-
       beforeEach(() => {
         vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
         vi.spyOn(releaseRepository, 'create').mockRejectedValue(new Error('Network error'));
@@ -126,16 +128,22 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should send a Slack notification with error message if Slack notification is enabled', async () => {
         // given
-        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ webhookUrl: 'http://webook.url', enable: true });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          webhookUrl: 'http://webook.url',
+          enable: true,
+        });
 
         // when
         await releaseJobProcessor({ data: { slackNotification: false } });
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).toHaveBeenCalledWith('Network error', new SlackNotifier('http://webook.url'));
+        expect(learningContentNotification.notifyReleaseCreationFailure).toHaveBeenCalledWith(
+          'Network error',
+          new SlackNotifier('http://webook.url'),
+        );
       });
 
-      it('should not send a slack failure notification if Slack notification is disabled', async function() {
+      it('should not send a slack failure notification if Slack notification is disabled', async function () {
         // given
         vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
 

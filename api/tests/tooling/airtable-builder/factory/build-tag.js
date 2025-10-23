@@ -1,14 +1,9 @@
-export function buildTag(
-  {
-    id,
-    airtableId = id,
-    title,
-  } = {}) {
+export function buildTag({ id, airtableId = id, title } = {}) {
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
-      'Nom': title,
+      Nom: title,
     },
   };
 }

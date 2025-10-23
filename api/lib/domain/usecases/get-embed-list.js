@@ -1,4 +1,4 @@
-import {  pipeline, Readable } from 'node:stream';
+import { pipeline, Readable } from 'node:stream';
 import csv from 'fast-csv';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { findUrlsInMarkdown } from '../../infrastructure/utils/url-utils.js';
@@ -9,19 +9,14 @@ export async function getEmbedList(stream) {
   const embedUrlsToCsv = findPixEpreuvesUrlsFromChallenges(release);
 
   const embedUrlWithToCsvHeader = [
-    ['origin','competence', 'acquis' ,'challengeId', 'embedUrl', 'status'],
-    ...embedUrlsToCsv
+    ['origin', 'competence', 'acquis', 'challengeId', 'embedUrl', 'status'],
+    ...embedUrlsToCsv,
   ];
 
-  pipeline(
-    Readable.from(embedUrlWithToCsvHeader),
-    csv.format({ headers: true }),
-    stream,
-    (error) => {
-      if (!error) return;
-      logger.error({ error }, 'Error while get embed list');
-    },
-  );
+  pipeline(Readable.from(embedUrlWithToCsvHeader), csv.format({ headers: true }), stream, (error) => {
+    if (!error) return;
+    logger.error({ error }, 'Error while get embed list');
+  });
 }
 
 export function findPixEpreuvesUrlsFromChallenges(release) {

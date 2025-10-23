@@ -17,19 +17,21 @@ describe('Unit | Domain | User', () => {
       expect(isAdmin).to.be.true;
     });
 
-    it.each(Object.keys(User.ROLES).filter((roleKey) => User.ROLES[roleKey] !== User.ROLES.ADMIN)
-    )('should return false when role key is %s', (roleKey) => {
-      // given
-      const user  = domainBuilder.buildUser({
-        access: User.ROLES[roleKey],
-      });
+    it.each(Object.keys(User.ROLES).filter((roleKey) => User.ROLES[roleKey] !== User.ROLES.ADMIN))(
+      'should return false when role key is %s',
+      (roleKey) => {
+        // given
+        const user = domainBuilder.buildUser({
+          access: User.ROLES[roleKey],
+        });
 
-      // when
-      const isAdmin = user.isAdmin;
+        // when
+        const isAdmin = user.isAdmin;
 
-      // then
-      expect(isAdmin).to.be.false;
-    });
+        // then
+        expect(isAdmin).to.be.false;
+      },
+    );
   });
 
   describe('#get isEditor', () => {
@@ -59,10 +61,11 @@ describe('Unit | Domain | User', () => {
       expect(isEditor).to.be.true;
     });
 
-    it.each(Object.keys(User.ROLES).filter((roleKey) => ![User.ROLES.ADMIN, User.ROLES.EDITOR].includes(User.ROLES[roleKey]))
+    it.each(
+      Object.keys(User.ROLES).filter((roleKey) => ![User.ROLES.ADMIN, User.ROLES.EDITOR].includes(User.ROLES[roleKey])),
     )('should return false when role key is %s', (roleKey) => {
       // given
-      const user  = domainBuilder.buildUser({
+      const user = domainBuilder.buildUser({
         access: User.ROLES[roleKey],
       });
 

@@ -6,7 +6,6 @@ import { domainBuilder } from '../../../test-helper.js';
 import { cloneAttachmentsFileInBucket } from '../../../../lib/infrastructure/utils/storage.js';
 
 describe('Unit | Infrastructure | Storage', () => {
-
   describe('#cloneAttachmentsFileInBucket', () => {
     const token = 'mon_super_token';
     beforeEach(() => {
@@ -46,7 +45,10 @@ describe('Unit | Infrastructure | Storage', () => {
         .reply(200);
 
       // when
-      await cloneAttachmentsFileInBucket({ attachments: [attachmentA, attachmentB], millisecondsTimestamp: Date.now() });
+      await cloneAttachmentsFileInBucket({
+        attachments: [attachmentA, attachmentB],
+        millisecondsTimestamp: Date.now(),
+      });
 
       // then
       expect(requestInterceptorA.isDone()).to.be.true;

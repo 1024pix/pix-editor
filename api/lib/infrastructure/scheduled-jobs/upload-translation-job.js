@@ -20,7 +20,7 @@ const uploadTranslationJobOptions = {
   backoff: { type: 'exponential', delay: 100 },
   removeOnComplete: true,
   removeOnFail: 1,
-  delay: 1000
+  delay: 1000,
 };
 
 export function start() {

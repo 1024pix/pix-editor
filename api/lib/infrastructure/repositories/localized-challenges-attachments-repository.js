@@ -1,8 +1,10 @@
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function save({ attachmentId, localizedChallengeId, transaction: knexConnection = knex }) {
-  await knexConnection('localized_challenges-attachments')
-    .insert({ attachmentId, localizedChallengeId });
+  await knexConnection('localized_challenges-attachments').insert({
+    attachmentId,
+    localizedChallengeId,
+  });
 }
 
 export async function deleteByAttachmentId(attachmentId) {

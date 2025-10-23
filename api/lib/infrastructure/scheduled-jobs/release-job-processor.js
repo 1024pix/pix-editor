@@ -13,7 +13,9 @@ export default async function releaseJobProcessor(job) {
     await downloadTranslationFromPhrase();
     const releaseId = await releaseRepository.create();
     if (_isSlackNotificationGloballyEnabled() && job.data.slackNotification === true) {
-      await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
+      await learningContentNotification.notifyReleaseCreationSuccess(
+        new SlackNotifier(config.notifications.slack.webhookUrl),
+      );
     }
     logger.info(`Periodic release created with id ${releaseId}`);
     if (config.scheduledJobs.startCheckUrlJob) {
@@ -23,7 +25,10 @@ export default async function releaseJobProcessor(job) {
     return releaseId;
   } catch (error) {
     if (_isSlackNotificationGloballyEnabled()) {
-      await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier(config.notifications.slack.webhookUrl));
+      await learningContentNotification.notifyReleaseCreationFailure(
+        error.message,
+        new SlackNotifier(config.notifications.slack.webhookUrl),
+      );
     }
     logger.error(error);
   }

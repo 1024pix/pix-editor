@@ -14,7 +14,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/current-content',
       config: {
-        handler: function() {
+        handler: function () {
           return promiseStreamer({
             promise: releaseRepository.getCurrentContent(),
             loggingScope: SCOPES.RELEASE,
@@ -26,10 +26,12 @@ export async function register(server) {
       method: 'POST',
       path: '/api/releases',
       config: {
-        pre:[{
-          method: securityPreHandlers.checkUserHasWriteAccess,
-        }],
-        handler: async function() {
+        pre: [
+          {
+            method: securityPreHandlers.checkUserHasWriteAccess,
+          },
+        ],
+        handler: async function () {
           const job = await createReleaseQueue.add({ slackNotification: true });
           const promise = async () => {
             const releaseId = await job.finished();
@@ -46,16 +48,17 @@ export async function register(server) {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
-        handler: async function(request, h) {
-          const ifModifiedSinceDate = request.headers?.['if-modified-since'] ? new Date(request.headers['if-modified-since']) : null;
+        handler: async function (request, h) {
+          const ifModifiedSinceDate = request.headers?.['if-modified-since']
+            ? new Date(request.headers['if-modified-since'])
+            : null;
           const latestReleaseDate = await releaseRepository.getLatestReleaseDate();
           if (!ifModifiedSinceDate || latestReleaseDate.getTime() > ifModifiedSinceDate.getTime()) {
             const release = await releaseRepository.getLatestRelease();
             return JSON.stringify(release);
           }
 
-          return h.response()
-            .header('Last-Modified', latestReleaseDate.toUTCString());
+          return h.response().header('Last-Modified', latestReleaseDate.toUTCString());
         },
       },
     },
@@ -66,9 +69,9 @@ export async function register(server) {
         validate: {
           params: Joi.object({
             id: releaseIdType,
-          })
+          }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const release = await releaseRepository.getRelease(request.params.id);
           if (release) {
             return JSON.stringify(release);

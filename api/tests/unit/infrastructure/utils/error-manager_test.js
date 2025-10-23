@@ -3,7 +3,7 @@ import { hFake } from '../../../test-helper.js';
 import * as AllDomainErrors from '../../../../lib/domain/errors.js';
 import { send } from '../../../../lib/infrastructure/utils/error-manager.js';
 
-describe('Unit | Infrastructure | ErrorManager', function() {
+describe('Unit | Infrastructure | ErrorManager', function () {
   describe('#send', () => {
     it('should manage properly all DomainErrors into appropriate InfraError', () => {
       const message = 'error message';
@@ -23,8 +23,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'NotFoundError') {
+        } else if (domainErrorName === 'NotFoundError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(404);
           expect(response.source).toStrictEqual({
             errors: [
@@ -35,8 +34,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'UserNotFoundError') {
+        } else if (domainErrorName === 'UserNotFoundError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(404);
           expect(response.source).toStrictEqual({
             errors: [
@@ -47,8 +45,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'MissionIntroductionMediaError') {
+        } else if (domainErrorName === 'MissionIntroductionMediaError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(500);
           expect(response.source).toStrictEqual({
             errors: [
@@ -59,8 +56,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'InvalidMissionContentError') {
+        } else if (domainErrorName === 'InvalidMissionContentError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(500);
           expect(response.source).toStrictEqual({
             errors: [
@@ -71,8 +67,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'StaticCourseIsInactiveError') {
+        } else if (domainErrorName === 'StaticCourseIsInactiveError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(409);
           expect(response.source).toStrictEqual({
             errors: [
@@ -83,8 +78,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'ForbiddenError') {
+        } else if (domainErrorName === 'ForbiddenError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(403);
           expect(response.source).toStrictEqual({
             errors: [
@@ -95,11 +89,10 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'InvalidStaticCourseCreationOrUpdateError') {
+        } else if (domainErrorName === 'InvalidStaticCourseCreationOrUpdateError') {
           const errorInstance = new domainErrorClass();
           errorInstance.addError({ attribute: 'name', detail: 'Un texte détaillant une erreur' });
-          errorInstance.addError({ attribute: 'challengeIds', detail: 'le détail d\'une autre erreur' });
+          errorInstance.addError({ attribute: 'challengeIds', detail: "le détail d'une autre erreur" });
           const responseForError = send(hFake, errorInstance);
           expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(422);
           expect(responseForError.source).toStrictEqual({
@@ -118,12 +111,11 @@ describe('Unit | Infrastructure | ErrorManager', function() {
                 source: {
                   pointer: '/data/attributes/challenge-ids',
                 },
-                detail: 'le détail d\'une autre erreur',
+                detail: "le détail d'une autre erreur",
               },
             ],
           });
-        }
-        else if (domainErrorName === 'NotFoundWhitelistedUrlError') {
+        } else if (domainErrorName === 'NotFoundWhitelistedUrlError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(404);
           expect(response.source).toStrictEqual({
             errors: [
@@ -134,8 +126,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'CommandWhitelistedUrlForbiddenError') {
+        } else if (domainErrorName === 'CommandWhitelistedUrlForbiddenError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(403);
           expect(response.source).toStrictEqual({
             errors: [
@@ -146,8 +137,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'CommandWhitelistedUrlConflictError') {
+        } else if (domainErrorName === 'CommandWhitelistedUrlConflictError') {
           expect(response.statusCode, expectErrorMessage).toStrictEqual(409);
           expect(response.source).toStrictEqual({
             errors: [
@@ -158,8 +148,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'CommandWhitelistedUrlError') {
+        } else if (domainErrorName === 'CommandWhitelistedUrlError') {
           const errorInstance = new domainErrorClass({ message, attribute });
           const responseForError = send(hFake, errorInstance);
           expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(422);
@@ -173,8 +162,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'TagTitleAlreadyUsedError') {
+        } else if (domainErrorName === 'TagTitleAlreadyUsedError') {
           const errorInstance = new domainErrorClass('Internet');
           const responseForError = send(hFake, errorInstance);
           expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(409);
@@ -187,8 +175,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else if (domainErrorName === 'CloneSkillError') {
+        } else if (domainErrorName === 'CloneSkillError') {
           const errorInstance = new domainErrorClass('mon message');
           const responseForError = send(hFake, errorInstance);
           expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(400);
@@ -201,8 +188,7 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
-        }
-        else {
+        } else {
           expect(true, `Conversion for ${domainErrorName} not tested`).to.be.false;
         }
       }

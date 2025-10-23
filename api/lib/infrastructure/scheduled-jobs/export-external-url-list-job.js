@@ -29,7 +29,9 @@ const externalUrlJobOptions = {
 
 export function schedule() {
   if (!_isScheduledExportEnabled()) {
-    logger.info('Scheduled export of external list is not enabled - check `EXPORT_EXTERNAL_URL_LIST_TIME` and `REDIS_URL` variables');
+    logger.info(
+      'Scheduled export of external list is not enabled - check `EXPORT_EXTERNAL_URL_LIST_TIME` and `REDIS_URL` variables',
+    );
     return;
   }
   queue.add({}, externalUrlJobOptions);

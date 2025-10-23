@@ -5,27 +5,27 @@ import * as usecases from '../../../../lib/domain/usecases/index.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { MissionSummary } from '../../../../lib/domain/readmodels/index.js';
 
-describe('Unit | Controller | missions controller', function() {
-  describe('findMissions', function() {
+describe('Unit | Controller | missions controller', function () {
+  describe('findMissions', function () {
     let findAllMissions;
 
-    beforeEach(function() {
+    beforeEach(function () {
       findAllMissions = vi.spyOn(usecases, 'findAllMissions');
-      findAllMissions.mockResolvedValue(
-        {
-          missions: [
-            new MissionSummary({
-              id: 1,
-              name: 'Ma première mission',
-              competence: '1.1 Ma compétence',
-              status: Mission.status.VALIDATED,
-              createdAt: new Date('2010-01-04'),
-            })],
-          meta: {}
-        });
+      findAllMissions.mockResolvedValue({
+        missions: [
+          new MissionSummary({
+            id: 1,
+            name: 'Ma première mission',
+            competence: '1.1 Ma compétence',
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+          }),
+        ],
+        meta: {},
+      });
     });
 
-    it('should call the repository with all query params when they are valid', async function() {
+    it('should call the repository with all query params when they are valid', async function () {
       // given
       const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[statuses][]': ['VALIDATED'] } };
 
@@ -33,9 +33,12 @@ describe('Unit | Controller | missions controller', function() {
       await missionsController.findMissions(request, hFake);
 
       // then
-      expect(findAllMissions).toHaveBeenCalledWith({ filter: { statuses: ['VALIDATED'] }, page: { number: 3, size: 5 } });
+      expect(findAllMissions).toHaveBeenCalledWith({
+        filter: { statuses: ['VALIDATED'] },
+        page: { number: 3, size: 5 },
+      });
     });
-    it('should return the serialized mission with french translations', async function() {
+    it('should return the serialized mission with french translations', async function () {
       // given
       const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[statuses][]': ['VALIDATED'] } };
 
@@ -51,16 +54,16 @@ describe('Unit | Controller | missions controller', function() {
             name: 'Ma première mission',
             competence: '1.1 Ma compétence',
             'created-at': new Date('2010-01-04'),
-            status: Mission.status.VALIDATED
-          }
-        }
+            status: Mission.status.VALIDATED,
+          },
+        },
       ]);
     });
 
-    describe('pagination', function() {
+    describe('pagination', function () {
       const filter = {};
 
-      it('ignore unknown pagination parameters', async function() {
+      it('ignore unknown pagination parameters', async function () {
         // given
         const request = { query: { 'page[size]': 5, 'page[number]': 3, 'page[hello]': 'oui' } };
 
@@ -71,9 +74,8 @@ describe('Unit | Controller | missions controller', function() {
         expect(findAllMissions).toHaveBeenCalledWith({ filter, page: { number: 3, size: 5 } });
       });
 
-      context('page size', function() {
-
-        it('should use default page.size default value when it is not a positive integer', async function() {
+      context('page size', function () {
+        it('should use default page.size default value when it is not a positive integer', async function () {
           // given
           const request0 = { query: { 'page[size]': -5, 'page[number]': 3 } };
           const request1 = { query: { 'page[size]': 'coucou', 'page[number]': 3 } };
@@ -93,7 +95,7 @@ describe('Unit | Controller | missions controller', function() {
           expect(findAllMissions).toHaveBeenNthCalledWith(4, { filter, page: { number: 3, size: 10 } });
         });
 
-        it('should ceil page.size value to max value when it overflows', async function() {
+        it('should ceil page.size value to max value when it overflows', async function () {
           // given
           const request0 = { query: { 'page[size]': 100, 'page[number]': 3 } };
           const request1 = { query: { 'page[size]': 101, 'page[number]': 3 } };
@@ -108,9 +110,8 @@ describe('Unit | Controller | missions controller', function() {
         });
       });
 
-      context('page number', function() {
-
-        it('should use default page.number default value when it is not a positive integer', async function() {
+      context('page number', function () {
+        it('should use default page.number default value when it is not a positive integer', async function () {
           // given
           const request0 = { query: { 'page[size]': 5, 'page[number]': -3 } };
           const request1 = { query: { 'page[size]': 5, 'page[number]': 'coucou' } };
@@ -130,13 +131,12 @@ describe('Unit | Controller | missions controller', function() {
           expect(findAllMissions).toHaveBeenNthCalledWith(4, { filter, page: { number: 1, size: 5 } });
         });
       });
-
     });
 
-    describe('filter normalization', function() {
+    describe('filter normalization', function () {
       const page = { number: 1, size: 10 };
 
-      it('ignore unknown filter parameters', async function() {
+      it('ignore unknown filter parameters', async function () {
         // given
         const request = { query: { 'filter[statuses][]': 'VALIDATED', 'filter[damn]': 'ok' } };
 
@@ -149,7 +149,7 @@ describe('Unit | Controller | missions controller', function() {
     });
   });
 
-  describe('createMission', function() {
+  describe('createMission', function () {
     let createMissionMock;
     const attributes = {
       name: 'Mission possible',
@@ -180,7 +180,7 @@ describe('Unit | Controller | missions controller', function() {
       status: Mission.status.VALIDATED,
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
       createMissionMock = vi.spyOn(usecases, 'createMission');
 
       createMissionMock.mockResolvedValue({
@@ -189,7 +189,7 @@ describe('Unit | Controller | missions controller', function() {
       });
     });
 
-    it('should call the usecase with a domain object', async function() {
+    it('should call the usecase with a domain object', async function () {
       // given
 
       // when
@@ -198,27 +198,25 @@ describe('Unit | Controller | missions controller', function() {
       expect(createMissionMock).toHaveBeenCalledWith(deserializedMission);
     });
 
-    it('should return the serialized mission id', async function() {
+    it('should return the serialized mission id', async function () {
       // when
       const result = await missionsController.create(request, hFake);
 
       // then
-      expect(result.source.data).to.deep.equal(
-        {
-          type: 'missions',
-          id: '1',
-          attributes: {
-            ...attributes,
-            'created-at': undefined,
-            'thematic-ids': null,
-            warnings: ['Ca va pas du tout là !'],
-          }
-        }
-      );
+      expect(result.source.data).to.deep.equal({
+        type: 'missions',
+        id: '1',
+        attributes: {
+          ...attributes,
+          'created-at': undefined,
+          'thematic-ids': null,
+          warnings: ['Ca va pas du tout là !'],
+        },
+      });
     });
   });
 
-  describe('updateMission', function() {
+  describe('updateMission', function () {
     let updateMissionMock;
     const attributes = {
       name: 'Mission possible',
@@ -233,7 +231,6 @@ describe('Unit | Controller | missions controller', function() {
       'introduction-media-alt': null,
       'introduction-media-type': null,
       'introduction-media-url': null,
-
     };
 
     const missionId = 1;
@@ -253,7 +250,7 @@ describe('Unit | Controller | missions controller', function() {
       status: Mission.status.VALIDATED,
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
       updateMissionMock = vi.spyOn(usecases, 'updateMission');
 
       updateMissionMock.mockResolvedValue({
@@ -262,7 +259,7 @@ describe('Unit | Controller | missions controller', function() {
       });
     });
 
-    it('should call the usecase with a domain object', async function() {
+    it('should call the usecase with a domain object', async function () {
       // given
 
       // when
@@ -272,21 +269,19 @@ describe('Unit | Controller | missions controller', function() {
       expect(updateMissionMock).toHaveBeenCalledWith(deserializedMission);
     });
 
-    it('should return the serialized mission id and warnings', async function() {
+    it('should return the serialized mission id and warnings', async function () {
       // when
       const result = await missionsController.update(request, hFake);
 
       // then
-      expect(result.source.data).to.deep.equal(
-        {
-          type: 'missions',
-          id: '1',
-          attributes: {
-            ...attributes,
-            warnings: ['Ca va pas du tout là !'],
-          }
-        }
-      );
+      expect(result.source.data).to.deep.equal({
+        type: 'missions',
+        id: '1',
+        attributes: {
+          ...attributes,
+          warnings: ['Ca va pas du tout là !'],
+        },
+      });
     });
   });
 });

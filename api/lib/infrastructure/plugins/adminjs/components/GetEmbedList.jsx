@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Icon, Text, Box } from '@adminjs/design-system';
-import Loader from './Loader.jsx'
+import Loader from './Loader.jsx';
 import Card from './Card.jsx';
 import { useCurrentAdmin, useNotice } from 'adminjs';
 import { saveAs } from 'file-saver';
@@ -17,7 +17,7 @@ const GetEmbedListComponent = () => {
       const token = currentAdmin?.email;
       const { data } = await axios.get('/api/embeds.csv', {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       const blob = new Blob([data], { type: 'text/csv' });
@@ -31,16 +31,22 @@ const GetEmbedListComponent = () => {
   }
 
   return (
-    <Card as="button" style={{cursor: isFetching ? 'not-allowed' : 'pointer', width: '100%' }} onClick={exportEmbedList} disabled={isFetching}>
-      <Text textAlign='center'>
-        {isFetching ?
-          <Loader style={{marginRight: 6}}/>
-          :
-        <Icon icon="Download" size={24} style={{ marginRight: 6 }} />
-        }
+    <Card
+      as="button"
+      style={{ cursor: isFetching ? 'not-allowed' : 'pointer', width: '100%' }}
+      onClick={exportEmbedList}
+      disabled={isFetching}
+    >
+      <Text textAlign="center">
+        {isFetching ? (
+          <Loader style={{ marginRight: 6 }} />
+        ) : (
+          <Icon icon="Download" size={24} style={{ marginRight: 6 }} />
+        )}
         Exporter la liste des embeds utilisés
       </Text>
     </Card>
-  )};
+  );
+};
 
 export default GetEmbedListComponent;

@@ -5,13 +5,12 @@ import { deserializeMission } from '../../../../../lib/infrastructure/serializer
 describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
   describe('#deserialize', () => {
     it('should deserialize a Mission', () => {
-
       const expectedMission = new Mission({
         id: 12,
-        learningObjectives_i18n: { fr: 'learning objectives-value', },
-        name_i18n: { fr: 'Mission Name', },
+        learningObjectives_i18n: { fr: 'learning objectives-value' },
+        name_i18n: { fr: 'Mission Name' },
         cardImageUrl: 'card-image-url',
-        validatedObjectives_i18n: { fr: 'validated-objectives-value', },
+        validatedObjectives_i18n: { fr: 'validated-objectives-value' },
         competenceId: 'rec12E12EFZF',
         thematicIds: 'someThematicIds',
         learningObjectives: 'learning objectives-value',
@@ -33,9 +32,9 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         'validated-objectives': expectedMission.validatedObjectives_i18n.fr,
         'introduction-media-url': expectedMission.introductionMediaUrl,
         'introduction-media-type': expectedMission.introductionMediaType,
-        'introduction-media-alt':  expectedMission.introductionMediaAlt_i18n.fr,
+        'introduction-media-alt': expectedMission.introductionMediaAlt_i18n.fr,
         'documentation-url': expectedMission.documentationUrl,
-        status: expectedMission.status
+        status: expectedMission.status,
       };
       const deserializedMission = deserializeMission(attributes);
 
@@ -43,7 +42,6 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
     });
 
     it('should deserialize empty string into null value', () => {
-
       const expectedMission = new Mission({ id: 12 });
 
       const attributes = {
@@ -62,4 +60,3 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
     });
   });
 });
-

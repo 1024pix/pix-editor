@@ -14,7 +14,7 @@ const Components = {
   Dashboard: componentLoader.add('Dashboard', './components/Dashboard.jsx'),
 };
 
-const readOnlyOptions =  {
+const readOnlyOptions = {
   edit: {
     isVisible: false,
   },
@@ -76,9 +76,9 @@ export const options = {
           ...readOnlyOptions,
           getEmbedList: {
             component: Components.GetEmbedList,
-          }
+          },
         },
-      }
+      },
     },
     {
       resource: Translations,
@@ -96,7 +96,7 @@ export const options = {
       resource: LocalizedChallenge,
       options: {
         actions: readOnlyOptions,
-      }
+      },
     },
   ],
   auth: {
@@ -106,4 +106,3 @@ export const options = {
     authenticate: (email) => checkUserIsAuthenticatedViaBasicAndAdmin(email),
   },
 };
-

@@ -7,14 +7,14 @@ describe('Unit | Domain | Attachment', () => {
       // given
       const attachment = domainBuilder.buildAttachment({
         id: 'oldId',
-        url:'http://cc.c',
+        url: 'http://cc.c',
         type: 'illustration',
         size: 345,
         mimeType: 'image/png',
         filename: 'nom_du_fichier',
         challengeId: 'challengeId',
         airtableChallengeId: 'challengeAirtableId',
-        localizedChallengeId: 'localizedChallengeId'
+        localizedChallengeId: 'localizedChallengeId',
       });
 
       // when
@@ -26,7 +26,7 @@ describe('Unit | Domain | Attachment', () => {
       // then
       const expectedAttachment = domainBuilder.buildAttachment({
         id: null,
-        url:'http://cc.c',
+        url: 'http://cc.c',
         type: 'illustration',
         size: 345,
         mimeType: 'image/png',

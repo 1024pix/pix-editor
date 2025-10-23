@@ -25,10 +25,10 @@ describe('Unit | Domain | Readmodels | LocalizedChallenge', () => {
           }),
         ],
         translations: {
-          'fr': {
+          fr: {
             instruction: 'Je men fiche',
           },
-          'nl': {
+          nl: {
             instruction: 'Da Da Da',
           },
         },
@@ -45,7 +45,7 @@ describe('Unit | Domain | Readmodels | LocalizedChallenge', () => {
           locale: 'nl',
           instruction: 'Da Da Da',
           status: LocalizedChallenge.STATUSES.PLAY,
-        })
+        }),
       );
     });
   });

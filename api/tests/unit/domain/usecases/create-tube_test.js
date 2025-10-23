@@ -4,7 +4,6 @@ import { createTube } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Use Cases | create-tube', () => {
-
   const createdTube = Symbol('createdTube');
 
   let tubeRepository, thematicRepository, thematic, tube, prepareForCreationStub, updatePixApiReleaseCache;

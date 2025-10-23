@@ -1,15 +1,5 @@
 export class StaticCourse {
-  constructor({
-    id,
-    name,
-    description,
-    challengeSummaries,
-    isActive,
-    deactivationReason,
-    createdAt,
-    updatedAt,
-    tags,
-  }) {
+  constructor({ id, name, description, challengeSummaries, isActive, deactivationReason, createdAt, updatedAt, tags }) {
     this.id = id;
     this.name = name;
     this.description = description;

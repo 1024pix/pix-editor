@@ -31,13 +31,13 @@ const serializer = new Serializer('localized-challenges', {
   fileIds: {
     ref(_, fileId) {
       return fileId;
-    }
+    },
   },
   attachments: {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
-      related: function(record, current, parent) {
+      related: function (record, current, parent) {
         return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
       },
     },
@@ -49,7 +49,7 @@ const serializer = new Serializer('localized-challenges', {
   keyForAttribute(attribute) {
     return Inflector.dasherize(Inflector.underscore(attribute));
   },
-  transform: function({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
+  transform: function ({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
     return {
       ...localizedChallenge,
       defaultEmbedUrl,
@@ -57,7 +57,7 @@ const serializer = new Serializer('localized-challenges', {
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
       attachments: [],
     };
-  }
+  },
 });
 
 export function serialize(localizedChallenge) {
@@ -92,9 +92,9 @@ const deserializer = new Deserializer({
   attachments: {
     valueForRelationship(attachment) {
       return attachment.id;
-    }
+    },
   },
-  transform: function({ challenge, embedUrl, files, ...localizedChallenge }) {
+  transform: function ({ challenge, embedUrl, files, ...localizedChallenge }) {
     return new LocalizedChallenge({
       ...localizedChallenge,
       challengeId: challenge,
@@ -102,12 +102,11 @@ const deserializer = new Deserializer({
       fileIds: files,
       validatedAt: null,
     });
-  }
+  },
 });
 
 export async function deserialize(localizedChallengeBody) {
   return new Promise((resolve, reject) => {
-
     deserializer.deserialize(localizedChallengeBody, (err, localizedChallengeObject) => {
       return err ? reject(err) : resolve(new LocalizedChallenge(localizedChallengeObject));
     });

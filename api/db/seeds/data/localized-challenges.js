@@ -4,29 +4,21 @@ import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-
 import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {
-  const {
-    AIRTABLE_API_KEY: airtableApiKey,
-    AIRTABLE_BASE: airtableBase,
-  } = process.env;
+  const { AIRTABLE_API_KEY: airtableApiKey, AIRTABLE_BASE: airtableBase } = process.env;
 
   const airtableClient = new Airtable({ apiKey: airtableApiKey }).base(airtableBase);
 
   const challenges = await airtableClient
     .table('Epreuves')
     .select({
-      fields: [
-        'id persistant',
-        'Langues',
-        'Embed URL',
-        'Géographie',
-      ],
+      fields: ['id persistant', 'Langues', 'Embed URL', 'Géographie'],
     })
     .all();
 
   const challengesLocales = fp.flow(
     fp.filter(({ key }) => key.startsWith('challenge.')),
     fp.groupBy(({ key }) => key.split('.')[1]),
-    fp.mapValues(fp.flow(fp.map('locale'), fp.uniq))
+    fp.mapValues(fp.flow(fp.map('locale'), fp.uniq)),
   )(translations);
 
   const localizedChallenges = challenges.flatMap((challenge) => {
@@ -41,7 +33,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
         locale: primaryLocale,
         embedUrl,
       },
-      ...challengesLocales[challengeId]
+      ...(challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
           id: `${challengeId}-${locale}`,
@@ -49,7 +41,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
           locale,
           status: LocalizedChallenge.STATUSES.PAUSE,
           geography: countryCode,
-        })) ?? [],
+        })) ?? []),
     ];
   });
 

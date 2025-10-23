@@ -71,15 +71,28 @@ export async function buildTubesFromConfig({
   learningContentData,
 }) {
   const tubeItems = [];
-  const allThematics = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics));
+  const allThematics = learningContentData.flatMap((framework) =>
+    framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics),
+  );
   for (const thematicItem of allThematics) {
     if (thematicItem.name.includes('workbench')) {
-      const tubeItemWorkbench = buildTube({ thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+      const tubeItemWorkbench = buildTube({
+        thematicItem,
+        databaseBuilder,
+        locales: learningContentConfig.locales,
+        isWorkbench: true,
+      });
       thematicItem.tubes.push(tubeItemWorkbench);
       tubeItems.push(tubeItemWorkbench);
     } else {
       for (let i = 0; i < learningContentConfig.cntTubesPerThematic; ++i) {
-        const tubeItem = buildTube({ indexTube: i, thematicItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+        const tubeItem = buildTube({
+          indexTube: i,
+          thematicItem,
+          databaseBuilder,
+          locales: learningContentConfig.locales,
+          isWorkbench: false,
+        });
         thematicItem.tubes.push(tubeItem);
         tubeItems.push(tubeItem);
       }
@@ -95,15 +108,15 @@ function toAirtableObject(item) {
   return {
     fields: {
       'id persistant': item.id,
-      'Index': item.index,
-      'Nom': item.name,
+      Index: item.index,
+      Nom: item.name,
       Competences: [item.competenceAirtableId],
       Thematique: [item.thematicAirtableId],
-    }
+    },
   };
 }
 
-export function buildTube({ indexTube , suffix = '', thematicItem, databaseBuilder, locales, isWorkbench }) {
+export function buildTube({ indexTube, suffix = '', thematicItem, databaseBuilder, locales, isWorkbench }) {
   const partId = thematicItem.id.split('thematic')[1];
   const tubeId = `tube${partId}Tu${isWorkbench ? 'W' : indexTube}`;
   const tubePracticalDescription = `${tubeId} practicalDescription`;
@@ -122,34 +135,40 @@ export function buildTube({ indexTube , suffix = '', thematicItem, databaseBuild
   };
   databaseBuilder.factory.buildTube(tubeItem);
   locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `tube.${tubeItem.id}.practicalTitle`,
-        value: `${tubeItem.practicalTitle} ${locale}`,
-      }
-    );
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `tube.${tubeItem.id}.practicalDescription`,
-        value: `${tubeItem.practicalDescription} ${locale}`,
-      }
-    );
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `tube.${tubeItem.id}.practicalTitle`,
+      value: `${tubeItem.practicalTitle} ${locale}`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `tube.${tubeItem.id}.practicalDescription`,
+      value: `${tubeItem.practicalDescription} ${locale}`,
+    });
   });
   return tubeItem;
 }
 
 export async function persistTubes({ items, airtableClient, logger }) {
   const airtableItems = items.map(toAirtableObject);
-  const records = await saveInAirtable({ tableName: 'Tubes', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Tubes',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
   });
 }
 
 export async function copyTubesFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableTubes = await  airtableClient.table('Tubes').select({ fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'] }).all();
+  const airtableTubes = await airtableClient
+    .table('Tubes')
+    .select({
+      fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'],
+    })
+    .all();
 
   logger.info(`Copying ${airtableTubes.length} tubes from airtable...`);
 

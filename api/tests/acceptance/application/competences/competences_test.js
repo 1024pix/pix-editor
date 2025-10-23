@@ -12,9 +12,8 @@ import { competenceDatasource } from '../../../../lib/infrastructure/datasources
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Acceptance | Route | competences', () => {
-
   let editorUser, adminUser;
-  beforeEach(async function() {
+  beforeEach(async function () {
     editorUser = databaseBuilder.factory.buildEditorUser();
     adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
@@ -104,41 +103,131 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildArea({ id: 'area11', code: '1', frameworkId: 'junior' });
       competences.forEach((competence) => {
         databaseBuilder.factory.buildCompetence(competence);
-        competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
-        competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+        competence.thematicIds.forEach((id) =>
+          databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
+        );
+        competence.tubeIds.forEach((id, index) =>
+          databaseBuilder.factory.buildTube({
+            id,
+            name: `@${id}`,
+            thematicId: competence.thematicIds[index % competence.thematicIds.length],
+          }),
+        );
       });
 
-      const airtableCompetences = competences.map((competence) => airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence)));
+      const airtableCompetences = competences.map((competence) =>
+        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence)),
+      );
 
       airtableCompetencesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Competences')
         .query({
           fields: { '': competenceDatasource.usedFields },
-          sort: [{ field: competenceDatasource.sortField, direction: 'asc' }]
+          sort: [{ field: competenceDatasource.sortField, direction: 'asc' }],
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableCompetences });
 
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence1.name', locale: 'fr', value: 'Première compétence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence1.name', locale: 'en', value: 'First competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence1.description', locale: 'fr', value: 'C’est la première' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence1.description', locale: 'en', value: 'It’s the first one' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence11.name', locale: 'fr', value: 'Première compétence junior' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence11.name', locale: 'en', value: 'First junior competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence11.description', locale: 'fr', value: 'C’est la première pour les juniors' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence11.description', locale: 'en', value: 'It’s the first one for juniors' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.name', locale: 'fr', value: 'Deuxième compétence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.name', locale: 'en', value: 'Second competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.description', locale: 'fr', value: 'C’est la deuxième' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.description', locale: 'en', value: 'It’s the second one' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence12.name', locale: 'fr', value: 'Deuxième compétence junior' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence12.name', locale: 'en', value: 'Second junior competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence12.description', locale: 'fr', value: 'C’est la deuxième pour les juniors' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence12.description', locale: 'en', value: 'It’s the second one for juniors' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence3.name', locale: 'fr', value: 'Troisième compétence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence3.name', locale: 'en', value: 'Third competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence3.description', locale: 'fr', value: 'C’est la troisième' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence3.description', locale: 'en', value: 'It’s the third one' });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.name',
+        locale: 'fr',
+        value: 'Première compétence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.name',
+        locale: 'en',
+        value: 'First competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.description',
+        locale: 'fr',
+        value: 'C’est la première',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence1.description',
+        locale: 'en',
+        value: 'It’s the first one',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence11.name',
+        locale: 'fr',
+        value: 'Première compétence junior',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence11.name',
+        locale: 'en',
+        value: 'First junior competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence11.description',
+        locale: 'fr',
+        value: 'C’est la première pour les juniors',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence11.description',
+        locale: 'en',
+        value: 'It’s the first one for juniors',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'fr',
+        value: 'Deuxième compétence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'en',
+        value: 'Second competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'fr',
+        value: 'C’est la deuxième',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'en',
+        value: 'It’s the second one',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence12.name',
+        locale: 'fr',
+        value: 'Deuxième compétence junior',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence12.name',
+        locale: 'en',
+        value: 'Second junior competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence12.description',
+        locale: 'fr',
+        value: 'C’est la deuxième pour les juniors',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence12.description',
+        locale: 'en',
+        value: 'It’s the second one for juniors',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence3.name',
+        locale: 'fr',
+        value: 'Troisième compétence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence3.name',
+        locale: 'en',
+        value: 'Third competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence3.description',
+        locale: 'fr',
+        value: 'C’est la troisième',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence3.description',
+        locale: 'en',
+        value: 'It’s the third one',
+      });
 
       await databaseBuilder.commit();
     });
@@ -249,9 +338,7 @@ describe('Acceptance | Route | competences', () => {
                 },
               },
               'raw-themes': {
-                data: [
-                  { id: 'recThematic3', type: 'themes' },
-                ],
+                data: [{ id: 'recThematic3', type: 'themes' }],
               },
               'raw-tubes': {
                 data: [
@@ -358,10 +445,20 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'pix' });
       databaseBuilder.factory.buildCompetence(competence);
-      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
-      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
+      competence.thematicIds.forEach((id) =>
+        databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
+      );
+      competence.tubeIds.forEach((id, index) =>
+        databaseBuilder.factory.buildTube({
+          id,
+          name: `@${id}`,
+          thematicId: competence.thematicIds[index % competence.thematicIds.length],
+        }),
+      );
 
-      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence));
+      airtableCompetence = airtableBuilder.factory.buildCompetence(
+        domainBuilder.buildCompetenceDatasourceObject(competence),
+      );
 
       airtableCompetenceScope = nock('https://api.airtable.com')
         .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
@@ -369,10 +466,26 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, airtableCompetence);
 
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.name', locale: 'fr', value: 'Deuxième compétence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.name', locale: 'en', value: 'Second competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.description', locale: 'fr', value: 'C’est la deuxième' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence2.description', locale: 'en', value: 'It’s the second one' });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'fr',
+        value: 'Deuxième compétence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.name',
+        locale: 'en',
+        value: 'Second competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'fr',
+        value: 'C’est la deuxième',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence2.description',
+        locale: 'en',
+        value: 'It’s the second one',
+      });
 
       await databaseBuilder.commit();
     });
@@ -437,9 +550,7 @@ describe('Acceptance | Route | competences', () => {
               },
             },
             'raw-themes': {
-              data: [
-                { id: 'recThematic3', type: 'themes' },
-              ],
+              data: [{ id: 'recThematic3', type: 'themes' }],
             },
             'raw-tubes': {
               data: [
@@ -468,15 +579,17 @@ describe('Acceptance | Route | competences', () => {
     // FIXME pixApiSkillCacheScope
 
     beforeEach(async () => {
-      const airtableArea = airtableBuilder.factory.buildArea(domainBuilder.buildAreaDatasourceObject({
-        id: 'area2',
-        airtableId: 'recArea2',
-        code: '2',
-        color: null,
-        competenceIds: ['competence3'],
-        competenceAirtableIds: ['recCompetence3'],
-        frameworkId: 'recFmk1',
-      }));
+      const airtableArea = airtableBuilder.factory.buildArea(
+        domainBuilder.buildAreaDatasourceObject({
+          id: 'area2',
+          airtableId: 'recArea2',
+          code: '2',
+          color: null,
+          competenceIds: ['competence3'],
+          competenceAirtableIds: ['recCompetence3'],
+          frameworkId: 'recFmk1',
+        }),
+      );
 
       airtableAreaScope = nock('https://api.airtable.com')
         .get(`/v0/airtableBaseValue/Domaines/${airtableArea.id}`)
@@ -488,60 +601,70 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
 
-      const airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject({
-        id: 'competence4',
-        airtableId: 'recCompetence4',
-        index: '2.2',
-        areaId: 'area2',
-        areaAirtableId: 'recArea2',
-        origin: 'Pix',
-        thematicIds: null,
-        thematicAirtableIds: null,
-        tubeAirtableIds: null,
-        skillIds: null,
-      }));
+      const airtableCompetence = airtableBuilder.factory.buildCompetence(
+        domainBuilder.buildCompetenceDatasourceObject({
+          id: 'competence4',
+          airtableId: 'recCompetence4',
+          index: '2.2',
+          areaId: 'area2',
+          areaAirtableId: 'recArea2',
+          origin: 'Pix',
+          thematicIds: null,
+          thematicAirtableIds: null,
+          tubeAirtableIds: null,
+          skillIds: null,
+        }),
+      );
 
-      const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({
-        id: 'thematic1',
-        airtableId: 'recThematic1',
-        index: 0,
-        competenceId: 'competence4',
-        tubeIds: [],
-      }));
+      const airtableThematic = airtableBuilder.factory.buildThematic(
+        domainBuilder.buildThematicDatasourceObject({
+          id: 'thematic1',
+          airtableId: 'recThematic1',
+          index: 0,
+          competenceId: 'competence4',
+          tubeIds: [],
+        }),
+      );
 
-      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({
-        id: 'tube1',
-        airtableId: 'recTube1',
-        name: '@workbench',
-        competenceAirtableId: 'recCompetence4',
-        competenceId: 'competence4',
-        index: null,
-        thematicAirtableId: 'recThematic1',
-        thematicId: 'thematic1',
-      }));
+      const airtableTube = airtableBuilder.factory.buildTube(
+        domainBuilder.buildTubeDatasourceObject({
+          id: 'tube1',
+          airtableId: 'recTube1',
+          name: '@workbench',
+          competenceAirtableId: 'recCompetence4',
+          competenceId: 'competence4',
+          index: null,
+          thematicAirtableId: 'recThematic1',
+          thematicId: 'thematic1',
+        }),
+      );
 
-      const airtableSkill = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject({
-        id: 'skill1',
-        airtableId: 'recSkill1',
-        name: '@workbench',
-        tubeAirtableId: 'recTube1',
-        tubeId: 'tube1',
-        description: 'Acquis pour l\'atelier de la compétence 2.2 Pix',
-        tutorialAirtableIds: [],
-        tutorialIds: [],
-        learningMoreTutorialAirtableIds: [],
-        learningMoreTutorialIds: [],
-      }));
+      const airtableSkill = airtableBuilder.factory.buildSkill(
+        domainBuilder.buildSkillDatasourceObject({
+          id: 'skill1',
+          airtableId: 'recSkill1',
+          name: '@workbench',
+          tubeAirtableId: 'recTube1',
+          tubeId: 'tube1',
+          description: "Acquis pour l'atelier de la compétence 2.2 Pix",
+          tutorialAirtableIds: [],
+          tutorialIds: [],
+          learningMoreTutorialAirtableIds: [],
+          learningMoreTutorialIds: [],
+        }),
+      );
 
       airtableCreateCompetenceScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Competences/', {
-          records: [{
-            fields: {
-              'id persistant': 'competence4',
-              'Sous-domaine': '2.2',
-              Domaine: ['recArea2'],
+          records: [
+            {
+              fields: {
+                'id persistant': 'competence4',
+                'Sous-domaine': '2.2',
+                Domaine: ['recArea2'],
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -549,13 +672,15 @@ describe('Acceptance | Route | competences', () => {
 
       airtableCreateThematicScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Thematiques/', {
-          records: [{
-            fields: {
-              'id persistant': 'thematic1',
-              Competence: ['recCompetence4'],
-              Index: 0,
+          records: [
+            {
+              fields: {
+                'id persistant': 'thematic1',
+                Competence: ['recCompetence4'],
+                Index: 0,
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -563,14 +688,16 @@ describe('Acceptance | Route | competences', () => {
 
       airtableCreateTubeScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Tubes/', {
-          records: [{
-            fields: {
-              'id persistant': 'tube1',
-              Nom: '@workbench',
-              Competences: ['recCompetence4'],
-              Thematique: ['recThematic1'],
+          records: [
+            {
+              fields: {
+                'id persistant': 'tube1',
+                Nom: '@workbench',
+                Competences: ['recCompetence4'],
+                Thematique: ['recThematic1'],
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -578,13 +705,15 @@ describe('Acceptance | Route | competences', () => {
 
       airtableCreateSkillScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Acquis/', {
-          records: [{
-            fields: {
-              'id persistant': 'skill1',
-              Tube: ['recTube1'],
-              Description: 'Acquis pour l\'atelier de la compétence 2.2 Pix',
+          records: [
+            {
+              fields: {
+                'id persistant': 'skill1',
+                Tube: ['recTube1'],
+                Description: "Acquis pour l'atelier de la compétence 2.2 Pix",
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -593,10 +722,14 @@ describe('Acceptance | Route | competences', () => {
       generateNewId = vi.spyOn(idGenerator, 'generateNewId');
       generateNewId.mockImplementation((prefix) => {
         switch (prefix) {
-          case 'competence': return 'competence4';
-          case 'thematic': return 'thematic1';
-          case 'tube': return 'tube1';
-          case 'skill': return 'skill1';
+          case 'competence':
+            return 'competence4';
+          case 'thematic':
+            return 'thematic1';
+          case 'tube':
+            return 'tube1';
+          case 'skill':
+            return 'skill1';
         }
       });
 
@@ -604,7 +737,7 @@ describe('Acceptance | Route | competences', () => {
       nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken })
+        .reply(200, { access_token: pixApiToken })
         .persist();
 
       pixApiCompetenceCacheScope = nock('https://api.test.pix.fr')
@@ -617,12 +750,12 @@ describe('Acceptance | Route | competences', () => {
           origin: 'Pix',
           name_i18n: {
             fr: 'Quatrième compétence',
-            en: 'Fourth competence'
+            en: 'Fourth competence',
           },
-          'description_i18n': {
+          description_i18n: {
             fr: 'C’est la quatrième',
-            en: 'It’s the fourth one'
-          }
+            en: 'It’s the fourth one',
+          },
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);
@@ -661,7 +794,7 @@ describe('Acceptance | Route | competences', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/competences',
-          payload:  {
+          payload: {
             data: {
               type: 'competences',
               attributes: {
@@ -691,7 +824,7 @@ describe('Acceptance | Route | competences', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/competences',
-          payload:  {
+          payload: {
             data: {
               type: 'competences',
               attributes: {
@@ -723,7 +856,7 @@ describe('Acceptance | Route | competences', () => {
       const response = await server.inject({
         method: 'POST',
         url: '/api/competences',
-        payload:  {
+        payload: {
           data: {
             type: 'competences',
             attributes: {
@@ -769,14 +902,10 @@ describe('Acceptance | Route | competences', () => {
               },
             },
             'raw-themes': {
-              data: [
-                { id: 'recThematic1', type: 'themes' },
-              ],
+              data: [{ id: 'recThematic1', type: 'themes' }],
             },
             'raw-tubes': {
-              data: [
-                { id: 'recTube1', type: 'tubes' },
-              ],
+              data: [{ id: 'recTube1', type: 'tubes' }],
             },
           },
         },
@@ -793,37 +922,54 @@ describe('Acceptance | Route | competences', () => {
       ]);
 
       await expect(knex.select('*').from('thematics')).resolves.toStrictEqual([
-        { id: 'thematic1', index: 0, competenceId: 'competence4', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        {
+          id: 'thematic1',
+          index: 0,
+          competenceId: 'competence4',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
       ]);
 
       await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
-        { id: 'tube1', name: '@workbench', index: null, thematicId: 'thematic1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+        {
+          id: 'tube1',
+          name: '@workbench',
+          index: null,
+          thematicId: 'thematic1',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
       ]);
 
-      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([{
-        id: 'skill1',
-        description: 'Acquis pour l\'atelier de la compétence 2.2 Pix',
-        descriptionStatus: null,
-        hintStatus: null,
-        internationalisation: null,
-        level: null,
-        status: null,
-        version: null,
-        tubeId: 'tube1',
-        activatedAt: null,
-        archivedAt: null,
-        obsoletedAt: null,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      }]);
+      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
+        {
+          id: 'skill1',
+          description: "Acquis pour l'atelier de la compétence 2.2 Pix",
+          descriptionStatus: null,
+          hintStatus: null,
+          internationalisation: null,
+          level: null,
+          status: null,
+          version: null,
+          tubeId: 'tube1',
+          activatedAt: null,
+          archivedAt: null,
+          obsoletedAt: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toStrictEqual([
         { key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' },
         { key: 'competence.competence4.description', locale: 'fr', value: 'C’est la quatrième' },
         { key: 'competence.competence4.name', locale: 'en', value: 'Fourth competence' },
         { key: 'competence.competence4.name', locale: 'fr', value: 'Quatrième compétence' },
         { key: 'thematic.thematic1.name', locale: 'fr', value: 'workbench_2_2' },
-        { key: 'tube.tube1.practicalTitle', locale: 'fr', value: 'Tube pour l\'atelier de la compétence 2.2 Pix' },
+        { key: 'tube.tube1.practicalTitle', locale: 'fr', value: "Tube pour l'atelier de la compétence 2.2 Pix" },
       ]);
 
       expect(airtableAreaScope.isDone()).toBe(true);
@@ -857,11 +1003,23 @@ describe('Acceptance | Route | competences', () => {
       databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'pix' });
       databaseBuilder.factory.buildCompetence(competence);
-      competence.thematicIds.forEach((id) => databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
-      competence.tubeIds.forEach((id, index) => databaseBuilder.factory.buildTube({ id, name: `@${id}`, thematicId: competence.thematicIds[index % competence.thematicIds.length] }));
-      competence.skillIds.forEach((id, index) => databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
+      competence.thematicIds.forEach((id) =>
+        databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
+      );
+      competence.tubeIds.forEach((id, index) =>
+        databaseBuilder.factory.buildTube({
+          id,
+          name: `@${id}`,
+          thematicId: competence.thematicIds[index % competence.thematicIds.length],
+        }),
+      );
+      competence.skillIds.forEach((id, index) =>
+        databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }),
+      );
 
-      airtableCompetence = airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence));
+      airtableCompetence = airtableBuilder.factory.buildCompetence(
+        domainBuilder.buildCompetenceDatasourceObject(competence),
+      );
 
       airtableCompetenceScope = nock('https://api.airtable.com')
         .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
@@ -869,10 +1027,26 @@ describe('Acceptance | Route | competences', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, airtableCompetence);
 
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence4.name', locale: 'fr', value: 'Quatrième compétence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence4.name', locale: 'en', value: 'Fourth competence' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence4.description', locale: 'fr', value: 'C’est la quatrième' });
-      databaseBuilder.factory.buildTranslation({ key: 'competence.competence4.description', locale: 'en', value: 'It’s the fourth one' });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence4.name',
+        locale: 'fr',
+        value: 'Quatrième compétence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence4.name',
+        locale: 'en',
+        value: 'Fourth competence',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence4.description',
+        locale: 'fr',
+        value: 'C’est la quatrième',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'competence.competence4.description',
+        locale: 'en',
+        value: 'It’s the fourth one',
+      });
 
       await databaseBuilder.commit();
 
@@ -880,7 +1054,7 @@ describe('Acceptance | Route | competences', () => {
       nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, { 'access_token': pixApiToken });
+        .reply(200, { access_token: pixApiToken });
       pixApiCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/competences/competence4', {
           id: 'competence4',
@@ -893,10 +1067,10 @@ describe('Acceptance | Route | competences', () => {
             fr: '4ème compétence',
             en: '4th competence',
           },
-          'description_i18n': {
+          description_i18n: {
             fr: 'C’est la 4ème',
             en: null,
-          }
+          },
         })
         .matchHeader('Authorization', `Bearer ${pixApiToken}`)
         .reply(200);
@@ -911,11 +1085,11 @@ describe('Acceptance | Route | competences', () => {
         const response = await server.inject({
           method: 'PATCH',
           url: `/api/competences/${airtableCompetence.id}`,
-          payload:  {
+          payload: {
             data: {
               type: 'competences',
               attributes: {
-                'title': 1234,
+                title: 1234,
               },
             },
           },
@@ -1156,7 +1330,9 @@ describe('Acceptance | Route | competences', () => {
         },
       });
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toStrictEqual([
         { key: 'competence.competence4.description', locale: 'fr', value: 'C’est la 4ème' },
         { key: 'competence.competence4.name', locale: 'en', value: '4th competence' },
         { key: 'competence.competence4.name', locale: 'fr', value: '4ème compétence' },

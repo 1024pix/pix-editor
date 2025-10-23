@@ -3,7 +3,14 @@ import * as updatePixApiReleaseCache from '../services/update-pix-api-release-ca
 
 import { NotFoundError } from '../errors.js';
 
-export async function createTube(tube, dependencies = { tubeRepository, thematicRepository, updatePixApiReleaseCache }) {
+export async function createTube(
+  tube,
+  dependencies = {
+    tubeRepository,
+    thematicRepository,
+    updatePixApiReleaseCache,
+  },
+) {
   const thematic = await dependencies.thematicRepository.getByAirtableId(tube.thematicAirtableId);
   if (!thematic) throw new NotFoundError('unknown thematic id');
 

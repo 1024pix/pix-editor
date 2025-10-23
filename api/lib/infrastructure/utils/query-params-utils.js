@@ -21,10 +21,7 @@ function extractSort(query) {
   if (!sortArray.length) return undefined;
   return sortArray.map((field) => {
     const desc = field.startsWith('-');
-    return [
-      desc ? field.slice(1) : field,
-      desc ? 'desc' : 'asc',
-    ];
+    return [desc ? field.slice(1) : field, desc ? 'desc' : 'asc'];
   });
 }
 
@@ -48,7 +45,7 @@ function extractObjectParameter(query, regex) {
       }
       return result;
     },
-    {}
+    {},
   );
 }
 

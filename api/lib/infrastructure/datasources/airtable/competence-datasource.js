@@ -1,7 +1,6 @@
 import { datasource } from './datasource.js';
 
 export const competenceDatasource = datasource.extend({
-
   modelName: 'Competence',
 
   tableName: 'Competences',
@@ -43,7 +42,7 @@ export const competenceDatasource = datasource.extend({
         'id persistant': competence.id,
         'Sous-domaine': competence.index,
         Domaine: [competence.areaAirtableId],
-      }
+      },
     };
   },
 });

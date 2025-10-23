@@ -29,63 +29,78 @@ export class CleanupLocalizedChallengesAndTranslations extends Script {
     }).base(process.env.AIRTABLE_BASE);
     const challengeIds = await fetchChallengeIds({ airtableClient });
 
-    await knex.transaction(async (transaction) => {
-      const localizedChallenges = await transaction('localized_challenges').select('id', 'challengeId', 'locale');
+    await knex.transaction(
+      async (transaction) => {
+        const localizedChallenges = await transaction('localized_challenges').select('id', 'challengeId', 'locale');
 
-      const orphanLocalizedChallenges = localizedChallenges.filter(({ challengeId }) => !challengeIds.has(challengeId));
-      if (orphanLocalizedChallenges.length === 0) {
-        logger.info('No orphan localized challenges detected');
-      } else {
-        logger.info({ orphanLocalizedChallenges }, `Will delete ${orphanLocalizedChallenges.length} orphan localized challenges`);
-      }
+        const orphanLocalizedChallenges = localizedChallenges.filter(
+          ({ challengeId }) => !challengeIds.has(challengeId),
+        );
+        if (orphanLocalizedChallenges.length === 0) {
+          logger.info('No orphan localized challenges detected');
+        } else {
+          logger.info(
+            { orphanLocalizedChallenges },
+            `Will delete ${orphanLocalizedChallenges.length} orphan localized challenges`,
+          );
+        }
 
-      const challengesTranslations = await transaction('translations')
-        .whereLike('key', 'challenge.%')
-        .select('key', 'locale');
+        const challengesTranslations = await transaction('translations')
+          .whereLike('key', 'challenge.%')
+          .select('key', 'locale');
 
-      const challengesLocales = fp.flow(
-        fp.filter((localizedChallenge) => !orphanLocalizedChallenges.includes(localizedChallenge)),
-        fp.groupBy('challengeId'),
-        fp.mapValues(fp.map('locale')),
-      )(localizedChallenges);
+        const challengesLocales = fp.flow(
+          fp.filter((localizedChallenge) => !orphanLocalizedChallenges.includes(localizedChallenge)),
+          fp.groupBy('challengeId'),
+          fp.mapValues(fp.map('locale')),
+        )(localizedChallenges);
 
-      const orphanTranslations = challengesTranslations.filter(({ key, locale }) => {
-        const challengeId = key.split('.')[1];
-        return !challengesLocales[challengeId]?.includes(locale);
-      });
-      if (orphanTranslations.length === 0) {
-        logger.info('No orphan translations detected');
-      } else {
-        logger.info({ orphanTranslations }, `Will delete ${orphanTranslations.length} orphan translations`);
-      }
+        const orphanTranslations = challengesTranslations.filter(({ key, locale }) => {
+          const challengeId = key.split('.')[1];
+          return !challengesLocales[challengeId]?.includes(locale);
+        });
+        if (orphanTranslations.length === 0) {
+          logger.info('No orphan translations detected');
+        } else {
+          logger.info({ orphanTranslations }, `Will delete ${orphanTranslations.length} orphan translations`);
+        }
 
-      if (options.dryRun) return;
+        if (options.dryRun) return;
 
-      if (orphanLocalizedChallenges.length !== 0) {
-        logger.info('Deleting orphan localized challenges...');
-        await transaction('localized_challenges').whereIn('id', orphanLocalizedChallenges.map(({ id }) => id)).delete();
-      }
+        if (orphanLocalizedChallenges.length !== 0) {
+          logger.info('Deleting orphan localized challenges...');
+          await transaction('localized_challenges')
+            .whereIn(
+              'id',
+              orphanLocalizedChallenges.map(({ id }) => id),
+            )
+            .delete();
+        }
 
-      if (orphanTranslations.length !== 0) {
-        logger.info('Deleting orphan translations from PG...');
-        await Promise.all(orphanTranslations.map(({ key, locale }) => transaction('translations').where({ key, locale }).delete()));
+        if (orphanTranslations.length !== 0) {
+          logger.info('Deleting orphan translations from PG...');
+          await Promise.all(
+            orphanTranslations.map(({ key, locale }) => transaction('translations').where({ key, locale }).delete()),
+          );
 
-        if (await translationDatasource.exists()) {
-          logger.info('Deleting orphan translations from Airtable...');
-          const records = await translationDatasource.filter({
-            filter: {
-              formula: `OR(${orphanTranslations.map(({ key, locale }) => `AND(key = '${key}', locale = '${locale}')`).join(', ')})`,
-            },
-          });
-          if (records.length === 0) return;
-          const recordIds = records.map(({ airtableId }) => airtableId);
-          for (const chunk of chunks(recordIds)) {
-            logger.info({ recordIds: chunk }, 'Deleting record IDs...');
-            await translationDatasource.delete(chunk);
+          if (await translationDatasource.exists()) {
+            logger.info('Deleting orphan translations from Airtable...');
+            const records = await translationDatasource.filter({
+              filter: {
+                formula: `OR(${orphanTranslations.map(({ key, locale }) => `AND(key = '${key}', locale = '${locale}')`).join(', ')})`,
+              },
+            });
+            if (records.length === 0) return;
+            const recordIds = records.map(({ airtableId }) => airtableId);
+            for (const chunk of chunks(recordIds)) {
+              logger.info({ recordIds: chunk }, 'Deleting record IDs...');
+              await translationDatasource.delete(chunk);
+            }
           }
         }
-      }
-    }, { readOnly: options.dryRun });
+      },
+      { readOnly: options.dryRun },
+    );
   }
 }
 

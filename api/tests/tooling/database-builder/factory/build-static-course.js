@@ -10,7 +10,6 @@ export function buildStaticCourse({
   createdAt = new Date('2010-01-04'),
   updatedAt = new Date('2010-01-11'),
 } = {}) {
-
   const values = { id, name, description, deactivationReason, challengeIds, createdAt, updatedAt, isActive };
 
   return databaseBuffer.pushInsertable({

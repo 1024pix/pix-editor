@@ -14,6 +14,6 @@ export async function findByApiKey(apiKey) {
     trigram: user.trigram,
     access: user.access,
     createdAt: user.createdAt,
-    updatedAt: user.updatedAt
+    updatedAt: user.updatedAt,
   });
 }

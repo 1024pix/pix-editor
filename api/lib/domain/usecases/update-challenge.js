@@ -24,7 +24,7 @@ export async function updateChallenge(challenge, dependencies = { challengeRepos
     await updatedRecordNotifier.notify({
       updatedRecord: newChallenge,
       model: 'challenges',
-      pixApiClient
+      pixApiClient,
     });
   } catch (err) {
     logger.error(err);

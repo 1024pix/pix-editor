@@ -5,11 +5,10 @@ import { importTranslations } from './import-translations.js';
 import { Readable } from 'node:stream';
 
 export async function downloadTranslationFromPhrase(phraseApi = { Configuration, LocalesApi }) {
-
   const { apiKey, projects } = config.phrase;
 
   if (!apiKey || !projects.length) {
-    logger.info('Phrase API Key or Projects is empty or doesn\'t contain areaCode. Skipping download translations.');
+    logger.info("Phrase API Key or Projects is empty or doesn't contain areaCode. Skipping download translations.");
     return;
   }
   const configuration = new phraseApi.Configuration({
@@ -34,7 +33,7 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
         await importTranslations(Readable.fromWeb(csvFile.stream()));
       }
     } catch (e) {
-      const text = await e.text?.() ?? e;
+      const text = (await e.text?.()) ?? e;
       logger.error(`Error while downloading translations: ${text}`);
       throw new Error('Download error', { cause: e });
     }

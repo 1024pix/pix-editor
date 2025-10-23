@@ -12,7 +12,10 @@ const DEFAULT_PAGE = {
 
 export async function findMissions(request, h) {
   const { filter, page } = extractParameters(request.query);
-  const { missions, meta } = await findAllMissions({ filter: normalizeFilter(filter), page: normalizePage(page) });
+  const { missions, meta } = await findAllMissions({
+    filter: normalizeFilter(filter),
+    page: normalizePage(page),
+  });
   return h.response(missionSerializer.serializeMissionSummary(missions, meta));
 }
 
@@ -30,7 +33,10 @@ export async function create(request, h) {
 export async function update(request, h) {
   const attributes = request?.payload?.data?.attributes;
   const missionId = request?.params?.id;
-  const mission = missionSerializer.deserializeMission({ ...attributes, id: missionId });
+  const mission = missionSerializer.deserializeMission({
+    ...attributes,
+    id: missionId,
+  });
   const { mission: updatedMission, warnings } = await updateMission(mission);
   return h.response(missionSerializer.serializeMission(updatedMission, warnings)).created();
 }
@@ -38,7 +44,10 @@ export async function update(request, h) {
 function normalizePage(page) {
   return {
     number: _.isInteger(page.number) && Math.sign(page.number) === 1 ? page.number : DEFAULT_PAGE.number,
-    size: _.isInteger(page.size) && Math.sign(page.size) === 1 ? Math.min(page.size, DEFAULT_PAGE.maxSize) : DEFAULT_PAGE.size,
+    size:
+      _.isInteger(page.size) && Math.sign(page.size) === 1
+        ? Math.min(page.size, DEFAULT_PAGE.maxSize)
+        : DEFAULT_PAGE.size,
   };
 }
 
@@ -47,4 +56,3 @@ function normalizeFilter(filter) {
     statuses: filter.statuses,
   };
 }
-

@@ -2,23 +2,15 @@ import { datasource } from './datasource.js';
 import { logger } from '../../logger.js';
 
 export const translationDatasource = datasource.extend({
-
   modelName: 'Translation',
 
   tableName: 'translations',
 
   sortField: 'key_locale',
 
-  usedFields: [
-    'key',
-    'locale',
-    'value',
-  ],
+  usedFields: ['key', 'locale', 'value'],
 
-  fieldsToMergeOn: [
-    'key',
-    'locale',
-  ],
+  fieldsToMergeOn: ['key', 'locale'],
 
   fromAirTableObject(airtableRecord) {
     return {
@@ -32,9 +24,9 @@ export const translationDatasource = datasource.extend({
   toAirTableObject(model) {
     return {
       fields: {
-        'key': model.key,
-        'locale': model.locale,
-        'value': model.value,
+        key: model.key,
+        locale: model.locale,
+        value: model.value,
       },
     };
   },
@@ -51,5 +43,5 @@ export const translationDatasource = datasource.extend({
       }
       return false;
     }
-  }
+  },
 });

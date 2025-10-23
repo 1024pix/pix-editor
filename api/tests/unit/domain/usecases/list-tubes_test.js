@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { listTubes } from '../../../../lib/domain/usecases/list-tubes';
 
 describe('Unit | Domain | Use Cases | list-tubes', () => {
-
   const allTubes = Symbol('allTubes');
   const tubesByAirtableIds = Symbol('tubesByAirtableIds');
   let tubeRepository;

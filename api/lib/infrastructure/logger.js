@@ -9,7 +9,7 @@ let destination = pino.destination();
 
 if (config.logging.prettyPrint) {
   destination = pretty({
-    colorize: true
+    colorize: true,
   });
 }
 
@@ -34,7 +34,7 @@ export const logger = pino(
     level: config.logging.logLevel,
     redact: ['req.headers.authorization'],
   },
-  config.logging.enabled ? destination : nullDestination
+  config.logging.enabled ? destination : nullDestination,
 );
 
 export const SCOPES = {

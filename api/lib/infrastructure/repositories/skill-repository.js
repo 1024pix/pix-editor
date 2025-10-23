@@ -45,40 +45,80 @@ export async function getManyByAirtableIds(ids) {
   if (!ids?.length) return [];
   const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    datasourceSkills.map(({ id }) => id),
+  );
+  const skillsDataFromPG = await knex(TABLE_NAME)
+    .select('*')
+    .whereIn(
+      'id',
+      datasourceSkills.map(({ id }) => id),
+    );
   return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listByTubeId(tubeId) {
   const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    datasourceSkills.map(({ id }) => id),
+  );
+  const skillsDataFromPG = await knex(TABLE_NAME)
+    .select('*')
+    .whereIn(
+      'id',
+      datasourceSkills.map(({ id }) => id),
+    );
   return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listActiveByCompetenceId(competenceId) {
   const datasourceSkills = await skillDatasource.listActiveByCompetenceId(competenceId);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    datasourceSkills.map(({ id }) => id),
+  );
+  const skillsDataFromPG = await knex(TABLE_NAME)
+    .select('*')
+    .whereIn(
+      'id',
+      datasourceSkills.map(({ id }) => id),
+    );
   return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function listByCompetenceId(competenceId) {
   const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    datasourceSkills.map(({ id }) => id),
+  );
+  const skillsDataFromPG = await knex(TABLE_NAME)
+    .select('*')
+    .whereIn(
+      'id',
+      datasourceSkills.map(({ id }) => id),
+    );
   return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
 export async function search(params) {
   const datasourceSkills = await skillDatasource.search(params);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*').whereIn('id', datasourceSkills.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    datasourceSkills.map(({ id }) => id),
+  );
+  const skillsDataFromPG = await knex(TABLE_NAME)
+    .select('*')
+    .whereIn(
+      'id',
+      datasourceSkills.map(({ id }) => id),
+    );
   return toDomainList(datasourceSkills, translations, skillsDataFromPG);
 }
 
@@ -86,24 +126,34 @@ export async function create(skill) {
   return knex.transaction(async (transaction) => {
     const createdSkillDTO = await skillDatasource.create(skill);
 
-    await transaction.insert({
-      id: skill.id,
-      status: skill.status,
-      hintStatus: skill.hintStatus,
-      descriptionStatus: skill.descriptionStatus,
-      description: skill.description,
-      level: skill.level,
-      internationalisation: skill.internationalisation,
-      version: skill.version,
-      tubeId: createdSkillDTO.tubeId,
-    }).into(TABLE_NAME);
+    await transaction
+      .insert({
+        id: skill.id,
+        status: skill.status,
+        hintStatus: skill.hintStatus,
+        descriptionStatus: skill.descriptionStatus,
+        description: skill.description,
+        level: skill.level,
+        internationalisation: skill.internationalisation,
+        version: skill.version,
+        tubeId: createdSkillDTO.tubeId,
+      })
+      .into(TABLE_NAME);
 
     const translations = skillTranslations.extractFromDomainObject(skill);
     await translationRepository.save({ translations, transaction });
 
     const skillTutorials = [
-      ...createdSkillDTO.tutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.UNDERSTANDING })),
-      ...createdSkillDTO.learningMoreTutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.LEARNING_MORE })),
+      ...createdSkillDTO.tutorialIds.map((tutorialId) => ({
+        skillId: skill.id,
+        tutorialId,
+        type: TUTORIAL_RELATION_TYPES.UNDERSTANDING,
+      })),
+      ...createdSkillDTO.learningMoreTutorialIds.map((tutorialId) => ({
+        skillId: skill.id,
+        tutorialId,
+        type: TUTORIAL_RELATION_TYPES.LEARNING_MORE,
+      })),
     ];
     if (skillTutorials.length > 0) {
       await transaction.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME);
@@ -115,21 +165,23 @@ export async function create(skill) {
 
 export async function update(skill) {
   return knex.transaction(async (transaction) => {
-
     const [updatedSkillDto, [skillDataFromPG]] = await Promise.all([
       skillDatasource.update(skill),
-      transaction(TABLE_NAME).update({
-        status: skill.status,
-        hintStatus: skill.hintStatus,
-        descriptionStatus: skill.descriptionStatus,
-        description: skill.description,
-        level: skill.level,
-        internationalisation: skill.internationalisation,
-        version: skill.version,
-        activatedAt: skill.activatedAt,
-        archivedAt: skill.archivedAt,
-        obsoletedAt: skill.obsoletedAt,
-      }).where('id', skill.id).returning(['activatedAt', 'archivedAt', 'obsoletedAt']),
+      transaction(TABLE_NAME)
+        .update({
+          status: skill.status,
+          hintStatus: skill.hintStatus,
+          descriptionStatus: skill.descriptionStatus,
+          description: skill.description,
+          level: skill.level,
+          internationalisation: skill.internationalisation,
+          version: skill.version,
+          activatedAt: skill.activatedAt,
+          archivedAt: skill.archivedAt,
+          obsoletedAt: skill.obsoletedAt,
+        })
+        .where('id', skill.id)
+        .returning(['activatedAt', 'archivedAt', 'obsoletedAt']),
     ]);
 
     const translations = skillTranslations.extractFromDomainObject(skill);
@@ -141,15 +193,30 @@ export async function update(skill) {
     await translationRepository.save({ translations, transaction });
 
     const skillTutorials = [
-      ...updatedSkillDto.tutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.UNDERSTANDING })),
-      ...updatedSkillDto.learningMoreTutorialIds.map((tutorialId) => ({ skillId: skill.id, tutorialId, type: TUTORIAL_RELATION_TYPES.LEARNING_MORE })),
+      ...updatedSkillDto.tutorialIds.map((tutorialId) => ({
+        skillId: skill.id,
+        tutorialId,
+        type: TUTORIAL_RELATION_TYPES.UNDERSTANDING,
+      })),
+      ...updatedSkillDto.learningMoreTutorialIds.map((tutorialId) => ({
+        skillId: skill.id,
+        tutorialId,
+        type: TUTORIAL_RELATION_TYPES.LEARNING_MORE,
+      })),
     ];
-    await transaction.delete().from(TUTORIALS_RELATION_TABLE_NAME).whereNotIn(
-      ['skillId', 'tutorialId', 'type'],
-      skillTutorials.map(({ skillId, tutorialId, type }) => [skillId, tutorialId, type]),
-    );
+    await transaction
+      .delete()
+      .from(TUTORIALS_RELATION_TABLE_NAME)
+      .whereNotIn(
+        ['skillId', 'tutorialId', 'type'],
+        skillTutorials.map(({ skillId, tutorialId, type }) => [skillId, tutorialId, type]),
+      );
     if (skillTutorials.length > 0) {
-      await transaction.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME).onConflict(['skillId', 'tutorialId', 'type']).merge({ updatedAt: transaction.fn.now() });
+      await transaction
+        .insert(skillTutorials)
+        .into(TUTORIALS_RELATION_TABLE_NAME)
+        .onConflict(['skillId', 'tutorialId', 'type'])
+        .merge({ updatedAt: transaction.fn.now() });
     }
 
     return toDomain(updatedSkillDto, translations, skillDataFromPG);
@@ -159,8 +226,12 @@ export async function update(skill) {
 function toDomainList(datasourceSkills, translations, skillsDataFromPG) {
   const translationsBySkillId = _.groupBy(translations, 'entityId');
   const skillDataFromPGBySkillId = _.groupBy(skillsDataFromPG, 'id');
-  return datasourceSkills.map(
-    (datasourceSkill) => toDomain(datasourceSkill, translationsBySkillId[datasourceSkill.id], skillDataFromPGBySkillId[datasourceSkill.id]?.[0] ?? null),
+  return datasourceSkills.map((datasourceSkill) =>
+    toDomain(
+      datasourceSkill,
+      translationsBySkillId[datasourceSkill.id],
+      skillDataFromPGBySkillId[datasourceSkill.id]?.[0] ?? null,
+    ),
   );
 }
 

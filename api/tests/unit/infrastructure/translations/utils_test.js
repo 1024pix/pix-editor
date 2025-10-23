@@ -3,15 +3,9 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { buildTranslationsUtils } from '../../../../lib/infrastructure/translations/utils.js';
 
 describe('Unit | Infrastructure | Entity translations', () => {
-  const fields = [
-    { field: 'attribute' },
-    { field: 'attribute2' },
-  ];
+  const fields = [{ field: 'attribute' }, { field: 'attribute2' }];
 
-  const locales = [
-    { locale: 'fr' },
-    { locale: 'en' },
-  ];
+  const locales = [{ locale: 'fr' }, { locale: 'en' }];
 
   const prefix = 'entity.';
 

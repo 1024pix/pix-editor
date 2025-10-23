@@ -2,7 +2,15 @@ import { tubeRepository, thematicRepository } from '../../infrastructure/reposit
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 import { NotFoundError } from '../errors.js';
 
-export async function updateTube(tubeAirtableId, tubeUpdates, dependencies = { tubeRepository, thematicRepository, updatePixApiReleaseCache }) {
+export async function updateTube(
+  tubeAirtableId,
+  tubeUpdates,
+  dependencies = {
+    tubeRepository,
+    thematicRepository,
+    updatePixApiReleaseCache,
+  },
+) {
   const tube = await dependencies.tubeRepository.getByAirtableId(tubeAirtableId);
   if (!tube) throw new NotFoundError('unknown tube id');
   const thematic = await dependencies.thematicRepository.getByAirtableId(tubeUpdates.thematicAirtableId);

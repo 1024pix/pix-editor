@@ -7,7 +7,7 @@ import {
   competenceRepository,
   skillRepository,
   thematicRepository,
-  tubeRepository
+  tubeRepository,
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
@@ -17,8 +17,7 @@ import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
-describe('Unit | Domain | Usecases | create competence', function() {
-
+describe('Unit | Domain | Usecases | create competence', function () {
   const transformedTube = Symbol('transformedTube');
   const skillForRelease = Symbol('skillForRelease');
 
@@ -37,7 +36,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
   });
 
   describe('when area id is unknown', () => {
-    it('should throw a BadRequestError', async() => {
+    it('should throw a BadRequestError', async () => {
       // given
       const areaAirtableId = 'unknown area id';
 
@@ -59,14 +58,16 @@ describe('Unit | Domain | Usecases | create competence', function() {
   });
 
   describe('when area has some competences', () => {
-    it('should compute new competence index accordingly', async () =>{
+    it('should compute new competence index accordingly', async () => {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
-        code: '24',
-        competenceIds: ['competence1', 'competence2', 'competence3', 'competence4', 'competence5']
-      }));
+      areaRepository.getByAirtableId.mockResolvedValueOnce(
+        domainBuilder.buildArea({
+          code: '24',
+          competenceIds: ['competence1', 'competence2', 'competence3', 'competence4', 'competence5'],
+        }),
+      );
       const createdCompetence = domainBuilder.buildCompetence({
         areaAirtableId,
         thematicIds: [],
@@ -111,27 +112,33 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
-      expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
-        name_i18n: { fr: 'workbench_24_6' },
-        index: 0,
-        competenceAirtableId: createdCompetence.airtableId,
-      }));
-      expect(tubeRepository.create).toHaveBeenCalledWith(new Tube({
-        name: '@workbench',
-        competenceAirtableId: createdCompetence.airtableId,
-        thematicAirtableId: createdThematic.airtableId,
-        practicalTitle_i18n: {
-          fr: 'Tube pour l\'atelier de la compétence 24.6 Fmk',
-        },
-        practicalDescription_i18n: {},
-      }));
-      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
-        id: 'skill1',
-        name: '@workbench',
-        description: 'Acquis pour l\'atelier de la compétence 24.6 Fmk',
-        tubeAirtableId: createdTube.airtableId,
-        hint_i18n: {},
-      }));
+      expect(thematicRepository.create).toHaveBeenCalledWith(
+        new Thematic({
+          name_i18n: { fr: 'workbench_24_6' },
+          index: 0,
+          competenceAirtableId: createdCompetence.airtableId,
+        }),
+      );
+      expect(tubeRepository.create).toHaveBeenCalledWith(
+        new Tube({
+          name: '@workbench',
+          competenceAirtableId: createdCompetence.airtableId,
+          thematicAirtableId: createdThematic.airtableId,
+          practicalTitle_i18n: {
+            fr: "Tube pour l'atelier de la compétence 24.6 Fmk",
+          },
+          practicalDescription_i18n: {},
+        }),
+      );
+      expect(skillRepository.create).toHaveBeenCalledWith(
+        new Skill({
+          id: 'skill1',
+          name: '@workbench',
+          description: "Acquis pour l'atelier de la compétence 24.6 Fmk",
+          tubeAirtableId: createdTube.airtableId,
+          hint_i18n: {},
+        }),
+      );
       expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
@@ -151,14 +158,16 @@ describe('Unit | Domain | Usecases | create competence', function() {
   });
 
   describe('when area has no competences', () => {
-    it('should compute new competence index accordingly', async () =>{
+    it('should compute new competence index accordingly', async () => {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
-        code: '24',
-        competenceIds: [],
-      }));
+      areaRepository.getByAirtableId.mockResolvedValueOnce(
+        domainBuilder.buildArea({
+          code: '24',
+          competenceIds: [],
+        }),
+      );
       const createdCompetence = domainBuilder.buildCompetence({
         areaAirtableId,
         thematicIds: [],
@@ -203,27 +212,33 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
-      expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
-        name_i18n: { fr: 'workbench_24_1' },
-        index: 0,
-        competenceAirtableId: createdCompetence.airtableId,
-      }));
-      expect(tubeRepository.create).toHaveBeenCalledWith(new Tube({
-        name: '@workbench',
-        competenceAirtableId: createdCompetence.airtableId,
-        thematicAirtableId: createdThematic.airtableId,
-        practicalTitle_i18n: {
-          fr: 'Tube pour l\'atelier de la compétence 24.1 Fmk',
-        },
-        practicalDescription_i18n: {},
-      }));
-      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
-        id: 'skill1',
-        name: '@workbench',
-        description: 'Acquis pour l\'atelier de la compétence 24.1 Fmk',
-        tubeAirtableId: createdTube.airtableId,
-        hint_i18n: {},
-      }));
+      expect(thematicRepository.create).toHaveBeenCalledWith(
+        new Thematic({
+          name_i18n: { fr: 'workbench_24_1' },
+          index: 0,
+          competenceAirtableId: createdCompetence.airtableId,
+        }),
+      );
+      expect(tubeRepository.create).toHaveBeenCalledWith(
+        new Tube({
+          name: '@workbench',
+          competenceAirtableId: createdCompetence.airtableId,
+          thematicAirtableId: createdThematic.airtableId,
+          practicalTitle_i18n: {
+            fr: "Tube pour l'atelier de la compétence 24.1 Fmk",
+          },
+          practicalDescription_i18n: {},
+        }),
+      );
+      expect(skillRepository.create).toHaveBeenCalledWith(
+        new Skill({
+          id: 'skill1',
+          name: '@workbench',
+          description: "Acquis pour l'atelier de la compétence 24.1 Fmk",
+          tubeAirtableId: createdTube.airtableId,
+          hint_i18n: {},
+        }),
+      );
       expect(tubeTransformer.transformTube).toHaveBeenCalledWith(createdTube);
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
@@ -247,10 +262,12 @@ describe('Unit | Domain | Usecases | create competence', function() {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(domainBuilder.buildArea({
-        code: '24',
-        competenceIds: [],
-      }));
+      areaRepository.getByAirtableId.mockResolvedValueOnce(
+        domainBuilder.buildArea({
+          code: '24',
+          competenceIds: [],
+        }),
+      );
       const createdCompetence = domainBuilder.buildCompetence({
         thematicIds: [],
         thematicAirtableIds: [],
@@ -294,27 +311,33 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
-      expect(thematicRepository.create).toHaveBeenCalledWith(new Thematic({
-        name_i18n: { fr: 'workbench_24_1' },
-        index: 0,
-        competenceAirtableId: createdCompetence.airtableId,
-      }));
-      expect(tubeRepository.create).toHaveBeenCalledWith(new Tube({
-        name: '@workbench',
-        competenceAirtableId: createdCompetence.airtableId,
-        thematicAirtableId: createdThematic.airtableId,
-        practicalTitle_i18n: {
-          fr: 'Tube pour l\'atelier de la compétence 24.1 Fmk',
-        },
-        practicalDescription_i18n: {},
-      }));
-      expect(skillRepository.create).toHaveBeenCalledWith(new Skill({
-        id: 'skill1',
-        name: '@workbench',
-        description: 'Acquis pour l\'atelier de la compétence 24.1 Fmk',
-        tubeAirtableId: createdTube.airtableId,
-        hint_i18n: {},
-      }));
+      expect(thematicRepository.create).toHaveBeenCalledWith(
+        new Thematic({
+          name_i18n: { fr: 'workbench_24_1' },
+          index: 0,
+          competenceAirtableId: createdCompetence.airtableId,
+        }),
+      );
+      expect(tubeRepository.create).toHaveBeenCalledWith(
+        new Tube({
+          name: '@workbench',
+          competenceAirtableId: createdCompetence.airtableId,
+          thematicAirtableId: createdThematic.airtableId,
+          practicalTitle_i18n: {
+            fr: "Tube pour l'atelier de la compétence 24.1 Fmk",
+          },
+          practicalDescription_i18n: {},
+        }),
+      );
+      expect(skillRepository.create).toHaveBeenCalledWith(
+        new Skill({
+          id: 'skill1',
+          name: '@workbench',
+          description: "Acquis pour l'atelier de la compétence 24.1 Fmk",
+          tubeAirtableId: createdTube.airtableId,
+          hint_i18n: {},
+        }),
+      );
       expect(skillTransformer.forRelease).toHaveBeenCalledWith(createdSkill);
       expect(updatePixApiReleaseCache.onCompetenceCreated).toHaveBeenCalledWith(createdCompetence);
       expect(updatePixApiReleaseCache.onThematicCreated).toHaveBeenCalledWith(createdThematic);

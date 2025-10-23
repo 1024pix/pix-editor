@@ -10,15 +10,41 @@ import { buildChallenge, persistChallenges } from './challenges.js';
 export async function buildPix1D({ airtableClient, databaseBuilder, logger, locales, indexFramework }) {
   logger.info('About to create whole framework Pix 1D...');
   const pix1DFrameworkItem = buildFramework({ name: 'Pix 1D' });
-  await persistFrameworks({ items: [pix1DFrameworkItem], airtableClient, databaseBuilder, logger });
+  await persistFrameworks({
+    items: [pix1DFrameworkItem],
+    airtableClient,
+    databaseBuilder,
+    logger,
+  });
 
-  const areaItem1 = buildArea({ indexFramework, indexArea: 0, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
-  const areaItem2 = buildArea({ indexFramework, indexArea: 1, frameworkItem: pix1DFrameworkItem, databaseBuilder, locales });
+  const areaItem1 = buildArea({
+    indexFramework,
+    indexArea: 0,
+    frameworkItem: pix1DFrameworkItem,
+    databaseBuilder,
+    locales,
+  });
+  const areaItem2 = buildArea({
+    indexFramework,
+    indexArea: 1,
+    frameworkItem: pix1DFrameworkItem,
+    databaseBuilder,
+    locales,
+  });
   await persistAreas({ items: [areaItem1, areaItem2], airtableClient, logger });
 
   const competenceItems = [];
-  for (const configCompetence of [{ iCompetence: 0, iArea: 0, areaItem: areaItem1 }, { iCompetence: 1, iArea: 0, areaItem: areaItem1 }, { iCompetence: 0, iArea: 1, areaItem: areaItem2 }]) {
-    const competenceItem = buildCompetence({ indexCompetence: configCompetence.iCompetence, areaItem: configCompetence.areaItem, databaseBuilder, locales });
+  for (const configCompetence of [
+    { iCompetence: 0, iArea: 0, areaItem: areaItem1 },
+    { iCompetence: 1, iArea: 0, areaItem: areaItem1 },
+    { iCompetence: 0, iArea: 1, areaItem: areaItem2 },
+  ]) {
+    const competenceItem = buildCompetence({
+      indexCompetence: configCompetence.iCompetence,
+      areaItem: configCompetence.areaItem,
+      databaseBuilder,
+      locales,
+    });
     competenceItems.push(competenceItem);
   }
   await persistCompetences({ items: competenceItems, airtableClient, logger });
@@ -27,44 +53,150 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
   const workbenchThematicItems = [];
   for (const competenceItem of competenceItems) {
     for (let i = 0; i < 3; ++i) {
-      const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales, isWorkbench: false });
+      const thematicItem = buildThematic({
+        indexThematic: i,
+        competenceItem,
+        databaseBuilder,
+        locales,
+        isWorkbench: false,
+      });
       thematicItem.isLastThematic = i === 2;
       thematicItems.push(thematicItem);
     }
-    workbenchThematicItems.push(buildThematic({ competenceItem, databaseBuilder, locales, isWorkbench: true }));
+    workbenchThematicItems.push(
+      buildThematic({
+        competenceItem,
+        databaseBuilder,
+        locales,
+        isWorkbench: true,
+      }),
+    );
   }
-  await persistThematics({ items: [...thematicItems, ...workbenchThematicItems], airtableClient, logger });
+  await persistThematics({
+    items: [...thematicItems, ...workbenchThematicItems],
+    airtableClient,
+    logger,
+  });
 
   const tubeItems = [];
   const workbenchTubeItems = [];
   for (const thematicItem of thematicItems) {
     if (thematicItem.isLastThematic) {
-      tubeItems.push(buildTube({ indexTube: 0, suffix: '_de', thematicItem, databaseBuilder, locales, isWorkbench: false }));
+      tubeItems.push(
+        buildTube({
+          indexTube: 0,
+          suffix: '_de',
+          thematicItem,
+          databaseBuilder,
+          locales,
+          isWorkbench: false,
+        }),
+      );
     } else {
-      tubeItems.push(buildTube({ indexTube: 0, suffix: '_en', thematicItem, databaseBuilder, locales, isWorkbench: false }));
-      tubeItems.push(buildTube({ indexTube: 1, suffix: '_di', thematicItem, databaseBuilder, locales, isWorkbench: false }));
-      tubeItems.push(buildTube({ indexTube: 2, suffix: '_va', thematicItem, databaseBuilder, locales, isWorkbench: false }));
+      tubeItems.push(
+        buildTube({
+          indexTube: 0,
+          suffix: '_en',
+          thematicItem,
+          databaseBuilder,
+          locales,
+          isWorkbench: false,
+        }),
+      );
+      tubeItems.push(
+        buildTube({
+          indexTube: 1,
+          suffix: '_di',
+          thematicItem,
+          databaseBuilder,
+          locales,
+          isWorkbench: false,
+        }),
+      );
+      tubeItems.push(
+        buildTube({
+          indexTube: 2,
+          suffix: '_va',
+          thematicItem,
+          databaseBuilder,
+          locales,
+          isWorkbench: false,
+        }),
+      );
     }
   }
   for (const workbenchThematicItem of workbenchThematicItems) {
-    workbenchTubeItems.push(buildTube({ thematicItem: workbenchThematicItem, databaseBuilder, locales, isWorkbench: true }));
+    workbenchTubeItems.push(
+      buildTube({
+        thematicItem: workbenchThematicItem,
+        databaseBuilder,
+        locales,
+        isWorkbench: true,
+      }),
+    );
   }
-  await persistTubes({ items: [...tubeItems, ...workbenchTubeItems], airtableClient, logger });
+  await persistTubes({
+    items: [...tubeItems, ...workbenchTubeItems],
+    airtableClient,
+    logger,
+  });
 
   const skillItems = [];
   const workbenchSkillItems = [];
   for (const tubeItem of tubeItems) {
-    skillItems.push(buildSkill({ indexSkill: 0, tubeItem, status: 'actif', version: 1, isWorkbench: false, databaseBuilder, locales }));
-    skillItems.push(buildSkill({ indexSkill: 1, tubeItem, status: 'actif', version: 1, isWorkbench: false, databaseBuilder, locales }));
+    skillItems.push(
+      buildSkill({
+        indexSkill: 0,
+        tubeItem,
+        status: 'actif',
+        version: 1,
+        isWorkbench: false,
+        databaseBuilder,
+        locales,
+      }),
+    );
+    skillItems.push(
+      buildSkill({
+        indexSkill: 1,
+        tubeItem,
+        status: 'actif',
+        version: 1,
+        isWorkbench: false,
+        databaseBuilder,
+        locales,
+      }),
+    );
   }
   for (const workbenchTubeItem of workbenchTubeItems) {
-    workbenchSkillItems.push(buildSkill({ tubeItem: workbenchTubeItem, isWorkbench: true, databaseBuilder, locales }));
+    workbenchSkillItems.push(
+      buildSkill({
+        tubeItem: workbenchTubeItem,
+        isWorkbench: true,
+        databaseBuilder,
+        locales,
+      }),
+    );
   }
-  await persistSkills({ items: [...skillItems, ...workbenchSkillItems], airtableClient, logger });
+  await persistSkills({
+    items: [...skillItems, ...workbenchSkillItems],
+    airtableClient,
+    logger,
+  });
 
   const challengeItems = [];
   for (const skillItem of skillItems) {
-    challengeItems.push(buildChallenge({ indexChallenge: 0, skillItem, status: Challenge.STATUSES.VALIDE, isProto: true, protoVersion: skillItem.version, decliVersion: null, databaseBuilder, locales }));
+    challengeItems.push(
+      buildChallenge({
+        indexChallenge: 0,
+        skillItem,
+        status: Challenge.STATUSES.VALIDE,
+        isProto: true,
+        protoVersion: skillItem.version,
+        decliVersion: null,
+        databaseBuilder,
+        locales,
+      }),
+    );
   }
   await persistChallenges({ items: challengeItems, airtableClient, logger });
 

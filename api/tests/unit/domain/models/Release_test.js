@@ -49,25 +49,25 @@ describe('Unit | Domain | Release', () => {
         id: 'competenceId1',
         origin: 'competenceOrigin',
         name_i18n: {
-          fr: 'competence name'
+          fr: 'competence name',
         },
       });
       const competenceNoOrigin = domainBuilder.buildCompetenceForRelease({
         id: 'competenceNoOriginId',
         origin: null,
         name_i18n: {
-          fr: 'competence no origin name'
+          fr: 'competence no origin name',
         },
       });
-      const tube =  domainBuilder.buildTubeForRelease({
+      const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
         competenceId: competence.id,
       });
-      const tubeNoCompetence =  domainBuilder.buildTubeForRelease({
+      const tubeNoCompetence = domainBuilder.buildTubeForRelease({
         id: 'tubeNoCompetenceId',
         competenceId: 'competenceUnknown',
       });
-      const tubeNoOrigin =  domainBuilder.buildTubeForRelease({
+      const tubeNoOrigin = domainBuilder.buildTubeForRelease({
         id: 'tubeNoOriginId',
         competenceId: competenceNoOrigin.id,
       });
@@ -120,7 +120,13 @@ describe('Unit | Domain | Release', () => {
         competencesFromRelease: [competence, competenceNoOrigin],
         tubesFromRelease: [tube, tubeNoCompetence, tubeNoOrigin],
         skillsFromRelease: [skill, skillNoTube, skillNoCompetence, skillNoOrigin],
-        challengesFromRelease: [challengeWithNoSkill, challengeWithNoTube, challengeWithNoCompetence, challengeWithNoOrigin, challengeOk],
+        challengesFromRelease: [
+          challengeWithNoSkill,
+          challengeWithNoTube,
+          challengeWithNoCompetence,
+          challengeWithNoOrigin,
+          challengeOk,
+        ],
       });
     });
 
@@ -174,14 +180,14 @@ describe('Unit | Domain | Release', () => {
         id: 'competenceId1',
         origin: 'competenceOrigin',
         name_i18n: {
-          fr: 'competence name'
+          fr: 'competence name',
         },
       });
-      const tube =  domainBuilder.buildTubeForRelease({
+      const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
         competenceId: competence.id,
       });
-      const tubeNoCompetence =  domainBuilder.buildTubeForRelease({
+      const tubeNoCompetence = domainBuilder.buildTubeForRelease({
         id: 'tubeNoCompetenceId',
         competenceId: 'competenceUnknown',
       });
@@ -266,7 +272,7 @@ describe('Unit | Domain | Release', () => {
     let release;
 
     beforeEach(() => {
-      const tube =  domainBuilder.buildTubeForRelease({
+      const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
         name: 'tube1Name',
       });
@@ -386,11 +392,11 @@ describe('Unit | Domain | Release', () => {
           fr: 'competence2 name',
         },
       });
-      const tube1 =  domainBuilder.buildTubeForRelease({
+      const tube1 = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
         competenceId: competence1.id,
       });
-      const tube2 =  domainBuilder.buildTubeForRelease({
+      const tube2 = domainBuilder.buildTubeForRelease({
         id: 'tubeId2',
         competenceId: competence2.id,
       });

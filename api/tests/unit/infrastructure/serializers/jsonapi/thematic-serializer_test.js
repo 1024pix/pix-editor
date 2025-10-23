@@ -21,10 +21,10 @@ describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
             'pix-id': thematic.id,
             name: thematic.name_i18n.fr,
             'name-en-us': thematic.name_i18n.en,
-            index: thematic.index
+            index: thematic.index,
           },
           relationships: {
-            'competence': {
+            competence: {
               data: {
                 type: 'competences',
                 id: thematic.competenceAirtableId,
@@ -36,7 +36,7 @@ describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
                   type: 'tubes',
                   id: thematic.tubeAirtableIds[0],
                 },
-              ]
+              ],
             },
           },
         },
@@ -49,9 +49,9 @@ describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
       // given
       const id = 'recThematic1';
       const attributes = {
-        'name': 'Nom de la thématique',
+        name: 'Nom de la thématique',
         'name-en-us': 'Thematic’s name',
-        'index': 2,
+        index: 2,
       };
       const relationships = {
         competence: {
@@ -74,15 +74,17 @@ describe('Unit | Serializer | JSONAPI | thematic-serializer', () => {
       const deserializedThematic = await deserialize(payload);
 
       // then
-      expect(deserializedThematic).toStrictEqual(new Thematic({
-        airtableId: id,
-        name_i18n: {
-          fr: attributes.name,
-          en: attributes['name-en-us'],
-        },
-        index: 2,
-        competenceAirtableId: relationships.competence.data.id,
-      }));
+      expect(deserializedThematic).toStrictEqual(
+        new Thematic({
+          airtableId: id,
+          name_i18n: {
+            fr: attributes.name,
+            en: attributes['name-en-us'],
+          },
+          index: 2,
+          competenceAirtableId: relationships.competence.data.id,
+        }),
+      );
     });
   });
 });

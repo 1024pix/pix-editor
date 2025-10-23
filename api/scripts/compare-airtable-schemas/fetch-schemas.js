@@ -9,7 +9,7 @@ const isLaunchedFromCommandLine = process.argv[1] === __filename;
 export async function fetchTableSchemas({ baseId, apiKey }) {
   const res = await fetch(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`, {
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     },
   });
   const body = await res.json();
@@ -28,7 +28,10 @@ function getFieldKeys(table) {
       key += `=\`${simplifiedFormula}\``;
     }
     if (['singleSelect', 'multipleSelects'].includes(field.type)) {
-      const options = field.options.choices.map(({ name }) => name).toSorted().join('/');
+      const options = field.options.choices
+        .map(({ name }) => name)
+        .toSorted()
+        .join('/');
       key += `:${options}`;
     }
     return key;

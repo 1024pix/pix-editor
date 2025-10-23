@@ -6,8 +6,8 @@ export function notifyReleaseCreationSuccess(slackNotifier) {
         color: '#5bc0de',
         title: 'Information',
         text: 'Une nouvelle version du référentiel vient d’être créée.',
-      }
-    ]
+      },
+    ],
   };
   return slackNotifier.send(blocks);
 }
@@ -24,11 +24,11 @@ export function notifyReleaseCreationFailure(errorMessage, slackNotifier) {
           {
             title: 'Error',
             value: errorMessage,
-            short: false
+            short: false,
           },
         ],
-      }
-    ]
+      },
+    ],
   };
   return slackNotifier.send(blocks);
 }

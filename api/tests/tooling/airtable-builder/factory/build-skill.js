@@ -20,30 +20,29 @@ export function buildSkill({
   challengeIds,
   createdAt,
 } = {}) {
-
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
       'Record Id': airtableId,
-      'Statut de l\'indice': hintStatus,
+      "Statut de l'indice": hintStatus,
       'Comprendre (id persistant)': tutorialIds,
-      'Comprendre': tutorialAirtableIds,
+      Comprendre: tutorialAirtableIds,
       'En savoir plus (id persistant)': learningMoreTutorialIds,
       'En savoir plus': learningMoreTutorialAirtableIds,
       'Tube (id persistant)': [tubeId],
-      'Tube': [tubeAirtableId],
-      'Status': status,
-      'Nom': name,
+      Tube: [tubeAirtableId],
+      Status: status,
+      Nom: name,
       'Compétence (via Tube) (id persistant)': [competenceId],
-      'PixValue': pixValue,
-      'Description': description,
-      'Level': level,
-      'Internationalisation': internationalisation,
-      'Version': version,
+      PixValue: pixValue,
+      Description: description,
+      Level: level,
+      Internationalisation: internationalisation,
+      Version: version,
       'Epreuves (id persistant)': challengeIds,
       'Statut de la description': descriptionStatus,
-      'Date': createdAt,
+      Date: createdAt,
     },
   };
 }

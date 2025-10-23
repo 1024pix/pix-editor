@@ -1,16 +1,14 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { forRelease, forReplication, } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
+import { forRelease, forReplication } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { SkillForReplication } from '../../../../lib/domain/models/replication/index.js';
 
-describe('Unit | Infrastructure | skill-transformer', function() {
-
-  describe('#forRelease', function() {
-
-    context('when providing a single Skill', function() {
-      it('should transform it into a single SkillForRelease', function() {
+describe('Unit | Infrastructure | skill-transformer', function () {
+  describe('#forRelease', function () {
+    context('when providing a single Skill', function () {
+      it('should transform it into a single SkillForRelease', function () {
         // given
         const skill = domainBuilder.buildSkill({
           id: 'skillId',
@@ -40,25 +38,27 @@ describe('Unit | Infrastructure | skill-transformer', function() {
         const actualSkillForRelease = forRelease(skill);
 
         // then
-        expect(actualSkillForRelease).toStrictEqual(new SkillForRelease({
-          id: 'skillId',
-          name: '@fruits2',
-          hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
-          hintStatus: Skill.HINT_STATUSES.VALIDE,
-          tutorialIds: ['tutorialId1', 'tutorialId2'],
-          learningMoreTutorialIds: ['tutorialId3'],
-          pixValue: 1.5,
-          competenceId: 'competenceId',
-          status: Skill.STATUSES.ARCHIVE,
-          tubeId: 'tubeId',
-          version: 1,
-          level: 2,
-        }));
+        expect(actualSkillForRelease).toStrictEqual(
+          new SkillForRelease({
+            id: 'skillId',
+            name: '@fruits2',
+            hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            tutorialIds: ['tutorialId1', 'tutorialId2'],
+            learningMoreTutorialIds: ['tutorialId3'],
+            pixValue: 1.5,
+            competenceId: 'competenceId',
+            status: Skill.STATUSES.ARCHIVE,
+            tubeId: 'tubeId',
+            version: 1,
+            level: 2,
+          }),
+        );
       });
     });
 
-    context('when providing several Skills', function() {
-      it('should transform them into several SkillsForRelease', function() {
+    context('when providing several Skills', function () {
+      it('should transform them into several SkillsForRelease', function () {
         // given
         const skills = [
           domainBuilder.buildSkill({
@@ -147,10 +147,9 @@ describe('Unit | Infrastructure | skill-transformer', function() {
     });
   });
 
-  describe('#forReplication', function() {
-
-    context('when providing a single Skill', function() {
-      it('should transform it into a single SkillForReplication', function() {
+  describe('#forReplication', function () {
+    context('when providing a single Skill', function () {
+      it('should transform it into a single SkillForReplication', function () {
         // given
         const skill = domainBuilder.buildSkill({
           id: 'skillId',
@@ -183,31 +182,33 @@ describe('Unit | Infrastructure | skill-transformer', function() {
         const actualSkillForReplication = forReplication(skill);
 
         // then
-        expect(actualSkillForReplication).toStrictEqual(new SkillForReplication({
-          id: 'skillId',
-          name: '@fruits2',
-          description: 'la super description',
-          hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
-          hintStatus: Skill.HINT_STATUSES.VALIDE,
-          tutorialIds: ['tutorialId1', 'tutorialId2'],
-          learningMoreTutorialIds: ['tutorialId3'],
-          pixValue: 1.5,
-          competenceId: 'competenceId',
-          status: Skill.STATUSES.ARCHIVE,
-          tubeId: 'tubeId',
-          version: 1,
-          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          level: 2,
-          createdAt: new Date('2020-01-01T18:08:00Z'),
-          activatedAt: new Date('2023-11-06T18:08:00Z'),
-          archivedAt: new Date('2023-12-07T18:08:00Z'),
-          obsoletedAt: new Date('2024-01-08T18:08:00Z'),
-        }));
+        expect(actualSkillForReplication).toStrictEqual(
+          new SkillForReplication({
+            id: 'skillId',
+            name: '@fruits2',
+            description: 'la super description',
+            hint_i18n: { fr: 'hint fr skillId', en: 'hint en skillId' },
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            tutorialIds: ['tutorialId1', 'tutorialId2'],
+            learningMoreTutorialIds: ['tutorialId3'],
+            pixValue: 1.5,
+            competenceId: 'competenceId',
+            status: Skill.STATUSES.ARCHIVE,
+            tubeId: 'tubeId',
+            version: 1,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 2,
+            createdAt: new Date('2020-01-01T18:08:00Z'),
+            activatedAt: new Date('2023-11-06T18:08:00Z'),
+            archivedAt: new Date('2023-12-07T18:08:00Z'),
+            obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+          }),
+        );
       });
     });
 
-    context('when providing several Skills', function() {
-      it('should transform them into several SkillsForReplication', function() {
+    context('when providing several Skills', function () {
+      it('should transform them into several SkillsForReplication', function () {
         // given
         const skills = [
           domainBuilder.buildSkill({

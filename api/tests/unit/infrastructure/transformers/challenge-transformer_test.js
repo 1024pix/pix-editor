@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { createChallengeTransformer, fillAlternativeQualityFieldsFromMatchingProto } from '../../../../lib/infrastructure/transformers/index.js';
+import {
+  createChallengeTransformer,
+  fillAlternativeQualityFieldsFromMatchingProto,
+} from '../../../../lib/infrastructure/transformers/index.js';
 import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Infrastructure | Challenge Transformer', function() {
-
-  describe('#createChallengeTransformer', function() {
-
+describe('Unit | Infrastructure | Challenge Transformer', function () {
+  describe('#createChallengeTransformer', function () {
     it('should transform challenge', () => {
       // given
       const attachments = [];
@@ -36,8 +37,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             toRephrase: true,
             hasEmbedInternalValidation: true,
             noValidationNeeded: true,
-          })
-        ]
+          }),
+        ],
       });
 
       // when
@@ -45,9 +46,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const result = transform(challenge);
 
       // then
-      expect(result).to.deep.equal(
-        _buildReleaseChallenge(challenge),
-      );
+      expect(result).to.deep.equal(_buildReleaseChallenge(challenge));
     });
 
     describe('when there are attachments', () => {
@@ -77,7 +76,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             },
           },
           locales: ['fr', 'fr-fr'],
-          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
         });
 
         // when
@@ -88,10 +87,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         expect(result).to.deep.equal(
           _buildReleaseChallenge({
             ...challenge,
-            attachments: [
-              'https://dl.example.com/attachment1.xlsx',
-              'https://dl.example.com/attachment1.csv',
-            ],
+            attachments: ['https://dl.example.com/attachment1.xlsx', 'https://dl.example.com/attachment1.csv'],
           }),
         );
       });
@@ -130,11 +126,11 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
               instruction: 'Consigne',
               alternativeInstruction: 'Consigne alternative',
               proposals: 'Propositions',
-              illustrationAlt: 'Un chien qui fait des bulles avec son museau'
+              illustrationAlt: 'Un chien qui fait des bulles avec son museau',
             },
           },
           locales: ['fr', 'fr-fr'],
-          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
         });
 
         // when
@@ -175,15 +171,17 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeProto1Skill1',
-          challengeId: 'challengeProto1Skill1',
-          requireGafamWebsiteAccess: true,
-          isIncompatibleIpadCertif: true,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeProto1Skill1',
+            challengeId: 'challengeProto1Skill1',
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: false,
+            toRephrase: false,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -193,7 +191,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       };
       const challengeAlternative1Skill1DTO = {
         id: 'challengeAlternative1Skill1',
-        skillId:  skill1.id,
+        skillId: skill1.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -201,16 +199,18 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeAlternative1Skill1',
-          challengeId: 'challengeAlternative1Skill1',
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeAlternative1Skill1',
+            challengeId: 'challengeAlternative1Skill1',
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.RAS,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         version: '1',
-        genealogy: Challenge.GENEALOGIES.DECLINAISON
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
       };
 
       const challengeProto2Skill1DTO = {
@@ -223,15 +223,17 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeProto2Skill1',
-          challengeId: 'challengeProto2Skill1',
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-          isAwarenessChallenge: true,
-          toRephrase: true,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeProto2Skill1',
+            challengeId: 'challengeProto2Skill1',
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: true,
+            toRephrase: true,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,
@@ -249,10 +251,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeAlternative2Skill1',
-          challengeId: 'challengeAlternative2Skill1',
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeAlternative2Skill1',
+            challengeId: 'challengeAlternative2Skill1',
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -271,17 +275,19 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeProto1Skill2',
-          challengeId: 'challengeProto1Skill2',
-          requireGafamWebsiteAccess: true,
-          isIncompatibleIpadCertif: true,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-          isAwarenessChallenge: true,
-          toRephrase: true,
-          hasEmbedInternalValidation: true,
-          noValidationNeeded: true,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeProto1Skill2',
+            challengeId: 'challengeProto1Skill2',
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.RAS,
@@ -299,16 +305,18 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeAlternative1Skill2',
-          challengeId: 'challengeAlternative1Skill2',
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeAlternative1Skill2',
+            challengeId: 'challengeAlternative1Skill2',
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
         version: '1',
-        genealogy: Challenge.GENEALOGIES.DECLINAISON
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
       };
 
       const challengeProto1Skill1 = domainBuilder.buildChallenge(challengeProto1Skill1DTO);
@@ -318,20 +326,20 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeProto1Skill2 = domainBuilder.buildChallenge(challengeProto1Skill2DTO);
       const challengeAlternative1Skill2 = domainBuilder.buildChallenge(challengeAlternative1Skill2DTO);
 
-      const skills = [
-        domainBuilder.buildSkill(skill1),
-        domainBuilder.buildSkill(skill2),
-      ];
+      const skills = [domainBuilder.buildSkill(skill1), domainBuilder.buildSkill(skill2)];
 
       // when
-      fillAlternativeQualityFieldsFromMatchingProto([
-        challengeProto1Skill1,
-        challengeAlternative1Skill1,
-        challengeProto2Skill1,
-        challengeAlternative2Skill1,
-        challengeProto1Skill2,
-        challengeAlternative1Skill2,
-      ], skills);
+      fillAlternativeQualityFieldsFromMatchingProto(
+        [
+          challengeProto1Skill1,
+          challengeAlternative1Skill1,
+          challengeProto2Skill1,
+          challengeAlternative2Skill1,
+          challengeProto1Skill2,
+          challengeAlternative1Skill2,
+        ],
+        skills,
+      );
 
       // then
       expect(challengeProto1Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill1DTO));
@@ -383,14 +391,14 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       });
     });
 
-    it('shouldn\'t alter challenges from workbench', () => {
+    it("shouldn't alter challenges from workbench", () => {
       // given
       const workbenchSkill = {
         id: 'skill3',
         name: Skill.WORKBENCH_NAME,
       };
 
-      const challengeProtoWorkbench1DTO  = {
+      const challengeProtoWorkbench1DTO = {
         id: 'challengeProtoWorkbench1',
         skillId: workbenchSkill.id,
         translations: {
@@ -400,27 +408,28 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeProtoWorkbench1',
-          challengeId: 'challengeProtoWorkbench1',
-          requireGafamWebsiteAccess: true,
-          isIncompatibleIpadCertif: true,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-          isAwarenessChallenge: true,
-          toRephrase: true,
-          hasEmbedInternalValidation: true,
-          noValidationNeeded: true,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeProtoWorkbench1',
+            challengeId: 'challengeProtoWorkbench1',
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
         version: null,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-
       };
 
-      const challengeProtoWorkbench2DTO  = {
+      const challengeProtoWorkbench2DTO = {
         id: 'challengeProtoWorkbench2',
         skillId: workbenchSkill.id,
         translations: {
@@ -430,44 +439,41 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeProtoWorkbench2',
-          challengeId: 'challengeProtoWorkbench2',
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-          hasEmbedInternalValidation: true,
-          noValidationNeeded: true,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeProtoWorkbench2',
+            challengeId: 'challengeProtoWorkbench2',
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         version: null,
-        genealogy: Challenge.GENEALOGIES.PROTOTYPE
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       };
 
       const challengeProtoWorkbench1 = domainBuilder.buildChallenge(challengeProtoWorkbench1DTO);
       const challengeProtoWorkbench2 = domainBuilder.buildChallenge(challengeProtoWorkbench2DTO);
 
-      const skills = [
-        domainBuilder.buildSkill(workbenchSkill),
-      ];
+      const skills = [domainBuilder.buildSkill(workbenchSkill)];
 
       // when
-      fillAlternativeQualityFieldsFromMatchingProto([
-        challengeProtoWorkbench1,
-        challengeProtoWorkbench2,
-      ], skills);
+      fillAlternativeQualityFieldsFromMatchingProto([challengeProtoWorkbench1, challengeProtoWorkbench2], skills);
 
       // then
       expect(challengeProtoWorkbench1).to.deep.equal(domainBuilder.buildChallenge(challengeProtoWorkbench1DTO));
       expect(challengeProtoWorkbench2).to.deep.equal(domainBuilder.buildChallenge(challengeProtoWorkbench2DTO));
     });
 
-    it('shouldn\'t alter challenges without prototype', () => {
+    it("shouldn't alter challenges without prototype", () => {
       // given
       const skill1 = {
         id: 'skill1',
@@ -484,17 +490,19 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeAlternative3Skill1',
-          challengeId: 'challengeAlternative3Skill1',
-          requireGafamWebsiteAccess: true,
-          isIncompatibleIpadCertif: true,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-          isAwarenessChallenge: true,
-          toRephrase: true,
-          hasEmbedInternalValidation: true,
-          noValidationNeeded: true,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeAlternative3Skill1',
+            challengeId: 'challengeAlternative3Skill1',
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
+            hasEmbedInternalValidation: true,
+            noValidationNeeded: true,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -513,17 +521,19 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
-        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
-          id: 'challengeAlternative3Skill1',
-          challengeId: 'challengeAlternative3Skill1',
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
-        })],
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeAlternative3Skill1',
+            challengeId: 'challengeAlternative3Skill1',
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false,
+          }),
+        ],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,
@@ -533,15 +543,10 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       };
       const challengeAlternative1Skill1 = domainBuilder.buildChallenge(challengeAlternative1Skill1DTO);
       const challengeAlternative2Skill1 = domainBuilder.buildChallenge(challengeAlternative2Skill1DTO);
-      const skills = [
-        domainBuilder.buildSkill(skill1),
-      ];
+      const skills = [domainBuilder.buildSkill(skill1)];
 
       // when
-      fillAlternativeQualityFieldsFromMatchingProto([
-        challengeAlternative1Skill1,
-        challengeAlternative2Skill1
-      ], skills);
+      fillAlternativeQualityFieldsFromMatchingProto([challengeAlternative1Skill1, challengeAlternative2Skill1], skills);
 
       // then
       expect(challengeAlternative1Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeAlternative1Skill1DTO));

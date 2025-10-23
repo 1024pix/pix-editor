@@ -1,11 +1,7 @@
 import _ from 'lodash';
 
 export class Release {
-  constructor({
-    id,
-    content,
-    createdAt,
-  } = {}) {
+  constructor({ id, content, createdAt } = {}) {
     this.id = id;
     this.createdAt = createdAt;
     this.content = content;
@@ -37,7 +33,9 @@ export class Release {
 
   findCompetenceNamesForTutorial(tutorial) {
     const skills = findSkillsUsingTutorial(tutorial, this.content);
-    const rawCompetenceNames = skills.map((skill) => skill ? findCompetenceForSkill(skill, this.content)?.name_i18n.fr : null);
+    const rawCompetenceNames = skills.map((skill) =>
+      skill ? findCompetenceForSkill(skill, this.content)?.name_i18n.fr : null,
+    );
     return _.uniq(_.compact(rawCompetenceNames));
   }
 
@@ -76,7 +74,6 @@ function findCompetenceForSkill(skill, content) {
 
 function findSkillsUsingTutorial(tutorial, content) {
   return content.skills.filter((skill) => {
-    return skill.tutorialIds.includes(tutorial.id) ||
-      skill.learningMoreTutorialIds.includes(tutorial.id);
+    return skill.tutorialIds.includes(tutorial.id) || skill.learningMoreTutorialIds.includes(tutorial.id);
   });
 }

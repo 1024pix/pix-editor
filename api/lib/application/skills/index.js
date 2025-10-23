@@ -64,19 +64,19 @@ export async function register(server) {
             data: {
               type: Joi.string().required().equal('skills'),
               attributes: {
-                'level': Joi.number().required(),
-                'description': Joi.string().allow(null),
+                level: Joi.number().required(),
+                description: Joi.string().allow(null),
                 'description-status': Joi.string().allow(null),
-                'clue': Joi.string().allow(null),
+                clue: Joi.string().allow(null),
                 'clue-en': Joi.string().allow(null),
                 'clue-status': Joi.string().allow(null),
-                'i18n': Joi.string().allow(null),
-                'name': Joi.string().allow(null),
-                'status': Joi.string().allow(null),
-                'version': Joi.number().allow(null),
+                i18n: Joi.string().allow(null),
+                name: Joi.string().allow(null),
+                status: Joi.string().allow(null),
+                version: Joi.number().allow(null),
               },
               relationships: {
-                'tube': {
+                tube: {
                   data: {
                     type: Joi.string().required().equal('tubes'),
                     id: Types.tubeId(),
@@ -101,13 +101,13 @@ export async function register(server) {
             data: Joi.object({
               type: Joi.string().required().equal('skills'),
               attributes: Joi.object({
-                'description': Joi.string().allow(null),
+                description: Joi.string().allow(null),
                 'description-status': Joi.string().allow(null),
-                'clue': Joi.string().allow(null),
+                clue: Joi.string().allow(null),
                 'clue-en': Joi.string().allow(null),
                 'clue-status': Joi.string().empty(''),
-                'i18n': Joi.string().allow(null),
-                'status': Joi.string().allow(null),
+                i18n: Joi.string().allow(null),
+                status: Joi.string().allow(null),
               }).unknown(true),
               relationships: Joi.object({
                 'tuto-more': Types.tutorialsRelationship(),

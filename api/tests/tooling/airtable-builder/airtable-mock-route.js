@@ -4,7 +4,6 @@ const ROUTE_TYPE = {
 };
 
 export class AirtableMockRoute {
-
   constructor({ routeType, tableName, nockScope }) {
     this.routeType = routeType;
     this.tableName = tableName;
@@ -60,7 +59,6 @@ function generateUrlForRouteType({ routeType, tableName, returnBody }) {
 
 function generateBodyForRouteType({ returnBody, routeType }) {
   switch (routeType) {
-
     case ROUTE_TYPE.LIST:
       return { records: returnBody };
 

@@ -8,9 +8,7 @@ export function serialize(infrastructureError) {
 
   return JSONAPIError(
     infrastructureError.map((error) => {
-      const source = error.attribute ?
-        { pointer: `/data/attributes/${_.kebabCase(error.attribute)}` } :
-        undefined;
+      const source = error.attribute ? { pointer: `/data/attributes/${_.kebabCase(error.attribute)}` } : undefined;
       return {
         status: `${error.status}`,
         title: error.title,

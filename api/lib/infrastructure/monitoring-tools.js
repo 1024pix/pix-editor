@@ -11,15 +11,21 @@ export function logInfoWithCorrelationIds(data) {
   if (config.hapi.enableRequestMonitoring) {
     const context = asyncLocalStorage.getStore();
     const request = _.get(context, 'request');
-    logger.info({
-      user_id: extractUserIdFromRequest(request),
-      request_id: `${_.get(request, 'info.id', '-')}`,
-      ..._.get(data, 'metrics', {}),
-    }, _.get(data, 'message', '-'));
+    logger.info(
+      {
+        user_id: extractUserIdFromRequest(request),
+        request_id: `${_.get(request, 'info.id', '-')}`,
+        ..._.get(data, 'metrics', {}),
+      },
+      _.get(data, 'message', '-'),
+    );
   } else {
-    logger.info({
-      ..._.get(data, 'metrics', {}),
-    }, _.get(data, 'message', '-'));
+    logger.info(
+      {
+        ..._.get(data, 'metrics', {}),
+      },
+      _.get(data, 'message', '-'),
+    );
   }
 }
 
@@ -27,17 +33,20 @@ export function logErrorWithCorrelationIds(error) {
   if (config.hapi.enableRequestMonitoring) {
     const context = asyncLocalStorage.getStore();
     const request = _.get(context, 'request');
-    logger.error({
-      user_id: extractUserIdFromRequest(request),
-      request_id: `${_.get(request, 'info.id', '-')}`,
-    }, error);
+    logger.error(
+      {
+        user_id: extractUserIdFromRequest(request),
+        request_id: `${_.get(request, 'info.id', '-')}`,
+      },
+      error,
+    );
   } else {
     logger.error(error);
   }
 }
 
 export function extractUserIdFromRequest(request) {
-  return _.get(request, 'auth.credentials.user.id', ('-'));
+  return _.get(request, 'auth.credentials.user.id', '-');
 }
 
 export function getInContext(path, value) {
@@ -55,7 +64,7 @@ export function setInContext(path, value) {
 export function incrementInContext(path) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
-  _.update(store, path, (v) => (v) ? (v + 1) : 1);
+  _.update(store, path, (v) => (v ? v + 1 : 1));
 }
 
 export function getContext() {
@@ -83,7 +92,7 @@ export function installHapiHook() {
     throw new Error('Hapi method Request.prototype._execute not found while patch');
   }
 
-  HapiRequest.prototype._execute = function(...args) {
+  HapiRequest.prototype._execute = function (...args) {
     const request = this;
     const context = { request };
     return asyncLocalStorage.run(context, () => originalMethod.call(request, args));

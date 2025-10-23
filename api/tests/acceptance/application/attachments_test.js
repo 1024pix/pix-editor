@@ -1,13 +1,18 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, } from '../../test-helper.js';
+import {
+  airtableBuilder,
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  knex,
+} from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as config from '../../../lib/config.js';
 
 describe('Acceptance | Route | attachments', () => {
-
   let editorUser, readUser, originalPixApiUrlValue;
-  beforeEach(async function() {
+  beforeEach(async function () {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -15,13 +20,13 @@ describe('Acceptance | Route | attachments', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('POST /attachments', () => {
     let validPayload;
-    beforeEach(function() {
+    beforeEach(function () {
       validPayload = {
         data: {
           type: 'attachments',
@@ -33,7 +38,7 @@ describe('Acceptance | Route | attachments', () => {
             'mime-type': 'some mime type',
           },
           relationships: {
-            'challenge': {
+            challenge: {
               data: {
                 type: 'challenges',
                 id: 'challenge123',
@@ -50,7 +55,7 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    afterEach(function() {
+    afterEach(function () {
       return knex('localized_challenges-attachments').truncate();
     });
 
@@ -95,12 +100,32 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with status 201 and created attachment', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        competenceId: 'competence1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@tube',
+        thematicId: 'thematic1',
+      });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge123',
+          skillId: 'skill1',
+        }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
@@ -122,12 +147,15 @@ describe('Acceptance | Route | attachments', () => {
           filterByFormula: 'OR("challenge123" = {id persistant})',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [{
-          fields: {
-            'id persistant': 'challenge123',
-            'Record ID': 'challengeAirtable123'
-          }
-        }]
+        .reply(200, {
+          records: [
+            {
+              fields: {
+                'id persistant': 'challenge123',
+                'Record ID': 'challengeAirtable123',
+              },
+            },
+          ],
         });
       const airtableAttachment = airtableBuilder.factory.buildAttachment({
         id: 'airtableAttachmentId',
@@ -142,17 +170,19 @@ describe('Acceptance | Route | attachments', () => {
       });
       const airtablePostAttachmentScope = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Attachments/', {
-          records: [{
-            fields: {
-              'url': validPayload.data.attributes.url,
-              'size': validPayload.data.attributes.size,
-              'type': validPayload.data.attributes.type,
-              'mimeType': validPayload.data.attributes['mime-type'],
-              'filename': validPayload.data.attributes.filename,
-              'challengeId': ['challengeAirtable123'],
-              'localizedChallengeId': validPayload.data.relationships['localized-challenge'].data.id,
+          records: [
+            {
+              fields: {
+                url: validPayload.data.attributes.url,
+                size: validPayload.data.attributes.size,
+                type: validPayload.data.attributes.type,
+                mimeType: validPayload.data.attributes['mime-type'],
+                filename: validPayload.data.attributes.filename,
+                challengeId: ['challengeAirtable123'],
+                localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -174,11 +204,11 @@ describe('Acceptance | Route | attachments', () => {
           type: 'attachments',
           id: 'airtableAttachmentId',
           attributes: {
-            'url': validPayload.data.attributes.url,
-            'size': validPayload.data.attributes.size,
-            'type': validPayload.data.attributes.type,
+            url: validPayload.data.attributes.url,
+            size: validPayload.data.attributes.size,
+            type: validPayload.data.attributes.type,
             'mime-type': validPayload.data.attributes['mime-type'],
-            'filename': validPayload.data.attributes.filename,
+            filename: validPayload.data.attributes.filename,
           },
           relationships: {
             'localized-challenge': {
@@ -203,7 +233,7 @@ describe('Acceptance | Route | attachments', () => {
 
   describe('PATCH /attachments/{attachmentId}', () => {
     let validPayload;
-    beforeEach(function() {
+    beforeEach(function () {
       validPayload = {
         data: {
           type: 'attachments',
@@ -271,8 +301,8 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
-      it('should return a 404 not found', async function() {
+    context('when attachment does not exist', function () {
+      it('should return a 404 not found', async function () {
         // given
         const airtableGetAttachmentScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Attachments/recABC123')
@@ -298,12 +328,32 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with status 200 and updated attachment', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        competenceId: 'competence1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@tube',
+        thematicId: 'thematic1',
+      });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge123',
+          skillId: 'skill1',
+        }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
@@ -346,18 +396,20 @@ describe('Acceptance | Route | attachments', () => {
 
       const airtablePatchAttachmentScope = nock('https://api.airtable.com')
         .patch('/v0/airtableBaseValue/Attachments/', {
-          records: [{
-            id: 'recABC123',
-            fields: {
-              'url': 'url avant',
-              'size': 'size avant',
-              'type': 'type avant',
-              'mimeType': 'mimeType avant',
-              'filename': 'filename APRES',
-              'challengeId': ['challengeAirtable123'],
-              'localizedChallengeId': 'challenge123ES',
+          records: [
+            {
+              id: 'recABC123',
+              fields: {
+                url: 'url avant',
+                size: 'size avant',
+                type: 'type avant',
+                mimeType: 'mimeType avant',
+                filename: 'filename APRES',
+                challengeId: ['challengeAirtable123'],
+                localizedChallengeId: 'challenge123ES',
+              },
             },
-          }],
+          ],
         })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -441,8 +493,8 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
-      it('should return a 404 not found', async function() {
+    context('when attachment does not exist', function () {
+      it('should return a 404 not found', async function () {
         // given
         const airtableGetAttachmentScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
@@ -465,12 +517,32 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with status 204', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        competenceId: 'competence1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@tube',
+        thematicId: 'thematic1',
+      });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({
+          id: 'challengeId',
+          skillId: 'skill1',
+        }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeId',
@@ -507,8 +579,8 @@ describe('Acceptance | Route | attachments', () => {
         .reply(204, {
           records: [
             {
-              'id': 'recAttachmentId',
-              'deleted': true,
+              id: 'recAttachmentId',
+              deleted: true,
             },
           ],
         });
@@ -562,8 +634,8 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
-      it('should return a 404 not found', async function() {
+    context('when attachment does not exist', function () {
+      it('should return a 404 not found', async function () {
         // given
         const airtableGetAttachmentScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Attachments/recABC123')
@@ -588,12 +660,32 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with status 200 and the attachment', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        competenceId: 'competence1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@tube',
+        thematicId: 'thematic1',
+      });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge123',
+          skillId: 'skill1',
+        }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
@@ -701,12 +793,32 @@ describe('Acceptance | Route | attachments', () => {
     it('should respond with found attachments', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildArea({
+        id: 'area1',
+        code: '1',
+        frameworkId: 'recFmk1',
+      });
+      databaseBuilder.factory.buildCompetence({
+        id: 'competence1',
+        index: '1.1',
+        areaId: 'area1',
+      });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        competenceId: 'competence1',
+      });
+      databaseBuilder.factory.buildTube({
+        id: 'tube1',
+        name: '@tube',
+        thematicId: 'thematic1',
+      });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge123', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge123',
+          skillId: 'skill1',
+        }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge123',
@@ -720,17 +832,19 @@ describe('Acceptance | Route | attachments', () => {
       });
       await databaseBuilder.commit();
       const airtableAttachments = [];
-      airtableAttachments.push(airtableBuilder.factory.buildAttachment({
-        id: 'airtableAttachmentId1',
-        type: 'some type 1',
-        url: 'some url 1',
-        size: 123,
-        mimeType: 'some mime type 1',
-        filename: 'some filename 1',
-        challengeId: 'challenge123',
-        airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: 'localizedChallenge123',
-      }));
+      airtableAttachments.push(
+        airtableBuilder.factory.buildAttachment({
+          id: 'airtableAttachmentId1',
+          type: 'some type 1',
+          url: 'some url 1',
+          size: 123,
+          mimeType: 'some mime type 1',
+          filename: 'some filename 1',
+          challengeId: 'challenge123',
+          airtableChallengeId: 'challengeAirtable123',
+          localizedChallengeId: 'localizedChallenge123',
+        }),
+      );
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
         .query({

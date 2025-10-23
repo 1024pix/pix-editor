@@ -26,25 +26,78 @@ export async function buildSkillsFromConfig({
   tutorialItems,
 }) {
   const skillItems = [];
-  const allTubes = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)));
+  const allTubes = learningContentData.flatMap((framework) =>
+    framework.areas
+      .flatMap((area) => area.competences)
+      .flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)),
+  );
   const tutorialsIter = cycleTutorials(tutorialItems);
   for (const tubeItem of allTubes) {
     if (tubeItem.name.includes('workbench')) {
-      const workbenchSkillItem = buildSkill({ tubeItem, isWorkbench: true, databaseBuilder, locales: learningContentConfig.locales });
+      const workbenchSkillItem = buildSkill({
+        tubeItem,
+        isWorkbench: true,
+        databaseBuilder,
+        locales: learningContentConfig.locales,
+      });
       skillItems.push(workbenchSkillItem);
       tubeItem.skills.push(workbenchSkillItem);
     } else {
       for (let i = 0; i < learningContentConfig.skillMaxLevel; ++i) {
         if (i % 2 === 0) {
-          const activeSkillV1 = buildSkill({ indexSkill: i, suffix: 'Act', tubeItem, status: 'actif', version: 1, isWorkbench: false, databaseBuilder, locales: learningContentConfig.locales, tutorialItems: tutorialsIter.next().value, learningMoreTutorialItems: tutorialsIter.next().value });
-          const enConstructionSkillV2 = buildSkill({ indexSkill: i, suffix: 'EnCons', tubeItem, status: 'en construction', version: 2, isWorkbench: false, databaseBuilder, locales: learningContentConfig.locales, tutorialItems: tutorialsIter.next().value, learningMoreTutorialItems: tutorialsIter.next().value });
+          const activeSkillV1 = buildSkill({
+            indexSkill: i,
+            suffix: 'Act',
+            tubeItem,
+            status: 'actif',
+            version: 1,
+            isWorkbench: false,
+            databaseBuilder,
+            locales: learningContentConfig.locales,
+            tutorialItems: tutorialsIter.next().value,
+            learningMoreTutorialItems: tutorialsIter.next().value,
+          });
+          const enConstructionSkillV2 = buildSkill({
+            indexSkill: i,
+            suffix: 'EnCons',
+            tubeItem,
+            status: 'en construction',
+            version: 2,
+            isWorkbench: false,
+            databaseBuilder,
+            locales: learningContentConfig.locales,
+            tutorialItems: tutorialsIter.next().value,
+            learningMoreTutorialItems: tutorialsIter.next().value,
+          });
           skillItems.push(activeSkillV1);
           skillItems.push(enConstructionSkillV2);
           tubeItem.skills.push(activeSkillV1);
           tubeItem.skills.push(enConstructionSkillV2);
         } else {
-          const obsoleteSkillV1 = buildSkill({ indexSkill: i, suffix: 'Obs', tubeItem, status: 'périmé', version: 1, isWorkbench: false, databaseBuilder, locales: learningContentConfig.locales, tutorialItems: tutorialsIter.next().value, learningMoreTutorialItems: tutorialsIter.next().value });
-          const archivedSkillV2 = buildSkill({ indexSkill: i, suffix: 'Arch', tubeItem, status: 'archivé', version: 2, isWorkbench: false, databaseBuilder, locales: learningContentConfig.locales, tutorialItems: tutorialsIter.next().value, learningMoreTutorialItems: tutorialsIter.next().value });
+          const obsoleteSkillV1 = buildSkill({
+            indexSkill: i,
+            suffix: 'Obs',
+            tubeItem,
+            status: 'périmé',
+            version: 1,
+            isWorkbench: false,
+            databaseBuilder,
+            locales: learningContentConfig.locales,
+            tutorialItems: tutorialsIter.next().value,
+            learningMoreTutorialItems: tutorialsIter.next().value,
+          });
+          const archivedSkillV2 = buildSkill({
+            indexSkill: i,
+            suffix: 'Arch',
+            tubeItem,
+            status: 'archivé',
+            version: 2,
+            isWorkbench: false,
+            databaseBuilder,
+            locales: learningContentConfig.locales,
+            tutorialItems: tutorialsIter.next().value,
+            learningMoreTutorialItems: tutorialsIter.next().value,
+          });
           skillItems.push(obsoleteSkillV1);
           skillItems.push(archivedSkillV2);
           tubeItem.skills.push(obsoleteSkillV1);
@@ -63,22 +116,33 @@ function toAirtableObject(item) {
   return {
     fields: {
       'id persistant': item.id,
-      'Statut de l\'indice': item.hintStatus,
-      'Comprendre': [],
+      "Statut de l'indice": item.hintStatus,
+      Comprendre: [],
       'En savoir plus': [],
-      'Status': item.status,
-      'Tube': [item.tubeAirtableId],
-      'Description': item.description,
-      'Level': item.level,
-      'Internationalisation': item.internationalisation,
-      'Version': item.version,
-      'Comprendre': item.tutorialAirtableIds,
+      Status: item.status,
+      Tube: [item.tubeAirtableId],
+      Description: item.description,
+      Level: item.level,
+      Internationalisation: item.internationalisation,
+      Version: item.version,
+      Comprendre: item.tutorialAirtableIds,
       'En savoir plus': item.learningMoreTutorialAirtableIds,
-    }
+    },
   };
 }
 
-export function buildSkill({ indexSkill, suffix = '', tubeItem, status, version, isWorkbench, databaseBuilder, locales, tutorialItems, learningMoreTutorialItems }) {
+export function buildSkill({
+  indexSkill,
+  suffix = '',
+  tubeItem,
+  status,
+  version,
+  isWorkbench,
+  databaseBuilder,
+  locales,
+  tutorialItems,
+  learningMoreTutorialItems,
+}) {
   const partId = tubeItem.id.split('tube')[1];
   const skillId = `skill${partId}S${isWorkbench ? 'W' : indexSkill.toString() + suffix}`;
   const skillItem = {
@@ -100,46 +164,54 @@ export function buildSkill({ indexSkill, suffix = '', tubeItem, status, version,
   };
   databaseBuilder.factory.buildSkill(skillItem);
   locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `skill.${skillItem.id}.hint`,
-        value: `${skillItem.hint} ${locale}`,
-      }
-    );
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `skill.${skillItem.id}.hint`,
+      value: `${skillItem.hint} ${locale}`,
+    });
   });
   return skillItem;
 }
 
 export async function persistSkills({ items, airtableClient, logger }) {
   const airtableItems = items.map(toAirtableObject);
-  const records = await saveInAirtable({ tableName: 'Acquis', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Acquis',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
   });
 }
 
 export async function copySkillsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableSkills = await  airtableClient.table('Acquis').select({ fields: [
-    'id persistant',
-    'Statut de l\'indice',
-    'Comprendre (id persistant)',
-    'En savoir plus (id persistant)',
-    'Status',
-    'Tube (id persistant)',
-    'Description',
-    'Level',
-    'Internationalisation',
-    'Version',
-    'Statut de la description',
-  ] }).all();
+  const airtableSkills = await airtableClient
+    .table('Acquis')
+    .select({
+      fields: [
+        'id persistant',
+        "Statut de l'indice",
+        'Comprendre (id persistant)',
+        'En savoir plus (id persistant)',
+        'Status',
+        'Tube (id persistant)',
+        'Description',
+        'Level',
+        'Internationalisation',
+        'Version',
+        'Statut de la description',
+      ],
+    })
+    .all();
 
   logger.info(`Copying ${airtableSkills.length} skills from airtable...`);
 
   airtableSkills.forEach((record) => {
     databaseBuilder.factory.buildSkill({
       id: record.get('id persistant'),
-      hintStatus: record.get('Statut de l\'indice'),
+      hintStatus: record.get("Statut de l'indice"),
       status: record.get('Status'),
       tubeId: record.get('Tube (id persistant)')[0],
       description: record.get('Description'),

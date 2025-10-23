@@ -2,62 +2,64 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
-import { skillDatasource, } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
 
 describe('Integration | Repository | skill-repository', () => {
-
   describe('#list', () => {
     it('should return the list of all skills', async () => {
       // given
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Acquis' }).returns([
-        airtableBuilder.factory.buildSkill({
-          id: 'skill1',
-          airtableId: 'recId1',
-          name: 'Acquis 1',
-          description: 'Description Acquis 1',
-          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-          hintStatus: Skill.HINT_STATUSES.VALIDE,
-          tutorialIds: ['tuto1', 'tuto2'],
-          tutorialAirtableIds: ['recTuto1', 'recTuto2'],
-          learningMoreTutorialIds: ['tuto3', 'tuto4'],
-          learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-          pixValue: 2.5,
-          competenceId: 'competence1',
-          status: Skill.STATUSES.PERIME,
-          tubeId: 'tube1',
-          tubeAirtableId: 'recTube1',
-          level: 4,
-          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          version: '1',
-          challengeIds: ['challenge123184r9124'],
-          createdAt: '2025-01-01T09:58:57.465Z',
-        }),
-        airtableBuilder.factory.buildSkill({
-          id: 'skill2',
-          airtableId: 'recId2',
-          name: 'Acquis 2',
-          description: 'Description Acquis 2',
-          descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
-          hintStatus: Skill.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['tuto5'],
-          tutorialAirtableIds: ['recTuto5'],
-          learningMoreTutorialIds: ['tuto6'],
-          learningMoreTutorialAirtableIds: ['recTuto6'],
-          pixValue: 1.6,
-          competenceId: 'competence2',
-          status: 'actif',
-          tubeId: 'tube2',
-          tubeAirtableId: 'recTube2',
-          level: 6,
-          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-          version: '2',
-          challengeIds: ['challengesdgff230fj38cs'],
-          createdAt: '2025-01-02T07:58:57.465Z',
-        }),
-      ]).activate().nockScope;
+      const airtableScope = airtableBuilder
+        .mockList({ tableName: 'Acquis' })
+        .returns([
+          airtableBuilder.factory.buildSkill({
+            id: 'skill1',
+            airtableId: 'recId1',
+            name: 'Acquis 1',
+            description: 'Description Acquis 1',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            tutorialIds: ['tuto1', 'tuto2'],
+            tutorialAirtableIds: ['recTuto1', 'recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            pixValue: 2.5,
+            competenceId: 'competence1',
+            status: Skill.STATUSES.PERIME,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            level: 4,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            version: '1',
+            challengeIds: ['challenge123184r9124'],
+            createdAt: '2025-01-01T09:58:57.465Z',
+          }),
+          airtableBuilder.factory.buildSkill({
+            id: 'skill2',
+            airtableId: 'recId2',
+            name: 'Acquis 2',
+            description: 'Description Acquis 2',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            tutorialIds: ['tuto5'],
+            tutorialAirtableIds: ['recTuto5'],
+            learningMoreTutorialIds: ['tuto6'],
+            learningMoreTutorialAirtableIds: ['recTuto6'],
+            pixValue: 1.6,
+            competenceId: 'competence2',
+            status: 'actif',
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            level: 6,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            version: '2',
+            challengeIds: ['challengesdgff230fj38cs'],
+            createdAt: '2025-01-02T07:58:57.465Z',
+          }),
+        ])
+        .activate().nockScope;
 
       databaseBuilder.factory.buildSkill({
         id: 'skill1',
@@ -194,33 +196,41 @@ describe('Integration | Repository | skill-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
-        if (options?.filterByFormula !== `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`) expect.unreachable('Wrong filterByFormula');
-        return [{
-          id: skill1.airtableId,
-          fields: {
-            'id persistant': skill1.id,
-            'Record Id': skill1.airtableId,
-            'Nom': skill1.name,
-            'Statut de l\'indice': skill1.hintStatus,
-            'Comprendre (id persistant)': skill1.tutorialIds,
-            'Comprendre': skill1.tutorialAirtableIds,
-            'En savoir plus (id persistant)': skill1.learningMoreTutorialIds,
-            'En savoir plus': skill1.learningMoreTutorialAirtableIds,
-            'PixValue': skill1.pixValue,
-            'Compétence (via Tube) (id persistant)': [skill1.competenceId],
-            'Status': skill1.status,
-            'Tube (id persistant)': [skill1.tubeId],
-            'Tube': [skill1.tubeAirtableId],
-            'Description': skill1.description,
-            'Statut de la description': skill1.descriptionStatus,
-            'Level': skill1.level,
-            'Internationalisation': skill1.internationalisation,
-            'Version': skill1.version,
-            'Epreuves (id persistant)': skill1.challengeIds,
-            'Date': skill1.createdAt,
+        if (
+          options?.filterByFormula !==
+          `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`
+        )
+          expect.unreachable('Wrong filterByFormula');
+        return [
+          {
+            id: skill1.airtableId,
+            fields: {
+              'id persistant': skill1.id,
+              'Record Id': skill1.airtableId,
+              Nom: skill1.name,
+              "Statut de l'indice": skill1.hintStatus,
+              'Comprendre (id persistant)': skill1.tutorialIds,
+              Comprendre: skill1.tutorialAirtableIds,
+              'En savoir plus (id persistant)': skill1.learningMoreTutorialIds,
+              'En savoir plus': skill1.learningMoreTutorialAirtableIds,
+              PixValue: skill1.pixValue,
+              'Compétence (via Tube) (id persistant)': [skill1.competenceId],
+              Status: skill1.status,
+              'Tube (id persistant)': [skill1.tubeId],
+              Tube: [skill1.tubeAirtableId],
+              Description: skill1.description,
+              'Statut de la description': skill1.descriptionStatus,
+              Level: skill1.level,
+              Internationalisation: skill1.internationalisation,
+              Version: skill1.version,
+              'Epreuves (id persistant)': skill1.challengeIds,
+              Date: skill1.createdAt,
+            },
+            get: function (field) {
+              return this.fields[field];
+            },
           },
-          get: function(field) { return this.fields[field]; },
-        }];
+        ];
       });
 
       // when
@@ -299,33 +309,40 @@ describe('Integration | Repository | skill-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
-        if (options?.filterByFormula !== `{Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
-        return [{
-          id: skill1.airtableId,
-          fields: {
-            'id persistant': skill1.id,
-            'Record Id': skill1.airtableId,
-            'Nom': skill1.name,
-            'Statut de l\'indice': skill1.hintStatus,
-            'Comprendre (id persistant)': skill1.tutorialIds,
-            'Comprendre': skill1.tutorialAirtableIds,
-            'En savoir plus (id persistant)': skill1.learningMoreTutorialIds,
-            'En savoir plus': skill1.learningMoreTutorialAirtableIds,
-            'PixValue': skill1.pixValue,
-            'Compétence (via Tube) (id persistant)': [skill1.competenceId],
-            'Status': skill1.status,
-            'Tube (id persistant)': [skill1.tubeId],
-            'Tube': [skill1.tubeAirtableId],
-            'Description': skill1.description,
-            'Statut de la description': skill1.descriptionStatus,
-            'Level': skill1.level,
-            'Internationalisation': skill1.internationalisation,
-            'Version': skill1.version,
-            'Epreuves (id persistant)': skill1.challengeIds,
-            'Date': skill1.createdAt,
+        if (
+          options?.filterByFormula !== `{Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}`
+        )
+          expect.unreachable('Wrong filterByFormula');
+        return [
+          {
+            id: skill1.airtableId,
+            fields: {
+              'id persistant': skill1.id,
+              'Record Id': skill1.airtableId,
+              Nom: skill1.name,
+              "Statut de l'indice": skill1.hintStatus,
+              'Comprendre (id persistant)': skill1.tutorialIds,
+              Comprendre: skill1.tutorialAirtableIds,
+              'En savoir plus (id persistant)': skill1.learningMoreTutorialIds,
+              'En savoir plus': skill1.learningMoreTutorialAirtableIds,
+              PixValue: skill1.pixValue,
+              'Compétence (via Tube) (id persistant)': [skill1.competenceId],
+              Status: skill1.status,
+              'Tube (id persistant)': [skill1.tubeId],
+              Tube: [skill1.tubeAirtableId],
+              Description: skill1.description,
+              'Statut de la description': skill1.descriptionStatus,
+              Level: skill1.level,
+              Internationalisation: skill1.internationalisation,
+              Version: skill1.version,
+              'Epreuves (id persistant)': skill1.challengeIds,
+              Date: skill1.createdAt,
+            },
+            get: function (field) {
+              return this.fields[field];
+            },
           },
-          get: function(field) { return this.fields[field]; },
-        }];
+        ];
       });
 
       // when
@@ -451,13 +468,25 @@ describe('Integration | Repository | skill-repository', () => {
             challengeIds: ['challenge3', 'challenge4', 'challenge5'],
           },
         ];
-        const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
-        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
-          airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+        const airtableSkills = skills.map((skill) =>
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)),
         );
+        const findRecordsSpy = vi
+          .spyOn(airtable, 'findRecords')
+          .mockResolvedValueOnce(
+            airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+          );
         skills.forEach((skill) => {
-          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
-          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+          databaseBuilder.factory.buildTranslation({
+            key: `skill.${skill.id}.hint`,
+            locale: 'fr',
+            value: skill.hint_i18n.fr,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `skill.${skill.id}.hint`,
+            locale: 'en',
+            value: skill.hint_i18n.en,
+          });
         });
         await databaseBuilder.commit();
         const ids = skills.map((skill) => skill.id);
@@ -555,13 +584,25 @@ describe('Integration | Repository | skill-repository', () => {
             challengeIds: ['challenge3', 'challenge4', 'challenge5'],
           },
         ];
-        const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
-        const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
-          airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+        const airtableSkills = skills.map((skill) =>
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)),
         );
+        const findRecordsSpy = vi
+          .spyOn(airtable, 'findRecords')
+          .mockResolvedValueOnce(
+            airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+          );
         skills.forEach((skill) => {
-          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
-          databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+          databaseBuilder.factory.buildTranslation({
+            key: `skill.${skill.id}.hint`,
+            locale: 'fr',
+            value: skill.hint_i18n.fr,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `skill.${skill.id}.hint`,
+            locale: 'en',
+            value: skill.hint_i18n.en,
+          });
         });
         await databaseBuilder.commit();
 
@@ -628,11 +669,19 @@ describe('Integration | Repository | skill-repository', () => {
           challengeIds: ['challenge1', 'challenge2'],
         };
         const airtableSkill = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill));
-        const findRecordSpy = vi.spyOn(airtable, 'findRecord').mockResolvedValueOnce(
-          new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
-        );
-        databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
-        databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+        const findRecordSpy = vi
+          .spyOn(airtable, 'findRecord')
+          .mockResolvedValueOnce(new Airtable.Record('Acquis', airtableSkill.id, airtableSkill));
+        databaseBuilder.factory.buildTranslation({
+          key: `skill.${skill.id}.hint`,
+          locale: 'fr',
+          value: skill.hint_i18n.fr,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `skill.${skill.id}.hint`,
+          locale: 'en',
+          value: skill.hint_i18n.en,
+        });
         await databaseBuilder.commit();
         const id = skill.id;
 
@@ -661,13 +710,53 @@ describe('Integration | Repository | skill-repository', () => {
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: skill.tubeId, name: '@foo', thematicId: 'thematic1' });
-      databaseBuilder.factory.buildTutorial({ id: 'tuto1', title: 'title tuto1', duration: 'duration tuto1', source: 'source tuto1', format: 'format tuto1', link: 'link tuto1', locale: 'fr' });
-      databaseBuilder.factory.buildTutorial({ id: 'tuto2', title: 'title tuto2', duration: 'duration tuto2', source: 'source tuto2', format: 'format tuto2', link: 'link tuto2', locale: 'fr' });
-      databaseBuilder.factory.buildTutorial({ id: 'tuto3', title: 'title tuto3', duration: 'duration tuto3', source: 'source tuto3', format: 'format tuto3', link: 'link tuto3', locale: 'fr' });
-      databaseBuilder.factory.buildTutorial({ id: 'tuto4', title: 'title tuto4', duration: 'duration tuto4', source: 'source tuto4', format: 'format tuto4', link: 'link tuto4', locale: 'fr' });
+      databaseBuilder.factory.buildTutorial({
+        id: 'tuto1',
+        title: 'title tuto1',
+        duration: 'duration tuto1',
+        source: 'source tuto1',
+        format: 'format tuto1',
+        link: 'link tuto1',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildTutorial({
+        id: 'tuto2',
+        title: 'title tuto2',
+        duration: 'duration tuto2',
+        source: 'source tuto2',
+        format: 'format tuto2',
+        link: 'link tuto2',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildTutorial({
+        id: 'tuto3',
+        title: 'title tuto3',
+        duration: 'duration tuto3',
+        source: 'source tuto3',
+        format: 'format tuto3',
+        link: 'link tuto3',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildTutorial({
+        id: 'tuto4',
+        title: 'title tuto4',
+        duration: 'duration tuto4',
+        source: 'source tuto4',
+        format: 'format tuto4',
+        link: 'link tuto4',
+        locale: 'fr',
+      });
       databaseBuilder.factory.buildSkill(skill);
-      databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr });
-      databaseBuilder.factory.buildTranslation({ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en });
+      databaseBuilder.factory.buildTranslation({
+        key: `skill.${skill.id}.hint`,
+        locale: 'fr',
+        value: skill.hint_i18n.fr,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `skill.${skill.id}.hint`,
+        locale: 'en',
+        value: skill.hint_i18n.en,
+      });
       await databaseBuilder.commit();
 
       const expectedSkill = domainBuilder.buildSkill({
@@ -687,34 +776,31 @@ describe('Integration | Repository | skill-repository', () => {
       });
 
       const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
-      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
-        new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
-      );
+      const updateRecordSpy = vi
+        .spyOn(airtable, 'updateRecord')
+        .mockResolvedValueOnce(new Airtable.Record('Acquis', airtableSkill.id, airtableSkill));
 
       // when
       const updatedSkill = await skillRepository.update(expectedSkill);
 
       // then
       expect(updatedSkill).toStrictEqual(expectedSkill);
-      expect(updateRecordSpy).toHaveBeenCalledWith(
-        'Acquis',
-        {
-          id: skill.airtableId,
-          fields: {
-            'id persistant': skill.id,
-            'Statut de l\'indice': expectedSkill.hintStatus,
-            'Status': expectedSkill.status,
-            'Description': expectedSkill.description,
-            'Statut de la description': expectedSkill.descriptionStatus,
-            'Level': expectedSkill.level,
-            'Internationalisation': expectedSkill.internationalisation,
-            'Version': expectedSkill.version,
-            'Tube': [skill.tubeAirtableId],
-            'Comprendre': expectedSkill.tutorialAirtableIds,
-            'En savoir plus': expectedSkill.learningMoreTutorialAirtableIds,
-          },
+      expect(updateRecordSpy).toHaveBeenCalledWith('Acquis', {
+        id: skill.airtableId,
+        fields: {
+          'id persistant': skill.id,
+          "Statut de l'indice": expectedSkill.hintStatus,
+          Status: expectedSkill.status,
+          Description: expectedSkill.description,
+          'Statut de la description': expectedSkill.descriptionStatus,
+          Level: expectedSkill.level,
+          Internationalisation: expectedSkill.internationalisation,
+          Version: expectedSkill.version,
+          Tube: [skill.tubeAirtableId],
+          Comprendre: expectedSkill.tutorialAirtableIds,
+          'En savoir plus': expectedSkill.learningMoreTutorialAirtableIds,
         },
-      );
+      });
 
       await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
         {
@@ -735,14 +821,28 @@ describe('Integration | Repository | skill-repository', () => {
         },
       ]);
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toStrictEqual([
         { key: `skill.${skill.id}.hint`, locale: 'en', value: expectedSkill.hint_i18n.en },
         { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr },
       ]);
 
       await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
-        ...expectedSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
-        ...expectedSkill.tutorialIds.toSorted().map((tutorialId) => ({ type: 'understanding', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...expectedSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
+          type: 'learningMore',
+          skillId: skill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
+        ...expectedSkill.tutorialIds.toSorted().map((tutorialId) => ({
+          type: 'understanding',
+          skillId: skill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
       ]);
     });
   });
@@ -766,41 +866,54 @@ describe('Integration | Repository | skill-repository', () => {
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
-      [...skill.tutorialIds, ...skill.learningMoreTutorialIds].forEach((id) => databaseBuilder.factory.buildTutorial({
-        id, title: `title ${id}`, duration: `duration ${id}`, source: `source ${id}`, format: `format ${id}`, link: `link ${id}`, locale: 'fr',
-      }));
+      [...skill.tutorialIds, ...skill.learningMoreTutorialIds].forEach((id) =>
+        databaseBuilder.factory.buildTutorial({
+          id,
+          title: `title ${id}`,
+          duration: `duration ${id}`,
+          source: `source ${id}`,
+          format: `format ${id}`,
+          link: `link ${id}`,
+          locale: 'fr',
+        }),
+      );
       await databaseBuilder.commit();
 
-      const airtableSkill = airtableBuilder.factory.buildSkill({ ...skill, airtableId: 'recSkillPouet', tubeId: 'tube1' });
-      const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
-        new Airtable.Record('Acquis', airtableSkill.id, airtableSkill),
-      );
+      const airtableSkill = airtableBuilder.factory.buildSkill({
+        ...skill,
+        airtableId: 'recSkillPouet',
+        tubeId: 'tube1',
+      });
+      const createRecordSpy = vi
+        .spyOn(airtable, 'createRecord')
+        .mockResolvedValueOnce(new Airtable.Record('Acquis', airtableSkill.id, airtableSkill));
 
       // when
       const createdSkill = await skillRepository.create(skill);
 
       // then
-      expect(createdSkill).toStrictEqual(domainBuilder.buildSkill({
-        ...skill,
-        airtableId: 'recSkillPouet',
-        tubeId: 'tube1',
-      }));
-      expect(createRecordSpy).toHaveBeenCalledWith(
-        'Acquis',
-        { fields: {
-          'id persistant': skill.id,
-          'Statut de l\'indice': skill.hintStatus,
-          'Comprendre': skill.tutorialAirtableIds,
-          'En savoir plus': skill.learningMoreTutorialAirtableIds,
-          'Status': skill.status,
-          'Tube': [skill.tubeAirtableId],
-          'Description': skill.description,
-          'Statut de la description': skill.descriptionStatus,
-          'Level': skill.level,
-          'Internationalisation': skill.internationalisation,
-          'Version': skill.version,
-        } },
+      expect(createdSkill).toStrictEqual(
+        domainBuilder.buildSkill({
+          ...skill,
+          airtableId: 'recSkillPouet',
+          tubeId: 'tube1',
+        }),
       );
+      expect(createRecordSpy).toHaveBeenCalledWith('Acquis', {
+        fields: {
+          'id persistant': skill.id,
+          "Statut de l'indice": skill.hintStatus,
+          Comprendre: skill.tutorialAirtableIds,
+          'En savoir plus': skill.learningMoreTutorialAirtableIds,
+          Status: skill.status,
+          Tube: [skill.tubeAirtableId],
+          Description: skill.description,
+          'Statut de la description': skill.descriptionStatus,
+          Level: skill.level,
+          Internationalisation: skill.internationalisation,
+          Version: skill.version,
+        },
+      });
 
       await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
         {
@@ -821,14 +934,28 @@ describe('Integration | Repository | skill-repository', () => {
         },
       ]);
 
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toStrictEqual([
         { key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en },
         { key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr },
       ]);
 
       await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
-        ...skill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({ type: 'learningMore', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
-        ...skill.tutorialIds.map((tutorialId) => ({ type: 'understanding', skillId: skill.id, tutorialId, createdAt: expect.any(Date), updatedAt: expect.any(Date) })),
+        ...skill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
+          type: 'learningMore',
+          skillId: skill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
+        ...skill.tutorialIds.map((tutorialId) => ({
+          type: 'understanding',
+          skillId: skill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
       ]);
     });
   });

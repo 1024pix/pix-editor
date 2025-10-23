@@ -5,19 +5,13 @@ describe('Unit | Infrastructure | Airtable', () => {
   describe('#stringValue', () => {
     it('should prepare a string value for airtable formula', async () => {
       // given
-      const rawStrings = [
-        'coucou',
-        '\\\'"\n\r\t coucou \\\'"\n\r\t',
-      ];
+      const rawStrings = ['coucou', '\\\'"\n\r\t coucou \\\'"\n\r\t'];
 
       // when
       const airtableStringValues = rawStrings.map((rawString) => airtable.stringValue(rawString));
 
       // then
-      expect(airtableStringValues).toStrictEqual([
-        '"coucou"',
-        '"\\\\\'\\"\\n\\t coucou \\\\\'\\"\\n\\t"',
-      ]);
+      expect(airtableStringValues).toStrictEqual(['"coucou"', '"\\\\\'\\"\\n\\t coucou \\\\\'\\"\\n\\t"']);
     });
   });
 });

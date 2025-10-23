@@ -1,14 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import nock from 'nock';
-import { RETRY, COMPLETED, MISSING_ARGUMENTS, deleteUnmentionedKeysAfterUpload } from '../../../../lib/domain/usecases/index.js';
+import {
+  RETRY,
+  COMPLETED,
+  MISSING_ARGUMENTS,
+  deleteUnmentionedKeysAfterUpload,
+} from '../../../../lib/domain/usecases/index.js';
 
-describe('Integration | Usecases | Delete unmentioned keys after upload', function() {
-  it('should delete unmentioned keys when upload is in success', async function() {
+describe('Integration | Usecases | Delete unmentioned keys after upload', function () {
+  it('should delete unmentioned keys when upload is in success', async function () {
     // given
     const phraseAPIUpload = nock('https://api.phrase.com')
       .get('/v2/projects/phrase-project-id/uploads/upload-id')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-      .reply(200,  {
+      .reply(200, {
         id: 'upload-id',
         state: 'success',
         summary: {
@@ -20,10 +25,10 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
       .delete('/v2/projects/phrase-project-id/keys')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .query({
-        q: 'unmentioned_in_upload:upload-id'
+        q: 'unmentioned_in_upload:upload-id',
       })
       .reply(200, {
-        records_affected: 2
+        records_affected: 2,
       });
 
     // when
@@ -38,12 +43,12 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
     expect(phraseAPIDelete.isDone()).to.be.true;
   });
 
-  it('should not delete unmentioned keys when there is no unmentioned keys', async function() {
+  it('should not delete unmentioned keys when there is no unmentioned keys', async function () {
     // given
     const phraseAPIUpload = nock('https://api.phrase.com')
       .get('/v2/projects/phrase-project-id/uploads/upload-id')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-      .reply(200,  {
+      .reply(200, {
         id: 'upload-id',
         state: 'success',
         summary: {
@@ -55,10 +60,10 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
       .delete('/v2/projects/phrase-project-id/keys')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .query({
-        q: 'unmentioned_in_upload:upload-id'
+        q: 'unmentioned_in_upload:upload-id',
       })
       .reply(200, {
-        records_affected: 0
+        records_affected: 0,
       });
 
     // when
@@ -73,24 +78,24 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
     expect(phraseAPIDelete.isDone()).to.be.false;
   });
 
-  it('should returns status retry when the upload is processing', async function() {
+  it('should returns status retry when the upload is processing', async function () {
     // given
     const phraseAPIUpload = nock('https://api.phrase.com')
       .get('/v2/projects/phrase-project-id/uploads/upload-id')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .reply(200, {
         id: 'upload-id',
-        state: 'processing'
+        state: 'processing',
       });
 
     const phraseAPIDelete = nock('https://api.phrase.com')
       .delete('/v2/projects/phrase-project-id/keys')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .query({
-        q: 'unmentioned_in_upload:upload-id'
+        q: 'unmentioned_in_upload:upload-id',
       })
-      .reply(200,  {
-        records_affected: 0
+      .reply(200, {
+        records_affected: 0,
       });
 
     // when
@@ -105,24 +110,24 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
     expect(phraseAPIDelete.isDone()).to.be.false;
   });
 
-  it('should returns status completed when the upload is in error', async function() {
+  it('should returns status completed when the upload is in error', async function () {
     // given
     const phraseAPIUpload = nock('https://api.phrase.com')
       .get('/v2/projects/phrase-project-id/uploads/upload-id')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .reply(200, {
         id: 'upload-id',
-        state: 'error'
+        state: 'error',
       });
 
     const phraseAPIDelete = nock('https://api.phrase.com')
       .delete('/v2/projects/phrase-project-id/keys')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .query({
-        q: 'unmentioned_in_upload:upload-id'
+        q: 'unmentioned_in_upload:upload-id',
       })
-      .reply(200,  {
-        records_affected: 0
+      .reply(200, {
+        records_affected: 0,
       });
 
     // when
@@ -136,24 +141,24 @@ describe('Integration | Usecases | Delete unmentioned keys after upload', functi
     expect(phraseAPIUpload.isDone()).to.be.true;
     expect(phraseAPIDelete.isDone()).to.be.false;
   });
-  it('should throw error when projectId isn\'t given', async function() {
+  it("should throw error when projectId isn't given", async function () {
     // given
     const phraseAPIUpload = nock('https://api.phrase.com')
       .get('/v2/projects/phrase-project-id/uploads/upload-id')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .reply(200, {
         id: 'upload-id',
-        state: 'error'
+        state: 'error',
       });
 
     const phraseAPIDelete = nock('https://api.phrase.com')
       .delete('/v2/projects/phrase-project-id/keys')
       .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
       .query({
-        q: 'unmentioned_in_upload:upload-id'
+        q: 'unmentioned_in_upload:upload-id',
       })
-      .reply(200,  {
-        records_affected: 0
+      .reply(200, {
+        records_affected: 0,
       });
 
     // when

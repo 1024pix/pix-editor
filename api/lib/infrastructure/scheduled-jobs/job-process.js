@@ -13,6 +13,10 @@ async function exitOnSignal(signal) {
 }
 
 if (process.env.NODE_ENV !== 'test') {
-  process.on('SIGTERM', () => { exitOnSignal('SIGTERM'); });
-  process.on('SIGINT', () => { exitOnSignal('SIGINT'); });
+  process.on('SIGTERM', () => {
+    exitOnSignal('SIGTERM');
+  });
+  process.on('SIGINT', () => {
+    exitOnSignal('SIGINT');
+  });
 }

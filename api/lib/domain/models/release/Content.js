@@ -44,7 +44,7 @@ export class Content {
     thematics,
     tubes,
     tutorials,
-    missions
+    missions,
   }) {
     const content = new Content();
     content.areas = areas ? areas.map((area) => new AreaForRelease(area)) : [];

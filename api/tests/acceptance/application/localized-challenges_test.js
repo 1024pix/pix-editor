@@ -14,7 +14,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -81,7 +83,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               },
             },
           },
-        }
+        },
       };
 
       // When
@@ -103,7 +105,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -134,39 +138,41 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       };
 
       const expectedLocalizedChallenges = {
-        data: [{
-          type: 'localized-challenges',
-          id: localizedChallenge.id,
-          attributes: {
-            'locale': localizedChallenge.locale,
-            'embed-url': localizedChallenge.embedUrl,
-            'default-embed-url': 'https://choucroute.com/?lang=nl',
-            status: null,
-            geography: 'AA',
-            translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
-            'urls-to-consult': null,
-            'require-gafam-website-access': true,
-            'is-incompatible-ipad-certif': true,
-            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-            'is-awareness-challenge': true,
-            'to-rephrase': true,
-            'has-embed-internal-validation': true,
-            'no-validation-needed': true,
-          },
-          relationships: {
-            challenge: {
-              data: {
-                id: localizedChallenge.challengeId,
-                type: 'challenges',
+        data: [
+          {
+            type: 'localized-challenges',
+            id: localizedChallenge.id,
+            attributes: {
+              locale: localizedChallenge.locale,
+              'embed-url': localizedChallenge.embedUrl,
+              'default-embed-url': 'https://choucroute.com/?lang=nl',
+              status: null,
+              geography: 'AA',
+              translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
+              'urls-to-consult': null,
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
+              'has-embed-internal-validation': true,
+              'no-validation-needed': true,
+            },
+            relationships: {
+              challenge: {
+                data: {
+                  id: localizedChallenge.challengeId,
+                  type: 'challenges',
+                },
+              },
+              attachments: {
+                links: {
+                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
+                },
               },
             },
-            attachments: {
-              links: {
-                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
-              },
-            },
           },
-        }]
+        ],
       };
 
       // When
@@ -186,8 +192,12 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -245,7 +255,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             type: 'localized-challenges',
             id: localizedChallenges[0].id,
             attributes: {
-              'locale': localizedChallenges[0].locale,
+              locale: localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
               'default-embed-url': 'https://choucroute.com/?lang=nl',
               geography: 'AA',
@@ -278,7 +288,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             type: 'localized-challenges',
             id: localizedChallenges[1].id,
             attributes: {
-              'locale': localizedChallenges[1].locale,
+              locale: localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
               'default-embed-url': 'https://raclette.com/?lang=de',
               geography: 'AA',
@@ -306,8 +316,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 },
               },
             },
-          }
-        ]
+          },
+        ],
       };
 
       // When
@@ -321,7 +331,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
 
   describe('PATCH /localized-challenges/{id}', () => {
     let now;
-    beforeEach(function() {
+    beforeEach(function () {
       now = new Date('2024-10-29T03:04:00Z');
       vi.useFakeTimers({
         now,
@@ -329,7 +339,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       });
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
@@ -342,7 +352,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -430,7 +442,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           },
         },
       });
-      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
+      const updatedLocalizedChallenge = await knex('localized_challenges')
+        .select()
+        .where({ id: localizedChallenge.id })
+        .first();
       expect(updatedLocalizedChallenge).to.deep.equal({
         id: localizedChallenge.id,
         challengeId: localizedChallenge.challengeId,
@@ -459,7 +474,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -548,7 +565,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           },
         },
       });
-      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
+      const updatedLocalizedChallenge = await knex('localized_challenges')
+        .select()
+        .where({ id: localizedChallenge.id })
+        .first();
       expect(updatedLocalizedChallenge).to.deep.equal({
         id: localizedChallenge.id,
         challengeId: localizedChallenge.challengeId,
@@ -579,14 +599,14 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         method: 'PATCH',
         url: '/api/localized-challenges/123',
         headers: generateAuthorizationHeader(readOnlyUser),
-        payload: {}
+        payload: {},
       });
 
       // Then
       expect(response.statusCode).to.equal(403);
     });
 
-    it('should return forbidden error if user is NOT admin and updates status', async() => {
+    it('should return forbidden error if user is NOT admin and updates status', async () => {
       // given
       const user = databaseBuilder.factory.buildEditorUser();
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -595,7 +615,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+      );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -622,7 +644,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             type: 'localized-challenges',
             id: 'localizedChallengeId',
             attributes: {
-              'status': LocalizedChallenge.STATUSES.PLAY,
+              status: LocalizedChallenge.STATUSES.PLAY,
             },
           },
         },

@@ -1,4 +1,4 @@
-import {  describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
 describe('Unit | Domain | Thematic', () => {
@@ -8,10 +8,7 @@ describe('Unit | Domain | Thematic', () => {
       const thematic = domainBuilder.buildThematic({
         index: null,
       });
-      const competenceThematics = [
-        domainBuilder.buildThematic(),
-        domainBuilder.buildThematic(),
-      ];
+      const competenceThematics = [domainBuilder.buildThematic(), domainBuilder.buildThematic()];
 
       // when
       thematic.prepareForCreation(competenceThematics);
@@ -55,19 +52,21 @@ describe('Unit | Domain | Thematic', () => {
       thematic.update(thematicUpdates);
 
       // then
-      expect(thematic).toStrictEqual(domainBuilder.buildThematic({
-        airtableId: 'recThematic1',
-        id: 'thematic1',
-        name_i18n: {
-          fr: 'après',
-          en: 'after',
-        },
-        index: 2,
-        competenceAirtableId: 'recCompetence1',
-        competenceId: 'competence1',
-        tubeAirtableIds: ['recTube1', 'recTube2'],
-        tubeIds: ['tube1', 'tube2'],
-      }));
+      expect(thematic).toStrictEqual(
+        domainBuilder.buildThematic({
+          airtableId: 'recThematic1',
+          id: 'thematic1',
+          name_i18n: {
+            fr: 'après',
+            en: 'after',
+          },
+          index: 2,
+          competenceAirtableId: 'recCompetence1',
+          competenceId: 'competence1',
+          tubeAirtableIds: ['recTube1', 'recTube2'],
+          tubeIds: ['tube1', 'tube2'],
+        }),
+      );
     });
   });
 });

@@ -56,18 +56,20 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
       const createdArea = await create(area);
 
       // then
-      expect(createdArea).toStrictEqual(new Area({
-        airtableId,
-        id,
-        code,
-        title_i18n: {
-          fr: titleFr,
-          en: titleEn,
-        },
-        frameworkId,
-        competenceAirtableIds: [],
-        competenceIds: [],
-      }));
+      expect(createdArea).toStrictEqual(
+        new Area({
+          airtableId,
+          id,
+          code,
+          title_i18n: {
+            fr: titleFr,
+            en: titleEn,
+          },
+          frameworkId,
+          competenceAirtableIds: [],
+          competenceIds: [],
+        }),
+      );
 
       expect(generateNewId).toHaveBeenCalledExactlyOnceWith('area');
       expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
@@ -94,32 +96,45 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
   describe('#list', () => {
     it('should return the list of all areas', async () => {
       // given
-      const airtableScope = airtableBuilder.mockList({ tableName: AIRTABLE_NAME }).returns([
-        airtableBuilder.factory.buildArea({
-          id: 'areaId1',
-          airtableId: 'recAreaId1',
-          code: '1',
-          color: Area.COLORS.BUTTERFLY_BUSH,
-          competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
-          competenceIds: ['competenceId11', 'competenceId12'],
-          frameworkId: 'frameworkId1',
-        }),
-        airtableBuilder.factory.buildArea({
-          id: 'areaId2',
-          airtableId: 'recAreaId2',
-          code: '2',
-          color: Area.COLORS.WILD_STRAWBERRY,
-          competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
-          competenceIds: ['competenceId21', 'competenceId22'],
-          frameworkId: 'frameworkId1',
-        }),
-      ]).activate().nockScope;
+      const airtableScope = airtableBuilder
+        .mockList({ tableName: AIRTABLE_NAME })
+        .returns([
+          airtableBuilder.factory.buildArea({
+            id: 'areaId1',
+            airtableId: 'recAreaId1',
+            code: '1',
+            color: Area.COLORS.BUTTERFLY_BUSH,
+            competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
+            competenceIds: ['competenceId11', 'competenceId12'],
+            frameworkId: 'frameworkId1',
+          }),
+          airtableBuilder.factory.buildArea({
+            id: 'areaId2',
+            airtableId: 'recAreaId2',
+            code: '2',
+            color: Area.COLORS.WILD_STRAWBERRY,
+            competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
+            competenceIds: ['competenceId21', 'competenceId22'],
+            frameworkId: 'frameworkId1',
+          }),
+        ])
+        .activate().nockScope;
 
       databaseBuilder.factory.buildFramework({ id: 'frameworkId1', name: 'Fmk' });
-      databaseBuilder.factory.buildArea({ id: 'areaId1', code: '1', color: Area.COLORS.BUTTERFLY_BUSH, frameworkId: 'frameworkId1' });
+      databaseBuilder.factory.buildArea({
+        id: 'areaId1',
+        code: '1',
+        color: Area.COLORS.BUTTERFLY_BUSH,
+        frameworkId: 'frameworkId1',
+      });
       databaseBuilder.factory.buildCompetence({ id: 'competenceId11', index: '1.1', areaId: 'areaId1' });
       databaseBuilder.factory.buildCompetence({ id: 'competenceId12', index: '1.2', areaId: 'areaId1' });
-      databaseBuilder.factory.buildArea({ id: 'areaId2', code: '2', color: Area.COLORS.WILD_STRAWBERRY, frameworkId: 'frameworkId1' });
+      databaseBuilder.factory.buildArea({
+        id: 'areaId2',
+        code: '2',
+        color: Area.COLORS.WILD_STRAWBERRY,
+        frameworkId: 'frameworkId1',
+      });
       databaseBuilder.factory.buildCompetence({ id: 'competenceId21', index: '2.1', areaId: 'areaId2' });
       databaseBuilder.factory.buildCompetence({ id: 'competenceId22', index: '2.2', areaId: 'areaId2' });
 

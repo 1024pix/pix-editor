@@ -6,7 +6,14 @@ import * as transformers from '../../../../lib/infrastructure/transformers/index
 import { logger } from '../../../../lib/infrastructure/logger.js';
 
 describe('Unit | Domain | Usecases | clone-skill', () => {
-  let attachmentRepository, skillRepository, challengeRepository, tubeRepository, generateNewIdFnc, updatedRecordNotifier, transformChallenge, forRelease;
+  let attachmentRepository,
+    skillRepository,
+    challengeRepository,
+    tubeRepository,
+    generateNewIdFnc,
+    updatedRecordNotifier,
+    transformChallenge,
+    forRelease;
   let dependencies;
   const userId = 123;
   const pixApiClient = Symbol('pixApiClient');
@@ -96,7 +103,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const promise = cloneSkill({ cloneCommand, dependencies });
 
       // then
-      await expect(promise).rejects.toThrow('L\'acquis d\'id "skillABC1Id" n\'existe pas');
+      await expect(promise).rejects.toThrow("L'acquis d'id \"skillABC1Id\" n'existe pas");
     });
 
     it('should throw an error when skill is not live', async () => {
@@ -107,10 +114,12 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         skillIdToClone: 'skillABC1Id',
         userId,
       };
-      skillRepository.get.mockResolvedValue(domainBuilder.buildSkill({
-        id: cloneCommand.skillIdToClone,
-        status: Skill.STATUSES.ARCHIVE,
-      }));
+      skillRepository.get.mockResolvedValue(
+        domainBuilder.buildSkill({
+          id: cloneCommand.skillIdToClone,
+          status: Skill.STATUSES.ARCHIVE,
+        }),
+      );
       tubeRepository.get.mockResolvedValue(domainBuilder.buildTube({ id: cloneCommand.tubeDestinationId }));
 
       // when
@@ -122,7 +131,15 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
   });
 
   describe('pre-check OK', () => {
-    let cloneCommand, spyCloneFnc, skillToClone, tube, challengeToClone1, challengeToClone2, tubeSkill1, tubeSkill2, attachmentToClone1;
+    let cloneCommand,
+      spyCloneFnc,
+      skillToClone,
+      tube,
+      challengeToClone1,
+      challengeToClone2,
+      tubeSkill1,
+      tubeSkill2,
+      attachmentToClone1;
     beforeEach(() => {
       cloneCommand = {
         tubeDestinationId: 'tubeABCId',
@@ -164,7 +181,9 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
         clonedSkill: 'clonedSkill',
         clonedChallenges: [{ id: 'challengeId' }],
-        clonedAttachments: [{ challengeId: 'attachmentChallengeId', localizedChallengeId: 'attachmentLocalizedChallengeId' }],
+        clonedAttachments: [
+          { challengeId: 'attachmentChallengeId', localizedChallengeId: 'attachmentLocalizedChallengeId' },
+        ],
       });
 
       // when
@@ -175,7 +194,12 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       expect(tubeRepository.get).toHaveBeenCalledWith(cloneCommand.tubeDestinationId);
       expect(challengeRepository.listBySkillId).toHaveBeenCalledWith(cloneCommand.skillIdToClone);
       expect(skillRepository.listByTubeId).toHaveBeenCalledWith(cloneCommand.tubeDestinationId);
-      expect(attachmentRepository.listByLocalizedChallengeIds).toHaveBeenCalledWith(['challenge1', 'localizedChallengeA', 'challenge2', 'localizedChallengeB']);
+      expect(attachmentRepository.listByLocalizedChallengeIds).toHaveBeenCalledWith([
+        'challenge1',
+        'localizedChallengeA',
+        'challenge2',
+        'localizedChallengeB',
+      ]);
       expect(spyCloneFnc).toHaveBeenCalledWith({
         tubeDestination: tube,
         level: cloneCommand.level,
@@ -206,10 +230,12 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       // then
       expect(skillRepository.create).toHaveBeenCalledWith(clonedSkill);
       expect(challengeRepository.createBatch).toHaveBeenCalledWith(clonedChallenges);
-      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }]);
+      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([
+        { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
+      ]);
     });
 
-    it('should update records for preview',  async() => {
+    it('should update records for preview', async () => {
       // given
       const clonedSkill = Symbol('clonedSkill');
       const clonedChallenge = { id: 'clonedChallenge', isPrimary: true };
@@ -225,7 +251,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       });
       const skillForRelease = Symbol('skillForRelease');
       forRelease.mockReturnValue(skillForRelease);
-      const transformedChallenge =  Symbol('transformedChallenge');
+      const transformedChallenge = Symbol('transformedChallenge');
       transformChallenge.mockReturnValue(transformedChallenge);
 
       // when
@@ -237,8 +263,16 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       expect(transformChallenge).toHaveBeenCalledOnce();
       expect(transformChallenge).toHaveBeenCalledWith(clonedChallenge);
       expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(2);
-      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: skillForRelease, model: 'skills', pixApiClient });
-      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(2, { updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
+      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, {
+        updatedRecord: skillForRelease,
+        model: 'skills',
+        pixApiClient,
+      });
+      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(2, {
+        updatedRecord: transformedChallenge,
+        model: 'challenges',
+        pixApiClient,
+      });
     });
 
     describe('when patching fails', () => {
@@ -269,7 +303,11 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
         expect(forRelease).toHaveBeenCalledOnce();
         expect(forRelease).toHaveBeenCalledWith(clonedSkill);
         expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
-        expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: skillForRelease, model: 'skills', pixApiClient });
+        expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, {
+          updatedRecord: skillForRelease,
+          model: 'skills',
+          pixApiClient,
+        });
         expect(logError).toHaveBeenCalledWith(error);
       });
     });

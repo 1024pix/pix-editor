@@ -9,65 +9,49 @@ function _airtableClient() {
 
 export function findRecords(tableName, options = {}) {
   logger.info({ tableName }, 'Querying Airtable');
-  return _airtableClient()
-    .table(tableName)
-    .select(options)
-    .all();
+  return _airtableClient().table(tableName).select(options).all();
 }
 
 export function findRecord(tableName, recordId) {
   logger.info({ tableName }, 'Querying Airtable');
-  return _airtableClient()
-    .table(tableName)
-    .find(recordId);
+  return _airtableClient().table(tableName).find(recordId);
 }
 
 export async function createRecord(tableName, body) {
-  const records = await _airtableClient()
-    .table(tableName)
-    .create([body]);
+  const records = await _airtableClient().table(tableName).create([body]);
   return records[0];
 }
 
 export async function createRecords(tableName, bodies) {
   const records = [];
-  for (const chunkBodies  of _.chunk(bodies, 10)) {
-    const chunkRecords = await _airtableClient()
-      .table(tableName)
-      .create(chunkBodies);
-    records.push(...chunkRecords) ;
+  for (const chunkBodies of _.chunk(bodies, 10)) {
+    const chunkRecords = await _airtableClient().table(tableName).create(chunkBodies);
+    records.push(...chunkRecords);
   }
   return records;
 }
 
 export async function updateRecord(tableName, body) {
-  const records = await _airtableClient()
-    .table(tableName)
-    .update([body]);
+  const records = await _airtableClient().table(tableName).update([body]);
   return records[0];
 }
 
 export async function updateRecords(tableName, bodies) {
   const records = [];
-  for (const chunkBodies  of _.chunk(bodies, 10)) {
-    const chunkRecords = await _airtableClient()
-      .table(tableName)
-      .update(chunkBodies);
-    records.push(...chunkRecords) ;
+  for (const chunkBodies of _.chunk(bodies, 10)) {
+    const chunkRecords = await _airtableClient().table(tableName).update(chunkBodies);
+    records.push(...chunkRecords);
   }
   return records;
 }
 
 export async function upsertRecords(tableName, records, fieldsToMergeOn) {
   logger.info({ tableName }, 'Upserting redords in Airtable');
-  return _airtableClient().table(tableName).update(
-    records,
-    {
-      performUpsert: {
-        fieldsToMergeOn,
-      },
+  return _airtableClient().table(tableName).update(records, {
+    performUpsert: {
+      fieldsToMergeOn,
     },
-  );
+  });
 }
 
 export async function deleteRecords(tableName, recordIds) {
@@ -78,18 +62,13 @@ export async function deleteRecords(tableName, recordIds) {
 }
 
 export function stringValue(value) {
-  return `"${
-    value.replace(/\r/g, '')
-      .replace(/["\\]/g, '\\$&')
-      .replace(/\n/g, '\\n')
-      .replace(/\t/g, '\\t')
-  }"`;
+  return `"${value.replace(/\r/g, '').replace(/["\\]/g, '\\$&').replace(/\n/g, '\\n').replace(/\t/g, '\\t')}"`;
 }
 
 async function getBaseName() {
   const res = await fetch('https://api.airtable.com/v0/meta/bases', {
     headers: {
-      'Authorization': `Bearer ${config.airtable.apiKeyMetaData}`,
+      Authorization: `Bearer ${config.airtable.apiKeyMetaData}`,
     },
   });
   const body = await res.json();
@@ -115,16 +94,16 @@ export async function canSeedOrEmptyAirtableBase() {
 
 export async function emptyAllTables({ showProgression = false } = {}) {
   const tablesAndRecordIds = {
-    'Referentiel': 'Record ID',
-    'Domaines': 'Record ID',
-    'Competences': 'Record ID',
-    'Thematiques': 'Record Id',
-    'Tubes': 'Record Id',
-    'Acquis': 'Record Id',
-    'Epreuves': 'Record ID',
-    'Tutoriels': 'Record ID',
-    'Tags': 'Record ID',
-    'Attachments': 'Record ID',
+    Referentiel: 'Record ID',
+    Domaines: 'Record ID',
+    Competences: 'Record ID',
+    Thematiques: 'Record Id',
+    Tubes: 'Record Id',
+    Acquis: 'Record Id',
+    Epreuves: 'Record ID',
+    Tutoriels: 'Record ID',
+    Tags: 'Record ID',
+    Attachments: 'Record ID',
   };
   const canEmpty = await canSeedOrEmptyAirtableBase();
   if (!canEmpty) {
@@ -133,7 +112,8 @@ export async function emptyAllTables({ showProgression = false } = {}) {
   }
   for (const [tableName, idKey] of Object.entries(tablesAndRecordIds)) {
     if (showProgression) logger.info(`\tFetching "${tableName}" ids...`);
-    const rawRecords = await _airtableClient().table(tableName)
+    const rawRecords = await _airtableClient()
+      .table(tableName)
       .select({ fields: [idKey] })
       .all();
     if (showProgression) logger.info(`\tEmptying ${rawRecords.length} from "${tableName}"...`);

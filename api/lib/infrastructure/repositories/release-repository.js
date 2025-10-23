@@ -1,4 +1,4 @@
-import { attachmentDatasource, tutorialDatasource, } from '../datasources/airtable/index.js';
+import { attachmentDatasource, tutorialDatasource } from '../datasources/airtable/index.js';
 import {
   areaRepository,
   challengeRepository,
@@ -31,34 +31,25 @@ export function getCurrentContent() {
 
 export async function create(getCurrentContent = _getCurrentContent) {
   const content = await getCurrentContent();
-  const release = await knex('releases')
-    .insert({ content }, ['id']);
+  const release = await knex('releases').insert({ content }, ['id']);
 
   return release[0].id;
 }
 
 export async function getLatestRelease() {
-  const release = await knex('releases')
-    .select('id', 'content', 'createdAt')
-    .orderBy('createdAt', 'desc')
-    .limit(1);
+  const release = await knex('releases').select('id', 'content', 'createdAt').orderBy('createdAt', 'desc').limit(1);
 
   return _toDomain(release[0]);
 }
 
 export async function getLatestReleaseDate() {
-  const [createdAt] = await knex('releases')
-    .pluck('createdAt')
-    .orderBy('createdAt', 'desc')
-    .limit(1);
+  const [createdAt] = await knex('releases').pluck('createdAt').orderBy('createdAt', 'desc').limit(1);
 
   return createdAt;
 }
 
 export async function getRelease(id) {
-  const release = await knex('releases')
-    .select('id', 'content', 'createdAt')
-    .where('id', id);
+  const release = await knex('releases').select('id', 'content', 'createdAt').where('id', id);
 
   return _toDomain(release[0]);
 }
@@ -103,14 +94,20 @@ async function _getCurrentContent() {
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
-    ...challenge.alternativeLocales.map((locale) => challenge.translate(locale))
+    ...challenge.alternativeLocales.map((locale) => challenge.translate(locale)),
   ]);
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedTubes = tubeTransformer.transformTubes(tubes, challenges);
 
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
-  const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
+  const transformedMissions = missionTransformer.transform({
+    missions,
+    challenges,
+    tubes,
+    thematics,
+    skills,
+  });
 
   return {
     frameworks: frameworkTransformer.forRelease(frameworks),

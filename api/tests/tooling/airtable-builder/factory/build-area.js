@@ -9,13 +9,13 @@ export function buildArea({
 } = {}) {
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
       'Competences (identifiants) (id persistant)': competenceIds,
       'Competences (identifiants)': competenceAirtableIds,
-      'Code': code,
-      'Couleur': color,
-      'Referentiel': [frameworkId],
+      Code: code,
+      Couleur: color,
+      Referentiel: [frameworkId],
     },
   };
 }
