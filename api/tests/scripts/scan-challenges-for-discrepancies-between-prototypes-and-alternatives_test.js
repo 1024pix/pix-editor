@@ -62,6 +62,17 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       locale: 'fr',
       urlsToConsult: ['a'],
     };
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+    databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+    databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'PROTO', skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI1_ISO', skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI2', skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI_ORPHAN_VERSION', skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI_ORPHAN_SKILL', skillId: 'skill1' }));
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'PROTO',
       challengeId: 'PROTO',
