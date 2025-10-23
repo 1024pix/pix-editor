@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
@@ -8,6 +8,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should get a localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -90,6 +97,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should filter one localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -166,7 +180,14 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should filter several localized challenges by IDs', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
-
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -315,6 +336,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should modify localized challenge of given ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -425,6 +453,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should not modify validatedAt if status does not change for PLAY', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
@@ -554,6 +589,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should return forbidden error if user is NOT admin and updates status', async() => {
       // given
       const user = databaseBuilder.factory.buildEditorUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }));
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
