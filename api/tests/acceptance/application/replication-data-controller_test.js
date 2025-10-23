@@ -135,6 +135,7 @@ async function mockCurrentContent() {
     genealogy: Challenge.GENEALOGIES.PROTOTYPE,
     accessibility1: Challenge.ACCESSIBILITY1.OK,
     accessibility2: Challenge.ACCESSIBILITY2.OK,
+    skillId: 'recSkill1',
   });
   const alternativeChallenge = domainBuilder.buildChallenge({
     id: 'challenge-id-alt',
@@ -143,6 +144,7 @@ async function mockCurrentContent() {
     accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
     accessibility2: Challenge.ACCESSIBILITY2.RAS,
     files: null,
+    skillId: 'recSkill1',
   });
   const challengeNl = domainBuilder.buildChallenge({
     id: 'localized-challenge-id',
@@ -160,6 +162,7 @@ async function mockCurrentContent() {
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
     validatedAt: '2023-01-02T18:08:08.000Z',
+    skillId: 'recSkill1',
   });
   const expectedPrimaryProtoQualityAttributes = {
     requireGafamWebsiteAccess: true,
@@ -268,6 +271,8 @@ async function mockCurrentContent() {
   expectedCurrentContent.tubes.forEach(databaseBuilder.factory.buildTube);
   expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
   expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
+  databaseBuilder.factory.buildChallenge(challenge);
+  databaseBuilder.factory.buildChallenge(alternativeChallenge);
 
   airtableBuilder.mockLists({
     frameworks: [buildFramework({ ...expectedFramework, areaIds: [expectedArea.id] })],
