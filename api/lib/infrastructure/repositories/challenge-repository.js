@@ -72,39 +72,98 @@ export async function filterByThematicIds(thematicIds) {
 }
 
 export async function create(challenge) {
-  const createdChallengeDto = await challengeDatasource.create(challenge);
-  const primaryLocalizedChallenge = challenge.localizedChallenges[0];
-  await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge] });
+  return knex.transaction(async (transaction) => {
+    const createdChallengeDto = await challengeDatasource.create(challenge);
 
-  const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.save({ translations });
-  return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+    await transaction.insert({
+      id: challenge.id,
+      type: challenge.type,
+      t1Status: challenge.t1Status,
+      t2Status: challenge.t2Status,
+      t3Status: challenge.t3Status,
+      status: challenge.status,
+      skillId: createdChallengeDto.skillId,
+      embedHeight: challenge.embedHeight,
+      timer: challenge.timer,
+      format: challenge.format,
+      autoReply: challenge.autoReply,
+      locales: challenge.locales,
+      focusable: challenge.focusable,
+      genealogy: challenge.genealogy,
+      pedagogy: challenge.pedagogy,
+      author: challenge.author,
+      declinable: challenge.declinable,
+      version: challenge.version,
+      alternativeVersion: challenge.alternativeVersion,
+      accessibility1: challenge.accessibility1,
+      accessibility2: challenge.accessibility2,
+      spoil: challenge.spoil,
+      responsive: challenge.responsive,
+      shuffled: challenge.shuffled,
+      contextualizedFields: challenge.contextualizedFields,
+    }).into('challenges');
+
+    const primaryLocalizedChallenge = challenge.localizedChallenges[0];
+    await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge], transaction });
+
+    const translations = extractTranslationsFromChallenge(challenge);
+    await translationRepository.save({ translations, transaction });
+    return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+  });
 }
 
 export async function createBatch(challenges) {
-  if (!challenges || challenges.length === 0) return [];
-  const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
-  const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
-  for (const challenge of challenges) {
-    challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
-    challenge.files = [];
-  }
-  const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
-  const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
-  const allTranslations = challenges.flatMap((challenge) => {
-    const translationModels = [];
-    for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
-      for (const [field, value] of Object.entries(translationsForLocale)) {
-        translationModels.push(new Translation({
-          key: `${prefixFor(challenge)}${field}`,
-          locale,
-          value,
-        }));
-      }
-    }
-    return translationModels;
-  });
   return knex.transaction(async (transaction) => {
+    if (!challenges || challenges.length === 0) return [];
+    const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
+    const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
+    for (const challenge of challenges) {
+      challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
+      challenge.files = [];
+    }
+    const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
+    const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
+    const allTranslations = challenges.flatMap((challenge) => {
+      const translationModels = [];
+      for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
+        for (const [field, value] of Object.entries(translationsForLocale)) {
+          translationModels.push(new Translation({
+            key: `${prefixFor(challenge)}${field}`,
+            locale,
+            value,
+          }));
+        }
+      }
+      return translationModels;
+    });
+
+    await Promise.all(challenges.map((challenge) => transaction.insert({
+      id: challenge.id,
+      type: challenge.type,
+      t1Status: challenge.t1Status,
+      t2Status: challenge.t2Status,
+      t3Status: challenge.t3Status,
+      status: challenge.status,
+      skillId: challenge.skillId,
+      embedHeight: challenge.embedHeight,
+      timer: challenge.timer,
+      format: challenge.format,
+      autoReply: challenge.autoReply,
+      locales: challenge.locales,
+      focusable: challenge.focusable,
+      genealogy: challenge.genealogy,
+      pedagogy: challenge.pedagogy,
+      author: challenge.author,
+      declinable: challenge.declinable,
+      version: challenge.version,
+      alternativeVersion: challenge.alternativeVersion,
+      accessibility1: challenge.accessibility1,
+      accessibility2: challenge.accessibility2,
+      spoil: challenge.spoil,
+      responsive: challenge.responsive,
+      shuffled: challenge.shuffled,
+      contextualizedFields: challenge.contextualizedFields,
+    }).into('challenges')));
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
     await translationRepository.save({ translations: allTranslations, transaction });
     return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);
@@ -112,9 +171,40 @@ export async function createBatch(challenges) {
 }
 // TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
 // là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
-export async function update(challenge, knexConn = knex) {
+export async function update(challenge, transaction = knex) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction: knexConn });
+
+  await transaction('challenges').update({
+    type: challenge.type,
+    t1Status: challenge.t1Status,
+    t2Status: challenge.t2Status,
+    t3Status: challenge.t3Status,
+    status: challenge.status,
+    embedHeight: challenge.embedHeight,
+    timer: challenge.timer,
+    format: challenge.format,
+    autoReply: challenge.autoReply,
+    locales: challenge.locales,
+    focusable: challenge.focusable,
+    genealogy: challenge.genealogy,
+    pedagogy: challenge.pedagogy,
+    author: challenge.author,
+    declinable: challenge.declinable,
+    version: challenge.version,
+    alternativeVersion: challenge.alternativeVersion,
+    accessibility1: challenge.accessibility1,
+    accessibility2: challenge.accessibility2,
+    spoil: challenge.spoil,
+    responsive: challenge.responsive,
+    shuffled: challenge.shuffled,
+    contextualizedFields: challenge.contextualizedFields,
+    archivedAt: challenge.archivedAt,
+    madeObsoleteAt: challenge.madeObsoleteAt,
+    validatedAt: challenge.validatedAt,
+    updatedAt: transaction.fn.now(),
+  }).where('id', challenge.id);
+
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
   const oldPrimaryLocale = primaryLocalizedChallenge.locale;
@@ -135,16 +225,16 @@ export async function update(challenge, knexConn = knex) {
 
   await localizedChallengeRepository.update({
     localizedChallenge: primaryLocalizedChallenge,
-    transaction: knexConn,
+    transaction,
   });
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.deleteByKeyPrefixAndLocales({
     prefix: prefixFor(challenge),
     locales: [oldPrimaryLocale],
-    transaction: knexConn,
+    transaction,
   });
-  await translationRepository.save({ translations, transaction: knexConn });
+  await translationRepository.save({ translations, transaction });
   return toDomain(updatedChallengeDto, translations, localizedChallenges);
 }
 

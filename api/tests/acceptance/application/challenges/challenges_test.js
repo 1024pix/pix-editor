@@ -1488,12 +1488,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
             delta: null,
             embedUrl: null,
             embedTitle: 'embed title for es',
+            focusable: false,
             format: Challenge.FORMATS.MOTS,
             illustrationAlt: 'illustration alt for es',
             illustrationUrl: attachment.fields.url,
             instruction: 'instruction for es',
             locales: ['es-419'],
             proposals: 'proposals for es',
+            shuffled: false,
             solution: 'solution for es',
             solutionToDisplay: 'solution to display for es',
             skillId: null,
@@ -1612,13 +1614,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('POST /challenges', () => {
     let user;
+
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
+
     afterEach(async function() {
-      await knex('translations').truncate();
+      await knex('translations').delete();
       await knex('localized_challenges').delete();
+      await knex('challenges').delete();
     });
 
     it('should create a challenge', async () => {
@@ -1636,6 +1641,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challengeData);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
       const expectedBody = { records: [expectedBodyChallenge] };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeData.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
@@ -1934,8 +1947,43 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         ],
       });
-      const localizedChallenges = await knex('localized_challenges').select();
-      expect(localizedChallenges).to.deep.equal([
+      await expect(knex.select('*').from('challenges')).resolves.toStrictEqual([
+        {
+          accessibility1: challengeData.accessibility1,
+          accessibility2: challengeData.accessibility2,
+          alternativeVersion: challengeData.alternativeVersion,
+          alpha: null,
+          archivedAt: null,
+          author: challengeData.author,
+          autoReply: challengeData.autoReply,
+          contextualizedFields: challengeData.contextualizedFields,
+          createdAt: expect.any(Date),
+          declinable: challengeData.declinable,
+          delta: null,
+          embedHeight: challengeData.embedHeight,
+          focusable: challengeData.focusable,
+          format: challengeData.format,
+          genealogy: challengeData.genealogy,
+          id: challengeData.id,
+          locales: challengeData.locales,
+          madeObsoleteAt: null,
+          pedagogy: challengeData.pedagogy,
+          responsive: challengeData.responsive,
+          shuffled: challengeData.shuffled,
+          skillId: challengeData.skillId,
+          spoil: challengeData.spoil,
+          status: challengeData.status,
+          t1Status: challengeData.t1Status,
+          t2Status: challengeData.t2Status,
+          t3Status: challengeData.t3Status,
+          timer: challengeData.timer,
+          type: challengeData.type,
+          updatedAt: expect.any(Date),
+          validatedAt: null,
+          version: challengeData.version,
+        },
+      ]);
+      await expect(knex('localized_challenges').select()).resolves.toStrictEqual([
         {
           id: 'challengeId',
           challengeId: 'challengeId',
@@ -1954,8 +2002,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: null,
         }
       ]);
-      const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
-      expect(translations).to.deep.equal([
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.toStrictEqual([
         {
           key: 'challenge.challengeId.alternativeInstruction',
           locale: 'fr',
@@ -2004,6 +2051,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
       const expectedBody = { records: [expectedBodyChallenge] };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      await databaseBuilder.commit();
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
@@ -2108,6 +2163,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
         const expectedBody = { records: [expectedBodyChallenge] };
 
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+        await databaseBuilder.commit();
+
         const airtableCall = nock('https://api.airtable.com')
           .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
           .reply(
@@ -2191,6 +2254,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('PATCH /challenge', () => {
     let user;
+
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
     });
@@ -2209,6 +2273,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedTitle: 'Titre d\'embed',
         geography: 'NL',
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challenge);
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
@@ -2262,7 +2335,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
       await databaseBuilder.commit();
 
-      const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+      const newChallenge = {
+        ...challenge,
+        type: Challenge.TYPES.QCU,
+        author: [...challenge.author, 'NIC'],
+        t1Status: false,
+        t2Status: true,
+        t3Status: false,
+      };
+
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(newChallenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge);
       const expectedBody = { records: [expectedBodyChallenge] };
 
@@ -2282,40 +2364,40 @@ describe('Acceptance | Controller | challenges-controller', () => {
         payload: {
           data: {
             type: 'challenges',
-            id: challenge.id,
+            id: newChallenge.id,
             attributes: {
-              'airtable-id': challenge.airtableId,
-              instruction: challenge.instruction,
-              'alternative-instruction': challenge.alternativeInstruction,
-              type: challenge.type,
-              format: challenge.format,
-              proposals: challenge.proposals,
-              solution: challenge.solution,
-              'solution-to-display': challenge.solutionToDisplay,
-              't1-status': challenge.t1Status,
-              't2-status': challenge.t2Status,
-              't3-status': challenge.t3Status,
-              pedagogy: challenge.pedagogy,
-              author: challenge.author,
-              declinable: challenge.declinable,
-              version: challenge.version,
-              genealogy: challenge.genealogy,
-              status: challenge.status,
-              preview: challenge.preview,
-              timer: challenge.timer,
-              'embed-url': challenge.embedUrl,
-              'embed-title': challenge.embedTitle,
-              'embed-height': challenge.embedHeight,
-              'alternative-version': challenge.alternativeVersion,
-              accessibility1: challenge.accessibility1,
-              accessibility2: challenge.accessibility2,
-              spoil: challenge.spoil,
-              responsive: challenge.responsive,
-              locales: challenge.locales,
-              geography: challenge.geography,
+              'airtable-id': newChallenge.airtableId,
+              instruction: newChallenge.instruction,
+              'alternative-instruction': newChallenge.alternativeInstruction,
+              type: newChallenge.type,
+              format: newChallenge.format,
+              proposals: newChallenge.proposals,
+              solution: newChallenge.solution,
+              'solution-to-display': newChallenge.solutionToDisplay,
+              't1-status': newChallenge.t1Status,
+              't2-status': newChallenge.t2Status,
+              't3-status': newChallenge.t3Status,
+              pedagogy: newChallenge.pedagogy,
+              author: newChallenge.author,
+              declinable: newChallenge.declinable,
+              version: newChallenge.version,
+              genealogy: newChallenge.genealogy,
+              status: newChallenge.status,
+              preview: newChallenge.preview,
+              timer: newChallenge.timer,
+              'embed-url': newChallenge.embedUrl,
+              'embed-title': newChallenge.embedTitle,
+              'embed-height': newChallenge.embedHeight,
+              'alternative-version': newChallenge.alternativeVersion,
+              accessibility1: newChallenge.accessibility1,
+              accessibility2: newChallenge.accessibility2,
+              spoil: newChallenge.spoil,
+              responsive: newChallenge.responsive,
+              locales: newChallenge.locales,
+              geography: newChallenge.geography,
               'urls-to-consult': ['pouet.com'],
-              'auto-reply': challenge.autoReply,
-              focusable: challenge.focusable,
+              'auto-reply': newChallenge.autoReply,
+              focusable: newChallenge.focusable,
               'updated-at': '2021-10-04',
               'validated-at': '2023-02-02T14:17:30.820Z',
               'archived-at': '2023-03-03T10:47:05.555Z',
@@ -2361,16 +2443,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'airtable-id': challenge.airtableId,
             instruction: 'consigne',
             'alternative-instruction': 'consigne alternative',
-            type: Challenge.TYPES.QCM,
+            type: Challenge.TYPES.QCU,
             format: Challenge.FORMATS.MOTS,
             proposals: 'propositions',
             solution: 'solution',
             'solution-to-display': 'solution à afficher',
-            't1-status': true,
-            't2-status': false,
-            't3-status': true,
+            't1-status': false,
+            't2-status': true,
+            't3-status': false,
             pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-            author: ['SPS'],
+            author: ['SPS', 'NIC'],
             declinable: Challenge.DECLINABLES.FACILEMENT,
             version: 1,
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -2573,17 +2655,57 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         ],
       });
-      const localizedChallenge = await knex('localized_challenges').select().where('id', challengeId).first();
-      expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
-      expect(localizedChallenge).toHaveProperty('urlsToConsult', ['pouet.com']);
-      expect(localizedChallenge).toHaveProperty('geography', 'NL');
-      expect(localizedChallenge).toHaveProperty('requireGafamWebsiteAccess', false);
-      expect(localizedChallenge).toHaveProperty('isIncompatibleIpadCertif', false);
-      expect(localizedChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
-      expect(localizedChallenge).toHaveProperty('isAwarenessChallenge', false);
-      expect(localizedChallenge).toHaveProperty('toRephrase', false);
-      expect(localizedChallenge).toHaveProperty('hasEmbedInternalValidation', true);
-      expect(localizedChallenge).toHaveProperty('noValidationNeeded', true);
+
+      await expect(knex('challenges').select()).resolves.toStrictEqual([
+        {
+          accessibility1: newChallenge.accessibility1,
+          accessibility2: newChallenge.accessibility2,
+          alternativeVersion: newChallenge.alternativeVersion,
+          alpha: newChallenge.alpha,
+          archivedAt: new Date(newChallenge.archivedAt),
+          author: newChallenge.author,
+          autoReply: newChallenge.autoReply,
+          contextualizedFields: newChallenge.contextualizedFields,
+          createdAt: new Date(newChallenge.createdAt),
+          declinable: newChallenge.declinable,
+          delta: newChallenge.delta,
+          embedHeight: newChallenge.embedHeight,
+          focusable: newChallenge.focusable,
+          format: newChallenge.format,
+          genealogy: newChallenge.genealogy,
+          id: newChallenge.id,
+          locales: newChallenge.locales,
+          madeObsoleteAt: new Date(newChallenge.madeObsoleteAt),
+          pedagogy: newChallenge.pedagogy,
+          responsive: newChallenge.responsive,
+          shuffled: newChallenge.shuffled,
+          skillId: newChallenge.skillId,
+          spoil: newChallenge.spoil,
+          status: newChallenge.status,
+          t1Status: newChallenge.t1Status,
+          t2Status: newChallenge.t2Status,
+          t3Status: newChallenge.t3Status,
+          timer: newChallenge.timer,
+          type: newChallenge.type,
+          updatedAt: expect.any(Date),
+          validatedAt: new Date(newChallenge.validatedAt),
+          version: newChallenge.version,
+        },
+      ]);
+
+      await expect(knex('localized_challenges').select().where('id', challengeId).first()).resolves.to.deep.include({
+        embedUrl: challenge.embedUrl,
+        urlsToConsult: ['pouet.com'],
+        geography: 'NL',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      });
+
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -2618,7 +2740,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
 
-    it('should change challenge\'s primary locale', async () => {
+    it('should change challenge’s primary locale', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const originalLocale = 'fr-fr';
@@ -2634,6 +2756,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedTitle: 'Titre d\'embed',
         geography: 'JM',
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge({ ...challenge, locales: [originalLocale] });
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
@@ -2984,6 +3115,44 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         ],
       });
+
+      await expect(knex('challenges').select()).resolves.toStrictEqual([
+        {
+          accessibility1: challenge.accessibility1,
+          accessibility2: challenge.accessibility2,
+          alternativeVersion: challenge.alternativeVersion,
+          alpha: challenge.alpha,
+          archivedAt: new Date(challenge.archivedAt),
+          author: challenge.author,
+          autoReply: challenge.autoReply,
+          contextualizedFields: challenge.contextualizedFields,
+          createdAt: new Date(challenge.createdAt),
+          declinable: challenge.declinable,
+          delta: challenge.delta,
+          embedHeight: challenge.embedHeight,
+          focusable: challenge.focusable,
+          format: challenge.format,
+          genealogy: challenge.genealogy,
+          id: challenge.id,
+          locales: challenge.locales,
+          madeObsoleteAt: new Date(challenge.madeObsoleteAt),
+          pedagogy: challenge.pedagogy,
+          responsive: challenge.responsive,
+          shuffled: challenge.shuffled,
+          skillId: challenge.skillId,
+          spoil: challenge.spoil,
+          status: challenge.status,
+          t1Status: challenge.t1Status,
+          t2Status: challenge.t2Status,
+          t3Status: challenge.t3Status,
+          timer: challenge.timer,
+          type: challenge.type,
+          updatedAt: expect.any(Date),
+          validatedAt: new Date(challenge.validatedAt),
+          version: challenge.version,
+        },
+      ]);
+
       await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
         {
           id: challengeId,
@@ -3003,6 +3172,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: null,
         },
       ]);
+
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',

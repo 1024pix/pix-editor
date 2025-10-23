@@ -27,7 +27,6 @@ export class Challenge {
     focusable,
     format,
     genealogy,
-    geography,
     id,
     locales,
     localizedChallenges,
@@ -64,9 +63,8 @@ export class Challenge {
     this.delta = delta;
     this.embedHeight = embedHeight;
     this.focusable = focusable;
-    this.format = format;
+    this.format = format ?? Challenge.FORMATS.MOTS;
     this.genealogy = genealogy;
-    this.geography = geography;
     this.id = id;
     this.madeObsoleteAt = madeObsoleteAt;
     this.pedagogy = pedagogy;

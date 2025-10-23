@@ -8,8 +8,8 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
 
     it('should retrieve all whitelisted urls ordered by url', async () => {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
@@ -111,8 +111,8 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
 
     it('should retrieve given whitelisted url by its id', async () => {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
@@ -219,8 +219,8 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
 
     it('should update the whitelisted url', async function() {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
         createdBy: adminUser1.id,
@@ -259,8 +259,8 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
 
     it('should insert a new whitelisted url', async function() {
       // given
-      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
-      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin' });
+      const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
       await databaseBuilder.commit();
       const whitelistedUrlToSave = domainBuilder.buildWhitelistedUrl({
         id: null,

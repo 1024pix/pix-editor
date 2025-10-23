@@ -143,6 +143,7 @@ async function mockCurrentContent() {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        shuffled: false,
       }
     ],
     tutorials: [
@@ -552,6 +553,7 @@ async function mockContentForRelease() {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
+        shuffled: false,
       },
       {
         id: 'recChallenge0_1',
@@ -590,7 +592,9 @@ async function mockContentForRelease() {
         toRephrase: true,
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
-      },],
+        shuffled: false,
+      },
+    ],
     tutorials: [
       {
         id: 'recTutorial0',
