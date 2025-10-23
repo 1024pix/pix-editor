@@ -1,5 +1,5 @@
-@use "pix-design-tokens/shadows" as *;
-@use "pix-design-tokens/typography" as *;
+@use 'pix-design-tokens/shadows' as *;
+@use 'pix-design-tokens/typography' as *;
 
 .competence-overview {
   background: var(--pix-primary-10);

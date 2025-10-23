@@ -8,7 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | localized-challenge-view | localized-challenge-view', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let screen, store, challenge, competence, chalengeLocale, localizedChallenge, attachment;
+  let screen, store, challenge, competence, challengeLocale, localizedChallenge, attachment;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
@@ -35,7 +35,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         status: LocalizedChallenge.STATUSES.PLAY,
         attachments: [attachment, store.createRecord('attachment', { type: 'illustration' })],
       });
-    chalengeLocale = store.createRecord('challenge-locale', {
+    challengeLocale = store.createRecord('challenge-locale', {
       challenge,
       localizedChallenge,
       locale: 'en',
@@ -46,7 +46,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     // when
     screen = await render(<template>
       <LocalizedChallengeView
-        @challengeLocale={{chalengeLocale}}
+        @challengeLocale={{challengeLocale}}
         @localizedChallenge={{localizedChallenge}}
         @competence={{competence}}
         @overview={{'overview'}}
@@ -71,7 +71,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
       // when
       screen = await render(<template>
         <LocalizedChallengeView
-          @challengeLocale={{chalengeLocale}}
+          @challengeLocale={{challengeLocale}}
           @localizedChallenge={{localizedChallenge}}
           @competence={{competence}}
           @overview={{'overview'}}
@@ -93,7 +93,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
       // when
       screen = await render(<template>
         <LocalizedChallengeView
-          @challengeLocale={{chalengeLocale}}
+          @challengeLocale={{challengeLocale}}
           @localizedChallenge={{localizedChallenge}}
           @competence={{competence}}
           @overview={{'overview'}}
