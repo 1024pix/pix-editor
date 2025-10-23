@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
 import { Buffer } from 'node:buffer';
 import multipart from 'parse-multipart-data';
 import nock from 'nock';
-import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
 import { Area, LocalizedChallenge } from '../../../lib/domain/models/index.js';
@@ -124,8 +124,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Indice - en',
           },
           hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['recTutorial0'],
-          learningMoreTutorialIds: ['recTutorial1'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
           pixValue: 8,
           competenceId: 'recCompetence0',
           status: SkillForRelease.STATUSES.ACTIF,
@@ -140,8 +140,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Indice - en',
           },
           hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['recTutorial0'],
-          learningMoreTutorialIds: ['recTutorial1'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
           pixValue: 8,
           competenceId: 'recCompetence0',
           status: SkillForRelease.STATUSES.ARCHIVE,
@@ -156,8 +156,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Indice - en',
           },
           hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['recTutorial0'],
-          learningMoreTutorialIds: ['recTutorial1'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
           pixValue: 8,
           competenceId: 'recCompetence0',
           status: SkillForRelease.STATUSES.PERIME,
@@ -179,7 +179,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           skillId: 'recSkill0',
           embedUrl: 'Embed URL',
           embedTitle: 'Embed title',
-          embedHeight: 'Embed height',
+          embedHeight: null,
           timer: 12,
           illustrationUrl: 'url de l‘illustration',
           attachments: ['url de la pièce jointe'],
@@ -194,6 +194,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           alpha: 0.9,
           responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+          shuffled: false,
         },
         {
           id: 'recChallenge66',
@@ -209,7 +210,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           skillId: 'recSkill0',
           embedUrl: 'Embed URL66',
           embedTitle: 'Embed title66',
-          embedHeight: 'Embed height66',
+          embedHeight: 66,
           timer: 12,
           illustrationUrl: 'url de l‘illustration66',
           attachments: ['url de la pièce jointe66'],
@@ -224,11 +225,18 @@ describe('Acceptance | Controller | phrase-controller', () => {
           alpha: 0.9,
           responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
+          shuffled: true,
         }],
       };
-      databaseBuilder.factory.buildRelease({
-        content: releaseContent
-      });
+      databaseBuilder.factory.buildRelease({ content: releaseContent });
+
+      releaseContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
+      releaseContent.areas.forEach(databaseBuilder.factory.buildArea);
+      releaseContent.competences.forEach(databaseBuilder.factory.buildCompetence);
+      releaseContent.thematics.forEach(databaseBuilder.factory.buildThematic);
+      releaseContent.tubes.forEach(databaseBuilder.factory.buildTube);
+      releaseContent.skills.forEach(databaseBuilder.factory.buildSkill);
+      releaseContent.challenges.forEach(databaseBuilder.factory.buildChallenge);
 
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
@@ -405,6 +413,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({ uploadId: 'uplaodId', projectId: 'MY_PHRASE_PROJECT_ID' });
     });
   });
+
   describe('POST /phrase/download', () => {
     beforeEach(()=> {
       vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
@@ -413,8 +422,26 @@ describe('Acceptance | Controller | phrase-controller', () => {
       ]);
     });
 
+    afterEach(async () => {
+      await knex.delete().from('translations');
+      await knex.delete().from('localized_challenges');
+    });
+
     it('should download the translations from phrase', async () => {
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'recnrCmBiPXGbgIyQ', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'recnrCmBiPXGbgIyQ' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challenge1nwE8BcKcmiNvR', skillId: 'skill1' }));
+      databaseBuilder.factory.buildArea({ id: 'recDesCodesLaAreaDeux', code: '2', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '2.1', areaId: 'recDesCodesLaAreaDeux' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+      databaseBuilder.factory.buildTube({ id: 'tube2', name: '@tube', thematicId: 'thematic2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube2' });
+      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'challengeDeLAreaDeux', skillId: 'skill2' }));
       await databaseBuilder.commit();
 
       const phraseAPIAreaOneLocales = nock('https://api.phrase.com')
