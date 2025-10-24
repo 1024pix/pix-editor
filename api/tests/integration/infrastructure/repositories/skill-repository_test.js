@@ -11,62 +11,88 @@ describe('Integration | Repository | skill-repository', () => {
   describe('#list', () => {
     it('should return the list of all skills', async () => {
       // given
+      const skills = [
+        {
+          id: 'skill1',
+          airtableId: 'recId1',
+          name: '@foo4',
+          description: 'Description Acquis 1',
+          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+          hintStatus: Skill.HINT_STATUSES.VALIDE,
+          tutorialIds: ['tuto1', 'tuto2'],
+          tutorialAirtableIds: ['recTuto1', 'recTuto2'],
+          learningMoreTutorialIds: ['tuto3', 'tuto4'],
+          learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+          pixValue: 2.5,
+          competenceId: 'competence1',
+          status: Skill.STATUSES.PERIME,
+          tubeId: 'tube1',
+          tubeAirtableId: 'recTube1',
+          level: 4,
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+          version: 1,
+          challengeIds: ['challenge123184r9124'],
+          createdAt: '2025-01-01T09:58:57.465Z',
+          activatedAt: '2023-11-06T18:08:00Z',
+          archivedAt: '2023-12-07T18:08:00Z',
+          obsoletedAt: '2024-01-08T18:08:00Z',
+        },
+        {
+          id: 'skill2',
+          airtableId: 'recId2',
+          name: '@bar6',
+          description: 'Description Acquis 2',
+          descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+          hintStatus: Skill.HINT_STATUSES.PROPOSE,
+          tutorialIds: ['tuto5'],
+          tutorialAirtableIds: ['recTuto5'],
+          learningMoreTutorialIds: ['tuto6'],
+          learningMoreTutorialAirtableIds: ['recTuto6'],
+          pixValue: 1.6,
+          competenceId: 'competence2',
+          status: 'actif',
+          tubeId: 'tube2',
+          tubeAirtableId: 'recTube2',
+          level: 6,
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+          version: 2,
+          challengeIds: ['challengesdgff230fj38cs'],
+          createdAt: '2025-01-02T07:58:57.465Z',
+        },
+      ];
+
       const airtableScope = airtableBuilder
         .mockList({ tableName: 'Acquis' })
-        .returns([
-          airtableBuilder.factory.buildSkill({
-            id: 'skill1',
-            airtableId: 'recId1',
-            name: 'Acquis 1',
-            description: 'Description Acquis 1',
-            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-            hintStatus: Skill.HINT_STATUSES.VALIDE,
-            tutorialIds: ['tuto1', 'tuto2'],
-            tutorialAirtableIds: ['recTuto1', 'recTuto2'],
-            learningMoreTutorialIds: ['tuto3', 'tuto4'],
-            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-            pixValue: 2.5,
-            competenceId: 'competence1',
-            status: Skill.STATUSES.PERIME,
-            tubeId: 'tube1',
-            tubeAirtableId: 'recTube1',
-            level: 4,
-            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-            version: '1',
-            challengeIds: ['challenge123184r9124'],
-            createdAt: '2025-01-01T09:58:57.465Z',
-          }),
-          airtableBuilder.factory.buildSkill({
-            id: 'skill2',
-            airtableId: 'recId2',
-            name: 'Acquis 2',
-            description: 'Description Acquis 2',
-            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
-            hintStatus: Skill.HINT_STATUSES.PROPOSE,
-            tutorialIds: ['tuto5'],
-            tutorialAirtableIds: ['recTuto5'],
-            learningMoreTutorialIds: ['tuto6'],
-            learningMoreTutorialAirtableIds: ['recTuto6'],
-            pixValue: 1.6,
-            competenceId: 'competence2',
-            status: 'actif',
-            tubeId: 'tube2',
-            tubeAirtableId: 'recTube2',
-            level: 6,
-            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-            version: '2',
-            challengeIds: ['challengesdgff230fj38cs'],
-            createdAt: '2025-01-02T07:58:57.465Z',
-          }),
-        ])
+        .returns(skills.map(airtableBuilder.factory.buildSkill))
         .activate().nockScope;
 
-      databaseBuilder.factory.buildSkill({
-        id: 'skill1',
-        activatedAt: new Date('2023-11-06T18:08:00Z'),
-        archivedAt: new Date('2023-12-07T18:08:00Z'),
-        obsoletedAt: new Date('2024-01-08T18:08:00Z'),
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+
+      databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic2', competenceId: 'competence2' });
+      databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic2' });
+
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto1', tagIds: [] }));
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto2', tagIds: [] }));
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto3', tagIds: [] }));
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto4', tagIds: [] }));
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto5', tagIds: [] }));
+      databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto6', tagIds: [] }));
+
+      skills.forEach((skill) => {
+        databaseBuilder.factory.buildSkill(skill);
+        skill.challengeIds.forEach((id) =>
+          databaseBuilder.factory.buildChallenge(
+            domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill.id }),
+          ),
+        );
       });
+
       databaseBuilder.factory.buildTranslation({
         key: 'skill.skill1.hint',
         locale: 'fr',
@@ -91,14 +117,14 @@ describe('Integration | Repository | skill-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const skills = await skillRepository.list();
+      const results = await skillRepository.list();
 
       // then
-      expect(skills).toEqual([
+      expect(results).toEqual([
         domainBuilder.buildSkill({
           id: 'skill1',
           airtableId: 'recId1',
-          name: 'Acquis 1',
+          name: '@foo4',
           description: 'Description Acquis 1',
           descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
           hint_i18n: {
@@ -117,7 +143,7 @@ describe('Integration | Repository | skill-repository', () => {
           tubeAirtableId: 'recTube1',
           level: 4,
           internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          version: '1',
+          version: 1,
           challengeIds: ['challenge123184r9124'],
           createdAt: '2025-01-01T09:58:57.465Z',
           activatedAt: new Date('2023-11-06T18:08:00Z'),
@@ -127,7 +153,7 @@ describe('Integration | Repository | skill-repository', () => {
         domainBuilder.buildSkill({
           id: 'skill2',
           airtableId: 'recId2',
-          name: 'Acquis 2',
+          name: '@bar6',
           description: 'Description Acquis 2',
           descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
           hint_i18n: {
@@ -146,7 +172,7 @@ describe('Integration | Repository | skill-repository', () => {
           tubeAirtableId: 'recTube2',
           level: 6,
           internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-          version: '2',
+          version: 2,
           challengeIds: ['challengesdgff230fj38cs'],
           createdAt: '2025-01-02T07:58:57.465Z',
         }),

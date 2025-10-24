@@ -222,54 +222,54 @@ describe('Application | Route | Skills', () => {
 
     describe('with no filters', () => {
       beforeEach(async () => {
-        const airtableSkills = [
-          airtableBuilder.factory.buildSkill(
-            domainBuilder.buildSkillDatasourceObject({
-              id: 'skill1',
-              airtableId: 'recSkill1',
-              createdAt: '2025-01-06T13:50:47.437Z',
-              description: 'premier acquis',
-              descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-              hintStatus: Skill.HINT_STATUSES.VALIDE,
-              internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-              level: 4,
-              name: '@skill4',
-              pixValue: 1.5,
-              status: Skill.STATUSES.ACTIF,
-              version: 1,
-              tubeId: 'tube1',
-              tubeAirtableId: 'recTube1',
-              tutorialIds: ['tuto1'],
-              tutorialAirtableIds: ['recTuto1'],
-              learningMoreTutorialIds: ['tuto2', 'tuto3'],
-              learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
-              challengeIds: ['challenge1', 'challenge2'],
-            }),
-          ),
-          airtableBuilder.factory.buildSkill(
-            domainBuilder.buildSkillDatasourceObject({
-              id: 'skill2',
-              airtableId: 'recSkill2',
-              createdAt: '2025-01-06T13:51:04.381Z',
-              description: 'deuxième acquis',
-              descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
-              hintStatus: Skill.HINT_STATUSES.PROPOSE,
-              internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-              level: 3,
-              name: '@skill3',
-              pixValue: 1.8,
-              status: Skill.STATUSES.EN_CONSTRUCTION,
-              version: 2,
-              tubeId: 'tube2',
-              tubeAirtableId: 'recTube2',
-              tutorialIds: ['tuto2'],
-              tutorialAirtableIds: ['recTuto2'],
-              learningMoreTutorialIds: ['tuto3', 'tuto4'],
-              learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-              challengeIds: ['challenge3', 'challenge4', 'challenge5'],
-            }),
-          ),
+        const skills = [
+          domainBuilder.buildSkillDatasourceObject({
+            id: 'skill1',
+            airtableId: 'recSkill1',
+            createdAt: '2025-01-06T13:50:47.437Z',
+            description: 'premier acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+            hintStatus: Skill.HINT_STATUSES.VALIDE,
+            internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+            level: 4,
+            name: '@skill4',
+            pixValue: 1.5,
+            status: Skill.STATUSES.ACTIF,
+            version: 1,
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
+            tutorialIds: ['tuto1'],
+            tutorialAirtableIds: ['recTuto1'],
+            learningMoreTutorialIds: ['tuto2', 'tuto3'],
+            learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+            challengeIds: ['challenge1', 'challenge2'],
+            competenceId: 'competence1',
+          }),
+          domainBuilder.buildSkillDatasourceObject({
+            id: 'skill2',
+            airtableId: 'recSkill2',
+            createdAt: '2025-01-06T13:51:04.381Z',
+            description: 'deuxième acquis',
+            descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+            hintStatus: Skill.HINT_STATUSES.PROPOSE,
+            internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+            level: 3,
+            name: '@acquis3',
+            pixValue: 1.8,
+            status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 2,
+            tubeId: 'tube2',
+            tubeAirtableId: 'recTube2',
+            tutorialIds: ['tuto2'],
+            tutorialAirtableIds: ['recTuto2'],
+            learningMoreTutorialIds: ['tuto3', 'tuto4'],
+            learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            competenceId: 'competence1',
+          }),
         ];
+
+        const airtableSkills = skills.map(airtableBuilder.factory.buildSkill);
 
         airtableSkillsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Acquis')
@@ -279,6 +279,25 @@ describe('Application | Route | Skills', () => {
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, { records: airtableSkills });
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@acquis', thematicId: 'thematic1' });
+
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto1', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto2', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto3', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto4', tagIds: [] }));
+
+        skills.forEach((skill) => {
+          databaseBuilder.factory.buildSkill(skill);
+          skill.challengeIds.forEach((id) =>
+            databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id, skillId: skill.id })),
+          );
+        });
 
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
@@ -380,7 +399,7 @@ describe('Application | Route | Skills', () => {
                 'description-status': 'Proposé',
                 i18n: 'Monde',
                 level: 3,
-                name: '@skill3',
+                name: '@acquis3',
                 status: 'en construction',
                 version: 2,
               },
@@ -2147,15 +2166,13 @@ describe('Application | Route | Skills', () => {
       await expect(
         knex.select('*').from('skills-tutorials').where('skillId', 'clonedAcquisId').orderBy(['type', 'tutorialId']),
       ).resolves.toStrictEqual([
-        ...skillToClone.learningMoreTutorialIds
-          .toSorted()
-          .map((tutorialId) => ({
-            type: 'learningMore',
-            skillId: 'clonedAcquisId',
-            tutorialId,
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-          })),
+        ...skillToClone.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
+          type: 'learningMore',
+          skillId: 'clonedAcquisId',
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
         ...skillToClone.tutorialIds.map((tutorialId) => ({
           type: 'understanding',
           skillId: 'clonedAcquisId',
