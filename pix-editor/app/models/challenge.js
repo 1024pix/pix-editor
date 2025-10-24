@@ -86,7 +86,11 @@ export default class ChallengeModel extends Model {
   }
 
   async getChallengeForLocale(locale) {
-    const challengeLocale = this.challengeLocales.find((challengeLocale) => challengeLocale.locale === locale);
+    const canonicalLocale = Intl.getCanonicalLocales(locale).toString();
+
+    const challengeLocale = this.challengeLocales.find((challengeLocale) => {
+      return challengeLocale.locale === canonicalLocale;
+    });
     await challengeLocale.localizedChallenge;
     return challengeLocale;
   }

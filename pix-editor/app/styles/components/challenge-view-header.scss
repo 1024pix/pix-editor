@@ -49,6 +49,11 @@
       display: flex;
       align-items: center;
       padding-left: var(--pix-spacing-4x);
+
+      .phrase-link {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 
@@ -70,13 +75,14 @@
     display: flex;
     align-items: center;
     gap: var(--pix-spacing-2x);
+
   }
 
   &__action-buttons > &__button-icon {
     color: var(--pix-neutral-0);
 
     &:hover {
-      background-color: rgba(var(--pix-neutral-500-inline), 0.5);
+      background-color: rgba(var(--pix-neutral-500-inline), 0.5) !important;
     }
   }
 

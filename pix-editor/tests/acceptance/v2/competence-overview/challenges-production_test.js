@@ -3,6 +3,7 @@ import { currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import Challenge from 'pixeditor/models/challenge';
+import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
@@ -73,6 +74,7 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       name: skillName,
       pixId: skillId,
     });
+
     const challengeProduction = this.server.create('challenge', {
       id: 'challengeIdProto',
       genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -81,12 +83,16 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       locales: ['fr'],
     });
 
+    const attachment = this.server.create('attachment', { id: 'attachmentId', type: 'attachment', challengeId: 'challengeIdProto' });
+
     const localizedChallengeProduction = this.server.create('localized-challenge', {
       id: 'localizedChallengeIdProto',
       locale: 'nl',
-      status: Challenge.STATUSES.VALIDE,
+      status: LocalizedChallengeModel.STATUSES.PAUSE,
       instruction: 'hallo mama',
       challenge: challengeProduction,
+      embedURL: 'https://super-site.com',
+      attachments: [attachment],
     });
 
     const challengeLocale = this.server.create('challenge-locale', {
@@ -109,7 +115,6 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     // then
     assert.ok(screen.getByRole('heading', { name: '1.1 ma compétence' }));
     assert.ok(screen.getByRole('heading', { name: 'thematic name' }));
-    assert.ok(screen.getByRole('heading', { name: 'thematic name' }));
     assert.ok(screen.getByRole('heading', { name: '@tube' }));
     assert.ok(screen.getByText('@tube1'));
     assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('1');
@@ -130,16 +135,6 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
   });
 
-  test('should display a localized challenge production list', async function(assert) {
-    // when
-    const screen = await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
-    await clickByText('@tube1');
-
-    // then
-    assert.dom(screen.getByText('hallo mama'));
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
-  });
-
   test('it should navigate to challenge view', async function(assert) {
     await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('@tube1');
@@ -152,4 +147,28 @@ module('Acceptance | competences | challenge-production', function(hooks) {
 
     assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
   });
+
+  test('should display a localized challenge production list', async function(assert) {
+    // when
+    const screen = await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
+    await clickByText('@tube1');
+
+    // then
+    assert.dom(screen.getByText('hallo mama'));
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
+  });
+
+  test('it should navigate to localized-challenge view', async function(assert) {
+    await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
+    await clickByText('@tube1');
+    await clickByText('Proto');
+
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+
+    await clickByText('Fermer l\'épreuve');
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
+    await clickByText('hallo mama');
+    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+  });
+
 });

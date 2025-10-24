@@ -40,8 +40,7 @@ export default class CompetenceOverview extends Component {
   }
 
   <template>
-    <div class="competence-overview">
-      <div class="competence-overview-main {{if this.multipanelManager.gridShouldBeMinimized "competence-overview-main--hidden" ""}}">
+      <div class="competence-overview {{if this.multipanelManager.gridShouldBeMinimized "competence-overview--hidden" ""}}">
         <div class="competence-overview-actions">
           <ul class="competence-overview-actions__tabs">
             <li class="active">En production</li>
@@ -116,7 +115,6 @@ export default class CompetenceOverview extends Component {
             <p>Acquix : {{@competenceOverview.skillsCount}}</p>
           </div>
         </div>
-      </div>
     </div>
   </template>
 }

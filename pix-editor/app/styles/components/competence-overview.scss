@@ -4,9 +4,7 @@
 .competence-overview {
   background: var(--pix-primary-10);
   overflow-y: auto;
-}
-
-.competence-overview-main {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--pix-spacing-4x);
@@ -53,11 +51,11 @@
     gap: var(--pix-spacing-4x);
   }
 
-  &__refresh, &__fetch {
-    margin: .5rem 0;
+  &__refresh,
+  &__fetch {
+    margin: 0.5rem 0;
   }
 }
-
 
 .competence-overview-grid {
   display: grid;
@@ -66,22 +64,25 @@
   border-radius: var(--pix-spacing-2x);
   overflow: auto;
 
-  h3, h4 {
+  h3,
+  h4 {
     background: var(--pix-neutral-20);
     font-weight: var(--pix-font-medium);
     padding: 0 var(--pix-spacing-2x);
   }
 
-  h3, .skill {
+  h3,
+  .skill {
     text-align: center;
   }
 
-  h3, h4, .skill {
+  h3,
+  h4,
+  .skill {
     place-content: center;
     border-right: 1px solid var(--pix-neutral-500);
     border-bottom: 1px solid var(--pix-neutral-500);
   }
-
 
   .thematic:first-child {
     h3 {
@@ -104,7 +105,8 @@
     .tube:last-child {
       border-bottom: none;
 
-      .skill, h4 {
+      .skill,
+      h4 {
         border-bottom: none;
       }
 
@@ -124,12 +126,11 @@
   display: none;
 }
 
-
 .thematic {
   display: grid;
   grid-column: 1 / span 9;
   grid-template-columns: subgrid;
-  grid-template-rows:  max-content;
+  grid-template-rows: max-content;
 
   h3 {
     grid-row: span var(--tubes-count);
@@ -159,7 +160,7 @@
     li {
       display: flex;
       align-items: center;
-      gap: var(--pix-spacing-2x)
+      gap: var(--pix-spacing-2x);
     }
 
     .circle {

@@ -15,12 +15,26 @@ export default class ChallengeLocaleModel extends Model {
     return this.belongsTo('localizedChallenge').value();
   }
 
+  get localizedChallengeId() {
+    return this.localizedChallengeValue?.id;
+  }
+
   get isPrimaryInLocale() {
-    return this.challenge.locales.includes(this.locale);
+    return this.challenge.locales
+      .map((locale) => Intl.getCanonicalLocales(locale).toString())
+      .includes(this.locale);
+  }
+
+  get isPrototype() {
+    return this.challenge.isPrototype;
+  }
+
+  get alternativeVersion() {
+    return this.isPrototype ? 'Proto' : this.challenge.alternativeVersion;
   }
 
   get version() {
-    return this.challenge.isPrototype ? 'Proto' : this.challenge.alternativeVersion;
+    return this.challenge.version;
   }
 
   get instruction() {

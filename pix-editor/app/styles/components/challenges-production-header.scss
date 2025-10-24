@@ -28,7 +28,7 @@
     color: var(--pix-neutral-0);
 
     &:hover {
-      background-color: rgbq(var(--pix-neutral-500-inline), 0.5);
+      background-color: rgba(var(--pix-neutral-500-inline), 0.5) !important;
     }
   }
 }

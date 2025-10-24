@@ -2,6 +2,7 @@
   position: relative;
   overflow: auto;
   height: 100%;
+  flex: 1;
 
   &--hidden {
     display: none;
@@ -28,7 +29,7 @@
     &__item button {
       display: flex;
       align-items: center;
-      gap:  var(--pix-spacing-2x);
+      gap: var(--pix-spacing-2x);
       padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
       white-space: nowrap;
 
@@ -75,6 +76,5 @@ td.challenges-production-table {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 70%;
+  flex: 1;
 }
-

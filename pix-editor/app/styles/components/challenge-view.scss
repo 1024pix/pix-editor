@@ -5,6 +5,7 @@
   padding: var(--pix-spacing-4x) var(--pix-spacing-6x);
   gap: var(--pix-spacing-3x);
   overflow: auto;
+  flex: 2;
 
   .pix-checkbox {
     margin-top: 0;
@@ -72,5 +73,26 @@
     overflow: hidden;
     border: 0;
     clip: rect(0,0,0,0);
+  }
+
+  &-default-embed-url {
+    background-color: var(--pix-info-50);
+    font-size: .875rem;
+    font-weight: 500;
+    padding: .5rem;
+    width: fit-content;
+    border-radius: 5px;
+    border: solid 1px var(--pix-tertiary-100);
+    margin-top: .5rem;
+  }
+
+  &-editable-fields {
+    padding: 1rem;
+    border: solid 1px var(--pix-tertiary-100);
+    border-radius: var(--pix-spacing-2x);
+
+    & > * {
+      margin-bottom: 1rem
+    }
   }
 }
