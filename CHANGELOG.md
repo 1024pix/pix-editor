@@ -1,5 +1,22 @@
 
 
+## v3.228.0 (24/10/2025)
+
+
+### :rocket: Amélioration
+- [#1163](https://github.com/1024pix/pix-editor/pull/1163) [FEATURE] Permettre de consulter une épreuve traduite en V2 (PIX-19684).
+- [#1166](https://github.com/1024pix/pix-editor/pull/1166) [FEATURE] Enlever les notes de la création de tutoriel (PIX-20030).
+
+### :building_construction: Tech
+- [#1183](https://github.com/1024pix/pix-editor/pull/1183) [TECH] Écriture des épreuves dans Postgres (PIX-19943).
+
+### :arrow_up: Montée de version
+- [#1181](https://github.com/1024pix/pix-editor/pull/1181) [BUMP] Update dependency eslint-plugin-mocha to v11 (scripts).
+- [#1182](https://github.com/1024pix/pix-editor/pull/1182) [BUMP] Update dependency sinon to v20 (pix-editor).
+- [#1178](https://github.com/1024pix/pix-editor/pull/1178) [BUMP] Update dependency eslint-plugin-mocha to v11 (api).
+- [#1131](https://github.com/1024pix/pix-editor/pull/1131) [BUMP] Update dependency jspdf to v3 [SECURITY].
+- [#1179](https://github.com/1024pix/pix-editor/pull/1179) [BUMP] Update dependency stylelint-config-standard-scss to v16 (pix-editor).
+
 ## v3.227.0 (21/10/2025)
 
 
