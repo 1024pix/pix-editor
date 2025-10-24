@@ -20,7 +20,6 @@ export function buildTag({ title, index, databaseBuilder }) {
     id: tagId,
     title,
     description: `description for ${tagId}`,
-    notes: `notes for ${tagId}`,
     skillAirtableIds: [],
     tutorialAirtableIds: [],
   };
@@ -37,7 +36,7 @@ export async function persistTags({ items, airtableClient, logger }) {
 }
 
 export async function copyTutorialTagsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableTutorialTags = await  airtableClient.table('Tags').select({ fields: ['id persistant', 'Nom', 'Notes'] }).all();
+  const airtableTutorialTags = await  airtableClient.table('Tags').select({ fields: ['id persistant', 'Nom'] }).all();
 
   logger.info(`Copying ${airtableTutorialTags.length} tutorial tags from airtable...`);
 
@@ -45,7 +44,6 @@ export async function copyTutorialTagsFromAirtable({ airtableClient, databaseBui
     databaseBuilder.factory.buildTag({
       id: record.get('id persistant'),
       title: record.get('Nom'),
-      notes: record.get('Notes'),
       createdAt: record._rawJson.createdTime,
       updatedAt: new Date(),
     });

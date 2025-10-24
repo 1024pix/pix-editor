@@ -31,8 +31,7 @@ describe('Application | Route | Tags', () => {
             data: {
               type: 'tags',
               attributes: {
-                'title': 'Internet',
-                'notes': 'une note',
+                'title': 'Internet'
               },
             },
           },
@@ -57,8 +56,7 @@ describe('Application | Route | Tags', () => {
             data: {
               type: 'tags',
               attributes: {
-                'titlee': 'Internet',
-                'notes': 'une note',
+                'titlee': 'Internet'
               },
             },
           },
@@ -101,8 +99,7 @@ describe('Application | Route | Tags', () => {
             data: {
               type: 'tags',
               attributes: {
-                'title': 'FRUITS',
-                'notes': 'une note',
+                'title': 'FRUITS'
               },
             },
           },
@@ -132,14 +129,13 @@ describe('Application | Route | Tags', () => {
           });
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
         generateNewId.mockReturnValue('tagId2');
-        const createdAirtableTag = airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'Internet', notes: 'une note' });
+        const createdAirtableTag = airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'Internet' });
         airtableCreateTagScope = nock('https://api.airtable.com')
           .post('/v0/airtableBaseValue/Tags/', {
             records: [{
               fields: {
                 'id persistant': 'tagId2',
-                'Nom': 'Internet',
-                'Notes': 'une note',
+                'Nom': 'Internet'
               },
             }],
           })
@@ -156,8 +152,7 @@ describe('Application | Route | Tags', () => {
             data: {
               type: 'tags',
               attributes: {
-                'title': 'Internet',
-                'notes': 'une note',
+                'title': 'Internet'
               },
             },
           },
@@ -172,8 +167,7 @@ describe('Application | Route | Tags', () => {
             id: 'tagAirtableId2',
             attributes: {
               'pix-id': 'tagId2',
-              'title': 'Internet',
-              'notes': 'une note',
+              'title': 'Internet'
             },
           },
         });
@@ -183,7 +177,6 @@ describe('Application | Route | Tags', () => {
         await expect(knex('tutorial_tags').select().first()).resolves.toEqual({
           id: 'tagId2',
           title: 'Internet',
-          notes: 'une note',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         });
@@ -239,14 +232,12 @@ describe('Application | Route | Tags', () => {
         databaseBuilder.factory.buildTag({
           id: 'tagId1',
           title: 'Fruits',
-          notes: 'une note',
         });
         await databaseBuilder.commit();
         const airtableTag = airtableBuilder.factory.buildTag({
           id: 'tagId1',
           airtableId: 'tagAirtableId1',
           title: 'Fruits',
-          notes: 'une note',
         });
         airtableGetTagScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
@@ -271,7 +262,6 @@ describe('Application | Route | Tags', () => {
             attributes: {
               'pix-id': 'tagId1',
               'title': 'Fruits',
-              'notes': 'une note',
             },
           },
         });
@@ -305,7 +295,7 @@ describe('Application | Route | Tags', () => {
       context('when searching by titles', function() {
         it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
           // given
-          databaseBuilder.factory.buildTag({ id: 'tagId3', notes: 'une note', title: 'france' });
+          databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'france' });
           databaseBuilder.factory.buildTag({ id: 'tagId4', title: 'freT' });
           databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'frontieRe' });
           databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'ééééfréééé' });
@@ -315,7 +305,7 @@ describe('Application | Route | Tags', () => {
           const airtableTags = [
             airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'ééééfréééé' }),
             airtableBuilder.factory.buildTag({ id: 'tagId5', airtableId: 'tagAirtableId5', title: 'FR' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
           ];
           airtableSearchTagsScope = nock('https://api.airtable.com')
@@ -365,7 +355,6 @@ describe('Application | Route | Tags', () => {
                 attributes: {
                   'pix-id': 'tagId3',
                   'title': 'france',
-                  'notes': 'une note',
                 },
               },
               {
@@ -385,13 +374,13 @@ describe('Application | Route | Tags', () => {
       context('when searching by ids', function() {
         it('should respond with status 200 and related tags', async () => {
           // given
-          databaseBuilder.factory.buildTag({ id: 'tagId3', notes: 'une note', title: 'france' });
+          databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'france' });
           databaseBuilder.factory.buildTag({ id: 'tagId4', title: 'freT' });
           databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'frontieRe' });
           await databaseBuilder.commit();
 
           const airtableTags = [
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', notes: 'une note', title: 'france' }),
+            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', title: 'france' }),
             airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
             airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
           ];
@@ -425,7 +414,6 @@ describe('Application | Route | Tags', () => {
                 attributes: {
                   'pix-id': 'tagId3',
                   'title': 'france',
-                  'notes': 'une note',
                 },
               },
               {

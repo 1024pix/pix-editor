@@ -7,14 +7,12 @@ const serializer = new Serializer('tag', {
   attributes: [
     'pixId',
     'title',
-    'notes',
   ],
   transform(tag) {
     return {
       id: tag.airtableId,
       pixId: tag.id,
       title: tag.title,
-      notes: tag.notes,
     };
   },
 });

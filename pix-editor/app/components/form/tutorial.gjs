@@ -11,17 +11,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import { eq } from 'ember-truth-helpers';
 
-function parseTitleAndNotes(query) {
-  const hasNote = query.includes('[');
-
-  if (!hasNote) {
-    return { title: query, notes: null };
-  }
-
-  const [, title, notes] = query.match(/^(.+?)\[(.+?)\]/);
-  return { title, notes };
-}
-
 function formattedOptionList(list) {
   return list.map((option) => ({ label: option, value: option }));
 }
@@ -98,7 +87,7 @@ export default class TutorialForm extends Component {
     })
       .then((tags) => {
         const results = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
-        results.push({ label: 'Ajouter', description: 'Créer un tag[note]', value: 'create' });
+        results.push({ label: 'Ajouter', description: 'Créer un tag', value: 'create' });
         return results;
       });
   }
@@ -134,11 +123,8 @@ export default class TutorialForm extends Component {
     const shouldCreate = selectedTagIds.includes('create');
     if (shouldCreate) {
       try {
-        const { title, notes } = parseTitleAndNotes(this.currentQuery);
-        const storedTag = await this.store.createRecord('tag', {
-          title,
-          notes,
-        }).save();
+        const title = this.currentQuery;
+        const storedTag = await this.store.createRecord('tag', { title }).save();
         tags.push(storedTag);
         this.tagListOptions.push({ label: storedTag.title, value: storedTag.id });
       } catch (err) {

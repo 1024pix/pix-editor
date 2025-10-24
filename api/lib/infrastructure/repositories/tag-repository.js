@@ -2,7 +2,7 @@ import { Tag } from '../../domain/models/index.js';
 import { tagDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
+import { compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'tutorial_tags';
 
@@ -10,7 +10,7 @@ export async function create(tag) {
   tag.id = generateNewId('tag');
   const [datasourceTag] = await Promise.all([
     tagDatasource.create(tag),
-    knex(TABLE_NAME).insert({ id: tag.id, title: tag.title, notes: tag.notes }),
+    knex(TABLE_NAME).insert({ id: tag.id, title: tag.title }),
   ]);
   return toDomain(datasourceTag);
 }
@@ -65,7 +65,6 @@ function compareTagDtos(airtableTag, pgTag) {
   const diff = [];
   if (airtableTag.id !== pgTag.id) diff.push(`tag airtable id "${airtableTag.id}" != postgres id "${pgTag.id}"`);
   if (airtableTag.title !== pgTag.title) diff.push(`tag airtable title "${airtableTag.title}" != postgres title "${pgTag.title}"`);
-  if (!areNullableValuesEqual(airtableTag.notes, pgTag.notes)) diff.push(`tag airtable notes "${airtableTag.notes}" != postgres notes "${pgTag.notes}"`);
   return diff;
 }
 
