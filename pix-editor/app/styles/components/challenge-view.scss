@@ -89,12 +89,45 @@
   }
 
   &-editable-fields {
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
     border: solid 1px var(--pix-tertiary-100);
     border-radius: var(--pix-spacing-2x);
 
     & > * {
-      margin-bottom: 1rem
+      margin-bottom: var(--pix-spacing-2x);
+    }
+  }
+
+  label {
+    font-size: 1rem;
+    font-weight: var(--pix-font-medium);
+    color: var(--pix-neutral-900);
+  }
+}
+
+.challenge-view-url-to-consult {
+  &--label {
+    margin-bottom: 0;
+  }
+
+  &--info {
+    font-size: .875rem;
+    color: var(--pix-neutral-500)
+  }
+
+  &--textarea {
+    font-size: 1rem;
+    resize: none;
+    border-radius: var(--pix-spacing-1x);
+    border: solid 1px var(--pix-neutral-100);
+    padding: var(--pix-spacing-2x) var(--pix-spacing-3x);
+    margin-top: var(--pix-spacing-1x);
+
+    &[readonly] {
+      background: var(--pix-neutral-20);
+      color:var(--pix-neutral-500);
     }
   }
 }

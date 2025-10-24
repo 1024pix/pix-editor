@@ -232,9 +232,24 @@ function routes() {
 
   this.patch('/localized-challenges/:id', (schema, request) => {
     const localizedChallenge = schema.localizedChallenges.find(request.params.id);
-    const { status } = JSON.parse(request.requestBody);
+    console.log(request.requestBody);
+    const {
+      locale,
+      status,
+      instruction,
+      challenge,
+      'embed-url': embedURL,
+      geography,
+    } = JSON.parse(request.requestBody);
 
-    localizedChallenge.update({ status });
+    localizedChallenge.update({
+      locale,
+      status,
+      instruction,
+      challenge,
+      embedURL,
+      geography,
+    });
 
     return localizedChallenge;
   });

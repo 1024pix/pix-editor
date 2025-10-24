@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
@@ -37,6 +38,11 @@ export default class ChallengeRoute extends Route {
     await challengeLocale.challenge.attachments;
     await localizedChallenge.attachments;
     return { challengeLocale, localizedChallenge, challengeLocales, competence, overview, skill };
+  }
+
+  @action
+  willTransition(transition) {
+
   }
 }
 
