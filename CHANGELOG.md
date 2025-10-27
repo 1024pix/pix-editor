@@ -1,5 +1,11 @@
 
 
+## v3.229.0 (27/10/2025)
+
+
+### :building_construction: Tech
+- [#1184](https://github.com/1024pix/pix-editor/pull/1184) [TECH] Ajout contrainte intégrité entre `localized_challenges` et `challenges` (PIX-20082).
+
 ## v3.228.3 (27/10/2025)
 
 
