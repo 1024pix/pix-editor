@@ -26,6 +26,7 @@ describe('Acceptance | Route | attachments', () => {
 
   describe('POST /attachments', () => {
     let validPayload;
+
     beforeEach(function () {
       validPayload = {
         data: {
@@ -55,8 +56,9 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    afterEach(function () {
-      return knex('localized_challenges-attachments').truncate();
+    afterEach(async function () {
+      await knex('localized_challenges-attachments').delete();
+      await knex('attachments').delete();
     });
 
     context('when user is NOT editor', () => {
@@ -226,6 +228,29 @@ describe('Acceptance | Route | attachments', () => {
           },
         },
       });
+
+      await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([
+        {
+          id: 'airtableAttachmentId',
+          url: validPayload.data.attributes.url,
+          size: validPayload.data.attributes.size,
+          type: validPayload.data.attributes.type,
+          mimeType: validPayload.data.attributes['mime-type'],
+          filename: validPayload.data.attributes.filename,
+          challengeId: 'challenge123',
+          localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
+      await expect(knex.select('*').from('localized_challenges-attachments')).resolves.toStrictEqual([
+        {
+          localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
+          attachmentId: 'airtableAttachmentId',
+        },
+      ]);
+
       expect(airtablePostAttachmentScope.isDone()).toBe(true);
       expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
     });

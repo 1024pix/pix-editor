@@ -490,8 +490,9 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(() => {
-      return knex('localized_challenges-attachments').truncate();
+    afterEach(async () => {
+      await knex('localized_challenges-attachments').delete();
+      await knex('attachments').delete();
     });
 
     it('should create an attachment in airtable with relationship to airtable challenge and create the link to the localized challenge', async () => {
@@ -576,14 +577,29 @@ describe('Integration | Repository | attachment-repository', () => {
         airtableChallengeId: 'airtableChallengeId',
       });
       expect(createdAttachment).toStrictEqual(expectedAttachment);
-      const localizedChallengeAttachment = await knex('localized_challenges-attachments')
-        .select(['attachmentId', 'localizedChallengeId'])
-        .where({ localizedChallengeId: attachment.localizedChallengeId })
-        .first();
-      expect(localizedChallengeAttachment).toStrictEqual({
-        attachmentId: 'airtableIdAttachment',
-        localizedChallengeId: attachment.localizedChallengeId,
-      });
+
+      await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([
+        {
+          id: 'airtableIdAttachment',
+          url: attachment.url,
+          type: attachment.type,
+          size: attachment.size,
+          mimeType: attachment.mimeType,
+          filename: attachment.filename,
+          challengeId: challengeId1,
+          localizedChallengeId: 'challengeIdES',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
+      await expect(
+        knex('localized_challenges-attachments')
+          .select(['attachmentId', 'localizedChallengeId'])
+          .where({ localizedChallengeId: attachment.localizedChallengeId }),
+      ).resolves.toStrictEqual([
+        { attachmentId: 'airtableIdAttachment', localizedChallengeId: attachment.localizedChallengeId },
+      ]);
     });
   });
 
