@@ -21,32 +21,50 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 }
 
 export async function createBatch(attachments) {
-  if (!attachments || attachments.length === 0) return [];
-  const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
-  const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
-  const attachmentToSaveDTOs = [];
+  return knex.transaction(async (transaction) => {
+    if (!attachments || attachments.length === 0) return [];
+    const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
+    const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
+    const attachmentToSaveDTOs = [];
 
-  for (const attachment of attachments) {
-    attachmentToSaveDTOs.push({
-      url: attachment.url,
-      size: attachment.size,
-      type: attachment.type,
-      mimeType: attachment.mimeType,
-      filename: attachment.filename,
-      challengeId: airtableChallengeIdsByIds[attachment.challengeId],
-      localizedChallengeId: attachment.localizedChallengeId,
-    });
-  }
-  const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
-  await knex
-    .insert(
-      createdAttachmentsDtos.map(({ localizedChallengeId, id: attachmentId }) => ({
-        attachmentId,
-        localizedChallengeId,
-      })),
-    )
-    .into('localized_challenges-attachments');
-  return toDomainList(createdAttachmentsDtos);
+    for (const attachment of attachments) {
+      attachmentToSaveDTOs.push({
+        url: attachment.url,
+        size: attachment.size,
+        type: attachment.type,
+        mimeType: attachment.mimeType,
+        filename: attachment.filename,
+        challengeId: airtableChallengeIdsByIds[attachment.challengeId],
+        localizedChallengeId: attachment.localizedChallengeId,
+      });
+    }
+    const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
+
+    await transaction
+      .insert(
+        createdAttachmentsDtos.map((airtableDto) => ({
+          id: airtableDto.id,
+          url: airtableDto.url,
+          size: airtableDto.size,
+          type: airtableDto.type,
+          mimeType: airtableDto.mimeType,
+          filename: airtableDto.filename,
+          challengeId: airtableDto.challengeId,
+          localizedChallengeId: airtableDto.localizedChallengeId,
+        })),
+      )
+      .into('attachments');
+    await transaction
+      .insert(
+        createdAttachmentsDtos.map(({ localizedChallengeId, id: attachmentId }) => ({
+          attachmentId,
+          localizedChallengeId,
+        })),
+      )
+      .into('localized_challenges-attachments');
+
+    return toDomainList(createdAttachmentsDtos);
+  });
 }
 
 export async function create(attachment) {

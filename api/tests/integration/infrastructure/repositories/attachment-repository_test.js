@@ -333,8 +333,9 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#createBatch', () => {
-    afterEach(() => {
-      return knex('localized_challenges-attachments').truncate();
+    afterEach(async () => {
+      await knex('localized_challenges-attachments').delete();
+      await knex('attachments').delete();
     });
 
     it('should create several attachments in airtable and the links to the localized challenge', async () => {
@@ -473,10 +474,39 @@ describe('Integration | Repository | attachment-repository', () => {
           localizedChallengeId: attachmentB.localizedChallengeId,
         }),
       ]);
-      const allLocalizedChallengeAttachments = await knex('localized_challenges-attachments')
-        .select(['attachmentId', 'localizedChallengeId'])
-        .orderBy('attachmentId');
-      expect(allLocalizedChallengeAttachments).toStrictEqual([
+
+      await expect(knex.select('*').from('attachments').orderBy('id')).resolves.toStrictEqual([
+        {
+          id: 'airtableIdAttachmentA',
+          url: attachmentA.url,
+          type: attachmentA.type,
+          size: attachmentA.size,
+          mimeType: attachmentA.mimeType,
+          filename: attachmentA.filename,
+          challengeId: attachmentA.challengeId,
+          localizedChallengeId: attachmentA.localizedChallengeId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+        {
+          id: 'airtableIdAttachmentB',
+          url: attachmentB.url,
+          type: attachmentB.type,
+          size: attachmentB.size,
+          mimeType: attachmentB.mimeType,
+          filename: attachmentB.filename,
+          challengeId: attachmentB.challengeId,
+          localizedChallengeId: attachmentB.localizedChallengeId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
+      await expect(
+        knex('localized_challenges-attachments')
+          .select(['attachmentId', 'localizedChallengeId'])
+          .orderBy('attachmentId'),
+      ).resolves.toStrictEqual([
         {
           attachmentId: 'airtableIdAttachmentA',
           localizedChallengeId: attachmentA.localizedChallengeId,

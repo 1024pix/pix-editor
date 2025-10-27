@@ -2182,7 +2182,7 @@ describe('Application | Route | Skills', () => {
               fields: {
                 ...createdAttachmentFields,
                 'Record ID': 'recOsef',
-                'challengeId persistant': 'clonedChallengeId',
+                'challengeId persistant': ['clonedChallengeId'],
               },
             },
           ],
@@ -2216,6 +2216,7 @@ describe('Application | Route | Skills', () => {
     afterEach(async () => {
       await knex('skills-tutorials').delete();
       await knex('localized_challenges-attachments').delete();
+      await knex('attachments').delete();
       await knex('localized_challenges').delete();
       await knex('challenges').delete();
       await knex('skills').delete();
@@ -2339,6 +2340,23 @@ describe('Application | Route | Skills', () => {
           toRephrase: false,
           urlsToConsult: null,
           validatedAt: null,
+        },
+      ]);
+
+      await expect(
+        knex.select('*').from('attachments').where('challengeId', 'clonedChallengeId'),
+      ).resolves.toStrictEqual([
+        {
+          id: 'recOsef',
+          challengeId: 'clonedChallengeId',
+          filename: 'nom_fichier',
+          localizedChallengeId: 'clonedChallengeId',
+          mimeType: 'image/jpeg',
+          size: 123,
+          type: 'illustration',
+          url: 'url/to/attachment',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         },
       ]);
 
