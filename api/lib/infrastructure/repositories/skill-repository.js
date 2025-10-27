@@ -72,19 +72,19 @@ export async function getManyByAirtableIds(ids) {
 }
 
 export async function listByTubeId(tubeId) {
-  const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
-  if (!datasourceSkills) return [];
+  const [airtableDtos, pgDtos] = await Promise.all([
+    skillDatasource.filterByTubeId(tubeId),
+    selectSkills().where('skills.tubeId', tubeId),
+  ]);
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listActiveByCompetenceId(competenceId) {

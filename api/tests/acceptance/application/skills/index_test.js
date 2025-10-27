@@ -1122,21 +1122,31 @@ describe('Application | Route | Skills', () => {
       };
 
       const skills = [
-        {
+        domainBuilder.buildSkillDatasourceObject({
           id: 'skill1Tube1',
           airtableId: 'recSkill1Tube1',
           tubeId: 'tube1',
           tubeAirtableId: 'recTube1',
           level: 1,
           version: 1,
-        },
-        {
+          name: '@tube1',
+          competenceId: 'competence1',
+          challengeIds: [],
+          tutorialIds: ['tuto1', 'tuto3'],
+          learningMoreTutorialIds: ['tuto2'],
+        }),
+        domainBuilder.buildSkillDatasourceObject({
           id: 'skill2Tube1',
           airtableId: 'recSkill2Tube1',
           tubeId: 'tube1',
           tubeAirtableId: 'recTube1',
           level: 2,
-        },
+          name: '@tube2',
+          competenceId: 'competence1',
+          challengeIds: [],
+          tutorialIds: ['tuto2', 'tuto3'],
+          learningMoreTutorialIds: [],
+        }),
       ];
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1430,7 +1440,9 @@ describe('Application | Route | Skills', () => {
         { key: 'skill.nouvelAcquis.hint', locale: 'fr', value: 'L indice de mon nouvel acquis' },
       ]);
 
-      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('*').from('skills-tutorials').where('skillId', 'nouvelAcquis').orderBy(['type', 'tutorialId']),
+      ).resolves.toStrictEqual([
         {
           type: 'learningMore',
           skillId: 'nouvelAcquis',
@@ -1819,24 +1831,27 @@ describe('Application | Route | Skills', () => {
         index: 5,
         competenceId: 'competence1',
         thematicId: 'thematic1',
-        skillIds: ['skill1', 'skill2', 'skill1Tube1'],
+        skillIds: ['skill1Tube1', 'skill2Tube1'],
       };
       const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
       databaseBuilder.factory.buildTube(tube);
-      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: tube.id });
-      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: tube.id });
+      const skillAlreadyAtDestinationTubeLevel = domainBuilder.buildSkillDatasourceObject({
+        id: 'skill2Tube1',
+        airtableId: 'recSkill2Tube1',
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        level: 2,
+        version: 1,
+        name: '@tube2',
+        competenceId: 'competence1',
+        challengeIds: [],
+      });
+      databaseBuilder.factory.buildSkill(skillAlreadyAtDestinationTubeLevel);
       databaseBuilder.factory.buildSkill(skillToClone);
 
       const airtableSkillToClone = airtableBuilder.factory.buildSkill(skillToClone);
       const airtableSkillAlreadyAtDestinationTubeLevel = airtableBuilder.factory.buildSkill(
-        domainBuilder.buildSkillDatasourceObject({
-          id: 'skill2Tube1',
-          airtableId: 'recSkill2Tube1',
-          tubeId: 'tube1',
-          tubeAirtableId: 'recTube1',
-          level: 2,
-          version: 1,
-        }),
+        skillAlreadyAtDestinationTubeLevel,
       );
       const airtableSkills = [airtableSkillToClone, airtableSkillAlreadyAtDestinationTubeLevel];
       const skillTradFr = databaseBuilder.factory.buildTranslation({
