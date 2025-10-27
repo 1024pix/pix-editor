@@ -1,18 +1,32 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, knex } from '../../../test-helper.js';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengesAttachmentsRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | localized-challenges-attachments-repository', function() {
+  const challengeId = 'challengeId';
+
+  beforeEach(async () => {
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+    databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+    databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }));
+    await databaseBuilder.commit();
+  });
+
   describe('#save', () => {
     afterEach(async function() {
       await knex('localized_challenges-attachments').delete();
     });
+
     it('should save attachment and localized challenge ids', async function() {
       // given
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
-        challengeId: 'challengeId',
+        challengeId,
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
         status: LocalizedChallenge.STATUSES.PAUSE,
@@ -31,12 +45,13 @@ describe('Integration | Repository | localized-challenges-attachments-repository
       }]);
     });
   });
+
   describe('#deleteByAttachmentId', () => {
     it('should delete localizedChallengeAttachment', async () => {
       // given
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localized-challenge-id',
-        challengeId: 'challengeId',
+        challengeId,
         locale: 'fr',
         embedUrl: 'https://example.com/embed.html',
         status: LocalizedChallenge.STATUSES.PAUSE,

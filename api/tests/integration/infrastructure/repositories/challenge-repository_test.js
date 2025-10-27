@@ -22,9 +22,6 @@ import Airtable from 'airtable';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Integration | Repository | challenge-repository', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
 
   describe('get', () => {
     it('should return the challenge when exist', async () => {
@@ -47,21 +44,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3StatusAirtable: 'Activé',
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
-        embedUrl: 'embedUrl challengeA',
-        embedHeight: 'embedHeight challengeA',
+        embedHeight: 678,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeA',
+        focusable: false,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeA',
+        author: ['QWE'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeA',
-        alternativeVersion: 'alternativeVersion challengeA',
+        version: 1,
+        alternativeVersion: 2,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -70,10 +66,10 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-22T17:55:00Z',
+        updatedAt: '2025-10-22T17:56:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeA',
+        shuffled: true,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
       const primaryLoc_challengeA_data = {
@@ -92,6 +88,15 @@ describe('Integration | Repository | challenge-repository', () => {
         geography: 'ES',
         urlsToConsult: ['http://esLoc.challengeA'],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeA_data);
+
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.challengeA_id.instruction',
         locale: 'fr',
@@ -141,7 +146,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 ],
                 'Type d\'épreuve': challengeA_data.type,
                 'T1 - Espaces, casse & accents':
-                    challengeA_data.t1StatusAirtable,
+                          challengeA_data.t1StatusAirtable,
                 'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
                 'T3 - Distance d\'édition': challengeA_data.t3StatusAirtable,
                 Statut: challengeA_data.status,
@@ -188,65 +193,64 @@ describe('Integration | Repository | challenge-repository', () => {
       const challenge = await challengeRepository.get(challengeA_data.id);
 
       // then
-      expect(challenge).toStrictEqual(
-        domainBuilder.buildChallenge({
-          accessibility1: challengeA_data.accessibility1,
-          accessibility2: challengeA_data.accessibility2,
-          airtableId: challengeA_data.airtableId,
-          alternativeVersion: challengeA_data.alternativeVersion,
-          alpha: challengeA_data.alpha,
-          archivedAt: challengeA_data.archivedAt,
-          author: challengeA_data.author,
-          autoReply: challengeA_data.autoReply,
-          competenceId: challengeA_data.competenceId,
-          contextualizedFields: challengeA_data.contextualizedFields,
-          createdAt: challengeA_data.createdAt,
-          declinable: challengeA_data.declinable,
-          delta: challengeA_data.delta,
-          embedHeight: challengeA_data.embedHeight,
-          files: challengeA_data.files,
-          focusable: challengeA_data.focusable,
-          format: challengeA_data.format,
-          genealogy: challengeA_data.genealogy,
-          geography: challengeA_data.geography,
-          id: challengeA_data.id,
-          locales: challengeA_data.locales,
-          localizedChallenges: [
-            domainBuilder.buildLocalizedChallenge({
-              id: challengeA_data.localizedEsId,
-              challengeId: challengeA_data.id,
-              ...esLoc_challengeA_data,
-            }),
-            domainBuilder.buildLocalizedChallenge({
-              id: challengeA_data.id,
-              challengeId: challengeA_data.id,
-              ...primaryLoc_challengeA_data,
-            }),
-          ],
-          madeObsoleteAt: challengeA_data.madeObsoleteAt,
-          pedagogy: challengeA_data.pedagogy,
-          responsive: challengeA_data.responsive,
-          shuffled: challengeA_data.shuffled,
-          skillId: challengeA_data.skillId,
-          skills: challengeA_data.skills,
-          spoil: challengeA_data.spoil,
-          status: challengeA_data.status,
-          t1Status: challengeA_data.t1Status,
-          t2Status: challengeA_data.t2Status,
-          t3Status: challengeA_data.t3Status,
-          timer: challengeA_data.timer,
-          translations: {
-            fr: {
-              instruction: 'instruction FR challengeA',
-              solution: 'solution FR challengeA',
-            },
-            es: { instruction: 'instruction ES challengeA' },
+      expect(challenge).toStrictEqual(domainBuilder.buildChallenge({
+        accessibility1: challengeA_data.accessibility1,
+        accessibility2: challengeA_data.accessibility2,
+        airtableId: challengeA_data.airtableId,
+        alternativeVersion: challengeA_data.alternativeVersion,
+        alpha: challengeA_data.alpha,
+        archivedAt: challengeA_data.archivedAt,
+        author: challengeA_data.author,
+        autoReply: challengeA_data.autoReply,
+        competenceId: challengeA_data.competenceId,
+        contextualizedFields: challengeA_data.contextualizedFields,
+        createdAt: challengeA_data.createdAt,
+        declinable: challengeA_data.declinable,
+        delta: challengeA_data.delta,
+        embedHeight: challengeA_data.embedHeight,
+        files: challengeA_data.files,
+        focusable: challengeA_data.focusable,
+        format: challengeA_data.format,
+        genealogy: challengeA_data.genealogy,
+        geography: challengeA_data.geography,
+        id: challengeA_data.id,
+        locales: challengeA_data.locales,
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeA_data.localizedEsId,
+            challengeId: challengeA_data.id,
+            ...esLoc_challengeA_data,
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeA_data.id,
+            challengeId: challengeA_data.id,
+            ...primaryLoc_challengeA_data,
+          }),
+        ],
+        madeObsoleteAt: challengeA_data.madeObsoleteAt,
+        pedagogy: challengeA_data.pedagogy,
+        responsive: challengeA_data.responsive,
+        shuffled: challengeA_data.shuffled,
+        skillId: challengeA_data.skillId,
+        skills: challengeA_data.skills,
+        spoil: challengeA_data.spoil,
+        status: challengeA_data.status,
+        t1Status: challengeA_data.t1Status,
+        t2Status: challengeA_data.t2Status,
+        t3Status: challengeA_data.t3Status,
+        timer: challengeA_data.timer,
+        translations: {
+          fr: {
+            instruction: 'instruction FR challengeA',
+            solution: 'solution FR challengeA',
           },
-          type: challengeA_data.type,
-          updatedAt: challengeA_data.updatedAt,
-          validatedAt: challengeA_data.validatedAt,
-          version: challengeA_data.version,
-        }));
+          es: { instruction: 'instruction ES challengeA' },
+        },
+        type: challengeA_data.type,
+        updatedAt: challengeA_data.updatedAt,
+        validatedAt: challengeA_data.validatedAt,
+        version: challengeA_data.version,
+      }));
     });
 
     it('should throw a NotFound error when no challenge exist for given id', async () => {
@@ -263,7 +267,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const promise = challengeRepository.get('someChallengeId');
 
       // then
-
       await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve introuvable'));
     });
   });
@@ -291,20 +294,20 @@ describe('Integration | Repository | challenge-repository', () => {
           t3Status: true,
           status: Challenge.STATUSES.PROPOSE,
           embedUrl: 'embedUrl challengeA',
-          embedHeight: 'embedHeight challengeA',
+          embedHeight: 987,
           timer: 789,
           format: Challenge.FORMATS.MOTS,
           autoReply: false,
           localesAirtable: ['Francophone'],
           locales: ['fr'],
-          focusable: 'focusable challengeA',
+          focusable: false,
           skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-          author: 'author challengeA',
+          author: ['AUT'],
           declinable: Challenge.DECLINABLES.FACILEMENT,
-          version: 'version challengeA',
-          alternativeVersion: 'alternativeVersion challengeA',
+          version: 2,
+          alternativeVersion: 1,
           accessibility1: Challenge.ACCESSIBILITY1.KO,
           accessibility2: Challenge.ACCESSIBILITY2.RAS,
           spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -313,10 +316,10 @@ describe('Integration | Repository | challenge-repository', () => {
           files: [],
           validatedAt: null,
           archivedAt: null,
-          createdAt: null,
-          updatedAt: null,
+          createdAt: '2025-10-23T10:08:00Z',
+          updatedAt: '2025-10-23T10:09:00Z',
           madeObsoleteAt: null,
-          shuffled: 'shuffled challengeA',
+          shuffled: false,
           contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         };
         const primaryLoc_challengeA_data = {
@@ -335,6 +338,15 @@ describe('Integration | Repository | challenge-repository', () => {
           geography: 'ES',
           urlsToConsult: ['http://esLoc.challengeA'],
         };
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+        databaseBuilder.factory.buildChallenge(challengeA_data);
+
         databaseBuilder.factory.buildTranslation({
           key: 'challenge.challengeA_id.instruction',
           locale: 'fr',
@@ -386,20 +398,20 @@ describe('Integration | Repository | challenge-repository', () => {
           t3Status: true,
           status: Challenge.STATUSES.PROPOSE,
           embedUrl: 'embedUrl challengeB',
-          embedHeight: 'embedHeight challengeB',
+          embedHeight: null,
           timer: 145,
           format: Challenge.FORMATS.MOTS,
           autoReply: true,
           localesAirtable: ['Francophone'],
           locales: ['fr'],
-          focusable: 'focusable challengeB',
+          focusable: true,
           skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-          author: 'author challengeB',
+          author: ['AZE'],
           declinable: Challenge.DECLINABLES.NON,
-          version: 'version challengeB',
-          alternativeVersion: 'alternativeVersion challengeB',
+          version: 1,
+          alternativeVersion: null,
           accessibility1: Challenge.ACCESSIBILITY1.OK,
           accessibility2: Challenge.ACCESSIBILITY2.OK,
           spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -408,10 +420,10 @@ describe('Integration | Repository | challenge-repository', () => {
           files: [],
           validatedAt: null,
           archivedAt: null,
-          createdAt: null,
+          createdAt: '2025-10-23T10:08:00Z',
           madeObsoleteAt: null,
-          updatedAt: null,
-          shuffled: 'shuffled challengeB',
+          updatedAt: '2025-10-23T10:09:00Z',
+          shuffled: true,
           contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         };
         const primaryLoc_challengeB_data = {
@@ -422,6 +434,9 @@ describe('Integration | Repository | challenge-repository', () => {
           geography: 'FR',
           urlsToConsult: ['http://primaryloc.challengeB'],
         };
+
+        databaseBuilder.factory.buildChallenge(challengeB_data);
+
         databaseBuilder.factory.buildTranslation({
           key: 'challenge.challengeB_id.instruction',
           locale: 'fr',
@@ -670,7 +685,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
     describe('when search is specified', () => {
       describe('when search is present in instruction or proposals', () => {
-
         it('should find challenges where translations included the search', async () => {
           // given
           const challengeA_data = {
@@ -692,20 +706,20 @@ describe('Integration | Repository | challenge-repository', () => {
             t3Status: true,
             status: Challenge.STATUSES.PROPOSE,
             embedUrl: 'embedUrl challengeA',
-            embedHeight: 'embedHeight challengeA',
+            embedHeight: 987,
             timer: 789,
             format: Challenge.FORMATS.MOTS,
             autoReply: false,
             localesAirtable: ['Francophone'],
             locales: ['fr'],
-            focusable: 'focusable challengeA',
+            focusable: true,
             skills: ['airtableSkillId'],
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-            author: 'author challengeA',
+            author: ['TRO'],
             declinable: Challenge.DECLINABLES.FACILEMENT,
-            version: 'version challengeA',
-            alternativeVersion: 'alternativeVersion challengeA',
+            version: 2,
+            alternativeVersion: 3,
             accessibility1: Challenge.ACCESSIBILITY1.KO,
             accessibility2: Challenge.ACCESSIBILITY2.RAS,
             spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -714,12 +728,21 @@ describe('Integration | Repository | challenge-repository', () => {
             files: [],
             validatedAt: null,
             archivedAt: null,
-            createdAt: null,
-            updatedAt: null,
+            createdAt: '2025-10-23T10:17:00Z',
+            updatedAt: '2025-10-23T10:18:00Z',
             madeObsoleteAt: null,
-            shuffled: 'shuffled challengeA',
+            shuffled: false,
             contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
           };
+
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challengeA_data);
+
           const primaryLoc_challengeA_data = {
             embedUrl: 'embedUrl primaryloc challengeA',
             fileIds: ['attachmentA'],
@@ -787,20 +810,20 @@ describe('Integration | Repository | challenge-repository', () => {
             t3Status: true,
             status: Challenge.STATUSES.PROPOSE,
             embedUrl: 'embedUrl challengeB',
-            embedHeight: 'embedHeight challengeB',
+            embedHeight: null,
             timer: 145,
             format: Challenge.FORMATS.MOTS,
             autoReply: true,
             localesAirtable: ['Francophone'],
             locales: ['fr'],
-            focusable: 'focusable challengeB',
+            focusable: false,
             skills: ['airtableSkillId'],
             genealogy: Challenge.GENEALOGIES.DECLINAISON,
             pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-            author: 'author challengeB',
+            author: ['QWE'],
             declinable: Challenge.DECLINABLES.NON,
-            version: 'version challengeB',
-            alternativeVersion: 'alternativeVersion challengeB',
+            version: 1,
+            alternativeVersion: null,
             accessibility1: Challenge.ACCESSIBILITY1.OK,
             accessibility2: Challenge.ACCESSIBILITY2.OK,
             spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -809,12 +832,15 @@ describe('Integration | Repository | challenge-repository', () => {
             files: [],
             validatedAt: null,
             archivedAt: null,
-            createdAt: null,
+            createdAt: '2025-10-23T10:19:00Z',
             madeObsoleteAt: null,
-            updatedAt: null,
-            shuffled: 'shuffled challengeB',
+            updatedAt: '2025-10-23T10:20:00Z',
+            shuffled: false,
             contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
           };
+
+          databaseBuilder.factory.buildChallenge(challengeB_data);
+
           const primaryLoc_challengeB_data = {
             embedUrl: 'embedUrl primaryloc challengeB',
             fileIds: [],
@@ -863,7 +889,7 @@ describe('Integration | Repository | challenge-repository', () => {
                     ],
                     'Type d\'épreuve': challengeA_data.type,
                     'T1 - Espaces, casse & accents':
-                        challengeA_data.t1StatusAirtable,
+                               challengeA_data.t1StatusAirtable,
                     'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
                     'T3 - Distance d\'édition': challengeA_data.t3StatusAirtable,
                     Statut: challengeA_data.status,
@@ -912,7 +938,7 @@ describe('Integration | Repository | challenge-repository', () => {
                     ],
                     'Type d\'épreuve': challengeB_data.type,
                     'T1 - Espaces, casse & accents':
-                        challengeB_data.t1StatusAirtable,
+                               challengeB_data.t1StatusAirtable,
                     'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
                     'T3 - Distance d\'édition': challengeB_data.t3StatusAirtable,
                     Statut: challengeB_data.status,
@@ -1073,8 +1099,8 @@ describe('Integration | Repository | challenge-repository', () => {
           ]);
         });
       });
-      describe('when search is not present in instruction or proposals', () => {
 
+      describe('when search is not present in instruction or proposals', () => {
         it('should find challenges from airtable where embed url contains search', async () => {
           // given
           const challengeA_data = {
@@ -1096,20 +1122,20 @@ describe('Integration | Repository | challenge-repository', () => {
             t3Status: true,
             status: Challenge.STATUSES.PROPOSE,
             embedUrl: 'embedUrl challengeA',
-            embedHeight: 'embedHeight challengeA',
+            embedHeight: 987,
             timer: 789,
             format: Challenge.FORMATS.MOTS,
             autoReply: false,
             localesAirtable: ['Francophone'],
             locales: ['fr'],
-            focusable: 'focusable challengeA',
+            focusable: true,
             skills: ['airtableSkillId'],
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-            author: 'author challengeA',
+            author: ['TRO'],
             declinable: Challenge.DECLINABLES.FACILEMENT,
-            version: 'version challengeA',
-            alternativeVersion: 'alternativeVersion challengeA',
+            version: 2,
+            alternativeVersion: 3,
             accessibility1: Challenge.ACCESSIBILITY1.KO,
             accessibility2: Challenge.ACCESSIBILITY2.RAS,
             spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -1118,12 +1144,21 @@ describe('Integration | Repository | challenge-repository', () => {
             files: [],
             validatedAt: null,
             archivedAt: null,
-            createdAt: null,
-            updatedAt: null,
+            createdAt: '2025-10-23T10:17:00Z',
+            updatedAt: '2025-10-23T10:18:00Z',
             madeObsoleteAt: null,
-            shuffled: 'shuffled challengeA',
+            shuffled: false,
             contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
           };
+
+          databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+          databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+          databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+          databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+          databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+          databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+          databaseBuilder.factory.buildChallenge(challengeA_data);
+
           const primaryLoc_challengeA_data = {
             embedUrl: 'embedUrl primaryloc challengeA',
             fileIds: ['attachmentA'],
@@ -1193,7 +1228,7 @@ describe('Integration | Repository | challenge-repository', () => {
                     ],
                     'Type d\'épreuve': challengeA_data.type,
                     'T1 - Espaces, casse & accents':
-                        challengeA_data.t1StatusAirtable,
+                                  challengeA_data.t1StatusAirtable,
                     'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
                     'T3 - Distance d\'édition': challengeA_data.t3StatusAirtable,
                     Statut: challengeA_data.status,
@@ -1349,20 +1384,20 @@ describe('Integration | Repository | challenge-repository', () => {
           t3Status: true,
           status: Challenge.STATUSES.PROPOSE,
           embedUrl: 'embedUrl challengeA',
-          embedHeight: 'embedHeight challengeA',
+          embedHeight: 987,
           timer: 789,
           format: Challenge.FORMATS.MOTS,
           autoReply: false,
           localesAirtable: ['Francophone'],
           locales: ['fr'],
-          focusable: 'focusable challengeA',
+          focusable: true,
           skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-          author: 'author challengeA',
+          author: ['TRO'],
           declinable: Challenge.DECLINABLES.FACILEMENT,
-          version: 'version challengeA',
-          alternativeVersion: 'alternativeVersion challengeA',
+          version: 2,
+          alternativeVersion: 3,
           accessibility1: Challenge.ACCESSIBILITY1.KO,
           accessibility2: Challenge.ACCESSIBILITY2.RAS,
           spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -1371,12 +1406,21 @@ describe('Integration | Repository | challenge-repository', () => {
           files: [],
           validatedAt: null,
           archivedAt: null,
-          createdAt: null,
-          updatedAt: null,
+          createdAt: '2025-10-23T10:17:00Z',
+          updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
-          shuffled: 'shuffled challengeA',
+          shuffled: false,
           contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         };
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+        databaseBuilder.factory.buildChallenge(challengeA_data);
+
         const primaryLoc_challengeA_data = {
           embedUrl: 'embedUrl primaryloc challengeA',
           fileIds: ['attachmentA'],
@@ -1444,20 +1488,20 @@ describe('Integration | Repository | challenge-repository', () => {
           t3Status: true,
           status: Challenge.STATUSES.PROPOSE,
           embedUrl: 'embedUrl challengeB',
-          embedHeight: 'embedHeight challengeB',
+          embedHeight: null,
           timer: 145,
           format: Challenge.FORMATS.MOTS,
           autoReply: true,
           localesAirtable: ['Francophone'],
           locales: ['fr'],
-          focusable: 'focusable challengeB',
+          focusable: false,
           skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-          author: 'author challengeB',
+          author: ['QWE'],
           declinable: Challenge.DECLINABLES.NON,
-          version: 'version challengeB',
-          alternativeVersion: 'alternativeVersion challengeB',
+          version: 1,
+          alternativeVersion: null,
           accessibility1: Challenge.ACCESSIBILITY1.OK,
           accessibility2: Challenge.ACCESSIBILITY2.OK,
           spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -1466,12 +1510,15 @@ describe('Integration | Repository | challenge-repository', () => {
           files: [],
           validatedAt: null,
           archivedAt: null,
-          createdAt: null,
+          createdAt: '2025-10-23T10:19:00Z',
           madeObsoleteAt: null,
-          updatedAt: null,
-          shuffled: 'shuffled challengeB',
+          updatedAt: '2025-10-23T10:20:00Z',
+          shuffled: false,
           contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         };
+
+        databaseBuilder.factory.buildChallenge(challengeB_data);
+
         const primaryLoc_challengeB_data = {
           embedUrl: 'embedUrl primaryloc challengeB',
           fileIds: [],
@@ -1511,7 +1558,7 @@ describe('Integration | Repository | challenge-repository', () => {
                   ],
                   'Type d\'épreuve': challengeA_data.type,
                   'T1 - Espaces, casse & accents':
-                    challengeA_data.t1StatusAirtable,
+                           challengeA_data.t1StatusAirtable,
                   'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
                   'T3 - Distance d\'édition': challengeA_data.t3StatusAirtable,
                   Statut: challengeA_data.status,
@@ -1560,7 +1607,7 @@ describe('Integration | Repository | challenge-repository', () => {
                   ],
                   'Type d\'épreuve': challengeB_data.type,
                   'T1 - Espaces, casse & accents':
-                    challengeB_data.t1StatusAirtable,
+                           challengeB_data.t1StatusAirtable,
                   'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
                   'T3 - Distance d\'édition': challengeB_data.t3StatusAirtable,
                   Statut: challengeB_data.status,
@@ -1745,20 +1792,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeA',
-        embedHeight: 'embedHeight challengeA',
+        embedHeight: 987,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeA',
+        focusable: true,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeA',
+        author: ['TRO'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeA',
-        alternativeVersion: 'alternativeVersion challengeA',
+        version: 2,
+        alternativeVersion: 3,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -1767,12 +1814,21 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:17:00Z',
+        updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeA',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeA_data);
+
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
         fileIds: ['attachmentA'],
@@ -1840,20 +1896,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeB',
-        embedHeight: 'embedHeight challengeB',
+        embedHeight: null,
         timer: 145,
         format: Challenge.FORMATS.MOTS,
         autoReply: true,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeB',
+        focusable: false,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-        author: 'author challengeB',
+        author: ['QWE'],
         declinable: Challenge.DECLINABLES.NON,
-        version: 'version challengeB',
-        alternativeVersion: 'alternativeVersion challengeB',
+        version: 1,
+        alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY2.OK,
         spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -1862,12 +1918,15 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
+        createdAt: '2025-10-23T10:19:00Z',
         madeObsoleteAt: null,
-        updatedAt: null,
-        shuffled: 'shuffled challengeB',
+        updatedAt: '2025-10-23T10:20:00Z',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
+
+      databaseBuilder.factory.buildChallenge(challengeB_data);
+
       const primaryLoc_challengeB_data = {
         embedUrl: 'embedUrl primaryloc challengeB',
         fileIds: [],
@@ -2166,20 +2225,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeA',
-        embedHeight: 'embedHeight challengeA',
+        embedHeight: 987,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeA',
+        focusable: true,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeA',
+        author: ['TRO'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeA',
-        alternativeVersion: 'alternativeVersion challengeA',
+        version: 2,
+        alternativeVersion: 3,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -2188,12 +2247,21 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:17:00Z',
+        updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeA',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeA_data);
+
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
         fileIds: ['attachmentA'],
@@ -2261,20 +2329,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeB',
-        embedHeight: 'embedHeight challengeB',
+        embedHeight: null,
         timer: 145,
         format: Challenge.FORMATS.MOTS,
         autoReply: true,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeB',
+        focusable: false,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-        author: 'author challengeB',
+        author: ['QWE'],
         declinable: Challenge.DECLINABLES.NON,
-        version: 'version challengeB',
-        alternativeVersion: 'alternativeVersion challengeB',
+        version: 1,
+        alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY2.OK,
         spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
@@ -2283,12 +2351,15 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
+        createdAt: '2025-10-23T10:19:00Z',
         madeObsoleteAt: null,
-        updatedAt: null,
-        shuffled: 'shuffled challengeB',
+        updatedAt: '2025-10-23T10:20:00Z',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
+
+      databaseBuilder.factory.buildChallenge(challengeB_data);
+
       const primaryLoc_challengeB_data = {
         embedUrl: 'embedUrl primaryloc challengeB',
         fileIds: [],
@@ -2583,20 +2654,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeDraftA',
-        embedHeight: 'embedHeight challengeDraftA',
+        embedHeight: 987,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeDraftA',
+        focusable: true,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeDraftA',
+        author: ['ASD'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeDraftA',
-        alternativeVersion: 'alternativeVersion challengeDraftA',
+        version: 2,
+        alternativeVersion: 3,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -2605,12 +2676,21 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:17:00Z',
+        updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeDraftA',
+        shuffled: true,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeDraftA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeDraftA_data);
+
       const challengeActiveA_data = {
         id: 'challengeActiveA_id',
         airtableId: 'airtableChallengeActiveA_id',
@@ -2629,20 +2709,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.VALIDE,
         embedUrl: 'embedUrl challengeActiveA',
-        embedHeight: 'embedHeight challengeActiveA',
+        embedHeight: null,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeActiveA',
+        focusable: false,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeActiveA',
+        author: ['QWE'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeActiveA',
-        alternativeVersion: 'alternativeVersion challengeActiveA',
+        version: 1,
+        alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -2651,12 +2731,15 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:19:00Z',
+        updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeActiveA',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildChallenge(challengeActiveA_data);
+
       const primaryLoc_challengeDraftA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
         fileIds: ['attachmentDraftA'],
@@ -3014,20 +3097,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
         embedUrl: 'embedUrl challengeProtoA',
-        embedHeight: 'embedHeight challengeProtoA',
+        embedHeight: 987,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeProtoA',
+        focusable: true,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeProtoA',
+        author: ['ASD'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeProtoA',
-        alternativeVersion: 'alternativeVersion challengeProtoA',
+        version: 3,
+        alternativeVersion: 2,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -3036,22 +3119,31 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:17:00Z',
+        updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeProtoA',
+        shuffled: true,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeProtoA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeProtoA_data);
+
       const challengeProtoB_data = {
         id: 'challengeProtoB_id',
-        airtableId: 'airtableChallengeActiveA_id',
+        airtableId: 'airtableChallengeProtoB_id',
         skillId: 'skillId',
         competenceId: 'competenceId',
         alpha: 1,
         alphaAirtable: '1',
         delta: 2,
         deltaAirtable: '2',
-        type: 'type challengeA',
+        type: 'type challengeProtoB',
         t1StatusAirtable: 'Activé',
         t1Status: true,
         t2StatusAirtable: 'Désactivé',
@@ -3060,20 +3152,20 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         status: Challenge.STATUSES.VALIDE,
         embedUrl: 'embedUrl challengeProtoB',
-        embedHeight: 'embedHeight challengeProtoB',
+        embedHeight: null,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
         autoReply: false,
         localesAirtable: ['Francophone'],
         locales: ['fr'],
-        focusable: 'focusable challengeProtoB',
+        focusable: false,
         skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        author: 'author challengeProtoB',
+        author: ['QWE'],
         declinable: Challenge.DECLINABLES.FACILEMENT,
-        version: 'version challengeProtoB',
-        alternativeVersion: 'alternativeVersion challengeProtoB',
+        version: 1,
+        alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         spoil: Challenge.SPOILS.NON_SPOILABLE,
@@ -3082,12 +3174,15 @@ describe('Integration | Repository | challenge-repository', () => {
         files: [],
         validatedAt: null,
         archivedAt: null,
-        createdAt: null,
-        updatedAt: null,
+        createdAt: '2025-10-23T10:19:00Z',
+        updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
-        shuffled: 'shuffled challengeProtoB',
+        shuffled: false,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
+
+      databaseBuilder.factory.buildChallenge(challengeProtoB_data);
+
       const primaryLoc_ProtoA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
         fileIds: ['attachmentProtoA'],
@@ -4035,6 +4130,7 @@ describe('Integration | Repository | challenge-repository', () => {
 
   describe('#create', () => {
     afterEach(async () => {
+      await knex.delete().from('localized_challenges');
       await knex.delete().from('challenges');
     });
 
@@ -4400,6 +4496,15 @@ describe('Integration | Repository | challenge-repository', () => {
           ],
         }),
       ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: expectedChallenges[0].skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(expectedChallenges[0]);
+
       const airtableChallenges = expectedChallenges.map((challenge) =>
         airtableBuilder.factory.buildChallenge(challenge),
       );

@@ -119,7 +119,7 @@ async function mockCurrentContent() {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         illustrationUrl: 'url de l‘illustration',
         attachments: ['url de la pièce jointe'],
@@ -410,6 +410,7 @@ async function mockCurrentContent() {
     value: expectedCurrentContent.challenges[0].illustrationAlt,
   });
 
+  databaseBuilder.factory.buildChallenge(expectedCurrentContent.challenges[0]);
   databaseBuilder.factory.buildLocalizedChallenge({
     id: expectedCurrentContent.challenges[0].id,
     challengeId: expectedCurrentContent.challenges[0].id,
@@ -529,7 +530,7 @@ async function mockContentForRelease() {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         competenceId: 'recCompetence0',
         format: ChallengeForRelease.FORMATS.MOTS,
@@ -569,7 +570,7 @@ async function mockContentForRelease() {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         competenceId: 'recCompetence0',
         format: ChallengeForRelease.FORMATS.MOTS,
@@ -802,6 +803,7 @@ async function mockContentForRelease() {
     });
 
     const isAlternative = challenge.genealogy === 'Décliné 1';
+    databaseBuilder.factory.buildChallenge(challenge);
     databaseBuilder.factory.buildLocalizedChallenge({
       id: challenge.id,
       challengeId: challenge.id,

@@ -1,4 +1,4 @@
-import { afterEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { afterEach, describe, describe as context, expect, it, vi, beforeEach } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
@@ -7,8 +7,19 @@ import _ from 'lodash';
 
 describe('Integration | Repository | attachment-repository', () => {
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  const challengeId1 = 'challengeId1';
+  const challengeId2 = 'challengeId2';
+
+  beforeEach(async () => {
+    databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+    databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+    databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+    databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+    databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+    databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId1, skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId2, skillId: 'skill1' }));
+    await databaseBuilder.commit();
   });
 
   describe('#list', () => {
@@ -31,7 +42,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: 'mimeType1NL',
           filename: 'filename_1NL',
           url: 'http://1-nl',
-          challengeId: 'challengeId1',
+          challengeId: challengeId1,
           airtableChallengeId: 'challengeAirtableId1',
           localizedChallengeId: 'localizedChallengeId1Nl'
         }),
@@ -41,7 +52,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: 'mimeType2',
           filename: 'filename_2',
           url: 'http://2',
-          challengeId: 'challengeId2',
+          challengeId: challengeId2,
           airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2'
         }),
@@ -51,7 +62,7 @@ describe('Integration | Repository | attachment-repository', () => {
           mimeType: 'mimeType3',
           filename: 'filename_3',
           url: 'http://3',
-          challengeId: 'challengeId2',
+          challengeId: challengeId2,
           airtableChallengeId: 'challengeAirtableId2',
           localizedChallengeId: 'localizedChallengeId2'
         }),
@@ -59,7 +70,7 @@ describe('Integration | Repository | attachment-repository', () => {
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId1',
-        challengeId: 'challengeId1',
+        challengeId: challengeId1,
       });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId: 'attachmentId1',
@@ -68,7 +79,7 @@ describe('Integration | Repository | attachment-repository', () => {
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
-        challengeId: 'challengeId2',
+        challengeId: challengeId2,
       });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId: 'attachmentId2',
@@ -139,7 +150,7 @@ describe('Integration | Repository | attachment-repository', () => {
         type: 'illustration',
         mimeType: 'images/jpeg',
         filename: 'attachment_nl_challengeA_filename',
-        challengeId: 'challengeA',
+        challengeId: challengeId1,
         localizedChallengeId: 'localizedChallengeNLForChallengeA',
       };
       const attachment_FR_forChallengeA_data = {
@@ -149,17 +160,17 @@ describe('Integration | Repository | attachment-repository', () => {
         type: 'illustration',
         mimeType: 'images/jpeg',
         filename: 'attachment_fr_challengeA_filename',
-        challengeId: 'challengeA',
-        localizedChallengeId: 'challengeA',
+        challengeId: challengeId1,
+        localizedChallengeId: challengeId1,
       };
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeA',
-        challengeId: 'challengeA',
+        id: challengeId1,
+        challengeId: challengeId1,
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeNLForChallengeA',
-        challengeId: 'challengeA',
+        challengeId: challengeId1,
         locale: 'nl',
       });
       const attachment_FR_forChallengeB_data = {
@@ -169,18 +180,18 @@ describe('Integration | Repository | attachment-repository', () => {
         type: 'attachment',
         mimeType: 'text/csv',
         filename: 'attachment_fr_challengeB_filename',
-        challengeId: 'challengeB',
-        localizedChallengeId: 'challengeB',
+        challengeId: challengeId2,
+        localizedChallengeId: challengeId2,
       };
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeB',
-        challengeId: 'challengeB',
+        id: challengeId2,
+        challengeId: challengeId2,
         locale: 'fr',
       });
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-        if (options?.filterByFormula !== 'OR({localizedChallengeId} = "challengeA",{localizedChallengeId} = "localizedChallengeNLForChallengeA",{localizedChallengeId} = "challengeB")') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== 'OR({localizedChallengeId} = "challengeId1",{localizedChallengeId} = "localizedChallengeNLForChallengeA",{localizedChallengeId} = "challengeId2")') expect.unreachable('Wrong filterByFormula');
         return [
           {
             id: attachment_NL_forChallengeA_data.id,
@@ -231,7 +242,7 @@ describe('Integration | Repository | attachment-repository', () => {
       });
 
       // when
-      const attachments = await attachmentRepository.listByLocalizedChallengeIds(['challengeA', 'localizedChallengeNLForChallengeA', 'challengeB']);
+      const attachments = await attachmentRepository.listByLocalizedChallengeIds([challengeId1, 'localizedChallengeNLForChallengeA', challengeId2]);
 
       // then
       expect(attachments).toStrictEqual([
@@ -273,16 +284,6 @@ describe('Integration | Repository | attachment-repository', () => {
 
     it('should return an empty array when no localized challenge ids provided', async () => {
       // given
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeA',
-        challengeId: 'challengeA',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeNLForChallengeA',
-        challengeId: 'challengeA',
-        locale: 'nl',
-      });
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation(() => {
         expect.unreachable('I should not be trying to reach airtable');
@@ -326,12 +327,12 @@ describe('Integration | Repository | attachment-repository', () => {
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachmentA_filename',
-        challengeId: 'challengeA',
+        challengeId: challengeId1,
         localizedChallengeId: 'localizedChallengeA',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeA',
-        challengeId: 'challengeA',
+        challengeId: challengeId1,
         locale: 'nl',
       });
       const attachmentB = domainBuilder.buildAttachment({
@@ -341,21 +342,21 @@ describe('Integration | Repository | attachment-repository', () => {
         size: 456,
         mimeType: 'text/csv',
         filename: 'attachmentB_filename',
-        challengeId: 'challengeB',
-        localizedChallengeId: 'challengeB',
+        challengeId: challengeId2,
+        localizedChallengeId: challengeId2,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeB',
-        challengeId: 'challengeB',
+        id: challengeId2,
+        challengeId: challengeId2,
         locale: 'fr',
       });
       await databaseBuilder.commit();
       const airtableIdsByIds = {
-        'challengeA': 'airtableChallengeA',
-        'challengeB': 'airtableChallengeB',
+        'challengeId1': 'airtableChallengeId1',
+        'challengeId2': 'airtableChallengeId2',
       };
       vi.spyOn(challengeDatasource, 'getAirtableIdsByIds').mockImplementation((necessaryChallengeIds) => {
-        if (necessaryChallengeIds.join(',') !== 'challengeA,challengeB')
+        if (necessaryChallengeIds.join(',') !== 'challengeId1,challengeId2')
           expect.unreachable('Wrong challenge ids for fetching corresponding airtable ids');
         return airtableIdsByIds;
       });
@@ -369,7 +370,7 @@ describe('Integration | Repository | attachment-repository', () => {
             type: attachmentA.type,
             mimeType: attachmentA.mimeType,
             filename: attachmentA.filename,
-            challengeId: ['airtableChallengeA'],
+            challengeId: ['airtableChallengeId1'],
             localizedChallengeId: attachmentA.localizedChallengeId,
           } })
           || !_.isEqual(airtableRequestBodies[1], { fields: {
@@ -378,7 +379,7 @@ describe('Integration | Repository | attachment-repository', () => {
             type: attachmentB.type,
             mimeType: attachmentB.mimeType,
             filename: attachmentB.filename,
-            challengeId: ['airtableChallengeB'],
+            challengeId: ['airtableChallengeId2'],
             localizedChallengeId: attachmentB.localizedChallengeId,
           } })
         ) expect.unreachable('Attachments to create to airtable wrong bodies');
@@ -475,25 +476,25 @@ describe('Integration | Repository | attachment-repository', () => {
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachment_filename',
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         localizedChallengeId: 'challengeIdES',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeId',
-        challengeId: 'challengeId',
+        id: challengeId1,
+        challengeId: challengeId1,
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeIdES',
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         locale: 'es',
       });
       await databaseBuilder.commit();
       const airtableIdsByIds = {
-        'challengeId': 'airtableChallengeId',
+        'challengeId1': 'airtableChallengeId',
       };
       vi.spyOn(challengeDatasource, 'getAirtableIdsByIds').mockImplementation((necessaryChallengeIds) => {
-        if (necessaryChallengeIds.join('') !== 'challengeId')
+        if (necessaryChallengeIds.join('') !== 'challengeId1')
           expect.unreachable('Wrong challenge id for fetching corresponding airtable id');
         return airtableIdsByIds;
       });
@@ -518,7 +519,7 @@ describe('Integration | Repository | attachment-repository', () => {
             type: attachment.type,
             mimeType: attachment.mimeType,
             filename: attachment.filename,
-            'challengeId persistant': ['challengeId'],
+            'challengeId persistant': [challengeId1],
             'challengeId': ['airtableChallengeId'],
             'localizedChallengeId': 'challengeIdES',
           },
@@ -537,7 +538,7 @@ describe('Integration | Repository | attachment-repository', () => {
         size: attachment.size,
         mimeType: attachment.mimeType,
         filename: attachment.filename,
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         localizedChallengeId: 'challengeIdES',
         airtableChallengeId: 'airtableChallengeId',
       });
@@ -556,7 +557,6 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#update', () => {
-
     it('should update an attachment in airtable', async () => {
       // given
       const attachment = domainBuilder.buildAttachment({
@@ -566,18 +566,18 @@ describe('Integration | Repository | attachment-repository', () => {
         size: 123,
         mimeType: 'image/jpeg',
         filename: 'attachment_filename',
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         airtableChallengeId: 'challengeAirtableId',
         localizedChallengeId: 'localizedChallengeId',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeId',
-        challengeId: 'challengeId',
+        id: challengeId1,
+        challengeId: challengeId1,
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId',
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         locale: 'nl',
       });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
@@ -609,7 +609,7 @@ describe('Integration | Repository | attachment-repository', () => {
             type: attachment.type,
             mimeType: attachment.mimeType,
             filename: attachment.filename,
-            'challengeId persistant': ['challengeId'],
+            'challengeId persistant': [challengeId1],
             'challengeId': ['airtableChallengeId'],
             'localizedChallengeId': attachment.localizedChallengeId,
           },
@@ -628,7 +628,7 @@ describe('Integration | Repository | attachment-repository', () => {
         size: attachment.size,
         mimeType: attachment.mimeType,
         filename: attachment.filename,
-        challengeId: 'challengeId',
+        challengeId: challengeId1,
         localizedChallengeId: attachment.localizedChallengeId,
         airtableChallengeId: 'airtableChallengeId',
       });
@@ -674,18 +674,18 @@ describe('Integration | Repository | attachment-repository', () => {
           size: 123,
           mimeType: 'image/jpeg',
           filename: 'attachment_filename',
-          challengeId: 'challengeId',
+          challengeId: challengeId1,
           localizedChallengeId: 'localizedChallengeId',
           airtableChallengeId: 'airtableChallengeId',
         });
         databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'challengeId',
-          challengeId: 'challengeId',
+          id: challengeId1,
+          challengeId: challengeId1,
           locale: 'fr',
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: 'localizedChallengeId',
-          challengeId: 'challengeId',
+          challengeId: challengeId1,
           locale: 'nl',
         });
         databaseBuilder.factory.buildLocalizedChallengeAttachment({
@@ -726,8 +726,8 @@ describe('Integration | Repository | attachment-repository', () => {
     it('delete the attachment on Airtable and localized challenge attachment', async () => {
       // given
       const attachmentId = 'attachmentId';
-      const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: 'chal1' }).id;
-      const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: 'chal2' }).id;
+      const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: challengeId1 }).id;
+      const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: challengeId2 }).id;
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId,
         localizedChallengeId: loc1Id,

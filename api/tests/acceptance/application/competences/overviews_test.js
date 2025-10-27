@@ -93,28 +93,18 @@ describe('Acceptance | Route | competence-overviews', () => {
         value: 'Thématique 2',
       });
 
-      const tube1 = { id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2, thematicId: 'recThematic1', skillIds: ['recSkill1', 'recSkill2'] };
-      const tube2 = { id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1, thematicId: 'recThematic1', skillIds: ['recSkill3'] };
-      const tube3 = { id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3, thematicId: 'recThematic1', skillIds: [] };
-      const tube4 = { id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1, thematicId: 'recThematic2', skillIds: ['recSkill4'] };
-      const tube5 = { id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2, thematicId: 'recThematic2', skillIds: ['recSkill5'] };
-      const tube6 = { id: 'recTube6', airtableId: 'recAirtableTube6', competenceId, name: '@tube6', index: 1, thematicId: 'recThematic4', skillIds: [] };
-
-      databaseBuilder.factory.buildTube(tube1);
-      databaseBuilder.factory.buildTube(tube2);
-      databaseBuilder.factory.buildTube(tube3);
-      databaseBuilder.factory.buildTube(tube4);
-      databaseBuilder.factory.buildTube(tube5);
-      databaseBuilder.factory.buildTube(tube6);
-
-      const airtableTubes = [
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube1)),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube2)),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube3)),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube4)),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube5)),
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube6)),
+      const tubes = [
+        { id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2, thematicId: 'recThematic1', skillIds: ['recSkill1', 'recSkill2'] },
+        { id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1, thematicId: 'recThematic1', skillIds: ['recSkill3'] },
+        { id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3, thematicId: 'recThematic1', skillIds: [] },
+        { id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1, thematicId: 'recThematic2', skillIds: ['recSkill4'] },
+        { id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2, thematicId: 'recThematic2', skillIds: ['recSkill5'] },
+        { id: 'recTube6', airtableId: 'recAirtableTube6', competenceId, name: '@tube6', index: 1, thematicId: 'recThematic4', skillIds: [] },
       ];
+
+      tubes.forEach(databaseBuilder.factory.buildTube);
+
+      const airtableTubes = tubes.map((tube) => airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)));
 
       airtableTubesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes')
@@ -127,25 +117,17 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableTubes });
 
-      const skill1 = { id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' };
-      const skill2 = { id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' };
-      const skill3 = { id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' };
-      const skill4 = { id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube41', level: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube4' };
-      const skill5 = { id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube56', level: 6, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube5' };
-
-      const airtableSkills = [
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill1)),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill2)),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill3)),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill4)),
-        airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill5)),
+      const skills = [
+        { id: 'recSkill1', airtableId: 'recAirtableSkill1', name: '@tube14', level: 4, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' },
+        { id: 'recSkill2', airtableId: 'recAirtableSkill2', name: '@tube13', level: 3, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube1' },
+        { id: 'recSkill3', airtableId: 'recAirtableSkill3', name: '@tube27', level: 7, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube2' },
+        { id: 'recSkill4', airtableId: 'recAirtableSkill4', name: '@tube41', level: 1, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube4' },
+        { id: 'recSkill5', airtableId: 'recAirtableSkill5', name: '@tube56', level: 6, status: Skill.STATUSES.ACTIF, competenceId, tubeId: 'recTube5' },
       ];
 
-      databaseBuilder.factory.buildSkill(skill1);
-      databaseBuilder.factory.buildSkill(skill2);
-      databaseBuilder.factory.buildSkill(skill3);
-      databaseBuilder.factory.buildSkill(skill4);
-      databaseBuilder.factory.buildSkill(skill5);
+      skills.forEach(databaseBuilder.factory.buildSkill);
+
+      const airtableSkills = skills.map((skill) => airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)));
 
       airtableSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
@@ -158,26 +140,37 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableSkills });
 
-      const airtableChallenges = [
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', airtableId: 'recAirtableChallenge1', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge11', airtableId: 'recAirtableChallenge11', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, status: Challenge.STATUSES.VALIDE, locales: [LOCALE.FRENCH_FRANCE], competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge2', airtableId: 'recAirtableChallenge2', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+      const challenges = [
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', airtableId: 'recAirtableChallenge1', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge11', airtableId: 'recAirtableChallenge11', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, status: Challenge.STATUSES.VALIDE, locales: [LOCALE.FRENCH_FRANCE], competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge2', airtableId: 'recAirtableChallenge2', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge3', airtableId: 'recAirtableChallenge3', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 2, status: Challenge.STATUSES.VALIDE, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge31', airtableId: 'recAirtableChallenge31', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge4', airtableId: 'recAirtableChallenge4', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.DIFFICILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge3', airtableId: 'recAirtableChallenge3', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 2, status: Challenge.STATUSES.VALIDE, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge31', airtableId: 'recAirtableChallenge31', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge4', airtableId: 'recAirtableChallenge4', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.DIFFICILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge5', airtableId: 'recAirtableChallenge5', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge5', airtableId: 'recAirtableChallenge5', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
       ];
 
-      const airtableEnglishChallenges = [
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge12', airtableId: 'recAirtableChallenge12', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, status: Challenge.STATUSES.VALIDE, locales: [LOCALE.ENGLISH_SPOKEN], competenceId }))
+      challenges.forEach(databaseBuilder.factory.buildChallenge);
+
+      const airtableChallenges = challenges.map(airtableBuilder.factory.buildChallenge);
+
+      const englishChallenges = [
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge12', airtableId: 'recAirtableChallenge12', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, status: Challenge.STATUSES.VALIDE, locales: [LOCALE.ENGLISH_SPOKEN], competenceId }),
       ];
 
-      const airtableNoiseChallenges = [
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge21', airtableId: 'recAirtableChallenge21', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge22', airtableId: 'recAirtableChallenge22', skillId: 'recSkill22', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.PROPOSE, competenceId })),
+      englishChallenges.forEach(databaseBuilder.factory.buildChallenge);
+
+      const airtableEnglishChallenges = englishChallenges.map(airtableBuilder.factory.buildChallenge);
+
+      const noiseChallenges = [
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge21', airtableId: 'recAirtableChallenge21', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId }),
       ];
+
+      noiseChallenges.forEach(databaseBuilder.factory.buildChallenge);
+
+      const airtableNoiseChallenges = noiseChallenges.map(airtableBuilder.factory.buildChallenge);
 
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge1', challengeId: 'recChallenge1', locale: LOCALE.FRENCH_SPOKEN });
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge11', challengeId: 'recChallenge11', locale: LOCALE.FRENCH_FRANCE });
@@ -187,7 +180,6 @@ describe('Acceptance | Route | competence-overviews', () => {
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge4', challengeId: 'recChallenge4', locale: LOCALE.FRENCH_SPOKEN });
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge5', challengeId: 'recChallenge5', locale: LOCALE.FRENCH_SPOKEN });
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge21', challengeId: 'recChallenge21', locale: LOCALE.FRENCH_SPOKEN });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge22', challengeId: 'recChallenge22', locale: LOCALE.FRENCH_SPOKEN });
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge12', challengeId: 'recChallenge12', locale: LOCALE.ENGLISH_SPOKEN });
       await databaseBuilder.commit();
 
@@ -615,32 +607,29 @@ describe('Acceptance | Route | competence-overviews', () => {
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableSkills });
 
-      const airtableChallenges = [
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', airtableId: 'recAirtableChallenge1', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+      const challenges = [
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', airtableId: 'recAirtableChallenge1', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge2', airtableId: 'recAirtableChallenge2', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge21', airtableId: 'recAirtableChallenge21', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge2', airtableId: 'recAirtableChallenge2', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.VALIDE, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge21', airtableId: 'recAirtableChallenge21', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge3', airtableId: 'recAirtableChallenge3', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.ARCHIVE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge3', airtableId: 'recAirtableChallenge3', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.ARCHIVE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge4', airtableId: 'recAirtableChallenge4', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge41', airtableId: 'recAirtableChallenge41', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.VALIDE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge4', airtableId: 'recAirtableChallenge4', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge41', airtableId: 'recAirtableChallenge41', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.VALIDE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge5', airtableId: 'recAirtableChallenge5', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId })),
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge51', airtableId: 'recAirtableChallenge51', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge5', airtableId: 'recAirtableChallenge5', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge51', airtableId: 'recAirtableChallenge51', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId }),
 
-        airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge6', airtableId: 'recAirtableChallenge6', skillId: 'recSkill6', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId })),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge6', airtableId: 'recAirtableChallenge6', skillId: 'recSkill6', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, status: Challenge.STATUSES.PERIME, competenceId }),
       ];
 
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge1', challengeId: 'recChallenge1' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge2', challengeId: 'recChallenge2' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge21', challengeId: 'recChallenge21' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge3', challengeId: 'recChallenge3' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge4', challengeId: 'recChallenge4' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge41', challengeId: 'recChallenge41' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge5', challengeId: 'recChallenge5' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge51', challengeId: 'recChallenge51' });
-      databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge6', challengeId: 'recChallenge6' });
+      challenges.forEach(databaseBuilder.factory.buildChallenge);
+
+      const airtableChallenges = challenges.map(airtableBuilder.factory.buildChallenge);
+
+      challenges.forEach((challenge) => databaseBuilder.factory.buildLocalizedChallenge({ id: challenge.id, challengeId: challenge.id }));
+
       await databaseBuilder.commit();
 
       airtableChallengesScope = nock('https://api.airtable.com')

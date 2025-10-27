@@ -175,7 +175,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         illustrationUrl: 'url de l‘illustration',
         attachments: ['url de la pièce jointe'],
@@ -190,6 +190,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        shuffled: false,
       },
       {
         id: 'recChallenge1',
@@ -205,7 +206,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         illustrationUrl: 'url de l‘illustration',
         attachments: ['url de la pièce jointe'],
@@ -220,6 +221,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        shuffled: false,
       },{
         id: 'recChallenge2',
         instruction: 'Consigne du Challenge',
@@ -234,7 +236,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         skillId: 'recSkill0',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         illustrationUrl: 'url de l‘illustration',
         attachments: ['url de la pièce jointe'],
@@ -249,7 +251,15 @@ describe('Acceptance | Controller | translations-controller', () => {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        shuffled: false,
       }];
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'recSkill0', tubeId: 'tube1' });
+      challenges.forEach(((challenge) => databaseBuilder.factory.buildChallenge(challenge)));
 
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
@@ -476,7 +486,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         skillId: 'inconnu',
         embedUrl: 'Embed URL',
         embedTitle: 'Embed title',
-        embedHeight: 'Embed height',
+        embedHeight: 123,
         timer: 12,
         illustrationUrl: 'url de l‘illustration',
         attachments: ['url de la pièce jointe'],
@@ -561,7 +571,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           skillId: 'recSkill0',
           embedUrl: 'Embed URL',
           embedTitle: 'Embed title',
-          embedHeight: 'Embed height',
+          embedHeight: 123,
           timer: 12,
           illustrationUrl: 'url de l‘illustration',
           attachments: ['url de la pièce jointe'],
@@ -612,6 +622,44 @@ describe('Acceptance | Controller | translations-controller', () => {
         key: 'challenge.challengeId.some-key',
         locale: 'fr',
         value: 'La clé !'
+      });
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'recSkill0', tubeId: 'tube1' });
+
+      databaseBuilder.factory.buildChallenge({
+        id: 'challengeId',
+        instruction: 'Consigne du Challenge',
+        proposals: 'Propositions du Challenge',
+        type: ChallengeForRelease.TYPES.QCM,
+        solution: 'Bonnes réponses du Challenge',
+        solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+        t1Status: false,
+        t2Status: true,
+        t3Status: false,
+        status: ChallengeForRelease.STATUSES.VALIDE,
+        skillId: 'recSkill0',
+        embedUrl: 'Embed URL',
+        embedTitle: 'Embed title',
+        embedHeight: 123,
+        timer: 12,
+        illustrationUrl: 'url de l‘illustration',
+        attachments: ['url de la pièce jointe'],
+        competenceId: 'recCompetence0',
+        illustrationAlt: 'Texte alternatif illustration',
+        format: ChallengeForRelease.FORMATS.MOTS,
+        autoReply: false,
+        locales: ['fr'],
+        alternativeInstruction: 'Consigne alternative',
+        focusable: false,
+        delta: 0.5,
+        alpha: 0.9,
+        responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+        genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        shuffled: false,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeId',
