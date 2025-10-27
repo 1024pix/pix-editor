@@ -462,54 +462,52 @@ describe('Application | Route | Skills', () => {
 
     describe('with ids filter', () => {
       beforeEach(async () => {
-        const airtableSkills = [
-          airtableBuilder.factory.buildSkill(
-            domainBuilder.buildSkillDatasourceObject({
-              id: 'skill1',
-              airtableId: 'recSkill1',
-              createdAt: '2025-01-06T13:50:47.437Z',
-              description: 'premier acquis',
-              descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-              hintStatus: Skill.HINT_STATUSES.VALIDE,
-              internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-              level: 4,
-              name: '@skill4',
-              pixValue: 1.5,
-              status: Skill.STATUSES.ACTIF,
-              version: 1,
-              tubeId: 'tube1',
-              tubeAirtableId: 'recTube1',
-              tutorialIds: ['tuto1'],
-              tutorialAirtableIds: ['recTuto1'],
-              learningMoreTutorialIds: ['tuto2', 'tuto3'],
-              learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
-              challengeIds: ['challenge1', 'challenge2'],
-            }),
-          ),
-          airtableBuilder.factory.buildSkill(
-            domainBuilder.buildSkillDatasourceObject({
-              id: 'skill2',
-              airtableId: 'recSkill2',
-              createdAt: '2025-01-06T13:51:04.381Z',
-              description: 'deuxième acquis',
-              descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
-              hintStatus: Skill.HINT_STATUSES.PROPOSE,
-              internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
-              level: 3,
-              name: '@skill3',
-              pixValue: 1.8,
-              status: Skill.STATUSES.EN_CONSTRUCTION,
-              version: 2,
-              tubeId: 'tube2',
-              tubeAirtableId: 'recTube2',
-              tutorialIds: ['tuto2'],
-              tutorialAirtableIds: ['recTuto2'],
-              learningMoreTutorialIds: ['tuto3', 'tuto4'],
-              learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-              challengeIds: ['challenge3', 'challenge4', 'challenge5'],
-            }),
-          ),
-        ];
+        const skill1 = domainBuilder.buildSkillDatasourceObject({
+          id: 'skill1',
+          airtableId: 'recSkill1',
+          createdAt: '2025-01-06T13:50:47.437Z',
+          description: 'premier acquis',
+          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+          hintStatus: Skill.HINT_STATUSES.VALIDE,
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+          level: 4,
+          name: '@skill4',
+          pixValue: 1.5,
+          status: Skill.STATUSES.ACTIF,
+          version: 1,
+          tubeId: 'tube1',
+          tubeAirtableId: 'recTube1',
+          tutorialIds: ['tuto1'],
+          tutorialAirtableIds: ['recTuto1'],
+          learningMoreTutorialIds: ['tuto2', 'tuto3'],
+          learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+          challengeIds: ['challenge1', 'challenge2'],
+          competenceId: 'competence1',
+        });
+        const skill2 = domainBuilder.buildSkillDatasourceObject({
+          id: 'skill2',
+          airtableId: 'recSkill2',
+          createdAt: '2025-01-06T13:51:04.381Z',
+          description: 'deuxième acquis',
+          descriptionStatus: Skill.DESCRIPTION_STATUSES.PROPOSE,
+          hintStatus: Skill.HINT_STATUSES.PROPOSE,
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
+          level: 3,
+          name: '@skill3',
+          pixValue: 1.8,
+          status: Skill.STATUSES.EN_CONSTRUCTION,
+          version: 2,
+          tubeId: 'tube2',
+          tubeAirtableId: 'recTube2',
+          tutorialIds: ['tuto2'],
+          tutorialAirtableIds: ['recTuto2'],
+          learningMoreTutorialIds: ['tuto3', 'tuto4'],
+          learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
+          challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          competenceId: 'competence1',
+        });
+
+        const airtableSkills = [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)];
 
         airtableSkillsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Acquis')
@@ -525,6 +523,40 @@ describe('Application | Route | Skills', () => {
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'fr', value: 'Un autre indice' });
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill2.hint', locale: 'en', value: 'An other clue' });
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@skill', thematicId: 'thematic1' });
+        ['tuto1', 'tuto2', 'tuto3', 'tuto4'].forEach((tutorialId) => {
+          databaseBuilder.factory.buildTutorial(
+            domainBuilder.buildTutorialDatasourceObject({
+              id: tutorialId,
+              tagIds: [],
+            }),
+          );
+        });
+        databaseBuilder.factory.buildSkill(skill1);
+        databaseBuilder.factory.buildSkill(skill2);
+        skill1.challengeIds.forEach((challengeId) => {
+          databaseBuilder.factory.buildChallenge(
+            domainBuilder.buildChallengeDatasourceObject({
+              id: challengeId,
+              skillId: skill1.id,
+            }),
+          );
+        });
+
+        skill2.challengeIds.forEach((challengeId) => {
+          databaseBuilder.factory.buildChallenge(
+            domainBuilder.buildChallengeDatasourceObject({
+              id: challengeId,
+              skillId: skill2.id,
+            }),
+          );
+        });
 
         await databaseBuilder.commit();
       });

@@ -467,6 +467,7 @@ describe('Integration | Repository | skill-repository', () => {
             learningMoreTutorialIds: ['tuto2', 'tuto3'],
             learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
             challengeIds: ['challenge1', 'challenge2'],
+            competenceId: 'competence1',
           },
           {
             id: 'skill2',
@@ -492,6 +493,7 @@ describe('Integration | Repository | skill-repository', () => {
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
             challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            competenceId: 'competence1',
           },
         ];
         const airtableSkills = skills.map((skill) =>
@@ -514,6 +516,33 @@ describe('Integration | Repository | skill-repository', () => {
             value: skill.hint_i18n.en,
           });
         });
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+        databaseBuilder.factory.buildTube({ id: 'tube2', name: '@skill', thematicId: 'thematic1' });
+        ['tuto1', 'tuto2', 'tuto3', 'tuto4'].forEach((tutorialId) => {
+          databaseBuilder.factory.buildTutorial(
+            domainBuilder.buildTutorialDatasourceObject({
+              id: tutorialId,
+              tagIds: [],
+            }),
+          );
+        });
+        skills.forEach(databaseBuilder.factory.buildSkill);
+        skills.forEach((skill) =>
+          skill.challengeIds.forEach((challengeId) => {
+            databaseBuilder.factory.buildChallenge(
+              domainBuilder.buildChallengeDatasourceObject({
+                id: challengeId,
+                skillId: skill.id,
+              }),
+            );
+          }),
+        );
+
         await databaseBuilder.commit();
         const ids = skills.map((skill) => skill.id);
 

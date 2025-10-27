@@ -53,19 +53,22 @@ export async function getByAirtableId(id) {
 
 export async function getManyByAirtableIds(ids) {
   if (!ids?.length) return [];
-  const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
-  if (!datasourceSkills) return [];
+  const airtableDtos = await skillDatasource.getManyByAirtableIds(ids);
+  if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
+  const pgDtos = await selectSkills()
     .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+      'skills.id',
+      airtableDtos.map(({ id }) => id),
+    )
+    .orderBy('skills.id');
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listByTubeId(tubeId) {
