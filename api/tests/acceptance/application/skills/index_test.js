@@ -1699,8 +1699,11 @@ describe('Application | Route | Skills', () => {
         airtableId: 'recSkill1Tube1',
         tubeId: 'tube1',
         tubeAirtableId: 'recTube1',
+        name: '@tube1',
         level: 1,
         version: 1,
+        competenceId: 'competence1',
+        challengeIds: ['validatedChallengeProto'],
       });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });

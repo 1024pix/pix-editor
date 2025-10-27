@@ -5,7 +5,7 @@ import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, areNullableValuesEqual, compareDtosLists } from './migration-from-airtable.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtosLists, compareDtos } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'skills';
 const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
@@ -28,13 +28,16 @@ export async function list() {
 }
 
 export async function get(id) {
-  const [[skillDTO], translations] = await Promise.all([
+  const [[airtableDto], pgDto, translations] = await Promise.all([
     skillDatasource.filter({ filter: { ids: [id] } }),
+    selectSkills().where('skills.id', id).first(),
     translationRepository.listByEntity(model, id),
   ]);
-  if (!skillDTO) return null;
-  const skillDataFromPG = await knex(TABLE_NAME).select('*').where({ id }).first();
-  return toDomain(skillDTO, translations, skillDataFromPG);
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  if (!airtableDto) return null;
+  return toDomain(airtableDto, translations, pgDto);
 }
 
 export async function getByAirtableId(id) {
