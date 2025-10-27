@@ -99,9 +99,17 @@ export class CopyChallengesFromAirtableToPg extends Script {
 
     if (options.dryRun) return;
 
-    await knex.insert(challenges).into('challenges').onConflict('id').merge();
+    for (const chunk of chunks(challenges, 1000)) {
+      await knex.insert(chunk).into('challenges').onConflict('id').merge();
+    }
     logger.info({ count: challenges.length }, 'Inserted challenges into postgres');
   }
 }
 
 await ScriptRunner.execute(import.meta.url, CopyChallengesFromAirtableToPg);
+
+function* chunks(arr, size) {
+  for (let i = 0; i < arr.length; i += size) {
+    yield arr.slice(i, i + size);
+  }
+}
