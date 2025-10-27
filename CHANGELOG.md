@@ -1,5 +1,11 @@
 
 
+## v3.228.3 (27/10/2025)
+
+
+### :bug: Correction
+- [#1196](https://github.com/1024pix/pix-editor/pull/1196) [BUGFIX] Rend la taille de tranche définissable par option dans le script de migration des épreuves depuis Airtable.
+
 ## v3.228.2 (27/10/2025)
 
 
