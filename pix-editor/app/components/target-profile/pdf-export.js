@@ -10,7 +10,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { Canvg, presets } from 'canvg';
 import jsPDF from 'jspdf';
-import { applyPlugin } from 'jspdf-autotable';
+import { autoTable } from 'jspdf-autotable';
 import { isEmpty } from 'lodash';
 
 import {
@@ -47,7 +47,6 @@ const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
 const defaultLanguage = 'fr';
 
 function createOffscreenCanvas(width, height) {
-  applyPlugin(jsPDF);
   let canvas;
   if (window.OffscreenCanvas) {
     canvas = new OffscreenCanvas(width, height);
@@ -170,7 +169,7 @@ export default class TargetProfilePdfExportComponent extends Component {
             return [...values, ...buildCell];
           }, []);
 
-          pdf.autoTable({
+          autoTable(pdf, {
             startY: y,
             head: tableHead,
             body: tableBody,
@@ -195,7 +194,7 @@ export default class TargetProfilePdfExportComponent extends Component {
           pdf.roundedRect(margin, newY - 5, pageWidth, 10, 5, 5, 'F');
 
           // Reprint table to prevent text hide by roundedRect
-          pdf.autoTable({
+          autoTable(pdf, {
             startY: y,
             head: tableHead,
             body: tableBody,
