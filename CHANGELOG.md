@@ -1,5 +1,11 @@
 
 
+## v3.228.2 (27/10/2025)
+
+
+### :bug: Correction
+- [#1194](https://github.com/1024pix/pix-editor/pull/1194) [BUGFIX] Valeurs par défaut pour les colonnes booléennes des épreuves (PIX-20145).
+
 ## v3.228.1 (27/10/2025)
 
 
