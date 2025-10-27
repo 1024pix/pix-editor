@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import { Attachment } from '../../domain/models/index.js';
-import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 export async function get(id) {
   const datasourceAttachment = await attachmentDatasource.find(id);
@@ -38,12 +38,14 @@ export async function createBatch(attachments) {
     });
   }
   const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
-  for (const createdAttachmentsDto of createdAttachmentsDtos) {
-    await localizedChallengesAttachmentsRepository.save({
-      localizedChallengeId: createdAttachmentsDto.localizedChallengeId,
-      attachmentId: createdAttachmentsDto.id,
-    });
-  }
+  await knex
+    .insert(
+      createdAttachmentsDtos.map(({ localizedChallengeId, id: attachmentId }) => ({
+        attachmentId,
+        localizedChallengeId,
+      })),
+    )
+    .into('localized_challenges-attachments');
   return toDomainList(createdAttachmentsDtos);
 }
 
@@ -60,10 +62,12 @@ export async function create(attachment) {
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
-  await localizedChallengesAttachmentsRepository.save({
-    localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
-    attachmentId: createdAttachmentDTO.id,
-  });
+  await knex
+    .insert({
+      localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
+      attachmentId: createdAttachmentDTO.id,
+    })
+    .into('localized_challenges-attachments');
   return toDomain(createdAttachmentDTO);
 }
 
@@ -84,7 +88,7 @@ export async function update(attachment) {
 
 export async function remove(attachmentId) {
   await attachmentDatasource.delete([attachmentId]);
-  await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
+  await knex.delete().from('localized_challenges-attachments').where('attachmentId', attachmentId);
 }
 
 function toDomainList(datasourceAttachments) {
