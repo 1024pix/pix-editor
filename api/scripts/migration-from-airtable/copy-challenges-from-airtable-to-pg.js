@@ -17,6 +17,12 @@ export class CopyChallengesFromAirtableToPg extends Script {
           demandOption: false,
           default: true,
         },
+        chunkSize: {
+          type: 'number',
+          describe: 'size of inserted chunk',
+          demandOption: false,
+          default: 500,
+        },
       },
     });
   }
@@ -99,7 +105,7 @@ export class CopyChallengesFromAirtableToPg extends Script {
 
     if (options.dryRun) return;
 
-    for (const chunk of chunks(challenges, 1000)) {
+    for (const chunk of chunks(challenges, options.chunkSize)) {
       await knex.insert(chunk).into('challenges').onConflict('id').merge();
     }
     logger.info({ count: challenges.length }, 'Inserted challenges into postgres');

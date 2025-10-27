@@ -124,9 +124,9 @@ describe('Integration | Scripts | CopyChallengesFromAirtableToPg', () => {
       await knex.delete().from(TABLE_NAME);
     });
 
-    it('reads skills from airtable and saves these to postgres', async () => {
+    it('reads challenges from airtable and saves these to postgres', async () => {
       // given
-      const options = { dryRun: false };
+      const options = { dryRun: false, chunkSize: 500 };
 
       // when
       await script.handle({ options, logger });
@@ -240,9 +240,9 @@ describe('Integration | Scripts | CopyChallengesFromAirtableToPg', () => {
     });
 
     describe('when dryRun is true', () => {
-      it('reads skills from airtable and stops', async () => {
+      it('reads challenges from airtable and stops', async () => {
         // given
-        const options = { dryRun: true };
+        const options = { dryRun: true, chunkSize: 500 };
 
         // when
         await script.handle({ options, logger });
