@@ -301,7 +301,7 @@ describe('Integration | Repository | skill-repository', () => {
       const skill1 = {
         id: 'skill1',
         airtableId: 'recId1',
-        name: 'Acquis 1',
+        name: '@foo4',
         description: 'Description Acquis 1',
         descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
         hintStatus: Skill.HINT_STATUSES.VALIDE,
@@ -316,10 +316,27 @@ describe('Integration | Repository | skill-repository', () => {
         tubeAirtableId: 'recTube1',
         level: 4,
         internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-        version: '1',
+        version: 1,
         challengeIds: ['challenge12kwuefn2s', 'challengeJqdqwjcd1'],
         createdAt: '2025-01-06T08:58:57.465Z',
       };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
+
+      [...skill1.tutorialIds, ...skill1.learningMoreTutorialIds].forEach((id) =>
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id, tagIds: [] })),
+      );
+
+      databaseBuilder.factory.buildSkill(skill1);
+      skill1.challengeIds.forEach((id) =>
+        databaseBuilder.factory.buildChallenge(
+          domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill1.id }),
+        ),
+      );
 
       databaseBuilder.factory.buildTranslation({
         key: 'skill.skill1.hint',
@@ -379,7 +396,7 @@ describe('Integration | Repository | skill-repository', () => {
         domainBuilder.buildSkill({
           id: 'skill1',
           airtableId: 'recId1',
-          name: 'Acquis 1',
+          name: '@foo4',
           description: 'Description Acquis 1',
           hint_i18n: {
             fr: 'Indice acquis 1',
@@ -398,7 +415,7 @@ describe('Integration | Repository | skill-repository', () => {
           tubeAirtableId: 'recTube1',
           level: 4,
           internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          version: '1',
+          version: 1,
           challengeIds: ['challenge12kwuefn2s', 'challengeJqdqwjcd1'],
           createdAt: '2025-01-06T08:58:57.465Z',
         }),

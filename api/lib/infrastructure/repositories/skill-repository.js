@@ -104,23 +104,29 @@ export async function listActiveByCompetenceId(competenceId) {
 }
 
 export async function listByCompetenceId(competenceId) {
-  const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
-  if (!datasourceSkills) return [];
+  const [airtableDtos, pgDtos] = await Promise.all([
+    skillDatasource.listByCompetenceId(competenceId),
+    selectSkills().where('thematics.competenceId', competenceId).orderBy('skills.id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
+
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function search(params) {
-  let query = selectSkills().whereRaw('?? || ?? ilike ?', ['tubes.name', 'skills.level', `${params.filter.name}%`]);
+  let query = selectSkills().whereRaw("?? || coalesce(??::varchar, '') ilike ?", [
+    'tubes.name',
+    'skills.level',
+    `${params.filter.name}%`,
+  ]);
   if (params.sort) {
     params.sort.forEach(([field, direction]) => {
       query = query.orderBy(field, direction);
@@ -150,7 +156,7 @@ export function selectSkills() {
   return knex
     .select(
       'skills.*',
-      knex.raw('?? || ?? as ??', ['tubes.name', 'skills.level', 'name']),
+      knex.raw("?? || coalesce(??::varchar, '') as ??", ['tubes.name', 'skills.level', 'name']),
       'thematics.competenceId',
       knex.raw(
         'coalesce((??), \'[]\') as "tutorialIds"',
