@@ -583,6 +583,7 @@ describe('Integration | Repository | skill-repository', () => {
             learningMoreTutorialIds: ['tuto2', 'tuto3'],
             learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
             challengeIds: ['challenge1', 'challenge2'],
+            competenceId: 'competence1',
           },
           {
             id: 'skill2',
@@ -601,24 +602,35 @@ describe('Integration | Repository | skill-repository', () => {
             pixValue: 1.8,
             status: Skill.STATUSES.EN_CONSTRUCTION,
             version: 2,
-            tubeId: 'tube2',
-            tubeAirtableId: 'recTube2',
+            tubeId: 'tube1',
+            tubeAirtableId: 'recTube1',
             tutorialIds: ['tuto2'],
             tutorialAirtableIds: ['recTuto2'],
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
             challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            competenceId: 'competence1',
           },
         ];
-        const airtableSkills = skills.map((skill) =>
-          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)),
-        );
-        const findRecordsSpy = vi
-          .spyOn(airtable, 'findRecords')
-          .mockResolvedValueOnce(
-            airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
-          );
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto1', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto2', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto3', tagIds: [] }));
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'tuto4', tagIds: [] }));
+
         skills.forEach((skill) => {
+          databaseBuilder.factory.buildSkill(skill);
+
+          skill.challengeIds.forEach((id) =>
+            databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id, skillId: skill.id })),
+          );
+
           databaseBuilder.factory.buildTranslation({
             key: `skill.${skill.id}.hint`,
             locale: 'fr',
@@ -630,6 +642,16 @@ describe('Integration | Repository | skill-repository', () => {
             value: skill.hint_i18n.en,
           });
         });
+
+        const airtableSkills = skills.map((skill) =>
+          airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill)),
+        );
+        const findRecordsSpy = vi
+          .spyOn(airtable, 'findRecords')
+          .mockResolvedValueOnce(
+            airtableSkills.map((airtableSkill) => new Airtable.Record('Acquis', airtableSkill.id, airtableSkill)),
+          );
+
         await databaseBuilder.commit();
 
         const params = {

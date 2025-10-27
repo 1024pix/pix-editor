@@ -114,19 +114,30 @@ export async function listByCompetenceId(competenceId) {
 }
 
 export async function search(params) {
-  const datasourceSkills = await skillDatasource.search(params);
-  if (!datasourceSkills) return [];
+  let query = selectSkills().whereRaw('?? || ?? ilike ?', ['tubes.name', 'skills.level', `${params.filter.name}%`]);
+  if (params.sort) {
+    params.sort.forEach(([field, direction]) => {
+      query = query.orderBy(field, direction);
+    });
+  } else {
+    query = query.orderBy('skills.id');
+  }
+  if (params.page?.limit) {
+    query = query.limit(params.page?.limit);
+  }
+
+  const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.search(params), query]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
+
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export function selectSkills() {
