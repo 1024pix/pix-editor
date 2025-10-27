@@ -1,15 +1,28 @@
 import _ from 'lodash';
 
-export async function exportExternalUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils }) {
+export async function exportExternalUrlsFromRelease({
+  releaseRepository,
+  urlRepository,
+  localizedChallengeRepository,
+  whitelistedUrlRepository,
+  UrlUtils,
+}) {
   const release = await releaseRepository.getLatestRelease();
   const { operativeChallenges } = release;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, localizedChallengesById, release, UrlUtils);
   const whitelistedUrls = await whitelistedUrlRepository.list();
   const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
-  const finalUrlList = urlsFromChallenges.filter(({ url }) => !activeWhitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)));
-  const dataToUpload = finalUrlList.map(({ origin, url, locales, status, tube }) =>
-    [origin, tube, url, locales.join(';'), status]);
+  const finalUrlList = urlsFromChallenges.filter(
+    ({ url }) => !activeWhitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
+  );
+  const dataToUpload = finalUrlList.map(({ origin, url, locales, status, tube }) => [
+    origin,
+    tube,
+    url,
+    locales.join(';'),
+    status,
+  ]);
   await urlRepository.exportExternalUrls(dataToUpload);
 }
 

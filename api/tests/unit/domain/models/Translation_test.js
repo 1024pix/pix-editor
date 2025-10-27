@@ -1,9 +1,9 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
-describe('Unit | Domain | Translation', function() {
-  context('get entityId', function() {
-    it('should generate the expected entityId', function() {
+describe('Unit | Domain | Translation', function () {
+  context('get entityId', function () {
+    it('should generate the expected entityId', function () {
       // given
       const translation = domainBuilder.buildTranslation({
         key: 'challenge.idDuChallenge.champ',
@@ -17,8 +17,8 @@ describe('Unit | Domain | Translation', function() {
     });
   });
 
-  context('get model', function() {
-    it('should return the expected model', function() {
+  context('get model', function () {
+    it('should return the expected model', function () {
       // given
       const translation = domainBuilder.buildTranslation({
         key: 'challenge.idDuChallenge.champ',

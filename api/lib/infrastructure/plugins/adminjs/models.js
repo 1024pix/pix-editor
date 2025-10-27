@@ -21,7 +21,7 @@ export const User = sequelize.define(
       allowNull: false,
     },
   },
-  {}
+  {},
 );
 
 export const LocalizedChallenge = sequelize.define(
@@ -61,7 +61,7 @@ export const Release = sequelize.define(
   },
   {
     timestamps: false,
-  }
+  },
 );
 
 export const Translations = sequelize.define(
@@ -71,7 +71,7 @@ export const Translations = sequelize.define(
       type: DataTypes.TEXT,
       primaryKey: true,
     },
-    locale : {
+    locale: {
       type: DataTypes.TEXT,
       primaryKey: true,
     },
@@ -83,4 +83,3 @@ export const Translations = sequelize.define(
     timestamps: false,
   },
 );
-

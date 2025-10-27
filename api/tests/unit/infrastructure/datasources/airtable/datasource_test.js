@@ -3,9 +3,7 @@ import { datasource } from '../../../../../lib/infrastructure/datasources/airtab
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 
 describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
-
   const someDatasource = datasource.extend({
-
     modelName: 'AirtableModel',
 
     tableName: 'Airtable_table',
@@ -16,12 +14,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
     toAirTableObject: (model) => ({
       fields: {
         'id persistant': model.id,
-      }
+      },
     }),
   });
 
   describe('#list', () => {
-
     beforeEach(() => {
       vi.spyOn(airtable, 'findRecords').mockImplementation(async (tableName, options) => {
         return [{ id: 1, tableName, ...options }];
@@ -33,7 +30,14 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await someDatasource.list();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+      expect(record).to.deep.equal([
+        {
+          id: 1,
+          tableName: 'Airtable_table',
+          fields: ['Shi', 'Foo', 'Me'],
+          sort: [{ direction: 'asc', field: 'id persistant' }],
+        },
+      ]);
     });
 
     it('should correctly manage the `this` context', async () => {
@@ -44,20 +48,33 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await unboundList();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+      expect(record).to.deep.equal([
+        {
+          id: 1,
+          tableName: 'Airtable_table',
+          fields: ['Shi', 'Foo', 'Me'],
+          sort: [{ direction: 'asc', field: 'id persistant' }],
+        },
+      ]);
     });
 
     it('should get list with limit', async () => {
       // when
       const record = await someDatasource.list({ page: { size: 20 } });
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], maxRecords: 20, sort: [{ direction: 'asc', field: 'id persistant' }] }]);
-
+      expect(record).to.deep.equal([
+        {
+          id: 1,
+          tableName: 'Airtable_table',
+          fields: ['Shi', 'Foo', 'Me'],
+          maxRecords: 20,
+          sort: [{ direction: 'asc', field: 'id persistant' }],
+        },
+      ]);
     });
   });
 
   describe('#filter', () => {
-
     it('should fetch records of a given type and given ids', async () => {
       // given
       vi.spyOn(airtable, 'findRecords').mockImplementation(async (tableName, options) => {
@@ -69,13 +86,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       await someDatasource.filter({ filter: { ids: ['1', '2'] } });
 
       // then
-      expect(airtable.findRecords).toHaveBeenCalledWith(
-        'Airtable_table',
-        {
-          fields: ['Shi', 'Foo', 'Me'],
-          filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
-        }
-      );
+      expect(airtable.findRecords).toHaveBeenCalledWith('Airtable_table', {
+        fields: ['Shi', 'Foo', 'Me'],
+        filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
+      });
     });
 
     it('should escape the query', async () => {
@@ -86,21 +100,17 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       });
 
       // when
-      await someDatasource.filter({ filter: { ids: ['1\'', '2\''] } });
+      await someDatasource.filter({ filter: { ids: ["1'", "2'"] } });
 
       // then
-      expect(airtable.findRecords).toHaveBeenCalledWith(
-        'Airtable_table',
-        {
-          fields: ['Shi', 'Foo', 'Me'],
-          filterByFormula: 'OR("1\'" = {id persistant},"2\'" = {id persistant})',
-        }
-      );
+      expect(airtable.findRecords).toHaveBeenCalledWith('Airtable_table', {
+        fields: ['Shi', 'Foo', 'Me'],
+        filterByFormula: 'OR("1\'" = {id persistant},"2\'" = {id persistant})',
+      });
     });
   });
 
   describe('#create', () => {
-
     it('should create record', async () => {
       // given
       vi.spyOn(airtable, 'createRecord').mockImplementation(async (tableName, options) => {
@@ -117,21 +127,25 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         tableName: 'Airtable_table',
         fields: { 'id persistant': 'created-record-id' },
       });
-
     });
   });
 
   describe('#createBatch', () => {
-
     it('should create records', async () => {
       // given
       vi.spyOn(airtable, 'createRecords').mockImplementation(async (tableName, bodies) => {
-        const returnValue = [{ id: 1, tableName, ...bodies[0] }, { id: 2, tableName, ...bodies[1] }];
+        const returnValue = [
+          { id: 1, tableName, ...bodies[0] },
+          { id: 2, tableName, ...bodies[1] },
+        ];
         return returnValue;
       });
 
       // when
-      const createdChallenges = await someDatasource.createBatch([{ id: 'created-record-id1' }, { id: 'created-record-id2' }]);
+      const createdChallenges = await someDatasource.createBatch([
+        { id: 'created-record-id1' },
+        { id: 'created-record-id2' },
+      ]);
 
       // then
       expect(createdChallenges).to.deep.equal([
@@ -139,7 +153,8 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
           id: 1,
           tableName: 'Airtable_table',
           fields: { 'id persistant': 'created-record-id1' },
-        }, {
+        },
+        {
           id: 2,
           tableName: 'Airtable_table',
           fields: { 'id persistant': 'created-record-id2' },
@@ -149,7 +164,6 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
   });
 
   describe('#update', () => {
-
     it('should update record', async () => {
       // given
       vi.spyOn(airtable, 'updateRecord').mockImplementation(async (tableName, options) => {
@@ -166,7 +180,6 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         tableName: 'Airtable_table',
         fields: { 'id persistant': 'updated-record-id' },
       });
-
     });
   });
 });

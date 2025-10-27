@@ -4,15 +4,7 @@ import { extractParameters } from '../../utils/query-params-utils.js';
 const { Serializer } = Jsonapi;
 
 const serializer = new Serializer('attachment', {
-  attributes: [
-    'filename',
-    'size',
-    'url',
-    'mimeType',
-    'type',
-    'challenge',
-    'localizedChallenge',
-  ],
+  attributes: ['filename', 'size', 'url', 'mimeType', 'type', 'challenge', 'localizedChallenge'],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenge') return 'localized-challenges';
   },

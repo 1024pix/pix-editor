@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, } from '../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
 import {
   AreaForReplication,
   FrameworkForReplication,
-  SkillForReplication
+  SkillForReplication,
 } from '../../../lib/domain/models/replication/index.js';
 
 const {
@@ -22,16 +22,15 @@ const {
 } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | replication-data-controller', () => {
-
   let user;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     user = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
   });
 
-  describe('GET /api/replication-data', function() {
-    it('should return data for replication', async function() {
+  describe('GET /api/replication-data', function () {
+    it('should return data for replication', async function () {
       const expectedCurrentContent = await mockCurrentContent();
 
       const server = await createServer();
@@ -49,19 +48,18 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const resultWithoutTranslations = _.omit(result, 'translations');
       const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
       expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
-      expect(result.translations).toMatchObject(expectedCurrentContent.translations.map((translation) => ({
-        ...translation,
-        id: expect.any(Number)
-      })));
+      expect(result.translations).toMatchObject(
+        expectedCurrentContent.translations.map((translation) => ({
+          ...translation,
+          id: expect.any(Number),
+        })),
+      );
     });
   });
 });
 
 function omit(keys, obj) {
-  return Object.fromEntries(
-    Object.entries(obj)
-      .filter(([k]) => !keys.includes(k))
-  );
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 }
 
 async function mockCurrentContent() {
@@ -75,42 +73,53 @@ async function mockCurrentContent() {
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
-  const expectedCompetence = omit(['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'tubeIds', 'areaAirtableId'], domainBuilder.buildCompetence({
-    name_i18n: {
-      fr: 'Français',
-      en: 'English',
-    },
-    description_i18n: {
-      fr: 'Description française',
-      en: 'Description anglaise',
-    },
-    skillIds: ['recSkill1'],
-    origin: 'Nom du referentiel',
-  }));
+  const expectedCompetence = omit(
+    ['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'tubeIds', 'areaAirtableId'],
+    domainBuilder.buildCompetence({
+      name_i18n: {
+        fr: 'Français',
+        en: 'English',
+      },
+      description_i18n: {
+        fr: 'Description française',
+        en: 'Description anglaise',
+      },
+      skillIds: ['recSkill1'],
+      origin: 'Nom du referentiel',
+    }),
+  );
   expectedCurrentContent.competences = [expectedCompetence];
 
-  const expectedThematic = omit(['airtableId', 'competenceAirtableId', 'tubeAirtableIds'], domainBuilder.buildThematic({
-    id: 'recThematic1',
-    name_i18n: {
-      fr: 'Thématique en fr',
-      en: 'Thematic in en',
-    },
-    competenceId: expectedCompetence.id,
-    tubeIds: ['recTube1'],
-  }));
+  const expectedThematic = omit(
+    ['airtableId', 'competenceAirtableId', 'tubeAirtableIds'],
+    domainBuilder.buildThematic({
+      id: 'recThematic1',
+      name_i18n: {
+        fr: 'Thématique en fr',
+        en: 'Thematic in en',
+      },
+      competenceId: expectedCompetence.id,
+      tubeIds: ['recTube1'],
+    }),
+  );
   expectedCurrentContent.thematics = [expectedThematic];
 
-  const expectedTube = omit(['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'], domainBuilder.buildTube({
-    id: 'recTube1',
-    thematicId: expectedThematic.id,
-    competenceId: expectedCompetence.id,
-    skillIds: ['recSkill1'],
-  }));
-  expectedCurrentContent.tubes = [{
-    ...expectedTube,
-    isMobileCompliant: false,
-    isTabletCompliant: false,
-  }];
+  const expectedTube = omit(
+    ['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'],
+    domainBuilder.buildTube({
+      id: 'recTube1',
+      thematicId: expectedThematic.id,
+      competenceId: expectedCompetence.id,
+      skillIds: ['recSkill1'],
+    }),
+  );
+  expectedCurrentContent.tubes = [
+    {
+      ...expectedTube,
+      isMobileCompliant: false,
+      isTabletCompliant: false,
+    },
+  ];
 
   const baseSkill = domainBuilder.buildSkill({
     id: 'recSkill1',
@@ -131,7 +140,7 @@ async function mockCurrentContent() {
       { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
     ],
-    version:1,
+    version: 1,
     genealogy: Challenge.GENEALOGIES.PROTOTYPE,
     accessibility1: Challenge.ACCESSIBILITY1.OK,
     accessibility2: Challenge.ACCESSIBILITY2.OK,
@@ -177,10 +186,7 @@ async function mockCurrentContent() {
     ...challenge,
     geography: 'BR',
     area: 'BR',
-    urlsToConsult: [
-      'https://example.com/',
-      'https://pix.org/nl-be',
-    ],
+    urlsToConsult: ['https://example.com/', 'https://pix.org/nl-be'],
     ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedChallenge.localizedChallenges;
@@ -194,7 +200,13 @@ async function mockCurrentContent() {
     ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
-  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'RO', area: 'RO' };
+  const expectedChallengeNl = {
+    ...challengeNl,
+    ...expectedPrimaryProtoQualityAttributes,
+    illustrationAlt: 'alt_nl',
+    geography: 'RO',
+    area: 'RO',
+  };
   delete expectedChallengeNl.localizedChallenges;
   expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
 
@@ -219,10 +231,13 @@ async function mockCurrentContent() {
     localizedChallengeId: 'localized-challenge-id',
   };
   expectedCurrentContent.attachments = [
-    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, }),
+    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
+      ...domainBuilder.buildAttachment(expectedAttachment),
+      alt: null,
+    }),
     omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
       ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
-      alt: 'alt_nl'
+      alt: 'alt_nl',
     }),
   ];
 
@@ -281,27 +296,25 @@ async function mockCurrentContent() {
     thematics: [buildThematic(expectedThematic)],
     tubes: [buildTube({ ...expectedTube, competenceId: expectedCompetence.id, skillIds: [baseSkill.id] })],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge({
-      ...expectedChallenge,
-      files: [
-        {
-          fileId: expectedAttachment.id,
-          localizedChallengeId: expectedChallenge.id
-        },
-        {
-          fileId: expectedAttachmentNl.id,
-          localizedChallengeId: expectedChallengeNl.id
-        },
-      ]
-    }),
-    buildChallenge({
-      ...alternativeChallenge
-    })
+    challenges: [
+      buildChallenge({
+        ...expectedChallenge,
+        files: [
+          {
+            fileId: expectedAttachment.id,
+            localizedChallengeId: expectedChallenge.id,
+          },
+          {
+            fileId: expectedAttachmentNl.id,
+            localizedChallengeId: expectedChallengeNl.id,
+          },
+        ],
+      }),
+      buildChallenge({
+        ...alternativeChallenge,
+      }),
     ],
-    attachments: [
-      buildAttachment(expectedAttachment),
-      buildAttachment(expectedAttachmentNl)
-    ],
+    attachments: [buildAttachment(expectedAttachment), buildAttachment(expectedAttachmentNl)],
     tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
   });
   databaseBuilder.factory.buildStaticCourse({
@@ -317,37 +330,48 @@ async function mockCurrentContent() {
     challengeIds: 'recChallenge0',
   });
 
-  const mission = databaseBuilder.factory.buildMission({
-    id: 123456789,
-    name: 'validated mission PG name',
-    competenceId: 'competenceId',
-    learningObjectives: 'Que tu sois le meilleur',
-    thematicIds: 'thematicIds',
-    validatedObjectives: 'Rien',
-    status: Mission.status.VALIDATED,
-    documentationUrl: 'http://url-example.net',
-  }, false);
+  const mission = databaseBuilder.factory.buildMission(
+    {
+      id: 123456789,
+      name: 'validated mission PG name',
+      competenceId: 'competenceId',
+      learningObjectives: 'Que tu sois le meilleur',
+      thematicIds: 'thematicIds',
+      validatedObjectives: 'Rien',
+      status: Mission.status.VALIDATED,
+      documentationUrl: 'http://url-example.net',
+    },
+    false,
+  );
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `mission.${mission.id}.name`,
-    locale: 'fr',
-    value: 'validated mission PG name',
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `mission.${mission.id}.learningObjectives`,
-    locale: 'fr',
-    value: 'Que tu sois le meilleur',
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `mission.${mission.id}.validatedObjectives`,
-    locale: 'fr',
-    value: 'Rien',
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `mission.${mission.id}.introductionMediaAlt`,
-    locale: 'fr',
-    value: 'Message alternatif',
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.name`,
+      locale: 'fr',
+      value: 'validated mission PG name',
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.learningObjectives`,
+      locale: 'fr',
+      value: 'Que tu sois le meilleur',
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.validatedObjectives`,
+      locale: 'fr',
+      value: 'Rien',
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.introductionMediaAlt`,
+      locale: 'fr',
+      value: 'Message alternatif',
+    }),
+  );
 
   databaseBuilder.factory.buildLocalizedChallenge({
     id: challenge.id,
@@ -356,10 +380,7 @@ async function mockCurrentContent() {
     embedUrl: challenge.embedUrl,
     status: LocalizedChallenge.STATUSES.PLAY,
     geography: 'BR',
-    urlsToConsult: [
-      'https://example.com/',
-      'https://pix.org/nl-be',
-    ],
+    urlsToConsult: ['https://example.com/', 'https://pix.org/nl-be'],
     ...expectedPrimaryProtoQualityAttributes,
   });
   databaseBuilder.factory.buildLocalizedChallenge({
@@ -389,112 +410,152 @@ async function mockCurrentContent() {
     validatedAt: new Date('2023-01-02T18:08:08Z'),
   });
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `area.${expectedCurrentContent.areas[0].id}.title`,
-    locale: 'fr',
-    value: expectedCurrentContent.areas[0].title_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `area.${expectedCurrentContent.areas[0].id}.title`,
-    locale: 'en',
-    value: expectedCurrentContent.areas[0].title_i18n.en,
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${expectedCurrentContent.areas[0].id}.title`,
+      locale: 'fr',
+      value: expectedCurrentContent.areas[0].title_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${expectedCurrentContent.areas[0].id}.title`,
+      locale: 'en',
+      value: expectedCurrentContent.areas[0].title_i18n.en,
+    }),
+  );
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].name_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].name_i18n.en,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].description_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].description_i18n.en,
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+      locale: 'fr',
+      value: expectedCurrentContent.competences[0].name_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+      locale: 'en',
+      value: expectedCurrentContent.competences[0].name_i18n.en,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+      locale: 'fr',
+      value: expectedCurrentContent.competences[0].description_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+      locale: 'en',
+      value: expectedCurrentContent.competences[0].description_i18n.en,
+    }),
+  );
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
-    locale: 'fr',
-    value: expectedCurrentContent.thematics[0].name_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
-    locale: 'en',
-    value: expectedCurrentContent.thematics[0].name_i18n.en,
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+      locale: 'fr',
+      value: expectedCurrentContent.thematics[0].name_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+      locale: 'en',
+      value: expectedCurrentContent.thematics[0].name_i18n.en,
+    }),
+  );
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
-    locale: 'fr',
-    value: expectedCurrentContent.tubes[0].practicalTitle_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
-    locale: 'en',
-    value: expectedCurrentContent.tubes[0].practicalTitle_i18n.en,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
-    locale: 'fr',
-    value: expectedCurrentContent.tubes[0].practicalDescription_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
-    locale: 'en',
-    value: expectedCurrentContent.tubes[0].practicalDescription_i18n.en,
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
+      locale: 'fr',
+      value: expectedCurrentContent.tubes[0].practicalTitle_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
+      locale: 'en',
+      value: expectedCurrentContent.tubes[0].practicalTitle_i18n.en,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
+      locale: 'fr',
+      value: expectedCurrentContent.tubes[0].practicalDescription_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
+      locale: 'en',
+      value: expectedCurrentContent.tubes[0].practicalDescription_i18n.en,
+    }),
+  );
 
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'fr',
-    value: expectedCurrentContent.skills[0].hint_i18n.fr,
-  }));
-  expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'en',
-    value: expectedCurrentContent.skills[0].hint_i18n.en,
-  }));
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
+      locale: 'fr',
+      value: expectedCurrentContent.skills[0].hint_i18n.fr,
+    }),
+  );
+  expectedCurrentContent.translations.push(
+    databaseBuilder.factory.buildTranslation({
+      key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
+      locale: 'en',
+      value: expectedCurrentContent.skills[0].hint_i18n.en,
+    }),
+  );
 
   for (const challengeForTranslation of [expectedChallenge, expectedAlternativeChallenge]) {
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.instruction`,
-      locale: 'fr',
-      value: challengeForTranslation.instruction,
-    }));
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.alternativeInstruction`,
-      locale: 'fr',
-      value: challengeForTranslation.alternativeInstruction,
-    }));
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.proposals`,
-      locale: 'fr',
-      value: challengeForTranslation.proposals,
-    }));
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.solution`,
-      locale: 'fr',
-      value: challengeForTranslation.solution,
-    }));
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.solutionToDisplay`,
-      locale: 'fr',
-      value: challengeForTranslation.solutionToDisplay,
-    }));
-    expectedCurrentContent.translations.push(databaseBuilder.factory.buildTranslation({
-      key: `challenge.${challengeForTranslation.id}.embedTitle`,
-      locale: 'fr',
-      value: challengeForTranslation.embedTitle,
-    }));
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.instruction`,
+        locale: 'fr',
+        value: challengeForTranslation.instruction,
+      }),
+    );
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.alternativeInstruction`,
+        locale: 'fr',
+        value: challengeForTranslation.alternativeInstruction,
+      }),
+    );
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.proposals`,
+        locale: 'fr',
+        value: challengeForTranslation.proposals,
+      }),
+    );
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.solution`,
+        locale: 'fr',
+        value: challengeForTranslation.solution,
+      }),
+    );
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.solutionToDisplay`,
+        locale: 'fr',
+        value: challengeForTranslation.solutionToDisplay,
+      }),
+    );
+    expectedCurrentContent.translations.push(
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeForTranslation.id}.embedTitle`,
+        locale: 'fr',
+        value: challengeForTranslation.embedTitle,
+      }),
+    );
   }
 
   expectedCurrentContent.translations.forEach((translation) => {

@@ -4,10 +4,16 @@ import {
   localizedChallengeRepository,
   releaseRepository,
   urlRepository,
-  whitelistedUrlRepository
+  whitelistedUrlRepository,
 } from '../repositories/index.js';
 import * as UrlUtils from '../utils/url-utils.js';
 
 export default function exportExternalUrlsJobProcessor() {
-  return exportExternalUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils });
+  return exportExternalUrlsFromRelease({
+    releaseRepository,
+    urlRepository,
+    localizedChallengeRepository,
+    whitelistedUrlRepository,
+    UrlUtils,
+  });
 }

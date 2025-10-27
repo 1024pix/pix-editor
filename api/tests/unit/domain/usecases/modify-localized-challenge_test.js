@@ -10,7 +10,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
       const updateSpy = vi.spyOn(originalLocalizedChallenge, 'update');
       const localizedChallengeRepository = {
         update: vi.fn(),
-        get: vi.fn().mockResolvedValue(originalLocalizedChallenge)
+        get: vi.fn().mockResolvedValue(originalLocalizedChallenge),
       };
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({});
 
@@ -18,7 +18,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
 
       expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
         localizedChallenge: originalLocalizedChallenge,
-        transaction: expect.anything()
+        transaction: expect.anything(),
       });
       expect(updateSpy).to.toHaveBeenCalledWith(localizedChallenge);
     });
@@ -29,7 +29,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
         });
         const localizedChallengeRepository = {
           update: vi.fn(),
-          get: vi.fn().mockResolvedValue(originalLocalizedChallenge)
+          get: vi.fn().mockResolvedValue(originalLocalizedChallenge),
         };
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id: 'localized-challenge-id',
@@ -41,8 +41,10 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
 
         await modifyLocalizedChallenge({ isAdmin: true, localizedChallenge }, { localizedChallengeRepository });
 
-        expect(localizedChallengeRepository.update)
-          .toHaveBeenCalledWith({ localizedChallenge: originalLocalizedChallenge,  transaction: expect.anything() });
+        expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
+          localizedChallenge: originalLocalizedChallenge,
+          transaction: expect.anything(),
+        });
       });
     });
     describe('when user is not admin', () => {
@@ -62,10 +64,15 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
           locale: 'nl',
         });
 
-        await expect(modifyLocalizedChallenge({
-          isAdmin: false,
-          localizedChallenge
-        }, { localizedChallengeRepository })).rejects.toThrow();
+        await expect(
+          modifyLocalizedChallenge(
+            {
+              isAdmin: false,
+              localizedChallenge,
+            },
+            { localizedChallengeRepository },
+          ),
+        ).rejects.toThrow();
         expect(localizedChallengeRepository.update).not.toHaveBeenCalled();
       });
 
@@ -75,7 +82,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
         });
         const localizedChallengeRepository = {
           update: vi.fn(),
-          get: vi.fn().mockResolvedValue(originalLocalizedChallenge)
+          get: vi.fn().mockResolvedValue(originalLocalizedChallenge),
         };
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id: 'localized-challenge-id',
@@ -85,18 +92,21 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
           locale: 'nl',
         });
 
-        await modifyLocalizedChallenge({
-          isAdmin: false,
-          localizedChallenge
-        }, { localizedChallengeRepository });
+        await modifyLocalizedChallenge(
+          {
+            isAdmin: false,
+            localizedChallenge,
+          },
+          { localizedChallengeRepository },
+        );
 
         expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
           localizedChallenge: originalLocalizedChallenge,
-          transaction: expect.anything()
+          transaction: expect.anything(),
         });
         expect(localizedChallengeRepository.get).toHaveBeenCalledWith({
           id: 'localized-challenge-id',
-          transaction: expect.anything()
+          transaction: expect.anything(),
         });
       });
     });

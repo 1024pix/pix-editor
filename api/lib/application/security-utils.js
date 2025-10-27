@@ -13,7 +13,7 @@ export function replyWithAuthenticationError(h) {
   const jsonApiError = new JSONAPIError({
     code: errorHttpStatusCode,
     title: 'Unauthorized access',
-    detail: 'Missing or invalid access token in request auhorization headers.'
+    detail: 'Missing or invalid access token in request auhorization headers.',
   });
 
   return h.response(jsonApiError).code(errorHttpStatusCode).takeover();

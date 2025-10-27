@@ -36,11 +36,13 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
       const createdFramework = await create(framework);
 
       // then
-      expect(createdFramework).toStrictEqual(new Framework({
-        id,
-        name,
-        areaIds: [],
-      }));
+      expect(createdFramework).toStrictEqual(
+        new Framework({
+          id,
+          name,
+          areaIds: [],
+        }),
+      );
 
       expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
         fields: {
@@ -133,10 +135,10 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
         }),
       ]);
 
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME,  {
+      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
         fields: frameworkDatasource.usedFields,
         sort: [{ direction: 'asc', field: frameworkDatasource.sortField }],
-      },);
+      });
     });
   });
 });

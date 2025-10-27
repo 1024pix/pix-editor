@@ -11,7 +11,6 @@ export function buildAttachment({
   airtableChallengeId = 'recAirtableChallengeId',
   localizedChallengeId = challengeId,
 } = {}) {
-
   return new Attachment({
     id,
     url,

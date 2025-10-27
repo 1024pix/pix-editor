@@ -1,12 +1,5 @@
 export class LocalizedChallenge {
-  constructor({
-    id,
-    challengeId,
-    locale,
-    instruction,
-    geography,
-    status,
-  }) {
+  constructor({ id, challengeId, locale, instruction, geography, status }) {
     this.id = id;
     this.challengeId = challengeId;
     this.locale = locale;

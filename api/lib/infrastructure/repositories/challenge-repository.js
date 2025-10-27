@@ -4,7 +4,7 @@ import { Challenge, Translation } from '../../domain/models/index.js';
 import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
-import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor, } from '../translations/challenge.js';
+import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { stringValue } from '../airtable.js';
 
@@ -75,33 +75,35 @@ export async function create(challenge) {
   return knex.transaction(async (transaction) => {
     const createdChallengeDto = await challengeDatasource.create(challenge);
 
-    await transaction.insert({
-      id: challenge.id,
-      type: challenge.type,
-      t1Status: challenge.t1Status,
-      t2Status: challenge.t2Status,
-      t3Status: challenge.t3Status,
-      status: challenge.status,
-      skillId: createdChallengeDto.skillId,
-      embedHeight: challenge.embedHeight,
-      timer: challenge.timer,
-      format: challenge.format,
-      autoReply: challenge.autoReply,
-      locales: challenge.locales,
-      focusable: challenge.focusable,
-      genealogy: challenge.genealogy,
-      pedagogy: challenge.pedagogy,
-      author: challenge.author,
-      declinable: challenge.declinable,
-      version: challenge.version,
-      alternativeVersion: challenge.alternativeVersion,
-      accessibility1: challenge.accessibility1,
-      accessibility2: challenge.accessibility2,
-      spoil: challenge.spoil,
-      responsive: challenge.responsive,
-      shuffled: challenge.shuffled,
-      contextualizedFields: challenge.contextualizedFields,
-    }).into('challenges');
+    await transaction
+      .insert({
+        id: challenge.id,
+        type: challenge.type,
+        t1Status: challenge.t1Status,
+        t2Status: challenge.t2Status,
+        t3Status: challenge.t3Status,
+        status: challenge.status,
+        skillId: createdChallengeDto.skillId,
+        embedHeight: challenge.embedHeight,
+        timer: challenge.timer,
+        format: challenge.format,
+        autoReply: challenge.autoReply,
+        locales: challenge.locales,
+        focusable: challenge.focusable,
+        genealogy: challenge.genealogy,
+        pedagogy: challenge.pedagogy,
+        author: challenge.author,
+        declinable: challenge.declinable,
+        version: challenge.version,
+        alternativeVersion: challenge.alternativeVersion,
+        accessibility1: challenge.accessibility1,
+        accessibility2: challenge.accessibility2,
+        spoil: challenge.spoil,
+        responsive: challenge.responsive,
+        shuffled: challenge.shuffled,
+        contextualizedFields: challenge.contextualizedFields,
+      })
+      .into('challenges');
 
     const primaryLocalizedChallenge = challenge.localizedChallenges[0];
     await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge], transaction });
@@ -127,24 +129,68 @@ export async function createBatch(challenges) {
       const translationModels = [];
       for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
         for (const [field, value] of Object.entries(translationsForLocale)) {
-          translationModels.push(new Translation({
-            key: `${prefixFor(challenge)}${field}`,
-            locale,
-            value,
-          }));
+          translationModels.push(
+            new Translation({
+              key: `${prefixFor(challenge)}${field}`,
+              locale,
+              value,
+            }),
+          );
         }
       }
       return translationModels;
     });
 
-    await Promise.all(challenges.map((challenge) => transaction.insert({
-      id: challenge.id,
+    await Promise.all(
+      challenges.map((challenge) =>
+        transaction
+          .insert({
+            id: challenge.id,
+            type: challenge.type,
+            t1Status: challenge.t1Status,
+            t2Status: challenge.t2Status,
+            t3Status: challenge.t3Status,
+            status: challenge.status,
+            skillId: challenge.skillId,
+            embedHeight: challenge.embedHeight,
+            timer: challenge.timer,
+            format: challenge.format,
+            autoReply: challenge.autoReply,
+            locales: challenge.locales,
+            focusable: challenge.focusable,
+            genealogy: challenge.genealogy,
+            pedagogy: challenge.pedagogy,
+            author: challenge.author,
+            declinable: challenge.declinable,
+            version: challenge.version,
+            alternativeVersion: challenge.alternativeVersion,
+            accessibility1: challenge.accessibility1,
+            accessibility2: challenge.accessibility2,
+            spoil: challenge.spoil,
+            responsive: challenge.responsive,
+            shuffled: challenge.shuffled,
+            contextualizedFields: challenge.contextualizedFields,
+          })
+          .into('challenges'),
+      ),
+    );
+    await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
+    await translationRepository.save({ translations: allTranslations, transaction });
+    return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);
+  });
+}
+// TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
+// là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
+export async function update(challenge, transaction = knex) {
+  const updatedChallengeDto = await challengeDatasource.update(challenge);
+
+  await transaction('challenges')
+    .update({
       type: challenge.type,
       t1Status: challenge.t1Status,
       t2Status: challenge.t2Status,
       t3Status: challenge.t3Status,
       status: challenge.status,
-      skillId: challenge.skillId,
       embedHeight: challenge.embedHeight,
       timer: challenge.timer,
       format: challenge.format,
@@ -163,48 +209,17 @@ export async function createBatch(challenges) {
       responsive: challenge.responsive,
       shuffled: challenge.shuffled,
       contextualizedFields: challenge.contextualizedFields,
-    }).into('challenges')));
-    await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
-    await translationRepository.save({ translations: allTranslations, transaction });
-    return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);
+      archivedAt: challenge.archivedAt,
+      madeObsoleteAt: challenge.madeObsoleteAt,
+      validatedAt: challenge.validatedAt,
+      updatedAt: transaction.fn.now(),
+    })
+    .where('id', challenge.id);
+
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
+    challengeIds: [challenge.id],
+    transaction,
   });
-}
-// TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
-// là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
-export async function update(challenge, transaction = knex) {
-  const updatedChallengeDto = await challengeDatasource.update(challenge);
-
-  await transaction('challenges').update({
-    type: challenge.type,
-    t1Status: challenge.t1Status,
-    t2Status: challenge.t2Status,
-    t3Status: challenge.t3Status,
-    status: challenge.status,
-    embedHeight: challenge.embedHeight,
-    timer: challenge.timer,
-    format: challenge.format,
-    autoReply: challenge.autoReply,
-    locales: challenge.locales,
-    focusable: challenge.focusable,
-    genealogy: challenge.genealogy,
-    pedagogy: challenge.pedagogy,
-    author: challenge.author,
-    declinable: challenge.declinable,
-    version: challenge.version,
-    alternativeVersion: challenge.alternativeVersion,
-    accessibility1: challenge.accessibility1,
-    accessibility2: challenge.accessibility2,
-    spoil: challenge.spoil,
-    responsive: challenge.responsive,
-    shuffled: challenge.shuffled,
-    contextualizedFields: challenge.contextualizedFields,
-    archivedAt: challenge.archivedAt,
-    madeObsoleteAt: challenge.madeObsoleteAt,
-    validatedAt: challenge.validatedAt,
-    updatedAt: transaction.fn.now(),
-  }).where('id', challenge.id);
-
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
   const oldPrimaryLocale = primaryLocalizedChallenge.locale;
@@ -260,15 +275,15 @@ export async function listPrototypesByCompetenceId(competenceId) {
 }
 
 export async function listValidPrototypesBySkillIds(skillIds) {
-  return filter({ filter: {
-    formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
-  } });
+  return filter({
+    filter: {
+      formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
+    },
+  });
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
-  return loadTranslationsAndLocalizedChallengesForChallengeIds(
-    challengeDtos.map(({ id }) => id),
-  );
+  return loadTranslationsAndLocalizedChallengesForChallengeIds(challengeDtos.map(({ id }) => id));
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeIds) {
@@ -295,9 +310,7 @@ function toDomainList(challengeDtos, translations, localizedChallenges) {
 function toDomain(challengeDto, challengeTranslations, localizedChallenges = []) {
   const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
   const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
-    return Object.fromEntries([
-      ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
-    ]);
+    return Object.fromEntries([...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value])]);
   });
 
   return new Challenge({
@@ -305,5 +318,4 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
     translations,
     localizedChallenges,
   });
-
 }

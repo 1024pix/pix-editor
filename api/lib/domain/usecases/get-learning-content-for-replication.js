@@ -76,7 +76,10 @@ export async function getLearningContentForReplication() {
   }));
   const transformedTubes = tubeTransformer.transformTubes(tubes, challenges);
 
-  const translationsGroupedByEntityId = Object.groupBy(translationsForReplication, (translation) => translation.entityId);
+  const translationsGroupedByEntityId = Object.groupBy(
+    translationsForReplication,
+    (translation) => translation.entityId,
+  );
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   await setImmediatePromise();
 
@@ -87,7 +90,9 @@ export async function getLearningContentForReplication() {
       await setImmediatePromise();
     }
     const translatedChallenges = challenge.alternativeLocales.map((locale) => {
-      const translationsForChallenge = translationsGroupedByEntityId[challenge.id].filter((translation) => translation.locale === locale);
+      const translationsForChallenge = translationsGroupedByEntityId[challenge.id].filter(
+        (translation) => translation.locale === locale,
+      );
       const localizedChallenge = challenge.translate(locale);
       for (const translationForChallenge of translationsForChallenge) {
         const translatedField = translationForChallenge.key.split('.')[2];
@@ -115,7 +120,13 @@ export async function getLearningContentForReplication() {
     alt: allTranslatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt,
   }));
 
-  const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
+  const transformedMissions = missionTransformer.transform({
+    missions,
+    challenges,
+    tubes,
+    thematics,
+    skills,
+  });
 
   await setImmediatePromise();
   return {
@@ -143,7 +154,5 @@ function byKeyAndLocale(trA, trB) {
 }
 
 async function _getCoursesFromPGForReplication() {
-  return knex('static_courses')
-    .select(['id', 'name'])
-    .orderBy('id');
+  return knex('static_courses').select(['id', 'name']).orderBy('id');
 }

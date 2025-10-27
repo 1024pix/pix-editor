@@ -6,7 +6,7 @@ import {
   databaseBuilder,
   domainBuilder,
   generateAuthorizationHeader,
-  knex
+  knex,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import * as config from '../../../../lib/config.js';
@@ -16,10 +16,10 @@ const challengeAirtableFields = [
   'id persistant',
   'Compétences (via tube) (id persistant)',
   'Timer',
-  'Type d\'épreuve',
+  "Type d'épreuve",
   'T1 - Espaces, casse & accents',
   'T2 - Ponctuation',
-  'T3 - Distance d\'édition',
+  "T3 - Distance d'édition",
   'Statut',
   'Acquix (id persistant)',
   'Embed URL',
@@ -55,7 +55,6 @@ const challengeAirtableFields = [
 ];
 
 describe('Acceptance | Controller | challenges-controller', () => {
-
   function _removeReadonlyFields(airtableChallengeBody, deleteId) {
     const body = _.cloneDeep(airtableChallengeBody);
     delete body.fields['Record ID'];
@@ -74,7 +73,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges', () => {
     let user;
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
@@ -83,10 +82,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'XX' });
 
-      const airtableChallenges = [
-        airtableBuilder.factory.buildChallenge(challenge),
-      ];
-      airtableBuilder.mockList({ tableName: 'Epreuves' })
+      const airtableChallenges = [airtableBuilder.factory.buildChallenge(challenge)];
+      airtableBuilder
+        .mockList({ tableName: 'Epreuves' })
         .respondsToQuery({
           fields: {
             '': challengeAirtableFields,
@@ -108,7 +106,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.my id.instruction',
         locale: 'fr',
-        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+        value:
+          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.my id.alternativeInstruction',
@@ -170,7 +169,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -182,7 +181,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             id: 'my id',
             attributes: {
               'airtable-id': challenge.airtableId,
-              instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+              instruction:
+                "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
               'alternative-instruction': 'Débrouille toi',
               type: Challenge.TYPES.QCM,
               format: Challenge.FORMATS.MOTS,
@@ -234,19 +234,19 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 data: {
                   type: 'skills',
                   id: challenge.skills[0],
-                }
+                },
               },
               'localized-challenges': {
                 data: [
                   {
                     id: 'my id',
-                    type: 'localized-challenges'
+                    type: 'localized-challenges',
                   },
                   {
                     id: 'my id_nl',
-                    type: 'localized-challenges'
-                  }
-                ]
+                    type: 'localized-challenges',
+                  },
+                ],
               },
               attachments: {
                 links: {
@@ -289,7 +289,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   },
                 ],
               },
-            }
+            },
           },
         ],
         included: [
@@ -409,13 +409,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})'
+          filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
         })
         .reply(200, {
           records: [
             airtableBuilder.factory.buildChallenge(challenge1),
             airtableBuilder.factory.buildChallenge(challenge2),
-          ]
+          ],
         });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -430,7 +430,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.1.instruction',
         locale: 'fr',
-        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+        value:
+          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.1.alternativeInstruction',
@@ -465,7 +466,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.instruction',
         locale: 'fr',
-        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+        value:
+          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.alternativeInstruction',
@@ -543,7 +545,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges?filter[ids][]=1&filter[ids][]=2',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -557,7 +559,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             id: '1',
             attributes: {
               'airtable-id': challenge1.airtableId,
-              instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+              instruction:
+                "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
               'alternative-instruction': 'Débrouille toi',
               type: Challenge.TYPES.QCM,
               format: Challenge.FORMATS.MOTS,
@@ -608,16 +611,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
               skill: {
                 data: {
                   id: 'recordId generated by Airtable',
-                  type: 'skills'
-                }
+                  type: 'skills',
+                },
               },
               'localized-challenges': {
                 data: [
                   {
                     id: '1',
                     type: 'localized-challenges',
-                  }
-                ]
+                  },
+                ],
               },
               attachments: {
                 links: {
@@ -660,14 +663,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   },
                 ],
               },
-            }
+            },
           },
           {
             type: 'challenges',
             id: '2',
             attributes: {
               'airtable-id': challenge2.airtableId,
-              instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+              instruction:
+                "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
               'alternative-instruction': 'Débrouille toi encore',
               type: Challenge.TYPES.QCM,
               format: Challenge.FORMATS.MOTS,
@@ -718,8 +722,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               skill: {
                 data: {
                   id: 'recordId generated by Airtable',
-                  type: 'skills'
-                }
+                  type: 'skills',
+                },
               },
               'localized-challenges': {
                 data: [
@@ -730,8 +734,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   {
                     id: '2_nl',
                     type: 'localized-challenges',
-                  }
-                ]
+                  },
+                ],
               },
               attachments: {
                 links: {
@@ -774,8 +778,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   },
                 ],
               },
-            }
-          }
+            },
+          },
         ],
         included: [
           {
@@ -995,7 +999,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
         })
         .reply(200, {
-          records: []
+          records: [],
         });
       const server = await createServer();
 
@@ -1003,7 +1007,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges?filter[search]=query term',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -1023,7 +1027,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           maxRecords: 20,
         })
         .reply(200, {
-          records: []
+          records: [],
         });
       const server = await createServer();
 
@@ -1031,7 +1035,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges?filter[search]=query term&page[size]=20',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -1043,7 +1047,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges/:id', () => {
     let user;
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
@@ -1074,12 +1078,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR("recChallengeId1" = {id persistant})'
+          filterByFormula: 'OR("recChallengeId1" = {id persistant})',
         })
         .reply(200, {
-          records: [
-            airtableChallenge,
-          ]
+          records: [airtableChallenge],
         });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'recChallengeId1',
@@ -1106,7 +1108,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.instruction',
         locale: 'fr',
-        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+        value:
+          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.alternativeInstruction',
@@ -1148,7 +1151,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges/recChallengeId1',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -1159,7 +1162,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: 'recChallengeId1',
           attributes: {
             'airtable-id': challenge.airtableId,
-            instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+            instruction:
+              "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
             'alternative-instruction': 'Débrouille toi',
             type: Challenge.TYPES.QCM,
             format: Challenge.FORMATS.MOTS,
@@ -1210,8 +1214,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             skill: {
               data: {
                 id: 'recordId generated by Airtable',
-                type: 'skills'
-              }
+                type: 'skills',
+              },
             },
             'localized-challenges': {
               data: [
@@ -1222,8 +1226,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 {
                   id: 'localizedChallengeId2',
                   type: 'localized-challenges',
-                }
-              ]
+                },
+              ],
             },
             attachments: {
               links: {
@@ -1266,7 +1270,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-          }
+          },
         },
         included: [
           {
@@ -1376,17 +1380,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(airtableCall.isDone()).to.be.true;
     });
 
-    it('should return a 404 error when the challenge doesn\'t exist', async () => {
+    it("should return a 404 error when the challenge doesn't exist", async () => {
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR("recChallengeId2" = {id persistant})'
+          filterByFormula: 'OR("recChallengeId2" = {id persistant})',
         })
         .reply(200, {
-          records: []
+          records: [],
         });
 
       const server = await createServer();
@@ -1395,7 +1399,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/challenges/recChallengeId2',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
@@ -1414,16 +1418,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let primaryLocalizedChallenge;
     let attachment;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       challenge = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
         locales: ['fr', 'fr-fr'],
         status: Challenge.STATUSES.VALIDE,
       });
 
-      airtableChallengeScope = airtableBuilder.mockList({ tableName: 'Epreuves' }).returns([
-        airtableBuilder.factory.buildChallenge(challenge)
-      ]).activate().nockScope;
+      airtableChallengeScope = airtableBuilder
+        .mockList({ tableName: 'Epreuves' })
+        .returns([airtableBuilder.factory.buildChallenge(challenge)])
+        .activate().nockScope;
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -1438,7 +1443,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         localizedChallengeId,
         type: 'illustration',
       });
-      airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([attachment]).activate().nockScope;
+      airtableAttachmentScope = airtableBuilder
+        .mockList({ tableName: 'Attachments' })
+        .returns([attachment])
+        .activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1515,47 +1523,46 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { access_token: apiToken });
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch(`/api/cache/challenges/${localizedChallengeId}`,
-          {
-            id: 'challenge123_es-419',
-            alpha: challenge.alpha,
-            alternativeInstruction: 'alternative instruction for es',
-            autoReply: challenge.autoReply,
-            competenceId: 'recsvLz0W2ShyfD63',
-            delta: challenge.delta,
-            embedUrl: null,
-            embedTitle: 'embed title for es',
-            embedHeight: challenge.embedHeight,
-            focusable: challenge.focusable,
-            format: challenge.format,
-            genealogy: challenge.genealogy,
-            illustrationAlt: 'illustration alt for es',
-            illustrationUrl: 'url/to/attachment',
-            instruction: 'instruction for es',
-            locales: [ 'es-419' ],
-            proposals: 'proposals for es',
-            responsive: challenge.responsive,
-            solution: 'solution for es',
-            solutionToDisplay: 'solution to display for es',
-            status: 'proposé',
-            skillId: challenge.skillId,
-            t1Status: challenge.t1Status,
-            t2Status: challenge.t2Status,
-            t3Status: challenge.t3Status,
-            timer: challenge.timer,
-            type: challenge.type,
-            shuffled: challenge.shuffled,
-            alternativeVersion: challenge.alternativeVersion,
-            accessibility1: challenge.accessibility1,
-            accessibility2: challenge.accessibility2,
-            requireGafamWebsiteAccess: primaryLocalizedChallenge.requireGafamWebsiteAccess,
-            isIncompatibleIpadCertif: primaryLocalizedChallenge.isIncompatibleIpadCertif,
-            deafAndHardOfHearing: primaryLocalizedChallenge.deafAndHardOfHearing,
-            isAwarenessChallenge: primaryLocalizedChallenge.isAwarenessChallenge,
-            toRephrase: primaryLocalizedChallenge.toRephrase,
-            hasEmbedInternalValidation: primaryLocalizedChallenge.hasEmbedInternalValidation,
-            noValidationNeeded: primaryLocalizedChallenge.noValidationNeeded,
-          })
+        .patch(`/api/cache/challenges/${localizedChallengeId}`, {
+          id: 'challenge123_es-419',
+          alpha: challenge.alpha,
+          alternativeInstruction: 'alternative instruction for es',
+          autoReply: challenge.autoReply,
+          competenceId: 'recsvLz0W2ShyfD63',
+          delta: challenge.delta,
+          embedUrl: null,
+          embedTitle: 'embed title for es',
+          embedHeight: challenge.embedHeight,
+          focusable: challenge.focusable,
+          format: challenge.format,
+          genealogy: challenge.genealogy,
+          illustrationAlt: 'illustration alt for es',
+          illustrationUrl: 'url/to/attachment',
+          instruction: 'instruction for es',
+          locales: ['es-419'],
+          proposals: 'proposals for es',
+          responsive: challenge.responsive,
+          solution: 'solution for es',
+          solutionToDisplay: 'solution to display for es',
+          status: 'proposé',
+          skillId: challenge.skillId,
+          t1Status: challenge.t1Status,
+          t2Status: challenge.t2Status,
+          t3Status: challenge.t3Status,
+          timer: challenge.timer,
+          type: challenge.type,
+          shuffled: challenge.shuffled,
+          alternativeVersion: challenge.alternativeVersion,
+          accessibility1: challenge.accessibility1,
+          accessibility2: challenge.accessibility2,
+          requireGafamWebsiteAccess: primaryLocalizedChallenge.requireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: primaryLocalizedChallenge.isIncompatibleIpadCertif,
+          deafAndHardOfHearing: primaryLocalizedChallenge.deafAndHardOfHearing,
+          isAwarenessChallenge: primaryLocalizedChallenge.isAwarenessChallenge,
+          toRephrase: primaryLocalizedChallenge.toRephrase,
+          hasEmbedInternalValidation: primaryLocalizedChallenge.hasEmbedInternalValidation,
+          noValidationNeeded: primaryLocalizedChallenge.noValidationNeeded,
+        })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);
 
@@ -1569,7 +1576,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       // then
       expect(response.statusCode).to.equal(302);
-      expect(response.headers.location).to.equal(`https://app.test.pix.org/challenges/${localizedChallengeId}/preview?lang=${locale}`);
+      expect(response.headers.location).to.equal(
+        `https://app.test.pix.org/challenges/${localizedChallengeId}/preview?lang=${locale}`,
+      );
 
       apiTokenScope.done();
       apiCacheScope.done();
@@ -1595,7 +1604,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }));
+      databaseBuilder.factory.buildChallenge(
+        domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }),
+      );
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1613,7 +1624,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const phraseAccountsApiScope = nock('https://api.phrase.com')
         .get('/v2/accounts')
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .query({ page:1 })
+        .query({ page: 1 })
         .reply(200, [
           {
             id: 'pixAccountId',
@@ -1655,7 +1666,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       // then
       expect(response.statusCode).toBe(302);
-      expect(response.headers.location).toBe(`https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_2?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`);
+      expect(response.headers.location).toBe(
+        `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_2?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`,
+      );
 
       expect(phraseAccountsApiScope.isDone()).toBe(true);
       expect(phraseLocalesApiScope.isDone()).toBe(true);
@@ -1665,12 +1678,12 @@ describe('Acceptance | Controller | challenges-controller', () => {
   describe('POST /challenges', () => {
     let user;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
 
-    afterEach(async function() {
+    afterEach(async function () {
       await knex('translations').delete();
       await knex('localized_challenges').delete();
       await knex('challenges').delete();
@@ -1686,7 +1699,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
-        embedTitle: 'Titre d\'embed',
+        embedTitle: "Titre d'embed",
       };
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challengeData);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
@@ -1702,10 +1715,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
-        .reply(
-          200,
-          { records: [airtableChallenge] }
-        );
+        .reply(200, { records: [airtableChallenge] });
       const server = await createServer();
 
       // when
@@ -1768,7 +1778,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 data: {
                   type: 'skills',
                   id: challengeData.skills[0],
-                }
+                },
               },
               attachments: {
                 data: challengeData.files.map(({ fileId }) => {
@@ -1811,7 +1821,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/challengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Titre d\'embed',
+            'embed-title': "Titre d'embed",
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: Challenge.ACCESSIBILITY1.OK,
@@ -1843,14 +1853,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
             skill: {
               data: {
                 id: 'recordId generated by Airtable',
-                type: 'skills'
-              }
+                type: 'skills',
+              },
             },
             'localized-challenges': {
-              data: [{
-                id: 'challengeId',
-                type: 'localized-challenges',
-              }],
+              data: [
+                {
+                  id: 'challengeId',
+                  type: 'localized-challenges',
+                },
+              ],
             },
             attachments: {
               links: {
@@ -1893,7 +1905,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-          }
+          },
         },
         included: [
           {
@@ -2050,13 +2062,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
           hasEmbedInternalValidation: true,
           noValidationNeeded: true,
           validatedAt: null,
-        }
+        },
       ]);
       await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.toStrictEqual([
         {
           key: 'challenge.challengeId.alternativeInstruction',
           locale: 'fr',
-          value: 'consigne alternative'
+          value: 'consigne alternative',
         },
         {
           key: 'challenge.challengeId.embedTitle',
@@ -2066,25 +2078,24 @@ describe('Acceptance | Controller | challenges-controller', () => {
         {
           key: 'challenge.challengeId.instruction',
           locale: 'fr',
-          value: 'consigne'
+          value: 'consigne',
         },
         {
           key: 'challenge.challengeId.proposals',
           locale: 'fr',
-          value: 'propositions'
+          value: 'propositions',
         },
         {
           key: 'challenge.challengeId.solution',
           locale: 'fr',
-          value: 'solution'
+          value: 'solution',
         },
         {
           key: 'challenge.challengeId.solutionToDisplay',
           locale: 'fr',
-          value: 'solution à afficher'
-        }
+          value: 'solution à afficher',
+        },
       ]);
-
     });
 
     it('should NOT patch the cache on PIX API', async () => {
@@ -2096,7 +2107,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
-        embedTitle: 'Titre d\'embed',
+        embedTitle: "Titre d'embed",
       };
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
@@ -2112,10 +2123,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const airtableCall = nock('https://api.airtable.com')
         .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
-        .reply(
-          200,
-          { records: [airtableChallenge] }
-        );
+        .reply(200, { records: [airtableChallenge] });
 
       const attachmentsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
@@ -2180,16 +2188,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 data: {
                   type: 'skills',
                   id: challenge.skills[0],
-                }
+                },
               },
               attachments: {
                 data: [
                   {
                     id: 'attachment recordId generated by Airtable',
-                    type: 'attachments'
-                  }
-                ]
-              }
+                    type: 'attachments',
+                  },
+                ],
+              },
             },
           },
         },
@@ -2223,10 +2231,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
         const airtableCall = nock('https://api.airtable.com')
           .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
-          .reply(
-            200,
-            { records: [airtableBuilder.factory.buildChallenge(challenge)] }
-          );
+          .reply(200, { records: [airtableBuilder.factory.buildChallenge(challenge)] });
         const server = await createServer();
 
         // when
@@ -2280,16 +2285,16 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   data: {
                     type: 'skills',
                     id: challenge.skills[0],
-                  }
+                  },
                 },
                 attachments: {
                   data: [
                     {
                       type: 'attachments',
                       id: 'attachment recordId generated by Airtable',
-                    }
-                  ]
-                }
+                    },
+                  ],
+                },
               },
             },
           },
@@ -2305,7 +2310,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
   describe('PATCH /challenge', () => {
     let user;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
@@ -2320,7 +2325,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
-        embedTitle: 'Titre d\'embed',
+        embedTitle: "Titre d'embed",
         geography: 'NL',
       };
 
@@ -2356,7 +2361,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
         locale,
-        value: 'Ancienne valeur de l\'instruction',
+        value: "Ancienne valeur de l'instruction",
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.alternativeInstruction`,
@@ -2400,10 +2405,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const airtableCall = nock('https://api.airtable.com')
         .patch('/v0/airtableBaseValue/Epreuves/?', expectedBody)
-        .reply(
-          200,
-          { records: [airtableChallenge] }
-        );
+        .reply(200, { records: [airtableChallenge] });
       const server = await createServer();
 
       // When
@@ -2467,7 +2469,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 data: {
                   type: 'skills',
                   id: challenge.skills[0],
-                }
+                },
               },
               attachments: {
                 data: challenge.files.map(({ fileId }) => {
@@ -2510,7 +2512,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Titre d\'embed',
+            'embed-title': "Titre d'embed",
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: Challenge.ACCESSIBILITY1.OK,
@@ -2543,7 +2545,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               data: {
                 id: 'recordId generated by Airtable',
                 type: 'skills',
-              }
+              },
             },
             'localized-challenges': {
               data: [
@@ -2554,8 +2556,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 {
                   id: 'challenge_localized_nl',
                   type: 'localized-challenges',
-                }
-              ]
+                },
+              ],
             },
             attachments: {
               links: {
@@ -2803,7 +2805,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
-        embedTitle: 'Titre d\'embed',
+        embedTitle: "Titre d'embed",
         geography: 'JM',
       };
 
@@ -2832,7 +2834,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
         locale: originalLocale,
-        value: 'Ancienne valeur de l\'instruction',
+        value: "Ancienne valeur de l'instruction",
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.alternativeInstruction`,
@@ -2867,10 +2869,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const airtableCall = nock('https://api.airtable.com')
         .patch('/v0/airtableBaseValue/Epreuves/?', expectedBody)
-        .reply(
-          200,
-          { records: [airtableChallenge] }
-        );
+        .reply(200, { records: [airtableChallenge] });
       const server = await createServer();
 
       // When
@@ -2934,7 +2933,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 data: {
                   type: 'skills',
                   id: challenge.skills[0],
-                }
+                },
               },
               attachments: {
                 data: challenge.files.map(({ fileId }) => {
@@ -2977,7 +2976,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Titre d\'embed',
+            'embed-title': "Titre d'embed",
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: Challenge.ACCESSIBILITY1.OK,
@@ -3010,7 +3009,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               data: {
                 id: 'recordId generated by Airtable',
                 type: 'skills',
-              }
+              },
             },
             'localized-challenges': {
               data: [

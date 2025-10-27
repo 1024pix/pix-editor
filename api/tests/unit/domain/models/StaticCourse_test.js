@@ -3,13 +3,13 @@ import { domainBuilder } from '../../../test-helper.js';
 import { StaticCourse } from '../../../../lib/domain/models/index.js';
 import { StaticCourseIsInactiveError } from '../../../../lib/domain/errors.js';
 
-describe('Unit | Domain | StaticCourse', function() {
-  context('static buildFromCreationCommand', function() {
+describe('Unit | Domain | StaticCourse', function () {
+  context('static buildFromCreationCommand', function () {
     let validCreationCommand, idGenerator;
     const allChallengeIds = ['chalABC', 'chalDEF', 'chalGHI', 'chalJKF'];
     const allTagIds = [123, 456];
 
-    beforeEach(function() {
+    beforeEach(function () {
       validCreationCommand = {
         name: 'some valid name  ',
         description: '  some valid description',
@@ -22,12 +22,12 @@ describe('Unit | Domain | StaticCourse', function() {
       idGenerator = (prefix) => `${prefix}ABC123`;
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
-    context('valid commands', function() {
-      it('should create a successful CommandResult with a staticCourse with trimmed name, description and challengeIds', function() {
+    context('valid commands', function () {
+      it('should create a successful CommandResult with a staticCourse with trimmed name, description and challengeIds', function () {
         // when
         const commandResult = StaticCourse.buildFromCreationCommand({
           creationCommand: validCreationCommand,
@@ -51,7 +51,7 @@ describe('Unit | Domain | StaticCourse', function() {
         });
       });
 
-      it('should create a valid StaticCourse without a description', function() {
+      it('should create a valid StaticCourse without a description', function () {
         // given
         validCreationCommand.description = '';
 
@@ -79,9 +79,9 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
 
-    context('invalid commands', function() {
-      context('when name is invalid', function() {
-        it('should return a failed CommandResult', function() {
+    context('invalid commands', function () {
+      context('when name is invalid', function () {
+        it('should return a failed CommandResult', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -107,8 +107,8 @@ describe('Unit | Domain | StaticCourse', function() {
         });
       });
 
-      context('when challengeIds is invalid', function() {
-        it('should return a failed CommandResult when at least one challenge does not exist', function() {
+      context('when challengeIds is invalid', function () {
+        it('should return a failed CommandResult when at least one challenge does not exist', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -129,12 +129,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+              detail: "Les IDs d'épreuve suivants n'existent pas : xchalLOL, chalDEFF",
             },
           ]);
         });
 
-        it('should return a failed CommandResult when at least one challenge appears more than once', function() {
+        it('should return a failed CommandResult when at least one challenge appears more than once', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -155,12 +155,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalJKF, chalABC',
+              detail: "Les IDs d'épreuve suivants sont en doublon : chalJKF, chalABC",
             },
           ]);
         });
 
-        it('should return a failed CommandResult when no challenges are provided', function() {
+        it('should return a failed CommandResult when no challenges are provided', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -182,12 +182,12 @@ describe('Unit | Domain | StaticCourse', function() {
             {
               attribute: 'challengeIds',
               detail: 'Le champ "IDs des épreuves" est obligatoire',
-            }
+            },
           ]);
         });
       });
-      context('when tagIds are invalid', function() {
-        it('should return a failed CommandResult when at least one tag does not exist', function() {
+      context('when tagIds are invalid', function () {
+        it('should return a failed CommandResult when at least one tag does not exist', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -208,12 +208,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'tagIds',
-              detail: 'Les tags suivants n\'existent pas : 789',
-            }
+              detail: "Les tags suivants n'existent pas : 789",
+            },
           ]);
         });
 
-        it('should return a failed CommandResult when at least one tag appears more than once', function() {
+        it('should return a failed CommandResult when at least one tag appears more than once', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -235,12 +235,12 @@ describe('Unit | Domain | StaticCourse', function() {
             {
               attribute: 'tagIds',
               detail: 'Les tags suivants sont en doublon : 123',
-            }
+            },
           ]);
         });
       });
-      context('when static course is invalid for several reasons', function() {
-        it('should return a failed CommandResult with all reasons why it is', function() {
+      context('when static course is invalid for several reasons', function () {
+        it('should return a failed CommandResult with all reasons why it is', function () {
           // given
           const invalidCreationCommand = {
             ...validCreationCommand,
@@ -267,11 +267,11 @@ describe('Unit | Domain | StaticCourse', function() {
 
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+              detail: "Les IDs d'épreuve suivants n'existent pas : xchalLOL, chalDEFF",
             },
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalGHI',
+              detail: "Les IDs d'épreuve suivants sont en doublon : chalGHI",
             },
           ]);
         });
@@ -279,12 +279,12 @@ describe('Unit | Domain | StaticCourse', function() {
     });
   });
 
-  context('update', function() {
+  context('update', function () {
     let validUpdateCommand, staticCourseToUpdate;
     const allChallengeIds = ['chalABC', 'chalDEF', 'chalGHI', 'chalJKF'];
     const allTagIds = [123, 456, 789, 159];
 
-    beforeEach(function() {
+    beforeEach(function () {
       validUpdateCommand = {
         name: 'some valid name  ',
         description: '  some valid description',
@@ -307,17 +307,17 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
-    context('valid commands', function() {
-      it('should update successfully the staticCourse with trimmed name, description and challengeIds', function() {
+    context('valid commands', function () {
+      it('should update successfully the staticCourse with trimmed name, description and challengeIds', function () {
         // when
         const commandResult = staticCourseToUpdate.update({
           updateCommand: validUpdateCommand,
           allChallengeIds,
-          allTagIds
+          allTagIds,
         });
 
         // then
@@ -335,7 +335,7 @@ describe('Unit | Domain | StaticCourse', function() {
         });
       });
 
-      it('should update successfully the staticCourse with an empty description', function() {
+      it('should update successfully the staticCourse with an empty description', function () {
         // given
         validUpdateCommand.description = '';
 
@@ -361,7 +361,7 @@ describe('Unit | Domain | StaticCourse', function() {
         });
       });
 
-      it('should return a failed CommandResult when static course is inactive', function() {
+      it('should return a failed CommandResult when static course is inactive', function () {
         // given
         const inactiveStaticCourse = domainBuilder.buildStaticCourse({
           id: 'myAwesomeCourse66',
@@ -389,9 +389,9 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
 
-    context('invalid commands', function() {
-      context('when name is invalid', function() {
-        it('should return a failed CommandResult', function() {
+    context('invalid commands', function () {
+      context('when name is invalid', function () {
+        it('should return a failed CommandResult', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -412,13 +412,13 @@ describe('Unit | Domain | StaticCourse', function() {
             {
               attribute: 'name',
               detail: 'Le champ "Nom" est obligatoire',
-            }
+            },
           ]);
         });
       });
 
-      context('when challengeIds is invalid', function() {
-        it('should create an invalid StaticCourse when at least one challenge does not exist', function() {
+      context('when challengeIds is invalid', function () {
+        it('should create an invalid StaticCourse when at least one challenge does not exist', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -438,12 +438,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
-            }
+              detail: "Les IDs d'épreuve suivants n'existent pas : xchalLOL, chalDEFF",
+            },
           ]);
         });
 
-        it('should create an invalid StaticCourse when at least one challenge appears more than once', function() {
+        it('should create an invalid StaticCourse when at least one challenge appears more than once', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -463,12 +463,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalJKF, chalABC',
-            }
+              detail: "Les IDs d'épreuve suivants sont en doublon : chalJKF, chalABC",
+            },
           ]);
         });
 
-        it('should create an invalid StaticCourse when no challenges are provided', function() {
+        it('should create an invalid StaticCourse when no challenges are provided', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -489,13 +489,13 @@ describe('Unit | Domain | StaticCourse', function() {
             {
               attribute: 'challengeIds',
               detail: 'Le champ "IDs des épreuves" est obligatoire',
-            }
+            },
           ]);
         });
       });
 
-      context('when tagIds are invalid', function() {
-        it('should create an invalid StaticCourse when at least one tag does not exist', function() {
+      context('when tagIds are invalid', function () {
+        it('should create an invalid StaticCourse when at least one tag does not exist', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -515,12 +515,12 @@ describe('Unit | Domain | StaticCourse', function() {
           expect(commandResult.error.errors).toEqual([
             {
               attribute: 'tagIds',
-              detail: 'Les tags suivants n\'existent pas : 1574, 888',
-            }
+              detail: "Les tags suivants n'existent pas : 1574, 888",
+            },
           ]);
         });
 
-        it('should create an invalid StaticCourse when at least one tag appears more than once', function() {
+        it('should create an invalid StaticCourse when at least one tag appears more than once', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -541,13 +541,13 @@ describe('Unit | Domain | StaticCourse', function() {
             {
               attribute: 'tagIds',
               detail: 'Les tags suivants sont en doublon : 123',
-            }
+            },
           ]);
         });
       });
 
-      context('when static course is invalid for several reasons', function() {
-        it('should create an invalid StaticCourse with all reasons why it is', function() {
+      context('when static course is invalid for several reasons', function () {
+        it('should create an invalid StaticCourse with all reasons why it is', function () {
           // given
           const invalidUpdateCommand = {
             ...validUpdateCommand,
@@ -572,11 +572,11 @@ describe('Unit | Domain | StaticCourse', function() {
             },
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants n\'existent pas : xchalLOL, chalDEFF',
+              detail: "Les IDs d'épreuve suivants n'existent pas : xchalLOL, chalDEFF",
             },
             {
               attribute: 'challengeIds',
-              detail: 'Les IDs d\'épreuve suivants sont en doublon : chalGHI',
+              detail: "Les IDs d'épreuve suivants sont en doublon : chalGHI",
             },
           ]);
         });
@@ -584,18 +584,18 @@ describe('Unit | Domain | StaticCourse', function() {
     });
   });
 
-  context('deactivate', function() {
-    beforeEach(function() {
+  context('deactivate', function () {
+    beforeEach(function () {
       vi.useFakeTimers({
         now: new Date('2021-10-29T03:04:00Z'),
       });
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
-    it('should make the static course inactive when it is active', function() {
+    it('should make the static course inactive when it is active', function () {
       // given
       const deactivationCommand = { reason: 'On en a un mieux' };
       const activeStaticCourse = domainBuilder.buildStaticCourse({
@@ -627,7 +627,7 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
 
-    it('should let the static course inactive when it is already inactive', function() {
+    it('should let the static course inactive when it is already inactive', function () {
       // given
       const deactivationCommand = { reason: '' };
       const inactiveStaticCourse = domainBuilder.buildStaticCourse({
@@ -660,18 +660,18 @@ describe('Unit | Domain | StaticCourse', function() {
     });
   });
 
-  context('reactivate', function() {
-    beforeEach(function() {
+  context('reactivate', function () {
+    beforeEach(function () {
       vi.useFakeTimers({
         now: new Date('2021-10-29T03:04:00Z'),
       });
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
-    it('should make the static course active when it is inactive', function() {
+    it('should make the static course active when it is inactive', function () {
       // given
       const inactiveStaticCourse = domainBuilder.buildStaticCourse({
         id: 'myAwesomeCourse66',
@@ -703,7 +703,7 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
 
-    it('should let the static course active when it is already active', function() {
+    it('should let the static course active when it is already active', function () {
       // given
       const activeStaticCourse = domainBuilder.buildStaticCourse({
         id: 'myAwesomeCourse66',

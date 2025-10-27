@@ -14,7 +14,7 @@ const Spinner = styled.div.attrs({
   & div {
     display: inline-block;
     position: absolute;
-    width: .25rem;
+    width: 0.25rem;
     background: ${({ theme }) => theme.colors.primary100};
     animation: lds-facebook 1s cubic-bezier(0, 0.5, 0.5, 1) infinite;
   }
@@ -23,31 +23,32 @@ const Spinner = styled.div.attrs({
     animation-delay: -0.24s;
   }
   & div:nth-child(2) {
-    left: .3rem;
+    left: 0.3rem;
     animation-delay: -0.12s;
   }
   & div:nth-child(3) {
-    left: .65rem;
+    left: 0.65rem;
     animation-delay: 0;
   }
   @keyframes lds-facebook {
-    0%, 80%, 100% {
+    0%,
+    80%,
+    100% {
       top: 0;
-      height:100%;
+      height: 100%;
     }
     40% {
-      top: calc(100% / 3 );
-      height: calc(100% / 3 );
+      top: calc(100% / 3);
+      height: calc(100% / 3);
     }
   }
+`;
 
-`
-
-const Loader = ({style}) => (
+const Loader = ({ style }) => (
   <Box
-    style={{ textAlign: 'center',display: 'inline-block', ...style }}
+    style={{ textAlign: 'center', display: 'inline-block', ...style }}
     data-testid="adminjs_Loader"
-    className='adminjs_Loader'
+    className="adminjs_Loader"
   >
     <Spinner>
       <div />
@@ -55,8 +56,8 @@ const Loader = ({style}) => (
       <div />
     </Spinner>
   </Box>
-)
+);
 
-Loader.displayName = 'Loader'
+Loader.displayName = 'Loader';
 
-export default Loader
+export default Loader;

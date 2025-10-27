@@ -130,7 +130,9 @@ export class Skill {
     const version = tubeSkills.filter((sk) => sk.level === level).length + 1;
     const name = `${tubeDestination.name}${level}`;
     const id = generateNewIdFnc(Skill.ID_PREFIX);
-    const liveChallenges = skillChallenges.filter((ch) => [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(ch.status));
+    const liveChallenges = skillChallenges.filter((ch) =>
+      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(ch.status),
+    );
     const prototypesWithActiveFirst = liveChallenges
       .filter((ch) => ch.genealogy === Challenge.GENEALOGIES.PROTOTYPE)
       .sort((chA, chB) => {
@@ -142,14 +144,15 @@ export class Skill {
     const clonedAttachments = [];
     let prototypeVersion = 1;
     for (const prototype of prototypesWithActiveFirst) {
-      const { clonedChallenge: cloneProto, clonedAttachments: cloneAttachmentsProto } = prototype.cloneChallengeAndAttachments({
-        skillId: id,
-        competenceId: tubeDestination.competenceId,
-        generateNewIdFnc,
-        prototypeVersion,
-        alternativeVersion: null,
-        attachments,
-      });
+      const { clonedChallenge: cloneProto, clonedAttachments: cloneAttachmentsProto } =
+        prototype.cloneChallengeAndAttachments({
+          skillId: id,
+          competenceId: tubeDestination.competenceId,
+          generateNewIdFnc,
+          prototypeVersion,
+          alternativeVersion: null,
+          attachments,
+        });
       clonedChallenges.push(cloneProto);
       clonedAttachments.push(...cloneAttachmentsProto);
       const declinaisons = liveChallenges
@@ -161,14 +164,15 @@ export class Skill {
         });
       let alternativeVersion = 1;
       for (const declinaison of declinaisons) {
-        const { clonedChallenge: cloneDecli, clonedAttachments: cloneAttachmentsDecli } = declinaison.cloneChallengeAndAttachments({
-          skillId: id,
-          competenceId: tubeDestination.competenceId,
-          generateNewIdFnc,
-          prototypeVersion,
-          alternativeVersion,
-          attachments,
-        });
+        const { clonedChallenge: cloneDecli, clonedAttachments: cloneAttachmentsDecli } =
+          declinaison.cloneChallengeAndAttachments({
+            skillId: id,
+            competenceId: tubeDestination.competenceId,
+            generateNewIdFnc,
+            prototypeVersion,
+            alternativeVersion,
+            attachments,
+          });
         clonedChallenges.push(cloneDecli);
         clonedAttachments.push(...cloneAttachmentsDecli);
         ++alternativeVersion;
@@ -206,7 +210,10 @@ export class Skill {
     this.description = command.description;
     this.descriptionStatus = command.descriptionStatus;
     this.hintStatus = command.clueStatus;
-    this.hint_i18n = { fr: normalizeNonBreakingSpaceFnc(command.clue), en: command.clueEn };
+    this.hint_i18n = {
+      fr: normalizeNonBreakingSpaceFnc(command.clue),
+      en: command.clueEn,
+    };
     this.internationalisation = command.i18n;
     this.learningMoreTutorialAirtableIds = command.tutoMoreAirtableIds;
     const oldStatus = this.status;

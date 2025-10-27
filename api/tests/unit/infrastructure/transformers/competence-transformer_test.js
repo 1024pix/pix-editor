@@ -4,11 +4,11 @@ import { CompetenceForReplication } from '../../../../lib/domain/models/replicat
 import { Competence } from '../../../../lib/domain/models/index.js';
 import { CompetenceForRelease } from '../../../../lib/domain/models/release/index.js';
 
-describe('Unit | Infrastructure | competence-transformer', function() {
-  describe('#forRelease', function() {
-    context('when providing a single Competence', function() {
-      it('should transform it into a single CompetenceForRelease', function() {
-      // given
+describe('Unit | Infrastructure | competence-transformer', function () {
+  describe('#forRelease', function () {
+    context('when providing a single Competence', function () {
+      it('should transform it into a single CompetenceForRelease', function () {
+        // given
         const competence = new Competence({
           id: 'competenceId',
           airtableId: 'recCompetenceId',
@@ -28,22 +28,24 @@ describe('Unit | Infrastructure | competence-transformer', function() {
         const actualCompetenceForRelease = forRelease(competence);
 
         // then
-        expect(actualCompetenceForRelease).toStrictEqual(new CompetenceForRelease({
-          id: 'competenceId',
-          index: 1,
-          origin: 'Pix+Fruits',
-          areaId: 'areaId',
-          thematicIds: ['thematicId1', 'thematicId2'],
-          skillIds: ['skillId1', 'skillId2'],
-          name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
-          description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
-        }));
+        expect(actualCompetenceForRelease).toStrictEqual(
+          new CompetenceForRelease({
+            id: 'competenceId',
+            index: 1,
+            origin: 'Pix+Fruits',
+            areaId: 'areaId',
+            thematicIds: ['thematicId1', 'thematicId2'],
+            skillIds: ['skillId1', 'skillId2'],
+            name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+            description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+          }),
+        );
       });
     });
 
-    context('when providing several Competences', function() {
-      it('should transform them into a several CompetencesForRelease', function() {
-      // given
+    context('when providing several Competences', function () {
+      it('should transform them into a several CompetencesForRelease', function () {
+        // given
         const competenceA = new Competence({
           id: 'competenceIdA',
           airtableId: 'recCompetenceIdA',
@@ -103,10 +105,10 @@ describe('Unit | Infrastructure | competence-transformer', function() {
     });
   });
 
-  describe('#forReplication', function() {
-    context('when providing a single Competence', function() {
-      it('should transform it into a single CompetenceForReplication', function() {
-      // given
+  describe('#forReplication', function () {
+    context('when providing a single Competence', function () {
+      it('should transform it into a single CompetenceForReplication', function () {
+        // given
         const competence = new Competence({
           id: 'competenceId',
           airtableId: 'recCompetenceId',
@@ -126,22 +128,24 @@ describe('Unit | Infrastructure | competence-transformer', function() {
         const actualCompetenceForReplication = forReplication(competence);
 
         // then
-        expect(actualCompetenceForReplication).toStrictEqual(new CompetenceForReplication({
-          id: 'competenceId',
-          index: 1,
-          origin: 'Pix+Fruits',
-          areaId: 'areaId',
-          thematicIds: ['thematicId1', 'thematicId2'],
-          skillIds: ['skillId1', 'skillId2'],
-          name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
-          description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
-        }));
+        expect(actualCompetenceForReplication).toStrictEqual(
+          new CompetenceForReplication({
+            id: 'competenceId',
+            index: 1,
+            origin: 'Pix+Fruits',
+            areaId: 'areaId',
+            thematicIds: ['thematicId1', 'thematicId2'],
+            skillIds: ['skillId1', 'skillId2'],
+            name_i18n: { fr: 'name fr competenceId', en: 'name en competenceId' },
+            description_i18n: { fr: 'description fr competenceId', en: 'description en competenceId' },
+          }),
+        );
       });
     });
 
-    context('when providing several Competences', function() {
-      it('should transform them into a several CompetencesForReplication', function() {
-      // given
+    context('when providing several Competences', function () {
+      it('should transform them into a several CompetencesForReplication', function () {
+        // given
         const competenceA = new Competence({
           id: 'competenceIdA',
           airtableId: 'recCompetenceIdA',

@@ -4,7 +4,6 @@ import { createThematic } from '../../../../lib/domain/usecases/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
 describe('Unit | Domain | Use Cases | create-thematic', () => {
-
   const competenceThematics = Symbol('competenceThematics');
   const createdThematic = Symbol('createdThematic');
   let thematicRepository, thematic, prepareForCreationStub;

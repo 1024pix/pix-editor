@@ -11,9 +11,7 @@ export function catchDomainAndInfrastructureErrors(request, h) {
     return errorManager.send(h, response);
   }
   if (response.isBoom) {
-    if (response.output.statusCode === 404 &&
-        request.method === 'get' &&
-        !request.path.startsWith('/api')) {
+    if (response.output.statusCode === 404 && request.method === 'get' && !request.path.startsWith('/api')) {
       return h.file(`${config.hapi.publicDir}/pix-editor/index.html`).code(200);
     }
     const err = response?.message ?? response;

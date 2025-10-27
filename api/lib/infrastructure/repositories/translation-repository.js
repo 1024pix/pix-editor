@@ -11,10 +11,7 @@ const projection = ['key', 'locale', 'value'];
 export async function save({ translations, transaction: knexConnection = knex, shouldDuplicateToAirtable = true }) {
   if (translations.length === 0) return [];
 
-  await knexConnection('translations')
-    .insert(translations)
-    .onConflict(['key', 'locale'])
-    .merge();
+  await knexConnection('translations').insert(translations).onConflict(['key', 'locale']).merge();
 
   if (!shouldDuplicateToAirtable) return;
 
@@ -31,18 +28,12 @@ export async function save({ translations, transaction: knexConnection = knex, s
  * @deprecated use one of {@link listByModel}, {@link listByEntity} or {@link listByEntities}
  */
 export async function listByPrefix(prefix, { transaction = knex } = {}) {
-  const translationDtos = await transaction
-    .select(projection)
-    .from('translations')
-    .whereLike('key', `${prefix}%`);
+  const translationDtos = await transaction.select(projection).from('translations').whereLike('key', `${prefix}%`);
   return translationDtos.map(_toDomain);
 }
 
 export async function listByModel(model, { knexConn = knex } = {}) {
-  const translationDtos = await knexConn
-    .select(projection)
-    .from('translations')
-    .where('model', model);
+  const translationDtos = await knexConn.select(projection).from('translations').where('model', model);
   return translationDtos.map(_toDomain);
 }
 
@@ -65,10 +56,7 @@ export async function listByEntities(model, entityIds, { knexConn = knex } = {})
 }
 
 export async function listByPattern(pattern, { transaction = knex } = {}) {
-  const translationDtos = await transaction
-    .select(projection)
-    .from('translations')
-    .whereLike('key', `${pattern}`);
+  const translationDtos = await transaction.select(projection).from('translations').whereLike('key', `${pattern}`);
   return translationDtos.map(_toDomain);
 }
 
@@ -81,7 +69,7 @@ export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
     .pluck('key')
     .whereILike('value', `%${escapeWildcardCharacters(search)}%`)
-    .andWhere(function() {
+    .andWhere(function () {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);
       }
@@ -92,9 +80,11 @@ export async function search({ entity, fields, search, limit }) {
 
   const keys = await query;
 
-  return _.sortedUniq(keys.map((key) => {
-    return key.split('.')[1];
-  }));
+  return _.sortedUniq(
+    keys.map((key) => {
+      return key.split('.')[1];
+    }),
+  );
 }
 
 function escapeWildcardCharacters(s) {
@@ -111,10 +101,7 @@ function _toDomain(dto) {
 }
 
 export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction: knexConnection = knex }) {
-  await knexConnection('translations')
-    .delete()
-    .whereLike('key', `${prefix}%`)
-    .whereIn('locale', locales);
+  await knexConnection('translations').delete().whereLike('key', `${prefix}%`).whereIn('locale', locales);
 
   if (_doesTableExistInAirtable == null && _doesTableExistInAirtablePromise == null) {
     await checkIfTableExistInAirtable();
@@ -131,4 +118,3 @@ export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction
     await translationDatasource.delete(recordIds);
   }
 }
-

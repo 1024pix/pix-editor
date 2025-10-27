@@ -4,7 +4,6 @@ import * as pixApiClient from '../../../lib/infrastructure/pix-api-client.js';
 import { cache } from '../../../lib/infrastructure/cache.js';
 
 describe('Unit | Infrastructure | PIX API Client', () => {
-
   describe('#request', () => {
     context('when token is in cache', () => {
       it('should call the API', async () => {
@@ -48,7 +47,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const authInterceptor = nock('https://api.test.pix.fr')
           .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': newToken });
+          .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -83,7 +82,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const authInterceptor = nock('https://api.test.pix.fr')
           .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': newToken });
+          .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -102,7 +101,6 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         expect(firstRequestInterceptor.isDone()).to.be.true;
         expect(authInterceptor.isDone()).to.be.true;
         expect(secondRequestInterceptor.isDone()).to.be.true;
-
       });
     });
 
@@ -124,7 +122,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const authInterceptor = nock('https://api.test.pix.fr')
           .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': token });
+          .reply(200, { access_token: token });
 
         // when
         await pixApiClient.request({ url: '/api/cache/model/id', payload });
@@ -152,7 +150,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         nock('https://api.test.pix.fr')
           .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': token });
+          .reply(200, { access_token: token });
 
         // when
         await pixApiClient.request({ url: '/api/cache/model/id', payload });
@@ -161,6 +159,5 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         expect(cache.set).toHaveBeenCalled();
       });
     });
-
   });
 });

@@ -43,8 +43,8 @@ describe('Unit | Infrastructure | Utils | Merge Stream', () => {
 
   it('supports object mode', async () => {
     // given
-    const writableStream1 = new PassThrough({ objectMode:true });
-    const writableStream2 = new PassThrough({ objectMode:true });
+    const writableStream1 = new PassThrough({ objectMode: true });
+    const writableStream2 = new PassThrough({ objectMode: true });
     const promise = streamToPromise(mergeStreams(writableStream1, writableStream2));
 
     // when

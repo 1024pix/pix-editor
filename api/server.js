@@ -12,21 +12,20 @@ import * as monitoringTools from './lib/infrastructure/monitoring-tools.js';
 monitoringTools.installHapiHook();
 
 export async function createServer() {
-
   const server = new Hapi.server({
     routes: {
       cors: {
         origin: ['*'],
-        additionalHeaders: ['X-Requested-With']
+        additionalHeaders: ['X-Requested-With'],
       },
       response: {
-        emptyStatusCode: 204
-      }
+        emptyStatusCode: 204,
+      },
     },
     port: config.port,
     router: {
       isCaseSensitive: false,
-    }
+    },
   });
 
   server.ext('onPreResponse', catchDomainAndInfrastructureErrors);
@@ -44,8 +43,7 @@ export async function createServer() {
   return server;
 }
 
-const enableOpsMetrics = async function(server) {
-
+const enableOpsMetrics = async function (server) {
   const oppsy = new Oppsy(server);
 
   oppsy.on('ops', (data) => {
@@ -53,5 +51,4 @@ const enableOpsMetrics = async function(server) {
   });
 
   oppsy.start(config.logging.emitOpsEventEachSeconds * 1000);
-
 };

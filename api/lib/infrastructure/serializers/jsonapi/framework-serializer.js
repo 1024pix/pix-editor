@@ -4,14 +4,11 @@ import { Framework } from '../../../domain/models/index.js';
 const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('framework', {
-  attributes: [
-    'name',
-    'areas',
-  ],
+  attributes: ['name', 'areas'],
   transform({ areaIds, ...framework }) {
     return {
       ...framework,
-      areas: areaIds?.map((id) => ({ id }))
+      areas: areaIds?.map((id) => ({ id })),
     };
   },
   areas: {

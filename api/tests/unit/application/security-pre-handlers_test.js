@@ -4,18 +4,15 @@ import {
   checkUserHasAdminAccess,
   checkUserHasWriteAccess,
   checkUserIsAuthenticatedViaBasicAndAdmin,
-  checkUserIsAuthenticatedViaBearer
+  checkUserIsAuthenticatedViaBearer,
 } from '../../../lib/application/security-pre-handlers.js';
 import { userRepository } from '../../../lib/infrastructure/repositories/index.js';
 import { User } from '../../../lib/domain/models/User.js';
 import { UserNotFoundError } from '../../../lib/domain/errors.js';
 
 describe('Unit | Application | SecurityPreHandlers', () => {
-
   describe('#checkUserIsAuthenticatedViaBearer', () => {
-
     context('Successful case', () => {
-
       it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
         // given
         const apiKey = 'valid.api.key';
@@ -38,14 +35,12 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         // then
         expect(response.authenticated).to.deep.equal({ credentials: { user: authenticatedUser } });
       });
-
     });
 
     context('Error cases', () => {
-
       it('should disallow access to resource when api key is missing', async () => {
         // given
-        const request = { headers: { } };
+        const request = { headers: {} };
         // when
         const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
 
@@ -75,11 +70,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
   });
 
   describe('#checkUserIsAuthenticatedViaBasicAndAdmin', () => {
-
     context('Successful case', () => {
-
       it('should allow access to resource - returning apiKey as email - when the request contains the authorization header with a valid api key', async () => {
-      // given
+        // given
         const apiKey = 'valid.api.key';
         const authenticatedUser = new User({
           id: '1',
@@ -98,11 +91,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         // then
         expect(response).to.deep.equal({ email: apiKey });
       });
-
     });
 
     context('Error cases', () => {
-
       it('should disallow access to resource when the api key is not found', async () => {
         // given
         const apiKey = 'invalid.api.key';
@@ -320,5 +311,4 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       expect(response.isTakeOver).to.be.true;
     });
   });
-
 });

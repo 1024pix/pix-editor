@@ -1,4 +1,4 @@
-import { createChallengeTransformer, skillTransformer, } from '../../infrastructure/transformers/index.js';
+import { createChallengeTransformer, skillTransformer } from '../../infrastructure/transformers/index.js';
 import { logger } from '../../infrastructure/logger.js';
 import { CloneSkillError } from '../errors.js';
 
@@ -28,22 +28,14 @@ export async function cloneSkill({
     skillRepository,
   });
 
-  const {
-    skillChallenges,
-    tubeSkills,
-    attachments,
-  } = await _fetchData({
+  const { skillChallenges, tubeSkills, attachments } = await _fetchData({
     skillToCloneId: skillToClone.id,
     tubeId: tube.id,
     challengeRepository,
     skillRepository,
     attachmentRepository,
   });
-  const {
-    clonedSkill,
-    clonedChallenges,
-    clonedAttachments,
-  } = skillToClone.cloneSkillAndChallenges({
+  const { clonedSkill, clonedChallenges, clonedAttachments } = skillToClone.cloneSkillAndChallenges({
     tubeDestination: tube,
     level: cloneCommand.level,
     skillChallenges,
@@ -54,9 +46,17 @@ export async function cloneSkill({
   const savedSkill = await skillRepository.create(clonedSkill);
   await challengeRepository.createBatch(clonedChallenges);
   // for now only persist primary attachments
-  const attachmentsToPersist = clonedAttachments.filter((attachment) => attachment.challengeId === attachment.localizedChallengeId);
+  const attachmentsToPersist = clonedAttachments.filter(
+    (attachment) => attachment.challengeId === attachment.localizedChallengeId,
+  );
   await attachmentRepository.createBatch(attachmentsToPersist);
-  await updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier });
+  await updateStagingPixApiCache({
+    clonedSkill,
+    clonedChallenges,
+    clonedAttachments,
+    pixApiClient,
+    updatedRecordNotifier,
+  });
   return savedSkill;
 }
 
@@ -94,18 +94,34 @@ async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRe
   };
 }
 
-async function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier }) {
+async function updateStagingPixApiCache({
+  clonedSkill,
+  clonedChallenges,
+  clonedAttachments,
+  pixApiClient,
+  updatedRecordNotifier,
+}) {
   try {
     const skillForRelease = skillTransformer.forRelease(clonedSkill);
-    await updatedRecordNotifier.notify({ updatedRecord: skillForRelease, model: 'skills', pixApiClient });
+    await updatedRecordNotifier.notify({
+      updatedRecord: skillForRelease,
+      model: 'skills',
+      pixApiClient,
+    });
 
     const primaryChallenges = clonedChallenges.filter((challenge) => challenge.isPrimary);
-    const transformChallenge = createChallengeTransformer({ attachments: clonedAttachments });
+    const transformChallenge = createChallengeTransformer({
+      attachments: clonedAttachments,
+    });
     const transformedChallenges = primaryChallenges.map((challenge) => transformChallenge(challenge));
     for (const transformedChallenge of transformedChallenges) {
-      await updatedRecordNotifier.notify({ updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
+      await updatedRecordNotifier.notify({
+        updatedRecord: transformedChallenge,
+        model: 'challenges',
+        pixApiClient,
+      });
     }
   } catch (err) {
     logger.error(err);
-  };
+  }
 }

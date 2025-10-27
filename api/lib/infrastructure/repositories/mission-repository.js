@@ -22,18 +22,22 @@ export async function getById(id) {
 }
 
 export async function findAllMissions({ filter, page }) {
-  const query = knex('missions')
-    .select('*')
-    .orderBy('createdAt', 'desc');
+  const query = knex('missions').select('*').orderBy('createdAt', 'desc');
   if (filter?.statuses) {
-    query.whereIn('status', filter.statuses.map((status) => status.toUpperCase()));
+    query.whereIn(
+      'status',
+      filter.statuses.map((status) => status.toUpperCase()),
+    );
   }
   const { results, pagination } = await fetchPage(query, page);
-  const translations = await translationRepository.listByEntities(model, results.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    results.map(({ id }) => id),
+  );
 
   return {
     missions: _toDomainList(results, translations),
-    meta: pagination
+    meta: pagination,
   };
 }
 
@@ -47,21 +51,29 @@ export async function list() {
 }
 
 export async function save(mission) {
-  const [insertedMission] = await knex('missions').insert({
-    id: mission.id,
-    cardImageUrl: mission.cardImageUrl,
-    competenceId: mission.competenceId,
-    thematicIds: mission.thematicIds,
-    status: mission.status,
-    introductionMediaUrl: mission.introductionMediaUrl,
-    introductionMediaType: mission.introductionMediaType,
-    documentationUrl: mission.documentationUrl,
-  }).onConflict('id')
+  const [insertedMission] = await knex('missions')
+    .insert({
+      id: mission.id,
+      cardImageUrl: mission.cardImageUrl,
+      competenceId: mission.competenceId,
+      thematicIds: mission.thematicIds,
+      status: mission.status,
+      introductionMediaUrl: mission.introductionMediaUrl,
+      introductionMediaType: mission.introductionMediaType,
+      documentationUrl: mission.documentationUrl,
+    })
+    .onConflict('id')
     .merge()
     .returning('*');
 
-  const translations = missionTranslations.extractFromReleaseObject({ ...mission, id: insertedMission.id });
-  await translationRepository.save({ translations, shouldDuplicateToAirtable: false });
+  const translations = missionTranslations.extractFromReleaseObject({
+    ...mission,
+    id: insertedMission.id,
+  });
+  await translationRepository.save({
+    translations,
+    shouldDuplicateToAirtable: false,
+  });
 
   return _toDomain(insertedMission, translations);
 }
@@ -78,7 +90,7 @@ function _toDomain(mission, translations) {
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
     documentationUrl: mission.documentationUrl,
-    ...missionTranslations.toDomain(translationsByMissionId[mission.id])
+    ...missionTranslations.toDomain(translationsByMissionId[mission.id]),
   });
 }
 

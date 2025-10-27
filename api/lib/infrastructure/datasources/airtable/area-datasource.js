@@ -1,7 +1,6 @@
 import { datasource } from './datasource.js';
 
 export const areaDatasource = datasource.extend({
-
   modelName: 'Area',
 
   tableName: 'Domaines',
@@ -40,7 +39,7 @@ export const areaDatasource = datasource.extend({
         'id persistant': area.id,
         Code: area.code,
         Referentiel: [area.frameworkId],
-      }
+      },
     };
   },
 });

@@ -14,11 +14,11 @@ function sink(func) {
   return result;
 }
 
-describe('Integration | Infrastructure | plugins | pino', function() {
+describe('Integration | Infrastructure | plugins | pino', function () {
   let httpTestServer;
   let user;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     httpTestServer = Hapi.server();
     httpTestServer.auth.scheme('api-token', security.scheme);
     httpTestServer.auth.strategy('default', 'api-token');
@@ -57,9 +57,9 @@ describe('Integration | Infrastructure | plugins | pino', function() {
     await httpTestServer.register([pinoPluginWithLogger]);
   }
 
-  describe('Ensure that datadog configured log format is what we send', function() {
-    context('with request monitoring disabled', function() {
-      beforeEach(function() {
+  describe('Ensure that datadog configured log format is what we send', function () {
+    context('with request monitoring disabled', function () {
+      beforeEach(function () {
         vi.spyOn(config, 'hapi', 'get').mockReturnValue({
           ...config.hapi,
           enableRequestMonitoring: false,
@@ -67,11 +67,11 @@ describe('Integration | Infrastructure | plugins | pino', function() {
         monitoringTools.installHapiHook();
       });
 
-      it('should log the message and version', async function() {
+      it('should log the message and version', async function () {
         // given
         let finish;
 
-        const done = new Promise(function(resolve) {
+        const done = new Promise(function (resolve) {
           finish = resolve;
         });
         const messages = [];
@@ -98,8 +98,8 @@ describe('Integration | Infrastructure | plugins | pino', function() {
       });
     });
 
-    context('with request monitoring enabled', function() {
-      beforeEach(function() {
+    context('with request monitoring enabled', function () {
+      beforeEach(function () {
         vi.spyOn(config, 'hapi', 'get').mockReturnValue({
           ...config.hapi,
           enableRequestMonitoring: true,
@@ -107,11 +107,11 @@ describe('Integration | Infrastructure | plugins | pino', function() {
         monitoringTools.installHapiHook();
       });
 
-      it('should log the message, version, user id, route and metrics', async function() {
+      it('should log the message, version, user id, route and metrics', async function () {
         // given
         let finish;
 
-        const done = new Promise(function(resolve) {
+        const done = new Promise(function (resolve) {
           finish = resolve;
         });
         const messages = [];

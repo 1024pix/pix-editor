@@ -4,11 +4,10 @@ import { Area } from '../../../../lib/domain/models/index.js';
 import { AreaForRelease } from '../../../../lib/domain/models/release/index.js';
 import { AreaForReplication } from '../../../../lib/domain/models/replication/index.js';
 
-describe('Unit | Infrastructure | area-transformer', function() {
-
-  describe('#forRelease', function() {
-    context('when providing a single Area', function() {
-      it('should transform it into a single AreaForRelease', function() {
+describe('Unit | Infrastructure | area-transformer', function () {
+  describe('#forRelease', function () {
+    context('when providing a single Area', function () {
+      it('should transform it into a single AreaForRelease', function () {
         // given
         const area = new Area({
           id: 'areaId',
@@ -25,20 +24,22 @@ describe('Unit | Infrastructure | area-transformer', function() {
         const actualAreaForRelease = forRelease(area);
 
         // then
-        expect(actualAreaForRelease).toStrictEqual(new AreaForRelease({
-          id: 'areaId',
-          code: '1',
-          name: '1. title fr areaId',
-          title_i18n: { fr: 'title fr areaId', en: 'title en areaId' },
-          competenceIds: ['competenceId1', 'competenceId2'],
-          color: Area.COLORS.CERULEAN,
-          frameworkId: 'frameworkId',
-        }));
+        expect(actualAreaForRelease).toStrictEqual(
+          new AreaForRelease({
+            id: 'areaId',
+            code: '1',
+            name: '1. title fr areaId',
+            title_i18n: { fr: 'title fr areaId', en: 'title en areaId' },
+            competenceIds: ['competenceId1', 'competenceId2'],
+            color: Area.COLORS.CERULEAN,
+            frameworkId: 'frameworkId',
+          }),
+        );
       });
     });
 
-    context('when providing several Areas', function() {
-      it('should transform them into a several AreasForRelease', function() {
+    context('when providing several Areas', function () {
+      it('should transform them into a several AreasForRelease', function () {
         // given
         const areaA = new Area({
           id: 'areaIdA',
@@ -89,9 +90,9 @@ describe('Unit | Infrastructure | area-transformer', function() {
     });
   });
 
-  describe('#forReplication', function() {
-    context('when providing a single Area', function() {
-      it('should transform it into a single AreaForReplication', function() {
+  describe('#forReplication', function () {
+    context('when providing a single Area', function () {
+      it('should transform it into a single AreaForReplication', function () {
         // given
         const area = new Area({
           id: 'areaId',
@@ -108,20 +109,22 @@ describe('Unit | Infrastructure | area-transformer', function() {
         const actualAreaForReplication = forReplication(area);
 
         // then
-        expect(actualAreaForReplication).toStrictEqual(new AreaForReplication({
-          id: 'areaId',
-          code: '1',
-          name: '1. title fr areaId',
-          title_i18n: { fr: 'title fr areaId', en: 'title en areaId' },
-          competenceIds: ['competenceId1', 'competenceId2'],
-          color: Area.COLORS.CERULEAN,
-          frameworkId: 'frameworkId',
-        }));
+        expect(actualAreaForReplication).toStrictEqual(
+          new AreaForReplication({
+            id: 'areaId',
+            code: '1',
+            name: '1. title fr areaId',
+            title_i18n: { fr: 'title fr areaId', en: 'title en areaId' },
+            competenceIds: ['competenceId1', 'competenceId2'],
+            color: Area.COLORS.CERULEAN,
+            frameworkId: 'frameworkId',
+          }),
+        );
       });
     });
 
-    context('when providing several Areas', function() {
-      it('should transform them into a several AreasForReplication', function() {
+    context('when providing several Areas', function () {
+      it('should transform them into a several AreasForReplication', function () {
         // given
         const areaA = new Area({
           id: 'areaIdA',

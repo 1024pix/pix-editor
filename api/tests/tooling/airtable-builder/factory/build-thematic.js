@@ -1,22 +1,21 @@
-export function buildThematic(
-  {
-    id,
-    airtableId = id,
-    competenceId,
-    competenceAirtableId,
-    tubeIds,
-    tubeAirtableIds,
-    index,
-  } = {}) {
+export function buildThematic({
+  id,
+  airtableId = id,
+  competenceId,
+  competenceAirtableId,
+  tubeIds,
+  tubeAirtableIds,
+  index,
+} = {}) {
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
       'Competence (id persistant)': [competenceId],
-      'Competence': [competenceAirtableId],
+      Competence: [competenceAirtableId],
       'Tubes (id persistant)': tubeIds,
-      'Tubes': tubeAirtableIds,
-      'Index': index
+      Tubes: tubeAirtableIds,
+      Index: index,
     },
   };
 }

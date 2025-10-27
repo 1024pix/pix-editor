@@ -5,7 +5,7 @@ export function buildThematic({
   airtableId = 'recAirtableThematic',
   name_i18n = {
     fr: 'Nom de la thématique',
-    en: 'Thematic\'s name',
+    en: "Thematic's name",
   },
   competenceId = 'recCompetence0',
   competenceAirtableId = 'recAirtableCompetence0',

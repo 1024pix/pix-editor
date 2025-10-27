@@ -1,14 +1,5 @@
 export class Thematic {
-  constructor({
-    id,
-    name_i18n,
-    index,
-    airtableId,
-    competenceId,
-    competenceAirtableId,
-    tubeIds,
-    tubeAirtableIds,
-  }) {
+  constructor({ id, name_i18n, index, airtableId, competenceId, competenceAirtableId, tubeIds, tubeAirtableIds }) {
     this.id = id;
     this.name_i18n = name_i18n;
     this.index = index;

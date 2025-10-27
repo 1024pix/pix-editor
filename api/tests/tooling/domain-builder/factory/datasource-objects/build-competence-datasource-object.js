@@ -21,7 +21,6 @@ export function buildCompetenceDatasourceObject({
   tubeAirtableIds = ['recP12434hvf34', 'recO01dh3298cf'],
   tubeIds = ['tubeP12434hvf34', 'tubeO01dh3298cf'],
 } = {}) {
-
   return {
     id,
     airtableId: airtableId ?? id,

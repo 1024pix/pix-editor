@@ -5,8 +5,7 @@ expect.extend({
     if (received?.constructor?.name !== expected?.constructor?.name) {
       return {
         pass: false,
-        message: () =>
-          `expected ${this.utils.stringify(received)} to be an instance of ${expected?.constructor?.name}`,
+        message: () => `expected ${this.utils.stringify(received)} to be an instance of ${expected?.constructor?.name}`,
       };
     }
     return {

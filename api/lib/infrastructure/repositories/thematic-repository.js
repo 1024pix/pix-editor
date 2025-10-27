@@ -73,7 +73,10 @@ export async function listByCompetenceId(competenceId) {
 
   compareDtosLists(airtableDtos, pgDtos, compareThematicDtos);
 
-  const translations = await translationRepository.listByEntities(model, airtableDtos.map(({ id }) => id));
+  const translations = await translationRepository.listByEntities(
+    model,
+    airtableDtos.map(({ id }) => id),
+  );
 
   return toDomainList(airtableDtos, translations);
 }
@@ -102,12 +105,14 @@ export async function create(thematic) {
     const translations = thematicTranslations.extractFromDomainObject(thematic);
 
     await Promise.all([
-      trx.insert({
-        id: thematic.id,
-        index: thematic.index,
-        competenceId: createdThematicDTO.competenceId,
-      }).into(TABLE_NAME),
-      translationRepository.save({ translations, transaction: trx })
+      trx
+        .insert({
+          id: thematic.id,
+          index: thematic.index,
+          competenceId: createdThematicDTO.competenceId,
+        })
+        .into(TABLE_NAME),
+      translationRepository.save({ translations, transaction: trx }),
     ]);
 
     return toDomain(createdThematicDTO, translations);
@@ -118,7 +123,9 @@ export async function update(thematic) {
   return knex.transaction(async (transaction) => {
     const updatedThematicDto = await thematicDatasource.update(thematic);
     const translations = thematicTranslations.extractFromDomainObject(thematic);
-    await transaction(TABLE_NAME).update({ index: thematic.index, updatedAt: transaction.fn.now() }).where('id', thematic.id);
+    await transaction(TABLE_NAME)
+      .update({ index: thematic.index, updatedAt: transaction.fn.now() })
+      .where('id', thematic.id);
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${thematicTranslations.prefix}${thematic.id}.`,
       locales: ['fr', 'en'],
@@ -130,32 +137,43 @@ export async function update(thematic) {
 }
 
 function selectThematics(knexConn = knex) {
-  return knexConn.select(
-    '*',
-    knexConn.raw(
-      'coalesce((??), \'[]\') as "tubeIds"',
-      knexConn
-        .select(knexConn.raw('json_agg(??)', knexConn.ref('tubes.id')))
-        .from('tubes')
-        .where('tubes.thematicId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
-    ),
-  ).from(TABLE_NAME);
+  return knexConn
+    .select(
+      '*',
+      knexConn.raw(
+        'coalesce((??), \'[]\') as "tubeIds"',
+        knexConn
+          .select(knexConn.raw('json_agg(??)', knexConn.ref('tubes.id')))
+          .from('tubes')
+          .where('tubes.thematicId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
+      ),
+    )
+    .from(TABLE_NAME);
 }
 
 function compareThematicDtos(airtableThematic, pgThematic) {
   const diff = [];
-  if (airtableThematic.id !== pgThematic.id) diff.push(`thematic airtable id "${airtableThematic.id}" != postgres id "${pgThematic.id}"`);
-  if (!areNullableValuesEqual(airtableThematic.index, pgThematic.index)) diff.push(`thematic airtable index "${airtableThematic.index}" != postgres index "${pgThematic.index}"`);
-  if (airtableThematic.competenceId !== pgThematic.competenceId) diff.push(`thematic airtable competenceId "${airtableThematic.competenceId}" != postgres competenceId "${pgThematic.competenceId}"`);
-  if (!areArrayEquals(airtableThematic.tubeIds, pgThematic.tubeIds)) diff.push(`thematic airtable tubeIds "${airtableThematic.tubeIds}" != postgres tubeIds "${pgThematic.tubeIds}"`);
+  if (airtableThematic.id !== pgThematic.id)
+    diff.push(`thematic airtable id "${airtableThematic.id}" != postgres id "${pgThematic.id}"`);
+  if (!areNullableValuesEqual(airtableThematic.index, pgThematic.index))
+    diff.push(`thematic airtable index "${airtableThematic.index}" != postgres index "${pgThematic.index}"`);
+  if (airtableThematic.competenceId !== pgThematic.competenceId)
+    diff.push(
+      `thematic airtable competenceId "${airtableThematic.competenceId}" != postgres competenceId "${pgThematic.competenceId}"`,
+    );
+  if (!areArrayEquals(airtableThematic.tubeIds, pgThematic.tubeIds))
+    diff.push(`thematic airtable tubeIds "${airtableThematic.tubeIds}" != postgres tubeIds "${pgThematic.tubeIds}"`);
   return diff;
 }
 
 function toDomainList(datasourceThematics, translations) {
   const translationsByThematicId = _.groupBy(translations, 'entityId');
-  return _.orderBy(datasourceThematics.map(
-    (datasourceThematic) => toDomain(datasourceThematic, translationsByThematicId[datasourceThematic.id]),
-  ), ['index', 'name_i18n.fr']);
+  return _.orderBy(
+    datasourceThematics.map((datasourceThematic) =>
+      toDomain(datasourceThematic, translationsByThematicId[datasourceThematic.id]),
+    ),
+    ['index', 'name_i18n.fr'],
+  );
 }
 
 function toDomain(datasourceThematic, translations = []) {

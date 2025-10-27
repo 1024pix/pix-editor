@@ -4,10 +4,7 @@ import { Tag } from '../../../domain/models/index.js';
 const { Deserializer, Serializer } = Jsonapi;
 
 const serializer = new Serializer('tag', {
-  attributes: [
-    'pixId',
-    'title',
-  ],
+  attributes: ['pixId', 'title'],
   transform(tag) {
     return {
       id: tag.airtableId,
@@ -29,7 +26,7 @@ const deserializer = new Deserializer({
       id: null,
       airtableId: tag.id ?? null,
     });
-  }
+  },
 });
 
 export function deserialize(tags) {

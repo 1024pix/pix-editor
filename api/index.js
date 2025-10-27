@@ -41,7 +41,11 @@ async function exitOnSignal(signal) {
   }
 }
 
-process.on('SIGTERM', () => { exitOnSignal('SIGTERM'); });
-process.on('SIGINT', () => { exitOnSignal('SIGINT'); });
+process.on('SIGTERM', () => {
+  exitOnSignal('SIGTERM');
+});
+process.on('SIGINT', () => {
+  exitOnSignal('SIGINT');
+});
 
 start();

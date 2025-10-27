@@ -19,11 +19,7 @@ function getWritableStream() {
   return writableStream;
 }
 
-export function promiseStreamer({
-  promise,
-  writableStream = getWritableStream(),
-  loggingScope,
-}) {
+export function promiseStreamer({ promise, writableStream = getWritableStream(), loggingScope }) {
   let logger = genericLogger;
   if (loggingScope) {
     logger = child('promisestream', { event: loggingScope });
@@ -42,13 +38,11 @@ export function promiseStreamer({
   });
 
   logger.info('Gathering data...');
-  promise.then((data) => {
-    logger.info('Data gathered, streaming about to begin...');
-    clearInterval(timer);
-    pipeline(
-      chunk(data),
-      writableStream,
-      (err) => {
+  promise
+    .then((data) => {
+      logger.info('Data gathered, streaming about to begin...');
+      clearInterval(timer);
+      pipeline(chunk(data), writableStream, (err) => {
         if (err) {
           logger.error(`Streaming pipeline error: ${err}`);
           if (!writableStream.closed && !writableStream.errored) {
@@ -57,15 +51,15 @@ export function promiseStreamer({
         } else {
           logger.info('Streaming pipeline done');
         }
+      });
+    })
+    .catch((err) => {
+      clearInterval(timer);
+      if (!writableStream.closed && !writableStream.errored) {
+        writableStream.end('error');
       }
-    );
-  }).catch((err) => {
-    clearInterval(timer);
-    if (!writableStream.closed && !writableStream.errored) {
-      writableStream.end('error');
-    }
-    logger.error(`Error in promise : ${err}`);
-  });
+      logger.error(`Error in promise : ${err}`);
+    });
   return writableStream;
 }
 

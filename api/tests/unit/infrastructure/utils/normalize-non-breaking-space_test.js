@@ -32,8 +32,10 @@ describe('Unit | infrastructure | utils | normalize-non-breaking-space', () => {
 
   it('should not replace space in select option', () => {
     // given
-    const proposition = 'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
-    const expectedResult = 'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
+    const proposition =
+      'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
+    const expectedResult =
+      'Action à réaliser pour la première image : ${rep1#- Sélectionner -#options=["Ajouter le texte de remplacement : « banniere-accessibilite.png »","Ajouter le texte de ? remplacement : « Logo d’un bonhomme  15 °C »"]}';
 
     // when
     const result = normalizeNonBreakingSpace(normalizeNonBreakingSpace(proposition));

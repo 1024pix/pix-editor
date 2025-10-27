@@ -22,11 +22,13 @@ export async function create(area) {
 
     const [createdAreaDto] = await Promise.all([
       areaDatasource.create(area),
-      trx.insert({
-        id: area.id,
-        code: area.code,
-        frameworkId: area.frameworkId,
-      }).into(TABLE_NAME),
+      trx
+        .insert({
+          id: area.id,
+          code: area.code,
+          frameworkId: area.frameworkId,
+        })
+        .into(TABLE_NAME),
       translationRepository.save({ translations, transaction: trx }),
     ]);
 
@@ -73,23 +75,23 @@ export async function getByAirtableId(areaAirtableId) {
 }
 
 function selectAreas(knexConn = knex) {
-  return knexConn.select(
-    '*',
-    knexConn.raw(
-      'coalesce((??), \'[]\') as "competenceIds"',
-      knexConn
-        .select(knexConn.raw('json_agg(??)', knexConn.ref('competences.id')))
-        .from('competences')
-        .where('competences.areaId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
-    ),
-  ).from(TABLE_NAME);
+  return knexConn
+    .select(
+      '*',
+      knexConn.raw(
+        'coalesce((??), \'[]\') as "competenceIds"',
+        knexConn
+          .select(knexConn.raw('json_agg(??)', knexConn.ref('competences.id')))
+          .from('competences')
+          .where('competences.areaId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
+      ),
+    )
+    .from(TABLE_NAME);
 }
 
 function toDomainList(datasourceAreas, translations) {
   const translationsByAreaId = _.groupBy(translations, 'entityId');
-  return datasourceAreas.map(
-    (datasourceArea) => toDomain(datasourceArea, translationsByAreaId[datasourceArea.id]),
-  );
+  return datasourceAreas.map((datasourceArea) => toDomain(datasourceArea, translationsByAreaId[datasourceArea.id]));
 }
 
 export function toDomain(datasourceArea, translations = []) {
@@ -102,9 +104,15 @@ export function toDomain(datasourceArea, translations = []) {
 function compareAreaDtos(airtableDto, pgDto) {
   const diff = [];
   if (airtableDto.id !== pgDto.id) diff.push(`area airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-  if (airtableDto.code !== pgDto.code) diff.push(`area airtable code "${airtableDto.code}" != postgres code "${pgDto.code}"`);
-  if (!areNullableValuesEqual(airtableDto.color, pgDto.color)) diff.push(`area airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
-  if (airtableDto.frameworkId !== pgDto.frameworkId) diff.push(`area airtable frameworkId "${airtableDto.frameworkId}" != postgres frameworkId "${pgDto.frameworkId}"`);
-  if (!areArrayEquals(airtableDto.competenceIds, pgDto.competenceIds)) diff.push(`area airtable competenceIds "${airtableDto.competenceIds}" != postgres competenceIds "${pgDto.competenceIds}"`);
+  if (airtableDto.code !== pgDto.code)
+    diff.push(`area airtable code "${airtableDto.code}" != postgres code "${pgDto.code}"`);
+  if (!areNullableValuesEqual(airtableDto.color, pgDto.color))
+    diff.push(`area airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
+  if (airtableDto.frameworkId !== pgDto.frameworkId)
+    diff.push(`area airtable frameworkId "${airtableDto.frameworkId}" != postgres frameworkId "${pgDto.frameworkId}"`);
+  if (!areArrayEquals(airtableDto.competenceIds, pgDto.competenceIds))
+    diff.push(
+      `area airtable competenceIds "${airtableDto.competenceIds}" != postgres competenceIds "${pgDto.competenceIds}"`,
+    );
   return diff;
 }

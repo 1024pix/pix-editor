@@ -8,7 +8,7 @@ import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js'
 import { attachmentDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
 
-describe('Unit | Domain | Usecases | update challenge', function() {
+describe('Unit | Domain | Usecases | update challenge', function () {
   beforeEach(() => {
     vi.spyOn(challengeRepository, 'update');
     vi.spyOn(updatedRecordNotifier, 'notify');
@@ -16,10 +16,10 @@ describe('Unit | Domain | Usecases | update challenge', function() {
   });
 
   describe('when challenge id is unknown', () => {
-    it('should throw a airtableError', async() => {
+    it('should throw a airtableError', async () => {
       // given
       const challengeUpdates = domainBuilder.buildChallenge({
-        locales: ['en']
+        locales: ['en'],
       });
 
       challengeRepository.update.mockRejectedValueOnce(new Error('Épreuve introuvable'));
@@ -35,18 +35,18 @@ describe('Unit | Domain | Usecases | update challenge', function() {
     });
   });
 
-  it('should update challenge', async () =>{
+  it('should update challenge', async () => {
     // given
     const challengeUpdates = domainBuilder.buildChallenge({
       id: 'updatedChallengeId',
       locales: ['en'],
-      updatedAt: '2021-10-04'
+      updatedAt: '2021-10-04',
     });
 
     const updatedChallenge = domainBuilder.buildChallenge({
       id: 'updatedChallengeId',
       locales: ['en'],
-      updatedAt: '2025-10-04'
+      updatedAt: '2025-10-04',
     });
 
     attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
@@ -70,7 +70,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
       'updatedAt',
       'urlsToConsult',
       'validatedAt',
-      'version'
+      'version',
     ];
     const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
@@ -86,51 +86,54 @@ describe('Unit | Domain | Usecases | update challenge', function() {
       pixApiClient,
       updatedRecord: {
         ...expectedChallengeFOrRelease,
-        'illustrationUrl': null,
+        illustrationUrl: null,
       },
     });
   });
 
   it.each([
-    ['fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
-    ['fr-fr', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
-    ['other', { instruction: 'Ça va ?', proposals:'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
-  ])('should normalize breaking space when challenge is `fr` or `fr-fr`', async (locale, { instruction, proposals, alternativeInstruction }) => {
-    const challenge = domainBuilder.buildChallenge({
-      locales: [locale],
-      instruction: 'Ça va ?',
-      proposals: 'Oui !',
-      alternativeInstruction: 'Et donc ; voilà'
-    });
+    ['fr', { instruction: 'Ça va ?', proposals: 'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
+    ['fr-fr', { instruction: 'Ça va ?', proposals: 'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
+    ['other', { instruction: 'Ça va ?', proposals: 'Oui !', alternativeInstruction: 'Et donc ; voilà' }],
+  ])(
+    'should normalize breaking space when challenge is `fr` or `fr-fr`',
+    async (locale, { instruction, proposals, alternativeInstruction }) => {
+      const challenge = domainBuilder.buildChallenge({
+        locales: [locale],
+        instruction: 'Ça va ?',
+        proposals: 'Oui !',
+        alternativeInstruction: 'Et donc ; voilà',
+      });
 
-    attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
-    challengeRepository.update.mockResolvedValueOnce(challenge);
-    updatedRecordNotifier.notify.mockResolvedValueOnce();
+      attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
+      challengeRepository.update.mockResolvedValueOnce(challenge);
+      updatedRecordNotifier.notify.mockResolvedValueOnce();
 
-    await updateChallenge(challenge, { challengeRepository, attachmentDatasource });
+      await updateChallenge(challenge, { challengeRepository, attachmentDatasource });
 
-    expect(challengeRepository.update).toHaveBeenCalledOnce();
-    expect(challengeRepository.update).toHaveBeenCalledWith({
-      ...challenge,
-      instruction,
-      proposals,
-      alternativeInstruction
-    });
-  });
+      expect(challengeRepository.update).toHaveBeenCalledOnce();
+      expect(challengeRepository.update).toHaveBeenCalledWith({
+        ...challenge,
+        instruction,
+        proposals,
+        alternativeInstruction,
+      });
+    },
+  );
 
   describe('when record notifier fails', () => {
-    it('should resolve anyway', async () =>{
+    it('should resolve anyway', async () => {
       // given
       const challengeUpdates = domainBuilder.buildChallenge({
         id: 'updatedChallengeId',
         locales: ['en'],
-        updatedAt: '2021-10-04'
+        updatedAt: '2021-10-04',
       });
 
       const updatedChallenge = domainBuilder.buildChallenge({
         id: 'updatedChallengeId',
         locales: ['en'],
-        updatedAt: '2025-10-04'
+        updatedAt: '2025-10-04',
       });
 
       const fieldToOmitForChallengeRelease = [
@@ -150,7 +153,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
         'updatedAt',
         'urlsToConsult',
         'validatedAt',
-        'version'
+        'version',
       ];
       const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
@@ -170,7 +173,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
         pixApiClient,
         updatedRecord: {
           ...expectedChallengeFOrRelease,
-          'illustrationUrl': null,
+          illustrationUrl: null,
         },
       });
     });

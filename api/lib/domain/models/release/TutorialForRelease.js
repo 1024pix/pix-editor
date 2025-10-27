@@ -1,13 +1,5 @@
 export class TutorialForRelease {
-  constructor({
-    id,
-    duration,
-    format,
-    link,
-    source,
-    title,
-    locale,
-  }) {
+  constructor({ id, duration, format, link, source, title, locale }) {
     this.id = id;
     this.duration = duration;
     this.format = format;

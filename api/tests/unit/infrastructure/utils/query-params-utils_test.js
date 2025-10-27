@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { extractParameters } from '../../../../lib/infrastructure/utils/query-params-utils.js';
 
-describe('Unit | Utils | Query Params Utils', function() {
-  describe('#extractParameters', function() {
-    it('should extract multiple parameters from request Object', function() {
+describe('Unit | Utils | Query Params Utils', function () {
+  describe('#extractParameters', function () {
+    it('should extract multiple parameters from request Object', function () {
       // given
       const query = {
         'filter[courseId]': '26',
@@ -39,7 +39,7 @@ describe('Unit | Utils | Query Params Utils', function() {
       });
     });
 
-    it('should return an object with empty properties if query does not contain jsonapi params', function() {
+    it('should return an object with empty properties if query does not contain jsonapi params', function () {
       // given
       const query = {
         page: 1,
@@ -58,7 +58,7 @@ describe('Unit | Utils | Query Params Utils', function() {
       });
     });
 
-    it('should support default values for objects', function() {
+    it('should support default values for objects', function () {
       // given
       const query = {
         'page[number]': '1',
@@ -67,9 +67,7 @@ describe('Unit | Utils | Query Params Utils', function() {
         page: {
           size: 100,
         },
-        sort: [
-          ['participationCount', 'asc'],
-        ],
+        sort: [['participationCount', 'asc']],
       };
 
       // when
@@ -82,9 +80,7 @@ describe('Unit | Utils | Query Params Utils', function() {
           number: 1,
           size: 100,
         },
-        sort: [
-          ['participationCount', 'asc'],
-        ],
+        sort: [['participationCount', 'asc']],
         include: [],
       });
     });

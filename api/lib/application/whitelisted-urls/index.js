@@ -13,7 +13,7 @@ export async function register(server) {
       path: '/api/whitelisted-urls',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
           return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls_read));
         },
@@ -29,7 +29,7 @@ export async function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const whitelistedUrlId = request.params.whitelistedUrlId;
           const whitelistedUrlToDelete = await whitelistedUrlRepository.find(whitelistedUrlId);
@@ -48,7 +48,7 @@ export async function register(server) {
       path: '/api/whitelisted-urls',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;
           const creationCommand = {
@@ -76,7 +76,7 @@ export async function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;
           const whitelistedUrlId = request.params.whitelistUrlId;

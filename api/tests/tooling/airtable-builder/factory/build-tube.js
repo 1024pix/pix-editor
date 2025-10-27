@@ -10,18 +10,17 @@ export function buildTube({
   skillAirtableIds,
   skillIds,
 } = {}) {
-
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
-      'Nom': name,
-      'Index': index,
-      'Thematique': [thematicAirtableId],
+      Nom: name,
+      Index: index,
+      Thematique: [thematicAirtableId],
       'Thematique (id persistant)': [thematicId],
-      'Competences': [competenceAirtableId],
+      Competences: [competenceAirtableId],
       'Competences (id persistant)': [competenceId],
-      'Acquis': skillAirtableIds,
+      Acquis: skillAirtableIds,
       'Acquis (id persistant)': skillIds,
     },
   };

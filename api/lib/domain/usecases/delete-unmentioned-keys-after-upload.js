@@ -17,17 +17,22 @@ export async function deleteUnmentionedKeysAfterUpload({ projectId, uploadId }) 
     fetchApi: fetch,
     apiKey: `token ${apiKey}`,
   });
-  const upload = await new UploadsApi(configuration).uploadShow({ projectId, id: uploadId });
+  const upload = await new UploadsApi(configuration).uploadShow({
+    projectId,
+    id: uploadId,
+  });
 
   if (upload.state === 'processing') {
     return RETRY;
   }
-  if (upload.state !== 'success' ||
-      upload.summary.translationKeysUnmentioned === 0) {
+  if (upload.state !== 'success' || upload.summary.translationKeysUnmentioned === 0) {
     return COMPLETED;
   }
 
-  await new KeysApi(configuration).keysDeleteCollection({ projectId, q: `unmentioned_in_upload:${uploadId}` });
+  await new KeysApi(configuration).keysDeleteCollection({
+    projectId,
+    q: `unmentioned_in_upload:${uploadId}`,
+  });
 
   return COMPLETED;
 }

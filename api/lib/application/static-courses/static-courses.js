@@ -3,7 +3,7 @@ import { extractParameters } from '../../infrastructure/utils/query-params-utils
 import {
   localizedChallengeRepository,
   staticCourseRepository,
-  staticCourseTagRepository
+  staticCourseTagRepository,
 } from '../../infrastructure/repositories/index.js';
 import { staticCourseSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
@@ -18,19 +18,26 @@ const DEFAULT_PAGE = {
 
 export async function findSummaries(request, h) {
   const { filter, page } = extractParameters(request.query);
-  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ filter: normalizeFilter(filter), page: normalizePage(page) });
+  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({
+    filter: normalizeFilter(filter),
+    page: normalizePage(page),
+  });
   return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
 }
 
 export async function get(request, h) {
   const staticCourseId = request.params.id;
-  const staticCourse = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
+  const staticCourse = await staticCourseRepository.getRead(staticCourseId, {
+    baseUrl: getBaseUrl(request),
+  });
   return h.response(staticCourseSerializer.serialize(staticCourse));
 }
 
 export async function create(request, h) {
   const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
-  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: creationCommand.challengeIds });
+  const localizedChallenges = await localizedChallengeRepository.getMany({
+    ids: creationCommand.challengeIds,
+  });
   const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = StaticCourse.buildFromCreationCommand({
     creationCommand,
@@ -53,7 +60,9 @@ export async function update(request, h) {
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: updateCommand.challengeIds });
+  const localizedChallenges = await localizedChallengeRepository.getMany({
+    ids: updateCommand.challengeIds,
+  });
   const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
@@ -102,14 +111,16 @@ export async function reactivate(request, h) {
 function normalizePage(page) {
   return {
     number: _.isInteger(page.number) && Math.sign(page.number) === 1 ? page.number : DEFAULT_PAGE.number,
-    size: _.isInteger(page.size) && Math.sign(page.size) === 1 ? Math.min(page.size, DEFAULT_PAGE.maxSize) : DEFAULT_PAGE.size,
+    size:
+      _.isInteger(page.size) && Math.sign(page.size) === 1
+        ? Math.min(page.size, DEFAULT_PAGE.maxSize)
+        : DEFAULT_PAGE.size,
   };
 }
 
 function normalizeFilter(filter) {
   const normalizedFilter = {};
-  if (filter.isActive === undefined)
-    normalizedFilter.isActive = null;
+  if (filter.isActive === undefined) normalizedFilter.isActive = null;
   else if (_.isString(filter.isActive)) {
     const trimmedValueFromFilter = filter.isActive.trim().toLowerCase();
     if (trimmedValueFromFilter === '') normalizedFilter.isActive = null;
@@ -122,8 +133,7 @@ function normalizeFilter(filter) {
     const trimmedValueFromFilter = filter.name.toString().trim();
     if (trimmedValueFromFilter.length > 0) normalizedFilter.name = trimmedValueFromFilter;
     else normalizedFilter.name = null;
-  }
-  else {
+  } else {
     normalizedFilter.name = null;
   }
 

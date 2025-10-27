@@ -3,13 +3,12 @@ import {
   databaseBuilder,
   domainBuilder,
   generateAuthorizationHeader,
-  streamToPromiseArray
+  streamToPromiseArray,
 } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { parseString as parseCSVString } from '@fast-csv/parse';
 
 describe('Acceptance | Controller | embed', () => {
-
   describe('GET /embeds - list embed used by challenges', () => {
     it('should return a csv file', async () => {
       // given
@@ -19,7 +18,7 @@ describe('Acceptance | Controller | embed', () => {
         id: 'competenceId',
         name_i18n: {
           fr: 'Ma competence',
-          en: 'My comptence'
+          en: 'My comptence',
         },
         origin: 'pix',
       });
@@ -27,7 +26,7 @@ describe('Acceptance | Controller | embed', () => {
       const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId',
         name: '@sujet',
-        competenceId: competence.id
+        competenceId: competence.id,
       });
 
       const skill = domainBuilder.buildSkillForRelease({
@@ -49,8 +48,8 @@ describe('Acceptance | Controller | embed', () => {
           competences: [competence],
           tubes: [tube],
           skills: [skill],
-          challenges: [challenge]
-        })
+          challenges: [challenge],
+        }),
       });
 
       await databaseBuilder.commit();
@@ -72,7 +71,7 @@ describe('Acceptance | Controller | embed', () => {
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
 
-      expect(headers).to.deep.equal(['origin', 'competence', 'acquis','challengeId', 'embedUrl', 'status']);
+      expect(headers).to.deep.equal(['origin', 'competence', 'acquis', 'challengeId', 'embedUrl', 'status']);
       expect(data).to.deep.equal([
         [
           'pix',
@@ -80,7 +79,7 @@ describe('Acceptance | Controller | embed', () => {
           '@sujet1',
           'challengeId1',
           'https://epreuves.pix.fr/fr/mon-embed/lilou.html',
-          'validé'
+          'validé',
         ],
         [
           'pix',
@@ -88,8 +87,8 @@ describe('Acceptance | Controller | embed', () => {
           '@sujet1',
           'challengeId1',
           'https://epreuves.pix.fr/mon-embed.html?mode=coucou&lang=fr',
-          'validé'
-        ]
+          'validé',
+        ],
       ]);
     });
   });

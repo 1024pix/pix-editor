@@ -6,6 +6,6 @@ export function notFoundError(errorMessage) {
   return new JSONAPIError({
     status: '404',
     title: 'Not Found',
-    detail: errorMessage
+    detail: errorMessage,
   });
 }

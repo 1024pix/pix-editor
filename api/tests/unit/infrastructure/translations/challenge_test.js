@@ -4,7 +4,6 @@ import { extractFromChallenge, prefixFor } from '../../../../lib/infrastructure/
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Infrastructure | Challenge translations', () => {
-
   describe('#extractFromChallenge', () => {
     it('should extract translations from challenge', () => {
       const challengeId = 'test';
@@ -18,12 +17,10 @@ describe('Unit | Infrastructure | Challenge translations', () => {
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
             embedTitle: 'titre du simulateur',
-          }
+          },
         },
         locales: ['fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-        ],
+        localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
       });
       const translations = extractFromChallenge(challenge);
       expect(translations).to.deep.equal([
@@ -35,7 +32,7 @@ describe('Unit | Infrastructure | Challenge translations', () => {
         {
           key: `challenge.${challengeId}.alternativeInstruction`,
           locale: 'fr',
-          value: 'consigne alternative en français'
+          value: 'consigne alternative en français',
         },
         {
           key: `challenge.${challengeId}.proposals`,
@@ -50,7 +47,7 @@ describe('Unit | Infrastructure | Challenge translations', () => {
         {
           key: `challenge.${challengeId}.solutionToDisplay`,
           locale: 'fr',
-          value: 'bonnes réponses à afficher en français'
+          value: 'bonnes réponses à afficher en français',
         },
         {
           key: `challenge.${challengeId}.embedTitle`,
@@ -71,12 +68,10 @@ describe('Unit | Infrastructure | Challenge translations', () => {
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
-          }
+          },
         },
         locales: ['fr-fr', 'fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-        ],
+        localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
       });
       const translations = extractFromChallenge(challenge);
       expect(translations).to.deep.equal([
@@ -84,14 +79,14 @@ describe('Unit | Infrastructure | Challenge translations', () => {
         {
           key: `challenge.${challengeId}.alternativeInstruction`,
           locale: 'fr',
-          value: 'consigne alternative en français'
+          value: 'consigne alternative en français',
         },
         { key: `challenge.${challengeId}.proposals`, locale: 'fr', value: 'propositions en français' },
         { key: `challenge.${challengeId}.solution`, locale: 'fr', value: 'bonnes réponses en français' },
         {
           key: `challenge.${challengeId}.solutionToDisplay`,
           locale: 'fr',
-          value: 'bonnes réponses à afficher en français'
+          value: 'bonnes réponses à afficher en français',
         },
       ]);
     });
@@ -107,12 +102,10 @@ describe('Unit | Infrastructure | Challenge translations', () => {
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
-          }
+          },
         },
         locales: ['fr'],
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-        ],
+        localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
       });
       const translations = extractFromChallenge(challenge);
       expect(translations).to.deep.equal([
@@ -122,7 +115,7 @@ describe('Unit | Infrastructure | Challenge translations', () => {
         {
           key: `challenge.${challengeId}.solutionToDisplay`,
           locale: 'fr',
-          value: 'bonnes réponses à afficher en français'
+          value: 'bonnes réponses à afficher en français',
         },
       ]);
     });
@@ -135,9 +128,7 @@ describe('Unit | Infrastructure | Challenge translations', () => {
       const challenge = new Challenge({
         id: challengeId,
         translations: { fr: {} },
-        localizedChallenges: [
-          new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-        ],
+        localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
       });
 
       // when

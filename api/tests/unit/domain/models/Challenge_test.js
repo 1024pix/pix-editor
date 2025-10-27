@@ -4,7 +4,6 @@ import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Domain | Challenge', () => {
-
   const fields = ['instruction', 'alternativeInstruction', 'proposals', 'solution', 'solutionToDisplay'];
 
   for (const field of fields) {
@@ -64,9 +63,7 @@ describe('Unit | Domain | Challenge', () => {
                 fr: { [field]: `${field} fr` },
               },
               locales: ['fr-fr', 'fr'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              ],
+              localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
             }),
             expected: `${field} fr`,
           },
@@ -77,9 +74,7 @@ describe('Unit | Domain | Challenge', () => {
                 fr: {},
               },
               locales: ['fr'],
-              localizedChallenges: [
-                new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' }),
-              ],
+              localizedChallenges: [new LocalizedChallenge({ id: challengeId, challengeId, locale: 'fr' })],
             }),
             expected: '',
           },
@@ -99,7 +94,7 @@ describe('Unit | Domain | Challenge', () => {
   describe('#get isPropose', () => {
     it('should return true when challenge is propose', () => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES.PROPOSE,
       });
 
@@ -110,10 +105,13 @@ describe('Unit | Domain | Challenge', () => {
       expect(isPropose).to.be.true;
     });
 
-    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROPOSE)
+    it.each(
+      Object.keys(Challenge.STATUSES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROPOSE,
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -128,7 +126,7 @@ describe('Unit | Domain | Challenge', () => {
   describe('#get isArchive', () => {
     it('should return true when challenge is archive', () => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES.ARCHIVE,
       });
 
@@ -139,10 +137,13 @@ describe('Unit | Domain | Challenge', () => {
       expect(isArchive).to.be.true;
     });
 
-    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.ARCHIVE)
+    it.each(
+      Object.keys(Challenge.STATUSES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.ARCHIVE,
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -157,7 +158,7 @@ describe('Unit | Domain | Challenge', () => {
   describe('#get isValide', () => {
     it('should return true when challenge is valide', () => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES.VALIDE,
       });
 
@@ -168,10 +169,13 @@ describe('Unit | Domain | Challenge', () => {
       expect(isValide).to.be.true;
     });
 
-    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.VALIDE)
+    it.each(
+      Object.keys(Challenge.STATUSES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.VALIDE,
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -186,7 +190,7 @@ describe('Unit | Domain | Challenge', () => {
   describe('#get isPerime', () => {
     it('should return true when challenge is perime', () => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES.PERIME,
       });
 
@@ -197,10 +201,13 @@ describe('Unit | Domain | Challenge', () => {
       expect(isPerime).to.be.true;
     });
 
-    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PERIME)
+    it.each(
+      Object.keys(Challenge.STATUSES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PERIME,
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -215,7 +222,7 @@ describe('Unit | Domain | Challenge', () => {
   describe('#get isPrototype', () => {
     it('should return true when challenge is isPrototype', () => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       });
 
@@ -226,10 +233,13 @@ describe('Unit | Domain | Challenge', () => {
       expect(isPrototype).to.be.true;
     });
 
-    it.each(Object.keys(Challenge.GENEALOGIES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROTOTYPE)
+    it.each(
+      Object.keys(Challenge.GENEALOGIES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROTOTYPE,
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const challenge  = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallenge({
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -305,17 +315,20 @@ describe('Unit | Domain | Challenge', () => {
   describe('#embedUrl', () => {
     it('should return embedUrl from localized challenge', () => {
       // given
-      const localizedChallenges = [{
-        id: '1',
-        challengeId: '1',
-        locale: 'fr',
-        embedUrl: 'mon.site.fr'
-      }, {
-        id: '2',
-        challengeId: '1',
-        locale: 'nl',
-        embedUrl: 'mon.site.nl'
-      }];
+      const localizedChallenges = [
+        {
+          id: '1',
+          challengeId: '1',
+          locale: 'fr',
+          embedUrl: 'mon.site.fr',
+        },
+        {
+          id: '2',
+          challengeId: '1',
+          locale: 'nl',
+          embedUrl: 'mon.site.nl',
+        },
+      ];
 
       const challenge = new Challenge({
         locales: ['fr'],
@@ -349,15 +362,9 @@ describe('Unit | Domain | Challenge', () => {
         challengeId,
         locale: 'nl',
       });
-      const localizedChallenges = [
-        frenchLocalizedChallenge,
-        dutchLocalizedChallenge,
-      ];
+      const localizedChallenges = [frenchLocalizedChallenge, dutchLocalizedChallenge];
 
-      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [
-        locale,
-        {},
-      ]));
+      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [locale, {}]));
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
         locales: ['fr-fr', 'fr'],
@@ -371,7 +378,9 @@ describe('Unit | Domain | Challenge', () => {
       const dutchChallenge = challenge.translate('nl');
 
       // then
-      expect(() => dutchChallenge.translate('fr')).toThrow('Illegal operation : trying to translate an already translated challenge');
+      expect(() => dutchChallenge.translate('fr')).toThrow(
+        'Illegal operation : trying to translate an already translated challenge',
+      );
     });
 
     it('should return a translated challenge', () => {
@@ -427,11 +436,7 @@ describe('Unit | Domain | Challenge', () => {
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
       });
-      const localizedChallenges = [
-        frenchLocalizedChallenge,
-        dutchLocalizedChallenge,
-        englishLocalizedChallenge,
-      ];
+      const localizedChallenges = [frenchLocalizedChallenge, dutchLocalizedChallenge, englishLocalizedChallenge];
 
       const frenchFiles = [
         { fileId: 'fileId1', localizedChallengeId: challengeId },
@@ -446,17 +451,19 @@ describe('Unit | Domain | Challenge', () => {
         { fileId: 'fileId2En', localizedChallengeId: englishChallengeId },
       ];
 
-      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [
-        locale,
-        {
-          alternativeInstruction: `alternativeInstruction ${locale}`,
-          embedTitle: `embedTitle ${locale}`,
-          instruction: `instruction ${locale}`,
-          proposals: `proposals ${locale}`,
-          solution: `solution ${locale}`,
-          solutionToDisplay: `solutionToDisplay ${locale}`,
-        },
-      ]));
+      const translations = Object.fromEntries(
+        localizedChallenges.map(({ locale }) => [
+          locale,
+          {
+            alternativeInstruction: `alternativeInstruction ${locale}`,
+            embedTitle: `embedTitle ${locale}`,
+            instruction: `instruction ${locale}`,
+            proposals: `proposals ${locale}`,
+            solution: `solution ${locale}`,
+            solutionToDisplay: `solutionToDisplay ${locale}`,
+          },
+        ]),
+      );
 
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
@@ -464,11 +471,7 @@ describe('Unit | Domain | Challenge', () => {
         status: Challenge.STATUSES.VALIDE,
         localizedChallenges,
         translations,
-        files: [
-          ...frenchFiles,
-          ...dutchFiles,
-          ...englishFiles,
-        ],
+        files: [...frenchFiles, ...dutchFiles, ...englishFiles],
         geography: 'FR',
         validatedAt: null,
       });
@@ -523,7 +526,10 @@ describe('Unit | Domain | Challenge', () => {
       expect(dutchChallenge).toHaveProperty('isPrimary', false);
       expect(dutchChallenge).toHaveProperty('requireGafamWebsiteAccess', true);
       expect(dutchChallenge).toHaveProperty('isIncompatibleIpadCertif', true);
-      expect(dutchChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
+      expect(dutchChallenge).toHaveProperty(
+        'deafAndHardOfHearing',
+        LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      );
       expect(dutchChallenge).toHaveProperty('isAwarenessChallenge', true);
       expect(dutchChallenge).toHaveProperty('toRephrase', true);
       expect(dutchChallenge).toHaveProperty('hasEmbedInternalValidation', false);
@@ -548,7 +554,10 @@ describe('Unit | Domain | Challenge', () => {
       expect(englishChallenge).toHaveProperty('isPrimary', false);
       expect(englishChallenge).toHaveProperty('requireGafamWebsiteAccess', true);
       expect(englishChallenge).toHaveProperty('isIncompatibleIpadCertif', true);
-      expect(englishChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
+      expect(englishChallenge).toHaveProperty(
+        'deafAndHardOfHearing',
+        LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      );
       expect(englishChallenge).toHaveProperty('isAwarenessChallenge', true);
       expect(englishChallenge).toHaveProperty('toRephrase', true);
       expect(englishChallenge).toHaveProperty('hasEmbedInternalValidation', false);
@@ -556,14 +565,46 @@ describe('Unit | Domain | Challenge', () => {
     });
 
     [
-      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
-      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
-      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
-      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.VALIDE },
-      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
-      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.ARCHIVE },
-      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
-      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
+      {
+        challengeStatus: Challenge.STATUSES.PROPOSE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE,
+        expectedTranslatedStatus: Challenge.STATUSES.PROPOSE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.PROPOSE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY,
+        expectedTranslatedStatus: Challenge.STATUSES.PROPOSE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.VALIDE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE,
+        expectedTranslatedStatus: Challenge.STATUSES.PROPOSE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.VALIDE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY,
+        expectedTranslatedStatus: Challenge.STATUSES.VALIDE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.ARCHIVE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE,
+        expectedTranslatedStatus: Challenge.STATUSES.PROPOSE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.ARCHIVE,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY,
+        expectedTranslatedStatus: Challenge.STATUSES.ARCHIVE,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.PERIME,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE,
+        expectedTranslatedStatus: Challenge.STATUSES.PERIME,
+      },
+      {
+        challengeStatus: Challenge.STATUSES.PERIME,
+        localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY,
+        expectedTranslatedStatus: Challenge.STATUSES.PERIME,
+      },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedTranslatedStatus }) => {
       it(`should translate status ${challengeStatus} and localized status ${localizedChallengeStatus} to ${expectedTranslatedStatus}`, () => {
         // given
@@ -580,10 +621,7 @@ describe('Unit | Domain | Challenge', () => {
           locale: 'nl',
           status: localizedChallengeStatus,
         });
-        const localizedChallenges = [
-          primaryLocalizedChallenge,
-          secondaryLocalizedChallenge,
-        ];
+        const localizedChallenges = [primaryLocalizedChallenge, secondaryLocalizedChallenge];
 
         const challenge = domainBuilder.buildChallenge({
           id: challengeId,
@@ -602,9 +640,9 @@ describe('Unit | Domain | Challenge', () => {
       });
     });
 
-    context('when translating validatedAt field', function() {
+    context('when translating validatedAt field', function () {
       let expectedFrValidatdAt, expectedNlValidatedAt, challenge;
-      beforeEach(function() {
+      beforeEach(function () {
         expectedNlValidatedAt = new Date('2022-02-02T00:00:00Z');
         expectedFrValidatdAt = new Date('2023-03-03T00:00:00Z');
         const primaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -623,13 +661,15 @@ describe('Unit | Domain | Challenge', () => {
           id: 'challengeId',
           locales: ['fr', 'nl'],
           localizedChallenges: [primaryLocalizedChallenge, secondaryLocalizedChallenge],
-          translations: Object.fromEntries([primaryLocalizedChallenge, secondaryLocalizedChallenge].map(({ locale }) => [locale, {}])),
+          translations: Object.fromEntries(
+            [primaryLocalizedChallenge, secondaryLocalizedChallenge].map(({ locale }) => [locale, {}]),
+          ),
           files: [],
           validatedAt: expectedFrValidatdAt,
         });
       });
-      context('when translating to primary locale', function() {
-        it('should have the value of the Challenge\'s validatedAt, ignoring the one in primary Localized Challenge', function() {
+      context('when translating to primary locale', function () {
+        it("should have the value of the Challenge's validatedAt, ignoring the one in primary Localized Challenge", function () {
           // when
           const translatedToPrimaryChallenge = challenge.translate('fr');
 
@@ -637,8 +677,8 @@ describe('Unit | Domain | Challenge', () => {
           expect(translatedToPrimaryChallenge.validatedAt).toStrictEqual(expectedFrValidatdAt);
         });
       });
-      context('when translating to an other locale', function() {
-        it('should have the value of the corresponding Localized Challenge\'s validatedAt', function() {
+      context('when translating to an other locale', function () {
+        it("should have the value of the corresponding Localized Challenge's validatedAt", function () {
           // when
           const translatedToPrimaryChallenge = challenge.translate('nl');
 
@@ -649,7 +689,7 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
-  describe('#cloneChallengeAndAttachments', ()=> {
+  describe('#cloneChallengeAndAttachments', () => {
     it('should clone challenge', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
@@ -689,10 +729,12 @@ describe('Unit | Domain | Challenge', () => {
             noValidationNeeded: true,
           }),
         ],
-        files: [{
-          fileId: 'attID',
-          localizedChallengeId: 'challengeId'
-        }],
+        files: [
+          {
+            fileId: 'attID',
+            localizedChallengeId: 'challengeId',
+          },
+        ],
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         alternativeVersion: 5,
@@ -701,7 +743,7 @@ describe('Unit | Domain | Challenge', () => {
         author: 'CHU',
         autoReply: 'oui c auto reply',
         competenceId: 'someCompetenceId',
-        contextualizedFields : [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
         createdAt: new Date('2019-01-01'),
         declinable: Challenge.DECLINABLES.NON,
         delta: 'super delta',
@@ -735,7 +777,7 @@ describe('Unit | Domain | Challenge', () => {
         generateNewIdFnc,
         prototypeVersion,
         alternativeVersion,
-        attachments: []
+        attachments: [],
       });
 
       // then
@@ -782,23 +824,25 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.toRephrase).toEqual(challenge.toRephrase);
       expect(clonedChallenge.hasEmbedInternalValidation).toEqual(challenge.hasEmbedInternalValidation);
       expect(clonedChallenge.noValidationNeeded).toEqual(challenge.noValidationNeeded);
-      expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(domainBuilder.buildLocalizedChallenge({
-        id: clonedChallengeId,
-        challengeId: clonedChallengeId,
-        status: LocalizedChallenge.STATUSES.PRIMARY,
-        embedUrl: challenge.localizedChallenges[0].embedUrl,
-        geography: challenge.localizedChallenges[0].geography,
-        urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
-        fileIds: [],
-        locale: challenge.localizedChallenges[0].locale,
-        requireGafamWebsiteAccess: challenge.localizedChallenges[0].requireGafamWebsiteAccess,
-        isIncompatibleIpadCertif: challenge.localizedChallenges[0].isIncompatibleIpadCertif,
-        deafAndHardOfHearing: challenge.localizedChallenges[0].deafAndHardOfHearing,
-        isAwarenessChallenge: challenge.localizedChallenges[0].isAwarenessChallenge,
-        toRephrase: challenge.localizedChallenges[0].toRephrase,
-        hasEmbedInternalValidation: challenge.localizedChallenges[0].hasEmbedInternalValidation,
-        noValidationNeeded: challenge.localizedChallenges[0].noValidationNeeded,
-      }));
+      expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(
+        domainBuilder.buildLocalizedChallenge({
+          id: clonedChallengeId,
+          challengeId: clonedChallengeId,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
+          embedUrl: challenge.localizedChallenges[0].embedUrl,
+          geography: challenge.localizedChallenges[0].geography,
+          urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
+          fileIds: [],
+          locale: challenge.localizedChallenges[0].locale,
+          requireGafamWebsiteAccess: challenge.localizedChallenges[0].requireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: challenge.localizedChallenges[0].isIncompatibleIpadCertif,
+          deafAndHardOfHearing: challenge.localizedChallenges[0].deafAndHardOfHearing,
+          isAwarenessChallenge: challenge.localizedChallenges[0].isAwarenessChallenge,
+          toRephrase: challenge.localizedChallenges[0].toRephrase,
+          hasEmbedInternalValidation: challenge.localizedChallenges[0].hasEmbedInternalValidation,
+          noValidationNeeded: challenge.localizedChallenges[0].noValidationNeeded,
+        }),
+      );
     });
 
     it('should clone challenge without translations', () => {
@@ -809,7 +853,8 @@ describe('Unit | Domain | Challenge', () => {
       const skillId = 'skillId';
       const alternativeVersion = 3;
       const prototypeVersion = 1;
-      const generateNewIdFnc = vi.fn()
+      const generateNewIdFnc = vi
+        .fn()
         .mockImplementationOnce(() => clonedChallengeId)
         .mockImplementation(() => clonedNLLocalizedChallengeId);
       const locales = ['fr', 'fr-FR'];
@@ -869,13 +914,16 @@ describe('Unit | Domain | Challenge', () => {
             noValidationNeeded: false,
           }),
         ],
-        files: [{
-          fileId: 'attachmentIdA',
-          localizedChallengeId: 'challengeId'
-        },{
-          fileId: 'attachmentIdB',
-          localizedChallengeId: 'locNLChallengeId'
-        }],
+        files: [
+          {
+            fileId: 'attachmentIdA',
+            localizedChallengeId: 'challengeId',
+          },
+          {
+            fileId: 'attachmentIdB',
+            localizedChallengeId: 'locNLChallengeId',
+          },
+        ],
       });
 
       const attachmentIdA = domainBuilder.buildAttachment({
@@ -884,7 +932,7 @@ describe('Unit | Domain | Challenge', () => {
         type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
-        localizedChallengeId: 'challengeId'
+        localizedChallengeId: 'challengeId',
       });
       const attachmentIdB = domainBuilder.buildAttachment({
         id: 'attachmentIdB',
@@ -892,7 +940,7 @@ describe('Unit | Domain | Challenge', () => {
         type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
-        localizedChallengeId: 'locNLChallengeId'
+        localizedChallengeId: 'locNLChallengeId',
       });
 
       // when
@@ -902,7 +950,7 @@ describe('Unit | Domain | Challenge', () => {
         generateNewIdFnc,
         prototypeVersion,
         alternativeVersion,
-        attachments: [attachmentIdA, attachmentIdB]
+        attachments: [attachmentIdA, attachmentIdB],
       });
 
       // then
@@ -924,7 +972,7 @@ describe('Unit | Domain | Challenge', () => {
           proposals: 'proposals FR',
           solution: 'solution FR',
           solutionToDisplay: 'solutionToDisplay FR',
-        }
+        },
       });
 
       expect(clonedChallenge.localizedChallenges).toStrictEqual([
@@ -956,7 +1004,7 @@ describe('Unit | Domain | Challenge', () => {
           localizedChallengeId: clonedChallengeId,
           challengeId: clonedChallengeId,
           airtableChallengeId: null,
-        })
+        }),
       ]);
     });
   });

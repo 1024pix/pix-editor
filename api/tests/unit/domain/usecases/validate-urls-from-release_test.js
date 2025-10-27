@@ -5,8 +5,8 @@ import { validateUrlsFromRelease } from '../../../../lib/domain/usecases/index.j
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Domain | Usecases | Validate urls from release', function() {
-  describe('#validateUrlsFromRelease', function() {
+describe('Unit | Domain | Usecases | Validate urls from release', function () {
+  describe('#validateUrlsFromRelease', function () {
     let releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, mockedUrlUtils;
     const identifiedUrlChallenge1_1 = {
       id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr',
@@ -42,7 +42,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
     };
     const identifiedUrlChallenge4_1 = {
       id: 'Pix;competence 1.1;@mySkill2;challenge4;archivé;fr',
-      url: 'https://solution_challenge4.org/'
+      url: 'https://solution_challenge4.org/',
     };
     const identifiedUrlChallenge5_1 = {
       id: 'wonderland;competence 4.5;@mySkill23;challenge5;validé;nl',
@@ -61,26 +61,26 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       url: 'https://tuto3.net/',
     };
 
-    beforeEach(function() {
+    beforeEach(function () {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence1',
         origin: 'Pix',
         name_i18n: {
-          fr: 'competence 1.1'
+          fr: 'competence 1.1',
         },
       });
       const wonderlandCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence2',
         origin: 'wonderland',
         name_i18n: {
-          fr: 'competence 4.5'
+          fr: 'competence 4.5',
         },
       });
-      const pixTube =  domainBuilder.buildTubeForRelease({
+      const pixTube = domainBuilder.buildTubeForRelease({
         id: 'tube1',
         competenceId: 'competence1',
       });
-      const wonderlandTube =  domainBuilder.buildTubeForRelease({
+      const wonderlandTube = domainBuilder.buildTubeForRelease({
         id: 'tube2',
         competenceId: 'competence2',
       });
@@ -112,7 +112,8 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       ];
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
         id: 'challenge1',
-        instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
+        instruction:
+          'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
         proposals: 'proposals [link](https://example.net/)',
         solution: 'solution [link](https://solution_example.net/)',
         skillId: 'skill1',
@@ -171,13 +172,23 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         competencesFromRelease: [pixCompetence, wonderlandCompetence],
         tubesFromRelease: [pixTube, wonderlandTube],
         skillsFromRelease: [pixSkill1, pixSkill2, wonderlandSkill1],
-        challengesFromRelease: [pixChallenge1Skill1, challenge2NoSkill, pixChallenge3Skill2,
-          pixChallenge4Skill2, wonderlandChallenge5Skill23, wonderlandChallenge6Skill23,wonderlandChallenge7Skill23],
+        challengesFromRelease: [
+          pixChallenge1Skill1,
+          challenge2NoSkill,
+          pixChallenge3Skill2,
+          pixChallenge4Skill2,
+          wonderlandChallenge5Skill23,
+          wonderlandChallenge6Skill23,
+          wonderlandChallenge7Skill23,
+        ],
         tutorialsFromRelease: tutorials,
       });
       releaseRepository = { getLatestRelease: vi.fn().mockResolvedValue(latestRelease) };
       const localizedChallenges = [
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challenge1',
+          urlsToConsult: ['http://google.com', 'https://zouzou.fr'],
+        }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: null }),
@@ -187,9 +198,21 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
       const whitelistedUrls = [
-        domainBuilder.buildWhitelistedUrl({ url: 'https://ignorez-moi.fr', checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH, deletedAt: null }),
-        domainBuilder.buildWhitelistedUrl({ url: 'https://ignore-me.us', checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH, deletedAt: null }),
-        domainBuilder.buildWhitelistedUrl({ url: 'https://example.net/', checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH, deletedAt: new Date('2020-01-01') }),
+        domainBuilder.buildWhitelistedUrl({
+          url: 'https://ignorez-moi.fr',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+          deletedAt: null,
+        }),
+        domainBuilder.buildWhitelistedUrl({
+          url: 'https://ignore-me.us',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+          deletedAt: null,
+        }),
+        domainBuilder.buildWhitelistedUrl({
+          url: 'https://example.net/',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+          deletedAt: new Date('2020-01-01'),
+        }),
       ];
       whitelistedUrlRepository = { list: vi.fn().mockResolvedValue(whitelistedUrls) };
       urlRepository = {
@@ -203,7 +226,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       };
     });
 
-    it('should analyze and update KO urls data from tutorials and operative challenges', async function() {
+    it('should analyze and update KO urls data from tutorials and operative challenges', async function () {
       // given
       mockedUrlUtils.analyzeIdentifiedUrls
         // mocking for challenges
@@ -305,104 +328,127 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         ]);
 
       // when
-      await validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils: mockedUrlUtils });
+      await validateUrlsFromRelease({
+        releaseRepository,
+        urlRepository,
+        localizedChallengeRepository,
+        whitelistedUrlRepository,
+        UrlUtils: mockedUrlUtils,
+      });
 
       // then
-      expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[0]).toStrictEqual([[identifiedUrlChallenge1_1, identifiedUrlChallenge1_2, identifiedUrlChallenge1_3, identifiedUrlChallenge1_4, identifiedUrlChallenge1_5, identifiedUrlChallenge2_1, identifiedUrlChallenge2_2, identifiedUrlChallenge3_1, identifiedUrlChallenge4_1, identifiedUrlChallenge5_1 ]]);
-      expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[1]).toStrictEqual([[identifiedTutorial1, identifiedTutorial2, identifiedTutorial3 ]]);
+      expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[0]).toStrictEqual([
+        [
+          identifiedUrlChallenge1_1,
+          identifiedUrlChallenge1_2,
+          identifiedUrlChallenge1_3,
+          identifiedUrlChallenge1_4,
+          identifiedUrlChallenge1_5,
+          identifiedUrlChallenge2_1,
+          identifiedUrlChallenge2_2,
+          identifiedUrlChallenge3_1,
+          identifiedUrlChallenge4_1,
+          identifiedUrlChallenge5_1,
+        ],
+      ]);
+      expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[1]).toStrictEqual([
+        [identifiedTutorial1, identifiedTutorial2, identifiedTutorial3],
+      ]);
       expect(urlRepository.updateChallenges).toHaveBeenCalledTimes(1);
-      expect(urlRepository.updateChallenges).toHaveBeenCalledWith([[
-        'Pix',
-        'competence 1.1',
-        '@mySkill1',
-        'challenge1',
-        'validé',
-        'fr',
-        'https://example.net/',
-        'KO',
-        'HTTP_ERROR',
-        'identifiedUrlChallenge1_1 HTTP_ERROR',
-      ],
-      [
-        'Pix',
-        'competence 1.1',
-        '@mySkill1',
-        'challenge1',
-        'validé',
-        'fr',
-        'https://other_example.net/',
-        'KO',
-        'FORMAT_ERROR',
-        'identifiedUrlChallenge1_2 FORMAT_ERROR',
-      ],
-      [
-        'Pix',
-        'competence 1.1',
-        '@mySkill1',
-        'challenge1',
-        'validé',
-        'fr',
-        'http://google.com',
-        'KO',
-        'HTTP_ERROR',
-        'identifiedUrlChallenge1_4 HTTP_ERROR',
-      ],
-      [
-        'Pix',
-        'competence 1.1',
-        '@mySkill1',
-        'challenge1',
-        'validé',
-        'fr',
-        'https://zouzou.fr',
-        'KO',
-        'FORMAT_ERROR',
-        'identifiedUrlChallenge1_5 FORMAT_ERROR',
-      ],
-      [
-        '',
-        '',
-        '',
-        'challenge2',
-        'archivé',
-        'fr',
-        'https://example.fr/',
-        'KO',
-        'HTTP_ERROR',
-        'identifiedUrlChallenge2_1 HTTP_ERROR',
-      ],
-      [
-        'wonderland',
-        'competence 4.5',
-        '@mySkill23',
-        'challenge5',
-        'validé',
-        'nl',
-        'http://alice.hole',
-        'KO',
-        'HTTP_ERROR',
-        'identifiedUrlChallenge5_1 HTTP_ERROR',
-      ]
+      expect(urlRepository.updateChallenges).toHaveBeenCalledWith([
+        [
+          'Pix',
+          'competence 1.1',
+          '@mySkill1',
+          'challenge1',
+          'validé',
+          'fr',
+          'https://example.net/',
+          'KO',
+          'HTTP_ERROR',
+          'identifiedUrlChallenge1_1 HTTP_ERROR',
+        ],
+        [
+          'Pix',
+          'competence 1.1',
+          '@mySkill1',
+          'challenge1',
+          'validé',
+          'fr',
+          'https://other_example.net/',
+          'KO',
+          'FORMAT_ERROR',
+          'identifiedUrlChallenge1_2 FORMAT_ERROR',
+        ],
+        [
+          'Pix',
+          'competence 1.1',
+          '@mySkill1',
+          'challenge1',
+          'validé',
+          'fr',
+          'http://google.com',
+          'KO',
+          'HTTP_ERROR',
+          'identifiedUrlChallenge1_4 HTTP_ERROR',
+        ],
+        [
+          'Pix',
+          'competence 1.1',
+          '@mySkill1',
+          'challenge1',
+          'validé',
+          'fr',
+          'https://zouzou.fr',
+          'KO',
+          'FORMAT_ERROR',
+          'identifiedUrlChallenge1_5 FORMAT_ERROR',
+        ],
+        [
+          '',
+          '',
+          '',
+          'challenge2',
+          'archivé',
+          'fr',
+          'https://example.fr/',
+          'KO',
+          'HTTP_ERROR',
+          'identifiedUrlChallenge2_1 HTTP_ERROR',
+        ],
+        [
+          'wonderland',
+          'competence 4.5',
+          '@mySkill23',
+          'challenge5',
+          'validé',
+          'nl',
+          'http://alice.hole',
+          'KO',
+          'HTTP_ERROR',
+          'identifiedUrlChallenge5_1 HTTP_ERROR',
+        ],
       ]);
       expect(urlRepository.updateTutorials).toHaveBeenCalledTimes(1);
-      expect(urlRepository.updateTutorials).toHaveBeenCalledWith([[
-        'competence 1.1',
-        '@mySkill1',
-        'tutorial1',
-        'https://tuto1.net/',
-        'KO',
-        'HTTP_ERROR',
-        'identifiedTutorial1 HTTP_ERROR',
-      ],
-      [
-        'competence 4.5',
-        '@mySkill23',
-        'tutorial2',
-        'https://www.tuto2.net/',
-        'KO',
-        'FORMAT_ERROR',
-        'identifiedTutorial2 identifiedTutorial2',
-      ]
+      expect(urlRepository.updateTutorials).toHaveBeenCalledWith([
+        [
+          'competence 1.1',
+          '@mySkill1',
+          'tutorial1',
+          'https://tuto1.net/',
+          'KO',
+          'HTTP_ERROR',
+          'identifiedTutorial1 HTTP_ERROR',
+        ],
+        [
+          'competence 4.5',
+          '@mySkill23',
+          'tutorial2',
+          'https://www.tuto2.net/',
+          'KO',
+          'FORMAT_ERROR',
+          'identifiedTutorial2 identifiedTutorial2',
+        ],
       ]);
     });
   });

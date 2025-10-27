@@ -12,7 +12,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/competences',
       config: {
-        handler: async function() {
+        handler: async function () {
           const competences = await competenceRepository.list();
           return competenceSerializer.serialize(competences);
         },
@@ -27,7 +27,7 @@ export async function register(server) {
             competenceAirtableId: Types.competenceId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
           if (!competence) throw new NotFoundError('unknown competence');
           return competenceSerializer.serialize(competence);
@@ -60,7 +60,7 @@ export async function register(server) {
             },
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const competence = await competenceSerializer.deserialize(request.payload);
           const createdCompetence = await usecases.createCompetence(competence);
           return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
@@ -90,10 +90,13 @@ export async function register(server) {
             },
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const competenceUpdates = await competenceSerializer.deserialize(request.payload);
 
-          const updatedCompetence = await usecases.updateCompetence(request.params.competenceAirtableId, competenceUpdates);
+          const updatedCompetence = await usecases.updateCompetence(
+            request.params.competenceAirtableId,
+            competenceUpdates,
+          );
 
           return competenceSerializer.serialize(updatedCompetence);
         },

@@ -12,55 +12,55 @@ function assertAirtableRecordToEqualExpectedJson(actualRecord, expectedRecordJso
 }
 
 describe('Integration | Infrastructure | airtable', () => {
-
   afterEach(() => {
     airtableBuilder.cleanAll();
   });
 
   describe('#findRecords', () => {
-
     const tableName = 'Tests';
-    const airtableRecordsJson = [{
-      id: 'recId1',
-      fields: {
-        foo: 'bar',
-        titi: 'toto',
-        toto: 'titi'
-      }
-    }, {
-      id: 'recId2',
-      fields: {
-        foo: 'bar',
-        titi: 'toto',
-        toto: 'titi'
-      }
-    }];
+    const airtableRecordsJson = [
+      {
+        id: 'recId1',
+        fields: {
+          foo: 'bar',
+          titi: 'toto',
+          toto: 'titi',
+        },
+      },
+      {
+        id: 'recId2',
+        fields: {
+          foo: 'bar',
+          titi: 'toto',
+          toto: 'titi',
+        },
+      },
+    ];
 
-    const airtableRecordsJsonWithSpecificFields = [{
-      id: 'recId1',
-      fields: {
-        titi: 'toto',
-        toto: 'titi'
-      }
-    }, {
-      id: 'recId2',
-      fields: {
-        titi: 'toto',
-        toto: 'titi'
-      }
-    }];
+    const airtableRecordsJsonWithSpecificFields = [
+      {
+        id: 'recId1',
+        fields: {
+          titi: 'toto',
+          toto: 'titi',
+        },
+      },
+      {
+        id: 'recId2',
+        fields: {
+          titi: 'toto',
+          toto: 'titi',
+        },
+      },
+    ];
 
     beforeEach(() => {
-      airtableBuilder
-        .mockList({ tableName })
-        .respondsToQuery({})
-        .returns(airtableRecordsJson)
-        .activate();
+      airtableBuilder.mockList({ tableName }).respondsToQuery({}).returns(airtableRecordsJson).activate();
 
       airtableBuilder
         .mockList({ tableName })
         .respondsToQuery({
-          'fields[]': ['titi', 'toto']
+          'fields[]': ['titi', 'toto'],
         })
         .returns(airtableRecordsJsonWithSpecificFields)
         .activate();
@@ -88,5 +88,4 @@ describe('Integration | Infrastructure | airtable', () => {
       });
     });
   });
-
 });

@@ -10,13 +10,12 @@ export function buildAttachment({
   createdAt = new Date().toISOString(),
   localizedChallengeId = challengeId,
 } = {}) {
-
   return {
     id,
-    'fields': {
+    fields: {
       'Record ID': id,
       'challengeId persistant': challengeId ? [challengeId] : [],
-      'challengeId': airtableChallengeId ? [airtableChallengeId] : [],
+      challengeId: airtableChallengeId ? [airtableChallengeId] : [],
       createdAt,
       localizedChallengeId,
       type,

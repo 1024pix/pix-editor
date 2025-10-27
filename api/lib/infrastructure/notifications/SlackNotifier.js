@@ -9,6 +9,8 @@ export class SlackNotifier {
   }
 
   send(blocks) {
-    return axios.post(this.webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+    return axios.post(this.webhookUrl, blocks, {
+      headers: { 'content-type': 'application/json' },
+    });
   }
 }

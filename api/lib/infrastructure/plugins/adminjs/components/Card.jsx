@@ -15,7 +15,8 @@ const Card = styled(Box)`
     box-shadow: ${({ theme }) => theme.shadows.cardHover};
   }
 
-  & .dsc-icon svg, .gh-icon svg {
+  & .dsc-icon svg,
+  .gh-icon svg {
     width: 64px;
     height: 64px;
   }

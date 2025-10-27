@@ -3,7 +3,7 @@ import { LocalizedChallenge, Translation } from '../../../../lib/domain/models/i
 import { importTranslations, InvalidFileError } from '../../../../lib/domain/usecases/index.js';
 import { PassThrough } from 'node:stream';
 
-describe('Unit | Domain | Usecases | import-translations', function() {
+describe('Unit | Domain | Usecases | import-translations', function () {
   let csvStream;
   let localizedChallengeRepository;
   let translationRepository;
@@ -11,7 +11,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
   beforeEach(() => {
     csvStream = new PassThrough();
     localizedChallengeRepository = {
-      create: vi.fn()
+      create: vi.fn(),
     };
     translationRepository = {
       save: vi.fn(),
@@ -29,16 +29,18 @@ describe('Unit | Domain | Usecases | import-translations', function() {
 
     expect(translationRepository.save).toHaveBeenCalledOnce();
     expect(translationRepository.save).toHaveBeenCalledWith({
-      translations: [new Translation({
-        key: 'some.key',
-        locale: 'nl',
-        value: 'Hallo',
-      })],
+      translations: [
+        new Translation({
+          key: 'some.key',
+          locale: 'nl',
+          value: 'Hallo',
+        }),
+      ],
       shouldDuplicateToAirtable: false,
     });
   });
 
-  it('should return an error when the CSV doesn\'t have key_name as first column', async () => {
+  it("should return an error when the CSV doesn't have key_name as first column", async () => {
     // when
     const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
     csvStream.write('one invalid header,nl,comment\navalue,anotherone,');
@@ -49,7 +51,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
     expect(translationRepository.save).not.toHaveBeenCalled();
   });
 
-  it('should return an error when the CSV doesn\'t have a valid locale as second column', async () => {
+  it("should return an error when the CSV doesn't have a valid locale as second column", async () => {
     // when
     const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
     csvStream.write('key_name,invalid_locale,comment\navalue,anotherone,');
@@ -63,7 +65,9 @@ describe('Unit | Domain | Usecases | import-translations', function() {
   it('should create a localized challenge when a new locale is added', async () => {
     // when
     const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write('key_name,nl,comment\nchallenge.id.key,Hallo,\nchallenge.id.key2,Hallo2,\nchallenge.id2.key,Hallo3,');
+    csvStream.write(
+      'key_name,nl,comment\nchallenge.id.key,Hallo,\nchallenge.id.key2,Hallo2,\nchallenge.id2.key,Hallo3,',
+    );
     csvStream.end();
 
     // then
@@ -75,59 +79,61 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         new Translation({
           key: 'challenge.id.key',
           locale: 'nl',
-          value: 'Hallo'
+          value: 'Hallo',
         }),
         new Translation({
           key: 'challenge.id.key2',
           locale: 'nl',
-          value: 'Hallo2'
+          value: 'Hallo2',
         }),
         new Translation({
           key: 'challenge.id2.key',
           locale: 'nl',
-          value: 'Hallo3'
-        })
+          value: 'Hallo3',
+        }),
       ],
       shouldDuplicateToAirtable: false,
     });
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
-    expect(localizedChallengeRepository.create).toHaveBeenCalledWith({ localizedChallenges: [
-      new LocalizedChallenge({
-        id: null,
-        challengeId: 'id',
-        locale: 'nl',
-        status: LocalizedChallenge.STATUSES.PAUSE,
-        embedUrl: null,
-        fileIds: [],
-        geography: 'AA',
-        urlsToConsult: null,
-        requireGafamWebsiteAccess: false,
-        isIncompatibleIpadCertif: false,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-        isAwarenessChallenge: false,
-        toRephrase: false,
-        hasEmbedInternalValidation: false,
-        noValidationNeeded: false,
-        validatedAt: null,
-      }),
-      new LocalizedChallenge({
-        id: null,
-        challengeId: 'id2',
-        locale: 'nl',
-        status: LocalizedChallenge.STATUSES.PAUSE,
-        embedUrl: null,
-        fileIds: [],
-        geography: 'AA',
-        urlsToConsult: null,
-        requireGafamWebsiteAccess: false,
-        isIncompatibleIpadCertif: false,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-        isAwarenessChallenge: false,
-        toRephrase: false,
-        hasEmbedInternalValidation: false,
-        noValidationNeeded: false,
-        validatedAt: null,
-      }),
-    ] });
+    expect(localizedChallengeRepository.create).toHaveBeenCalledWith({
+      localizedChallenges: [
+        new LocalizedChallenge({
+          id: null,
+          challengeId: 'id',
+          locale: 'nl',
+          status: LocalizedChallenge.STATUSES.PAUSE,
+          embedUrl: null,
+          fileIds: [],
+          geography: 'AA',
+          urlsToConsult: null,
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
+          validatedAt: null,
+        }),
+        new LocalizedChallenge({
+          id: null,
+          challengeId: 'id2',
+          locale: 'nl',
+          status: LocalizedChallenge.STATUSES.PAUSE,
+          embedUrl: null,
+          fileIds: [],
+          geography: 'AA',
+          urlsToConsult: null,
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
+          validatedAt: null,
+        }),
+      ],
+    });
   });
 });

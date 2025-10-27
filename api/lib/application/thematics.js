@@ -18,7 +18,7 @@ export function register(server) {
             thematicAirtableId: Types.thematicId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const thematic = await thematicRepository.getByAirtableId(request.params.thematicAirtableId);
           if (!thematic) return Boom.notFound('unknown thematic id');
           return thematicSerializer.serialize(thematic);
@@ -34,7 +34,7 @@ export function register(server) {
             'filter[ids][]': [Types.thematicId(), Joi.array().items(Types.thematicId())],
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const params = extractParameters(request.query);
           const thematics = await listThematics(params);
           return thematicSerializer.serialize(thematics);
@@ -50,19 +50,19 @@ export function register(server) {
             data: Joi.object({
               type: Joi.string().required().equal('themes'),
               attributes: Joi.object({
-                'name': Joi.string().allow(null),
+                name: Joi.string().allow(null),
                 'name-en-us': Joi.string().allow(null),
-                'index': Joi.number().allow(null),
+                index: Joi.number().allow(null),
               }).unknown(true),
               relationships: Joi.object({
-                'competence': Types.competenceRelationship(),
+                competence: Types.competenceRelationship(),
                 'raw-tubes': Types.tubesRelationship(),
               }),
             }),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const thematic = await thematicSerializer.deserialize(request.payload);
           const createdThematic = await createThematic(thematic);
           return h.response(thematicSerializer.serialize(createdThematic)).code(201);
@@ -82,19 +82,19 @@ export function register(server) {
               type: Joi.string().required().equal('themes'),
               id: Types.thematicId().required(),
               attributes: Joi.object({
-                'name': Joi.string().allow(null),
+                name: Joi.string().allow(null),
                 'name-en-us': Joi.string().allow(null),
-                'index': Joi.number().allow(null),
+                index: Joi.number().allow(null),
               }).unknown(true),
               relationships: Joi.object({
-                'competence': Types.competenceRelationship(),
+                competence: Types.competenceRelationship(),
                 'raw-tubes': Types.tubesRelationship(),
               }),
             }),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request) {
+        handler: async function (request) {
           const { thematicAirtableId } = request.params;
           const thematicUpdates = await thematicSerializer.deserialize(request.payload);
           const updatedThematic = await updateThematic(thematicAirtableId, thematicUpdates);

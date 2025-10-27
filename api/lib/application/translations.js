@@ -15,18 +15,22 @@ export async function register(server) {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
-        validate:{
-          query:  Joi.object({
+        validate: {
+          query: Joi.object({
             frameworkName: Joi.string().required(),
           }).required(),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
           const release = await releaseRepository.getLatestRelease();
-          await exportTranslations(stream, request.query, { localizedChallengeRepository, release, baseUrl });
+          await exportTranslations(stream, request.query, {
+            localizedChallengeRepository,
+            release,
+            baseUrl,
+          });
           return h.response(stream).header('Content-type', 'text/csv');
-        }
+        },
       },
     },
     {
@@ -39,7 +43,7 @@ export async function register(server) {
           output: 'file',
           maxBytes: config.importTranslationsFileMaxSize,
         },
-        handler: importTranslationsHandler
+        handler: importTranslationsHandler,
       },
     },
   ]);

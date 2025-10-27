@@ -83,11 +83,13 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
               },
             },
             files: {
-              data: [{
-                type: 'attachments',
-                id: 'attachmentId'
-              }]
-            }
+              data: [
+                {
+                  type: 'attachments',
+                  id: 'attachmentId',
+                },
+              ],
+            },
           },
         },
       };
@@ -191,8 +193,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                 related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
               },
             },
-          }
-        }
+          },
+        },
       };
 
       // When

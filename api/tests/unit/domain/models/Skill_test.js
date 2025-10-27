@@ -6,7 +6,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isLive', () => {
     it('should return true when skill is active', () => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES.ACTIF,
       });
 
@@ -19,7 +19,7 @@ describe('Unit | Domain | Skill', () => {
 
     it('should return true when skill is en construction', () => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES.EN_CONSTRUCTION,
       });
 
@@ -30,10 +30,13 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.true;
     });
 
-    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => ![Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[statusKey]))
+    it.each(
+      Object.keys(Skill.STATUSES).filter(
+        (statusKey) => ![Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[statusKey]),
+      ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES[statusKey],
       });
 
@@ -48,7 +51,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isEnConstruction', () => {
     it('should return true when skill is enConstruction', () => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES.EN_CONSTRUCTION,
       });
 
@@ -59,10 +62,11 @@ describe('Unit | Domain | Skill', () => {
       expect(isEnConstruction).to.be.true;
     });
 
-    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.EN_CONSTRUCTION)
+    it.each(
+      Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.EN_CONSTRUCTION),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES[statusKey],
       });
 
@@ -77,7 +81,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isActif', () => {
     it('should return true when skill is actif', () => {
       // given
-      const skill  = domainBuilder.buildSkill({
+      const skill = domainBuilder.buildSkill({
         status: Skill.STATUSES.ACTIF,
       });
 
@@ -88,19 +92,21 @@ describe('Unit | Domain | Skill', () => {
       expect(isActif).to.be.true;
     });
 
-    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.ACTIF)
-    )('should return false when status key is %s', (statusKey) => {
-      // given
-      const skill  = domainBuilder.buildSkill({
-        status: Skill.STATUSES[statusKey],
-      });
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.ACTIF))(
+      'should return false when status key is %s',
+      (statusKey) => {
+        // given
+        const skill = domainBuilder.buildSkill({
+          status: Skill.STATUSES[statusKey],
+        });
 
-      // when
-      const isActif = skill.isActif;
+        // when
+        const isActif = skill.isActif;
 
-      // then
-      expect(isActif).to.be.false;
-    });
+        // then
+        expect(isActif).to.be.false;
+      },
+    );
   });
 
   describe('#cloneSkillAndChallenges', () => {
@@ -156,11 +162,7 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      const {
-        clonedSkill,
-        clonedChallenges,
-        clonedAttachments,
-      } = skillToClone.cloneSkillAndChallenges({
+      const { clonedSkill, clonedChallenges, clonedAttachments } = skillToClone.cloneSkillAndChallenges({
         tubeDestination,
         level,
         skillChallenges,
@@ -234,11 +236,7 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      const {
-        clonedSkill,
-        clonedChallenges,
-        clonedAttachments,
-      } = skillToClone.cloneSkillAndChallenges({
+      const { clonedSkill, clonedChallenges, clonedAttachments } = skillToClone.cloneSkillAndChallenges({
         tubeDestination,
         level,
         skillChallenges,
@@ -306,17 +304,77 @@ describe('Unit | Domain | Skill', () => {
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
-      const perimeProto = domainBuilder.buildChallenge({ id: 'perimeProtoId', version: 3, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PERIME });
-      const archiveProto = domainBuilder.buildChallenge({ id: 'archiveProtoId', version: 4, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.ARCHIVE });
-      const activeProto = domainBuilder.buildChallenge({ id: 'activeProtoId', version: 5, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE });
-      const decliPerimeProtoActive = domainBuilder.buildChallenge({ id: 'decliPerimeProtoActiveId', version: 5, alternativeVersion: 1, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PERIME });
-      const decliArchiveProtoActive = domainBuilder.buildChallenge({ id: 'decliArchiveProtoActiveId', version: 5, alternativeVersion: 2, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.ARCHIVE });
-      const decliValide1ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide1ProtoActiveId', version: 5, alternativeVersion: null, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE });
-      const decliProposeProtoActive = domainBuilder.buildChallenge({ id: 'decliProposeProtoActiveId', version: 5, alternativeVersion: 4, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PROPOSE });
-      const decliValide2ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide2ProtoActiveId', version: 5, alternativeVersion: 6, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
-      const proposeProto = domainBuilder.buildChallenge({ id: 'proposeProtoId', version: 7, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE });
-      const decliPerimeProtoPropose = domainBuilder.buildChallenge({ id: 'decliPerimeProtoProposeId', version: 7, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PERIME });
-      const decliProposeProtoPropose = domainBuilder.buildChallenge({ id: 'decliProposeProtoProposeId', version: 7, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PROPOSE });
+      const perimeProto = domainBuilder.buildChallenge({
+        id: 'perimeProtoId',
+        version: 3,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        status: Challenge.STATUSES.PERIME,
+      });
+      const archiveProto = domainBuilder.buildChallenge({
+        id: 'archiveProtoId',
+        version: 4,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+      const activeProto = domainBuilder.buildChallenge({
+        id: 'activeProtoId',
+        version: 5,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        status: Challenge.STATUSES.VALIDE,
+      });
+      const decliPerimeProtoActive = domainBuilder.buildChallenge({
+        id: 'decliPerimeProtoActiveId',
+        version: 5,
+        alternativeVersion: 1,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.PERIME,
+      });
+      const decliArchiveProtoActive = domainBuilder.buildChallenge({
+        id: 'decliArchiveProtoActiveId',
+        version: 5,
+        alternativeVersion: 2,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+      const decliValide1ProtoActive = domainBuilder.buildChallenge({
+        id: 'decliValide1ProtoActiveId',
+        version: 5,
+        alternativeVersion: null,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.VALIDE,
+      });
+      const decliProposeProtoActive = domainBuilder.buildChallenge({
+        id: 'decliProposeProtoActiveId',
+        version: 5,
+        alternativeVersion: 4,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.PROPOSE,
+      });
+      const decliValide2ProtoActive = domainBuilder.buildChallenge({
+        id: 'decliValide2ProtoActiveId',
+        version: 5,
+        alternativeVersion: 6,
+        genealogy: 'Décliné 1',
+        status: Challenge.STATUSES.VALIDE,
+      });
+      const proposeProto = domainBuilder.buildChallenge({
+        id: 'proposeProtoId',
+        version: 7,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        status: Challenge.STATUSES.PROPOSE,
+      });
+      const decliPerimeProtoPropose = domainBuilder.buildChallenge({
+        id: 'decliPerimeProtoProposeId',
+        version: 7,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.PERIME,
+      });
+      const decliProposeProtoPropose = domainBuilder.buildChallenge({
+        id: 'decliProposeProtoProposeId',
+        version: 7,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.PROPOSE,
+      });
       skillChallenges = [
         perimeProto,
         archiveProto,
@@ -348,25 +406,75 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // then
-      expect(clonedAttachments).toEqual(['activeProtoId_attachment', 'decliProposeProtoActiveId_attachment', 'decliValide2ProtoActiveId_attachment', 'decliValide1ProtoActiveId_attachment', 'proposeProtoId_attachment', 'decliProposeProtoProposeId_attachment']);
-      expect(clonedChallenges).toEqual(['activeProtoId', 'decliProposeProtoActiveId', 'decliValide2ProtoActiveId', 'decliValide1ProtoActiveId', 'proposeProtoId', 'decliProposeProtoProposeId']);
+      expect(clonedAttachments).toEqual([
+        'activeProtoId_attachment',
+        'decliProposeProtoActiveId_attachment',
+        'decliValide2ProtoActiveId_attachment',
+        'decliValide1ProtoActiveId_attachment',
+        'proposeProtoId_attachment',
+        'decliProposeProtoProposeId_attachment',
+      ]);
+      expect(clonedChallenges).toEqual([
+        'activeProtoId',
+        'decliProposeProtoActiveId',
+        'decliValide2ProtoActiveId',
+        'decliValide1ProtoActiveId',
+        'proposeProtoId',
+        'decliProposeProtoProposeId',
+      ]);
       expect(spies[perimeProto.id]).toHaveBeenCalledTimes(0);
       expect(spies[archiveProto.id]).toHaveBeenCalledTimes(0);
       expect(spies[decliPerimeProtoActive.id]).toHaveBeenCalledTimes(0);
       expect(spies[decliArchiveProtoActive.id]).toHaveBeenCalledTimes(0);
       expect(spies[decliPerimeProtoPropose.id]).toHaveBeenCalledTimes(0);
       expect(spies[activeProto.id]).toHaveBeenCalledTimes(1);
-      expect(spies[activeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 1 });
+      expect(spies[activeProto.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: null,
+        prototypeVersion: 1,
+      });
       expect(spies[decliValide1ProtoActive.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliValide1ProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 3, prototypeVersion: 1 });
+      expect(spies[decliValide1ProtoActive.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: 3,
+        prototypeVersion: 1,
+      });
       expect(spies[decliValide2ProtoActive.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliValide2ProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 2, prototypeVersion: 1 });
+      expect(spies[decliValide2ProtoActive.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: 2,
+        prototypeVersion: 1,
+      });
       expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 1 });
+      expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: 1,
+        prototypeVersion: 1,
+      });
       expect(spies[proposeProto.id]).toHaveBeenCalledTimes(1);
-      expect(spies[proposeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 2 });
+      expect(spies[proposeProto.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: null,
+        prototypeVersion: 2,
+      });
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 2 });
+      expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({
+        skillId: clonedSkillId,
+        competenceId: tubeDestination.competenceId,
+        generateNewIdFnc,
+        alternativeVersion: 1,
+        prototypeVersion: 2,
+      });
     });
   });
 
@@ -417,8 +525,8 @@ describe('Unit | Domain | Skill', () => {
       expect(skill).toHaveProperty('version', 2);
     });
 
-    context('hint', function() {
-      it('should normalize non breaking spaces on "fr" hints', function() {
+    context('hint', function () {
+      it('should normalize non breaking spaces on "fr" hints', function () {
         // given
         normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
         const tube = domainBuilder.buildTube({
@@ -430,9 +538,9 @@ describe('Unit | Domain | Skill', () => {
           status: null,
           version: null,
           hint_i18n: {
-            'nl': 'Je vais rester tel quel car je suis en néerlandais',
-            'fr': 'Je vais passer dans la fonction',
-            'en': 'Je vais rester tel quel car je suis en anglais',
+            nl: 'Je vais rester tel quel car je suis en néerlandais',
+            fr: 'Je vais passer dans la fonction',
+            en: 'Je vais rester tel quel car je suis en anglais',
           },
         });
 
@@ -441,9 +549,9 @@ describe('Unit | Domain | Skill', () => {
 
         // then
         expect(skill).toHaveProperty('hint_i18n', {
-          'nl': 'Je vais rester tel quel car je suis en néerlandais',
-          'fr': 'Je suis passée dans la fonction ! YOUPI',
-          'en': 'Je vais rester tel quel car je suis en anglais',
+          nl: 'Je vais rester tel quel car je suis en néerlandais',
+          fr: 'Je suis passée dans la fonction ! YOUPI',
+          en: 'Je vais rester tel quel car je suis en anglais',
         });
       });
     });
@@ -452,7 +560,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#update', () => {
     let normalizeNonBreakingSpaceFnc, now;
 
-    beforeEach(function() {
+    beforeEach(function () {
       normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
       now = new Date('2024-10-29T03:04:00Z');
       vi.useFakeTimers({
@@ -461,11 +569,11 @@ describe('Unit | Domain | Skill', () => {
       });
     });
 
-    afterEach(function() {
+    afterEach(function () {
       vi.useRealTimers();
     });
 
-    it('should set specific fields for update', function() {
+    it('should set specific fields for update', function () {
       // given
       const originalData = {
         id: 'originalId',
@@ -511,24 +619,26 @@ describe('Unit | Domain | Skill', () => {
       skill.update(updateCommand, normalizeNonBreakingSpaceFnc);
 
       // then
-      expect(skill).toStrictEqual(domainBuilder.buildSkill({
-        ...originalData,
-        description: 'newDescription',
-        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-        hint_i18n: {
-          fr: 'new hint fr',
-          en: 'new hint en',
-        },
-        hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
-        internationalisation: Skill.INTERNATIONALISATIONS.NONE,
-        tutorialAirtableIds: ['newTutoAirtableId'],
-        learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
-        status: Skill.STATUSES.ARCHIVE,
-        archivedAt: now,
-      }));
+      expect(skill).toStrictEqual(
+        domainBuilder.buildSkill({
+          ...originalData,
+          description: 'newDescription',
+          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+          hint_i18n: {
+            fr: 'new hint fr',
+            en: 'new hint en',
+          },
+          hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
+          internationalisation: Skill.INTERNATIONALISATIONS.NONE,
+          tutorialAirtableIds: ['newTutoAirtableId'],
+          learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
+          status: Skill.STATUSES.ARCHIVE,
+          archivedAt: now,
+        }),
+      );
     });
 
-    it('should set "activatedAt" date when status turns into actif', function() {
+    it('should set "activatedAt" date when status turns into actif', function () {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -536,9 +646,12 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      skill.update({
-        status: Skill.STATUSES.ACTIF,
-      }, normalizeNonBreakingSpaceFnc);
+      skill.update(
+        {
+          status: Skill.STATUSES.ACTIF,
+        },
+        normalizeNonBreakingSpaceFnc,
+      );
 
       // then
       expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
@@ -547,7 +660,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(null);
     });
 
-    it('should set "archivedAt" date when status turns into archivé', function() {
+    it('should set "archivedAt" date when status turns into archivé', function () {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -556,9 +669,12 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      skill.update({
-        status: Skill.STATUSES.ARCHIVE,
-      }, normalizeNonBreakingSpaceFnc);
+      skill.update(
+        {
+          status: Skill.STATUSES.ARCHIVE,
+        },
+        normalizeNonBreakingSpaceFnc,
+      );
 
       // then
       expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
@@ -567,7 +683,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(null);
     });
 
-    it('should set "obsoletedAt" date when status turns into périmé', function() {
+    it('should set "obsoletedAt" date when status turns into périmé', function () {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -577,9 +693,12 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      skill.update({
-        status: Skill.STATUSES.PERIME,
-      }, normalizeNonBreakingSpaceFnc);
+      skill.update(
+        {
+          status: Skill.STATUSES.PERIME,
+        },
+        normalizeNonBreakingSpaceFnc,
+      );
 
       // then
       expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
@@ -588,7 +707,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(now);
     });
 
-    it('should not alter any dates if status remains unchanged', function() {
+    it('should not alter any dates if status remains unchanged', function () {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -599,9 +718,12 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // when
-      skill.update({
-        status: Skill.STATUSES.PERIME,
-      }, normalizeNonBreakingSpaceFnc);
+      skill.update(
+        {
+          status: Skill.STATUSES.PERIME,
+        },
+        normalizeNonBreakingSpaceFnc,
+      );
 
       // then
       expect(skill.createdAt).toStrictEqual(new Date('2023-10-05T18:08:00Z'));
@@ -610,8 +732,8 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(new Date('2024-01-08T18:08:00Z'));
     });
 
-    context('hint', function() {
-      it('should normalize non breaking spaces on "fr" hints', function() {
+    context('hint', function () {
+      it('should normalize non breaking spaces on "fr" hints', function () {
         // given
         normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
         const skill = domainBuilder.buildSkill();
@@ -625,8 +747,8 @@ describe('Unit | Domain | Skill', () => {
 
         // then
         expect(skill).toHaveProperty('hint_i18n', {
-          'fr': 'Je suis passée dans la fonction ! YOUPI',
-          'en': 'Je vais rester tel quel car je suis en anglais',
+          fr: 'Je suis passée dans la fonction ! YOUPI',
+          en: 'Je vais rester tel quel car je suis en anglais',
         });
       });
     });

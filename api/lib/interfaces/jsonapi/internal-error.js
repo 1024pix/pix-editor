@@ -6,6 +6,6 @@ export function internalError(errorMessage) {
   return new JSONAPIError({
     status: '500',
     title: 'Internal Server Error',
-    detail: errorMessage
+    detail: errorMessage,
   });
 }

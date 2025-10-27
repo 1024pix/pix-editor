@@ -2,21 +2,13 @@ import { findRecords, stringValue } from '../../airtable.js';
 import { datasource } from './datasource.js';
 
 export const thematicDatasource = datasource.extend({
-
   modelName: 'Thematic',
 
   tableName: 'Thematiques',
 
   airtableIdField: 'Record Id',
 
-  usedFields: [
-    'id persistant',
-    'Competence',
-    'Competence (id persistant)',
-    'Tubes (id persistant)',
-    'Tubes',
-    'Index',
-  ],
+  usedFields: ['id persistant', 'Competence', 'Competence (id persistant)', 'Tubes (id persistant)', 'Tubes', 'Index'],
 
   fromAirTableObject(airtableRecord) {
     return {

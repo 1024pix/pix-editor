@@ -9,10 +9,8 @@ export async function register(server) {
       method: 'POST',
       path: '/api/file-storage-token',
       config: {
-        pre: [
-          { method: securityPreHandlers.checkUserHasWriteAccess },
-        ],
-        handler: async function(request, h) {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function (request, h) {
           try {
             const token = await fileStorageTokenRepository.create();
             return h.response({ token: token.value });
@@ -20,7 +18,7 @@ export async function register(server) {
             return Boom.boomify(error, { statusCode: error.response.status });
           }
         },
-      }
+      },
     },
   ]);
 }

@@ -3,7 +3,6 @@ import { findRecords, stringValue } from '../../airtable.js';
 import { Skill } from '../../../domain/models/Skill.js';
 
 export const skillDatasource = datasource.extend({
-
   modelName: 'Skill',
 
   tableName: 'Acquis',
@@ -14,7 +13,7 @@ export const skillDatasource = datasource.extend({
     'id persistant',
     'Record Id',
     'Nom',
-    'Statut de l\'indice',
+    "Statut de l'indice",
     'Comprendre',
     'Comprendre (id persistant)',
     'En savoir plus',
@@ -38,12 +37,11 @@ export const skillDatasource = datasource.extend({
   },
 
   fromAirTableObject(airtableRecord) {
-
     return {
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.get('Record Id'),
       name: airtableRecord.get('Nom'),
-      hintStatus: airtableRecord.get('Statut de l\'indice'),
+      hintStatus: airtableRecord.get("Statut de l'indice"),
       tutorialIds: airtableRecord.get('Comprendre (id persistant)') ?? [],
       tutorialAirtableIds: airtableRecord.get('Comprendre') ?? [],
       learningMoreTutorialIds: airtableRecord.get('En savoir plus (id persistant)') ?? [],
@@ -74,17 +72,17 @@ export const skillDatasource = datasource.extend({
     const body = {
       fields: {
         'id persistant': model.id,
-        'Statut de l\'indice': model.hintStatus,
-        'Comprendre': model.tutorialAirtableIds,
+        "Statut de l'indice": model.hintStatus,
+        Comprendre: model.tutorialAirtableIds,
         'En savoir plus': model.learningMoreTutorialAirtableIds,
-        'Status': model.status,
-        'Tube': [model.tubeAirtableId],
-        'Description': model.description,
+        Status: model.status,
+        Tube: [model.tubeAirtableId],
+        Description: model.description,
         'Statut de la description': model.descriptionStatus,
-        'Level': model.level,
-        'Internationalisation': model.internationalisation,
-        'Version': model.version,
-      }
+        Level: model.level,
+        Internationalisation: model.internationalisation,
+        Version: model.version,
+      },
     };
     if (model.airtableId) {
       body.id = model.airtableId;
@@ -121,10 +119,12 @@ export const skillDatasource = datasource.extend({
   async search(params) {
     const filterByFormula = `FIND(${stringValue(params.filter.name.toLowerCase())}, LOWER(Nom))`;
 
-    let sort = params.sort?.filter(([field]) => this.sortableFields[field]).map(([field, direction]) => ({
-      field: this.sortableFields[field],
-      direction,
-    }));
+    let sort = params.sort
+      ?.filter(([field]) => this.sortableFields[field])
+      .map(([field, direction]) => ({
+        field: this.sortableFields[field],
+        direction,
+      }));
     if (!sort?.length) {
       sort = this.defaultSort();
     }

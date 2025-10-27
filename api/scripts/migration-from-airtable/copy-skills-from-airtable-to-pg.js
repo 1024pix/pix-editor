@@ -4,7 +4,6 @@ import { Script } from '../../lib/application/scripts/script.js';
 import * as airtable from '../../lib/infrastructure/airtable.js';
 
 export class CopySkillsFromAirtableToPg extends Script {
-
   constructor() {
     super({
       description: 'Copie des acquis de Airtable vers Postgres',
@@ -26,7 +25,7 @@ export class CopySkillsFromAirtableToPg extends Script {
     const airtableSkills = await airtable.findRecords('Acquis', {
       fields: [
         'id persistant',
-        'Statut de l\'indice',
+        "Statut de l'indice",
         'Comprendre (id persistant)',
         'En savoir plus (id persistant)',
         'Status',
@@ -42,7 +41,7 @@ export class CopySkillsFromAirtableToPg extends Script {
 
     const skills = airtableSkills.map((record) => ({
       id: record.get('id persistant'),
-      hintStatus: record.get('Statut de l\'indice'),
+      hintStatus: record.get("Statut de l'indice"),
       status: record.get('Status'),
       tubeId: record.get('Tube (id persistant)')[0],
       description: record.get('Description'),
@@ -74,7 +73,8 @@ export class CopySkillsFromAirtableToPg extends Script {
     await knex.insert(skills).into('skills').onConflict('id').merge();
     logger.info({ count: skills.length }, 'Inserted skills into postgres');
 
-    const deletedRelationsCount = await knex.delete()
+    const deletedRelationsCount = await knex
+      .delete()
       .from('skills-tutorials')
       .whereNotIn(
         ['skillId', 'tutorialId', 'type'],
@@ -82,7 +82,11 @@ export class CopySkillsFromAirtableToPg extends Script {
       );
     logger.info({ count: deletedRelationsCount }, 'Deleted skills tutorials relations into postgres');
 
-    await knex.insert(skillsTutorialsRelations).into('skills-tutorials').onConflict(['skillId', 'tutorialId', 'type']).merge({ updatedAt: knex.fn.now() });
+    await knex
+      .insert(skillsTutorialsRelations)
+      .into('skills-tutorials')
+      .onConflict(['skillId', 'tutorialId', 'type'])
+      .merge({ updatedAt: knex.fn.now() });
     logger.info({ count: skillsTutorialsRelations.length }, 'Inserted skills tutorials relations into postgres');
   }
 }

@@ -6,9 +6,7 @@ import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | AreaDatasource', () => {
-
   describe('#fromAirTableObject', () => {
-
     it('should create a Area from the AirtableRecord', () => {
       // given
       const expectedArea = domainBuilder.buildAreaDatasourceObject();
@@ -22,5 +20,4 @@ describe('Unit | Infrastructure | Datasource | Airtable | AreaDatasource', () =>
       expect(area).to.deep.equal(expectedArea);
     });
   });
-
 });

@@ -39,8 +39,7 @@ async function checkCsvHeader({ filePath, requiredFieldNames = [] }) {
 
   if (!isEmpty(missingRequiredFieldNames)) {
     throw new Error(
-      ERRORS.MISSING_REQUIRED_FIELD_NAMES +
-      `Colonne(s) manquante(s) ou erronée(s) : ${missingRequiredFieldNames}`,
+      ERRORS.MISSING_REQUIRED_FIELD_NAMES + `Colonne(s) manquante(s) ou erronée(s) : ${missingRequiredFieldNames}`,
     );
   }
 }

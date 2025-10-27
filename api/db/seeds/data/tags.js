@@ -36,7 +36,10 @@ export async function persistTags({ items, airtableClient, logger }) {
 }
 
 export async function copyTutorialTagsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableTutorialTags = await  airtableClient.table('Tags').select({ fields: ['id persistant', 'Nom'] }).all();
+  const airtableTutorialTags = await airtableClient
+    .table('Tags')
+    .select({ fields: ['id persistant', 'Nom'] })
+    .all();
 
   logger.info(`Copying ${airtableTutorialTags.length} tutorial tags from airtable...`);
 

@@ -10,6 +10,6 @@ export function buildTranslation({ key, locale, value } = {}) {
   return {
     ...translation,
     model: key.split('.')[0],
-    entityId: key.split('.')[1]
+    entityId: key.split('.')[1],
   };
 }

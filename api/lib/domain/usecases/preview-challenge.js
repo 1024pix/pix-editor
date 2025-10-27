@@ -3,10 +3,7 @@ import * as config from '../../config.js';
 
 export async function previewChallenge(
   { challengeId, locale },
-  {
-    challengeRepository = repositories.challengeRepository,
-    refreshCache,
-  },
+  { challengeRepository = repositories.challengeRepository, refreshCache },
 ) {
   if (!locale) return new URL(`challenges/${challengeId}/preview`, config.pixApp.baseUrlFr).href;
   const challenge = await challengeRepository.get(challengeId);

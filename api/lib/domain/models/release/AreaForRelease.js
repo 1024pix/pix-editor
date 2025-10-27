@@ -1,15 +1,7 @@
 import { Area } from '../Area.js';
 
 export class AreaForRelease {
-  constructor({
-    id,
-    code,
-    title_i18n,
-    name,
-    competenceIds,
-    color,
-    frameworkId,
-  }) {
+  constructor({ id, code, title_i18n, name, competenceIds, color, frameworkId }) {
     this.id = id;
     this.code = code;
     this.title_i18n = title_i18n;

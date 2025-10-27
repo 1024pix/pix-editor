@@ -3,7 +3,10 @@ import Joi from 'joi';
 const postgreSQLSequenceDefaultStart = 1;
 const postgreSQLSequenceEnd = 2 ** 31 - 1;
 
-const schemaPositiveInteger32bits = Joi.number().integer().min(postgreSQLSequenceDefaultStart).max(postgreSQLSequenceEnd);
+const schemaPositiveInteger32bits = Joi.number()
+  .integer()
+  .min(postgreSQLSequenceDefaultStart)
+  .max(postgreSQLSequenceEnd);
 
 export function areaId() {
   return Joi.string().pattern(/^(rec|area)[a-zA-Z0-9]+$/);
@@ -49,10 +52,12 @@ export function skillId() {
 
 export function skillsRelationship() {
   return Joi.object({
-    data: Joi.array().items(Joi.object({
-      type: Joi.string().required().equal('skills'),
-      id: skillId().required(),
-    })),
+    data: Joi.array().items(
+      Joi.object({
+        type: Joi.string().required().equal('skills'),
+        id: skillId().required(),
+      }),
+    ),
   });
 }
 
@@ -79,10 +84,12 @@ export function tubeId() {
 
 export function tubesRelationship() {
   return Joi.object({
-    data: Joi.array().items(Joi.object({
-      type: Joi.string().required().equal('tubes'),
-      id: tubeId().required(),
-    })),
+    data: Joi.array().items(
+      Joi.object({
+        type: Joi.string().required().equal('tubes'),
+        id: tubeId().required(),
+      }),
+    ),
   });
 }
 
@@ -92,10 +99,12 @@ export function tutorialId() {
 
 export function tutorialsRelationship() {
   return Joi.object({
-    data: Joi.array().items(Joi.object({
-      type: Joi.string().required().equal('tutorials'),
-      id: tutorialId().required(),
-    })),
+    data: Joi.array().items(
+      Joi.object({
+        type: Joi.string().required().equal('tutorials'),
+        id: tutorialId().required(),
+      }),
+    ),
   });
 }
 

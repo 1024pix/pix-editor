@@ -183,9 +183,9 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
     });
   });
 
-  describe('#serialize', function() {
-    context('when serializing one entity', function() {
-      it('should return a json for one serialized entity', function() {
+  describe('#serialize', function () {
+    context('when serializing one entity', function () {
+      it('should return a json for one serialized entity', function () {
         // given
         const attachment = domainBuilder.buildAttachment({
           id: 'attachmentId',
@@ -211,8 +211,8 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
         });
       });
     });
-    context('when serializing several entities', function() {
-      it('should return a json for several serialized entities', function() {
+    context('when serializing several entities', function () {
+      it('should return a json for several serialized entities', function () {
         // given
         const attachment1 = domainBuilder.buildAttachment({
           id: 'attachmentId1',
@@ -239,62 +239,60 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
 
         const serializedAttachments = serialize([attachment1, attachment2]);
 
-        expect(serializedAttachments).toStrictEqual(
-          {
-            data: [
-              {
-                type: 'attachments',
-                id: 'attachmentId1',
-                attributes: {
-                  filename: 'some filename1',
-                  size: 123,
-                  url: 'some.url.com1',
-                  type: 'some type1',
-                  'mime-type': 'some mime type1',
-                },
-                relationships: {
-                  'localized-challenge': {
-                    data: {
-                      type: 'localized-challenges',
-                      id: 'locId123',
-                    },
+        expect(serializedAttachments).toStrictEqual({
+          data: [
+            {
+              type: 'attachments',
+              id: 'attachmentId1',
+              attributes: {
+                filename: 'some filename1',
+                size: 123,
+                url: 'some.url.com1',
+                type: 'some type1',
+                'mime-type': 'some mime type1',
+              },
+              relationships: {
+                'localized-challenge': {
+                  data: {
+                    type: 'localized-challenges',
+                    id: 'locId123',
                   },
-                  challenge: {
-                    data: {
-                      type: 'challenges',
-                      id: 'challenge123',
-                    },
+                },
+                challenge: {
+                  data: {
+                    type: 'challenges',
+                    id: 'challenge123',
                   },
                 },
               },
-              {
-                type: 'attachments',
-                id: 'attachmentId2',
-                attributes: {
-                  filename: 'some filename2',
-                  size: 456,
-                  url: 'some.url.com2',
-                  type: 'some type2',
-                  'mime-type': 'some mime type2',
-                },
-                relationships: {
-                  'localized-challenge': {
-                    data: {
-                      type: 'localized-challenges',
-                      id: 'locId456',
-                    },
+            },
+            {
+              type: 'attachments',
+              id: 'attachmentId2',
+              attributes: {
+                filename: 'some filename2',
+                size: 456,
+                url: 'some.url.com2',
+                type: 'some type2',
+                'mime-type': 'some mime type2',
+              },
+              relationships: {
+                'localized-challenge': {
+                  data: {
+                    type: 'localized-challenges',
+                    id: 'locId456',
                   },
-                  challenge: {
-                    data: {
-                      type: 'challenges',
-                      id: 'challenge456',
-                    },
+                },
+                challenge: {
+                  data: {
+                    type: 'challenges',
+                    id: 'challenge456',
                   },
                 },
               },
-            ],
-          },
-        );
+            },
+          ],
+        });
       });
     });
   });

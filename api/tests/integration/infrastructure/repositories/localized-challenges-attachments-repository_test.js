@@ -3,7 +3,7 @@ import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengesAttachmentsRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Integration | Repository | localized-challenges-attachments-repository', function() {
+describe('Integration | Repository | localized-challenges-attachments-repository', function () {
   const challengeId = 'challengeId';
 
   beforeEach(async () => {
@@ -13,16 +13,18 @@ describe('Integration | Repository | localized-challenges-attachments-repository
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
     databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-    databaseBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }));
+    databaseBuilder.factory.buildChallenge(
+      domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }),
+    );
     await databaseBuilder.commit();
   });
 
   describe('#save', () => {
-    afterEach(async function() {
+    afterEach(async function () {
       await knex('localized_challenges-attachments').delete();
     });
 
-    it('should save attachment and localized challenge ids', async function() {
+    it('should save attachment and localized challenge ids', async function () {
       // given
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
@@ -34,15 +36,20 @@ describe('Integration | Repository | localized-challenges-attachments-repository
       await databaseBuilder.commit();
 
       // when
-      await localizedChallengesAttachmentsRepository.save({ localizedChallengeId: localizedChallenge.id, attachmentId: 'attachment-id' });
+      await localizedChallengesAttachmentsRepository.save({
+        localizedChallengeId: localizedChallenge.id,
+        attachmentId: 'attachment-id',
+      });
 
       // then
       const localizedChallengesAttachments = await knex('localized_challenges-attachments').select();
 
-      expect(localizedChallengesAttachments).to.deep.equal([{
-        localizedChallengeId: localizedChallenge.id,
-        attachmentId: 'attachment-id',
-      }]);
+      expect(localizedChallengesAttachments).to.deep.equal([
+        {
+          localizedChallengeId: localizedChallenge.id,
+          attachmentId: 'attachment-id',
+        },
+      ]);
     });
   });
 

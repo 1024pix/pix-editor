@@ -3,24 +3,24 @@ import * as config from '../../config.js';
 
 export async function create() {
   const payload = {
-    'auth': {
-      'identity': {
-        'methods': ['password'],
-        'password': {
-          'user': {
-            'name': config.storage.user,
-            'domain': { 'id': 'default' },
-            'password': config.storage.password,
-          }
-        }
+    auth: {
+      identity: {
+        methods: ['password'],
+        password: {
+          user: {
+            name: config.storage.user,
+            domain: { id: 'default' },
+            password: config.storage.password,
+          },
+        },
       },
-      'scope': {
-        'project': {
-          'name': config.storage.tenant,
-          'domain': { 'id': 'default' }
-        }
-      }
-    }
+      scope: {
+        project: {
+          name: config.storage.tenant,
+          domain: { id: 'default' },
+        },
+      },
+    },
   };
   const response = await axios.post(config.storage.authUrl, payload);
   return {

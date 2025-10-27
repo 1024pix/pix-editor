@@ -24,16 +24,16 @@ describe('Unit | Serializer | JSONAPI | tube-serializer', () => {
             'practical-title-en': tube.practicalTitle_i18n.en,
             'practical-description-fr': tube.practicalDescription_i18n.fr,
             'practical-description-en': tube.practicalDescription_i18n.en,
-            index: tube.index
+            index: tube.index,
           },
           relationships: {
-            'competence': {
+            competence: {
               data: {
                 type: 'competences',
                 id: tube.competenceAirtableId,
               },
             },
-            'theme': {
+            theme: {
               data: {
                 type: 'themes',
                 id: tube.thematicAirtableId,
@@ -49,7 +49,7 @@ describe('Unit | Serializer | JSONAPI | tube-serializer', () => {
                   type: 'skills',
                   id: tube.skillAirtableIds[1],
                 },
-              ]
+              ],
             },
           },
         },
@@ -62,7 +62,7 @@ describe('Unit | Serializer | JSONAPI | tube-serializer', () => {
       // given
       const id = 'recTube1';
       const attributes = {
-        'name': '@test',
+        name: '@test',
         'practical-title-fr': 'Titre',
         'practical-title-en': 'Title',
         'practical-description-fr': 'La description',
@@ -89,19 +89,21 @@ describe('Unit | Serializer | JSONAPI | tube-serializer', () => {
       const deserializedThematic = await deserialize(payload);
 
       // then
-      expect(deserializedThematic).toStrictEqual(new Tube({
-        airtableId: id,
-        name: attributes.name,
-        practicalTitle_i18n: {
-          fr: attributes['practical-title-fr'],
-          en: attributes['practical-title-en'],
-        },
-        practicalDescription_i18n: {
-          fr: attributes['practical-description-fr'],
-          en: attributes['practical-description-en'],
-        },
-        thematicAirtableId: relationships.theme.data.id,
-      }));
+      expect(deserializedThematic).toStrictEqual(
+        new Tube({
+          airtableId: id,
+          name: attributes.name,
+          practicalTitle_i18n: {
+            fr: attributes['practical-title-fr'],
+            en: attributes['practical-title-en'],
+          },
+          practicalDescription_i18n: {
+            fr: attributes['practical-description-fr'],
+            en: attributes['practical-description-en'],
+          },
+          thematicAirtableId: relationships.theme.data.id,
+        }),
+      );
     });
   });
 });

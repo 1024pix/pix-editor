@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   LOG_OPS_METRICS: Joi.string().valid('true', 'false').optional(),
-  OPS_EVENT_EACH_SECONDS: Joi.number().integer().min(1).optional()
+  OPS_EVENT_EACH_SECONDS: Joi.number().integer().min(1).optional(),
 }).options({ allowUnknown: true });
 
 export function validateEnvironmentVariables() {

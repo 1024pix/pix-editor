@@ -1,15 +1,34 @@
 import { saveInAirtable } from './utils.js';
 
-export async function buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+export async function buildThematicsFromConfig({
+  airtableClient,
+  databaseBuilder,
+  logger,
+  learningContentConfig,
+  learningContentData,
+}) {
   const thematicItems = [];
-  const allCompetences = learningContentData.flatMap((framework) => framework.areas.flatMap((area) => area.competences));
+  const allCompetences = learningContentData.flatMap((framework) =>
+    framework.areas.flatMap((area) => area.competences),
+  );
   for (const competenceItem of allCompetences) {
     for (let i = 0; i < learningContentConfig.cntThematicsPerCompetence; ++i) {
-      const thematicItem = buildThematic({ indexThematic: i, competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: false });
+      const thematicItem = buildThematic({
+        indexThematic: i,
+        competenceItem,
+        databaseBuilder,
+        locales: learningContentConfig.locales,
+        isWorkbench: false,
+      });
       thematicItems.push(thematicItem);
       competenceItem.thematics.push(thematicItem);
     }
-    const thematicWorkbenchItem = buildThematic({ competenceItem, databaseBuilder, locales: learningContentConfig.locales, isWorkbench: true });
+    const thematicWorkbenchItem = buildThematic({
+      competenceItem,
+      databaseBuilder,
+      locales: learningContentConfig.locales,
+      isWorkbench: true,
+    });
     thematicItems.push(thematicWorkbenchItem);
     competenceItem.thematics.push(thematicWorkbenchItem);
   }
@@ -41,20 +60,23 @@ export function buildThematic({ indexThematic, competenceItem, databaseBuilder, 
   };
   databaseBuilder.factory.buildThematic(thematicItem);
   locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation(
-      {
-        locale,
-        key: `thematic.${thematicItem.id}.name`,
-        value: `${thematicItem.name} ${locale}`,
-      }
-    );
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `thematic.${thematicItem.id}.name`,
+      value: `${thematicItem.name} ${locale}`,
+    });
   });
   return thematicItem;
 }
 
 export async function persistThematics({ items, airtableClient, logger }) {
   const airtableItems = items.map(toAirtableObject);
-  const records = await saveInAirtable({ tableName: 'Thematiques', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Thematiques',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
   });
@@ -64,14 +86,19 @@ function toAirtableObject(item) {
   return {
     fields: {
       'id persistant': item.id,
-      'Index': item.index,
+      Index: item.index,
       Competence: [item.competenceAirtableId],
-    }
+    },
   };
 }
 
 export async function copyThematicsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableThematics = await  airtableClient.table('Thematiques').select({ fields: ['id persistant', 'Index', 'Competence (id persistant)'] }).all();
+  const airtableThematics = await airtableClient
+    .table('Thematiques')
+    .select({
+      fields: ['id persistant', 'Index', 'Competence (id persistant)'],
+    })
+    .all();
 
   logger.info(`Copying ${airtableThematics.length} thematics from airtable...`);
 

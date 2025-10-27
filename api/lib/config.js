@@ -24,7 +24,7 @@ export const rootPath = path.normalize(__dirname + '/..');
 
 export let port = parseInt(process.env.PORT, 10) || 3002;
 
-export const environment = (process.env.NODE_ENV || 'development');
+export const environment = process.env.NODE_ENV || 'development';
 
 export const hapi = {
   options: {},
@@ -42,8 +42,8 @@ export const airtable = {
 
 export const logging = {
   enabled: isFeatureEnabled(process.env.LOG_ENABLED),
-  colorEnabled: (process.env.NODE_ENV === 'development'),
-  logLevel: (process.env.LOG_LEVEL || 'info'),
+  colorEnabled: process.env.NODE_ENV === 'development',
+  logLevel: process.env.LOG_LEVEL || 'info',
   logOpsMetrics: isFeatureEnabled(process.env.LOG_OPS_METRICS),
   emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
   prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT),
@@ -62,7 +62,7 @@ export let pixApp = {
 };
 
 export const lcms = {
-  baseUrl: process.env.PIX_EDITOR_BASE_URL
+  baseUrl: process.env.PIX_EDITOR_BASE_URL,
 };
 
 export const pixEditor = {
@@ -118,12 +118,35 @@ export const exportExternalUrlsJob = {
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
   projects: [
-    { frameworkName: 'Pix', areaCode: 1, projectId: process.env.PHRASE_PIX_FIRST_AREA_PROJECT_ID },
-    { frameworkName: 'Pix', areaCode: 2, projectId: process.env.PHRASE_PIX_SECOND_AREA_PROJECT_ID },
-    { frameworkName: 'Pix', areaCode: 3, projectId: process.env.PHRASE_PIX_THIRD_AREA_PROJECT_ID },
-    { frameworkName: 'Pix', areaCode: 4, projectId: process.env.PHRASE_PIX_FOURTH_AREA_PROJECT_ID },
-    { frameworkName: 'Pix', areaCode: 5, projectId: process.env.PHRASE_PIX_FIFTH_AREA_PROJECT_ID },
-    { frameworkName: 'Numérique Responsable', projectId: process.env.PHRASE_PIX_NR_PROJECT_ID },
+    {
+      frameworkName: 'Pix',
+      areaCode: 1,
+      projectId: process.env.PHRASE_PIX_FIRST_AREA_PROJECT_ID,
+    },
+    {
+      frameworkName: 'Pix',
+      areaCode: 2,
+      projectId: process.env.PHRASE_PIX_SECOND_AREA_PROJECT_ID,
+    },
+    {
+      frameworkName: 'Pix',
+      areaCode: 3,
+      projectId: process.env.PHRASE_PIX_THIRD_AREA_PROJECT_ID,
+    },
+    {
+      frameworkName: 'Pix',
+      areaCode: 4,
+      projectId: process.env.PHRASE_PIX_FOURTH_AREA_PROJECT_ID,
+    },
+    {
+      frameworkName: 'Pix',
+      areaCode: 5,
+      projectId: process.env.PHRASE_PIX_FIFTH_AREA_PROJECT_ID,
+    },
+    {
+      frameworkName: 'Numérique Responsable',
+      projectId: process.env.PHRASE_PIX_NR_PROJECT_ID,
+    },
   ].filter(({ projectId }) => projectId),
 };
 

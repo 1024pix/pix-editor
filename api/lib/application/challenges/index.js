@@ -16,7 +16,9 @@ import {
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import { NotFoundError } from '../../domain/errors.js';
 
-const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
+const challengeIdType = Joi.string()
+  .pattern(/^(rec|challenge)[a-zA-Z0-9]+$/)
+  .required();
 
 async function _refreshCache({ challenge }) {
   try {
@@ -26,7 +28,11 @@ async function _refreshCache({ challenge }) {
 
     const model = 'challenges';
 
-    await updatedRecordNotifier.notify({ updatedRecord: newChallenge, model, pixApiClient });
+    await updatedRecordNotifier.notify({
+      updatedRecord: newChallenge,
+      model,
+      pixApiClient,
+    });
   } catch (err) {
     logger.error(err);
   }
@@ -38,8 +44,10 @@ export async function register(server) {
       method: 'GET',
       path: '/api/challenges',
       config: {
-        handler: async function(request) {
-          const params = extractParameters(request.query, { page: { size: 100 } });
+        handler: async function (request) {
+          const params = extractParameters(request.query, {
+            page: { size: 100 },
+          });
           const challenges = await challengeRepository.filter(params);
           return challengeSerializer.serialize(challenges);
         },
@@ -54,7 +62,7 @@ export async function register(server) {
             id: challengeIdType,
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const challengeId = request.params.id;
           const params = { filter: { ids: [challengeId] } };
           const challenges = await challengeRepository.filter(params);
@@ -75,10 +83,10 @@ export async function register(server) {
             id: challengeIdType,
           }),
           query: Joi.object({
-            locale: Joi.string().min(2)
+            locale: Joi.string().min(2),
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const challengeId = request.params.id;
           const locale = request.query.locale;
 
@@ -100,13 +108,18 @@ export async function register(server) {
             frameworkName: Joi.string(),
           }),
         },
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const challengeId = request.params.id;
           const locale = request.params.locale;
           const areaCode = request.params.areaCode;
           const frameworkName = request.params.frameworkName;
 
-          const translationsUrl = await getPhraseTranslationsURL({ challengeId, locale, areaCode, frameworkName });
+          const translationsUrl = await getPhraseTranslationsURL({
+            challengeId,
+            locale,
+            areaCode,
+            frameworkName,
+          });
 
           return h.redirect(translationsUrl);
         },
@@ -117,9 +130,11 @@ export async function register(server) {
       path: '/api/challenges',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const createdChallenge = await createChallenge(challenge, { challengeRepository });
+          const createdChallenge = await createChallenge(challenge, {
+            challengeRepository,
+          });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -134,7 +149,7 @@ export async function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await updateChallenge(challenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));

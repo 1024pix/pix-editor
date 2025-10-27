@@ -10,7 +10,6 @@ const TABLE_NAME = 'thematics';
 const AIRTABLE_NAME = 'Thematiques';
 
 describe('Integration | Repository | thematic-repository', () => {
-
   describe('#list', () => {
     it('should return the list of all thematics', async () => {
       // given
@@ -26,32 +25,35 @@ describe('Integration | Repository | thematic-repository', () => {
       databaseBuilder.factory.buildTube({ id: 'tubeId4', name: '@buzz', thematicId: 'thematic2' });
       databaseBuilder.factory.buildThematic({ id: 'thematic3', index: 3, competenceId: 'competenceId2' });
 
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([
-        airtableBuilder.factory.buildThematic({
-          id: 'thematic1',
-          competenceId: 'competenceId1',
-          competenceAirtableId: 'recCompetenceId1',
-          index: 1,
-          tubeIds: ['tubeId1', 'tubeId2'],
-          tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
-        }),
-        airtableBuilder.factory.buildThematic({
-          id: 'thematic2',
-          competenceId: 'competenceId2',
-          competenceAirtableId: 'recCompetenceId2',
-          index: 2,
-          tubeIds: ['tubeId3', 'tubeId4'],
-          tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
-        }),
-        airtableBuilder.factory.buildThematic({
-          id: 'thematic3',
-          competenceId: 'competenceId2',
-          competenceAirtableId: 'recCompetenceId2',
-          index: 3,
-          tubeIds: null,
-          tubeAirtableIds: null,
-        }),
-      ]).activate().nockScope;
+      const airtableScope = airtableBuilder
+        .mockList({ tableName: 'Thematiques' })
+        .returns([
+          airtableBuilder.factory.buildThematic({
+            id: 'thematic1',
+            competenceId: 'competenceId1',
+            competenceAirtableId: 'recCompetenceId1',
+            index: 1,
+            tubeIds: ['tubeId1', 'tubeId2'],
+            tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
+          }),
+          airtableBuilder.factory.buildThematic({
+            id: 'thematic2',
+            competenceId: 'competenceId2',
+            competenceAirtableId: 'recCompetenceId2',
+            index: 2,
+            tubeIds: ['tubeId3', 'tubeId4'],
+            tubeAirtableIds: ['recTubeId3', 'recTubeId4'],
+          }),
+          airtableBuilder.factory.buildThematic({
+            id: 'thematic3',
+            competenceId: 'competenceId2',
+            competenceAirtableId: 'recCompetenceId2',
+            index: 3,
+            tubeIds: null,
+            tubeAirtableIds: null,
+          }),
+        ])
+        .activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: 'thematic.thematic1.name',
@@ -163,19 +165,24 @@ describe('Integration | Repository | thematic-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Thematiques') expect.unreachable('Airtable tableName should be Tubes');
-        if (options?.filterByFormula !==  `{Competence (id persistant)} = ${airtable.stringValue(competenceId)}`) expect.unreachable('Wrong filterByFormula');
-        return [{
-          id: 'recAirtableThematic1',
-          fields: {
-            'id persistant': thematicId,
-            'Competence (id persistant)': [competenceId],
-            'Competence': ['recCompetenceId1'],
-            'Tubes (id persistant)': ['tubeId1', 'tubeId2'],
-            'Tubes': ['recTubeId1', 'recTubeId2'],
-            'Index': 1,
+        if (options?.filterByFormula !== `{Competence (id persistant)} = ${airtable.stringValue(competenceId)}`)
+          expect.unreachable('Wrong filterByFormula');
+        return [
+          {
+            id: 'recAirtableThematic1',
+            fields: {
+              'id persistant': thematicId,
+              'Competence (id persistant)': [competenceId],
+              Competence: ['recCompetenceId1'],
+              'Tubes (id persistant)': ['tubeId1', 'tubeId2'],
+              Tubes: ['recTubeId1', 'recTubeId2'],
+              Index: 1,
+            },
+            get: function (field) {
+              return this.fields[field];
+            },
           },
-          get: function(field) { return this.fields[field]; },
-        }];
+        ];
       });
 
       //when
@@ -195,7 +202,7 @@ describe('Integration | Repository | thematic-repository', () => {
           tubeIds: ['tubeId1', 'tubeId2'],
           tubeAirtableIds: ['recTubeId1', 'recTubeId2'],
           index: 1,
-        })
+        }),
       ]);
     });
   });
@@ -224,10 +231,14 @@ describe('Integration | Repository | thematic-repository', () => {
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
       databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
 
-      const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
-      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
-        new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
-      ]);
+      const airtableThematic = airtableBuilder.factory.buildThematic(
+        domainBuilder.buildThematicDatasourceObject(thematic),
+      );
+      const findRecordsSpy = vi
+        .spyOn(airtable, 'findRecords')
+        .mockResolvedValueOnce([
+          new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+        ]);
 
       databaseBuilder.factory.buildTranslation({
         key: `thematic.${thematic.id}.name`,
@@ -245,9 +256,7 @@ describe('Integration | Repository | thematic-repository', () => {
       const thematics = await thematicRepository.listByCompetenceAirtableId(thematic.competenceAirtableId);
 
       // then
-      expect(thematics).toStrictEqual([
-        domainBuilder.buildThematic(thematic),
-      ]);
+      expect(thematics).toStrictEqual([domainBuilder.buildThematic(thematic)]);
       expect(findRecordsSpy).toHaveBeenCalledWith(thematicDatasource.tableName, {
         filterByFormula: 'Competence = "recCompetence1"',
         fields: thematicDatasource.usedFields,
@@ -284,7 +293,10 @@ describe('Integration | Repository | thematic-repository', () => {
         tubeAirtableIds: ['recTubeId5', 'recTubeId6'],
       });
 
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([thematic2, thematic3]).activate().nockScope;
+      const airtableScope = airtableBuilder
+        .mockList({ tableName: 'Thematiques' })
+        .returns([thematic2, thematic3])
+        .activate().nockScope;
 
       const result = await thematicRepository.getMany([thematic2.id, thematic3.id]);
 
@@ -321,9 +333,9 @@ describe('Integration | Repository | thematic-repository', () => {
         id: thematicId,
         competenceId: 'competence1',
       });
-      const createRecordSpy = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
-        new Airtable.Record(AIRTABLE_NAME, airtableThematic.id, airtableThematic),
-      );
+      const createRecordSpy = vi
+        .spyOn(airtable, 'createRecord')
+        .mockResolvedValueOnce(new Airtable.Record(AIRTABLE_NAME, airtableThematic.id, airtableThematic));
 
       // when
       const createdThematic = await thematicRepository.create(thematic);
@@ -338,24 +350,25 @@ describe('Integration | Repository | thematic-repository', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-      expect(createdThematic).toStrictEqual(domainBuilder.buildThematic({
-        ...thematic,
-        competenceId: 'competence1',
-        airtableId: 'recThematic1',
-        tubeAirtableIds: [],
-        tubeIds: [],
-      }));
-      expect(createRecordSpy).toHaveBeenCalledWith(
-        AIRTABLE_NAME,
-        {
-          fields: {
-            'id persistant': thematicId,
-            Competence: [thematic.competenceAirtableId],
-            Index: thematic.index,
-          },
-        },
+      expect(createdThematic).toStrictEqual(
+        domainBuilder.buildThematic({
+          ...thematic,
+          competenceId: 'competence1',
+          airtableId: 'recThematic1',
+          tubeAirtableIds: [],
+          tubeIds: [],
+        }),
       );
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+      expect(createRecordSpy).toHaveBeenCalledWith(AIRTABLE_NAME, {
+        fields: {
+          'id persistant': thematicId,
+          Competence: [thematic.competenceAirtableId],
+          Index: thematic.index,
+        },
+      });
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toEqual([
         { key: `thematic.${thematicId}.name`, locale: 'en', value: thematic.name_i18n.en },
         { key: `thematic.${thematicId}.name`, locale: 'fr', value: thematic.name_i18n.fr },
       ]);
@@ -400,12 +413,24 @@ describe('Integration | Repository | thematic-repository', () => {
         databaseBuilder.factory.buildThematic(thematic);
         databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
         databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', thematicId: 'thematic1' });
-        const airtableThematic = airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic));
-        const findRecordSpy = vi.spyOn(airtable, 'findRecord').mockResolvedValueOnce(
-          new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+        const airtableThematic = airtableBuilder.factory.buildThematic(
+          domainBuilder.buildThematicDatasourceObject(thematic),
         );
-        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'fr', value: thematic.name_i18n.fr });
-        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'en', value: thematic.name_i18n.en });
+        const findRecordSpy = vi
+          .spyOn(airtable, 'findRecord')
+          .mockResolvedValueOnce(
+            new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+          );
+        databaseBuilder.factory.buildTranslation({
+          key: `thematic.${thematic.id}.name`,
+          locale: 'fr',
+          value: thematic.name_i18n.fr,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `thematic.${thematic.id}.name`,
+          locale: 'en',
+          value: thematic.name_i18n.en,
+        });
         await databaseBuilder.commit();
 
         // when
@@ -449,8 +474,17 @@ describe('Integration | Repository | thematic-repository', () => {
           tubeAirtableIds: ['recTube3', 'recTube4'],
         },
       ];
-      const airtableThematics = thematics.map((thematic) => airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic)));
-      const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(airtableThematics.map((airtableThematic) => new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic)));
+      const airtableThematics = thematics.map((thematic) =>
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject(thematic)),
+      );
+      const findRecordsSpy = vi
+        .spyOn(airtable, 'findRecords')
+        .mockResolvedValueOnce(
+          airtableThematics.map(
+            (airtableThematic) =>
+              new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
+          ),
+        );
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({
         id: 'area1',
@@ -467,9 +501,7 @@ describe('Integration | Repository | thematic-repository', () => {
         index: '1.2',
         areaId: 'area1',
       });
-      thematics.forEach((thematic) =>
-        databaseBuilder.factory.buildThematic(thematic),
-      );
+      thematics.forEach((thematic) => databaseBuilder.factory.buildThematic(thematic));
       databaseBuilder.factory.buildTube({
         id: 'tube1',
         name: '@foo',
@@ -491,8 +523,16 @@ describe('Integration | Repository | thematic-repository', () => {
         thematicId: 'thematic2',
       });
       for (const thematic of thematics) {
-        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'fr', value: thematic.name_i18n.fr });
-        databaseBuilder.factory.buildTranslation({ key: `thematic.${thematic.id}.name`, locale: 'en', value: thematic.name_i18n.en });
+        databaseBuilder.factory.buildTranslation({
+          key: `thematic.${thematic.id}.name`,
+          locale: 'fr',
+          value: thematic.name_i18n.fr,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `thematic.${thematic.id}.name`,
+          locale: 'en',
+          value: thematic.name_i18n.en,
+        });
       }
       await databaseBuilder.commit();
 
@@ -504,7 +544,7 @@ describe('Integration | Repository | thematic-repository', () => {
       expect(findRecordsSpy).toHaveBeenCalledWith(thematicDatasource.tableName, {
         filterByFormula: 'OR(RECORD_ID() = "recThematic1", RECORD_ID() = "recThematic2")',
         fields: thematicDatasource.usedFields,
-        sort: [{ direction: 'asc', field: thematicDatasource.sortField }]
+        sort: [{ direction: 'asc', field: thematicDatasource.sortField }],
       });
     });
   });
@@ -515,7 +555,12 @@ describe('Integration | Repository | thematic-repository', () => {
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 1, competenceId: 'competence1', createdAt: '2025-09-26T14:26:10Z' });
+      databaseBuilder.factory.buildThematic({
+        id: 'thematic1',
+        index: 1,
+        competenceId: 'competence1',
+        createdAt: '2025-09-26T14:26:10Z',
+      });
       await databaseBuilder.commit();
 
       const thematicUpdates = {
@@ -537,12 +582,20 @@ describe('Integration | Repository | thematic-repository', () => {
       };
 
       const airtableThematic = airtableBuilder.factory.buildThematic(expectedThematic);
-      const updateRecordSpy = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
-        new Airtable.Record('Thematiques', airtableThematic.id, airtableThematic),
-      );
+      const updateRecordSpy = vi
+        .spyOn(airtable, 'updateRecord')
+        .mockResolvedValueOnce(new Airtable.Record('Thematiques', airtableThematic.id, airtableThematic));
 
-      databaseBuilder.factory.buildTranslation({ key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: 'First thematic' });
-      databaseBuilder.factory.buildTranslation({ key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: 'Première thématique' });
+      databaseBuilder.factory.buildTranslation({
+        key: `thematic.${thematicUpdates.id}.name`,
+        locale: 'en',
+        value: 'First thematic',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `thematic.${thematicUpdates.id}.name`,
+        locale: 'fr',
+        value: 'Première thématique',
+      });
       await databaseBuilder.commit();
 
       const thematic = domainBuilder.buildThematic(thematicUpdates);
@@ -562,18 +615,17 @@ describe('Integration | Repository | thematic-repository', () => {
       ]);
 
       expect(updatedThematic).toStrictEqual(domainBuilder.buildThematic(expectedThematic));
-      expect(updateRecordSpy).toHaveBeenCalledWith(
-        'Thematiques',
-        {
-          id: thematicUpdates.airtableId,
-          fields: {
-            'id persistant': thematicUpdates.id,
-            Competence: [thematicUpdates.competenceAirtableId],
-            Index: thematicUpdates.index,
-          },
+      expect(updateRecordSpy).toHaveBeenCalledWith('Thematiques', {
+        id: thematicUpdates.airtableId,
+        fields: {
+          'id persistant': thematicUpdates.id,
+          Competence: [thematicUpdates.competenceAirtableId],
+          Index: thematicUpdates.index,
         },
-      );
-      await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toEqual([
+      });
+      await expect(
+        knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
+      ).resolves.toEqual([
         { key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: thematicUpdates.name_i18n.en },
         { key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: thematicUpdates.name_i18n.fr },
       ]);

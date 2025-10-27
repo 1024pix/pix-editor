@@ -4,12 +4,11 @@ import { updateTube } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Use Cases | update-tube', () => {
-
   const updatedTube = Symbol('updatedTube');
   const tubeUpdates = Symbol('tubeUpdates');
   const thematicDestination = {
     thematicAirtableId: 'thematicAirtableId',
-    competenceAirtableId: 'competenceAirtableId'
+    competenceAirtableId: 'competenceAirtableId',
   };
 
   let tubeRepository, thematicRepository, tube, updateStub, updatePixApiReleaseCache;
@@ -21,7 +20,7 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
     };
 
     thematicRepository = {
-      getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination)
+      getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination),
     };
 
     updatePixApiReleaseCache = {

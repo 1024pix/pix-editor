@@ -15,18 +15,18 @@ export function buildTutorial({
 } = {}) {
   return {
     id: airtableId,
-    'fields': {
+    fields: {
       'id persistant': id,
-      'Titre': title,
-      'Format': format,
-      'Durée': duration,
-      'Source': source,
-      'Lien': link,
-      'Langue': locale,
-      'License': license,
-      'niveau': level,
-      'CoupDeCoeur': crush ? 'YES' : null,
-      'Tags': tagAirtableIds ?? [],
+      Titre: title,
+      Format: format,
+      Durée: duration,
+      Source: source,
+      Lien: link,
+      Langue: locale,
+      License: license,
+      niveau: level,
+      CoupDeCoeur: crush ? 'YES' : null,
+      Tags: tagAirtableIds ?? [],
       'Tags (id persistant)': tagIds ?? [],
     },
   };

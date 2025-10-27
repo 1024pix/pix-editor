@@ -7,7 +7,11 @@ export async function updateSkill(updateCommand, dependencies) {
 
   try {
     const skillForRelease = dependencies.skillTransformer.forRelease(updatedSkill);
-    await dependencies.updatedRecordNotifier.notify({ updatedRecord: skillForRelease , model: 'skills', pixApiClient: dependencies.pixApiClient });
+    await dependencies.updatedRecordNotifier.notify({
+      updatedRecord: skillForRelease,
+      model: 'skills',
+      pixApiClient: dependencies.pixApiClient,
+    });
   } catch (err) {
     dependencies.logger.error(err);
   }

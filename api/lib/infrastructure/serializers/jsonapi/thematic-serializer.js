@@ -5,22 +5,8 @@ import { Thematic } from '../../../domain/models/index.js';
 const { Serializer, Deserializer } = Jsonapi;
 
 const serializer = new Serializer('theme', {
-  attributes: [
-    'pixId',
-    'name',
-    'nameEnUs',
-    'index',
-    'competence',
-    'rawTubes',
-  ],
-  transform({
-    id,
-    airtableId,
-    name_i18n,
-    competenceAirtableId,
-    tubeAirtableIds,
-    ...thematic
-  }) {
+  attributes: ['pixId', 'name', 'nameEnUs', 'index', 'competence', 'rawTubes'],
+  transform({ id, airtableId, name_i18n, competenceAirtableId, tubeAirtableIds, ...thematic }) {
     return {
       ...thematic,
       id: airtableId,
@@ -53,14 +39,7 @@ const deserializer = new Deserializer({
       return id;
     },
   },
-  transform({
-    id,
-    pixId,
-    name,
-    nameEnUs,
-    competence: competenceAirtableId,
-    ...thematic
-  }) {
+  transform({ id, pixId, name, nameEnUs, competence: competenceAirtableId, ...thematic }) {
     return new Thematic({
       ...thematic,
       airtableId: id,

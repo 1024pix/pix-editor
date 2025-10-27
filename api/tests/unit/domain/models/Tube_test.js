@@ -1,11 +1,11 @@
-import {  describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
 describe('Unit | Domain | Tube', () => {
   describe('#get isWorkbench', () => {
     it('is true when name is @workbench', () => {
       // given
-      const tube  = domainBuilder.buildTube({
+      const tube = domainBuilder.buildTube({
         name: '@workbench',
       });
 
@@ -18,7 +18,7 @@ describe('Unit | Domain | Tube', () => {
 
     it('is false when name os @workbench', () => {
       // given
-      const tube  = domainBuilder.buildTube({
+      const tube = domainBuilder.buildTube({
         name: '@test',
       });
 
@@ -32,7 +32,6 @@ describe('Unit | Domain | Tube', () => {
 
   describe('#prepareForCreation', () => {
     it('computes fields for creation', () => {
-
       // given
       const tube = domainBuilder.buildTube({
         thematicAirtableId: 'recThematic1',
@@ -89,7 +88,7 @@ describe('Unit | Domain | Tube', () => {
         competenceAirtableId: 'recCompetence1',
         tubeIds: ['tubeId0'],
         tubeAirtableIds: ['recTube0'],
-        index: 0
+        index: 0,
       });
 
       // when

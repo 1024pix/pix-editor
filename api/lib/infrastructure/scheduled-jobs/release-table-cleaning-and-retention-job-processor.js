@@ -2,7 +2,9 @@ import './job-process.js';
 import { child } from '../logger.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
-const logger = child('releases-cleaning-and-retention-job', { event: 'lcms:releases-cleaning' });
+const logger = child('releases-cleaning-and-retention-job', {
+  event: 'lcms:releases-cleaning',
+});
 const MONTHS_FULL_DATA = 3;
 
 export default async function releasesTableCleaningAndRetention(dependencies = { logger: logger }) {
@@ -11,7 +13,7 @@ export default async function releasesTableCleaningAndRetention(dependencies = {
   try {
     const now = new Date();
     const dailyRetentionDate = new Date(now.getFullYear(), now.getMonth() - MONTHS_FULL_DATA, now.getDate());
-    const releaseDTOs = await trx('releases').select('id','createdAt').where('createdAt', '<', dailyRetentionDate);
+    const releaseDTOs = await trx('releases').select('id', 'createdAt').where('createdAt', '<', dailyRetentionDate);
     const groupedByMonth = Object.groupBy(releaseDTOs, (dto) => {
       return dto.createdAt.getMonth().toString();
     });
@@ -21,7 +23,7 @@ export default async function releasesTableCleaningAndRetention(dependencies = {
         ...releasesInSameMonth
           .sort(byCreatedAtAsc)
           .slice(1)
-          .map((release) => release.id)
+          .map((release) => release.id),
       );
     }
     const deletedReleases = await trx('releases').whereIn('id', releaseIdsToDelete).del(['id']);

@@ -5,7 +5,6 @@ import { convertLanguagesToLocales } from '../../lib/domain/services/convert-loc
 import * as airtable from '../../lib/infrastructure/airtable.js';
 
 export class CopyChallengesFromAirtableToPg extends Script {
-
   constructor() {
     super({
       description: 'Copie des épreuves de Airtable vers Postgres',
@@ -34,10 +33,10 @@ export class CopyChallengesFromAirtableToPg extends Script {
       fields: [
         'id persistant',
         'Timer',
-        'Type d\'épreuve',
+        "Type d'épreuve",
         'T1 - Espaces, casse & accents',
         'T2 - Ponctuation',
-        'T3 - Distance d\'édition',
+        "T3 - Distance d'édition",
         'Statut',
         'Acquix (id persistant)',
         'Embed height',
@@ -70,10 +69,10 @@ export class CopyChallengesFromAirtableToPg extends Script {
 
     const challenges = airtableChallenges.map((record) => ({
       id: record.get('id persistant'),
-      type: record.get('Type d\'épreuve'),
+      type: record.get("Type d'épreuve"),
       t1Status: record.get('T1 - Espaces, casse & accents') === 'Activé',
       t2Status: record.get('T2 - Ponctuation') === 'Activé',
-      t3Status: record.get('T3 - Distance d\'édition') === 'Activé',
+      t3Status: record.get("T3 - Distance d'édition") === 'Activé',
       status: record.get('Statut'),
       skillId: record.get('Acquix (id persistant)')?.[0],
       embedHeight: record.get('Embed height'),

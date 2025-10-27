@@ -1,22 +1,17 @@
 import _ from 'lodash';
 import { afterEach, describe, describe as context, expect, it } from 'vitest';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | mission | POST /api/missions', function() {
-
-  afterEach(async function() {
+describe('Acceptance | API | mission | POST /api/missions', function () {
+  afterEach(async function () {
     await knex('missions').delete();
     await knex('translations').delete();
   });
 
-  context('when user has rights to create a mission', function() {
-    it('creates the mission and returns its id', async function() {
+  context('when user has rights to create a mission', function () {
+    it('creates the mission and returns its id', async function () {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
@@ -30,8 +25,8 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
             'thematic-id': null,
             status: Mission.status.INACTIVE,
             'learning-objectives': 'Autre chose',
-            'validated-objectives': 'Très bien'
-          }
+            'validated-objectives': 'Très bien',
+          },
         },
       };
 
@@ -52,7 +47,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
         data: {
           type: 'missions',
           id: missionId.toString(),
-          'attributes': {
+          attributes: {
             'card-image-url': 'https://example.com/image.png',
             'competence-id': 'AZERTY',
             'documentation-url': null,
@@ -60,19 +55,19 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
             'introduction-media-type': null,
             'introduction-media-url': null,
             'learning-objectives': 'Autre chose',
-            'name': 'Mission impossible',
-            'status': 'INACTIVE',
+            name: 'Mission impossible',
+            status: 'INACTIVE',
             'thematic-ids': null,
             'validated-objectives': 'Très bien',
-            'warnings': [],
+            warnings: [],
           },
         },
       });
     });
   });
 
-  context('when user no has rights to create a mission', function() {
-    it('does not allow the creation', async function() {
+  context('when user no has rights to create a mission', function () {
+    it('does not allow the creation', async function () {
       // given
       const user = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
@@ -86,8 +81,8 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
             'thematic-id': null,
             status: Mission.status.INACTIVE,
             'learning-objectives': 'Autre chose',
-            'validated-objectives': 'Très bien'
-          }
+            'validated-objectives': 'Très bien',
+          },
         },
       };
 

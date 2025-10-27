@@ -21,23 +21,26 @@ function findMissingTables(aIdentifiers, bIdentifiers) {
 }
 
 function findMissingFields(aIdentifiers, bIdentifiers, alreadyMissingTables) {
-  const aTables = new Set(aIdentifiers
-    .filter((identifier) => {
-      const table = fromIdentifierToTableName(identifier);
-      return !alreadyMissingTables.includes(table);
-    })
-    .map(fromIdentifierToFieldName));
+  const aTables = new Set(
+    aIdentifiers
+      .filter((identifier) => {
+        const table = fromIdentifierToTableName(identifier);
+        return !alreadyMissingTables.includes(table);
+      })
+      .map(fromIdentifierToFieldName),
+  );
   const bTables = new Set(bIdentifiers.map(fromIdentifierToFieldName));
   return Array.from(aTables.difference(bTables));
 }
 
 function findDifferentFieldTypes(aIdentifiers, bIdentifiers, alreadyMissingTables, alreadyMissingFields) {
-  const aTables = new Set(aIdentifiers
-    .filter((identifier) => {
+  const aTables = new Set(
+    aIdentifiers.filter((identifier) => {
       const table = fromIdentifierToTableName(identifier);
       const field = fromIdentifierToFieldName(identifier);
       return !(alreadyMissingTables.includes(table) || alreadyMissingFields.includes(field));
-    }));
+    }),
+  );
   const bTables = new Set(bIdentifiers);
   return Array.from(aTables.difference(bTables));
 }
@@ -59,7 +62,12 @@ async function main() {
 
         const missingTablesInOtherBase = findMissingTables(identifiers, otherIdentifiers);
         const missingFieldsInOtherBase = findMissingFields(identifiers, otherIdentifiers, missingTablesInOtherBase);
-        const differentFieldTypesInOtherBase = findDifferentFieldTypes(identifiers, otherIdentifiers, missingTablesInOtherBase, missingFieldsInOtherBase);
+        const differentFieldTypesInOtherBase = findDifferentFieldTypes(
+          identifiers,
+          otherIdentifiers,
+          missingTablesInOtherBase,
+          missingFieldsInOtherBase,
+        );
 
         const res = {
           [`missingTablesIn_${otherBase}`]: missingTablesInOtherBase,

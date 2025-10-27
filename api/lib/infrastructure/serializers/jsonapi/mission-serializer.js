@@ -12,7 +12,7 @@ export function serializeMissionSummary(mission, meta) {
       'learningObjectives',
       'validatedObjectives',
       'createdAt',
-      'status'
+      'status',
     ],
     meta,
   }).serialize(mission);
@@ -44,22 +44,21 @@ export function serializeMission(mission, warnings) {
       'status',
       'warnings',
     ],
-
   }).serialize(mission);
 }
 
 export function deserializeMission(attributes) {
   return new Mission({
     id: attributes.id,
-    name_i18n: { fr: attributes.name  },
+    name_i18n: { fr: attributes.name },
     cardImageUrl: attributes['card-image-url'] || null,
     competenceId: attributes['competence-id'],
     thematicIds: attributes['thematic-ids'],
-    learningObjectives_i18n:  { fr:  attributes['learning-objectives'] },
-    validatedObjectives_i18n: { fr:  attributes['validated-objectives'] },
+    learningObjectives_i18n: { fr: attributes['learning-objectives'] },
+    validatedObjectives_i18n: { fr: attributes['validated-objectives'] },
     introductionMediaUrl: attributes['introduction-media-url'] || null,
     introductionMediaType: attributes['introduction-media-type'] || null,
-    introductionMediaAlt_i18n:  { fr:  attributes['introduction-media-alt'] },
+    introductionMediaAlt_i18n: { fr: attributes['introduction-media-alt'] },
     documentationUrl: attributes['documentation-url'] || null,
     status: attributes.status,
   });

@@ -1,12 +1,24 @@
 import { areaDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { saveInAirtable } from './utils.js';
 
-export async function buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData }) {
+export async function buildAreasFromConfig({
+  airtableClient,
+  databaseBuilder,
+  logger,
+  learningContentConfig,
+  learningContentData,
+}) {
   const areaItems = [];
   for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
     for (let j = 0; j < learningContentConfig.cntAreasPerFramework; ++j) {
       const frameworkItem = learningContentData[i];
-      const areaItem = buildArea({ indexFramework: i, indexArea: j, frameworkItem, databaseBuilder, locales: learningContentConfig.locales });
+      const areaItem = buildArea({
+        indexFramework: i,
+        indexArea: j,
+        frameworkItem,
+        databaseBuilder,
+        locales: learningContentConfig.locales,
+      });
       frameworkItem.areas.push(areaItem);
       areaItems.push(areaItem);
     }
@@ -46,14 +58,22 @@ export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBu
 
 export async function persistAreas({ items, airtableClient, logger }) {
   const airtableItems = items.map(areaDatasource.toAirTableObject);
-  const records = await saveInAirtable({ tableName: 'Domaines', data: airtableItems, logger, airtableClient });
+  const records = await saveInAirtable({
+    tableName: 'Domaines',
+    data: airtableItems,
+    logger,
+    airtableClient,
+  });
   items.forEach((item) => {
     item.airtableId = records.shift().id;
   });
 }
 
 export async function copyAreasFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableAreas = await airtableClient.table('Domaines').select({ fields: ['id persistant', 'Code', 'Couleur', 'Referentiel'] }).all();
+  const airtableAreas = await airtableClient
+    .table('Domaines')
+    .select({ fields: ['id persistant', 'Code', 'Couleur', 'Referentiel'] })
+    .all();
 
   logger.info(`Copying ${airtableAreas.length} areas from airtable...`);
 

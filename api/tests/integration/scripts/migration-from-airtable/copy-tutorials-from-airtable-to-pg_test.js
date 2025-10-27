@@ -88,19 +88,21 @@ describe('Integration | Scripts | CopyTutorialsFromAirtableToPg', () => {
       await script.handle({ options, logger });
 
       // then
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: [
-        'id persistant',
-        'Durée',
-        'Format',
-        'Lien',
-        'Source',
-        'Titre',
-        'Langue',
-        'License',
-        'niveau',
-        'CoupDeCoeur',
-        'Tags (id persistant)',
-      ] });
+      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+        fields: [
+          'id persistant',
+          'Durée',
+          'Format',
+          'Lien',
+          'Source',
+          'Titre',
+          'Langue',
+          'License',
+          'niveau',
+          'CoupDeCoeur',
+          'Tags (id persistant)',
+        ],
+      });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
         {
@@ -133,7 +135,9 @@ describe('Integration | Scripts | CopyTutorialsFromAirtableToPg', () => {
         },
       ]);
 
-      await expect(knex.select('*').from(TAGS_RELATION_TABLE_NAME).orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('*').from(TAGS_RELATION_TABLE_NAME).orderBy(['tutorialId', 'tutorialTagId']),
+      ).resolves.toStrictEqual([
         { tutorialId: 'tutorial1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { tutorialId: 'tutorial1', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { tutorialId: 'tutorial2', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
@@ -207,19 +211,21 @@ describe('Integration | Scripts | CopyTutorialsFromAirtableToPg', () => {
         await script.handle({ options, logger });
 
         // then
-        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: [
-          'id persistant',
-          'Durée',
-          'Format',
-          'Lien',
-          'Source',
-          'Titre',
-          'Langue',
-          'License',
-          'niveau',
-          'CoupDeCoeur',
-          'Tags (id persistant)',
-        ] });
+        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+          fields: [
+            'id persistant',
+            'Durée',
+            'Format',
+            'Lien',
+            'Source',
+            'Titre',
+            'Langue',
+            'License',
+            'niveau',
+            'CoupDeCoeur',
+            'Tags (id persistant)',
+          ],
+        });
 
         await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
           {
@@ -238,7 +244,9 @@ describe('Integration | Scripts | CopyTutorialsFromAirtableToPg', () => {
           },
         ]);
 
-        await expect(knex.select('*').from(TAGS_RELATION_TABLE_NAME).orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+        await expect(
+          knex.select('*').from(TAGS_RELATION_TABLE_NAME).orderBy(['tutorialId', 'tutorialTagId']),
+        ).resolves.toStrictEqual([
           { tutorialId: 'tutorial1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
           { tutorialId: 'tutorial1', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         ]);

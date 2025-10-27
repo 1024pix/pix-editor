@@ -18,7 +18,7 @@ export function register(server) {
             tubeAirtableId: Types.tubeId().required(),
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
           if (!tube) return Boom.notFound('unknown tube id');
           return tubeSerializer.serialize(tube);
@@ -34,7 +34,7 @@ export function register(server) {
             'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())],
           }),
         },
-        handler: async function(request) {
+        handler: async function (request) {
           const params = extractParameters(request.query);
           const tubes = await listTubes(params);
           return tubeSerializer.serialize(tubes);
@@ -50,22 +50,22 @@ export function register(server) {
             data: Joi.object({
               type: Joi.string().required().equal('tubes'),
               attributes: Joi.object({
-                'name': Joi.string(),
+                name: Joi.string(),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
                 'practical-description-fr': Joi.string().allow(null),
                 'practical-description-en': Joi.string().allow(null),
               }).unknown(true),
               relationships: Joi.object({
-                'competence': Types.competenceRelationship({ allow: [null] }),
-                'theme': Types.thematicRelationship(),
+                competence: Types.competenceRelationship({ allow: [null] }),
+                theme: Types.thematicRelationship(),
                 'raw-skills': Types.skillsRelationship(),
               }),
             }),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request, h) {
+        handler: async function (request, h) {
           const tube = await tubeSerializer.deserialize(request.payload);
           const createdTube = await createTube(tube);
           return h.response(tubeSerializer.serialize(createdTube)).code(201);
@@ -85,23 +85,23 @@ export function register(server) {
               type: Joi.string().required().equal('tubes'),
               id: Types.tubeId().required(),
               attributes: Joi.object({
-                'name': Joi.string(),
-                'index': Joi.number(),
+                name: Joi.string(),
+                index: Joi.number(),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
                 'practical-description-fr': Joi.string().allow(null),
                 'practical-description-en': Joi.string().allow(null),
               }).unknown(true),
               relationships: Joi.object({
-                'competence': Types.competenceRelationship(),
-                'theme': Types.thematicRelationship(),
+                competence: Types.competenceRelationship(),
+                theme: Types.thematicRelationship(),
                 'raw-skills': Types.skillsRelationship(),
               }),
             }),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function(request) {
+        handler: async function (request) {
           const tube = await tubeSerializer.deserialize(request.payload);
           const updatedTube = await updateTube(request.params.tubeAirtableId, tube);
           return tubeSerializer.serialize(updatedTube);

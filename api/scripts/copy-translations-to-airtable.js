@@ -12,7 +12,7 @@ export class CopyTranslationsToAirtable extends Script {
     });
   }
 
-  async handle({  logger }) {
+  async handle({ logger }) {
     const translations = await translationRepository.list();
 
     if (translations.length === 0) {

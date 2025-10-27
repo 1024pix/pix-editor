@@ -7,7 +7,7 @@ import {
   Competence,
   Framework,
   Thematic,
-  Tutorial
+  Tutorial,
 } from '../../../../lib/domain/models/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
@@ -15,7 +15,7 @@ import * as config from '../../../../lib/config.js';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
-describe('Integration | Service | update pix api release cache', function() {
+describe('Integration | Service | update pix api release cache', function () {
   let notifyStub, originalPixApiUrlValue;
 
   beforeEach(() => {
@@ -23,20 +23,18 @@ describe('Integration | Service | update pix api release cache', function() {
     originalPixApiUrlValue = config.pixApi.baseUrl;
   });
 
-  afterEach(function() {
+  afterEach(function () {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
-  describe('#onAttachmentCreated', function() {
-
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+  describe('#onAttachmentCreated', function () {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      context('when attachment is from the primary challenge', function() {
-        it('should patch the primary challenge accordingly', async function() {
+      context('when attachment is from the primary challenge', function () {
+        it('should patch the primary challenge accordingly', async function () {
           // given
           const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
@@ -61,12 +59,10 @@ describe('Integration | Service | update pix api release cache', function() {
             .get('/v0/airtableBaseValue/Epreuves')
             .query({
               filterByFormula: '{id persistant} = "challengeIdA"',
-              maxRecords: '1'
+              maxRecords: '1',
             })
             .reply(200, {
-              records: [
-                airtableChallenge,
-              ],
+              records: [airtableChallenge],
             });
           const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
             id: 'airtableAttachmentIdA',
@@ -93,13 +89,13 @@ describe('Integration | Service | update pix api release cache', function() {
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
             .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-            .reply(200, { 'access_token': pixApiToken });
+            .reply(200, { access_token: pixApiToken });
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
               alpha: 0.5,
               alternativeInstruction: '',
-              attachments: [ 'http://url-piecejointe.com' ],
+              attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'recsvLz0W2ShyfD63',
               delta: 0.2,
@@ -112,7 +108,7 @@ describe('Integration | Service | update pix api release cache', function() {
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
-              locales: [ 'fr' ],
+              locales: ['fr'],
               proposals: '',
               shuffled: false,
               responsive: 'Non',
@@ -135,13 +131,15 @@ describe('Integration | Service | update pix api release cache', function() {
               isAwarenessChallenge: false,
               toRephrase: false,
               hasEmbedInternalValidation: false,
-              noValidationNeeded: false
+              noValidationNeeded: false,
             })
             .matchHeader('Authorization', `Bearer ${pixApiToken}`)
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
+          await updatePixApiReleaseCache.onAttachmentCreated(
+            new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }),
+          );
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -150,8 +148,8 @@ describe('Integration | Service | update pix api release cache', function() {
         });
       });
 
-      context('when attachment is from a localized challenge', function() {
-        it('should patch the translated challenge accordingly', async function() {
+      context('when attachment is from a localized challenge', function () {
+        it('should patch the translated challenge accordingly', async function () {
           // given
           const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
@@ -181,12 +179,10 @@ describe('Integration | Service | update pix api release cache', function() {
             .get('/v0/airtableBaseValue/Epreuves')
             .query({
               filterByFormula: '{id persistant} = "challengeIdA"',
-              maxRecords: '1'
+              maxRecords: '1',
             })
             .reply(200, {
-              records: [
-                airtableChallenge,
-              ]
+              records: [airtableChallenge],
             });
           const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
             id: 'airtableAttachmentIdA',
@@ -211,13 +207,13 @@ describe('Integration | Service | update pix api release cache', function() {
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
             .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-            .reply(200, { 'access_token': pixApiToken });
+            .reply(200, { access_token: pixApiToken });
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
               alpha: 0.5,
               alternativeInstruction: '',
-              attachments: [ 'http://url-piecejointe.com' ],
+              attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'recsvLz0W2ShyfD63',
               delta: 0.2,
@@ -230,7 +226,7 @@ describe('Integration | Service | update pix api release cache', function() {
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
-              locales: [ 'es', 'fr' ],
+              locales: ['es', 'fr'],
               proposals: '',
               responsive: 'Non',
               shuffled: false,
@@ -252,13 +248,15 @@ describe('Integration | Service | update pix api release cache', function() {
               isAwarenessChallenge: false,
               toRephrase: false,
               hasEmbedInternalValidation: false,
-              noValidationNeeded: false
+              noValidationNeeded: false,
             })
             .matchHeader('Authorization', `Bearer ${pixApiToken}`)
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentCreated(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
+          await updatePixApiReleaseCache.onAttachmentCreated(
+            new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }),
+          );
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -268,9 +266,8 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      it('should not patch anything', async function() {
+    context('when patchingPixApi is disabled', function () {
+      it('should not patch anything', async function () {
         // given
         config.pixApi.baseUrl = undefined;
 
@@ -283,16 +280,14 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onAttachmentDeleted', function() {
-
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+  describe('#onAttachmentDeleted', function () {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      context('when attachment is from the primary challenge', function() {
-        it('should patch the primary challenge accordingly', async function() {
+      context('when attachment is from the primary challenge', function () {
+        it('should patch the primary challenge accordingly', async function () {
           // given
           const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
@@ -317,12 +312,10 @@ describe('Integration | Service | update pix api release cache', function() {
             .get('/v0/airtableBaseValue/Epreuves')
             .query({
               filterByFormula: '{id persistant} = "challengeIdA"',
-              maxRecords: '1'
+              maxRecords: '1',
             })
             .reply(200, {
-              records: [
-                airtableChallenge,
-              ]
+              records: [airtableChallenge],
             });
           const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
             id: 'airtableAttachmentIdA',
@@ -349,13 +342,13 @@ describe('Integration | Service | update pix api release cache', function() {
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
             .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-            .reply(200, { 'access_token': pixApiToken });
+            .reply(200, { access_token: pixApiToken });
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
               alpha: 0.5,
               alternativeInstruction: '',
-              attachments: [ 'http://url-piecejointe.com' ],
+              attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'recsvLz0W2ShyfD63',
               delta: 0.2,
@@ -368,7 +361,7 @@ describe('Integration | Service | update pix api release cache', function() {
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
-              locales: [ 'fr' ],
+              locales: ['fr'],
               proposals: '',
               responsive: 'Non',
               shuffled: false,
@@ -390,13 +383,15 @@ describe('Integration | Service | update pix api release cache', function() {
               isAwarenessChallenge: false,
               toRephrase: false,
               hasEmbedInternalValidation: false,
-              noValidationNeeded: false
+              noValidationNeeded: false,
             })
             .matchHeader('Authorization', `Bearer ${pixApiToken}`)
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }));
+          await updatePixApiReleaseCache.onAttachmentDeleted(
+            new Attachment({ challengeId: 'challengeIdA', localizedChallengeId: null }),
+          );
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -405,8 +400,8 @@ describe('Integration | Service | update pix api release cache', function() {
         });
       });
 
-      context('when attachment is from a localized challenge', function() {
-        it('should patch the translated challenge accordingly', async function() {
+      context('when attachment is from a localized challenge', function () {
+        it('should patch the translated challenge accordingly', async function () {
           // given
           const challenge = domainBuilder.buildChallengeDatasourceObject({
             id: 'challengeIdA',
@@ -436,12 +431,10 @@ describe('Integration | Service | update pix api release cache', function() {
             .get('/v0/airtableBaseValue/Epreuves')
             .query({
               filterByFormula: '{id persistant} = "challengeIdA"',
-              maxRecords: '1'
+              maxRecords: '1',
             })
             .reply(200, {
-              records: [
-                airtableChallenge,
-              ]
+              records: [airtableChallenge],
             });
           const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
             id: 'airtableAttachmentIdA',
@@ -466,13 +459,13 @@ describe('Integration | Service | update pix api release cache', function() {
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
             .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-            .reply(200, { 'access_token': pixApiToken });
+            .reply(200, { access_token: pixApiToken });
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
               alpha: 0.5,
               alternativeInstruction: '',
-              attachments: [ 'http://url-piecejointe.com' ],
+              attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'recsvLz0W2ShyfD63',
               delta: 0.2,
@@ -485,7 +478,7 @@ describe('Integration | Service | update pix api release cache', function() {
               illustrationAlt: null,
               illustrationUrl: 'http://url-illustration.com',
               instruction: '',
-              locales: [ 'es', 'fr' ],
+              locales: ['es', 'fr'],
               proposals: '',
               responsive: 'Non',
               shuffled: false,
@@ -507,13 +500,15 @@ describe('Integration | Service | update pix api release cache', function() {
               isAwarenessChallenge: false,
               toRephrase: false,
               hasEmbedInternalValidation: false,
-              noValidationNeeded: false
+              noValidationNeeded: false,
             })
             .matchHeader('Authorization', `Bearer ${pixApiToken}`)
             .reply(200);
 
           // when
-          await updatePixApiReleaseCache.onAttachmentDeleted(new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }));
+          await updatePixApiReleaseCache.onAttachmentDeleted(
+            new Attachment({ challengeId: null, localizedChallengeId: 'challengeIdA_ES' }),
+          );
 
           // then
           expect(airtableGetChallengeScope.isDone()).to.be.true;
@@ -523,9 +518,8 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      it('should not patch anything', async function() {
+    context('when patchingPixApi is disabled', function () {
+      it('should not patch anything', async function () {
         // given
         config.pixApi.baseUrl = undefined;
 
@@ -538,10 +532,9 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onAttachmentUpdated', function() {
-
-    context('when patchingPixApi is enabled', function() {
-      it('not patch anything', async function() {
+  describe('#onAttachmentUpdated', function () {
+    context('when patchingPixApi is enabled', function () {
+      it('not patch anything', async function () {
         // given
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
 
@@ -553,8 +546,8 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-      it('not patch anything', async function() {
+    context('when patchingPixApi is disabled', function () {
+      it('not patch anything', async function () {
         // given
         config.pixApi.baseUrl = undefined;
 
@@ -567,10 +560,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onFrameworkCreated', function() {
+  describe('#onFrameworkCreated', function () {
     let framework;
 
-    beforeEach(function() {
+    beforeEach(function () {
       framework = new Framework({
         id: 'frameworkABC123',
         name: 'Nom de mon framework',
@@ -578,20 +571,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/frameworks/frameworkABC123', {
             id: 'frameworkABC123',
@@ -608,14 +600,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -628,10 +619,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onAreaCreated', function() {
+  describe('#onAreaCreated', function () {
     let area;
 
-    beforeEach(function() {
+    beforeEach(function () {
       area = new Area({
         id: 'areaId',
         airtableId: 'recAreaId',
@@ -644,20 +635,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/areas/areaId', {
             id: 'areaId',
@@ -679,14 +669,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -699,10 +688,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onCompetenceCreated', function() {
+  describe('#onCompetenceCreated', function () {
     let competence;
 
-    beforeEach(function() {
+    beforeEach(function () {
       competence = new Competence({
         id: 'competenceId',
         airtableId: 'recCompetenceId',
@@ -719,20 +708,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/competences/competenceId', {
             id: 'competenceId',
@@ -755,14 +743,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -775,10 +762,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onCompetenceUpdated', function() {
+  describe('#onCompetenceUpdated', function () {
     let competence;
 
-    beforeEach(function() {
+    beforeEach(function () {
       competence = new Competence({
         id: 'competenceId',
         airtableId: 'recCompetenceId',
@@ -795,20 +782,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/competences/competenceId', {
             id: 'competenceId',
@@ -831,14 +817,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -851,10 +836,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onThematicCreated', function() {
+  describe('#onThematicCreated', function () {
     let thematic;
 
-    beforeEach(function() {
+    beforeEach(function () {
       thematic = new Thematic({
         id: 'thematicId',
         airtableId: 'recThematicId',
@@ -867,20 +852,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/thematics/thematicId', {
             id: 'thematicId',
@@ -900,14 +884,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -920,10 +903,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onThematicUpdated', function() {
+  describe('#onThematicUpdated', function () {
     let thematic;
 
-    beforeEach(function() {
+    beforeEach(function () {
       thematic = new Thematic({
         id: 'thematicId',
         airtableId: 'recThematicId',
@@ -936,20 +919,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/thematics/thematicId', {
             id: 'thematicId',
@@ -969,14 +951,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -989,10 +970,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onTutorialCreated', function() {
+  describe('#onTutorialCreated', function () {
     let tutorial;
 
-    beforeEach(function() {
+    beforeEach(function () {
       tutorial = new Tutorial({
         id: 'tutorialId',
         airtableId: 'tutorialAirtableId',
@@ -1009,20 +990,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/tutorials/tutorialId', {
             id: 'tutorialId',
@@ -1044,14 +1024,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // given
         const spy = vi.spyOn(updatedRecordNotifier, 'notify');
 
@@ -1064,10 +1043,10 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onTutorialUpdated', function() {
+  describe('#onTutorialUpdated', function () {
     let tutorial;
 
-    beforeEach(function() {
+    beforeEach(function () {
       tutorial = new Tutorial({
         id: 'tutorialId',
         airtableId: 'tutorialAirtableId',
@@ -1084,20 +1063,19 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is enabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is enabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tutorial', async function() {
+      it('should patch the tutorial', async function () {
         // given
         const pixApiToken = 'secret';
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch('/api/cache/tutorials/tutorialId', {
             id: 'tutorialId',
@@ -1119,14 +1097,13 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patchingPixApi is disabled', function() {
-
-      beforeEach(function() {
+    context('when patchingPixApi is disabled', function () {
+      beforeEach(function () {
         originalPixApiUrlValue = config.pixApi.baseUrl;
         delete config.pixApi.baseUrl;
       });
 
-      it('should not patch anything', async function() {
+      it('should not patch anything', async function () {
         // when
         await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
@@ -1136,15 +1113,13 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onTubeCreated', function() {
-
-    context('when patching Pix API is enabled', function() {
-
-      beforeEach(function() {
+  describe('#onTubeCreated', function () {
+    context('when patching Pix API is enabled', function () {
+      beforeEach(function () {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tube', async function() {
+      it('should patch the tube', async function () {
         // given
         const tube = domainBuilder.buildTube({
           skillIds: [],
@@ -1154,7 +1129,7 @@ describe('Integration | Service | update pix api release cache', function() {
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch(`/api/cache/tubes/${tube.id}`, {
             id: tube.id,
@@ -1178,9 +1153,8 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patching Pix API is disabled', function() {
-
-      it('should not patch anything', async function() {
+    context('when patching Pix API is disabled', function () {
+      it('should not patch anything', async function () {
         // given
         config.pixApi.baseUrl = undefined;
 
@@ -1193,14 +1167,13 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onTubeUpdated', function() {
-    context('when patching Pix API is enabled', function() {
-
-      beforeEach(function() {
+  describe('#onTubeUpdated', function () {
+    context('when patching Pix API is enabled', function () {
+      beforeEach(function () {
         config.pixApi.baseUrl = 'https://some-api-base-url.fr';
       });
 
-      it('should patch the tube', async function() {
+      it('should patch the tube', async function () {
         // given
         const tube = domainBuilder.buildTube({ thematicId: 'thematic1', skillIds: ['skill1'] });
         const challenge = domainBuilder.buildChallengeDatasourceObject({
@@ -1231,7 +1204,7 @@ describe('Integration | Service | update pix api release cache', function() {
             fields: {
               '': challengeDatasource.usedFields,
             },
-            filterByFormula: `AND(OR(${tube.skillIds.map((skillId) => `{Acquis (id persistant)} = "${skillId}"`).join(', ')}), {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}", {Statut} = "${Challenge.STATUSES.VALIDE}")`
+            filterByFormula: `AND(OR(${tube.skillIds.map((skillId) => `{Acquis (id persistant)} = "${skillId}"`).join(', ')}), {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}", {Statut} = "${Challenge.STATUSES.VALIDE}")`,
           })
           .reply(200, {
             records: [airtableChallenge],
@@ -1243,7 +1216,7 @@ describe('Integration | Service | update pix api release cache', function() {
         nock('https://some-api-base-url.fr')
           .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-          .reply(200, { 'access_token': pixApiToken });
+          .reply(200, { access_token: pixApiToken });
         const pixApiCacheScope = nock('https://some-api-base-url.fr')
           .patch(`/api/cache/tubes/${tube.id}`, {
             id: tube.id,
@@ -1268,9 +1241,8 @@ describe('Integration | Service | update pix api release cache', function() {
       });
     });
 
-    context('when patching Pix API is disabled', function() {
-
-      it('should not patch anything', async function() {
+    context('when patching Pix API is disabled', function () {
+      it('should not patch anything', async function () {
         // given
         config.pixApi.baseUrl = undefined;
 

@@ -1,52 +1,58 @@
 import { omit } from 'lodash';
 import { afterEach, describe, describe as context, expect, expectTypeOf, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
-import { findAllMissions, getById, list, save, } from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import {
+  findAllMissions,
+  getById,
+  list,
+  save,
+} from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
-describe('Integration | Repository | mission-repository', function() {
-
-  afterEach(async function() {
+describe('Integration | Repository | mission-repository', function () {
+  afterEach(async function () {
     await knex('translations').delete();
     await knex('missions').delete();
   });
 
-  describe('#get', function() {
-    context('When mission does not exists', function() {
-      it('should throw a NotFoundError', async function() {
+  describe('#get', function () {
+    context('When mission does not exists', function () {
+      it('should throw a NotFoundError', async function () {
         const promise = getById(1);
         await expect(promise).rejects.to.deep.equal(new NotFoundError('Mission introuvable'));
       });
     });
-    context('When mission exists', function() {
-      it('should return the mission', async function() {
+    context('When mission exists', function () {
+      it('should return the mission', async function () {
         databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
         await databaseBuilder.commit();
 
         const result = await getById(1);
 
-        expect(result).to.deep.equal(new Mission({
-          id: 1,
-          name_i18n: { fr: 'Ma première mission' },
-          cardImageUrl: null,
-          competenceId: 'competenceId',
-          thematicIds: 'thematicIds',
-          learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-          validatedObjectives_i18n: { fr: 'Rien' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-        }));
+        expect(result).to.deep.equal(
+          new Mission({
+            id: 1,
+            name_i18n: { fr: 'Ma première mission' },
+            cardImageUrl: null,
+            competenceId: 'competenceId',
+            thematicIds: 'thematicIds',
+            learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+            validatedObjectives_i18n: { fr: 'Rien' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+          }),
+        );
       });
     });
   });
-  describe('#findAllMissions', function() {
-    context('When there are missions', function() {
-      it('should return all missions', async function() {
+  describe('#findAllMissions', function () {
+    context('When there are missions', function () {
+      it('should return all missions', async function () {
         databaseBuilder.factory.buildMission({ id: 1, cardImageUrl: null, status: Mission.status.VALIDATED });
         databaseBuilder.factory.buildMission({
           id: 2,
@@ -54,41 +60,44 @@ describe('Integration | Repository | mission-repository', function() {
           name: 'Alt name',
           status: Mission.status.INACTIVE,
           learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives'
+          validatedObjectives: 'Alt validated objectives',
         });
         await databaseBuilder.commit();
 
         const results = await findAllMissions({ filter: { isActive: false }, page: { number: 1, size: 20 } });
 
-        expect(results.missions).to.deep.equal([new Mission({
-          id: 1,
-          cardImageUrl: null,
-          name_i18n: { fr: 'Ma première mission' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicIds',
-          learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-          validatedObjectives_i18n: { fr: 'Rien' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-        }), new Mission({
-          id: 2,
-          cardImageUrl: 'https://images.pix.fr/mission-card-image.png',
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicIds',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          introductionMediaUrl: null,
-          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-          introductionMediaType: null,
-          documentationUrl: null,
-          status: Mission.status.INACTIVE,
-          createdAt: new Date('2010-01-04'),
-        })]);
+        expect(results.missions).to.deep.equal([
+          new Mission({
+            id: 1,
+            cardImageUrl: null,
+            name_i18n: { fr: 'Ma première mission' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicIds',
+            learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+            validatedObjectives_i18n: { fr: 'Rien' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+          }),
+          new Mission({
+            id: 2,
+            cardImageUrl: 'https://images.pix.fr/mission-card-image.png',
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicIds',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMediaUrl: null,
+            introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+            introductionMediaType: null,
+            documentationUrl: null,
+            status: Mission.status.INACTIVE,
+            createdAt: new Date('2010-01-04'),
+          }),
+        ]);
         expect(results.meta).to.deep.equal({
           page: 1,
           pageSize: 20,
@@ -97,9 +106,8 @@ describe('Integration | Repository | mission-repository', function() {
         });
       });
     });
-    context('When there are no missions', function() {
-      it('should return an empty list', async function() {
-
+    context('When there are no missions', function () {
+      it('should return an empty list', async function () {
         const results = await findAllMissions({ filter: { isActive: false }, page: { number: 1, size: 20 } });
 
         expect(results.missions.length).to.equal(0);
@@ -111,9 +119,9 @@ describe('Integration | Repository | mission-repository', function() {
         });
       });
     });
-    context('With statuses filter', function() {
-      context('with results', function() {
-        it('should return all active missions', async function() {
+    context('With statuses filter', function () {
+      context('with results', function () {
+        it('should return all active missions', async function () {
           const activeMission = databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           databaseBuilder.factory.buildMission({ id: 3, status: Mission.status.EXPERIMENTAL });
@@ -131,8 +139,8 @@ describe('Integration | Repository | mission-repository', function() {
           });
         });
       });
-      context('with no results', function() {
-        it('should return an empty list of missions', async function() {
+      context('with no results', function () {
+        it('should return an empty list of missions', async function () {
           databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.INACTIVE });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           await databaseBuilder.commit();
@@ -151,8 +159,8 @@ describe('Integration | Repository | mission-repository', function() {
     });
   });
 
-  describe('#list', function() {
-    it('should return all missions', async function() {
+  describe('#list', function () {
+    it('should return all missions', async function () {
       databaseBuilder.factory.buildMission({
         id: 3,
         competenceId: 'competenceId active',
@@ -180,41 +188,44 @@ describe('Integration | Repository | mission-repository', function() {
 
       const result = await list();
 
-      expect(result).to.deep.equal([new Mission({
-        id: 2,
-        cardImageUrl: null,
-        name_i18n: { fr: 'inactive name' },
-        competenceId: 'competenceId inactive',
-        thematicIds: 'thematicStep1,thematicStep2',
-        learningObjectives_i18n: { fr: 'Alt objectives' },
-        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-        introductionMediaUrl: null,
-        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-        introductionMediaType: null,
-        documentationUrl: null,
-        status: Mission.status.INACTIVE,
-        createdAt: new Date('2019-01-01'),
-      }),new Mission({
-        id: 3,
-        cardImageUrl: 'https://example.com/image.png',
-        name_i18n: { fr: 'Alt name' },
-        competenceId: 'competenceId active',
-        thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
-        learningObjectives_i18n: { fr: 'Alt objectives' },
-        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-        introductionMediaUrl: null,
-        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-        introductionMediaType: null,
-        documentationUrl: null,
-        status: Mission.status.VALIDATED,
-        createdAt: new Date('2020-01-01'),
-      })]);
+      expect(result).to.deep.equal([
+        new Mission({
+          id: 2,
+          cardImageUrl: null,
+          name_i18n: { fr: 'inactive name' },
+          competenceId: 'competenceId inactive',
+          thematicIds: 'thematicStep1,thematicStep2',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMediaUrl: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+          introductionMediaType: null,
+          documentationUrl: null,
+          status: Mission.status.INACTIVE,
+          createdAt: new Date('2019-01-01'),
+        }),
+        new Mission({
+          id: 3,
+          cardImageUrl: 'https://example.com/image.png',
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId active',
+          thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMediaUrl: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+          introductionMediaType: null,
+          documentationUrl: null,
+          status: Mission.status.VALIDATED,
+          createdAt: new Date('2020-01-01'),
+        }),
+      ]);
     });
   });
 
-  describe('#save', function() {
-    context('Mission creation', function() {
-      it('should store mission', async function() {
+  describe('#save', function () {
+    context('Mission creation', function () {
+      it('should store mission', async function () {
         const mission = new Mission({
           cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
@@ -231,10 +242,15 @@ describe('Integration | Repository | mission-repository', function() {
 
         const savedMission = await save(mission);
         expectTypeOf(savedMission).toEqualTypeOf('Mission');
-        expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({
-          ...mission,
-          id: savedMission.id
-        }), ['createdAt']));
+        expect(omit(savedMission, ['createdAt'])).to.deep.equal(
+          omit(
+            new Mission({
+              ...mission,
+              id: savedMission.id,
+            }),
+            ['createdAt'],
+          ),
+        );
 
         const expectedMission = {
           id: savedMission.id,
@@ -246,12 +262,22 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaType', 'documentationUrl');
+        const missionFromDb = await knex('missions')
+          .where({ id: savedMission.id })
+          .first()
+          .select(
+            'competenceId',
+            'thematicIds',
+            'status',
+            'id',
+            'introductionMediaUrl',
+            'introductionMediaType',
+            'documentationUrl',
+          );
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
-      it('should store I18n for mission', async function() {
-
+      it('should store I18n for mission', async function () {
         const mission = new Mission({
           cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
@@ -269,7 +295,7 @@ describe('Integration | Repository | mission-repository', function() {
           {
             key: `mission.${savedMission.id}.name`,
             locale: 'fr',
-            value: 'Mission impossible'
+            value: 'Mission impossible',
           },
           {
             key: `mission.${savedMission.id}.learningObjectives`,
@@ -279,21 +305,21 @@ describe('Integration | Repository | mission-repository', function() {
           {
             key: `mission.${savedMission.id}.validatedObjectives`,
             locale: 'fr',
-            value: 'Très bien'
+            value: 'Très bien',
           },
           {
             key: `mission.${savedMission.id}.introductionMediaAlt`,
             locale: 'fr',
-            value: 'Alt text'
-          }
+            value: 'Alt text',
+          },
         ];
 
         expect(await knex('translations').select('key', 'locale', 'value')).to.deep.equal(translations);
       });
     });
 
-    context('Update mission', function() {
-      it('should update the mission', async function() {
+    context('Update mission', function () {
+      it('should update the mission', async function () {
         const savedMission = databaseBuilder.factory.buildMission({
           name: 'saved mission',
           competenceId: 'AZERTY',
@@ -320,10 +346,15 @@ describe('Integration | Repository | mission-repository', function() {
         const updatedMission = await save(missionToUpdate);
 
         expectTypeOf(updatedMission).toEqualTypeOf('Mission');
-        expect(omit(updatedMission, ['createdAt'])).to.deep.equal(omit(new Mission({
-          ...missionToUpdate,
-          id: updatedMission.id
-        }), ['createdAt']));
+        expect(omit(updatedMission, ['createdAt'])).to.deep.equal(
+          omit(
+            new Mission({
+              ...missionToUpdate,
+              id: updatedMission.id,
+            }),
+            ['createdAt'],
+          ),
+        );
 
         const expectedMission = {
           id: updatedMission.id,
@@ -335,15 +366,26 @@ describe('Integration | Repository | mission-repository', function() {
           documentationUrl: 'http://fake-url.net',
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaType', 'documentationUrl');
+        const missionFromDb = await knex('missions')
+          .where({ id: updatedMission.id })
+          .first()
+          .select(
+            'competenceId',
+            'thematicIds',
+            'status',
+            'id',
+            'introductionMediaUrl',
+            'introductionMediaType',
+            'documentationUrl',
+          );
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
-      it('should store I18n for mission', async function() {
+      it('should store I18n for mission', async function () {
         const savedMission = databaseBuilder.factory.buildMission({
           name: 'saved mission',
           competenceId: 'AZERTY',
-          status: Mission.status.VALIDATED
+          status: Mission.status.VALIDATED,
         });
         await databaseBuilder.commit();
 
@@ -365,7 +407,7 @@ describe('Integration | Repository | mission-repository', function() {
           {
             key: `mission.${updatedMission.id}.name`,
             locale: 'fr',
-            value: 'Updated mission'
+            value: 'Updated mission',
           },
           {
             key: `mission.${updatedMission.id}.learningObjectives`,
@@ -375,13 +417,13 @@ describe('Integration | Repository | mission-repository', function() {
           {
             key: `mission.${updatedMission.id}.validatedObjectives`,
             locale: 'fr',
-            value: 'intermédiaire'
+            value: 'intermédiaire',
           },
           {
             key: `mission.${savedMission.id}.introductionMediaAlt`,
             locale: 'fr',
-            value: 'New Alt text'
-          }
+            value: 'New Alt text',
+          },
         ];
 
         expect(await knex('translations').select('key', 'locale', 'value')).to.deep.equal(translations);

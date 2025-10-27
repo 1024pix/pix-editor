@@ -11,18 +11,19 @@ url.pathname = '/postgres';
 
 const client = new PgClient(url.href);
 
-client.query_and_log(`DROP DATABASE ${DB_TO_DELETE_NAME};`)
+client
+  .query_and_log(`DROP DATABASE ${DB_TO_DELETE_NAME};`)
   .then(() => {
     console.log('Database dropped');
     client.end();
     process.exit(0);
-  }).catch((error) => {
+  })
+  .catch((error) => {
     if (error.code === PGSQL_NON_EXISTENT_DATABASE_ERROR) {
       console.log(`Database ${DB_TO_DELETE_NAME} does not exist`);
       client.end();
       process.exit(0);
-    }
-    else {
+    } else {
       throw error;
     }
   });

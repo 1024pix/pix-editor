@@ -57,24 +57,102 @@ export async function seed(knex) {
     const learningContentConfig = {
       ...airtableSeedsConfig,
     };
-    const learningContentData = await buildFrameworksFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig });
-    await buildAreasFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildCompetencesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildThematicsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildTubesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    const tagItems = await buildTags({ airtableClient, logger, databaseBuilder });
-    const tutorialItems = await buildTutorials({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, tagItems });
-    await buildSkillsFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData, tutorialItems });
-    await buildChallengesFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig, learningContentData });
-    await buildPix1D({ airtableClient, databaseBuilder, logger, locales: learningContentConfig.locales, indexFramework: learningContentConfig.cntFrameworks });
+    const learningContentData = await buildFrameworksFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+    });
+    await buildAreasFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+    });
+    await buildCompetencesFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+    });
+    await buildThematicsFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+    });
+    await buildTubesFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+    });
+    const tagItems = await buildTags({
+      airtableClient,
+      logger,
+      databaseBuilder,
+    });
+    const tutorialItems = await buildTutorials({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      locales: learningContentConfig.locales,
+      tagItems,
+    });
+    await buildSkillsFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+      tutorialItems,
+    });
+    await buildChallengesFromConfig({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      learningContentConfig,
+      learningContentData,
+    });
+    await buildPix1D({
+      airtableClient,
+      databaseBuilder,
+      logger,
+      locales: learningContentConfig.locales,
+      indexFramework: learningContentConfig.cntFrameworks,
+    });
   } else {
-    await copyFrameworksFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyFrameworksFromAirtable({
+      airtableClient,
+      databaseBuilder,
+      logger,
+    });
     await copyAreasFromAirtable({ airtableClient, databaseBuilder, logger });
-    await copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger });
-    await copyThematicsFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyCompetencesFromAirtable({
+      airtableClient,
+      databaseBuilder,
+      logger,
+    });
+    await copyThematicsFromAirtable({
+      airtableClient,
+      databaseBuilder,
+      logger,
+    });
     await copyTubesFromAirtable({ airtableClient, databaseBuilder, logger });
-    await copyTutorialTagsFromAirtable({ airtableClient, databaseBuilder, logger });
-    await copyTutorialsFromAirtable({ airtableClient, databaseBuilder, logger });
+    await copyTutorialTagsFromAirtable({
+      airtableClient,
+      databaseBuilder,
+      logger,
+    });
+    await copyTutorialsFromAirtable({
+      airtableClient,
+      databaseBuilder,
+      logger,
+    });
     await copySkillsFromAirtable({ airtableClient, databaseBuilder, logger });
     await copyChallengesFromAirtable({ airtableClient, databaseBuilder, logger });
 

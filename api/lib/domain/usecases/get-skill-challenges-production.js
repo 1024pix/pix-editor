@@ -1,19 +1,11 @@
-export async function getSkillChallengesProduction({
-  skillId,
-  dependencies: {
-    challengeRepository,
-    logger,
-  },
-}) {
+export async function getSkillChallengesProduction({ skillId, dependencies: { challengeRepository, logger } }) {
   const challenges = await challengeRepository.listBySkillId(skillId);
   const validatedPrototype = challenges.find((challenge) => challenge.isPrototype && challenge.isValide);
   if (!validatedPrototype) {
     logger.warn(`usecase: getSkillChallengesProduction. Pas de proto validé pour acquis "${skillId}"`);
     return [];
   }
-  return challenges
-    .filter((challenge) => validatedPrototype.version === challenge.version)
-    .sort(byAlternativeVersion);
+  return challenges.filter((challenge) => validatedPrototype.version === challenge.version).sort(byAlternativeVersion);
 }
 
 function byAlternativeVersion(challengeA, challengeB) {

@@ -157,10 +157,12 @@ export class LocalizedChallenge {
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
-      clonedAttachments.push(attachmentToClone.clone({
-        challengeId,
-        localizedChallengeId: id,
-      }));
+      clonedAttachments.push(
+        attachmentToClone.clone({
+          challengeId,
+          localizedChallengeId: id,
+        }),
+      );
     }
     return {
       clonedLocalizedChallenge,

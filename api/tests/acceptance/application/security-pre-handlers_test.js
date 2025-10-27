@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { createServer } from '../../../server.js';
 
 describe('Acceptance | Application | SecurityPreHandlers', () => {
-
   let server;
 
   beforeEach(async () => {
@@ -10,7 +9,6 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
   });
 
   describe('#checkUserIsAuthenticatedViaBearer', () => {
-
     it('should disallow access resource with well formed JSON API error', async () => {
       // given
       const options = {
@@ -23,11 +21,13 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
 
       // then
       const jsonApiError = {
-        errors: [{
-          code: 401,
-          title: 'Unauthorized access',
-          detail: 'Missing or invalid access token in request auhorization headers.'
-        }]
+        errors: [
+          {
+            code: 401,
+            title: 'Unauthorized access',
+            detail: 'Missing or invalid access token in request auhorization headers.',
+          },
+        ],
       };
       expect(response.statusCode).to.equal(401);
       expect(response.result).to.deep.equal(jsonApiError);

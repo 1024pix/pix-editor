@@ -1,14 +1,5 @@
 export class CompetenceForReplication {
-  constructor({
-    id,
-    name_i18n,
-    index,
-    description_i18n,
-    areaId,
-    skillIds,
-    thematicIds,
-    origin,
-  }) {
+  constructor({ id, name_i18n, index, description_i18n, areaId, skillIds, thematicIds, origin }) {
     this.id = id;
     this.index = index;
     this.areaId = areaId;

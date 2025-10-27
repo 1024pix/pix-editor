@@ -16,13 +16,10 @@ import {
   listSkills,
   updateSkill,
 } from '../../domain/usecases/index.js';
-import { NotFoundError, } from '../../domain/errors.js';
+import { NotFoundError } from '../../domain/errors.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
-import {
-  challengeSerializer,
-  skillSerializer
-} from '../../infrastructure/serializers/jsonapi/index.js';
+import { challengeSerializer, skillSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { skillTransformer } from '../../infrastructure/transformers/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 

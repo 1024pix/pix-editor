@@ -1,14 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
+import {
+  airtableBuilder,
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  knex,
+} from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function() {
+describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function () {
   let user;
   const activeCourseId = 'myAwesomeCourse66';
   const inactiveCourseId = 'myLameCourse66';
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
@@ -97,19 +103,19 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
     databaseBuilder.factory.buildStaticCourseTag({
       id: 123,
-      label: 'tagA'
+      label: 'tagA',
     });
     databaseBuilder.factory.buildStaticCourseTag({
       id: 456,
-      label: 'tagB'
+      label: 'tagB',
     });
     databaseBuilder.factory.buildStaticCourseTag({
       id: 789,
-      label: 'tagC'
+      label: 'tagC',
     });
     databaseBuilder.factory.buildStaticCourseTag({
       id: 159,
-      label: 'tagD'
+      label: 'tagD',
     });
     databaseBuilder.factory.linkTagsTo({
       staticCourseTagIds: [123, 456, 159],
@@ -167,13 +173,13 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
   });
 
-  afterEach(async function() {
+  afterEach(async function () {
     vi.useRealTimers();
     await knex('static_courses_tags_link').delete();
     return knex('static_courses').delete();
   });
 
-  it('updates and returns the static course', async function() {
+  it('updates and returns the static course', async function () {
     // given
     const payload = {
       data: {
@@ -222,7 +228,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
               {
                 type: 'static-course-tags',
                 id: '789',
-              }
+              },
             ],
           },
           'challenge-summaries': {
@@ -281,21 +287,21 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
           type: 'static-course-tags',
           id: '456',
           attributes: {
-            label: 'tagB'
+            label: 'tagB',
           },
         },
         {
           type: 'static-course-tags',
           id: '789',
           attributes: {
-            label: 'tagC'
+            label: 'tagC',
           },
         },
       ],
     });
   });
 
-  it('return a 409 HTTP status code when static course is inactive', async function() {
+  it('return a 409 HTTP status code when static course is inactive', async function () {
     // given
     const payload = {
       data: {

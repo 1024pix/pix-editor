@@ -5,8 +5,8 @@ import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import _ from 'lodash';
 
-describe('Integration | Usecases | create mission', function() {
-  afterEach(async function() {
+describe('Integration | Usecases | create mission', function () {
+  afterEach(async function () {
     await knex('missions').delete();
     await knex('translations').delete();
   });
@@ -50,7 +50,7 @@ describe('Integration | Usecases | create mission', function() {
           id: 'skillTuto2',
           level: 2,
           tubeId: 'tubeTuto',
-          status: Skill.STATUSES.EN_CONSTRUCTION
+          status: Skill.STATUSES.EN_CONSTRUCTION,
         }),
       ],
       tubes: [airtableBuilder.factory.buildTube(tube)],
@@ -63,20 +63,24 @@ describe('Integration | Usecases | create mission', function() {
     const result = await createMission(createdMission);
 
     // then
-    expect(result.warnings).to.deep.equal(['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
+    expect(result.warnings).to.deep.equal([
+      "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2.",
+    ]);
   });
 
   it('when mission is not valid, should throw an error', async () => {
     // given
     const createdMission = domainBuilder.buildMission({
       status: Mission.status.VALIDATED,
-      thematicIds: ''
+      thematicIds: '',
     });
 
     // when
     const promise = createMission(createdMission);
 
     // then
-    await expect(promise).rejects.to.deep.equal(new InvalidMissionContentError('La mission ne peut pas être mise à jour car elle n\'a pas de thématique'));
+    await expect(promise).rejects.to.deep.equal(
+      new InvalidMissionContentError("La mission ne peut pas être mise à jour car elle n'a pas de thématique"),
+    );
   });
 });

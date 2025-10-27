@@ -6,9 +6,7 @@ import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | CompetenceDatasource', () => {
-
   describe('#fromAirTableObject', () => {
-
     it('should create a Competence from the AirtableRecord', () => {
       // given
       const expectedCompetence = domainBuilder.buildCompetenceDatasourceObject();
@@ -22,5 +20,4 @@ describe('Unit | Infrastructure | Datasource | Airtable | CompetenceDatasource',
       expect(area).to.deep.equal(expectedCompetence);
     });
   });
-
 });

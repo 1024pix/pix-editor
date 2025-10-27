@@ -15,32 +15,66 @@ export async function exportTranslations(stream, filters, dependencies) {
   const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
   const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
   const releaseContent = Object.fromEntries(
-    Object.entries(release.content)
-      .map(([collection, entities]) => [
-        collection,
-        Object.fromEntries(entities.map((entity) => [entity.id, entity])),
-      ]),
+    Object.entries(release.content).map(([collection, entities]) => [
+      collection,
+      Object.fromEntries(entities.map((entity) => [entity.id, entity])),
+    ]),
   );
 
   const localeToExtract = 'fr';
 
-  const filteredActiveSkills = release.content.skills
-    .filter((skill) => skill.canExportForTranslation());
+  const filteredActiveSkills = release.content.skills.filter((skill) => skill.canExportForTranslation());
 
   const activeTubeIds = filteredActiveSkills.map(({ tubeId }) => tubeId);
-  const filteredTubes = release.content.tubes
-    .filter((tube) => activeTubeIds.includes(tube.id));
+  const filteredTubes = release.content.tubes.filter((tube) => activeTubeIds.includes(tube.id));
 
-  const filteredValidatedChallenges = release.content.challenges
-    .filter((challenge) => challenge.canExportForTranslation(localeToExtract));
+  const filteredValidatedChallenges = release.content.challenges.filter((challenge) =>
+    challenge.canExportForTranslation(localeToExtract),
+  );
 
   const translationsStreams = mergeStreams(
-    createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.thematics, extractMetadataFromThematic, releaseContent, 'thematique', thematicTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
-    createTranslationsStream(filteredTubes, extractMetadataFromTube, releaseContent, 'sujet', tubeTranslations.extractFromReleaseObject),
-    createTranslationsStream(filteredActiveSkills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
-    createTranslationsStream(filteredValidatedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
+    createTranslationsStream(
+      release.content.competences,
+      extractMetadataFromCompetence,
+      releaseContent,
+      'competence',
+      competenceTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      release.content.thematics,
+      extractMetadataFromThematic,
+      releaseContent,
+      'thematique',
+      thematicTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      release.content.areas,
+      extractMetadataFromArea,
+      releaseContent,
+      'domaine',
+      areaTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      filteredTubes,
+      extractMetadataFromTube,
+      releaseContent,
+      'sujet',
+      tubeTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      filteredActiveSkills,
+      extractMetadataFromSkill,
+      releaseContent,
+      'acquis',
+      skillTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      filteredValidatedChallenges,
+      _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges),
+      releaseContent,
+      'epreuve',
+      extractFromChallenge,
+    ),
   );
 
   let csvLinesStream = translationsStreams.filter(({ translation }) => translation.locale === localeToExtract);
@@ -51,15 +85,10 @@ export async function exportTranslations(stream, filters, dependencies) {
 
   csvLinesStream = csvLinesStream.map(translationAndTagsToCSVLine);
 
-  pipeline(
-    csvLinesStream,
-    csv.format({ headers: true }),
-    stream,
-    (error) => {
-      if (!error) return;
-      logger.error({ error }, 'Error while exporting translations from release');
-    },
-  );
+  pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
+    if (!error) return;
+    logger.error({ error }, 'Error while exporting translations from release');
+  });
 }
 
 function makeTranslationsFilters({ frameworkName, areaCode }) {
@@ -138,7 +167,7 @@ function extractMetadataFromSkill(skill, releaseContent) {
 function extractMetadataFromTube(tube, releaseContent) {
   return {
     tags: extractTagsFromTube(tube, releaseContent),
-    description: ''
+    description: '',
   };
 }
 
@@ -164,18 +193,12 @@ function extractMetadataFromThematic(thematic, releaseContent) {
 }
 
 function extractTagsFromChallenge(challenge, releaseContent) {
-  return [
-    toTag(challenge.status),
-    ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
-  ];
+  return [toTag(challenge.status), ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent)];
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
   if (skill === undefined) return [];
-  return [
-    toTag(skill.name),
-    ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent),
-  ];
+  return [toTag(skill.name), ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent)];
 }
 
 function extractTagsFromTube(tube, releaseContent) {
@@ -190,15 +213,9 @@ function extractTagsFromThematic(thematic, releaseContent) {
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
-  return [
-    toTag(competence.index),
-    ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent),
-  ];
+  return [toTag(competence.index), ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent)];
 }
 
 function extractTagsFromArea(area, releaseContent) {
-  return [
-    toTag(area.code),
-    toTag(releaseContent.frameworks[area.frameworkId].name),
-  ];
+  return [toTag(area.code), toTag(releaseContent.frameworks[area.frameworkId].name)];
 }

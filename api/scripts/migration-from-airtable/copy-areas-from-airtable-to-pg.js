@@ -4,7 +4,6 @@ import { Script } from '../../lib/application/scripts/script.js';
 import * as airtable from '../../lib/infrastructure/airtable.js';
 
 export class CopyAreasFromAirtableToPg extends Script {
-
   constructor() {
     super({
       description: 'Copie des domaines de Airtable vers Postgres',

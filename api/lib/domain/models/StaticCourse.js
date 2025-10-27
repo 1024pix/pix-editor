@@ -3,17 +3,7 @@ import { CommandResult } from '../CommandResult.js';
 import { InvalidStaticCourseCreationOrUpdateError, StaticCourseIsInactiveError } from '../errors.js';
 
 export class StaticCourse {
-  constructor({
-    id,
-    name,
-    description,
-    challengeIds,
-    tagIds,
-    isActive,
-    deactivationReason,
-    createdAt,
-    updatedAt,
-  }) {
+  constructor({ id, name, description, challengeIds, tagIds, isActive, deactivationReason, createdAt, updatedAt }) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -40,13 +30,21 @@ export class StaticCourse {
     if (validationError.hasErrors()) {
       return CommandResult.Failure({ value: null, error: validationError });
     }
-    const staticCourse = new StaticCourse({ ...attributes, id: idGenerator('course'), isActive: true, deactivationReason: '' });
+    const staticCourse = new StaticCourse({
+      ...attributes,
+      id: idGenerator('course'),
+      isActive: true,
+      deactivationReason: '',
+    });
     return CommandResult.Success({ value: staticCourse });
   }
 
   update({ updateCommand, allChallengeIds, allTagIds }) {
     if (!this.isActive) {
-      return CommandResult.Failure({ value: null, error: new StaticCourseIsInactiveError() });
+      return CommandResult.Failure({
+        value: null,
+        error: new StaticCourseIsInactiveError(),
+      });
     }
     const timestamp = new Date();
     const attributes = {
@@ -129,19 +127,28 @@ function validateAttributes({ name, challengeIds, tagIds }, allChallengeIds, all
 
 function checkName(name, validationError) {
   if (name.length === 0) {
-    validationError.addError({ attribute: 'name', detail: 'Le champ "Nom" est obligatoire' });
+    validationError.addError({
+      attribute: 'name',
+      detail: 'Le champ "Nom" est obligatoire',
+    });
   }
 }
 
 function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
   if (challengeIds.length === 0) {
-    validationError.addError({ attribute: 'challengeIds', detail: 'Le champ "IDs des épreuves" est obligatoire' });
+    validationError.addError({
+      attribute: 'challengeIds',
+      detail: 'Le champ "IDs des épreuves" est obligatoire',
+    });
     return;
   }
 
   const notFoundChallengeIds = _.difference(challengeIds, allChallengeIds);
   if (notFoundChallengeIds.length > 0) {
-    validationError.addError({ attribute: 'challengeIds', detail: `Les IDs d'épreuve suivants n'existent pas : ${notFoundChallengeIds.join(', ')}` });
+    validationError.addError({
+      attribute: 'challengeIds',
+      detail: `Les IDs d'épreuve suivants n'existent pas : ${notFoundChallengeIds.join(', ')}`,
+    });
   }
 
   const challengeOccurrencesMap = _.countBy(challengeIds);
@@ -152,15 +159,20 @@ function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
     }
   }
   if (duplicateChallengeIds.length > 0) {
-    validationError.addError({ attribute: 'challengeIds', detail: `Les IDs d'épreuve suivants sont en doublon : ${duplicateChallengeIds.join(', ')}` });
+    validationError.addError({
+      attribute: 'challengeIds',
+      detail: `Les IDs d'épreuve suivants sont en doublon : ${duplicateChallengeIds.join(', ')}`,
+    });
   }
 }
 
 function checkTagIds(tagIds, allTagIds, validationError) {
-
   const notFoundTagIds = _.difference(tagIds, allTagIds);
   if (notFoundTagIds.length > 0) {
-    validationError.addError({ attribute: 'tagIds', detail: `Les tags suivants n'existent pas : ${notFoundTagIds.join(', ')}` });
+    validationError.addError({
+      attribute: 'tagIds',
+      detail: `Les tags suivants n'existent pas : ${notFoundTagIds.join(', ')}`,
+    });
   }
 
   const tagOccurrencesMap = _.countBy(tagIds);
@@ -171,6 +183,9 @@ function checkTagIds(tagIds, allTagIds, validationError) {
     }
   }
   if (duplicateTagIds.length > 0) {
-    validationError.addError({ attribute: 'tagIds', detail: `Les tags suivants sont en doublon : ${duplicateTagIds.join(', ')}` });
+    validationError.addError({
+      attribute: 'tagIds',
+      detail: `Les tags suivants sont en doublon : ${duplicateTagIds.join(', ')}`,
+    });
   }
 }

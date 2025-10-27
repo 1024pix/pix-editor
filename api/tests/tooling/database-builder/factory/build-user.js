@@ -9,7 +9,6 @@ export function buildUser({
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
-
   const values = { id, name, trigram, access, apiKey, createdAt, updatedAt };
 
   return databaseBuffer.pushInsertable({
@@ -23,7 +22,12 @@ export function buildAdminUser() {
 }
 
 export function buildReadonlyUser() {
-  return buildUser({ name: 'User', trigram: 'RDO', access: 'readonly', apiKey: '10000000-0000-0000-0000-000000000000' });
+  return buildUser({
+    name: 'User',
+    trigram: 'RDO',
+    access: 'readonly',
+    apiKey: '10000000-0000-0000-0000-000000000000',
+  });
 }
 
 export function buildEditorUser() {

@@ -1,14 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader,
-  airtableBuilder,
-  domainBuilder,
-} from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, airtableBuilder, domainBuilder } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | static courses | GET /api/static-courses/{id}', function() {
-  it('Return the static course', async function() {
+describe('Acceptance | API | static courses | GET /api/static-courses/{id}', function () {
+  it('Return the static course', async function () {
     // Given
     const server = await createServer();
     const user = databaseBuilder.factory.buildReadonlyUser();
@@ -133,7 +128,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
                 id: `${tagBId}`,
               },
             ],
-          }
+          },
         },
       },
       included: [

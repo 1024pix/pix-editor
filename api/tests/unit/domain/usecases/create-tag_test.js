@@ -16,23 +16,25 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
     };
   });
 
-  context('when title already taken', function() {
-    it('should throw a ConflictError', async function() {
+  context('when title already taken', function () {
+    it('should throw a ConflictError', async function () {
       // given
       tagRepository.findByTitle.mockResolvedValue(new Tag({}));
 
       // when / then
-      await expect(createTag(new Tag({ title: 'titre recherché' }), dependencies)).rejects.to.deep.equal(new TagTitleAlreadyUsedError('titre recherché'));
+      await expect(createTag(new Tag({ title: 'titre recherché' }), dependencies)).rejects.to.deep.equal(
+        new TagTitleAlreadyUsedError('titre recherché'),
+      );
       expect(tagRepository.findByTitle).toHaveBeenCalledWith('titre recherché');
     });
   });
 
-  context('when title is available', function() {
-    it('should return the createdTag', async function() {
+  context('when title is available', function () {
+    it('should return the createdTag', async function () {
       // given
       tagRepository.findByTitle.mockResolvedValue(null);
       tagRepository.create.mockResolvedValue(
-        new Tag({ title: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' })
+        new Tag({ title: 'Internet', airtableId: 'tagAirtableId1', id: 'tagId1' }),
       );
 
       // when

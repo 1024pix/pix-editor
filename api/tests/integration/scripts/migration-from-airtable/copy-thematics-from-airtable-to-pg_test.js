@@ -30,7 +30,7 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
         new Airtable.Record(AIRTABLE_NAME, 'rec123', {
           fields: {
             'id persistant': 'thematic123',
-            'Index': 0,
+            Index: 0,
             'Competence (id persistant)': ['competence123'],
           },
           createdTime: '2025-09-29T00:00:00Z',
@@ -38,7 +38,7 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
         new Airtable.Record(AIRTABLE_NAME, 'rec456', {
           fields: {
             'id persistant': 'thematic456',
-            'Index': 1,
+            Index: 1,
             'Competence (id persistant)': ['competence123'],
           },
           createdTime: '2025-09-29T13:58:00Z',
@@ -70,7 +70,9 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
       await script.handle({ options, logger });
 
       // then
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Index', 'Competence (id persistant)'] });
+      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+        fields: ['id persistant', 'Index', 'Competence (id persistant)'],
+      });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
         {
@@ -99,7 +101,7 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
           new Airtable.Record(AIRTABLE_NAME, 'rec123', {
             fields: {
               'id persistant': 'thematic123',
-              'Index': 0,
+              Index: 0,
               'Competence (id persistant)': ['competence123'],
             },
             createdTime: '2025-09-29T00:00:00Z',
@@ -107,7 +109,7 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
           new Airtable.Record(AIRTABLE_NAME, 'rec456', {
             fields: {
               'id persistant': 'thematic456',
-              'Index': 1,
+              Index: 1,
               'Competence (id persistant)': ['competence123'],
             },
             createdTime: '2025-09-29T13:58:00Z',
@@ -141,7 +143,9 @@ describe('Integration | Scripts | CopyThematicsFromAirtableToPg', () => {
         await script.handle({ options, logger });
 
         // then
-        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: ['id persistant', 'Index', 'Competence (id persistant)'] });
+        expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
+          fields: ['id persistant', 'Index', 'Competence (id persistant)'],
+        });
 
         await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
           {

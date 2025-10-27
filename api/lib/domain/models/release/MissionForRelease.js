@@ -11,7 +11,7 @@ export class MissionForRelease {
     introductionMediaUrl,
     introductionMediaType,
     introductionMediaAlt_i18n,
-    documentationUrl
+    documentationUrl,
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -29,22 +29,14 @@ export class MissionForRelease {
 }
 
 class Content {
-  constructor({
-    steps = [],
-    dareChallenges = [],
-  } = {}) {
+  constructor({ steps = [], dareChallenges = [] } = {}) {
     this.steps = steps.map((step) => new Step(step));
     this.dareChallenges = dareChallenges;
   }
 }
 
 class Step {
-  constructor({
-    name_i18n,
-    tutorialChallenges = [],
-    trainingChallenges = [],
-    validationChallenges = [],
-  } = {}) {
+  constructor({ name_i18n, tutorialChallenges = [], trainingChallenges = [], validationChallenges = [] } = {}) {
     this.name_i18n = name_i18n;
     this.tutorialChallenges = tutorialChallenges;
     this.trainingChallenges = trainingChallenges;

@@ -11,8 +11,6 @@ export default defineConfig({
         singleFork: true,
       },
     },
-    setupFiles: [
-      'tests/setup-tests.js',
-    ],
+    setupFiles: ['tests/setup-tests.js'],
   },
 });

@@ -5,7 +5,7 @@ describe('Unit | Domain | SkillForRelease', () => {
   describe('#canExportForTranslation', () => {
     it('should return true when skill is active', () => {
       // given
-      const skillForRelease  = domainBuilder.buildSkillForRelease({
+      const skillForRelease = domainBuilder.buildSkillForRelease({
         status: SkillForRelease.STATUSES.ACTIF,
       });
 
@@ -16,10 +16,13 @@ describe('Unit | Domain | SkillForRelease', () => {
       expect(result).to.be.true;
     });
 
-    it.each(Object.keys(SkillForRelease.STATUSES).filter((status) => SkillForRelease.STATUSES[status] !== SkillForRelease.STATUSES.ACTIF)
+    it.each(
+      Object.keys(SkillForRelease.STATUSES).filter(
+        (status) => SkillForRelease.STATUSES[status] !== SkillForRelease.STATUSES.ACTIF,
+      ),
     )('should return false when status key is %s', (status) => {
       // given
-      const skillForRelease  = domainBuilder.buildSkillForRelease({
+      const skillForRelease = domainBuilder.buildSkillForRelease({
         status,
       });
 

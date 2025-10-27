@@ -2,7 +2,6 @@ import { datasource } from './datasource.js';
 import { findRecords, stringValue } from '../../airtable.js';
 
 export const attachmentDatasource = datasource.extend({
-
   modelName: 'Attachment',
 
   tableName: 'Attachments',
@@ -40,14 +39,14 @@ export const attachmentDatasource = datasource.extend({
   toAirTableObject(model) {
     const body = {
       fields: {
-        'url': model.url,
-        'size': model.size,
-        'type': model.type,
-        'mimeType': model.mimeType,
-        'filename': model.filename,
-        'challengeId': [model.challengeId],
-        'localizedChallengeId': model.localizedChallengeId,
-      }
+        url: model.url,
+        size: model.size,
+        type: model.type,
+        mimeType: model.mimeType,
+        filename: model.filename,
+        challengeId: [model.challengeId],
+        localizedChallengeId: model.localizedChallengeId,
+      },
     };
     if (model.id) {
       body.id = model.id;
@@ -57,7 +56,7 @@ export const attachmentDatasource = datasource.extend({
 
   async filterByLocalizedChallengeId(localizedChallengeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula : `{localizedChallengeId} = ${stringValue(localizedChallengeId)}`,
+      filterByFormula: `{localizedChallengeId} = ${stringValue(localizedChallengeId)}`,
     });
     return airtableRawObjects.map(this.fromAirTableObject);
   },
@@ -71,4 +70,3 @@ export const attachmentDatasource = datasource.extend({
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 });
-

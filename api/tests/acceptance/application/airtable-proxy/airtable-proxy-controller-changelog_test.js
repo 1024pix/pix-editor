@@ -22,7 +22,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
         method: 'PATCH',
         url: '/api/airtable/changelog/Notes',
         headers: generateAuthorizationHeader(user),
-        payload: { param: 'value' }
+        payload: { param: 'value' },
       });
 
       // Then
@@ -47,7 +47,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
         method: 'POST',
         url: '/api/airtable/changelog/Notes',
         headers: generateAuthorizationHeader(user),
-        payload: { param: 'value' }
+        payload: { param: 'value' },
       });
 
       // Then
@@ -68,13 +68,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
           method: 'PATCH',
           url: '/api/airtable/changelog/Notes',
           headers: generateAuthorizationHeader(user),
-          payload: { param: 'value' }
+          payload: { param: 'value' },
         });
 
         // Then
         expect(response.statusCode).to.equal(403);
       });
     });
-
   });
 });

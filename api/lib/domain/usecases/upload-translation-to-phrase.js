@@ -8,7 +8,6 @@ import { streamToPromise } from '../../infrastructure/utils/stream-to-promise.js
 import { schedule as scheduleDeleteUnmentionedKeysAfterUploadJob } from '../../infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
 export async function uploadTranslationToPhrase(phraseApi = { Configuration, LocalesApi, UploadsApi }) {
-
   const { apiKey, projects } = config.phrase;
   const baseUrl = config.lcms.baseUrl;
 
@@ -52,12 +51,15 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
           tag_column: 3,
           comment_index: 4,
           header_content_row: true,
-        }
+        },
       });
 
-      await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id, projectId });
+      await scheduleDeleteUnmentionedKeysAfterUploadJob({
+        uploadId: upload.id,
+        projectId,
+      });
     } catch (e) {
-      const text = await e.text?.() ?? e;
+      const text = (await e.text?.()) ?? e;
       logger.error(`Phrase error while uploading translations: ${text}`);
       throw new Error('Phrase error', { cause: e });
     }

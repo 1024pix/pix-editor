@@ -7,10 +7,7 @@ import { knex } from '../../../db/knex-database-connection.js';
  * @param {Number} page.number - the page number to retrieve
  * @param {Number} page.size - the size of the page
  */
-export async function fetchPage(
-  queryBuilder,
-  { number, size },
-) {
+export async function fetchPage(queryBuilder, { number, size }) {
   const page = number < 1 ? 1 : number;
   const offset = (page - 1) * size;
 

@@ -16,7 +16,19 @@ export function buildWhitelistedUrl({
   if (createdBy && !latestUpdatedBy) {
     latestUpdatedBy = createdBy;
   }
-  const values = { id, createdBy, latestUpdatedBy, deletedBy, createdAt, updatedAt, deletedAt, url, relatedSkillNames, comment, checkType };
+  const values = {
+    id,
+    createdBy,
+    latestUpdatedBy,
+    deletedBy,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    url,
+    relatedSkillNames,
+    comment,
+    checkType,
+  };
 
   return databaseBuffer.pushInsertable({
     tableName: 'whitelisted_urls',

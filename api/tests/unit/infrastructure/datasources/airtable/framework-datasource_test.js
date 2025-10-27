@@ -6,9 +6,7 @@ import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | FrameworkDatasource', () => {
-
   describe('#fromAirTableObject', () => {
-
     it('should create a Framework from the AirtableRecord', () => {
       // given
       const expectedFramework = domainBuilder.buildFrameworkDatasourceObject();
@@ -22,5 +20,4 @@ describe('Unit | Infrastructure | Datasource | Airtable | FrameworkDatasource', 
       expect(framework).to.deep.equal(expectedFramework);
     });
   });
-
 });

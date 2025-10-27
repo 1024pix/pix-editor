@@ -7,13 +7,12 @@ export async function register(server) {
       method: 'GET',
       path: '/api/config',
       config: {
-        handler: function() {
+        handler: function () {
           return configSerializer.serialize(config.pixEditor);
         },
-      }
+      },
     },
   ]);
 }
 
 export const name = 'config-api';
-

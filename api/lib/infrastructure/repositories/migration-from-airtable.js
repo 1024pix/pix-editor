@@ -1,7 +1,9 @@
 import * as config from '../../config.js';
 import { child } from '../logger.js';
 
-const logger = child('airtable:migration', { event: 'migration-from-airtable' });
+const logger = child('airtable:migration', {
+  event: 'migration-from-airtable',
+});
 
 /**
  * @param {object[]} airtableDtos
@@ -10,10 +12,13 @@ const logger = child('airtable:migration', { event: 'migration-from-airtable' })
  */
 export function compareDtosLists(airtableDtos, pgDtos, compareFunc) {
   if (airtableDtos.length !== pgDtos.length) {
-    logger.warn({
-      airtableCount: airtableDtos.length,
-      postgresCount: pgDtos.length,
-    }, 'difference between airtable and postgres dtos count');
+    logger.warn(
+      {
+        airtableCount: airtableDtos.length,
+        postgresCount: pgDtos.length,
+      },
+      'difference between airtable and postgres dtos count',
+    );
     if (config.migrationFromAirtable.throwOnPostgresDifference) {
       console.error('difference between airtable and postgres dtos count', {
         airtableCount: airtableDtos.length,

@@ -38,13 +38,18 @@ export async function findReadSummaries({ filter, page }) {
     query.andWhereILike('name', `%${filter.name}%`);
   }
   if (filter.tagIds?.length) {
-    query.whereIn('static_courses.id', knex.select('staticCourseId').from('static_courses_tags_link').whereIn('staticCourseTagId', filter.tagIds));
+    query.whereIn(
+      'static_courses.id',
+      knex.select('staticCourseId').from('static_courses_tags_link').whereIn('staticCourseTagId', filter.tagIds),
+    );
   }
 
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
-    const tags = staticCourse.tags.map(({ id, label }) => new StaticCourseTag_Read({ id, label })).filter(({ id }) => id !== null);
+    const tags = staticCourse.tags
+      .map(({ id, label }) => new StaticCourseTag_Read({ id, label }))
+      .filter(({ id }) => id !== null);
     return new StaticCourseSummary_Read({
       id: staticCourse.id,
       name: staticCourse.name,
@@ -83,7 +88,9 @@ export async function getRead(id, { baseUrl }) {
 
   if (!staticCourse) return null;
 
-  const tags = staticCourse.tags.map(({ id, label }) => new StaticCourseTag_Read({ id, label })).filter(({ id }) => id !== null);
+  const tags = staticCourse.tags
+    .map(({ id, label }) => new StaticCourseTag_Read({ id, label }))
+    .filter(({ id }) => id !== null);
   const localizedChallengeIds = staticCourse.challengeIds.split(',');
   const challengeSummaries = await findChallengeSummaries(localizedChallengeIds, { baseUrl });
   return new StaticCourse_Read({
@@ -151,16 +158,15 @@ export async function save(staticCourseForCreation) {
     updatedAt: staticCourseDTO.updatedAt,
   };
   await knex.transaction(async (trx) => {
-    await trx('static_courses')
-      .insert(serializedStaticCourseForDB)
-      .onConflict('id')
-      .merge();
-    await trx('static_courses_tags_link')
-      .del()
-      .where('staticCourseId', serializedStaticCourseForDB.id);
+    await trx('static_courses').insert(serializedStaticCourseForDB).onConflict('id').merge();
+    await trx('static_courses_tags_link').del().where('staticCourseId', serializedStaticCourseForDB.id);
     if (staticCourseDTO.tagIds.length > 0) {
-      await trx('static_courses_tags_link')
-        .insert(staticCourseDTO.tagIds.map((staticCourseDtoTagId) => ({ staticCourseTagId: staticCourseDtoTagId, staticCourseId: serializedStaticCourseForDB.id })));
+      await trx('static_courses_tags_link').insert(
+        staticCourseDTO.tagIds.map((staticCourseDtoTagId) => ({
+          staticCourseTagId: staticCourseDtoTagId,
+          staticCourseId: serializedStaticCourseForDB.id,
+        })),
+      );
     }
   });
 
@@ -168,12 +174,18 @@ export async function save(staticCourseForCreation) {
 }
 
 async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
-  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
+  const localizedChallenges = await localizedChallengeRepository.getMany({
+    ids: localizedChallengeIds,
+  });
   const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
-  const challenges = await challengeRepository.filter({ filter: { ids: challengeIds } });
+  const challenges = await challengeRepository.filter({
+    filter: { ids: challengeIds },
+  });
 
   const skillIds = challenges.map(({ skillId }) => skillId);
-  const skillsFromAirtable = await skillDatasource.filter({ filter: { ids: skillIds } });
+  const skillsFromAirtable = await skillDatasource.filter({
+    filter: { ids: skillIds },
+  });
 
   return localizedChallengeIds.map((localizedChallengeId, index) => {
     const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);

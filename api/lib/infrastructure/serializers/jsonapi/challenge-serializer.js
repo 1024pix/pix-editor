@@ -66,7 +66,7 @@ const serializer = new Serializer('challenges', {
   skill: {
     ref(challenge, skillId) {
       return skillId;
-    }
+    },
   },
   localizedChallenges: {
     ref: 'id',
@@ -76,7 +76,7 @@ const serializer = new Serializer('challenges', {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
-      related: function(record, current, parent) {
+      related: function (record, current, parent) {
         return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
       },
     },
@@ -84,10 +84,7 @@ const serializer = new Serializer('challenges', {
   challengeLocales: {
     ref: 'id',
     included: true,
-    attributes: [
-      'locale',
-      'localizedChallenge',
-    ],
+    attributes: ['locale', 'localizedChallenge'],
     localizedChallenge: {
       ref: 'id',
       included: false,
@@ -98,7 +95,9 @@ const serializer = new Serializer('challenges', {
     challenge.skill = challenge.skills[0];
     challenge.attachments = [];
     challenge.challengeLocales = LocalizedChallenge.SUPPORTED_LOCALES.map((locale) => {
-      const localizedChallenge = challenge.localizedChallenges.find((localizedChallenge) => localizedChallenge.locale === locale);
+      const localizedChallenge = challenge.localizedChallenges.find(
+        (localizedChallenge) => localizedChallenge.locale === locale,
+      );
       return {
         id: `${challenge.id}-${locale}`,
         locale,
@@ -108,7 +107,7 @@ const serializer = new Serializer('challenges', {
       };
     });
     return challenge;
-  }
+  },
 });
 
 export function serialize(challenge) {
@@ -150,29 +149,33 @@ const deserializer = new Deserializer({
         illustrationAlt,
       },
     };
-    challenge.files = challenge.attachments?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
+    challenge.files = challenge.attachments?.map((fileId) => ({
+      fileId,
+      localizedChallengeId: challenge.id,
+    }));
     return challenge;
-  }
+  },
 });
 
 export function deserialize(challengeBody) {
   return new Promise((resolve, reject) => {
-
     deserializer.deserialize(challengeBody, (err, challengeObject) => {
-      challengeObject.localizedChallenges = [LocalizedChallenge.buildPrimary({
-        challengeId: challengeObject.id,
-        locale: Challenge.getPrimaryLocale(challengeObject.locales),
-        embedUrl: challengeObject.embedUrl,
-        geography: challengeObject.geography,
-        urlsToConsult: challengeObject.urlsToConsult,
-        requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
-        isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,
-        deafAndHardOfHearing: challengeObject.deafAndHardOfHearing,
-        isAwarenessChallenge: challengeObject.isAwarenessChallenge,
-        toRephrase: challengeObject.toRephrase,
-        hasEmbedInternalValidation: challengeObject.hasEmbedInternalValidation,
-        noValidationNeeded: challengeObject.noValidationNeeded,
-      })];
+      challengeObject.localizedChallenges = [
+        LocalizedChallenge.buildPrimary({
+          challengeId: challengeObject.id,
+          locale: Challenge.getPrimaryLocale(challengeObject.locales),
+          embedUrl: challengeObject.embedUrl,
+          geography: challengeObject.geography,
+          urlsToConsult: challengeObject.urlsToConsult,
+          requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,
+          deafAndHardOfHearing: challengeObject.deafAndHardOfHearing,
+          isAwarenessChallenge: challengeObject.isAwarenessChallenge,
+          toRephrase: challengeObject.toRephrase,
+          hasEmbedInternalValidation: challengeObject.hasEmbedInternalValidation,
+          noValidationNeeded: challengeObject.noValidationNeeded,
+        }),
+      ];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
   });

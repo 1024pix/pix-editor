@@ -3,7 +3,7 @@ import { domainBuilder } from '../../../test-helper';
 
 import { findAllMissions } from '../../../../lib/domain/usecases/index.js';
 
-describe('Unit | Domain | Usecases | find all missions', function() {
+describe('Unit | Domain | Usecases | find all missions', function () {
   it('should return a list of mission summaries', async () => {
     // given
     const competence1 = domainBuilder.buildCompetence({
@@ -48,12 +48,12 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     // then
     const missionSummary1 = domainBuilder.buildMissionSummary({
       id: 3,
-      competence: '1.1 Nom compétence 1'
+      competence: '1.1 Nom compétence 1',
     });
     const missionSummary2 = domainBuilder.buildMissionSummary({
       id: 4,
       name: 'Alt name',
-      competence: '2.2 Nom compétence 2'
+      competence: '2.2 Nom compétence 2',
     });
 
     expect(result).toEqual({ missions: [missionSummary1, missionSummary2], meta });
@@ -61,7 +61,7 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     expect(competenceRepository.getMany).to.toHaveBeenCalledWith(['recCompetence1', 'recCompetence2']);
   });
 
-  describe('When there is no competence found', function() {
+  describe('When there is no competence found', function () {
     it('should specify there is no competence', async () => {
       // given
       const competence = domainBuilder.buildCompetence({
@@ -88,12 +88,13 @@ describe('Unit | Domain | Usecases | find all missions', function() {
       // when
       const result = await findAllMissions(
         { filter: { isActive: false }, page: { number: 1, size: 20 } },
-        { missionRepository, competenceRepository }
+        { missionRepository, competenceRepository },
       );
 
       // then
       const missionSummary = domainBuilder.buildMissionSummary({
-        ...mission, competence: 'Compétence non trouvée : recCompetence2'
+        ...mission,
+        competence: 'Compétence non trouvée : recCompetence2',
       });
       expect(result).toEqual({ missions: [missionSummary], meta });
     });

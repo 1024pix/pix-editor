@@ -4,9 +4,9 @@ export function buildTubeForRelease({
   id = 'recTIddrkopID23Fp',
   name = '@Moteur',
   title = 'Moteur de recherche',
-  description = 'Connaître le fonctionnement d\'un moteur de recherche',
+  description = "Connaître le fonctionnement d'un moteur de recherche",
   practicalTitle_i18n = {
-    fr: 'Outils d\'accès au web',
+    fr: "Outils d'accès au web",
     en: 'Tools for web',
   },
   practicalDescription_i18n = {

@@ -44,7 +44,13 @@ function _mapToInfrastructureError(error) {
     };
   }
   if (error instanceof DomainErrors.InvalidStaticCourseCreationOrUpdateError) {
-    const infraErrors = error.errors.map((error) => new InfraErrors.UnprocessableEntityError({ detail: error.detail, attribute: error.attribute }));
+    const infraErrors = error.errors.map(
+      (error) =>
+        new InfraErrors.UnprocessableEntityError({
+          detail: error.detail,
+          attribute: error.attribute,
+        }),
+    );
     return {
       infraErrors,
       statusCode: 422,
@@ -65,7 +71,10 @@ function _mapToInfrastructureError(error) {
     };
   }
   if (error instanceof DomainErrors.CommandWhitelistedUrlError) {
-    const infraError = new InfraErrors.UnprocessableEntityError({ message: error.message, attribute: error.attribute });
+    const infraError = new InfraErrors.UnprocessableEntityError({
+      message: error.message,
+      attribute: error.attribute,
+    });
     return {
       infraErrors: [infraError],
       statusCode: infraError.status,

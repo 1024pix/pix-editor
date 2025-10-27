@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, Button, Loader, DropZone, H3 } from '@adminjs/design-system'
+import { Box, Button, Loader, DropZone, H3 } from '@adminjs/design-system';
 import { useCurrentAdmin, useNotice } from 'adminjs';
 import { saveAs } from 'file-saver';
 
@@ -16,7 +16,7 @@ const ImportExportComponent = () => {
       const token = currentAdmin?.email;
       const { data } = await axios.get(`/api/translations.csv?frameworkName=${frameworkName}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       const blob = new Blob([data], { type: 'text/csv' });
@@ -33,11 +33,15 @@ const ImportExportComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      await axios.post('/api/phrase/upload', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      await axios.post(
+        '/api/phrase/upload',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       sendNotice({ message: 'Upload request in progress', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
@@ -53,12 +57,10 @@ const ImportExportComponent = () => {
       const importData = new FormData();
       importData.append('file', file, file?.name);
 
-      await axios.patch('/api/translations.csv',
-        importData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+      await axios.patch('/api/translations.csv', importData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       sendNotice({ message: 'Imported successfully', type: 'success' });
     } catch (e) {
@@ -72,11 +74,15 @@ const ImportExportComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      await axios.post('/api/phrase/download', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      await axios.post(
+        '/api/phrase/download',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       sendNotice({ message: 'Download request in progress', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
@@ -93,14 +99,10 @@ const ImportExportComponent = () => {
     <Box>
       <Box mb={30}>
         <H3>Export</H3>
-        <Button
-          onClick={() => exportTranslations('Pix')}
-          variant="outlined"
-          disabled={isFetching}
-        >
+        <Button onClick={() => exportTranslations('Pix')} variant="outlined" disabled={isFetching}>
           Exporter les traductions FR du référentiel Pix dans un fichier CSV
         </Button>
-        <br/>
+        <br />
         <Button
           mt={10}
           onClick={() => exportTranslations('Numérique Responsable')}
@@ -109,37 +111,19 @@ const ImportExportComponent = () => {
         >
           Exporter les traductions FR du référentiel Numérique Responsable dans un fichier CSV
         </Button>
-        <br/>
-        <Button
-          mt={10}
-          onClick={exportTranslationToPhrase}
-          variant="outlined"
-          disabled={isFetching}
-        >
+        <br />
+        <Button mt={10} onClick={exportTranslationToPhrase} variant="outlined" disabled={isFetching}>
           Exporter toutes les traductions FR dans Phrase
         </Button>
       </Box>
       <Box>
         <H3>Import</H3>
-        <DropZone
-          mimeTypes={['text/csv']}
-          onChange={(files) => setFile(files?.[0] ?? null)}
-        />
-        <Button
-          onClick={importTranslations}
-          variant="outlined"
-          disabled={isFetching || !file}
-          mt={24}
-        >
+        <DropZone mimeTypes={['text/csv']} onChange={(files) => setFile(files?.[0] ?? null)} />
+        <Button onClick={importTranslations} variant="outlined" disabled={isFetching || !file} mt={24}>
           Importer les traductions
         </Button>
-        <br/>
-        <Button
-          mt={10}
-          onClick={importTranslationFromPhrase}
-          variant="outlined"
-          disabled={isFetching}
-        >
+        <br />
+        <Button mt={10} onClick={importTranslationFromPhrase} variant="outlined" disabled={isFetching}>
           Importer les traductions depuis Phrase
         </Button>
       </Box>

@@ -78,13 +78,15 @@ describe('Script | DeleteTutorials', () => {
           'fields[]': ['Record ID', 'id persistant'],
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: records.map((record) => ({
-          ...record,
-          fields: {
-            ...record.fields,
-            'Record ID': record.id,
-          },
-        })) });
+        .reply(200, {
+          records: records.map((record) => ({
+            ...record,
+            fields: {
+              ...record.fields,
+              'Record ID': record.id,
+            },
+          })),
+        });
 
       deleteScope = nock('https://api.airtable.com')
         .delete('/v0/airtableBaseValue/Tutoriels')
@@ -92,17 +94,19 @@ describe('Script | DeleteTutorials', () => {
           'records[]': ['recTuto1', 'recTuto3'],
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [
-          { deleted: true, id: 'recTuto1', },
-          { deleted: true, id: 'recTuto3', },
-        ] });
+        .reply(200, {
+          records: [
+            { deleted: true, id: 'recTuto1' },
+            { deleted: true, id: 'recTuto3' },
+          ],
+        });
     });
 
     it('deletes existing tutorials corresponding to given ids', async () => {
       // given
       const options = {
         dryRun: false,
-        id: ['tuto1', 'tuto2', 'tuto3']
+        id: ['tuto1', 'tuto2', 'tuto3'],
       };
 
       // when
@@ -125,7 +129,9 @@ describe('Script | DeleteTutorials', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-      await expect(knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
+      ).resolves.toStrictEqual([
         { tutorialId: 'tuto4', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { tutorialId: 'tuto4', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
       ]);
@@ -140,7 +146,7 @@ describe('Script | DeleteTutorials', () => {
         // given
         const options = {
           dryRun: true,
-          id: ['tuto1', 'tuto2', 'tuto3']
+          id: ['tuto1', 'tuto2', 'tuto3'],
         };
 
         // when
@@ -191,7 +197,9 @@ describe('Script | DeleteTutorials', () => {
             updatedAt: expect.any(Date),
           },
         ]);
-        await expect(knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+        await expect(
+          knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
+        ).resolves.toStrictEqual([
           { tutorialId: 'tuto1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
           { tutorialId: 'tuto1', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
           { tutorialId: 'tuto3', tutorialTagId: 'tag2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },

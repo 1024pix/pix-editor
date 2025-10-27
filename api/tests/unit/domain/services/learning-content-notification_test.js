@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { notifyReleaseCreationFailure, notifyReleaseCreationSuccess } from '../../../../lib/domain/services/learning-content-notification.js';
+import {
+  notifyReleaseCreationFailure,
+  notifyReleaseCreationSuccess,
+} from '../../../../lib/domain/services/learning-content-notification.js';
 
-describe('Unit | Domain | Services | learning-content-notification', function() {
-
+describe('Unit | Domain | Services | learning-content-notification', function () {
   describe('#notifyReleaseCreationSuccess', () => {
-
-    it('should send a success message with given Slack notifier', async function() {
+    it('should send a success message with given Slack notifier', async function () {
       const slackNotifier = {
         send: vi.fn().mockResolvedValue(),
       };
@@ -19,16 +20,15 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
             color: '#5bc0de',
             title: 'Information',
             text: 'Une nouvelle version du référentiel vient d’être créée.',
-          }
-        ]
+          },
+        ],
       };
       expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
 
   describe('#notifyReleaseCreationFailure', () => {
-
-    it('should send a failure message with given Slack notifier', async function() {
+    it('should send a failure message with given Slack notifier', async function () {
       // given
       const slackNotifier = {
         send: vi.fn().mockResolvedValue(),
@@ -50,14 +50,13 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
               {
                 title: 'Error',
                 value: errorMessage,
-                short: false
+                short: false,
               },
             ],
-          }
-        ]
+          },
+        ],
       };
       expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
-
 });

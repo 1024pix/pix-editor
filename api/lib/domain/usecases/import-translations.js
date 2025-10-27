@@ -22,7 +22,8 @@ export function importTranslations(csvStream, dependencies = { translationReposi
       },
       objectMode: true,
       strictColumnHandling: true,
-    }).validate((data) => data.key && data.value)
+    })
+      .validate((data) => data.key && data.value)
       .on('error', reject)
       .on('data-invalid', (invalidData) => {
         reject(new InvalidFileError(`Invalid data: ${JSON.stringify(invalidData)}`));
@@ -32,9 +33,14 @@ export function importTranslations(csvStream, dependencies = { translationReposi
       })
       .on('end', async () => {
         const challengesLocales = extractChallengesLocales(translations);
-        await dependencies.localizedChallengeRepository.create({ localizedChallenges:challengesLocales });
+        await dependencies.localizedChallengeRepository.create({
+          localizedChallenges: challengesLocales,
+        });
 
-        await dependencies.translationRepository.save({ translations, shouldDuplicateToAirtable: false });
+        await dependencies.translationRepository.save({
+          translations,
+          shouldDuplicateToAirtable: false,
+        });
 
         resolve();
       });

@@ -6,7 +6,7 @@ describe('Unit | Domain | ChallengeForRelease', () => {
   describe('#canExportForTranslation', () => {
     it('should return true when all conditions are reunited', () => {
       // given
-      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['fr', 'en'],
       });
@@ -19,10 +19,13 @@ describe('Unit | Domain | ChallengeForRelease', () => {
       expect(result).to.be.true;
     });
 
-    it.each(Object.keys(ChallengeForRelease.STATUSES).filter((status) => ChallengeForRelease.STATUSES[status] !== ChallengeForRelease.STATUSES.VALIDE)
+    it.each(
+      Object.keys(ChallengeForRelease.STATUSES).filter(
+        (status) => ChallengeForRelease.STATUSES[status] !== ChallengeForRelease.STATUSES.VALIDE,
+      ),
     )('should return false when status key is %s', (status) => {
       // given
-      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({
         status,
         locales: ['fr', 'en'],
       });
@@ -37,7 +40,7 @@ describe('Unit | Domain | ChallengeForRelease', () => {
 
     it('should return false when locale is not included in challenge', () => {
       // given
-      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['fr', 'en'],
       });
@@ -54,10 +57,12 @@ describe('Unit | Domain | ChallengeForRelease', () => {
   describe('#get isOperative', () => {
     it.each(Object.values(ChallengeForRelease.STATUSES))('is "%s" is operative ?', (currentStatus) => {
       // given
-      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({
         status: currentStatus,
       });
-      const expectedIsOperative = [ChallengeForRelease.STATUSES.ARCHIVE, ChallengeForRelease.STATUSES.VALIDE].includes(currentStatus);
+      const expectedIsOperative = [ChallengeForRelease.STATUSES.ARCHIVE, ChallengeForRelease.STATUSES.VALIDE].includes(
+        currentStatus,
+      );
 
       // when
       const actual = challengeForRelease.isOperative;
@@ -80,7 +85,7 @@ describe('Unit | Domain | ChallengeForRelease', () => {
 
       // then
       expect(challengeForRelease).to.have.property('accessibility1', 'KO');
-      expect(challengeForRelease).to.have.property('accessibility2','OK');
+      expect(challengeForRelease).to.have.property('accessibility2', 'OK');
     });
   });
 });

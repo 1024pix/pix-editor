@@ -1,6 +1,4 @@
-import {
-  staticCourseTagRepository
-} from '../../infrastructure/repositories/index.js';
+import { staticCourseTagRepository } from '../../infrastructure/repositories/index.js';
 import { staticCourseTagSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 export async function list(request, h) {

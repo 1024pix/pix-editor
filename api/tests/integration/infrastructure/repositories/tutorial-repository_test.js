@@ -51,9 +51,14 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       tutorials.forEach(databaseBuilder.factory.buildTutorial);
       await databaseBuilder.commit();
 
-      const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
-        tutorials.map((tutorial) => new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, airtableBuilder.factory.buildTutorial(tutorial))),
-      );
+      const findRecords = vi
+        .spyOn(airtable, 'findRecords')
+        .mockResolvedValueOnce(
+          tutorials.map(
+            (tutorial) =>
+              new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, airtableBuilder.factory.buildTutorial(tutorial)),
+          ),
+        );
 
       // when
       const actualTutorials = await tutorialRepository.getMany(['tuto1', 'tuto2']);
@@ -145,9 +150,12 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       await databaseBuilder.commit();
 
       const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
-        tutorials.map((tutorial) => new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, {
-          fields: { 'id persistant': tutorial.id, 'Record ID': tutorial.airtableId },
-        })),
+        tutorials.map(
+          (tutorial) =>
+            new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, {
+              fields: { 'id persistant': tutorial.id, 'Record ID': tutorial.airtableId },
+            }),
+        ),
       );
 
       const deleteRecords = vi.spyOn(airtable, 'deleteRecords').mockResolvedValueOnce();
@@ -170,10 +178,12 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
           license: null,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
-        }
+        },
       ]);
 
-      await expect(knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
+      ).resolves.toStrictEqual([
         { tutorialId: 'tuto3', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
         { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
       ]);
