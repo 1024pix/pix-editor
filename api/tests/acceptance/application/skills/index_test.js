@@ -932,35 +932,58 @@ describe('Application | Route | Skills', () => {
     let airtableSkillScope;
 
     beforeEach(async () => {
-      const airtableSkill = airtableBuilder.factory.buildSkill(
-        domainBuilder.buildSkillDatasourceObject({
-          id: 'skill1',
-          airtableId: 'recSkill1',
-          createdAt: '2025-01-06T13:50:47.437Z',
-          description: 'premier acquis',
-          descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
-          hintStatus: Skill.HINT_STATUSES.VALIDE,
-          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
-          level: 4,
-          name: '@skill4',
-          pixValue: 1.5,
-          status: Skill.STATUSES.ACTIF,
-          version: 1,
-          tubeId: 'tube1',
-          tubeAirtableId: 'recTube1',
-          tutorialIds: ['tuto1'],
-          tutorialAirtableIds: ['recTuto1'],
-          learningMoreTutorialIds: ['tuto2', 'tuto3'],
-          learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
-          challengeIds: ['challenge1', 'challenge2'],
-        }),
-      );
+      const skill = domainBuilder.buildSkillDatasourceObject({
+        id: 'skill1',
+        airtableId: 'recSkill1',
+        createdAt: '2025-01-06T13:50:47.437Z',
+        description: 'premier acquis',
+        descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        level: 4,
+        name: '@skill4',
+        pixValue: 1.5,
+        status: Skill.STATUSES.ACTIF,
+        version: 1,
+        tubeId: 'tube1',
+        tubeAirtableId: 'recTube1',
+        tutorialIds: ['tuto1'],
+        tutorialAirtableIds: ['recTuto1'],
+        learningMoreTutorialIds: ['tuto2', 'tuto3'],
+        learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
+        challengeIds: ['challenge1', 'challenge2'],
+        competenceId: 'competence1',
+      });
+      const airtableSkill = airtableBuilder.factory.buildSkill(skill);
 
       airtableSkillScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis/recSkill1')
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, airtableSkill);
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+      [...skill.tutorialIds, ...skill.learningMoreTutorialIds].forEach((tutorialId) => {
+        databaseBuilder.factory.buildTutorial(
+          domainBuilder.buildTutorialDatasourceObject({
+            id: tutorialId,
+            tagIds: [],
+          }),
+        );
+      });
+      databaseBuilder.factory.buildSkill(skill);
+      skill.challengeIds.forEach((challengeId) => {
+        databaseBuilder.factory.buildChallenge(
+          domainBuilder.buildChallengeDatasourceObject({
+            id: challengeId,
+            skillId: skill.id,
+          }),
+        );
+      });
 
       databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
       databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'en', value: 'A clue' });
@@ -1420,13 +1443,13 @@ describe('Application | Route | Skills', () => {
       skillDataObject = domainBuilder.buildSkillDatasourceObject({
         airtableId: 'skillAirtableId',
         id: 'skillIdPersistant',
-        name: 'Un nom généré par Airtable',
+        name: '@foo7',
         hintStatus: skillAttributes['clue-status'],
         tutorialIds: ['tutorialIdPersistant'],
         tutorialAirtableIds: ['tutorialAirtableId'],
         learningMoreTutorialIds: ['tutorialLMIdPersistant'],
         learningMoreTutorialAirtableIds: ['tutorialLMAirtableId'],
-        competenceId: 'UneCompetenceId',
+        competenceId: 'competence1',
         pixValue: 789,
         status: skillAttributes['status'],
         tubeId: 'tubeIdPersistant',
@@ -1500,6 +1523,14 @@ describe('Application | Route | Skills', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildSkill(skillDataObject);
+      skillDataObject.challengeIds.forEach((challengeId) => {
+        databaseBuilder.factory.buildChallenge(
+          domainBuilder.buildChallengeDatasourceObject({
+            id: challengeId,
+            skillId: skillDataObject.id,
+          }),
+        );
+      });
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',

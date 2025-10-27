@@ -41,11 +41,14 @@ export async function get(id) {
 }
 
 export async function getByAirtableId(id) {
-  const datasourceSkill = await skillDatasource.find(id);
-  if (!datasourceSkill) return null;
-  const translations = await translationRepository.listByEntity(model, datasourceSkill.id);
-  const skillDataFromPG = await knex(TABLE_NAME).select('*').where({ id: datasourceSkill.id }).first();
-  return toDomain(datasourceSkill, translations, skillDataFromPG);
+  const airtableDto = await skillDatasource.find(id);
+  if (!airtableDto) return null;
+  const translations = await translationRepository.listByEntity(model, airtableDto.id);
+  const pgDto = await selectSkills().where('skills.id', airtableDto.id).first();
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  return toDomain(airtableDto, translations, pgDto);
 }
 
 export async function getManyByAirtableIds(ids) {

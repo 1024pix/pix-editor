@@ -715,6 +715,7 @@ describe('Integration | Repository | skill-repository', () => {
           learningMoreTutorialIds: ['tuto2', 'tuto3'],
           learningMoreTutorialAirtableIds: ['recTuto2', 'recTuto3'],
           challengeIds: ['challenge1', 'challenge2'],
+          competenceId: 'competence1',
         };
         const airtableSkill = airtableBuilder.factory.buildSkill(domainBuilder.buildSkillDatasourceObject(skill));
         const findRecordSpy = vi
@@ -730,6 +731,30 @@ describe('Integration | Repository | skill-repository', () => {
           locale: 'en',
           value: skill.hint_i18n.en,
         });
+
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+        databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+        databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
+        [...skill.tutorialIds, ...skill.learningMoreTutorialIds].forEach((tutorialId) => {
+          databaseBuilder.factory.buildTutorial(
+            domainBuilder.buildTutorialDatasourceObject({
+              id: tutorialId,
+              tagIds: [],
+            }),
+          );
+        });
+        databaseBuilder.factory.buildSkill(skill);
+        skill.challengeIds.forEach((challengeId) => {
+          databaseBuilder.factory.buildChallenge(
+            domainBuilder.buildChallengeDatasourceObject({
+              id: challengeId,
+              skillId: skill.id,
+            }),
+          );
+        });
+
         await databaseBuilder.commit();
         const id = skill.id;
 
