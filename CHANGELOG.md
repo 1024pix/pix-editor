@@ -1,5 +1,19 @@
 
 
+## v3.228.1 (27/10/2025)
+
+
+### :building_construction: Tech
+- [#1193](https://github.com/1024pix/pix-editor/pull/1193) [TECH] Correction script de copie des épreuves (PIX-20143).
+
+### :arrow_up: Montée de version
+- [#1192](https://github.com/1024pix/pix-editor/pull/1192) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.13 (pix-editor).
+- [#1191](https://github.com/1024pix/pix-editor/pull/1191) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.24 (pix-editor).
+- [#1190](https://github.com/1024pix/pix-editor/pull/1190) [BUMP] Update dependency jspdf-autotable to v5 (pix-editor).
+- [#1189](https://github.com/1024pix/pix-editor/pull/1189) [BUMP] Update dependency @1024pix/pix-ui to ^55.30.0 (pix-editor).
+- [#1188](https://github.com/1024pix/pix-editor/pull/1188) [BUMP] Update dependency @playwright/test to v1.56.1.
+- [#1186](https://github.com/1024pix/pix-editor/pull/1186) [BUMP] Update dependency hasha to v7 (scripts).
+
 ## v3.228.0 (24/10/2025)
 
 
