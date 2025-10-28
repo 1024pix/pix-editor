@@ -129,8 +129,11 @@ export async function update(attachment) {
 }
 
 export async function remove(attachmentId) {
-  await attachmentDatasource.delete([attachmentId]);
-  await knex.delete().from('localized_challenges-attachments').where('attachmentId', attachmentId);
+  return knex.transaction(async (transaction) => {
+    await attachmentDatasource.delete([attachmentId]);
+    await transaction.delete().from('localized_challenges-attachments').where('attachmentId', attachmentId);
+    await transaction.delete().from('attachments').where('id', attachmentId);
+  });
 }
 
 function toDomainList(datasourceAttachments) {

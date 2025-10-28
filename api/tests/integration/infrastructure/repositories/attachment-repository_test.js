@@ -833,6 +833,28 @@ describe('Integration | Repository | attachment-repository', () => {
       const attachmentId = 'attachmentId';
       const loc1Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc1', challengeId: challengeId1 }).id;
       const loc2Id = databaseBuilder.factory.buildLocalizedChallenge({ id: 'loc2', challengeId: challengeId2 }).id;
+
+      databaseBuilder.factory.buildAttachment({
+        id: attachmentId,
+        url: 'url',
+        size: 123,
+        type: 'type',
+        mimeType: 'mimeType',
+        filename: 'filename',
+        challengeId: challengeId1,
+        localizedChallengeId: loc1Id,
+      });
+      databaseBuilder.factory.buildAttachment({
+        id: 'someOtherAttachmentId',
+        url: 'url',
+        size: 123,
+        type: 'type',
+        mimeType: 'mimeType',
+        filename: 'filename',
+        challengeId: challengeId2,
+        localizedChallengeId: loc2Id,
+      });
+
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId,
         localizedChallengeId: loc1Id,
@@ -842,6 +864,7 @@ describe('Integration | Repository | attachment-repository', () => {
         localizedChallengeId: loc2Id,
       });
       await databaseBuilder.commit();
+
       vi.spyOn(airtableClient, 'deleteRecords').mockImplementation((tableName, recordIds) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
         if (!_.isEqual(recordIds, ['attachmentId']))
@@ -852,8 +875,10 @@ describe('Integration | Repository | attachment-repository', () => {
       await attachmentRepository.remove(attachmentId);
 
       // then
-      const localizedChallengeAttachmentsLeft = await knex('localized_challenges-attachments').pluck('attachmentId');
-      expect(localizedChallengeAttachmentsLeft).toStrictEqual(['someOtherAttachmentId']);
+      await expect(knex('attachments').pluck('id')).resolves.toStrictEqual(['someOtherAttachmentId']);
+      await expect(knex('localized_challenges-attachments').pluck('attachmentId')).resolves.toStrictEqual([
+        'someOtherAttachmentId',
+      ]);
     });
   });
 });

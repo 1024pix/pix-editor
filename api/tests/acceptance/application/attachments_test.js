@@ -557,6 +557,18 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 204', async () => {
       // given
+      const attachment = {
+        id: 'recAttachmentId',
+        type: 'some type',
+        url: 'some url',
+        size: 4321,
+        mimeType: 'some mimeType',
+        filename: 'some filename',
+        challengeId: 'challengeId',
+        airtableChallengeId: 'challengeAirtableId',
+        localizedChallengeId: 'challengeId',
+      };
+
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({
         id: 'area1',
@@ -590,22 +602,16 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challengeId',
         locale: 'fr',
       });
+
+      databaseBuilder.factory.buildAttachment(attachment);
+
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         localizedChallengeId: 'challengeId',
         attachmentId: 'recAttachmentId',
       });
       await databaseBuilder.commit();
-      const airtableAttachment = airtableBuilder.factory.buildAttachment({
-        id: 'recAttachmentId',
-        type: 'some type',
-        url: 'some url',
-        size: 'some size',
-        mimeType: 'some mimeType',
-        filename: 'some filename',
-        challengeId: 'challengeId',
-        airtableChallengeId: 'challengeAirtableId',
-        localizedChallengeId: 'challengeId',
-      });
+
+      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
         .query({})
@@ -635,6 +641,9 @@ describe('Acceptance | Route | attachments', () => {
       });
 
       // then
+      await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([]);
+      await expect(knex.select('*').from('localized_challenges-attachments')).resolves.toStrictEqual([]);
+
       expect(response.statusCode).toBe(204);
       expect(airtableGetAttachmentScope.isDone()).toBe(true);
       expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
