@@ -117,6 +117,14 @@ export async function update(attachment) {
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
+
+  await knex('attachments')
+    .update({
+      filename: attachment.filename,
+      updatedAt: knex.fn.now(),
+    })
+    .where('id', attachment.id);
+
   return toDomain(updatedAttachmentDTO);
 }
 

@@ -636,7 +636,7 @@ describe('Integration | Repository | attachment-repository', () => {
   describe('#update', () => {
     it('should update an attachment in airtable', async () => {
       // given
-      const attachment = domainBuilder.buildAttachment({
+      const attachmentDto = {
         id: 'recABC123',
         url: 'url/to/attachment',
         type: 'some other type',
@@ -646,7 +646,9 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: challengeId1,
         airtableChallengeId: 'challengeAirtableId',
         localizedChallengeId: 'localizedChallengeId',
-      });
+      };
+      const attachment = domainBuilder.buildAttachment(attachmentDto);
+
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId1,
         challengeId: challengeId1,
@@ -656,6 +658,10 @@ describe('Integration | Repository | attachment-repository', () => {
         id: 'localizedChallengeId',
         challengeId: challengeId1,
         locale: 'nl',
+      });
+      databaseBuilder.factory.buildAttachment({
+        ...attachmentDto,
+        filename: 'old attachment_filename',
       });
       databaseBuilder.factory.buildLocalizedChallengeAttachment({
         attachmentId: 'recABC123',
@@ -714,14 +720,32 @@ describe('Integration | Repository | attachment-repository', () => {
         airtableChallengeId: 'airtableChallengeId',
       });
       expect(updatedAttachment).toStrictEqual(expectedAttachment);
-      const localizedChallengeAttachment = await knex('localized_challenges-attachments')
-        .select(['attachmentId', 'localizedChallengeId'])
-        .where({ localizedChallengeId: attachment.localizedChallengeId })
-        .first();
-      expect(localizedChallengeAttachment).toStrictEqual({
-        attachmentId: attachment.id,
-        localizedChallengeId: attachment.localizedChallengeId,
-      });
+
+      await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([
+        {
+          id: 'recABC123',
+          url: 'url/to/attachment',
+          type: 'some other type',
+          size: 123,
+          mimeType: 'image/jpeg',
+          filename: 'attachment_filename',
+          challengeId: challengeId1,
+          localizedChallengeId: 'localizedChallengeId',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
+      await expect(
+        knex('localized_challenges-attachments')
+          .select(['attachmentId', 'localizedChallengeId'])
+          .where({ localizedChallengeId: attachment.localizedChallengeId }),
+      ).resolves.toStrictEqual([
+        {
+          attachmentId: attachment.id,
+          localizedChallengeId: attachment.localizedChallengeId,
+        },
+      ]);
     });
   });
 

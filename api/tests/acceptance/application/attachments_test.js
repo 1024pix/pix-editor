@@ -352,6 +352,22 @@ describe('Acceptance | Route | attachments', () => {
 
     it('should respond with status 200 and updated attachment', async () => {
       // given
+      const attachmentBefore = {
+        id: 'recABC123',
+        type: 'type avant',
+        url: 'url avant',
+        size: 1024,
+        mimeType: 'mimeType avant',
+        filename: 'filename avant',
+        challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
+        localizedChallengeId: 'challenge123ES',
+      };
+      const attachmentAfter = {
+        ...attachmentBefore,
+        filename: validPayload.data.attributes.filename,
+      };
+
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({
         id: 'area1',
@@ -390,29 +406,13 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challenge123',
         locale: 'es',
       });
+
+      databaseBuilder.factory.buildAttachment(attachmentBefore);
+
       await databaseBuilder.commit();
-      const airtableAttachmentBefore = airtableBuilder.factory.buildAttachment({
-        id: 'recABC123',
-        type: 'type avant',
-        url: 'url avant',
-        size: 'size avant',
-        mimeType: 'mimeType avant',
-        filename: 'filename avant',
-        challengeId: 'challenge123',
-        airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: 'challenge123ES',
-      });
-      const airtableAttachmentAfter = airtableBuilder.factory.buildAttachment({
-        id: 'recABC123',
-        type: 'type avant',
-        url: 'url avant',
-        size: 'size avant',
-        mimeType: 'mimeType avant',
-        filename: validPayload.data.attributes.filename,
-        challengeId: 'challenge123',
-        airtableChallengeId: 'challengeAirtable123',
-        localizedChallengeId: 'challenge123ES',
-      });
+
+      const airtableAttachmentBefore = airtableBuilder.factory.buildAttachment(attachmentBefore);
+      const airtableAttachmentAfter = airtableBuilder.factory.buildAttachment(attachmentAfter);
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments/recABC123')
         .query({})
@@ -426,7 +426,7 @@ describe('Acceptance | Route | attachments', () => {
               id: 'recABC123',
               fields: {
                 url: 'url avant',
-                size: 'size avant',
+                size: 1024,
                 type: 'type avant',
                 mimeType: 'mimeType avant',
                 filename: 'filename APRES',
@@ -457,7 +457,7 @@ describe('Acceptance | Route | attachments', () => {
           id: 'recABC123',
           attributes: {
             url: 'url avant',
-            size: 'size avant',
+            size: 1024,
             type: 'type avant',
             'mime-type': 'mimeType avant',
             filename: 'filename APRES',
@@ -478,6 +478,22 @@ describe('Acceptance | Route | attachments', () => {
           },
         },
       });
+
+      await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([
+        {
+          id: 'recABC123',
+          type: 'type avant',
+          url: 'url avant',
+          size: 1024,
+          mimeType: 'mimeType avant',
+          filename: validPayload.data.attributes.filename,
+          challengeId: 'challenge123',
+          localizedChallengeId: 'challenge123ES',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
       expect(airtableGetAttachmentScope.isDone()).toBe(true);
       expect(airtablePatchAttachmentScope.isDone()).toBe(true);
     });
