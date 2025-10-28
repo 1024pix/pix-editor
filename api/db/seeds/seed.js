@@ -20,6 +20,7 @@ import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
 import { buildTags, copyTutorialTagsFromAirtable } from './data/tags.js';
 import { buildTutorials, copyTutorialsFromAirtable } from './data/tutorials.js';
+import { copyAttachmentsFromAirtable } from './data/attachments.js';
 
 export async function seed(knex) {
   const airtableClient = new Airtable({ apiKey: airtable.apiKey }).base(airtable.base);
@@ -160,6 +161,8 @@ export async function seed(knex) {
     await localizedChallengesBuilder(databaseBuilder, translations);
     await localizedChallengesAttachmentsBuilder(databaseBuilder);
     buildMissions(databaseBuilder);
+
+    await copyAttachmentsFromAirtable({ airtableClient, databaseBuilder, logger });
   }
 
   staticCoursesBuilder(databaseBuilder);
