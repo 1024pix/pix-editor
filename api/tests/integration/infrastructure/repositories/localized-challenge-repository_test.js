@@ -127,6 +127,13 @@ describe('Integration | Repository | localized-challenge-repository', function (
           localizedChallengeId: localizedChallengeBz.id,
           attachmentId: 'attachment-id-0',
         });
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachment-id-0',
+            challengeId,
+            localizedChallengeId: localizedChallengeBz.id,
+          }),
+        );
         await databaseBuilder.commit();
 
         const expectedFrenchChallenge = domainBuilder.buildLocalizedChallenge({
@@ -495,6 +502,20 @@ describe('Integration | Repository | localized-challenge-repository', function (
           localizedChallengeId: localizedChallengeNl.id,
           attachmentId: 'attachment-id-2',
         });
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachment-id-1',
+            challengeId,
+            localizedChallengeId: localizedChallengeNl.id,
+          }),
+        );
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachment-id-2',
+            challengeId,
+            localizedChallengeId: localizedChallengeNl.id,
+          }),
+        );
 
         await databaseBuilder.commit();
 
@@ -662,6 +683,14 @@ describe('Integration | Repository | localized-challenge-repository', function (
           attachmentId: 'attachment-nl',
         });
 
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            challengeId: otherChallengeId,
+            localizedChallengeId: `${otherChallengeId}Nl`,
+            id: 'attachment-nl',
+          }),
+        );
+
         await databaseBuilder.commit();
 
         // when
@@ -824,6 +853,13 @@ describe('Integration | Repository | localized-challenge-repository', function (
           attachmentId: 'attachment-en',
         });
 
+        const attachment = domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachment-en',
+          challengeId,
+          localizedChallengeId: id2,
+        });
+        databaseBuilder.factory.buildAttachment(attachment);
+
         await databaseBuilder.commit();
 
         // when
@@ -934,6 +970,13 @@ describe('Integration | Repository | localized-challenge-repository', function (
           localizedChallengeId: localizedChallengeBz.id,
           attachmentId: 'attachment-id-0',
         });
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachment-id-0',
+            localizedChallengeId: localizedChallengeBz.id,
+            challengeId,
+          }),
+        );
         await databaseBuilder.commit();
 
         // when

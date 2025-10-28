@@ -113,16 +113,22 @@ function adaptModelForDB(localizedChallenge, generateId) {
 }
 
 function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
-  return knexConnection('localized_challenges')
-    .select('localized_challenges.*', 'plc.embedUrl as primaryEmbedUrl', 'fileIds')
-    .join({ plc: 'localized_challenges' }, 'plc.id', 'localized_challenges.challengeId')
-    .leftJoin(
-      knex('localized_challenges-attachments')
-        .as('localized_challenges-attachments')
-        .groupBy('localizedChallengeId')
-        .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
-      {
-        'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id',
-      },
+  return knexConnection
+    .select(
+      'localized_challenges.*',
+      'primaryLocalizedChallenge.embedUrl as primaryEmbedUrl',
+      knex.raw(
+        'coalesce((??), \'[]\') as "fileIds"',
+        knex
+          .select(knex.raw('json_agg(??)', 'attachments.id'))
+          .from('attachments')
+          .where('attachments.localizedChallengeId', knex.ref('localized_challenges.id')),
+      ),
+    )
+    .from('localized_challenges')
+    .join(
+      { primaryLocalizedChallenge: 'localized_challenges' },
+      'primaryLocalizedChallenge.id',
+      'localized_challenges.challengeId',
     );
 }

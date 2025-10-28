@@ -1909,11 +1909,16 @@ describe('Application | Route | Skills', () => {
         localizedChallengeId: protoId,
         attachmentId: 'attid1',
       });
-      const attachment = airtableBuilder.factory.buildAttachment({
+      const attachmentData = domainBuilder.buildAttachmentDatasourceObject({
         challengeId: protoId,
         localizedChallengeId: protoId,
         type: 'illustration',
+        url: 'url/to/attachment',
+        mimeType: 'image/jpeg',
+        filename: 'nom_fichier',
       });
+      databaseBuilder.factory.buildAttachment(attachmentData);
+      const attachment = airtableBuilder.factory.buildAttachment(attachmentData);
 
       const createdAirtableSkill = structuredClone(airtableSkillToClone);
       createdAirtableSkill.id = null;
