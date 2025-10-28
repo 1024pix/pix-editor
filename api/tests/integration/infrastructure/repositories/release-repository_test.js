@@ -530,7 +530,7 @@ function _mockRichAirtableContent() {
   const airtableThematic211 = airtableBuilder.factory.buildThematic(thematic211);
   const tube1111 = {
     id: 'tube1111',
-    name: 'tube1111 name',
+    name: '@tube1111',
     title: 'tube1111 title',
     description: 'tube1111 description',
     practicalTitle_i18n: {
@@ -550,7 +550,7 @@ function _mockRichAirtableContent() {
   const airtableTube1111 = airtableBuilder.factory.buildTube(tube1111);
   const tube1121 = {
     id: 'tube1121',
-    name: 'tube1121 name',
+    name: '@tube1121',
     title: 'tube1121 title',
     description: 'tube1121 description',
     practicalTitle_i18n: {
@@ -570,7 +570,7 @@ function _mockRichAirtableContent() {
   const airtableTube1121 = airtableBuilder.factory.buildTube(tube1121);
   const tube1211 = {
     id: 'tube1211',
-    name: 'tube1211 name',
+    name: '@tube1211',
     title: 'tube1211 title',
     description: 'tube1211 description',
     practicalTitle_i18n: {
@@ -590,7 +590,7 @@ function _mockRichAirtableContent() {
   const airtableTube1211 = airtableBuilder.factory.buildTube(tube1211);
   const tube1212 = {
     id: 'tube1212',
-    name: 'tube1212 name',
+    name: '@tube1212',
     title: 'tube1212 title',
     description: 'tube1212 description',
     practicalTitle_i18n: {
@@ -610,7 +610,7 @@ function _mockRichAirtableContent() {
   const airtableTube1212 = airtableBuilder.factory.buildTube(tube1212);
   const tube2111 = {
     id: 'tube2111',
-    name: 'tube2111 name',
+    name: '@tube2111',
     title: 'tube2111 title',
     description: 'tube2111 description',
     practicalTitle_i18n: {
@@ -651,7 +651,7 @@ function _mockRichAirtableContent() {
   const airtableTutorial2 = airtableBuilder.factory.buildTutorial(tutorial2);
   const skill11111 = {
     id: 'skill11111',
-    name: 'skill11111 name',
+    name: '@tube11114',
     hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
     tutorialIds: ['tutorial2'],
     learningMoreTutorialIds: ['tutorial1'],
@@ -668,7 +668,7 @@ function _mockRichAirtableContent() {
   const airtableSkill11111 = airtableBuilder.factory.buildSkill(skill11111);
   const skill11112 = {
     id: 'skill11112',
-    name: 'skill11112 name',
+    name: '@tube11113',
     hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -685,7 +685,7 @@ function _mockRichAirtableContent() {
   const airtableSkill11112 = airtableBuilder.factory.buildSkill(skill11112);
   const skill12121 = {
     id: 'skill12121',
-    name: 'skill12121 name',
+    name: '@tube12122',
     hintStatus: SkillForRelease.HINT_STATUSES.PRE_VALIDE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -697,12 +697,13 @@ function _mockRichAirtableContent() {
     level: 2,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.UNION_EUROPEENNE,
     version: 12121,
+    challengeIds: ['challenge121211', 'challenge121212'],
   };
   databaseBuilder.factory.buildSkill(skill12121);
   const airtableSkill12121 = airtableBuilder.factory.buildSkill(skill12121);
   const skill21111 = {
     id: 'skill21111',
-    name: 'skill21111 name',
+    name: '@tube21111',
     hintStatus: SkillForRelease.HINT_STATUSES.A_SOUMETTRE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -714,6 +715,7 @@ function _mockRichAirtableContent() {
     level: 1,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
     version: 21111,
+    challengeIds: ['challenge211111', 'challenge211112', 'challenge211113'],
   };
   databaseBuilder.factory.buildSkill(skill21111);
   const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
@@ -1094,7 +1096,7 @@ function _getRichCurrentContentDTO() {
   const expectedTubeDTOs = [
     {
       id: 'tube1111',
-      name: 'tube1111 name',
+      name: '@tube1111',
       practicalTitle_i18n: {
         fr: 'tube1111 practicalTitleFrFr from PG',
         en: 'tube1111 practicalTitleEnUs from PG',
@@ -1111,7 +1113,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'tube1121',
-      name: 'tube1121 name',
+      name: '@tube1121',
       practicalTitle_i18n: {
         fr: 'tube1121 practicalTitleFrFr from PG',
         en: 'tube1121 practicalTitleEnUs from PG',
@@ -1128,7 +1130,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'tube1211',
-      name: 'tube1211 name',
+      name: '@tube1211',
       practicalTitle_i18n: {
         fr: 'tube1211 practicalTitleFrFr from PG',
         en: 'tube1211 practicalTitleEnUs from PG',
@@ -1145,7 +1147,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'tube1212',
-      name: 'tube1212 name',
+      name: '@tube1212',
       practicalTitle_i18n: {
         fr: 'tube1212 practicalTitleFrFr from PG',
         en: 'tube1212 practicalTitleEnUs from PG',
@@ -1162,7 +1164,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'tube2111',
-      name: 'tube2111 name',
+      name: '@tube2111',
       practicalTitle_i18n: {
         fr: 'tube2111 practicalTitleFrFr from PG',
         en: 'tube2111 practicalTitleEnUs from PG',
@@ -1181,7 +1183,7 @@ function _getRichCurrentContentDTO() {
   const expectedSkillDTOs = [
     {
       id: 'skill11111',
-      name: 'skill11111 name',
+      name: '@tube11114',
       hint_i18n: {
         fr: 'skill11111 hintFrFr',
         en: 'skill11111 hintEnUs',
@@ -1198,7 +1200,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'skill11112',
-      name: 'skill11112 name',
+      name: '@tube11113',
       hint_i18n: {
         fr: 'skill11112 hintFrFr',
         en: 'skill11112 hintEnUs',
@@ -1215,7 +1217,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'skill12121',
-      name: 'skill12121 name',
+      name: '@tube12122',
       hint_i18n: {
         fr: 'skill12121 hintFrFr',
         en: 'skill12121 hintEnUs',
@@ -1232,7 +1234,7 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'skill21111',
-      name: 'skill21111 name',
+      name: '@tube21111',
       hint_i18n: {
         fr: 'skill21111 hintFrFr',
         en: 'skill21111 hintEnUs',

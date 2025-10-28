@@ -214,6 +214,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube1',
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          challengeIds: ['recChallenge1', 'recChallenge11', 'recChallenge12'],
         },
         {
           id: 'recSkill2',
@@ -223,6 +226,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube1',
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          challengeIds: ['recChallenge2', 'recChallenge21'],
         },
         {
           id: 'recSkill3',
@@ -232,6 +238,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube2',
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          challengeIds: ['recChallenge3', 'recChallenge31'],
         },
         {
           id: 'recSkill4',
@@ -241,6 +250,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube4',
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          challengeIds: ['recChallenge4'],
         },
         {
           id: 'recSkill5',
@@ -250,8 +262,11 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube5',
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          challengeIds: ['recChallenge5'],
         },
-      ];
+      ].map(domainBuilder.buildSkillDatasourceObject);
 
       skills.forEach(databaseBuilder.factory.buildSkill);
 
@@ -271,7 +286,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         .reply(200, { records: airtableSkills });
 
       const challenges = [
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge1',
           airtableId: 'recAirtableChallenge1',
           skillId: 'recSkill1',
@@ -280,8 +295,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge11',
           airtableId: 'recAirtableChallenge11',
           skillId: 'recSkill1',
@@ -290,8 +305,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: [LOCALE.FRENCH_FRANCE],
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge2',
           airtableId: 'recAirtableChallenge2',
           skillId: 'recSkill2',
@@ -300,9 +315,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge3',
           airtableId: 'recAirtableChallenge3',
           skillId: 'recSkill3',
@@ -311,8 +326,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge31',
           airtableId: 'recAirtableChallenge31',
           skillId: 'recSkill3',
@@ -320,8 +335,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge4',
           airtableId: 'recAirtableChallenge4',
           skillId: 'recSkill4',
@@ -330,9 +345,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge5',
           airtableId: 'recAirtableChallenge5',
           skillId: 'recSkill5',
@@ -341,15 +356,15 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
-      ];
+        },
+      ].map(domainBuilder.buildChallengeDatasourceObject);
 
       challenges.forEach(databaseBuilder.factory.buildChallenge);
 
       const airtableChallenges = challenges.map(airtableBuilder.factory.buildChallenge);
 
       const englishChallenges = [
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge12',
           airtableId: 'recAirtableChallenge12',
           skillId: 'recSkill1',
@@ -358,15 +373,15 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: [LOCALE.ENGLISH_SPOKEN],
           competenceId,
-        }),
-      ];
+        },
+      ].map(domainBuilder.buildChallengeDatasourceObject);
 
       englishChallenges.forEach(databaseBuilder.factory.buildChallenge);
 
       const airtableEnglishChallenges = englishChallenges.map(airtableBuilder.factory.buildChallenge);
 
       const noiseChallenges = [
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge21',
           airtableId: 'recAirtableChallenge21',
           skillId: 'recSkill2',
@@ -375,8 +390,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
-        }),
-      ];
+        },
+      ].map(domainBuilder.buildChallengeDatasourceObject);
 
       noiseChallenges.forEach(databaseBuilder.factory.buildChallenge);
 
@@ -929,6 +944,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube1',
+          challengeIds: ['recChallenge1'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill2',
@@ -939,6 +957,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube1',
+          challengeIds: ['recChallenge2', 'recChallenge21'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill3',
@@ -949,6 +970,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ARCHIVE,
           competenceId,
           tubeId: 'recTube2',
+          challengeIds: ['recChallenge3'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill4',
@@ -959,6 +983,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.ACTIF,
           competenceId,
           tubeId: 'recTube2',
+          challengeIds: ['recChallenge4', 'recChallenge41'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill5',
@@ -969,6 +996,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           competenceId,
           tubeId: 'recTube2',
+          challengeIds: ['recChallenge5', 'recChallenge51'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill6',
@@ -979,6 +1009,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.PERIME,
           competenceId,
           tubeId: 'recTube3',
+          challengeIds: ['recChallenge6'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkill7',
@@ -989,15 +1022,22 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           competenceId,
           tubeId: 'recTube3',
+          challengeIds: [],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
         {
           id: 'recSkillWorkbench',
           airtableId: 'recAirtableSkillWorkbench',
           name: '@workbench',
+          level: null,
           competenceId,
           tubeId: 'recTubeWorkbench',
+          challengeIds: [],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
         },
-      ];
+      ].map(domainBuilder.buildSkillDatasourceObject);
 
       skills.forEach(databaseBuilder.factory.buildSkill);
 
@@ -1017,7 +1057,7 @@ describe('Acceptance | Route | competence-overviews', () => {
         .reply(200, { records: airtableSkills });
 
       const challenges = [
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge1',
           airtableId: 'recAirtableChallenge1',
           skillId: 'recSkill1',
@@ -1025,9 +1065,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge2',
           airtableId: 'recAirtableChallenge2',
           skillId: 'recSkill2',
@@ -1035,8 +1075,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge21',
           airtableId: 'recAirtableChallenge21',
           skillId: 'recSkill2',
@@ -1044,9 +1084,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge3',
           airtableId: 'recAirtableChallenge3',
           skillId: 'recSkill3',
@@ -1054,9 +1094,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.ARCHIVE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge4',
           airtableId: 'recAirtableChallenge4',
           skillId: 'recSkill4',
@@ -1064,8 +1104,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge41',
           airtableId: 'recAirtableChallenge41',
           skillId: 'recSkill4',
@@ -1073,9 +1113,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge5',
           airtableId: 'recAirtableChallenge5',
           skillId: 'recSkill5',
@@ -1083,8 +1123,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
-        }),
-        domainBuilder.buildChallengeDatasourceObject({
+        },
+        {
           id: 'recChallenge51',
           airtableId: 'recAirtableChallenge51',
           skillId: 'recSkill5',
@@ -1092,9 +1132,9 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
-        }),
+        },
 
-        domainBuilder.buildChallengeDatasourceObject({
+        {
           id: 'recChallenge6',
           airtableId: 'recAirtableChallenge6',
           skillId: 'recSkill6',
@@ -1102,8 +1142,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
-        }),
-      ];
+        },
+      ].map(domainBuilder.buildChallengeDatasourceObject);
 
       challenges.forEach(databaseBuilder.factory.buildChallenge);
 

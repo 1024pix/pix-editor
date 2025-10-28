@@ -144,22 +144,21 @@ function selectTubes() {
     .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`);
 }
 
-function compareTubeDtos(airtableSkill, pgSkill) {
+function compareTubeDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableSkill.id !== pgSkill.id)
-    diff.push(`tube airtable id "${airtableSkill.id}" != postgres id "${pgSkill.id}"`);
-  if (airtableSkill.name !== pgSkill.name)
-    diff.push(`tube airtable name "${airtableSkill.name}" != postgres name "${pgSkill.name}"`);
-  if (!areNullableValuesEqual(airtableSkill.index, pgSkill.index))
-    diff.push(`tube airtable index "${airtableSkill.index}" != postgres index "${pgSkill.index}"`);
-  if (airtableSkill.thematicId !== pgSkill.thematicId)
-    diff.push(`tube airtable thematicId "${airtableSkill.thematicId}" != postgres thematicId "${pgSkill.thematicId}"`);
-  if (airtableSkill.competenceId !== pgSkill.competenceId)
+  if (airtableDto.id !== pgDto.id) diff.push(`tube airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.name !== pgDto.name)
+    diff.push(`tube airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
+  if (!areNullableValuesEqual(airtableDto.index, pgDto.index))
+    diff.push(`tube airtable index "${airtableDto.index}" != postgres index "${pgDto.index}"`);
+  if (airtableDto.thematicId !== pgDto.thematicId)
+    diff.push(`tube airtable thematicId "${airtableDto.thematicId}" != postgres thematicId "${pgDto.thematicId}"`);
+  if (airtableDto.competenceId !== pgDto.competenceId)
     diff.push(
-      `tube airtable competenceId "${airtableSkill.competenceId}" != postgres competenceId "${pgSkill.competenceId}"`,
+      `tube airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
     );
-  if (!areArrayEquals(airtableSkill.skillIds, pgSkill.skillIds))
-    diff.push(`tube airtable skillIds "${airtableSkill.skillIds}" != postgres skillIds "${pgSkill.skillIds}"`);
+  if (!areArrayEquals(airtableDto.skillIds, pgDto.skillIds))
+    diff.push(`tube airtable skillIds "${airtableDto.skillIds}" != postgres skillIds "${pgDto.skillIds}"`);
   return diff;
 }
 

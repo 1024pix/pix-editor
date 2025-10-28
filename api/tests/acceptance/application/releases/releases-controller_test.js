@@ -82,7 +82,7 @@ async function mockCurrentContent() {
     tubes: [
       {
         id: 'recTube0',
-        name: 'Nom du Tube',
+        name: '@tube',
         practicalTitle_i18n: {
           fr: 'Titre pratique du Tube - fr',
           en: 'Titre pratique du Tube - en',
@@ -103,7 +103,7 @@ async function mockCurrentContent() {
     skills: [
       {
         id: 'recSkill0',
-        name: 'Nom de l‘Acquis',
+        name: '@tube1',
         hint_i18n: {
           fr: 'Indice - fr',
           en: 'Indice - en',
@@ -291,7 +291,7 @@ async function mockCurrentContent() {
     frameworks: [
       buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
     ],
-    skills: [buildSkill(expectedCurrentContent.skills[0])],
+    skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0'] })],
     thematics: [
       buildThematic({
         ...expectedCurrentContent.thematics[0],
@@ -314,6 +314,7 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
   expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
   databaseBuilder.factory.buildSkill(expectedCurrentContent.skills[0]);
+  databaseBuilder.factory.buildChallenge(expectedCurrentContent.challenges[0]);
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -444,7 +445,6 @@ async function mockCurrentContent() {
     value: expectedCurrentContent.challenges[0].illustrationAlt,
   });
 
-  databaseBuilder.factory.buildChallenge(expectedCurrentContent.challenges[0]);
   databaseBuilder.factory.buildLocalizedChallenge({
     id: expectedCurrentContent.challenges[0].id,
     challengeId: expectedCurrentContent.challenges[0].id,
@@ -523,7 +523,7 @@ async function mockContentForRelease() {
     tubes: [
       {
         id: 'recTube0',
-        name: 'Nom du Tube',
+        name: '@zobi',
         competenceId: 'recCompetence0',
         thematicId: 'recThematic0',
         skillIds: ['recSkill0'],
@@ -544,7 +544,7 @@ async function mockContentForRelease() {
     skills: [
       {
         id: 'recSkill0',
-        name: 'Nom de l‘Acquis',
+        name: '@zobi1',
         hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['recTutorial0'],
         learningMoreTutorialIds: ['recTutorial1'],
@@ -760,7 +760,7 @@ async function mockContentForRelease() {
     frameworks: [
       buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
     ],
-    skills: [buildSkill(expectedCurrentContent.skills[0])],
+    skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0', 'recChallenge0_1'] })],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     tutorials: expectedCurrentContent.tutorials.map(buildTutorial),

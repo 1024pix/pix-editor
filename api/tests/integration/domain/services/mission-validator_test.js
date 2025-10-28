@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionValidator from '../../../../lib/domain/services/mission-validator.js';
 import { InvalidMissionContentError, MissionIntroductionMediaError } from '../../../../lib/domain/errors.js';
-import { airtableBuilder, databaseBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 
 describe('Integration | Validator | Mission', function () {
   describe('status validation', function () {
@@ -114,23 +114,34 @@ describe('Integration | Validator | Mission', function () {
             databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
             databaseBuilder.factory.buildThematic(thematic);
             databaseBuilder.factory.buildTube(tube);
+            const skill1 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto1',
+              level: 1,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.ACTIF,
+              name: '@Pix1D-recherche_di1',
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+            });
+            const skill2 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto1Bis',
+              level: 1,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.EN_CONSTRUCTION,
+              name: '@Pix1D-recherche_di1',
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+            });
+            databaseBuilder.factory.buildSkill(skill1);
+            databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
 
             airtableBuilder.mockLists({
-              skills: [
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.ACTIF,
-                }),
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1Bis',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.EN_CONSTRUCTION,
-                }),
-              ],
+              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
               tubes: [airtableBuilder.factory.buildTube(tube)],
               thematics: [airtableBuilder.factory.buildThematic(thematic)],
             });
@@ -170,6 +181,7 @@ describe('Integration | Validator | Mission', function () {
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
               competenceId: 'competence1',
+              skillIds: ['skillTuto1', 'skillTuto1Bis'],
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -177,23 +189,34 @@ describe('Integration | Validator | Mission', function () {
             databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
             databaseBuilder.factory.buildThematic(thematic);
             databaseBuilder.factory.buildTube(tube);
+            const skill1 = domainBuilder.buildSkill({
+              id: 'skillTuto1',
+              level: 1,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.ARCHIVE,
+              competenceId: 'competence1',
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              challengeIds: [],
+              name: '@Pix1D-recherche_di1',
+            });
+            const skill2 = domainBuilder.buildSkill({
+              id: 'skillTuto1Bis',
+              level: 1,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.PERIME,
+              competenceId: 'competence1',
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              challengeIds: [],
+              name: '@Pix1D-recherche_di1',
+            });
+            databaseBuilder.factory.buildSkill(skill1);
+            databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
 
             airtableBuilder.mockLists({
-              skills: [
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.ARCHIVE,
-                }),
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1Bis',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.PERIME,
-                }),
-              ],
+              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
               tubes: [airtableBuilder.factory.buildTube(tube)],
               thematics: [airtableBuilder.factory.buildThematic(thematic)],
             });
@@ -233,6 +256,7 @@ describe('Integration | Validator | Mission', function () {
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
               competenceId: 'competence1',
+              skillIds: ['skillTuto1', 'skillTuto1Bis', 'skillTuto2'],
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -240,28 +264,48 @@ describe('Integration | Validator | Mission', function () {
             databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
             databaseBuilder.factory.buildThematic(thematic);
             databaseBuilder.factory.buildTube(tube);
+            const skill1 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto1',
+              name: '@Pix1D-recherche_di1',
+              tubeId: 'tubeTuto',
+              level: 1,
+              status: Skill.STATUSES.ACTIF,
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+            });
+            const skill2 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto1Bis',
+              name: '@Pix1D-recherche_di1',
+              tubeId: 'tubeTuto',
+              level: 1,
+              status: Skill.STATUSES.EN_CONSTRUCTION,
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+            });
+            const skill3 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto2',
+              name: '@Pix1D-recherche_di2',
+              tubeId: 'tubeTuto',
+              level: 2,
+              status: Skill.STATUSES.EN_CONSTRUCTION,
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+            });
+            [skill1, skill2, skill3].forEach(databaseBuilder.factory.buildSkill);
+
             await databaseBuilder.commit();
 
             airtableBuilder.mockLists({
               skills: [
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.ACTIF,
-                }),
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1Bis',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.EN_CONSTRUCTION,
-                }),
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto2',
-                  level: 2,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.EN_CONSTRUCTION,
-                }),
+                airtableBuilder.factory.buildSkill(skill1),
+                airtableBuilder.factory.buildSkill(skill2),
+                airtableBuilder.factory.buildSkill(skill3),
               ],
               tubes: [airtableBuilder.factory.buildTube(tube)],
               thematics: [airtableBuilder.factory.buildThematic(thematic)],
@@ -304,6 +348,7 @@ describe('Integration | Validator | Mission', function () {
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
               competenceId: 'competence1',
+              skillIds: ['skillTuto1', 'skillTuto2'],
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -311,23 +356,34 @@ describe('Integration | Validator | Mission', function () {
             databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
             databaseBuilder.factory.buildThematic(thematic);
             databaseBuilder.factory.buildTube(tube);
+            const skill1 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto1',
+              level: 1,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.EN_CONSTRUCTION,
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+              name: '@Pix1D-recherche_di1',
+            });
+            const skill2 = domainBuilder.buildSkillDatasourceObject({
+              id: 'skillTuto2',
+              level: 2,
+              tubeId: 'tubeTuto',
+              status: Skill.STATUSES.EN_CONSTRUCTION,
+              tutorialIds: [],
+              learningMoreTutorialIds: [],
+              competenceId: 'competence1',
+              challengeIds: [],
+              name: '@Pix1D-recherche_di2',
+            });
+            databaseBuilder.factory.buildSkill(skill1);
+            databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
 
             airtableBuilder.mockLists({
-              skills: [
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto1',
-                  level: 1,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.EN_CONSTRUCTION,
-                }),
-                airtableBuilder.factory.buildSkill({
-                  id: 'skillTuto2',
-                  level: 2,
-                  tubeId: 'tubeTuto',
-                  status: Skill.STATUSES.EN_CONSTRUCTION,
-                }),
-              ],
+              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
               tubes: [airtableBuilder.factory.buildTube(tube)],
               thematics: [airtableBuilder.factory.buildThematic(thematic)],
             });

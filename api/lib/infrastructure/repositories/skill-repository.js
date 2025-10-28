@@ -5,6 +5,7 @@ import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { areArrayEquals, areNullableValuesEqual, compareDtosLists, compareDtos } from './migration-from-airtable.js';
 
 const TABLE_NAME = 'skills';
 const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
@@ -15,111 +16,180 @@ const TUTORIAL_RELATION_TYPES = {
 const model = 'skill';
 
 export async function list() {
-  const [datasourceSkills, translations] = await Promise.all([
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
     skillDatasource.list(),
+    selectSkills().orderBy('id'),
     translationRepository.listByModel(model),
   ]);
-  const skillsDataFromPG = await knex(TABLE_NAME).select('*');
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function get(id) {
-  const [[skillDTO], translations] = await Promise.all([
+  const [[airtableDto], pgDto, translations] = await Promise.all([
     skillDatasource.filter({ filter: { ids: [id] } }),
+    selectSkills().where('skills.id', id).first(),
     translationRepository.listByEntity(model, id),
   ]);
-  if (!skillDTO) return null;
-  const skillDataFromPG = await knex(TABLE_NAME).select('*').where({ id }).first();
-  return toDomain(skillDTO, translations, skillDataFromPG);
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  if (!airtableDto) return null;
+  return toDomain(airtableDto, translations, pgDto);
 }
 
 export async function getByAirtableId(id) {
-  const datasourceSkill = await skillDatasource.find(id);
-  if (!datasourceSkill) return null;
-  const translations = await translationRepository.listByEntity(model, datasourceSkill.id);
-  const skillDataFromPG = await knex(TABLE_NAME).select('*').where({ id: datasourceSkill.id }).first();
-  return toDomain(datasourceSkill, translations, skillDataFromPG);
+  const airtableDto = await skillDatasource.find(id);
+  if (!airtableDto) return null;
+  const translations = await translationRepository.listByEntity(model, airtableDto.id);
+  const pgDto = await selectSkills().where('skills.id', airtableDto.id).first();
+
+  compareDtos(airtableDto, pgDto, compareSkillDtos);
+
+  return toDomain(airtableDto, translations, pgDto);
 }
 
 export async function getManyByAirtableIds(ids) {
   if (!ids?.length) return [];
-  const datasourceSkills = await skillDatasource.getManyByAirtableIds(ids);
-  if (!datasourceSkills) return [];
+  const airtableDtos = await skillDatasource.getManyByAirtableIds(ids);
+  if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
+  const pgDtos = await selectSkills()
     .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+      'skills.id',
+      airtableDtos.map(({ id }) => id),
+    )
+    .orderBy('skills.id');
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listByTubeId(tubeId) {
-  const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
-  if (!datasourceSkills) return [];
+  const [airtableDtos, pgDtos] = await Promise.all([
+    skillDatasource.filterByTubeId(tubeId),
+    selectSkills().where('skills.tubeId', tubeId),
+  ]);
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listActiveByCompetenceId(competenceId) {
-  const datasourceSkills = await skillDatasource.listActiveByCompetenceId(competenceId);
-  if (!datasourceSkills) return [];
+  const [airtableDtos, pgDtos] = await Promise.all([
+    skillDatasource.listActiveByCompetenceId(competenceId),
+    selectSkills()
+      .where('thematics.competenceId', competenceId)
+      .where('skills.status', Skill.STATUSES.ACTIF)
+      .orderBy('skills.id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
+
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listByCompetenceId(competenceId) {
-  const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
-  if (!datasourceSkills) return [];
+  const [airtableDtos, pgDtos] = await Promise.all([
+    skillDatasource.listByCompetenceId(competenceId),
+    selectSkills().where('thematics.competenceId', competenceId).orderBy('skills.id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
+
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function search(params) {
-  const datasourceSkills = await skillDatasource.search(params);
-  if (!datasourceSkills) return [];
+  let query = selectSkills().whereRaw("?? || coalesce(??::varchar, '') ilike ?", [
+    'tubes.name',
+    'skills.level',
+    `${params.filter.name}%`,
+  ]);
+  if (params.sort) {
+    params.sort.forEach(([field, direction]) => {
+      query = query.orderBy(field, direction);
+    });
+  } else {
+    query = query.orderBy('skills.id');
+  }
+  if (params.page?.limit) {
+    query = query.limit(params.page?.limit);
+  }
+
+  const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.search(params), query]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+
+  if (!airtableDtos) return [];
+
   const translations = await translationRepository.listByEntities(
     model,
-    datasourceSkills.map(({ id }) => id),
+    airtableDtos.map(({ id }) => id),
   );
-  const skillsDataFromPG = await knex(TABLE_NAME)
-    .select('*')
-    .whereIn(
-      'id',
-      datasourceSkills.map(({ id }) => id),
-    );
-  return toDomainList(datasourceSkills, translations, skillsDataFromPG);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
+}
+
+export function selectSkills() {
+  return knex
+    .select(
+      'skills.*',
+      knex.raw("?? || coalesce(??::varchar, '') as ??", ['tubes.name', 'skills.level', 'name']),
+      'thematics.competenceId',
+      knex.raw(
+        'coalesce((??), \'[]\') as "tutorialIds"',
+        knex
+          .select(knex.raw('json_agg(??)', 'skills-tutorials.tutorialId'))
+          .from('skills-tutorials')
+          .where('skills-tutorials.skillId', knex.ref('skills.id'))
+          .where('skills-tutorials.type', TUTORIAL_RELATION_TYPES.UNDERSTANDING),
+      ),
+      knex.raw(
+        'coalesce((??), \'[]\') as "learningMoreTutorialIds"',
+        knex
+          .select(knex.raw('json_agg(??)', 'skills-tutorials.tutorialId'))
+          .from('skills-tutorials')
+          .where('skills-tutorials.skillId', knex.ref('skills.id'))
+          .where('skills-tutorials.type', TUTORIAL_RELATION_TYPES.LEARNING_MORE),
+      ),
+      knex.raw(
+        'coalesce((??), \'[]\') as "challengeIds"',
+        knex
+          .select(knex.raw('json_agg(??)', 'challenges.id'))
+          .from('challenges')
+          .where('challenges.skillId', knex.ref('skills.id')),
+      ),
+    )
+    .from('skills')
+    .leftOuterJoin('tubes', 'tubes.id', 'skills.tubeId')
+    .leftOuterJoin('thematics', 'thematics.id', 'tubes.thematicId');
 }
 
 export async function create(skill) {
@@ -221,6 +291,48 @@ export async function update(skill) {
 
     return toDomain(updatedSkillDto, translations, skillDataFromPG);
   });
+}
+
+function compareSkillDtos(airtableDto, pgDto) {
+  const diff = [];
+  if (airtableDto.id !== pgDto.id) diff.push(`skill airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (!areNullableValuesEqual(airtableDto.status, pgDto.status))
+    diff.push(`skill airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
+  if (!areNullableValuesEqual(airtableDto.hintStatus, pgDto.hintStatus))
+    diff.push(`skill airtable hintStatus "${airtableDto.hintStatus}" != postgres hintStatus "${pgDto.hintStatus}"`);
+  if (!areNullableValuesEqual(airtableDto.descriptionStatus, pgDto.descriptionStatus))
+    diff.push(
+      `skill airtable descriptionStatus "${airtableDto.descriptionStatus}" != postgres descriptionStatus "${pgDto.descriptionStatus}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.description, pgDto.description))
+    diff.push(`skill airtable description "${airtableDto.description}" != postgres description "${pgDto.description}"`);
+  if (!areNullableValuesEqual(airtableDto.level, pgDto.level))
+    diff.push(`skill airtable level "${airtableDto.level}" != postgres level "${pgDto.level}"`);
+  if (!areNullableValuesEqual(airtableDto.internationalisation, pgDto.internationalisation))
+    diff.push(
+      `skill airtable internationalisation "${airtableDto.internationalisation}" != postgres internationalisation "${pgDto.internationalisation}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.version, pgDto.version))
+    diff.push(`skill airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
+  if (!areNullableValuesEqual(airtableDto.tubeId, pgDto.tubeId))
+    diff.push(`skill airtable tubeId "${airtableDto.tubeId}" != postgres tubeId "${pgDto.tubeId}"`);
+  if (airtableDto.name !== pgDto.name)
+    diff.push(`skill airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
+  if (!areNullableValuesEqual(airtableDto.competenceId, pgDto.competenceId))
+    diff.push(
+      `skill airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
+    );
+  if (!areArrayEquals(airtableDto.tutorialIds, pgDto.tutorialIds))
+    diff.push(`skill airtable tutorialIds "${airtableDto.tutorialIds}" != postgres tutorialIds "${pgDto.tutorialIds}"`);
+  if (!areArrayEquals(airtableDto.learningMoreTutorialIds, pgDto.learningMoreTutorialIds))
+    diff.push(
+      `skill airtable learningMoreTutorialIds "${airtableDto.learningMoreTutorialIds}" != postgres learningMoreTutorialIds "${pgDto.learningMoreTutorialIds}"`,
+    );
+  if (!areArrayEquals(airtableDto.challengeIds, pgDto.challengeIds))
+    diff.push(
+      `skill airtable challengeIds "${airtableDto.challengeIds}" != postgres challengeIds "${pgDto.challengeIds}"`,
+    );
+  return diff;
 }
 
 function toDomainList(datasourceSkills, translations, skillsDataFromPG) {

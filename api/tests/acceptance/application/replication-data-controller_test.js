@@ -111,6 +111,7 @@ async function mockCurrentContent() {
       thematicId: expectedThematic.id,
       competenceId: expectedCompetence.id,
       skillIds: ['recSkill1'],
+      name: '@dvorak',
     }),
   );
   expectedCurrentContent.tubes = [
@@ -127,6 +128,7 @@ async function mockCurrentContent() {
     tubeId: expectedTube.id,
     tutorialIds: ['recTuto1'],
     learningMoreTutorialIds: ['recTuto2'],
+    name: '@dvorak5',
     createdAt: '2023-10-05T18:08:00Z',
     activatedAt: '2023-11-06T18:08:00.000Z',
     archivedAt: '2023-12-07T18:08:00.000Z',
@@ -295,7 +297,13 @@ async function mockCurrentContent() {
     competences: [buildCompetence({ ...expectedCompetence, tubeIds: [expectedTube.id] })],
     thematics: [buildThematic(expectedThematic)],
     tubes: [buildTube({ ...expectedTube, competenceId: expectedCompetence.id, skillIds: [baseSkill.id] })],
-    skills: [buildSkill(expectedCurrentContent.skills[0])],
+    skills: [
+      buildSkill({
+        ...expectedCurrentContent.skills[0],
+        competenceId: expectedCompetence.id,
+        challengeIds: ['challenge-id', 'challenge-id-alt'],
+      }),
+    ],
     challenges: [
       buildChallenge({
         ...expectedChallenge,

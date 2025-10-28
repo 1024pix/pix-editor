@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { updateMission } from '../../../../lib/domain/usecases/index.js';
-import { airtableBuilder, databaseBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionRepository from '../../../../lib/infrastructure/repositories/mission-repository.js';
 
@@ -33,6 +33,7 @@ describe('Integration | Usecases | Update mission', function () {
       name: '@Pix1D-recherche_di',
       thematicId: 'Thematic',
       competenceId: 'competence1',
+      skillIds: ['skillTuto2'],
     };
 
     databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -40,17 +41,22 @@ describe('Integration | Usecases | Update mission', function () {
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic(thematic);
     databaseBuilder.factory.buildTube(tube);
+    const skill = domainBuilder.buildSkillDatasourceObject({
+      id: 'skillTuto2',
+      level: 2,
+      tubeId: 'tubeTuto',
+      status: Skill.STATUSES.EN_CONSTRUCTION,
+      competenceId: 'competence1',
+      tutorialIds: [],
+      learningMoreTutorialIds: [],
+      challengeIds: [],
+      name: '@Pix1D-recherche_di2',
+    });
+    databaseBuilder.factory.buildSkill(skill);
     await databaseBuilder.commit();
 
     airtableBuilder.mockLists({
-      skills: [
-        airtableBuilder.factory.buildSkill({
-          id: 'skillTuto2',
-          level: 2,
-          tubeId: 'tubeTuto',
-          status: Skill.STATUSES.EN_CONSTRUCTION,
-        }),
-      ],
+      skills: [airtableBuilder.factory.buildSkill(skill)],
       tubes: [airtableBuilder.factory.buildTube(tube)],
       thematics: [airtableBuilder.factory.buildThematic(thematic)],
     });
