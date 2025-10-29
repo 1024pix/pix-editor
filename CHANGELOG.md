@@ -1,5 +1,12 @@
 
 
+## v3.230.1 (29/10/2025)
+
+
+### :bug: Correction
+- [#1205](https://github.com/1024pix/pix-editor/pull/1205) [BUGFIX] Liens acquis <-> tutoriels cassés (PIX-20183).
+- [#1204](https://github.com/1024pix/pix-editor/pull/1204) [BUGFIX] Liens cassés entre PJs/illustrations et épreuves (PIX-20180).
+
 ## v3.230.0 (29/10/2025)
 
 
