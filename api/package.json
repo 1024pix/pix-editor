@@ -76,7 +76,7 @@
     "pg": "^8.9.0",
     "pg-query-stream": "^4.5.3",
     "phrase-js": "^3.0.0",
-    "pino": "^9.0.0",
+    "pino": "^10.0.0",
     "pino-pretty": "^11.0.0",
     "qs": "^6.10.1",
     "sequelize": "^6.29.0",
