@@ -1,5 +1,11 @@
 
 
+## v3.231.3 (29/10/2025)
+
+
+### :bug: Correction
+- [#1215](https://github.com/1024pix/pix-editor/pull/1215) [BUGFIX] Trier les acquis dans le même ordre que Airtable dans la recherche.
+
 ## v3.231.2 (29/10/2025)
 
 
