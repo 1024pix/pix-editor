@@ -1,3 +1,5 @@
+import { Writable } from 'node:stream';
+
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import split from 'split2';
 import writeStream from 'flush-write-stream';
@@ -7,6 +9,7 @@ import { generateAuthorizationHeader, databaseBuilder } from '../../../test-help
 import * as pinoPlugin from '../../../../lib/infrastructure/plugins/pino.js';
 import * as monitoringTools from '../../../../lib/infrastructure/monitoring-tools.js';
 import * as security from '../../../../lib/infrastructure/security.js';
+import pino from 'pino';
 
 function sink(func) {
   const result = split(JSON.parse);
@@ -45,11 +48,19 @@ describe('Integration | Infrastructure | plugins | pino', function () {
   });
 
   async function registerWithPlugin(cb) {
+    const stream = new Writable({
+      write(chunk, encoding, ack) {
+        cb(JSON.parse(chunk.toString()));
+        ack();
+        return true;
+      },
+    });
+
     const pinoPluginWithLogger = {
       ...pinoPlugin,
       options: {
         ...pinoPlugin.options,
-        instance: undefined,
+        instance: pino(stream),
         level: 'info',
         stream: sink(cb),
       },
