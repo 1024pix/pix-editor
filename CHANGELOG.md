@@ -1,5 +1,16 @@
 
 
+## v3.230.0 (29/10/2025)
+
+
+### :building_construction: Tech
+- [#1197](https://github.com/1024pix/pix-editor/pull/1197) [TECH] Double lecture des acquis (PIX-19947).
+- [#1187](https://github.com/1024pix/pix-editor/pull/1187) [TECH] Ajout prettier dans l'api (PIX-20125).
+
+### :arrow_up: Montée de version
+- [#1201](https://github.com/1024pix/pix-editor/pull/1201) [BUMP] Update dependency pino to v9 (api).
+- [#1199](https://github.com/1024pix/pix-editor/pull/1199) [BUMP] Update dependency p-queue to v9 (pix-editor).
+
 ## v3.229.0 (27/10/2025)
 
 
