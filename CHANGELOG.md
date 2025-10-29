@@ -1,5 +1,11 @@
 
 
+## v3.231.0 (29/10/2025)
+
+
+### :building_construction: Tech
+- [#1198](https://github.com/1024pix/pix-editor/pull/1198) [TECH] Écriture des pièces jointes dans Postgres (PIX-19949).
+
 ## v3.230.1 (29/10/2025)
 
 
