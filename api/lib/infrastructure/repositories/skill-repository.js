@@ -134,10 +134,14 @@ export async function search(params) {
   ]);
   if (params.sort) {
     params.sort.forEach(([field, direction]) => {
-      query = query.orderBy(field, direction);
+      if (field === 'name') {
+        query = query.orderByRaw('?? collate ??', ['name', 'fr-x-icu']);
+      } else {
+        query = query.orderBy(field, direction);
+      }
     });
   } else {
-    query = query.orderByRaw('?? collate ??', ['skills.id', 'fr-x-icu']);
+    query = query.orderBy('skills.id');
   }
   if (params.page?.limit) {
     query = query.limit(params.page?.limit);
