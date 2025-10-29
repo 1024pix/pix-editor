@@ -58,7 +58,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     // then
     assert.dom(screen.getByLabelText('Embed URL')).hasValue('https://mon-site.fr/my-link.html?lang=en');
     assert.dom(screen.getByText('Pièces jointes')).exists();
-    assert.dom(screen.getByText('Illustration')).exists();
+    assert.dom(screen.getByRole('heading', { name: 'Illustration' })).exists();
     assert.dom(screen.getByLabelText('Géographie')).hasText('Neutre');
     assert.dom(screen.getByLabelText('Id')).hasValue('localizedChallengeId');
   });

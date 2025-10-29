@@ -11,15 +11,17 @@
     margin-top: 0;
   }
 
-  p {
+ > p {
     color: var(--pix-neutral-900);
     font-weight: var(--pix-font-medium);
   }
 
-  img {
+  > img {
     width: 100px;
     height: auto;
   }
+
+
 
   &-internationalisation {
     width: 100%;

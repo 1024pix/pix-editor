@@ -46,6 +46,7 @@
 @use 'components/form/challenge';
 @use 'components/form/tutorial';
 @use 'components/dropdown-menu';
+@use 'components/pop-in/image';
 @use 'components/pop-in/tutorial' as tutorial-pop-in;
 @use 'components/pop-in/pdf-entries';
 @use 'components/select-location';
@@ -58,4 +59,5 @@
 
 // v2
 
+@use 'components/v2/field/illustration';
 @use 'components/v2/field/toggle-field';
