@@ -1,5 +1,19 @@
 
 
+## v3.231.1 (29/10/2025)
+
+
+### :building_construction: Tech
+- [#1208](https://github.com/1024pix/pix-editor/pull/1208) [TECH] Ajoute la taille de tranche comme option au script de migration des attachments.
+
+### :bug: Correction
+- [#1206](https://github.com/1024pix/pix-editor/pull/1206) [BUGFIX] Trier les acquis dans le même ordre que Airtable dans la recherche.
+
+### :arrow_up: Montée de version
+- [#1209](https://github.com/1024pix/pix-editor/pull/1209) [BUMP] Update dependency pino-pretty to v13 (api).
+- [#1207](https://github.com/1024pix/pix-editor/pull/1207) [BUMP] Update dependency pino-pretty to v12 (api).
+- [#1202](https://github.com/1024pix/pix-editor/pull/1202) [BUMP] Update dependency pino to v10 (api).
+
 ## v3.231.0 (29/10/2025)
 
 
