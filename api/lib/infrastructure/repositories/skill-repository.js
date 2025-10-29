@@ -137,7 +137,7 @@ export async function search(params) {
       query = query.orderBy(field, direction);
     });
   } else {
-    query = query.orderBy('skills.id');
+    query = query.orderByRaw('?? collate ??', ['skills.id', 'fr-x-icu']);
   }
   if (params.page?.limit) {
     query = query.limit(params.page?.limit);
