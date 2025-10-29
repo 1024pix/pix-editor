@@ -81,12 +81,49 @@ export async function persistAttachments({ items, airtableClient, logger, databa
     airtableClient,
   });
   items.forEach((item) => {
-    item.airtableId = records.shift().id;
+    const record = records.shift();
+    item.airtableId = record.id;
+    item.id = record.id;
+    item.challengeId = record.get('challengeId persistant')[0];
   });
-  items.map((item) =>
+  items.forEach((item) => {
     databaseBuilder.factory.buildLocalizedChallengeAttachment({
       localizedChallengeId: item.localizedChallengeId,
       attachmentId: item.airtableId,
-    }),
-  );
+    });
+    databaseBuilder.factory.buildAttachment(item);
+  });
+}
+
+export async function copyAttachmentsFromAirtable({ airtableClient, databaseBuilder, logger }) {
+  const airtableAttachments = await airtableClient
+    .table('Attachments')
+    .select({
+      fields: [
+        'Record ID',
+        'url',
+        'size',
+        'type',
+        'mimeType',
+        'filename',
+        'challengeId persistant',
+        'localizedChallengeId',
+      ],
+    })
+    .all();
+
+  logger.info(`Copying ${airtableAttachments.length} attachments from airtable...`);
+
+  airtableAttachments.forEach((record) => {
+    databaseBuilder.factory.buildAttachment({
+      id: record.get('Record ID'),
+      url: record.get('url'),
+      size: record.get('size'),
+      type: record.get('type'),
+      mimeType: record.get('mimeType'),
+      filename: record.get('filename'),
+      challengeId: record.get('challengeId persistant')?.[0],
+      localizedChallengeId: record.get('localizedChallengeId'),
+    });
+  });
 }

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import { Attachment } from '../../domain/models/index.js';
-import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 export async function get(id) {
   const datasourceAttachment = await attachmentDatasource.find(id);
@@ -21,50 +21,88 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 }
 
 export async function createBatch(attachments) {
-  if (!attachments || attachments.length === 0) return [];
-  const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
-  const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
-  const attachmentToSaveDTOs = [];
+  return knex.transaction(async (transaction) => {
+    if (!attachments || attachments.length === 0) return [];
+    const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
+    const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
+    const attachmentToSaveDTOs = [];
 
-  for (const attachment of attachments) {
-    attachmentToSaveDTOs.push({
+    for (const attachment of attachments) {
+      attachmentToSaveDTOs.push({
+        url: attachment.url,
+        size: attachment.size,
+        type: attachment.type,
+        mimeType: attachment.mimeType,
+        filename: attachment.filename,
+        challengeId: airtableChallengeIdsByIds[attachment.challengeId],
+        localizedChallengeId: attachment.localizedChallengeId,
+      });
+    }
+    const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
+
+    await transaction
+      .insert(
+        createdAttachmentsDtos.map((airtableDto) => ({
+          id: airtableDto.id,
+          url: airtableDto.url,
+          size: airtableDto.size,
+          type: airtableDto.type,
+          mimeType: airtableDto.mimeType,
+          filename: airtableDto.filename,
+          challengeId: airtableDto.challengeId,
+          localizedChallengeId: airtableDto.localizedChallengeId,
+        })),
+      )
+      .into('attachments');
+    await transaction
+      .insert(
+        createdAttachmentsDtos.map(({ localizedChallengeId, id: attachmentId }) => ({
+          attachmentId,
+          localizedChallengeId,
+        })),
+      )
+      .into('localized_challenges-attachments');
+
+    return toDomainList(createdAttachmentsDtos);
+  });
+}
+
+export async function create(attachment) {
+  return knex.transaction(async (transaction) => {
+    const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds([attachment.challengeId]);
+    const airtableChallengeId = airtableChallengeIdsByIds[attachment.challengeId];
+    const attachmentDTO = {
       url: attachment.url,
       size: attachment.size,
       type: attachment.type,
       mimeType: attachment.mimeType,
       filename: attachment.filename,
-      challengeId: airtableChallengeIdsByIds[attachment.challengeId],
+      challengeId: airtableChallengeId,
       localizedChallengeId: attachment.localizedChallengeId,
-    });
-  }
-  const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
-  for (const createdAttachmentsDto of createdAttachmentsDtos) {
-    await localizedChallengesAttachmentsRepository.save({
-      localizedChallengeId: createdAttachmentsDto.localizedChallengeId,
-      attachmentId: createdAttachmentsDto.id,
-    });
-  }
-  return toDomainList(createdAttachmentsDtos);
-}
+    };
+    const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
 
-export async function create(attachment) {
-  const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds([attachment.challengeId]);
-  const airtableChallengeId = airtableChallengeIdsByIds[attachment.challengeId];
-  const attachmentDTO = {
-    url: attachment.url,
-    size: attachment.size,
-    type: attachment.type,
-    mimeType: attachment.mimeType,
-    filename: attachment.filename,
-    challengeId: airtableChallengeId,
-    localizedChallengeId: attachment.localizedChallengeId,
-  };
-  const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
-  await localizedChallengesAttachmentsRepository.save({
-    localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
-    attachmentId: createdAttachmentDTO.id,
+    await transaction
+      .insert({
+        id: createdAttachmentDTO.id,
+        url: attachment.url,
+        size: attachment.size,
+        type: attachment.type,
+        mimeType: attachment.mimeType,
+        filename: attachment.filename,
+        challengeId: attachment.challengeId,
+        localizedChallengeId: attachment.localizedChallengeId,
+      })
+      .into('attachments');
+    await transaction
+      .insert({
+        localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
+        attachmentId: createdAttachmentDTO.id,
+      })
+      .into('localized_challenges-attachments');
+
+    return toDomain(createdAttachmentDTO);
   });
-  return toDomain(createdAttachmentDTO);
 }
 
 export async function update(attachment) {
@@ -79,12 +117,23 @@ export async function update(attachment) {
     localizedChallengeId: attachment.localizedChallengeId,
   };
   const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
+
+  await knex('attachments')
+    .update({
+      filename: attachment.filename,
+      updatedAt: knex.fn.now(),
+    })
+    .where('id', attachment.id);
+
   return toDomain(updatedAttachmentDTO);
 }
 
 export async function remove(attachmentId) {
-  await attachmentDatasource.delete([attachmentId]);
-  await localizedChallengesAttachmentsRepository.deleteByAttachmentId(attachmentId);
+  return knex.transaction(async (transaction) => {
+    await attachmentDatasource.delete([attachmentId]);
+    await transaction.delete().from('localized_challenges-attachments').where('attachmentId', attachmentId);
+    await transaction.delete().from('attachments').where('id', attachmentId);
+  });
 }
 
 function toDomainList(datasourceAttachments) {
