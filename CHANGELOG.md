@@ -1,5 +1,15 @@
 
 
+## v3.231.2 (29/10/2025)
+
+
+### :bug: Correction
+- [#1213](https://github.com/1024pix/pix-editor/pull/1213) [BUGFIX] Trier les acquis dans le même ordre que Airtable dans la recherche.
+
+### :arrow_up: Montée de version
+- [#1211](https://github.com/1024pix/pix-editor/pull/1211) [BUMP] Update dependency tracked-built-ins to v4 (pix-editor).
+- [#1210](https://github.com/1024pix/pix-editor/pull/1210) [BUMP] Update dependency sinon to v21 (pix-editor).
+
 ## v3.231.1 (29/10/2025)
 
 
