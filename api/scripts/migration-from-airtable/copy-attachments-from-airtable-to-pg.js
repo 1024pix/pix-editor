@@ -15,6 +15,12 @@ export class CopyAttachmentsFromAirtableToPg extends Script {
           demandOption: false,
           default: true,
         },
+        chunkSize: {
+          type: 'number',
+          describe: 'size of inserted chunk',
+          demandOption: false,
+          default: 500,
+        },
       },
     });
   }
@@ -51,9 +57,17 @@ export class CopyAttachmentsFromAirtableToPg extends Script {
       );
     logger.info({ count: deletedCount }, 'Deleted attachments into postgres');
 
-    await knex.insert(attachments).into('attachments').onConflict('id').merge();
+    for (const chunk of chunks(attachments, options.chunkSize)) {
+      await knex.insert(chunk).into('attachments').onConflict('id').merge();
+    }
     logger.info({ count: attachments.length }, 'Inserted attachments into postgres');
   }
 }
 
 await ScriptRunner.execute(import.meta.url, CopyAttachmentsFromAirtableToPg);
+
+function* chunks(arr, size) {
+  for (let i = 0; i < arr.length; i += size) {
+    yield arr.slice(i, i + size);
+  }
+}

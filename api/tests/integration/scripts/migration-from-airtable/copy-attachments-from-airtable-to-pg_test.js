@@ -24,7 +24,7 @@ describe('Integration | Scripts | CopyAttachmentsFromAirtableToPg', () => {
 
     it('reads attachments from airtable and saves these to postgres', async () => {
       // given
-      const options = { dryRun: false };
+      const options = { dryRun: false, chunkSize: 10 };
 
       const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
         new Airtable.Record(AIRTABLE_NAME, 'rec123Abc', {
@@ -136,7 +136,7 @@ describe('Integration | Scripts | CopyAttachmentsFromAirtableToPg', () => {
     describe('when dryRun is true', () => {
       it('reads attachments from airtable and stops', async () => {
         // given
-        const options = { dryRun: true };
+        const options = { dryRun: true, chunkSize: 10 };
 
         const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
           new Airtable.Record(AIRTABLE_NAME, 'rec123Abc', {
