@@ -65,6 +65,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     delete body.fields['updated_at'];
     delete body.fields['created_at'];
     delete body.fields['filesLocalizedChallengeIds'];
+    delete body.fields.files;
     if (deleteId) {
       delete body.id;
     }

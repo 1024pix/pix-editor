@@ -113,20 +113,13 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       delete airtableChallenge.fields['updated_at'];
       delete airtableChallenge.fields['created_at'];
       delete airtableChallenge.fields['filesLocalizedChallengeIds'];
+      delete airtableChallenge.fields.files;
     }
 
     it('should serialize a challenge to an airtable object', () => {
       // given
       const createdChallenge = domainBuilder.buildChallenge({ locales: ['fr-fr'], geography: 'FR' });
-      const airtableChallenge = airtableBuilder.factory.buildChallenge({
-        ...createdChallenge,
-        files: [
-          {
-            fileId: createdChallenge.files[0],
-            localizedChallengeId: createdChallenge.id,
-          },
-        ],
-      });
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(createdChallenge);
       _removeReadonlyFields(airtableChallenge);
 
       // when

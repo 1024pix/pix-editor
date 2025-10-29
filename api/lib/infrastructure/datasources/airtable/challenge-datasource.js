@@ -143,7 +143,6 @@ export const challengeDatasource = datasource.extend({
         Spoil: model.spoil,
         Responsive: model.responsive,
         Géographie: model.localizedChallenges?.[0]?.geography || 'AA',
-        files: model.files,
         validated_at: model.validatedAt,
         archived_at: model.archivedAt,
         made_obsolete_at: model.madeObsoleteAt,

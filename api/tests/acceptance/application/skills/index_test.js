@@ -1933,7 +1933,6 @@ describe('Application | Route | Skills', () => {
         'Embed URL',
         'Embed height',
         'Format',
-        'files',
         'Réponse automatique',
         'Langues',
         'Focalisée',
@@ -1960,7 +1959,6 @@ describe('Application | Route | Skills', () => {
       createdChallengeFields['made_obsolete_at'] = null;
       createdChallengeFields['validated_at'] = null;
       createdChallengeFields['Statut'] = 'proposé';
-      createdChallengeFields['files'] = [];
       const challengeProtoCloned = {
         id: 'recChallengeProtoCloned',
         fields: {
