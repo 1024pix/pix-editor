@@ -277,9 +277,10 @@ export async function update(skill) {
     await transaction
       .delete()
       .from(TUTORIALS_RELATION_TABLE_NAME)
+      .where('skillId', skill.id)
       .whereNotIn(
-        ['skillId', 'tutorialId', 'type'],
-        skillTutorials.map(({ skillId, tutorialId, type }) => [skillId, tutorialId, type]),
+        ['tutorialId', 'type'],
+        skillTutorials.map(({ tutorialId, type }) => [tutorialId, type]),
       );
     if (skillTutorials.length > 0) {
       await transaction

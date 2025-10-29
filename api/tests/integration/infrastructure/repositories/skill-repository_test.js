@@ -883,6 +883,12 @@ describe('Integration | Repository | skill-repository', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildSkill(skill);
+      const otherSkill = databaseBuilder.factory.buildSkill({
+        id: 'z_otherSkill',
+        skillId: skill.tubeId,
+        tutorialIds: ['tuto1', 'tuto4'],
+        learningMoreTutorialIds: ['tuto3'],
+      });
       databaseBuilder.factory.buildTranslation({
         key: `skill.${skill.id}.hint`,
         locale: 'fr',
@@ -938,24 +944,22 @@ describe('Integration | Repository | skill-repository', () => {
         },
       });
 
-      await expect(knex.select('*').from('skills')).resolves.toStrictEqual([
-        {
-          id: skill.id,
-          description: expectedSkill.description,
-          descriptionStatus: expectedSkill.descriptionStatus,
-          hintStatus: expectedSkill.hintStatus,
-          internationalisation: expectedSkill.internationalisation,
-          level: expectedSkill.level,
-          status: expectedSkill.status,
-          version: expectedSkill.version,
-          tubeId: skill.tubeId,
-          activatedAt: expectedSkill.activatedAt,
-          archivedAt: expectedSkill.archivedAt,
-          obsoletedAt: expectedSkill.obsoletedAt,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ]);
+      await expect(knex.select('*').from('skills').where('id', skill.id).first()).resolves.toStrictEqual({
+        id: skill.id,
+        description: expectedSkill.description,
+        descriptionStatus: expectedSkill.descriptionStatus,
+        hintStatus: expectedSkill.hintStatus,
+        internationalisation: expectedSkill.internationalisation,
+        level: expectedSkill.level,
+        status: expectedSkill.status,
+        version: expectedSkill.version,
+        tubeId: skill.tubeId,
+        activatedAt: expectedSkill.activatedAt,
+        archivedAt: expectedSkill.archivedAt,
+        obsoletedAt: expectedSkill.obsoletedAt,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
@@ -964,7 +968,9 @@ describe('Integration | Repository | skill-repository', () => {
         { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr },
       ]);
 
-      await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
+      await expect(
+        knex.select('*').from('skills-tutorials').orderBy(['skillId', 'type', 'tutorialId']),
+      ).resolves.toStrictEqual([
         ...expectedSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
           type: 'learningMore',
           skillId: skill.id,
@@ -975,6 +981,20 @@ describe('Integration | Repository | skill-repository', () => {
         ...expectedSkill.tutorialIds.toSorted().map((tutorialId) => ({
           type: 'understanding',
           skillId: skill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
+        ...otherSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
+          type: 'learningMore',
+          skillId: otherSkill.id,
+          tutorialId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })),
+        ...otherSkill.tutorialIds.toSorted().map((tutorialId) => ({
+          type: 'understanding',
+          skillId: otherSkill.id,
           tutorialId,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
