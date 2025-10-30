@@ -1,5 +1,14 @@
 
 
+## v3.231.4 (30/10/2025)
+
+
+### :building_construction: Tech
+- [#1216](https://github.com/1024pix/pix-editor/pull/1216) [TECH] Warnings pour les données présentes seulement dans PG.
+
+### :bug: Correction
+- [#1217](https://github.com/1024pix/pix-editor/pull/1217) [BUGFIX] Répare le tri des résultats de recherche d'acquis dans PG.
+
 ## v3.231.3 (29/10/2025)
 
 
