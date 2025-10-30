@@ -34,6 +34,14 @@ export class CopyFrameworksFromAirtableToPg extends Script {
       updatedAt: knex.fn.now(),
     }));
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('frameworks')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [frameworks.map((framework) => framework.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some frameworks are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     await knex.insert(frameworks).into('frameworks').onConflict('id').merge();

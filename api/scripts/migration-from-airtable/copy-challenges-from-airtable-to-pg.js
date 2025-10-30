@@ -102,6 +102,14 @@ export class CopyChallengesFromAirtableToPg extends Script {
       contextualizedFields: record.get('contextualizedFields'),
     }));
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('challenges')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [challenges.map((challenge) => challenge.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some challenges are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     for (const chunk of chunks(challenges, options.chunkSize)) {
