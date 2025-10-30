@@ -4,7 +4,7 @@ import { fetchPage } from '../utils/knex-utils.js';
 import { Mission } from '../../domain/models/index.js';
 import * as missionTranslations from '../translations/mission.js';
 import { NotFoundError } from '../../domain/errors.js';
-import { translationRepository } from './index.js';
+import * as translationRepository from './translation-repository.js';
 
 const model = 'mission';
 

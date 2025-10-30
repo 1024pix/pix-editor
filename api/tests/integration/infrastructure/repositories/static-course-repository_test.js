@@ -5,10 +5,10 @@ import {
   get,
   getRead,
 } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
-import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import {
   challengeRepository,
   localizedChallengeRepository,
+  skillRepository,
 } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Integration | Repository | static-course-repository', function () {
@@ -449,10 +449,12 @@ describe('Integration | Repository | static-course-repository', function () {
         .spyOn(localizedChallengeRepository, 'getMany')
         .mockResolvedValue(localizedChallenges);
       const stubFilterChallengeRepository = vi.spyOn(challengeRepository, 'filter').mockResolvedValue(challenges);
-      const stubFilterSkillDatasource = vi.spyOn(skillDatasource, 'filter').mockResolvedValue([
-        { id: 'skillA', name: '@skillA' },
-        { id: 'skillB', name: '@skillB' },
-      ]);
+      const stubFilterSkillRepository = vi
+        .spyOn(skillRepository, 'getMany')
+        .mockResolvedValue([
+          domainBuilder.buildSkill({ id: 'skillA', name: '@skillA' }),
+          domainBuilder.buildSkill({ id: 'skillB', name: '@skillB' }),
+        ]);
       await databaseBuilder.commit();
 
       //when
@@ -497,7 +499,7 @@ describe('Integration | Repository | static-course-repository', function () {
         }),
       );
       expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
-      expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });
+      expect(stubFilterSkillRepository).toHaveBeenCalledWith(['skillA', 'skillB']);
       expect(stubLocalizedChallengeRepository).toHaveBeenCalledWith({ ids: ['challengeA', 'challengeB'] });
     });
   });

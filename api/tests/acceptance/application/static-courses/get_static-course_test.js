@@ -3,7 +3,7 @@ import { databaseBuilder, generateAuthorizationHeader, airtableBuilder, domainBu
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | GET /api/static-courses/{id}', function () {
-  it('Return the static course', async function () {
+  it('returns the static course', async function () {
     // Given
     const server = await createServer();
     const user = databaseBuilder.factory.buildReadonlyUser();
@@ -32,9 +32,44 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-    const challenge1 = domainBuilder.buildChallenge({ id: 'challengeid1' });
-    const challenge2 = domainBuilder.buildChallenge({ id: 'challengeid2' });
-    databaseBuilder.factory.buildSkill({ id: challenge1.skillId, tubeId: 'tube1' });
+    const skill1 = domainBuilder.buildSkillDatasourceObject({
+      id: 'skillid1',
+      name: '@skillid1',
+      hint_i18n: {},
+      tubeId: 'tube1',
+      level: 1,
+      name: '@tube1',
+      competenceId: 'competence1',
+      challengeIds: ['challengeid1'],
+      tutorialIds: [],
+      learningMoreTutorialIds: [],
+    });
+    const skill2 = domainBuilder.buildSkillDatasourceObject({
+      id: 'skillid2',
+      name: '@skillid2',
+      hint_i18n: {},
+      tubeId: 'tube1',
+      level: 2,
+      name: '@tube2',
+      competenceId: 'competence1',
+      challengeIds: ['challengeid2'],
+      tutorialIds: [],
+      learningMoreTutorialIds: [],
+    });
+    databaseBuilder.factory.buildSkill(skill1);
+    databaseBuilder.factory.buildSkill(skill2);
+    const challenge1 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid1',
+      skillId: 'skillid1',
+      status: 'status for challengeid1',
+      locales: ['fr'],
+    });
+    const challenge2 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid2',
+      skillId: 'skillid2',
+      status: 'status for challengeid2',
+      locales: ['fr'],
+    });
 
     databaseBuilder.factory.buildChallenge(challenge1);
     databaseBuilder.factory.buildLocalizedChallenge({
@@ -53,28 +88,10 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
     databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagAId, tagBId], staticCourseId: 'courseid1' });
 
     await databaseBuilder.commit();
-    const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid1',
-      skillId: 'skillid1',
-      status: 'status for challengeid1',
-      locales: ['fr'],
-    });
-    const airtableSkill1 = airtableBuilder.factory.buildSkill({
-      id: 'skillid1',
-      name: '@skillid1',
-      hint_i18n: {},
-    });
-    const airtableChallenge2 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid2',
-      skillId: 'skillid2',
-      status: 'status for challengeid2',
-      locales: ['fr'],
-    });
-    const airtableSkill2 = airtableBuilder.factory.buildSkill({
-      id: 'skillid2',
-      name: '@skillid2',
-      hint_i18n: {},
-    });
+    const airtableChallenge1 = airtableBuilder.factory.buildChallenge(challenge1);
+    const airtableSkill1 = airtableBuilder.factory.buildSkill(skill1);
+    const airtableChallenge2 = airtableBuilder.factory.buildChallenge(challenge2);
+    const airtableSkill2 = airtableBuilder.factory.buildSkill(skill2);
     airtableBuilder.mockLists({
       challenges: [airtableChallenge1, airtableChallenge2],
       skills: [airtableSkill1, airtableSkill2],
@@ -138,7 +155,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
           attributes: {
             index: 0,
             instruction: 'instruction for challengeid1',
-            'skill-name': '@skillid1',
+            'skill-name': '@tube1',
             status: 'status for challengeid1',
             'preview-url': 'http://host.site/api/challenges/challengeid1/preview',
           },
@@ -149,7 +166,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
           attributes: {
             index: 1,
             instruction: 'instruction for challengeid2',
-            'skill-name': '@skillid2',
+            'skill-name': '@tube2',
             status: 'status for challengeid2',
             'preview-url': 'http://host.site/api/challenges/challengeid2/preview',
           },

@@ -1,9 +1,8 @@
 import Joi from 'joi';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { attachmentRepository, challengeRepository } from '../../infrastructure/repositories/index.js';
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from '../security-pre-handlers.js';
-import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
 import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
@@ -22,7 +21,7 @@ const challengeIdType = Joi.string()
 
 async function _refreshCache({ challenge }) {
   try {
-    const attachments = await attachmentDatasource.filterByLocalizedChallengeId(challenge.id);
+    const attachments = await attachmentRepository.listByLocalizedChallengeId(challenge.id);
     const transformChallenge = createChallengeTransformer({ attachments });
     const newChallenge = transformChallenge(challenge);
 

@@ -40,6 +40,18 @@ export async function get(id) {
   return toDomain(airtableDto, translations, pgDto);
 }
 
+export async function getMany(ids) {
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
+    skillDatasource.filter({ filter: { ids } }),
+    selectSkills().whereIn('skills.id', ids).orderBy('skills.id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
+}
+
 export async function getByAirtableId(id) {
   const airtableDto = await skillDatasource.find(id);
   if (!airtableDto) return null;

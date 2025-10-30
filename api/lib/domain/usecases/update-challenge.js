@@ -1,12 +1,11 @@
-import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { attachmentRepository, challengeRepository } from '../../infrastructure/repositories/index.js';
 import { normalizeNonBreakingSpace } from '../../infrastructure/utils/normalize-non-breaking-space.js';
-import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
 import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function updateChallenge(challenge, dependencies = { challengeRepository, attachmentDatasource }) {
+export async function updateChallenge(challenge, dependencies = { challengeRepository, attachmentRepository }) {
   if (challenge.locales.includes('fr') || challenge.locales.includes('fr-fr')) {
     const fieldsToNormalize = ['instruction', 'proposals', 'alternativeInstruction'];
     for (const field of fieldsToNormalize) {
@@ -18,7 +17,7 @@ export async function updateChallenge(challenge, dependencies = { challengeRepos
   const updatedChallenge = await dependencies.challengeRepository.update(challenge);
 
   try {
-    const attachments = await dependencies.attachmentDatasource.filterByLocalizedChallengeId(updatedChallenge.id);
+    const attachments = await dependencies.attachmentRepository.listByLocalizedChallengeId(updatedChallenge.id);
     const transformChallenge = createChallengeTransformer({ attachments });
     const newChallenge = transformChallenge(updatedChallenge);
     await updatedRecordNotifier.notify({
