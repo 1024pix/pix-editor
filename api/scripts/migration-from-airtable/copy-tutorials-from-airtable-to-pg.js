@@ -63,6 +63,14 @@ export class CopyTutorialsFromAirtableToPg extends Script {
         })) ?? [],
     );
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('tutorials')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [tutorials.map((tutorial) => tutorial.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some tutorials are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     await knex.insert(tutorials).into('tutorials').onConflict('id').merge();

@@ -36,6 +36,14 @@ export class CopyAreasFromAirtableToPg extends Script {
       updatedAt: knex.fn.now(),
     }));
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('areas')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [areas.map((area) => area.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some areas are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     await knex.insert(areas).into('areas').onConflict('id').merge();

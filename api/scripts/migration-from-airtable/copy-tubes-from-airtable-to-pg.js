@@ -36,6 +36,14 @@ export class CopyTubesFromAirtableToPg extends Script {
       updatedAt: knex.fn.now(),
     }));
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('tubes')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [tubes.map((tube) => tube.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some tubes are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     await knex.insert(tubes).into('tubes').onConflict('id').merge();

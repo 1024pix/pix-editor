@@ -35,6 +35,14 @@ export class CopyThematicsFromAirtableToPg extends Script {
       updatedAt: knex.fn.now(),
     }));
 
+    const postgresOnlyIds = await knex
+      .pluck('id')
+      .from('thematics')
+      .whereNotIn('id', knex.select('*').fromRaw('unnest(?::text[])', [thematics.map((thematic) => thematic.id)]));
+    if (postgresOnlyIds.length !== 0) {
+      logger.warn({ ids: postgresOnlyIds }, 'Some thematics are only in postgres');
+    }
+
     if (options.dryRun) return;
 
     await knex.insert(thematics).into('thematics').onConflict('id').merge();
