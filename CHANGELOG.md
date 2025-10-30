@@ -1,5 +1,17 @@
 
 
+## v3.232.0 (30/10/2025)
+
+
+### :building_construction: Tech
+- [#1214](https://github.com/1024pix/pix-editor/pull/1214) [TECH] Supprime la table `localized-challenges-attachments` (PIX-20156).
+- [#1203](https://github.com/1024pix/pix-editor/pull/1203) [TECH] Supprime la dépendance `hapi-pino`.
+
+### :arrow_up: Montée de version
+- [#1220](https://github.com/1024pix/pix-editor/pull/1220) [BUMP] Update dependency vitest to v4 (scripts).
+- [#1219](https://github.com/1024pix/pix-editor/pull/1219) [BUMP] Update dependency vitest to v4 (challenge-parser).
+- [#1218](https://github.com/1024pix/pix-editor/pull/1218) [BUMP] Update dependency @1024pix/pix-ui to ^55.31.0 (pix-editor).
+
 ## v3.231.4 (30/10/2025)
 
 
