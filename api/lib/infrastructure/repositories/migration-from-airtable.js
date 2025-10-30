@@ -60,18 +60,25 @@ export function compareDtos(airtableDto, pgDto, compareFunc) {
   }
 }
 
-export function areArrayEquals(array1, array2) {
+export function areArrayEquals(array1, array2, { sortFn, compareFn = (value1, value2) => value1 === value2 } = {}) {
   if (array1 == null && array2 == null) return true;
   if (array1 == null && array2 != null) return false;
   if (array1 != null && array2 == null) return false;
   if (array1.length !== array2.length) return false;
-  const sortedArray2 = array2.toSorted();
-  return array1.toSorted().every((value, i) => value === sortedArray2[i]);
+  const sortedArray2 = array2.toSorted(sortFn);
+  return array1.toSorted(sortFn).every((value, i) => compareFn(value, sortedArray2[i]));
 }
 
 export function areNullableValuesEqual(value1, value2) {
   if (value1 == null && value2 == null) return true;
   return value1 === value2;
+}
+
+export function areNullableDatesEqual(date1, date2) {
+  if (date1 == null && date2 == null) return true;
+  if (date1 == null && date2 != null) return false;
+  if (date1 != null && date2 == null) return false;
+  return new Date(date1).getTime() === new Date(date2).getTime();
 }
 
 function byId(dto1, dto2) {

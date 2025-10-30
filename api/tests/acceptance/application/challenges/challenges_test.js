@@ -738,9 +738,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: 'recChallengeId1',
         files: [
           { fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' },
-          { fileId: 'fileId2', localizedChallengeId: 'recChallengeId2' },
+          { fileId: 'fileId2', localizedChallengeId: 'localizedChallengeId2' },
         ],
         geography: 'XX',
+        competenceId: 'competence1',
       });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -814,12 +815,21 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
-
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.proposals',
         locale: 'nl',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      challenge.files.forEach((file) =>
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: file.fileId,
+            challengeId: challenge.id,
+            localizedChallengeId: file.localizedChallengeId,
+          }),
+        ),
+      );
 
       await databaseBuilder.commit();
 
@@ -1092,13 +1102,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let airtableAttachmentScope;
     let challenge;
     let primaryLocalizedChallenge;
-    let attachment;
 
     beforeEach(async function () {
       challenge = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
         locales: ['fr', 'fr-fr'],
         status: Challenge.STATUSES.VALIDE,
+        competenceId: 'competence1',
+        files: [{ fileId: 'fileId', localizedChallengeId }],
       });
 
       airtableChallengeScope = airtableBuilder
@@ -1114,14 +1125,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(challenge);
 
-      attachment = airtableBuilder.factory.buildAttachment({
+      const attachment = domainBuilder.buildAttachmentDatasourceObject({
+        id: 'fileId',
         challengeId,
         localizedChallengeId,
         type: 'illustration',
+        url: 'illustration url',
       });
+      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
       airtableAttachmentScope = airtableBuilder
         .mockList({ tableName: 'Attachments' })
-        .returns([attachment])
+        .returns([airtableAttachment])
         .activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
@@ -1188,6 +1202,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         noValidationNeeded: false,
       });
 
+      databaseBuilder.factory.buildAttachment(attachment);
+
       await databaseBuilder.commit();
     });
 
@@ -1204,7 +1220,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           alpha: challenge.alpha,
           alternativeInstruction: 'alternative instruction for es',
           autoReply: challenge.autoReply,
-          competenceId: 'recsvLz0W2ShyfD63',
+          competenceId: 'competence1',
           delta: challenge.delta,
           embedUrl: null,
           embedTitle: 'embed title for es',
@@ -1213,7 +1229,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           format: challenge.format,
           genealogy: challenge.genealogy,
           illustrationAlt: 'illustration alt for es',
-          illustrationUrl: 'url/to/attachment',
+          illustrationUrl: 'illustration url',
           instruction: 'instruction for es',
           locales: ['es-419'],
           proposals: 'proposals for es',

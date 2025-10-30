@@ -7,19 +7,28 @@ import * as localizedChallengeRepository from './localized-challenge-repository.
 import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { stringValue } from '../airtable.js';
+import {
+  areArrayEquals,
+  areNullableDatesEqual,
+  areNullableValuesEqual,
+  compareDtos,
+} from './migration-from-airtable.js';
 
 const model = 'challenge';
 
 export async function get(id) {
-  const [challengeDto, localizedChallenges, translations] = await Promise.all([
+  const [airtableDto, pgDto, localizedChallenges, translations] = await Promise.all([
     challengeDatasource.filterById(id),
+    selectChallenges().where('challenges.id', id).first(),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
     translationRepository.listByEntity(model, id),
   ]);
 
-  if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
+  compareDtos(airtableDto, pgDto, compareChallengeDtos);
 
-  return toDomain(challengeDto, translations, localizedChallenges);
+  if (!airtableDto) throw new NotFoundError('Épreuve introuvable');
+
+  return toDomain(airtableDto, translations, localizedChallenges);
 }
 
 export async function list() {
@@ -288,6 +297,30 @@ async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeId
   ]);
 }
 
+function selectChallenges() {
+  return knex
+    .select(
+      'challenges.*',
+      'thematics.competenceId',
+      knex.raw(
+        'coalesce((??), \'[]\') as "files"',
+        knex
+          .select(
+            knex.raw("json_agg(json_build_object('fileId', ??, 'localizedChallengeId', ??))", [
+              'attachments.id',
+              'attachments.localizedChallengeId',
+            ]),
+          )
+          .from('attachments')
+          .where('attachments.challengeId', knex.ref('challenges.id')),
+      ),
+    )
+    .from('challenges')
+    .join('skills', 'skills.id', 'challenges.skillId')
+    .join('tubes', 'tubes.id', 'skills.tubeId')
+    .join('thematics', 'thematics.id', 'tubes.thematicId');
+}
+
 function toDomainList(challengeDtos, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
@@ -311,4 +344,99 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
     translations,
     localizedChallenges,
   });
+}
+
+function compareChallengeDtos(airtableDto, pgDto) {
+  const diff = [];
+  if (airtableDto.id !== pgDto.id) diff.push(`challenge airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.type !== pgDto.type)
+    diff.push(`challenge airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
+  if (airtableDto.t1Status !== pgDto.t1Status)
+    diff.push(`challenge airtable t1Status "${airtableDto.t1Status}" != postgres t1Status "${pgDto.t1Status}"`);
+  if (airtableDto.t2Status !== pgDto.t2Status)
+    diff.push(`challenge airtable t2Status "${airtableDto.t2Status}" != postgres t2Status "${pgDto.t2Status}"`);
+  if (airtableDto.t3Status !== pgDto.t3Status)
+    diff.push(`challenge airtable t3Status "${airtableDto.t3Status}" != postgres t3Status "${pgDto.t3Status}"`);
+  if (!areNullableValuesEqual(airtableDto.status, pgDto.status))
+    diff.push(`challenge airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
+  if (!areNullableValuesEqual(airtableDto.skillId, pgDto.skillId))
+    diff.push(`challenge airtable skillId "${airtableDto.skillId}" != postgres skillId "${pgDto.skillId}"`);
+  if (!areNullableValuesEqual(airtableDto.embedHeight, pgDto.embedHeight))
+    diff.push(
+      `challenge airtable embedHeight "${airtableDto.embedHeight}" != postgres embedHeight "${pgDto.embedHeight}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.timer, pgDto.timer))
+    diff.push(`challenge airtable timer "${airtableDto.timer}" != postgres timer "${pgDto.timer}"`);
+  if (airtableDto.competenceId !== pgDto.competenceId)
+    diff.push(
+      `challenge airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.format, pgDto.format))
+    diff.push(`challenge airtable format "${airtableDto.format}" != postgres format "${pgDto.format}"`);
+  if (airtableDto.autoReply !== pgDto.autoReply)
+    diff.push(`challenge airtable autoReply "${airtableDto.autoReply}" != postgres autoReply "${pgDto.autoReply}"`);
+  if (!areArrayEquals(airtableDto.locales, pgDto.locales))
+    diff.push(`challenges airtable locales "${airtableDto.locales}" != postgres locales "${pgDto.locales}"`);
+  if (!areNullableValuesEqual(airtableDto.genealogy, pgDto.genealogy))
+    diff.push(`challenge airtable genealogy "${airtableDto.genealogy}" != postgres genealogy "${pgDto.genealogy}"`);
+  if (!areNullableValuesEqual(airtableDto.pedagogy, pgDto.pedagogy))
+    diff.push(`challenge airtable pedagogy "${airtableDto.pedagogy}" != postgres pedagogy "${pgDto.pedagogy}"`);
+  if (!areArrayEquals(airtableDto.author, pgDto.author))
+    diff.push(`challenge airtable author "${airtableDto.author}" != postgres author "${pgDto.author}"`);
+  if (!areNullableValuesEqual(airtableDto.declinable, pgDto.declinable))
+    diff.push(`challenge airtable declinable "${airtableDto.declinable}" != postgres declinable "${pgDto.declinable}"`);
+  if (!areNullableValuesEqual(airtableDto.version, pgDto.version))
+    diff.push(`challenge airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
+  if (!areNullableValuesEqual(airtableDto.alternativeVersion, pgDto.alternativeVersion))
+    diff.push(
+      `challenge airtable alternativeVersion "${airtableDto.alternativeVersion}" != postgres alternativeVersion "${pgDto.alternativeVersion}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.accessibility1, pgDto.accessibility1))
+    diff.push(
+      `challenge airtable accessibility1 "${airtableDto.accessibility1}" != postgres accessibility1 "${pgDto.accessibility1}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.accessibility2, pgDto.accessibility2))
+    diff.push(
+      `challenge airtable accessibility2 "${airtableDto.accessibility2}" != postgres accessibility2 "${pgDto.accessibility2}"`,
+    );
+  if (!areNullableValuesEqual(airtableDto.spoil, pgDto.spoil))
+    diff.push(`challenge airtable spoil "${airtableDto.spoil}" != postgres spoil "${pgDto.spoil}"`);
+  if (!areNullableValuesEqual(airtableDto.responsive, pgDto.responsive))
+    diff.push(`challenge airtable responsive "${airtableDto.responsive}" != postgres responsive "${pgDto.responsive}"`);
+  if (!areNullableValuesEqual(airtableDto.delta, pgDto.delta))
+    diff.push(`challenge airtable delta "${airtableDto.delta}" != postgres delta "${pgDto.delta}"`);
+  if (!areNullableValuesEqual(airtableDto.alpha, pgDto.alpha))
+    diff.push(`challenge airtable alpha "${airtableDto.alpha}" != postgres alpha "${pgDto.alpha}"`);
+  if (airtableDto.shuffled !== pgDto.shuffled)
+    diff.push(`challenge airtable shuffled "${airtableDto.shuffled}" != postgres shuffled "${pgDto.shuffled}"`);
+  if (!areArrayEquals(airtableDto.contextualizedFields, pgDto.contextualizedFields))
+    diff.push(
+      `challenge airtable contextualizedFields "${airtableDto.contextualizedFields}" != postgres contextualizedFields "${pgDto.contextualizedFields}"`,
+    );
+  if (!areNullableDatesEqual(airtableDto.validatedAt, pgDto.validatedAt))
+    diff.push(
+      `challenge airtable validatedAt "${airtableDto.validatedAt}" != postgres validatedAt "${pgDto.validatedAt}"`,
+    );
+  if (!areNullableDatesEqual(airtableDto.archivedAt, pgDto.archivedAt))
+    diff.push(`challenge airtable archivedAt "${airtableDto.archivedAt}" != postgres archivedAt "${pgDto.archivedAt}"`);
+  if (!areNullableDatesEqual(airtableDto.madeObsoleteAt, pgDto.madeObsoleteAt))
+    diff.push(
+      `challenge airtable madeObsoleteAt "${airtableDto.madeObsoleteAt}" != postgres madeObsoleteAt "${pgDto.madeObsoleteAt}"`,
+    );
+  if (
+    !areArrayEquals(airtableDto.files, pgDto.files, {
+      sortFn: (file1, file2) => {
+        if (file1.fileId !== file2.fileId) return file1.fileId < file2.fileId ? -1 : 1;
+        if (file1.localizedChallengeId === file2.localizedChallengeId) return 0;
+        return file1.localizedChallengeId < file2.localizedChallengeId ? -1 : 1;
+      },
+      compareFn: (file1, file2) =>
+        file1.fileId === file2.fileId && file1.localizedChallengeId === file2.localizedChallengeId,
+    })
+  )
+    diff.push(
+      `challenge airtable files "${JSON.stringify(airtableDto.files)}" != postgres files "${JSON.stringify(pgDto.files)}"`,
+    );
+
+  return diff;
 }

@@ -18,7 +18,7 @@ describe('Integration | Repository | challenge-repository', () => {
         localizedEsId: 'locES_challengeA_id',
         airtableId: 'airtableChallengeA_id',
         skillId: 'skillId',
-        competenceId: 'competenceId',
+        competenceId: 'competence1',
         alpha: 1,
         alphaAirtable: '1',
         delta: 2,
@@ -50,7 +50,6 @@ describe('Integration | Repository | challenge-repository', () => {
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         geography: 'FR',
-        files: [],
         validatedAt: null,
         archivedAt: null,
         createdAt: '2025-10-22T17:55:00Z',
@@ -58,6 +57,10 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         shuffled: true,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
+        files: [
+          { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
+          { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
+        ],
       };
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
@@ -160,7 +163,8 @@ describe('Integration | Repository | challenge-repository', () => {
               Spoil: challengeA_data.spoil,
               Responsive: challengeA_data.responsive,
               Géographie: challengeA_data.geography,
-              files: challengeA_data.files,
+              files: challengeA_data.files.map(({ fileId }) => fileId),
+              filesLocalizedChallengeIds: challengeA_data.files.map(({ localizedChallengeId }) => localizedChallengeId),
               validated_at: challengeA_data.validatedAt,
               archived_at: challengeA_data.archivedAt,
               created_at: challengeA_data.createdAt,

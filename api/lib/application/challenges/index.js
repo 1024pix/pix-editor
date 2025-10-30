@@ -13,7 +13,6 @@ import {
   updateChallenge,
 } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { NotFoundError } from '../../domain/errors.js';
 
 const challengeIdType = Joi.string()
   .pattern(/^(rec|challenge)[a-zA-Z0-9]+$/)
