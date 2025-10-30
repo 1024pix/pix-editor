@@ -109,14 +109,20 @@ describe('Integration | Repository | challenge-repository', () => {
         challengeId: 'challengeA_id',
         ...esLoc_challengeA_data,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeA_id',
-        attachmentId: 'attachmentA',
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'locES_challengeA_id',
-        attachmentId: 'attachmentB',
-      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentA',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'challengeA_id',
+        }),
+      );
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentB',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'locES_challengeA_id',
+        }),
+      );
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
@@ -352,14 +358,20 @@ describe('Integration | Repository | challenge-repository', () => {
           challengeId: 'challengeA_id',
           ...esLoc_challengeA_data,
         });
-        databaseBuilder.factory.buildLocalizedChallengeAttachment({
-          localizedChallengeId: 'challengeA_id',
-          attachmentId: 'attachmentA',
-        });
-        databaseBuilder.factory.buildLocalizedChallengeAttachment({
-          localizedChallengeId: 'locES_challengeA_id',
-          attachmentId: 'attachmentB',
-        });
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachmentA',
+            challengeId: 'challengeA_id',
+            localizedChallengeId: 'challengeA_id',
+          }),
+        );
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachmentB',
+            challengeId: 'challengeA_id',
+            localizedChallengeId: 'locES_challengeA_id',
+          }),
+        );
         const challengeB_data = {
           id: 'challengeB_id',
           airtableId: 'airtableChallengeB_id',
@@ -753,14 +765,20 @@ describe('Integration | Repository | challenge-repository', () => {
             challengeId: 'challengeA_id',
             ...esLoc_challengeA_data,
           });
-          databaseBuilder.factory.buildLocalizedChallengeAttachment({
-            localizedChallengeId: 'challengeA_id',
-            attachmentId: 'attachmentA',
-          });
-          databaseBuilder.factory.buildLocalizedChallengeAttachment({
-            localizedChallengeId: 'locES_challengeA_id',
-            attachmentId: 'attachmentB',
-          });
+          databaseBuilder.factory.buildAttachment(
+            domainBuilder.buildAttachmentDatasourceObject({
+              id: 'attachmentA',
+              challengeId: 'challengeA_id',
+              localizedChallengeId: 'challengeA_id',
+            }),
+          );
+          databaseBuilder.factory.buildAttachment(
+            domainBuilder.buildAttachmentDatasourceObject({
+              id: 'attachmentB',
+              challengeId: 'challengeA_id',
+              localizedChallengeId: 'locES_challengeA_id',
+            }),
+          );
           const challengeB_data = {
             id: 'challengeB_id',
             airtableId: 'airtableChallengeB_id',
@@ -1161,14 +1179,20 @@ describe('Integration | Repository | challenge-repository', () => {
             challengeId: 'challengeA_id',
             ...esLoc_challengeA_data,
           });
-          databaseBuilder.factory.buildLocalizedChallengeAttachment({
-            localizedChallengeId: 'challengeA_id',
-            attachmentId: 'attachmentA',
-          });
-          databaseBuilder.factory.buildLocalizedChallengeAttachment({
-            localizedChallengeId: 'locES_challengeA_id',
-            attachmentId: 'attachmentB',
-          });
+          databaseBuilder.factory.buildAttachment(
+            domainBuilder.buildAttachmentDatasourceObject({
+              id: 'attachmentA',
+              challengeId: 'challengeA_id',
+              localizedChallengeId: 'challengeA_id',
+            }),
+          );
+          databaseBuilder.factory.buildAttachment(
+            domainBuilder.buildAttachmentDatasourceObject({
+              id: 'attachmentB',
+              challengeId: 'challengeA_id',
+              localizedChallengeId: 'locES_challengeA_id',
+            }),
+          );
           await databaseBuilder.commit();
           vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
             if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
@@ -1410,14 +1434,20 @@ describe('Integration | Repository | challenge-repository', () => {
           challengeId: 'challengeA_id',
           ...esLoc_challengeA_data,
         });
-        databaseBuilder.factory.buildLocalizedChallengeAttachment({
-          localizedChallengeId: 'challengeA_id',
-          attachmentId: 'attachmentA',
-        });
-        databaseBuilder.factory.buildLocalizedChallengeAttachment({
-          localizedChallengeId: 'locES_challengeA_id',
-          attachmentId: 'attachmentB',
-        });
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachmentA',
+            challengeId: 'challengeA_id',
+            localizedChallengeId: 'challengeA_id',
+          }),
+        );
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: 'attachmentB',
+            challengeId: 'challengeA_id',
+            localizedChallengeId: 'locES_challengeA_id',
+          }),
+        );
         const challengeB_data = {
           id: 'challengeB_id',
           airtableId: 'airtableChallengeB_id',
@@ -1809,14 +1839,20 @@ describe('Integration | Repository | challenge-repository', () => {
         challengeId: 'challengeA_id',
         ...esLoc_challengeA_data,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeA_id',
-        attachmentId: 'attachmentA',
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'locES_challengeA_id',
-        attachmentId: 'attachmentB',
-      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentA',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'challengeA_id',
+        }),
+      );
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentB',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'locES_challengeA_id',
+        }),
+      );
       const challengeB_data = {
         id: 'challengeB_id',
         airtableId: 'airtableChallengeB_id',
@@ -2225,14 +2261,20 @@ describe('Integration | Repository | challenge-repository', () => {
         challengeId: 'challengeA_id',
         ...esLoc_challengeA_data,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeA_id',
-        attachmentId: 'attachmentA',
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'locES_challengeA_id',
-        attachmentId: 'attachmentB',
-      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentA',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'challengeA_id',
+        }),
+      );
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentB',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'locES_challengeA_id',
+        }),
+      );
       const challengeB_data = {
         id: 'challengeB_id',
         airtableId: 'airtableChallengeB_id',
@@ -2711,14 +2753,20 @@ describe('Integration | Repository | challenge-repository', () => {
         challengeId: 'challengeActiveA_id',
         ...primaryLoc_challengeActiveA_data,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeDraftA_id',
-        attachmentId: 'attachmentDraftA',
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'locES_challengeDraftA_id',
-        attachmentId: 'attachmentDraftB',
-      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentDraftA',
+          challengeId: 'challengeDraftA_id',
+          localizedChallengeId: 'challengeDraftA_id',
+        }),
+      );
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentDraftB',
+          challengeId: 'challengeDraftA_id',
+          localizedChallengeId: 'locES_challengeDraftA_id',
+        }),
+      );
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
@@ -3115,10 +3163,13 @@ describe('Integration | Repository | challenge-repository', () => {
         challengeId: 'challengeProtoB_id',
         ...primaryLoc_ProtoB_data,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeProtoA_id',
-        attachmentId: 'attachmentProtoA',
-      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentProtoA',
+          challengeId: 'challengeProtoA_id',
+          localizedChallengeId: 'challengeProtoA_id',
+        }),
+      );
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
@@ -3357,7 +3408,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
   describe('#createBatch', () => {
     afterEach(async () => {
-      await knex('localized_challenges-attachments').delete();
       await knex('localized_challenges').delete();
       await knex('challenges').delete();
       await knex('translations').delete();
@@ -3927,8 +3977,6 @@ describe('Integration | Repository | challenge-repository', () => {
         },
       ]);
 
-      await expect(knex('localized_challenges-attachments').select('*')).resolves.toStrictEqual([]);
-
       await expect(
         knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale']),
       ).resolves.toStrictEqual([
@@ -4248,10 +4296,8 @@ describe('Integration | Repository | challenge-repository', () => {
           validatedAt: null,
         },
       ]);
-      const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments').select('*');
-      expect(allLocalizedChallengesAttachments.length).toStrictEqual(0);
-      const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale']);
 
+      const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale']);
       expect(allTranslations).to.deep.have.members([
         {
           key: 'challenge.challengeToCreate_id.instruction',

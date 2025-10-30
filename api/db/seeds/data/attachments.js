@@ -87,10 +87,6 @@ export async function persistAttachments({ items, airtableClient, logger, databa
     item.challengeId = record.get('challengeId persistant')[0];
   });
   items.forEach((item) => {
-    databaseBuilder.factory.buildLocalizedChallengeAttachment({
-      localizedChallengeId: item.localizedChallengeId,
-      attachmentId: item.airtableId,
-    });
     databaseBuilder.factory.buildAttachment(item);
   });
 }

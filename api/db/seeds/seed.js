@@ -14,7 +14,6 @@ import { buildTubesFromConfig, copyTubesFromAirtable } from './data/tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 
-import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
 import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
@@ -159,7 +158,6 @@ export async function seed(knex) {
 
     const translations = await translationsBuilder(databaseBuilder);
     await localizedChallengesBuilder(databaseBuilder, translations);
-    await localizedChallengesAttachmentsBuilder(databaseBuilder);
     buildMissions(databaseBuilder);
 
     await copyAttachmentsFromAirtable({ airtableClient, databaseBuilder, logger });

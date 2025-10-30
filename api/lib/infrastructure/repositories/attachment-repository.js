@@ -54,14 +54,6 @@ export async function createBatch(attachments) {
         })),
       )
       .into('attachments');
-    await transaction
-      .insert(
-        createdAttachmentsDtos.map(({ localizedChallengeId, id: attachmentId }) => ({
-          attachmentId,
-          localizedChallengeId,
-        })),
-      )
-      .into('localized_challenges-attachments');
 
     return toDomainList(createdAttachmentsDtos);
   });
@@ -94,12 +86,6 @@ export async function create(attachment) {
         localizedChallengeId: attachment.localizedChallengeId,
       })
       .into('attachments');
-    await transaction
-      .insert({
-        localizedChallengeId: createdAttachmentDTO.localizedChallengeId,
-        attachmentId: createdAttachmentDTO.id,
-      })
-      .into('localized_challenges-attachments');
 
     return toDomain(createdAttachmentDTO);
   });
@@ -131,7 +117,6 @@ export async function update(attachment) {
 export async function remove(attachmentId) {
   return knex.transaction(async (transaction) => {
     await attachmentDatasource.delete([attachmentId]);
-    await transaction.delete().from('localized_challenges-attachments').where('attachmentId', attachmentId);
     await transaction.delete().from('attachments').where('id', attachmentId);
   });
 }

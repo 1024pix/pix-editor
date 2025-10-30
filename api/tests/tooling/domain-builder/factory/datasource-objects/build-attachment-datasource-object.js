@@ -4,6 +4,9 @@ export function buildAttachmentDatasourceObject({
   type = 'image',
   challengeId = 'recChallengeId',
   localizedChallengeId = challengeId,
+  filename = 'file.ext',
+  mimeType = 'image/ext',
+  size = 123,
 } = {}) {
   return {
     id,
@@ -11,5 +14,8 @@ export function buildAttachmentDatasourceObject({
     type,
     challengeId,
     localizedChallengeId,
+    filename,
+    mimeType,
+    size,
   };
 }

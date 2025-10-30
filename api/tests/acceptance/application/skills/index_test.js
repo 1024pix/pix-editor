@@ -1905,15 +1905,16 @@ describe('Application | Route | Skills', () => {
           geography: 'FR',
         }),
       ];
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: protoId,
-        attachmentId: 'attid1',
-      });
-      const attachment = airtableBuilder.factory.buildAttachment({
+      const attachmentData = domainBuilder.buildAttachmentDatasourceObject({
         challengeId: protoId,
         localizedChallengeId: protoId,
         type: 'illustration',
+        url: 'url/to/attachment',
+        mimeType: 'image/jpeg',
+        filename: 'nom_fichier',
       });
+      databaseBuilder.factory.buildAttachment(attachmentData);
+      const attachment = airtableBuilder.factory.buildAttachment(attachmentData);
 
       const createdAirtableSkill = structuredClone(airtableSkillToClone);
       createdAirtableSkill.id = null;
@@ -2215,7 +2216,6 @@ describe('Application | Route | Skills', () => {
 
     afterEach(async () => {
       await knex('skills-tutorials').delete();
-      await knex('localized_challenges-attachments').delete();
       await knex('attachments').delete();
       await knex('localized_challenges').delete();
       await knex('challenges').delete();
@@ -2359,10 +2359,6 @@ describe('Application | Route | Skills', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      await expect(
-        knex.select('*').from('localized_challenges-attachments').where('localizedChallengeId', 'clonedChallengeId'),
-      ).resolves.toStrictEqual([{ attachmentId: 'recOsef', localizedChallengeId: 'clonedChallengeId' }]);
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
