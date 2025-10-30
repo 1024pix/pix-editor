@@ -135,7 +135,7 @@ export async function search(params) {
   if (params.sort) {
     params.sort.forEach(([field, direction]) => {
       if (field === 'name') {
-        query = query.orderByRaw('?? collate ??, ??', ['tubes.name', 'fr-x-icu', 'skills.level']);
+        query = query.orderByRaw('(?? || ??) collate ??', ['tubes.name', 'skills.level', 'fr-x-icu']);
       } else {
         query = query.orderBy(field, direction);
       }
