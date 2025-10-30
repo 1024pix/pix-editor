@@ -1,5 +1,14 @@
 
 
+## v3.232.1 (30/10/2025)
+
+
+### :bug: Correction
+- [#1222](https://github.com/1024pix/pix-editor/pull/1222) [BUGFIX] Evite de crash quand on log en dehors du contexte d'une requête.
+
+### :arrow_up: Montée de version
+- [#1212](https://github.com/1024pix/pix-editor/pull/1212) [BUMP] Update dependency vitest to v4 (api).
+
 ## v3.232.0 (30/10/2025)
 
 
