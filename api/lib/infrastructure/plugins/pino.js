@@ -18,7 +18,7 @@ function requestSerializer(req) {
 
   return {
     ...enhancedReq,
-    user_id: monitoringTools.extractUserIdFromRequest(context.request),
+    user_id: monitoringTools.extractUserIdFromRequest(context?.request),
     metrics: context?.metrics,
     route: context?.request?.route?.path,
   };
