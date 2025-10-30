@@ -1905,10 +1905,6 @@ describe('Application | Route | Skills', () => {
           geography: 'FR',
         }),
       ];
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: protoId,
-        attachmentId: 'attid1',
-      });
       const attachmentData = domainBuilder.buildAttachmentDatasourceObject({
         challengeId: protoId,
         localizedChallengeId: protoId,
@@ -2220,7 +2216,6 @@ describe('Application | Route | Skills', () => {
 
     afterEach(async () => {
       await knex('skills-tutorials').delete();
-      await knex('localized_challenges-attachments').delete();
       await knex('attachments').delete();
       await knex('localized_challenges').delete();
       await knex('challenges').delete();
@@ -2364,10 +2359,6 @@ describe('Application | Route | Skills', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      await expect(
-        knex.select('*').from('localized_challenges-attachments').where('localizedChallengeId', 'clonedChallengeId'),
-      ).resolves.toStrictEqual([{ attachmentId: 'recOsef', localizedChallengeId: 'clonedChallengeId' }]);
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),

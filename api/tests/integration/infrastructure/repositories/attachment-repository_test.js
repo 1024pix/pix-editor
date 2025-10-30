@@ -78,18 +78,10 @@ describe('Integration | Repository | attachment-repository', () => {
         id: 'localizedChallengeId1',
         challengeId: challengeId1,
       });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId: 'attachmentId1',
-        localizedChallengeId: 'localizedChallengeId1',
-      });
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
         challengeId: challengeId2,
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId: 'attachmentId2',
-        localizedChallengeId: 'localizedChallengeId2',
       });
 
       await databaseBuilder.commit();
@@ -334,7 +326,6 @@ describe('Integration | Repository | attachment-repository', () => {
 
   describe('#createBatch', () => {
     afterEach(async () => {
-      await knex('localized_challenges-attachments').delete();
       await knex('attachments').delete();
     });
 
@@ -501,27 +492,11 @@ describe('Integration | Repository | attachment-repository', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      await expect(
-        knex('localized_challenges-attachments')
-          .select(['attachmentId', 'localizedChallengeId'])
-          .orderBy('attachmentId'),
-      ).resolves.toStrictEqual([
-        {
-          attachmentId: 'airtableIdAttachmentA',
-          localizedChallengeId: attachmentA.localizedChallengeId,
-        },
-        {
-          attachmentId: 'airtableIdAttachmentB',
-          localizedChallengeId: attachmentB.localizedChallengeId,
-        },
-      ]);
     });
   });
 
   describe('#create', () => {
     afterEach(async () => {
-      await knex('localized_challenges-attachments').delete();
       await knex('attachments').delete();
     });
 
@@ -622,14 +597,6 @@ describe('Integration | Repository | attachment-repository', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      await expect(
-        knex('localized_challenges-attachments')
-          .select(['attachmentId', 'localizedChallengeId'])
-          .where({ localizedChallengeId: attachment.localizedChallengeId }),
-      ).resolves.toStrictEqual([
-        { attachmentId: 'airtableIdAttachment', localizedChallengeId: attachment.localizedChallengeId },
-      ]);
     });
   });
 
@@ -662,10 +629,6 @@ describe('Integration | Repository | attachment-repository', () => {
       databaseBuilder.factory.buildAttachment({
         ...attachmentDto,
         filename: 'old attachment_filename',
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId: 'recABC123',
-        localizedChallengeId: 'localizedChallengeId',
       });
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'updateRecord').mockImplementation((tableName, airtableRequestBody) => {
@@ -735,17 +698,6 @@ describe('Integration | Repository | attachment-repository', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      await expect(
-        knex('localized_challenges-attachments')
-          .select(['attachmentId', 'localizedChallengeId'])
-          .where({ localizedChallengeId: attachment.localizedChallengeId }),
-      ).resolves.toStrictEqual([
-        {
-          attachmentId: attachment.id,
-          localizedChallengeId: attachment.localizedChallengeId,
-        },
-      ]);
     });
   });
 
@@ -790,10 +742,6 @@ describe('Integration | Repository | attachment-repository', () => {
           id: 'localizedChallengeId',
           challengeId: challengeId1,
           locale: 'nl',
-        });
-        databaseBuilder.factory.buildLocalizedChallengeAttachment({
-          attachmentId: 'recABC123',
-          localizedChallengeId: 'localizedChallengeId',
         });
         await databaseBuilder.commit();
         vi.spyOn(airtableClient, 'findRecord').mockImplementation((tableName, id) => {
@@ -855,14 +803,6 @@ describe('Integration | Repository | attachment-repository', () => {
         localizedChallengeId: loc2Id,
       });
 
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId,
-        localizedChallengeId: loc1Id,
-      });
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId: 'someOtherAttachmentId',
-        localizedChallengeId: loc2Id,
-      });
       await databaseBuilder.commit();
 
       vi.spyOn(airtableClient, 'deleteRecords').mockImplementation((tableName, recordIds) => {
@@ -876,9 +816,6 @@ describe('Integration | Repository | attachment-repository', () => {
 
       // then
       await expect(knex('attachments').pluck('id')).resolves.toStrictEqual(['someOtherAttachmentId']);
-      await expect(knex('localized_challenges-attachments').pluck('attachmentId')).resolves.toStrictEqual([
-        'someOtherAttachmentId',
-      ]);
     });
   });
 });

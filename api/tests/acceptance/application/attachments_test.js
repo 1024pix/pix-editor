@@ -57,7 +57,6 @@ describe('Acceptance | Route | attachments', () => {
     });
 
     afterEach(async function () {
-      await knex('localized_challenges-attachments').delete();
       await knex('attachments').delete();
     });
 
@@ -241,13 +240,6 @@ describe('Acceptance | Route | attachments', () => {
           localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
-        },
-      ]);
-
-      await expect(knex.select('*').from('localized_challenges-attachments')).resolves.toStrictEqual([
-        {
-          localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
-          attachmentId: 'airtableAttachmentId',
         },
       ]);
 
@@ -605,10 +597,6 @@ describe('Acceptance | Route | attachments', () => {
 
       databaseBuilder.factory.buildAttachment(attachment);
 
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: 'challengeId',
-        attachmentId: 'recAttachmentId',
-      });
       await databaseBuilder.commit();
 
       const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
@@ -642,7 +630,6 @@ describe('Acceptance | Route | attachments', () => {
 
       // then
       await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([]);
-      await expect(knex.select('*').from('localized_challenges-attachments')).resolves.toStrictEqual([]);
 
       expect(response.statusCode).toBe(204);
       expect(airtableGetAttachmentScope.isDone()).toBe(true);

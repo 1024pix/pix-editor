@@ -208,11 +208,6 @@ describe('Integration | Repository | release-repository', function () {
       buildSkillsTranslations(skills);
       buildChallengesTranslationsAndLocalizedChallenges(challenges);
 
-      databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        attachmentId: 'attachment4',
-        localizedChallengeId: 'challengeNl',
-      });
-
       databaseBuilder.factory.buildStaticCourse({
         id: 'course1PG',
         name: 'course1PG name',
