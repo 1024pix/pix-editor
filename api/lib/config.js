@@ -20,6 +20,12 @@ function _getStringArray(stringWithCommas, defaultStringArray) {
   return defaultStringArray;
 }
 
+function _getLogForHumans() {
+  const processOutputingToTerminal = process.stdout.isTTY;
+  const forceJSONLogs = process.env.LOG_FOR_HUMANS === 'false';
+  return processOutputingToTerminal && !forceJSONLogs;
+}
+
 export const rootPath = path.normalize(__dirname + '/..');
 
 export let port = parseInt(process.env.PORT, 10) || 3002;
@@ -46,8 +52,9 @@ export const logging = {
   logLevel: process.env.LOG_LEVEL || 'info',
   logOpsMetrics: isFeatureEnabled(process.env.LOG_OPS_METRICS),
   emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
-  prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT),
   debugSections: process.env.LOG_DEBUG?.split(',') ?? [],
+  logForHumans: _getLogForHumans(),
+  logForHumansCompactFormat: process.env.LOG_FOR_HUMANS_FORMAT === 'compact',
 };
 
 export let pixApi = {
