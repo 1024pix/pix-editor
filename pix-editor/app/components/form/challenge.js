@@ -167,9 +167,9 @@ export default class ChallengeForm extends Component {
       this.args.challenge.autoReply = true;
       this.args.challenge.format = 'mots';
       this.args.challenge.proposals = null;
-      this.args.challenge.t1Status = null;
-      this.args.challenge.t2Status = null;
-      this.args.challenge.t3Status = null;
+      this.args.challenge.t1Status = false;
+      this.args.challenge.t2Status = false;
+      this.args.challenge.t3Status = false;
     }
 
     if (['QCU', 'QCM'].includes(value)) {
