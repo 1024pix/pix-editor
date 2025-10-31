@@ -40,6 +40,18 @@ export async function get(id) {
   return toDomain(airtableDto, translations, pgDto);
 }
 
+export async function getMany(ids) {
+  const [airtableDtos, pgDtos, translations] = await Promise.all([
+    skillDatasource.filter({ filter: { ids } }),
+    selectSkills().whereIn('skills.id', ids).orderBy('skills.id'),
+    translationRepository.listByEntities(model, ids),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+
+  return toDomainList(airtableDtos, translations, pgDtos);
+}
+
 export async function getByAirtableId(id) {
   const airtableDto = await skillDatasource.find(id);
   if (!airtableDto) return null;
@@ -133,13 +145,15 @@ export async function search(params) {
     `${params.filter.name}%`,
   ]);
   if (params.sort) {
-    params.sort.forEach(([field, direction]) => {
+    const orderBySqlAndParams = params.sort.map(([field, direction]) => {
       if (field === 'name') {
-        query = query.orderByRaw('(?? || ??) collate ??', ['tubes.name', 'skills.level', 'fr-x-icu']);
-      } else {
-        query = query.orderBy(field, direction);
+        return [`(?? || ??) collate ?? ${direction}`, ['tubes.name', 'skills.level', 'fr-x-icu']];
       }
+      return [`?? ${direction}`, [`skills.${field}`]];
     });
+    const orderBySql = orderBySqlAndParams.map(([sql]) => sql).join(', ');
+    const orderByParams = orderBySqlAndParams.flatMap(([, params]) => params);
+    query = query.orderByRaw(orderBySql, orderByParams);
   } else {
     query = query.orderBy('skills.id');
   }

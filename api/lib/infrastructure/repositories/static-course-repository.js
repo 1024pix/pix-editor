@@ -7,9 +7,9 @@ import {
   StaticCourseTag as StaticCourseTag_Read,
 } from '../../domain/readmodels/index.js';
 import { StaticCourse } from '../../domain/models/index.js';
-import { skillDatasource } from '../datasources/airtable/index.js';
 import * as challengeRepository from './challenge-repository.js';
-import { localizedChallengeRepository } from './index.js';
+import * as localizedChallengeRepository from './localized-challenge-repository.js';
+import * as skillRepository from './skill-repository.js';
 import _ from 'lodash';
 
 export async function findReadSummaries({ filter, page }) {
@@ -183,9 +183,7 @@ async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
   });
 
   const skillIds = challenges.map(({ skillId }) => skillId);
-  const skillsFromAirtable = await skillDatasource.filter({
-    filter: { ids: skillIds },
-  });
+  const skillsFromAirtable = await skillRepository.getMany(skillIds);
 
   return localizedChallengeIds.map((localizedChallengeId, index) => {
     const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);

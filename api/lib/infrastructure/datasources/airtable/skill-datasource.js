@@ -34,6 +34,7 @@ export const skillDatasource = datasource.extend({
 
   sortableFields: {
     name: 'Nom',
+    version: 'Version',
   },
 
   fromAirTableObject(airtableRecord) {

@@ -28,7 +28,7 @@ module('Unit | Component | sidebar/search', function(hooks) {
           name: '\\\'"\t coucou \\\'"\t',
         },
         page: { limit: 20 },
-        sort: 'name',
+        sort: 'name,-version',
       }));
     });
   });

@@ -172,6 +172,14 @@ export async function getMany(ids) {
   return airtableDtos.map(toDomain);
 }
 
+export async function list() {
+  const [airtableDtos, pgDtos] = await Promise.all([tutorialDatasource.list(), selectTutorials().orderBy('id')]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+
+  return airtableDtos.map(toDomain);
+}
+
 async function _delete(ids) {
   const airtableIds = Object.entries(await tutorialDatasource.getAirtableIdsByIds(ids)).map(
     ([, airtableId]) => airtableId,

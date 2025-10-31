@@ -6,11 +6,7 @@ export default defineConfig({
     reporters: process.env.CI ? 'junit' : 'dot',
     outputFile: process.env.CI ? './test-results/report.xml' : undefined,
     restoreMocks: true,
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    maxWorkers: 1,
     setupFiles: ['tests/setup-tests.js'],
   },
 });

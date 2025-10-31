@@ -20,6 +20,12 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
   return toDomainList(datasourceAttachments);
 }
 
+export async function listByLocalizedChallengeId(localizedChallengeId) {
+  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId);
+  if (!datasourceAttachments) return [];
+  return toDomainList(datasourceAttachments);
+}
+
 export async function createBatch(attachments) {
   return knex.transaction(async (transaction) => {
     if (!attachments || attachments.length === 0) return [];

@@ -1,6 +1,6 @@
-import { attachmentDatasource, tutorialDatasource } from '../datasources/airtable/index.js';
 import {
   areaRepository,
+  attachmentRepository,
   challengeRepository,
   competenceRepository,
   frameworkRepository,
@@ -8,6 +8,7 @@ import {
   skillRepository,
   thematicRepository,
   tubeRepository,
+  tutorialRepository,
 } from './index.js';
 import {
   areaTransformer,
@@ -81,13 +82,13 @@ async function _getCurrentContent() {
   ] = await Promise.all([
     challengeRepository.list(),
     areaRepository.list(),
-    attachmentDatasource.list(),
+    attachmentRepository.list(),
     competenceRepository.list(),
     frameworkRepository.list(),
     skillRepository.list(),
     thematicRepository.list(),
     tubeRepository.list(),
-    tutorialDatasource.list(),
+    tutorialRepository.list(),
     getStaticCourses(),
     missionRepository.list(),
   ]);

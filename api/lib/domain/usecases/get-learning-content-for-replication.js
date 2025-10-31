@@ -1,4 +1,3 @@
-import { tutorialDatasource } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
   attachmentRepository,
@@ -10,6 +9,7 @@ import {
   thematicRepository,
   translationRepository,
   tubeRepository,
+  tutorialRepository,
 } from '../../infrastructure/repositories/index.js';
 import {
   areaTransformer,
@@ -62,7 +62,7 @@ export async function getLearningContentForReplication() {
     skillRepository.list(),
     challengeRepository.list(),
     attachmentRepository.list(),
-    tutorialDatasource.list(),
+    tutorialRepository.list(),
     _getCoursesFromPGForReplication(),
     missionRepository.list(),
     translationRepository.list(),

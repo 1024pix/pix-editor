@@ -2,17 +2,16 @@ import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
 import { updateChallenge } from '../../../../lib/domain/usecases/update-challenge.js';
-import { challengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { attachmentRepository, challengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
-import { attachmentDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
 
 describe('Unit | Domain | Usecases | update challenge', function () {
   beforeEach(() => {
     vi.spyOn(challengeRepository, 'update');
     vi.spyOn(updatedRecordNotifier, 'notify');
-    vi.spyOn(attachmentDatasource, 'filterByLocalizedChallengeId');
+    vi.spyOn(attachmentRepository, 'listByLocalizedChallengeId');
   });
 
   describe('when challenge id is unknown', () => {
@@ -49,7 +48,7 @@ describe('Unit | Domain | Usecases | update challenge', function () {
       updatedAt: '2025-10-04',
     });
 
-    attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
+    attachmentRepository.listByLocalizedChallengeId.mockResolvedValueOnce([]);
     challengeRepository.update.mockResolvedValueOnce(updatedChallenge);
     updatedRecordNotifier.notify.mockResolvedValueOnce();
 
@@ -75,12 +74,12 @@ describe('Unit | Domain | Usecases | update challenge', function () {
     const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
     // when
-    const result = await updateChallenge(challengeUpdates, { challengeRepository, attachmentDatasource });
+    const result = await updateChallenge(challengeUpdates, { challengeRepository, attachmentRepository });
 
     // then
     expect(result).toBe(updatedChallenge);
     expect(challengeRepository.update).toHaveBeenCalledWith(challengeUpdates);
-    expect(attachmentDatasource.filterByLocalizedChallengeId).toHaveBeenCalledWith('updatedChallengeId');
+    expect(attachmentRepository.listByLocalizedChallengeId).toHaveBeenCalledWith('updatedChallengeId');
     expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
       model: 'challenges',
       pixApiClient,
@@ -105,11 +104,11 @@ describe('Unit | Domain | Usecases | update challenge', function () {
         alternativeInstruction: 'Et donc ; voilà',
       });
 
-      attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
+      attachmentRepository.listByLocalizedChallengeId.mockResolvedValueOnce([]);
       challengeRepository.update.mockResolvedValueOnce(challenge);
       updatedRecordNotifier.notify.mockResolvedValueOnce();
 
-      await updateChallenge(challenge, { challengeRepository, attachmentDatasource });
+      await updateChallenge(challenge, { challengeRepository, attachmentRepository });
 
       expect(challengeRepository.update).toHaveBeenCalledOnce();
       expect(challengeRepository.update).toHaveBeenCalledWith({
@@ -157,17 +156,17 @@ describe('Unit | Domain | Usecases | update challenge', function () {
       ];
       const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
-      attachmentDatasource.filterByLocalizedChallengeId.mockResolvedValueOnce([]);
+      attachmentRepository.listByLocalizedChallengeId.mockResolvedValueOnce([]);
       challengeRepository.update.mockResolvedValueOnce(updatedChallenge);
       updatedRecordNotifier.notify.mockRejectedValueOnce(new Error());
 
       // when
-      const result = await updateChallenge(challengeUpdates, { challengeRepository, attachmentDatasource });
+      const result = await updateChallenge(challengeUpdates, { challengeRepository, attachmentRepository });
 
       // then
       expect(result).toBe(updatedChallenge);
       expect(challengeRepository.update).toHaveBeenCalledWith(challengeUpdates);
-      expect(attachmentDatasource.filterByLocalizedChallengeId).toHaveBeenCalledWith('updatedChallengeId');
+      expect(attachmentRepository.listByLocalizedChallengeId).toHaveBeenCalledWith('updatedChallengeId');
       expect(updatedRecordNotifier.notify).toHaveBeenCalledWith({
         model: 'challenges',
         pixApiClient,
