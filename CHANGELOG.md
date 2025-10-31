@@ -1,5 +1,11 @@
 
 
+## v3.233.0 (31/10/2025)
+
+
+### :building_construction: Tech
+- [#1223](https://github.com/1024pix/pix-editor/pull/1223) [TECH] Remplacer les appels datasources par des appels repositories (PIX-20179).
+
 ## v3.232.2 (31/10/2025)
 
 
