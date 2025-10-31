@@ -1,5 +1,11 @@
 
 
+## v3.232.2 (31/10/2025)
+
+
+### :bug: Correction
+- [#1224](https://github.com/1024pix/pix-editor/pull/1224) [BUGFIX] Éviter d’envoyer null dans les booléens txStatus.
+
 ## v3.232.1 (30/10/2025)
 
 
