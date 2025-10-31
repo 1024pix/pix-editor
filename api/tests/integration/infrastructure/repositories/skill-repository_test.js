@@ -599,7 +599,10 @@ describe('Integration | Repository | skill-repository', () => {
       it('should return corresponding skills', async () => {
         const params = {
           filter: { name: '@NotFound' },
-          sort: [['name', 'asc']],
+          sort: [
+            ['name', 'asc'],
+            ['version', 'desc'],
+          ],
           page: { limit: 10 },
         };
         const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([]);
@@ -612,7 +615,10 @@ describe('Integration | Repository | skill-repository', () => {
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
           filterByFormula: 'FIND("@notfound", LOWER(Nom))',
           fields: skillDatasource.usedFields,
-          sort: [{ field: 'Nom', direction: 'asc' }],
+          sort: [
+            { field: 'Nom', direction: 'asc' },
+            { field: 'Version', direction: 'desc' },
+          ],
           maxRecords: 10,
         });
       });

@@ -145,13 +145,15 @@ export async function search(params) {
     `${params.filter.name}%`,
   ]);
   if (params.sort) {
-    params.sort.forEach(([field, direction]) => {
+    const orderBySqlAndParams = params.sort.map(([field, direction]) => {
       if (field === 'name') {
-        query = query.orderByRaw('(?? || ??) collate ??', ['tubes.name', 'skills.level', 'fr-x-icu']);
-      } else {
-        query = query.orderBy(field, direction);
+        return [`(?? || ??) collate ?? ${direction}`, ['tubes.name', 'skills.level', 'fr-x-icu']];
       }
+      return [`?? ${direction}`, [`skills.${field}`]];
     });
+    const orderBySql = orderBySqlAndParams.map(([sql]) => sql).join(', ');
+    const orderByParams = orderBySqlAndParams.flatMap(([, params]) => params);
+    query = query.orderByRaw(orderBySql, orderByParams);
   } else {
     query = query.orderBy('skills.id');
   }

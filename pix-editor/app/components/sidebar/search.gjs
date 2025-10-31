@@ -44,7 +44,7 @@ export default class SidebarSearch extends Component {
         name: skillName,
       },
       page: { limit: 20 },
-      sort: 'name',
+      sort: 'name,-version',
     });
     return skills.map((skill) => ({
       isSkill: true,
