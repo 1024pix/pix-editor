@@ -39,7 +39,7 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       t2Status: true,
       t3Status: true,
       status: Challenge.STATUSES.VALIDE,
-      competenceId: 'A',
+      competenceId: 'competence1',
       embedUrl: 'A',
       embedTitle: 'A',
       embedHeight: 1,
@@ -65,22 +65,93 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-    databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
-    databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: 'PROTO', skillId: 'skill1' }),
-    );
-    databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI1_ISO', skillId: 'skill1' }),
-    );
-    databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI2', skillId: 'skill1' }),
-    );
-    databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI_ORPHAN_VERSION', skillId: 'skill1' }),
-    );
-    databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: 'DECLI_ORPHAN_SKILL', skillId: 'skill1' }),
-    );
+    databaseBuilder.factory.buildSkill({ id: 'recSkillId', tubeId: 'tube1' });
+    databaseBuilder.factory.buildSkill({ id: 'someOtherReallyGreatSkill', tubeId: 'tube1' });
+
+    const proto = domainBuilder.buildChallengeDatasourceObject({
+      id: 'PROTO',
+      airtableId: 'recPROTO',
+      alternativeVersion: null,
+      genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      ...someOtherCommonData,
+      ...dataThatShouldBeTheSame,
+    });
+    const decli1 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'DECLI1_ISO',
+      airtableId: 'recDECLI1_ISO',
+      alternativeVersion: 1,
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      skillId: 'recSkillId',
+      instruction: 'B',
+      alternativeInstruction: 'B',
+      proposals: 'B',
+      solution: 'B',
+      solutionToDisplay: 'B',
+      t1Status: false,
+      t2Status: false,
+      t3Status: false,
+      status: Challenge.STATUSES.ARCHIVE,
+      competenceId: 'competence1',
+      embedUrl: 'B',
+      embedTitle: 'B',
+      embedHeight: 2,
+      format: Challenge.FORMATS.DATE,
+      locales: ['en'],
+      author: ['B'],
+      geography: 'EN',
+      files: [],
+      updatedAt: '2020-10-04',
+      createdAt: '2020-07-14',
+      validatedAt: '2020-02-02T14:17:30.820Z',
+      archivedAt: '2020-03-03T10:47:05.555Z',
+      madeObsoleteAt: '2020-04-04T10:47:05.555Z',
+      alpha: 2,
+      delta: 2,
+      version: 1,
+      ...dataThatShouldBeTheSame,
+    });
+    const decli2 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'DECLI2',
+      airtableId: 'recDECLI2',
+      alternativeVersion: 2,
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      ...someOtherCommonData,
+      accessibility1: Challenge.ACCESSIBILITY1.KO,
+      accessibility2: Challenge.ACCESSIBILITY2.KO,
+      autoReply: false,
+      contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
+      declinable: Challenge.DECLINABLES.DIFFICILEMENT,
+      focusable: false,
+      pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
+      responsive: Challenge.RESPONSIVES.TABLETTE,
+      shuffled: false,
+      spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
+      timer: 456,
+      toRephrase: false,
+      type: Challenge.TYPES.QCU,
+    });
+    const decliOrphanVersion = domainBuilder.buildChallengeDatasourceObject({
+      id: 'DECLI_ORPHAN_VERSION',
+      airtableId: 'recDECLI_ORPHAN_VERSION',
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      ...someOtherCommonData,
+      ...dataThatShouldBeTheSame,
+      version: 2,
+    });
+    const decliOrphanSkill = domainBuilder.buildChallengeDatasourceObject({
+      id: 'DECLI_ORPHAN_SKILL',
+      airtableId: 'recDECLI_ORPHAN_SKILL',
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      ...someOtherCommonData,
+      ...dataThatShouldBeTheSame,
+      skillId: 'someOtherReallyGreatSkill',
+    });
+
+    databaseBuilder.factory.buildChallenge(proto);
+    databaseBuilder.factory.buildChallenge(decli1);
+    databaseBuilder.factory.buildChallenge(decli2);
+    databaseBuilder.factory.buildChallenge(decliOrphanVersion);
+    databaseBuilder.factory.buildChallenge(decliOrphanSkill);
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'PROTO',
       challengeId: 'PROTO',
@@ -125,94 +196,11 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       ...dataThatShouldBeTheSame,
     });
     const airtableChallenges = [
-      airtableBuilder.factory.buildChallenge(
-        domainBuilder.buildChallenge({
-          id: 'PROTO',
-          airtableId: 'recPROTO',
-          alternativeVersion: null,
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          ...someOtherCommonData,
-          ...dataThatShouldBeTheSame,
-        }),
-      ),
-      airtableBuilder.factory.buildChallenge(
-        domainBuilder.buildChallenge({
-          id: 'DECLI1_ISO',
-          airtableId: 'recDECLI1_ISO',
-          alternativeVersion: 1,
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          skillId: 'recSkillId',
-          instruction: 'B',
-          alternativeInstruction: 'B',
-          proposals: 'B',
-          solution: 'B',
-          solutionToDisplay: 'B',
-          t1Status: false,
-          t2Status: false,
-          t3Status: false,
-          status: Challenge.STATUSES.ARCHIVE,
-          competenceId: 'B',
-          embedUrl: 'B',
-          embedTitle: 'B',
-          embedHeight: 2,
-          format: Challenge.FORMATS.DATE,
-          locales: ['en'],
-          author: ['B'],
-          geography: 'EN',
-          files: [],
-          updatedAt: '2020-10-04',
-          createdAt: '2020-07-14',
-          validatedAt: '2020-02-02T14:17:30.820Z',
-          archivedAt: '2020-03-03T10:47:05.555Z',
-          madeObsoleteAt: '2020-04-04T10:47:05.555Z',
-          alpha: 2,
-          delta: 2,
-          version: 1,
-          ...dataThatShouldBeTheSame,
-        }),
-      ),
-      airtableBuilder.factory.buildChallenge(
-        domainBuilder.buildChallenge({
-          id: 'DECLI2',
-          airtableId: 'recDECLI2',
-          alternativeVersion: 2,
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          ...someOtherCommonData,
-          accessibility1: Challenge.ACCESSIBILITY1.KO,
-          accessibility2: Challenge.ACCESSIBILITY2.KO,
-          autoReply: false,
-          contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
-          declinable: Challenge.DECLINABLES.DIFFICILEMENT,
-          focusable: false,
-          pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
-          responsive: Challenge.RESPONSIVES.TABLETTE,
-          shuffled: false,
-          spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
-          timer: 456,
-          toRephrase: false,
-          type: Challenge.TYPES.QCU,
-        }),
-      ),
-      airtableBuilder.factory.buildChallenge(
-        domainBuilder.buildChallenge({
-          id: 'DECLI_ORPHAN_VERSION',
-          airtableId: 'recDECLI_ORPHAN_VERSION',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          ...someOtherCommonData,
-          ...dataThatShouldBeTheSame,
-          version: 2,
-        }),
-      ),
-      airtableBuilder.factory.buildChallenge(
-        domainBuilder.buildChallenge({
-          id: 'DECLI_ORPHAN_SKILL',
-          airtableId: 'recDECLI_ORPHAN_SKILL',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          ...someOtherCommonData,
-          ...dataThatShouldBeTheSame,
-          skillId: 'someOtherReallyGreatSkill',
-        }),
-      ),
+      airtableBuilder.factory.buildChallenge(proto),
+      airtableBuilder.factory.buildChallenge(decli1),
+      airtableBuilder.factory.buildChallenge(decli2),
+      airtableBuilder.factory.buildChallenge(decliOrphanVersion),
+      airtableBuilder.factory.buildChallenge(decliOrphanSkill),
     ];
 
     airtableChallengesScope = nock('https://api.airtable.com')

@@ -147,6 +147,7 @@ async function mockCurrentContent() {
     accessibility1: Challenge.ACCESSIBILITY1.OK,
     accessibility2: Challenge.ACCESSIBILITY2.OK,
     skillId: 'recSkill1',
+    competenceId: 'recCompetence1',
   });
   const alternativeChallenge = domainBuilder.buildChallenge({
     id: 'challenge-id-alt',
@@ -156,6 +157,7 @@ async function mockCurrentContent() {
     accessibility2: Challenge.ACCESSIBILITY2.RAS,
     files: null,
     skillId: 'recSkill1',
+    competenceId: 'recCompetence1',
   });
   const challengeNl = domainBuilder.buildChallenge({
     id: 'localized-challenge-id',
@@ -174,6 +176,7 @@ async function mockCurrentContent() {
     accessibility2: challenge.accessibility2,
     validatedAt: '2023-01-02T18:08:08.000Z',
     skillId: 'recSkill1',
+    competenceId: 'recCompetence1',
   });
   const expectedPrimaryProtoQualityAttributes = {
     requireGafamWebsiteAccess: true,
@@ -220,7 +223,8 @@ async function mockCurrentContent() {
     filename: 'nom_fichier_1',
     type: Attachment.TYPES.ILLUSTRATION,
     alt: null,
-    localizedChallenge: challenge.id,
+    localizedChallengeId: challenge.id,
+    size: 1234,
   };
   const expectedAttachmentNl = {
     id: 'attid2',
@@ -231,6 +235,7 @@ async function mockCurrentContent() {
     type: Attachment.TYPES.ILLUSTRATION,
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
+    size: 5678,
   };
   expectedCurrentContent.attachments = [
     omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
@@ -417,6 +422,9 @@ async function mockCurrentContent() {
     toRephrase: false,
     validatedAt: new Date('2023-01-02T18:08:08Z'),
   });
+
+  databaseBuilder.factory.buildAttachment(expectedAttachment);
+  databaseBuilder.factory.buildAttachment(expectedAttachmentNl);
 
   expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({

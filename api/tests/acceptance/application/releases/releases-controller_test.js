@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
+import {
+  airtableBuilder,
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  knex,
+} from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Attachment, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
@@ -267,14 +273,7 @@ async function mockCurrentContent() {
       challengeId: 'recChallenge0',
       localizedChallengeId: 'recChallenge0',
     },
-    {
-      id: 'attid3',
-      url: 'url of the joint piece',
-      type: Attachment.TYPES.ATTACHMENT,
-      challengeId: 'recChallenge0',
-      localizedChallengeId: 'recChallenge0En',
-    },
-  ];
+  ].map(domainBuilder.buildAttachmentDatasourceObject);
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
@@ -458,6 +457,8 @@ async function mockCurrentContent() {
     hasEmbedInternalValidation: false,
     noValidationNeeded: false,
   });
+
+  attachments.forEach(databaseBuilder.factory.buildAttachment);
 
   await databaseBuilder.commit();
 
@@ -729,14 +730,7 @@ async function mockContentForRelease() {
       challengeId: 'recChallenge0',
       localizedChallengeId: 'recChallenge0',
     },
-    {
-      id: 'attid3',
-      url: 'url de la pièce jointe',
-      type: Attachment.TYPES.ATTACHMENT,
-      challengeId: 'recChallenge0',
-      localizedChallengeId: 'recChallenge0En',
-    },
-  ];
+  ].map(domainBuilder.buildAttachmentDatasourceObject);
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
@@ -825,6 +819,14 @@ async function mockContentForRelease() {
     });
   }
 
+  databaseBuilder.factory.buildChallenge({ ...expectedCurrentContent.challenges[0], version: 8 });
+  databaseBuilder.factory.buildChallenge({
+    ...expectedCurrentContent.challenges[1],
+    accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
+    accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
+    version: 8,
+  });
+
   for (const challenge of expectedCurrentContent.challenges) {
     databaseBuilder.factory.buildTranslation({
       key: `challenge.${challenge.id}.instruction`,
@@ -863,7 +865,6 @@ async function mockContentForRelease() {
     });
 
     const isAlternative = challenge.genealogy === 'Décliné 1';
-    databaseBuilder.factory.buildChallenge(challenge);
     databaseBuilder.factory.buildLocalizedChallenge({
       id: challenge.id,
       challengeId: challenge.id,
@@ -882,6 +883,8 @@ async function mockContentForRelease() {
         : challenge.deafAndHardOfHearing,
     });
   }
+
+  attachments.forEach(databaseBuilder.factory.buildAttachment);
 
   await databaseBuilder.commit();
   return expectedCurrentContent;
