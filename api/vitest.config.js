@@ -5,12 +5,10 @@ export default defineConfig({
     include: ['tests/**/*_test.js'],
     reporters: process.env.CI ? 'junit' : 'default',
     outputFile: process.env.CI ? './test-results/report.xml' : undefined,
-    restoreMocks: true,
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    mockReset: true,
+    pool: 'threads',
+    maxWorkers: 1,
+    isolate: false,
     setupFiles: ['tests/setup-tests.js'],
   },
 });

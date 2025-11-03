@@ -10,6 +10,8 @@ loadEnvFileIfExists();
 
 beforeAll(() => {
   nock.disableNetConnect();
+  vi.restoreAllMocks();
+  vi.resetModules();
 });
 
 afterEach(async () => {
