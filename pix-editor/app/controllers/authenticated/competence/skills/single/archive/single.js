@@ -4,11 +4,10 @@ import { action } from '@ember/object';
 import PrototypeController from '../../../prototypes/single';
 
 export default class SingleController extends PrototypeController {
-
   elementClass = 'archive-challenge';
 
   @controller('authenticated.competence.skills.single.archive')
-    parentController;
+  parentController;
 
   get maximized() {
     return this.parentController.rightMaximized;
@@ -37,6 +36,4 @@ export default class SingleController extends PrototypeController {
   minimize() {
     this.parentController.maximizeRight(false);
   }
-
 }
-

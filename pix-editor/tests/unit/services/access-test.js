@@ -3,7 +3,7 @@ import Service from '@ember/service';
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Service | access', function(hooks) {
+module('Unit | Service | access', function (hooks) {
   setupTest(hooks);
 
   const REPLICATOR = 2;
@@ -11,7 +11,7 @@ module('Unit | Service | access', function(hooks) {
   const ADMIN = 4;
   let accessService;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     accessService = this.owner.lookup('service:access');
   });
 
@@ -26,9 +26,8 @@ module('Unit | Service | access', function(hooks) {
     owner.register('service:config', ConfigService);
   }
 
-  module('mayEdit', function() {
-
-    test('it should return `false` if challenge is obsolete', function(assert) {
+  module('mayEdit', function () {
+    test('it should return `false` if challenge is obsolete', function (assert) {
       // given
       const challenge = EmberObject.create({
         id: 'rec123656',
@@ -36,16 +35,16 @@ module('Unit | Service | access', function(hooks) {
         isObsolete: true,
       });
 
-      //when
+      // when
       const accessResult = accessService.mayEdit(challenge);
 
-      //then
+      // then
       assert.notOk(accessResult);
     });
 
-    module('#liveChallenge', function(hooks) {
+    module('#liveChallenge', function (hooks) {
       let validatedChallenge, archivedChallenge;
-      hooks.beforeEach(function() {
+      hooks.beforeEach(function () {
         validatedChallenge = EmberObject.create({
           id: 'recChallenge1',
           name: 'challenge',
@@ -58,27 +57,26 @@ module('Unit | Service | access', function(hooks) {
           isArchived: true,
         });
       });
-      test('it should return `true` if challenge is live and level is `EDITOR`', function(assert) {
-        //when
+      test('it should return `true` if challenge is live and level is `EDITOR`', function (assert) {
+        // when
         _stubAccessLevel(EDITOR, this.owner);
 
-        //then
+        // then
         assert.ok(accessService.mayEdit(validatedChallenge));
         assert.ok(accessService.mayEdit(archivedChallenge));
-
       });
-      test('it should return `true` if challenge is live and level is `ADMIN`', function(assert) {
-        //when
+      test('it should return `true` if challenge is live and level is `ADMIN`', function (assert) {
+        // when
         _stubAccessLevel(ADMIN, this.owner);
 
-        //then
+        // then
         assert.ok(accessService.mayEdit(validatedChallenge));
         assert.ok(accessService.mayEdit(archivedChallenge));
       });
     });
 
-    test('it should return `true` when level is `REPLICATOR` only if challenge is not in production and is not a prototype', function(assert) {
-      //given
+    test('it should return `true` when level is `REPLICATOR` only if challenge is not in production and is not a prototype', function (assert) {
+      // given
       const validatedChallenge = EmberObject.create({
         id: 'rec123655',
         name: 'validatedChallenge',
@@ -94,32 +92,32 @@ module('Unit | Service | access', function(hooks) {
         name: 'challenge',
       });
 
-      //when
+      // when
       _stubAccessLevel(REPLICATOR, this.owner);
 
-      //then
+      // then
       assert.notOk(accessService.mayEdit(validatedChallenge));
       assert.notOk(accessService.mayEdit(prototypeChallenge));
       assert.ok(accessService.mayEdit(challenge));
     });
   });
 
-  module('mayChangeLocalizedChallengeStatus', function() {
-    test('it should return `false` if localized challenge is not editable', function(assert) {
+  module('mayChangeLocalizedChallengeStatus', function () {
+    test('it should return `false` if localized challenge is not editable', function (assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',
         isStatusEditable: false,
       });
 
-      //when
+      // when
       const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
 
-      //then
+      // then
       assert.notOk(accessResult);
     });
 
-    test('it should return `false` if localized challenge is editable and user is not admin', function(assert) {
+    test('it should return `false` if localized challenge is editable and user is not admin', function (assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',
@@ -127,14 +125,14 @@ module('Unit | Service | access', function(hooks) {
       });
       _stubAccessLevel(EDITOR, this.owner);
 
-      //when
+      // when
       const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
 
-      //then
+      // then
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` if localized challenge is editable and user is admin', function(assert) {
+    test('it should return `true` if localized challenge is editable and user is admin', function (assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',
@@ -142,58 +140,57 @@ module('Unit | Service | access', function(hooks) {
       });
       _stubAccessLevel(ADMIN, this.owner);
 
-      //when
+      // when
       const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
 
-      //then
+      // then
       assert.ok(accessResult);
     });
-
   });
 
-  module('mayAccessWhitelistedUrls', function() {
-    test('it should return `false` when is not editor', function(assert) {
+  module('mayAccessWhitelistedUrls', function () {
+    test('it should return `false` when is not editor', function (assert) {
       // given
       _stubAccessLevel(REPLICATOR, this.owner);
 
-      //when
+      // when
       const accessResult = accessService.mayAccessWhitelistedUrls();
 
-      //then
+      // then
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` when is editor or above', function(assert) {
+    test('it should return `true` when is editor or above', function (assert) {
       _stubAccessLevel(ADMIN, this.owner);
       const accessResultAsAdmin = accessService.mayAccessWhitelistedUrls();
       _stubAccessLevel(EDITOR, this.owner);
       const accessResultAsEditor = accessService.mayAccessWhitelistedUrls();
 
-      //then
+      // then
       assert.ok(accessResultAsAdmin);
       assert.ok(accessResultAsEditor);
     });
   });
 
-  module('mayCreateOrEditWhitelistedUrl', function() {
-    test('it should return `false` when is not editor', function(assert) {
+  module('mayCreateOrEditWhitelistedUrl', function () {
+    test('it should return `false` when is not editor', function (assert) {
       // given
       _stubAccessLevel(REPLICATOR, this.owner);
 
-      //when
+      // when
       const accessResult = accessService.mayCreateOrEditWhitelistedUrl();
 
-      //then
+      // then
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` when is editor or above', function(assert) {
+    test('it should return `true` when is editor or above', function (assert) {
       _stubAccessLevel(ADMIN, this.owner);
       const accessResultAsAdmin = accessService.mayCreateOrEditWhitelistedUrl();
       _stubAccessLevel(EDITOR, this.owner);
       const accessResultAsEditor = accessService.mayCreateOrEditWhitelistedUrl();
 
-      //then
+      // then
       assert.ok(accessResultAsAdmin);
       assert.ok(accessResultAsEditor);
     });

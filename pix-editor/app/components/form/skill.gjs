@@ -12,28 +12,36 @@ const descriptionStatusList = [
   {
     label: 'Proposé',
     value: 'Proposé',
-  }, {
+  },
+  {
     label: 'Validé',
     value: 'Validé',
-  }, {
+  },
+  {
     label: 'pré-validé',
     value: 'pré-validé',
-  }, {
+  },
+  {
     label: 'à soumettre',
     value: 'à soumettre',
-  }, {
+  },
+  {
     label: 'à retravailler',
     value: 'à retravailler',
-  }, {
+  },
+  {
     label: 'archivé',
     value: 'archivé',
   },
 ];
-const clueStatusList = [ ...descriptionStatusList, { label: 'inapplicable', value: 'inapplicable' }];
-const i18nOptionList = [{ label: 'France', value: 'France' }, { label: 'Monde', value: 'Monde' }, { label: 'Union Européenne', value: 'Union Européenne' }];
+const clueStatusList = [...descriptionStatusList, { label: 'inapplicable', value: 'inapplicable' }];
+const i18nOptionList = [
+  { label: 'France', value: 'France' },
+  { label: 'Monde', value: 'Monde' },
+  { label: 'Union Européenne', value: 'Union Européenne' },
+];
 
 export default class SkillForm extends Component {
-
   @action
   setDescriptionStatus(value) {
     this.args.skill.descriptionStatus = value;

@@ -5,14 +5,14 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenge-view | challenge-view', function(hooks) {
+module('Integration | Component | challenge-view | challenge-view', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store, challengeFromStore;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
-    challengeFromStore =
-      store.createRecord('challenge', {
+    challengeFromStore
+      = store.createRecord('challenge', {
         id: 'challengeProtoValidee',
         instruction: 'instructions',
         alternativeInstruction: 'alternativeInstruction',
@@ -52,9 +52,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         contextualizedFields: 'contextualizedFields',
         updatedAt: '2021-10-02T14:00:00.000Z',
       });
-
   });
-  test('it should display readonly form', async function(assert) {
+  test('it should display readonly form', async function (assert) {
     // given
     const challenge = challengeFromStore;
     // when
@@ -101,7 +100,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     assert.dom(screen.getByLabelText('Id')).hasValue('challengeProtoValidee');
   });
 
-  test('it should display actions', async function(assert) {
+  test('it should display actions', async function (assert) {
     // given
     const challenge = challengeFromStore;
 
@@ -121,9 +120,9 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
     assert.ok(link.href.endsWith('/api/urlto/challengeProtoValidee'));
   });
 
-  module('#header', function() {
-    module('when challenge is validate', function() {
-      test('it should display only "Validée" when no date provided', async function(assert) {
+  module('#header', function () {
+    module('when challenge is validate', function () {
+      test('it should display only "Validée" when no date provided', async function (assert) {
         // given
         challengeFromStore.validatedAt = null;
         challengeFromStore.status = Challenge.STATUSES.VALIDE;
@@ -143,7 +142,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         // then
         assert.dom(screen.getByText('Validée')).exists();
       });
-      test('it should display "Validée le 21/02/2025" when date provided', async function(assert) {
+      test('it should display "Validée le 21/02/2025" when date provided', async function (assert) {
         // given
         challengeFromStore.validatedAt = new Date('2025-02-21T12:00:00Z');
         challengeFromStore.status = Challenge.STATUSES.VALIDE;
@@ -164,8 +163,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Validée le 21/02/2025')).exists();
       });
     });
-    module('when challenge is archived', function() {
-      test('it should display only "Archivée" when no date provided', async function(assert) {
+    module('when challenge is archived', function () {
+      test('it should display only "Archivée" when no date provided', async function (assert) {
         // given
         challengeFromStore.archivedAt = null;
         challengeFromStore.status = Challenge.STATUSES.ARCHIVE;
@@ -185,7 +184,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         // then
         assert.dom(screen.getByText('Archivée')).exists();
       });
-      test('it should display "Archivée le 21/02/2025" when date provided', async function(assert) {
+      test('it should display "Archivée le 21/02/2025" when date provided', async function (assert) {
         // given
         challengeFromStore.archivedAt = new Date('2025-02-21T12:00:00Z');
         challengeFromStore.status = Challenge.STATUSES.ARCHIVE;
@@ -206,8 +205,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Archivée le 21/02/2025')).exists();
       });
     });
-    module('when challenge is obsolete', function() {
-      test('it should display only "Périmée" when no date provided', async function(assert) {
+    module('when challenge is obsolete', function () {
+      test('it should display only "Périmée" when no date provided', async function (assert) {
         // given
         challengeFromStore.madeObsoleteAt = null;
         challengeFromStore.status = Challenge.STATUSES.PERIME;
@@ -227,7 +226,7 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         // then
         assert.dom(screen.getByText('Périmée')).exists();
       });
-      test('it should display "Périmée le 21/02/2025" when date provided', async function(assert) {
+      test('it should display "Périmée le 21/02/2025" when date provided', async function (assert) {
         // given
         challengeFromStore.madeObsoleteAt = new Date('2025-02-21T12:00:00Z');
         challengeFromStore.status = Challenge.STATUSES.PERIME;
@@ -248,8 +247,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Périmée le 21/02/2025')).exists();
       });
     });
-    module('when challenge is proposed', function() {
-      test('it should display "Proposée"', async function(assert) {
+    module('when challenge is proposed', function () {
+      test('it should display "Proposée"', async function (assert) {
         // given
         challengeFromStore.status = Challenge.STATUSES.PROPOSE;
         const challenge = challengeFromStore;
@@ -269,8 +268,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Proposée')).exists();
       });
     });
-    module('when challenge is prototype', function() {
-      test('it should display wright title', async function(assert) {
+    module('when challenge is prototype', function () {
+      test('it should display wright title', async function (assert) {
         // given
         const challenge = challengeFromStore;
         // when
@@ -287,8 +286,8 @@ module('Integration | Component | challenge-view | challenge-view', function(hoo
         assert.dom(screen.getByText('Proto (V1)')).exists();
       });
     });
-    module('when challenge is alternative', function() {
-      test('it should display wright title', async function(assert) {
+    module('when challenge is alternative', function () {
+      test('it should display wright title', async function (assert) {
         // given
         challengeFromStore.genealogy = 'Décliné 1';
         challengeFromStore.alternativeVersion = 2;

@@ -6,12 +6,12 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
-module('Integration | Component | alternatives', function(hooks) {
+module('Integration | Component | alternatives', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let newAlternativeStub, store, alternatives;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     alternatives = [
       store.createRecord('challenge', {
@@ -49,9 +49,7 @@ module('Integration | Component | alternatives', function(hooks) {
       version: 2,
       genealogy: 'Prototype 1',
     });
-    store.createRecord('skill', {
-      challenges: [challenge, ...alternatives],
-    });
+    store.createRecord('skill', { challenges: [challenge, ...alternatives] });
 
     newAlternativeStub = sinon.stub();
 
@@ -59,7 +57,7 @@ module('Integration | Component | alternatives', function(hooks) {
     this.set('newAlternative', newAlternativeStub);
   });
 
-  test('displays challenge\'s alternatives', async function(assert) {
+  test('displays challenge\'s alternatives', async function (assert) {
     // when
     const screen = await render(hbs`
       <Alternatives
@@ -79,7 +77,7 @@ module('Integration | Component | alternatives', function(hooks) {
     assert.dom(screen.queryByRole('button', { name: 'Nouvelle déclinaison' })).doesNotExist();
   });
 
-  test('displays obsolete alternatives when checked', async function(assert) {
+  test('displays obsolete alternatives when checked', async function (assert) {
     // when
     const screen = await render(hbs`
       <Alternatives
@@ -99,8 +97,8 @@ module('Integration | Component | alternatives', function(hooks) {
     assert.dom(screen.queryByText('ceci est une alternative périmée')).exists();
   });
 
-  [ 'validé', 'proposé'].forEach((status) => {
-    test(`alternative button exist for alternative status ${status}`, async function(assert) {
+  ['validé', 'proposé'].forEach((status) => {
+    test(`alternative button exist for alternative status ${status}`, async function (assert) {
       // when
       this.set('challenge', alternatives.find((challenge) => challenge.status === status));
       const screen = await render(hbs`
@@ -120,7 +118,7 @@ module('Integration | Component | alternatives', function(hooks) {
     });
   });
   ['périmé', 'archivé'].forEach((status) => {
-    test(`alternative button does not exist for alternative status ${status}`, async function(assert) {
+    test(`alternative button does not exist for alternative status ${status}`, async function (assert) {
       // when
       this.set('challenge', alternatives.find((challenge) => challenge.status === status));
       const screen = await render(hbs`

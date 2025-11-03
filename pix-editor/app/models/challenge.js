@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import _ from 'lodash';
 
 export default class ChallengeModel extends Model {
-
   @attr('string') airtableId;
   @attr instruction;
   @attr alternativeInstruction;
@@ -32,7 +31,12 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
-  @attr({ defaultValue: function() { return []; } }) locales;
+  @attr({
+    defaultValue: function () {
+      return [];
+    },
+  }) locales;
+
   @attr alternativeLocales;
   @attr geography;
   @attr urlsToConsult;
@@ -44,7 +48,12 @@ export default class ChallengeModel extends Model {
   @attr('date') archivedAt;
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
-  @attr({ defaultValue: function() { return []; } }) contextualizedFields;
+  @attr({
+    defaultValue: function () {
+      return [];
+    },
+  }) contextualizedFields;
+
   @attr requireGafamWebsiteAccess;
   @attr isIncompatibleIpadCertif;
   @attr deafAndHardOfHearing;
@@ -200,7 +209,12 @@ export default class ChallengeModel extends Model {
 
   get isTextBased() {
     const type = this.type;
-    return ['QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep'].includes(type);
+    return [
+      'QROC',
+      'QROCM',
+      'QROCM-ind',
+      'QROCM-dep',
+    ].includes(type);
   }
 
   get timerOn() {
@@ -282,7 +296,15 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = ['skill', 'author', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
+    const ignoredFields = [
+      'skill',
+      'author',
+      'airtableId',
+      'updatedAt',
+      'archivedAt',
+      'madeObsoleteAt',
+      'validatedAt',
+    ];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -300,7 +322,14 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = ['skill', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
+    const ignoredFields = [
+      'skill',
+      'airtableId',
+      'updatedAt',
+      'archivedAt',
+      'madeObsoleteAt',
+      'validatedAt',
+    ];
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';

@@ -2,11 +2,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Adapter | airtable', function(hooks) {
+module('Unit | Adapter | airtable', function (hooks) {
   setupTest(hooks);
 
-  module('#updateRecord', function() {
-    test('when the primaryKey is the record id, it uses the id', function(assert) {
+  module('#updateRecord', function () {
+    test('when the primaryKey is the record id, it uses the id', function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
       const serializer = {
         primaryKey: 'Record ID',
@@ -17,15 +17,11 @@ module('Unit | Adapter | airtable', function(hooks) {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       const snapshot = {
         id: '1',
         attributes() {
-          return {
-            airtableId: 'myAirtableId',
-          };
+          return { airtableId: 'myAirtableId' };
         },
       };
 
@@ -36,7 +32,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables/1', 'PATCH', { data: {} }));
     });
 
-    test('when the primaryKey is the persistant id, it uses the record id', function(assert) {
+    test('when the primaryKey is the persistant id, it uses the record id', function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
       const serializer = {
         primaryKey: 'id persistant',
@@ -47,15 +43,11 @@ module('Unit | Adapter | airtable', function(hooks) {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       const snapshot = {
         id: '1',
         attributes() {
-          return {
-            airtableId: 'myAirtableId',
-          };
+          return { airtableId: 'myAirtableId' };
         },
       };
 
@@ -66,7 +58,7 @@ module('Unit | Adapter | airtable', function(hooks) {
       assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables/myAirtableId', 'PATCH', { data: {} }));
     });
 
-    test('when the primaryKey is set but the airtableId is null, it POST to create the record', function(assert) {
+    test('when the primaryKey is set but the airtableId is null, it POST to create the record', function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
       const serializer = {
         primaryKey: 'id persistant',
@@ -77,15 +69,11 @@ module('Unit | Adapter | airtable', function(hooks) {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       const snapshot = {
         id: '1',
         attributes() {
-          return {
-            airtableId: undefined,
-          };
+          return { airtableId: undefined };
         },
       };
 
@@ -97,90 +85,92 @@ module('Unit | Adapter | airtable', function(hooks) {
     });
   });
 
-  module('#findMany', function() {
+  module('#findMany', function () {
     const MAX_IDS = 3;
 
-    test('call ajax with the right parameter', function(assert) {
+    test('call ajax with the right parameter', function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
-      const serializer = {
-        primaryKey: 'id persistant',
-      };
+      const serializer = { primaryKey: 'id persistant' };
       const store = {
         serializerFor() {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       adapter.ajax = sinon.stub();
 
-      adapter.findMany(store, type, [1, 2, 3], [], MAX_IDS);
+      adapter.findMany(store, type, [
+        1,
+        2,
+        3,
+      ], [], MAX_IDS);
 
       assert.ok(adapter.ajax.called);
       assert.ok(adapter.ajax.calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
     });
 
-    test('split the ajax calls', function(assert) {
+    test('split the ajax calls', function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
-      const serializer = {
-        primaryKey: 'id persistant',
-      };
+      const serializer = { primaryKey: 'id persistant' };
       const store = {
         serializerFor() {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       adapter.ajax = sinon.stub().resolves({ records: ['data'] });
 
-      adapter.findMany(store, type, [1, 2, 3, 4], [], MAX_IDS);
+      adapter.findMany(store, type, [
+        1,
+        2,
+        3,
+        4,
+      ], [], MAX_IDS);
 
       assert.ok(adapter.ajax.calledTwice);
       assert.ok(adapter.ajax.getCalls()[0].calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'1\',{id persistant} = \'2\',{id persistant} = \'3\')' } }));
       assert.ok(adapter.ajax.getCalls()[1].calledWith('/api/airtable/changelog/testTables', 'GET', { data: { filterByFormula: 'OR({id persistant} = \'4\')' } }));
     });
 
-    test('returns response from ajax call', async function(assert) {
+    test('returns response from ajax call', async function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
-      const serializer = {
-        primaryKey: 'id persistant',
-      };
+      const serializer = { primaryKey: 'id persistant' };
       const store = {
         serializerFor() {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       adapter.ajax = sinon.stub().resolves({ records: ['data'] });
 
-      const response = await adapter.findMany(store, type, [1, 2, 3], [], MAX_IDS);
+      const response = await adapter.findMany(store, type, [
+        1,
+        2,
+        3,
+      ], [], MAX_IDS);
 
       assert.deepEqual(response, { records: ['data'] });
     });
 
-    test('merges responses from splitted ajax calls', async function(assert) {
+    test('merges responses from splitted ajax calls', async function (assert) {
       const adapter = this.owner.lookup('adapter:airtable');
-      const serializer = {
-        primaryKey: 'id persistant',
-      };
+      const serializer = { primaryKey: 'id persistant' };
       const store = {
         serializerFor() {
           return serializer;
         },
       };
-      const type = {
-        modelName: 'TestTable',
-      };
+      const type = { modelName: 'TestTable' };
       adapter.ajax = sinon.stub()
         .onFirstCall().resolves({ records: ['data'] })
         .onSecondCall().resolves({ records: ['data2'] });
 
-      const response = await adapter.findMany(store, type, [1, 2, 3, 4], [], MAX_IDS);
+      const response = await adapter.findMany(store, type, [
+        1,
+        2,
+        3,
+        4,
+      ], [], MAX_IDS);
 
       assert.deepEqual(response, { records: ['data', 'data2'] });
     });

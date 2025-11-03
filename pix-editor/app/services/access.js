@@ -164,6 +164,7 @@ export default class AccessService extends Service {
   mayCreateOrEditStaticCourse() {
     return this.isEditor();
   }
+
   mayCreateOrEditMission() {
     return this.isEditor();
   }
@@ -194,7 +195,7 @@ export default class AccessService extends Service {
 
   getLevel(accessString) {
     switch (accessString) {
-      case 'readpixonly' :
+      case 'readpixonly':
         return READ_PIX_ONLY;
       case 'readonly':
         return READ_ONLY;

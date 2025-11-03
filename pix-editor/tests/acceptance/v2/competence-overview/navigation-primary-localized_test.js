@@ -8,11 +8,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | navigation-primary-localized', function(hooks) {
+module('Acceptance | navigation-primary-localized', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -26,64 +26,100 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
       id: 'competence1:challenges-production',
       airtableId: 'recCompetence1',
       name: '1.1 ma compétence',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: 'skill1',
-            name: '@tube1',
-            prototypeId: 'prototype1',
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 1,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: 'skill1',
+                  name: '@tube1',
+                  prototypeId: 'prototype1',
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production:fr',
       airtableId: 'recCompetence1',
       name: '1.1 ma compétence',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: 'skill1',
-            name: '@tube1',
-            prototypeId: 'prototype1',
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 1,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: 'skill1',
+                  name: '@tube1',
+                  prototypeId: 'prototype1',
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production:nl',
       airtableId: 'recCompetence1',
       name: '1.1 ma compétence',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: 'skill1',
-            name: '@tube1',
-            prototypeId: 'prototype1',
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 0,
-            validatedChallengesCount: 1,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: 'skill1',
+                  name: '@tube1',
+                  prototypeId: 'prototype1',
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 0,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     const skill = this.server.create('skill', {
       id: 'skill1',
@@ -128,7 +164,7 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
     return authenticateSession();
   });
 
-  test('should navigate from primary to some locale back and forth seamlessly', async function(assert) {
+  test('should navigate from primary to some locale back and forth seamlessly', async function (assert) {
     // First we are on the primary
     const screen = await visit('/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');

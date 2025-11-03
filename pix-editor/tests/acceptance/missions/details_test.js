@@ -5,11 +5,11 @@ import { setupApplicationTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-module('Acceptance | Missions | Details', function(hooks) {
+module('Acceptance | Missions | Details', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
@@ -25,7 +25,7 @@ module('Acceptance | Missions | Details', function(hooks) {
     return authenticateSession();
   });
 
-  test('it displays all Pix 1D missions', async function(assert) {
+  test('it displays all Pix 1D missions', async function (assert) {
     // when
     const screen = await visit('/missions');
     await click(screen.getAllByRole('row')[1]);
@@ -34,7 +34,7 @@ module('Acceptance | Missions | Details', function(hooks) {
     assert.strictEqual(currentURL(), '/missions/1');
   });
 
-  test('should display mission details', async function(assert) {
+  test('should display mission details', async function (assert) {
     // when
     const screen = await visit('/missions/1');
     // then
@@ -45,7 +45,7 @@ module('Acceptance | Missions | Details', function(hooks) {
     assert.dom(screen.getByRole('link', { name: 'http://url-example.net' })).exists();
   });
 
-  test('it redirects to missions list', async function(assert) {
+  test('it redirects to missions list', async function (assert) {
     // when
     const screen = await visit('/missions/1');
     await click(screen.getByRole('link', { name: 'Retour à la liste des missions' }));

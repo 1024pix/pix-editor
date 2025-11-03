@@ -20,7 +20,11 @@ export default class FormSelectLocation extends Component {
   constructor(...args) {
     super(...args);
 
-    const supportedVariants = ['prototype', 'skill', 'tube'];
+    const supportedVariants = [
+      'prototype',
+      'skill',
+      'tube',
+    ];
     if (!supportedVariants.includes(this.args.variant)) {
       throw new Error(`[Form::SelectLocation] the @variant argument must be a valid option (${supportedVariants})`);
     }
@@ -235,7 +239,7 @@ export default class FormSelectLocation extends Component {
       this.args.onSubmit(skill);
     }
     if (this.isMovingSkill) {
-      const tube = this.tubeList.find((tube)=> tube.id === this.selectedTubeId);
+      const tube = this.tubeList.find((tube) => tube.id === this.selectedTubeId);
       this.args.onSubmit(competence, tube, this.selectedLevel);
     }
   }

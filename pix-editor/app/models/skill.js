@@ -3,7 +3,6 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class SkillModel extends Model {
-
   _pinnedRelationships = {};
 
   @attr name;
@@ -254,5 +253,4 @@ export default class SkillModel extends Model {
     }
     return extractedLanguages;
   }
-
 }

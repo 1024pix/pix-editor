@@ -6,19 +6,19 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | localized-challenge-view | localized-challenge-view', function(hooks) {
+module('Integration | Component | localized-challenge-view | localized-challenge-view', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store, challenge, competence, challengeLocale, localizedChallenge, attachment;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
     attachment = store.createRecord('attachment', { type: 'attachment' });
     competence = store.createRecord('competence', {
       id: 'competenceId',
       code: '1.1',
     });
-    challenge =
-      store.createRecord('challenge', {
+    challenge
+      = store.createRecord('challenge', {
         id: 'challengeProtoValidee',
         version: 1,
         genealogy: 'Prototype 1',
@@ -27,8 +27,8 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         geography: 'FR',
         attachments: [attachment],
       });
-    localizedChallenge =
-      store.createRecord('localized-challenge', {
+    localizedChallenge
+      = store.createRecord('localized-challenge', {
         id: 'localizedChallengeId',
         locale: 'en',
         embedURL: `${challenge.embedURL}?lang=en`,
@@ -42,7 +42,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     });
   });
 
-  test('it should display readonly form', async function(assert) {
+  test('it should display readonly form', async function (assert) {
     // when
     screen = await render(<template>
       <LocalizedChallengeView
@@ -63,8 +63,8 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     assert.dom(screen.getByLabelText('Id')).hasValue('localizedChallengeId');
   });
 
-  module('when challenge has no embed URL', function() {
-    test('it should not display embed input', async function(assert) {
+  module('when challenge has no embed URL', function () {
+    test('it should not display embed input', async function (assert) {
       // given
       challenge.embedURL = null;
 
@@ -85,8 +85,8 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     });
   });
 
-  module('when challenge has no attachment', function() {
-    test('it should not display attachment input', async function(assert) {
+  module('when challenge has no attachment', function () {
+    test('it should not display attachment input', async function (assert) {
       // given
       challenge.attachments = [];
 

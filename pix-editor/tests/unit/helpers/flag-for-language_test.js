@@ -1,8 +1,8 @@
 import { flagForLanguage } from 'pixeditor/helpers/flag-for-language';
 import { module, test } from 'qunit';
 
-module('Unit | Helpers | flag for language', function() {
-  test('it should return the expected flag emoji for language "fr"', function(assert) {
+module('Unit | Helpers | flag for language', function () {
+  test('it should return the expected flag emoji for language "fr"', function (assert) {
     // when
     const result = flagForLanguage(['fr']);
 
@@ -10,7 +10,7 @@ module('Unit | Helpers | flag for language', function() {
     assert.strictEqual(result, '🇫🇷');
   });
 
-  test('it should return the expected flag emoji for language "fr-fr"', function(assert) {
+  test('it should return the expected flag emoji for language "fr-fr"', function (assert) {
     // when
     const result = flagForLanguage(['fr-fr']);
 
@@ -18,7 +18,7 @@ module('Unit | Helpers | flag for language', function() {
     assert.strictEqual(result, '🇫🇷');
   });
 
-  test('it should return the expected flag emoji for language "es"', function(assert) {
+  test('it should return the expected flag emoji for language "es"', function (assert) {
     // when
     const result = flagForLanguage(['es']);
 
@@ -26,7 +26,7 @@ module('Unit | Helpers | flag for language', function() {
     assert.strictEqual(result, '🇪🇸');
   });
 
-  test('it should return the expected flag emoji for language "es-419"', function(assert) {
+  test('it should return the expected flag emoji for language "es-419"', function (assert) {
     // when
     const result = flagForLanguage(['es-419']);
 
@@ -34,7 +34,7 @@ module('Unit | Helpers | flag for language', function() {
     assert.strictEqual(result, '🌎');
   });
 
-  test('it should return the expected flag emoji for language "nl"', function(assert) {
+  test('it should return the expected flag emoji for language "nl"', function (assert) {
     // when
     const result = flagForLanguage(['nl']);
 

@@ -4,11 +4,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | list/events-log', function(hooks) {
+module('Integration | Component | list/events-log', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should display a list of skill logs', async function(assert) {
-    //given
+  test('it should display a list of skill logs', async function (assert) {
+    // given
     const skillLog1 = {
       recordId: 'rec123456',
       text: 'some text',
@@ -29,10 +29,10 @@ module('Integration | Component | list/events-log', function(hooks) {
 
     this.skillLogs = skillLogs;
 
-    //when
+    // when
     await render(hbs`<List::EventsLog @list={{this.skillLogs}}/>`);
 
-    //then
+    // then
     assert.strictEqual(findAll('[data-test-skillLog]').length, skillLogs.length);
   });
 });

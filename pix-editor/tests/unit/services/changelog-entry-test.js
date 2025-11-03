@@ -1,20 +1,20 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Service | changelog-entry', function(hooks) {
+module('Unit | Service | changelog-entry', function (hooks) {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it should return an elementType', function(assert) {
+  test('it should return an elementType', function (assert) {
     assert.expect(2);
-    //given
+    // given
     const keys = ['skill', 'challenge'];
     const expectedResults = ['acquis', 'épreuve'];
 
-    //when
+    // when
     const service = this.owner.lookup('service:changelog-entry');
 
-    //then
+    // then
     keys.forEach((key, index) => {
       assert.strictEqual(service[key], expectedResults[index]);
     });

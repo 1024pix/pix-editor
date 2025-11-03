@@ -2,7 +2,6 @@ import RESTSerializer from '@ember-data/serializer/rest';
 import { pluralize } from 'ember-inflector';
 
 export default class AirtableSerializer extends RESTSerializer {
-
   payloadKeyFromModelName(modelName) {
     return super.payloadKeyFromModelName(modelName);
   }
@@ -14,9 +13,7 @@ export default class AirtableSerializer extends RESTSerializer {
       payload[modelNamePlural] = payload.records;
       delete payload.records;
 
-      payload.meta = {
-        offset: payload.offset,
-      };
+      payload.meta = { offset: payload.offset };
       delete payload.offset;
 
       payload[modelNamePlural].forEach((record) => {
@@ -85,7 +82,6 @@ export default class AirtableSerializer extends RESTSerializer {
     const key = relationship.key;
 
     if (this.shouldSerializeHasMany(snapshot, key, relationship)) {
-
       const hasMany = snapshot.hasMany(key);
 
       if (hasMany !== undefined) {

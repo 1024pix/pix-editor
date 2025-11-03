@@ -6,12 +6,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Localized-Challenge', function(hooks) {
+module('Acceptance | Localized-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  module('When interacting with a prototype', function(hooks) {
-    hooks.beforeEach(function() {
+  module('When interacting with a prototype', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
@@ -36,29 +36,41 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
-        thematicOverviews: [{
-          id: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            id: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              id: skill1.id,
-              name: skill1.name,
-              prototypeId: prototype1.id,
-              isPrototypeDeclinable: true,
-              proposedChallengesCount: 2,
-              validatedChallengesCount: 1,
-            }, {
-              id: skill2.id,
-              name: skill2.name,
-              prototypeId: prototype2.id,
-              isPrototypeDeclinable: true,
-              proposedChallengesCount: 2,
-              validatedChallengesCount: 1,
-            }, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            id: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                id: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    id: skill1.id,
+                    name: skill1.name,
+                    prototypeId: prototype1.id,
+                    isPrototypeDeclinable: true,
+                    proposedChallengesCount: 2,
+                    validatedChallengesCount: 1,
+                  },
+                  {
+                    id: skill2.id,
+                    name: skill2.name,
+                    prototypeId: prototype2.id,
+                    isPrototypeDeclinable: true,
+                    proposedChallengesCount: 2,
+                    validatedChallengesCount: 1,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', {
         id: 'recArea1',
@@ -70,7 +82,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       return authenticateSession();
     });
 
-    test('should display a default embedUrl if is empty but not for primary', async function(assert) {
+    test('should display a default embedUrl if is empty but not for primary', async function (assert) {
       // when
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
@@ -81,7 +93,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       // then
       assert.dom(await screen.queryByText('https://mon-site.fr/my-link.html?lang=nl', { exact: false })).exists();
     });
-    test('should not display a default url if primary does not have any', async function(assert) {
+    test('should not display a default url if primary does not have any', async function (assert) {
       // given
       this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1', embedURL: null });
       this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
@@ -99,7 +111,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       assert.dom(await screen.queryByText('Embed URL auto-générée', { exact: false })).doesNotExist();
     });
 
-    test('should display an embed url if localized challenge has one', async function(assert) {
+    test('should display an embed url if localized challenge has one', async function (assert) {
       // given
       this.server.create('localized-challenge', { id: 'recChallenge2ES', challengeId: 'recChallenge2', locale: 'es', embedURL: 'https://mon-site.fr/my-es-link.html' });
 
@@ -116,8 +128,8 @@ module('Acceptance | Localized-Challenge', function(hooks) {
     });
   });
 
-  module('When interacting with an alternative', function(hooks) {
-    hooks.beforeEach(function() {
+  module('When interacting with an alternative', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
@@ -138,22 +150,34 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
-        thematicOverviews: [{
-          id: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            id: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              id: skill.id,
-              name: skill.name,
-              prototypeId: prototype.id,
-              isPrototypeDeclinable: true,
-              proposedChallengesCount: 3,
-              validatedChallengesCount: 1,
-            }, null, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            id: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                id: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    id: skill.id,
+                    name: skill.name,
+                    prototypeId: prototype.id,
+                    isPrototypeDeclinable: true,
+                    proposedChallengesCount: 3,
+                    validatedChallengesCount: 1,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', {
         id: 'recArea1',
@@ -165,7 +189,7 @@ module('Acceptance | Localized-Challenge', function(hooks) {
       return authenticateSession();
     });
 
-    test('should display a default embedUrl if is empty but not for primary', async function(assert) {
+    test('should display a default embedUrl if is empty but not for primary', async function (assert) {
       // when
       const screen = await visit('/');
       await clickByText('Nom du domaine');

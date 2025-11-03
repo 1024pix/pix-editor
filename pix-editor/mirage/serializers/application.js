@@ -1,5 +1,3 @@
 import { JSONAPISerializer } from 'miragejs';
 
-export default JSONAPISerializer.extend({
-  alwaysIncludeLinkageData: true,
-});
+export default JSONAPISerializer.extend({ alwaysIncludeLinkageData: true });

@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | quality-view', function(hooks) {
+module('Integration | Component | quality-view', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     // given
     const skill = {
       productionPrototype: {},

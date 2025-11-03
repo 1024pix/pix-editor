@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
+module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -31,22 +31,34 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill1.id,
-            name: skill1.name,
-            prototypeId: prototype1.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill1.id,
+                  name: skill1.name,
+                  prototypeId: prototype1.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
@@ -54,7 +66,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     return authenticateSession();
   });
 
-  test('adding illustration', async function(assert) {
+  test('adding illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -94,7 +106,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.dom(await within(popIn).findByRole('img')).hasAttribute('src', 'data:,');
   });
 
-  test('replace illustration', async function(assert) {
+  test('replace illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -140,7 +152,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.strictEqual(attachments[0].url, 'data-illustrationB:,');
   });
 
-  test('delete illustration', async function(assert) {
+  test('delete illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
     class StorageServiceStub extends Service {
@@ -170,7 +182,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('update illustration', async function(assert) {
+  test('update illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
     class StorageServiceStub extends Service {
@@ -206,7 +218,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.strictEqual(newIllustration.url, 'data:,');
   });
 
-  test('delete and upload a new illustration', async function(assert) {
+  test('delete and upload a new illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
 
@@ -241,5 +253,4 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');
   });
-
 });

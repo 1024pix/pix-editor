@@ -5,7 +5,6 @@ const OCCIDENT = 1;
 const AFRICA = 2;
 const UNESCO = 3;
 export default class StatisticsI18nComponent extends Component {
-
   _i18nAreas = new Map([
     ['Neutre', NEUTRAL],
     ['Institutions internationales', NEUTRAL],
@@ -82,7 +81,12 @@ export default class StatisticsI18nComponent extends Component {
         }, new Map());
 
         const countries = current.countries;
-        const areaCounts = [[0, 0], [0, 0], [0, 0], [0, 0]];
+        const areaCounts = [
+          [0, 0],
+          [0, 0],
+          [0, 0],
+          [0, 0],
+        ];
 
         for (const [country, values] of competenceCountries) {
           if (!countries.has(country)) {
@@ -156,6 +160,7 @@ export default class StatisticsI18nComponent extends Component {
       }, current);
     }, 0);
   }
+
   get i18nWorldSkills() {
     return this.i18nSkills('Monde');
   }
@@ -189,5 +194,4 @@ export default class StatisticsI18nComponent extends Component {
   get i18nUnescoCountries() {
     return this.i18nCountries(UNESCO);
   }
-
 }

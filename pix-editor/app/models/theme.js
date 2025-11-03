@@ -2,7 +2,6 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import sortBy from 'lodash/sortBy';
 
 export default class ThemeModel extends Model {
-
   @attr pixId;
   @attr name;
   @attr nameEnUs;

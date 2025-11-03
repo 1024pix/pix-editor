@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class CompetenceThemesSingleController extends Controller {
-
   @service access;
   @service config;
   @service notify;
@@ -21,7 +20,7 @@ export default class CompetenceThemesSingleController extends Controller {
   }
 
   @controller('authenticated.competence')
-    parentController;
+  parentController;
 
   get mayEdit() {
     return this.access.mayEditSkills();
@@ -49,7 +48,7 @@ export default class CompetenceThemesSingleController extends Controller {
     this.loader.start();
     const theme = this.theme;
     return theme.save()
-      .then(()=> {
+      .then(() => {
         this.edition = false;
         this.loader.stop();
         this.notify.message('Thématique mis à jour');

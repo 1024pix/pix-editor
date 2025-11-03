@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import ENV from 'pixeditor/config/environment';
 
 export default class SortedList extends Component {
-
   @tracked ascending = true;
   @tracked sortField = null;
   @tracked sorts = [];
@@ -61,10 +60,12 @@ export default class SortedList extends Component {
       this.sorts = params;
     } else {
       this.ascending = !this.ascending;
-      this.sorts = [{
-        valuePath: this.sortField,
-        isAscending: this.ascending,
-      }];
+      this.sorts = [
+        {
+          valuePath: this.sortField,
+          isAscending: this.ascending,
+        },
+      ];
     }
   }
 }

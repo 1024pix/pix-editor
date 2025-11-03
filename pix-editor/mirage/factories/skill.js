@@ -16,4 +16,3 @@ export default Factory.extend({
   createdAt: '2018-12-11T13:38:35.000Z',
   version: 1,
 });
-

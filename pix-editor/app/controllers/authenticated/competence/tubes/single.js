@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
-
   @tracked edition = false;
   @tracked displaySelectLocation = false;
 
@@ -17,7 +16,7 @@ export default class SingleController extends Controller {
   }
 
   @controller('authenticated.competence')
-    parentController;
+  parentController;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -85,7 +84,7 @@ export default class SingleController extends Controller {
     this.loader.start();
     const tube = this.tube;
     return tube.save()
-      .then(()=> {
+      .then(() => {
         this.edition = false;
         this.loader.stop();
         this.notify.message('Tube mis à jour');

@@ -5,10 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | tube-form', function(hooks) {
+module('Integration | Component | tube-form', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should display appropriate fields', async function(assert) {
+  test('it should display appropriate fields', async function (assert) {
     // given
     const tube = EmberObject.create({});
     this.set('tube', tube);
@@ -23,8 +23,8 @@ module('Integration | Component | tube-form', function(hooks) {
     assert.dom('[data-test-practical-description-en-field]').exists();
   });
 
-  module('#not edition', function(hooks) {
-    hooks.beforeEach(async function() {
+  module('#not edition', function (hooks) {
+    hooks.beforeEach(async function () {
       const tube = EmberObject.create({});
       this.set('tube', tube);
       this.set('edition', false);
@@ -33,19 +33,19 @@ module('Integration | Component | tube-form', function(hooks) {
                                    @edition={{this.edition}}/>`);
     });
 
-    test('it should display `pixId` field', function(assert) {
+    test('it should display `pixId` field', function (assert) {
       // then
       assert.dom('[data-test-pix-id-field]').exists();
     });
 
-    test('it should not display `tube.name` field', function(assert) {
+    test('it should not display `tube.name` field', function (assert) {
       // then
       assert.dom('[data-test-name-field]').doesNotExist();
     });
   });
 
-  module('#edition', function(hooks) {
-    hooks.beforeEach(async function() {
+  module('#edition', function (hooks) {
+    hooks.beforeEach(async function () {
       const tube = EmberObject.create({});
       this.set('tube', tube);
       this.set('edition', true);
@@ -54,12 +54,12 @@ module('Integration | Component | tube-form', function(hooks) {
                                    @edition={{this.edition}}/>`);
     });
 
-    test('it should not display `pixId` field', function(assert) {
+    test('it should not display `pixId` field', function (assert) {
       // then
       assert.dom('[data-test-pix-id-field]').doesNotExist();
     });
 
-    test('it should display `tube.name` field', function(assert) {
+    test('it should display `tube.name` field', function (assert) {
       // then
       assert.dom('[data-test-name-field]').exists();
     });

@@ -6,12 +6,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | Controller | Localized Challenge', function(hooks) {
+module('Acceptance | Controller | Localized Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let localizedChallenge;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -31,29 +31,41 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', code: '1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: challenge.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 0,
-            validatedChallengesCount: 1,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: challenge.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 0,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('it should display the localized challenge', async function(assert) {
+  test('it should display the localized challenge', async function (assert) {
     const screen = await visit('/');
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -75,7 +87,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en/framework-name/Pix/area-code/1'), 'href ends with /translations/en/framework-name/Pix/area-code/1');
   });
 
-  test('it should go back to the original challenge', async function(assert) {
+  test('it should go back to the original challenge', async function (assert) {
     const screen = await visit('/');
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -87,8 +99,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     assert.dom(screen.getByText('Version en')).exists();
   });
 
-  module('#edit localized challenge status', function() {
-    test('should set localized status to `validé`', async function(assert) {
+  module('#edit localized challenge status', function () {
+    test('should set localized status to `validé`', async function (assert) {
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
       await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -103,7 +115,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
       assert.dom(screen.getByText('En prod')).exists();
     });
 
-    test('should set localized status to `proposé`', async function(assert) {
+    test('should set localized status to `proposé`', async function (assert) {
       localizedChallenge.update({ status: 'validé' });
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
@@ -118,11 +130,10 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
 
       assert.dom(screen.getByText('Pas en prod')).exists();
     });
-
   });
 
-  module('#edit localized challenge', function() {
-    test('should display edition form', async function(assert) {
+  module('#edit localized challenge', function () {
+    test('should display edition form', async function (assert) {
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
       await click(screen.getByRole('link', { name: '1.1 Title' }));

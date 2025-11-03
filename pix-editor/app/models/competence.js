@@ -2,7 +2,6 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import sortBy from 'lodash/sortBy';
 
 export default class CompetenceModel extends Model {
-
   @attr title;
   @attr titleEn;
   @attr description;

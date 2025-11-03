@@ -5,10 +5,10 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | sidebar/search', function(hooks) {
+module('Integration | Component | sidebar/search', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     // given
     const maySearch = sinon.stub().returns(true);
 

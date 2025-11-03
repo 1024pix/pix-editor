@@ -9,9 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 
 export default class PopinPDFEntries extends Component {
-  options = {
-    language: [{ value: 'en', label: 'Anglais' }, { value: 'fr', label: 'Français' }],
-  };
+  options = { language: [{ value: 'en', label: 'Anglais' }, { value: 'fr', label: 'Français' }] };
 
   @tracked title = 'Liste des thèmes et des sujets abordés dans Pix';
   @tracked language = false;

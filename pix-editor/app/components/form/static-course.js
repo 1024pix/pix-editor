@@ -142,9 +142,13 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me'); }
+  validate() {
+    throw new Error('implement me');
+  }
 
-  getValueForSubmit() { throw new Error('implement me'); }
+  getValueForSubmit() {
+    throw new Error('implement me');
+  }
 }
 
 class NameField extends FormField {
@@ -158,14 +162,19 @@ class NameField extends FormField {
       : STATES.ERROR;
   }
 
-  getValueForSubmit() { return this.value.trim(); }
+  getValueForSubmit() {
+    return this.value.trim();
+  }
 }
 
 class DescriptionField extends FormField {
+  validate() {
+    return STATES.SUCCESS;
+  }
 
-  validate() { return STATES.SUCCESS; }
-
-  getValueForSubmit() { return this.value.trim(); }
+  getValueForSubmit() {
+    return this.value.trim();
+  }
 }
 
 class ChallengeIdsField extends FormField {

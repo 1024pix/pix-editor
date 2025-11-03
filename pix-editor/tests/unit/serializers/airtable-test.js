@@ -2,28 +2,32 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Serializer | airtable', function(hooks) {
+module('Unit | Serializer | airtable', function (hooks) {
   setupTest(hooks);
   let store, modelFor;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     modelFor = store.modelFor;
     store.modelFor = sinon.stub().returns({
-      determineRelationshipType() { return 'manyToMany'; },
+      determineRelationshipType() {
+        return 'manyToMany';
+      },
       attributes: {
         key: 'key',
-        has() { return true; },
+        has() {
+          return true;
+        },
       },
     });
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     store.modelFor = modelFor;
   });
 
-  module('#serialize', function() {
-    test('it should serialize hasMany relation', function(assert) {
+  module('#serialize', function () {
+    test('it should serialize hasMany relation', function (assert) {
       // given
       const serializer = store.serializerFor('airtable');
       const snapshot = {
@@ -31,16 +35,22 @@ module('Unit | Serializer | airtable', function(hooks) {
         eachRelationship(callback) {
           callback('key', { kind: 'hasMany', key: 'key' });
         },
-        hasMany() { return [
-          {
-            id: 1,
-            attributes() {return {};},
-          },
-          {
-            id: 2,
-            attributes() {return {};},
-          },
-        ]; },
+        hasMany() {
+          return [
+            {
+              id: 1,
+              attributes() {
+                return {};
+              },
+            },
+            {
+              id: 2,
+              attributes() {
+                return {};
+              },
+            },
+          ];
+        },
       };
 
       // when
@@ -50,7 +60,7 @@ module('Unit | Serializer | airtable', function(hooks) {
       assert.deepEqual(serialized, { key: [1, 2] });
     });
 
-    test('it should verify primaryKey to serialise', function(assert) {
+    test('it should verify primaryKey to serialise', function (assert) {
       // given
       const serializer = store.serializerFor('airtable');
       const snapshot = {
@@ -58,10 +68,16 @@ module('Unit | Serializer | airtable', function(hooks) {
         eachRelationship(callback) {
           callback('key', { kind: 'hasMany', key: 'key' });
         },
-        hasMany() { return [{
-          id: 'primaryKey',
-          attributes() { return { airtableId: 'MyIdea' }; },
-        }]; },
+        hasMany() {
+          return [
+            {
+              id: 'primaryKey',
+              attributes() {
+                return { airtableId: 'MyIdea' };
+              },
+            },
+          ];
+        },
       };
 
       // when

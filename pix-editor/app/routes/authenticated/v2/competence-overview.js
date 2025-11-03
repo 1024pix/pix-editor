@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class CompetenceOverviewRoute extends Route {
-
   @service router;
   @service store;
   @service versionManager;

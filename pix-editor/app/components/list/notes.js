@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import SortedList from './sorted';
 
 export default class NoteList extends SortedList {
-
   sortHandlers = {
     date: {
       type: 'date',
@@ -12,11 +11,13 @@ export default class NoteList extends SortedList {
   };
 
   get headers() {
-    const headers = [{
-      name: 'Date',
-      valuePath: 'date',
-      maxWidth: 150,
-    }];
+    const headers = [
+      {
+        name: 'Date',
+        valuePath: 'date',
+        maxWidth: 150,
+      },
+    ];
     if (this.displayAuthor) {
       headers.push({
         name: 'Auteur',

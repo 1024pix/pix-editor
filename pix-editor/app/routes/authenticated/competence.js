@@ -7,12 +7,8 @@ export default class CompetenceRoute extends Route {
   @service router;
 
   queryParams = {
-    view: {
-      refreshModel: true,
-    },
-    languageFilter: {
-      refreshModel: true,
-    },
+    view: { refreshModel: true },
+    languageFilter: { refreshModel: true },
   };
 
   model(params) {

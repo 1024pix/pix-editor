@@ -37,9 +37,7 @@ export default class DropdownMenu extends Component {
 
     computePosition(button, menu, {
       placement: 'bottom-end',
-      middleware: [flip({
-        fallbackAxisSideDirection: 'start',
-      })],
+      middleware: [flip({ fallbackAxisSideDirection: 'start' })],
     }).then(({ x, y }) => {
       Object.assign(menu.style, {
         top: `${y}px`,
@@ -99,4 +97,3 @@ export default class DropdownMenu extends Component {
     </div>
   </template>
 }
-

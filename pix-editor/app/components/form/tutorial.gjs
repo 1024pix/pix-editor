@@ -25,9 +25,36 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options = {
-    format: ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
-    level: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    license: ['CC-BY-SA', '(c)', 'Youtube'],
+    format: [
+      'audio',
+      'frise',
+      'image',
+      'jeu',
+      'outil',
+      'page',
+      'pdf',
+      'site',
+      'slide',
+      'son',
+      'vidéo',
+    ],
+    level: [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+    ],
+    license: [
+      'CC-BY-SA',
+      '(c)',
+      'Youtube',
+    ],
   };
 
   constructor() {
@@ -80,11 +107,7 @@ export default class TutorialForm extends Component {
       return;
     }
     const queryLowerCase = query.toLowerCase();
-    this.tagListOptions = await this.store.query('tag', {
-      filter: {
-        title: queryLowerCase,
-      },
-    })
+    this.tagListOptions = await this.store.query('tag', { filter: { title: queryLowerCase } })
       .then((tags) => {
         const results = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
         results.push({ label: 'Ajouter', description: 'Créer un tag', value: 'create' });
@@ -99,11 +122,7 @@ export default class TutorialForm extends Component {
       return;
     }
     const queryLowerCaseWithEscapedQuote = query.toLowerCase().replaceAll('\'', '\\\'');
-    this.sourceList = await this.store.query('tutorial', {
-      filter: {
-        source: queryLowerCaseWithEscapedQuote,
-      },
-    })
+    this.sourceList = await this.store.query('tutorial', { filter: { source: queryLowerCaseWithEscapedQuote } })
       .then((tutorials) => {
         const results = tutorials.map((tutorial) => (tutorial.get('source')));
         results.push(query);
@@ -136,11 +155,7 @@ export default class TutorialForm extends Component {
         }
       }
     } else {
-      this.args.tutorial.tags = await this.store.query('tag', {
-        filter: {
-          ids: selectedTagIds,
-        },
-      });
+      this.args.tutorial.tags = await this.store.query('tag', { filter: { ids: selectedTagIds } });
     }
   }
 

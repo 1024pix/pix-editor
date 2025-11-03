@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | Controller | Get Challenge', function(hooks) {
+module('Acceptance | Controller | Get Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -23,22 +23,34 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: prototype.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: prototype.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-workbench`,
@@ -49,7 +61,7 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     return authenticateSession();
   });
 
-  test('it should display the challenge', async function(assert) {
+  test('it should display the challenge', async function (assert) {
     const screen = await visit('/');
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Code Title' }));
@@ -58,8 +70,8 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     assert.dom('time').hasAttribute('datetime', '2021-10-04T14:00:00.000Z');
   });
 
-  test('it should change prototype location', async function(assert) {
-    //when
+  test('it should change prototype location', async function (assert) {
+    // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge2?leftMaximized=false&view=workbench');
     await click(screen.getByRole('button', { name: 'Déplacer l\'épreuve' }));
     await click(screen.getByLabelText('Acquis'));
@@ -68,7 +80,7 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     await click(await screen.findByRole('button', { name: 'Enregistrer' }));
     const store = this.owner.lookup('service:store');
 
-    //then
+    // then
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
     assert.ok(await screen.findByText('Changement d\'acquis effectué pour le prototype'));
     assert.strictEqual(challenge.skill.get('id'), 'recSkill2');

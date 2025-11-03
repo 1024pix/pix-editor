@@ -4,16 +4,16 @@ import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('Unit | Component | sidebar/search', function(hooks) {
+module('Unit | Component | sidebar/search', function (hooks) {
   setupTest(hooks);
   let component;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     component = createGlimmerComponent('component:sidebar/search');
   });
 
-  module('#searchSkillsByName', function() {
-    test('it should query store with skill name', function(assert) {
+  module('#searchSkillsByName', function () {
+    test('it should query store with skill name', function (assert) {
     // given
       const queryStub = sinon.stub().resolves([]);
 
@@ -24,9 +24,7 @@ module('Unit | Component | sidebar/search', function(hooks) {
 
       // then
       assert.ok(queryStub.calledWith('skill', {
-        filter: {
-          name: '\\\'"\t coucou \\\'"\t',
-        },
+        filter: { name: '\\\'"\t coucou \\\'"\t' },
         page: { limit: 20 },
         sort: 'name,-version',
       }));

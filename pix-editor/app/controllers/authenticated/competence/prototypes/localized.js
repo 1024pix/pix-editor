@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class LocalizedController extends Controller {
-
   @service router;
   @service access;
   @service notify;

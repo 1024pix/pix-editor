@@ -11,11 +11,7 @@ export default class CompetenceHeader extends Component {
   @action
   setLocale(locale) {
     if (locale === 'source') locale = undefined;
-    this.router.transitionTo({
-      queryParams: {
-        locale,
-      },
-    });
+    this.router.transitionTo({ queryParams: { locale } });
   }
 
   @action

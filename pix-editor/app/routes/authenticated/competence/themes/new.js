@@ -8,9 +8,7 @@ export default class CompetenceThemesNewRoute extends CompetenceThemesSingleRout
   @service idGenerator;
 
   model() {
-    return this.store.createRecord('theme', {
-      pixId: this.idGenerator.newId('thematic'),
-    });
+    return this.store.createRecord('theme', { pixId: this.idGenerator.newId('thematic') });
   }
 
   setupController(controller) {

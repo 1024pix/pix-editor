@@ -3,15 +3,9 @@ import { inject as service } from '@ember/service';
 
 export default class MissionsRoute extends Route {
   queryParams = {
-    pageNumber: {
-      refreshModel: true,
-    },
-    pageSize: {
-      refreshModel: true,
-    },
-    statuses: {
-      refreshModel: true,
-    },
+    pageNumber: { refreshModel: true },
+    pageSize: { refreshModel: true },
+    statuses: { refreshModel: true },
   };
 
   @service store;
@@ -23,9 +17,7 @@ export default class MissionsRoute extends Route {
         size: params.pageSize,
       },
 
-      filter: {
-        statuses: params.statuses,
-      },
+      filter: { statuses: params.statuses },
     }, { reload: true });
     return {
       missions,

@@ -1,19 +1,15 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Model | competence', function(hooks) {
+module('Unit | Model | competence', function (hooks) {
   setupTest(hooks);
 
-  test('it should return live theme', function(assert) {
+  test('it should return live theme', function (assert) {
     const store = this.owner.lookup('service:store');
 
-    const liveTheme = store.createRecord('theme', {
-      name: 'liveTheme',
-    });
+    const liveTheme = store.createRecord('theme', { name: 'liveTheme' });
 
-    const workbenchTheme = store.createRecord('theme', {
-      name: 'workbench_theme',
-    });
+    const workbenchTheme = store.createRecord('theme', { name: 'workbench_theme' });
 
     const competence = store.createRecord('competence', {
       title: 'competence1',
@@ -23,20 +19,16 @@ module('Unit | Model | competence', function(hooks) {
     assert.deepEqual(competence.themes, [liveTheme]);
   });
 
-  module('#productionTubes', function() {
-    test('returns tubes with valided skills', function(assert) {
+  module('#productionTubes', function () {
+    test('returns tubes with valided skills', function (assert) {
       const store = this.owner.lookup('service:store');
 
       const liveTube = store.createRecord('tube', {
         name: 'liveTube',
-        rawSkills: [
-          store.createRecord('skill', { status: 'actif' }),
-        ],
+        rawSkills: [store.createRecord('skill', { status: 'actif' })],
       });
 
-      const workbenchTube = store.createRecord('tube', {
-        name: 'workbenchTube',
-      });
+      const workbenchTube = store.createRecord('tube', { name: 'workbenchTube' });
 
       const competence = store.createRecord('competence', {
         title: 'competence1',
@@ -47,13 +39,11 @@ module('Unit | Model | competence', function(hooks) {
     });
   });
 
-  module('#getAreaCode', function() {
-    test('should return area code', function(assert) {
+  module('#getAreaCode', function () {
+    test('should return area code', function (assert) {
       const store = this.owner.lookup('service:store');
 
-      const competence = store.createRecord('competence', {
-        code: '2.4',
-      });
+      const competence = store.createRecord('competence', { code: '2.4' });
 
       assert.strictEqual(competence.areaCode, '2');
     });

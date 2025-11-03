@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class AlternativesController extends Controller {
-
   queryParams = ['rightMaximized'];
 
   @tracked rightMaximized = false;

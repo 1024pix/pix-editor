@@ -7,12 +7,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
+module('Acceptance | expand-collapse-close-multipanels', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -28,44 +28,68 @@ module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
       id: 'competence1:challenges-production',
       name: '1.1 ma compétence',
       airtableId: 'recCompetence1',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: skillId,
-            name: skillName,
-            prototypeId,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 1,
-            airtableId: skillId,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: skillId,
+                  name: skillName,
+                  prototypeId,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 1,
+                  airtableId: skillId,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production:nl',
       name: '1.1 ma compétence',
       airtableId: 'recCompetence1',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: skillId,
-            name: skillName,
-            prototypeId,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 0,
-            validatedChallengesCount: 1,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: skillId,
+                  name: skillName,
+                  prototypeId,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 0,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     const skill = this.server.create('skill', {
       id: skillId,
@@ -84,7 +108,7 @@ module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
     return authenticateSession();
   });
 
-  test('should correctly expand / collapse panels according to scenario', async function(assert) {
+  test('should correctly expand / collapse panels according to scenario', async function (assert) {
     // Grid only
     await visit('/v2/competences/recCompetence1/challenges-production');
     assert.dom('.competence-overview-grid').isVisible();

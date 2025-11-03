@@ -5,10 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | whitelisted-urls/related-skill-cell', function(hooks) {
+module('Integration | Component | whitelisted-urls/related-skill-cell', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should display an empty when there is no skill', async function(assert) {
+  test('it should display an empty when there is no skill', async function (assert) {
     // given
     const skills = null;
 
@@ -22,7 +22,7 @@ module('Integration | Component | whitelisted-urls/related-skill-cell', function
     assert.strictEqual(content.length, 0);
   });
 
-  test('it should display a skill when there is one skill', async function(assert) {
+  test('it should display a skill when there is one skill', async function (assert) {
     // given
     const skills = '@skill1';
 
@@ -31,13 +31,7 @@ module('Integration | Component | whitelisted-urls/related-skill-cell', function
       <RelatedSkillCell @skills={{skills}} />
     </template>));
     const allElementsWithSkill = await screen.queryAllByText('@skill1');
-    const [
-      skillCell,
-      tooltip,
-    ] = [
-      allElementsWithSkill.find((el) => el.hasAttribute('aria-labelledby')),
-      allElementsWithSkill.find((el) => !el.hasAttribute('aria-labelledby')),
-    ];
+    const [skillCell, tooltip] = [allElementsWithSkill.find((el) => el.hasAttribute('aria-labelledby')), allElementsWithSkill.find((el) => !el.hasAttribute('aria-labelledby'))];
     await triggerEvent(skillCell, 'mouseenter');
 
     // then
@@ -45,7 +39,7 @@ module('Integration | Component | whitelisted-urls/related-skill-cell', function
     assert.dom(tooltip).isVisible();
   });
 
-  test('it should display the first skill (as in alphabetical order) and a singular version of appended sentence when there is a list of 2 skills', async function(assert) {
+  test('it should display the first skill (as in alphabetical order) and a singular version of appended sentence when there is a list of 2 skills', async function (assert) {
     // given
     const skills = '@verite2,@mensonge3';
 
@@ -62,7 +56,7 @@ module('Integration | Component | whitelisted-urls/related-skill-cell', function
     assert.dom(tooltip).isVisible();
   });
 
-  test('it should display the first skill (as in alphabetical order) and a plural version of appended sentence when there is a list of more than 2 skills', async function(assert) {
+  test('it should display the first skill (as in alphabetical order) and a plural version of appended sentence when there is a list of more than 2 skills', async function (assert) {
     // given
     const skills = '@verite2,@mensonge3,@meOperator3';
 

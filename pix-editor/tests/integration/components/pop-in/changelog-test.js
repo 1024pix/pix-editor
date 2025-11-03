@@ -5,18 +5,18 @@ import Sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | popin-changelog', function(hooks) {
+module('Integration | Component | popin-changelog', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    //given
+  test('it renders', async function (assert) {
+    // given
     this.approve = Sinon.stub();
 
-    //when
+    // when
     await render(hbs`<PopIn::Changelog  @onApprove={{this.approve}}/>`);
     await click('[data-test-save-changelog-button]');
 
-    //then
+    // then
     assert.true(this.approve.called);
   });
 });

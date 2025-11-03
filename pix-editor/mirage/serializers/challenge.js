@@ -2,6 +2,4 @@ import ApplicationSerializer from './application';
 
 const include = ['challengeLocales'];
 
-export default ApplicationSerializer.extend({
-  include,
-});
+export default ApplicationSerializer.extend({ include });

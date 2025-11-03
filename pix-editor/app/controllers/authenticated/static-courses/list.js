@@ -5,7 +5,14 @@ import { tracked } from '@glimmer/tracking';
 
 export default class StaticCoursesController extends Controller {
   @service router;
-  queryParams = ['pageNumber', 'pageSize', 'isActive', 'name', 'tagIds'];
+  queryParams = [
+    'pageNumber',
+    'pageSize',
+    'isActive',
+    'name',
+    'tagIds',
+  ];
+
   @tracked pageNumber = 1;
   @tracked pageSize = 10;
   @tracked showActiveOnly = true;

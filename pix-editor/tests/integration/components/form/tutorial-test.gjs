@@ -5,10 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | tutorial-form', function(hooks) {
+module('Integration | Component | tutorial-form', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders tutorial languages from config', async function(assert) {
+  test('it renders tutorial languages from config', async function (assert) {
     class ConfigService extends Service {
       get tutorialLocaleToLanguageMap() {
         return {
@@ -29,7 +29,7 @@ module('Integration | Component | tutorial-form', function(hooks) {
     assert.dom(await screen.findByRole('option', { name: 'Autre Langue' })).exists();
   });
 
-  test('it shows a tutorial licenses dropdown with default empty option "Licence non renseignée"', async function(assert) {
+  test('it shows a tutorial licenses dropdown with default empty option "Licence non renseignée"', async function (assert) {
     class ConfigService extends Service {
       get tutorialLocaleToLanguageMap() {
         return {
@@ -51,7 +51,7 @@ module('Integration | Component | tutorial-form', function(hooks) {
     assert.dom(screen.getByRole('option', { name: 'CC-BY-SA' })).hasAria('selected', 'false');
   });
 
-  test('it shows a tutorial levels dropdown with default empty option "Niveau non renseigné"', async function(assert) {
+  test('it shows a tutorial levels dropdown with default empty option "Niveau non renseigné"', async function (assert) {
     class ConfigService extends Service {
       get tutorialLocaleToLanguageMap() {
         return {

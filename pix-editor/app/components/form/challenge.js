@@ -10,7 +10,7 @@ export default class ChallengeForm extends Component {
 
   @tracked languageOptions = [];
   options = {
-    'types': [
+    types: [
       { value: 'QCU', label: 'QCU' },
       { value: 'QCM', label: 'QCM' },
       { value: 'QROC', label: 'QROC' },
@@ -18,15 +18,49 @@ export default class ChallengeForm extends Component {
       { value: 'QROCM-dep', label: 'QROCM-dep' },
       { value: 'autoReply', label: 'Embed-auto' },
     ],
-    'pedagogy': [{ label: 'e-preuve', value: 'e-preuve' }, { label: 'q-savoir', value: 'q-savoir' }, { label: 'q-situation', value: 'q-situation' }],
-    'declinable': [{ label: 'facilement', value: 'facilement' }, { label: 'difficilement', value: 'difficilement' }, { label: 'permutation', value: 'permutation' }, { label: 'non', value: 'non' }],
-    'format': [{ label: 'petit', value: 'petit' }, { label: 'mots', value: 'mots' }, { label: 'phrase', value: 'phrase' }, { label: 'paragraphe', value: 'paragraphe' }, { label: 'nombre', value: 'nombre' }],
-    'accessibility1': ['RAS', 'OK', 'Acquis Non Pertinent', 'KO', 'A tester'],
-    'accessibility2': ['RAS', 'OK', 'KO'],
-    'responsive': ['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
-    'spoil': ['Non Sp', 'Difficilement Sp', 'Facilement Sp'],
-    'locales': this.languageOptions,
-    'contextualizedFields': [
+    pedagogy: [
+      { label: 'e-preuve', value: 'e-preuve' },
+      { label: 'q-savoir', value: 'q-savoir' },
+      { label: 'q-situation', value: 'q-situation' },
+    ],
+    declinable: [
+      { label: 'facilement', value: 'facilement' },
+      { label: 'difficilement', value: 'difficilement' },
+      { label: 'permutation', value: 'permutation' },
+      { label: 'non', value: 'non' },
+    ],
+    format: [
+      { label: 'petit', value: 'petit' },
+      { label: 'mots', value: 'mots' },
+      { label: 'phrase', value: 'phrase' },
+      { label: 'paragraphe', value: 'paragraphe' },
+      { label: 'nombre', value: 'nombre' },
+    ],
+    accessibility1: [
+      'RAS',
+      'OK',
+      'Acquis Non Pertinent',
+      'KO',
+      'A tester',
+    ],
+    accessibility2: [
+      'RAS',
+      'OK',
+      'KO',
+    ],
+    responsive: [
+      'Tablette',
+      'Smartphone',
+      'Tablette/Smartphone',
+      'Non',
+    ],
+    spoil: [
+      'Non Sp',
+      'Difficilement Sp',
+      'Facilement Sp',
+    ],
+    locales: this.languageOptions,
+    contextualizedFields: [
       { value: 'instruction', label: 'Consigne' },
       { value: 'embed', label: 'Embed' },
       { value: 'illustration', label: 'Illustration' },
@@ -37,6 +71,7 @@ export default class ChallengeForm extends Component {
       { value: 'solution', label: 'Réponse' },
     ],
   };
+
   helpInstructions = '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
   helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
 
@@ -128,7 +163,7 @@ export default class ChallengeForm extends Component {
       return null;
     }
 
-    return this.options.types.find((type)=> type.value === actualType).value;
+    return this.options.types.find((type) => type.value === actualType).value;
   }
 
   get challengeFormatValue() {
@@ -136,7 +171,7 @@ export default class ChallengeForm extends Component {
       return 'mots';
     }
 
-    return this.options.format.find((format)=> format.value === this.args.challenge.format).value;
+    return this.options.format.find((format) => format.value === this.args.challenge.format).value;
   }
 
   get challengeGeographyValue() {

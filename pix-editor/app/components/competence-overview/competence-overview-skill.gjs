@@ -4,7 +4,6 @@ import { LinkTo } from '@ember/routing';
 import Component from '@glimmer/component';
 
 export default class CompetenceOverviewSkill extends Component {
-
   get modifier() {
     if (this.args.skillOverview.validatedChallengesCount) return 'validated';
     if (this.args.skillOverview.proposedChallengesCount) return 'proposed';

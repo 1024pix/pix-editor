@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class PopinSingleEntry extends Component {
-
   @tracked value = '';
 
   constructor() {

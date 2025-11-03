@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
+module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -25,29 +25,41 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: prototype.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: prototype.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('adding illustration', async function(assert) {
+  test('adding illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -80,7 +92,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isNew));
   });
 
-  test('replace illustration', async function(assert) {
+  test('replace illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -125,7 +137,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.strictEqual(attachments[0].url, 'data-illustrationB:,');
   });
 
-  test('delete illustration', async function(assert) {
+  test('delete illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
@@ -154,7 +166,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('update illustration', async function(assert) {
+  test('update illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
@@ -188,7 +200,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.strictEqual(newIllustration.url, 'data:,');
   });
 
-  test('delete and upload a new illustration', async function(assert) {
+  test('delete and upload a new illustration', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1' });
     class StorageServiceStub extends Service {
@@ -222,5 +234,4 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');
   });
-
 });

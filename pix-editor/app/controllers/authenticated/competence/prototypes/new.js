@@ -6,7 +6,6 @@ import * as Sentry from '@sentry/ember';
 import Prototype from './single';
 
 export default class NewController extends Prototype {
-
   creation = true;
   queryParams = ['from', 'fromSkill'];
   @tracked from = '';

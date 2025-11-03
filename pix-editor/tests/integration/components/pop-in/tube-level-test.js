@@ -5,11 +5,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | popin-tube-level', function(hooks) {
+module('Integration | Component | popin-tube-level', function (hooks) {
   setupIntlRenderingTest(hooks);
   let tube, skill1, skill2, skill5, skill6;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     // given
     skill1 = {
       id: 'rec321654',
@@ -46,11 +46,16 @@ module('Integration | Component | popin-tube-level', function(hooks) {
     this.setTubeAction = sinon.stub();
     this.clearTubeAction = sinon.stub();
     this.selectedTube = tube;
-    this.tubeSkills = [skill1, skill2, skill5, skill6];
+    this.tubeSkills = [
+      skill1,
+      skill2,
+      skill5,
+      skill6,
+    ];
     this.selectedTubeLevel = tube.selectedTubeLevel;
     this.selectedTubeSkills = tube.selectedTubeSkills;
     this.isThematicResultMode = true;
-    this.closeTubeLevel = ()=>{};
+    this.closeTubeLevel = () => {};
 
     await render(hbs`<PopIn::TubeLevel  @setTubeLevel={{this.setTubeAction}}
                                         @clearTube={{this.clearTubeAction}}
@@ -62,10 +67,19 @@ module('Integration | Component | popin-tube-level', function(hooks) {
                                         @close={{this.closeTubeLevel}}/>`);
   });
 
-  test('it should display a list of an ordered list of skills level', function(assert) {
+  test('it should display a list of an ordered list of skills level', function (assert) {
     assert.expect(8);
     // when
-    const expectedResult = ['1', '2', '', '', '5', '6', '', ''];
+    const expectedResult = [
+      '1',
+      '2',
+      '',
+      '',
+      '5',
+      '6',
+      '',
+      '',
+    ];
 
     // then
     const skillsList = this.element.querySelectorAll('.levels .level');
@@ -74,7 +88,7 @@ module('Integration | Component | popin-tube-level', function(hooks) {
     });
   });
 
-  test('it should display selected skill level', function(assert) {
+  test('it should display selected skill level', function (assert) {
     assert.expect(3);
     // when
     const expectedResult = ['1', '2'];
@@ -87,7 +101,7 @@ module('Integration | Component | popin-tube-level', function(hooks) {
     });
   });
 
-  test('it should invoke `clearTubeAction` on click on erase button', async function(assert) {
+  test('it should invoke `clearTubeAction` on click on erase button', async function (assert) {
     // when
     await click('[data-test-erase-button]');
 
@@ -95,9 +109,17 @@ module('Integration | Component | popin-tube-level', function(hooks) {
     assert.deepEqual(this.clearTubeAction.getCall(0).args, [tube]);
   });
 
-  test('it should invoke `setTubeAction` on click on skill cell', async function(assert) {
+  test('it should invoke `setTubeAction` on click on skill cell', async function (assert) {
     // when
-    const expectedResult = [tube, 5, [skill1.pixId, skill2.pixId, skill5.pixId]];
+    const expectedResult = [
+      tube,
+      5,
+      [
+        skill1.pixId,
+        skill2.pixId,
+        skill5.pixId,
+      ],
+    ];
     await click(findAll('.levels .level')[4]);
 
     // then

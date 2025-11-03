@@ -18,4 +18,3 @@ export default Factory.extend({
     return 'default-valid-api-key';
   },
 });
-

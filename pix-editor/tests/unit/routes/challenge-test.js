@@ -2,7 +2,7 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Route | challenge', function(hooks) {
+module('Unit | Route | challenge', function (hooks) {
   setupTest(hooks);
 
   let route;
@@ -19,23 +19,17 @@ module('Unit | Route | challenge', function(hooks) {
   let primaryLocalizedAlternative;
   let secondaryLocalizedAlternative;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     route = this.owner.lookup('route:authenticated.challenge');
 
     route.versionManager = {};
 
-    route.router = {
-      transitionTo: sinon.stub(),
-    };
+    route.router = { transitionTo: sinon.stub() };
 
     const store = this.owner.lookup('service:store');
 
-    const competence = store.createRecord('competence', {
-      id: competenceId,
-    });
-    const tube = store.createRecord('tube', {
-      competence,
-    });
+    const competence = store.createRecord('competence', { id: competenceId });
+    const tube = store.createRecord('tube', { competence });
     const skill = store.createRecord('skill', {
       id: skillId,
       tube,
@@ -70,19 +64,19 @@ module('Unit | Route | challenge', function(hooks) {
     });
   });
 
-  module('#afterModel', function() {
-    module('when in v2', function(hooks) {
-      hooks.beforeEach(function() {
+  module('#afterModel', function () {
+    module('when in v2', function (hooks) {
+      hooks.beforeEach(function () {
         route.versionManager.isV2 = true;
       });
 
-      module('when prototype is in production', function(hooks) {
-        hooks.beforeEach(function() {
+      module('when prototype is in production', function (hooks) {
+        hooks.beforeEach(function () {
           prototype.status = 'validé';
         });
 
-        module('when navigating to prototype’s primary', function() {
-          test('redirects to v2 challenge', async function(assert) {
+        module('when navigating to prototype’s primary', function () {
+          test('redirects to v2 challenge', async function (assert) {
             // given
             const model = primaryLocalizedPrototype;
 
@@ -102,8 +96,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s primary', function() {
-          test('redirects to v2 challenge', async function(assert) {
+        module('when navigating to alternative’s primary', function () {
+          test('redirects to v2 challenge', async function (assert) {
             // given
             const model = primaryLocalizedAlternative;
 
@@ -123,8 +117,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to prototype’s secondary', function() {
-          test('redirects to v1 localized challenge', async function(assert) {
+        module('when navigating to prototype’s secondary', function () {
+          test('redirects to v1 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedPrototype;
 
@@ -143,8 +137,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s secondary', function() {
-          test('redirects to v1 localized challenge', async function(assert) {
+        module('when navigating to alternative’s secondary', function () {
+          test('redirects to v1 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedAlternative;
 
@@ -165,13 +159,13 @@ module('Unit | Route | challenge', function(hooks) {
         });
       });
 
-      module('when prototype is not in production', function(hooks) {
-        hooks.beforeEach(function() {
+      module('when prototype is not in production', function (hooks) {
+        hooks.beforeEach(function () {
           prototype.status = 'périmé';
         });
 
-        module('when navigating to prototype’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to prototype’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedPrototype;
 
@@ -190,8 +184,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to alternative’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedAlternative;
 
@@ -213,18 +207,18 @@ module('Unit | Route | challenge', function(hooks) {
       });
     });
 
-    module('when in v1', function(hooks) {
-      hooks.beforeEach(function() {
+    module('when in v1', function (hooks) {
+      hooks.beforeEach(function () {
         route.versionManager.isV2 = false;
       });
 
-      module('when prototype is in production', function(hooks) {
-        hooks.beforeEach(function() {
+      module('when prototype is in production', function (hooks) {
+        hooks.beforeEach(function () {
           prototype.status = 'validé';
         });
 
-        module('when navigating to prototype’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to prototype’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedPrototype;
 
@@ -243,8 +237,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to alternative’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedAlternative;
 
@@ -264,8 +258,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to prototype’s secondary', function() {
-          test('redirects to v1 localized challenge', async function(assert) {
+        module('when navigating to prototype’s secondary', function () {
+          test('redirects to v1 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedPrototype;
 
@@ -284,8 +278,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s secondary', function() {
-          test('redirects to v1 localized challenge', async function(assert) {
+        module('when navigating to alternative’s secondary', function () {
+          test('redirects to v1 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedAlternative;
 
@@ -306,13 +300,13 @@ module('Unit | Route | challenge', function(hooks) {
         });
       });
 
-      module('when prototype is not in production', function(hooks) {
-        hooks.beforeEach(function() {
+      module('when prototype is not in production', function (hooks) {
+        hooks.beforeEach(function () {
           prototype.status = 'périmé';
         });
 
-        module('when navigating to prototype’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to prototype’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedPrototype;
 
@@ -331,8 +325,8 @@ module('Unit | Route | challenge', function(hooks) {
           });
         });
 
-        module('when navigating to alternative’s primary', function() {
-          test('redirects to v1 challenge', async function(assert) {
+        module('when navigating to alternative’s primary', function () {
+          test('redirects to v1 challenge', async function (assert) {
             // given
             const model = primaryLocalizedAlternative;
 

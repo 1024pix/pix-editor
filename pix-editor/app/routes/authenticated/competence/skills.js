@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 
 export default class SkillsRoute extends Route {
-
   async model() {
     const competence = this.modelFor('authenticated.competence');
     if (this.refreshing) {

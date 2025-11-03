@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/ember';
 import CompetenceThemesSingleController from './single';
 
 export default class CompetenceThemesNewController extends CompetenceThemesSingleController {
-
   creation = true;
 
   @service currentData;

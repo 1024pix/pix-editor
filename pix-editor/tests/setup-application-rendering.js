@@ -5,7 +5,7 @@ export function setupApplicationTest(hooks) {
   emberSetupApplicationTest(hooks);
   setupIntl(hooks, 'fr');
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.removeItem('v2');
   });
 }

@@ -10,7 +10,6 @@ import { tracked } from '@glimmer/tracking';
 import { not } from 'ember-truth-helpers';
 
 export default class FieldTextarea extends Component {
-
   @tracked maximized = false;
 
   get safeHelpContent() {

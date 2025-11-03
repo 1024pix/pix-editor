@@ -3,7 +3,6 @@ import * as Sentry from '@sentry/ember';
 import fetch from 'fetch';
 
 export default class StorageService extends Service {
-
   @service config;
   @service filePath;
   @service session;
@@ -90,7 +89,7 @@ export default class StorageService extends Service {
       }
       const response = await fetchFn('/api/file-storage-token', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${this.session.data.authenticated.apiKey}` },
+        headers: { Authorization: `Bearer ${this.session.data.authenticated.apiKey}` },
       });
       if (!response.ok) {
         console.error('could not get storage token');

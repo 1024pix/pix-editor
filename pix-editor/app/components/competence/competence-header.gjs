@@ -6,16 +6,19 @@ import Component from '@glimmer/component';
 export default class CompetenceHeader extends Component {
   @service config;
 
-  sections = [{
-    label: 'Epreuves',
-    value: 'challenges',
-  }, {
-    label: 'Acquis',
-    value: 'skills',
-  }, {
-    label: 'Qualité',
-    value: 'quality',
-  },
+  sections = [
+    {
+      label: 'Epreuves',
+      value: 'challenges',
+    },
+    {
+      label: 'Acquis',
+      value: 'skills',
+    },
+    {
+      label: 'Qualité',
+      value: 'quality',
+    },
   ];
 
   languageOptions = [

@@ -14,5 +14,4 @@ export default class NotifyService extends Service {
   error(text) {
     this.target.showMessage(text, false);
   }
-
 }

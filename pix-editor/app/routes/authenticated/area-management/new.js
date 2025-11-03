@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class AreaManagementNewRoute extends Route {
-
   @service currentData;
   @service idGenerator;
   @service store;

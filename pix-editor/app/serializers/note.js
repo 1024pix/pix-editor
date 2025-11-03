@@ -47,5 +47,4 @@ export default class NoteSerializer extends AirtableSerializer {
       return super.serializeAttribute(...arguments);
     }
   }
-
 }

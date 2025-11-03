@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Search', function(hooks) {
+module('Acceptance | Search', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -21,7 +21,7 @@ module('Acceptance | Search', function(hooks) {
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1' });
     this.server.create('skill', { id: 'recSkill2', name: '@skill1', challengeIds: [], status: 'archivé', version: 2, pixId: 'skill2' });
     const skill = this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'], pixId: 'skill1', version: 1 });
-    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill2', 'recSkill1' ] });
+    const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill2', 'recSkill1'] });
     const competence = this.server.create('competence', {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
@@ -29,22 +29,34 @@ module('Acceptance | Search', function(hooks) {
     });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: 'pas de thématique',
-        name: 'on m\'a oublié :(',
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: prototype.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'pas de thématique',
+          name: 'on m\'a oublié :(',
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: prototype.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', {
       id: 'recArea1',
@@ -56,7 +68,7 @@ module('Acceptance | Search', function(hooks) {
     return authenticateSession();
   });
 
-  test('search a challenge by rec id', async function(assert) {
+  test('search a challenge by rec id', async function (assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
 
@@ -70,7 +82,7 @@ module('Acceptance | Search', function(hooks) {
     assert.strictEqual(currentURL(), expectedUrl);
   });
 
-  test('search a challenge by challenge id', async function(assert) {
+  test('search a challenge by challenge id', async function (assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1?view=production';
 
@@ -84,7 +96,7 @@ module('Acceptance | Search', function(hooks) {
     assert.strictEqual(currentURL(), expectedUrl);
   });
 
-  test('search a challenge by localized challenge id', async function(assert) {
+  test('search a challenge by localized challenge id', async function (assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/challengeLocalizedChallenge1?view=production';
 
@@ -98,7 +110,7 @@ module('Acceptance | Search', function(hooks) {
     assert.strictEqual(currentURL(), expectedUrl);
   });
 
-  test('search a challenge by text', async function(assert) {
+  test('search a challenge by text', async function (assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
 
@@ -112,7 +124,7 @@ module('Acceptance | Search', function(hooks) {
     assert.strictEqual(currentURL(), expectedUrl);
   });
 
-  test('search a skill by name - starting with @', async function(assert) {
+  test('search a skill by name - starting with @', async function (assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/skills/recSkill1?view=production';
 

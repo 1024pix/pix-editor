@@ -3,21 +3,27 @@ import { module, test } from 'qunit';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('unit | Component | form/challenge', function(hooks) {
+module('unit | Component | form/challenge', function (hooks) {
   setupTest(hooks);
   let component;
 
-  hooks.beforeEach(function() {
-    component = createGlimmerComponent('component:form/challenge', {
-      challenge: {},
-    });
+  hooks.beforeEach(function () {
+    component = createGlimmerComponent('component:form/challenge', { challenge: {} });
   });
 
-  test('it should set locales properly', async function(assert) {
+  test('it should set locales properly', async function (assert) {
     // given
-    const input = ['en', 'fr-fr', 'fr'];
+    const input = [
+      'en',
+      'fr-fr',
+      'fr',
+    ];
 
-    const expected = ['en', 'fr-fr', 'fr'];
+    const expected = [
+      'en',
+      'fr-fr',
+      'fr',
+    ];
 
     const challenge = {
       id: 'recchallenge_1',

@@ -2,7 +2,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class CompetenceCompetenceGridThematicComponent extends Component {
-
   @service access;
 
   get isOverview() {
@@ -25,9 +24,7 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
 
   get tubeOverviewsOrTubes() {
     if (this.isOverview) {
-      return this.args.thematicOverview.tubeOverviews.map((tubeOverview) => ({
-        tubeOverview,
-      }));
+      return this.args.thematicOverview.tubeOverviews.map((tubeOverview) => ({ tubeOverview }));
     }
     return this.tubes.map((tube) => ({ tube }));
   }

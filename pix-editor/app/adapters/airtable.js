@@ -5,7 +5,6 @@ import chunk from 'lodash/chunk';
 const ID_PERSISTANT_FIELD = 'id persistant';
 
 export default class AirtableAdapter extends RESTAdapter {
-
   namespace = '/api/airtable/changelog';
 
   @service session;
@@ -25,10 +24,12 @@ export default class AirtableAdapter extends RESTAdapter {
     const serializer = store.serializerFor(type.modelName);
     if (serializer.primaryKey === ID_PERSISTANT_FIELD) {
       const url = this.buildURL(type.modelName, id, snapshot, 'findMany');
-      return this.ajax(url, 'GET', { data: {
-        filterByFormula: `AND(FIND('${id}', {id persistant}))`,
-        maxRecords: 1,
-      } });
+      return this.ajax(url, 'GET', {
+        data: {
+          filterByFormula: `AND(FIND('${id}', {id persistant}))`,
+          maxRecords: 1,
+        },
+      });
     }
     return super.findRecord(store, type, id, snapshot);
   }

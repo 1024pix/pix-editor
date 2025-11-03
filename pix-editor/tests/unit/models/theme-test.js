@@ -1,37 +1,37 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Model | theme', function(hooks) {
+module('Unit | Model | theme', function (hooks) {
   setupTest(hooks);
   let store;
   let tube_1, tube_2, tube_3, tube_4;
   let theme;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
 
     const activeSkill_1 = store.createRecord('skill', {
       status: 'actif',
-      challenges: [ store.createRecord('challenge', {
-        genealogy: 'Prototype 1',
-        status: 'validé',
-      })],
+      challenges: [
+        store.createRecord('challenge', {
+          genealogy: 'Prototype 1',
+          status: 'validé',
+        }),
+      ],
     });
     const activeSkill_2 = store.createRecord('skill', {
       status: 'actif',
-      challenges: [ store.createRecord('challenge', {
-        genealogy: 'Prototype 1',
-        status: 'validé',
-      })],
+      challenges: [
+        store.createRecord('challenge', {
+          genealogy: 'Prototype 1',
+          status: 'validé',
+        }),
+      ],
     });
 
-    const deadSkill = store.createRecord('skill', {
-      status: 'périmé',
-    });
+    const deadSkill = store.createRecord('skill', { status: 'périmé' });
 
-    tube_1 = store.createRecord('tube', {
-      name: '@workbench',
-    });
+    tube_1 = store.createRecord('tube', { name: '@workbench' });
 
     tube_2 = store.createRecord('tube', {
       name: '@tube_2',
@@ -63,18 +63,22 @@ module('Unit | Model | theme', function(hooks) {
     });
   });
 
-  test('it should not return workbench tubes', function(assert) {
+  test('it should not return workbench tubes', function (assert) {
     assert.expect(3);
     // when
     const tubes = theme.tubes;
 
     // then
     tubes.forEach((tube) => {
-      assert.ok(['@tube_2', '@tube_3', '@tube_4'].includes(tube.name));
+      assert.ok([
+        '@tube_2',
+        '@tube_3',
+        '@tube_4',
+      ].includes(tube.name));
     });
   });
 
-  test('it should return sorted production tubes', function(assert) {
+  test('it should return sorted production tubes', function (assert) {
     assert.expect(2);
     // when
     const tubes = theme.productionTubes;
@@ -86,7 +90,7 @@ module('Unit | Model | theme', function(hooks) {
     });
   });
 
-  test('it should return number of  selected tubes', function(assert) {
+  test('it should return number of  selected tubes', function (assert) {
     // when
     const selectedProductionTubeLength = theme.selectedProductionTubeLength;
 
@@ -94,24 +98,20 @@ module('Unit | Model | theme', function(hooks) {
     assert.strictEqual(selectedProductionTubeLength, 1);
   });
 
-  module('#hasSelectedProductionTube', function() {
-    test('it should be true if has selected tube', function(assert) {
+  module('#hasSelectedProductionTube', function () {
+    test('it should be true if has selected tube', function (assert) {
       // when
       const hasSelectedProductionTube = theme.hasSelectedProductionTube;
 
       // then
       assert.ok(hasSelectedProductionTube);
-
     });
 
-    test('it should be false if has no selected tube', function(assert) {
+    test('it should be false if has no selected tube', function (assert) {
       // given
       theme = store.createRecord('theme', {
         name: 'themeName',
-        rawTubes: [
-          tube_1,
-          tube_3,
-        ],
+        rawTubes: [tube_1, tube_3],
       });
 
       // when
@@ -119,8 +119,6 @@ module('Unit | Model | theme', function(hooks) {
 
       // then
       assert.notOk(hasSelectedProductionTube);
-
     });
   });
-
 });

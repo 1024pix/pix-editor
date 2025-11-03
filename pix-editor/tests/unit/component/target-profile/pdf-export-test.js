@@ -3,18 +3,18 @@ import { module, test } from 'qunit';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('Unit | Component | target-profile/pdf-export', function(hooks) {
+module('Unit | Component | target-profile/pdf-export', function (hooks) {
   setupTest(hooks);
   let component;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     component = createGlimmerComponent('component:target-profile/pdf-export');
   });
 
-  module('#_getTranslatedField', function(hooks) {
+  module('#_getTranslatedField', function (hooks) {
     let model, keys;
 
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       model = {
         id: 'modelId',
         titleEnUs: 'English name',
@@ -26,7 +26,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       };
     });
 
-    test('it should get the english field if language is `en`', async function(assert) {
+    test('it should get the english field if language is `en`', async function (assert) {
       // given
       const language = 'en';
 
@@ -37,7 +37,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       assert.strictEqual(result, 'English name');
     });
 
-    test('it should get the french field if language is `fr`', async function(assert) {
+    test('it should get the french field if language is `fr`', async function (assert) {
       // given
       const language = 'fr';
 

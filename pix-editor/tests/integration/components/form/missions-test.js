@@ -5,11 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | mission', function(hooks) {
+module('Integration | Component | mission', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('Should enable create mission button when mandatory informations have been given', async function(assert) {
-
+  test('Should enable create mission button when mandatory informations have been given', async function (assert) {
     this.set('mission', {});
     this.set('competences', [{ title: 'Notre compétence', pixId: 'pixId', themes: [{}] }]);
     this.set('submitButtonText', 'Créer la mission');
@@ -34,8 +33,7 @@ module('Integration | Component | mission', function(hooks) {
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
 
-  test('Should disable create mission button when no complete informations', async function(assert) {
-
+  test('Should disable create mission button when no complete informations', async function (assert) {
     this.set('mission', {});
     this.set('competences', [{}]);
     this.set('submitButtonText', 'Créer la mission');

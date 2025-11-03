@@ -4,7 +4,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class PopinChangelog extends Component {
-
   @service notify;
 
   @tracked _value = null;

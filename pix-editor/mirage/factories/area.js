@@ -11,4 +11,3 @@ export default Factory.extend({
   titleEnUs: '',
 
 });
-

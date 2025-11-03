@@ -3,12 +3,7 @@ import { inject as service } from '@ember/service';
 import Tube from './single';
 
 export default class NewRoute extends Tube {
-
-  queryParams = {
-    themeId: {
-      refreshModel: true,
-    },
-  };
+  queryParams = { themeId: { refreshModel: true } };
 
   templateName = 'authenticated/competence/tubes/single';
   @service idGenerator;

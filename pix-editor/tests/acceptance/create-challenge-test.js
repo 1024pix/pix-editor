@@ -10,11 +10,11 @@ import sinon from 'sinon';
 import { waitForSelectToBeClosed } from '../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Create-Challenge', function(hooks) {
+module('Acceptance | Create-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -45,7 +45,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     return authenticateSession();
   });
 
-  test('creating a new challenge', async function(assert) {
+  test('creating a new challenge', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -118,4 +118,3 @@ module('Acceptance | Create-Challenge', function(hooks) {
     assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
   });
 });
-

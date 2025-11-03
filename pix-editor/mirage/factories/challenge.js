@@ -11,7 +11,9 @@ export default Factory.extend({
   t2Status: 't2',
   t3Status: 't3',
   pedagogy: 'pedagogy',
-  author() { return ['author']; },
+  author() {
+    return ['author'];
+  },
   declinable: 'declinable',
   version: 'version',
   genealogy: 'Prototype 1',
@@ -34,6 +36,7 @@ export default Factory.extend({
   noValidationNeeded: false,
   attachments: null,
   updatedAt: '2021-10-02T14:00:00.000Z',
-  contextualizedFields() { return ['illustration', 'instruction']; },
+  contextualizedFields() {
+    return ['illustration', 'instruction'];
+  },
 });
-

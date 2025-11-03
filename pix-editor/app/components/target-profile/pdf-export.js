@@ -38,11 +38,61 @@ const pSize = 7.4;
 const footerSize = 4;
 const margin = 15;
 const areaTitleHeight = 69;
-const fontColor = [65, 70, 87];
-const lightGrey = [250, 250, 250];
-const grey = [240, 240, 240];
-const colors = [[241, 161, 65], [87, 200, 132], [18, 163, 255], [255, 63, 148], [87, 77, 166], [56, 138, 255]];
-const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
+const fontColor = [
+  65,
+  70,
+  87,
+];
+const lightGrey = [
+  250,
+  250,
+  250,
+];
+const grey = [
+  240,
+  240,
+  240,
+];
+const colors = [
+  [
+    241,
+    161,
+    65,
+  ],
+  [
+    87,
+    200,
+    132,
+  ],
+  [
+    18,
+    163,
+    255,
+  ],
+  [
+    255,
+    63,
+    148,
+  ],
+  [
+    87,
+    77,
+    166,
+  ],
+  [
+    56,
+    138,
+    255,
+  ],
+];
+const areaGradient = [
+  area1bg,
+  area2bg,
+  area3bg,
+  area4bg,
+  area5bg,
+  area6bg,
+];
 
 const defaultLanguage = 'fr';
 
@@ -64,7 +114,6 @@ function createOffscreenCanvas(width, height) {
 }
 
 export default class TargetProfilePdfExportComponent extends Component {
-
   @tracked displayTitleInput = false;
 
   @action
@@ -139,27 +188,29 @@ export default class TargetProfilePdfExportComponent extends Component {
         competences.forEach((competence) => {
           const competenceColor = colors[i];
           const competenceName = this._getTranslatedCompetenceName(language, competence);
-          const tableHead = [[
-            {
-              content: `${competence.code} ${competenceName}`,
-              colSpan: 3,
-              rowSpan: 1,
-              styles: {
-                cellPadding: {
-                  left: margin,
-                  top: competenceTitleCellPadding,
-                  right: margin,
-                  bottom: competenceTitleCellPadding,
+          const tableHead = [
+            [
+              {
+                content: `${competence.code} ${competenceName}`,
+                colSpan: 3,
+                rowSpan: 1,
+                styles: {
+                  cellPadding: {
+                    left: margin,
+                    top: competenceTitleCellPadding,
+                    right: margin,
+                    bottom: competenceTitleCellPadding,
+                  },
+                  fillColor: lightGrey,
+                  font: 'RobotoCondensed',
+                  fontStyle: 'bold',
+                  fontSize: competenceTitleSize,
+                  textColor: competenceColor,
+                  valign: 'middle',
                 },
-                fillColor: lightGrey,
-                font: 'RobotoCondensed',
-                fontStyle: 'bold',
-                fontSize: competenceTitleSize,
-                textColor: competenceColor,
-                valign: 'middle',
               },
-            },
-          ]];
+            ],
+          ];
 
           const themes = hasSelectedTubes ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube) : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
 
@@ -224,11 +275,9 @@ export default class TargetProfilePdfExportComponent extends Component {
             }
           });
           y = 15 + pdf.lastAutoTable.finalY;
-
         });
         pdf.addPage();
       }
-
     }
     const pageCount = pdf.internal.getNumberOfPages();
     for (let i = 2; i <= pageCount; i++) {
@@ -250,43 +299,47 @@ export default class TargetProfilePdfExportComponent extends Component {
     const firstTube = tubes.shift();
     const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, firstTube);
     const themeName = this._getTranslatedThemeName(language, theme);
-    const firstCell = [{
-      content: themeName,
-      rowSpan,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
-        cellWidth: 80,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'bold',
-        fontSize: pSize + 1,
-        textColor: fontColor,
-        fillColor: lightGrey,
+    const firstCell = [
+      {
+        content: themeName,
+        rowSpan,
+        styles: {
+          cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
+          cellWidth: 80,
+          valign: 'middle',
+          font: 'RobotoCondensed',
+          fontStyle: 'bold',
+          fontSize: pSize + 1,
+          textColor: fontColor,
+          fillColor: lightGrey,
+        },
       },
-    }, {
-      content: tubeName,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
-        cellWidth: 100,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'normal',
-        fontSize: pSize,
-        textColor: fontColor,
-        fillColor: lightGrey,
+      {
+        content: tubeName,
+        styles: {
+          cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+          cellWidth: 100,
+          valign: 'middle',
+          font: 'RobotoCondensed',
+          fontStyle: 'normal',
+          fontSize: pSize,
+          textColor: fontColor,
+          fillColor: lightGrey,
+        },
       },
-    }, {
-      content: tubeDescription,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
-        fontSize: pSize,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'light',
-        textColor: fontColor,
-        fillColor: lightGrey,
+      {
+        content: tubeDescription,
+        styles: {
+          cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+          fontSize: pSize,
+          valign: 'middle',
+          font: 'RobotoCondensed',
+          fontStyle: 'light',
+          textColor: fontColor,
+          fillColor: lightGrey,
+        },
       },
-    }];
+    ];
     return tubes.reduce((values, tube, index) => {
       const fillColor = index % 2 === 0 ? grey : lightGrey;
       const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, tube);
@@ -315,7 +368,8 @@ export default class TargetProfilePdfExportComponent extends Component {
             textColor: fontColor,
             fillColor,
           },
-        }];
+        },
+      ];
       values.push(cells);
       return values;
     }, [firstCell]);
@@ -401,7 +455,7 @@ export default class TargetProfilePdfExportComponent extends Component {
 
   _generateCenteredLongText(pdf, text, breakX, breakY, positionY) {
     const lines = pdf.splitTextToSize(text, breakX);
-    lines.forEach((line)=>{
+    lines.forEach((line) => {
       pdf.text(line, this._getCenteredX(pdf, line), positionY);
       positionY += breakY;
     });

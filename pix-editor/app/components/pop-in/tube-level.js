@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
 export default class PopinTubeLevel extends Component {
-
   get title() {
     return this.args.tube?.name || 'no_tube';
   }
@@ -15,7 +14,16 @@ export default class PopinTubeLevel extends Component {
       const isSelected = selected.includes(skill.pixId);
       orderedSkills[level - 1] = { skill, isSelected };
       return orderedSkills;
-    }, [null, null, null, null, null, null, null, null]);
+    }, [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ]);
   }
 
   get mayUnset() {

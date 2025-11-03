@@ -1,7 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Tests statiques', () => {
-
   test.use({ storageState: 'editor.storageState.json' });
 
   test.beforeEach(async ({ page }) => {
@@ -9,7 +8,7 @@ test.describe('Tests statiques', () => {
     await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 10000 });
   });
 
-  test('accéder au détail d\'un test statique', async function({ page }) {
+  test('accéder au détail d\'un test statique', async function ({ page }) {
     await page.getByRole('link', { name: 'Tests statiques' }).click();
     await page.getByRole('cell', { name: 'Static Course 1' }).click();
 

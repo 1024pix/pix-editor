@@ -7,7 +7,12 @@ import MissionSummary from '../../../models/mission-summary';
 
 export default class MissionsListController extends Controller {
   @service router;
-  queryParams = ['pageNumber', 'pageSize', 'statuses'];
+  queryParams = [
+    'pageNumber',
+    'pageSize',
+    'statuses',
+  ];
+
   @tracked pageNumber = 1;
   @tracked pageSize = 10;
   @tracked statuses = [];

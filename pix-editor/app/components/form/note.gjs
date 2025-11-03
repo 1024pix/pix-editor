@@ -18,7 +18,8 @@ const statusList = [
   {
     label: 'archive',
     value: 'ARCHIVED',
-  }];
+  },
+];
 
 export default class NoteForm extends Component {
   @tracked status;

@@ -1,25 +1,19 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Service | current-data', function(hooks) {
+module('Unit | Service | current-data', function (hooks) {
   setupTest(hooks);
   let competence, service, pixFramework, pixFranceFramework, pix1dFramework, pixArea, pix1dArea, pixFranceArea, pix1dThematic, pix1dCompetence, prototype;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const store = this.owner.lookup('service:store');
 
     // Given
-    prototype = store.createRecord('challenge', {
-      id: 'prototype',
-    });
+    prototype = store.createRecord('challenge', { id: 'prototype' });
 
-    competence = store.createRecord('competence', {
-      id: 'competence',
-    });
+    competence = store.createRecord('competence', { id: 'competence' });
 
-    pix1dThematic = store.createRecord('theme', {
-      id: 'thematic',
-    });
+    pix1dThematic = store.createRecord('theme', { id: 'thematic' });
 
     pix1dCompetence = store.createRecord('competence', {
       id: 'pix1dCompetence',
@@ -61,22 +55,34 @@ module('Unit | Service | current-data', function(hooks) {
     });
 
     service = this.owner.lookup('service:current-data');
-    service.setFrameworks([pixFramework, pixFranceFramework, pix1dFramework]);
+    service.setFrameworks([
+      pixFramework,
+      pixFranceFramework,
+      pix1dFramework,
+    ]);
     service.setFramework(pixFramework);
-    service.setAreas([pixArea, pixFranceArea, pix1dArea]);
+    service.setAreas([
+      pixArea,
+      pixFranceArea,
+      pix1dArea,
+    ]);
     service.setCompetence(competence);
     service.setPrototype(prototype);
   });
 
-  test('it should return frameworks', function(assert) {
+  test('it should return frameworks', function (assert) {
     // when
     const frameworks = service.getFrameworks();
 
     // then
-    assert.deepEqual(frameworks, [pixFramework, pixFranceFramework, pix1dFramework]);
+    assert.deepEqual(frameworks, [
+      pixFramework,
+      pixFranceFramework,
+      pix1dFramework,
+    ]);
   });
 
-  test('it should return one framework', function(assert) {
+  test('it should return one framework', function (assert) {
     // when
     const framework = service.getFramework();
 
@@ -84,15 +90,19 @@ module('Unit | Service | current-data', function(hooks) {
     assert.deepEqual(framework, pixFramework);
   });
 
-  test('it should return all areas when argument is `false`', function(assert) {
+  test('it should return all areas when argument is `false`', function (assert) {
     // when
     const areas = service.getAreas(false);
 
     // then
-    assert.deepEqual(areas, [pixArea, pixFranceArea, pix1dArea]);
+    assert.deepEqual(areas, [
+      pixArea,
+      pixFranceArea,
+      pix1dArea,
+    ]);
   });
 
-  test('it should return areas of set framework when have no argument ', async function(assert) {
+  test('it should return areas of set framework when have no argument ', async function (assert) {
     // when
     const areas = service.getAreas();
 
@@ -100,7 +110,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.deepEqual(areas, [pixArea]);
   });
 
-  test('it should return competence', function(assert) {
+  test('it should return competence', function (assert) {
     // when
     const competenceResult = service.getCompetence();
 
@@ -108,7 +118,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.deepEqual(competenceResult, competence);
   });
 
-  test('it should return prototype', function(assert) {
+  test('it should return prototype', function (assert) {
     // when
     const prototypeResult = service.getPrototype();
 
@@ -116,7 +126,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.deepEqual(prototypeResult, prototype);
   });
 
-  test('it should return `true` if is a pix framework', function(assert) {
+  test('it should return `true` if is a pix framework', function (assert) {
     // when
     const isPixFrameworkResult = service.isPixFramework;
 
@@ -124,7 +134,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.ok(isPixFrameworkResult);
   });
 
-  test('it should return `false` if is not a pix framework', function(assert) {
+  test('it should return `false` if is not a pix framework', function (assert) {
     // given
     service.setFramework(pixFranceFramework);
 
@@ -135,7 +145,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.notOk(isPixFrameworkResult);
   });
 
-  test('it should return competences for pix1d', async function(assert) {
+  test('it should return competences for pix1d', async function (assert) {
     // when
     const competencesResult = await service.getCompetencesFromPix1DFramework();
 
@@ -143,7 +153,7 @@ module('Unit | Service | current-data', function(hooks) {
     assert.deepEqual(competencesResult, [pix1dCompetence]);
   });
 
-  test('it should return thematics for pix1d', async function(assert) {
+  test('it should return thematics for pix1d', async function (assert) {
     // when
     const thematicsResult = await service.getThematicsFromPix1DFramework();
 

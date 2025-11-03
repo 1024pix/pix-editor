@@ -3,7 +3,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class SingleRoute extends Route {
-
   @service currentData;
   @service router;
   @service store;
@@ -36,8 +35,8 @@ export default class SingleRoute extends Route {
 
   @action
   async willTransition(transition) {
-    if (this.controllerFor('authenticated.competence.skills.single').edition &&
-      !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+    if (this.controllerFor('authenticated.competence.skills.single').edition
+      && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
       const modelSkillSingle = this.controllerFor('authenticated.competence.skills.single').model;
