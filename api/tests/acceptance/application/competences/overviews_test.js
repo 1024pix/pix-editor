@@ -1065,8 +1065,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [{ fileId: 'attachment1', localizedChallengeId: 'recChallenge1' }],
         },
-
         {
           id: 'recChallenge2',
           airtableId: 'recAirtableChallenge2',
@@ -1075,6 +1075,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge21',
@@ -1084,8 +1085,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge3',
           airtableId: 'recAirtableChallenge3',
@@ -1094,8 +1095,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.ARCHIVE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge4',
           airtableId: 'recAirtableChallenge4',
@@ -1104,6 +1105,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge41',
@@ -1113,8 +1115,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge5',
           airtableId: 'recAirtableChallenge5',
@@ -1123,6 +1125,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge51',
@@ -1132,8 +1135,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge6',
           airtableId: 'recAirtableChallenge6',
@@ -1142,6 +1145,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.PERIME,
           competenceId,
+          files: [],
         },
       ].map(domainBuilder.buildChallengeDatasourceObject);
 
@@ -1149,9 +1153,18 @@ describe('Acceptance | Route | competence-overviews', () => {
 
       const airtableChallenges = challenges.map(airtableBuilder.factory.buildChallenge);
 
-      challenges.forEach((challenge) =>
-        databaseBuilder.factory.buildLocalizedChallenge({ id: challenge.id, challengeId: challenge.id }),
-      );
+      challenges.forEach((challenge) => {
+        databaseBuilder.factory.buildLocalizedChallenge({ id: challenge.id, challengeId: challenge.id });
+        challenge.files?.map(({ fileId }) =>
+          databaseBuilder.factory.buildAttachment(
+            domainBuilder.buildAttachmentDatasourceObject({
+              id: fileId,
+              challengeId: challenge.id,
+              localizedChallengeId: challenge.id,
+            }),
+          ),
+        );
+      });
 
       await databaseBuilder.commit();
 

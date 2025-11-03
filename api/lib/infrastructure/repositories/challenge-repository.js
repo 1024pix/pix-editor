@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge, Translation } from '../../domain/models/index.js';
+import { Challenge, Skill, Translation } from '../../domain/models/index.js';
 import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
@@ -269,10 +269,19 @@ export async function listActiveOrDraftByCompetenceId(competenceId) {
 }
 
 export async function listPrototypesByCompetenceId(competenceId) {
-  const challengeDTOs = await challengeDatasource.listPrototypesByCompetenceId(competenceId);
-  if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
-  return toDomainList(challengeDTOs, translations, localizedChallenges);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    challengeDatasource.listPrototypesByCompetenceId(competenceId),
+    selectChallenges()
+      .where('thematics.competenceId', competenceId)
+      .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
+      .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+      .orderBy('id'),
+  ]);
+  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos);
+
+  if (!airtableDtos) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function listValidPrototypesBySkillIds(skillIds) {
