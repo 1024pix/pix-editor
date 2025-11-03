@@ -266,10 +266,19 @@ export async function listBySkillId(skillId) {
 }
 
 export async function listActiveOrDraftByCompetenceId(competenceId) {
-  const challengeDTOs = await challengeDatasource.listActiveOrDraftByCompetenceId(competenceId);
-  if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
-  return toDomainList(challengeDTOs, translations, localizedChallenges);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    challengeDatasource.listActiveOrDraftByCompetenceId(competenceId),
+    selectChallenges()
+      .where('thematics.competenceId', competenceId)
+      .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
+      .and.whereIn('challenges.status', [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE])
+      .orderBy('id'),
+  ]);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+
+  if (!airtableDtos) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function listPrototypesByCompetenceId(competenceId) {
@@ -281,7 +290,7 @@ export async function listPrototypesByCompetenceId(competenceId) {
       .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
       .orderBy('id'),
   ]);
-  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
 
   if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
@@ -301,10 +310,10 @@ export async function listValidPrototypesBySkillIds(skillIds) {
       .andWhere('challenges.status', Challenge.STATUSES.VALIDE)
       .orderBy('challenges.id'),
   ]);
-  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
 
+  if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-
   return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 

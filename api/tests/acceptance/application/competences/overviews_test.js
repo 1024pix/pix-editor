@@ -295,6 +295,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge11',
@@ -305,6 +306,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: [LOCALE.FRENCH_FRANCE],
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge2',
@@ -315,8 +317,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge3',
           airtableId: 'recAirtableChallenge3',
@@ -326,6 +328,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge31',
@@ -335,6 +338,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
+          files: [],
         },
         {
           id: 'recChallenge4',
@@ -345,8 +349,8 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
-
         {
           id: 'recChallenge5',
           airtableId: 'recAirtableChallenge5',
@@ -356,6 +360,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 1,
           status: Challenge.STATUSES.VALIDE,
           competenceId,
+          files: [],
         },
       ].map(domainBuilder.buildChallengeDatasourceObject);
 
@@ -373,6 +378,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: [LOCALE.ENGLISH_SPOKEN],
           competenceId,
+          files: [],
         },
       ].map(domainBuilder.buildChallengeDatasourceObject);
 
@@ -390,6 +396,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           version: 2,
           status: Challenge.STATUSES.PROPOSE,
           competenceId,
+          files: [],
         },
       ].map(domainBuilder.buildChallengeDatasourceObject);
 
