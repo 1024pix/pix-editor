@@ -61,9 +61,21 @@ export async function filter(params = {}) {
     search: params.filter.search,
     limit: params.page?.size,
   });
-  const challengeDtos = await challengeDatasource.search(params);
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos);
-  return toDomainList(challengeDtos, translations, localizedChallenges);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    challengeDatasource.search(params),
+    selectChallenges()
+      .join('localized_challenges', 'localized_challenges.id', 'challenges.id')
+      .whereIn('challenges.id', params.filter.ids)
+      .orWhereILike('localized_challenges.embedUrl', `%${params.filter.search}%`)
+      .limit(params.page?.size)
+      .orderBy('id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+
+  if (!airtableDtos) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function create(challenge) {
