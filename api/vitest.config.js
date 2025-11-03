@@ -7,6 +7,7 @@ export default defineConfig({
     outputFile: process.env.CI ? './test-results/report.xml' : undefined,
     restoreMocks: true,
     maxWorkers: 1,
-    setupFiles: ['tests/setup-tests.js'],
+    isolate: false,
+    setupFiles: ['tests/setup-tests-env.js', 'tests/setup-tests-before-after.js'],
   },
 });
