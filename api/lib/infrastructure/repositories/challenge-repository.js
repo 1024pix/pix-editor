@@ -66,16 +66,6 @@ export async function filter(params = {}) {
   return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
-export async function filterByThematicIds(thematicIds) {
-  const airtableDtos = await challengeDatasource.filter({
-    filter: {
-      formula: `OR(${thematicIds.map((thematicId) => `FIND("${thematicId}", {Thematique (Record ID)})`).join(', ')})`,
-    },
-  });
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
-}
-
 export async function create(challenge) {
   return knex.transaction(async (transaction) => {
     const createdChallengeDto = await challengeDatasource.create(challenge);
