@@ -1215,10 +1215,13 @@ describe('Integration | Service | update pix api release cache', function () {
         // given
         const tube = domainBuilder.buildTube({ thematicId: 'thematic1', skillIds: ['skill1'] });
         const challenge = domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge1',
           skillId: 'skill1',
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           status: Challenge.STATUSES.VALIDE,
           responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
+          competenceId: 'competence1',
+          files: [{ fileId: 'file1', localizedChallengeId: 'challenge1' }],
         });
         const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
 
@@ -1234,6 +1237,12 @@ describe('Integration | Service | update pix api release cache', function () {
           challengeId: challenge.id,
           locale: challenge.locales[0],
         });
+        const attachment = domainBuilder.buildAttachmentDatasourceObject({
+          id: 'file1',
+          localizedChallengeId: 'challenge1',
+          challengeId: 'challenge1',
+        });
+        databaseBuilder.factory.buildAttachment(attachment);
 
         const airtableChallengesScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Epreuves')

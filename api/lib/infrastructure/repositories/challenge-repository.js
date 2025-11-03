@@ -12,6 +12,7 @@ import {
   areNullableDatesEqual,
   areNullableValuesEqual,
   compareDtos,
+  compareDtosLists,
 } from './migration-from-airtable.js';
 
 const model = 'challenge';
@@ -275,12 +276,22 @@ export async function listPrototypesByCompetenceId(competenceId) {
 }
 
 export async function listValidPrototypesBySkillIds(skillIds) {
-  const airtableDtos = await challengeDatasource.filter({
-    filter: {
-      formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
-    },
-  });
+  const [airtableDtos, pgDtos] = await Promise.all([
+    challengeDatasource.filter({
+      filter: {
+        formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
+      },
+    }),
+    selectChallenges()
+      .whereIn('skills.id', skillIds)
+      .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+      .andWhere('challenges.status', Challenge.STATUSES.VALIDE)
+      .orderBy('challenges.id'),
+  ]);
+  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos);
+
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+
   return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 

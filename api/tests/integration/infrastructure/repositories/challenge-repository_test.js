@@ -3520,6 +3520,8 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           id: challengeId,
           files: [],
+          skillId: 'skillId1',
+          competenceId: 'competence1',
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
               id: challengeId,
