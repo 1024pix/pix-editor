@@ -448,7 +448,7 @@ describe('Integration | Repository | static-course-repository', function () {
       const stubLocalizedChallengeRepository = vi
         .spyOn(localizedChallengeRepository, 'getMany')
         .mockResolvedValue(localizedChallenges);
-      const stubFilterChallengeRepository = vi.spyOn(challengeRepository, 'filter').mockResolvedValue(challenges);
+      const challengeRepositoryGetMany = vi.spyOn(challengeRepository, 'getMany').mockResolvedValue(challenges);
       const stubFilterSkillRepository = vi
         .spyOn(skillRepository, 'getMany')
         .mockResolvedValue([
@@ -498,7 +498,7 @@ describe('Integration | Repository | static-course-repository', function () {
           tags: [tagA, tagB],
         }),
       );
-      expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
+      expect(challengeRepositoryGetMany).toHaveBeenCalledWith(['challengeA', 'challengeB']);
       expect(stubFilterSkillRepository).toHaveBeenCalledWith(['skillA', 'skillB']);
       expect(stubLocalizedChallengeRepository).toHaveBeenCalledWith({ ids: ['challengeA', 'challengeB'] });
     });

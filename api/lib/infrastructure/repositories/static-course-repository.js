@@ -178,9 +178,7 @@ async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
     ids: localizedChallengeIds,
   });
   const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
-  const challenges = await challengeRepository.filter({
-    filter: { ids: challengeIds },
-  });
+  const challenges = await challengeRepository.getMany(challengeIds);
 
   const skillIds = challenges.map(({ skillId }) => skillId);
   const skillsFromAirtable = await skillRepository.getMany(skillIds);

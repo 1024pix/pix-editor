@@ -10,25 +10,6 @@ import { stringValue } from '../airtable.js';
 
 const model = 'challenge';
 
-async function _getChallengesFromParams(params) {
-  if (params.filter && params.filter.ids) {
-    return challengeDatasource.filter(params);
-  }
-  if (params.filter && params.filter.search) {
-    params.filter.ids = await translationRepository.search({
-      entity: model,
-      fields: ['instruction', 'proposals'],
-      search: params.filter.search,
-      limit: params.page?.size,
-    });
-    return challengeDatasource.search(params);
-  }
-  if (params?.filter?.formula) {
-    return challengeDatasource.filter(params);
-  }
-  return challengeDatasource.list(params);
-}
-
 export async function get(id) {
   const [challengeDto, localizedChallenges, translations] = await Promise.all([
     challengeDatasource.filterById(id),
@@ -60,15 +41,25 @@ export async function getMany(ids) {
 }
 
 export async function filter(params = {}) {
-  const challengeDtos = await _getChallengesFromParams(params);
+  params.filter.ids = await translationRepository.search({
+    entity: model,
+    fields: ['instruction', 'proposals'],
+    search: params.filter.search,
+    limit: params.page?.size,
+  });
+  const challengeDtos = await challengeDatasource.search(params);
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos);
   return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
 export async function filterByThematicIds(thematicIds) {
-  const formula = `OR(${thematicIds.map((thematicId) => `FIND("${thematicId}", {Thematique (Record ID)})`).join(', ')})`;
-
-  return filter({ filter: { formula } });
+  const airtableDtos = await challengeDatasource.filter({
+    filter: {
+      formula: `OR(${thematicIds.map((thematicId) => `FIND("${thematicId}", {Thematique (Record ID)})`).join(', ')})`,
+    },
+  });
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function create(challenge) {
@@ -275,11 +266,13 @@ export async function listPrototypesByCompetenceId(competenceId) {
 }
 
 export async function listValidPrototypesBySkillIds(skillIds) {
-  return filter({
+  const airtableDtos = await challengeDatasource.filter({
     filter: {
       formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
     },
   });
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
