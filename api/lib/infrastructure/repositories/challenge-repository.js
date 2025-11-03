@@ -259,10 +259,15 @@ export async function update(challenge, transaction = knex) {
 }
 
 export async function listBySkillId(skillId) {
-  const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
-  if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
-  return toDomainList(challengeDTOs, translations, localizedChallenges);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    challengeDatasource.filterBySkillId(skillId),
+    selectChallenges().where('challenges.skillId', skillId).orderBy('id'),
+  ]);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+
+  if (!airtableDtos) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function listActiveOrDraftByCompetenceId(competenceId) {
