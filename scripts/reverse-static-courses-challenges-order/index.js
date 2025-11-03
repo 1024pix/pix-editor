@@ -1,6 +1,6 @@
 import { knex } from '../../api/db/knex-database-connection';
 
-(async function() {
+(async function () {
   const staticCourses = await knex('static_courses')
     .select('id', 'name', 'challengeIds');
   for (const staticCourse of staticCourses) {
@@ -8,9 +8,6 @@ import { knex } from '../../api/db/knex-database-connection';
     const reversedChallengeIds = challengeIds.reverse();
     await knex('static_courses')
       .where('id', staticCourse.id)
-      .update({
-        challengeIds: reversedChallengeIds.join(','),
-      });
+      .update({ challengeIds: reversedChallengeIds.join(',') });
   }
 })();
-

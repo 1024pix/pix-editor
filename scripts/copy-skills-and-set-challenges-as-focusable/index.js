@@ -50,9 +50,7 @@ async function main() {
 }
 
 function createAirtableClient() {
-  return new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  return new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 }
 
 function getBaseSkills(table) {
@@ -93,14 +91,16 @@ export async function findSkill(base, persistentId) {
 }
 
 export async function duplicateSkill(base, idGenerator, skill) {
-  const createdSkills = await base.create([{
-    fields: {
-      ...skill.fields,
-      'id persistant': idGenerator('skill'),
-      Version: skill.get('Version') + 1,
-      Status: 'en construction',
-    }
-  }]);
+  const createdSkills = await base.create([
+    {
+      fields: {
+        ...skill.fields,
+        'id persistant': idGenerator('skill'),
+        'Version': skill.get('Version') + 1,
+        'Status': 'en construction',
+      },
+    },
+  ]);
   return createdSkills[0];
 }
 
@@ -121,7 +121,7 @@ export async function cloneAttachmentsFromAChallenge(base, token, challengePersi
       'mimeType',
       'type',
     ],
-    filterByFormula : `{challengeId persistant} = '${challengePersistentId}'`
+    filterByFormula: `{challengeId persistant} = '${challengePersistentId}'`,
   }).all();
 
   const duplicatedAttachments = await Promise.all(attachments.map((attachment) => {
@@ -139,7 +139,7 @@ async function cloneAndPrepareAttachment(attachment, token, clock) {
     fields: {
       ...attachment.fields,
       url: attachmentUrl,
-    }
+    },
   };
 }
 
@@ -151,7 +151,7 @@ async function cloneFile(token, originalUrl, randomString, filename, clock = Dat
     headers: {
       'X-Auth-Token': token,
       'X-Copy-From': process.env.BUCKET_NAME + parsedUrl.pathname,
-    }
+    },
   };
 
   try {
@@ -171,7 +171,7 @@ export function prepareNewChallenge(challenge, destinationSkillId, newAttachment
       'Acquix': [destinationSkillId],
       'Focalisée': true,
       'files': newAttachmentsId,
-    }
+    },
   };
 }
 
@@ -192,9 +192,7 @@ export function activateSkill(base, skill) {
 function changeSkillStatus(base, skill, status) {
   const updatedSkill = {
     id: skill.getId(),
-    fields: {
-      'Status': status,
-    },
+    fields: { Status: status },
   };
 
   return base.update([updatedSkill]);
@@ -204,9 +202,7 @@ export function archiveChallenges(base, challenges) {
   const archivedChallenges = challenges.map((challenge) => {
     return {
       id: challenge.getId(),
-      fields: {
-        'Statut': 'archivé',
-      },
+      fields: { Statut: 'archivé' },
     };
   });
 
@@ -218,7 +214,7 @@ export async function bulkCreate(base, records) {
 }
 
 export async function bulkUpdate(base, records) {
-  const uniqRecords = _.uniqBy(records,'id');
+  const uniqRecords = _.uniqBy(records, 'id');
   return bulkOnBase(base, 'update', uniqRecords);
 }
 

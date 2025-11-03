@@ -7,13 +7,14 @@ export const USEFUL_SKILL_FIELDS = [
   'Compétence',
   'Comprendre',
   'En savoir plus',
-  'Tags', 'Description',
+  'Tags',
+  'Description',
   'Statut de la description',
   'Level',
   'Tube',
   'Status',
   'Internationalisation',
-  'Version'
+  'Version',
 ];
 
 export const USEFUL_CHALLENGE_FIELDS = [

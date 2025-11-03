@@ -25,13 +25,15 @@ export function parseData(csvData) {
   return new Promise((resolve, reject) => {
     const result = [];
 
-    parseString(csvData, { headers: (headers) => {
-      const missingHeaders = getMissingHeaders(headers);
-      if (missingHeaders.length > 0) {
-        reject(new Error(`Missing header: ${missingHeaders.join(',')}`));
-      }
-      return headers.map((h) => HEADERS_MAPPING[h]);
-    } })
+    parseString(csvData, {
+      headers: (headers) => {
+        const missingHeaders = getMissingHeaders(headers);
+        if (missingHeaders.length > 0) {
+          reject(new Error(`Missing header: ${missingHeaders.join(',')}`));
+        }
+        return headers.map((h) => HEADERS_MAPPING[h]);
+      },
+    })
       .on('error', (error) => {
         console.error(error);
         reject(error);
@@ -59,7 +61,7 @@ export async function findAirtableIds(base, challengesWithPersistentIds) {
     const data = challengesWithPersistentIds.find((row) => row.id === airtableRecord.get('id persistant'));
     return {
       ...data,
-      id: airtableRecord.id
+      id: airtableRecord.id,
     };
   });
 }
@@ -70,7 +72,7 @@ export async function updateRecords(base, data) {
       id,
       fields: {
         'Difficulté calculée': `${delta}`,
-        'Discrimination calculée': `${alpha}`
+        'Discrimination calculée': `${alpha}`,
       },
     };
   });
@@ -94,11 +96,10 @@ export async function updateRecords(base, data) {
 }
 
 export async function clearDifficultyAndDiscriminant(base) {
-
   try {
     const records = await base.select({
       fields: ['Difficulté calculée', 'Discrimination calculée'],
-      filterByFormula: 'OR({Difficulté calculée}, {Discrimination calculée})'
+      filterByFormula: 'OR({Difficulté calculée}, {Discrimination calculée})',
     }).all();
 
     console.log(`Purging ${records.length} records`);
@@ -107,8 +108,8 @@ export async function clearDifficultyAndDiscriminant(base) {
       id,
       fields: {
         'Difficulté calculée': null,
-        'Discrimination calculée': null
-      }
+        'Discrimination calculée': null,
+      },
     }));
 
     const chunks = _.chunk(recordsWithoutDifficultyAndDiscriminant, 10);
@@ -130,9 +131,7 @@ export async function clearDifficultyAndDiscriminant(base) {
 }
 
 function getBaseChallenges() {
-  const base = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 
   return base('Epreuves');
 }

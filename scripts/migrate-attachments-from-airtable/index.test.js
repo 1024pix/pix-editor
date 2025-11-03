@@ -7,33 +7,32 @@ import {
   renameFileToImport,
 } from './index.js';
 
-describe('Scripts | Migrate attachment from Airtable', function() {
-  describe('challengeAttachmentsToCsv', function() {
-
-    it('returns illustration as CSV string', function() {
+describe('Scripts | Migrate attachment from Airtable', function () {
+  describe('challengeAttachmentsToCsv', function () {
+    it('returns illustration as CSV string', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'thumbnails': {
-          'full': {
-            'height': 356,
-            'url': 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
-            'width': 1096
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        thumbnails: {
+          full: {
+            height: 356,
+            url: 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
+            width: 1096,
           },
-          'large': {
-            'height': 356,
-            'url': 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
-            'width': 1096
+          large: {
+            height: 356,
+            url: 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
+            width: 1096,
           },
-          'small': {
-            'height': 36,
-            'url': 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
-            'width': 111
-          }
+          small: {
+            height: 36,
+            url: 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
+            width: 111,
+          },
         },
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const challenge = {
@@ -52,30 +51,30 @@ describe('Scripts | Migrate attachment from Airtable', function() {
       expect(csv).to.equal(expectedCsv);
     });
 
-    it('returns illustration as CSV string with no alt text', function() {
+    it('returns illustration as CSV string with no alt text', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'thumbnails': {
-          'full': {
-            'height': 356,
-            'url': 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
-            'width': 1096
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        thumbnails: {
+          full: {
+            height: 356,
+            url: 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
+            width: 1096,
           },
-          'large': {
-            'height': 356,
-            'url': 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
-            'width': 1096
+          large: {
+            height: 356,
+            url: 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
+            width: 1096,
           },
-          'small': {
-            'height': 36,
-            'url': 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
-            'width': 111
-          }
+          small: {
+            height: 36,
+            url: 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
+            width: 111,
+          },
         },
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const challenge = {
@@ -93,68 +92,68 @@ describe('Scripts | Migrate attachment from Airtable', function() {
       expect(csv).to.equal(expectedCsv);
     });
 
-    it('returns attachments as CSV string', function() {
+    it('returns attachments as CSV string', function () {
       const attachments = [
         {
-          'filename': 'Pix_etoile.odp',
-          'id': 'attmRoYR3AfCyUiLW',
-          'size': 21258,
-          'type': 'application/vnd.oasis.opendocument.presentation',
-          'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
+          filename: 'Pix_etoile.odp',
+          id: 'attmRoYR3AfCyUiLW',
+          size: 21258,
+          type: 'application/vnd.oasis.opendocument.presentation',
+          url: 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp',
         },
         {
-          'filename': 'Pix_etoile.pptx',
-          'id': 'attLwY7ni4a6Naboz',
-          'size': 34753,
-          'thumbnails': {
-            'large': {
-              'height': 240,
-              'url': 'https://dl.airtable.com/attLwY7ni4a6Naboz-1a5ab1ea4c7a527b-320x240.jpg',
-              'width': 320
+          filename: 'Pix_etoile.pptx',
+          id: 'attLwY7ni4a6Naboz',
+          size: 34753,
+          thumbnails: {
+            large: {
+              height: 240,
+              url: 'https://dl.airtable.com/attLwY7ni4a6Naboz-1a5ab1ea4c7a527b-320x240.jpg',
+              width: 320,
             },
-            'small': {
-              'height': 32,
-              'url': 'https://dl.airtable.com/attLwY7ni4a6Naboz-fe6474e0106877ac-32x32.jpg',
-              'width': 32
-            }
+            small: {
+              height: 32,
+              url: 'https://dl.airtable.com/attLwY7ni4a6Naboz-fe6474e0106877ac-32x32.jpg',
+              width: 32,
+            },
           },
-          'type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          'url': 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx'
-        }
+          type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          url: 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx',
+        },
       ];
 
       const challenge = {
         fields: {
           'Pièce jointe': attachments,
           'Record ID': 'some-challenge-id',
-        }
+        },
       };
 
       const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-      const expectedCsv = '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"' + '\n' +
-                        '"attLwY7ni4a6Naboz","Pix_etoile.pptx","34753","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation","attachment","some-challenge-id"';
+      const expectedCsv = '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"' + '\n'
+        + '"attLwY7ni4a6Naboz","Pix_etoile.pptx","34753","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation","attachment","some-challenge-id"';
 
       const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
 
       expect(csv).to.equal(expectedCsv);
     });
 
-    it('returns attachments and illustrations as CSV string', function() {
+    it('returns attachments and illustrations as CSV string', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const attachments = [
         {
-          'filename': 'Pix_etoile.odp',
-          'id': 'attmRoYR3AfCyUiLW',
-          'size': 21258,
-          'type': 'application/vnd.oasis.opendocument.presentation',
-          'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
+          filename: 'Pix_etoile.odp',
+          id: 'attmRoYR3AfCyUiLW',
+          size: 21258,
+          type: 'application/vnd.oasis.opendocument.presentation',
+          url: 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp',
         },
       ];
 
@@ -168,21 +167,21 @@ describe('Scripts | Migrate attachment from Airtable', function() {
       };
 
       const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-      const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"' + '\n' +
-                        '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"';
+      const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"' + '\n'
+        + '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"';
 
       const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
 
       expect(csv).to.equal(expectedCsv);
     });
 
-    it('returns illustration as CSV string with escaped alternative text', function() {
+    it('returns illustration as CSV string with escaped alternative text', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const challenge = {
@@ -200,26 +199,25 @@ describe('Scripts | Migrate attachment from Airtable', function() {
 
       expect(csv).to.equal(expectedCsv);
     });
-
   });
 
-  describe('challengesAttachmentsToCsv', function() {
-    it('returns a csv string with a header and lines', function() {
+  describe('challengesAttachmentsToCsv', function () {
+    it('returns a csv string with a header and lines', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const attachments = [
         {
-          'filename': 'Pix_etoile.odp',
-          'id': 'attmRoYR3AfCyUiLW',
-          'size': 21258,
-          'type': 'application/vnd.oasis.opendocument.presentation',
-          'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
+          filename: 'Pix_etoile.odp',
+          id: 'attmRoYR3AfCyUiLW',
+          size: 21258,
+          type: 'application/vnd.oasis.opendocument.presentation',
+          url: 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp',
         },
       ];
 
@@ -234,11 +232,11 @@ describe('Scripts | Migrate attachment from Airtable', function() {
 
       const challenges = [challenge, challenge];
       const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-      const expectedCsv = 'id,filename,size,alt,url,mimeType,type,challengeId' + '\n' +
-          '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
-                        '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"' + '\n' +
-    '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
-    '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"';
+      const expectedCsv = 'id,filename,size,alt,url,mimeType,type,challengeId' + '\n'
+        + '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n'
+        + '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"' + '\n'
+        + '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n'
+        + '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"';
 
       const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl });
 
@@ -246,13 +244,9 @@ describe('Scripts | Migrate attachment from Airtable', function() {
     });
   });
 
-  describe('challenges doesn\'t have any attachments and illustration', function() {
-    it('should return a challenge csv file without attachments and illustration', function() {
-      const challenge = {
-        fields: {
-          'Record ID': 'some-challenge-id',
-        },
-      };
+  describe('challenges doesn\'t have any attachments and illustration', function () {
+    it('should return a challenge csv file without attachments and illustration', function () {
+      const challenge = { fields: { 'Record ID': 'some-challenge-id' } };
 
       const challenges = [challenge, challenge];
       const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
@@ -264,14 +258,14 @@ describe('Scripts | Migrate attachment from Airtable', function() {
     });
   });
 
-  describe('rename files', function() {
-    it('should rename illustration', function() {
+  describe('rename files', function () {
+    it('should rename illustration', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const challenge = {
@@ -289,14 +283,14 @@ describe('Scripts | Migrate attachment from Airtable', function() {
       expect(stubRenameSync).toHaveBeenCalledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id_illustration_mailPJ.png');
     });
 
-    it('should rename attachment', function() {
+    it('should rename attachment', function () {
       const attachments = [
         {
-          'filename': 'Pix_etoile.odp',
-          'id': 'attmRoYR3AfCyUiLW',
-          'size': 21258,
-          'type': 'application/vnd.oasis.opendocument.presentation',
-          'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
+          filename: 'Pix_etoile.odp',
+          id: 'attmRoYR3AfCyUiLW',
+          size: 21258,
+          type: 'application/vnd.oasis.opendocument.presentation',
+          url: 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp',
         },
       ];
 
@@ -315,30 +309,30 @@ describe('Scripts | Migrate attachment from Airtable', function() {
       expect(stubRenameSync).toHaveBeenCalledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id2_attachment_Pix_etoile.odp');
     });
 
-    it('should rename illustration and attachments', function() {
+    it('should rename illustration and attachments', function () {
       const illustration = {
-        'filename': 'mailPJ.png',
-        'id': 'attcKBWOyCUyATJ93',
-        'size': 49502,
-        'type': 'image/png',
-        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+        filename: 'mailPJ.png',
+        id: 'attcKBWOyCUyATJ93',
+        size: 49502,
+        type: 'image/png',
+        url: 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
       };
 
       const attachments = [
         {
-          'filename': 'Pix_etoile.odp',
-          'id': 'attmRoYR3AfCyUiLW',
-          'size': 21258,
-          'type': 'application/vnd.oasis.opendocument.presentation',
-          'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
+          filename: 'Pix_etoile.odp',
+          id: 'attmRoYR3AfCyUiLW',
+          size: 21258,
+          type: 'application/vnd.oasis.opendocument.presentation',
+          url: 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp',
         },
         {
-          'filename': 'Pix_etoile.pptx',
-          'id': 'attLwY7ni4a6Naboz',
-          'size': 34753,
-          'type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          'url': 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx'
-        }
+          filename: 'Pix_etoile.pptx',
+          id: 'attLwY7ni4a6Naboz',
+          size: 34753,
+          type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          url: 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx',
+        },
       ];
 
       const challenge = {
@@ -360,8 +354,8 @@ describe('Scripts | Migrate attachment from Airtable', function() {
     });
   });
 
-  describe('Attachment url', function() {
-    it('should construct attachment url', function() {
+  describe('Attachment url', function () {
+    it('should construct attachment url', function () {
       const challengeId = 'some-challenge-id3';
       const filename = 'Pix etoile.odp';
       const bucketBaseUrl = 'https://dl.ovh.com/bucket/';

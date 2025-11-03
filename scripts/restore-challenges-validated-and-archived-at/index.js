@@ -10,10 +10,10 @@ function getStatus(status) {
   }[status] ?? status;
 }
 
-(async function() {
+(async function () {
   const client = new Client({ connectionString: process.env.DATABASE_URL });
   let cursor;
-      
+
   try {
     await client.connect();
     const result = await client.query('SELECT "createdAt" FROM releases ORDER BY "createdAt" limit 1');
@@ -109,13 +109,15 @@ async function _parseReleases(cursor) {
 async function _parseChangelog(oldestReleaseDate) {
   const challengesInfo = new Map();
 
-  const changelogAirtableClient = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY,
-  }).base(process.env.AIRTABLE_EDITOR_BASE);
+  const changelogAirtableClient = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_EDITOR_BASE);
 
   console.log(`reading all changelogs older than ${oldestReleaseDate} from Airtable changelog base...`);
   const allChangelogs = await changelogAirtableClient.table('Notes').select({
-    fields: ['Texte', 'Record_Id', 'Date'],
+    fields: [
+      'Texte',
+      'Record_Id',
+      'Date',
+    ],
   }).all();
   console.log('done');
 
@@ -179,18 +181,21 @@ async function _parseChangelog(oldestReleaseDate) {
 }
 
 async function _updateAirtable(challengesInfo) {
-  const challengesToUpdate = [...challengesInfo.values()].filter(({ validatedAt,archivedAt, madeObsoleteAt })=> validatedAt || archivedAt || madeObsoleteAt);
-  console.log('validated:', [...challengesInfo.values()].filter(({ validatedAt })=>validatedAt).length);
-  console.log('archived:', [...challengesInfo.values()].filter(({ archivedAt })=>archivedAt).length);
-  console.log('madeObsoleteAt:', [...challengesInfo.values()].filter(({ madeObsoleteAt })=>madeObsoleteAt).length);
+  const challengesToUpdate = [...challengesInfo.values()].filter(({ validatedAt, archivedAt, madeObsoleteAt }) => validatedAt || archivedAt || madeObsoleteAt);
+  console.log('validated:', [...challengesInfo.values()].filter(({ validatedAt }) => validatedAt).length);
+  console.log('archived:', [...challengesInfo.values()].filter(({ archivedAt }) => archivedAt).length);
+  console.log('madeObsoleteAt:', [...challengesInfo.values()].filter(({ madeObsoleteAt }) => madeObsoleteAt).length);
 
-  const airtableClient =  new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY,
-  }).base(process.env.AIRTABLE_BASE);
+  const airtableClient = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 
   console.log('reading all challenges from Airtable...');
   const allChallenges = await airtableClient.table('Epreuves').select({
-    fields: ['id persistant', 'validated_at', 'archived_at', 'made_obsolete_at'],
+    fields: [
+      'id persistant',
+      'validated_at',
+      'archived_at',
+      'made_obsolete_at',
+    ],
   }).all();
   console.log('done');
 
@@ -201,7 +206,7 @@ async function _updateAirtable(challengesInfo) {
     });
     const update = {
       id: airtableChallenge.id,
-      fields: {}
+      fields: {},
     };
     if (challengeToUpdate.validatedAt != null && airtableChallenge.fields['validated_at'] == null) {
       update.fields['validated_at'] = challengeToUpdate.validatedAt;

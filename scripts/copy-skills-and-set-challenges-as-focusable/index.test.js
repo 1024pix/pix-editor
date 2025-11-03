@@ -18,9 +18,9 @@ import {
   activateSkill,
 } from './index.js';
 
-describe('Copy skills and set challenges as focusable', function() {
-  describe('#findSkill', function() {
-    it('should call airtable to find a skill', async function() {
+describe('Copy skills and set challenges as focusable', function () {
+  describe('#findSkill', function () {
+    it('should call airtable to find a skill', async function () {
       const persistentId = 1;
       const airtableData = [
         new AirtableRecord('Skill', 'recAirtableId1', {
@@ -28,60 +28,54 @@ describe('Copy skills and set challenges as focusable', function() {
             'id persistant': '1',
             'Version': 2,
             'Status': 'actif',
-            'Description': 'Coucou'
+            'Description': 'Coucou',
           },
         }),
       ];
-      const base = {
-        select: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue(airtableData)
-        }),
-      };
+      const base = { select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(airtableData) }) };
       const skill = await findSkill(base, persistentId);
 
       expect(base.select).toHaveBeenCalledWith({
         fields: USEFUL_SKILL_FIELDS,
-        filterByFormula : '{id persistant} = \'1\'',
-        maxRecords: 1
+        filterByFormula: '{id persistant} = \'1\'',
+        maxRecords: 1,
       });
       expect(skill).to.deep.equal(airtableData[0]);
     });
   });
 
-  describe('#duplicateSkill', function() {
-    it('should duplicate skill', async function() {
-      const skill  = new AirtableRecord('Skill', 'recAirtableId1', {
+  describe('#duplicateSkill', function () {
+    it('should duplicate skill', async function () {
+      const skill = new AirtableRecord('Skill', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
           'Version': 2,
           'Status': 'actif',
-          'Description': 'Coucou'
+          'Description': 'Coucou',
         },
       });
-      const createdAirtableData = [
-        new AirtableRecord('Skill', 'recNewSkillId'),
-      ];
-      const base = {
-        create: vi.fn().mockResolvedValue(createdAirtableData),
-      };
+      const createdAirtableData = [new AirtableRecord('Skill', 'recNewSkillId')];
+      const base = { create: vi.fn().mockResolvedValue(createdAirtableData) };
       const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
 
       const createdSkill = await duplicateSkill(base, idGenerator, skill);
 
       expect(createdSkill).to.deep.equal(createdAirtableData[0]);
-      expect(base.create).toHaveBeenCalledWith([{
-        fields: {
-          'id persistant': 'skillIdPersistantRandom',
-          'Version': 3,
-          'Status': 'en construction',
-          'Description': 'Coucou',
-        }
-      }]);
+      expect(base.create).toHaveBeenCalledWith([
+        {
+          fields: {
+            'id persistant': 'skillIdPersistantRandom',
+            'Version': 3,
+            'Status': 'en construction',
+            'Description': 'Coucou',
+          },
+        },
+      ]);
     });
   });
 
-  describe('#findChallengesFromASkill', function() {
-    it('should find challenges from a skill when status is validated, validated without tests and pre-validated', async function() {
+  describe('#findChallengesFromASkill', function () {
+    it('should find challenges from a skill when status is validated, validated without tests and pre-validated', async function () {
       const skillPersistentId = 1;
       const airtableData = [
         new AirtableRecord('Challenges', 'recAirtableId1', {
@@ -93,25 +87,21 @@ describe('Copy skills and set challenges as focusable', function() {
           },
         }),
       ];
-      const base = {
-        select: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue(airtableData)
-        }),
-      };
+      const base = { select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(airtableData) }) };
 
       await findChallengesFromASkill(base, skillPersistentId);
 
       expect(base.select).toHaveBeenCalledWith({
         fields: USEFUL_CHALLENGE_FIELDS,
-        filterByFormula : 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), {Statut} = \'validé\'))',
+        filterByFormula: 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), {Statut} = \'validé\'))',
       });
     });
   });
 
-  describe('#prepareNewChallenge', function() {
-    it('should create the updated airtable serialization', function() {
+  describe('#prepareNewChallenge', function () {
+    it('should create the updated airtable serialization', function () {
       const destinationSkillId = 2;
-      const challenge =  new AirtableRecord('Challenges', 'recAirtableId1', {
+      const challenge = new AirtableRecord('Challenges', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
           'Statut': 'validé',
@@ -137,14 +127,14 @@ describe('Copy skills and set challenges as focusable', function() {
     });
   });
 
-  describe('#cloneAttachmentsFromAChallenge', function() {
-    beforeEach(function() {
+  describe('#cloneAttachmentsFromAChallenge', function () {
+    beforeEach(function () {
       nock.cleanAll();
       nock.disableNetConnect();
       process.env.BUCKET_NAME = 'bucket name';
     });
 
-    it('should retrieve challenge attachments from a challenge and clone them', async function() {
+    it('should retrieve challenge attachments from a challenge and clone them', async function () {
       const challengePersistantId = 1;
       const airtableAttachments = [
         new AirtableRecord('Attachments', 'recAttachmentAirtableId1', {
@@ -160,14 +150,9 @@ describe('Copy skills and set challenges as focusable', function() {
           },
         }),
       ];
-      const newAirtableAttachments = [
-        new AirtableRecord('Attachments', 'recNewAttachmentAirtableId1'),
-        new AirtableRecord('Attachments', 'recNewAttachmentAirtableId2'),
-      ];
+      const newAirtableAttachments = [new AirtableRecord('Attachments', 'recNewAttachmentAirtableId1'), new AirtableRecord('Attachments', 'recNewAttachmentAirtableId2')];
       const base = {
-        select: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue(airtableAttachments)
-        }),
+        select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(airtableAttachments) }),
         create: vi.fn().mockResolvedValue(newAirtableAttachments),
       };
 
@@ -183,7 +168,11 @@ describe('Copy skills and set challenges as focusable', function() {
         .put('/recAttachmentAirtableId2123456/attachment2.pdf')
         .reply(200);
 
-      const result = await cloneAttachmentsFromAChallenge(base, token, challengePersistantId, { now() { return '123456'; } });
+      const result = await cloneAttachmentsFromAChallenge(base, token, challengePersistantId, {
+        now() {
+          return '123456';
+        },
+      });
 
       expect(base.select).toHaveBeenCalledWith({
         fields: [
@@ -194,7 +183,7 @@ describe('Copy skills and set challenges as focusable', function() {
           'mimeType',
           'type',
         ],
-        filterByFormula : '{challengeId persistant} = \'1\''
+        filterByFormula: '{challengeId persistant} = \'1\'',
       });
 
       cloneFileCall.done();
@@ -218,9 +207,8 @@ describe('Copy skills and set challenges as focusable', function() {
     });
   });
 
-  describe('#archiveChallenges', function() {
-
-    it('should archive challenges', async function() {
+  describe('#archiveChallenges', function () {
+    it('should archive challenges', async function () {
       const challenges = [
         new AirtableRecord('Challenges', 'recAirtableId1', {
           fields: {
@@ -239,32 +227,25 @@ describe('Copy skills and set challenges as focusable', function() {
           },
         }),
       ];
-      const base = {
-        update: vi.fn(),
-      };
+      const base = { update: vi.fn() };
 
       await archiveChallenges(base, challenges);
 
       expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
-          fields: {
-            'Statut': 'archivé'
-          },
+          fields: { Statut: 'archivé' },
         },
         {
           id: 'recAirtableId2',
-          fields: {
-            'Statut': 'archivé',
-          },
+          fields: { Statut: 'archivé' },
         },
       ]);
     });
   });
 
-  describe('#archiveSkill', function() {
-
-    it('should archive skill', async function() {
+  describe('#archiveSkill', function () {
+    it('should archive skill', async function () {
       const skill = new AirtableRecord('Skills', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
@@ -272,26 +253,21 @@ describe('Copy skills and set challenges as focusable', function() {
           'Description': 'Coucou',
         },
       });
-      const base = {
-        update: vi.fn(),
-      };
+      const base = { update: vi.fn() };
 
       await archiveSkill(base, skill);
 
       expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
-          fields: {
-            'Status': 'archivé'
-          },
+          fields: { Status: 'archivé' },
         },
       ]);
     });
   });
 
-  describe('#activateSkill', function() {
-
-    it('should activate skill', async function() {
+  describe('#activateSkill', function () {
+    it('should activate skill', async function () {
       const skill = new AirtableRecord('Skills', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
@@ -299,29 +275,23 @@ describe('Copy skills and set challenges as focusable', function() {
           'Description': 'Coucou',
         },
       });
-      const base = {
-        update: vi.fn(),
-      };
+      const base = { update: vi.fn() };
 
       await activateSkill(base, skill);
 
       expect(base.update).toHaveBeenCalledWith([
         {
           id: 'recAirtableId1',
-          fields: {
-            'Status': 'actif'
-          },
+          fields: { Status: 'actif' },
         },
       ]);
     });
   });
 
-  describe('#bulkCreate', function() {
-    it('should create the records and return the result', async function() {
+  describe('#bulkCreate', function () {
+    it('should create the records and return the result', async function () {
       const expectedResult = [Symbol()];
-      const base = {
-        create: vi.fn().mockResolvedValue(expectedResult),
-      };
+      const base = { create: vi.fn().mockResolvedValue(expectedResult) };
       const records = [1];
 
       const result = await bulkCreate(base, records);
@@ -329,26 +299,33 @@ describe('Copy skills and set challenges as focusable', function() {
       expect(result).to.deep.equal(expectedResult);
     });
 
-    it('should create the records by batch of 10 and return the result', async function() {
+    it('should create the records by batch of 10 and return the result', async function () {
       const expectedResult = [Symbol()];
-      const base = {
-        create: vi.fn().mockResolvedValue(expectedResult),
-      };
+      const base = { create: vi.fn().mockResolvedValue(expectedResult) };
       const records = _.times(11).map((i) => i);
 
       const result = await bulkCreate(base, records);
-      expect(base.create).toHaveBeenCalledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(base.create).toHaveBeenCalledWith([
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+      ]);
       expect(base.create).toHaveBeenCalledWith([10]);
       expect(result).to.deep.equal(expectedResult.concat(expectedResult));
     });
   });
 
-  describe('#bulkUpdate', function() {
-    it('should update the records and return the result', async function() {
+  describe('#bulkUpdate', function () {
+    it('should update the records and return the result', async function () {
       const expectedResult = [{ id: 'rec123' }];
-      const base = {
-        update: vi.fn().mockResolvedValue(expectedResult),
-      };
+      const base = { update: vi.fn().mockResolvedValue(expectedResult) };
       const records = [{ id: 1 }];
 
       const result = await bulkUpdate(base, records);
@@ -356,11 +333,9 @@ describe('Copy skills and set challenges as focusable', function() {
       expect(result).to.deep.equal(expectedResult);
     });
 
-    it('should remove duplicate records before update', async function() {
+    it('should remove duplicate records before update', async function () {
       const expectedResult = [{ id: 'rec123' }];
-      const base = {
-        update: vi.fn().mockResolvedValue(expectedResult),
-      };
+      const base = { update: vi.fn().mockResolvedValue(expectedResult) };
       const records = [{ id: 1 }, { id: 1 }];
 
       const result = await bulkUpdate(base, records);
@@ -368,12 +343,12 @@ describe('Copy skills and set challenges as focusable', function() {
       expect(result).to.deep.equal(expectedResult);
     });
 
-    it('should update the records by batch of 10 and return the result', async function() {
+    it('should update the records by batch of 10 and return the result', async function () {
       const expectedResult = [Symbol()];
-      const base = {
-        update: vi.fn().mockResolvedValue(expectedResult),
-      };
-      const records = _.times(11).map((i) => { return { id: i }; });
+      const base = { update: vi.fn().mockResolvedValue(expectedResult) };
+      const records = _.times(11).map((i) => {
+        return { id: i };
+      });
 
       const result = await bulkUpdate(base, records);
       expect(base.update).toHaveBeenCalledWith([

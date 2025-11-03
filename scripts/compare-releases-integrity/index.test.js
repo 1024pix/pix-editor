@@ -3,16 +3,13 @@ import nock from 'nock';
 
 import { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } from './index.js';
 
-describe('Scripts | Compare Release Integrity', function() {
-  describe('#replaceAttachmentsUrlByChecksum', function() {
-    it('returns challenge with attachments url replaced by checksum', async function() {
+describe('Scripts | Compare Release Integrity', function () {
+  describe('#replaceAttachmentsUrlByChecksum', function () {
+    it('returns challenge with attachments url replaced by checksum', async function () {
       const initialChallenge = {
         some: 'property',
         illustrationUrl: 'illustration-url',
-        attachments: [
-          'attachments-url-1',
-          'attachments-url-2',
-        ],
+        attachments: ['attachments-url-1', 'attachments-url-2'],
       };
 
       const remoteChecksumComputerStub = vi.fn();
@@ -31,7 +28,7 @@ describe('Scripts | Compare Release Integrity', function() {
       expect(remoteChecksumComputerStub).toHaveBeenCalledWith('attachments-url-2');
     });
 
-    it('should works when there is no attachments', async function() {
+    it('should works when there is no attachments', async function () {
       const initialChallenge = {
         some: 'property',
         illustrationUrl: 'illustration-url',
@@ -50,13 +47,10 @@ describe('Scripts | Compare Release Integrity', function() {
       expect(remoteChecksumComputerStub).toHaveBeenCalledWith('illustration-url');
     });
 
-    it('should works when there is no illustrations', async function() {
+    it('should works when there is no illustrations', async function () {
       const initialChallenge = {
         some: 'property',
-        attachments: [
-          'attachments-url-1',
-          'attachments-url-2',
-        ],
+        attachments: ['attachments-url-1', 'attachments-url-2'],
       };
 
       const remoteChecksumComputerStub = vi.fn();
@@ -74,29 +68,21 @@ describe('Scripts | Compare Release Integrity', function() {
     });
   });
 
-  describe('#compareReleases', function() {
-    beforeEach(function() {
+  describe('#compareReleases', function () {
+    beforeEach(function () {
       nock.cleanAll();
       nock.disableNetConnect();
     });
 
-    it('should return an empty table when there is no differences', async function() {
+    it('should return an empty table when there is no differences', async function () {
       const remoteChecksumComputer = vi.fn();
-      const productionRelease = {
-        content: {
-          challenges: [{ id: 1 }]
-        }
-      };
+      const productionRelease = { content: { challenges: [{ id: 1 }] } };
       const url1Scope = nock('http://example.org')
         .matchHeader('Authorization', 'Bearer myToken1')
         .get('/api/releases/latest')
         .reply(200, productionRelease);
 
-      const newRelease = {
-        content: {
-          challenges: [{ id: 1 }]
-        }
-      };
+      const newRelease = { content: { challenges: [{ id: 1 }] } };
       const url2Scope = nock('http://example.com')
         .matchHeader('Authorization', 'Bearer myToken2')
         .get('/api/releases/latest')
@@ -105,7 +91,7 @@ describe('Scripts | Compare Release Integrity', function() {
       const differences = await compareReleases(
         { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
         { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
-        remoteChecksumComputer
+        remoteChecksumComputer,
       );
 
       expect(differences).to.deep.equal([]);
@@ -113,29 +99,15 @@ describe('Scripts | Compare Release Integrity', function() {
       expect(url2Scope.isDone()).toBe(true);
     });
 
-    it('should return an empty table when there is no differences when challenges are not ordered', async function() {
+    it('should return an empty table when there is no differences when challenges are not ordered', async function () {
       const remoteChecksumComputer = vi.fn();
-      const productionRelease = {
-        content: {
-          challenges: [
-            { id: 1 },
-            { id: 2 },
-          ],
-        },
-      };
+      const productionRelease = { content: { challenges: [{ id: 1 }, { id: 2 }] } };
       const url1Scope = nock('http://example.org')
         .matchHeader('Authorization', 'Bearer myToken1')
         .get('/api/releases/latest')
         .reply(200, productionRelease);
 
-      const newRelease = {
-        content: {
-          challenges: [
-            { id: 2 },
-            { id: 1 },
-          ],
-        },
-      };
+      const newRelease = { content: { challenges: [{ id: 2 }, { id: 1 }] } };
       const url2Scope = nock('http://example.com')
         .matchHeader('Authorization', 'Bearer myToken2')
         .get('/api/releases/latest')
@@ -144,7 +116,7 @@ describe('Scripts | Compare Release Integrity', function() {
       const differences = await compareReleases(
         { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
         { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
-        remoteChecksumComputer
+        remoteChecksumComputer,
       );
 
       expect(differences).to.deep.equal([]);
@@ -152,23 +124,15 @@ describe('Scripts | Compare Release Integrity', function() {
       expect(url2Scope.isDone()).toBe(true);
     });
 
-    it('should ignore text with space before new line', async function() {
+    it('should ignore text with space before new line', async function () {
       const remoteChecksumComputer = vi.fn();
-      const productionRelease = {
-        content: {
-          challenges: [{ id: 1, illustrationAlt: 'alternative text . \ntest' }]
-        }
-      };
+      const productionRelease = { content: { challenges: [{ id: 1, illustrationAlt: 'alternative text . \ntest' }] } };
       const url1Scope = nock('http://example.org')
         .matchHeader('Authorization', 'Bearer myToken1')
         .get('/api/releases/latest')
         .reply(200, productionRelease);
 
-      const newRelease = {
-        content: {
-          challenges: [{ id: 1, illustrationAlt: 'alternative text .\ntest' }]
-        }
-      };
+      const newRelease = { content: { challenges: [{ id: 1, illustrationAlt: 'alternative text .\ntest' }] } };
       const url2Scope = nock('http://example.com')
         .matchHeader('Authorization', 'Bearer myToken2')
         .get('/api/releases/latest')
@@ -177,7 +141,7 @@ describe('Scripts | Compare Release Integrity', function() {
       const differences = await compareReleases(
         { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
         { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
-        remoteChecksumComputer
+        remoteChecksumComputer,
       );
 
       expect(differences).to.deep.equal([]);
@@ -185,7 +149,7 @@ describe('Scripts | Compare Release Integrity', function() {
       url2Scope.done();
     });
 
-    it('should return the differences', async function() {
+    it('should return the differences', async function () {
       const remoteChecksumComputer = vi.fn()
         .mockResolvedValueOnce('sha1')
         .mockResolvedValueOnce('sha2');
@@ -194,11 +158,13 @@ describe('Scripts | Compare Release Integrity', function() {
 
       const productionRelease = {
         content: {
-          challenges: [{
-            id: 'recCorruptedChallenge',
-            illustrationUrl: 'illustration-url',
-          }]
-        }
+          challenges: [
+            {
+              id: 'recCorruptedChallenge',
+              illustrationUrl: 'illustration-url',
+            },
+          ],
+        },
       };
       nock('http://example.org')
         .get('/api/releases/latest')
@@ -206,11 +172,13 @@ describe('Scripts | Compare Release Integrity', function() {
 
       const newRelease = {
         content: {
-          challenges: [{
-            id: 'recCorruptedChallenge',
-            illustrationUrl: 'illustration-corrupted-url',
-          }]
-        }
+          challenges: [
+            {
+              id: 'recCorruptedChallenge',
+              illustrationUrl: 'illustration-corrupted-url',
+            },
+          ],
+        },
       };
       nock('http://example.com')
         .get('/api/releases/latest')
@@ -219,29 +187,31 @@ describe('Scripts | Compare Release Integrity', function() {
       const differences = await compareReleases(
         { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
         { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
-        remoteChecksumComputer
+        remoteChecksumComputer,
       );
 
       expect(differences).to.deep.equal([expectedDifference]);
     });
 
-    it('should return the differences when the number of challenges differ', async function() {
+    it('should return the differences when the number of challenges differ', async function () {
       const remoteChecksumComputer = vi.fn()
         .mockResolvedValueOnce('sha1')
         .mockResolvedValueOnce('sha2');
 
-      const expectedDifference = ['2', '4', '5'];
+      const expectedDifference = [
+        '2',
+        '4',
+        '5',
+      ];
 
       const productionRelease = {
         content: {
-          challenges: [{
-            id: '1',
-          },{
-            id: '2',
-          }, {
-            id: '3',
-          }]
-        }
+          challenges: [
+            { id: '1' },
+            { id: '2' },
+            { id: '3' },
+          ],
+        },
       };
       nock('http://example.org')
         .get('/api/releases/latest')
@@ -249,16 +219,13 @@ describe('Scripts | Compare Release Integrity', function() {
 
       const newRelease = {
         content: {
-          challenges: [{
-            id: '1',
-          }, {
-            id: '5',
-          }, {
-            id: '3',
-          }, {
-            id: '4',
-          }]
-        }
+          challenges: [
+            { id: '1' },
+            { id: '5' },
+            { id: '3' },
+            { id: '4' },
+          ],
+        },
       };
       nock('http://example.com')
         .get('/api/releases/latest')
@@ -267,20 +234,20 @@ describe('Scripts | Compare Release Integrity', function() {
       const differences = await compareReleases(
         { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
         { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
-        remoteChecksumComputer
+        remoteChecksumComputer,
       );
 
       expect(differences).to.deep.equal(expectedDifference);
     });
   });
 
-  describe('#remoteChecksumComputer', function() {
-    beforeEach(function() {
+  describe('#remoteChecksumComputer', function () {
+    beforeEach(function () {
       nock.cleanAll();
       nock.disableNetConnect();
     });
 
-    it('compute the hash of the remote file', async function() {
+    it('compute the hash of the remote file', async function () {
       const requestCall = nock('http://example.net')
         .get('/file.jpg')
         .reply(200, 'test');
@@ -290,7 +257,7 @@ describe('Scripts | Compare Release Integrity', function() {
       expect(requestCall.isDone()).toBe(true);
     });
 
-    it('returns an error when the server returns an error', async function() {
+    it('returns an error when the server returns an error', async function () {
       const requestCall = nock('http://example.net')
         .get('/file.jpg')
         .reply(400, '');

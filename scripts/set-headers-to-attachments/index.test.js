@@ -3,8 +3,8 @@ import nock from 'nock';
 
 import { setHeadersToAttachments } from './index.js';
 
-describe('Set headers to attachments', function() {
-  it('set header Content-Disposition only to type attachments', async function() {
+describe('Set headers to attachments', function () {
+  it('set header Content-Disposition only to type attachments', async function () {
     process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
     process.env.BUCKET_USER = 'user';
     process.env.BUCKET_PASSWORD = 'password';
@@ -25,34 +25,32 @@ describe('Set headers to attachments', function() {
 
     const getTokenApiCall = nock('https://auth.cloud.ovh.net/v3')
       .post('/auth/tokens', {
-        'auth': {
-          'identity': {
-            'methods': ['password'],
-            'password': {
-              'user': {
-                'name': 'user',
-                'domain': { 'id': 'default' },
-                'password':'password'
-              }
-            }
+        auth: {
+          identity: {
+            methods: ['password'],
+            password: {
+              user: {
+                name: 'user',
+                domain: { id: 'default' },
+                password: 'password',
+              },
+            },
           },
-          'scope': {
-            'project': {
-              'name': 'tenant name',
-              'domain': { 'id': 'default' }
-            }
-          }
-        }
+          scope: {
+            project: {
+              name: 'tenant name',
+              domain: { id: 'default' },
+            },
+          },
+        },
       })
-      .reply(200, {}, {
-        'x-subject-token': 'TOKEN'
-      });
+      .reply(200, {}, { 'x-subject-token': 'TOKEN' });
 
     nock.disableNetConnect();
 
     const attachments = [
       {
-        'fields': {
+        fields: {
           'id': 'attcKBWOyCUyATJ93',
           'Record ID': 'reczu9rZzvVD07Gme',
           'challengeId': ['some-challenge-id'],
@@ -62,10 +60,10 @@ describe('Set headers to attachments', function() {
           'type': 'illustration',
           'url': 'https://dl.pix.fr/illustration1.png',
           'alt': 'alternative text',
-        }
+        },
       },
       {
-        'fields': {
+        fields: {
           'id': 'attcKBWOyCUyATJ932',
           'Record ID': 'reczu9rZzvVD07Gme2',
           'challengeId': ['some-challenge-id'],
@@ -75,7 +73,7 @@ describe('Set headers to attachments', function() {
           'type': 'attachment',
           'url': 'https://dl.pix.fr/attachment1.png',
           'alt': '',
-        }
+        },
       },
     ];
 

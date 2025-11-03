@@ -6,24 +6,22 @@ import pLimit from 'p-limit';
 const limit = pLimit(10);
 
 function getBaseAttachments() {
-  const base = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 
   return base('Attachments');
 }
 
 function eachRecord(callback) {
-  getBaseAttachments().select({
-    view: 'Grid view'
-  }).eachPage(async function page(records, fetchNextPage) {
+  getBaseAttachments().select({ view: 'Grid view' }).eachPage(async function page(records, fetchNextPage) {
     records.forEach(async (record) => {
       await limit(() => callback(record));
     });
 
     fetchNextPage();
   }, function done(err) {
-    if (err) { console.error(err); return; }
+    if (err) {
+      console.error(err);
+    }
   });
 }
 
@@ -39,7 +37,7 @@ export async function cloneFile(token, originalUrl, randomString, filename, cloc
     headers: {
       'X-Auth-Token': token,
       'X-Copy-From': process.env.BUCKET_NAME + parsedUrl.pathname,
-    }
+    },
   };
 
   try {
@@ -56,9 +54,7 @@ export async function updateRecord(base, id, url) {
     base.update([
       {
         id,
-        fields: {
-          url,
-        },
+        fields: { url },
       },
     ], (err) => {
       if (err) reject();

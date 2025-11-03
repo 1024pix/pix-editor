@@ -9,14 +9,12 @@ const logger = createLogger({
     format.colorize(),
     format.simple(),
   ),
-  transports: [
-    new transports.Console(),
-  ]
+  transports: [new transports.Console()],
 });
 
 const enableShuffledOnChallenges = async ({ airtableClient, dryRun, sample }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
-  
+
   const challenges = await _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, sample });
 
   if (!dryRun) {
@@ -37,12 +35,12 @@ async function readExcludes({ airtableClient }) {
   const ws = wb.Sheets[wb.SheetNames[0]];
   const excludes = xlsxUtils.sheet_to_json(ws, { header: [undefined, 'skillName'], range: 1 });
 
-  const airtableSkills = await airtableClient.table('Acquis').select({ fields:['Nom'] }).all();
+  const airtableSkills = await airtableClient.table('Acquis').select({ fields: ['Nom'] }).all();
 
   return excludes.map(({ skillName }) => {
     return {
       skillIds: airtableSkills.filter(
-        (skill) => skillName.localeCompare(skill.get('Nom'), 'fr', { sensitivity: 'base' }) === 0
+        (skill) => skillName.localeCompare(skill.get('Nom'), 'fr', { sensitivity: 'base' }) === 0,
       ).map((skill) => skill.id),
       skillName,
     };
@@ -76,13 +74,13 @@ async function _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, s
 
   let prevLength = airtableChallenges.length;
   airtableChallenges = airtableChallenges.filter(
-    (challenge) => challenge.get('Acquix')?.every((skillId) => !excludedSkillIds.includes(skillId) ?? true)
+    (challenge) => challenge.get('Acquix')?.every((skillId) => !excludedSkillIds.includes(skillId) ?? true),
   );
   logger.info(`Excluded ${prevLength - airtableChallenges.length} from a total of ${prevLength} QCU/QCM challenges`);
 
   prevLength = airtableChallenges.length;
   airtableChallenges = airtableChallenges.filter(
-    (challenge) => !challenge.get('shuffled')
+    (challenge) => !challenge.get('shuffled'),
   );
   logger.info(`${prevLength - airtableChallenges.length} of ${prevLength} challenges are already shuffled`);
 
@@ -101,9 +99,7 @@ async function _shuffleChallenges(challenges, { airtableClient }) {
   for (const chunk of chunks(challenges, 10)) {
     await airtableClient.table('Epreuves').update(chunk.map((challenge) => ({
       id: challenge.id,
-      fields: {
-        shuffled: true,
-      },
+      fields: { shuffled: true },
     })));
 
     updatedCount += chunk.length;
@@ -120,10 +116,7 @@ function* chunks(array, chunkSize) {
 function _writeReport(challenges) {
   const wb = xlsxUtils.book_new();
 
-  const ws = xlsxUtils.aoa_to_sheet([
-    ['ID Épreuve'],
-    ...challenges.map((challenge) => [challenge.id]),
-  ]);
+  const ws = xlsxUtils.aoa_to_sheet([['ID Épreuve'], ...challenges.map((challenge) => [challenge.id])]);
 
   xlsxUtils.book_append_sheet(wb, ws, 'Challenges');
 
@@ -173,6 +166,4 @@ async function main() {
   }
 })();
 
-export default {
-  enableShuffledOnChallenges,
-};
+export default { enableShuffledOnChallenges };

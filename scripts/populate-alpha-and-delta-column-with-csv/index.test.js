@@ -5,20 +5,23 @@ const { Record: AirtableRecord } = airtable;
 
 import { parseData, findAirtableIds, updateRecords, clearDifficultyAndDiscriminant } from './index.js';
 
-describe('Populate alpha and delta column', function() {
-  describe('#parseData', function() {
-    it('should return a object table with challenge persistent id, alpha and delta', async function() {
+describe('Populate alpha and delta column', function () {
+  describe('#parseData', function () {
+    it('should return a object table with challenge persistent id, alpha and delta', async function () {
       const csvData = 'items,difficulties,discriminants\nrec1,0.8423189520825876,1.6760518550872801\nrec2,-0.9423189520825878,2.6760518550872802';
 
-      const expectedResult = [{
-        id: 'rec1',
-        alpha: '1.6760518550872801',
-        delta: '0.8423189520825876',
-      }, {
-        id: 'rec2',
-        alpha: '2.6760518550872802',
-        delta: '-0.9423189520825878',
-      }];
+      const expectedResult = [
+        {
+          id: 'rec1',
+          alpha: '1.6760518550872801',
+          delta: '0.8423189520825876',
+        },
+        {
+          id: 'rec2',
+          alpha: '2.6760518550872802',
+          delta: '-0.9423189520825878',
+        },
+      ];
 
       const result = await parseData(csvData);
 
@@ -26,46 +29,37 @@ describe('Populate alpha and delta column', function() {
     });
   });
 
-  describe('#findAirtableIds', function() {
-    it('should request airtable with the persistent ids', async function() {
-      const data = [{
-        id: 'recPix1',
-        alpha: 0.123,
-        delta: 0.654321,
-      }, {
-        id: 'recPix2',
-        alpha: -0.321,
-        delta: 0.98765432166556,
-      }];
-
-      const airtableData = [
-        new AirtableRecord('Challenge', 'recAirtableId1', {
-          fields: {
-            'id persistant': 'recPix1'
-          },
-        }),
-        new AirtableRecord('Challenge', 'recAirtableId2', {
-          fields: {
-            'id persistant': 'recPix2'
-          },
-        })
+  describe('#findAirtableIds', function () {
+    it('should request airtable with the persistent ids', async function () {
+      const data = [
+        {
+          id: 'recPix1',
+          alpha: 0.123,
+          delta: 0.654321,
+        },
+        {
+          id: 'recPix2',
+          alpha: -0.321,
+          delta: 0.98765432166556,
+        },
       ];
 
-      const base = {
-        select: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue(airtableData)
-        }),
-      };
+      const airtableData = [new AirtableRecord('Challenge', 'recAirtableId1', { fields: { 'id persistant': 'recPix1' } }), new AirtableRecord('Challenge', 'recAirtableId2', { fields: { 'id persistant': 'recPix2' } })];
 
-      const expectedResult = [{
-        id: 'recAirtableId1',
-        alpha: 0.123,
-        delta: 0.654321,
-      }, {
-        id: 'recAirtableId2',
-        alpha: -0.321,
-        delta: 0.98765432166556,
-      }];
+      const base = { select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(airtableData) }) };
+
+      const expectedResult = [
+        {
+          id: 'recAirtableId1',
+          alpha: 0.123,
+          delta: 0.654321,
+        },
+        {
+          id: 'recAirtableId2',
+          alpha: -0.321,
+          delta: 0.98765432166556,
+        },
+      ];
 
       const result = await findAirtableIds(base, data);
 
@@ -77,17 +71,20 @@ describe('Populate alpha and delta column', function() {
     });
   });
 
-  describe('#updateRecords', function() {
-    it('updates alpha and delta in challenges records', async function() {
-      const data = [{
-        id: 'recAirtableId1',
-        alpha: 0.123,
-        delta: 0.654321,
-      }, {
-        id: 'recAirtableId2',
-        alpha: -0.321,
-        delta: 0.98765432166556,
-      }];
+  describe('#updateRecords', function () {
+    it('updates alpha and delta in challenges records', async function () {
+      const data = [
+        {
+          id: 'recAirtableId1',
+          alpha: 0.123,
+          delta: 0.654321,
+        },
+        {
+          id: 'recAirtableId2',
+          alpha: -0.321,
+          delta: 0.98765432166556,
+        },
+      ];
       const base = {
         update: vi.fn().mockImplementation((_, cb) => {
           cb();
@@ -100,27 +97,27 @@ describe('Populate alpha and delta column', function() {
             id: 'recAirtableId1',
             fields: {
               'Difficulté calculée': '0.654321',
-              'Discrimination calculée': '0.123'
-            }
+              'Discrimination calculée': '0.123',
+            },
           },
           {
             id: 'recAirtableId2',
             fields: {
               'Difficulté calculée': '0.98765432166556',
-              'Discrimination calculée': '-0.321'
-            }
-          }
+              'Discrimination calculée': '-0.321',
+            },
+          },
         ],
         expect.any(Function),
       );
     });
 
-    it('should batch updates with up to 10 records at a time', async function() {
+    it('should batch updates with up to 10 records at a time', async function () {
       const data = _.times(11).map((index) => {
         return {
           id: index,
           alpha: 1,
-          delta: 2
+          delta: 2,
         };
       });
       const base = {
@@ -133,23 +130,21 @@ describe('Populate alpha and delta column', function() {
     });
   });
 
-  describe('#clearDifficultyAndDiscriminant', function() {
-    it('deletes value of difficulty and discriminant in challenges records', async function() {
+  describe('#clearDifficultyAndDiscriminant', function () {
+    it('deletes value of difficulty and discriminant in challenges records', async function () {
       const recordsCount = 100;
       const records = _.range(0, recordsCount)
         .map((recordIndex) => ({
           id: `recAirtableId${recordIndex}`,
           fields: {
             'Difficulté calculée': '0.98765432166556',
-            'Discrimination calculée': '-0.321'
-          }
+            'Discrimination calculée': '-0.321',
+          },
         }));
 
       const base = {
         update: vi.fn(),
-        select: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue(records),
-        }),
+        select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(records) }),
       };
 
       const updatedRecords = [];
@@ -168,4 +163,3 @@ describe('Populate alpha and delta column', function() {
     });
   });
 });
-
