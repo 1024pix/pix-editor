@@ -89,7 +89,7 @@ export async function listByTubeId(tubeId) {
     skillDatasource.filterByTubeId(tubeId),
     selectSkills().where('skills.tubeId', tubeId),
   ]);
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
 
   if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(

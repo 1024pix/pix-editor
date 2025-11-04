@@ -50,7 +50,7 @@ export function register(server) {
             data: Joi.object({
               type: Joi.string().required().equal('tubes'),
               attributes: Joi.object({
-                name: Joi.string(),
+                name: Joi.string().required().pattern(/^@.+$/),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
                 'practical-description-fr': Joi.string().allow(null),
@@ -85,7 +85,7 @@ export function register(server) {
               type: Joi.string().required().equal('tubes'),
               id: Types.tubeId().required(),
               attributes: Joi.object({
-                name: Joi.string(),
+                name: Joi.string().required().pattern(/^@.+$/),
                 index: Joi.number(),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
