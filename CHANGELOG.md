@@ -1,5 +1,18 @@
 
 
+## v3.234.0 (04/11/2025)
+
+
+### :building_construction: Tech
+- [#1229](https://github.com/1024pix/pix-editor/pull/1229) [TECH] Lit les épreuves depuis postgresql (PIX-19948).
+- [#1227](https://github.com/1024pix/pix-editor/pull/1227) [TECH] Revert "[BUMP] Update dependency vitest to v4 (api)".
+
+### :arrow_up: Montée de version
+- [#1226](https://github.com/1024pix/pix-editor/pull/1226) [BUMP] Lock file maintenance (challenge-parser).
+
+### :coffee: Autre
+- [#1228](https://github.com/1024pix/pix-editor/pull/1228) [REVERT] Config vitest.
+
 ## v3.233.0 (31/10/2025)
 
 
