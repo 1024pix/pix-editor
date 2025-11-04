@@ -1,5 +1,11 @@
 
 
+## v3.234.1 (04/11/2025)
+
+
+### :bug: Correction
+- [#1231](https://github.com/1024pix/pix-editor/pull/1231) [BUGFIX] Erreur lors de la création du 1er acquis d’un tube.
+
 ## v3.234.0 (04/11/2025)
 
 
