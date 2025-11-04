@@ -26,11 +26,6 @@ describe('Application | Route | Tutorials', () => {
   describe('POST /api/tutorials', async () => {
     let airtableCreateTutorialScope;
 
-    afterEach(async () => {
-      await knex.delete().from('tutorials-tutorial_tags');
-      await knex.delete().from('tutorials');
-    });
-
     context('when user has not the right to do the operation', function () {
       it('should respond with status 403', async function () {
         // given

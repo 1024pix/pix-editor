@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import {
   create,
@@ -15,10 +15,6 @@ import {
 } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function () {
-  afterEach(function () {
-    return knex('releases').delete();
-  });
-
   describe('#create', function () {
     it('should save current content as a new release', async function () {
       // Given

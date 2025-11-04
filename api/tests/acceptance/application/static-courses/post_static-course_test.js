@@ -190,8 +190,6 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
 
   afterEach(async function () {
     vi.useRealTimers();
-    await knex('static_courses_tags_link').delete();
-    return knex('static_courses').delete();
   });
 
   it('creates and returns the static course', async function () {

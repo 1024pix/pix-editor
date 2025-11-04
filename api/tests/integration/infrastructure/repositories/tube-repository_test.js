@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import nock from 'nock';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
@@ -358,11 +358,6 @@ describe('Integration | Repository | tube-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(async () => {
-      await knex('tubes').delete();
-      await knex('translations').delete();
-    });
-
     it('should save new tube to Airtable and translations to DB', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });

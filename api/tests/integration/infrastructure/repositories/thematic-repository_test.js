@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as thematicRepository from '../../../../lib/infrastructure/repositories/thematic-repository.js';
@@ -306,11 +306,6 @@ describe('Integration | Repository | thematic-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(() => {
-      return knex('thematics').delete();
-      return knex('translations').delete();
-    });
-
     it('should save new thematic to Airtable and translations to DB', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });

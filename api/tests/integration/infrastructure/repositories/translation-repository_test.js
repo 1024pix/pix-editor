@@ -4,10 +4,6 @@ import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
 
 describe('Integration | Repository | translation-repository', function () {
-  afterEach(async function () {
-    await knex('translations').delete();
-  });
-
   context('#save', function () {
     it('should create or update translations', async () => {
       // given

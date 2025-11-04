@@ -10,17 +10,16 @@ loadEnvFileIfExists();
 
 beforeAll(() => {
   nock.disableNetConnect();
-  vi.restoreAllMocks();
   vi.resetModules();
 });
 
 afterEach(async () => {
   airtableBuilder.cleanAll();
   await databaseBuilder.clean();
-  cache.flushAll();
   nock.cleanAll();
+  cache.flushAll();
   for (const queue of queues) {
-    await queue.obliterate({ force: true });
+    await queue.obliterate({ force: true }).catch(() => {});
   }
 });
 

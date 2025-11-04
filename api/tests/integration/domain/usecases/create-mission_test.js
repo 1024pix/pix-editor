@@ -1,16 +1,11 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { createMission } from '../../../../lib/domain/usecases/index.js';
-import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import _ from 'lodash';
 
 describe('Integration | Usecases | create mission', function () {
-  afterEach(async function () {
-    await knex('missions').delete();
-    await knex('translations').delete();
-  });
-
   it('when mission is totally valid, should create mission without warnings', async () => {
     // given
     const mission = domainBuilder.buildMission({ status: Mission.status.EXPERIMENTAL });

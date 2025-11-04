@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 
 import { CopyChallengesFromAirtableToPg } from '../../../../scripts/migration-from-airtable/copy-challenges-from-airtable-to-pg.js';
@@ -122,10 +122,6 @@ describe('Integration | Scripts | CopyChallengesFromAirtableToPg', () => {
       });
 
       await databaseBuilder.commit();
-    });
-
-    afterEach(async () => {
-      await knex.delete().from(TABLE_NAME);
     });
 
     it('reads challenges from airtable and saves these to postgres', async () => {

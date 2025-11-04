@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 
 import { CopyTutorialTagsFromAirtableToPg } from '../../../../scripts/migration-from-airtable/copy-tutorial_tags-from-airtable-to-pg.js';
@@ -18,10 +18,6 @@ describe('Integration | Scripts | CopyTutorialTagsFromAirtableToPg', () => {
   });
 
   describe('#handle', () => {
-    afterEach(async () => {
-      await knex.delete().from(TABLE_NAME);
-    });
-
     it('reads tutorial tags from airtable and saves these to postgres', async () => {
       // given
       const options = { dryRun: false };

@@ -1,11 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
@@ -202,8 +196,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
 
   afterEach(async function () {
     vi.useRealTimers();
-    await knex('static_courses_tags_link').delete();
-    return knex('static_courses').delete();
   });
 
   it('updates and returns the static course', async function () {

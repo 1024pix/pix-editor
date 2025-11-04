@@ -1,15 +1,10 @@
 import _ from 'lodash';
-import { afterEach, describe, describe as context, expect, it } from 'vitest';
+import { describe, describe as context, expect, it } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | API | mission | PATCH /api/missions/{id}', function () {
-  afterEach(async function () {
-    await knex('missions').delete();
-    await knex('translations').delete();
-  });
-
   context('when user has rights to update a mission', function () {
     it('updates the mission and returns its id', async function () {
       // given

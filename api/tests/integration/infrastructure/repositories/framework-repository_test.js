@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 
 import { create, list } from '../../../../lib/infrastructure/repositories/framework-repository.js';
@@ -12,10 +12,6 @@ const AIRTABLE_NAME = 'Referentiel';
 
 describe('Integration | Infrastructure | Repositories | Framework', () => {
   describe('#create', () => {
-    afterEach(async () => {
-      await knex.delete().from(TABLE_NAME);
-    });
-
     it('inserts framework in Airtable and Postgres', async () => {
       // given
       const id = 'rec123Abc456Def';

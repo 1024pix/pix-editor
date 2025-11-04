@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
 import {
@@ -1385,12 +1385,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
     beforeEach(async function () {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-    });
-
-    afterEach(async function () {
-      await knex('translations').delete();
-      await knex('localized_challenges').delete();
-      await knex('challenges').delete();
     });
 
     it('should create a challenge', async () => {

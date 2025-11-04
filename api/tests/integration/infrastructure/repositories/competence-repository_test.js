@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper';
@@ -457,10 +457,6 @@ describe('Integration | Repository | competence-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(async () => {
-      await knex.delete().from(TABLE_NAME);
-    });
-
     it('inserts competence in airtable and postgres w/ its translations', async () => {
       // given
       const airtableId = 'rec123Abc';
