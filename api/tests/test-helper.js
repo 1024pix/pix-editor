@@ -11,7 +11,7 @@ export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/uti
 export { knex };
 
 // DatabaseBuilder
-export const databaseBuilder = new DatabaseBuilder({ knex });
+export const databaseBuilder = await DatabaseBuilder.create({ knex });
 
 // Hapi
 export const hFake = {
