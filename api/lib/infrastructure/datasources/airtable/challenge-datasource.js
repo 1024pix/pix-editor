@@ -147,7 +147,7 @@ export const challengeDatasource = datasource.extend({
         archived_at: model.archivedAt,
         made_obsolete_at: model.madeObsoleteAt,
         shuffled: model.shuffled,
-        contextualizedFields: model.contextualizedFields,
+        contextualizedFields: model.contextualizedFields ?? [],
       },
     };
     if (model.airtableId) {
