@@ -103,8 +103,8 @@ export const challengeDatasource = datasource.extend({
       spoil: airtableRecord.get('Spoil'),
       responsive: airtableRecord.get('Responsive'),
       geography: airtableRecord.get('Géographie'),
-      delta: parseFloat(airtableRecord.get('Difficulté calculée')),
-      alpha: parseFloat(airtableRecord.get('Discrimination calculée')),
+      delta: parseNullableFloat(airtableRecord.get('Difficulté calculée')),
+      alpha: parseNullableFloat(airtableRecord.get('Discrimination calculée')),
       updatedAt: airtableRecord.get('updated_at'),
       validatedAt: airtableRecord.get('validated_at'),
       archivedAt: airtableRecord.get('archived_at'),
@@ -221,4 +221,9 @@ function _convertBooleanToAirtableValue(value) {
 
 function _convertAirtableValueToBoolean(value) {
   return value === 'Activé';
+}
+
+function parseNullableFloat(str) {
+  if (str == null || str === '') return null;
+  return parseFloat(str);
 }
