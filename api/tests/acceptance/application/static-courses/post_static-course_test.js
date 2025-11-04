@@ -73,24 +73,32 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       skillId: 'skillid1',
       locales: ['fr'],
       status: Challenge.STATUSES.VALIDE,
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge2 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid2',
       skillId: 'skillid2',
       locales: ['fr'],
       status: Challenge.STATUSES.PROPOSE,
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge3 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid3',
       skillId: 'skillid3',
       locales: ['fr'],
       status: Challenge.STATUSES.PROPOSE,
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge4 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid4',
       skillId: 'skillid4',
       locales: ['fr'],
       status: Challenge.STATUSES.PROPOSE,
+      files: [],
+      competenceId: 'competence1',
     });
     databaseBuilder.factory.buildSkill(skill1);
     databaseBuilder.factory.buildSkill(skill2);

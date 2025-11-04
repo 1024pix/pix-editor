@@ -44,10 +44,30 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-    const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid1', skillId: 'skillid1' });
-    const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid2', skillId: 'skillid2' });
-    const challenge3 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid3', skillId: 'skillid3' });
-    const challenge4 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid4', skillId: 'skillid4' });
+    const challenge1 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid1',
+      skillId: 'skillid1',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge2 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid2',
+      skillId: 'skillid2',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge3 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid3',
+      skillId: 'skillid3',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge4 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid4',
+      skillId: 'skillid4',
+      competenceId: 'competence1',
+      files: [],
+    });
     const skill1 = domainBuilder.buildSkillDatasourceObject({
       id: challenge1.skillId,
       tubeId: 'tube1',

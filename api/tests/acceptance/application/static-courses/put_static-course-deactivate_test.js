@@ -70,18 +70,24 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
       skillId: 'skillid2',
       status: 'status for challengeid2',
       locales: ['fr'],
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge3 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid3',
       skillId: 'skillid3',
       status: 'status for challengeid3',
       locales: ['fr'],
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge4 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid4',
       skillId: 'skillid4',
       status: 'status for challengeid4',
       locales: ['fr'],
+      files: [],
+      competenceId: 'competence1',
     });
     databaseBuilder.factory.buildSkill(skill2);
     databaseBuilder.factory.buildSkill(skill3);

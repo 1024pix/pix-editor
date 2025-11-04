@@ -81,8 +81,18 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should filter challenges by id', async () => {
       // Given
-      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'XX' });
-      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'XX' });
+      const challenge1 = domainBuilder.buildChallengeDatasourceObject({
+        id: '1',
+        geography: 'XX',
+        files: [],
+        competenceId: 'competence1',
+      });
+      const challenge2 = domainBuilder.buildChallengeDatasourceObject({
+        id: '2',
+        geography: 'XX',
+        files: [],
+        competenceId: 'competence1',
+      });
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({

@@ -46,12 +46,15 @@ export async function list() {
 }
 
 export async function getMany(ids) {
-  const [challengeDTOs, [translations, localizedChallenges]] = await Promise.all([
+  const [airtableDtos, pgDtos, [translations, localizedChallenges]] = await Promise.all([
     challengeDatasource.filter({ filter: { ids } }),
+    selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'),
     loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
   ]);
-  if (!challengeDTOs) return [];
-  return toDomainList(challengeDTOs, translations, localizedChallenges);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+
+  if (!airtableDtos) return [];
+  return toDomainList(airtableDtos, translations, localizedChallenges);
 }
 
 export async function filter(params = {}) {
