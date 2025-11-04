@@ -1,21 +1,22 @@
 const INITIAL_ID = 100000;
-
-export const databaseBuffer = {
-  objectsToInsert: [],
-  tablesToDelete: [],
+const databaseBuffer = {
+  objectsToInsert: {},
   nextId: INITIAL_ID,
 
-  pushInsertable({ tableName, values, autoId = true }) {
-    if (!values.id && autoId) {
-      values = { ...values, id: this.nextId++ };
-    }
-    this.objectsToInsert.push({ tableName, values });
+  pushInsertable({ tableName, values }) {
+    if (!this.objectsToInsert[tableName]) this.objectsToInsert[tableName] = [];
+    this.objectsToInsert[tableName].push(values);
 
     return values;
   },
 
+  getNextId() {
+    return this.nextId++;
+  },
+
   purge() {
-    this.objectsToInsert = [];
-    this.tablesToDelete = [];
+    this.objectsToInsert = {};
   },
 };
+
+export { databaseBuffer };
