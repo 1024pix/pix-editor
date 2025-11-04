@@ -11,6 +11,7 @@ import * as challengeRepository from './challenge-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import * as skillRepository from './skill-repository.js';
 import _ from 'lodash';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
@@ -35,7 +36,7 @@ export async function findReadSummaries({ filter, page }) {
     query.andWhere('isActive', filter.isActive);
   }
   if (filter.name) {
-    query.andWhereILike('name', `%${filter.name}%`);
+    query.andWhereILike('name', `%${escapeLikeWildcards(filter.name)}%`);
   }
   if (filter.tagIds?.length) {
     query.whereIn(

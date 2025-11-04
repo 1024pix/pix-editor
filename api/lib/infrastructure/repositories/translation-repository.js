@@ -2,6 +2,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { translationDatasource } from '../datasources/airtable/index.js';
 import { Translation } from '../../domain/models/index.js';
 import _ from 'lodash';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 let _doesTableExistInAirtable;
 let _doesTableExistInAirtablePromise;
@@ -68,7 +69,7 @@ export async function list() {
 export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
     .pluck('key')
-    .whereILike('value', `%${escapeWildcardCharacters(search)}%`)
+    .whereILike('value', `%${escapeLikeWildcards(search)}%`)
     .andWhere(function () {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);
@@ -85,10 +86,6 @@ export async function search({ entity, fields, search, limit }) {
       return key.split('.')[1];
     }),
   );
-}
-
-function escapeWildcardCharacters(s) {
-  return s.replace(/(%|_)/g, '\\$1');
 }
 
 export async function checkIfTableExistInAirtable() {

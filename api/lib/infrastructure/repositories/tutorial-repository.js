@@ -3,6 +3,7 @@ import { tutorialDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 const TABLE_NAME = 'tutorials';
 const TAGS_RELATION_TABLE_NAME = 'tutorials-tutorial_tags';
@@ -118,7 +119,10 @@ export async function getManyByAirtableIds(airtableIds) {
 export async function searchByTitle(title) {
   const [airtableDtos, pgDtos] = await Promise.all([
     tutorialDatasource.searchByTitle(title),
-    selectTutorials().whereILike('title', `%${title}%`).orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(100),
+    selectTutorials()
+      .whereILike('title', `%${escapeLikeWildcards(title)}%`)
+      .orderByRaw('?? collate ??', ['title', 'fr-x-icu'])
+      .limit(100),
   ]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
@@ -130,7 +134,10 @@ export async function searchByTitle(title) {
 export async function searchBySource(source) {
   const [airtableDtos, pgDtos] = await Promise.all([
     tutorialDatasource.searchBySource(source),
-    selectTutorials().whereILike('source', `%${source}%`).orderByRaw('?? collate ??', ['title', 'fr-x-icu']).limit(4),
+    selectTutorials()
+      .whereILike('source', `%${escapeLikeWildcards(source)}%`)
+      .orderByRaw('?? collate ??', ['title', 'fr-x-icu'])
+      .limit(4),
   ]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
@@ -149,7 +156,7 @@ export async function searchByTagTitles(tagTitles) {
         .select('tutorials-tutorial_tags.tutorialId')
         .from('tutorial_tags')
         .join('tutorials-tutorial_tags', 'tutorials-tutorial_tags.tutorialTagId', 'tutorial_tags.id')
-        .whereILike('tutorial_tags.title', `%${tagTitle}%`),
+        .whereILike('tutorial_tags.title', `%${escapeLikeWildcards(tagTitle)}%`),
     );
   }
 

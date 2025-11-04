@@ -14,6 +14,7 @@ import {
   compareDtos,
   compareDtosLists,
 } from './migration-from-airtable.js';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 const model = 'challenge';
 
@@ -69,7 +70,7 @@ export async function filter(params = {}) {
     selectChallenges()
       .join('localized_challenges', 'localized_challenges.id', 'challenges.id')
       .whereIn('challenges.id', params.filter.ids)
-      .orWhereILike('localized_challenges.embedUrl', `%${params.filter.search}%`)
+      .orWhereILike('localized_challenges.embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`)
       .limit(params.page?.size)
       .orderBy('id'),
   ]);

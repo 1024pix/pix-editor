@@ -6,6 +6,7 @@ import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import { areArrayEquals, areNullableValuesEqual, compareDtosLists, compareDtos } from './migration-from-airtable.js';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 const TABLE_NAME = 'skills';
 const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
@@ -142,7 +143,7 @@ export async function search(params) {
   let query = selectSkills().whereRaw("?? || coalesce(??::varchar, '') ilike ?", [
     'tubes.name',
     'skills.level',
-    `${params.filter.name}%`,
+    `${escapeLikeWildcards(params.filter.name)}%`,
   ]);
   if (params.sort) {
     const orderBySqlAndParams = params.sort.map(([field, direction]) => {

@@ -3,6 +3,7 @@ import { tagDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import { compareDtos, compareDtosLists } from './migration-from-airtable.js';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 const TABLE_NAME = 'tutorial_tags';
 
@@ -50,7 +51,7 @@ export async function searchByTitle(title) {
     knex
       .select('*')
       .from(TABLE_NAME)
-      .whereILike('title', `%${title}%`)
+      .whereILike('title', `%${escapeLikeWildcards(title)}%`)
       .orderByRaw('?? collate ??', ['title', 'fr-x-icu'])
       .limit(4),
   ]);
