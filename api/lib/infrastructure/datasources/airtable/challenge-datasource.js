@@ -160,6 +160,7 @@ export const challengeDatasource = datasource.extend({
     const options = {
       fields: this.usedFields,
       filterByFormula: `FIND(${stringValue(params.filter.search)}, LOWER(CONCATENATE({Embed URL})))`,
+      sort: [{ field: 'updated_at', direction: 'desc' }],
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
       options.filterByFormula =
