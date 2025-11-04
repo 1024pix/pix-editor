@@ -73,7 +73,9 @@ export async function update(request, h) {
     throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, {
+    baseUrl: getBaseUrl(request),
+  });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 

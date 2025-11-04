@@ -13,7 +13,6 @@ import {
   updateChallenge,
 } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { NotFoundError } from '../../domain/errors.js';
 
 const challengeIdType = Joi.string()
   .pattern(/^(rec|challenge)[a-zA-Z0-9]+$/)
@@ -47,7 +46,12 @@ export async function register(server) {
           const params = extractParameters(request.query, {
             page: { size: 100 },
           });
-          const challenges = await challengeRepository.filter(params);
+          let challenges;
+          if (params.filter?.ids) {
+            challenges = await challengeRepository.getMany(params.filter.ids);
+          } else {
+            challenges = await challengeRepository.filter(params);
+          }
           return challengeSerializer.serialize(challenges);
         },
       },
@@ -63,12 +67,8 @@ export async function register(server) {
         },
         handler: async function (request) {
           const challengeId = request.params.id;
-          const params = { filter: { ids: [challengeId] } };
-          const challenges = await challengeRepository.filter(params);
-          if (challenges.length === 0) {
-            return new NotFoundError();
-          }
-          return challengeSerializer.serialize(challenges[0]);
+          const challenge = await challengeRepository.get(challengeId);
+          return challengeSerializer.serialize(challenge);
         },
       },
     },

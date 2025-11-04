@@ -40,6 +40,11 @@ describe('Integration | Service | update pix api release cache', function () {
             id: 'challengeIdA',
             locales: ['fr'],
             skillId: 'skill1',
+            competenceId: 'competence1',
+            files: [
+              { fileId: 'airtableAttachmentIdA', localizedChallengeId: 'challengeIdA' },
+              { fileId: 'airtableAttachmentIdB', localizedChallengeId: 'challengeIdA' },
+            ],
           });
           const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -54,6 +59,23 @@ describe('Integration | Service | update pix api release cache', function () {
             challengeId: 'challengeIdA',
             locale: 'fr',
           });
+          const attachments = [
+            {
+              id: 'airtableAttachmentIdA',
+              type: Attachment.TYPES.ILLUSTRATION,
+              url: 'http://url-illustration.com',
+              challengeId: 'challengeIdA',
+              airtableChallengeId: 'challengeAirtableIdA',
+            },
+            {
+              id: 'airtableAttachmentIdB',
+              type: Attachment.TYPES.ATTACHMENT,
+              url: 'http://url-piecejointe.com',
+              challengeId: 'challengeIdA',
+              airtableChallengeId: 'challengeAirtableIdA',
+            },
+          ].map(domainBuilder.buildAttachmentDatasourceObject);
+          attachments.map(databaseBuilder.factory.buildAttachment);
           await databaseBuilder.commit();
           const airtableGetChallengeScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Epreuves')
@@ -64,27 +86,15 @@ describe('Integration | Service | update pix api release cache', function () {
             .reply(200, {
               records: [airtableChallenge],
             });
-          const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdA',
-            type: Attachment.TYPES.ILLUSTRATION,
-            url: 'http://url-illustration.com',
-            challengeId: 'challengeIdA',
-            airtableChallengeId: 'challengeAirtableIdA',
-          });
-          const airtableAttachmentB = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdB',
-            type: Attachment.TYPES.ATTACHMENT,
-            url: 'http://url-piecejointe.com',
-            challengeId: 'challengeIdA',
-            airtableChallengeId: 'challengeAirtableIdA',
-          });
           const airtableFindAttachmentsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Attachments')
             .query({
               filterByFormula: 'OR({localizedChallengeId} = "challengeIdA")',
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: [airtableAttachmentA, airtableAttachmentB] });
+            .reply(200, {
+              records: attachments.map(airtableBuilder.factory.buildAttachment),
+            });
           const pixApiToken = 'secret';
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
@@ -97,7 +107,7 @@ describe('Integration | Service | update pix api release cache', function () {
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
-              competenceId: 'recsvLz0W2ShyfD63',
+              competenceId: 'competence1',
               delta: 0.2,
               embedUrl: null,
               embedTitle: '',
@@ -155,6 +165,11 @@ describe('Integration | Service | update pix api release cache', function () {
             id: 'challengeIdA',
             locales: ['fr', 'es'],
             skillId: 'skill1',
+            competenceId: 'competence1',
+            files: [
+              { fileId: 'airtableAttachmentIdA', localizedChallengeId: 'challengeIdA_ES' },
+              { fileId: 'airtableAttachmentIdB', localizedChallengeId: 'challengeIdA_ES' },
+            ],
           });
           const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -174,6 +189,23 @@ describe('Integration | Service | update pix api release cache', function () {
             challengeId: 'challengeIdA',
             locale: 'es',
           });
+          const attachments = [
+            {
+              id: 'airtableAttachmentIdA',
+              type: Attachment.TYPES.ILLUSTRATION,
+              url: 'http://url-illustration.com',
+              challengeId: 'challengeIdA',
+              localizedChallengeId: 'challengeIdA_ES',
+            },
+            {
+              id: 'airtableAttachmentIdB',
+              type: Attachment.TYPES.ATTACHMENT,
+              url: 'http://url-piecejointe.com',
+              challengeId: 'challengeIdA',
+              localizedChallengeId: 'challengeIdA_ES',
+            },
+          ].map(domainBuilder.buildAttachmentDatasourceObject);
+          attachments.forEach(databaseBuilder.factory.buildAttachment);
           await databaseBuilder.commit();
           const airtableGetChallengeScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Epreuves')
@@ -184,25 +216,13 @@ describe('Integration | Service | update pix api release cache', function () {
             .reply(200, {
               records: [airtableChallenge],
             });
-          const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdA',
-            type: Attachment.TYPES.ILLUSTRATION,
-            url: 'http://url-illustration.com',
-            localizedChallengeId: 'challengeIdA_ES',
-          });
-          const airtableAttachmentB = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdB',
-            type: Attachment.TYPES.ATTACHMENT,
-            url: 'http://url-piecejointe.com',
-            localizedChallengeId: 'challengeIdA_ES',
-          });
           const airtableFindAttachmentsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Attachments')
             .query({
               filterByFormula: 'OR({localizedChallengeId} = "challengeIdA_ES")',
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: [airtableAttachmentA, airtableAttachmentB] });
+            .reply(200, { records: attachments.map(airtableBuilder.factory.buildAttachment) });
           const pixApiToken = 'secret';
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
@@ -215,7 +235,7 @@ describe('Integration | Service | update pix api release cache', function () {
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
-              competenceId: 'recsvLz0W2ShyfD63',
+              competenceId: 'competence1',
               delta: 0.2,
               embedUrl: null,
               embedTitle: '',
@@ -293,6 +313,11 @@ describe('Integration | Service | update pix api release cache', function () {
             id: 'challengeIdA',
             locales: ['fr'],
             skillId: 'skill1',
+            competenceId: 'competence1',
+            files: [
+              { fileId: 'airtableAttachmentIdA', localizedChallengeId: 'challengeIdA' },
+              { fileId: 'airtableAttachmentIdB', localizedChallengeId: 'challengeIdA' },
+            ],
           });
           const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -307,6 +332,23 @@ describe('Integration | Service | update pix api release cache', function () {
             challengeId: 'challengeIdA',
             locale: 'fr',
           });
+          const attachments = [
+            {
+              id: 'airtableAttachmentIdA',
+              type: Attachment.TYPES.ILLUSTRATION,
+              url: 'http://url-illustration.com',
+              challengeId: 'challengeIdA',
+              airtableChallengeId: 'challengeAirtableIdA',
+            },
+            {
+              id: 'airtableAttachmentIdB',
+              type: Attachment.TYPES.ATTACHMENT,
+              url: 'http://url-piecejointe.com',
+              challengeId: 'challengeIdA',
+              airtableChallengeId: 'challengeAirtableIdA',
+            },
+          ].map(domainBuilder.buildAttachmentDatasourceObject);
+          attachments.forEach(databaseBuilder.factory.buildAttachment);
           await databaseBuilder.commit();
           const airtableGetChallengeScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Epreuves')
@@ -317,27 +359,13 @@ describe('Integration | Service | update pix api release cache', function () {
             .reply(200, {
               records: [airtableChallenge],
             });
-          const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdA',
-            type: Attachment.TYPES.ILLUSTRATION,
-            url: 'http://url-illustration.com',
-            challengeId: 'challengeIdA',
-            airtableChallengeId: 'challengeAirtableIdA',
-          });
-          const airtableAttachmentB = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdB',
-            type: Attachment.TYPES.ATTACHMENT,
-            url: 'http://url-piecejointe.com',
-            challengeId: 'challengeIdA',
-            airtableChallengeId: 'challengeAirtableIdA',
-          });
           const airtableFindAttachmentsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Attachments')
             .query({
               filterByFormula: 'OR({localizedChallengeId} = "challengeIdA")',
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: [airtableAttachmentA, airtableAttachmentB] });
+            .reply(200, { records: attachments.map(airtableBuilder.factory.buildAttachment) });
           const pixApiToken = 'secret';
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
@@ -350,7 +378,7 @@ describe('Integration | Service | update pix api release cache', function () {
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
-              competenceId: 'recsvLz0W2ShyfD63',
+              competenceId: 'competence1',
               delta: 0.2,
               embedUrl: null,
               embedTitle: '',
@@ -407,6 +435,11 @@ describe('Integration | Service | update pix api release cache', function () {
             id: 'challengeIdA',
             locales: ['fr', 'es'],
             skillId: 'skill1',
+            competenceId: 'competence1',
+            files: [
+              { fileId: 'airtableAttachmentIdA', localizedChallengeId: 'challengeIdA_ES' },
+              { fileId: 'airtableAttachmentIdB', localizedChallengeId: 'challengeIdA_ES' },
+            ],
           });
           const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
           databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -426,6 +459,23 @@ describe('Integration | Service | update pix api release cache', function () {
             challengeId: 'challengeIdA',
             locale: 'es',
           });
+          const attachments = [
+            {
+              id: 'airtableAttachmentIdA',
+              type: Attachment.TYPES.ILLUSTRATION,
+              url: 'http://url-illustration.com',
+              challengeId: 'challengeIdA',
+              localizedChallengeId: 'challengeIdA_ES',
+            },
+            {
+              id: 'airtableAttachmentIdB',
+              type: Attachment.TYPES.ATTACHMENT,
+              url: 'http://url-piecejointe.com',
+              challengeId: 'challengeIdA',
+              localizedChallengeId: 'challengeIdA_ES',
+            },
+          ].map(domainBuilder.buildAttachmentDatasourceObject);
+          attachments.forEach(databaseBuilder.factory.buildAttachment);
           await databaseBuilder.commit();
           const airtableGetChallengeScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Epreuves')
@@ -436,25 +486,13 @@ describe('Integration | Service | update pix api release cache', function () {
             .reply(200, {
               records: [airtableChallenge],
             });
-          const airtableAttachmentA = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdA',
-            type: Attachment.TYPES.ILLUSTRATION,
-            url: 'http://url-illustration.com',
-            localizedChallengeId: 'challengeIdA_ES',
-          });
-          const airtableAttachmentB = airtableBuilder.factory.buildAttachment({
-            id: 'airtableAttachmentIdB',
-            type: Attachment.TYPES.ATTACHMENT,
-            url: 'http://url-piecejointe.com',
-            localizedChallengeId: 'challengeIdA_ES',
-          });
           const airtableFindAttachmentsScope = nock('https://api.airtable.com')
             .get('/v0/airtableBaseValue/Attachments')
             .query({
               filterByFormula: 'OR({localizedChallengeId} = "challengeIdA_ES")',
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: [airtableAttachmentA, airtableAttachmentB] });
+            .reply(200, { records: attachments.map(airtableBuilder.factory.buildAttachment) });
           const pixApiToken = 'secret';
           nock('https://some-api-base-url.fr')
             .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
@@ -467,7 +505,7 @@ describe('Integration | Service | update pix api release cache', function () {
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
-              competenceId: 'recsvLz0W2ShyfD63',
+              competenceId: 'competence1',
               delta: 0.2,
               embedUrl: null,
               embedTitle: '',
@@ -1177,10 +1215,13 @@ describe('Integration | Service | update pix api release cache', function () {
         // given
         const tube = domainBuilder.buildTube({ thematicId: 'thematic1', skillIds: ['skill1'] });
         const challenge = domainBuilder.buildChallengeDatasourceObject({
+          id: 'challenge1',
           skillId: 'skill1',
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           status: Challenge.STATUSES.VALIDE,
           responsive: Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE,
+          competenceId: 'competence1',
+          files: [{ fileId: 'file1', localizedChallengeId: 'challenge1' }],
         });
         const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
 
@@ -1196,6 +1237,12 @@ describe('Integration | Service | update pix api release cache', function () {
           challengeId: challenge.id,
           locale: challenge.locales[0],
         });
+        const attachment = domainBuilder.buildAttachmentDatasourceObject({
+          id: 'file1',
+          localizedChallengeId: 'challenge1',
+          challengeId: 'challenge1',
+        });
+        databaseBuilder.factory.buildAttachment(attachment);
 
         const airtableChallengesScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Epreuves')

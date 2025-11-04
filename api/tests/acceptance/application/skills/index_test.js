@@ -42,6 +42,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.PERIME,
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoPerime);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -57,6 +59,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.PERIME,
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoPerimeDecliPerime);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -72,6 +76,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.PROPOSE,
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoPropose);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -87,6 +93,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.PROPOSE,
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoProposeDecliPropose);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -102,6 +110,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.ARCHIVE,
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoArchive);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -117,6 +127,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.ARCHIVE,
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoArchiveDecliArchive);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -132,6 +144,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.VALIDE,
         skillId,
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoValide);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -155,6 +169,8 @@ describe('Application | Route | Skills', () => {
         status: Challenge.STATUSES.VALIDE,
         skillId,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        competenceId: 'competence1',
+        files: [],
       });
       databaseBuilder.factory.buildChallenge(challengeProtoValideDecliValide);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -1872,7 +1888,8 @@ describe('Application | Route | Skills', () => {
         locales: ['fr'],
         skillId: airtableSkillToClone.fields['id persistant'],
         skills: [airtableSkillToClone.id],
-        competenceId: 'recCompetence123',
+        competenceId: 'competence1',
+        files: [{ fileId: 'attachmentId', localizedChallengeId: protoId }],
       });
       const validatedChallengeProtoToClone = airtableBuilder.factory.buildChallenge(
         validatedDomainChallengeProtoToClone,

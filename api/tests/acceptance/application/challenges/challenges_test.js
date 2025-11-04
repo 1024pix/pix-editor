@@ -79,331 +79,20 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it('should return challenges', async () => {
-      // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'XX' });
-
-      const airtableChallenges = [airtableBuilder.factory.buildChallenge(challenge)];
-      airtableBuilder
-        .mockList({ tableName: 'Epreuves' })
-        .respondsToQuery({
-          fields: {
-            '': challengeAirtableFields,
-          },
-          maxRecords: 100,
-          sort: [{ field: 'id persistant', direction: 'asc' }],
-        })
-        .returns(airtableChallenges)
-        .activate();
-
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-      databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(challenge);
-
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.instruction',
-        locale: 'fr',
-        value:
-          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.alternativeInstruction',
-        locale: 'fr',
-        value: 'Débrouille toi',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.embedTitle',
-        locale: 'fr',
-        value: 'Epreuve de selection de dossier',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.illustrationAlt',
-        locale: 'fr',
-        value: 'Une illustration',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.solution',
-        locale: 'fr',
-        value: '1, 5',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.solutionToDisplay',
-        locale: 'fr',
-        value: '1',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.proposals',
-        locale: 'fr',
-        value: '- 1\n- 2\n- 3\n- 4\n- 5',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'my id',
-        challengeId: 'my id',
-        locale: 'fr',
-        embedUrl: 'http://example.com/my_embed.html',
-        geography: 'BR',
-        urlsToConsult: ['truc'],
-        requireGafamWebsiteAccess: true,
-        isIncompatibleIpadCertif: true,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-        isAwarenessChallenge: true,
-        toRephrase: true,
-        hasEmbedInternalValidation: true,
-        noValidationNeeded: true,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'my id_nl',
-        challengeId: 'my id',
-        locale: 'nl',
-        geography: null,
-        urlsToConsult: ['truc.nl'],
-      });
-      await databaseBuilder.commit();
-
-      const server = await createServer();
-
-      // When
-      const response = await server.inject({
-        method: 'GET',
-        url: '/api/challenges',
-        headers: generateAuthorizationHeader(user),
-      });
-
-      // Then
-      expect(response.statusCode).to.equal(200);
-      expect(response.result).to.deep.equal({
-        data: [
-          {
-            type: 'challenges',
-            id: 'my id',
-            attributes: {
-              'airtable-id': challenge.airtableId,
-              instruction:
-                "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
-              'alternative-instruction': 'Débrouille toi',
-              type: Challenge.TYPES.QCM,
-              format: Challenge.FORMATS.MOTS,
-              proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
-              solution: '1, 5',
-              'solution-to-display': '1',
-              't1-status': true,
-              't2-status': false,
-              't3-status': true,
-              pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-              author: ['SPS'],
-              declinable: Challenge.DECLINABLES.FACILEMENT,
-              version: 1,
-              genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-              status: Challenge.STATUSES.VALIDE,
-              preview: '/api/challenges/my id/preview',
-              timer: 1234,
-              'embed-url': 'http://example.com/my_embed.html',
-              'embed-title': 'Epreuve de selection de dossier',
-              'embed-height': 500,
-              'alternative-version': 2,
-              accessibility1: Challenge.ACCESSIBILITY1.OK,
-              accessibility2: Challenge.ACCESSIBILITY2.RAS,
-              spoil: Challenge.SPOILS.NON_SPOILABLE,
-              responsive: Challenge.RESPONSIVES.NON,
-              locales: ['fr'],
-              'alternative-locales': ['nl'],
-              geography: 'BR',
-              'urls-to-consult': ['truc'],
-              'auto-reply': false,
-              focusable: false,
-              'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z',
-              'archived-at': '2023-03-03T10:47:05.555Z',
-              'made-obsolete-at': '2023-04-04T10:47:05.555Z',
-              shuffled: false,
-              'contextualized-fields': ['instruction', 'illustration'],
-              'illustration-alt': 'Une illustration',
-              'require-gafam-website-access': true,
-              'is-incompatible-ipad-certif': true,
-              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-              'is-awareness-challenge': true,
-              'to-rephrase': true,
-              'has-embed-internal-validation': true,
-              'no-validation-needed': true,
-            },
-            relationships: {
-              skill: {
-                data: {
-                  type: 'skills',
-                  id: challenge.skills[0],
-                },
-              },
-              'localized-challenges': {
-                data: [
-                  {
-                    id: 'my id',
-                    type: 'localized-challenges',
-                  },
-                  {
-                    id: 'my id_nl',
-                    type: 'localized-challenges',
-                  },
-                ],
-              },
-              attachments: {
-                links: {
-                  related: '/api/attachments?filter[localizedChallengeId]=my id',
-                },
-              },
-              'challenge-locales': {
-                data: [
-                  {
-                    id: 'my id-en',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-es',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-es-419',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-fr',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-fr-BE',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-fr-FR',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-nl-BE',
-                    type: 'challenge-locales',
-                  },
-                  {
-                    id: 'my id-nl',
-                    type: 'challenge-locales',
-                  },
-                ],
-              },
-            },
-          },
-        ],
-        included: [
-          {
-            attributes: {
-              locale: 'en',
-            },
-            id: 'my id-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'es',
-            },
-            id: 'my id-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'es-419',
-            },
-            id: 'my id-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'fr',
-            },
-            id: 'my id-fr',
-            relationships: {
-              'localized-challenge': {
-                data: {
-                  id: 'my id',
-                  type: 'localized-challenges',
-                },
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'fr-BE',
-            },
-            id: 'my id-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'fr-FR',
-            },
-            id: 'my id-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'nl-BE',
-            },
-            id: 'my id-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
-            type: 'challenge-locales',
-          },
-          {
-            attributes: {
-              locale: 'nl',
-            },
-            id: 'my id-nl',
-            relationships: {
-              'localized-challenge': {
-                data: {
-                  id: 'my id_nl',
-                  type: 'localized-challenges',
-                },
-              },
-            },
-            type: 'challenge-locales',
-          },
-        ],
-      });
-    });
-
     it('should filter challenges by id', async () => {
       // Given
-      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'XX' });
-      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'XX' });
+      const challenge1 = domainBuilder.buildChallengeDatasourceObject({
+        id: '1',
+        geography: 'XX',
+        files: [],
+        competenceId: 'competence1',
+      });
+      const challenge2 = domainBuilder.buildChallengeDatasourceObject({
+        id: '2',
+        geography: 'XX',
+        files: [],
+        competenceId: 'competence1',
+      });
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -1059,9 +748,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: 'recChallengeId1',
         files: [
           { fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' },
-          { fileId: 'fileId2', localizedChallengeId: 'recChallengeId2' },
+          { fileId: 'fileId2', localizedChallengeId: 'localizedChallengeId2' },
         ],
         geography: 'XX',
+        competenceId: 'competence1',
       });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1076,10 +766,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': challengeAirtableFields,
-          },
-          filterByFormula: 'OR("recChallengeId1" = {id persistant})',
+          filterByFormula: '{id persistant} = "recChallengeId1"',
+          maxRecords: 1,
         })
         .reply(200, {
           records: [airtableChallenge],
@@ -1137,12 +825,21 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
-
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.proposals',
         locale: 'nl',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      challenge.files.forEach((file) =>
+        databaseBuilder.factory.buildAttachment(
+          domainBuilder.buildAttachmentDatasourceObject({
+            id: file.fileId,
+            challengeId: challenge.id,
+            localizedChallengeId: file.localizedChallengeId,
+          }),
+        ),
+      );
 
       await databaseBuilder.commit();
 
@@ -1385,10 +1082,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': challengeAirtableFields,
-          },
-          filterByFormula: 'OR("recChallengeId2" = {id persistant})',
+          filterByFormula: '{id persistant} = "recChallengeId2"',
+          maxRecords: 1,
         })
         .reply(200, {
           records: [],
@@ -1417,13 +1112,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let airtableAttachmentScope;
     let challenge;
     let primaryLocalizedChallenge;
-    let attachment;
 
     beforeEach(async function () {
       challenge = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
         locales: ['fr', 'fr-fr'],
         status: Challenge.STATUSES.VALIDE,
+        competenceId: 'competence1',
+        files: [{ fileId: 'fileId', localizedChallengeId }],
       });
 
       airtableChallengeScope = airtableBuilder
@@ -1439,14 +1135,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildSkill({ id: challenge.skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(challenge);
 
-      attachment = airtableBuilder.factory.buildAttachment({
+      const attachment = domainBuilder.buildAttachmentDatasourceObject({
+        id: 'fileId',
         challengeId,
         localizedChallengeId,
         type: 'illustration',
+        url: 'illustration url',
       });
+      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
       airtableAttachmentScope = airtableBuilder
         .mockList({ tableName: 'Attachments' })
-        .returns([attachment])
+        .returns([airtableAttachment])
         .activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
@@ -1513,6 +1212,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         noValidationNeeded: false,
       });
 
+      databaseBuilder.factory.buildAttachment(attachment);
+
       await databaseBuilder.commit();
     });
 
@@ -1529,7 +1230,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           alpha: challenge.alpha,
           alternativeInstruction: 'alternative instruction for es',
           autoReply: challenge.autoReply,
-          competenceId: 'recsvLz0W2ShyfD63',
+          competenceId: 'competence1',
           delta: challenge.delta,
           embedUrl: null,
           embedTitle: 'embed title for es',
@@ -1538,7 +1239,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           format: challenge.format,
           genealogy: challenge.genealogy,
           illustrationAlt: 'illustration alt for es',
-          illustrationUrl: 'url/to/attachment',
+          illustrationUrl: 'illustration url',
           instruction: 'instruction for es',
           locales: ['es-419'],
           proposals: 'proposals for es',

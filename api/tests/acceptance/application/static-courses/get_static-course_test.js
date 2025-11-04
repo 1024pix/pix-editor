@@ -63,12 +63,16 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       skillId: 'skillid1',
       status: 'status for challengeid1',
       locales: ['fr'],
+      files: [],
+      competenceId: 'competence1',
     });
     const challenge2 = domainBuilder.buildChallengeDatasourceObject({
       id: 'challengeid2',
       skillId: 'skillid2',
       status: 'status for challengeid2',
       locales: ['fr'],
+      files: [],
+      competenceId: 'competence1',
     });
 
     databaseBuilder.factory.buildChallenge(challenge1);

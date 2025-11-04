@@ -351,6 +351,15 @@ function buildTubesTranslations(tubeIds) {
 function buildChallengesTranslationsAndLocalizedChallenges(challenges) {
   for (const challenge of challenges) {
     buildChallengeTranslationsAndLocalizedChallenge(challenge, challenge.locales[0]);
+    challenge.files?.map(({ fileId, localizedChallengeId }) =>
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: fileId,
+          challengeId: challenge.id,
+          localizedChallengeId,
+        }),
+      ),
+    );
   }
 
   buildChallengeTranslationsAndLocalizedChallenge(challenges[0], 'nl-be', 'challengeNl');

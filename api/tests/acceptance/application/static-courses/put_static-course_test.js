@@ -44,10 +44,30 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-    const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid1', skillId: 'skillid1' });
-    const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid2', skillId: 'skillid2' });
-    const challenge3 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid3', skillId: 'skillid3' });
-    const challenge4 = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeid4', skillId: 'skillid4' });
+    const challenge1 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid1',
+      skillId: 'skillid1',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge2 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid2',
+      skillId: 'skillid2',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge3 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid3',
+      skillId: 'skillid3',
+      competenceId: 'competence1',
+      files: [],
+    });
+    const challenge4 = domainBuilder.buildChallengeDatasourceObject({
+      id: 'challengeid4',
+      skillId: 'skillid4',
+      competenceId: 'competence1',
+      files: [],
+    });
     const skill1 = domainBuilder.buildSkillDatasourceObject({
       id: challenge1.skillId,
       tubeId: 'tube1',
@@ -169,38 +189,14 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
 
     await databaseBuilder.commit();
-    const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid1',
-      skillId: 'skillid1',
-      status: 'status for challengeid1',
-      locales: ['fr'],
-    });
+    const airtableChallenge1 = airtableBuilder.factory.buildChallenge(challenge1);
     const airtableSkill1 = airtableBuilder.factory.buildSkill(skill1);
-    const airtableChallenge2 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid2',
-      skillId: 'skillid2',
-      status: 'status for challengeid2',
-      locales: ['fr'],
-    });
-    const airtableSkill2 = airtableBuilder.factory.buildSkill(skill2);
-    const airtableChallenge3 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid3',
-      skillId: 'skillid3',
-      status: 'status for challengeid3',
-      locales: ['fr'],
-    });
+    const airtableChallenge3 = airtableBuilder.factory.buildChallenge(challenge3);
     const airtableSkill3 = airtableBuilder.factory.buildSkill(skill3);
-    const airtableChallenge4 = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid4',
-      skillId: 'skillid4',
-      status: 'status for challengeid4',
-      locales: ['fr'],
-    });
-    const airtableSkill4 = airtableBuilder.factory.buildSkill(skill4);
     // TODO replace by nock to assert airtable query parameters
     airtableBuilder.mockLists({
-      challenges: [airtableChallenge1, airtableChallenge2, airtableChallenge3, airtableChallenge4],
-      skills: [airtableSkill1, airtableSkill2, airtableSkill3, airtableSkill4],
+      challenges: [airtableChallenge1, airtableChallenge3],
+      skills: [airtableSkill1, airtableSkill3],
     });
   });
 
@@ -288,7 +284,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             index: 0,
             instruction: 'instruction for challengeid3',
             'skill-name': '@tube3',
-            status: 'status for challengeid3',
+            status: 'validé',
             'preview-url': 'http://host.site/api/challenges/challengeid3/preview',
           },
         },
@@ -299,7 +295,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             index: 1,
             instruction: 'instruction for challengeid1',
             'skill-name': '@tube1',
-            status: 'status for challengeid1',
+            status: 'validé',
             'preview-url': 'http://host.site/api/challenges/challengeid1/preview',
           },
         },
@@ -310,7 +306,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             index: 2,
             instruction: 'instruction for challengeidnl1',
             'skill-name': '@tube1',
-            status: 'status for challengeid1',
+            status: 'validé',
             'preview-url': 'http://host.site/api/challenges/challengeid1/preview?locale=nl',
           },
         },
