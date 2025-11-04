@@ -147,7 +147,7 @@ export const challengeDatasource = datasource.extend({
         archived_at: model.archivedAt,
         made_obsolete_at: model.madeObsoleteAt,
         shuffled: model.shuffled,
-        contextualizedFields: model.contextualizedFields,
+        contextualizedFields: model.contextualizedFields ?? [],
       },
     };
     if (model.airtableId) {
@@ -160,6 +160,7 @@ export const challengeDatasource = datasource.extend({
     const options = {
       fields: this.usedFields,
       filterByFormula: `FIND(${stringValue(params.filter.search)}, LOWER(CONCATENATE({Embed URL})))`,
+      sort: [{ field: 'updated_at', direction: 'desc' }],
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
       options.filterByFormula =

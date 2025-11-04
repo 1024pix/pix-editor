@@ -72,7 +72,7 @@ export async function filter(params = {}) {
       .whereIn('challenges.id', params.filter.ids)
       .orWhereILike('localized_challenges.embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`)
       .limit(params.page?.size)
-      .orderBy('id'),
+      .orderBy('updatedAt', 'desc'),
   ]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
