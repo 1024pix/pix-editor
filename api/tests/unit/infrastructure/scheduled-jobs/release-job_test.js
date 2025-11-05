@@ -75,7 +75,9 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should not send a slack success notification if slack notification is is globally disabled', async function () {
         // given
-        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          enable: false,
+        });
 
         // When
         await releaseJobProcessor({ data: { slackNotification: true } });
@@ -86,7 +88,10 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should not send a slack success notification if slack notification is locally disabled', async function () {
         // given
-        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(true);
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          webhookUrl: 'http://webook.url',
+          enable: true,
+        });
 
         // When
         await releaseJobProcessor({ data: { slackNotification: false } });
@@ -95,8 +100,12 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
-      it('should start the upload translation job to  phrase when is finished', async () => {
+      it('should start the upload translation job to phrase when is finished', async () => {
         // given
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          webhookUrl: 'http://webook.url',
+          enable: true,
+        });
         const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
 
         // when
@@ -117,6 +126,10 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should log the error', async () => {
         // given
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          webhookUrl: 'http://webook.url',
+          enable: true,
+        });
         const errorLogStub = vi.spyOn(logger, 'error');
 
         // when
@@ -145,7 +158,9 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should not send a slack failure notification if Slack notification is disabled', async function () {
         // given
-        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
+          enable: false,
+        });
 
         // When
         await releaseJobProcessor({ data: {} });

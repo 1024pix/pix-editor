@@ -1,4 +1,4 @@
-import { beforeEach, describe, describe as context, expect, it, afterEach, vi } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
 
 import {
@@ -720,11 +720,6 @@ describe('Application | Route | Tubes', () => {
           .reply(200, { records: [createdAirtableTube] });
 
         vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('tube3');
-      });
-
-      afterEach(async () => {
-        await knex('tubes').delete();
-        await knex('translations').delete();
       });
 
       it('should respond with status 201 and created thematic', async () => {

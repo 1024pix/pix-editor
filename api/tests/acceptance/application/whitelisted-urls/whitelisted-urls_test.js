@@ -15,7 +15,6 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
 
   afterEach(function () {
     vi.useRealTimers();
-    return knex('whitelisted_urls').del();
   });
 
   describe('GET /whitelisted-urls', () => {

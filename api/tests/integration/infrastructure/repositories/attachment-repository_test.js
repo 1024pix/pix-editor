@@ -1,4 +1,4 @@
-import { afterEach, describe, describe as context, expect, it, vi, beforeEach } from 'vitest';
+import { describe, describe as context, expect, it, vi, beforeEach } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
@@ -325,10 +325,6 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#createBatch', () => {
-    afterEach(async () => {
-      await knex('attachments').delete();
-    });
-
     it('should create several attachments in airtable and the links to the localized challenge', async () => {
       // given
       const attachmentA = domainBuilder.buildAttachment({
@@ -496,10 +492,6 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(async () => {
-      await knex('attachments').delete();
-    });
-
     it('should create an attachment in airtable with relationship to airtable challenge and create the link to the localized challenge', async () => {
       // given
       const attachment = domainBuilder.buildAttachment({

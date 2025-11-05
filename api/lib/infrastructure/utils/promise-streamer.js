@@ -19,7 +19,7 @@ function getWritableStream() {
   return writableStream;
 }
 
-export function promiseStreamer({ promise, writableStream = getWritableStream(), loggingScope }) {
+export function promiseStreamer({ promise, writableStream = getWritableStream(), loggingScope, onFinish }) {
   let logger = genericLogger;
   if (loggingScope) {
     logger = child('promisestream', { event: loggingScope });
@@ -29,9 +29,11 @@ export function promiseStreamer({ promise, writableStream = getWritableStream(),
   }, 1000);
   writableStream.on('error', (err) => {
     logger.error(`WritableStream error: ${err}`);
+    onFinish?.();
   });
   writableStream.on('finish', () => {
     logger.info('WritableStream close');
+    onFinish?.();
   });
   writableStream.on('pipe', () => {
     logger.info('WritableStream pipe');

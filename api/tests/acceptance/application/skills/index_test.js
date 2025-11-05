@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
 
@@ -1307,12 +1307,6 @@ describe('Application | Route | Skills', () => {
         .reply(200);
     });
 
-    afterEach(async () => {
-      await knex('skills-tutorials').delete();
-      await knex('skills').delete();
-      await knex('translations').delete();
-    });
-
     it('should respond with status 201 and created skill', async () => {
       // given
       const server = await createServer();
@@ -2229,15 +2223,6 @@ describe('Application | Route | Skills', () => {
       vi.spyOn(idGenerator, 'generateNewId')
         .mockReturnValueOnce('clonedAcquisId')
         .mockReturnValueOnce('clonedChallengeId');
-    });
-
-    afterEach(async () => {
-      await knex('skills-tutorials').delete();
-      await knex('attachments').delete();
-      await knex('localized_challenges').delete();
-      await knex('challenges').delete();
-      await knex('skills').delete();
-      await knex('translations').delete();
     });
 
     it('should respond with status 302 with cloned skill redirection', async () => {

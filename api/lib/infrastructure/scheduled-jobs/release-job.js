@@ -4,16 +4,19 @@ import { logger } from '../logger.js';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-export const queue = createQueue('create-release-queue');
 const cjsFile = __dirname + '/release-job-processor.cjs';
 const esmFile = __dirname + '/release-job-processor.js';
-if (process.env.NODE_ENV === 'test') {
-  import(esmFile).then((module) => {
-    queue.process(module.default);
-  });
-} else {
-  queue.process(cjsFile);
+
+export function createReleaseJobQueue() {
+  const queue = createQueue('create-release-queue');
+  if (process.env.NODE_ENV === 'test') {
+    import(esmFile).then((module) => {
+      queue.process(module.default);
+    });
+  } else {
+    queue.process(cjsFile);
+  }
+  return queue;
 }
 
 const releaseJobOptions = {
@@ -27,14 +30,15 @@ const releaseJobOptions = {
   },
 };
 
-export function schedule() {
-  if (!_isScheduledReleaseEnabled()) {
+export function scheduleReleaseJobQueue() {
+  const isScheduledReleaseEnabled = config.scheduledJobs.createReleaseTime && config.scheduledJobs.redisUrl;
+
+  if (!isScheduledReleaseEnabled) {
     logger.info('Scheduled release is not enabled - check `CREATE_RELEASE_TIME` and `REDIS_URL` variables');
     return;
   }
-  queue.add({}, releaseJobOptions);
-}
 
-function _isScheduledReleaseEnabled() {
-  return config.scheduledJobs.createReleaseTime && config.scheduledJobs.redisUrl;
+  const queue = createReleaseJobQueue();
+  queue.add({}, releaseJobOptions);
+  return queue;
 }

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, beforeEach } from 'vitest';
+import { describe, expect, it, beforeEach } from 'vitest';
 import FormData from 'form-data';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
@@ -628,10 +628,6 @@ describe('Acceptance | Controller | translations-controller', () => {
     });
   });
   describe('PATCH /translations.csv - import translations from a CSV file', () => {
-    afterEach(async () => {
-      await knex('translations').delete();
-    });
-
     it('should update the translations', async () => {
       // Given
       const user = databaseBuilder.factory.buildAdminUser();

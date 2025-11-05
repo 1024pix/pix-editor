@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom';
 import Joi from 'joi';
 import { releaseRepository } from '../infrastructure/repositories/index.js';
-import { queue as createReleaseQueue } from '../infrastructure/scheduled-jobs/release-job.js';
 import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { SCOPES } from '../infrastructure/logger.js';
+import { createReleaseJobQueue } from '../infrastructure/scheduled-jobs/release-job.js';
 
 const releaseIdType = Joi.number().greater(-2147483648).less(2147483647).required();
 
@@ -32,7 +32,8 @@ export async function register(server) {
           },
         ],
         handler: async function () {
-          const job = await createReleaseQueue.add({ slackNotification: true });
+          const releaseJobQueue = createReleaseJobQueue();
+          const job = await releaseJobQueue.add({ slackNotification: true });
           const promise = async () => {
             const releaseId = await job.finished();
             return releaseRepository.getRelease(releaseId);
@@ -40,6 +41,7 @@ export async function register(server) {
           return promiseStreamer({
             promise: promise(),
             loggingScope: SCOPES.RELEASE,
+            onFinish: () => releaseJobQueue.close(),
           });
         },
       },

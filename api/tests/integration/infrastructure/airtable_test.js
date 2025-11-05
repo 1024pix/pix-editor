@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import airtable from 'airtable';
 import { airtableBuilder } from '../../test-helper.js';
 import { findRecords } from '../../../lib/infrastructure/airtable.js';
@@ -12,10 +12,6 @@ function assertAirtableRecordToEqualExpectedJson(actualRecord, expectedRecordJso
 }
 
 describe('Integration | Infrastructure | airtable', () => {
-  afterEach(() => {
-    airtableBuilder.cleanAll();
-  });
-
   describe('#findRecords', () => {
     const tableName = 'Tests';
     const airtableRecordsJson = [

@@ -240,10 +240,6 @@ describe('Acceptance | Route | areas', () => {
   });
 
   describe('POST /areas', () => {
-    afterEach(async () => {
-      await knex.delete().from('areas');
-    });
-
     describe('when user is NOT admin', () => {
       it('should respond with status 403', async () => {
         // given

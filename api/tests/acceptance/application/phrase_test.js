@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
 import { Buffer } from 'node:buffer';
@@ -435,11 +435,6 @@ describe('Acceptance | Controller | phrase-controller', () => {
         { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' },
         { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' },
       ]);
-    });
-
-    afterEach(async () => {
-      await knex.delete().from('translations');
-      await knex.delete().from('localized_challenges');
     });
 
     it('should download the translations from phrase', async () => {

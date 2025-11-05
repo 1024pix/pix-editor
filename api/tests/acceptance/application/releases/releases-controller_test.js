@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, vi, afterEach } from 'vitest';
 import nock from 'nock';
 import {
   airtableBuilder,
@@ -1137,8 +1137,8 @@ describe('Acceptance | Controller | release-controller', () => {
       vi.spyOn(axios, 'post').mockResolvedValue();
     });
 
-    afterEach(function () {
-      return knex('releases').delete();
+    afterEach(async function () {
+      await knex('releases').delete();
     });
 
     context('nominal case', () => {

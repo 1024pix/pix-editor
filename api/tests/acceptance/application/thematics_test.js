@@ -650,11 +650,6 @@ describe('Application | Route | Thematics', () => {
         vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('thematic3');
       });
 
-      afterEach(async () => {
-        await knex('thematics').delete();
-        await knex('translations').delete();
-      });
-
       it('should respond with status 201 and created thematic', async () => {
         // given
         const server = await createServer();

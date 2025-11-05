@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import * as whitelistedUrlRepository from '../../../../lib/infrastructure/repositories/whitelisted-url-repository.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
@@ -212,10 +212,6 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
     });
   });
   describe('#save', function () {
-    afterEach(function () {
-      return knex('whitelisted_urls').del();
-    });
-
     it('should update the whitelisted url', async function () {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });

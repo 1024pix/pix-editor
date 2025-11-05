@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Airtable from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
@@ -1010,12 +1010,6 @@ describe('Integration | Repository | skill-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(async () => {
-      await knex('skills-tutorials').delete();
-      await knex('skills').delete();
-      await knex('translations').delete();
-    });
-
     it('should save new skill and translations', async () => {
       // given
       const skill = domainBuilder.buildSkill({

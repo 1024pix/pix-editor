@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
 import * as airtable from '../../../../lib/infrastructure/airtable.js';
@@ -2610,12 +2610,6 @@ describe('Integration | Repository | challenge-repository', () => {
   });
 
   describe('#createBatch', () => {
-    afterEach(async () => {
-      await knex('localized_challenges').delete();
-      await knex('challenges').delete();
-      await knex('translations').delete();
-    });
-
     it('should create several challenges in airtable and its localized challenges and translations in PG', async () => {
       // given
       const primaryLocalizedChallenge_challengeA = domainBuilder.buildLocalizedChallenge({
@@ -3213,11 +3207,6 @@ describe('Integration | Repository | challenge-repository', () => {
   });
 
   describe('#create', () => {
-    afterEach(async () => {
-      await knex.delete().from('localized_challenges');
-      await knex.delete().from('challenges');
-    });
-
     it('should create a challenge, its localized challenge primary and its translated attributes', async function () {
       // given
       const challengeToCreate_data = {

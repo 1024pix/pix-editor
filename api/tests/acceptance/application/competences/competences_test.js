@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import {
   airtableBuilder,
@@ -775,14 +775,6 @@ describe('Acceptance | Route | competences', () => {
         .reply(200);
 
       await databaseBuilder.commit();
-    });
-
-    afterEach(async () => {
-      await knex('skills').delete();
-      await knex('tubes').delete();
-      await knex('thematics').delete();
-      await knex('competences').delete();
-      await knex('translations').delete();
     });
 
     describe('when payload is NOT valid', () => {

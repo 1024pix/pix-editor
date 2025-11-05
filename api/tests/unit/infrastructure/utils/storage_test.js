@@ -17,7 +17,6 @@ describe('Unit | Infrastructure | Storage', () => {
     });
 
     afterEach(() => {
-      vi.restoreAllMocks();
       vi.useRealTimers();
     });
 

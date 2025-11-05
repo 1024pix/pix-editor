@@ -56,10 +56,6 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    afterEach(async function () {
-      await knex('attachments').delete();
-    });
-
     context('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given

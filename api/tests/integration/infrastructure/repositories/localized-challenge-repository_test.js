@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe as context, describe, expect, it } from 'vitest';
+import { beforeEach, describe as context, describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
@@ -155,10 +155,6 @@ describe('Integration | Repository | localized-challenge-repository', function (
   });
 
   context('#create', function () {
-    afterEach(async () => {
-      await knex('localized_challenges').delete();
-    });
-
     it('should create a localized challenge', async function () {
       // when
       await localizedChallengeRepository.create({

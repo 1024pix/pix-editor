@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { afterEach, describe, describe as context, expect, expectTypeOf, it } from 'vitest';
+import { describe, describe as context, expect, expectTypeOf, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 import {
   findAllMissions,
@@ -11,11 +11,6 @@ import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Integration | Repository | mission-repository', function () {
-  afterEach(async function () {
-    await knex('translations').delete();
-    await knex('missions').delete();
-  });
-
   describe('#get', function () {
     context('When mission does not exists', function () {
       it('should throw a NotFoundError', async function () {

@@ -1,11 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function () {
@@ -150,7 +144,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
 
   afterEach(function () {
     vi.useRealTimers();
-    return knex('static_courses').delete();
   });
 
   it('deactivates and returns the static course', async function () {
