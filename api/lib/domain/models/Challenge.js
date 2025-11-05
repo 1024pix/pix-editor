@@ -75,7 +75,7 @@ export class Challenge {
     this.t1Status = t1Status;
     this.t2Status = t2Status;
     this.t3Status = t3Status;
-    this.timer = timer;
+    this.timer = timer === 0 ? undefined : timer;
     this.type = type;
     this.updatedAt = updatedAt;
     this.validatedAt = validatedAt;
