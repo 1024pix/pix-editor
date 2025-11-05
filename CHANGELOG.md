@@ -1,5 +1,17 @@
 
 
+## v3.234.2 (05/11/2025)
+
+
+### :building_construction: Tech
+- [#1230](https://github.com/1024pix/pix-editor/pull/1230) [TECH] Bump to vitest 4.
+- [#1200](https://github.com/1024pix/pix-editor/pull/1200) [TECH] Ajout stylistic dans le front et les scripts (PIX-20125).
+
+### :bug: Correction
+- [#1235](https://github.com/1024pix/pix-editor/pull/1235) [BUGFIX] Warnings de comparaison sur les épreuves.
+- [#1234](https://github.com/1024pix/pix-editor/pull/1234) [BUGFIX] Warnings sur la double lecture des épreuves.
+- [#1232](https://github.com/1024pix/pix-editor/pull/1232) [BUGFIX] Warnings sur la double lecture des épreuves.
+
 ## v3.234.1 (04/11/2025)
 
 
