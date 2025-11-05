@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import { Attachment } from '../../domain/models/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areNullableValuesEqual, compareDtos } from './migration-from-airtable.js';
+import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 export async function get(id) {
   const [airtableDto, pgDto] = await Promise.all([
@@ -28,9 +28,15 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 }
 
 export async function listByLocalizedChallengeId(localizedChallengeId) {
-  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId);
-  if (!datasourceAttachments) return [];
-  return toDomainList(datasourceAttachments);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId),
+    knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId).orderBy('id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
+
+  if (!airtableDtos) return [];
+  return toDomainList(airtableDtos);
 }
 
 export async function createBatch(attachments) {
