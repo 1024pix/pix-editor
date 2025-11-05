@@ -17,8 +17,14 @@ export async function get(id) {
 }
 
 export async function list() {
-  const datasourceAttachments = await attachmentDatasource.list();
-  return toDomainList(datasourceAttachments);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    attachmentDatasource.list(),
+    knex.select('*').from('attachments').orderBy('id'),
+  ]);
+
+  compareDtosLists(airtableDtos, pgDtos, compareAttachmentDtos);
+
+  return toDomainList(airtableDtos);
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
