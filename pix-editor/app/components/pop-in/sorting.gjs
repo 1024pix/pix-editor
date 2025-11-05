@@ -9,7 +9,6 @@ import sortableItem from 'ember-sortable/modifiers/sortable-item';
 import _ from 'lodash';
 
 export default class PopInSortingComponent extends Component {
-
   get models() {
     return _.sortBy(this.args.model, 'index');
   }

@@ -4,13 +4,12 @@ import { module, test } from 'qunit';
 import CompetenceOverviewSkill from '../../../../components/competence-overview/competence-overview-skill';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | competence-overview | competence-overview-skill', function(hooks) {
-
+module('Integration | Component | competence-overview | competence-overview-skill', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let screen;
 
-  test('it should display a skill cell with validated Challenges on it', async function(assert) {
+  test('it should display a skill cell with validated Challenges on it', async function (assert) {
     // given
     const skillOverview = {
       id: 'skillOverviewId',
@@ -31,10 +30,9 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.queryByText('NR')).doesNotExist();
     const link = screen.getByRole('link', { name: '@skillOverviewName1 2 (2)' });
     assert.dom(link).hasClass('production-skill-overview-action--validated');
-
   });
 
-  test('it should display a skill cell with only proposed Challenges on it', async function(assert) {
+  test('it should display a skill cell with only proposed Challenges on it', async function (assert) {
     // given
     const skillOverview = {
       id: 'skillOverviewId',
@@ -56,7 +54,7 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(link).hasClass('production-skill-overview-action--proposed');
   });
 
-  test('it should display a skill cell with no challenges on it', async function(assert) {
+  test('it should display a skill cell with no challenges on it', async function (assert) {
     // given
     const skillOverview = {
       id: 'skillOverviewId',
@@ -78,7 +76,7 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(link).hasClass('production-skill-overview-action--empty');
   });
 
-  test('it should display a skill cell with no skill', async function(assert) {
+  test('it should display a skill cell with no skill', async function (assert) {
     // when
     screen = await render(<template><CompetenceOverviewSkill @skillOverview={{null}} /></template>);
 
@@ -88,7 +86,7 @@ module('Integration | Component | competence-overview | competence-overview-skil
     assert.dom(screen.queryByTitle('Nombre d\'épreuves en cours de construction')).doesNotExist();
   });
 
-  test('it should display a skill cell with `NR` challenge', async function(assert) {
+  test('it should display a skill cell with `NR` challenge', async function (assert) {
     // given
     const skillOverview = {
       id: 'skillOverviewId',

@@ -40,6 +40,7 @@ export default class AreaModel extends Model {
       return count + competence.selectedProductionTubeCount;
     }, 0);
   }
+
   get selectedThematicResultTubeCount() {
     return this.competencesArray.reduce((count, competence) => {
       return count + competence.selectedThematicResultTubeCount;

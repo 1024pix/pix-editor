@@ -15,7 +15,7 @@ async function main() {
   const differences = await compareReleases(
     { url: baseUrl1, token: token1 },
     { url: baseUrl2, token: token2 },
-    remoteChecksumComputer
+    remoteChecksumComputer,
   );
 
   console.log(differences);
@@ -63,9 +63,7 @@ export async function compareReleases({ url: urlLeft, token: tokenLeft }, { url:
 }
 
 async function getRelease(url, token) {
-  const { data: { content: { challenges } } } = await axios.get(url, {
-    headers: { 'Authorization': 'Bearer ' + token }
-  });
+  const { data: { content: { challenges } } } = await axios.get(url, { headers: { Authorization: 'Bearer ' + token } });
   return challenges;
 }
 

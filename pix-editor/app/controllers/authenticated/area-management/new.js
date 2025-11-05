@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import * as Sentry from '@sentry/ember';
 
 export default class AreaManagementNewController extends Controller {
-
   @service loader;
   @service notify;
   @service router;

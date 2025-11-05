@@ -132,9 +132,13 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me'); }
+  validate() {
+    throw new Error('implement me');
+  }
 
-  getValueForSubmit() { throw new Error('implement me'); }
+  getValueForSubmit() {
+    throw new Error('implement me');
+  }
 }
 
 class UrlField extends FormField {
@@ -158,16 +162,23 @@ class UrlField extends FormField {
     }
   }
 
-  getValueForSubmit() { return this.value.trim(); }
+  getValueForSubmit() {
+    return this.value.trim();
+  }
 }
 
 class CommentField extends FormField {
+  get isValid() {
+    return true;
+  };
 
-  get isValid() { return true; };
+  validate() {
+    this.state = FormField.STATES.SUCCESS;
+  }
 
-  validate() { this.state = FormField.STATES.SUCCESS; }
-
-  getValueForSubmit() { return this.value.trim(); }
+  getValueForSubmit() {
+    return this.value.trim();
+  }
 }
 
 class RelatedSkillNamesField extends FormField {

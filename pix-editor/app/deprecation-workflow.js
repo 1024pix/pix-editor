@@ -1,10 +1,10 @@
 import setupDeprecationWorkflow from 'ember-cli-deprecation-workflow';
 
 setupDeprecationWorkflow({
-  'workflow': [
+  workflow: [
     {
-      'handler': 'warn', // this deprecation is only on EmberTable package
-      'matchId': 'template-action',
+      handler: 'warn', // this deprecation is only on EmberTable package
+      matchId: 'template-action',
     },
   ],
 });

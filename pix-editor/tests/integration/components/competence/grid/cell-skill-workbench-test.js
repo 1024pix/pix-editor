@@ -4,7 +4,7 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | competence/grid/cell-skill-workbench', function(hooks) {
+module('Integration | Component | competence/grid/cell-skill-workbench', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let store;
@@ -12,7 +12,7 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
   const skillName = '@skill1';
   let tube;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     // given
     store = this.owner.lookup('service:store');
     skillRecord1 = store.createRecord('skill', {
@@ -20,11 +20,13 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
       name: skillName,
       level: 1,
       status: 'actif',
-      challenges: [store.createRecord('challenge', {
-        id: 'recChallenge0',
-        genealogy: 'Prototype 1',
-        status: 'validé',
-      })],
+      challenges: [
+        store.createRecord('challenge', {
+          id: 'recChallenge0',
+          genealogy: 'Prototype 1',
+          status: 'validé',
+        }),
+      ],
     });
     skillRecord2 = store.createRecord('skill', {
       id: 'rec654259',
@@ -60,28 +62,34 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
       id: 'rec123456',
       name: 'tubeName',
       rawSkills: [
-        skillRecord1
-        , skillRecord2
-        , skillRecord3
-        , skillRecord4
-        , skillRecord5
-        , skillRecord6,
+        skillRecord1,
+        skillRecord2,
+        skillRecord3,
+        skillRecord4,
+        skillRecord5,
+        skillRecord6,
       ],
     });
     this.skill = skillRecord1;
-    this.skills = [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6];
+    this.skills = [
+      skillRecord1,
+      skillRecord2,
+      skillRecord3,
+      skillRecord4,
+      skillRecord5,
+      skillRecord6,
+    ];
     this.tube = tube;
 
     // when
     await render(hbs`<Competence::Grid::CellSkillWorkbench @tube={{this.tube}} @skill={{this.skill}} @skills={{this.skills}}/>`);
   });
 
-  test('it should display a skill count by status', async function(assert) {
+  test('it should display a skill count by status', async function (assert) {
     // then
     assert.dom('[data-test-draft-count]').hasText('2');
     assert.dom('[data-test-active-count]').hasText('1');
     assert.dom('[data-test-archived-count]').hasText('2');
     assert.dom('[data-test-obsolete-count]').hasText('1');
   });
-
 });

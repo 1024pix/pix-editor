@@ -1,4 +1,3 @@
 import Skill from '../skills/single';
 
-export default class SingleController extends Skill {
-}
+export default class SingleController extends Skill {}

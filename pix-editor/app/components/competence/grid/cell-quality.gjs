@@ -5,7 +5,6 @@ import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 
 export default class CellQuality extends Component {
-
   get qualityIndication() {
     if (this.loadingChallenges) return null;
     const productionPrototype = this.args.skill.productionPrototype;
@@ -63,8 +62,10 @@ export default class CellQuality extends Component {
     const classTuto = this.classTutorial;
     const tutoSolutionCount = this.args.skill.tutoSolution.length;
     const tutoMoreCount = this.args.skill.tutoMore.length;
-    const haveTuto = classTuto ? `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
-                                <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>` : '';
+    const haveTuto = classTuto
+      ? `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
+                                <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`
+      : '';
     return htmlSafe(`<tr><td>Spoil </td><td> ${spoil} </td></tr>
             <tr><td>Responsive </td><td> ${responsive} </td></tr>
             <tr><td>Non/Mal voyant </td><td> ${blind} </td></tr>
@@ -99,9 +100,9 @@ export default class CellQuality extends Component {
   _colorblindWeight(colorblind) {
     const weight = 3;
     const quality = {
-      'RAS': 1,
-      'OK': 1,
-      'default': 0,
+      RAS: 1,
+      OK: 1,
+      default: 0,
     };
     return (quality[colorblind] || quality['default']) * weight;
   }

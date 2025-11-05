@@ -9,13 +9,13 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Controller | Create alternative challenge', function(hooks) {
+module('Acceptance | Controller | Create alternative challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let challenge;
   let skill;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -26,29 +26,41 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: challenge.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: challenge.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('create a challenge alternative', async function(assert) {
+  test('create a challenge alternative', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -78,7 +90,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.ok(attachments.every((record) => !record.isNew));
   });
 
-  test('create a challenge alternative clone the attachments', async function(assert) {
+  test('create a challenge alternative clone the attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }
@@ -110,7 +122,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
-  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
+  test('create a challenge alternative don\'t clone deleted attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }

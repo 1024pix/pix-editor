@@ -3,12 +3,8 @@ import { inject as service } from '@ember/service';
 
 export default class WhitelistedUrlsRoute extends Route {
   queryParams = {
-    url: {
-      refreshModel: true,
-    },
-    names: {
-      refreshModel: true,
-    },
+    url: { refreshModel: true },
+    names: { refreshModel: true },
   };
 
   @service store;

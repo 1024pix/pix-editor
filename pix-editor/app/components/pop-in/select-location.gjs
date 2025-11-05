@@ -8,7 +8,6 @@ import { t } from 'ember-intl';
 import FormSelectLocation from '../form/select-location';
 
 export default class PopinSelectLocation extends Component {
-
   @tracked disableActionButton = this.args.variant !== 'skill';
 
   get actionButtonTitle() {

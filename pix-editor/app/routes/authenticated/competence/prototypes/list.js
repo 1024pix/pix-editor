@@ -3,17 +3,13 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class ListRoute extends Route {
-
   @service router;
   @service store;
 
   async model(params) {
-    const [tube, skill] = await Promise.all([
-      this.store.findRecord('tube', params.tube_id),
-      this.store.findRecord('skill', params.skill_id),
-    ]);
+    const [tube, skill] = await Promise.all([this.store.findRecord('tube', params.tube_id), this.store.findRecord('skill', params.skill_id)]);
     const skills = await tube.rawSkills;
-    await Promise.all(skills.map((skill)=> skill.challenges));
+    await Promise.all(skills.map((skill) => skill.challenges));
     return { skills: tube.filledSkills[skill.level - 1], skill };
   }
 

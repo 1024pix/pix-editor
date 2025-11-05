@@ -1,7 +1,6 @@
 import ApplicationAdapter from './application';
 
 export default class StaticCourseAdapter extends ApplicationAdapter {
-
   createRecord(store, type, snapshot) {
     const payload = preparePayloadForCreateAndUpdate(this.serialize(snapshot), snapshot.adapterOptions);
     const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'createRecord');

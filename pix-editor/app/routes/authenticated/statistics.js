@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class StatisticsRoute extends Route {
-
   @service currentData;
 
   model() {
@@ -25,5 +24,4 @@ export default class StatisticsRoute extends Route {
         return Promise.all(getChallenges);
       });
   }
-
 }

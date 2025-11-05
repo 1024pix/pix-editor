@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class TargetProfileController extends Controller {
-
   @tracked selectedTubeSkills = [];
   @tracked tubeSkills = [];
   @tracked selectedTube = null;
@@ -103,7 +102,7 @@ export default class TargetProfileController extends Controller {
 
   _getThematicTubeSkills(tube) {
     const productionSkill = tube.productionSkills;
-    return productionSkill.filter((skill)=>{
+    return productionSkill.filter((skill) => {
       return tube.selectedSkills.includes(skill.pixId);
     });
   }
@@ -258,7 +257,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _emptyOpenFile() {
-    //TODO: find a better way to be able to reload same file
+    // TODO: find a better way to be able to reload same file
     document.getElementById('target-profile__open-file').value = '';
   }
 
@@ -273,7 +272,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _determineFileType(data) {
-    if (Array.isArray(data) && data.length > 0 && typeof(data[0]) === 'string') {
+    if (Array.isArray(data) && data.length > 0 && typeof (data[0]) === 'string') {
       return 'orga';
     }
     return 'editor';

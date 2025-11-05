@@ -3,7 +3,6 @@ import { guidFor } from '@ember/object/internals';
 import Component from '@glimmer/component';
 
 export default class RelatedSkillCell extends Component {
-
   constructor(...args) {
     super(...args);
     this.id = 'related-skill-cell-' + guidFor(this);

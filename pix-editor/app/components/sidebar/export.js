@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class SidebarExportComponent extends Component {
-
   @service('file-saver') fileSaver;
   @service notify;
   @service loader;
@@ -54,11 +53,19 @@ export default class SidebarExportComponent extends Component {
               tube.productionSkills.reduce((table, skill) => {
                 table[skill.level - 1] = skill.name;
                 return table;
-              }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(','),
+              }, [
+                '░',
+                '░',
+                '░',
+                '░',
+                '░',
+                '░',
+                '░',
+                '░',
+              ]).join(','),
             ];
             fields = fields.map((field) => this._formatCSVString(field));
             return content + '\n' + fields.join(',');
-
           }, content);
         }, content);
       }, content);
@@ -71,5 +78,4 @@ export default class SidebarExportComponent extends Component {
     }
     return ' ';
   }
-
 }

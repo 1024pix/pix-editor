@@ -7,11 +7,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenges-production | localized-challenges-production', function(hooks) {
+module('Integration | Component | challenges-production | localized-challenges-production', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store, skill, challengeLocalesNl, challengeLocalesFr, challengeLocalesEs, competence;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
     skill = store.createRecord('skill', {
       id: 'skillAId',
@@ -250,8 +250,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
     ];
   });
 
-  module('list item', function(hooks) {
-    hooks.beforeEach(async ()=> {
+  module('list item', function (hooks) {
+    hooks.beforeEach(async () => {
       screen = await render(<template>
         <LocalizedChallengesProduction
           @skill={{skill}}
@@ -261,7 +261,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       </template>);
     });
 
-    test('should display all expected info for a given challenge', async function(assert) {
+    test('should display all expected info for a given challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
       const prototype = validatedChallenges[1];
@@ -272,8 +272,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
     });
-    module('it should display actions', function() {
-      test('when have translation for current locale', async function(assert) {
+    module('it should display actions', function () {
+      test('when have translation for current locale', async function (assert) {
         // when
         await clickByText('ouvrir option pour l\'épreuve challengeProtoValide');
 
@@ -289,7 +289,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValideeNl' })).exists();
       });
 
-      test('when primary is in current locale', async function(assert) {
+      test('when primary is in current locale', async function (assert) {
         // when
         await clickByText('ouvrir option pour l\'épreuve challengeDecliNl');
 
@@ -298,7 +298,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.dom(screen.queryByRole('list', { name: 'traduction' })).doesNotExist();
       });
 
-      test('when have not translation for current locale', async function(assert) {
+      test('when have not translation for current locale', async function (assert) {
         // when
         await clickByText('ouvrir option pour l\'épreuve challengeDecliProposee');
 
@@ -308,7 +308,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       });
     });
 
-    test('should display appropriate translation statuses for each challenge', async function(assert) {
+    test('should display appropriate translation statuses for each challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
 
@@ -334,8 +334,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
     });
   });
 
-  module('when displaying the list', function() {
-    test('it should display only challenge who has selected locale or fr', async function(assert) {
+  module('when displaying the list', function () {
+    test('it should display only challenge who has selected locale or fr', async function (assert) {
       // given
 
       // when
@@ -353,8 +353,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.strictEqual(challengeListWithoutThead.length, 3);
     });
 
-    module('when locale is not in phrase', function() {
-      test('when locale is not in phrase', async function(assert) {
+    module('when locale is not in phrase', function () {
+      test('when locale is not in phrase', async function (assert) {
         // given
 
         // when
@@ -373,8 +373,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       });
     });
 
-    module('when box to display obsolete challenges not checked', function() {
-      test('should display all but obsolete', async function(assert) {
+    module('when box to display obsolete challenges not checked', function () {
+      test('should display all but obsolete', async function (assert) {
         // when
         screen = await render(<template>
           <LocalizedChallengesProduction
@@ -396,8 +396,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.strictEqual(obsoleteChallenges.length, 0);
       });
     });
-    module('when box to display obsolete challenges checked', function() {
-      test('display all challenges', async function(assert) {
+    module('when box to display obsolete challenges checked', function () {
+      test('display all challenges', async function (assert) {
         // when
         screen = await render(<template>
           <LocalizedChallengesProduction

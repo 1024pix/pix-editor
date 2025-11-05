@@ -4,20 +4,14 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | list/skill', function(hooks) {
+module('Integration | Component | list/skill', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('should display a list of skills', async function(assert) {
+  test('should display a list of skills', async function (assert) {
     // given
-    const challenge1 = {
-      id: 'recChallenge1',
-    };
-    const challenge2 = {
-      id: 'recChallenge2',
-    };
-    const challenge3 = {
-      id: 'recChallenge3',
-    };
+    const challenge1 = { id: 'recChallenge1' };
+    const challenge2 = { id: 'recChallenge2' };
+    const challenge3 = { id: 'recChallenge3' };
     const skill1 = {
       id: 'recSkill1',
       pixId: 'pixSkill1',

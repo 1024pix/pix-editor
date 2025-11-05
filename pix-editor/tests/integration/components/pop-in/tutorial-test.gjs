@@ -4,35 +4,33 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | pop-in/tutorial', function(hooks) {
+module('Integration | Component | pop-in/tutorial', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const configService = this.owner.lookup('service:config');
-    configService.tutorialLocaleToLanguageMap = {
-      lang: 'Première langue',
-    };
+    configService.tutorialLocaleToLanguageMap = { lang: 'Première langue' };
     store = this.owner.lookup('service:store');
   });
 
-  test('save input should be disabled if mandatory field are empty', async function(assert) {
-    //given
+  test('save input should be disabled if mandatory field are empty', async function (assert) {
+    // given
     const closeFn = () => {};
     const saveTutorialFn = () => {};
 
     const emptyTutorial = store.createRecord('tutorial', {});
 
-    //when
+    // when
     const screen = await render(<template><TutorialPopin @close={{closeFn}} @tutorial={{emptyTutorial}} @saveTutorial={{saveTutorialFn}} @showModal={{true}} /></template>);
 
-    //then
+    // then
     assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).hasAria('disabled', 'true');
   });
 
-  test('save input should not be disabled if mandatory field are empty', async function(assert) {
-    //given
+  test('save input should not be disabled if mandatory field are empty', async function (assert) {
+    // given
     const closeFn = () => {};
     const saveTutorialFn = () => {};
     const filledTutorial = store.createRecord('tutorial', {
@@ -44,7 +42,7 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
       duration: '00:20:00',
     });
 
-    //when
+    // when
     const screen = await render(<template><TutorialPopin @close={{closeFn}} @tutorial={{filledTutorial}} @saveTutorial={{saveTutorialFn}} @showModal={{true}} /></template>);
 
     // then

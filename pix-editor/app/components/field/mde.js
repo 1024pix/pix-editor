@@ -4,7 +4,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class Mde extends Component {
-
   @tracked maximized = false;
 
   get safeHelpContent() {

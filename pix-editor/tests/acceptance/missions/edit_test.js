@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Missions | Edit', function(hooks) {
+module('Acceptance | Missions | Edit', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('theme', { id: 'recTheme1' });
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'recCompetence1.1', rawThemeIds: ['recTheme1'], title: 'Notre compétence' });
@@ -31,14 +31,14 @@ module('Acceptance | Missions | Edit', function(hooks) {
     });
   });
 
-  module('when user has write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user has write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    test('should be able to edit a mission', async function(assert) {
+    test('should be able to edit a mission', async function (assert) {
       // given
       await visit('/missions/2');
 
@@ -49,7 +49,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       assert.strictEqual(currentURL(), '/missions/2/edit');
     });
 
-    test('should save updated informations', async function(assert) {
+    test('should save updated informations', async function (assert) {
       // given
       this.server.create('mission', {
         id: 3,
@@ -87,7 +87,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       assert.dom(screen.getByText('http://doc.com')).exists();
     });
 
-    test('should display errors if any', async function(assert) {
+    test('should display errors if any', async function (assert) {
       // given
       this.server.create('mission', {
         id: 3,

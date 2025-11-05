@@ -5,4 +5,3 @@ export default class CompetenceSkillsSingleArchiveRoute extends Route {
     await skill.challenges;
   }
 }
-

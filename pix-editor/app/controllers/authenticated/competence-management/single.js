@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class CompetenceManagementSingleController extends Controller {
-
   @service access;
   @service notify;
   @service loader;
@@ -38,7 +37,7 @@ export default class CompetenceManagementSingleController extends Controller {
     this.loader.start();
     const competence = this.model;
     return competence.save()
-      .then(()=> {
+      .then(() => {
         this.edition = false;
         this.loader.stop();
         this.notify.message('Compétence mise à jour');

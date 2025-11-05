@@ -221,9 +221,13 @@ class FormField {
     this.value = value;
   }
 
-  validate() { throw new Error('implement me'); }
+  validate() {
+    throw new Error('implement me');
+  }
 
-  getValueForSubmit() { throw new Error('implement me'); }
+  getValueForSubmit() {
+    throw new Error('implement me');
+  }
 }
 
 class ThematicIdsField extends FormField {
@@ -247,7 +251,9 @@ class ThematicIdsField extends FormField {
     return this.value?.split(',').every((thematicId) => this.availableThematicIds?.includes(thematicId.trim()));
   }
 
-  getValueForSubmit() { return this.value.split(',').map((element) => element.trim()).join(','); }
+  getValueForSubmit() {
+    return this.value.split(',').map((element) => element.trim()).join(',');
+  }
 }
 
 class NameField extends FormField {
@@ -261,7 +267,9 @@ class NameField extends FormField {
       : STATES.ERROR;
   }
 
-  getValueForSubmit() { return this.value.trim(); }
+  getValueForSubmit() {
+    return this.value.trim();
+  }
 }
 
 class CompetenceIdField extends FormField {
@@ -280,4 +288,3 @@ class CompetenceIdField extends FormField {
     }
   }
 }
-

@@ -79,4 +79,3 @@ module.exports = defineConfig({
   /* Global setup for authentication contexts. */
   globalSetup: require.resolve('./playwright.global-setup'),
 });
-

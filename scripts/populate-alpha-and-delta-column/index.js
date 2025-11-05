@@ -52,7 +52,7 @@ export async function findAirtableIds(base, challengesWithPersistentIds) {
     const data = challengesWithPersistentIds.find((row) => row.id === airtableRecord.get('id persistant'));
     return {
       ...data,
-      id: airtableRecord.id
+      id: airtableRecord.id,
     };
   });
 }
@@ -63,7 +63,7 @@ export async function updateRecords(base, data) {
       id,
       fields: {
         'Difficulté calculée': `${delta}`,
-        'Discrimination calculée': `${alpha}`
+        'Discrimination calculée': `${alpha}`,
       },
     };
   });
@@ -87,9 +87,7 @@ export async function updateRecords(base, data) {
 }
 
 function getBaseChallenges() {
-  const base = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 
   return base('Epreuves');
 }

@@ -4,7 +4,7 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | note-list', function(hooks) {
+module('Integration | Component | note-list', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   const myNote1 = {
@@ -37,68 +37,74 @@ module('Integration | Component | note-list', function(hooks) {
     date: new Date(2020, 8, 28),
     changelog: true,
   };
-  const notes = [myNote1, myNote2, otherNote, log1, log2];
-  hooks.beforeEach(function() {
+  const notes = [
+    myNote1,
+    myNote2,
+    otherNote,
+    log1,
+    log2,
+  ];
+  hooks.beforeEach(function () {
     this.set('notes', notes);
   });
 
-  test('it renders', async function(assert) {
-    //when
+  test('it renders', async function (assert) {
+    // when
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
-    //then
+    // then
     assert.dom('.ember-table').exists();
   });
 
-  test('it should display a list of notes', async function(assert) {
-    //when
+  test('it should display a list of notes', async function (assert) {
+    // when
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-note]').exists({ count: notes.length });
   });
 
-  test('it should display authors when displayAuthor is `true`', async function(assert) {
-    //given
+  test('it should display authors when displayAuthor is `true`', async function (assert) {
+    // given
     this.set('displayAuthor', true);
 
-    //when
+    // when
     await render(hbs`<List::Notes @list={{this.notes}} @displayAuthor={{this.displayAuthor}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-note] .author-note').exists();
   });
 
-  test('it should not display authors when displayAuthor is `false`', async function(assert) {
-    //given
+  test('it should not display authors when displayAuthor is `false`', async function (assert) {
+    // given
     this.set('displayAuthor', false);
 
-    //when
+    // when
     await render(hbs`<List::Notes @list={{this.notes}} @displayAuthor={{this.displayAuthor}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-note] .author-note').doesNotExist();
   });
 
-  test('it should display note status when displayStatus is `true`', async function(assert) {
-    //given
+  test('it should display note status when displayStatus is `true`', async function (assert) {
+    // given
     this.set('displayStatus', true);
 
-    //when
+    // when
     await render(hbs`<List::Notes @list={{this.notes}} @displayStatus={{this.displayStatus}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-note] .status-note').exists();
   });
 
-  test('it should not display note status when displayStatus is `false`', async function(assert) {
-    //given
+  test('it should not display note status when displayStatus is `false`', async function (assert) {
+    // given
     this.set('displayStatus', false);
 
-    //when
+    // when
     await render(hbs`<List::Notes @list={{this.notes}} @displayStatus={{this.displayStatus}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-note] .status-note').doesNotExist();
   });
 });

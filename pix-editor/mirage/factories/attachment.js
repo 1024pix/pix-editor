@@ -9,4 +9,3 @@ export default Factory.extend({
   size: 123,
 
 });
-

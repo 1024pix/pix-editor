@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import sortBy from 'lodash/sortBy';
 
 export default class TubeModel extends Model {
-
   selectedSkills = [];
   selectedThematicResultSkills = [];
 
@@ -109,6 +108,14 @@ export default class TubeModel extends Model {
         grid[skill.level - 1] = [skill];
       }
       return grid;
-    }, [false, false, false, false, false, false, false]);
+    }, [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
   }
 }

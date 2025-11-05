@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 import { uniqBy } from 'lodash';
 
 export default class SidebarSearch extends Component {
-
   routeModel = null;
 
   @service store;
@@ -40,9 +39,7 @@ export default class SidebarSearch extends Component {
 
   async searchSkillsByName(skillName) {
     const skills = await this.store.query('skill', {
-      filter: {
-        name: skillName,
-      },
+      filter: { name: skillName },
       page: { limit: 20 },
       sort: 'name,-version',
     });
@@ -60,11 +57,7 @@ export default class SidebarSearch extends Component {
   }
 
   async searchChallengesById(challengeId) {
-    const challenges = await this.store.query('challenge', {
-      filter: {
-        ids: [challengeId],
-      },
-    });
+    const challenges = await this.store.query('challenge', { filter: { ids: [challengeId] } });
     return challenges.map((challenge) => ({
       title: challenge.id,
       transition: {
@@ -75,11 +68,7 @@ export default class SidebarSearch extends Component {
   }
 
   async searchLocalizedChallengesById(localizedChallengeId) {
-    const results = await this.store.query('localized-challenge', {
-      filter: {
-        ids: [localizedChallengeId],
-      },
-    });
+    const results = await this.store.query('localized-challenge', { filter: { ids: [localizedChallengeId] } });
     return results.map((result) => ({
       title: result.id,
       transition: {
@@ -91,12 +80,8 @@ export default class SidebarSearch extends Component {
 
   async searchChallengesByText(text) {
     const challenges = await this.store.query('challenge', {
-      filter: {
-        search: text.toLowerCase(),
-      },
-      page: {
-        size: 20,
-      },
+      filter: { search: text.toLowerCase() },
+      page: { size: 20 },
     });
     return challenges.map((challenge) => ({
       title: challenge.instruction.substr(0, 100),

@@ -1,10 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import Challenge from 'pixeditor/models/challenge';
 
-const inProductionCombinations = [
-  'validé:validé',
-  'archivé:validé',
-];
+const inProductionCombinations = ['validé:validé', 'archivé:validé'];
 
 export default class LocalizedChallengeModel extends Model {
   @attr embedURL;

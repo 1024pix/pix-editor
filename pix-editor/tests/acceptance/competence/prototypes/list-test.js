@@ -17,14 +17,13 @@ const deadSkillId = 'recDeadSkill';
 const deadSkillPixId = 'pixDeadSkill';
 const challengeId2 = 'recChallenge2';
 
-module('Acceptance | competence/prototypes/list', function() {
-  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function(hooks) {
-
+module('Acceptance | competence/prototypes/list', function () {
+  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
 
-    hooks.beforeEach(async function() {
-      //given
+    hooks.beforeEach(async function () {
+      // given
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
@@ -35,7 +34,13 @@ module('Acceptance | competence/prototypes/list', function() {
       this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1, status: 'périmé', challengeIds: [] });
       this.server.create('skill', { id: skillId2, pixId: skillPixId2, name: skillName, version: 2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
       this.server.create('skill', { id: 'recSkill3', challengeIds: ['recChallenge3'] });
-      this.server.create('tube', { id: tubeId1, rawSkillIds: [skillId1, skillId2, deadSkillId] });
+      this.server.create('tube', {
+        id: tubeId1, rawSkillIds: [
+          skillId1,
+          skillId2,
+          deadSkillId,
+        ],
+      });
       this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill3'] });
       this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tubeId1] });
       this.server.create('theme', { id: 'recTheme2', rawTubeIds: ['recTube2'] });
@@ -54,16 +59,20 @@ module('Acceptance | competence/prototypes/list', function() {
       await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}?view=workbench`);
     });
 
-    test('it should display a list of prototype of `skill1`', function(assert) {
+    test('it should display a list of prototype of `skill1`', function (assert) {
       // then
       assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.3`);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count: 1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
-    test('it should display a list of skill tab sorted by date', function(assert) {
-      //given
-      const expectedResult = [`${skillName} v.3`, `${skillName} v.2`, `${skillName} v.1`];
+    test('it should display a list of skill tab sorted by date', function (assert) {
+      // given
+      const expectedResult = [
+        `${skillName} v.3`,
+        `${skillName} v.2`,
+        `${skillName} v.1`,
+      ];
 
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
@@ -73,10 +82,10 @@ module('Acceptance | competence/prototypes/list', function() {
       });
     });
 
-    test('it should display a list of prototype of selected skill', async function(assert) {
-      //when
+    test('it should display a list of prototype of selected skill', async function (assert) {
+      // when
       await click(findAll('[data-test-skill-tab]')[1]);
-      await waitUntil(function() {
+      await waitUntil(function () {
         return find('[data-test-prototype-list]').textContent.includes('instructionsChallenge2');
       }, { timeout: 1000 });
 
@@ -86,11 +95,11 @@ module('Acceptance | competence/prototypes/list', function() {
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge2');
     });
 
-    test('it should call prototype/new with good query params', async function(assert) {
-      //given
+    test('it should call prototype/new with good query params', async function (assert) {
+      // given
       const expectedResult = `/competence/recCompetence1_1/prototypes/new?from=${challengeId2}`;
 
-      //when
+      // when
       await click(findAll('[data-test-skill-tab]')[1]);
       await click(find('[data-test-new-prototype-action]'));
       // Ugly hack to wait for ToastUI to be ready
@@ -98,7 +107,7 @@ module('Acceptance | competence/prototypes/list', function() {
       // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
       await runTask(this, async () => { }, 100);
 
-      //then
+      // then
       assert.strictEqual(currentURL().indexOf(expectedResult), 0);
     });
   });

@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class CompetenceGridCellSkillComponent extends Component {
-
   get hasNoClueByLanguage() {
     switch (this.args.languageFilter) {
       case 'fr':
@@ -9,7 +8,7 @@ export default class CompetenceGridCellSkillComponent extends Component {
         return !this.args.skill.clue;
       case 'en':
         return !this.args.skill.clueEn;
-      default :
+      default:
         return true;
     }
   }
@@ -51,11 +50,11 @@ export default class CompetenceGridCellSkillComponent extends Component {
 
   _convertLanguageFilterToLanguageTutorial(language) {
     switch (language) {
-      case 'fr' :
+      case 'fr':
         return 'fr-fr';
       case 'en':
         return 'en-us';
-      default :
+      default:
         return language;
     }
   }

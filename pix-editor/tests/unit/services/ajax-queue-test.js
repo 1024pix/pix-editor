@@ -2,28 +2,29 @@ import { setupTest } from 'ember-qunit';
 import ENV from 'pixeditor/config/environment';
 import { module, test } from 'qunit';
 
-module('Unit | Service | ajax-queue', function(hooks) {
+module('Unit | Service | ajax-queue', function (hooks) {
   setupTest(hooks);
   let ajaxQueueService;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     ajaxQueueService = this.owner.lookup('service:ajax-queue');
   });
 
-  module('add()', function() {
-
-    test('should execute the passed job', async function(assert) {
+  module('add()', function () {
+    test('should execute the passed job', async function (assert) {
       // given
       const expectedValue = 1;
 
       // when
-      const actualValue = await ajaxQueueService.add(async () => { return expectedValue; });
+      const actualValue = await ajaxQueueService.add(async () => {
+        return expectedValue;
+      });
 
       // then
       assert.strictEqual(actualValue, expectedValue);
     });
 
-    test('should execute concurrently as many jobs as indicated in settings file', async function(assert) {
+    test('should execute concurrently as many jobs as indicated in settings file', async function (assert) {
       // given
       let counter = 0, maxCounter = 0;
       async function job() {

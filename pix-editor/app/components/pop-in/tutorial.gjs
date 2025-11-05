@@ -6,7 +6,6 @@ import { t } from 'ember-intl';
 import TutorialForm from '../form/tutorial';
 
 export default class TutorialPopIn extends Component {
-
   get hasEmptyMandatoryField() {
     const tutorial = this.args.tutorial;
     return tutorial && (

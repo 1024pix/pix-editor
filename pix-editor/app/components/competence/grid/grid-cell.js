@@ -2,7 +2,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class GridCell extends Component {
-
   @service access;
   @service config;
 
@@ -30,14 +29,14 @@ export default class GridCell extends Component {
               return 'skill';
             }
             break;
-          case 'workbench' :
+          case 'workbench':
             if (skill) {
               return 'skill-workbench';
             } else if (this.access.mayEditSkills()) {
               return 'add-skill';
             }
             break;
-          case 'draft' :
+          case 'draft':
             if (skill) {
               return 'skill-draft';
             } else if (this.access.mayEditSkills()) {

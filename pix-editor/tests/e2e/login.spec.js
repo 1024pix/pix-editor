@@ -5,7 +5,7 @@ test.describe('Login', () => {
     await page.goto('/');
   });
 
-  test('se connecter et se déconnecter', async function({ page }) {
+  test('se connecter et se déconnecter', async function ({ page }) {
     await expect(page).toHaveURL('/connexion');
 
     await test.step('utiliser une clé invalide', async () => {

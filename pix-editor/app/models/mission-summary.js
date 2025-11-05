@@ -34,7 +34,6 @@ export default class MissionSummary extends Model {
 
   get isExperimental() {
     return this.status === MissionSummary.statuses.EXPERIMENTAL;
-
   }
 
   get isValidated() {

@@ -7,20 +7,20 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge', function(hooks) {
+module('Acceptance | Modify-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     return authenticateSession();
   });
 
-  module('modifying a draft challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying a draft challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -67,28 +67,40 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-workbench`,
-        thematicOverviews: [{
-          airtableId: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            airtableId: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              airtableId: skill.id,
-              name: skill.name,
-              proposedChallengesCount: 2,
-              validatedChallengesCount: 0,
-              archivedChallengesCount: 0,
-              obsoleteChallengesCount: 0,
-            }, null, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            airtableId: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                airtableId: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    airtableId: skill.id,
+                    name: skill.name,
+                    proposedChallengesCount: 2,
+                    validatedChallengesCount: 0,
+                    archivedChallengesCount: 0,
+                    obsoleteChallengesCount: 0,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes when challenge is a prototype', async function(assert) {
+    test('can modify attributes when challenge is a prototype', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -143,7 +155,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
     });
 
-    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function(assert) {
+    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function (assert) {
       await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -175,8 +187,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying a production challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying a production challenge', function (hooks) {
+    hooks.beforeEach(function () {
       const prototype = this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -201,28 +213,40 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
-        thematicOverviews: [{
-          id: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            id: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              id: skill.id,
-              name: skill.name,
-              prototypeId: prototype.id,
-              isPrototypeDeclinable: true,
-              proposedChallengesCount: 1,
-              validatedChallengesCount: 0,
-            }, null, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            id: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                id: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    id: skill.id,
+                    name: skill.name,
+                    prototypeId: prototype.id,
+                    isPrototypeDeclinable: true,
+                    proposedChallengesCount: 1,
+                    validatedChallengesCount: 0,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function(assert) {
+    test('can modify attributes', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -264,7 +288,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.deepEqual(challenge.geography, 'JP');
     });
 
-    test('modify a challenge\'s urlsToConsult when playing around with the field', async function(assert) {
+    test('modify a challenge\'s urlsToConsult when playing around with the field', async function (assert) {
       // when
       const store = this.owner.lookup('service:store');
 
@@ -293,8 +317,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying an archived challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying an archived challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -323,28 +347,40 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-workbench`,
-        thematicOverviews: [{
-          airtableId: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            airtableId: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              airtableId: skill.id,
-              name: skill.name,
-              proposedChallengesCount: 2,
-              validatedChallengesCount: 0,
-              archivedChallengesCount: 0,
-              obsoleteChallengesCount: 0,
-            }, null, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            airtableId: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                airtableId: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    airtableId: skill.id,
+                    name: skill.name,
+                    proposedChallengesCount: 2,
+                    validatedChallengesCount: 0,
+                    archivedChallengesCount: 0,
+                    obsoleteChallengesCount: 0,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function(assert) {
+    test('can modify attributes', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -396,8 +432,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying an obsolete challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying an obsolete challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -426,28 +462,40 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-workbench`,
-        thematicOverviews: [{
-          airtableId: thematic.id,
-          name: thematic.name,
-          tubeOverviews: [{
-            airtableId: tube.id,
-            name: tube.name,
-            skillOverviews: [{
-              airtableId: skill.id,
-              name: skill.name,
-              proposedChallengesCount: 2,
-              validatedChallengesCount: 0,
-              archivedChallengesCount: 0,
-              obsoleteChallengesCount: 0,
-            }, null, null, null, null, null, null],
-          }],
-        }],
+        thematicOverviews: [
+          {
+            airtableId: thematic.id,
+            name: thematic.name,
+            tubeOverviews: [
+              {
+                airtableId: tube.id,
+                name: tube.name,
+                skillOverviews: [
+                  {
+                    airtableId: skill.id,
+                    name: skill.name,
+                    proposedChallengesCount: 2,
+                    validatedChallengesCount: 0,
+                    archivedChallengesCount: 0,
+                    obsoleteChallengesCount: 0,
+                  },
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
+              },
+            ],
+          },
+        ],
       });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('cannot modify an obsolete challenge', async function(assert) {
+    test('cannot modify an obsolete challenge', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -459,4 +507,3 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 });
-

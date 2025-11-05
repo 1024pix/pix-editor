@@ -5,11 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | target-profile/area-profile', function(hooks) {
+module('Integration | Component | target-profile/area-profile', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it filter', async function(assert) {
-
+  test('it filter', async function (assert) {
     // given
     const competence_1 = EmberObject.create({
       name: 'competence_1',
@@ -41,7 +40,7 @@ module('Integration | Component | target-profile/area-profile', function(hooks) 
     // when
     await render(hbs`<TargetProfile::AreaProfile @area={{this.area}} @filter={{this.filter}}/>`);
 
-    //then
+    // then
     assert.dom('[data-test-competence-profile]').exists({ count: 2 });
   });
 });

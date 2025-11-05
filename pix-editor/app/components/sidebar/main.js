@@ -61,4 +61,3 @@ export default class SidebarMain extends Component {
     this.versionManager.toggleV2();
   }
 }
-

@@ -1,16 +1,17 @@
+/* eslint-disable @stylistic/object-curly-newline */
 'use strict';
 
 function _isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
 }
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'pixeditor',
+    'modulePrefix': 'pixeditor',
     environment,
-    rootURL: '/',
-    locationType: 'history',
-    EmberENV: {
+    'rootURL': '/',
+    'locationType': 'history',
+    'EmberENV': {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
@@ -18,7 +19,7 @@ module.exports = function(environment) {
       EXTEND_PROTOTYPES: false,
     },
 
-    APP: {
+    'APP': {
       // Here you can pass flags/options to your application instance
       // when it is created
       version: require('../package.json').version,
@@ -44,21 +45,13 @@ module.exports = function(environment) {
       },
     },
 
-    sentry: {
-      enabled: _isFeatureEnabled(process.env.SENTRY_ENABLED),
-    },
+    'sentry': { enabled: _isFeatureEnabled(process.env.SENTRY_ENABLED) },
 
-    'ember-simple-auth': {
-      routeAfterAuthentication: 'authenticated',
-    },
+    'ember-simple-auth': { routeAfterAuthentication: 'authenticated' },
 
-    'ember-cli-notifications': {
-      autoClear: true,
-    },
+    'ember-cli-notifications': { autoClear: true },
 
-    'ember-cli-mirage': {
-      usingProxy: true,
-    },
+    'ember-cli-mirage': { usingProxy: true },
   };
 
   if (environment === 'development') {
@@ -80,9 +73,7 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
 
-    ENV['ember-cli-notifications'] = {
-      autoClear: false,
-    };
+    ENV['ember-cli-notifications'] = { autoClear: false };
   }
 
   return ENV;
@@ -96,4 +87,3 @@ function _getEnvironmentVariableAsNumber({ environmentVariableName, defaultValue
   }
   throw new Error(`Invalid value '${valueToValidate}' for environment variable '${environmentVariableName}'. It should be a number greater than or equal ${minValue}.`);
 }
-

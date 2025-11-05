@@ -4,15 +4,15 @@ import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('unit | Component | field/illustration', function(hooks) {
+module('unit | Component | field/illustration', function (hooks) {
   setupTest(hooks);
   let component;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     component = createGlimmerComponent('component:field/illustration');
   });
 
-  test('it should remove old illustration before add new illustration', async function(assert) {
+  test('it should remove old illustration before add new illustration', async function (assert) {
     // given
     const removeIllustrationStub = sinon.stub().resolves();
     component.args.removeIllustration = removeIllustrationStub;

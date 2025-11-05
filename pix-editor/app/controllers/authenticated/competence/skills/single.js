@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
-
   wasMaximized = false;
   changelogCallback = null;
 
@@ -17,7 +16,8 @@ export default class SingleController extends Controller {
   @tracked isStatusActionMenuOpen = false;
 
   @controller('authenticated.competence')
-    parentController;
+  parentController;
+
   @service access;
   @service changelogEntry;
   @service config;

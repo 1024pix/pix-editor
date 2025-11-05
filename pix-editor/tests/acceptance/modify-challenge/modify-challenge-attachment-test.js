@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
+module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -25,29 +25,41 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
-      thematicOverviews: [{
-        id: thematic.id,
-        name: thematic.name,
-        tubeOverviews: [{
-          id: tube.id,
-          name: tube.name,
-          skillOverviews: [{
-            id: skill.id,
-            name: skill.name,
-            prototypeId: prototype.id,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 0,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill.id,
+                  name: skill.name,
+                  prototypeId: prototype.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 0,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('adding attachments', async function(assert) {
+  test('adding attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -81,7 +93,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.strictEqual(attachments.length, 1);
   });
 
-  test('replace attachment', async function(assert) {
+  test('replace attachment', async function (assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -126,7 +138,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.strictEqual(attachments[0].url, 'data-attachmentB:,');
   });
 
-  test('delete attachment', async function(assert) {
+  test('delete attachment', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
 
@@ -148,7 +160,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('cancel adding an attachment', async function(assert) {
+  test('cancel adding an attachment', async function (assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
 

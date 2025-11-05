@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenge-form', function(hooks) {
+module('Integration | Component | challenge-form', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen;
 
-  test('it should display expected fields if challenge type is `QROC`', async function(assert) {
+  test('it should display expected fields if challenge type is `QROC`', async function (assert) {
     // Given
     const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ type: 'QROC', isTextBased: true, isPrototype: true });
@@ -27,7 +27,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-suggestion-field]').exists();
   });
 
-  test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
+  test('it should hide useless fields if challenge autoReply is `true`', async function (assert) {
     // Given
     const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ autoReply: true, isTextBased: true, isPrototype: true });
@@ -39,12 +39,16 @@ module('Integration | Component | challenge-form', function(hooks) {
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
 
     // Then
-    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
+    [
+      'data-test-format-field',
+      'data-test-tolerence-fields',
+      'data-test-suggestion-field',
+    ].forEach((field) => {
       assert.dom(`[${field}]`).doesNotExist();
     });
   });
 
-  test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
+  test('it should display autochecked checkbox if challenge type is `QCM`', async function (assert) {
     // Given
     const store = this.owner.lookup('service:store');
     const countries = [{ FR: 'France' }];
@@ -72,7 +76,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     await settled();
   });
 
-  test('it should display autochecked checkbox if challenge type is `QCU`', async function(assert) {
+  test('it should display autochecked checkbox if challenge type is `QCU`', async function (assert) {
     // Given
     const countries = [{ FR: 'France' }];
     const store = this.owner.lookup('service:store');

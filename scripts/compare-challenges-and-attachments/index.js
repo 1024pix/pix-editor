@@ -14,7 +14,7 @@ async function main() {
     await limit(async () => {
       const errors = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
       if (_.isEmpty(errors)) {
-        challengeCount ++;
+        challengeCount++;
         console.log(challengeCount / challenges.length * 100 + '%');
       } else {
         console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`);
@@ -51,7 +51,7 @@ function formatChallengeAttachment(attachment) {
     alt: attachment.fields.alt || '',
     mimeType: attachment.fields.mimeType,
     type: attachment.fields.type,
-    url: attachment.fields.url
+    url: attachment.fields.url,
   };
 }
 
@@ -96,11 +96,10 @@ function sanitizeAltText(text) {
 }
 
 async function remoteChecksumComputer(url) {
-
   const response = await axios({
     url,
     method: 'GET',
-    responseType: 'stream'
+    responseType: 'stream',
   });
 
   return hash(response.data.pipe, { algorithm: 'sha1' });
@@ -109,4 +108,3 @@ async function remoteChecksumComputer(url) {
 if (process.env.NODE_ENV !== 'test') {
   main();
 }
-

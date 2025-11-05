@@ -6,20 +6,15 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Create-Tutorial', function(hooks) {
+module('Acceptance | Create-Tutorial', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let competence, skill;
-  hooks.beforeEach(function() {
-    this.server.create('config', {
-      tutorialLocaleToLanguageMap: {
-        fr: 'Français',
-      },
-    });
+  hooks.beforeEach(function () {
+    this.server.create('config', { tutorialLocaleToLanguageMap: { fr: 'Français' } });
 
     this.server.create('user', { trigram: 'ABC' });
-    this.server.create('tag', { id: 'recTag1',
-    });
+    this.server.create('tag', { id: 'recTag1' });
     this.server.create('tutorial', { id: 'recTuto1', source: 'ma source' });
 
     this.server.create('challenge', { id: 'recChallenge1' });
@@ -44,13 +39,11 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     return authenticateSession();
   });
 
-  test('create a new tutorial', async function(assert) {
+  test('create a new tutorial', async function (assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await click(screen.getByRole('button', { name: 'Modifier' }));
-    const createTutorialLink = screen.getByRole('button', {
-      name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
-    });
+    const createTutorialLink = screen.getByRole('button', { name: 'Ajouter un tutoriel Pour réussir la prochaine fois' });
 
     await click(createTutorialLink);
 
@@ -113,13 +106,11 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.strictEqual(screen.getAllByText('Super tag').length, 2);
   });
 
-  test('verify if the url link is valid', async function(assert) {
+  test('verify if the url link is valid', async function (assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');
-    const createTutorialLink = screen.getByRole('button', {
-      name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
-    });
+    const createTutorialLink = screen.getByRole('button', { name: 'Ajouter un tutoriel Pour réussir la prochaine fois' });
 
     await click(createTutorialLink);
 
@@ -146,4 +137,3 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     assert.dom(screen.getByLabelText('Lien *')).hasValue('PASBONLELINK');
   });
 });
-

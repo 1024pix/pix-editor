@@ -7,13 +7,12 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | competence-management/single', function(hooks) {
-
+module('Acceptance | competence-management/single', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store, originalWindowConfirm;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     originalWindowConfirm = window.confirm;
     store = this.owner.lookup('service:store');
@@ -26,11 +25,11 @@ module('Acceptance | competence-management/single', function(hooks) {
     return authenticateSession();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     window.confirm = originalWindowConfirm;
   });
 
-  test('it should edit a competence', async function(assert) {
+  test('it should edit a competence', async function (assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -46,7 +45,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.strictEqual(competence.title, 'Nouveau titre');
   });
 
-  test('it should cancel edit', async function(assert) {
+  test('it should cancel edit', async function (assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -62,7 +61,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.strictEqual(competence.title, 'Titre');
   });
 
-  test('it should prevent transition on edition', async function(assert) {
+  test('it should prevent transition on edition', async function (assert) {
     // given
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(false);

@@ -6,11 +6,7 @@ export default class V2Route extends Route {
   @service router;
   @service versionManager;
 
-  queryParams = {
-    locale: {
-      refreshModel: true,
-    },
-  };
+  queryParams = { locale: { refreshModel: true } };
 
   async model(params) {
     const competence = await this.store.findRecord('competence', params.competence_id);

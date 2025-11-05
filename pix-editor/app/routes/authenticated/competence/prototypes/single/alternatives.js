@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 
 export default class AlternativesRoute extends Route {
-
   async model() {
     const prototype = this.modelFor('authenticated.competence.prototypes.single');
     await prototype.skill.get('challenges');
@@ -16,5 +15,4 @@ export default class AlternativesRoute extends Route {
   resetController(controller) {
     controller.rightMaximized = false;
   }
-
 }

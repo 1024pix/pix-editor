@@ -19,14 +19,14 @@ export async function setHeadersToAttachments(attachments) {
       headers: {
         'Content-Type': attachment.fields.mimeType,
         'X-Auth-Token': token,
-      }
+      },
     };
     if (attachment.fields.type === 'attachment') {
       config.headers['Content-Disposition'] = `attachment; filename="${encodeURIComponent(attachment.fields.filename)}"`;
     }
     try {
       await limit(() => {
-        count ++;
+        count++;
         console.log(`Progress: ${count / attachments.length * 100}`);
         return axios.post(attachment.fields.url, {}, config);
       });

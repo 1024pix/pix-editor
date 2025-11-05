@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
 export default class PopinThresholdCalculation extends Component {
-
   get selectedSkills() {
     const selectedSkills = [];
     const areas = this.args.model;
@@ -32,7 +31,7 @@ export default class PopinThresholdCalculation extends Component {
 
   get selectedSkillsLevels() {
     const levels = [];
-    this.selectedSkills.forEach((skill)=>{
+    this.selectedSkills.forEach((skill) => {
       if (!levels.includes(skill.level)) {
         levels.push(skill.level);
       }

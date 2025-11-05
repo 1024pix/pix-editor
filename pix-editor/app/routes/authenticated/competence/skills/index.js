@@ -6,7 +6,11 @@ export default class SkillsIndexRoute extends Route {
     const competenceController = this.controllerFor('authenticated.competence');
     competenceController.setSection('skills');
     const view = competenceController.view;
-    if (!['production', 'workbench', 'draft'].includes(view)) {
+    if (![
+      'production',
+      'workbench',
+      'draft',
+    ].includes(view)) {
       competenceController.setView('production');
     }
     competenceController.maximizeLeft(false);

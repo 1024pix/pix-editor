@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class CompetenceCompetenceGridTubeComponent extends Component {
-
   get isOverview() {
     return this.args.tubeOverview != null;
   }

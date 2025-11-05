@@ -26,5 +26,4 @@ export default class FieldToggleFieldComponent extends Component {
       this.args.setDisplayField(true);
     }
   }
-
 }

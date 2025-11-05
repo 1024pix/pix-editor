@@ -3,7 +3,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class PrototypesRoute extends Route {
-
   @service currentData;
   @service store;
   @service router;
@@ -13,12 +12,12 @@ export default class PrototypesRoute extends Route {
   refreshing = false;
 
   beforeModel(transition) {
-    if (!['production', 'workbench', 'workbench-list'].includes(transition.to.queryParams.view)) {
-      this.router.replaceWith({
-        queryParams: {
-          view: 'production',
-        },
-      });
+    if (![
+      'production',
+      'workbench',
+      'workbench-list',
+    ].includes(transition.to.queryParams.view)) {
+      this.router.replaceWith({ queryParams: { view: 'production' } });
     }
   }
 

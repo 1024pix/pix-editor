@@ -5,16 +5,16 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
-module('Integration | Component | login-form', function(hooks) {
+module('Integration | Component | login-form', function (hooks) {
   setupIntlRenderingTest(hooks);
   let onLogInClickedStub;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     onLogInClickedStub = sinon.stub();
     this.onLogInClicked = onLogInClickedStub;
   });
 
-  test('it renders correctly', async function(assert) {
+  test('it renders correctly', async function (assert) {
     // when
     await render(hbs`<LoginForm @onLogInClicked={{this.onLogInClicked}} />`);
 
@@ -28,7 +28,7 @@ module('Integration | Component | login-form', function(hooks) {
     assert.dom('#login-form-error-message').doesNotExist();
   });
 
-  test('it calls onLogInClicked with the API key when form is submitted', async function(assert) {
+  test('it calls onLogInClicked with the API key when form is submitted', async function (assert) {
     // given
     onLogInClickedStub.resolves();
     const apiKey = 'test-api-key-123';
@@ -43,7 +43,7 @@ module('Integration | Component | login-form', function(hooks) {
     assert.ok(onLogInClickedStub.calledWith(apiKey));
   });
 
-  test('it displays error message when login fails', async function(assert) {
+  test('it displays error message when login fails', async function (assert) {
     // given
     onLogInClickedStub.rejects(new Error('Login failed'));
     const apiKey = 'invalid-api-key';
@@ -58,7 +58,7 @@ module('Integration | Component | login-form', function(hooks) {
     assert.dom('#login-form-error-message p').hasText('La clé saisie n\'a pas pu être validée ou n\'est pas valide. Vérifiez votre connexion, votre saisie ou contactez l\'équipe de développement.');
   });
 
-  test('it hides error message when a new login attempt is made', async function(assert) {
+  test('it hides error message when a new login attempt is made', async function (assert) {
     // given
     onLogInClickedStub.onFirstCall().rejects(new Error('Login failed'));
     onLogInClickedStub.onSecondCall().resolves();
@@ -82,7 +82,7 @@ module('Integration | Component | login-form', function(hooks) {
     assert.dom('#login-form-error-message').doesNotExist();
   });
 
-  test('it updates the API key value when input changes', async function(assert) {
+  test('it updates the API key value when input changes', async function (assert) {
     // given
     onLogInClickedStub.resolves();
     const firstApiKey = 'first-key';

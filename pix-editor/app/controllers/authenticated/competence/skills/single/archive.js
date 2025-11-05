@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceSkillsSingleArchiveController extends Controller {
-
   @controller('authenticated.competence') competenceController;
 
   get skill() {
@@ -59,5 +58,4 @@ export default class CompetenceSkillsSingleArchiveController extends Controller 
     this.maximizeRight(false);
     this.router.transitionTo('authenticated.competence.skills.single.archive');
   }
-
 }

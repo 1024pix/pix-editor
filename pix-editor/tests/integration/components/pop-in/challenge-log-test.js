@@ -6,12 +6,12 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | popin-challenge-log', function(hooks) {
+module('Integration | Component | popin-challenge-log', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let paginatedQueryLoadNotesStub;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     paginatedQueryLoadNotesStub = sinon.stub();
     class PaginatedQueryService extends Service {
       query = paginatedQueryLoadNotesStub.resolves([note]);
@@ -30,32 +30,31 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
       locales: ['Francophone', 'Franco Français'],
       instruction: 'Some instructions 1',
     };
-    this.closeAction = function() { };
+    this.closeAction = function () { };
     this.challenge = challenge;
   });
 
-  test('it renders', async function(assert) {
-    //when
+  test('it renders', async function (assert) {
+    // when
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
-    //then
+    // then
     assert.dom('.pix-modal').exists();
   });
 
-  test('it queries notes', async function(assert) {
-    //when
+  test('it queries notes', async function (assert) {
+    // when
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
-    //then
+    // then
     assert.deepEqual(paginatedQueryLoadNotesStub.getCall(0).args, ['note', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
 
-  test('it queries changelogs', async function(assert) {
-    //when
+  test('it queries changelogs', async function (assert) {
+    // when
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
-    //then
+    // then
     assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args, ['changelog-entry', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
-
 });

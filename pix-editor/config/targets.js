@@ -6,6 +6,4 @@ const browsers = [
   'last 1 Safari versions',
 ];
 
-module.exports = {
-  browsers,
-};
+module.exports = { browsers };

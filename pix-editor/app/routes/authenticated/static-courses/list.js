@@ -3,21 +3,11 @@ import { inject as service } from '@ember/service';
 
 export default class StaticCoursesRoute extends Route {
   queryParams = {
-    pageNumber: {
-      refreshModel: true,
-    },
-    pageSize: {
-      refreshModel: true,
-    },
-    isActive: {
-      refreshModel: true,
-    },
-    name: {
-      refreshModel: true,
-    },
-    tagIds: {
-      refreshModel: true,
-    },
+    pageNumber: { refreshModel: true },
+    pageSize: { refreshModel: true },
+    isActive: { refreshModel: true },
+    name: { refreshModel: true },
+    tagIds: { refreshModel: true },
   };
 
   @service store;

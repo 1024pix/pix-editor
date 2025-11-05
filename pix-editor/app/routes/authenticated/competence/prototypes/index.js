@@ -7,7 +7,11 @@ export default class PrototypesIndexRoute extends Route {
     competenceController.setSection('challenges');
     competenceController.maximizeLeft(false);
     const view = competenceController.view;
-    if (!['production', 'workbench', 'workbench-list'].includes(view)) {
+    if (![
+      'production',
+      'workbench',
+      'workbench-list',
+    ].includes(view)) {
       competenceController.setView('production');
     }
   }

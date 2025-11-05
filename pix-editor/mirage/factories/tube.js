@@ -9,4 +9,3 @@ export default Factory.extend({
   practicalDescriptionEn: 'practicalDescriptionEn',
   pixId: 'pixId',
 });
-

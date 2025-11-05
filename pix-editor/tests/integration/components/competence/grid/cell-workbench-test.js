@@ -5,14 +5,14 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | competence/grid/cell-workbench', function(hooks) {
+module('Integration | Component | competence/grid/cell-workbench', function (hooks) {
   setupIntlRenderingTest(hooks);
   let store;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
   });
 
-  test('it should display a prototype count by status', async function(assert) {
+  test('it should display a prototype count by status', async function (assert) {
     // given
     const validatedPrototype = store.createRecord('challenge', {
       id: 'recChallenge0',
@@ -53,7 +53,13 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
       id: 'recSkill1',
       name: 'skill1',
       level: 1,
-      challenges: [validatedPrototype, archivedPrototype1, archivedPrototype2, draftPrototype1, deletedPrototype1],
+      challenges: [
+        validatedPrototype,
+        archivedPrototype1,
+        archivedPrototype2,
+        draftPrototype1,
+        deletedPrototype1,
+      ],
     });
     const skill2 = store.createRecord('skill', {
       id: 'recSkill2',

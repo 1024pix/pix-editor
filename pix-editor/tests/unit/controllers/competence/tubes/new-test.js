@@ -4,12 +4,12 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence/tubes/new', function(hooks) {
+module('Unit | Controller | competence/tubes/new', function (hooks) {
   setupTest(hooks);
 
   let controller, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, deleteRecordStub, themeRollbackAttributesStub;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -40,21 +40,15 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     controller = this.owner.lookup('controller:authenticated.competence/tubes/new');
 
     themeRollbackAttributesStub = sinon.stub();
-    controller.model = EmberObject.create({
-      theme: {
-        rollbackAttributes: themeRollbackAttributesStub,
-      },
-    });
+    controller.model = EmberObject.create({ theme: { rollbackAttributes: themeRollbackAttributesStub } });
     controller.edition = true;
   });
 
-  test('it should cancel creation', async function(assert) {
+  test('it should cancel creation', async function (assert) {
     // given
     controller.model.name = 'newTube';
     const parentControllerSendStub = sinon.stub();
-    controller.parentController = {
-      send: parentControllerSendStub,
-    };
+    controller.parentController = { send: parentControllerSendStub };
 
     // when
     await controller.cancelEdit();
@@ -67,7 +61,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(parentControllerSendStub.calledWith('closeChildComponent'));
   });
 
-  test('it should save record', async function(assert) {
+  test('it should save record', async function (assert) {
     // given
     const transitionToRouteStub = sinon.stub();
     controller.router.transitionTo = transitionToRouteStub;
@@ -89,11 +83,9 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', competence, controller.model));
   });
 
-  test('it should catch an error if save action failed', async function(assert) {
+  test('it should catch an error if save action failed', async function (assert) {
     // given
-    const errorMessage = {
-      'error': ['error-test'],
-    };
+    const errorMessage = { error: ['error-test'] };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;
 

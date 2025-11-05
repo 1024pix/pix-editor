@@ -5,17 +5,16 @@ import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('Unit | Component | competence/grid/grid-cell', function(hooks) {
+module('Unit | Component | competence/grid/grid-cell', function (hooks) {
   setupTest(hooks);
   let section, view;
-  module('#draftSkill', function(hooks) {
-
-    hooks.beforeEach(function() {
+  module('#draftSkill', function (hooks) {
+    hooks.beforeEach(function () {
       section = 'skills';
       view = 'draft';
     });
 
-    test('it should return a proper cell type if there is a skill', function(assert) {
+    test('it should return a proper cell type if there is a skill', function (assert) {
       // given
       const skill = {
         id: 'skillId',
@@ -29,7 +28,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       // then
       assert.strictEqual(result, 'skill-draft');
     });
-    test('it should return `empty` if there isn\'t skill', function(assert) {
+    test('it should return `empty` if there isn\'t skill', function (assert) {
       // given
       const component = createGlimmerComponent('component:competence/grid/grid-cell', { section, view });
 
@@ -40,7 +39,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       assert.strictEqual(result, 'empty');
     });
 
-    test('it should return `add-skill` if user may edit skill', function(assert) {
+    test('it should return `add-skill` if user may edit skill', function (assert) {
       // given
       class AccessService extends Service {
         constructor() {

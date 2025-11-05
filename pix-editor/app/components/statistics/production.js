@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class StatisticsProductionComponent extends Component {
-
   get productionTubeCounts() {
     return this.productionCounts((competence) => {
       return competence.productionTubeCount;
@@ -60,5 +59,4 @@ export default class StatisticsProductionComponent extends Component {
   productionTotal(productionCounts) {
     return Object.values(productionCounts).reduce((current, value) => current + value, 0);
   }
-
 }

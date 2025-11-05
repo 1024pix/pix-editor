@@ -27,5 +27,4 @@ export default class AuthenticatedRoute extends Route {
     }
     return frameworks;
   }
-
 }

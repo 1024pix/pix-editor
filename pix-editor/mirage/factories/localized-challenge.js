@@ -1,6 +1,3 @@
 import { Factory } from 'miragejs';
 
-export default Factory.extend({
-  locale: 'fr',
-});
-
+export default Factory.extend({ locale: 'fr' });

@@ -2,7 +2,6 @@ import { inject as service } from '@ember/service';
 import Model, { attr } from '@ember-data/model';
 
 export default class NoteModel extends Model {
-
   @service changelogEntry;
 
   @attr text;
@@ -23,15 +22,15 @@ export default class NoteModel extends Model {
   get actionCSS() {
     const changelogEntry = this.changelogEntry;
     switch (this.action) {
-      case changelogEntry.deleteAction :
+      case changelogEntry.deleteAction:
         return 'delete-log';
-      case changelogEntry.createAction :
+      case changelogEntry.createAction:
         return 'create-log';
-      case changelogEntry.archiveAction :
+      case changelogEntry.archiveAction:
         return 'archive-log';
-      case changelogEntry.modifyAction :
+      case changelogEntry.modifyAction:
         return 'modify-log';
-      case changelogEntry.moveAction :
+      case changelogEntry.moveAction:
         return 'move-log';
       default:
         return '';

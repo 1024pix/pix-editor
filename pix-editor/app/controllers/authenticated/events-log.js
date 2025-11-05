@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class EventsLogController extends Controller {
-
   @service paginatedQuery;
   @tracked offset;
 
