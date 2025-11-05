@@ -58,11 +58,6 @@ export const challengeDatasource = datasource.extend({
       competenceId = airtableRecord.get('Compétences (via tube) (id persistant)')[0];
     }
 
-    let timer;
-    if (airtableRecord.get('Timer')) {
-      timer = parseInt(airtableRecord.get('Timer'));
-    }
-
     const filesIds = airtableRecord.get('files');
     const filesLocalizedChallengeIds = airtableRecord.get('filesLocalizedChallengeIds');
     const files =
@@ -84,7 +79,7 @@ export const challengeDatasource = datasource.extend({
       skillId: (airtableRecord.get('Acquix (id persistant)') || [])[0],
       embedUrl: airtableRecord.get('Embed URL'),
       embedHeight: airtableRecord.get('Embed height'),
-      timer,
+      timer: airtableRecord.get('Timer'),
       competenceId,
       format: airtableRecord.get('Format'),
       files,

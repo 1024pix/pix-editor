@@ -393,7 +393,7 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
 function compareChallengeDtos(airtableDto, pgDto) {
   const diff = [];
   if (airtableDto.id !== pgDto.id) diff.push(`challenge airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-  if (airtableDto.type !== pgDto.type)
+  if (!areNullableValuesEqual(airtableDto.type, pgDto.type))
     diff.push(`challenge airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
   if (airtableDto.t1Status !== pgDto.t1Status)
     diff.push(`challenge airtable t1Status "${airtableDto.t1Status}" != postgres t1Status "${pgDto.t1Status}"`);
@@ -411,7 +411,7 @@ function compareChallengeDtos(airtableDto, pgDto) {
     );
   if (!areNullableValuesEqual(airtableDto.timer, pgDto.timer))
     diff.push(`challenge airtable timer "${airtableDto.timer}" != postgres timer "${pgDto.timer}"`);
-  if (airtableDto.competenceId !== pgDto.competenceId)
+  if (!areNullableValuesEqual(airtableDto.competenceId, pgDto.competenceId))
     diff.push(
       `challenge airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
     );
