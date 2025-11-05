@@ -111,7 +111,7 @@ export const challengeDatasource = datasource.extend({
       madeObsoleteAt: airtableRecord.get('made_obsolete_at'),
       createdAt: airtableRecord.get('created_at'),
       shuffled: airtableRecord.get('shuffled') ?? false,
-      contextualizedFields: airtableRecord.get('contextualizedFields'),
+      contextualizedFields: airtableRecord.get('contextualizedFields') ?? [],
     };
   },
 
@@ -147,7 +147,7 @@ export const challengeDatasource = datasource.extend({
         archived_at: model.archivedAt,
         made_obsolete_at: model.madeObsoleteAt,
         shuffled: model.shuffled,
-        contextualizedFields: model.contextualizedFields ?? [],
+        contextualizedFields: model.contextualizedFields,
       },
     };
     if (model.airtableId) {

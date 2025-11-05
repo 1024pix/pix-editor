@@ -758,6 +758,7 @@ function _mockRichAirtableContent() {
     alpha: 2.2,
     updatedAt: new Date(),
     shuffled: false,
+    contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge121211);
   const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
@@ -796,6 +797,7 @@ function _mockRichAirtableContent() {
     alpha: 456,
     updatedAt: new Date(),
     shuffled: true,
+    contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge121212);
   const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
@@ -835,6 +837,7 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: new Date(),
     shuffled: false,
+    contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211111);
   const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
@@ -873,6 +876,7 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: new Date(),
     shuffled: false,
+    contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211112);
   const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
@@ -911,6 +915,7 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: new Date(),
     shuffled: false,
+    contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211113);
   const airtableChallenge211113 = airtableBuilder.factory.buildChallenge(challenge211113);

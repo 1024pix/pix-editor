@@ -99,7 +99,7 @@ export class CopyChallengesFromAirtableToPg extends Script {
       madeObsoleteAt: record.get('made_obsolete_at'),
       createdAt: record.get('created_at'),
       shuffled: record.get('shuffled') ?? false,
-      contextualizedFields: record.get('contextualizedFields'),
+      contextualizedFields: record.get('contextualizedFields') ?? [],
     }));
 
     const postgresOnlyIds = await knex
