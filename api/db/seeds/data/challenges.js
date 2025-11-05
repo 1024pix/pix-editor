@@ -688,7 +688,7 @@ export async function copyChallengesFromAirtable({ airtableClient, databaseBuild
       madeObsoleteAt: record.get('made_obsolete_at'),
       createdAt: record.get('created_at'),
       shuffled: record.get('shuffled') ?? false,
-      contextualizedFields: record.get('contextualizedFields'),
+      contextualizedFields: record.get('contextualizedFields') ?? [],
     });
   });
 }

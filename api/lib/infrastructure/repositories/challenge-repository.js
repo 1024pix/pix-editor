@@ -360,9 +360,9 @@ function selectChallenges() {
       ),
     )
     .from('challenges')
-    .join('skills', 'skills.id', 'challenges.skillId')
-    .join('tubes', 'tubes.id', 'skills.tubeId')
-    .join('thematics', 'thematics.id', 'tubes.thematicId');
+    .leftOuterJoin('skills', 'skills.id', 'challenges.skillId')
+    .leftOuterJoin('tubes', 'tubes.id', 'skills.tubeId')
+    .leftOuterJoin('thematics', 'thematics.id', 'tubes.thematicId');
 }
 
 function toDomainList(challengeDtos, translations, localizedChallenges) {

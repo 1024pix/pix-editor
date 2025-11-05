@@ -360,7 +360,7 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildTube(expectedCurrentContent.tubes[0]);
   expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
   databaseBuilder.factory.buildSkill(expectedCurrentContent.skills[0]);
-  databaseBuilder.factory.buildChallenge(expectedCurrentContent.challenges[0]);
+  databaseBuilder.factory.buildChallenge({ ...expectedCurrentContent.challenges[0], contextualizedFields: [] });
 
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse0',
@@ -880,12 +880,17 @@ async function mockContentForRelease() {
     });
   }
 
-  databaseBuilder.factory.buildChallenge({ ...expectedCurrentContent.challenges[0], version: 8 });
+  databaseBuilder.factory.buildChallenge({
+    ...expectedCurrentContent.challenges[0],
+    version: 8,
+    contextualizedFields: [],
+  });
   databaseBuilder.factory.buildChallenge({
     ...expectedCurrentContent.challenges[1],
     accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
     accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
     version: 8,
+    contextualizedFields: [],
   });
 
   for (const challenge of expectedCurrentContent.challenges) {
