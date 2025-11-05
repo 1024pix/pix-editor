@@ -202,7 +202,7 @@ describe('Integration | Repository | release-repository', function () {
       buildThematicsTranslations(thematics);
       buildTubesTranslations(tubeIds);
       buildSkillsTranslations(skills);
-      buildChallengesTranslationsAndLocalizedChallenges(challenges);
+      buildChallengesTranslations(challenges);
 
       databaseBuilder.factory.buildStaticCourse({
         id: 'course1PG',
@@ -344,24 +344,15 @@ function buildTubesTranslations(tubeIds) {
   }
 }
 
-function buildChallengesTranslationsAndLocalizedChallenges(challenges) {
+function buildChallengesTranslations(challenges) {
   for (const challenge of challenges) {
-    buildChallengeTranslationsAndLocalizedChallenge(challenge, challenge.locales[0]);
-    challenge.files?.map(({ fileId, localizedChallengeId }) =>
-      databaseBuilder.factory.buildAttachment(
-        domainBuilder.buildAttachmentDatasourceObject({
-          id: fileId,
-          challengeId: challenge.id,
-          localizedChallengeId,
-        }),
-      ),
-    );
+    buildChallengeTranslations(challenge, challenge.locales[0]);
   }
 
-  buildChallengeTranslationsAndLocalizedChallenge(challenges[0], 'nl-be', 'challengeNl');
+  buildChallengeTranslations(challenges[0], 'nl-be');
 }
 
-function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, localizedChallengeId = challenge.id) {
+function buildChallengeTranslations(challenge, locale) {
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${challenge.id}.instruction`,
     locale,
@@ -391,23 +382,6 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
     key: `challenge.${challenge.id}.embedTitle`,
     locale,
     value: `${challenge.id} embedTitle ${locale}`,
-  });
-
-  const isPrimary = localizedChallengeId === challenge.id;
-  const isAlternative = challenge.genealogy === 'Décliné 1';
-  databaseBuilder.factory.buildLocalizedChallenge({
-    id: localizedChallengeId,
-    challengeId: challenge.id,
-    locale,
-    embedUrl: isPrimary ? challenge.embedUrl : null,
-    status: LocalizedChallenge.STATUSES.PLAY,
-    requireGafamWebsiteAccess: !isAlternative,
-    isIncompatibleIpadCertif: isPrimary,
-    deafAndHardOfHearing: isPrimary
-      ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK
-      : LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-    isAwarenessChallenge: isPrimary,
-    toRephrase: isPrimary,
   });
 }
 
@@ -736,6 +710,7 @@ function _mockRichAirtableContent() {
     files: [
       { fileId: 'attachment1', localizedChallengeId: 'challenge121211' },
       { fileId: 'attachment2', localizedChallengeId: 'challenge121211' },
+      { fileId: 'attachment4', localizedChallengeId: 'challengeNl' },
     ],
     autoReply: false,
     locales: ['fr-fr'],
@@ -761,6 +736,32 @@ function _mockRichAirtableContent() {
     contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge121211);
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge121211.id,
+    challengeId: challenge121211.id,
+    locale: challenge121211.locales[0],
+    embedUrl: challenge121211.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  });
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: 'challengeNl',
+    challengeId: challenge121211.id,
+    locale: 'nl-be',
+    embedUrl: null,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: false,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+    isAwarenessChallenge: false,
+    toRephrase: false,
+  });
+
   const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
   const challenge121212 = {
     id: 'challenge121212',
@@ -800,6 +801,20 @@ function _mockRichAirtableContent() {
     contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge121212);
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge121212.id,
+    challengeId: challenge121212.id,
+    locale: challenge121212.locales[0],
+    embedUrl: challenge121212.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: false,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  });
+
   const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
   const challenge211111 = {
     id: 'challenge211111',
@@ -840,6 +855,20 @@ function _mockRichAirtableContent() {
     contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211111);
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge211111.id,
+    challengeId: challenge211111.id,
+    locale: challenge211111.locales[0],
+    embedUrl: challenge211111.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  });
+
   const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
   const challenge211112 = {
     id: 'challenge211112',
@@ -879,6 +908,20 @@ function _mockRichAirtableContent() {
     contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211112);
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge211112.id,
+    challengeId: challenge211112.id,
+    locale: challenge211112.locales[0],
+    embedUrl: challenge211112.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  });
+
   const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
   const challenge211113 = {
     id: 'challenge211113',
@@ -918,32 +961,55 @@ function _mockRichAirtableContent() {
     contextualizedFields: [],
   };
   databaseBuilder.factory.buildChallenge(challenge211113);
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge211113.id,
+    challengeId: challenge211113.id,
+    locale: challenge211113.locales[0],
+    embedUrl: challenge211113.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: false,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  });
+
   const airtableChallenge211113 = airtableBuilder.factory.buildChallenge(challenge211113);
-  const airtableAttachment1 = airtableBuilder.factory.buildAttachment({
+
+  const attachment1 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment1',
     type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment1 url',
     challengeId: 'challenge121211',
   });
-  const airtableAttachment2 = airtableBuilder.factory.buildAttachment({
+  databaseBuilder.factory.buildAttachment(attachment1);
+  const airtableAttachment1 = airtableBuilder.factory.buildAttachment(attachment1);
+  const attachment2 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment2',
     type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment2 url',
     challengeId: 'challenge121211',
   });
-  const airtableAttachment3 = airtableBuilder.factory.buildAttachment({
+  databaseBuilder.factory.buildAttachment(attachment2);
+  const airtableAttachment2 = airtableBuilder.factory.buildAttachment(attachment2);
+  const attachment3 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment3',
     type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment3 url',
     challengeId: 'challenge211111',
   });
-  const airtableAttachment4 = airtableBuilder.factory.buildAttachment({
+  databaseBuilder.factory.buildAttachment(attachment3);
+  const airtableAttachment3 = airtableBuilder.factory.buildAttachment(attachment3);
+  const attachment4 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment4',
     type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment4 url',
     challengeId: 'challenge121211',
     localizedChallengeId: 'challengeNl',
   });
+  databaseBuilder.factory.buildAttachment(attachment4);
+  const airtableAttachment4 = airtableBuilder.factory.buildAttachment(attachment4);
 
   airtableBuilder.mockLists({
     frameworks: [airtableFrameworkA],
