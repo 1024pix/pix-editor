@@ -816,7 +816,7 @@ describe('Acceptance | Route | attachments', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/attachments?filter[loclizedChallengeId]=localizedChallengeId123,challengeId456',
+          url: '/api/attachments?filter[loclizedChallengeId]=localizedChallenge123,challengeId456',
           headers: generateAuthorizationHeader(readUser),
         });
 
@@ -865,25 +865,25 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challenge123',
         locale: 'es',
       });
+      const attachment = {
+        id: 'airtableAttachmentId1',
+        type: 'some type 1',
+        url: 'some url 1',
+        size: 123,
+        mimeType: 'some mime type 1',
+        filename: 'some filename 1',
+        challengeId: 'challenge123',
+        airtableChallengeId: 'challengeAirtable123',
+        localizedChallengeId: 'localizedChallenge123',
+      };
+      databaseBuilder.factory.buildAttachment(attachment);
       await databaseBuilder.commit();
-      const airtableAttachments = [];
-      airtableAttachments.push(
-        airtableBuilder.factory.buildAttachment({
-          id: 'airtableAttachmentId1',
-          type: 'some type 1',
-          url: 'some url 1',
-          size: 123,
-          mimeType: 'some mime type 1',
-          filename: 'some filename 1',
-          challengeId: 'challenge123',
-          airtableChallengeId: 'challengeAirtable123',
-          localizedChallengeId: 'localizedChallenge123',
-        }),
-      );
+      const airtableAttachments = [airtableBuilder.factory.buildAttachment(attachment)];
+
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
         .query({
-          filterByFormula: 'OR({localizedChallengeId} = "localizedChallengeId123")',
+          filterByFormula: 'OR({localizedChallengeId} = "localizedChallenge123")',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableAttachments });
@@ -892,7 +892,7 @@ describe('Acceptance | Route | attachments', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId123',
+        url: '/api/attachments?filter[localizedChallengeId]=localizedChallenge123',
         headers: generateAuthorizationHeader(readUser),
       });
 

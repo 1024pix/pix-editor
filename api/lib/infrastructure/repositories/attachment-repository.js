@@ -28,9 +28,15 @@ export async function list() {
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds);
-  if (!datasourceAttachments) return [];
-  return toDomainList(datasourceAttachments);
+  const [airtableDtos, pgDtos] = await Promise.all([
+    attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds),
+    knex.select('*').from('attachments').whereIn('localizedChallengeId', localizedChallengeIds).orderBy('id'),
+  ]);
+
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
+
+  if (!airtableDtos) return [];
+  return toDomainList(airtableDtos);
 }
 
 export async function listByLocalizedChallengeId(localizedChallengeId) {

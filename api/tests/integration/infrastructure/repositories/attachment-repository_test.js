@@ -156,6 +156,10 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: challengeId2,
         locale: 'fr',
       });
+      [attachment_FR_forChallengeA_data, attachment_NL_forChallengeA_data, attachment_FR_forChallengeB_data].forEach(
+        (attachment) =>
+          databaseBuilder.factory.buildAttachment(domainBuilder.buildAttachmentDatasourceObject(attachment)),
+      );
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
