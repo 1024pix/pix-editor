@@ -99,5 +99,8 @@
     "split2": "^4.1.0",
     "vitest": "^4.0.7",
     "yargs": "^18.0.0"
+  },
+  "overrides": {
+    "tough-cookie": "^6.0.0"
   }
 }
