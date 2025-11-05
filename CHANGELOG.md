@@ -1,5 +1,11 @@
 
 
+## v3.235.0 (05/11/2025)
+
+
+### :building_construction: Tech
+- [#1236](https://github.com/1024pix/pix-editor/pull/1236) [TECH] Double lecture des pièces jointes et illustrations (PIX-19950).
+
 ## v3.234.2 (05/11/2025)
 
 
