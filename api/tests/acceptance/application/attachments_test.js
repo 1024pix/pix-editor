@@ -730,18 +730,20 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challenge123',
         locale: 'es',
       });
-      await databaseBuilder.commit();
-      const airtableAttachment = airtableBuilder.factory.buildAttachment({
+      const attachment = {
         id: 'recABC123',
         type: 'some type',
         url: 'some url',
-        size: 'some size',
+        size: 52983472,
         mimeType: 'some mimeType',
         filename: 'some filename',
         challengeId: 'challenge123',
         airtableChallengeId: 'challengeAirtable123',
         localizedChallengeId: 'challenge123ES',
-      });
+      };
+      databaseBuilder.factory.buildAttachment(attachment);
+      await databaseBuilder.commit();
+      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
       const airtableGetAttachmentScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments/recABC123')
         .query({})
@@ -765,7 +767,7 @@ describe('Acceptance | Route | attachments', () => {
           attributes: {
             type: 'some type',
             url: 'some url',
-            size: 'some size',
+            size: 52983472,
             'mime-type': 'some mimeType',
             filename: 'some filename',
           },
