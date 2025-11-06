@@ -240,7 +240,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
         filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
-        sort: [{ field: 'updated_at', direction: 'desc' }],
+        sort: [
+          { field: 'updated_at', direction: 'desc' },
+          { field: 'id persistant', direction: 'asc' },
+        ],
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
@@ -265,7 +268,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
         filterByFormula: 'OR(FIND("query term", LOWER(CONCATENATE({Embed URL}))), "challengeId1" = {id persistant})',
-        sort: [{ field: 'updated_at', direction: 'desc' }],
+        sort: [
+          { field: 'updated_at', direction: 'desc' },
+          { field: 'id persistant', direction: 'asc' },
+        ],
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');

@@ -68,11 +68,19 @@ export async function filter(params = {}) {
   const [airtableDtos, pgDtos] = await Promise.all([
     challengeDatasource.search(params),
     selectChallenges()
-      .join('localized_challenges', 'localized_challenges.id', 'challenges.id')
       .whereIn('challenges.id', params.filter.ids)
-      .orWhereILike('localized_challenges.embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`)
+      .orWhereIn(
+        'challenges.id',
+        knex
+          .select('challengeId')
+          .from('localized_challenges')
+          .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
+      )
       .limit(params.page?.size)
-      .orderBy('updatedAt', 'desc'),
+      .orderBy([
+        { column: 'updatedAt', order: 'desc' },
+        { column: 'challenges.id', order: 'asc' },
+      ]),
   ]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
