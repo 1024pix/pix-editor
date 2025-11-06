@@ -72,7 +72,7 @@ async function getBaseName() {
 }
 
 export async function canSeedOrEmptyAirtableBase() {
-  if (config.airtableSeedsConfig.force) {
+  if (config.seedsConfig.force) {
     return true;
   }
   let airtableBaseName;

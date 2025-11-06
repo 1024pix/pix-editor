@@ -1,12 +1,4 @@
-import { saveInAirtable } from './utils.js';
-
-export async function buildThematicsFromConfig({
-  airtableClient,
-  databaseBuilder,
-  logger,
-  learningContentConfig,
-  learningContentData,
-}) {
+export async function buildThematicsFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const thematicItems = [];
   const allCompetences = learningContentData.flatMap((framework) =>
     framework.areas.flatMap((area) => area.competences),
@@ -32,7 +24,6 @@ export async function buildThematicsFromConfig({
     thematicItems.push(thematicWorkbenchItem);
     competenceItem.thematics.push(thematicWorkbenchItem);
   }
-  await persistThematics({ items: thematicItems, airtableClient, logger });
   thematicItems.forEach((thematicItem) => {
     thematicItem.tubes = [];
   });
@@ -54,7 +45,6 @@ export function buildThematic({ indexThematic, competenceItem, databaseBuilder, 
   const thematicItem = {
     id: thematicId,
     index: isWorkbench ? 0 : indexThematic,
-    competenceAirtableId: competenceItem.airtableId,
     competenceId: competenceItem.id,
     name: thematicName,
   };
@@ -67,52 +57,4 @@ export function buildThematic({ indexThematic, competenceItem, databaseBuilder, 
     });
   });
   return thematicItem;
-}
-
-export async function persistThematics({ items, airtableClient, logger }) {
-  const airtableItems = items.map(toAirtableObject);
-  const records = await saveInAirtable({
-    tableName: 'Thematiques',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    item.airtableId = records.shift().id;
-  });
-}
-
-function toAirtableObject(item) {
-  return {
-    fields: {
-      'id persistant': item.id,
-      Index: item.index,
-      Competence: [item.competenceAirtableId],
-    },
-  };
-}
-
-export async function copyThematicsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableThematics = await airtableClient
-    .table('Thematiques')
-    .select({
-      fields: [
-        'id persistant',
-        'Index',
-        'Competence (id persistant)',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableThematics.length} thematics from airtable...`);
-
-  airtableThematics.forEach((record) => {
-    databaseBuilder.factory.buildThematic({
-      id: record.get('id persistant'),
-      index: record.get('Index'),
-      competenceId: record.get('Competence (id persistant)')[0],
-      createdAt: record._rawJson.createdTime,
-      updatedAt: new Date(),
-    });
-  });
 }

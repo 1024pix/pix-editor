@@ -155,8 +155,7 @@ export const phrase = {
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
-export const airtableSeedsConfig = {
-  force: process.env.FORCE_AIRTABLE_SEEDS === 'true',
+export const seedsConfig = {
   cntFrameworks: _getNumber(process.env.AIRTABLE_SEEDS_CNT_FRAMEWORKS, 2),
   cntAreasPerFramework: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
   cntCompetencesPerArea: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),

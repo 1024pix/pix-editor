@@ -2525,10 +2525,7 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
       databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube1' });
 
-      const challengeData = domainBuilder.buildChallengeDatasourceObject({
-        skillId: 'skill1',
-        skills: ['recSkill1'],
-      });
+      const challengeData = domainBuilder.buildChallengeDatasourceObject({ skillId: 'skill1' });
 
       databaseBuilder.factory.buildChallenge(challengeData);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -2538,35 +2535,18 @@ describe('Integration | Repository | challenge-repository', () => {
       });
       await databaseBuilder.commit();
 
-      const updateRecord = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
-        new Airtable.Record(
-          'Epreuves',
-          challengeData.airtableId,
-          airtableBuilder.factory.buildChallenge({
-            ...challengeData,
-            skillId: 'skill2',
-            skills: ['recSkill2'],
-          }),
-        ),
-      );
-
-      const challenge = domainBuilder.buildChallenge({ ...challengeData, skills: ['recSkill2'] });
+      const challenge = domainBuilder.buildChallenge({ ...challengeData, skillId: 'skill2' });
 
       // when
       const updatedChallenge = await challengeRepository.update(challenge);
 
       // then
       expect(updatedChallenge).toHaveProperty('skillId', 'skill2');
-      expect(updatedChallenge).toHaveProperty('skills', ['recSkill2']);
+      expect(updatedChallenge).toHaveProperty('skills', ['skill2']);
 
       await expect(
         knex.select('skillId').from('challenges').where('id', challengeData.id).first(),
       ).resolves.toStrictEqual({ skillId: 'skill2' });
-
-      expect(updateRecord).toHaveBeenCalledExactlyOnceWith('Epreuves', {
-        id: challengeData.airtableId,
-        fields: expect.objectContaining({ Acquix: ['recSkill2'] }),
-      });
     });
   });
 
