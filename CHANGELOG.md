@@ -1,5 +1,15 @@
 
 
+## v3.236.0 (06/11/2025)
+
+
+### :building_construction: Tech
+- [#1239](https://github.com/1024pix/pix-editor/pull/1239) [TECH] Calcule la valeur de Pix des acquis depuis postgres (PIX-19944).
+- [#1233](https://github.com/1024pix/pix-editor/pull/1233) [TECH] Supprime les avertissements lors de l'installation des dépendances de l'API.
+
+### :bug: Correction
+- [#1240](https://github.com/1024pix/pix-editor/pull/1240) [BUGFIX] Différences de résultats de recherche d’épreuves.
+
 ## v3.235.0 (05/11/2025)
 
 
