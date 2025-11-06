@@ -55,17 +55,13 @@ export const attachmentDatasource = datasource.extend({
   },
 
   async filterByLocalizedChallengeId(localizedChallengeId) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `{localizedChallengeId} = ${stringValue(localizedChallengeId)}`,
-    });
+    const airtableRawObjects = await findRecords(this.tableName, { filterByFormula: `{localizedChallengeId} = ${stringValue(localizedChallengeId)}` });
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
   async filterByLocalizedChallengeIds(localizedChallengeIds) {
     if (localizedChallengeIds.length === 0) return undefined;
-    const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `OR(${localizedChallengeIds.map((id) => `{localizedChallengeId} = ${stringValue(id)}`).join(',')})`,
-    });
+    const airtableRawObjects = await findRecords(this.tableName, { filterByFormula: `OR(${localizedChallengeIds.map((id) => `{localizedChallengeId} = ${stringValue(id)}`).join(',')})` });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },

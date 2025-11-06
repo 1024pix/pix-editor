@@ -77,11 +77,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
-            attachments: {
-              links: {
-                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
-              },
-            },
+            attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}` } },
           },
         },
       };
@@ -165,11 +161,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              attachments: {
-                links: {
-                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
-                },
-              },
+              attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}` } },
             },
           },
         ],
@@ -277,11 +269,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              attachments: {
-                links: {
-                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[0].id}`,
-                },
-              },
+              attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[0].id}` } },
             },
           },
           {
@@ -310,11 +298,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
-              attachments: {
-                links: {
-                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[1].id}`,
-                },
-              },
+              attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenges[1].id}` } },
             },
           },
         ],
@@ -331,7 +315,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
 
   describe('PATCH /localized-challenges/{id}', () => {
     let now;
-    beforeEach(function () {
+    beforeEach(function() {
       now = new Date('2024-10-29T03:04:00Z');
       vi.useFakeTimers({
         now,
@@ -339,7 +323,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       });
     });
 
-    afterEach(function () {
+    afterEach(function() {
       vi.useRealTimers();
     });
 
@@ -435,11 +419,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               id: 'recChallenge0',
             },
           },
-          attachments: {
-            links: {
-              related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId',
-            },
-          },
+          attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId' } },
         },
       });
       const updatedLocalizedChallenge = await knex('localized_challenges')
@@ -558,11 +538,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               id: 'recChallenge0',
             },
           },
-          attachments: {
-            links: {
-              related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId',
-            },
-          },
+          attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=localizedChallengeId' } },
         },
       });
       const updatedLocalizedChallenge = await knex('localized_challenges')
@@ -643,9 +619,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           data: {
             type: 'localized-challenges',
             id: 'localizedChallengeId',
-            attributes: {
-              status: LocalizedChallenge.STATUSES.PLAY,
-            },
+            attributes: { status: LocalizedChallenge.STATUSES.PLAY },
           },
         },
       };

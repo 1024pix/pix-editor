@@ -57,9 +57,7 @@ describe('Unit | Domain | ChallengeForRelease', () => {
   describe('#get isOperative', () => {
     it.each(Object.values(ChallengeForRelease.STATUSES))('is "%s" is operative ?', (currentStatus) => {
       // given
-      const challengeForRelease = domainBuilder.buildChallengeForRelease({
-        status: currentStatus,
-      });
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({ status: currentStatus });
       const expectedIsOperative = [ChallengeForRelease.STATUSES.ARCHIVE, ChallengeForRelease.STATUSES.VALIDE].includes(
         currentStatus,
       );

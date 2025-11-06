@@ -1,7 +1,6 @@
 const TABLE_NAME = 'trainings';
 
 export function up(knex) {
-
   function table(t) {
     t.increments().primary();
     t.string('title').notNullable();
@@ -19,7 +18,6 @@ export function up(knex) {
 }
 
 export function down(knex) {
-
   return knex.schema
     .dropTable(TABLE_NAME);
 }

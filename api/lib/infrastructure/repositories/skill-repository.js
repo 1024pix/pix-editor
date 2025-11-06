@@ -17,7 +17,11 @@ const TUTORIAL_RELATION_TYPES = {
 const model = 'skill';
 
 export async function list() {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     skillDatasource.list(),
     selectSkills().orderBy('id'),
     translationRepository.listByModel(model),
@@ -29,7 +33,11 @@ export async function list() {
 }
 
 export async function get(id) {
-  const [[airtableDto], pgDto, translations] = await Promise.all([
+  const [
+    [airtableDto],
+    pgDto,
+    translations,
+  ] = await Promise.all([
     skillDatasource.filter({ filter: { ids: [id] } }),
     selectSkills().where('skills.id', id).first(),
     translationRepository.listByEntity(model, id),
@@ -42,7 +50,11 @@ export async function get(id) {
 }
 
 export async function getMany(ids) {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     skillDatasource.filter({ filter: { ids } }),
     selectSkills().whereIn('skills.id', ids).orderBy('skills.id'),
     translationRepository.listByEntities(model, ids),
@@ -85,10 +97,7 @@ export async function getManyByAirtableIds(ids) {
 }
 
 export async function listByTubeId(tubeId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    skillDatasource.filterByTubeId(tubeId),
-    selectSkills().where('skills.tubeId', tubeId),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.filterByTubeId(tubeId), selectSkills().where('skills.tubeId', tubeId)]);
   compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
 
   if (!airtableDtos) return [];
@@ -122,10 +131,7 @@ export async function listActiveByCompetenceId(competenceId) {
 }
 
 export async function listByCompetenceId(competenceId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    skillDatasource.listByCompetenceId(competenceId),
-    selectSkills().where('thematics.competenceId', competenceId).orderBy('skills.id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.listByCompetenceId(competenceId), selectSkills().where('thematics.competenceId', competenceId).orderBy('skills.id')]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
 
@@ -148,7 +154,14 @@ export async function search(params) {
   if (params.sort) {
     const orderBySqlAndParams = params.sort.map(([field, direction]) => {
       if (field === 'name') {
-        return [`(?? || ??) collate ?? ${direction}`, ['tubes.name', 'skills.level', 'fr-x-icu']];
+        return [
+          `(?? || ??) collate ?? ${direction}`,
+          [
+            'tubes.name',
+            'skills.level',
+            'fr-x-icu',
+          ],
+        ];
       }
       return [`?? ${direction}`, [`skills.${field}`]];
     });
@@ -180,7 +193,11 @@ export function selectSkills() {
   return knex
     .select(
       'skills.*',
-      knex.raw("?? || coalesce(??::varchar, '') as ??", ['tubes.name', 'skills.level', 'name']),
+      knex.raw("?? || coalesce(??::varchar, '') as ??", [
+        'tubes.name',
+        'skills.level',
+        'name',
+      ]),
       'thematics.competenceId',
       knex.raw(
         'coalesce((??), \'[]\') as "tutorialIds"',
@@ -270,7 +287,11 @@ export async function update(skill) {
           obsoletedAt: skill.obsoletedAt,
         })
         .where('id', skill.id)
-        .returning(['activatedAt', 'archivedAt', 'obsoletedAt']),
+        .returning([
+          'activatedAt',
+          'archivedAt',
+          'obsoletedAt',
+        ]),
     ]);
 
     const translations = skillTranslations.extractFromDomainObject(skill);
@@ -305,7 +326,11 @@ export async function update(skill) {
       await transaction
         .insert(skillTutorials)
         .into(TUTORIALS_RELATION_TABLE_NAME)
-        .onConflict(['skillId', 'tutorialId', 'type'])
+        .onConflict([
+          'skillId',
+          'tutorialId',
+          'type',
+        ])
         .merge({ updatedAt: transaction.fn.now() });
     }
 

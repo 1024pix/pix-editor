@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { PopulateAlphaAndDeltaColumnsWithCsv } from '../../scripts/populate-alpha-and-delta-column-with-csv.js';
 import { databaseBuilder, createTempFile, knex } from '../test-helper.js';
 
-describe('Script | Populate alpha and delta columns', function () {
-  it('should parse input file', async function () {
+describe('Script | Populate alpha and delta columns', function() {
+  it('should parse input file', async function() {
     const script = new PopulateAlphaAndDeltaColumnsWithCsv();
     const options = script.metaInfo.options;
     const file = 'challenge-calibrations-to-import.csv';
@@ -19,7 +19,7 @@ describe('Script | Populate alpha and delta columns', function () {
     ]);
   });
 
-  it('should update challenges with given calibration', async function () {
+  it('should update challenges with given calibration', async function() {
     databaseBuilder.factory.buildChallenge({ id: '123', alpha: 4, delta: 5 });
     await databaseBuilder.commit();
     const script = new PopulateAlphaAndDeltaColumnsWithCsv();

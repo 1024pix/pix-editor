@@ -9,10 +9,10 @@ import {
 import { createServer } from '../../../../server.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | static courses | POST /api/static-courses', function () {
+describe('Acceptance | API | static courses | POST /api/static-courses', function() {
   let user;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
@@ -188,18 +188,22 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     });
   });
 
-  afterEach(async function () {
+  afterEach(async function() {
     vi.useRealTimers();
   });
 
-  it('creates and returns the static course', async function () {
+  it('creates and returns the static course', async function() {
     // given
     const payload = {
       data: {
         attributes: {
           name: 'static course 1',
           description: 'static course description',
-          'challenge-ids': ['challengeid3', 'challengeid1', 'challengeid1nl'],
+          'challenge-ids': [
+            'challengeid3',
+            'challengeid1',
+            'challengeid1nl',
+          ],
           'tag-ids': ['123', '456'],
         },
       },
@@ -297,16 +301,12 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
         {
           type: 'static-course-tags',
           id: '123',
-          attributes: {
-            label: 'tagA',
-          },
+          attributes: { label: 'tagA' },
         },
         {
           type: 'static-course-tags',
           id: '456',
-          attributes: {
-            label: 'tagB',
-          },
+          attributes: { label: 'tagB' },
         },
       ],
     });

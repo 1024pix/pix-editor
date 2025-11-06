@@ -16,7 +16,7 @@ const TABLE_NAME = 'frameworks';
 describe('Acceptance | Route | frameworks', () => {
   let editorUser, adminUser, originalPixApiUrlValue;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -24,7 +24,7 @@ describe('Acceptance | Route | frameworks', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
@@ -59,16 +59,32 @@ describe('Acceptance | Route | frameworks', () => {
           domainBuilder.buildFrameworkDatasourceObject({
             id: 'framework3',
             name: 'Poux',
-            areaIds: ['area6', 'area7', 'area8'],
-            areaAirtableIds: ['recArea6', 'recArea7', 'recArea8'],
+            areaIds: [
+              'area6',
+              'area7',
+              'area8',
+            ],
+            areaAirtableIds: [
+              'recArea6',
+              'recArea7',
+              'recArea8',
+            ],
           }),
         ),
         airtableBuilder.factory.buildFramework(
           domainBuilder.buildFrameworkDatasourceObject({
             id: 'framework2',
             name: 'Paix',
-            areaIds: ['area3', 'area4', 'area5'],
-            areaAirtableIds: ['recArea3', 'recArea4', 'recArea5'],
+            areaIds: [
+              'area3',
+              'area4',
+              'area5',
+            ],
+            areaAirtableIds: [
+              'recArea3',
+              'recArea4',
+              'recArea5',
+            ],
           }),
         ),
         airtableBuilder.factory.buildFramework(
@@ -110,24 +126,13 @@ describe('Acceptance | Route | frameworks', () => {
           {
             type: 'frameworks',
             id: 'framework1',
-            attributes: {
-              name: 'Pix',
-            },
-            relationships: {
-              areas: {
-                data: [
-                  { id: 'recArea1', type: 'areas' },
-                  { id: 'recArea2', type: 'areas' },
-                ],
-              },
-            },
+            attributes: { name: 'Pix' },
+            relationships: { areas: { data: [{ id: 'recArea1', type: 'areas' }, { id: 'recArea2', type: 'areas' }] } },
           },
           {
             type: 'frameworks',
             id: 'framework3',
-            attributes: {
-              name: 'Poux',
-            },
+            attributes: { name: 'Poux' },
             relationships: {
               areas: {
                 data: [
@@ -141,9 +146,7 @@ describe('Acceptance | Route | frameworks', () => {
           {
             type: 'frameworks',
             id: 'framework2',
-            attributes: {
-              name: 'Paix',
-            },
+            attributes: { name: 'Paix' },
             relationships: {
               areas: {
                 data: [
@@ -157,14 +160,8 @@ describe('Acceptance | Route | frameworks', () => {
           {
             type: 'frameworks',
             id: 'framework4',
-            attributes: {
-              name: 'Prix',
-            },
-            relationships: {
-              areas: {
-                data: [],
-              },
-            },
+            attributes: { name: 'Prix' },
+            relationships: { areas: { data: [] } },
           },
         ],
       });
@@ -190,9 +187,7 @@ describe('Acceptance | Route | frameworks', () => {
           payload: {
             data: {
               type: 'frameworks',
-              attributes: {
-                name: 'Mon framework',
-              },
+              attributes: { name: 'Mon framework' },
             },
           },
           headers: generateAuthorizationHeader(editorUser),
@@ -215,9 +210,7 @@ describe('Acceptance | Route | frameworks', () => {
           payload: {
             data: {
               type: 'frameworks',
-              attributes: {
-                name: null,
-              },
+              attributes: { name: null },
             },
           },
           headers: generateAuthorizationHeader(adminUser),
@@ -240,15 +233,7 @@ describe('Acceptance | Route | frameworks', () => {
       );
 
       const airtableFrameworksScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Referentiel/', {
-          records: [
-            {
-              fields: {
-                Nom: 'Prix',
-              },
-            },
-          ],
-        })
+        .post('/v0/airtableBaseValue/Referentiel/', { records: [{ fields: { Nom: 'Prix' } }] })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableFramework] });
@@ -261,9 +246,7 @@ describe('Acceptance | Route | frameworks', () => {
         payload: {
           data: {
             type: 'frameworks',
-            attributes: {
-              name: 'Prix',
-            },
+            attributes: { name: 'Prix' },
           },
         },
         url: '/api/frameworks',
@@ -276,14 +259,8 @@ describe('Acceptance | Route | frameworks', () => {
         data: {
           type: 'frameworks',
           id: 'framework4',
-          attributes: {
-            name: 'Prix',
-          },
-          relationships: {
-            areas: {
-              data: [],
-            },
-          },
+          attributes: { name: 'Prix' },
+          relationships: { areas: { data: [] } },
         },
       });
       expect(airtableFrameworksScope.isDone()).toBe(true);

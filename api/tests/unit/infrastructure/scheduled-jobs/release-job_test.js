@@ -47,13 +47,13 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
       });
 
       it('should log the success', async () => {
-        //given
+        // given
         const successLogStub = vi.spyOn(logger, 'info');
 
-        //when
+        // when
         await releaseJobProcessor({ data: {} });
 
-        //then
+        // then
         expect(successLogStub).toHaveBeenCalled();
       });
 
@@ -73,11 +73,9 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         );
       });
 
-      it('should not send a slack success notification if slack notification is is globally disabled', async function () {
+      it('should not send a slack success notification if slack notification is is globally disabled', async function() {
         // given
-        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
-          enable: false,
-        });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ enable: false });
 
         // When
         await releaseJobProcessor({ data: { slackNotification: true } });
@@ -86,7 +84,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
-      it('should not send a slack success notification if slack notification is locally disabled', async function () {
+      it('should not send a slack success notification if slack notification is locally disabled', async function() {
         // given
         vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
           webhookUrl: 'http://webook.url',
@@ -156,11 +154,9 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         );
       });
 
-      it('should not send a slack failure notification if Slack notification is disabled', async function () {
+      it('should not send a slack failure notification if Slack notification is disabled', async function() {
         // given
-        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({
-          enable: false,
-        });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ enable: false });
 
         // When
         await releaseJobProcessor({ data: {} });

@@ -2,11 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function () {
+describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
   let user;
   const staticCourseId = 'myAwesomeCourse66';
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
@@ -142,11 +142,11 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     });
   });
 
-  afterEach(function () {
+  afterEach(function() {
     vi.useRealTimers();
   });
 
-  it('deactivates and returns the static course', async function () {
+  it('deactivates and returns the static course', async function() {
     // when
     const server = await createServer();
     const response = await server.inject({
@@ -173,9 +173,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
           'deactivation-reason': '',
         },
         relationships: {
-          tags: {
-            data: [],
-          },
+          tags: { data: [] },
           'challenge-summaries': {
             data: [
               {

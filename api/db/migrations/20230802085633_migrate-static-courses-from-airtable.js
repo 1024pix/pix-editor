@@ -7,20 +7,26 @@ const TESTS_TABLE_IN_AIRTABLE_EXISTS = false;
  */
 export async function up(knex) {
   if (process.env.NODE_ENV !== 'production' || !TESTS_TABLE_IN_AIRTABLE_EXISTS) return;
-  const airtableClient = new Airtable({
-    apiKey: process.env.AIRTABLE_API_KEY,
-  }).base(process.env.AIRTABLE_BASE);
+  const airtableClient = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE);
 
   console.log('reading all static courses from Airtable...');
   const allStaticCourses = await airtableClient.table('Tests').select({
-    fields: ['id persistant', 'Nom', 'Description', 'Épreuves (id persistant)', 'created_at', 'updated_at', 'Nb d\'épreuves'],
+    fields: [
+      'id persistant',
+      'Nom',
+      'Description',
+      'Épreuves (id persistant)',
+      'created_at',
+      'updated_at',
+      'Nb d\'épreuves',
+    ],
   }).all();
   console.log('done');
 
   const filteredStaticCourses = allStaticCourses
     .filter((course) => course.fields['Nom'] != null
-        && course.fields['Nb d\'épreuves'] !== 0
-        && course.fields['Épreuves (id persistant)'].toString().length <= 1000
+      && course.fields['Nb d\'épreuves'] !== 0
+      && course.fields['Épreuves (id persistant)'].toString().length <= 1000,
     );
   console.log(filteredStaticCourses.length);
 

@@ -4,10 +4,10 @@ import { CompetenceForReplication } from '../../../../lib/domain/models/replicat
 import { Competence } from '../../../../lib/domain/models/index.js';
 import { CompetenceForRelease } from '../../../../lib/domain/models/release/index.js';
 
-describe('Unit | Infrastructure | competence-transformer', function () {
-  describe('#forRelease', function () {
-    context('when providing a single Competence', function () {
-      it('should transform it into a single CompetenceForRelease', function () {
+describe('Unit | Infrastructure | competence-transformer', function() {
+  describe('#forRelease', function() {
+    context('when providing a single Competence', function() {
+      it('should transform it into a single CompetenceForRelease', function() {
         // given
         const competence = new Competence({
           id: 'competenceId',
@@ -43,8 +43,8 @@ describe('Unit | Infrastructure | competence-transformer', function () {
       });
     });
 
-    context('when providing several Competences', function () {
-      it('should transform them into a several CompetencesForRelease', function () {
+    context('when providing several Competences', function() {
+      it('should transform them into a several CompetencesForRelease', function() {
         // given
         const competenceA = new Competence({
           id: 'competenceIdA',
@@ -105,9 +105,9 @@ describe('Unit | Infrastructure | competence-transformer', function () {
     });
   });
 
-  describe('#forReplication', function () {
-    context('when providing a single Competence', function () {
-      it('should transform it into a single CompetenceForReplication', function () {
+  describe('#forReplication', function() {
+    context('when providing a single Competence', function() {
+      it('should transform it into a single CompetenceForReplication', function() {
         // given
         const competence = new Competence({
           id: 'competenceId',
@@ -143,8 +143,8 @@ describe('Unit | Infrastructure | competence-transformer', function () {
       });
     });
 
-    context('when providing several Competences', function () {
-      it('should transform them into a several CompetencesForReplication', function () {
+    context('when providing several Competences', function() {
+      it('should transform them into a several CompetencesForReplication', function() {
         // given
         const competenceA = new Competence({
           id: 'competenceIdA',

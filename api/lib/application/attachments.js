@@ -48,7 +48,7 @@ export function register(server) {
             },
           }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const attachmentCreationCommand = attachmentSerializer.deserializeCreationCommand(request.payload);
           const createdAttachment = await usecases.createAttachment({
             attachmentCreationCommand,
@@ -72,9 +72,7 @@ export function register(server) {
           },
         ],
         validate: {
-          params: Joi.object({
-            attachmentId: Types.attachmentId().required(),
-          }),
+          params: Joi.object({ attachmentId: Types.attachmentId().required() }),
           payload: Joi.object({
             data: {
               id: Types.attachmentId().required(),
@@ -103,7 +101,7 @@ export function register(server) {
             },
           }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const attachmentUpdateCommand = attachmentSerializer.deserializeUpdateCommand(request.payload);
           const updatedAttachment = await usecases.updateAttachment({
             attachmentUpdateCommand,
@@ -125,12 +123,8 @@ export function register(server) {
             },
           },
         ],
-        validate: {
-          params: Joi.object({
-            attachmentId: Types.attachmentId().required(),
-          }),
-        },
-        handler: async function (request, h) {
+        validate: { params: Joi.object({ attachmentId: Types.attachmentId().required() }) },
+        handler: async function(request, h) {
           const attachmentId = request.params.attachmentId;
           await usecases.deleteAttachment({
             attachmentId,
@@ -145,12 +139,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/attachments/{attachmentId}',
       config: {
-        validate: {
-          params: Joi.object({
-            attachmentId: Types.attachmentId().required(),
-          }),
-        },
-        handler: async function (request, h) {
+        validate: { params: Joi.object({ attachmentId: Types.attachmentId().required() }) },
+        handler: async function(request, h) {
           const id = request.params.attachmentId;
           const attachment = await usecases.findAttachment({
             id,
@@ -164,12 +154,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/attachments',
       config: {
-        validate: {
-          query: Joi.object({
-            'filter[localizedChallengeId]': Joi.string().required(),
-          }).required(),
-        },
-        handler: async function (request, h) {
+        validate: { query: Joi.object({ 'filter[localizedChallengeId]': Joi.string().required() }).required() },
+        handler: async function(request, h) {
           const query = attachmentSerializer.deserializeQuery(request.query);
           const attachments = await usecases.findAttachments({
             query,

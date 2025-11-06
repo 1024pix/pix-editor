@@ -3,19 +3,15 @@ import { LocalizedChallenge, Translation } from '../../../../lib/domain/models/i
 import { importTranslations, InvalidFileError } from '../../../../lib/domain/usecases/index.js';
 import { PassThrough } from 'node:stream';
 
-describe('Unit | Domain | Usecases | import-translations', function () {
+describe('Unit | Domain | Usecases | import-translations', function() {
   let csvStream;
   let localizedChallengeRepository;
   let translationRepository;
 
   beforeEach(() => {
     csvStream = new PassThrough();
-    localizedChallengeRepository = {
-      create: vi.fn(),
-    };
-    translationRepository = {
-      save: vi.fn(),
-    };
+    localizedChallengeRepository = { create: vi.fn() };
+    translationRepository = { save: vi.fn() };
   });
 
   it('should write in database translation from CSV', async () => {

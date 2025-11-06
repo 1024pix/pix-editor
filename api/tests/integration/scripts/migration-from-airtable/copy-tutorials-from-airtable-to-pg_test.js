@@ -241,10 +241,7 @@ describe('Integration | Scripts | CopyTutorialsFromAirtableToPg', () => {
 
         await expect(
           knex.select('*').from(TAGS_RELATION_TABLE_NAME).orderBy(['tutorialId', 'tutorialTagId']),
-        ).resolves.toStrictEqual([
-          { tutorialId: 'tutorial1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-          { tutorialId: 'tutorial1', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-        ]);
+        ).resolves.toStrictEqual([{ tutorialId: 'tutorial1', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { tutorialId: 'tutorial1', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
       });
     });
   });

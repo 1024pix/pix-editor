@@ -9,10 +9,7 @@ const TABLE_NAME = 'tutorial_tags';
 
 export async function create(tag) {
   tag.id = generateNewId('tag');
-  const [datasourceTag] = await Promise.all([
-    tagDatasource.create(tag),
-    knex(TABLE_NAME).insert({ id: tag.id, title: tag.title }),
-  ]);
+  const [datasourceTag] = await Promise.all([tagDatasource.create(tag), knex(TABLE_NAME).insert({ id: tag.id, title: tag.title })]);
   return toDomain(datasourceTag);
 }
 
@@ -62,10 +59,7 @@ export async function searchByTitle(title) {
 }
 
 export async function findByTitle(title) {
-  const [airtableDto, pgDto] = await Promise.all([
-    tagDatasource.findByTitle(title),
-    knex.select('*').from(TABLE_NAME).where(knex.raw('LOWER(??)', 'title'), title.toLowerCase()).first(),
-  ]);
+  const [airtableDto, pgDto] = await Promise.all([tagDatasource.findByTitle(title), knex.select('*').from(TABLE_NAME).where(knex.raw('LOWER(??)', 'title'), title.toLowerCase()).first()]);
 
   compareDtos(airtableDto, pgDto, compareTagDtos);
 

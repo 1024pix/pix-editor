@@ -15,27 +15,15 @@ const Components = {
 };
 
 const readOnlyOptions = {
-  edit: {
-    isVisible: false,
-  },
-  new: {
-    isVisible: false,
-  },
-  delete: {
-    isVisible: false,
-  },
-  bulkDelete: {
-    isVisible: false,
-  },
+  edit: { isVisible: false },
+  new: { isVisible: false },
+  delete: { isVisible: false },
+  bulkDelete: { isVisible: false },
 };
 
 export const options = {
-  branding: {
-    companyName: 'Pix Editor',
-  },
-  dashboard: {
-    component: Components.Dashboard,
-  },
+  branding: { companyName: 'Pix Editor' },
+  dashboard: { component: Components.Dashboard },
   componentLoader,
   resources: [
     {
@@ -74,9 +62,7 @@ export const options = {
       options: {
         actions: {
           ...readOnlyOptions,
-          getEmbedList: {
-            component: Components.GetEmbedList,
-          },
+          getEmbedList: { component: Components.GetEmbedList },
         },
       },
     },
@@ -94,9 +80,7 @@ export const options = {
     },
     {
       resource: LocalizedChallenge,
-      options: {
-        actions: readOnlyOptions,
-      },
+      options: { actions: readOnlyOptions },
     },
   ],
   auth: {

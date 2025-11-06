@@ -27,8 +27,8 @@ export class ScanChallengesForDiscrepanciesBetweenPrototypesAndAlternatives exte
         for (const commonField of Challenge.PROTO_FIELDS) {
           if (commonField === 'contextualizedFields') {
             if (
-              JSON.stringify(alternative[commonField]?.sort() ?? '') !==
-              JSON.stringify(prototype[commonField]?.sort() ?? '')
+              JSON.stringify(alternative[commonField]?.sort() ?? '')
+              !== JSON.stringify(prototype[commonField]?.sort() ?? '')
             ) {
               logger.error(
                 `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,

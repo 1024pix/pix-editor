@@ -94,11 +94,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 },
               ],
             },
-            attachments: {
-              links: {
-                related: `/api/attachments?filter[localizedChallengeId]=${challenge.id}`,
-              },
-            },
+            attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${challenge.id}` } },
             'challenge-locales': {
               data: [
                 {
@@ -139,45 +135,25 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         },
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: 'recwWzTquPlvIl4So-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: 'recwWzTquPlvIl4So-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: 'recwWzTquPlvIl4So-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: 'recwWzTquPlvIl4So-fr',
             relationships: {
               'localized-challenge': {
@@ -190,51 +166,27 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: 'recwWzTquPlvIl4So-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: 'recwWzTquPlvIl4So-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: 'recwWzTquPlvIl4So-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: 'recwWzTquPlvIl4So-nl',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
         ],
@@ -264,7 +216,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge(
         { localizedChallenges: [expectedLocalizedChallenge] },
-        ['alpha', 'delta', 'skillId'],
+        [
+          'alpha',
+          'delta',
+          'skillId',
+        ],
       );
       const json = {
         data: {
@@ -311,10 +267,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
-            contextualizedFields: [
-              Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION,
-              Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION,
-            ],
+            contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
             'require-gafam-website-access': true,
             'is-incompatible-ipad-certif': true,
             'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
@@ -357,18 +310,14 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       expect(challenge).to.deep.equal(expectedDeserializedChallenge);
     });
 
-    it('should allow empty skill relationships', async function () {
+    it('should allow empty skill relationships', async function() {
       // Given
       const json = {
         data: {
           type: 'challenges',
           id: 'challengeId',
           attributes: {},
-          relationships: {
-            skill: {
-              data: null,
-            },
-          },
+          relationships: { skill: { data: null } },
         },
       };
 

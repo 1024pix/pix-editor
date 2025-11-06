@@ -7,7 +7,7 @@ describe('Acceptance | Controller | config', () => {
   describe('GET /config - retrieve config', () => {
     context('nominal case', () => {
       let user;
-      beforeEach(async function () {
+      beforeEach(async function() {
         user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });

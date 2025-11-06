@@ -4,8 +4,8 @@ import deleteUnmentionedKeysAfterUploadJobProcessor from '../../../../lib/infras
 import * as deleteUnmentionedKeysAfterUploadUsecase from '../../../../lib/domain/usecases/delete-unmentioned-keys-after-upload.js';
 import { queue } from '../../../../lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
-describe('Unit | Infrastructure | scheduled-jobs | delete-unmentioned-keys-after-upload-job', function () {
-  it('should schedule a new job when delete-unmentioned-keys-after-upload return status is `retry`', async function () {
+describe('Unit | Infrastructure | scheduled-jobs | delete-unmentioned-keys-after-upload-job', function() {
+  it('should schedule a new job when delete-unmentioned-keys-after-upload return status is `retry`', async function() {
     // given
     const deleteUnmentionedKeysAfterUploadStub = vi
       .spyOn(deleteUnmentionedKeysAfterUploadUsecase, 'deleteUnmentionedKeysAfterUpload')
@@ -13,9 +13,7 @@ describe('Unit | Infrastructure | scheduled-jobs | delete-unmentioned-keys-after
     const scheduleStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
     const queueAddStub = vi.spyOn(queue, 'add');
     // when
-    await deleteUnmentionedKeysAfterUploadJobProcessor({
-      data: { uploadId: 'upload-id', projectId: 'phrase-project-id' },
-    });
+    await deleteUnmentionedKeysAfterUploadJobProcessor({ data: { uploadId: 'upload-id', projectId: 'phrase-project-id' } });
 
     // then
     expect(queueAddStub).toHaveBeenCalledWith(
@@ -35,7 +33,7 @@ describe('Unit | Infrastructure | scheduled-jobs | delete-unmentioned-keys-after
     });
   });
 
-  it('should not schedule a new job when delete-unmentioned-keys-after-upload return status is `completed`', async function () {
+  it('should not schedule a new job when delete-unmentioned-keys-after-upload return status is `completed`', async function() {
     // given
     const deleteUnmentionedKeysAfterUploadStub = vi
       .spyOn(deleteUnmentionedKeysAfterUploadUsecase, 'deleteUnmentionedKeysAfterUpload')
@@ -43,9 +41,7 @@ describe('Unit | Infrastructure | scheduled-jobs | delete-unmentioned-keys-after
     const scheduleStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
 
     // when
-    await deleteUnmentionedKeysAfterUploadJobProcessor({
-      data: { uploadId: 'upload-id', projectId: 'phrase-project-id' },
-    });
+    await deleteUnmentionedKeysAfterUploadJobProcessor({ data: { uploadId: 'upload-id', projectId: 'phrase-project-id' } });
 
     // then
     expect(scheduleStub).not.toHaveBeenCalled();

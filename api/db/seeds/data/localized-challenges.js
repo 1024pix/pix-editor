@@ -11,7 +11,12 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
   const challenges = await airtableClient
     .table('Epreuves')
     .select({
-      fields: ['id persistant', 'Langues', 'Embed URL', 'Géographie'],
+      fields: [
+        'id persistant',
+        'Langues',
+        'Embed URL',
+        'Géographie',
+      ],
     })
     .all();
 

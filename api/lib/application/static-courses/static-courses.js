@@ -27,17 +27,13 @@ export async function findSummaries(request, h) {
 
 export async function get(request, h) {
   const staticCourseId = request.params.id;
-  const staticCourse = await staticCourseRepository.getRead(staticCourseId, {
-    baseUrl: getBaseUrl(request),
-  });
+  const staticCourse = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourse));
 }
 
 export async function create(request, h) {
   const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
-  const localizedChallenges = await localizedChallengeRepository.getMany({
-    ids: creationCommand.challengeIds,
-  });
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: creationCommand.challengeIds });
   const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = StaticCourse.buildFromCreationCommand({
     creationCommand,
@@ -60,9 +56,7 @@ export async function update(request, h) {
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  const localizedChallenges = await localizedChallengeRepository.getMany({
-    ids: updateCommand.challengeIds,
-  });
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: updateCommand.challengeIds });
   const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
@@ -73,9 +67,7 @@ export async function update(request, h) {
     throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, {
-    baseUrl: getBaseUrl(request),
-  });
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
@@ -158,9 +150,7 @@ function normalizeCreationOrUpdateCommand(attrs) {
 }
 
 function normalizeDeactivationCommand(attrs) {
-  return {
-    reason: _.isString(attrs.reason) ? attrs.reason : '',
-  };
+  return { reason: _.isString(attrs.reason) ? attrs.reason : '' };
 }
 
 function getBaseUrl(request) {

@@ -13,7 +13,7 @@ import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.
 
 describe('Acceptance | Route | competences', () => {
   let editorUser, adminUser;
-  beforeEach(async function () {
+  beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
     adminUser = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
@@ -33,8 +33,20 @@ describe('Acceptance | Route | competences', () => {
           origin: 'Pix',
           thematicAirtableIds: ['recThematic1', 'recThematic2'],
           thematicIds: ['thematic1', 'thematic2'],
-          tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTube5'],
-          tubeIds: ['tube1', 'tube2', 'tube3', 'tube4', 'tube5'],
+          tubeAirtableIds: [
+            'recTube1',
+            'recTube2',
+            'recTube3',
+            'recTube4',
+            'recTube5',
+          ],
+          tubeIds: [
+            'tube1',
+            'tube2',
+            'tube3',
+            'tube4',
+            'tube5',
+          ],
           skillAirtableIds: [],
           skillIds: [],
         },
@@ -47,8 +59,16 @@ describe('Acceptance | Route | competences', () => {
           origin: 'Pix Junior',
           thematicAirtableIds: ['recThematic11', 'recThematic12'],
           thematicIds: ['thematic11', 'thematic12'],
-          tubeAirtableIds: ['recTube11', 'recTube12', 'recTube13'],
-          tubeIds: ['tube11', 'tube12', 'tube13'],
+          tubeAirtableIds: [
+            'recTube11',
+            'recTube12',
+            'recTube13',
+          ],
+          tubeIds: [
+            'tube11',
+            'tube12',
+            'tube13',
+          ],
           skillAirtableIds: [],
           skillIds: [],
         },
@@ -75,8 +95,18 @@ describe('Acceptance | Route | competences', () => {
           origin: 'Pix Junior',
           thematicAirtableIds: ['recThematic13', 'recThematic14'],
           thematicIds: ['thematic13', 'thematic14'],
-          tubeAirtableIds: ['recTube14', 'recTube15', 'recTube16', 'recTube17'],
-          tubeIds: ['tube14', 'tube15', 'tube16', 'tube17'],
+          tubeAirtableIds: [
+            'recTube14',
+            'recTube15',
+            'recTube16',
+            'recTube17',
+          ],
+          tubeIds: [
+            'tube14',
+            'tube15',
+            'tube16',
+            'tube17',
+          ],
           skillAirtableIds: [],
           skillIds: [],
         },
@@ -267,12 +297,7 @@ describe('Acceptance | Route | competences', () => {
                   id: 'recArea1',
                 },
               },
-              'raw-themes': {
-                data: [
-                  { id: 'recThematic1', type: 'themes' },
-                  { id: 'recThematic2', type: 'themes' },
-                ],
-              },
+              'raw-themes': { data: [{ id: 'recThematic1', type: 'themes' }, { id: 'recThematic2', type: 'themes' }] },
               'raw-tubes': {
                 data: [
                   { id: 'recTube1', type: 'tubes' },
@@ -303,12 +328,7 @@ describe('Acceptance | Route | competences', () => {
                   id: 'recArea11',
                 },
               },
-              'raw-themes': {
-                data: [
-                  { id: 'recThematic11', type: 'themes' },
-                  { id: 'recThematic12', type: 'themes' },
-                ],
-              },
+              'raw-themes': { data: [{ id: 'recThematic11', type: 'themes' }, { id: 'recThematic12', type: 'themes' }] },
               'raw-tubes': {
                 data: [
                   { id: 'recTube11', type: 'tubes' },
@@ -337,15 +357,8 @@ describe('Acceptance | Route | competences', () => {
                   id: 'recArea1',
                 },
               },
-              'raw-themes': {
-                data: [{ id: 'recThematic3', type: 'themes' }],
-              },
-              'raw-tubes': {
-                data: [
-                  { id: 'recTube6', type: 'tubes' },
-                  { id: 'recTube7', type: 'tubes' },
-                ],
-              },
+              'raw-themes': { data: [{ id: 'recThematic3', type: 'themes' }] },
+              'raw-tubes': { data: [{ id: 'recTube6', type: 'tubes' }, { id: 'recTube7', type: 'tubes' }] },
             },
           },
           {
@@ -367,12 +380,7 @@ describe('Acceptance | Route | competences', () => {
                   id: 'recArea11',
                 },
               },
-              'raw-themes': {
-                data: [
-                  { id: 'recThematic13', type: 'themes' },
-                  { id: 'recThematic14', type: 'themes' },
-                ],
-              },
+              'raw-themes': { data: [{ id: 'recThematic13', type: 'themes' }, { id: 'recThematic14', type: 'themes' }] },
               'raw-tubes': {
                 data: [
                   { id: 'recTube14', type: 'tubes' },
@@ -402,18 +410,8 @@ describe('Acceptance | Route | competences', () => {
                   id: 'recArea2',
                 },
               },
-              'raw-themes': {
-                data: [
-                  { id: 'recThematic4', type: 'themes' },
-                  { id: 'recThematic5', type: 'themes' },
-                ],
-              },
-              'raw-tubes': {
-                data: [
-                  { id: 'recTube8', type: 'tubes' },
-                  { id: 'recTube9', type: 'tubes' },
-                ],
-              },
+              'raw-themes': { data: [{ id: 'recThematic4', type: 'themes' }, { id: 'recThematic5', type: 'themes' }] },
+              'raw-tubes': { data: [{ id: 'recTube8', type: 'tubes' }, { id: 'recTube9', type: 'tubes' }] },
             },
           },
         ],
@@ -549,15 +547,8 @@ describe('Acceptance | Route | competences', () => {
                 id: 'recArea1',
               },
             },
-            'raw-themes': {
-              data: [{ id: 'recThematic3', type: 'themes' }],
-            },
-            'raw-tubes': {
-              data: [
-                { id: 'recTube6', type: 'tubes' },
-                { id: 'recTube7', type: 'tubes' },
-              ],
-            },
+            'raw-themes': { data: [{ id: 'recThematic3', type: 'themes' }] },
+            'raw-tubes': { data: [{ id: 'recTube6', type: 'tubes' }, { id: 'recTube7', type: 'tubes' }] },
           },
         },
       });
@@ -789,14 +780,8 @@ describe('Acceptance | Route | competences', () => {
           payload: {
             data: {
               type: 'competences',
-              attributes: {
-                title: 'Quatrième compétence',
-              },
-              relationships: {
-                area: {
-                  data: null,
-                },
-              },
+              attributes: { title: 'Quatrième compétence' },
+              relationships: { area: { data: null } },
             },
           },
           headers: generateAuthorizationHeader(adminUser),
@@ -819,9 +804,7 @@ describe('Acceptance | Route | competences', () => {
           payload: {
             data: {
               type: 'competences',
-              attributes: {
-                title: 'Quatrième compétence',
-              },
+              attributes: { title: 'Quatrième compétence' },
               relationships: {
                 area: {
                   data: {
@@ -893,12 +876,8 @@ describe('Acceptance | Route | competences', () => {
                 id: 'recArea2',
               },
             },
-            'raw-themes': {
-              data: [{ id: 'recThematic1', type: 'themes' }],
-            },
-            'raw-tubes': {
-              data: [{ id: 'recTube1', type: 'tubes' }],
-            },
+            'raw-themes': { data: [{ id: 'recThematic1', type: 'themes' }] },
+            'raw-tubes': { data: [{ id: 'recTube1', type: 'tubes' }] },
           },
         },
       });
@@ -908,10 +887,7 @@ describe('Acceptance | Route | competences', () => {
       expect(generateNewId).toHaveBeenCalledWith('tube');
       expect(generateNewId).toHaveBeenCalledWith('skill');
 
-      await expect(knex.select('*').from('competences').orderBy('index')).resolves.toStrictEqual([
-        { id: 'competence3', index: '2.1', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-        { id: 'competence4', index: '2.2', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-      ]);
+      await expect(knex.select('*').from('competences').orderBy('index')).resolves.toStrictEqual([{ id: 'competence3', index: '2.1', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { id: 'competence4', index: '2.2', areaId: 'area2', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
 
       await expect(knex.select('*').from('thematics')).resolves.toStrictEqual([
         {
@@ -989,7 +965,11 @@ describe('Acceptance | Route | competences', () => {
         thematicAirtableIds: ['recThematic9'],
         tubeAirtableIds: ['recTube8', 'recTube9'],
         tubeIds: ['tube8', 'tube9'],
-        skillIds: ['skill7', 'skill8', 'skill9'],
+        skillIds: [
+          'skill7',
+          'skill8',
+          'skill9',
+        ],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'pix', name: 'Pix' });
@@ -1052,7 +1032,11 @@ describe('Acceptance | Route | competences', () => {
           id: 'competence4',
           index: '2.2',
           areaId: 'area2',
-          skillIds: ['skill7', 'skill8', 'skill9'],
+          skillIds: [
+            'skill7',
+            'skill8',
+            'skill9',
+          ],
           thematicIds: ['thematic9'],
           origin: 'Pix',
           name_i18n: {
@@ -1080,9 +1064,7 @@ describe('Acceptance | Route | competences', () => {
           payload: {
             data: {
               type: 'competences',
-              attributes: {
-                title: 1234,
-              },
+              attributes: { title: 1234 },
             },
           },
           headers: generateAuthorizationHeader(adminUser),

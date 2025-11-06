@@ -66,8 +66,8 @@ function _getChallengeIdsForActivity(missionStatus, missionTubes, skills, challe
         .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()))
         .filter(
           (challenge) =>
-            (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE) ||
-            missionStatus !== Mission.status.VALIDATED,
+            (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE)
+            || missionStatus !== Mission.status.VALIDATED,
         );
 
       if (alternatives.length === 0) {

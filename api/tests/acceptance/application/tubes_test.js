@@ -15,7 +15,7 @@ import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js'
 describe('Application | Route | Tubes', () => {
   let editorUser, readonlyUser;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
     readonlyUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
@@ -24,8 +24,8 @@ describe('Application | Route | Tubes', () => {
   describe('GET /api/tubes/{tubeAirtableId}', () => {
     let airtableTubeScope;
 
-    context('when provided id has not the right format', function () {
-      it('should respond with a status 400', async function () {
+    context('when provided id has not the right format', function() {
+      it('should respond with a status 400', async function() {
         const server = await createServer();
 
         // when
@@ -40,8 +40,8 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when tube does not exist', function () {
-      it('should respond with a status 404', async function () {
+    context('when tube does not exist', function() {
+      it('should respond with a status 404', async function() {
         const server = await createServer();
         airtableTubeScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tubes/recTube1')
@@ -570,8 +570,8 @@ describe('Application | Route | Tubes', () => {
   describe('POST /api/tubes', async () => {
     let airtableCreateTubeScope, airtableThematicScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -602,9 +602,7 @@ describe('Application | Route | Tubes', () => {
                     type: 'themes',
                   },
                 },
-                'raw-skills': {
-                  data: [],
-                },
+                'raw-skills': { data: [] },
               },
             },
           },
@@ -616,8 +614,8 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -636,18 +634,14 @@ describe('Application | Route | Tubes', () => {
                 'practical-description-en': 'Tube’s description',
               },
               relationships: {
-                competence: {
-                  data: null,
-                },
+                competence: { data: null },
                 theme: {
                   data: {
                     id: 'recThematic1',
                     type: 'themes',
                   },
                 },
-                'raw-skills': {
-                  data: [],
-                },
+                'raw-skills': { data: [] },
               },
             },
           },
@@ -659,7 +653,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       beforeEach(async () => {
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'fmk1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -741,18 +735,14 @@ describe('Application | Route | Tubes', () => {
                 'practical-description-en': 'Third tube’s description',
               },
               relationships: {
-                competence: {
-                  data: null,
-                },
+                competence: { data: null },
                 theme: {
                   data: {
                     type: 'themes',
                     id: 'recThematic1',
                   },
                 },
-                'raw-skills': {
-                  data: [],
-                },
+                'raw-skills': { data: [] },
               },
             },
           },
@@ -787,9 +777,7 @@ describe('Application | Route | Tubes', () => {
                   id: 'recThematic1',
                 },
               },
-              'raw-skills': {
-                data: [],
-              },
+              'raw-skills': { data: [] },
             },
           },
         });
@@ -839,8 +827,8 @@ describe('Application | Route | Tubes', () => {
   describe('PATCH /api/tubes/{tubeAirtableId}', async () => {
     let airtableUpdateTubeScope, airtableTubeScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -892,8 +880,8 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when the payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when the payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -945,7 +933,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       beforeEach(async () => {
         const tube = {
           id: 'tube1',

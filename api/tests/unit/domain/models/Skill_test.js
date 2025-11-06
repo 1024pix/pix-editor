@@ -6,9 +6,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isLive', () => {
     it('should return true when skill is active', () => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES.ACTIF,
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES.ACTIF });
 
       // when
       const isLive = skill.isLive;
@@ -19,9 +17,7 @@ describe('Unit | Domain | Skill', () => {
 
     it('should return true when skill is en construction', () => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES.EN_CONSTRUCTION,
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES.EN_CONSTRUCTION });
 
       // when
       const isLive = skill.isLive;
@@ -36,9 +32,7 @@ describe('Unit | Domain | Skill', () => {
       ),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES[statusKey],
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES[statusKey] });
 
       // when
       const isLive = skill.isLive;
@@ -51,9 +45,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isEnConstruction', () => {
     it('should return true when skill is enConstruction', () => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES.EN_CONSTRUCTION,
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES.EN_CONSTRUCTION });
 
       // when
       const isEnConstruction = skill.isEnConstruction;
@@ -66,9 +58,7 @@ describe('Unit | Domain | Skill', () => {
       Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.EN_CONSTRUCTION),
     )('should return false when status key is %s', (statusKey) => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES[statusKey],
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES[statusKey] });
 
       // when
       const isEnConstruction = skill.isEnConstruction;
@@ -81,9 +71,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#get isActif', () => {
     it('should return true when skill is actif', () => {
       // given
-      const skill = domainBuilder.buildSkill({
-        status: Skill.STATUSES.ACTIF,
-      });
+      const skill = domainBuilder.buildSkill({ status: Skill.STATUSES.ACTIF });
 
       // when
       const isActif = skill.isActif;
@@ -96,9 +84,7 @@ describe('Unit | Domain | Skill', () => {
       'should return false when status key is %s',
       (statusKey) => {
         // given
-        const skill = domainBuilder.buildSkill({
-          status: Skill.STATUSES[statusKey],
-        });
+        const skill = domainBuilder.buildSkill({ status: Skill.STATUSES[statusKey] });
 
         // when
         const isActif = skill.isActif;
@@ -496,9 +482,7 @@ describe('Unit | Domain | Skill', () => {
         version: null,
       });
 
-      const tube = domainBuilder.buildTube({
-        name: '@test',
-      });
+      const tube = domainBuilder.buildTube({ name: '@test' });
 
       const tubeSkills = [
         domainBuilder.buildSkill({ level: 1 }),
@@ -525,13 +509,11 @@ describe('Unit | Domain | Skill', () => {
       expect(skill).toHaveProperty('version', 2);
     });
 
-    context('hint', function () {
-      it('should normalize non breaking spaces on "fr" hints', function () {
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
         // given
         normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
-        const tube = domainBuilder.buildTube({
-          name: '@test',
-        });
+        const tube = domainBuilder.buildTube({ name: '@test' });
         const skill = domainBuilder.buildSkill({
           name: null,
           level: 6,
@@ -560,7 +542,7 @@ describe('Unit | Domain | Skill', () => {
   describe('#update', () => {
     let normalizeNonBreakingSpaceFnc, now;
 
-    beforeEach(function () {
+    beforeEach(function() {
       normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation((str) => str);
       now = new Date('2024-10-29T03:04:00Z');
       vi.useFakeTimers({
@@ -569,11 +551,11 @@ describe('Unit | Domain | Skill', () => {
       });
     });
 
-    afterEach(function () {
+    afterEach(function() {
       vi.useRealTimers();
     });
 
-    it('should set specific fields for update', function () {
+    it('should set specific fields for update', function() {
       // given
       const originalData = {
         id: 'originalId',
@@ -638,7 +620,7 @@ describe('Unit | Domain | Skill', () => {
       );
     });
 
-    it('should set "activatedAt" date when status turns into actif', function () {
+    it('should set "activatedAt" date when status turns into actif', function() {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -647,9 +629,7 @@ describe('Unit | Domain | Skill', () => {
 
       // when
       skill.update(
-        {
-          status: Skill.STATUSES.ACTIF,
-        },
+        { status: Skill.STATUSES.ACTIF },
         normalizeNonBreakingSpaceFnc,
       );
 
@@ -660,7 +640,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(null);
     });
 
-    it('should set "archivedAt" date when status turns into archivé', function () {
+    it('should set "archivedAt" date when status turns into archivé', function() {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -670,9 +650,7 @@ describe('Unit | Domain | Skill', () => {
 
       // when
       skill.update(
-        {
-          status: Skill.STATUSES.ARCHIVE,
-        },
+        { status: Skill.STATUSES.ARCHIVE },
         normalizeNonBreakingSpaceFnc,
       );
 
@@ -683,7 +661,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(null);
     });
 
-    it('should set "obsoletedAt" date when status turns into périmé', function () {
+    it('should set "obsoletedAt" date when status turns into périmé', function() {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -694,9 +672,7 @@ describe('Unit | Domain | Skill', () => {
 
       // when
       skill.update(
-        {
-          status: Skill.STATUSES.PERIME,
-        },
+        { status: Skill.STATUSES.PERIME },
         normalizeNonBreakingSpaceFnc,
       );
 
@@ -707,7 +683,7 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(now);
     });
 
-    it('should not alter any dates if status remains unchanged', function () {
+    it('should not alter any dates if status remains unchanged', function() {
       // given
       const skill = domainBuilder.buildSkill({
         createdAt: new Date('2023-10-05T18:08:00Z'),
@@ -719,9 +695,7 @@ describe('Unit | Domain | Skill', () => {
 
       // when
       skill.update(
-        {
-          status: Skill.STATUSES.PERIME,
-        },
+        { status: Skill.STATUSES.PERIME },
         normalizeNonBreakingSpaceFnc,
       );
 
@@ -732,8 +706,8 @@ describe('Unit | Domain | Skill', () => {
       expect(skill.obsoletedAt).toStrictEqual(new Date('2024-01-08T18:08:00Z'));
     });
 
-    context('hint', function () {
-      it('should normalize non breaking spaces on "fr" hints', function () {
+    context('hint', function() {
+      it('should normalize non breaking spaces on "fr" hints', function() {
         // given
         normalizeNonBreakingSpaceFnc = vi.fn().mockImplementation(() => 'Je suis passée dans la fonction ! YOUPI');
         const skill = domainBuilder.buildSkill();

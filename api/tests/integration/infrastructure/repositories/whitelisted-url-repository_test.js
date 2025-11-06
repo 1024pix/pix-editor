@@ -211,8 +211,8 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       expect(whitelistedUrl).toStrictEqual(null);
     });
   });
-  describe('#save', function () {
-    it('should update the whitelisted url', async function () {
+  describe('#save', function() {
+    it('should update the whitelisted url', async function() {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
       const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
@@ -252,7 +252,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       expect(savedWhitelistedUrl).toStrictEqual(whitelistedUrlToSave);
     });
 
-    it('should insert a new whitelisted url', async function () {
+    it('should insert a new whitelisted url', async function() {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
       const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });

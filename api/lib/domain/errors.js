@@ -16,11 +16,7 @@ export class UserNotFoundError extends NotFoundError {
   }
 
   getErrorMessage() {
-    return {
-      data: {
-        id: ['Ce compte est introuvable.'],
-      },
-    };
+    return { data: { id: ['Ce compte est introuvable.'] } };
   }
 }
 

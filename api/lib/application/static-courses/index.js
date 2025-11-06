@@ -6,16 +6,12 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/api/static-course-summaries',
-      config: {
-        handler: staticCourseController.findSummaries,
-      },
+      config: { handler: staticCourseController.findSummaries },
     },
     {
       method: 'GET',
       path: '/api/static-courses/{id}',
-      config: {
-        handler: staticCourseController.get,
-      },
+      config: { handler: staticCourseController.get },
     },
     {
       method: 'POST',

@@ -72,7 +72,12 @@ function messageFormatCompact(log, messageKey, _logLevel, { colors }) {
     const details = colors.yellow([queries, queriesTime].filter(Boolean).join(' '));
     const time = colors.gray(`(${responseTime}ms)`);
 
-    return [statusCode, request, details, time].filter(Boolean).join(' - ');
+    return [
+      statusCode,
+      request,
+      details,
+      time,
+    ].filter(Boolean).join(' - ');
   }
 
   // compact log by default

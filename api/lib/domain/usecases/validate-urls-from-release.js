@@ -66,7 +66,13 @@ function keepAndFormatKOUrls(analyzedLines) {
       return line.status === 'KO';
     })
     .map((line) => {
-      return [...line.id.split(';'), line.url, line.status, line.error, line.comments];
+      return [
+        ...line.id.split(';'),
+        line.url,
+        line.status,
+        line.error,
+        line.comments,
+      ];
     });
 }
 

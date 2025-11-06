@@ -4,7 +4,7 @@ import { localizedChallengeRepository } from '../../../../lib/infrastructure/rep
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Integration | Repository | localized-challenge-repository', function () {
+describe('Integration | Repository | localized-challenge-repository', function() {
   const challengeId = 'challengeId';
   const otherChallengeId = 'otherChallengeId';
 
@@ -24,8 +24,8 @@ describe('Integration | Repository | localized-challenge-repository', function (
     await databaseBuilder.commit();
   });
 
-  context('#list', function () {
-    it('should return all localized challenges ordered by challenge id and locale', async function () {
+  context('#list', function() {
+    it('should return all localized challenges ordered by challenge id and locale', async function() {
       // given
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -149,13 +149,17 @@ describe('Integration | Repository | localized-challenge-repository', function (
         const localizedChallenges = await localizedChallengeRepository.list();
 
         // then
-        expect(localizedChallenges).toStrictEqual([expectedBzChallenge, expectedFrenchChallenge, expectedNlChallenge]);
+        expect(localizedChallenges).toStrictEqual([
+          expectedBzChallenge,
+          expectedFrenchChallenge,
+          expectedNlChallenge,
+        ]);
       });
     });
   });
 
-  context('#create', function () {
-    it('should create a localized challenge', async function () {
+  context('#create', function() {
+    it('should create a localized challenge', async function() {
       // when
       await localizedChallengeRepository.create({
         localizedChallenges: [
@@ -203,8 +207,8 @@ describe('Integration | Repository | localized-challenge-repository', function (
       ]);
     });
 
-    context('when there is no arg', function () {
-      it('should do nothing', async function () {
+    context('when there is no arg', function() {
+      it('should do nothing', async function() {
         // when
         await localizedChallengeRepository.create({});
 
@@ -215,8 +219,8 @@ describe('Integration | Repository | localized-challenge-repository', function (
       });
     });
 
-    context('when there is no id', function () {
-      it('should generate an id and create a localized challenge', async function () {
+    context('when there is no id', function() {
+      it('should generate an id and create a localized challenge', async function() {
         // when
         const localizedChallengeToCreate = domainBuilder.buildLocalizedChallenge({
           challengeId,
@@ -264,7 +268,7 @@ describe('Integration | Repository | localized-challenge-repository', function (
         ]);
       });
 
-      it('should generate multiple unique ids and create localized challenges', async function () {
+      it('should generate multiple unique ids and create localized challenges', async function() {
         // when
         await localizedChallengeRepository.create({
           localizedChallenges: [
@@ -577,9 +581,7 @@ describe('Integration | Repository | localized-challenge-repository', function (
       await databaseBuilder.commit();
 
       // when
-      const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
-        challengeIds: [challengeId, otherChallengeId],
-      });
+      const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeId, otherChallengeId] });
 
       // then
       expect(localizedChallenges).toStrictEqual([
@@ -669,9 +671,7 @@ describe('Integration | Repository | localized-challenge-repository', function (
         await databaseBuilder.commit();
 
         // when
-        const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
-          challengeIds: [challengeId, otherChallengeId],
-        });
+        const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeId, otherChallengeId] });
 
         // then
         expect(localizedChallenges).toStrictEqual([
@@ -756,7 +756,13 @@ describe('Integration | Repository | localized-challenge-repository', function (
       await databaseBuilder.commit();
 
       // when
-      const localizedChallenges = await localizedChallengeRepository.getMany({ ids: [id1, id2, id3] });
+      const localizedChallenges = await localizedChallengeRepository.getMany({
+        ids: [
+          id1,
+          id2,
+          id3,
+        ],
+      });
 
       // then
       expect(localizedChallenges).toStrictEqual([
@@ -833,7 +839,13 @@ describe('Integration | Repository | localized-challenge-repository', function (
         await databaseBuilder.commit();
 
         // when
-        const localizedChallenges = await localizedChallengeRepository.getMany({ ids: [id1, id2, id3] });
+        const localizedChallenges = await localizedChallengeRepository.getMany({
+          ids: [
+            id1,
+            id2,
+            id3,
+          ],
+        });
 
         // then
         expect(localizedChallenges).toStrictEqual([

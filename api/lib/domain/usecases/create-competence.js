@@ -38,9 +38,7 @@ export async function createCompetence(competence) {
     competenceAirtableId: createdCompetence.airtableId,
     name: Tube.WORKBENCH_NAME,
     thematicAirtableId: createdWorkbenchThematic.airtableId,
-    practicalTitle_i18n: {
-      fr: `Tube pour l'atelier de la compétence ${createdCompetence.index} ${createdCompetence.origin}`,
-    },
+    practicalTitle_i18n: { fr: `Tube pour l'atelier de la compétence ${createdCompetence.index} ${createdCompetence.origin}` },
     practicalDescription_i18n: {},
   });
 

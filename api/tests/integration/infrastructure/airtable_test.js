@@ -55,9 +55,7 @@ describe('Integration | Infrastructure | airtable', () => {
 
       airtableBuilder
         .mockList({ tableName })
-        .respondsToQuery({
-          'fields[]': ['titi', 'toto'],
-        })
+        .respondsToQuery({ 'fields[]': ['titi', 'toto'] })
         .returns(airtableRecordsJsonWithSpecificFields)
         .activate();
     });

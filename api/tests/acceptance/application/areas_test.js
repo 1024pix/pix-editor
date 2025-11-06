@@ -15,7 +15,7 @@ import * as config from '../../../lib/config.js';
 describe('Acceptance | Route | areas', () => {
   let editorUser, adminUser, originalPixApiUrlValue;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -23,7 +23,7 @@ describe('Acceptance | Route | areas', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
@@ -71,8 +71,16 @@ describe('Acceptance | Route | areas', () => {
             airtableId: 'recArea3',
             code: '3',
             frameworkId: 'framework1',
-            competenceAirtableIds: ['recCompetence7', 'recCompetence5', 'recCompetence6'],
-            competenceIds: ['competence7', 'competence5', 'competence6'],
+            competenceAirtableIds: [
+              'recCompetence7',
+              'recCompetence5',
+              'recCompetence6',
+            ],
+            competenceIds: [
+              'competence7',
+              'competence5',
+              'competence6',
+            ],
             color: null,
           }),
         ),
@@ -148,12 +156,7 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework1',
                 },
               },
-              competences: {
-                data: [
-                  { id: 'recCompetence1', type: 'competences' },
-                  { id: 'recCompetence2', type: 'competences' },
-                ],
-              },
+              competences: { data: [{ id: 'recCompetence1', type: 'competences' }, { id: 'recCompetence2', type: 'competences' }] },
             },
           },
           {
@@ -173,12 +176,7 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework2',
                 },
               },
-              competences: {
-                data: [
-                  { id: 'recCompetence8', type: 'competences' },
-                  { id: 'recCompetence9', type: 'competences' },
-                ],
-              },
+              competences: { data: [{ id: 'recCompetence8', type: 'competences' }, { id: 'recCompetence9', type: 'competences' }] },
             },
           },
           {
@@ -198,12 +196,7 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework1',
                 },
               },
-              competences: {
-                data: [
-                  { id: 'recCompetence4', type: 'competences' },
-                  { id: 'recCompetence3', type: 'competences' },
-                ],
-              },
+              competences: { data: [{ id: 'recCompetence4', type: 'competences' }, { id: 'recCompetence3', type: 'competences' }] },
             },
           },
           {
@@ -290,11 +283,7 @@ describe('Acceptance | Route | areas', () => {
                 'title-fr-fr': 'Mon domaine',
                 'title-en-us': 'My domain',
               },
-              relationships: {
-                framework: {
-                  data: null,
-                },
-              },
+              relationships: { framework: { data: null } },
             },
           },
           headers: generateAuthorizationHeader(adminUser),
@@ -451,9 +440,7 @@ describe('Acceptance | Route | areas', () => {
                 id: 'framework2',
               },
             },
-            competences: {
-              data: [],
-            },
+            competences: { data: [] },
           },
         },
       });
@@ -461,10 +448,7 @@ describe('Acceptance | Route | areas', () => {
       expect(generateNewId).toHaveBeenCalledWith('area');
 
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual(
-        [
-          { key: 'area.area5.title', locale: 'en', value: 'Fifth domain' },
-          { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' },
-        ],
+        [{ key: 'area.area5.title', locale: 'en', value: 'Fifth domain' }, { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' }],
       );
 
       expect(airtableGetAreasScope.isDone()).toBe(true);

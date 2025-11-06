@@ -53,9 +53,7 @@ const serializer = new Serializer('skill', {
       tube: tubeAirtableId && { id: tubeAirtableId },
     };
   },
-  challenges: {
-    ref: 'id',
-  },
+  challenges: { ref: 'id' },
   challengesProduction: {
     ref: 'id',
     ignoreRelationshipData: true,
@@ -65,15 +63,9 @@ const serializer = new Serializer('skill', {
       },
     },
   },
-  tutoSolution: {
-    ref: 'id',
-  },
-  tutoMore: {
-    ref: 'id',
-  },
-  tube: {
-    ref: 'id',
-  },
+  tutoSolution: { ref: 'id' },
+  tutoMore: { ref: 'id' },
+  tube: { ref: 'id' },
 });
 
 export function serialize(skills) {

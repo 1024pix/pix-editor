@@ -9,7 +9,14 @@ export async function getEmbedList(stream) {
   const embedUrlsToCsv = findPixEpreuvesUrlsFromChallenges(release);
 
   const embedUrlWithToCsvHeader = [
-    ['origin', 'competence', 'acquis', 'challengeId', 'embedUrl', 'status'],
+    [
+      'origin',
+      'competence',
+      'acquis',
+      'challengeId',
+      'embedUrl',
+      'status',
+    ],
     ...embedUrlsToCsv,
   ];
 
@@ -23,10 +30,7 @@ export function findPixEpreuvesUrlsFromChallenges(release) {
   const challenges = release.content.challenges;
   return challenges
     .flatMap((challenge) => {
-      const functions = [
-        (challenge) => findUrlsInMarkdown(challenge.instruction).filter((url) => url?.includes('epreuves.pix.fr')),
-        (challenge) => [challenge.embedUrl].filter((url) => url?.includes('epreuves.pix.fr')),
-      ];
+      const functions = [(challenge) => findUrlsInMarkdown(challenge.instruction).filter((url) => url?.includes('epreuves.pix.fr')), (challenge) => [challenge.embedUrl].filter((url) => url?.includes('epreuves.pix.fr'))];
       return functions
         .flatMap((fun) => fun(challenge))
         .map((url) => {

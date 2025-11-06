@@ -24,24 +24,19 @@ export function staticCoursesBuilder(databaseBuilder) {
     isActive: true,
     deactivationReason: 'Les épreuves sont trop cools',
   }).id;
-  const tagA = databaseBuilder.factory.buildStaticCourseTag({
-    label: 'Panel Externe',
-  });
-  const tagB = databaseBuilder.factory.buildStaticCourseTag({
-    label: 'International',
-  });
-  const tagC = databaseBuilder.factory.buildStaticCourseTag({
-    label: 'Pix+ BTP',
-  });
-  const tagD = databaseBuilder.factory.buildStaticCourseTag({
-    label: 'Brouillon',
-  });
-  const tagE = databaseBuilder.factory.buildStaticCourseTag({
-    label: 'Panel Interne',
-  });
+  const tagA = databaseBuilder.factory.buildStaticCourseTag({ label: 'Panel Externe' });
+  const tagB = databaseBuilder.factory.buildStaticCourseTag({ label: 'International' });
+  const tagC = databaseBuilder.factory.buildStaticCourseTag({ label: 'Pix+ BTP' });
+  const tagD = databaseBuilder.factory.buildStaticCourseTag({ label: 'Brouillon' });
+  const tagE = databaseBuilder.factory.buildStaticCourseTag({ label: 'Panel Interne' });
   databaseBuilder.factory.linkTagsTo({
     staticCourseId: staticCourseId3,
-    staticCourseTagIds: [tagA.id, tagB.id, tagC.id, tagD.id],
+    staticCourseTagIds: [
+      tagA.id,
+      tagB.id,
+      tagC.id,
+      tagD.id,
+    ],
   });
   databaseBuilder.factory.linkTagsTo({
     staticCourseId: staticCourseId1,

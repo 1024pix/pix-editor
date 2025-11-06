@@ -3,7 +3,11 @@ import { normalizeNonBreakingSpace } from '../../infrastructure/utils/normalize-
 
 export async function createChallenge(challenge, dependencies = { challengeRepository }) {
   if (challenge.locales.includes('fr') || challenge.locales.includes('fr-fr')) {
-    const fieldsToNormalize = ['instruction', 'proposals', 'alternativeInstruction'];
+    const fieldsToNormalize = [
+      'instruction',
+      'proposals',
+      'alternativeInstruction',
+    ];
     for (const field of fieldsToNormalize) {
       if (challenge[field]) {
         challenge[field] = normalizeNonBreakingSpace(challenge[field]);

@@ -4,9 +4,9 @@ import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../tes
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | mission | PATCH /api/missions/{id}', function () {
-  context('when user has rights to update a mission', function () {
-    it('updates the mission and returns its id', async function () {
+describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
+  context('when user has rights to update a mission', function() {
+    it('updates the mission and returns its id', async function() {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       const missionToUpdateId = databaseBuilder.factory.buildMission().id;
@@ -63,8 +63,8 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function () {
     });
   });
 
-  context('when user no has rights to update a mission', function () {
-    it('does not allow the update', async function () {
+  context('when user no has rights to update a mission', function() {
+    it('does not allow the update', async function() {
       // given
       const user = databaseBuilder.factory.buildReadonlyUser();
       const missionId = databaseBuilder.factory.buildMission().id;

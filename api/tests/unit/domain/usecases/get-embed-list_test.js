@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { findPixEpreuvesUrlsFromChallenges } from '../../../../lib/domain/usecases/get-embed-list.js';
 
-describe('Unit | Domain | Usecases | get-embed-list-from-release', function () {
+describe('Unit | Domain | Usecases | get-embed-list-from-release', function() {
   it('should extract embed url from release', async () => {
     // given
 

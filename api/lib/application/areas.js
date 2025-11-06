@@ -11,7 +11,7 @@ export function register(server) {
       method: 'GET',
       path: '/api/areas',
       config: {
-        handler: async function () {
+        handler: async function() {
           const areas = await areaRepository.list();
           return areaSerializer.serialize(areas);
         },
@@ -41,7 +41,7 @@ export function register(server) {
             },
           }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const area = await areaSerializer.deserialize(request.payload);
 
           const createdArea = await usecases.createArea(area);

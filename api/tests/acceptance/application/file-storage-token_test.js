@@ -9,7 +9,7 @@ describe('Acceptance | Controller | file-storage-token', () => {
       let server;
       let options;
 
-      beforeEach(async function () {
+      beforeEach(async function() {
         const user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
         server = await createServer();
@@ -23,17 +23,13 @@ describe('Acceptance | Controller | file-storage-token', () => {
       context('nominal case', () => {
         let nockAuthScope;
 
-        beforeEach(async function () {
+        beforeEach(async function() {
           nockAuthScope = nock('https://storage.auth.example.net')
             .post('/api/auth')
             .reply(
               200,
-              {
-                token: { expires_at: 456 },
-              },
-              {
-                'x-subject-token': 'my token',
-              },
+              { token: { expires_at: 456 } },
+              { 'x-subject-token': 'my token' },
             );
         });
 
@@ -47,18 +43,16 @@ describe('Acceptance | Controller | file-storage-token', () => {
           const response = await server.inject(options);
 
           nockAuthScope.done();
-          expect(response.result).to.deep.equal({
-            token: 'my token',
-          });
+          expect(response.result).to.deep.equal({ token: 'my token' });
         });
       });
 
       context('when an error occurs on the remote storage side', () => {
-        beforeEach(function () {
+        beforeEach(function() {
           nock('https://storage.auth.example.net').post('/api/auth').reply(401, {});
         });
 
-        it('forward the status code', async function () {
+        it('forward the status code', async function() {
           const response = await server.inject(options);
 
           expect(response.statusCode).to.equal(401);

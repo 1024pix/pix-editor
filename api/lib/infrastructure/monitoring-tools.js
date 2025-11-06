@@ -21,9 +21,7 @@ export function logInfoWithCorrelationIds(data) {
     );
   } else {
     logger.info(
-      {
-        ..._.get(data, 'metrics', {}),
-      },
+      { ..._.get(data, 'metrics', {}) },
       _.get(data, 'message', '-'),
     );
   }
@@ -92,7 +90,7 @@ export function installHapiHook() {
     throw new Error('Hapi method Request.prototype._execute not found while patch');
   }
 
-  HapiRequest.prototype._execute = function (...args) {
+  HapiRequest.prototype._execute = function(...args) {
     const request = this;
     const context = { request };
     return asyncLocalStorage.run(context, () => originalMethod.call(request, args));

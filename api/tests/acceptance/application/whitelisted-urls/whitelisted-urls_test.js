@@ -5,7 +5,7 @@ import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | whitelisted-urls', () => {
   let now;
-  beforeEach(function () {
+  beforeEach(function() {
     now = new Date('2024-10-29T03:04:00Z');
     vi.useFakeTimers({
       now,
@@ -13,13 +13,13 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
     });
   });
 
-  afterEach(function () {
+  afterEach(function() {
     vi.useRealTimers();
   });
 
   describe('GET /whitelisted-urls', () => {
     let editorUser, server;
-    beforeEach(async function () {
+    beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -135,7 +135,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('DELETE /whitelisted-urls/{whitelistedUrlId}', () => {
     let editorUser, server;
-    beforeEach(async function () {
+    beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -280,7 +280,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('POST /whitelisted-urls', () => {
     let editorUser, server, validPayload;
-    beforeEach(async function () {
+    beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,
@@ -418,7 +418,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
   });
   describe('PATCH /whitelisted-urls/{whitelistedUrlId}', () => {
     let editorUser, server, validPayload;
-    beforeEach(async function () {
+    beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'admin' });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 123,

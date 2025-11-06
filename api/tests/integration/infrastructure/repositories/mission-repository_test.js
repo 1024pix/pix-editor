@@ -10,16 +10,16 @@ import {
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
-describe('Integration | Repository | mission-repository', function () {
-  describe('#get', function () {
-    context('When mission does not exists', function () {
-      it('should throw a NotFoundError', async function () {
+describe('Integration | Repository | mission-repository', function() {
+  describe('#get', function() {
+    context('When mission does not exists', function() {
+      it('should throw a NotFoundError', async function() {
         const promise = getById(1);
         await expect(promise).rejects.to.deep.equal(new NotFoundError('Mission introuvable'));
       });
     });
-    context('When mission exists', function () {
-      it('should return the mission', async function () {
+    context('When mission exists', function() {
+      it('should return the mission', async function() {
         databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
         await databaseBuilder.commit();
 
@@ -45,9 +45,9 @@ describe('Integration | Repository | mission-repository', function () {
       });
     });
   });
-  describe('#findAllMissions', function () {
-    context('When there are missions', function () {
-      it('should return all missions', async function () {
+  describe('#findAllMissions', function() {
+    context('When there are missions', function() {
+      it('should return all missions', async function() {
         databaseBuilder.factory.buildMission({ id: 1, cardImageUrl: null, status: Mission.status.VALIDATED });
         databaseBuilder.factory.buildMission({
           id: 2,
@@ -101,8 +101,8 @@ describe('Integration | Repository | mission-repository', function () {
         });
       });
     });
-    context('When there are no missions', function () {
-      it('should return an empty list', async function () {
+    context('When there are no missions', function() {
+      it('should return an empty list', async function() {
         const results = await findAllMissions({ filter: { isActive: false }, page: { number: 1, size: 20 } });
 
         expect(results.missions.length).to.equal(0);
@@ -114,9 +114,9 @@ describe('Integration | Repository | mission-repository', function () {
         });
       });
     });
-    context('With statuses filter', function () {
-      context('with results', function () {
-        it('should return all active missions', async function () {
+    context('With statuses filter', function() {
+      context('with results', function() {
+        it('should return all active missions', async function() {
           const activeMission = databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           databaseBuilder.factory.buildMission({ id: 3, status: Mission.status.EXPERIMENTAL });
@@ -134,8 +134,8 @@ describe('Integration | Repository | mission-repository', function () {
           });
         });
       });
-      context('with no results', function () {
-        it('should return an empty list of missions', async function () {
+      context('with no results', function() {
+        it('should return an empty list of missions', async function() {
           databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.INACTIVE });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           await databaseBuilder.commit();
@@ -154,8 +154,8 @@ describe('Integration | Repository | mission-repository', function () {
     });
   });
 
-  describe('#list', function () {
-    it('should return all missions', async function () {
+  describe('#list', function() {
+    it('should return all missions', async function() {
       databaseBuilder.factory.buildMission({
         id: 3,
         competenceId: 'competenceId active',
@@ -218,9 +218,9 @@ describe('Integration | Repository | mission-repository', function () {
     });
   });
 
-  describe('#save', function () {
-    context('Mission creation', function () {
-      it('should store mission', async function () {
+  describe('#save', function() {
+    context('Mission creation', function() {
+      it('should store mission', async function() {
         const mission = new Mission({
           cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
@@ -272,7 +272,7 @@ describe('Integration | Repository | mission-repository', function () {
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
-      it('should store I18n for mission', async function () {
+      it('should store I18n for mission', async function() {
         const mission = new Mission({
           cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
@@ -313,8 +313,8 @@ describe('Integration | Repository | mission-repository', function () {
       });
     });
 
-    context('Update mission', function () {
-      it('should update the mission', async function () {
+    context('Update mission', function() {
+      it('should update the mission', async function() {
         const savedMission = databaseBuilder.factory.buildMission({
           name: 'saved mission',
           competenceId: 'AZERTY',
@@ -376,7 +376,7 @@ describe('Integration | Repository | mission-repository', function () {
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
-      it('should store I18n for mission', async function () {
+      it('should store I18n for mission', async function() {
         const savedMission = databaseBuilder.factory.buildMission({
           name: 'saved mission',
           competenceId: 'AZERTY',

@@ -4,12 +4,10 @@ import {
   notifyReleaseCreationSuccess,
 } from '../../../../lib/domain/services/learning-content-notification.js';
 
-describe('Unit | Domain | Services | learning-content-notification', function () {
+describe('Unit | Domain | Services | learning-content-notification', function() {
   describe('#notifyReleaseCreationSuccess', () => {
-    it('should send a success message with given Slack notifier', async function () {
-      const slackNotifier = {
-        send: vi.fn().mockResolvedValue(),
-      };
+    it('should send a success message with given Slack notifier', async function() {
+      const slackNotifier = { send: vi.fn().mockResolvedValue() };
 
       await notifyReleaseCreationSuccess(slackNotifier);
 
@@ -28,11 +26,9 @@ describe('Unit | Domain | Services | learning-content-notification', function ()
   });
 
   describe('#notifyReleaseCreationFailure', () => {
-    it('should send a failure message with given Slack notifier', async function () {
+    it('should send a failure message with given Slack notifier', async function() {
       // given
-      const slackNotifier = {
-        send: vi.fn().mockResolvedValue(),
-      };
+      const slackNotifier = { send: vi.fn().mockResolvedValue() };
       const errorMessage = 'Some network error occurred';
 
       // when

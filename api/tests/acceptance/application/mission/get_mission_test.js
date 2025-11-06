@@ -3,9 +3,9 @@ import { databaseBuilder, generateAuthorizationHeader } from '../../../test-help
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | mission | GET /api/missions', function () {
-  it('Should return an object of serialized missions', async function () {
-    //given
+describe('Acceptance | API | mission | GET /api/missions', function() {
+  it('Should return an object of serialized missions', async function() {
+    // given
     const user = databaseBuilder.factory.buildAdminUser();
     const mission = databaseBuilder.factory.buildMission({
       name: 'Condor',
@@ -19,7 +19,7 @@ describe('Acceptance | API | mission | GET /api/missions', function () {
     });
     await databaseBuilder.commit();
 
-    //when
+    // when
     const server = await createServer();
     const response = await server.inject({
       method: 'GET',
@@ -27,7 +27,7 @@ describe('Acceptance | API | mission | GET /api/missions', function () {
       headers: generateAuthorizationHeader(user),
     });
 
-    //then
+    // then
     expect(response.result).to.deep.equal({
       data: {
         type: 'missions',

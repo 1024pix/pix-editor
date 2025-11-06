@@ -23,9 +23,7 @@ export async function buildFrameworksFromConfig({ airtableClient, databaseBuilde
 }
 
 export function buildFramework({ name }) {
-  return {
-    name,
-  };
+  return { name };
 }
 
 export async function persistFrameworks({ items, airtableClient, databaseBuilder, logger }) {

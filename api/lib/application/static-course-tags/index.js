@@ -5,9 +5,7 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/api/static-course-tags',
-      config: {
-        handler: staticCourseTagsController.list,
-      },
+      config: { handler: staticCourseTagsController.list },
     },
   ]);
 }

@@ -96,7 +96,11 @@ export async function copyThematicsFromAirtable({ airtableClient, databaseBuilde
   const airtableThematics = await airtableClient
     .table('Thematiques')
     .select({
-      fields: ['id persistant', 'Index', 'Competence (id persistant)'],
+      fields: [
+        'id persistant',
+        'Index',
+        'Competence (id persistant)',
+      ],
     })
     .all();
 

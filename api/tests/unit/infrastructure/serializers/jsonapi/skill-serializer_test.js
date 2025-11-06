@@ -173,11 +173,7 @@ describe('Unit | Serializer | JSONAPI | skill-serializer', () => {
                 },
               ],
             },
-            'challenges-production': {
-              links: {
-                related: '/api/skills/skillId/challenges-production',
-              },
-            },
+            'challenges-production': { links: { related: '/api/skills/skillId/challenges-production' } },
           },
         },
       };

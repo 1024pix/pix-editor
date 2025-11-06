@@ -22,21 +22,23 @@ describe('Unit | Infrastructure | Storage', () => {
 
     it('should clone files', async () => {
       // given
-      const attachmentA = domainBuilder.buildAttachment({
-        url: `${config.pixEditor.storagePost}un_dossier/mon_imageA.jpg`,
-      });
-      const attachmentB = domainBuilder.buildAttachment({
-        url: `${config.pixEditor.storagePost}un_dossier/mon_imageB.jpg`,
-      });
+      const attachmentA = domainBuilder.buildAttachment({ url: `${config.pixEditor.storagePost}un_dossier/mon_imageA.jpg` });
+      const attachmentB = domainBuilder.buildAttachment({ url: `${config.pixEditor.storagePost}un_dossier/mon_imageB.jpg` });
       const expectedDestUrlA = `${config.pixEditor.storagePost}${Date.now()}/mon_imageA.jpg`;
       const expectedDestUrlB = `${config.pixEditor.storagePost}${Date.now()}/mon_imageB.jpg`;
-      const [, baseUrlA, routeA] = [...expectedDestUrlA.matchAll(/^(http.*com)(.*)/g)][0];
+      const [
+        , baseUrlA,
+        routeA,
+      ] = [...expectedDestUrlA.matchAll(/^(http.*com)(.*)/g)][0];
       const requestInterceptorA = nock(baseUrlA)
         .put(routeA)
         .matchHeader('X-Auth-Token', token)
         .matchHeader('X-Copy-From', `${config.pixEditor.storageBucket}/un_dossier/mon_imageA.jpg`)
         .reply(200);
-      const [, baseUrlB, routeB] = [...expectedDestUrlB.matchAll(/^(http.*com)(.*)/g)][0];
+      const [
+        , baseUrlB,
+        routeB,
+      ] = [...expectedDestUrlB.matchAll(/^(http.*com)(.*)/g)][0];
       const requestInterceptorB = nock(baseUrlB)
         .put(routeB)
         .matchHeader('X-Auth-Token', token)

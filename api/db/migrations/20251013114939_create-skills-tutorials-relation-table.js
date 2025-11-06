@@ -9,7 +9,11 @@ export async function up(knex) {
     table.string('skillId').notNullable().references('skills.id');
     table.string('tutorialId').notNullable().references('tutorials.id');
     table.string('type').checkIn(['understanding', 'learningMore']).notNullable();
-    table.primary(['tutorialId', 'skillId', 'type']);
+    table.primary([
+      'tutorialId',
+      'skillId',
+      'type',
+    ]);
     table.timestamps(true, true, true);
   });
 }

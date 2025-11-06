@@ -90,23 +90,20 @@ describe('Script | DeleteTutorials', () => {
 
       deleteScope = nock('https://api.airtable.com')
         .delete('/v0/airtableBaseValue/Tutoriels')
-        .query({
-          'records[]': ['recTuto1', 'recTuto3'],
-        })
+        .query({ 'records[]': ['recTuto1', 'recTuto3'] })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, {
-          records: [
-            { deleted: true, id: 'recTuto1' },
-            { deleted: true, id: 'recTuto3' },
-          ],
-        });
+        .reply(200, { records: [{ deleted: true, id: 'recTuto1' }, { deleted: true, id: 'recTuto3' }] });
     });
 
     it('deletes existing tutorials corresponding to given ids', async () => {
       // given
       const options = {
         dryRun: false,
-        id: ['tuto1', 'tuto2', 'tuto3'],
+        id: [
+          'tuto1',
+          'tuto2',
+          'tuto3',
+        ],
       };
 
       // when
@@ -131,10 +128,7 @@ describe('Script | DeleteTutorials', () => {
       ]);
       await expect(
         knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
-      ).resolves.toStrictEqual([
-        { tutorialId: 'tuto4', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-        { tutorialId: 'tuto4', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-      ]);
+      ).resolves.toStrictEqual([{ tutorialId: 'tuto4', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { tutorialId: 'tuto4', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
 
       expect(getManyScope.isDone()).toBe(true);
       expect(getAirtableIdsByIdsScope.isDone()).toBe(true);
@@ -146,7 +140,11 @@ describe('Script | DeleteTutorials', () => {
         // given
         const options = {
           dryRun: true,
-          id: ['tuto1', 'tuto2', 'tuto3'],
+          id: [
+            'tuto1',
+            'tuto2',
+            'tuto3',
+          ],
         };
 
         // when

@@ -98,7 +98,15 @@ describe('Integration | Scripts | CopyAttachmentsFromAirtableToPg', () => {
 
       // then
       expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: ['url', 'size', 'type', 'mimeType', 'filename', 'challengeId persistant', 'localizedChallengeId'],
+        fields: [
+          'url',
+          'size',
+          'type',
+          'mimeType',
+          'filename',
+          'challengeId persistant',
+          'localizedChallengeId',
+        ],
       });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
@@ -214,7 +222,15 @@ describe('Integration | Scripts | CopyAttachmentsFromAirtableToPg', () => {
 
         // then
         expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-          fields: ['url', 'size', 'type', 'mimeType', 'filename', 'challengeId persistant', 'localizedChallengeId'],
+          fields: [
+            'url',
+            'size',
+            'type',
+            'mimeType',
+            'filename',
+            'challengeId persistant',
+            'localizedChallengeId',
+          ],
         });
 
         await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([

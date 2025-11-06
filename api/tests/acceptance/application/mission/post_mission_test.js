@@ -4,9 +4,9 @@ import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../tes
 import { createServer } from '../../../../server.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | mission | POST /api/missions', function () {
-  context('when user has rights to create a mission', function () {
-    it('creates the mission and returns its id', async function () {
+describe('Acceptance | API | mission | POST /api/missions', function() {
+  context('when user has rights to create a mission', function() {
+    it('creates the mission and returns its id', async function() {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
@@ -61,8 +61,8 @@ describe('Acceptance | API | mission | POST /api/missions', function () {
     });
   });
 
-  context('when user no has rights to create a mission', function () {
-    it('does not allow the creation', async function () {
+  context('when user no has rights to create a mission', function() {
+    it('does not allow the creation', async function() {
       // given
       const user = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();

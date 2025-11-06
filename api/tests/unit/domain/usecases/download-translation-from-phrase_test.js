@@ -5,10 +5,7 @@ import * as config from '../../../../lib/config.js';
 describe('Unit | Domain | Usecases | download-translation-from-phrase', () => {
   it('should download from Phrase when config is set', async () => {
     // given
-    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-      { projectId: 'PHRASE_AREA_ONE_PROJECT', areaCode: 1 },
-      { projectId: 'PHRASE_AREA_TWO_PROJECT', areaCode: 2 },
-    ]);
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'PHRASE_AREA_ONE_PROJECT', areaCode: 1 }, { projectId: 'PHRASE_AREA_TWO_PROJECT', areaCode: 2 }]);
     const ConfigurationStub = class {};
     const localesListStub = vi.fn().mockResolvedValue([]);
     const LocalesApiStub = class {

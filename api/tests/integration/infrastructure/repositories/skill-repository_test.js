@@ -240,8 +240,8 @@ describe('Integration | Repository | skill-repository', () => {
       vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
         if (
-          options?.filterByFormula !==
-          `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`
+          options?.filterByFormula
+          !== `AND({Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}, {Status} = "${Skill.STATUSES.ACTIF}")`
         )
           expect.unreachable('Wrong filterByFormula');
         return [
@@ -269,7 +269,7 @@ describe('Integration | Repository | skill-repository', () => {
               'Epreuves (id persistant)': skill1.challengeIds,
               Date: skill1.createdAt,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -398,7 +398,7 @@ describe('Integration | Repository | skill-repository', () => {
               'Epreuves (id persistant)': skill1.challengeIds,
               Date: skill1.createdAt,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -526,7 +526,11 @@ describe('Integration | Repository | skill-repository', () => {
             tutorialAirtableIds: ['recTuto2'],
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            challengeIds: [
+              'challenge3',
+              'challenge4',
+              'challenge5',
+            ],
             competenceId: 'competence1',
           },
         ];
@@ -557,7 +561,12 @@ describe('Integration | Repository | skill-repository', () => {
         databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
         databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
         databaseBuilder.factory.buildTube({ id: 'tube2', name: '@skill', thematicId: 'thematic1' });
-        ['tuto1', 'tuto2', 'tuto3', 'tuto4'].forEach((tutorialId) => {
+        [
+          'tuto1',
+          'tuto2',
+          'tuto3',
+          'tuto4',
+        ].forEach((tutorialId) => {
           databaseBuilder.factory.buildTutorial(
             domainBuilder.buildTutorialDatasourceObject({
               id: tutorialId,
@@ -599,10 +608,7 @@ describe('Integration | Repository | skill-repository', () => {
       it('should return corresponding skills', async () => {
         const params = {
           filter: { name: '@NotFound' },
-          sort: [
-            ['name', 'asc'],
-            ['version', 'desc'],
-          ],
+          sort: [['name', 'asc'], ['version', 'desc']],
           page: { limit: 10 },
         };
         const findRecordsSpy = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([]);
@@ -615,10 +621,7 @@ describe('Integration | Repository | skill-repository', () => {
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
           filterByFormula: 'FIND("@notfound", LOWER(Nom))',
           fields: skillDatasource.usedFields,
-          sort: [
-            { field: 'Nom', direction: 'asc' },
-            { field: 'Version', direction: 'desc' },
-          ],
+          sort: [{ field: 'Nom', direction: 'asc' }, { field: 'Version', direction: 'desc' }],
           maxRecords: 10,
         });
       });
@@ -677,7 +680,11 @@ describe('Integration | Repository | skill-repository', () => {
             tutorialAirtableIds: ['recTuto2'],
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            challengeIds: [
+              'challenge3',
+              'challenge4',
+              'challenge5',
+            ],
             competenceId: 'competence1',
           },
         ];
@@ -723,9 +730,7 @@ describe('Integration | Repository | skill-repository', () => {
 
         await databaseBuilder.commit();
 
-        const params = {
-          filter: { name: '@skill' },
-        };
+        const params = { filter: { name: '@skill' } };
 
         // when
         const results = await skillRepository.search(params);
@@ -969,13 +974,14 @@ describe('Integration | Repository | skill-repository', () => {
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-      ).resolves.toStrictEqual([
-        { key: `skill.${skill.id}.hint`, locale: 'en', value: expectedSkill.hint_i18n.en },
-        { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr },
-      ]);
+      ).resolves.toStrictEqual([{ key: `skill.${skill.id}.hint`, locale: 'en', value: expectedSkill.hint_i18n.en }, { key: `skill.${skill.id}.hint`, locale: 'fr', value: expectedSkill.hint_i18n.fr }]);
 
       await expect(
-        knex.select('*').from('skills-tutorials').orderBy(['skillId', 'type', 'tutorialId']),
+        knex.select('*').from('skills-tutorials').orderBy([
+          'skillId',
+          'type',
+          'tutorialId',
+        ]),
       ).resolves.toStrictEqual([
         ...expectedSkill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({
           type: 'learningMore',
@@ -1092,10 +1098,7 @@ describe('Integration | Repository | skill-repository', () => {
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-      ).resolves.toStrictEqual([
-        { key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en },
-        { key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr },
-      ]);
+      ).resolves.toStrictEqual([{ key: `skill.${skill.id}.hint`, locale: 'en', value: skill.hint_i18n.en }, { key: `skill.${skill.id}.hint`, locale: 'fr', value: skill.hint_i18n.fr }]);
 
       await expect(knex.select('*').from('skills-tutorials').orderBy(['type', 'tutorialId'])).resolves.toStrictEqual([
         ...skill.learningMoreTutorialIds.toSorted().map((tutorialId) => ({

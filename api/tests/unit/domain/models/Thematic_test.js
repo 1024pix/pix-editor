@@ -5,9 +5,7 @@ describe('Unit | Domain | Thematic', () => {
   describe('#prepareForCreation', () => {
     it('sets fields for creation', () => {
       // given
-      const thematic = domainBuilder.buildThematic({
-        index: null,
-      });
+      const thematic = domainBuilder.buildThematic({ index: null });
       const competenceThematics = [domainBuilder.buildThematic(), domainBuilder.buildThematic()];
 
       // when

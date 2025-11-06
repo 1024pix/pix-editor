@@ -3,18 +3,14 @@ import { domainBuilder } from '../../../test-helper.js';
 
 import { createChallenge } from '../../../../lib/domain/usecases/create-challenge.js';
 
-describe('Unit | Domain | Usecases | create challenge', function () {
+describe('Unit | Domain | Usecases | create challenge', function() {
   it('should create a challenge', async () => {
     // given
     const challengeToCreate = domainBuilder.buildChallenge();
     const createdChallenge = Symbol('createdChallenge');
-    const challengeRepositoryStub = {
-      create: vi.fn().mockResolvedValueOnce(createdChallenge),
-    };
+    const challengeRepositoryStub = { create: vi.fn().mockResolvedValueOnce(createdChallenge) };
     // when
-    const result = await createChallenge(challengeToCreate, {
-      challengeRepository: challengeRepositoryStub,
-    });
+    const result = await createChallenge(challengeToCreate, { challengeRepository: challengeRepositoryStub });
 
     // then
     expect(result).toBe(createdChallenge);
@@ -33,9 +29,7 @@ describe('Unit | Domain | Usecases | create challenge', function () {
       proposals: 'Oui !',
       alternativeInstruction: 'Et donc ; voilà',
     });
-    const challengeRepositoryStub = {
-      create: vi.fn().mockResolvedValueOnce(challenge),
-    };
+    const challengeRepositoryStub = { create: vi.fn().mockResolvedValueOnce(challenge) };
 
     const result = await createChallenge(challenge, { challengeRepository: challengeRepositoryStub });
 

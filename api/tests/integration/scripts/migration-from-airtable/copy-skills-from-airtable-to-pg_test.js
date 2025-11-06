@@ -181,7 +181,11 @@ describe('Integration | Scripts | CopySkillsFromAirtableToPg', () => {
       ]);
 
       await expect(
-        knex.select('*').from(TUTORIALS_RELATION_TABLE_NAME).orderBy(['skillId', 'type', 'tutorialId']),
+        knex.select('*').from(TUTORIALS_RELATION_TABLE_NAME).orderBy([
+          'skillId',
+          'type',
+          'tutorialId',
+        ]),
       ).resolves.toStrictEqual([
         {
           skillId: 'skill1',
@@ -392,7 +396,11 @@ describe('Integration | Scripts | CopySkillsFromAirtableToPg', () => {
         ]);
 
         await expect(
-          knex.select('*').from(TUTORIALS_RELATION_TABLE_NAME).orderBy(['skillId', 'type', 'tutorialId']),
+          knex.select('*').from(TUTORIALS_RELATION_TABLE_NAME).orderBy([
+            'skillId',
+            'type',
+            'tutorialId',
+          ]),
         ).resolves.toStrictEqual([
           {
             skillId: 'skill1',

@@ -5,9 +5,9 @@ import * as missionValidator from '../../../../lib/domain/services/mission-valid
 import { InvalidMissionContentError, MissionIntroductionMediaError } from '../../../../lib/domain/errors.js';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 
-describe('Integration | Validator | Mission', function () {
-  describe('status validation', function () {
-    describe('when requested mission status is not VALIDATED', function () {
+describe('Integration | Validator | Mission', function() {
+  describe('status validation', function() {
+    describe('when requested mission status is not VALIDATED', function() {
       it('should not reject mission with not validated challenges', async () => {
         // given
         const mission = new Mission({
@@ -31,8 +31,8 @@ describe('Integration | Validator | Mission', function () {
       });
     });
 
-    describe('when requested mission status is VALIDATED', function () {
-      describe('when there is no thematic', function () {
+    describe('when requested mission status is VALIDATED', function() {
+      describe('when there is no thematic', function() {
         it('throws InvalidMissionContentError', async () => {
           // given
           const mission = new Mission({
@@ -55,7 +55,7 @@ describe('Integration | Validator | Mission', function () {
         });
       });
 
-      describe('When there is no tubes', function () {
+      describe('When there is no tubes', function() {
         it('throws InvalidMissionContentError', async () => {
           // given
           const thematic = {
@@ -95,7 +95,7 @@ describe('Integration | Validator | Mission', function () {
       });
 
       describe('Skill cases', () => {
-        describe('when a skill has 2 versions including one with "ACTIF" status', function () {
+        describe('when a skill has 2 versions including one with "ACTIF" status', function() {
           it('should not return a warning', async () => {
             // given
             const thematic = {
@@ -168,7 +168,7 @@ describe('Integration | Validator | Mission', function () {
           });
         });
 
-        describe('when a skill has versions with only "ARCHIVE" or "PERIME" statuses', function () {
+        describe('when a skill has versions with only "ARCHIVE" or "PERIME" statuses', function() {
           it('should not return a warning', async () => {
             // given
             const thematic = {
@@ -243,7 +243,7 @@ describe('Integration | Validator | Mission', function () {
           });
         });
 
-        describe('when a skill has a "en construction" status version but no "actif" status version', function () {
+        describe('when a skill has a "en construction" status version but no "actif" status version', function() {
           it('should return a warning', async () => {
             // given
             const thematic = {
@@ -256,7 +256,11 @@ describe('Integration | Validator | Mission', function () {
               name: '@Pix1D-recherche_di',
               thematicId: 'Thematic1',
               competenceId: 'competence1',
-              skillIds: ['skillTuto1', 'skillTuto1Bis', 'skillTuto2'],
+              skillIds: [
+                'skillTuto1',
+                'skillTuto1Bis',
+                'skillTuto2',
+              ],
             };
 
             databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -297,7 +301,11 @@ describe('Integration | Validator | Mission', function () {
               competenceId: 'competence1',
               challengeIds: [],
             });
-            [skill1, skill2, skill3].forEach(databaseBuilder.factory.buildSkill);
+            [
+              skill1,
+              skill2,
+              skill3,
+            ].forEach(databaseBuilder.factory.buildSkill);
 
             await databaseBuilder.commit();
 
@@ -329,13 +337,11 @@ describe('Integration | Validator | Mission', function () {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            expect(warnings).toStrictEqual([
-              "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2.",
-            ]);
+            expect(warnings).toStrictEqual(["L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2."]);
           });
         });
 
-        describe('when there are several skills with "en construction"', function () {
+        describe('when there are several skills with "en construction"', function() {
           it('should return multiple warnings', async () => {
             // given
             const thematic = {
@@ -406,18 +412,15 @@ describe('Integration | Validator | Mission', function () {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            expect(warnings).toStrictEqual([
-              "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 1.",
-              "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2.",
-            ]);
+            expect(warnings).toStrictEqual(["L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 1.", "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2."]);
           });
         });
       });
     });
   });
 
-  describe('introduction media validation', function () {
-    describe('When the mission has a media url without a type', function () {
+  describe('introduction media validation', function() {
+    describe('When the mission has a media url without a type', function() {
       it('should return an error MissionIntroductionMediaError', async () => {
         // given
         const missionToSave = new Mission({
@@ -446,7 +449,7 @@ describe('Integration | Validator | Mission', function () {
       });
     });
 
-    describe('When the mission has a media type without an url', function () {
+    describe('When the mission has a media type without an url', function() {
       it('should return an error MissionIntroductionMediaError', async () => {
         // given
         const missionToSave = new Mission({

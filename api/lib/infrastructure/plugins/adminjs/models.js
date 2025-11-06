@@ -10,12 +10,8 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    trigram: {
-      type: DataTypes.STRING,
-    },
-    access: {
-      type: DataTypes.STRING,
-    },
+    trigram: { type: DataTypes.STRING },
+    access: { type: DataTypes.STRING },
     apiKey: {
       type: DataTypes.UUIDV4,
       allowNull: false,
@@ -31,37 +27,19 @@ export const LocalizedChallenge = sequelize.define(
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    challengeId: {
-      type: DataTypes.STRING,
-    },
-    locale: {
-      type: DataTypes.STRING,
-    },
-    status: {
-      type: DataTypes.STRING,
-    },
-    embedUrl: {
-      type: DataTypes.STRING,
-    },
-    geography: {
-      type: DataTypes.STRING,
-    },
+    challengeId: { type: DataTypes.STRING },
+    locale: { type: DataTypes.STRING },
+    status: { type: DataTypes.STRING },
+    embedUrl: { type: DataTypes.STRING },
+    geography: { type: DataTypes.STRING },
   },
-  {
-    timestamps: false,
-  },
+  { timestamps: false },
 );
 
 export const Release = sequelize.define(
   'release',
-  {
-    createdAt: {
-      type: DataTypes.DATE,
-    },
-  },
-  {
-    timestamps: false,
-  },
+  { createdAt: { type: DataTypes.DATE } },
+  { timestamps: false },
 );
 
 export const Translations = sequelize.define(
@@ -75,11 +53,7 @@ export const Translations = sequelize.define(
       type: DataTypes.TEXT,
       primaryKey: true,
     },
-    value: {
-      type: DataTypes.TEXT,
-    },
+    value: { type: DataTypes.TEXT },
   },
-  {
-    timestamps: false,
-  },
+  { timestamps: false },
 );

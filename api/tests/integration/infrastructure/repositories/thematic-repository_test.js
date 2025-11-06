@@ -140,7 +140,7 @@ describe('Integration | Repository | thematic-repository', () => {
 
   describe('#listByCompetenceId', () => {
     it('should retrieve all thematics by competence id', async () => {
-      //given
+      // given
       const competenceId = 'competenceId1';
       const thematicId = 'recThematic1';
 
@@ -178,17 +178,17 @@ describe('Integration | Repository | thematic-repository', () => {
               Tubes: ['recTubeId1', 'recTubeId2'],
               Index: 1,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
         ];
       });
 
-      //when
+      // when
       const thematics = await thematicRepository.listByCompetenceId(competenceId);
 
-      //then
+      // then
       expect(thematics).toStrictEqual([
         domainBuilder.buildThematic({
           id: 'recThematic1',
@@ -236,9 +236,7 @@ describe('Integration | Repository | thematic-repository', () => {
       );
       const findRecordsSpy = vi
         .spyOn(airtable, 'findRecords')
-        .mockResolvedValueOnce([
-          new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic),
-        ]);
+        .mockResolvedValueOnce([new Airtable.Record(thematicDatasource.tableName, airtableThematic.airtableId, airtableThematic)]);
 
       databaseBuilder.factory.buildTranslation({
         key: `thematic.${thematic.id}.name`,
@@ -363,10 +361,7 @@ describe('Integration | Repository | thematic-repository', () => {
       });
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-      ).resolves.toEqual([
-        { key: `thematic.${thematicId}.name`, locale: 'en', value: thematic.name_i18n.en },
-        { key: `thematic.${thematicId}.name`, locale: 'fr', value: thematic.name_i18n.fr },
-      ]);
+      ).resolves.toEqual([{ key: `thematic.${thematicId}.name`, locale: 'en', value: thematic.name_i18n.en }, { key: `thematic.${thematicId}.name`, locale: 'fr', value: thematic.name_i18n.fr }]);
     });
   });
 
@@ -620,10 +615,7 @@ describe('Integration | Repository | thematic-repository', () => {
       });
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-      ).resolves.toEqual([
-        { key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: thematicUpdates.name_i18n.en },
-        { key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: thematicUpdates.name_i18n.fr },
-      ]);
+      ).resolves.toEqual([{ key: `thematic.${thematicUpdates.id}.name`, locale: 'en', value: thematicUpdates.name_i18n.en }, { key: `thematic.${thematicUpdates.id}.name`, locale: 'fr', value: thematicUpdates.name_i18n.fr }]);
     });
   });
 });

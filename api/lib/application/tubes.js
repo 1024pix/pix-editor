@@ -13,12 +13,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/tubes/{tubeAirtableId}',
       config: {
-        validate: {
-          params: Joi.object({
-            tubeAirtableId: Types.tubeId().required(),
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ tubeAirtableId: Types.tubeId().required() }) },
+        handler: async function(request) {
           const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
           if (!tube) return Boom.notFound('unknown tube id');
           return tubeSerializer.serialize(tube);
@@ -29,12 +25,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/tubes',
       config: {
-        validate: {
-          query: Joi.object({
-            'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())],
-          }),
-        },
-        handler: async function (request) {
+        validate: { query: Joi.object({ 'filter[ids][]': [Types.tubeId(), Joi.array().items(Types.tubeId())] }) },
+        handler: async function(request) {
           const params = extractParameters(request.query);
           const tubes = await listTubes(params);
           return tubeSerializer.serialize(tubes);
@@ -65,7 +57,7 @@ export function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const tube = await tubeSerializer.deserialize(request.payload);
           const createdTube = await createTube(tube);
           return h.response(tubeSerializer.serialize(createdTube)).code(201);
@@ -77,9 +69,7 @@ export function register(server) {
       path: '/api/tubes/{tubeAirtableId}',
       config: {
         validate: {
-          params: Joi.object({
-            tubeAirtableId: Types.tubeId(),
-          }),
+          params: Joi.object({ tubeAirtableId: Types.tubeId() }),
           payload: Joi.object({
             data: Joi.object({
               type: Joi.string().required().equal('tubes'),
@@ -101,7 +91,7 @@ export function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request) {
+        handler: async function(request) {
           const tube = await tubeSerializer.deserialize(request.payload);
           const updatedTube = await updateTube(request.params.tubeAirtableId, tube);
           return tubeSerializer.serialize(updatedTube);

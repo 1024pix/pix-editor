@@ -40,11 +40,7 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
         }),
       );
 
-      expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: {
-          Nom: name,
-        },
-      });
+      expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, { fields: { Nom: name } });
 
       await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
         {
@@ -71,8 +67,16 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
         new Airtable.Record(AIRTABLE_NAME, 'recFmk2', {
           fields: {
             Nom: 'Deuxième framework',
-            'Domaines (identifiants)': ['recArea3', 'recArea4', 'recArea5'],
-            'Domaines (identifiants) (id persistant)': ['area3', 'area4', 'area5'],
+            'Domaines (identifiants)': [
+              'recArea3',
+              'recArea4',
+              'recArea5',
+            ],
+            'Domaines (identifiants) (id persistant)': [
+              'area3',
+              'area4',
+              'area5',
+            ],
           },
         }),
       ]);
@@ -127,7 +131,11 @@ describe('Integration | Infrastructure | Repositories | Framework', () => {
         domainBuilder.buildFramework({
           id: 'recFmk2',
           name: 'Deuxième framework',
-          areaIds: ['recArea3', 'recArea4', 'recArea5'],
+          areaIds: [
+            'recArea3',
+            'recArea4',
+            'recArea5',
+          ],
         }),
       ]);
 

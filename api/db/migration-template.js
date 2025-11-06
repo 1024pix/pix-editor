@@ -5,7 +5,7 @@ const TABLE_NAME = 'example';
  * @returns { Promise<void> }
  */
 export async function up(knex) {
-  await knex.schema.createTable(TABLE_NAME, function (table) {
+  await knex.schema.createTable(TABLE_NAME, function(table) {
     // TODO Replace following line by actual up migration
     table.increments('id').notNullable();
   });

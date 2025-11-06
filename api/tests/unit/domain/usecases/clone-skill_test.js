@@ -24,9 +24,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       listByTubeId: vi.fn(),
       create: vi.fn(),
     };
-    tubeRepository = {
-      get: vi.fn(),
-    };
+    tubeRepository = { get: vi.fn() };
     challengeRepository = {
       listBySkillId: vi.fn(),
       createBatch: vi.fn(),
@@ -153,17 +151,11 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       tubeRepository.get.mockResolvedValue(tube);
       challengeToClone1 = domainBuilder.buildChallenge({
         id: 'challenge1',
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({ id: 'challenge1' }),
-          domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeA' }),
-        ],
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({ id: 'challenge1' }), domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeA' })],
       });
       challengeToClone2 = domainBuilder.buildChallenge({
         id: 'challenge2',
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({ id: 'challenge2' }),
-          domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeB' }),
-        ],
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({ id: 'challenge2' }), domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeB' })],
       });
       challengeRepository.listBySkillId.mockResolvedValue([challengeToClone1, challengeToClone2]);
       tubeSkill1 = domainBuilder.buildSkill({ id: 'tubeSkill1', tubeId: cloneCommand.tubeDestinationId });
@@ -181,9 +173,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
         clonedSkill: 'clonedSkill',
         clonedChallenges: [{ id: 'challengeId' }],
-        clonedAttachments: [
-          { challengeId: 'attachmentChallengeId', localizedChallengeId: 'attachmentLocalizedChallengeId' },
-        ],
+        clonedAttachments: [{ challengeId: 'attachmentChallengeId', localizedChallengeId: 'attachmentLocalizedChallengeId' }],
       });
 
       // when
@@ -214,10 +204,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       // given
       const clonedSkill = Symbol('clonedSkill');
       const clonedChallenges = [Symbol('clonedChallenges')];
-      const clonedAttachments = [
-        { challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' },
-        { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
-      ];
+      const clonedAttachments = [{ challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' }, { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }];
       spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
         clonedSkill,
         clonedChallenges,
@@ -230,9 +217,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       // then
       expect(skillRepository.create).toHaveBeenCalledWith(clonedSkill);
       expect(challengeRepository.createBatch).toHaveBeenCalledWith(clonedChallenges);
-      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([
-        { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
-      ]);
+      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }]);
     });
 
     it('should update records for preview', async () => {
@@ -240,10 +225,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const clonedSkill = Symbol('clonedSkill');
       const clonedChallenge = { id: 'clonedChallenge', isPrimary: true };
       const clonedChallenges = [clonedChallenge, { id: 'clonedChallenge2', isPrimary: false }];
-      const clonedAttachments = [
-        { challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' },
-        { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
-      ];
+      const clonedAttachments = [{ challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' }, { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }];
       spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
         clonedSkill,
         clonedChallenges,

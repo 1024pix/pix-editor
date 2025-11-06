@@ -4,7 +4,15 @@ import { extractParameters } from '../../utils/query-params-utils.js';
 const { Serializer } = Jsonapi;
 
 const serializer = new Serializer('attachment', {
-  attributes: ['filename', 'size', 'url', 'mimeType', 'type', 'challenge', 'localizedChallenge'],
+  attributes: [
+    'filename',
+    'size',
+    'url',
+    'mimeType',
+    'type',
+    'challenge',
+    'localizedChallenge',
+  ],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenge') return 'localized-challenges';
   },
@@ -20,12 +28,8 @@ const serializer = new Serializer('attachment', {
       localizedChallenge: { id: localizedChallengeId },
     };
   },
-  challenge: {
-    ref: 'id',
-  },
-  localizedChallenge: {
-    ref: 'id',
-  },
+  challenge: { ref: 'id' },
+  localizedChallenge: { ref: 'id' },
 });
 
 export function serialize(attachments) {
@@ -53,7 +57,5 @@ export function deserializeUpdateCommand({ data }) {
 
 export function deserializeQuery(query) {
   const extractedParams = extractParameters(query);
-  return {
-    localizedChallengeId: extractedParams.filter.localizedChallengeId,
-  };
+  return { localizedChallengeId: extractedParams.filter.localizedChallengeId };
 }

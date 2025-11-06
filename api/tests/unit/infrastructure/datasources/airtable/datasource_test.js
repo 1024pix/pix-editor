@@ -8,14 +8,14 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     tableName: 'Airtable_table',
 
-    usedFields: ['Shi', 'Foo', 'Me'],
+    usedFields: [
+      'Shi',
+      'Foo',
+      'Me',
+    ],
 
     fromAirTableObject: (record) => ({ ...record }),
-    toAirTableObject: (model) => ({
-      fields: {
-        'id persistant': model.id,
-      },
-    }),
+    toAirTableObject: (model) => ({ fields: { 'id persistant': model.id } }),
   });
 
   describe('#list', () => {
@@ -34,7 +34,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         {
           id: 1,
           tableName: 'Airtable_table',
-          fields: ['Shi', 'Foo', 'Me'],
+          fields: [
+            'Shi',
+            'Foo',
+            'Me',
+          ],
           sort: [{ direction: 'asc', field: 'id persistant' }],
         },
       ]);
@@ -52,7 +56,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         {
           id: 1,
           tableName: 'Airtable_table',
-          fields: ['Shi', 'Foo', 'Me'],
+          fields: [
+            'Shi',
+            'Foo',
+            'Me',
+          ],
           sort: [{ direction: 'asc', field: 'id persistant' }],
         },
       ]);
@@ -66,7 +74,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         {
           id: 1,
           tableName: 'Airtable_table',
-          fields: ['Shi', 'Foo', 'Me'],
+          fields: [
+            'Shi',
+            'Foo',
+            'Me',
+          ],
           maxRecords: 20,
           sort: [{ direction: 'asc', field: 'id persistant' }],
         },
@@ -87,7 +99,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
       // then
       expect(airtable.findRecords).toHaveBeenCalledWith('Airtable_table', {
-        fields: ['Shi', 'Foo', 'Me'],
+        fields: [
+          'Shi',
+          'Foo',
+          'Me',
+        ],
         filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
       });
     });
@@ -104,7 +120,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
       // then
       expect(airtable.findRecords).toHaveBeenCalledWith('Airtable_table', {
-        fields: ['Shi', 'Foo', 'Me'],
+        fields: [
+          'Shi',
+          'Foo',
+          'Me',
+        ],
         filterByFormula: 'OR("1\'" = {id persistant},"2\'" = {id persistant})',
       });
     });
@@ -134,18 +154,12 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
     it('should create records', async () => {
       // given
       vi.spyOn(airtable, 'createRecords').mockImplementation(async (tableName, bodies) => {
-        const returnValue = [
-          { id: 1, tableName, ...bodies[0] },
-          { id: 2, tableName, ...bodies[1] },
-        ];
+        const returnValue = [{ id: 1, tableName, ...bodies[0] }, { id: 2, tableName, ...bodies[1] }];
         return returnValue;
       });
 
       // when
-      const createdChallenges = await someDatasource.createBatch([
-        { id: 'created-record-id1' },
-        { id: 'created-record-id2' },
-      ]);
+      const createdChallenges = await someDatasource.createBatch([{ id: 'created-record-id1' }, { id: 'created-record-id2' }]);
 
       // then
       expect(createdChallenges).to.deep.equal([

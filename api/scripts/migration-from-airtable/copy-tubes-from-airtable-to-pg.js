@@ -23,7 +23,12 @@ export class CopyTubesFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableTubes = await airtable.findRecords('Tubes', {
-      fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'],
+      fields: [
+        'id persistant',
+        'Nom',
+        'Index',
+        'Thematique (id persistant)',
+      ],
     });
     logger.info({ count: airtableTubes.length }, 'Loaded tubes from airtable');
 

@@ -72,7 +72,14 @@ export async function persistAreas({ items, airtableClient, logger }) {
 export async function copyAreasFromAirtable({ airtableClient, databaseBuilder, logger }) {
   const airtableAreas = await airtableClient
     .table('Domaines')
-    .select({ fields: ['id persistant', 'Code', 'Couleur', 'Referentiel'] })
+    .select({
+      fields: [
+        'id persistant',
+        'Code',
+        'Couleur',
+        'Referentiel',
+      ],
+    })
     .all();
 
   logger.info(`Copying ${airtableAreas.length} areas from airtable...`);

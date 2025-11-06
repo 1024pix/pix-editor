@@ -3,8 +3,8 @@ import nock from 'nock';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
 
-describe('Integration | Repository | translation-repository', function () {
-  context('#save', function () {
+describe('Integration | Repository | translation-repository', function() {
+  context('#save', function() {
     it('should create or update translations', async () => {
       // given
       databaseBuilder.factory.buildTranslation({
@@ -37,15 +37,15 @@ describe('Integration | Repository | translation-repository', function () {
     });
 
     context('when Airtable has a translations table', () => {
-      beforeEach(async function () {
+      beforeEach(async function() {
         await _setDoesTableExistInAirtable(true);
       });
 
-      afterEach(async function () {
+      afterEach(async function() {
         await _setDoesTableExistInAirtable(false);
       });
 
-      it('should save translations to airtable', async function () {
+      it('should save translations to airtable', async function() {
         // given
         nock('https://api.airtable.com')
           .patch('/v0/airtableBaseValue/translations/?', {
@@ -58,17 +58,13 @@ describe('Integration | Repository | translation-repository', function () {
                 },
               },
             ],
-            performUpsert: {
-              fieldsToMergeOn: ['key', 'locale'],
-            },
+            performUpsert: { fieldsToMergeOn: ['key', 'locale'] },
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, { records: [] });
 
         // when
-        await translationRepository.save({
-          translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }],
-        });
+        await translationRepository.save({ translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }] });
 
         // then
         expect(nock.isDone()).to.be.true;
@@ -76,8 +72,8 @@ describe('Integration | Repository | translation-repository', function () {
     });
   });
 
-  context('#deleteByKeyPrefixAndLocales', function () {
-    it('should delete translations having key prefix and locales', async function () {
+  context('#deleteByKeyPrefixAndLocales', function() {
+    it('should delete translations having key prefix and locales', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'some.prefix.key',
@@ -113,11 +109,11 @@ describe('Integration | Repository | translation-repository', function () {
     });
 
     context('when Airtable has a translations table', () => {
-      beforeEach(async function () {
+      beforeEach(async function() {
         await _setDoesTableExistInAirtable(true);
       });
 
-      afterEach(async function () {
+      afterEach(async function() {
         await _setDoesTableExistInAirtable(false);
       });
 
@@ -127,7 +123,11 @@ describe('Integration | Repository | translation-repository', function () {
           .get('/v0/airtableBaseValue/translations')
           .query({
             fields: {
-              '': ['key', 'locale', 'value'],
+              '': [
+                'key',
+                'locale',
+                'value',
+              ],
             },
             filterByFormula: "AND(REGEX_MATCH(key, '^some\\.prefix\\.'), OR(locale = 'fr', locale = 'en'))",
           })
@@ -155,18 +155,9 @@ describe('Integration | Repository | translation-repository', function () {
 
         nock('https://api.airtable.com')
           .delete('/v0/airtableBaseValue/translations')
-          .query({
-            records: {
-              '': ['recTranslation1', 'recTranslation2'],
-            },
-          })
+          .query({ records: { '': ['recTranslation1', 'recTranslation2'] } })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, {
-            records: [
-              { id: 'recTranslation1', deleted: true },
-              { id: 'recTranslation2', deleted: true },
-            ],
-          });
+          .reply(200, { records: [{ id: 'recTranslation1', deleted: true }, { id: 'recTranslation2', deleted: true }] });
 
         const prefixToDelete = 'some.prefix.';
         const locales = ['fr', 'en'];
@@ -179,8 +170,8 @@ describe('Integration | Repository | translation-repository', function () {
     });
   });
 
-  context('#search', function () {
-    it('should search for fields in entities', async function () {
+  context('#search', function() {
+    it('should search for fields in entities', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'entity.entityId1.key',
@@ -210,7 +201,7 @@ describe('Integration | Repository | translation-repository', function () {
       expect(entityIds).to.deep.equal(['entityId1']);
     });
 
-    it('should return distinct entity ids', async function () {
+    it('should return distinct entity ids', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'entity.entityId1.key',
@@ -235,7 +226,7 @@ describe('Integration | Repository | translation-repository', function () {
       expect(entityIds).to.deep.equal(['entityId1']);
     });
 
-    it('should return entity ids sorted alphabetically', async function () {
+    it('should return entity ids sorted alphabetically', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'entity.entityId2.key',
@@ -260,7 +251,7 @@ describe('Integration | Repository | translation-repository', function () {
       expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
     });
 
-    it('should return a limited number of ids', async function () {
+    it('should return a limited number of ids', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'entity.entityId1.key',
@@ -286,7 +277,7 @@ describe('Integration | Repository | translation-repository', function () {
       expect(entityIds).to.deep.equal(['entityId1']);
     });
 
-    it('should perform a case-insensitive search', async function () {
+    it('should perform a case-insensitive search', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'entity.entityId1.key',
@@ -631,7 +622,11 @@ async function _setDoesTableExistInAirtable(value) {
       .get('/v0/airtableBaseValue/translations')
       .query({
         fields: {
-          '': ['key', 'locale', 'value'],
+          '': [
+            'key',
+            'locale',
+            'value',
+          ],
         },
         sort: [{ field: 'key_locale', direction: 'asc' }],
         maxRecords: 1,
@@ -643,7 +638,11 @@ async function _setDoesTableExistInAirtable(value) {
       .get('/v0/airtableBaseValue/translations')
       .query({
         fields: {
-          '': ['key', 'locale', 'value'],
+          '': [
+            'key',
+            'locale',
+            'value',
+          ],
         },
         sort: [{ field: 'key_locale', direction: 'asc' }],
         maxRecords: 1,

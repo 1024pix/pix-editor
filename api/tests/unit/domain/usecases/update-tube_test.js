@@ -19,13 +19,9 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
       update: vi.fn(),
     };
 
-    thematicRepository = {
-      getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination),
-    };
+    thematicRepository = { getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination) };
 
-    updatePixApiReleaseCache = {
-      onTubeUpdated: vi.fn().mockResolvedValueOnce(),
-    };
+    updatePixApiReleaseCache = { onTubeUpdated: vi.fn().mockResolvedValueOnce() };
 
     tube = domainBuilder.buildTube();
     updateStub = vi.spyOn(tube, 'update').mockReturnValueOnce();
@@ -58,9 +54,7 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
       tubeRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
 
       // when
-      const result = updateTube('recTube1', tubeUpdates, {
-        tubeRepository,
-      });
+      const result = updateTube('recTube1', tubeUpdates, { tubeRepository });
 
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown tube id'));

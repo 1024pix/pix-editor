@@ -23,7 +23,11 @@ export class CopyCompetencesFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableCompetences = await airtable.findRecords('Competences', {
-      fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'],
+      fields: [
+        'id persistant',
+        'Sous-domaine',
+        'Domaine (id persistant)',
+      ],
     });
     logger.info({ count: airtableCompetences.length }, 'Loaded competences from airtable');
 

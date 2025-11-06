@@ -18,7 +18,11 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         } catch {
           throw new InvalidFileError('Expected second column to be a valid locale');
         }
-        return ['key', 'value', ...Array(headers.length - 2)];
+        return [
+          'key',
+          'value',
+          ...Array(headers.length - 2),
+        ];
       },
       objectMode: true,
       strictColumnHandling: true,
@@ -33,9 +37,7 @@ export function importTranslations(csvStream, dependencies = { translationReposi
       })
       .on('end', async () => {
         const challengesLocales = extractChallengesLocales(translations);
-        await dependencies.localizedChallengeRepository.create({
-          localizedChallenges: challengesLocales,
-        });
+        await dependencies.localizedChallengeRepository.create({ localizedChallenges: challengesLocales });
 
         await dependencies.translationRepository.save({
           translations,

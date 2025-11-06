@@ -144,8 +144,8 @@ export class Skill {
     const clonedAttachments = [];
     let prototypeVersion = 1;
     for (const prototype of prototypesWithActiveFirst) {
-      const { clonedChallenge: cloneProto, clonedAttachments: cloneAttachmentsProto } =
-        prototype.cloneChallengeAndAttachments({
+      const { clonedChallenge: cloneProto, clonedAttachments: cloneAttachmentsProto }
+        = prototype.cloneChallengeAndAttachments({
           skillId: id,
           competenceId: tubeDestination.competenceId,
           generateNewIdFnc,
@@ -164,8 +164,8 @@ export class Skill {
         });
       let alternativeVersion = 1;
       for (const declinaison of declinaisons) {
-        const { clonedChallenge: cloneDecli, clonedAttachments: cloneAttachmentsDecli } =
-          declinaison.cloneChallengeAndAttachments({
+        const { clonedChallenge: cloneDecli, clonedAttachments: cloneAttachmentsDecli }
+          = declinaison.cloneChallengeAndAttachments({
             skillId: id,
             competenceId: tubeDestination.competenceId,
             generateNewIdFnc,

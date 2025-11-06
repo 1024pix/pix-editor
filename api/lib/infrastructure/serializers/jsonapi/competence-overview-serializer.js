@@ -3,7 +3,13 @@ import JsonapiSerializer from 'jsonapi-serializer';
 const { Serializer } = JsonapiSerializer;
 
 const serializer = new Serializer('competence-overview', {
-  attributes: ['airtableId', 'name', 'thematicOverviews', 'tubesCount', 'skillsCount'],
+  attributes: [
+    'airtableId',
+    'name',
+    'thematicOverviews',
+    'tubesCount',
+    'skillsCount',
+  ],
 });
 
 export function serialize(config) {

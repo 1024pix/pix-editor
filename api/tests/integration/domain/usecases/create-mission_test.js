@@ -5,7 +5,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-h
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import _ from 'lodash';
 
-describe('Integration | Usecases | create mission', function () {
+describe('Integration | Usecases | create mission', function() {
   it('when mission is totally valid, should create mission without warnings', async () => {
     // given
     const mission = domainBuilder.buildMission({ status: Mission.status.EXPERIMENTAL });
@@ -64,9 +64,7 @@ describe('Integration | Usecases | create mission', function () {
     const result = await createMission(createdMission);
 
     // then
-    expect(result.warnings).to.deep.equal([
-      "L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2.",
-    ]);
+    expect(result.warnings).to.deep.equal(["L'activité '@Pix1D-recherche_di' n'a pas d'acquis actif pour le niveau 2."]);
   });
 
   it('when mission is not valid, should throw an error', async () => {

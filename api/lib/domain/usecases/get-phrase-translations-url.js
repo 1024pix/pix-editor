@@ -12,16 +12,12 @@ export async function getPhraseTranslationsURL(
       fetchApi: fetch,
     });
 
-    const accounts = await new phrase.AccountsApi(configuration).accountsList({
-      page: 1,
-    });
+    const accounts = await new phrase.AccountsApi(configuration).accountsList({ page: 1 });
 
     const accountId = accounts.find(({ name }) => name === 'Pix')?.id;
     const projectId = config.phrase.projects.find(byAreaCodeAndFrameworkName(areaCode, frameworkName)).projectId;
 
-    const locales = await new phrase.LocalesApi(configuration).localesList({
-      projectId,
-    });
+    const locales = await new phrase.LocalesApi(configuration).localesList({ projectId });
 
     const defaultLocaleId = locales.find(({ _default }) => _default)?.id;
     const targetLocaleId = locales.find(({ code }) => code === locale)?.id;

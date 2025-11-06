@@ -5,7 +5,7 @@ const TABLE_NAME = 'attachments';
  * @returns { Promise<void> }
  */
 export async function up(knex) {
-  await knex.schema.createTable(TABLE_NAME, function (table) {
+  await knex.schema.createTable(TABLE_NAME, function(table) {
     table.string('id').notNullable().primary();
     table.text('url').notNullable();
     table.integer('size').notNullable();

@@ -4,9 +4,9 @@ import { findByApiKey } from '../../../../lib/infrastructure/repositories/user-r
 import { User } from '../../../../lib/domain/models/User.js';
 import { UserNotFoundError } from '../../../../lib/domain/errors.js';
 
-describe('Integration | Repository | user-repository', function () {
-  describe('#findByApiKey', function () {
-    it('should return user associated to given apiKey', async function () {
+describe('Integration | Repository | user-repository', function() {
+  describe('#findByApiKey', function() {
+    it('should return user associated to given apiKey', async function() {
       // Given
       const apiKey = '00000000-0000-0000-0000-000000000000';
       const userToCreate = {
@@ -32,7 +32,7 @@ describe('Integration | Repository | user-repository', function () {
       expect(user.access).to.equal(expectedUser.access);
     });
 
-    it('should throw an error when user is not found', async function () {
+    it('should throw an error when user is not found', async function() {
       // Given
       const apiKey = '00000000-0000-0000-0000-000000000000';
 

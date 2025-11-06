@@ -13,7 +13,7 @@ export async function register(server) {
       path: '/api/whitelisted-urls',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const whitelistedUrls_read = await whitelistedUrlReadRepository.list();
           return h.response(whitelistedUrlSerializer.serialize(whitelistedUrls_read));
         },
@@ -23,13 +23,9 @@ export async function register(server) {
       method: 'DELETE',
       path: '/api/whitelisted-urls/{whitelistedUrlId}',
       config: {
-        validate: {
-          params: Joi.object({
-            whitelistedUrlId: Types.whitelistedUrlId().required(),
-          }),
-        },
+        validate: { params: Joi.object({ whitelistedUrlId: Types.whitelistedUrlId().required() }) },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const whitelistedUrlId = request.params.whitelistedUrlId;
           const whitelistedUrlToDelete = await whitelistedUrlRepository.find(whitelistedUrlId);
@@ -48,7 +44,7 @@ export async function register(server) {
       path: '/api/whitelisted-urls',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;
           const creationCommand = {
@@ -70,13 +66,9 @@ export async function register(server) {
       method: 'PATCH',
       path: '/api/whitelisted-urls/{whitelistUrlId}',
       config: {
-        validate: {
-          params: Joi.object({
-            whitelistUrlId: Types.whitelistedUrlId().required(),
-          }),
-        },
+        validate: { params: Joi.object({ whitelistUrlId: Types.whitelistedUrlId().required() }) },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           const attributes = request.payload.data.attributes;
           const whitelistedUrlId = request.params.whitelistUrlId;

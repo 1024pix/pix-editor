@@ -175,9 +175,7 @@ export async function save(staticCourseForCreation) {
 }
 
 async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
-  const localizedChallenges = await localizedChallengeRepository.getMany({
-    ids: localizedChallengeIds,
-  });
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
   const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
   const challenges = await challengeRepository.getMany(challengeIds);
 

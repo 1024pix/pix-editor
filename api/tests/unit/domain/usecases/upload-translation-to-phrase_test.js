@@ -84,10 +84,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     // given
     const release = Symbol('release');
     const ConfigurationStub = class {};
-    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-      { projectId: 'mon-projet-1' },
-      { projectId: 'mon-projet-2', areaCode: '4' },
-    ]);
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'mon-projet-1' }, { projectId: 'mon-projet-2', areaCode: '4' }]);
     const localesListStub = vi
       .fn()
       .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr', name: 'fr', _default: true }])
@@ -127,9 +124,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       updateDescriptions: true,
       updateTranslations: true,
       skipUploadTags: true,
-      localeMapping: {
-        fr: 2,
-      },
+      localeMapping: { fr: 2 },
       formatOptions: {
         key_index: 1,
         tag_column: 3,
@@ -173,10 +168,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
   it('should schedule multiple deletions of unmentioned keys when the are several projectIds', async () => {
     // given
     const ConfigurationStub = class {};
-    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-      { projectId: 'mon-projet-1' },
-      { projectId: 'mon-projet-2', areaCode: '4' },
-    ]);
+    vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'mon-projet-1' }, { projectId: 'mon-projet-2', areaCode: '4' }]);
     const localesListStub = vi
       .fn()
       .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr', name: 'fr', _default: true }])

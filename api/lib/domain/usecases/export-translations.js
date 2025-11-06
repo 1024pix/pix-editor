@@ -15,10 +15,7 @@ export async function exportTranslations(stream, filters, dependencies) {
   const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
   const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
   const releaseContent = Object.fromEntries(
-    Object.entries(release.content).map(([collection, entities]) => [
-      collection,
-      Object.fromEntries(entities.map((entity) => [entity.id, entity])),
-    ]),
+    Object.entries(release.content).map(([collection, entities]) => [collection, Object.fromEntries(entities.map((entity) => [entity.id, entity]))]),
   );
 
   const localeToExtract = 'fr';
@@ -115,7 +112,11 @@ function toDescription(localizedChallenges, challenge, baseUrl) {
     });
   const peURL = `Pix Editor: ${baseUrl}/challenge/${challenge.id}`;
 
-  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls, peURL].join('\n');
+  return [
+    primaryLocalePreviewUrl,
+    ...alternativeLocalePreviewUrls,
+    peURL,
+  ].join('\n');
 }
 
 function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
@@ -202,10 +203,7 @@ function extractTagsFromSkill(skill, releaseContent) {
 }
 
 function extractTagsFromTube(tube, releaseContent) {
-  return [
-    toTag(tube.name),
-    ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
-  ];
+  return [toTag(tube.name), ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent)];
 }
 
 function extractTagsFromThematic(thematic, releaseContent) {

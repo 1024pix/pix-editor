@@ -1,7 +1,7 @@
 import { Release } from '../../../../lib/domain/models/release/index.js';
 import { buildContentForRelease } from './build-content-for-release.js';
 
-export const buildDomainRelease = function ({
+export const buildDomainRelease = function({
   id = 123,
   content = buildContentForRelease(),
   createdAt = new Date('2020-01-01'),
@@ -13,7 +13,7 @@ export const buildDomainRelease = function ({
   });
 };
 
-buildDomainRelease.withContent = function ({
+buildDomainRelease.withContent = function({
   id = 123,
   frameworksFromRelease,
   areasFromRelease,

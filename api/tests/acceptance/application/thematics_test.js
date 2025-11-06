@@ -16,7 +16,7 @@ import * as config from '../../../lib/config.js';
 describe('Application | Route | Thematics', () => {
   let editorUser, readonlyUser, originalPixApiUrlValue;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -24,15 +24,15 @@ describe('Application | Route | Thematics', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('GET /api/thematics/{thematicAirtableId}', () => {
     let airtableThematicScope;
 
-    context('when provided id has not the right format', function () {
-      it('should respond with a status 400', async function () {
+    context('when provided id has not the right format', function() {
+      it('should respond with a status 400', async function() {
         const server = await createServer();
 
         // when
@@ -47,8 +47,8 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('when thematic does not exist', function () {
-      it('should respond with a status 404', async function () {
+    context('when thematic does not exist', function() {
+      it('should respond with a status 404', async function() {
         const server = await createServer();
         airtableThematicScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Thematiques/recThematic2')
@@ -504,8 +504,8 @@ describe('Application | Route | Thematics', () => {
   describe('POST /api/thematics', async () => {
     let airtableCreateThematicScope, airtableThematicsScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -527,9 +527,7 @@ describe('Application | Route | Thematics', () => {
                     id: 'recCompetence1',
                   },
                 },
-                'raw-tubes': {
-                  data: [],
-                },
+                'raw-tubes': { data: [] },
               },
             },
           },
@@ -541,8 +539,8 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -564,9 +562,7 @@ describe('Application | Route | Thematics', () => {
                     id: 'recCompetence1',
                   },
                 },
-                'raw-tubes': {
-                  data: [],
-                },
+                'raw-tubes': { data: [] },
               },
             },
           },
@@ -578,7 +574,7 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       beforeEach(async () => {
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -672,9 +668,7 @@ describe('Application | Route | Thematics', () => {
                     id: 'recCompetence1',
                   },
                 },
-                'raw-tubes': {
-                  data: [],
-                },
+                'raw-tubes': { data: [] },
               },
             },
           },
@@ -700,9 +694,7 @@ describe('Application | Route | Thematics', () => {
                   type: 'competences',
                 },
               },
-              'raw-tubes': {
-                data: [],
-              },
+              'raw-tubes': { data: [] },
             },
           },
         });
@@ -736,10 +728,7 @@ describe('Application | Route | Thematics', () => {
 
         await expect(
           knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-        ).resolves.toStrictEqual([
-          { key: 'thematic.thematic3.name', locale: 'en', value: 'Third thematic' },
-          { key: 'thematic.thematic3.name', locale: 'fr', value: 'Troisième thématique' },
-        ]);
+        ).resolves.toStrictEqual([{ key: 'thematic.thematic3.name', locale: 'en', value: 'Third thematic' }, { key: 'thematic.thematic3.name', locale: 'fr', value: 'Troisième thématique' }]);
       });
     });
   });
@@ -747,8 +736,8 @@ describe('Application | Route | Thematics', () => {
   describe('PATCH /api/thematics/{thematicAirtableId}', async () => {
     let airtableUpdateThematicScope, airtableThematicScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -796,8 +785,8 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('when the payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when the payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -845,7 +834,7 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('when the thematic does not exist', function () {
+    context('when the thematic does not exist', function() {
       it('should respond with status 404', async () => {
         // given
         const server = await createServer();
@@ -899,7 +888,7 @@ describe('Application | Route | Thematics', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       beforeEach(async () => {
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -1067,10 +1056,7 @@ describe('Application | Route | Thematics', () => {
 
         await expect(
           knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-        ).resolves.toStrictEqual([
-          { key: 'thematic.thematic1.name', locale: 'en', value: '1st thematic' },
-          { key: 'thematic.thematic1.name', locale: 'fr', value: '1ère thématique' },
-        ]);
+        ).resolves.toStrictEqual([{ key: 'thematic.thematic1.name', locale: 'en', value: '1st thematic' }, { key: 'thematic.thematic1.name', locale: 'fr', value: '1ère thématique' }]);
       });
     });
   });

@@ -28,9 +28,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
     updatePixApiReleaseCache.onThematicUpdated.mockResolvedValueOnce();
 
     // when
-    const result = updateThematic('recThematic1', thematicUpdates, {
-      thematicRepository,
-    });
+    const result = updateThematic('recThematic1', thematicUpdates, { thematicRepository });
 
     // then
     await expect(result).resolves.toBe(updatedThematic);
@@ -47,9 +45,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
       thematicRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
 
       // when
-      const result = updateThematic('recThematic1', thematicUpdates, {
-        thematicRepository,
-      });
+      const result = updateThematic('recThematic1', thematicUpdates, { thematicRepository });
 
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown thematic id'));

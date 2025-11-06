@@ -24,15 +24,11 @@ describe('Integration | Scripts | CopyFrameworksFromAirtableToPg', () => {
 
       const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
         new Airtable.Record(AIRTABLE_NAME, 'rec123Abc', {
-          fields: {
-            Nom: 'Pix',
-          },
+          fields: { Nom: 'Pix' },
           createdTime: '2025-09-02T04:30:00Z',
         }),
         new Airtable.Record(AIRTABLE_NAME, 'rec456Def', {
-          fields: {
-            Nom: 'Nouveau',
-          },
+          fields: { Nom: 'Nouveau' },
           createdTime: '2025-09-02T13:58:00Z',
         }),
       ]);
@@ -74,15 +70,11 @@ describe('Integration | Scripts | CopyFrameworksFromAirtableToPg', () => {
 
         const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce([
           new Airtable.Record(AIRTABLE_NAME, 'rec123Abc', {
-            fields: {
-              Nom: 'Pix',
-            },
+            fields: { Nom: 'Pix' },
             createdTime: '2025-09-02T04:30:00Z',
           }),
           new Airtable.Record(AIRTABLE_NAME, 'rec456Def', {
-            fields: {
-              Nom: 'Nouveau',
-            },
+            fields: { Nom: 'Nouveau' },
             createdTime: '2025-09-02T13:58:00Z',
           }),
         ]);

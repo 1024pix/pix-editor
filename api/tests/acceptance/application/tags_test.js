@@ -9,7 +9,7 @@ import { tagDatasource } from '../../../lib/infrastructure/datasources/airtable/
 describe('Application | Route | Tags', () => {
   let editorUser, readonlyUser;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
     readonlyUser = databaseBuilder.factory.buildReadonlyUser();
     await databaseBuilder.commit();
@@ -18,8 +18,8 @@ describe('Application | Route | Tags', () => {
   describe('POST /api/tags', async () => {
     let airtableCreateTagScope, airtableSearchTagsScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -30,9 +30,7 @@ describe('Application | Route | Tags', () => {
           payload: {
             data: {
               type: 'tags',
-              attributes: {
-                title: 'Internet',
-              },
+              attributes: { title: 'Internet' },
             },
           },
           headers: generateAuthorizationHeader(readonlyUser),
@@ -43,8 +41,8 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -55,9 +53,7 @@ describe('Application | Route | Tags', () => {
           payload: {
             data: {
               type: 'tags',
-              attributes: {
-                titlee: 'Internet',
-              },
+              attributes: { titlee: 'Internet' },
             },
           },
           headers: generateAuthorizationHeader(editorUser),
@@ -68,15 +64,13 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('when tag title already taken', function () {
+    context('when tag title already taken', function() {
       it('should respond with status 409', async () => {
         // given
         databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'Fruits' });
         await databaseBuilder.commit();
 
-        const airtableTags = [
-          airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits' }),
-        ];
+        const airtableTags = [airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits' })];
         airtableSearchTagsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Tags')
           .query({
@@ -86,9 +80,7 @@ describe('Application | Route | Tags', () => {
             maxRecords: 1,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, {
-            records: airtableTags,
-          });
+          .reply(200, { records: airtableTags });
         const server = await createServer();
 
         // when
@@ -98,9 +90,7 @@ describe('Application | Route | Tags', () => {
           payload: {
             data: {
               type: 'tags',
-              attributes: {
-                title: 'FRUITS',
-              },
+              attributes: { title: 'FRUITS' },
             },
           },
           headers: generateAuthorizationHeader(editorUser),
@@ -112,7 +102,7 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       it('should respond with status 201 and created tag', async () => {
         // given
         airtableSearchTagsScope = nock('https://api.airtable.com')
@@ -124,9 +114,7 @@ describe('Application | Route | Tags', () => {
             maxRecords: 1,
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, {
-            records: [],
-          });
+          .reply(200, { records: [] });
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
         generateNewId.mockReturnValue('tagId2');
         const createdAirtableTag = airtableBuilder.factory.buildTag({
@@ -157,9 +145,7 @@ describe('Application | Route | Tags', () => {
           payload: {
             data: {
               type: 'tags',
-              attributes: {
-                title: 'Internet',
-              },
+              attributes: { title: 'Internet' },
             },
           },
           headers: generateAuthorizationHeader(editorUser),
@@ -193,8 +179,8 @@ describe('Application | Route | Tags', () => {
   describe('GET /api/tags/{tagAirtableId}', async () => {
     let airtableGetTagScope;
 
-    context('when param is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when param is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -210,7 +196,7 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('when tag does not exist', function () {
+    context('when tag does not exist', function() {
       it('should respond with status 404', async () => {
         // given
         airtableGetTagScope = nock('https://api.airtable.com')
@@ -232,7 +218,7 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       it('should respond with status 200 and tag', async () => {
         // given
         databaseBuilder.factory.buildTag({
@@ -280,8 +266,8 @@ describe('Application | Route | Tags', () => {
   describe('GET /api/tags', async () => {
     let airtableSearchTagsScope;
 
-    context('when query param is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when query param is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -297,8 +283,8 @@ describe('Application | Route | Tags', () => {
       });
     });
 
-    context('success', function () {
-      context('when searching by titles', function () {
+    context('success', function() {
+      context('when searching by titles', function() {
         it('should respond with status 200 and related tags, limited by 4 tags and sorted by title', async () => {
           // given
           databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'france' });
@@ -323,9 +309,7 @@ describe('Application | Route | Tags', () => {
               maxRecords: 4,
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTags,
-            });
+            .reply(200, { records: airtableTags });
           const server = await createServer();
 
           // when
@@ -377,7 +361,7 @@ describe('Application | Route | Tags', () => {
         });
       });
 
-      context('when searching by ids', function () {
+      context('when searching by ids', function() {
         it('should respond with status 200 and related tags', async () => {
           // given
           databaseBuilder.factory.buildTag({ id: 'tagId3', title: 'france' });
@@ -398,9 +382,7 @@ describe('Application | Route | Tags', () => {
               sort: [{ field: tagDatasource.sortField, direction: 'asc' }],
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTags,
-            });
+            .reply(200, { records: airtableTags });
           const server = await createServer();
 
           // when

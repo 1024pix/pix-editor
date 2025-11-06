@@ -5,10 +5,10 @@ import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { Tube } from '../../../../lib/domain/models/Tube.js';
 
-describe('Unit | Transformer | mission-transformer', function () {
-  describe('#listActive', function () {
+describe('Unit | Transformer | mission-transformer', function() {
+  describe('#listActive', function() {
     let challenges, skills, tubes, thematics;
-    beforeEach(async function () {
+    beforeEach(async function() {
       challenges = [
         domainBuilder.buildChallenge({
           id: 'challengeTuto1',
@@ -68,17 +68,22 @@ describe('Unit | Transformer | mission-transformer', function () {
       thematics = [
         domainBuilder.buildThematic({
           id: 'thematicStep1',
-          name_i18n: {
-            fr: 'Thématique du step 1',
-          },
-          tubeIds: ['aTubeWithoutName', 'tubeTuto1', 'tubeTraining1', 'tubeValidation1'],
+          name_i18n: { fr: 'Thématique du step 1' },
+          tubeIds: [
+            'aTubeWithoutName',
+            'tubeTuto1',
+            'tubeTraining1',
+            'tubeValidation1',
+          ],
         }),
         domainBuilder.buildThematic({
           id: 'thematicStep2',
-          name_i18n: {
-            fr: 'Thématique du step 2',
-          },
-          tubeIds: ['tubeTuto2', 'tubeTraining2', 'tubeValidation2'],
+          name_i18n: { fr: 'Thématique du step 2' },
+          tubeIds: [
+            'tubeTuto2',
+            'tubeTraining2',
+            'tubeValidation2',
+          ],
         }),
         domainBuilder.buildThematic({
           id: 'thematicDefi',
@@ -95,9 +100,9 @@ describe('Unit | Transformer | mission-transformer', function () {
       ];
     });
 
-    context('with inactive, proposal, and active challenges', function () {
-      context('when mission is EXPERIMENTAL', function () {
-        it('should return proposal and active challenges only', function () {
+    context('with inactive, proposal, and active challenges', function() {
+      context('when mission is EXPERIMENTAL', function() {
+        it('should return proposal and active challenges only', function() {
           challenges = [
             domainBuilder.buildChallenge({
               id: 'challengeValidationValidéStep1',
@@ -173,8 +178,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         });
       });
 
-      context('when mission is validated', function () {
-        it('should return active challenges only', async function () {
+      context('when mission is validated', function() {
+        it('should return active challenges only', async function() {
           challenges = [
             domainBuilder.buildChallenge({
               id: 'challengeValidationValidé',
@@ -245,8 +250,8 @@ describe('Unit | Transformer | mission-transformer', function () {
       });
     });
 
-    context('with inactive, proposal, and active skills', async function () {
-      it('should return in progress and active skill challenges only', async function () {
+    context('with inactive, proposal, and active skills', async function() {
+      it('should return in progress and active skill challenges only', async function() {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'challengeSkillActif',
@@ -348,8 +353,8 @@ describe('Unit | Transformer | mission-transformer', function () {
       });
     });
 
-    context('with multiple challenges in activities', async function () {
-      it('should return ordered challenges', async function () {
+    context('with multiple challenges in activities', async function() {
+      it('should return ordered challenges', async function() {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'secondChallengeValidation',
@@ -430,8 +435,8 @@ describe('Unit | Transformer | mission-transformer', function () {
       });
     });
 
-    context('with alternative challenges in activities', async function () {
-      it('should return ordered alternative challenges', async function () {
+    context('with alternative challenges in activities', async function() {
+      it('should return ordered alternative challenges', async function() {
         challenges = [
           domainBuilder.buildChallenge({
             id: 'secondAltChallengeValidation',
@@ -515,8 +520,8 @@ describe('Unit | Transformer | mission-transformer', function () {
       });
     });
 
-    context('Without challenges for skills', async function () {
-      it('Should return missions', async function () {
+    context('Without challenges for skills', async function() {
+      it('Should return missions', async function() {
         challenges = [];
 
         const missions = [
@@ -564,8 +569,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         ]);
       });
     });
-    context('Without skills in tubes', async function () {
-      it('Should return missions', async function () {
+    context('Without skills in tubes', async function() {
+      it('Should return missions', async function() {
         skills = [];
 
         const missions = [
@@ -613,8 +618,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         ]);
       });
     });
-    context('Without tubes', async function () {
-      it('Should return missions', async function () {
+    context('Without tubes', async function() {
+      it('Should return missions', async function() {
         tubes = [];
 
         const missions = [
@@ -655,8 +660,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         ]);
       });
     });
-    context('Without tubes in thematic', async function () {
-      it('Should return missions', async function () {
+    context('Without tubes in thematic', async function() {
+      it('Should return missions', async function() {
         thematics = [
           domainBuilder.buildThematic(
             {
@@ -705,8 +710,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         ]);
       });
     });
-    context('Without thematic', async function () {
-      it('Should return missions', async function () {
+    context('Without thematic', async function() {
+      it('Should return missions', async function() {
         thematics = [];
 
         const missions = [
@@ -747,8 +752,8 @@ describe('Unit | Transformer | mission-transformer', function () {
         ]);
       });
     });
-    context('Without thematicID in mission', async function () {
-      it('Should return missions', async function () {
+    context('Without thematicID in mission', async function() {
+      it('Should return missions', async function() {
         const missions = [
           domainBuilder.buildMission({
             id: 2,
@@ -788,8 +793,8 @@ describe('Unit | Transformer | mission-transformer', function () {
       });
     });
 
-    context('With no name tube in thematic', function () {
-      it('Should return empty conten', async function () {
+    context('With no name tube in thematic', function() {
+      it('Should return empty conten', async function() {
         const missions = [
           domainBuilder.buildMission({
             id: 2,

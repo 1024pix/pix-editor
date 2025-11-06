@@ -16,10 +16,10 @@ export function transformTube(tube, challenges) {
   const tubeValidatedPrototypes = challenges?.filter(
     (challenge) => skillIds.includes(challenge.skillId) && challenge.isPrototype && challenge.isValide,
   );
-  const isMobileCompliant =
-    tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isMobileCompliant);
-  const isTabletCompliant =
-    tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isTabletCompliant);
+  const isMobileCompliant
+    = tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isMobileCompliant);
+  const isTabletCompliant
+    = tubeValidatedPrototypes?.length > 0 && tubeValidatedPrototypes.every((challenge) => challenge.isTabletCompliant);
 
   return {
     id,

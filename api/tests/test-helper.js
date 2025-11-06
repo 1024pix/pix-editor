@@ -44,14 +44,10 @@ export const hFake = {
     };
   },
   authenticated(data) {
-    return {
-      authenticated: data,
-    };
+    return { authenticated: data };
   },
   redirect(location) {
-    return {
-      location,
-    };
+    return { location };
   },
   file(path, options) {
     return this.response({ path, options });

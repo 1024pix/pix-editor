@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 
-describe('Unit | Utils | URL Utils', function () {
-  describe('#findUrlsInMarkdown', function () {
-    it('should return URLs in markdown text', function () {
+describe('Unit | Utils | URL Utils', function() {
+  describe('#findUrlsInMarkdown', function() {
+    it('should return URLs in markdown text', function() {
       // given
-      const markdownText =
-        'instructions [link](https://example.net/) further instructions [https://other_example.net?mode=a&lang=fr](https://other_example.net?mode=a&lang=fr) <a href="https://from_link_example.net?mode=a&lang=en">ici</a> « https://thirdexample.com/ »';
+      const markdownText
+        = 'instructions [link](https://example.net/) further instructions [https://other_example.net?mode=a&lang=fr](https://other_example.net?mode=a&lang=fr) <a href="https://from_link_example.net?mode=a&lang=en">ici</a> « https://thirdexample.com/ »';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
@@ -20,7 +20,7 @@ describe('Unit | Utils | URL Utils', function () {
       ]);
     });
 
-    it('should return an empty array when no URL detected in markdown', function () {
+    it('should return an empty array when no URL detected in markdown', function() {
       // given
       const markdownText1 = 'instructions [link](https://broke)further instructions';
       const markdownText2 = 'coucou';
@@ -43,10 +43,10 @@ describe('Unit | Utils | URL Utils', function () {
       expect(urls5).toStrictEqual([]);
     });
 
-    it('should fix url by prepending protocol if missing', function () {
+    it('should fix url by prepending protocol if missing', function() {
       // given
-      const markdownText =
-        'instructions [link](www.example.net/) [second link](www.example.net/?url=https://example.com/path) [third link](HTTPS://example.com/path) ';
+      const markdownText
+        = 'instructions [link](www.example.net/) [second link](www.example.net/?url=https://example.com/path) [third link](HTTPS://example.com/path) ';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
@@ -59,10 +59,10 @@ describe('Unit | Utils | URL Utils', function () {
       ]);
     });
 
-    it('should return unique occurences', function () {
+    it('should return unique occurences', function() {
       // given
-      const markdownText =
-        'instructions [link](https://www.example.net/) further instructions [other_link](https://www.example.net/)';
+      const markdownText
+        = 'instructions [link](https://www.example.net/) further instructions [other_link](https://www.example.net/)';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
@@ -73,7 +73,7 @@ describe('Unit | Utils | URL Utils', function () {
   });
 
   describe('#findUrlsInText', () => {
-    it('should find multiple urls', function () {
+    it('should find multiple urls', function() {
       const inputString = `lien:
 - "https://pas_local.org/super_nom_wow.pdf"
 - "http://local_youyou.org/el_-_deuxième_super_truc.html"

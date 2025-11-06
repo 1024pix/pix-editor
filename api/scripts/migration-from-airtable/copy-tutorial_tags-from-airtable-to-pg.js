@@ -22,9 +22,7 @@ export class CopyTutorialTagsFromAirtableToPg extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
-    const airtableTutorialTags = await airtable.findRecords('Tags', {
-      fields: ['id persistant', 'Nom'],
-    });
+    const airtableTutorialTags = await airtable.findRecords('Tags', { fields: ['id persistant', 'Nom'] });
     logger.info({ count: airtableTutorialTags.length }, 'Loaded tutorial tags from airtable');
 
     const tutorialTags = airtableTutorialTags.map((record) => ({

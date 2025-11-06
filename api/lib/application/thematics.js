@@ -13,12 +13,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/thematics/{thematicAirtableId}',
       config: {
-        validate: {
-          params: Joi.object({
-            thematicAirtableId: Types.thematicId().required(),
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ thematicAirtableId: Types.thematicId().required() }) },
+        handler: async function(request) {
           const thematic = await thematicRepository.getByAirtableId(request.params.thematicAirtableId);
           if (!thematic) return Boom.notFound('unknown thematic id');
           return thematicSerializer.serialize(thematic);
@@ -29,12 +25,8 @@ export function register(server) {
       method: 'GET',
       path: '/api/thematics',
       config: {
-        validate: {
-          query: Joi.object({
-            'filter[ids][]': [Types.thematicId(), Joi.array().items(Types.thematicId())],
-          }),
-        },
-        handler: async function (request) {
+        validate: { query: Joi.object({ 'filter[ids][]': [Types.thematicId(), Joi.array().items(Types.thematicId())] }) },
+        handler: async function(request) {
           const params = extractParameters(request.query);
           const thematics = await listThematics(params);
           return thematicSerializer.serialize(thematics);
@@ -62,7 +54,7 @@ export function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const thematic = await thematicSerializer.deserialize(request.payload);
           const createdThematic = await createThematic(thematic);
           return h.response(thematicSerializer.serialize(createdThematic)).code(201);
@@ -74,9 +66,7 @@ export function register(server) {
       path: '/api/thematics/{thematicAirtableId}',
       config: {
         validate: {
-          params: Joi.object({
-            thematicAirtableId: Types.thematicId(),
-          }),
+          params: Joi.object({ thematicAirtableId: Types.thematicId() }),
           payload: Joi.object({
             data: Joi.object({
               type: Joi.string().required().equal('themes'),
@@ -94,7 +84,7 @@ export function register(server) {
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request) {
+        handler: async function(request) {
           const { thematicAirtableId } = request.params;
           const thematicUpdates = await thematicSerializer.deserialize(request.payload);
           const updatedThematic = await updateThematic(thematicAirtableId, thematicUpdates);

@@ -37,7 +37,7 @@ const serializer = new Serializer('localized-challenges', {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
-      related: function (record, current, parent) {
+      related: function(record, current, parent) {
         return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
       },
     },
@@ -49,7 +49,7 @@ const serializer = new Serializer('localized-challenges', {
   keyForAttribute(attribute) {
     return Inflector.dasherize(Inflector.underscore(attribute));
   },
-  transform: function ({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
+  transform: function({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
     return {
       ...localizedChallenge,
       defaultEmbedUrl,
@@ -94,7 +94,7 @@ const deserializer = new Deserializer({
       return attachment.id;
     },
   },
-  transform: function ({ challenge, embedUrl, files, ...localizedChallenge }) {
+  transform: function({ challenge, embedUrl, files, ...localizedChallenge }) {
     return new LocalizedChallenge({
       ...localizedChallenge,
       challengeId: challenge,

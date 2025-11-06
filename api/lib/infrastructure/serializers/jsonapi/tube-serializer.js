@@ -39,15 +39,9 @@ const serializer = new Serializer('tube', {
       rawSkills: skillAirtableIds?.map((id) => ({ id })),
     };
   },
-  theme: {
-    ref: 'id',
-  },
-  competence: {
-    ref: 'id',
-  },
-  rawSkills: {
-    ref: 'id',
-  },
+  theme: { ref: 'id' },
+  competence: { ref: 'id' },
+  rawSkills: { ref: 'id' },
   typeForAttribute(attribute) {
     if (attribute === 'rawSkills') return 'skills';
   },

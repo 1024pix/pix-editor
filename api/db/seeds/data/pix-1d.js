@@ -202,15 +202,27 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
 
   let iCompetence = 0;
   let iThematic = 0;
-  for (const missionStatus of [Mission.status.VALIDATED, Mission.status.INACTIVE, Mission.status.EXPERIMENTAL]) {
+  for (const missionStatus of [
+    Mission.status.VALIDATED,
+    Mission.status.INACTIVE,
+    Mission.status.EXPERIMENTAL,
+  ]) {
     const competenceItem = competenceItems[iCompetence];
-    const [thematicItem1, thematicItem2, thematicItem3] = thematicItems.slice(iThematic, 3 + iThematic);
+    const [
+      thematicItem1,
+      thematicItem2,
+      thematicItem3,
+    ] = thematicItems.slice(iThematic, 3 + iThematic);
     databaseBuilder.factory.buildMission({
       name: `Mission test au statut ${missionStatus}`,
       cardImageUrl: `https://example.net/image_for_${missionStatus}.png`,
       competenceId: competenceItem.id,
       learningObjectives: `Learning objectif pour ${missionStatus}`,
-      thematicIds: [thematicItem1.id, thematicItem2.id, thematicItem3.id].join(','),
+      thematicIds: [
+        thematicItem1.id,
+        thematicItem2.id,
+        thematicItem3.id,
+      ].join(','),
       validatedObjectives: `- Ca pour ${missionStatus}
  Et puis ça pour ${missionStatus}`,
       status: missionStatus,

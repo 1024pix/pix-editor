@@ -13,7 +13,11 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'BZ',
-        urlsToConsult: ['url-to-consult.org', 'url-to-consult.com', 'url-to-consult.fr'],
+        urlsToConsult: [
+          'url-to-consult.org',
+          'url-to-consult.com',
+          'url-to-consult.fr',
+        ],
       });
       const json = {
         data: {
@@ -53,9 +57,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
 
     it('should deserialize a Localized Challenge with files', async () => {
       // Given
-      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
-        fileIds: ['attachmentId'],
-      });
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({ fileIds: ['attachmentId'] });
 
       const json = {
         data: {
@@ -103,9 +105,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
 
     it('should deserialize empty embed URL as null', async () => {
       // Given
-      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
-        embedUrl: null,
-      });
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({ embedUrl: null });
       const json = {
         data: {
           type: 'localized-challenges',
@@ -188,11 +188,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                 type: 'challenges',
               },
             },
-            attachments: {
-              links: {
-                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
-              },
-            },
+            attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}` } },
           },
         },
       };
@@ -234,11 +230,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                 type: 'challenges',
               },
             },
-            attachments: {
-              links: {
-                related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}`,
-              },
-            },
+            attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge.id}` } },
           },
         },
       };
@@ -286,11 +278,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                   type: 'challenges',
                 },
               },
-              attachments: {
-                links: {
-                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge1.id}`,
-                },
-              },
+              attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge1.id}` } },
             },
           },
           {
@@ -311,11 +299,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
                   type: 'challenges',
                 },
               },
-              attachments: {
-                links: {
-                  related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge2.id}`,
-                },
-              },
+              attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${localizedChallenge2.id}` } },
             },
           },
         ],

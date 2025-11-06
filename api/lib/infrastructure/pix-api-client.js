@@ -6,9 +6,7 @@ import { logger } from './logger.js';
 
 export async function request({ payload, url }) {
   return _callAPIWithRetry((token) => {
-    return axios.patch(`${config.pixApi.baseUrl}${url}`, payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return axios.patch(`${config.pixApi.baseUrl}${url}`, payload, { headers: { Authorization: `Bearer ${token}` } });
   });
 }
 
@@ -42,9 +40,7 @@ async function _authenticate() {
     grant_type: 'password',
   });
 
-  const response = await axios.post(`${config.pixApi.baseUrl}/api/token`, data, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  });
+  const response = await axios.post(`${config.pixApi.baseUrl}/api/token`, data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
 
   cache.set('pix-api-token', response.data.access_token);
 

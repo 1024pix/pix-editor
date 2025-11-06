@@ -23,21 +23,21 @@ describe('Unit | Infrastructure | Utils | Promise Streamer', () => {
   });
 
   it('should end the stream with an error when an error occured', async () => {
-    //Given
+    // Given
     const promise = async () => {
       throw new Error();
     };
     const writableStream = new PassThrough();
     const streamPromise = streamToPromise(writableStream);
 
-    //When
+    // When
     promiseStreamer({
       promise: promise(),
       writableStream,
     });
     const result = await streamPromise;
 
-    //Then
+    // Then
     expect(result).to.match(/error$/);
   });
 });

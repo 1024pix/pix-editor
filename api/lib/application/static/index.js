@@ -5,9 +5,7 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/{param*}',
-      options: {
-        auth: false,
-      },
+      options: { auth: false },
       handler: {
         directory: {
           path: `${config.hapi.publicDir}/pix-editor`,

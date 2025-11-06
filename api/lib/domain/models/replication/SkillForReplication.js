@@ -1,9 +1,7 @@
 import { child } from '../../../infrastructure/logger.js';
 import * as config from '../../../config.js';
 
-const logger = child('airtable:migration', {
-  event: 'migration-from-airtable',
-});
+const logger = child('airtable:migration', { event: 'migration-from-airtable' });
 
 export class SkillForReplication {
   #pixValue;

@@ -9,10 +9,7 @@ import * as translationRepository from './translation-repository.js';
 const model = 'mission';
 
 export async function getById(id) {
-  const [mission, translations] = await Promise.all([
-    knex('missions').select('*').where({ id }).first(),
-    translationRepository.listByEntity(model, id),
-  ]);
+  const [mission, translations] = await Promise.all([knex('missions').select('*').where({ id }).first(), translationRepository.listByEntity(model, id)]);
 
   if (!mission) {
     throw new NotFoundError('Mission introuvable');
@@ -42,10 +39,7 @@ export async function findAllMissions({ filter, page }) {
 }
 
 export async function list() {
-  const [missions, translations] = await Promise.all([
-    knex('missions').select('*').orderBy('id'),
-    translationRepository.listByModel(model),
-  ]);
+  const [missions, translations] = await Promise.all([knex('missions').select('*').orderBy('id'), translationRepository.listByModel(model)]);
 
   return _toDomainList(missions, translations);
 }

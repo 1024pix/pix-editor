@@ -28,9 +28,7 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 id: 'localizedChallenge123',
               },
             },
-            challenge: {
-              data: null,
-            },
+            challenge: { data: null },
           },
         },
       };
@@ -66,9 +64,7 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 id: 'challenge123',
               },
             },
-            'localized-challenge': {
-              data: null,
-            },
+            'localized-challenge': { data: null },
           },
         },
       };
@@ -108,9 +104,7 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 id: 'localizedChallenge123',
               },
             },
-            challenge: {
-              data: null,
-            },
+            challenge: { data: null },
           },
         },
       };
@@ -148,9 +142,7 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
                 id: 'challenge123',
               },
             },
-            'localized-challenge': {
-              data: null,
-            },
+            'localized-challenge': { data: null },
           },
         },
       };
@@ -177,15 +169,13 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
 
       const deserializedQuery = deserializeQuery(query);
 
-      expect(deserializedQuery).toStrictEqual({
-        localizedChallengeId: 'loc1Id',
-      });
+      expect(deserializedQuery).toStrictEqual({ localizedChallengeId: 'loc1Id' });
     });
   });
 
-  describe('#serialize', function () {
-    context('when serializing one entity', function () {
-      it('should return a json for one serialized entity', function () {
+  describe('#serialize', function() {
+    context('when serializing one entity', function() {
+      it('should return a json for one serialized entity', function() {
         // given
         const attachment = domainBuilder.buildAttachment({
           id: 'attachmentId',
@@ -211,8 +201,8 @@ describe('Unit | Serializer | JSONAPI | attachment-serializer', () => {
         });
       });
     });
-    context('when serializing several entities', function () {
-      it('should return a json for several serialized entities', function () {
+    context('when serializing several entities', function() {
+      it('should return a json for several serialized entities', function() {
         // given
         const attachment1 = domainBuilder.buildAttachment({
           id: 'attachmentId1',

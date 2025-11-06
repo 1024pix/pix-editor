@@ -17,8 +17,8 @@ export class TubeForRelease {
     this.title = title;
     this.description = description;
     ((this.practicalTitle_i18n = practicalTitle_i18n),
-      (this.practicalDescription_i18n = practicalDescription_i18n),
-      (this.competenceId = competenceId));
+    (this.practicalDescription_i18n = practicalDescription_i18n),
+    (this.competenceId = competenceId));
     this.isMobileCompliant = isMobileCompliant;
     this.isTabletCompliant = isTabletCompliant;
     this.thematicId = thematicId;

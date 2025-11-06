@@ -152,9 +152,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
         tutorials.map(
           (tutorial) =>
-            new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, {
-              fields: { 'id persistant': tutorial.id, 'Record ID': tutorial.airtableId },
-            }),
+            new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, { fields: { 'id persistant': tutorial.id, 'Record ID': tutorial.airtableId } }),
         ),
       );
 
@@ -183,10 +181,7 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
 
       await expect(
         knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
-      ).resolves.toStrictEqual([
-        { tutorialId: 'tuto3', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-        { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) },
-      ]);
+      ).resolves.toStrictEqual([{ tutorialId: 'tuto3', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
 
       expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
         fields: ['Record ID', 'id persistant'],

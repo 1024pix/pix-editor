@@ -8,7 +8,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/replication-data',
       config: {
-        handler: async function () {
+        handler: async function() {
           return promiseStreamer({
             promise: getLearningContentForReplication(),
             loggingScope: SCOPES.REPLICATION,

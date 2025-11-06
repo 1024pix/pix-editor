@@ -3,9 +3,7 @@ import * as config from '../../../config.js';
 
 import { Skill } from '../Skill.js';
 
-const logger = child('airtable:migration', {
-  event: 'migration-from-airtable',
-});
+const logger = child('airtable:migration', { event: 'migration-from-airtable' });
 
 export class SkillForRelease {
   #pixValue;

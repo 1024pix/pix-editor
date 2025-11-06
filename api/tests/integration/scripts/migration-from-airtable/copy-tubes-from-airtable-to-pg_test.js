@@ -80,7 +80,12 @@ describe('Integration | Scripts | CopyTubesFromAirtableToPg', () => {
 
       // then
       expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'],
+        fields: [
+          'id persistant',
+          'Nom',
+          'Index',
+          'Thematique (id persistant)',
+        ],
       });
 
       await expect(knex.select('*').from(TABLE_NAME).orderBy('createdAt')).resolves.toStrictEqual([
@@ -168,7 +173,12 @@ describe('Integration | Scripts | CopyTubesFromAirtableToPg', () => {
 
         // then
         expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-          fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'],
+          fields: [
+            'id persistant',
+            'Nom',
+            'Index',
+            'Thematique (id persistant)',
+          ],
         });
 
         await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([

@@ -3,9 +3,9 @@ import { domainBuilder } from '../../../test-helper.js';
 import { transformTube, transformTubes } from '../../../../lib/infrastructure/transformers/tube-transformer.js';
 import { Challenge } from '../../../../lib/domain/models/Challenge.js';
 
-describe('Unit | Infrastructure | tube-transformer', function () {
+describe('Unit | Infrastructure | tube-transformer', function() {
   describe('#transformTube', () => {
-    it('transforms tube for release', function () {
+    it('transforms tube for release', function() {
       // given
       const tube = domainBuilder.buildTube({
         id: 'tube1',

@@ -5,9 +5,7 @@ describe('Unit | Domain | Tube', () => {
   describe('#get isWorkbench', () => {
     it('is true when name is @workbench', () => {
       // given
-      const tube = domainBuilder.buildTube({
-        name: '@workbench',
-      });
+      const tube = domainBuilder.buildTube({ name: '@workbench' });
 
       // when
       const { isWorkbench } = tube;
@@ -18,9 +16,7 @@ describe('Unit | Domain | Tube', () => {
 
     it('is false when name os @workbench', () => {
       // given
-      const tube = domainBuilder.buildTube({
-        name: '@test',
-      });
+      const tube = domainBuilder.buildTube({ name: '@test' });
 
       // when
       const { isWorkbench } = tube;

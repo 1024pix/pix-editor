@@ -29,7 +29,15 @@ export class CopyAttachmentsFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableAttachments = await airtable.findRecords('Attachments', {
-      fields: ['url', 'size', 'type', 'mimeType', 'filename', 'challengeId persistant', 'localizedChallengeId'],
+      fields: [
+        'url',
+        'size',
+        'type',
+        'mimeType',
+        'filename',
+        'challengeId persistant',
+        'localizedChallengeId',
+      ],
     });
     logger.info({ count: airtableAttachments.length }, 'Loaded attachments from airtable');
 

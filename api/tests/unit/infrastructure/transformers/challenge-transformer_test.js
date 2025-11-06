@@ -7,8 +7,8 @@ import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Infrastructure | Challenge Transformer', function () {
-  describe('#createChallengeTransformer', function () {
+describe('Unit | Infrastructure | Challenge Transformer', function() {
+  describe('#createChallengeTransformer', function() {
     it('should transform challenge', () => {
       // given
       const attachments = [];

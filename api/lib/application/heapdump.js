@@ -8,7 +8,7 @@ export function register(server) {
       path: '/api/heapdump',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
-        handler: async function (_, h) {
+        handler: async function(_, h) {
           return h
             .response(getHeapSnapshot())
             .header('Content-type', 'application/json')

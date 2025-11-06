@@ -15,12 +15,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
-        validate: {
-          query: Joi.object({
-            frameworkName: Joi.string().required(),
-          }).required(),
-        },
-        handler: async function (request, h) {
+        validate: { query: Joi.object({ frameworkName: Joi.string().required() }).required() },
+        handler: async function(request, h) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
           const release = await releaseRepository.getLatestRelease();

@@ -57,10 +57,7 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         shuffled: true,
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
-        files: [
-          { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
-          { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
-        ],
+        files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
       };
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
@@ -173,7 +170,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeA_data.shuffled,
               contextualizedFields: challengeA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -303,10 +300,7 @@ describe('Integration | Repository | challenge-repository', () => {
           spoil: Challenge.SPOILS.NON_SPOILABLE,
           responsive: Challenge.RESPONSIVES.SMARTPHONE,
           geography: 'FR',
-          files: [
-            { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
-            { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
-          ],
+          files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
           validatedAt: null,
           archivedAt: null,
           createdAt: '2025-10-23T10:17:00Z',
@@ -507,7 +501,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 shuffled: challengeA_data.shuffled,
                 contextualizedFields: challengeA_data.contextualizedFields,
               },
-              get: function (field) {
+              get: function(field) {
                 return this.fields[field];
               },
             },
@@ -553,7 +547,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 shuffled: challengeB_data.shuffled,
                 contextualizedFields: challengeB_data.contextualizedFields,
               },
-              get: function (field) {
+              get: function(field) {
                 return this.fields[field];
               },
             },
@@ -720,10 +714,7 @@ describe('Integration | Repository | challenge-repository', () => {
           spoil: Challenge.SPOILS.NON_SPOILABLE,
           responsive: Challenge.RESPONSIVES.SMARTPHONE,
           geography: 'FR',
-          files: [
-            { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
-            { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
-          ],
+          files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
           validatedAt: null,
           archivedAt: null,
           createdAt: '2025-10-23T10:17:00Z',
@@ -847,7 +838,7 @@ describe('Integration | Repository | challenge-repository', () => {
                 shuffled: challengeA_data.shuffled,
                 contextualizedFields: challengeA_data.contextualizedFields,
               },
-              get: function (field) {
+              get: function(field) {
                 return this.fields[field];
               },
             },
@@ -963,10 +954,7 @@ describe('Integration | Repository | challenge-repository', () => {
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         geography: 'FR',
-        files: [
-          { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
-          { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
-        ],
+        files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
         validatedAt: null,
         archivedAt: null,
         createdAt: '2025-10-23T10:17:00Z',
@@ -1160,7 +1148,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeA_data.shuffled,
               contextualizedFields: challengeA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -1206,7 +1194,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeB_data.shuffled,
               contextualizedFields: challengeB_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -1389,10 +1377,7 @@ describe('Integration | Repository | challenge-repository', () => {
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         geography: 'FR',
-        files: [
-          { fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' },
-          { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' },
-        ],
+        files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
         validatedAt: null,
         archivedAt: null,
         createdAt: '2025-10-23T10:17:00Z',
@@ -1584,7 +1569,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeA_data.shuffled,
               contextualizedFields: challengeA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -1631,7 +1616,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeB_data.shuffled,
               contextualizedFields: challengeB_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -1814,10 +1799,7 @@ describe('Integration | Repository | challenge-repository', () => {
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         geography: 'FR',
-        files: [
-          { fileId: 'attachmentDraftA', localizedChallengeId: 'challengeDraftA_id' },
-          { fileId: 'attachmentDraftB', localizedChallengeId: 'locES_challengeDraftA_id' },
-        ],
+        files: [{ fileId: 'attachmentDraftA', localizedChallengeId: 'challengeDraftA_id' }, { fileId: 'attachmentDraftB', localizedChallengeId: 'locES_challengeDraftA_id' }],
         validatedAt: null,
         archivedAt: null,
         createdAt: '2025-10-23T10:17:00Z',
@@ -1966,8 +1948,8 @@ describe('Integration | Repository | challenge-repository', () => {
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
         if (
-          options?.filterByFormula !==
-          `AND({Compétences (via tube) (id persistant)} = "${challengeDraftA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
+          options?.filterByFormula
+          !== `AND({Compétences (via tube) (id persistant)} = "${challengeDraftA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
         )
           expect.unreachable('Wrong filterByFormula');
         return [
@@ -2016,7 +1998,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeDraftA_data.shuffled,
               contextualizedFields: challengeDraftA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -2062,7 +2044,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeActiveA_data.shuffled,
               contextualizedFields: challengeActiveA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -2192,8 +2174,8 @@ describe('Integration | Repository | challenge-repository', () => {
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
         if (
-          options?.filterByFormula !==
-          `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
+          options?.filterByFormula
+          !== `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
         )
           expect.unreachable('Wrong filterByFormula');
         return [];
@@ -2373,8 +2355,8 @@ describe('Integration | Repository | challenge-repository', () => {
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
         if (
-          options?.filterByFormula !==
-          `AND({Compétences (via tube) (id persistant)} = "${challengeProtoA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}")`
+          options?.filterByFormula
+          !== `AND({Compétences (via tube) (id persistant)} = "${challengeProtoA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}")`
         )
           expect.unreachable('Wrong filterByFormula');
         return [
@@ -2421,7 +2403,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeProtoA_data.shuffled,
               contextualizedFields: challengeProtoA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -2467,7 +2449,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeProtoB_data.shuffled,
               contextualizedFields: challengeProtoB_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -2591,8 +2573,8 @@ describe('Integration | Repository | challenge-repository', () => {
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
         if (
-          options?.filterByFormula !==
-          `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
+          options?.filterByFormula
+          !== `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
         )
           expect.unreachable('Wrong filterByFormula');
         return [];
@@ -2790,8 +2772,8 @@ describe('Integration | Repository | challenge-repository', () => {
       vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
         if (
-          airtableRequestBodies.length !== 2 ||
-          !_.isEqual(airtableRequestBodies[0], {
+          airtableRequestBodies.length !== 2
+          || !_.isEqual(airtableRequestBodies[0], {
             fields: {
               'id persistant': challengeA_data.id,
               "Type d'épreuve": challengeA_data.type,
@@ -2824,8 +2806,8 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeA_data.shuffled,
               contextualizedFields: challengeA_data.contextualizedFields,
             },
-          }) ||
-          !_.isEqual(airtableRequestBodies[1], {
+          })
+          || !_.isEqual(airtableRequestBodies[1], {
             fields: {
               'id persistant': challengeB_data.id,
               "Type d'épreuve": challengeB_data.type,
@@ -2904,7 +2886,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeA_data.shuffled,
               contextualizedFields: challengeA_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -2950,7 +2932,7 @@ describe('Integration | Repository | challenge-repository', () => {
               shuffled: challengeB_data.shuffled,
               contextualizedFields: challengeB_data.contextualizedFields,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
@@ -3204,7 +3186,7 @@ describe('Integration | Repository | challenge-repository', () => {
   });
 
   describe('#create', () => {
-    it('should create a challenge, its localized challenge primary and its translated attributes', async function () {
+    it('should create a challenge, its localized challenge primary and its translated attributes', async function() {
       // given
       const challengeToCreate_data = {
         id: 'challengeToCreate_id',
@@ -3374,7 +3356,7 @@ describe('Integration | Repository | challenge-repository', () => {
             shuffled: challengeToCreate_data.shuffled,
             contextualizedFields: challengeToCreate_data.contextualizedFields,
           },
-          get: function (field) {
+          get: function(field) {
             return this.fields[field];
           },
         };
@@ -3574,15 +3556,11 @@ describe('Integration | Repository | challenge-repository', () => {
 
       await expect(
         knex.select('skillId').from('challenges').where('id', challengeData.id).first(),
-      ).resolves.toStrictEqual({
-        skillId: 'skill2',
-      });
+      ).resolves.toStrictEqual({ skillId: 'skill2' });
 
       expect(updateRecord).toHaveBeenCalledExactlyOnceWith('Epreuves', {
         id: challengeData.airtableId,
-        fields: expect.objectContaining({
-          Acquix: ['recSkill2'],
-        }),
+        fields: expect.objectContaining({ Acquix: ['recSkill2'] }),
       });
     });
   });
