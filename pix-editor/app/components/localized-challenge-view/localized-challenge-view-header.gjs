@@ -16,9 +16,6 @@ export default class LocalizedChallengeViewHeader extends Component {
   @action
   closePanel() {
     this.multipanelManager.onDetailsClosed();
-    if (this.args.edition) {
-      this.args.cancelEdition();
-    }
     this.router.transitionTo('authenticated.v2.competence-overview.localized-challenges', this.args.competence.id, this.args.overview, this.args.skillId);
   }
 
@@ -122,7 +119,7 @@ export default class LocalizedChallengeViewHeader extends Component {
           <div class="challenge-view-header-second__right-action">
             {{#if @edition}}
               <PixButton
-                @triggerAction={{@cancelEdition}}
+                @triggerAction={{@cancelEdit}}
                 @variant="secondary"
                 aria-label="Annuler l'édition"
               >
@@ -135,7 +132,7 @@ export default class LocalizedChallengeViewHeader extends Component {
               </PixButton>
             {{else}}
               <PixButton
-                @triggerAction={{@toggleEdition}}
+                @triggerAction={{@edit}}
                 @iconAfter="edit"
               >
                 Modifier

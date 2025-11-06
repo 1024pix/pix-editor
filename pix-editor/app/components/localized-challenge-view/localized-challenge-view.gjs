@@ -24,7 +24,6 @@ export default class LocalizedChallenge extends Component {
   @service store;
   @service storage;
 
-  @tracked edition = false;
   @tracked embedURLValidationStatus = 'default';
   @tracked invalidUrlsToConsult = '';
   @tracked displayUrlsToConsultField = false;
@@ -34,6 +33,10 @@ export default class LocalizedChallenge extends Component {
   @tracked urlsToConsultTextareaHeigh = this.args.localizedChallenge.urlsToConsult?.length ?? 2;
 
   deletedFiles = [];
+
+  get edition() {
+    return this.args.edition;
+  }
 
   get readonly() {
     return !this.edition;
@@ -72,9 +75,9 @@ export default class LocalizedChallenge extends Component {
   }
 
   @action
-  async cancelEdition() {
-    this.edition = false;
-    const localizedChallenge = this.args.localizedChallenge
+  async cancelEdit() {
+    this.args.cancelEdit();
+    const localizedChallenge = this.args.localizedChallenge;
     localizedChallenge.rollbackAttributes();
     this.urlsToConsult = localizedChallenge.urlsToConsult?.join('\n') ?? '';
     this.displayUrlsToConsultField = false;
@@ -83,11 +86,6 @@ export default class LocalizedChallenge extends Component {
     localizedChallenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
     this.deletedFiles = [];
     this.notify.message('Modification annulée');
-  }
-
-  @action
-  toggleEdition() {
-    this.edition = !this.edition;
   }
 
   @action
@@ -184,7 +182,6 @@ export default class LocalizedChallenge extends Component {
 
   @action
   async save() {
-    // this.loader.start();
     try {
       this.loader.start('Enregistrement...');
 
@@ -193,7 +190,7 @@ export default class LocalizedChallenge extends Component {
       await this._saveFiles();
       await this._saveLocalizedChallenge();
 
-      this.toggleEdition();
+      this.args.cancelEdit();
       this.invalidUrlsToConsult = '';
       this.displayUrlsToConsultField = false;
       this.notify.message('Épreuve mise à jour');
@@ -302,10 +299,10 @@ export default class LocalizedChallenge extends Component {
       @overview={{@overview}}
       @competence={{@competence}}
       @skillId={{@skillId}}
-      @edition={{this.edition}}
-      @toggleEdition={{this.toggleEdition}}
+      @edition={{@edition}}
+      @edit={{@edit}}
       @save={{this.save}}
-      @cancelEdition={{this.cancelEdition}}
+      @cancelEdit={{this.cancelEdit}}
     />
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">

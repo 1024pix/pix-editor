@@ -1,6 +1,5 @@
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
-import Service from '@ember/service';
-import { click } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import Challenge from 'pixeditor/models/challenge';
@@ -9,8 +8,8 @@ import { module, test } from 'qunit';
 
 import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
-import sinon from "sinon";
-import {selectFiles} from "ember-file-upload/test-support";
+import { selectFiles } from 'ember-file-upload/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -34,45 +33,69 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
       id: 'competence1:challenges-production',
       name: '1.1 ma compétence',
       airtableId: 'recCompetence1',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: skillId,
-            name: skillName,
-            prototypeId,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 1,
-            validatedChallengesCount: 1,
-            airtableId: skillId,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: skillId,
+                  name: skillName,
+                  prototypeId,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 1,
+                  validatedChallengesCount: 1,
+                  airtableId: skillId,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production:nl',
       name: '1.1 ma compétence',
       airtableId: 'recCompetence1',
-      thematicOverviews: [{
-        id: 'thematic1',
-        name: 'thematic name',
-        tubeOverviews: [{
-          id: 'tube1',
-          name: '@tube',
-          skillOverviews: [{
-            id: skillId,
-            name: skillName,
-            prototypeId,
-            isPrototypeDeclinable: true,
-            proposedChallengesCount: 0,
-            validatedChallengesCount: 1,
-            airtableId: skillId,
-          }, null, null, null, null, null, null],
-        }],
-      }],
+      thematicOverviews: [
+        {
+          id: 'thematic1',
+          name: 'thematic name',
+          tubeOverviews: [
+            {
+              id: 'tube1',
+              name: '@tube',
+              skillOverviews: [
+                {
+                  id: skillId,
+                  name: skillName,
+                  prototypeId,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 0,
+                  validatedChallengesCount: 1,
+                  airtableId: skillId,
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
     });
     const skill = this.server.create('skill', {
       id: skillId,
@@ -95,7 +118,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
       instruction: 'hallo mama',
       challenge: challengeProduction,
       embedURL: 'https://super-site.com',
-      geography: 'FR'
+      geography: 'FR',
     });
 
     const challengeLocale = this.server.create('challenge-locale', {
@@ -151,37 +174,128 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
     assert.notOk(localizedChallenge.hasDirtyAttributes);
   });
 
+  module('when edition is cancel on button press', function() {
+    test('it should rollback modified attributes', async function(assert) {
+      // given
+      this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto' });
+      this.server.create('attachment', { id: 'recAttachment2', type: 'attachment', challengeId: 'challengeIdProto' });
 
-  test('it should cancel modified attributes', async function(assert) {
-    // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto' });
-    this.server.create('attachment', { id: 'recAttachment2', type: 'attachment', challengeId: 'challengeIdProto' });
+      const file1 = new File([], 'challenge-illustration.png', { type: 'image/png' });
+      const file2 = new File([], 'challenge-attachment2.csv', { type: 'text/csv' });
 
-    const file1 = new File([], 'challenge-illustration.png', { type: 'image/png' });
-    const file2 = new File([], 'challenge-attachment2.csv', { type: 'text/csv' });
+      // when
+      const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+      await clickByText('Modifier');
+      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com');
+      await fillByLabel('Embed URL', 'https://mon-autre-embed-url.com');
+      await clickByText('Géographie');
+      await click(await screen.findByRole('option', { name: 'Japon' }));
+      await waitForSelectToBeClosed(screen);
 
-    // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
-    await clickByText('Modifier');
-    await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-    await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com');
-    await fillByLabel('Embed URL', 'https://mon-autre-embed-url.com');
-    await clickByText('Géographie');
-    await click(await screen.findByRole('option', { name: 'Japon' }));
-    await waitForSelectToBeClosed(screen);
+      await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+      await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
 
-    await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
-    await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
+      await click(screen.getByRole('button', { name: 'Annuler l\'édition' }));
 
-    await click(screen.getByRole('button', { name: "Annuler l'édition" }));
+      // then
+      const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');
+      const attachments = await store.peekAll('attachment');
 
-    // then
-    const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');
-    const attachments = await store.peekAll('attachment');
+      assert.notOk(localizedChallenge.urlsToConsult);
+      assert.deepEqual(localizedChallenge.embedURL, 'https://super-site.com');
+      assert.strictEqual(localizedChallenge.geography, 'FR');
+      assert.strictEqual(attachments.length, 2);
+    });
+  });
 
-    assert.notOk(localizedChallenge.urlsToConsult);
-    assert.deepEqual(localizedChallenge.embedURL, 'https://super-site.com');
-    assert.strictEqual(localizedChallenge.geography, 'FR');
-    assert.strictEqual(attachments.length, 2);
+  module('when user navigate to an other page', function(hooks) {
+    let originalWindowConfirm, confirmStub;
+    hooks.beforeEach(function() {
+      originalWindowConfirm = window.confirm;
+      confirmStub = sinon.stub(window, 'confirm');
+    });
+
+    hooks.afterEach(function() {
+      window.confirm = originalWindowConfirm;
+    });
+
+    module('#on confirm leaving', function(hooks) {
+      hooks.beforeEach(function() {
+        confirmStub.returns(true);
+      });
+
+      test('it should rollback modified attributes', async function(assert) {
+        // given
+        this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto' });
+        this.server.create('attachment', { id: 'recAttachment2', type: 'attachment', challengeId: 'challengeIdProto' });
+
+        const file1 = new File([], 'challenge-illustration.png', { type: 'image/png' });
+        const file2 = new File([], 'challenge-attachment2.csv', { type: 'text/csv' });
+
+        // when
+        const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+        await clickByText('Modifier');
+        await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+        await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com');
+        await fillByLabel('Embed URL', 'https://mon-autre-embed-url.com');
+        await clickByText('Géographie');
+        await click(await screen.findByRole('option', { name: 'Japon' }));
+        await waitForSelectToBeClosed(screen);
+
+        await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+        await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
+
+        await click(await screen.findByRole('button', { name: 'Fermer l\'épreuve' }));
+
+        // then
+        const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');
+        const attachments = await store.peekAll('attachment');
+
+        assert.notOk(localizedChallenge.urlsToConsult);
+        assert.deepEqual(localizedChallenge.embedURL, 'https://super-site.com');
+        assert.strictEqual(localizedChallenge.geography, 'FR');
+        assert.strictEqual(attachments.length, 2);
+      });
+    });
+
+    module('#on cancel leaving', function(hooks) {
+      hooks.beforeEach(function() {
+        confirmStub.returns(false);
+      });
+
+      test('it should cancel navigation', async function(assert) {
+        // given
+        this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto' });
+        this.server.create('attachment', { id: 'recAttachment2', type: 'attachment', challengeId: 'challengeIdProto' });
+
+        const file1 = new File([], 'challenge-illustration.png', { type: 'image/png' });
+        const file2 = new File([], 'challenge-attachment2.csv', { type: 'text/csv' });
+
+        // when
+        const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+        await clickByText('Modifier');
+        await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+        await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com');
+        await fillByLabel('Embed URL', 'https://mon-autre-embed-url.com');
+        await clickByText('Géographie');
+        await click(await screen.findByRole('option', { name: 'Japon' }));
+        await waitForSelectToBeClosed(screen);
+
+        await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+        await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
+
+        await click(await screen.findByRole('button', { name: 'Fermer l\'épreuve' }));
+
+        // then
+        const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');
+        const attachments = await store.peekAll('attachment');
+
+        assert.deepEqual(localizedChallenge.urlsToConsult, ['https://mon-url.com']);
+        assert.strictEqual(localizedChallenge.embedURL, 'https://mon-autre-embed-url.com');
+        assert.strictEqual(localizedChallenge.geography, 'JP');
+        assert.strictEqual(attachments.length, 4);
+      });
+    });
   });
 });
