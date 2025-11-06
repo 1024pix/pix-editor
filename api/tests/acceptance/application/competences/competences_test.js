@@ -1,14 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { competenceDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Acceptance | Route | competences', () => {
@@ -20,25 +13,23 @@ describe('Acceptance | Route | competences', () => {
   });
 
   describe('GET /competences', async () => {
-    let airtableCompetencesScope;
-
     beforeEach(async () => {
       const competences = [
         {
           id: 'competence1',
-          airtableId: 'recCompetence1',
+          airtableId: 'competence1',
           index: '1.1',
-          areaAirtableId: 'recArea1',
+          areaAirtableId: 'area1',
           areaId: 'area1',
           origin: 'Pix',
-          thematicAirtableIds: ['recThematic1', 'recThematic2'],
+          thematicAirtableIds: ['thematic1', 'thematic2'],
           thematicIds: ['thematic1', 'thematic2'],
           tubeAirtableIds: [
-            'recTube1',
-            'recTube2',
-            'recTube3',
-            'recTube4',
-            'recTube5',
+            'tube1',
+            'tube2',
+            'tube3',
+            'tube4',
+            'tube5',
           ],
           tubeIds: [
             'tube1',
@@ -52,17 +43,17 @@ describe('Acceptance | Route | competences', () => {
         },
         {
           id: 'competence11',
-          airtableId: 'recCompetence11',
+          airtableId: 'competence11',
           index: '1.1',
-          areaAirtableId: 'recArea11',
+          areaAirtableId: 'area11',
           areaId: 'area11',
           origin: 'Pix Junior',
-          thematicAirtableIds: ['recThematic11', 'recThematic12'],
+          thematicAirtableIds: ['thematic11', 'thematic12'],
           thematicIds: ['thematic11', 'thematic12'],
           tubeAirtableIds: [
-            'recTube11',
-            'recTube12',
-            'recTube13',
+            'tube11',
+            'tube12',
+            'tube13',
           ],
           tubeIds: [
             'tube11',
@@ -74,32 +65,32 @@ describe('Acceptance | Route | competences', () => {
         },
         {
           id: 'competence2',
-          airtableId: 'recCompetence2',
+          airtableId: 'competence2',
           index: '1.2',
-          areaAirtableId: 'recArea1',
+          areaAirtableId: 'area1',
           areaId: 'area1',
           origin: 'Pix',
-          thematicAirtableIds: ['recThematic3'],
+          thematicAirtableIds: ['thematic3'],
           thematicIds: ['thematic3'],
-          tubeAirtableIds: ['recTube6', 'recTube7'],
+          tubeAirtableIds: ['tube6', 'tube7'],
           tubeIds: ['tube6', 'tube7'],
           skillAirtableIds: [],
           skillIds: [],
         },
         {
           id: 'competence12',
-          airtableId: 'recCompetence12',
+          airtableId: 'competence12',
           index: '1.2',
-          areaAirtableId: 'recArea11',
+          areaAirtableId: 'area11',
           areaId: 'area11',
           origin: 'Pix Junior',
-          thematicAirtableIds: ['recThematic13', 'recThematic14'],
+          thematicAirtableIds: ['thematic13', 'thematic14'],
           thematicIds: ['thematic13', 'thematic14'],
           tubeAirtableIds: [
-            'recTube14',
-            'recTube15',
-            'recTube16',
-            'recTube17',
+            'tube14',
+            'tube15',
+            'tube16',
+            'tube17',
           ],
           tubeIds: [
             'tube14',
@@ -112,14 +103,14 @@ describe('Acceptance | Route | competences', () => {
         },
         {
           id: 'competence3',
-          airtableId: 'recCompetence3',
+          airtableId: 'competence3',
           index: '2.1',
-          areaAirtableId: 'recArea2',
+          areaAirtableId: 'area2',
           areaId: 'area2',
           origin: 'Pix',
-          thematicAirtableIds: ['recThematic4', 'recThematic5'],
+          thematicAirtableIds: ['thematic4', 'thematic5'],
           thematicIds: ['thematic4', 'thematic5'],
-          tubeAirtableIds: ['recTube8', 'recTube9'],
+          tubeAirtableIds: ['tube8', 'tube9'],
           tubeIds: ['tube8', 'tube9'],
           skillAirtableIds: [],
           skillIds: [],
@@ -144,19 +135,6 @@ describe('Acceptance | Route | competences', () => {
           }),
         );
       });
-
-      const airtableCompetences = competences.map((competence) =>
-        airtableBuilder.factory.buildCompetence(domainBuilder.buildCompetenceDatasourceObject(competence)),
-      );
-
-      airtableCompetencesScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Competences')
-        .query({
-          fields: { '': competenceDatasource.usedFields },
-          sort: [{ field: competenceDatasource.sortField, direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableCompetences });
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence1.name',
@@ -280,7 +258,7 @@ describe('Acceptance | Route | competences', () => {
         data: [
           {
             type: 'competences',
-            id: 'recCompetence1',
+            id: 'competence1',
             attributes: {
               'pix-id': 'competence1',
               code: '1.1',
@@ -294,24 +272,24 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea1',
+                  id: 'area1',
                 },
               },
-              'raw-themes': { data: [{ id: 'recThematic1', type: 'themes' }, { id: 'recThematic2', type: 'themes' }] },
+              'raw-themes': { data: [{ id: 'thematic1', type: 'themes' }, { id: 'thematic2', type: 'themes' }] },
               'raw-tubes': {
                 data: [
-                  { id: 'recTube1', type: 'tubes' },
-                  { id: 'recTube2', type: 'tubes' },
-                  { id: 'recTube3', type: 'tubes' },
-                  { id: 'recTube4', type: 'tubes' },
-                  { id: 'recTube5', type: 'tubes' },
+                  { id: 'tube1', type: 'tubes' },
+                  { id: 'tube2', type: 'tubes' },
+                  { id: 'tube3', type: 'tubes' },
+                  { id: 'tube4', type: 'tubes' },
+                  { id: 'tube5', type: 'tubes' },
                 ],
               },
             },
           },
           {
             type: 'competences',
-            id: 'recCompetence11',
+            id: 'competence11',
             attributes: {
               'pix-id': 'competence11',
               code: '1.1',
@@ -325,22 +303,22 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea11',
+                  id: 'area11',
                 },
               },
-              'raw-themes': { data: [{ id: 'recThematic11', type: 'themes' }, { id: 'recThematic12', type: 'themes' }] },
+              'raw-themes': { data: [{ id: 'thematic11', type: 'themes' }, { id: 'thematic12', type: 'themes' }] },
               'raw-tubes': {
                 data: [
-                  { id: 'recTube11', type: 'tubes' },
-                  { id: 'recTube12', type: 'tubes' },
-                  { id: 'recTube13', type: 'tubes' },
+                  { id: 'tube11', type: 'tubes' },
+                  { id: 'tube12', type: 'tubes' },
+                  { id: 'tube13', type: 'tubes' },
                 ],
               },
             },
           },
           {
             type: 'competences',
-            id: 'recCompetence2',
+            id: 'competence2',
             attributes: {
               'pix-id': 'competence2',
               code: '1.2',
@@ -354,16 +332,16 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea1',
+                  id: 'area1',
                 },
               },
-              'raw-themes': { data: [{ id: 'recThematic3', type: 'themes' }] },
-              'raw-tubes': { data: [{ id: 'recTube6', type: 'tubes' }, { id: 'recTube7', type: 'tubes' }] },
+              'raw-themes': { data: [{ id: 'thematic3', type: 'themes' }] },
+              'raw-tubes': { data: [{ id: 'tube6', type: 'tubes' }, { id: 'tube7', type: 'tubes' }] },
             },
           },
           {
             type: 'competences',
-            id: 'recCompetence12',
+            id: 'competence12',
             attributes: {
               'pix-id': 'competence12',
               code: '1.2',
@@ -377,23 +355,23 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea11',
+                  id: 'area11',
                 },
               },
-              'raw-themes': { data: [{ id: 'recThematic13', type: 'themes' }, { id: 'recThematic14', type: 'themes' }] },
+              'raw-themes': { data: [{ id: 'thematic13', type: 'themes' }, { id: 'thematic14', type: 'themes' }] },
               'raw-tubes': {
                 data: [
-                  { id: 'recTube14', type: 'tubes' },
-                  { id: 'recTube15', type: 'tubes' },
-                  { id: 'recTube16', type: 'tubes' },
-                  { id: 'recTube17', type: 'tubes' },
+                  { id: 'tube14', type: 'tubes' },
+                  { id: 'tube15', type: 'tubes' },
+                  { id: 'tube16', type: 'tubes' },
+                  { id: 'tube17', type: 'tubes' },
                 ],
               },
             },
           },
           {
             type: 'competences',
-            id: 'recCompetence3',
+            id: 'competence3',
             attributes: {
               'pix-id': 'competence3',
               code: '2.1',
@@ -407,34 +385,32 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea2',
+                  id: 'area2',
                 },
               },
-              'raw-themes': { data: [{ id: 'recThematic4', type: 'themes' }, { id: 'recThematic5', type: 'themes' }] },
-              'raw-tubes': { data: [{ id: 'recTube8', type: 'tubes' }, { id: 'recTube9', type: 'tubes' }] },
+              'raw-themes': { data: [{ id: 'thematic4', type: 'themes' }, { id: 'thematic5', type: 'themes' }] },
+              'raw-tubes': { data: [{ id: 'tube8', type: 'tubes' }, { id: 'tube9', type: 'tubes' }] },
             },
           },
         ],
       });
-
-      expect(airtableCompetencesScope.isDone()).toBe(true);
     });
   });
 
   describe('GET /competences/{competenceAirtableid}', async () => {
-    let airtableCompetence, airtableCompetenceScope;
+    let competence;
 
     beforeEach(async () => {
-      const competence = {
+      competence = {
         id: 'competence2',
-        airtableId: 'recCompetence2',
+        airtableId: 'competence2',
         index: '1.2',
         areaId: 'area1',
-        areaAirtableId: 'recArea1',
+        areaAirtableId: 'area1',
         origin: 'Pix',
-        thematicAirtableIds: ['recThematic3'],
+        thematicAirtableIds: ['thematic3'],
         thematicIds: ['thematic3'],
-        tubeAirtableIds: ['recTube6', 'recTube7'],
+        tubeAirtableIds: ['tube6', 'tube7'],
         tubeIds: ['tube6', 'tube7'],
         skillAirtableIds: [],
         skillIds: [],
@@ -453,16 +429,6 @@ describe('Acceptance | Route | competences', () => {
           thematicId: competence.thematicIds[index % competence.thematicIds.length],
         }),
       );
-
-      airtableCompetence = airtableBuilder.factory.buildCompetence(
-        domainBuilder.buildCompetenceDatasourceObject(competence),
-      );
-
-      airtableCompetenceScope = nock('https://api.airtable.com')
-        .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableCompetence);
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence2.name',
@@ -491,25 +457,17 @@ describe('Acceptance | Route | competences', () => {
     describe('when competence is unknown', () => {
       it('should respond with status 404', async () => {
         // given
-        const airtableUnknownCompetenceScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Competences/recCompetence404')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
-
         const server = await createServer();
 
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/competences/recCompetence404',
+          url: '/api/competences/competence404',
           headers: generateAuthorizationHeader(editorUser),
         });
 
         // then
         expect(response.statusCode).toBe(404);
-
-        expect(airtableUnknownCompetenceScope.isDone()).toBe(true);
       });
     });
 
@@ -520,7 +478,7 @@ describe('Acceptance | Route | competences', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: `/api/competences/${airtableCompetence.id}`,
+        url: `/api/competences/${competence.id}`,
         headers: generateAuthorizationHeader(editorUser),
       });
 
@@ -530,7 +488,7 @@ describe('Acceptance | Route | competences', () => {
       expect(response.result).toEqual({
         data: {
           type: 'competences',
-          id: 'recCompetence2',
+          id: 'competence2',
           attributes: {
             'pix-id': 'competence2',
             code: '1.2',
@@ -544,25 +502,18 @@ describe('Acceptance | Route | competences', () => {
             area: {
               data: {
                 type: 'areas',
-                id: 'recArea1',
+                id: 'area1',
               },
             },
-            'raw-themes': { data: [{ id: 'recThematic3', type: 'themes' }] },
-            'raw-tubes': { data: [{ id: 'recTube6', type: 'tubes' }, { id: 'recTube7', type: 'tubes' }] },
+            'raw-themes': { data: [{ id: 'thematic3', type: 'themes' }] },
+            'raw-tubes': { data: [{ id: 'tube6', type: 'tubes' }, { id: 'tube7', type: 'tubes' }] },
           },
         },
       });
-
-      expect(airtableCompetenceScope.isDone()).toBe(true);
     });
   });
 
   describe('POST /competences', async () => {
-    let airtableAreaScope;
-    let airtableCreateCompetenceScope;
-    let airtableCreateThematicScope;
-    let airtableCreateTubeScope;
-    let airtableCreateSkillScope;
     let generateNewId;
     let pixApiCompetenceCacheScope;
     let pixApiThematicCacheScope;
@@ -570,145 +521,9 @@ describe('Acceptance | Route | competences', () => {
     // FIXME pixApiSkillCacheScope
 
     beforeEach(async () => {
-      const airtableArea = airtableBuilder.factory.buildArea(
-        domainBuilder.buildAreaDatasourceObject({
-          id: 'area2',
-          airtableId: 'recArea2',
-          code: '2',
-          color: null,
-          competenceIds: ['competence3'],
-          competenceAirtableIds: ['recCompetence3'],
-          frameworkId: 'recFmk1',
-        }),
-      );
-
-      airtableAreaScope = nock('https://api.airtable.com')
-        .get(`/v0/airtableBaseValue/Domaines/${airtableArea.id}`)
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableArea);
-
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk' });
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
-
-      const airtableCompetence = airtableBuilder.factory.buildCompetence(
-        domainBuilder.buildCompetenceDatasourceObject({
-          id: 'competence4',
-          airtableId: 'recCompetence4',
-          index: '2.2',
-          areaId: 'area2',
-          areaAirtableId: 'recArea2',
-          origin: 'Pix',
-          thematicIds: null,
-          thematicAirtableIds: null,
-          tubeAirtableIds: null,
-          skillIds: null,
-        }),
-      );
-
-      const airtableThematic = airtableBuilder.factory.buildThematic(
-        domainBuilder.buildThematicDatasourceObject({
-          id: 'thematic1',
-          airtableId: 'recThematic1',
-          index: 0,
-          competenceId: 'competence4',
-          tubeIds: [],
-        }),
-      );
-
-      const airtableTube = airtableBuilder.factory.buildTube(
-        domainBuilder.buildTubeDatasourceObject({
-          id: 'tube1',
-          airtableId: 'recTube1',
-          name: '@workbench',
-          competenceAirtableId: 'recCompetence4',
-          competenceId: 'competence4',
-          index: null,
-          thematicAirtableId: 'recThematic1',
-          thematicId: 'thematic1',
-        }),
-      );
-
-      const airtableSkill = airtableBuilder.factory.buildSkill(
-        domainBuilder.buildSkillDatasourceObject({
-          id: 'skill1',
-          airtableId: 'recSkill1',
-          name: '@workbench',
-          tubeAirtableId: 'recTube1',
-          tubeId: 'tube1',
-          description: "Acquis pour l'atelier de la compétence 2.2 Pix",
-          tutorialAirtableIds: [],
-          tutorialIds: [],
-          learningMoreTutorialAirtableIds: [],
-          learningMoreTutorialIds: [],
-        }),
-      );
-
-      airtableCreateCompetenceScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences/', {
-          records: [
-            {
-              fields: {
-                'id persistant': 'competence4',
-                'Sous-domaine': '2.2',
-                Domaine: ['recArea2'],
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableCompetence] });
-
-      airtableCreateThematicScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Thematiques/', {
-          records: [
-            {
-              fields: {
-                'id persistant': 'thematic1',
-                Competence: ['recCompetence4'],
-                Index: 0,
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableThematic] });
-
-      airtableCreateTubeScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Tubes/', {
-          records: [
-            {
-              fields: {
-                'id persistant': 'tube1',
-                Nom: '@workbench',
-                Competences: ['recCompetence4'],
-                Thematique: ['recThematic1'],
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableTube] });
-
-      airtableCreateSkillScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Acquis/', {
-          records: [
-            {
-              fields: {
-                'id persistant': 'skill1',
-                Tube: ['recTube1'],
-                Description: "Acquis pour l'atelier de la compétence 2.2 Pix",
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableSkill] });
 
       generateNewId = vi.spyOn(idGenerator, 'generateNewId');
       generateNewId.mockImplementation((prefix) => {
@@ -809,7 +624,7 @@ describe('Acceptance | Route | competences', () => {
                 area: {
                   data: {
                     type: 'areas',
-                    id: 'recArea2',
+                    id: 'area2',
                   },
                 },
               },
@@ -844,7 +659,7 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea2',
+                  id: 'area2',
                 },
               },
             },
@@ -859,7 +674,7 @@ describe('Acceptance | Route | competences', () => {
       expect(response.result).toEqual({
         data: {
           type: 'competences',
-          id: 'recCompetence4',
+          id: 'competence4',
           attributes: {
             'pix-id': 'competence4',
             code: '2.2',
@@ -873,11 +688,11 @@ describe('Acceptance | Route | competences', () => {
             area: {
               data: {
                 type: 'areas',
-                id: 'recArea2',
+                id: 'area2',
               },
             },
-            'raw-themes': { data: [{ id: 'recThematic1', type: 'themes' }] },
-            'raw-tubes': { data: [{ id: 'recTube1', type: 'tubes' }] },
+            'raw-themes': { data: [{ id: 'thematic1', type: 'themes' }] },
+            'raw-tubes': { data: [{ id: 'tube1', type: 'tubes' }] },
           },
         },
       });
@@ -940,30 +755,21 @@ describe('Acceptance | Route | competences', () => {
         { key: 'tube.tube1.practicalTitle', locale: 'fr', value: "Tube pour l'atelier de la compétence 2.2 Pix" },
       ]);
 
-      expect(airtableAreaScope.isDone()).toBe(true);
-      expect(airtableCreateCompetenceScope.isDone()).toBe(true);
-      expect(airtableCreateThematicScope.isDone()).toBe(true);
-      expect(airtableCreateTubeScope.isDone()).toBe(true);
-      expect(airtableCreateSkillScope.isDone()).toBe(true);
       expect(pixApiCompetenceCacheScope.isDone()).toBe(true);
       expect(pixApiThematicCacheScope.isDone()).toBe(true);
     });
   });
 
   describe('PATCH /competences/{id}', async () => {
-    let airtableCompetence, airtableCompetenceScope, pixApiCacheScope;
+    let pixApiCacheScope, competence;
 
     beforeEach(async () => {
-      const competence = {
+      competence = {
         id: 'competence4',
-        airtableId: 'recCompetence4',
         index: '2.2',
         areaId: 'area2',
-        areaAirtableId: 'recArea2',
         origin: 'Pix',
         thematicIds: ['thematic9'],
-        thematicAirtableIds: ['recThematic9'],
-        tubeAirtableIds: ['recTube8', 'recTube9'],
         tubeIds: ['tube8', 'tube9'],
         skillIds: [
           'skill7',
@@ -988,16 +794,6 @@ describe('Acceptance | Route | competences', () => {
       competence.skillIds.forEach((id, index) =>
         databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }),
       );
-
-      airtableCompetence = airtableBuilder.factory.buildCompetence(
-        domainBuilder.buildCompetenceDatasourceObject(competence),
-      );
-
-      airtableCompetenceScope = nock('https://api.airtable.com')
-        .get(`/v0/airtableBaseValue/Competences/${airtableCompetence.id}`)
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableCompetence);
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence4.name',
@@ -1060,7 +856,7 @@ describe('Acceptance | Route | competences', () => {
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: `/api/competences/${airtableCompetence.id}`,
+          url: `/api/competences/${competence.id}`,
           payload: {
             data: {
               type: 'competences',
@@ -1083,11 +879,11 @@ describe('Acceptance | Route | competences', () => {
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: `/api/competences/${airtableCompetence.id}`,
+          url: `/api/competences/${competence.id}`,
           payload: {
             data: {
               type: 'competences',
-              id: 'recCompetence4',
+              id: 'competence4',
               attributes: {
                 'pix-id': 'competence4',
                 code: '2.2',
@@ -1101,14 +897,14 @@ describe('Acceptance | Route | competences', () => {
                 area: {
                   data: {
                     type: 'areas',
-                    id: 'recArea2',
+                    id: 'area2',
                   },
                 },
                 'raw-themes': {
                   data: [
                     {
                       type: 'themes',
-                      id: 'recThematic9',
+                      id: 'thematic9',
                     },
                   ],
                 },
@@ -1116,11 +912,11 @@ describe('Acceptance | Route | competences', () => {
                   data: [
                     {
                       type: 'tubes',
-                      id: 'recTube8',
+                      id: 'tube8',
                     },
                     {
                       type: 'tubes',
-                      id: 'recTube9',
+                      id: 'tube9',
                     },
                   ],
                 },
@@ -1138,22 +934,16 @@ describe('Acceptance | Route | competences', () => {
     describe('when competence is unknown', () => {
       it('should respond with status 404', async () => {
         // given
-        const airtableUnknownCompetenceScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Competences/recCompetence404')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
-
         const server = await createServer();
 
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: '/api/competences/recCompetence404',
+          url: '/api/competences/competence404',
           payload: {
             data: {
               type: 'competences',
-              id: 'recCompetence404',
+              id: 'competence404',
               attributes: {
                 'pix-id': 'competence404',
                 code: '2.2',
@@ -1167,14 +957,14 @@ describe('Acceptance | Route | competences', () => {
                 area: {
                   data: {
                     type: 'areas',
-                    id: 'recArea2',
+                    id: 'area2',
                   },
                 },
                 'raw-themes': {
                   data: [
                     {
                       type: 'themes',
-                      id: 'recThematic9',
+                      id: 'thematic9',
                     },
                   ],
                 },
@@ -1182,11 +972,11 @@ describe('Acceptance | Route | competences', () => {
                   data: [
                     {
                       type: 'tubes',
-                      id: 'recTube8',
+                      id: 'tube8',
                     },
                     {
                       type: 'tubes',
-                      id: 'recTube9',
+                      id: 'tube9',
                     },
                   ],
                 },
@@ -1198,8 +988,6 @@ describe('Acceptance | Route | competences', () => {
 
         // then
         expect(response.statusCode).toBe(404);
-
-        expect(airtableUnknownCompetenceScope.isDone()).toBe(true);
       });
     });
 
@@ -1210,11 +998,11 @@ describe('Acceptance | Route | competences', () => {
       // when
       const response = await server.inject({
         method: 'PATCH',
-        url: `/api/competences/${airtableCompetence.id}`,
+        url: `/api/competences/${competence.id}`,
         payload: {
           data: {
             type: 'competences',
-            id: 'recCompetence4',
+            id: 'competence4',
             attributes: {
               'pix-id': 'competence4',
               code: '2.2',
@@ -1228,14 +1016,14 @@ describe('Acceptance | Route | competences', () => {
               area: {
                 data: {
                   type: 'areas',
-                  id: 'recArea2',
+                  id: 'area2',
                 },
               },
               'raw-themes': {
                 data: [
                   {
                     type: 'themes',
-                    id: 'recThematic9',
+                    id: 'thematic9',
                   },
                 ],
               },
@@ -1243,11 +1031,11 @@ describe('Acceptance | Route | competences', () => {
                 data: [
                   {
                     type: 'tubes',
-                    id: 'recTube8',
+                    id: 'tube8',
                   },
                   {
                     type: 'tubes',
-                    id: 'recTube9',
+                    id: 'tube9',
                   },
                 ],
               },
@@ -1263,7 +1051,7 @@ describe('Acceptance | Route | competences', () => {
       expect(response.result).toEqual({
         data: {
           type: 'competences',
-          id: 'recCompetence4',
+          id: 'competence4',
           attributes: {
             'pix-id': 'competence4',
             code: '2.2',
@@ -1277,14 +1065,14 @@ describe('Acceptance | Route | competences', () => {
             area: {
               data: {
                 type: 'areas',
-                id: 'recArea2',
+                id: 'area2',
               },
             },
             'raw-themes': {
               data: [
                 {
                   type: 'themes',
-                  id: 'recThematic9',
+                  id: 'thematic9',
                 },
               ],
             },
@@ -1292,11 +1080,11 @@ describe('Acceptance | Route | competences', () => {
               data: [
                 {
                   type: 'tubes',
-                  id: 'recTube8',
+                  id: 'tube8',
                 },
                 {
                   type: 'tubes',
-                  id: 'recTube9',
+                  id: 'tube9',
                 },
               ],
             },
@@ -1312,7 +1100,6 @@ describe('Acceptance | Route | competences', () => {
         { key: 'competence.competence4.name', locale: 'fr', value: '4ème compétence' },
       ]);
 
-      expect(airtableCompetenceScope.isDone()).toBe(true);
       expect(pixApiCacheScope.isDone()).toBe(true);
     });
   });

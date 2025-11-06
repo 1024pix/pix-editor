@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
@@ -123,23 +123,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
       value: 'instruction for challengeid4',
     });
     await databaseBuilder.commit();
-
-    const airtableSkills = [
-      airtableBuilder.factory.buildSkill(skill2),
-      airtableBuilder.factory.buildSkill(skill3),
-      airtableBuilder.factory.buildSkill(skill4),
-    ];
-
-    const airtableChallenges = [
-      airtableBuilder.factory.buildChallenge(challenge2),
-      airtableBuilder.factory.buildChallenge(challenge3),
-      airtableBuilder.factory.buildChallenge(challenge4),
-    ];
-
-    airtableBuilder.mockLists({
-      skills: airtableSkills,
-      challenges: airtableChallenges,
-    });
   });
 
   afterEach(function() {

@@ -14,12 +14,10 @@ import { computePixValuesBySkill } from '../../domain/services/compute-pix-value
  */
 export function forRelease(skills, pixFrameworkCompetenceIds) {
   if (Array.isArray(skills)) {
-    const skillsForRelease = skills.map((skill) => new SkillForRelease(skill));
     const pixValuesBySkill = computePixValuesBySkill(
       skills.filter(({ competenceId }) => pixFrameworkCompetenceIds.includes(competenceId)),
     );
-    skillsForRelease.forEach((skill) => (skill.pixValue = pixValuesBySkill[skill.id] ?? 0));
-    return skillsForRelease;
+    return skills.map((skill) => new SkillForRelease({ ...skill, pixValue: pixValuesBySkill[skill.id] ?? 0 }));
   }
   return new SkillForRelease(skills);
 }
@@ -30,12 +28,10 @@ export function forRelease(skills, pixFrameworkCompetenceIds) {
  */
 export function forReplication(skills, pixFrameworkCompetenceIds) {
   if (Array.isArray(skills)) {
-    const skillsForReplication = skills.map((skill) => new SkillForReplication(skill));
     const pixValuesBySkill = computePixValuesBySkill(
       skills.filter(({ competenceId }) => pixFrameworkCompetenceIds.includes(competenceId)),
     );
-    skillsForReplication.forEach((skill) => (skill.pixValue = pixValuesBySkill[skill.id] ?? 0));
-    return skillsForReplication;
+    return skills.map((skill) => new SkillForReplication({ ...skill, pixValue: pixValuesBySkill[skill.id] ?? 0 }));
   }
   return new SkillForReplication(skills);
 }

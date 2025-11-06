@@ -1,12 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
-import Airtable from 'airtable';
-import * as airtable from '../../../../lib/infrastructure/airtable.js';
+import { describe, expect, it } from 'vitest';
 import * as tutorialRepository from '../../../../lib/infrastructure/repositories/tutorial-repository.js';
 import { Tutorial } from '../../../../lib/domain/models/Tutorial.js';
-import { tutorialDatasource } from '../../../../lib/infrastructure/datasources/airtable/tutorial-datasource.js';
-import { airtableBuilder, databaseBuilder, knex } from '../../../test-helper.js';
-
-const AIRTABLE_NAME = 'Tutoriels';
+import { databaseBuilder, knex } from '../../../test-helper.js';
 
 describe('Integration | Infrastructure | Repository | Tutorial', () => {
   describe('#getMany', () => {
@@ -51,22 +46,13 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       tutorials.forEach(databaseBuilder.factory.buildTutorial);
       await databaseBuilder.commit();
 
-      const findRecords = vi
-        .spyOn(airtable, 'findRecords')
-        .mockResolvedValueOnce(
-          tutorials.map(
-            (tutorial) =>
-              new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, airtableBuilder.factory.buildTutorial(tutorial)),
-          ),
-        );
-
       // when
       const actualTutorials = await tutorialRepository.getMany(['tuto1', 'tuto2']);
 
       // then
       expect(actualTutorials).toStrictEqual([
         new Tutorial({
-          airtableId: 'recTuto1',
+          airtableId: 'tuto1',
           id: 'tuto1',
           duration: 'Durée 1',
           format: 'Format 1',
@@ -77,11 +63,11 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
           license: 'License 1',
           level: 'niveau 1',
           crush: true,
-          tagAirtableIds: ['recTag1', 'recTag2'],
+          tagAirtableIds: ['tag1', 'tag2'],
           tagIds: ['tag1', 'tag2'],
         }),
         new Tutorial({
-          airtableId: 'recTuto2',
+          airtableId: 'tuto2',
           id: 'tuto2',
           duration: 'Durée 2',
           format: 'Format 2',
@@ -92,15 +78,10 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
           license: 'License 2',
           level: 'niveau 2',
           crush: false,
-          tagAirtableIds: ['recTag2', 'recTag3'],
+          tagAirtableIds: ['tag2', 'tag3'],
           tagIds: ['tag2', 'tag3'],
         }),
       ]);
-
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: tutorialDatasource.usedFields,
-        filterByFormula: 'OR("tuto1" = {id persistant},"tuto2" = {id persistant})',
-      });
     });
   });
 
@@ -149,15 +130,6 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       });
       await databaseBuilder.commit();
 
-      const findRecords = vi.spyOn(airtable, 'findRecords').mockResolvedValueOnce(
-        tutorials.map(
-          (tutorial) =>
-            new Airtable.Record(AIRTABLE_NAME, tutorial.airtableId, { fields: { 'id persistant': tutorial.id, 'Record ID': tutorial.airtableId } }),
-        ),
-      );
-
-      const deleteRecords = vi.spyOn(airtable, 'deleteRecords').mockResolvedValueOnce();
-
       // when
       await tutorialRepository.delete(['tuto1', 'tuto2']);
 
@@ -182,13 +154,6 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       await expect(
         knex.select('*').from('tutorials-tutorial_tags').orderBy(['tutorialId', 'tutorialTagId']),
       ).resolves.toStrictEqual([{ tutorialId: 'tuto3', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
-
-      expect(findRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: ['Record ID', 'id persistant'],
-        filterByFormula: 'OR("tuto1" = {id persistant},"tuto2" = {id persistant})',
-      });
-
-      expect(deleteRecords).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, ['recTuto1', 'recTuto2']);
     });
   });
 });

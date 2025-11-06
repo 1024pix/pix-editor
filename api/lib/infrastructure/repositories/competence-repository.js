@@ -1,137 +1,104 @@
-import _ from 'lodash';
-
-import { competenceDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'competence';
 const TABLE_NAME = 'competences';
 
 export async function list() {
-  const [
-    airtableDtos,
-    pgDtos,
-    translations,
-  ] = await Promise.all([
-    competenceDatasource.list(),
-    selectCompetences().orderBy('competences.index'),
-    translationRepository.listByModel(model),
-  ]);
+  const [dtos, translations] = await Promise.all([selectCompetences().orderBy('competences.index'), translationRepository.listByModel(model)]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos, TABLE_NAME);
-
-  return toDomainList(airtableDtos, translations);
+  return toDomainList(dtos, translations);
 }
 
 export async function getMany(ids) {
-  const [
-    airtableDtos,
-    pgDtos,
-    translations,
-  ] = await Promise.all([
-    competenceDatasource.filter({ filter: { ids } }),
-    selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'),
-    translationRepository.listByEntities(model, ids),
-  ]);
+  const [dtos, translations] = await Promise.all([selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'), translationRepository.listByEntities(model, ids)]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos, TABLE_NAME);
-
-  return toDomainList(airtableDtos, translations);
+  return toDomainList(dtos, translations);
 }
 
 export async function get(id) {
-  const [
-    [airtableDto],
-    pgDto,
-    translations,
-  ] = await Promise.all([
-    competenceDatasource.filter({ filter: { ids: [id] } }),
-    selectCompetences().where('competences.id', id).first(),
-    translationRepository.listByEntity(model, id),
-  ]);
+  const [dto, translations] = await Promise.all([selectCompetences().where('competences.id', id).first(), translationRepository.listByEntity(model, id)]);
 
-  compareDtos(airtableDto, pgDto, compareCompetenceDtos, TABLE_NAME);
+  if (!dto) return null;
 
-  if (!airtableDto) return null;
-
-  return toDomain(airtableDto, translations);
+  return toDomain(dto, translations);
 }
 
-export async function getByAirtableId(airtableId) {
-  const airtableDto = await competenceDatasource.find(airtableId);
-  if (!airtableDto) return null;
-
-  const [pgDto, translations] = await Promise.all([selectCompetences().where('competences.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
-
-  compareDtos(airtableDto, pgDto, compareCompetenceDtos, TABLE_NAME);
-
-  return toDomain(airtableDto, translations);
+/**
+ * @deprecated use {@link get}
+ */
+export async function getByAirtableId(id) {
+  return get(id);
 }
 
 export async function create(competence) {
-  competence.id = idGenerator.generateNewId('competence');
+  return knex.transaction(async (transaction) => {
+    competence.id = idGenerator.generateNewId('competence');
+    const translations = competenceTranslations.extractFromDomainObject(competence);
 
-  const translations = competenceTranslations.extractFromDomainObject(competence);
+    await Promise.all([
+      transaction
+        .insert({
+          id: competence.id,
+          index: competence.index,
+          areaId: competence.areaAirtableId,
+        })
+        .into(TABLE_NAME),
+      translationRepository.save({ translations, transaction }),
+    ]);
 
-  const createdCompetenceDto = await competenceDatasource.create(competence);
+    const dto = await selectCompetences(transaction).where('competences.id', competence.id).first();
 
-  await knex
-    .insert({
-      id: competence.id,
-      index: competence.index,
-      areaId: createdCompetenceDto.areaId,
-    })
-    .into(TABLE_NAME);
-
-  await translationRepository.save({ translations });
-
-  return toDomain(createdCompetenceDto, translations);
+    return toDomain(dto, translations);
+  });
 }
 
 export async function update(competence) {
-  const translations = competenceTranslations.extractFromDomainObject(competence);
+  return knex.transaction(async (transaction) => {
+    const translations = competenceTranslations.extractFromDomainObject(competence);
 
-  await translationRepository.deleteByKeyPrefixAndLocales({
-    prefix: `${competenceTranslations.prefix}${competence.id}.`,
-    locales: ['fr', 'en'],
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: `${competenceTranslations.prefix}${competence.id}.`,
+      locales: ['fr', 'en'],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
+
+    return competence;
   });
-  await translationRepository.save({ translations });
-
-  return competence;
 }
 
-function selectCompetences() {
-  return knex
+function selectCompetences(knexConn = knex) {
+  return knexConn
     .select(
       'competences.*',
       'frameworks.name as origin',
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "thematicIds"',
-        knex
-          .select(knex.raw('json_agg(??)', 'thematics.id'))
+        knexConn
+          .select(knexConn.raw('json_agg(?? order by ??)', ['thematics.id', 'thematics.id']))
           .from('thematics')
-          .where('thematics.competenceId', '=', knex.ref('competences.id')),
+          .where('thematics.competenceId', '=', knexConn.ref('competences.id')),
       ),
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "tubeIds"',
-        knex
-          .select(knex.raw('json_agg(??)', 'tubes.id'))
+        knexConn
+          .select(knexConn.raw('json_agg(?? order by ??)', ['tubes.id', 'tubes.id']))
           .from('thematics')
           .join('tubes', 'tubes.thematicId', 'thematics.id')
-          .where('thematics.competenceId', '=', knex.ref('competences.id')),
+          .where('thematics.competenceId', '=', knexConn.ref('competences.id')),
       ),
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "skillIds"',
-        knex
-          .select(knex.raw('json_agg(??)', 'skills.id'))
+        knexConn
+          .select(knexConn.raw('json_agg(?? order by ??)', ['skills.id', 'skills.id']))
           .from('thematics')
           .join('tubes', 'tubes.thematicId', 'thematics.id')
           .join('skills', 'skills.tubeId', 'tubes.id')
-          .where('thematics.competenceId', '=', knex.ref('competences.id')),
+          .where('thematics.competenceId', '=', knexConn.ref('competences.id')),
       ),
     )
     .from('competences')
@@ -139,41 +106,25 @@ function selectCompetences() {
     .join('frameworks', 'frameworks.id', 'areas.frameworkId');
 }
 
-function compareCompetenceDtos(airtableCompetence, pgCompetence) {
-  const diff = [];
-  if (airtableCompetence.id !== pgCompetence.id)
-    diff.push(`airtable id "${airtableCompetence.id}" != postgres id "${pgCompetence.id}"`);
-  if (airtableCompetence.index !== pgCompetence.index)
-    diff.push(`airtable index "${airtableCompetence.index}" != postgres index "${pgCompetence.index}"`);
-  if (airtableCompetence.areaId !== pgCompetence.areaId)
-    diff.push(`airtable areaId "${airtableCompetence.areaId}" != postgres areaId "${pgCompetence.areaId}"`);
-  if (airtableCompetence.origin !== pgCompetence.origin)
-    diff.push(`airtable origin "${airtableCompetence.origin}" != postgres origin "${pgCompetence.origin}"`);
-  if (!areArrayEquals(airtableCompetence.thematicIds, pgCompetence.thematicIds))
-    diff.push(
-      `airtable thematicIds "${airtableCompetence.thematicIds}" != postgres thematicIds "${pgCompetence.thematicIds}"`,
-    );
-  if (!areArrayEquals(airtableCompetence.tubeIds, pgCompetence.tubeIds))
-    diff.push(
-      `airtable tubeIds "${airtableCompetence.tubeIds}" != postgres tubeIds "${pgCompetence.tubeIds}"`,
-    );
-  if (!areArrayEquals(airtableCompetence.skillIds, pgCompetence.skillIds))
-    diff.push(
-      `airtable skillIds "${airtableCompetence.skillIds}" != postgres skillIds "${pgCompetence.skillIds}"`,
-    );
-  return diff;
-}
-
-function toDomainList(datasourceCompetences, translations) {
-  const translationsByCompetenceId = _.groupBy(translations, 'entityId');
-  return datasourceCompetences.map((datasourceCompetence) =>
+function toDomainList(dtos, translations) {
+  const translationsByCompetenceId = Object.groupBy(translations, (translation) => translation.entityId);
+  return dtos.map((datasourceCompetence) =>
     toDomain(datasourceCompetence, translationsByCompetenceId[datasourceCompetence.id]),
   );
 }
 
-function toDomain(datasourceCompetence, translations = []) {
+function toDomain({ id, areaId, thematicIds = [], tubeIds = [], skillIds = [], ...dto }, translations = []) {
   return new Competence({
-    ...datasourceCompetence,
+    id,
+    airtableId: id,
+    areaId,
+    areaAirtableId: areaId,
+    thematicIds,
+    thematicAirtableIds: thematicIds,
+    tubeIds,
+    tubeAirtableIds: tubeIds,
+    skillIds,
+    ...dto,
     ...competenceTranslations.toDomain(translations),
   });
 }

@@ -1,88 +1,60 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge, Skill, Translation } from '../../domain/models/index.js';
-import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
-import { stringValue } from '../airtable.js';
-import {
-  areArrayEquals,
-  areNullableDatesEqual,
-  areNullableValuesEqual,
-  compareDtos,
-  compareDtosLists,
-} from './migration-from-airtable.js';
 import { escapeLikeWildcards } from './sql-utils.js';
 
 const model = 'challenge';
 
 export async function get(id) {
   const [
-    airtableDto,
-    pgDto,
+    dto,
     localizedChallenges,
     translations,
   ] = await Promise.all([
-    challengeDatasource.filterById(id),
     selectChallenges().where('challenges.id', id).first(),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareChallengeDtos, 'challenges');
+  if (!dto) throw new NotFoundError('Épreuve introuvable');
 
-  if (!airtableDto) throw new NotFoundError('Épreuve introuvable');
-
-  return toDomain(airtableDto, translations, localizedChallenges);
+  return toDomain(dto, translations, localizedChallenges);
 }
 
 export async function list() {
   const [
-    airtableDtos,
-    pgDtos,
+    dtos,
     translations,
     localizedChallenges,
   ] = await Promise.all([
-    challengeDatasource.list(),
     selectChallenges().orderBy('challenges.id'),
     translationRepository.listByModel(model),
     localizedChallengeRepository.list(),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos, 'challenges');
-
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function getMany(ids) {
-  const [
-    airtableDtos,
-    pgDtos,
-    [translations, localizedChallenges],
-  ] = await Promise.all([
-    challengeDatasource.filter({ filter: { ids } }),
-    selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'),
-    loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
-  ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
+  const [dtos, [translations, localizedChallenges]] = await Promise.all([selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'), loadTranslationsAndLocalizedChallengesForChallengeIds(ids)]);
 
-  if (!airtableDtos) return [];
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (dtos.length === 0) return [];
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function filter(params = {}) {
-  let ids = await translationRepository.search({
+  const ids = await translationRepository.search({
     entity: model,
     fields: ['instruction', 'proposals'],
     search: params.filter.search,
     limit: params.page?.size,
   });
-
-  ids = await knex
-    .pluck('challenges.id')
-    .from('challenges')
+  const dtos = await selectChallenges()
     .whereIn('challenges.id', ids)
     .orWhereIn(
       'challenges.id',
@@ -92,17 +64,17 @@ export async function filter(params = {}) {
         .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
     )
     .limit(params.page?.size)
-    .orderBy('challenges.updatedAt', 'desc');
+    .orderBy('challenges.id');
 
-  if (ids.length === 0) return [];
+  if (dtos.length === 0) return [];
 
-  return getMany(ids);
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function create(challenge) {
   return knex.transaction(async (transaction) => {
-    const createdChallengeDto = await challengeDatasource.create(challenge);
-
     await transaction
       .insert({
         id: challenge.id,
@@ -111,7 +83,7 @@ export async function create(challenge) {
         t2Status: challenge.t2Status,
         t3Status: challenge.t3Status,
         status: challenge.status,
-        skillId: createdChallengeDto.skillId,
+        skillId: challenge.skills[0],
         embedHeight: challenge.embedHeight,
         timer: challenge.timer,
         format: challenge.format,
@@ -138,20 +110,17 @@ export async function create(challenge) {
 
     const translations = extractTranslationsFromChallenge(challenge);
     await translationRepository.save({ translations, transaction });
-    return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+
+    const dto = await selectChallenges(transaction).where('challenges.id', challenge.id).first();
+
+    return toDomain(dto, translations, [primaryLocalizedChallenge]);
   });
 }
 
 export async function createBatch(challenges) {
   return knex.transaction(async (transaction) => {
     if (!challenges || challenges.length === 0) return [];
-    const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
-    const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
-    for (const challenge of challenges) {
-      challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
-      challenge.files = [];
-    }
-    const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
+
     const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
     const allTranslations = challenges.flatMap((challenge) => {
       const translationModels = [];
@@ -169,49 +138,55 @@ export async function createBatch(challenges) {
       return translationModels;
     });
 
-    await Promise.all(
-      challenges.map((challenge) =>
-        transaction
-          .insert({
-            id: challenge.id,
-            type: challenge.type,
-            t1Status: challenge.t1Status,
-            t2Status: challenge.t2Status,
-            t3Status: challenge.t3Status,
-            status: challenge.status,
-            skillId: challenge.skillId,
-            embedHeight: challenge.embedHeight,
-            timer: challenge.timer,
-            format: challenge.format,
-            autoReply: challenge.autoReply,
-            locales: challenge.locales,
-            focusable: challenge.focusable,
-            genealogy: challenge.genealogy,
-            pedagogy: challenge.pedagogy,
-            author: challenge.author,
-            declinable: challenge.declinable,
-            version: challenge.version,
-            alternativeVersion: challenge.alternativeVersion,
-            accessibility1: challenge.accessibility1,
-            accessibility2: challenge.accessibility2,
-            spoil: challenge.spoil,
-            responsive: challenge.responsive,
-            shuffled: challenge.shuffled,
-            contextualizedFields: challenge.contextualizedFields,
-          })
-          .into('challenges'),
-      ),
-    );
+    await transaction
+      .insert(
+        challenges.map((challenge) => ({
+          id: challenge.id,
+          type: challenge.type,
+          t1Status: challenge.t1Status,
+          t2Status: challenge.t2Status,
+          t3Status: challenge.t3Status,
+          status: challenge.status,
+          skillId: challenge.skillId,
+          embedHeight: challenge.embedHeight,
+          timer: challenge.timer,
+          format: challenge.format,
+          autoReply: challenge.autoReply,
+          locales: challenge.locales,
+          focusable: challenge.focusable,
+          genealogy: challenge.genealogy,
+          pedagogy: challenge.pedagogy,
+          author: challenge.author,
+          declinable: challenge.declinable,
+          version: challenge.version,
+          alternativeVersion: challenge.alternativeVersion,
+          accessibility1: challenge.accessibility1,
+          accessibility2: challenge.accessibility2,
+          spoil: challenge.spoil,
+          responsive: challenge.responsive,
+          shuffled: challenge.shuffled,
+          contextualizedFields: challenge.contextualizedFields,
+        })),
+      )
+      .into('challenges');
+
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
     await translationRepository.save({ translations: allTranslations, transaction });
-    return toDomainList(createdChallengesDtos, allTranslations, allLocalizedChallenges);
+
+    const dtos = await selectChallenges(transaction)
+      .whereIn(
+        'challenges.id',
+        challenges.map(({ id }) => id),
+      )
+      .orderBy('challenges.id');
+
+    return toDomainList(dtos, allTranslations, allLocalizedChallenges);
   });
 }
+
 // TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
 // là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
 export async function update(challenge, transaction = knex) {
-  const updatedChallengeDto = await challengeDatasource.update(challenge);
-
   await transaction('challenges')
     .update({
       type: challenge.type,
@@ -279,64 +254,62 @@ export async function update(challenge, transaction = knex) {
     transaction,
   });
   await translationRepository.save({ translations, transaction });
-  return toDomain(updatedChallengeDto, translations, localizedChallenges);
+
+  const dto = await selectChallenges(transaction).where('challenges.id', challenge.id).first();
+
+  return toDomain(dto, translations, localizedChallenges);
 }
 
 export async function listBySkillId(skillId) {
-  const [airtableDtos, pgDtos] = await Promise.all([challengeDatasource.filterBySkillId(skillId), selectChallenges().where('challenges.skillId', skillId).orderBy('id')]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
+  const dtos = await selectChallenges().where('challenges.skillId', skillId).orderBy('id');
 
-  if (!airtableDtos) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (dtos.length === 0) return [];
+
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function listActiveOrDraftByCompetenceId(competenceId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.listActiveOrDraftByCompetenceId(competenceId),
-    selectChallenges()
-      .where('thematics.competenceId', competenceId)
-      .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
-      .and.whereIn('challenges.status', [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE])
-      .orderBy('id'),
-  ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
+  const dtos = await selectChallenges()
+    .where('thematics.competenceId', competenceId)
+    .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
+    .and.whereIn('challenges.status', [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE])
+    .orderBy('id');
 
-  if (!airtableDtos) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (dtos.length === 0) return [];
+
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function listPrototypesByCompetenceId(competenceId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.listPrototypesByCompetenceId(competenceId),
-    selectChallenges()
-      .where('thematics.competenceId', competenceId)
-      .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
-      .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
-      .orderBy('id'),
-  ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
+  const dtos = await selectChallenges()
+    .where('thematics.competenceId', competenceId)
+    .andWhereNot('tubes.name', Skill.WORKBENCH_NAME)
+    .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+    .orderBy('id');
 
-  if (!airtableDtos) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (dtos.length === 0) return [];
+
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 export async function listValidPrototypesBySkillIds(skillIds) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.filter({ filter: { formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})` } }),
-    selectChallenges()
-      .whereIn('skills.id', skillIds)
-      .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
-      .andWhere('challenges.status', Challenge.STATUSES.VALIDE)
-      .orderBy('challenges.id'),
-  ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
+  const dtos = await selectChallenges()
+    .whereIn('skills.id', skillIds)
+    .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+    .andWhere('challenges.status', Challenge.STATUSES.VALIDE)
+    .orderBy('challenges.id');
 
-  if (!airtableDtos) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (dtos.length === 0) return [];
+
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
@@ -349,19 +322,23 @@ async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeId
   return Promise.all([translationRepository.listByEntities(model, challengeIds), localizedChallengeRepository.listByChallengeIds({ challengeIds })]);
 }
 
-function selectChallenges() {
-  return knex
+function selectChallenges(knexConn = knex) {
+  return knexConn
     .select(
       'challenges.*',
       'thematics.competenceId',
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "files"',
-        knex
+        knexConn
           .select(
-            knex.raw("json_agg(json_build_object('fileId', ??, 'localizedChallengeId', ??))", ['attachments.id', 'attachments.localizedChallengeId']),
+            knexConn.raw("json_agg(json_build_object('fileId', ??, 'localizedChallengeId', ??) order by ??)", [
+              'attachments.id',
+              'attachments.localizedChallengeId',
+              'attachments.id',
+            ]),
           )
           .from('attachments')
-          .where('attachments.challengeId', knex.ref('challenges.id')),
+          .where('attachments.challengeId', knexConn.ref('challenges.id')),
       ),
     )
     .from('challenges')
@@ -370,122 +347,34 @@ function selectChallenges() {
     .leftOuterJoin('thematics', 'thematics.id', 'tubes.thematicId');
 }
 
-function toDomainList(challengeDtos, translations, localizedChallenges) {
-  const translationsByChallengeId = _.groupBy(translations, 'entityId');
-  const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
+function toDomainList(dtos, translations, localizedChallenges) {
+  const translationsByChallengeId = Object.groupBy(translations, (translation) => translation.entityId);
+  const localizedChallengesByChallengeId = Object.groupBy(
+    localizedChallenges,
+    (localizedChallenge) => localizedChallenge.challengeId,
+  );
 
-  return challengeDtos.map((challengeDto) => {
-    const challengeTranslations = translationsByChallengeId[challengeDto.id] ?? [];
-    const localizedChallenges = localizedChallengesByChallengeId[challengeDto.id] ?? [];
+  return dtos.map((dto) => {
+    const challengeTranslations = translationsByChallengeId[dto.id] ?? [];
+    const localizedChallenges = localizedChallengesByChallengeId[dto.id] ?? [];
 
-    return toDomain(challengeDto, challengeTranslations, localizedChallenges);
+    return toDomain(dto, challengeTranslations, localizedChallenges);
   });
 }
 
-function toDomain(challengeDto, challengeTranslations, localizedChallenges = []) {
-  const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
+function toDomain({ id, skillId, ...dto }, challengeTranslations, localizedChallenges = []) {
+  const translationsByLocale = Object.groupBy(challengeTranslations, (translation) => translation.locale);
   const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
     return Object.fromEntries([...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value])]);
   });
 
   return new Challenge({
-    ...challengeDto,
+    id,
+    airtableId: id,
+    skillId,
+    skills: [skillId],
+    ...dto,
     translations,
     localizedChallenges,
   });
-}
-
-function compareChallengeDtos(airtableDto, pgDto) {
-  const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-  if (!areNullableValuesEqual(airtableDto.type, pgDto.type))
-    diff.push(`airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
-  if (airtableDto.t1Status !== pgDto.t1Status)
-    diff.push(`airtable t1Status "${airtableDto.t1Status}" != postgres t1Status "${pgDto.t1Status}"`);
-  if (airtableDto.t2Status !== pgDto.t2Status)
-    diff.push(`airtable t2Status "${airtableDto.t2Status}" != postgres t2Status "${pgDto.t2Status}"`);
-  if (airtableDto.t3Status !== pgDto.t3Status)
-    diff.push(`airtable t3Status "${airtableDto.t3Status}" != postgres t3Status "${pgDto.t3Status}"`);
-  if (!areNullableValuesEqual(airtableDto.status, pgDto.status))
-    diff.push(`airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
-  if (!areNullableValuesEqual(airtableDto.skillId, pgDto.skillId))
-    diff.push(`airtable skillId "${airtableDto.skillId}" != postgres skillId "${pgDto.skillId}"`);
-  if (!areNullableValuesEqual(airtableDto.embedHeight, pgDto.embedHeight))
-    diff.push(
-      `airtable embedHeight "${airtableDto.embedHeight}" != postgres embedHeight "${pgDto.embedHeight}"`,
-    );
-  if (!areNullableValuesEqual(airtableDto.timer, pgDto.timer))
-    diff.push(`airtable timer "${airtableDto.timer}" != postgres timer "${pgDto.timer}"`);
-  if (!areNullableValuesEqual(airtableDto.competenceId, pgDto.competenceId))
-    diff.push(
-      `airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
-    );
-  if (!areNullableValuesEqual(airtableDto.format, pgDto.format))
-    diff.push(`airtable format "${airtableDto.format}" != postgres format "${pgDto.format}"`);
-  if (airtableDto.autoReply !== pgDto.autoReply)
-    diff.push(`airtable autoReply "${airtableDto.autoReply}" != postgres autoReply "${pgDto.autoReply}"`);
-  if (!areArrayEquals(airtableDto.locales, pgDto.locales))
-    diff.push(`challenges airtable locales "${airtableDto.locales}" != postgres locales "${pgDto.locales}"`);
-  if (!areNullableValuesEqual(airtableDto.genealogy, pgDto.genealogy))
-    diff.push(`airtable genealogy "${airtableDto.genealogy}" != postgres genealogy "${pgDto.genealogy}"`);
-  if (!areNullableValuesEqual(airtableDto.pedagogy, pgDto.pedagogy))
-    diff.push(`airtable pedagogy "${airtableDto.pedagogy}" != postgres pedagogy "${pgDto.pedagogy}"`);
-  if (!areArrayEquals(airtableDto.author, pgDto.author))
-    diff.push(`airtable author "${airtableDto.author}" != postgres author "${pgDto.author}"`);
-  if (!areNullableValuesEqual(airtableDto.declinable, pgDto.declinable))
-    diff.push(`airtable declinable "${airtableDto.declinable}" != postgres declinable "${pgDto.declinable}"`);
-  if (!areNullableValuesEqual(airtableDto.version, pgDto.version))
-    diff.push(`airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
-  if (!areNullableValuesEqual(airtableDto.alternativeVersion, pgDto.alternativeVersion))
-    diff.push(
-      `airtable alternativeVersion "${airtableDto.alternativeVersion}" != postgres alternativeVersion "${pgDto.alternativeVersion}"`,
-    );
-  if (!areNullableValuesEqual(airtableDto.accessibility1, pgDto.accessibility1))
-    diff.push(
-      `airtable accessibility1 "${airtableDto.accessibility1}" != postgres accessibility1 "${pgDto.accessibility1}"`,
-    );
-  if (!areNullableValuesEqual(airtableDto.accessibility2, pgDto.accessibility2))
-    diff.push(
-      `airtable accessibility2 "${airtableDto.accessibility2}" != postgres accessibility2 "${pgDto.accessibility2}"`,
-    );
-  if (!areNullableValuesEqual(airtableDto.spoil, pgDto.spoil))
-    diff.push(`airtable spoil "${airtableDto.spoil}" != postgres spoil "${pgDto.spoil}"`);
-  if (!areNullableValuesEqual(airtableDto.responsive, pgDto.responsive))
-    diff.push(`airtable responsive "${airtableDto.responsive}" != postgres responsive "${pgDto.responsive}"`);
-  if (!areNullableValuesEqual(airtableDto.delta, pgDto.delta))
-    diff.push(`airtable delta "${airtableDto.delta}" != postgres delta "${pgDto.delta}"`);
-  if (!areNullableValuesEqual(airtableDto.alpha, pgDto.alpha))
-    diff.push(`airtable alpha "${airtableDto.alpha}" != postgres alpha "${pgDto.alpha}"`);
-  if (airtableDto.shuffled !== pgDto.shuffled)
-    diff.push(`airtable shuffled "${airtableDto.shuffled}" != postgres shuffled "${pgDto.shuffled}"`);
-  if (!areArrayEquals(airtableDto.contextualizedFields, pgDto.contextualizedFields))
-    diff.push(
-      `airtable contextualizedFields "${airtableDto.contextualizedFields}" != postgres contextualizedFields "${pgDto.contextualizedFields}"`,
-    );
-  if (!areNullableDatesEqual(airtableDto.validatedAt, pgDto.validatedAt))
-    diff.push(
-      `airtable validatedAt "${airtableDto.validatedAt}" != postgres validatedAt "${pgDto.validatedAt}"`,
-    );
-  if (!areNullableDatesEqual(airtableDto.archivedAt, pgDto.archivedAt))
-    diff.push(`airtable archivedAt "${airtableDto.archivedAt}" != postgres archivedAt "${pgDto.archivedAt}"`);
-  if (!areNullableDatesEqual(airtableDto.madeObsoleteAt, pgDto.madeObsoleteAt))
-    diff.push(
-      `airtable madeObsoleteAt "${airtableDto.madeObsoleteAt}" != postgres madeObsoleteAt "${pgDto.madeObsoleteAt}"`,
-    );
-  if (
-    !areArrayEquals(airtableDto.files, pgDto.files, {
-      sortFn: (file1, file2) => {
-        if (file1.fileId !== file2.fileId) return file1.fileId < file2.fileId ? -1 : 1;
-        if (file1.localizedChallengeId === file2.localizedChallengeId) return 0;
-        return file1.localizedChallengeId < file2.localizedChallengeId ? -1 : 1;
-      },
-      compareFn: (file1, file2) =>
-        file1.fileId === file2.fileId && file1.localizedChallengeId === file2.localizedChallengeId,
-    })
-  )
-    diff.push(
-      `airtable files "${JSON.stringify(airtableDto.files)}" != postgres files "${JSON.stringify(pgDto.files)}"`,
-    );
-
-  return diff;
 }

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
@@ -187,15 +187,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
 
     await databaseBuilder.commit();
-    const airtableChallenge1 = airtableBuilder.factory.buildChallenge(challenge1);
-    const airtableSkill1 = airtableBuilder.factory.buildSkill(skill1);
-    const airtableChallenge3 = airtableBuilder.factory.buildChallenge(challenge3);
-    const airtableSkill3 = airtableBuilder.factory.buildSkill(skill3);
-    // TODO replace by nock to assert airtable query parameters
-    airtableBuilder.mockLists({
-      challenges: [airtableChallenge1, airtableChallenge3],
-      skills: [airtableSkill1, airtableSkill3],
-    });
   });
 
   afterEach(async function() {

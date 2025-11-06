@@ -1,60 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import Airtable from 'airtable';
-import nock from 'nock';
-import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
-import * as airtable from '../../../../lib/infrastructure/airtable.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
-import { tubeDatasource } from '../../../../lib/infrastructure/datasources/airtable/tube-datasource.js';
+import { Tube } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | tube-repository', () => {
   describe('#list', () => {
     it('should return the list of all tubes', async () => {
       // given
-      const airtableScope = airtableBuilder
-        .mockList({ tableName: 'Tubes' })
-        .returns([
-          airtableBuilder.factory.buildTube({
-            id: 'tubeId1',
-            name: '@tube1',
-            index: 1,
-            practicalTitle_i18n: {
-              fr: 'practicalTitleFrFr tube1',
-              en: 'practicalTitleEnUs tube1',
-            },
-            practicalDescription_i18n: {
-              fr: 'practicalDescriptionFrFr tube1',
-              en: 'practicalDescriptionEnUs tube1',
-            },
-            thematicAirtableId: 'thematicAirtableId1',
-            thematicId: 'thematicId1',
-            competenceAirtableId: 'competenceAirtableId1',
-            competenceId: 'competenceId1',
-            skillAirtableIds: ['recSkill1', 'recSkill2'],
-            skillIds: ['skill1', 'skill2'],
-          }),
-          airtableBuilder.factory.buildTube({
-            id: 'tubeId2',
-            name: '@tube2',
-            index: 2,
-            practicalTitle_i28n: {
-              fr: 'practicalTitleFrFr tube2',
-              en: 'practicalTitleEnUs tube2',
-            },
-            practicalDescription_i18n: {
-              fr: 'practicalDescriptionFrFr tube2',
-              en: 'practicalDescriptionEnUs tube2',
-            },
-            thematicAirtableId: 'thematicAirtableId2',
-            thematicId: 'thematicId2',
-            competenceAirtableId: 'competenceAirtableId2',
-            competenceId: 'competenceId2',
-            skillAirtableIds: ['recSkill3', 'recSkill4'],
-            skillIds: ['skill3', 'skill4'],
-          }),
-        ])
-        .activate().nockScope;
-
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competenceId1', index: '1.1', areaId: 'area1' });
@@ -120,7 +73,6 @@ describe('Integration | Repository | tube-repository', () => {
       expect(tubes).toEqual([
         domainBuilder.buildTube({
           id: 'tubeId1',
-          airtableId: 'tubeId1',
           name: '@tube1',
           index: 1,
           practicalTitle_i18n: {
@@ -131,16 +83,12 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube1DescriptionFr.value,
             en: tube1DescriptionEn.value,
           },
-          thematicAirtableId: 'thematicAirtableId1',
           thematicId: 'thematicId1',
-          competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
-          skillAirtableIds: ['recSkill1', 'recSkill2'],
           skillIds: ['skill1', 'skill2'],
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
-          airtableId: 'tubeId2',
           name: '@tube2',
           index: 2,
           practicalTitle_i18n: {
@@ -151,16 +99,11 @@ describe('Integration | Repository | tube-repository', () => {
             fr: tube2DescriptionFr.value,
             en: tube2DescriptionEn.value,
           },
-          thematicAirtableId: 'thematicAirtableId2',
           thematicId: 'thematicId2',
-          competenceAirtableId: 'competenceAirtableId2',
           competenceId: 'competenceId2',
-          skillAirtableIds: ['recSkill3', 'recSkill4'],
           skillIds: ['skill3', 'skill4'],
         }),
       ]);
-
-      airtableScope.done();
     });
   });
 
@@ -180,10 +123,7 @@ describe('Integration | Repository | tube-repository', () => {
           en: 'practicalDescriptionEnUs tube1',
         },
         thematicId: 'thematicId1',
-        thematicAirtableId: 'thematicAirtableId1',
-        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competenceId1',
-        skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
       };
 
@@ -216,30 +156,6 @@ describe('Integration | Repository | tube-repository', () => {
         value: "Outils d'accès au web from PG 1",
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtable, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
-        if (options?.filterByFormula !== `{Competences (id persistant)} = ${airtable.stringValue(tube1.competenceId)}`)
-          expect.unreachable('Wrong filterByFormula');
-        return [
-          {
-            id: 'airtableTubeId1',
-            fields: {
-              'id persistant': tube1.id,
-              Nom: tube1.name,
-              Thematique: [tube1.thematicAirtableId],
-              'Thematique (id persistant)': [tube1.thematicId],
-              Competences: [tube1.competenceAirtableId],
-              'Competences (id persistant)': [tube1.competenceId],
-              Index: tube1.index,
-              Acquis: tube1.skillAirtableIds,
-              'Acquis (id persistant)': tube1.skillIds,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const tubes = await tubeRepository.listByCompetenceId(tube1.competenceId);
@@ -248,7 +164,6 @@ describe('Integration | Repository | tube-repository', () => {
       expect(tubes).toStrictEqual([
         domainBuilder.buildTube({
           id: 'tubeId1',
-          airtableId: 'airtableTubeId1',
           name: '@tube1',
           index: 1,
           practicalTitle_i18n: {
@@ -260,31 +175,22 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube1DescriptionEn.value,
           },
           thematicId: 'thematicId1',
-          thematicAirtableId: 'thematicAirtableId1',
-          competenceAirtableId: 'competenceAirtableId1',
           competenceId: 'competenceId1',
-          skillAirtableIds: ['recSkill1', 'recSkill2'],
           skillIds: ['skill1', 'skill2'],
         }),
       ]);
     });
   });
 
-  describe('#getByAirtableId', () => {
-    let airtableScope;
-
-    it('should retrieve a tube by airtable ID', async () => {
+  describe('#get', () => {
+    it('should retrieve a tube by ID', async () => {
       // given
       const tube = {
         id: 'tube1',
-        airtableId: 'recTube1',
         name: '@test',
         index: 3,
-        thematicAirtableId: 'thematicAirtableId1',
         thematicId: 'thematicId1',
-        competenceAirtableId: 'competenceAirtableId1',
         competenceId: 'competence1',
-        skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
         practicalTitle_i18n: {
           fr: 'le titre',
@@ -302,12 +208,6 @@ describe('Integration | Repository | tube-repository', () => {
       databaseBuilder.factory.buildThematic({ id: tube.thematicId, competenceId: tube.competenceId });
       databaseBuilder.factory.buildTube(tube);
       tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
-
-      airtableScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Tubes/recTube1')
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableBuilder.factory.buildTube(tube));
 
       databaseBuilder.factory.buildTranslation({
         key: 'tube.tube1.practicalTitle',
@@ -332,24 +232,16 @@ describe('Integration | Repository | tube-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const result = await tubeRepository.getByAirtableId('recTube1');
+      const result = await tubeRepository.get('tube1');
 
       // then
       expect(result).toStrictEqual(domainBuilder.buildTube(tube));
-      expect(airtableScope.isDone()).toBe(true);
     });
 
     describe('when not found', () => {
       it('should return null', async () => {
-        // given
-        airtableScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tubes/recTube1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
-
         // when
-        const result = await tubeRepository.getByAirtableId('recTube1');
+        const result = await tubeRepository.get('recTube1');
 
         // then
         expect(result).toBe(null);
@@ -358,7 +250,7 @@ describe('Integration | Repository | tube-repository', () => {
   });
 
   describe('#create', () => {
-    it('should save new tube to Airtable and translations to DB', async () => {
+    it('should save new tube and translations to DB', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -368,20 +260,19 @@ describe('Integration | Repository | tube-repository', () => {
 
       const tubeId = 'tube45267428';
       vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(tubeId);
-      const tube = domainBuilder.buildTube({
-        airtableId: null,
-        id: null,
-        thematicId: null,
+      const tube = new Tube({
+        thematicAirtableId: 'thematic1',
+        name: '@foo',
+        index: 3,
+        practicalTitle_i18n: {
+          fr: 'titre fr',
+          en: 'en title',
+        },
+        practicalDescription_i18n: {
+          fr: 'description fr',
+          en: 'en description',
+        },
       });
-      const airtableTube = airtableBuilder.factory.buildTube({
-        ...tube,
-        airtableId: 'recTube1',
-        id: tubeId,
-        thematicId: 'thematic1',
-      });
-      const createRecordSpy = vi
-        .spyOn(airtable, 'createRecord')
-        .mockResolvedValueOnce(new Airtable.Record('Tubes', airtableTube.id, airtableTube));
 
       // when
       const createdTube = await tubeRepository.create(tube);
@@ -390,19 +281,12 @@ describe('Integration | Repository | tube-repository', () => {
       expect(createdTube).toStrictEqual(
         domainBuilder.buildTube({
           ...tube,
-          airtableId: 'recTube1',
+          id: tubeId,
+          competenceId: 'competence1',
           thematicId: 'thematic1',
+          skillIds: [],
         }),
       );
-      expect(createRecordSpy).toHaveBeenCalledWith('Tubes', {
-        fields: {
-          'id persistant': tubeId,
-          Nom: tube.name,
-          Competences: [tube.competenceAirtableId],
-          Index: tube.index,
-          Thematique: [tube.thematicAirtableId],
-        },
-      });
 
       await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
         {
@@ -426,13 +310,12 @@ describe('Integration | Repository | tube-repository', () => {
     });
   });
 
-  describe('#getManyByAirtableIds', () => {
+  describe('#getMany', () => {
     it('should return domain tubes', async () => {
       // given
       const tubes = [
         {
           id: 'tube1',
-          airtableId: 'recTube1',
           name: '@pouic',
           practicalTitle_i18n: {
             fr: 'Titre premier tube',
@@ -443,16 +326,12 @@ describe('Integration | Repository | tube-repository', () => {
             en: 'First tube’s description',
           },
           index: 1,
-          thematicAirtableId: 'recThematic1',
           thematicId: 'thematic1',
           competenceId: 'competence1',
-          competenceAirtableId: 'recCompetence1',
           skillIds: ['skill1', 'skill2'],
-          skillAirtableIds: ['recSkill1', 'recSkill2'],
         },
         {
           id: 'tube2',
-          airtableId: 'recTube2',
           name: '@pouet',
           practicalTitle_i18n: {
             fr: 'Titre deuxième tube',
@@ -463,12 +342,9 @@ describe('Integration | Repository | tube-repository', () => {
             en: 'Second tube’s description',
           },
           index: 2,
-          thematicAirtableId: 'recThematic2',
           thematicId: 'thematic2',
           competenceId: 'competence2',
-          competenceAirtableId: 'recCompetence2',
           skillIds: ['skill3', 'skill4'],
-          skillAirtableIds: ['recSkill3', 'recSkill4'],
         },
       ];
 
@@ -483,16 +359,6 @@ describe('Integration | Repository | tube-repository', () => {
         tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
       });
 
-      const airtableTubes = tubes.map((tube) =>
-        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)),
-      );
-      const findRecordsSpy = vi
-        .spyOn(airtable, 'findRecords')
-        .mockResolvedValueOnce(
-          airtableTubes.map(
-            (airtableTube) => new Airtable.Record(tubeDatasource.tableName, airtableTube.airtableId, airtableTube),
-          ),
-        );
       for (const tube of tubes) {
         databaseBuilder.factory.buildTranslation({
           key: `tube.${tube.id}.practicalTitle`,
@@ -518,20 +384,15 @@ describe('Integration | Repository | tube-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const result = await tubeRepository.getManyByAirtableIds(tubes.map((tube) => tube.airtableId));
+      const result = await tubeRepository.getMany(tubes.map((tube) => tube.id));
 
       // then
       expect(result).toStrictEqual(tubes.map((tube) => domainBuilder.buildTube(tube)));
-      expect(findRecordsSpy).toHaveBeenCalledWith(tubeDatasource.tableName, {
-        filterByFormula: 'OR(RECORD_ID() = "recTube1", RECORD_ID() = "recTube2")',
-        fields: tubeDatasource.usedFields,
-        sort: [{ direction: 'asc', field: tubeDatasource.sortField }],
-      });
     });
   });
 
   describe('#update', () => {
-    it('should save tube to Airtable and translations to DB', async () => {
+    it('should save tube and translations to DB', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -540,9 +401,10 @@ describe('Integration | Repository | tube-repository', () => {
       databaseBuilder.factory.buildThematic({ id: 'thematic1', index: 0, competenceId: 'competence1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic2', index: 0, competenceId: 'competence2' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@avant', index: 0, thematicId: 'thematic2' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube1' });
 
       const tubeUpdates = {
-        airtableId: 'recTube1',
         id: 'tube1',
         name: '@test',
         practicalTitle_i18n: {
@@ -554,22 +416,15 @@ describe('Integration | Repository | tube-repository', () => {
           en: 'Tube’s description after',
         },
         index: 2,
-        competenceAirtableId: 'recCompetence1',
-        thematicAirtableId: 'recThematic1',
+        thematicAirtableId: 'thematic1',
       };
 
       const expectedTube = {
         ...tubeUpdates,
         competenceId: 'competence1',
         thematicId: 'thematic1',
-        skillAirtableIds: ['recSkill1', 'recSkill2'],
         skillIds: ['skill1', 'skill2'],
       };
-
-      const airtableTube = airtableBuilder.factory.buildTube(expectedTube);
-      const updateRecordSpy = vi
-        .spyOn(airtable, 'updateRecord')
-        .mockResolvedValueOnce(new Airtable.Record('Tubes', airtableTube.id, airtableTube));
 
       databaseBuilder.factory.buildTranslation({
         key: `tube.${tubeUpdates.id}.practicalTitle`,
@@ -593,23 +448,13 @@ describe('Integration | Repository | tube-repository', () => {
       });
       await databaseBuilder.commit();
 
-      const tube = domainBuilder.buildTube(tubeUpdates);
+      const tube = new Tube(tubeUpdates);
 
       // when
       const updatedTube = await tubeRepository.update(tube);
 
       // then
       expect(updatedTube).toStrictEqual(domainBuilder.buildTube(expectedTube));
-      expect(updateRecordSpy).toHaveBeenCalledWith('Tubes', {
-        id: tubeUpdates.airtableId,
-        fields: {
-          'id persistant': tubeUpdates.id,
-          Nom: tubeUpdates.name,
-          Competences: [tubeUpdates.competenceAirtableId],
-          Thematique: [tubeUpdates.thematicAirtableId],
-          Index: tubeUpdates.index,
-        },
-      });
 
       await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
         {

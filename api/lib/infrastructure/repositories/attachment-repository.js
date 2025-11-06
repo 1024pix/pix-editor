@@ -1,101 +1,43 @@
-import _ from 'lodash';
-import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import { Attachment } from '../../domain/models/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
+import * as idGenerator from '../utils/id-generator.js';
 
 export async function get(id) {
-  const [airtableDto, pgDto] = await Promise.all([attachmentDatasource.find(id), knex.select('*').from('attachments').where('id', id).first()]);
+  const dto = await knex.select('*').from('attachments').where('id', id).first();
 
-  compareDtos(airtableDto, pgDto, compareAttachmentDtos, 'attachments');
-
-  if (!airtableDto) return null;
-  return toDomain(airtableDto);
+  if (!dto) return null;
+  return toDomain(dto);
 }
 
 export async function list() {
-  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.list(), knex.select('*').from('attachments').orderBy('id')]);
+  const dtos = await knex.select('*').from('attachments').orderBy('id');
 
-  compareDtosLists(airtableDtos, pgDtos, compareAttachmentDtos, 'attachments');
-
-  return toDomainList(airtableDtos);
+  return toDomainList(dtos);
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds), knex.select('*').from('attachments').whereIn('localizedChallengeId', localizedChallengeIds).orderBy('id')]);
+  const dtos = await knex
+    .select('*')
+    .from('attachments')
+    .whereIn('localizedChallengeId', localizedChallengeIds)
+    .orderBy('id');
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos, 'attachments');
-
-  if (!airtableDtos) return [];
-  return toDomainList(airtableDtos);
+  return toDomainList(dtos);
 }
 
 export async function listByLocalizedChallengeId(localizedChallengeId) {
-  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId), knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId).orderBy('id')]);
+  const dtos = await knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos, 'attachments');
-
-  if (!airtableDtos) return [];
-  return toDomainList(airtableDtos);
+  return toDomainList(dtos);
 }
 
 export async function createBatch(attachments) {
-  return knex.transaction(async (transaction) => {
-    if (!attachments || attachments.length === 0) return [];
-    const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
-    const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
-    const attachmentToSaveDTOs = [];
+  if (!attachments || attachments.length === 0) return [];
 
-    for (const attachment of attachments) {
-      attachmentToSaveDTOs.push({
-        url: attachment.url,
-        size: attachment.size,
-        type: attachment.type,
-        mimeType: attachment.mimeType,
-        filename: attachment.filename,
-        challengeId: airtableChallengeIdsByIds[attachment.challengeId],
-        localizedChallengeId: attachment.localizedChallengeId,
-      });
-    }
-    const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
-
-    await transaction
-      .insert(
-        createdAttachmentsDtos.map((airtableDto) => ({
-          id: airtableDto.id,
-          url: airtableDto.url,
-          size: airtableDto.size,
-          type: airtableDto.type,
-          mimeType: airtableDto.mimeType,
-          filename: airtableDto.filename,
-          challengeId: airtableDto.challengeId,
-          localizedChallengeId: airtableDto.localizedChallengeId,
-        })),
-      )
-      .into('attachments');
-
-    return toDomainList(createdAttachmentsDtos);
-  });
-}
-
-export async function create(attachment) {
-  return knex.transaction(async (transaction) => {
-    const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds([attachment.challengeId]);
-    const airtableChallengeId = airtableChallengeIdsByIds[attachment.challengeId];
-    const attachmentDTO = {
-      url: attachment.url,
-      size: attachment.size,
-      type: attachment.type,
-      mimeType: attachment.mimeType,
-      filename: attachment.filename,
-      challengeId: airtableChallengeId,
-      localizedChallengeId: attachment.localizedChallengeId,
-    };
-    const createdAttachmentDTO = await attachmentDatasource.create(attachmentDTO);
-
-    await transaction
-      .insert({
-        id: createdAttachmentDTO.id,
+  const dtos = await knex
+    .insert(
+      attachments.map((attachment) => ({
+        id: idGenerator.generateNewId('attachment'),
         url: attachment.url,
         size: attachment.size,
         type: attachment.type,
@@ -103,71 +45,55 @@ export async function create(attachment) {
         filename: attachment.filename,
         challengeId: attachment.challengeId,
         localizedChallengeId: attachment.localizedChallengeId,
-      })
-      .into('attachments');
+      })),
+    )
+    .into('attachments')
+    .returning('*')
+    .orderBy('id');
 
-    return toDomain(createdAttachmentDTO);
-  });
+  return toDomainList(dtos);
+}
+
+export async function create(attachment) {
+  const id = idGenerator.generateNewId('attachment');
+
+  const [dto] = await knex
+    .insert({
+      id,
+      url: attachment.url,
+      size: attachment.size,
+      type: attachment.type,
+      mimeType: attachment.mimeType,
+      filename: attachment.filename,
+      challengeId: attachment.challengeId,
+      localizedChallengeId: attachment.localizedChallengeId,
+    })
+    .into('attachments')
+    .returning('*');
+
+  return toDomain(dto);
 }
 
 export async function update(attachment) {
-  const attachmentDTO = {
-    id: attachment.id,
-    url: attachment.url,
-    size: attachment.size,
-    type: attachment.type,
-    mimeType: attachment.mimeType,
-    filename: attachment.filename,
-    challengeId: attachment.airtableChallengeId,
-    localizedChallengeId: attachment.localizedChallengeId,
-  };
-  const updatedAttachmentDTO = await attachmentDatasource.update(attachmentDTO);
-
-  await knex('attachments')
+  const [dto] = await knex('attachments')
     .update({
       filename: attachment.filename,
       updatedAt: knex.fn.now(),
     })
-    .where('id', attachment.id);
+    .where('id', attachment.id)
+    .returning('*');
 
-  return toDomain(updatedAttachmentDTO);
+  return toDomain(dto);
 }
 
 export async function remove(attachmentId) {
-  return knex.transaction(async (transaction) => {
-    await attachmentDatasource.delete([attachmentId]);
-    await transaction.delete().from('attachments').where('id', attachmentId);
-  });
+  await knex.delete().from('attachments').where('id', attachmentId);
 }
 
-function compareAttachmentDtos(airtableDto, pgDto) {
-  const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-  if (airtableDto.url !== pgDto.url)
-    diff.push(`airtable url "${airtableDto.url}" != postgres url "${pgDto.url}"`);
-  if (airtableDto.size !== pgDto.size)
-    diff.push(`airtable size "${airtableDto.size}" != postgres size "${pgDto.size}"`);
-  if (airtableDto.type !== pgDto.type)
-    diff.push(`airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
-  if (!areNullableValuesEqual(airtableDto.mimeType, pgDto.mimeType))
-    diff.push(`airtable mimeType "${airtableDto.mimeType}" != postgres mimeType "${pgDto.mimeType}"`);
-  if (airtableDto.filename !== pgDto.filename)
-    diff.push(`airtable filename "${airtableDto.filename}" != postgres filename "${pgDto.filename}"`);
-  if (!areNullableValuesEqual(airtableDto.challengeId, pgDto.challengeId))
-    diff.push(
-      `airtable challengeId "${airtableDto.challengeId}" != postgres challengeId "${pgDto.challengeId}"`,
-    );
-  if (airtableDto.localizedChallengeId !== pgDto.localizedChallengeId)
-    diff.push(
-      `airtable localizedChallengeId "${airtableDto.localizedChallengeId}" != postgres localizedChallengeId "${pgDto.localizedChallengeId}"`,
-    );
-  return diff;
+function toDomainList(dtos) {
+  return dtos.map(toDomain);
 }
 
-function toDomainList(datasourceAttachments) {
-  return datasourceAttachments.map(toDomain);
-}
-
-export function toDomain(attachment) {
-  return new Attachment(attachment);
+export function toDomain({ challengeId, ...dto }) {
+  return new Attachment({ challengeId, airtableChallengeId: challengeId, ...dto });
 }

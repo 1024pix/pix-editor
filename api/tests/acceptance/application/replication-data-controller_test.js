@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
@@ -8,18 +8,6 @@ import {
   FrameworkForReplication,
   SkillForReplication,
 } from '../../../lib/domain/models/replication/index.js';
-
-const {
-  buildFramework,
-  buildArea,
-  buildCompetence,
-  buildTube,
-  buildSkill,
-  buildChallenge,
-  buildTutorial,
-  buildAttachment,
-  buildThematic,
-} = airtableBuilder.factory;
 
 describe('Acceptance | Controller | replication-data-controller', () => {
   let user;
@@ -46,7 +34,9 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       // then
       const result = JSON.parse(response.result);
       const resultWithoutTranslations = _.omit(result, 'translations');
-      const expectedCurrentContentWithoutTranslations = _.omit(expectedCurrentContent, 'translations');
+      const expectedCurrentContentWithoutTranslations = JSON.parse(
+        JSON.stringify(_.omit(expectedCurrentContent, 'translations')),
+      );
       expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(
         expectedCurrentContent.translations.map((translation) => ({
@@ -143,14 +133,12 @@ async function mockCurrentContent() {
     tutorialIds: ['recTuto1'],
     learningMoreTutorialIds: ['recTuto2'],
     name: '@dvorak5',
-    pixValue: 4,
     createdAt: '2023-10-05T18:08:00Z',
     activatedAt: '2023-11-06T18:08:00.000Z',
     archivedAt: '2023-12-07T18:08:00.000Z',
     obsoletedAt: '2024-01-08T18:08:00.000Z',
   });
-  expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill) }];
-
+  expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill), pixValue: 4 }];
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
     files: [{ fileId: 'attid1', localizedChallengeId: 'challenge-id' }, { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' }],
@@ -213,6 +201,7 @@ async function mockCurrentContent() {
   const expectedChallengeNl = {
     ...challengeNl,
     ...expectedPrimaryProtoQualityAttributes,
+    airtableId: challenge.id,
     illustrationAlt: 'alt_nl',
     geography: 'RO',
     area: 'RO',
@@ -310,38 +299,6 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildChallenge(challenge);
   databaseBuilder.factory.buildChallenge(alternativeChallenge);
 
-  airtableBuilder.mockLists({
-    frameworks: [buildFramework({ ...expectedFramework, areaIds: [expectedArea.id] })],
-    areas: [buildArea(expectedArea)],
-    competences: [buildCompetence({ ...expectedCompetence, tubeIds: [expectedTube.id] })],
-    thematics: [buildThematic(expectedThematic)],
-    tubes: [buildTube({ ...expectedTube, competenceId: expectedCompetence.id, skillIds: [baseSkill.id] })],
-    skills: [
-      buildSkill({
-        ...expectedCurrentContent.skills[0],
-        competenceId: expectedCompetence.id,
-        challengeIds: ['challenge-id', 'challenge-id-alt'],
-      }),
-    ],
-    challenges: [
-      buildChallenge({
-        ...expectedChallenge,
-        files: [
-          {
-            fileId: expectedAttachment.id,
-            localizedChallengeId: expectedChallenge.id,
-          },
-          {
-            fileId: expectedAttachmentNl.id,
-            localizedChallengeId: expectedChallengeNl.id,
-          },
-        ],
-      }),
-      buildChallenge({ ...alternativeChallenge }),
-    ],
-    attachments: [buildAttachment(expectedAttachment), buildAttachment(expectedAttachmentNl)],
-    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
-  });
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',
     name: 'nameCourse2',

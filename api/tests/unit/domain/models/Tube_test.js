@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
+import { Thematic, Tube } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Tube', () => {
   describe('#get isWorkbench', () => {
@@ -29,12 +30,12 @@ describe('Unit | Domain | Tube', () => {
   describe('#prepareForCreation', () => {
     it('computes fields for creation', () => {
       // given
-      const tube = domainBuilder.buildTube({
+      const tube = new Tube({
         thematicAirtableId: 'recThematic1',
         competenceAirtableId: null,
         index: null,
       });
-      const thematic = domainBuilder.buildThematic({
+      const thematic = new Thematic({
         id: 'recThematic1',
         competenceAirtableId: 'recCompetence1',
         tubeAirtableIds: ['recTube1', 'recTube2'],
@@ -77,13 +78,10 @@ describe('Unit | Domain | Tube', () => {
         },
       });
 
-      const thematicDestination = domainBuilder.buildThematicDatasourceObject({
+      const thematicDestination = domainBuilder.buildThematic({
         id: 'thematic1',
-        airtableId: 'recThematic1',
-        competenceId: 'recCompetence1',
-        competenceAirtableId: 'recCompetence1',
+        competenceId: 'competence1',
         tubeIds: ['tubeId0'],
-        tubeAirtableIds: ['recTube0'],
         index: 0,
       });
 
@@ -98,8 +96,8 @@ describe('Unit | Domain | Tube', () => {
       expect(tube).toHaveProperty('practicalDescription_i18n.fr', 'Description après');
       expect(tube).toHaveProperty('practicalDescription_i18n.en', 'Description after');
 
-      expect(tube).toHaveProperty('thematicAirtableId', 'recThematic1');
-      expect(tube).toHaveProperty('competenceAirtableId', 'recCompetence1');
+      expect(tube).toHaveProperty('thematicAirtableId', 'thematic1');
+      expect(tube).toHaveProperty('competenceAirtableId', 'competence1');
     });
   });
 });

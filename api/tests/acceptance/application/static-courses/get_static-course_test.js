@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder, generateAuthorizationHeader, airtableBuilder, domainBuilder } from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, domainBuilder } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | GET /api/static-courses/{id}', function() {
@@ -92,14 +92,6 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
     databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagAId, tagBId], staticCourseId: 'courseid1' });
 
     await databaseBuilder.commit();
-    const airtableChallenge1 = airtableBuilder.factory.buildChallenge(challenge1);
-    const airtableSkill1 = airtableBuilder.factory.buildSkill(skill1);
-    const airtableChallenge2 = airtableBuilder.factory.buildChallenge(challenge2);
-    const airtableSkill2 = airtableBuilder.factory.buildSkill(skill2);
-    airtableBuilder.mockLists({
-      challenges: [airtableChallenge1, airtableChallenge2],
-      skills: [airtableSkill1, airtableSkill2],
-    });
 
     // When
     const response = await server.inject({

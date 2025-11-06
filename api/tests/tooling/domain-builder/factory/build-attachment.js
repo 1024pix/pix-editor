@@ -8,7 +8,6 @@ export function buildAttachment({
   mimeType = 'image/jpeg',
   filename = 'mon_image',
   challengeId = 'recChallengeId',
-  airtableChallengeId = 'recAirtableChallengeId',
   localizedChallengeId = challengeId,
 } = {}) {
   return new Attachment({
@@ -19,7 +18,7 @@ export function buildAttachment({
     mimeType,
     filename,
     challengeId,
-    airtableChallengeId,
+    airtableChallengeId: challengeId,
     localizedChallengeId,
   });
 }

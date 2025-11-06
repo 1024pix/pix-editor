@@ -1,11 +1,9 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
-import nock from 'nock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import { Tutorial } from '../../../lib/domain/models/index.js';
-import { tutorialDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as config from '../../../lib/config.js';
 
 describe('Application | Route | Tutorials', () => {
@@ -24,9 +22,7 @@ describe('Application | Route | Tutorials', () => {
   });
 
   describe('POST /api/tutorials', async () => {
-    let airtableCreateTutorialScope;
-
-    context('when user has not the right to do the operation', function() {
+    describe('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
         // given
         const server = await createServer();
@@ -54,11 +50,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -73,7 +69,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function() {
+    describe('when payload is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -101,11 +97,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -120,7 +116,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function() {
+    describe('success', function() {
       it('should respond with status 201 and created tutorial', async () => {
         // given
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
@@ -129,44 +125,6 @@ describe('Application | Route | Tutorials', () => {
         databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'title2' });
         await databaseBuilder.commit();
 
-        const createdAirtableTutorial = airtableBuilder.factory.buildTutorial({
-          id: 'tutorialId1',
-          airtableId: 'tutorialAirtableId1',
-          title: 'mon titre',
-          format: Tutorial.FORMATS.PDF,
-          duration: '12:01:02',
-          source: 'Mon grenier',
-          link: 'https://coucou.com',
-          locale: 'fr',
-          license: Tutorial.LICENSES.C,
-          level: Tutorial.LEVELS.TWO,
-          crush: true,
-          tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
-          tagIds: ['tagId1', 'tagId2'],
-        });
-        airtableCreateTutorialScope = nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Tutoriels/', {
-            records: [
-              {
-                fields: {
-                  'id persistant': 'tutorialId1',
-                  Durée: '12:01:02',
-                  Format: Tutorial.FORMATS.PDF,
-                  Lien: 'https://coucou.com',
-                  Source: 'Mon grenier',
-                  Titre: 'mon titre',
-                  Langue: 'fr',
-                  License: Tutorial.LICENSES.C,
-                  niveau: Tutorial.LEVELS.TWO,
-                  CoupDeCoeur: 'YES',
-                  Tags: ['tagAirtableId1', 'tagAirtableId2'],
-                },
-              },
-            ],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [createdAirtableTutorial] });
         const server = await createServer();
 
         // when
@@ -192,11 +150,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -211,7 +169,7 @@ describe('Application | Route | Tutorials', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tutorials',
-            id: 'tutorialAirtableId1',
+            id: 'tutorialId1',
             attributes: {
               title: 'mon titre',
               duration: '12:01:02',
@@ -229,18 +187,17 @@ describe('Application | Route | Tutorials', () => {
                 data: [
                   {
                     type: 'tags',
-                    id: 'tagAirtableId1',
+                    id: 'tagId1',
                   },
                   {
                     type: 'tags',
-                    id: 'tagAirtableId2',
+                    id: 'tagId2',
                   },
                 ],
               },
             },
           },
         });
-        expect(airtableCreateTutorialScope.isDone()).toBe(true);
 
         await expect(knex('tutorials').select()).resolves.toStrictEqual([
           {
@@ -278,9 +235,7 @@ describe('Application | Route | Tutorials', () => {
   });
 
   describe('GET /api/tutorials/{tutorialAirtableId}', async () => {
-    let airtableGetTutorialScope;
-
-    context('when param is not in the right format', function() {
+    describe('when param is not in the right format', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -297,15 +252,10 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when tutorial does not exist', function() {
+    describe('when tutorial does not exist', function() {
       it('should respond with status 404', async function() {
         // given
         const server = await createServer();
-        airtableGetTutorialScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
 
         // when
         const response = await server.inject({
@@ -316,16 +266,14 @@ describe('Application | Route | Tutorials', () => {
 
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableGetTutorialScope.isDone()).toBe(true);
       });
     });
 
-    context('success', function() {
+    describe('success', function() {
       it('should respond with status 200 and tutorial', async () => {
         // given
         const tutorial = {
           id: 'tutorialId',
-          airtableId: 'tutorialAirtableId',
           title: 'mon titre',
           format: Tutorial.FORMATS.PDF,
           duration: '12:01:02',
@@ -336,25 +284,18 @@ describe('Application | Route | Tutorials', () => {
           level: Tutorial.LEVELS.TWO,
           crush: true,
           tagIds: ['tagId1', 'tagId2'],
-          tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
         };
 
         tutorial.tagIds.forEach((id) => databaseBuilder.factory.buildTag({ id, title: `${id} title` }));
         databaseBuilder.factory.buildTutorial(tutorial);
         await databaseBuilder.commit();
 
-        const airtableTutorial = airtableBuilder.factory.buildTutorial(tutorial);
-        airtableGetTutorialScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableTutorial);
         const server = await createServer();
 
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/tutorials/tutorialAirtableId',
+          url: '/api/tutorials/tutorialId',
           headers: generateAuthorizationHeader(readonlyUser),
         });
 
@@ -363,7 +304,7 @@ describe('Application | Route | Tutorials', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tutorials',
-            id: 'tutorialAirtableId',
+            id: 'tutorialId',
             attributes: {
               title: 'mon titre',
               duration: '12:01:02',
@@ -381,26 +322,23 @@ describe('Application | Route | Tutorials', () => {
                 data: [
                   {
                     type: 'tags',
-                    id: 'tagAirtableId1',
+                    id: 'tagId1',
                   },
                   {
                     type: 'tags',
-                    id: 'tagAirtableId2',
+                    id: 'tagId2',
                   },
                 ],
               },
             },
           },
         });
-        expect(airtableGetTutorialScope.isDone()).toBe(true);
       });
     });
   });
 
   describe('PATCH /api/tutorials/{tutorialAirtableId}', async () => {
-    let airtableGetTutorialScope, airtableUpdateTutorialScope;
-
-    context('when user has not the right to do the operation', function() {
+    describe('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
         // given
         const server = await createServer();
@@ -412,7 +350,7 @@ describe('Application | Route | Tutorials', () => {
           payload: {
             data: {
               type: 'tutorials',
-              id: 'tutorialAirtableId',
+              id: 'tutorialId',
               attributes: {
                 title: 'mon titre',
                 duration: '12:01:02',
@@ -430,11 +368,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -449,7 +387,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function() {
+    describe('when payload is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -461,7 +399,7 @@ describe('Application | Route | Tutorials', () => {
           payload: {
             data: {
               type: 'tutorials',
-              id: 'tutorialAirtableId',
+              id: 'tutorialId',
               attributes: {
                 title: 'mon titre',
                 duration: '12:01:02',
@@ -479,11 +417,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -498,15 +436,10 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when tutorial does not exist', function() {
+    describe('when tutorial does not exist', function() {
       it('should respond with status 404', async function() {
         // given
         const server = await createServer();
-        airtableGetTutorialScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
 
         // when
         const response = await server.inject({
@@ -515,7 +448,7 @@ describe('Application | Route | Tutorials', () => {
           payload: {
             data: {
               type: 'tutorials',
-              id: 'tutorialAirtableId',
+              id: 'tutorialId',
               attributes: {
                 title: 'mon titre',
                 duration: '12:01:02',
@@ -533,11 +466,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -549,11 +482,10 @@ describe('Application | Route | Tutorials', () => {
 
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableGetTutorialScope.isDone()).toBe(true);
       });
     });
 
-    context('success', function() {
+    describe('success', function() {
       it('should respond with status 200 and updated tutorial', async () => {
         // given
         databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'title1' });
@@ -562,7 +494,6 @@ describe('Application | Route | Tutorials', () => {
 
         const tutorial = {
           id: 'tutorialId',
-          airtableId: 'tutorialAirtableId',
           title: 'mon titre old',
           format: Tutorial.FORMATS.FRISE,
           duration: '06:06:06',
@@ -573,58 +504,12 @@ describe('Application | Route | Tutorials', () => {
           level: Tutorial.LEVELS.FOUR,
           crush: false,
           tagIds: ['tagId3'],
-          tagAirtableIds: ['tagAirtableId3'],
         };
 
         databaseBuilder.factory.buildTutorial(tutorial);
 
         await databaseBuilder.commit();
 
-        const originalAirtableTutorial = airtableBuilder.factory.buildTutorial(tutorial);
-        airtableGetTutorialScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tutoriels/tutorialAirtableId')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, originalAirtableTutorial);
-        const updatedAirtableTutorial = airtableBuilder.factory.buildTutorial({
-          id: 'tutorialId',
-          airtableId: 'tutorialAirtableId',
-          title: 'mon titre',
-          format: Tutorial.FORMATS.PDF,
-          duration: '12:01:02',
-          source: 'Mon grenier',
-          link: 'https://coucou.com',
-          locale: 'fr',
-          license: Tutorial.LICENSES.C,
-          level: Tutorial.LEVELS.TWO,
-          crush: true,
-          tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
-          tagIds: ['tagId1', 'tagId2'],
-        });
-        airtableUpdateTutorialScope = nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/Tutoriels/', {
-            records: [
-              {
-                fields: {
-                  'id persistant': 'tutorialId',
-                  Durée: '12:01:02',
-                  Format: Tutorial.FORMATS.PDF,
-                  Lien: 'https://coucou.com',
-                  Source: 'Mon grenier',
-                  Titre: 'mon titre',
-                  Langue: 'fr',
-                  License: Tutorial.LICENSES.C,
-                  niveau: Tutorial.LEVELS.TWO,
-                  CoupDeCoeur: 'YES',
-                  Tags: ['tagAirtableId1', 'tagAirtableId2'],
-                },
-                id: 'tutorialAirtableId',
-              },
-            ],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [updatedAirtableTutorial] });
         const server = await createServer();
 
         // when
@@ -634,7 +519,7 @@ describe('Application | Route | Tutorials', () => {
           payload: {
             data: {
               type: 'tutorials',
-              id: 'tutorialAirtableId',
+              id: 'tutorialId',
               attributes: {
                 title: 'mon titre',
                 duration: '12:01:02',
@@ -652,11 +537,11 @@ describe('Application | Route | Tutorials', () => {
                   data: [
                     {
                       type: 'tags',
-                      id: 'tagAirtableId1',
+                      id: 'tagId1',
                     },
                     {
                       type: 'tags',
-                      id: 'tagAirtableId2',
+                      id: 'tagId2',
                     },
                   ],
                 },
@@ -671,7 +556,7 @@ describe('Application | Route | Tutorials', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tutorials',
-            id: 'tutorialAirtableId',
+            id: 'tutorialId',
             attributes: {
               title: 'mon titre',
               duration: '12:01:02',
@@ -689,18 +574,17 @@ describe('Application | Route | Tutorials', () => {
                 data: [
                   {
                     type: 'tags',
-                    id: 'tagAirtableId1',
+                    id: 'tagId1',
                   },
                   {
                     type: 'tags',
-                    id: 'tagAirtableId2',
+                    id: 'tagId2',
                   },
                 ],
               },
             },
           },
         });
-        expect(airtableUpdateTutorialScope.isDone()).toBe(true);
 
         await expect(knex.select('*').from('tutorials')).resolves.toStrictEqual([
           {
@@ -738,12 +622,7 @@ describe('Application | Route | Tutorials', () => {
   });
 
   describe('GET /api/tutorials', async () => {
-    let airtableSearchTutorialByTitleScope,
-      airtableSearchTutorialByTagTitlesScope,
-      airtableSearchTutorialBySourceScope,
-      airtableGetManyTutorialsScope;
-
-    context('when query param is not in the right format', function() {
+    describe('when query param is not in the right format', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -760,14 +639,13 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function() {
-      context('when searching by tutorial title', function() {
+    describe('success', function() {
+      describe('when searching by tutorial title', function() {
         it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
             {
               id: 'tutorialId1',
-              airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
               format: Tutorial.FORMATS.PDF,
               duration: '12:01:02',
@@ -777,12 +655,10 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.C,
               level: Tutorial.LEVELS.ONE,
               crush: true,
-              tagAirtableIds: ['tagAirtableId1'],
               tagIds: ['tagId1'],
             },
             {
               id: 'tutorialId2',
-              airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
               format: Tutorial.FORMATS.FRISE,
               duration: '12:50:50',
@@ -800,17 +676,6 @@ describe('Application | Route | Tutorials', () => {
           tutorials.forEach(databaseBuilder.factory.buildTutorial);
           await databaseBuilder.commit();
 
-          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
-          airtableSearchTutorialByTitleScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tutoriels')
-            .query({
-              filterByFormula: 'FIND("mon ti", LOWER(Titre))',
-              fields: { '': tutorialDatasource.usedFields },
-              sort: [{ field: 'Titre', direction: 'asc' }],
-              maxRecords: 100,
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -826,7 +691,7 @@ describe('Application | Route | Tutorials', () => {
             data: [
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId1',
+                id: 'tutorialId1',
                 attributes: {
                   title: 'mon titre 1',
                   duration: '12:01:02',
@@ -844,7 +709,7 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                     ],
                   },
@@ -852,7 +717,7 @@ describe('Application | Route | Tutorials', () => {
               },
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId2',
+                id: 'tutorialId2',
                 attributes: {
                   title: 'mon titre 2',
                   duration: '12:50:50',
@@ -869,17 +734,15 @@ describe('Application | Route | Tutorials', () => {
               },
             ],
           });
-          expect(airtableSearchTutorialByTitleScope.isDone()).toBe(true);
         });
       });
 
-      context('when searching by tutorial source', function() {
+      describe('when searching by tutorial source', function() {
         it('should respond with status 200 and relevant tutorials, limited by 4 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
             {
               id: 'tutorialId1',
-              airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
               format: Tutorial.FORMATS.PDF,
               duration: '12:01:02',
@@ -889,12 +752,10 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.C,
               level: Tutorial.LEVELS.ONE,
               crush: true,
-              tagAirtableIds: ['tagAirtableId1'],
               tagIds: ['tagId1'],
             },
             {
               id: 'tutorialId2',
-              airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
               format: Tutorial.FORMATS.FRISE,
               duration: '12:50:50',
@@ -904,7 +765,6 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.CCBYSA,
               level: Tutorial.LEVELS.TWO,
               crush: false,
-              tagAirtableIds: [],
               tagIds: [],
             },
           ];
@@ -913,17 +773,6 @@ describe('Application | Route | Tutorials', () => {
           tutorials.forEach(databaseBuilder.factory.buildTutorial);
           await databaseBuilder.commit();
 
-          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
-          airtableSearchTutorialBySourceScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tutoriels')
-            .query({
-              filterByFormula: 'FIND("mon gren", LOWER(Source))',
-              fields: { '': tutorialDatasource.usedFields },
-              sort: [{ field: 'Titre', direction: 'asc' }],
-              maxRecords: 4,
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -939,7 +788,7 @@ describe('Application | Route | Tutorials', () => {
             data: [
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId1',
+                id: 'tutorialId1',
                 attributes: {
                   title: 'mon titre 1',
                   duration: '12:01:02',
@@ -957,7 +806,7 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                     ],
                   },
@@ -965,7 +814,7 @@ describe('Application | Route | Tutorials', () => {
               },
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId2',
+                id: 'tutorialId2',
                 attributes: {
                   title: 'mon titre 2',
                   duration: '12:50:50',
@@ -982,17 +831,15 @@ describe('Application | Route | Tutorials', () => {
               },
             ],
           });
-          expect(airtableSearchTutorialBySourceScope.isDone()).toBe(true);
         });
       });
 
-      context('when searching by tag titles', function() {
+      describe('when searching by tag titles', function() {
         it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
             {
               id: 'tutorialId1',
-              airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
               format: Tutorial.FORMATS.PDF,
               duration: '12:01:02',
@@ -1002,12 +849,10 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.C,
               level: Tutorial.LEVELS.ONE,
               crush: true,
-              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
               tagIds: ['tagId1', 'tagId2'],
             },
             {
               id: 'tutorialId2',
-              airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
               format: Tutorial.FORMATS.FRISE,
               duration: '12:50:50',
@@ -1017,7 +862,6 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.CCBYSA,
               level: Tutorial.LEVELS.TWO,
               crush: false,
-              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId3'],
               tagIds: ['tagId1', 'tagId3'],
             },
           ];
@@ -1028,17 +872,6 @@ describe('Application | Route | Tutorials', () => {
           tutorials.forEach(databaseBuilder.factory.buildTutorial);
           await databaseBuilder.commit();
 
-          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
-          airtableSearchTutorialByTagTitlesScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tutoriels')
-            .query({
-              filterByFormula: 'AND(FIND("lymotio", LOWER(Tags)),FIND("youtu", LOWER(Tags)))',
-              fields: { '': tutorialDatasource.usedFields },
-              sort: [{ field: 'Titre', direction: 'asc' }],
-              maxRecords: 100,
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -1054,7 +887,7 @@ describe('Application | Route | Tutorials', () => {
             data: [
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId1',
+                id: 'tutorialId1',
                 attributes: {
                   title: 'mon titre 1',
                   duration: '12:01:02',
@@ -1072,11 +905,11 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                       {
                         type: 'tags',
-                        id: 'tagAirtableId2',
+                        id: 'tagId2',
                       },
                     ],
                   },
@@ -1084,7 +917,7 @@ describe('Application | Route | Tutorials', () => {
               },
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId2',
+                id: 'tutorialId2',
                 attributes: {
                   title: 'mon titre 2',
                   duration: '12:50:50',
@@ -1102,11 +935,11 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                       {
                         type: 'tags',
-                        id: 'tagAirtableId3',
+                        id: 'tagId3',
                       },
                     ],
                   },
@@ -1114,17 +947,15 @@ describe('Application | Route | Tutorials', () => {
               },
             ],
           });
-          expect(airtableSearchTutorialByTagTitlesScope.isDone()).toBe(true);
         });
       });
 
-      context('when searching by ids', function() {
+      describe('when searching by ids', function() {
         it('should respond with status 200 and relevant tutorials', async () => {
           // given
           const tutorials = [
             {
               id: 'tutorialId1',
-              airtableId: 'tutorialAirtableId1',
               title: 'mon titre 1',
               format: Tutorial.FORMATS.PDF,
               duration: '12:01:02',
@@ -1134,12 +965,10 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.C,
               level: Tutorial.LEVELS.ONE,
               crush: true,
-              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId2'],
               tagIds: ['tagId1', 'tagId2'],
             },
             {
               id: 'tutorialId2',
-              airtableId: 'tutorialAirtableId2',
               title: 'mon titre 2',
               format: Tutorial.FORMATS.FRISE,
               duration: '12:50:50',
@@ -1149,7 +978,6 @@ describe('Application | Route | Tutorials', () => {
               license: Tutorial.LICENSES.CCBYSA,
               level: Tutorial.LEVELS.TWO,
               crush: false,
-              tagAirtableIds: ['tagAirtableId1', 'tagAirtableId3'],
               tagIds: ['tagId1', 'tagId3'],
             },
           ];
@@ -1160,16 +988,6 @@ describe('Application | Route | Tutorials', () => {
           tutorials.forEach(databaseBuilder.factory.buildTutorial);
           await databaseBuilder.commit();
 
-          const airtableTutorials = tutorials.map(airtableBuilder.factory.buildTutorial);
-          airtableGetManyTutorialsScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tutoriels')
-            .query({
-              filterByFormula: 'OR(RECORD_ID() = "tutorialId1", RECORD_ID() = "tutorialId2")',
-              fields: { '': tutorialDatasource.usedFields },
-              sort: [{ field: tutorialDatasource.sortField, direction: 'asc' }],
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -1185,7 +1003,7 @@ describe('Application | Route | Tutorials', () => {
             data: [
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId1',
+                id: 'tutorialId1',
                 attributes: {
                   title: 'mon titre 1',
                   duration: '12:01:02',
@@ -1203,11 +1021,11 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                       {
                         type: 'tags',
-                        id: 'tagAirtableId2',
+                        id: 'tagId2',
                       },
                     ],
                   },
@@ -1215,7 +1033,7 @@ describe('Application | Route | Tutorials', () => {
               },
               {
                 type: 'tutorials',
-                id: 'tutorialAirtableId2',
+                id: 'tutorialId2',
                 attributes: {
                   title: 'mon titre 2',
                   duration: '12:50:50',
@@ -1233,11 +1051,11 @@ describe('Application | Route | Tutorials', () => {
                     data: [
                       {
                         type: 'tags',
-                        id: 'tagAirtableId1',
+                        id: 'tagId1',
                       },
                       {
                         type: 'tags',
-                        id: 'tagAirtableId3',
+                        id: 'tagId3',
                       },
                     ],
                   },
@@ -1245,7 +1063,6 @@ describe('Application | Route | Tutorials', () => {
               },
             ],
           });
-          expect(airtableGetManyTutorialsScope.isDone()).toBe(true);
         });
       });
     });

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { createTube } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { Tube } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Use Cases | create-tube', () => {
   const createdTube = Symbol('createdTube');
@@ -17,7 +18,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
 
     thematicRepository.getByAirtableId.mockResolvedValueOnce(thematic);
 
-    tube = domainBuilder.buildTube({ thematicAirtableId: 'recThematic1' });
+    tube = new Tube({ thematicAirtableId: 'recThematic1' });
     prepareForCreationStub = vi.spyOn(tube, 'prepareForCreation');
 
     tubeRepository.create.mockResolvedValueOnce(createdTube);

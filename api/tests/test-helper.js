@@ -1,7 +1,5 @@
 import * as infraErrors from '../lib/infrastructure/errors.js';
-import nock from 'nock';
 import { DatabaseBuilder } from './tooling/database-builder/database-builder.js';
-import { AirtableBuilder } from './tooling/airtable-builder/airtable-builder.js';
 import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
 
@@ -65,9 +63,6 @@ export function catchErr(promiseFn, ctx) {
     }
   };
 }
-
-// airtableBuilder
-export const airtableBuilder = new AirtableBuilder({ nock });
 
 export function generateAuthorizationHeader(user) {
   return { authorization: `Bearer ${user.apiKey}` };

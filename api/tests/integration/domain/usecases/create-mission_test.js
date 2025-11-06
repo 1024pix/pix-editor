@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { createMission } from '../../../../lib/domain/usecases/index.js';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import _ from 'lodash';
 
@@ -51,12 +51,6 @@ describe('Integration | Usecases | create mission', function() {
     });
     databaseBuilder.factory.buildSkill(skill);
     await databaseBuilder.commit();
-
-    airtableBuilder.mockLists({
-      skills: [airtableBuilder.factory.buildSkill(skill)],
-      tubes: [airtableBuilder.factory.buildTube(tube)],
-      thematics: [airtableBuilder.factory.buildThematic(thematic)],
-    });
 
     const createdMission = domainBuilder.buildMission({ status: Mission.status.VALIDATED, thematicIds: 'Thematic' });
 

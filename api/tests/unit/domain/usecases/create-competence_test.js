@@ -13,7 +13,7 @@ import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import { skillTransformer, tubeTransformer } from '../../../../lib/infrastructure/transformers/index.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
-import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
+import { Competence, Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
@@ -42,7 +42,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(undefined);
 
-      const competence = domainBuilder.buildCompetence({ areaAirtableId });
+      const competence = new Competence({ areaAirtableId });
 
       // when
       const result = createCompetence(competence);
@@ -94,7 +94,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,
@@ -192,7 +192,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,
@@ -289,7 +289,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,

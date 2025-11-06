@@ -1,5 +1,5 @@
 import { beforeEach, describe, describe as context, expect, it } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import {
   create,
   getCurrentContent,
@@ -390,11 +390,6 @@ function _mockRichAirtableContent() {
     id: 'frameworkA',
     name: 'Pix',
   });
-  const airtableFrameworkA = airtableBuilder.factory.buildFramework({
-    id: 'frameworkA',
-    name: 'Pix',
-    areaIds: ['area1', 'area2'],
-  });
   const area1 = {
     id: 'area1',
     competenceIds: ['competence11', 'competence12'],
@@ -405,7 +400,6 @@ function _mockRichAirtableContent() {
     frameworkId: 'frameworkA',
   };
   databaseBuilder.factory.buildArea(area1);
-  const airtableArea1 = airtableBuilder.factory.buildArea(area1);
   const area2 = {
     id: 'area2',
     competenceIds: ['competence21'],
@@ -416,7 +410,6 @@ function _mockRichAirtableContent() {
     frameworkId: 'frameworkA',
   };
   databaseBuilder.factory.buildArea(area2);
-  const airtableArea2 = airtableBuilder.factory.buildArea(area2);
   const competence11 = {
     id: 'competence11',
     index: 'competence11 index',
@@ -427,7 +420,6 @@ function _mockRichAirtableContent() {
     origin: 'Pix',
   };
   databaseBuilder.factory.buildCompetence(competence11);
-  const airtableCompetence11 = airtableBuilder.factory.buildCompetence(competence11);
   const competence12 = {
     id: 'competence12',
     index: 'competence12 index',
@@ -438,7 +430,6 @@ function _mockRichAirtableContent() {
     origin: 'Pix',
   };
   databaseBuilder.factory.buildCompetence(competence12);
-  const airtableCompetence12 = airtableBuilder.factory.buildCompetence(competence12);
   const competence21 = {
     id: 'competence21',
     index: 'competence21 index',
@@ -449,7 +440,6 @@ function _mockRichAirtableContent() {
     origin: 'Pix',
   };
   databaseBuilder.factory.buildCompetence(competence21);
-  const airtableCompetence21 = airtableBuilder.factory.buildCompetence(competence21);
   const thematic111 = {
     id: 'thematic111',
     airtableId: 'recThematic111',
@@ -462,7 +452,6 @@ function _mockRichAirtableContent() {
     index: 111,
   };
   databaseBuilder.factory.buildThematic(thematic111);
-  const airtableThematic111 = airtableBuilder.factory.buildThematic(thematic111);
   const thematic112 = {
     id: 'thematic112',
     airtableId: 'recThematic112',
@@ -475,7 +464,6 @@ function _mockRichAirtableContent() {
     index: 112,
   };
   databaseBuilder.factory.buildThematic(thematic112);
-  const airtableThematic112 = airtableBuilder.factory.buildThematic(thematic112);
   const thematic121 = {
     id: 'thematic121',
     airtableId: 'recThematic121',
@@ -488,7 +476,6 @@ function _mockRichAirtableContent() {
     index: 121,
   };
   databaseBuilder.factory.buildThematic(thematic121);
-  const airtableThematic121 = airtableBuilder.factory.buildThematic(thematic121);
   const thematic211 = {
     id: 'thematic211',
     airtableId: 'recThematic211',
@@ -501,7 +488,6 @@ function _mockRichAirtableContent() {
     index: 211,
   };
   databaseBuilder.factory.buildThematic(thematic211);
-  const airtableThematic211 = airtableBuilder.factory.buildThematic(thematic211);
   const tube1111 = {
     id: 'tube1111',
     name: '@tube1111',
@@ -521,7 +507,6 @@ function _mockRichAirtableContent() {
     thematicId: 'thematic111',
   };
   databaseBuilder.factory.buildTube(tube1111);
-  const airtableTube1111 = airtableBuilder.factory.buildTube(tube1111);
   const tube1121 = {
     id: 'tube1121',
     name: '@tube1121',
@@ -541,7 +526,6 @@ function _mockRichAirtableContent() {
     thematicId: 'thematic112',
   };
   databaseBuilder.factory.buildTube(tube1121);
-  const airtableTube1121 = airtableBuilder.factory.buildTube(tube1121);
   const tube1211 = {
     id: 'tube1211',
     name: '@tube1211',
@@ -561,7 +545,6 @@ function _mockRichAirtableContent() {
     thematicId: 'thematic121',
   };
   databaseBuilder.factory.buildTube(tube1211);
-  const airtableTube1211 = airtableBuilder.factory.buildTube(tube1211);
   const tube1212 = {
     id: 'tube1212',
     name: '@tube1212',
@@ -581,7 +564,6 @@ function _mockRichAirtableContent() {
     thematicId: 'thematic121',
   };
   databaseBuilder.factory.buildTube(tube1212);
-  const airtableTube1212 = airtableBuilder.factory.buildTube(tube1212);
   const tube2111 = {
     id: 'tube2111',
     name: '@tube2111',
@@ -600,7 +582,6 @@ function _mockRichAirtableContent() {
     thematicId: 'thematic211',
   };
   databaseBuilder.factory.buildTube(tube2111);
-  const airtableTube2111 = airtableBuilder.factory.buildTube(tube2111);
   const tutorial1 = {
     id: 'tutorial1',
     title: 'tutorial1 title',
@@ -611,7 +592,6 @@ function _mockRichAirtableContent() {
     locale: 'fr',
   };
   databaseBuilder.factory.buildTutorial(tutorial1);
-  const airtableTutorial1 = airtableBuilder.factory.buildTutorial(tutorial1);
   const tutorial2 = {
     id: 'tutorial2',
     title: 'tutorial2 title',
@@ -622,7 +602,6 @@ function _mockRichAirtableContent() {
     locale: 'fr-fr',
   };
   databaseBuilder.factory.buildTutorial(tutorial2);
-  const airtableTutorial2 = airtableBuilder.factory.buildTutorial(tutorial2);
   const skill11111 = {
     id: 'skill11111',
     name: '@tube11114',
@@ -639,7 +618,6 @@ function _mockRichAirtableContent() {
     version: 11111,
   };
   databaseBuilder.factory.buildSkill(skill11111);
-  const airtableSkill11111 = airtableBuilder.factory.buildSkill(skill11111);
   const skill11112 = {
     id: 'skill11112',
     name: '@tube11113',
@@ -656,7 +634,6 @@ function _mockRichAirtableContent() {
     version: 11112,
   };
   databaseBuilder.factory.buildSkill(skill11112);
-  const airtableSkill11112 = airtableBuilder.factory.buildSkill(skill11112);
   const skill12121 = {
     id: 'skill12121',
     name: '@tube12122',
@@ -674,7 +651,6 @@ function _mockRichAirtableContent() {
     challengeIds: ['challenge121211', 'challenge121212'],
   };
   databaseBuilder.factory.buildSkill(skill12121);
-  const airtableSkill12121 = airtableBuilder.factory.buildSkill(skill12121);
   const skill21111 = {
     id: 'skill21111',
     name: '@tube21111',
@@ -696,7 +672,6 @@ function _mockRichAirtableContent() {
     ],
   };
   databaseBuilder.factory.buildSkill(skill21111);
-  const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
   const challenge121211 = {
     id: 'challenge121211',
     type: ChallengeForRelease.TYPES.QCM,
@@ -766,7 +741,6 @@ function _mockRichAirtableContent() {
     toRephrase: false,
   });
 
-  const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
   const challenge121212 = {
     id: 'challenge121212',
     type: ChallengeForRelease.TYPES.QCU,
@@ -819,7 +793,6 @@ function _mockRichAirtableContent() {
     toRephrase: true,
   });
 
-  const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
   const challenge211111 = {
     id: 'challenge211111',
     type: ChallengeForRelease.TYPES.QCM,
@@ -873,7 +846,6 @@ function _mockRichAirtableContent() {
     toRephrase: true,
   });
 
-  const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
   const challenge211112 = {
     id: 'challenge211112',
     type: ChallengeForRelease.TYPES.QROCM_DEP,
@@ -926,7 +898,6 @@ function _mockRichAirtableContent() {
     toRephrase: true,
   });
 
-  const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
   const challenge211113 = {
     id: 'challenge211113',
     type: ChallengeForRelease.TYPES.QROCM,
@@ -979,8 +950,6 @@ function _mockRichAirtableContent() {
     toRephrase: true,
   });
 
-  const airtableChallenge211113 = airtableBuilder.factory.buildChallenge(challenge211113);
-
   const attachment1 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment1',
     type: Attachment.TYPES.ATTACHMENT,
@@ -988,7 +957,6 @@ function _mockRichAirtableContent() {
     challengeId: 'challenge121211',
   });
   databaseBuilder.factory.buildAttachment(attachment1);
-  const airtableAttachment1 = airtableBuilder.factory.buildAttachment(attachment1);
   const attachment2 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment2',
     type: Attachment.TYPES.ATTACHMENT,
@@ -996,7 +964,6 @@ function _mockRichAirtableContent() {
     challengeId: 'challenge121211',
   });
   databaseBuilder.factory.buildAttachment(attachment2);
-  const airtableAttachment2 = airtableBuilder.factory.buildAttachment(attachment2);
   const attachment3 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment3',
     type: Attachment.TYPES.ATTACHMENT,
@@ -1004,7 +971,6 @@ function _mockRichAirtableContent() {
     challengeId: 'challenge211111',
   });
   databaseBuilder.factory.buildAttachment(attachment3);
-  const airtableAttachment3 = airtableBuilder.factory.buildAttachment(attachment3);
   const attachment4 = domainBuilder.buildAttachmentDatasourceObject({
     id: 'attachment4',
     type: Attachment.TYPES.ATTACHMENT,
@@ -1013,50 +979,6 @@ function _mockRichAirtableContent() {
     localizedChallengeId: 'challengeNl',
   });
   databaseBuilder.factory.buildAttachment(attachment4);
-  const airtableAttachment4 = airtableBuilder.factory.buildAttachment(attachment4);
-
-  airtableBuilder.mockLists({
-    frameworks: [airtableFrameworkA],
-    areas: [airtableArea1, airtableArea2],
-    competences: [
-      airtableCompetence11,
-      airtableCompetence12,
-      airtableCompetence21,
-    ],
-    thematics: [
-      airtableThematic111,
-      airtableThematic112,
-      airtableThematic121,
-      airtableThematic211,
-    ],
-    tubes: [
-      airtableTube1111,
-      airtableTube1121,
-      airtableTube1211,
-      airtableTube1212,
-      airtableTube2111,
-    ],
-    skills: [
-      airtableSkill11111,
-      airtableSkill11112,
-      airtableSkill12121,
-      airtableSkill21111,
-    ],
-    challenges: [
-      airtableChallenge121211,
-      airtableChallenge121212,
-      airtableChallenge211111,
-      airtableChallenge211112,
-      airtableChallenge211113,
-    ],
-    tutorials: [airtableTutorial1, airtableTutorial2],
-    attachments: [
-      airtableAttachment1,
-      airtableAttachment2,
-      airtableAttachment3,
-      airtableAttachment4,
-    ],
-  });
 
   return {
     areas: [area1, area2],
@@ -1072,11 +994,11 @@ function _mockRichAirtableContent() {
       thematic211,
     ],
     tubeIds: [
-      airtableTube1111.id,
-      airtableTube1121.id,
-      airtableTube1211.id,
-      airtableTube1212.id,
-      airtableTube2111.id,
+      tube1111.id,
+      tube1121.id,
+      tube1211.id,
+      tube1212.id,
+      tube2111.id,
     ],
     skills: [
       skill11111,

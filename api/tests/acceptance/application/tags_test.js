@@ -1,10 +1,8 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
-import nock from 'nock';
 
-import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
-import { tagDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Application | Route | Tags', () => {
   let editorUser, readonlyUser;
@@ -16,8 +14,6 @@ describe('Application | Route | Tags', () => {
   });
 
   describe('POST /api/tags', async () => {
-    let airtableCreateTagScope, airtableSearchTagsScope;
-
     context('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
         // given
@@ -70,17 +66,6 @@ describe('Application | Route | Tags', () => {
         databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'Fruits' });
         await databaseBuilder.commit();
 
-        const airtableTags = [airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'Fruits' })];
-        airtableSearchTagsScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tags')
-          .query({
-            filterByFormula: '"fruits" = LOWER(Nom)',
-            fields: { '': tagDatasource.usedFields },
-            sort: [{ field: 'Nom', direction: 'asc' }],
-            maxRecords: 1,
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableTags });
         const server = await createServer();
 
         // when
@@ -98,44 +83,13 @@ describe('Application | Route | Tags', () => {
 
         // then
         expect(response.statusCode).toBe(409);
-        expect(airtableSearchTagsScope.isDone()).toBe(true);
       });
     });
 
     context('success', function() {
       it('should respond with status 201 and created tag', async () => {
         // given
-        airtableSearchTagsScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tags')
-          .query({
-            filterByFormula: '"internet" = LOWER(Nom)',
-            fields: { '': tagDatasource.usedFields },
-            sort: [{ field: 'Nom', direction: 'asc' }],
-            maxRecords: 1,
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [] });
-        const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
-        generateNewId.mockReturnValue('tagId2');
-        const createdAirtableTag = airtableBuilder.factory.buildTag({
-          id: 'tagId2',
-          airtableId: 'tagAirtableId2',
-          title: 'Internet',
-        });
-        airtableCreateTagScope = nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Tags/', {
-            records: [
-              {
-                fields: {
-                  'id persistant': 'tagId2',
-                  Nom: 'Internet',
-                },
-              },
-            ],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [createdAirtableTag] });
+        vi.spyOn(idGenerator, 'generateNewId').mockReturnValue('tagId2');
         const server = await createServer();
 
         // when
@@ -156,7 +110,7 @@ describe('Application | Route | Tags', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tags',
-            id: 'tagAirtableId2',
+            id: 'tagId2',
             attributes: {
               'pix-id': 'tagId2',
               title: 'Internet',
@@ -164,8 +118,6 @@ describe('Application | Route | Tags', () => {
           },
         });
 
-        expect(airtableSearchTagsScope.isDone()).toBe(true);
-        expect(airtableCreateTagScope.isDone()).toBe(true);
         await expect(knex('tutorial_tags').select().first()).resolves.toEqual({
           id: 'tagId2',
           title: 'Internet',
@@ -176,9 +128,7 @@ describe('Application | Route | Tags', () => {
     });
   });
 
-  describe('GET /api/tags/{tagAirtableId}', async () => {
-    let airtableGetTagScope;
-
+  describe('GET /api/tags/{tagId}', async () => {
     context('when param is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
@@ -199,17 +149,12 @@ describe('Application | Route | Tags', () => {
     context('when tag does not exist', function() {
       it('should respond with status 404', async () => {
         // given
-        airtableGetTagScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
         const server = await createServer();
 
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/tags/tagAirtableId1',
+          url: '/api/tags/tagId1',
           headers: generateAuthorizationHeader(editorUser),
         });
 
@@ -226,22 +171,12 @@ describe('Application | Route | Tags', () => {
           title: 'Fruits',
         });
         await databaseBuilder.commit();
-        const airtableTag = airtableBuilder.factory.buildTag({
-          id: 'tagId1',
-          airtableId: 'tagAirtableId1',
-          title: 'Fruits',
-        });
-        airtableGetTagScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tags/tagAirtableId1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableTag);
         const server = await createServer();
 
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/tags/tagAirtableId1',
+          url: '/api/tags/tagId1',
           headers: generateAuthorizationHeader(editorUser),
         });
 
@@ -250,22 +185,18 @@ describe('Application | Route | Tags', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tags',
-            id: 'tagAirtableId1',
+            id: 'tagId1',
             attributes: {
               'pix-id': 'tagId1',
               title: 'Fruits',
             },
           },
         });
-
-        expect(airtableGetTagScope.isDone()).toBe(true);
       });
     });
   });
 
   describe('GET /api/tags', async () => {
-    let airtableSearchTagsScope;
-
     context('when query param is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
@@ -294,22 +225,6 @@ describe('Application | Route | Tags', () => {
           databaseBuilder.factory.buildTag({ id: 'tagId5', title: 'FR' });
           await databaseBuilder.commit();
 
-          const airtableTags = [
-            airtableBuilder.factory.buildTag({ id: 'tagId1', airtableId: 'tagAirtableId1', title: 'ééééfréééé' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId5', airtableId: 'tagAirtableId5', title: 'FR' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', title: 'france' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
-          ];
-          airtableSearchTagsScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tags')
-            .query({
-              filterByFormula: 'FIND("fr", LOWER(Nom))',
-              fields: { '': tagDatasource.usedFields },
-              sort: [{ field: 'Nom', direction: 'asc' }],
-              maxRecords: 4,
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTags });
           const server = await createServer();
 
           // when
@@ -325,7 +240,7 @@ describe('Application | Route | Tags', () => {
             data: [
               {
                 type: 'tags',
-                id: 'tagAirtableId1',
+                id: 'tagId1',
                 attributes: {
                   'pix-id': 'tagId1',
                   title: 'ééééfréééé',
@@ -333,7 +248,7 @@ describe('Application | Route | Tags', () => {
               },
               {
                 type: 'tags',
-                id: 'tagAirtableId5',
+                id: 'tagId5',
                 attributes: {
                   'pix-id': 'tagId5',
                   title: 'FR',
@@ -341,7 +256,7 @@ describe('Application | Route | Tags', () => {
               },
               {
                 type: 'tags',
-                id: 'tagAirtableId3',
+                id: 'tagId3',
                 attributes: {
                   'pix-id': 'tagId3',
                   title: 'france',
@@ -349,7 +264,7 @@ describe('Application | Route | Tags', () => {
               },
               {
                 type: 'tags',
-                id: 'tagAirtableId4',
+                id: 'tagId4',
                 attributes: {
                   'pix-id': 'tagId4',
                   title: 'freT',
@@ -357,7 +272,6 @@ describe('Application | Route | Tags', () => {
               },
             ],
           });
-          expect(airtableSearchTagsScope.isDone()).toBe(true);
         });
       });
 
@@ -369,20 +283,6 @@ describe('Application | Route | Tags', () => {
           databaseBuilder.factory.buildTag({ id: 'tagId2', title: 'frontieRe' });
           await databaseBuilder.commit();
 
-          const airtableTags = [
-            airtableBuilder.factory.buildTag({ id: 'tagId3', airtableId: 'tagAirtableId3', title: 'france' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId4', airtableId: 'tagAirtableId4', title: 'freT' }),
-            airtableBuilder.factory.buildTag({ id: 'tagId2', airtableId: 'tagAirtableId2', title: 'frontieRe' }),
-          ];
-          airtableSearchTagsScope = nock('https://api.airtable.com')
-            .get('/v0/airtableBaseValue/Tags')
-            .query({
-              filterByFormula: 'OR(RECORD_ID() = "tagId3", RECORD_ID() = "tagId4", RECORD_ID() = "tagId2")',
-              fields: { '': tagDatasource.usedFields },
-              sort: [{ field: tagDatasource.sortField, direction: 'asc' }],
-            })
-            .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, { records: airtableTags });
           const server = await createServer();
 
           // when
@@ -398,7 +298,15 @@ describe('Application | Route | Tags', () => {
             data: [
               {
                 type: 'tags',
-                id: 'tagAirtableId3',
+                id: 'tagId2',
+                attributes: {
+                  'pix-id': 'tagId2',
+                  title: 'frontieRe',
+                },
+              },
+              {
+                type: 'tags',
+                id: 'tagId3',
                 attributes: {
                   'pix-id': 'tagId3',
                   title: 'france',
@@ -406,23 +314,14 @@ describe('Application | Route | Tags', () => {
               },
               {
                 type: 'tags',
-                id: 'tagAirtableId4',
+                id: 'tagId4',
                 attributes: {
                   'pix-id': 'tagId4',
                   title: 'freT',
                 },
               },
-              {
-                type: 'tags',
-                id: 'tagAirtableId2',
-                attributes: {
-                  'pix-id': 'tagId2',
-                  title: 'frontieRe',
-                },
-              },
             ],
           });
-          expect(airtableSearchTagsScope.isDone()).toBe(true);
         });
       });
     });

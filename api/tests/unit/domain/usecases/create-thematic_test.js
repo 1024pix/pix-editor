@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { domainBuilder } from '../../../test-helper.js';
 import { createThematic } from '../../../../lib/domain/usecases/index.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
+import { Thematic } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Use Cases | create-thematic', () => {
   const competenceThematics = Symbol('competenceThematics');
@@ -17,7 +17,7 @@ describe('Unit | Domain | Use Cases | create-thematic', () => {
 
     thematicRepository.listByCompetenceAirtableId.mockResolvedValueOnce(competenceThematics);
 
-    thematic = domainBuilder.buildThematic({ competenceAirtableId: 'recCompetence1' });
+    thematic = new Thematic({ competenceAirtableId: 'recCompetence1' });
     prepareForCreationStub = vi.spyOn(thematic, 'prepareForCreation');
 
     thematicRepository.create.mockResolvedValueOnce(createdThematic);

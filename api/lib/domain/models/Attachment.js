@@ -30,7 +30,7 @@ export class Attachment {
       size: this.size,
       mimeType: this.mimeType,
       filename: this.filename,
-      airtableChallengeId: null,
+      airtableChallengeId: challengeId,
       challengeId,
       localizedChallengeId,
     });

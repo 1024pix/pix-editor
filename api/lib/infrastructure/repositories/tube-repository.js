@@ -1,174 +1,144 @@
 import _ from 'lodash';
-import { tubeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 const model = 'tube';
 const TABLE_NAME = 'tubes';
 
 export async function list() {
-  const [
-    airtableDtos,
-    pgDtos,
-    translations,
-  ] = await Promise.all([
-    tubeDatasource.list(),
-    selectTubes().orderBy(`${TABLE_NAME}.id`),
-    translationRepository.listByModel(model),
-  ]);
+  const [dtos, translations] = await Promise.all([selectTubes().orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model)]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
-
-  return toDomainList(airtableDtos, translations);
+  return toDomainList(dtos, translations);
 }
 
 export async function get(id) {
-  const [
-    [airtableDto],
-    pgDto,
-    translations,
-  ] = await Promise.all([
-    tubeDatasource.filter({ filter: { ids: [id] } }),
-    selectTubes().where('tubes.id', id).first(),
-    translationRepository.listByEntity(model, id),
-  ]);
+  const [dto, translations] = await Promise.all([selectTubes().where('tubes.id', id).first(), translationRepository.listByEntity(model, id)]);
 
-  compareDtos(airtableDto, pgDto, compareTubeDtos, TABLE_NAME);
+  if (!dto) return null;
 
-  if (!airtableDto) return null;
-
-  return toDomain(airtableDto, translations);
+  return toDomain(dto, translations);
 }
 
 export async function listByCompetenceId(competenceId) {
-  const [airtableDtos, pgDtos] = await Promise.all([tubeDatasource.listByCompetenceId(competenceId), selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id')]);
+  const dtos = await selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id');
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
-
-  if (!airtableDtos) return [];
+  if (dtos.length === 0) return [];
 
   const translations = await translationRepository.listByEntities(
     model,
-    airtableDtos.map(({ id }) => id),
+    dtos.map(({ id }) => id),
   );
 
-  return toDomainList(airtableDtos, translations);
+  return toDomainList(dtos, translations);
 }
 
-export async function getByAirtableId(airtableId) {
-  const airtableDto = await tubeDatasource.find(airtableId);
-  if (!airtableDto) return null;
-
-  const [pgDto, translations] = await Promise.all([selectTubes().where('tubes.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
-
-  compareDtos(airtableDto, pgDto, compareTubeDtos, TABLE_NAME);
-
-  return toDomain(airtableDto, translations);
+/**
+ * @deprecated use {@link get}
+ */
+export async function getByAirtableId(id) {
+  return get(id);
 }
 
-export async function getManyByAirtableIds(airtableIds) {
-  if (!airtableIds?.length) return [];
+/**
+ * @deprecated use {@link getMany}
+ */
+export async function getManyByAirtableIds(ids) {
+  return getMany(ids);
+}
 
-  const airtableDtos = await tubeDatasource.getManyByAirtableIds(airtableIds);
-  if (!airtableDtos) return [];
+export async function getMany(ids) {
+  if (!ids?.length) return [];
 
-  const ids = airtableDtos.map(({ id }) => id);
+  const [dtos, translations] = await Promise.all([selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'), translationRepository.listByEntities(model, ids)]);
 
-  const [pgDtos, translations] = await Promise.all([selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'), translationRepository.listByEntities(model, ids)]);
+  if (!dtos) return [];
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
-
-  return toDomainList(airtableDtos, translations);
+  return toDomainList(dtos, translations);
 }
 
 export async function create(tube) {
   return knex.transaction(async (transaction) => {
     tube.id = idGenerator.generateNewId('tube');
-    const createdTubeDTO = await tubeDatasource.create(tube);
     const translations = tubeTranslations.extractFromDomainObject(tube);
+
     await Promise.all([
       transaction
         .insert({
           id: tube.id,
           name: tube.name,
           index: tube.index,
-          thematicId: createdTubeDTO.thematicId,
+          thematicId: tube.thematicAirtableId,
         })
         .into(TABLE_NAME),
       translationRepository.save({ translations, transaction }),
     ]);
-    return toDomain(createdTubeDTO, translations);
+
+    const dto = await selectTubes(transaction).where('tubes.id', tube.id).first();
+
+    return toDomain(dto, translations);
   });
 }
 
 export async function update(tube) {
   return knex.transaction(async (transaction) => {
-    const updatedTubeDto = await tubeDatasource.update(tube);
     const translations = tubeTranslations.extractFromDomainObject(tube);
+
     await transaction(TABLE_NAME)
       .update({
         name: tube.name,
         index: tube.index,
-        thematicId: updatedTubeDto.thematicId,
+        thematicId: tube.thematicAirtableId,
       })
       .where('id', tube.id);
+    const dto = await selectTubes(transaction).where('tubes.id', tube.id).first();
+
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${tubeTranslations.prefix}${tube.id}.`,
       locales: ['fr', 'en'],
       transaction,
     });
     await translationRepository.save({ translations, transaction });
-    return toDomain(updatedTubeDto, translations);
+
+    return toDomain(dto, translations);
   });
 }
 
-function selectTubes() {
-  return knex
+function selectTubes(knexConn = knex) {
+  return knexConn
     .select(
       `${TABLE_NAME}.*`,
       'thematics.competenceId',
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "skillIds"',
-        knex
-          .select(knex.raw('json_agg(??)', 'skills.id'))
+        knexConn
+          .select(knexConn.raw('json_agg(?? order by ??)', ['skills.id', 'skills.id']))
           .from('skills')
-          .where('skills.tubeId', '=', knex.ref(`${TABLE_NAME}.id`)),
+          .where('skills.tubeId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
       ),
     )
     .from(TABLE_NAME)
     .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`);
 }
 
-function compareTubeDtos(airtableDto, pgDto) {
-  const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
-  if (airtableDto.name !== pgDto.name)
-    diff.push(`airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
-  if (!areNullableValuesEqual(airtableDto.index, pgDto.index))
-    diff.push(`airtable index "${airtableDto.index}" != postgres index "${pgDto.index}"`);
-  if (airtableDto.thematicId !== pgDto.thematicId)
-    diff.push(`airtable thematicId "${airtableDto.thematicId}" != postgres thematicId "${pgDto.thematicId}"`);
-  if (airtableDto.competenceId !== pgDto.competenceId)
-    diff.push(
-      `airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
-    );
-  if (!areArrayEquals(airtableDto.skillIds, pgDto.skillIds))
-    diff.push(`airtable skillIds "${airtableDto.skillIds}" != postgres skillIds "${pgDto.skillIds}"`);
-  return diff;
+function toDomainList(dtos, translations) {
+  const translationsByTubeId = Object.groupBy(translations, (translation) => translation.entityId);
+  return dtos.map((dto) => toDomain(dto, translationsByTubeId[dto.id]));
 }
 
-function toDomainList(datasourceTubes, translations) {
-  const translationsByTubeId = _.groupBy(translations, 'entityId');
-  return datasourceTubes.map((datasourceTube) => toDomain(datasourceTube, translationsByTubeId[datasourceTube.id]));
-}
-
-function toDomain(datasourceTube, translations = []) {
+function toDomain({ id, thematicId, competenceId, skillIds = [], ...dto }, translations = []) {
   return new Tube({
-    ...datasourceTube,
+    id,
+    airtableId: id,
+    thematicId,
+    thematicAirtableId: thematicId,
+    competenceId,
+    competenceAirtableId: competenceId,
+    skillIds,
+    skillAirtableIds: skillIds,
+    ...dto,
     ...tubeTranslations.toDomain(translations),
   });
 }
