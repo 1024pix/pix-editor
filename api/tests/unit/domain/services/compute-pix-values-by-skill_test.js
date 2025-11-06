@@ -88,9 +88,9 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
 
         // then
         expect(pixValuesBySkill).toStrictEqual({
-          skill1: 2.667,
-          skill2: 2.667,
-          skill3: 2.667,
+          skill1: 2.6666666666666665,
+          skill2: 2.6666666666666665,
+          skill3: 2.6666666666666665,
         });
       });
     });
@@ -133,9 +133,9 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
 
       // then
       expect(pixValuesBySkill).toStrictEqual({
-        skill1: 2.667,
-        skill2: 2.667,
-        skill3: 2.667,
+        skill1: 2.6666666666666665,
+        skill2: 2.6666666666666665,
+        skill3: 2.6666666666666665,
         skill4: 4,
         skill5: 4,
         skill6: 4,
