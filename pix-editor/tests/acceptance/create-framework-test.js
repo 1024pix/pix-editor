@@ -6,12 +6,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Create-Framework', function (hooks) {
+module('Acceptance | Create-Framework', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
@@ -20,7 +20,7 @@ module('Acceptance | Create-Framework', function (hooks) {
     return authenticateSession();
   });
 
-  test('it should create a new framework', async function (assert) {
+  test('it should create a new framework', async function(assert) {
     // given
     const newFrameworkName = 'Nouveau titre';
 

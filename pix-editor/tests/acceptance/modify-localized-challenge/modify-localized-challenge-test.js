@@ -7,11 +7,11 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge', function (hooks) {
+module('Acceptance | Modify-Localized-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -58,7 +58,7 @@ module('Acceptance | Modify-Localized-Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('should modify attributes in localized challenge', async function (assert) {
+  test('should modify attributes in localized challenge', async function(assert) {
     // when
     const store = this.owner.lookup('service:store');
 

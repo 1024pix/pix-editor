@@ -7,20 +7,20 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge', function (hooks) {
+module('Acceptance | Modify-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     return authenticateSession();
   });
 
-  module('modifying a draft challenge', function (hooks) {
-    hooks.beforeEach(function () {
+  module('modifying a draft challenge', function(hooks) {
+    hooks.beforeEach(function() {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -100,7 +100,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes when challenge is a prototype', async function (assert) {
+    test('can modify attributes when challenge is a prototype', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -155,7 +155,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
     });
 
-    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function (assert) {
+    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function(assert) {
       await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -187,8 +187,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     });
   });
 
-  module('modifying a production challenge', function (hooks) {
-    hooks.beforeEach(function () {
+  module('modifying a production challenge', function(hooks) {
+    hooks.beforeEach(function() {
       const prototype = this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -246,7 +246,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function (assert) {
+    test('can modify attributes', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -288,7 +288,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       assert.deepEqual(challenge.geography, 'JP');
     });
 
-    test('modify a challenge\'s urlsToConsult when playing around with the field', async function (assert) {
+    test('modify a challenge\'s urlsToConsult when playing around with the field', async function(assert) {
       // when
       const store = this.owner.lookup('service:store');
 
@@ -317,8 +317,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     });
   });
 
-  module('modifying an archived challenge', function (hooks) {
-    hooks.beforeEach(function () {
+  module('modifying an archived challenge', function(hooks) {
+    hooks.beforeEach(function() {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -380,7 +380,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function (assert) {
+    test('can modify attributes', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
@@ -432,8 +432,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     });
   });
 
-  module('modifying an obsolete challenge', function (hooks) {
-    hooks.beforeEach(function () {
+  module('modifying an obsolete challenge', function(hooks) {
+    hooks.beforeEach(function() {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -495,7 +495,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('cannot modify an obsolete challenge', async function (assert) {
+    test('cannot modify an obsolete challenge', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');

@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | form-mde.hbs', function (hooks) {
+module('Integration | Component | form-mde.hbs', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should display Tui editor if `edition` is `true`', async function (assert) {
+  test('it should display Tui editor if `edition` is `true`', async function(assert) {
     // given
     this.set('edition', true);
 
@@ -18,7 +18,7 @@ module('Integration | Component | form-mde.hbs', function (hooks) {
     assert.dom('[data-test-tui-editor]').exists();
   });
 
-  test('it should display `MarkdownToHtml` if `edition` is `false`', async function (assert) {
+  test('it should display `MarkdownToHtml` if `edition` is `false`', async function(assert) {
     // given
     this.set('edition', false);
 

@@ -3,17 +3,17 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Service | confirm', function (hooks) {
+module('Unit | Service | confirm', function(hooks) {
   setupTest(hooks);
   let service, startStub, stopStub;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     service = this.owner.lookup('service:confirm');
     startStub = sinon.stub();
     stopStub = sinon.stub();
   });
 
-  module('#loader management', function (hooks) {
-    hooks.beforeEach(function () {
+  module('#loader management', function(hooks) {
+    hooks.beforeEach(function() {
       service.setTarget({
         confirmAsk(title, text, callback) {
           callback(true);
@@ -21,7 +21,7 @@ module('Unit | Service | confirm', function (hooks) {
       });
     });
 
-    test('it should manage loader if `isLoading` is `true`', async function (assert) {
+    test('it should manage loader if `isLoading` is `true`', async function(assert) {
       // given
       class LoaderService extends Service {
         start = startStub;
@@ -38,7 +38,7 @@ module('Unit | Service | confirm', function (hooks) {
       assert.ok(stopStub.calledOnce);
     });
 
-    test('it should not manage loader if `isLoading` is `false`', async function (assert) {
+    test('it should not manage loader if `isLoading` is `false`', async function(assert) {
       // given
       class LoaderService extends Service {
         start = startStub;
@@ -56,7 +56,7 @@ module('Unit | Service | confirm', function (hooks) {
     });
   });
 
-  test('It should reject promise if callback return `false`', async function (assert) {
+  test('It should reject promise if callback return `false`', async function(assert) {
     // given
     class LoaderService extends Service {
       start = startStub;

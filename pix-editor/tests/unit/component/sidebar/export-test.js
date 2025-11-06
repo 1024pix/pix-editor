@@ -4,11 +4,11 @@ import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('unit | Component | sidebar/export', function (hooks) {
+module('unit | Component | sidebar/export', function(hooks) {
   setupTest(hooks);
   let component, areas;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     component = createGlimmerComponent('component:sidebar/export');
 
     const productionSkill_1_1 = [
@@ -86,7 +86,7 @@ module('unit | Component | sidebar/export', function (hooks) {
     ];
   });
 
-  test('it should return formatted cvs content', function (assert) {
+  test('it should return formatted cvs content', function(assert) {
     // given
     const expectedCsvContent = `"Domaine","Compétence","Thématique","Tube","Titre pratique","Description pratique","Liste des acquis"
 "area","competence1","theme1","tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
@@ -100,7 +100,7 @@ module('unit | Component | sidebar/export', function (hooks) {
     assert.strictEqual(csvContent, expectedCsvContent);
   });
 
-  test('it should format CSV string', function (assert) {
+  test('it should format CSV string', function(assert) {
     // given
     const string = 'hello';
     const expectedResult = '"hello"';
@@ -112,10 +112,10 @@ module('unit | Component | sidebar/export', function (hooks) {
     assert.strictEqual(result, expectedResult);
   });
 
-  module('#export', function (hooks) {
+  module('#export', function(hooks) {
     let notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, buildCSVContentStub;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       notifyMessageStub = sinon.stub();
       notifyErrorStub = sinon.stub();
 
@@ -137,7 +137,7 @@ module('unit | Component | sidebar/export', function (hooks) {
       component.args.areas = areas;
     });
 
-    test('it should export subjects', async function (assert) {
+    test('it should export subjects', async function(assert) {
       // given
       const saveAsStub = sinon.stub();
       component.fileSaver = { saveAs: saveAsStub };
@@ -152,7 +152,7 @@ module('unit | Component | sidebar/export', function (hooks) {
       assert.ok(loaderStopStub.calledOnce);
     });
 
-    test('it should catch an error if export subject failed', async function (assert) {
+    test('it should catch an error if export subject failed', async function(assert) {
       // given
       const saveAsStub = sinon.stub().throws();
       component.fileSaver = { saveAs: saveAsStub };

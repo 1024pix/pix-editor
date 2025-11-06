@@ -3,11 +3,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence/themes/new', function (hooks) {
+module('Unit | Controller | competence/themes/new', function(hooks) {
   setupTest(hooks);
   let controller, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, deleteRecordStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -41,7 +41,7 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     controller.edition = true;
   });
 
-  test('it should cancel creation', function (assert) {
+  test('it should cancel creation', function(assert) {
     // given
     controller.model.name = 'newTheme';
     const parentControllerSendStub = sinon.stub();
@@ -57,7 +57,7 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     assert.ok(parentControllerSendStub.calledWith('closeChildComponent'));
   });
 
-  test('it should save record', async function (assert) {
+  test('it should save record', async function(assert) {
     // given
     class CurrentDataService extends Service {
       getCompetence() {
@@ -84,7 +84,7 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     assert.ok(transitionToRouteStub.calledOnce);
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     class CurrentDataService extends Service {
       getCompetence() {

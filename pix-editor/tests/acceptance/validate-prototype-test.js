@@ -8,13 +8,13 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Validate-Challenge', function (hooks) {
+module('Acceptance | Validate-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let competence, tube, store, messageStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
     class NotifyServiceStub extends Service {
       message() {}
@@ -45,9 +45,9 @@ module('Acceptance | Validate-Challenge', function (hooks) {
     authenticateSession();
   });
 
-  module('when have one prototype in a suggestedSkill', function (hooks) {
+  module('when have one prototype in a suggestedSkill', function(hooks) {
     let proposalPrototype, suggestedSkill, draftAlternativeChallenge, obsoleteAlternativeChallenge;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       proposalPrototype = this.server.create('challenge', { id: 'recChallenge1', status: 'proposé', genealogy: 'Prototype 1', version: 1 });
       draftAlternativeChallenge = this.server.create('challenge', { id: 'recChallenge1-1', status: 'proposé', genealogy: 'Décliné 1', version: 1, alternativeVersion: 1 });
       obsoleteAlternativeChallenge = this.server.create('challenge', { id: 'recChallenge1-2', status: 'périmé', genealogy: 'Décliné 1', version: 1, alternativeVersion: 2 });
@@ -63,7 +63,7 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       tube.update({ rawSkillIds: ['recSkill1'] });
     });
 
-    test('validate a prototype and draft alternatives should active the parent skill', async function (assert) {
+    test('validate a prototype and draft alternatives should active the parent skill', async function(assert) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${proposalPrototype.id}/alternatives?view=workbench`);
 
@@ -95,7 +95,7 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       assert.strictEqual(skill.status, 'actif');
     });
 
-    test('should not validate alternative when we won\'t', async function (assert) {
+    test('should not validate alternative when we won\'t', async function(assert) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${proposalPrototype.id}/alternatives?view=workbench`);
 
@@ -128,10 +128,10 @@ module('Acceptance | Validate-Challenge', function (hooks) {
     });
   });
 
-  module('when have several prototypes in activeSkill', function (hooks) {
+  module('when have several prototypes in activeSkill', function(hooks) {
     let proposalPrototype, validatePrototype, skill;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       validatePrototype = this.server.create('challenge', { id: 'recChallenge1', status: 'validé', genealogy: 'Prototype 1', version: 1 });
       proposalPrototype = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', instruction: 'Epreuve à valider', genealogy: 'Prototype 1', version: 2 });
 
@@ -140,7 +140,7 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       tube.update({ rawSkillIds: ['recSkill1'] });
     });
 
-    test('validate a new prototype version should archive the old validated prototype version ', async function (assert) {
+    test('validate a new prototype version should archive the old validated prototype version ', async function(assert) {
       // when
       const screen = await visit(`competence/${competence.id}/prototypes/list/${tube.id}/${skill.id}?view=workbench`);
 
@@ -167,10 +167,10 @@ module('Acceptance | Validate-Challenge', function (hooks) {
     });
   });
 
-  module('when have several skills', function (hooks) {
+  module('when have several skills', function(hooks) {
     let actifSkill, validatedPrototype, suggestedSkill, proposalPrototype;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       proposalPrototype = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', genealogy: 'Prototype 1', version: 1 });
       suggestedSkill = this.server.create('skill', { id: 'recSkill2', status: 'suggested', challengeIds: ['recChallenge2'], version: 2 });
 
@@ -180,7 +180,7 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       tube.update({ rawSkillIds: [actifSkill.id, suggestedSkill.id] });
     });
 
-    test('validate a new prototype version from a suggested skill should archive current active skill', async function (assert) {
+    test('validate a new prototype version from a suggested skill should archive current active skill', async function(assert) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${validatedPrototype.id}`);
 

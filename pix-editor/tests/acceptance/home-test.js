@@ -7,11 +7,11 @@ import { setupApplicationTest } from '../setup-application-rendering';
 
 const competenceIds = ['recCompetence1.1', 'recCompetence2.1'];
 
-module('Acceptance | Home', function (hooks) {
+module('Acceptance | Home', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -22,7 +22,7 @@ module('Acceptance | Home', function (hooks) {
     return authenticateSession();
   });
 
-  test('visiting /', async function (assert) {
+  test('visiting /', async function(assert) {
     // when
     const screen = await visit('/');
 

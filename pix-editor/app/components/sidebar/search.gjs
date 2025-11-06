@@ -13,10 +13,10 @@ export default class SidebarSearch extends Component {
   @tracked searchResults = [];
 
   statusToIcon = {
-    'validated': '🟢',
-    'suggested': '🔵',
-    'archived': '⬜️',
-    'deleted': '🔴',
+    validated: '🟢',
+    suggested: '🔵',
+    archived: '⬜️',
+    deleted: '🔴',
     '': '❓',
   };
 

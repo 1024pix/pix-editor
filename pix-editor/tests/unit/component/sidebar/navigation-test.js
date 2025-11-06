@@ -4,15 +4,15 @@ import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
-module('unit | Component | sidebar/navigation', function (hooks) {
+module('unit | Component | sidebar/navigation', function(hooks) {
   setupTest(hooks);
   let component;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     component = createGlimmerComponent('component:sidebar/navigation');
   });
 
-  test('it should display newFramework pop-in', function (assert) {
+  test('it should display newFramework pop-in', function(assert) {
     // given
     const newFramework = { name: '' };
     const createRecordStub = sinon.stub().returns(newFramework);
@@ -29,7 +29,7 @@ module('unit | Component | sidebar/navigation', function (hooks) {
     assert.ok(component.displayNewFrameworkPopIn);
   });
 
-  test('it should hide newFramework pop-in', function (assert) {
+  test('it should hide newFramework pop-in', function(assert) {
     // given
     const framework = { name: 'pix +' };
     const deleteRecordStub = sinon.stub();
@@ -45,9 +45,9 @@ module('unit | Component | sidebar/navigation', function (hooks) {
     assert.notOk(component.displayNewFrameworkPopIn);
   });
 
-  module('#saveFramework', function (hooks) {
+  module('#saveFramework', function(hooks) {
     let notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       notifyMessageStub = sinon.stub();
       notifyErrorStub = sinon.stub();
 
@@ -65,7 +65,7 @@ module('unit | Component | sidebar/navigation', function (hooks) {
       };
     });
 
-    test('it should save the framework', async function (assert) {
+    test('it should save the framework', async function(assert) {
       // given
       const transitionToStub = sinon.stub();
       component.router = { transitionTo: transitionToStub };
@@ -95,7 +95,7 @@ module('unit | Component | sidebar/navigation', function (hooks) {
       assert.ok(transitionToStub.calledWith('authenticated'));
     });
 
-    test('it should catch an error if save framework failed', async function (assert) {
+    test('it should catch an error if save framework failed', async function(assert) {
       // given
       const errorMessage = { error: ['error-test'] };
       const saveStub = sinon.stub().rejects(errorMessage);

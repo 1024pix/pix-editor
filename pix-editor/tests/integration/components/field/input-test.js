@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | form-input', function (hooks) {
+module('Integration | Component | form-input', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
+  test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 

@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | navigation-v1-v2', function (hooks) {
+module('Acceptance | navigation-v1-v2', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
@@ -90,7 +90,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     return authenticateSession();
   });
 
-  test('should navigate to v2 route if v2 is enabled', async function (assert) {
+  test('should navigate to v2 route if v2 is enabled', async function(assert) {
     // when
     await visit('/');
 
@@ -102,7 +102,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production');
   });
 
-  test('should upgrade route to v2 when toggling v2 on upgradable v1 route', async function (assert) {
+  test('should upgrade route to v2 when toggling v2 on upgradable v1 route', async function(assert) {
     // when
     await visit('/competence/recCompetence1/prototypes?view=production');
     await clickByText('V2');
@@ -111,7 +111,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production');
   });
 
-  test('should downgrade route to v1 when toggling v1 on a v2 route', async function (assert) {
+  test('should downgrade route to v1 when toggling v1 on a v2 route', async function(assert) {
     // when
     await visit('/');
     await clickByText('V2');
@@ -122,7 +122,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     assert.strictEqual(currentURL(), '/competence/recCompetence1/prototypes?view=production');
   });
 
-  test('should remember selected language when switching from/to v2', async function (assert) {
+  test('should remember selected language when switching from/to v2', async function(assert) {
     // when
     await visit('/competence/recCompetence1/prototypes?view=production&languageFilter=nl');
     await clickByText('V2');
@@ -131,7 +131,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production?locale=nl');
   });
 
-  test('should move to v2 of the selected challenge', async function (assert) {
+  test('should move to v2 of the selected challenge', async function(assert) {
     // when
     await visit('/competence/recCompetence1/prototypes/prototype1?view=production');
     await clickByText('V2');

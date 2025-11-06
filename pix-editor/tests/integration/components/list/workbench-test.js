@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | workbench-list', function (hooks) {
+module('Integration | Component | workbench-list', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
+  test('it renders', async function(assert) {
     // given
 
     // when

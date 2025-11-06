@@ -7,12 +7,12 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | competence-management/new', function (hooks) {
+module('Acceptance | competence-management/new', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store, originalWindowConfirm;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     originalWindowConfirm = window.confirm;
     store = this.owner.lookup('service:store');
@@ -27,11 +27,11 @@ module('Acceptance | competence-management/new', function (hooks) {
     return authenticateSession();
   });
 
-  hooks.afterEach(function () {
+  hooks.afterEach(function() {
     window.confirm = originalWindowConfirm;
   });
 
-  test('it should create a new competence', async function (assert) {
+  test('it should create a new competence', async function(assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -52,7 +52,7 @@ module('Acceptance | competence-management/new', function (hooks) {
     assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 
-  test('it should cancel creation', async function (assert) {
+  test('it should cancel creation', async function(assert) {
     // when
     await visit('/competence-management/new/recArea1');
     await click(find('[data-test-cancel-button]'));
@@ -62,7 +62,7 @@ module('Acceptance | competence-management/new', function (hooks) {
     assert.strictEqual(currentURL(), '/');
   });
 
-  test('it should prevent transition', async function (assert) {
+  test('it should prevent transition', async function(assert) {
     // given
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(false);

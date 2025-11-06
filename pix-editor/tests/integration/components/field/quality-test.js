@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | quality', function (hooks) {
+module('Integration | Component | quality', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
+  test('it renders', async function(assert) {
     this.set('challenge', { accessibility1: false, accessibility2: false, spoil: false, responsive: false });
 
     await render(hbs`<Field::Quality @title="form_title"

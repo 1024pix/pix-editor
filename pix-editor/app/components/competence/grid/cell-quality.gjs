@@ -81,7 +81,7 @@ export default class CellQuality extends Component {
       'Non Sp': 3,
       'Difficilement Sp': 2,
       'Facilement Sp': 1,
-      'default': 0,
+      default: 0,
     };
     return (quality[spoil] || quality['default']) / 3 * weight;
   }
@@ -89,10 +89,10 @@ export default class CellQuality extends Component {
   _responsiveWeight(responsive) {
     const weight = 4;
     const quality = {
-      'Tablette': 1,
-      'Smartphone': 1,
+      Tablette: 1,
+      Smartphone: 1,
       'Tablette/Smartphone': 2,
-      'default': 0,
+      default: 0,
     };
     return (quality[responsive] || quality['default']) / 2 * weight;
   }
@@ -110,11 +110,11 @@ export default class CellQuality extends Component {
   _a11YWeight(a11Y) {
     const weight = 3;
     const quality = {
-      'RAS': 2,
-      'OK': 2,
+      RAS: 2,
+      OK: 2,
       'Acquis Non Pertinent': 2,
-      'KO': 0,
-      'default': 0,
+      KO: 0,
+      default: 0,
     };
     return (quality[a11Y] || quality['default']) / 2 * weight;
   }
@@ -122,13 +122,13 @@ export default class CellQuality extends Component {
   _clueWeight(clue) {
     const weight = 4;
     const quality = {
-      'Validé': 4,
+      Validé: 4,
       'pré-validé': 3,
-      'Proposé': 2,
+      Proposé: 2,
       'à soumettre': 2,
       'à retravailler': 1,
-      'archiver': 0,
-      'default': 0,
+      archiver: 0,
+      default: 0,
     };
     return (quality[clue] || quality['default']) / 4 * weight;
   }

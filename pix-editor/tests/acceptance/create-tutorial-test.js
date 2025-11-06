@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Create-Tutorial', function (hooks) {
+module('Acceptance | Create-Tutorial', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let competence, skill;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', { tutorialLocaleToLanguageMap: { fr: 'Français' } });
 
     this.server.create('user', { trigram: 'ABC' });
@@ -39,7 +39,7 @@ module('Acceptance | Create-Tutorial', function (hooks) {
     return authenticateSession();
   });
 
-  test('create a new tutorial', async function (assert) {
+  test('create a new tutorial', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await click(screen.getByRole('button', { name: 'Modifier' }));
@@ -106,7 +106,7 @@ module('Acceptance | Create-Tutorial', function (hooks) {
     assert.strictEqual(screen.getAllByText('Super tag').length, 2);
   });
 
-  test('verify if the url link is valid', async function (assert) {
+  test('verify if the url link is valid', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');

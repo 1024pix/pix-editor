@@ -6,11 +6,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | pop-in/pdf-entries', function (hooks) {
+module('Integration | Component | pop-in/pdf-entries', function(hooks) {
   setupIntlRenderingTest(hooks);
   let screen, callBackActionStub, closeTitleInputStub;
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(async function() {
     // given
     callBackActionStub = sinon.stub();
     closeTitleInputStub = sinon.stub();
@@ -23,7 +23,7 @@ module('Integration | Component | pop-in/pdf-entries', function (hooks) {
     /></template>);
   });
 
-  test('it should set default title and language on validate', async function (assert) {
+  test('it should set default title and language on validate', async function(assert) {
     // when
     await clickByText('Valider');
 
@@ -33,7 +33,7 @@ module('Integration | Component | pop-in/pdf-entries', function (hooks) {
     assert.deepEqual(callBackActionStub.getCall(0).args, ['Liste des thèmes et des sujets abordés dans Pix', 'fr']);
   });
 
-  test('it should set custom title and selected language on validate', async function (assert) {
+  test('it should set custom title and selected language on validate', async function(assert) {
     // when
     await fillByLabel('Titre', 'mont titre');
     await clickByText('Langue');

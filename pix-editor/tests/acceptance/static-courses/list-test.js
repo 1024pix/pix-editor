@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Static Courses | List', function (hooks) {
+module('Acceptance | Static Courses | List', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     const tags = [this.server.create('static-course-tag', { id: 'tagA', label: 'tagA' }), this.server.create('static-course-tag', { id: 'tagB', label: 'tagB' })];
@@ -25,7 +25,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     return authenticateSession();
   });
 
-  test('should display active static courses by default when accessing list', async function (assert) {
+  test('should display active static courses by default when accessing list', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -36,7 +36,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 
-  test('should display all static courses when accessing list and toggling filter', async function (assert) {
+  test('should display all static courses when accessing list and toggling filter', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -51,7 +51,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 
-  test('should display only static courses with searched tag in the tag filter', async function (assert) {
+  test('should display only static courses with searched tag in the tag filter', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -69,7 +69,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 
-  test('should render correctly a row', async function (assert) {
+  test('should render correctly a row', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');

@@ -3,12 +3,12 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence/tubes/single', function (hooks) {
+module('Unit | Controller | competence/tubes/single', function(hooks) {
   setupTest(hooks);
 
   let controller, store, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -40,7 +40,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     controller.model = tube;
   });
 
-  test('it should save modifications', async function (assert) {
+  test('it should save modifications', async function(assert) {
     // given
     const reloadSkillsStub = sinon.stub();
     controller.model.hasMany('rawSkills').reload = reloadSkillsStub;
@@ -61,7 +61,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     assert.ok(reloadSkillsStub.calledOnce);
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = { error: ['error-test'] };
     const saveStub = sinon.stub().rejects(errorMessage);
@@ -79,7 +79,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour du tube'));
   });
 
-  test('it should start edition', function (assert) {
+  test('it should start edition', function(assert) {
     // given
     const sendStub = sinon.stub();
     controller.send = sendStub;
@@ -95,15 +95,15 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     assert.ok(sendStub.calledWith('maximize'));
   });
 
-  module('#cancelEdition', function (hooks) {
+  module('#cancelEdition', function(hooks) {
     let rollbackAttributesStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       rollbackAttributesStub = sinon.stub();
       controller.model.rollbackAttributes = rollbackAttributesStub;
       controller.edition = true;
     });
 
-    test('it should cancel edition', function (assert) {
+    test('it should cancel edition', function(assert) {
       // given
       this.wasMaximized = true;
 
@@ -116,7 +116,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       assert.ok(notifyMessageStub.calledWith('Modification annulée'));
     });
 
-    test('it should send `minimize` if `wasMaximized` is `false`', function (assert) {
+    test('it should send `minimize` if `wasMaximized` is `false`', function(assert) {
       // given
       const sendStub = sinon.stub();
       controller.send = sendStub;
@@ -129,7 +129,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       assert.ok(sendStub.calledWith('minimize'));
     });
 
-    test('it should close and cancel edition', function (assert) {
+    test('it should close and cancel edition', function(assert) {
       // given
       const parentControllerSendStub = sinon.stub();
       controller.parentController.send = parentControllerSendStub;
@@ -145,9 +145,9 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     });
   });
 
-  module('#setCompetence', function (hooks) {
+  module('#setCompetence', function(hooks) {
     let newTheme, newCompetence;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       newTheme = store.createRecord('theme', {
         id: 'recTheme0',
         name: 'themeName',
@@ -158,7 +158,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       });
     });
 
-    test('it should set a competence and a theme', async function (assert) {
+    test('it should set a competence and a theme', async function(assert) {
       // given
       const transitionToRouteStub = sinon.stub();
       controller.router.transitionTo = transitionToRouteStub;
@@ -180,7 +180,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       assert.deepEqual(theme, newTheme);
     });
 
-    test('it should catch an error if action failed', async function (assert) {
+    test('it should catch an error if action failed', async function(assert) {
       // given
       const errorMessage = { error: ['error-test'] };
       const saveStub = sinon.stub().rejects(errorMessage);

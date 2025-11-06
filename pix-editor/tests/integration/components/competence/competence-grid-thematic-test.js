@@ -7,11 +7,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | competence/competence-grid-thematic', function (hooks) {
+module('Integration | Component | competence/competence-grid-thematic', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  module('if thematic has tubes', function (hooks) {
-    hooks.beforeEach(function () {
+  module('if thematic has tubes', function(hooks) {
+    hooks.beforeEach(function() {
       const productionTube1 = EmberObject.create({
         name: '@productionTube1',
         filledProductionSkills: [],
@@ -66,7 +66,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       this.set('thematicOverview', thematicOverview);
     });
 
-    test('it should display a thematic cell with appropriate rowspan', async function (assert) {
+    test('it should display a thematic cell with appropriate rowspan', async function(assert) {
       // given
       this.set('view', 'workbench');
       this.set('section', 'challenges');
@@ -82,7 +82,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
     });
 
     ['workbench', 'production'].forEach((view) => {
-      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function (assert) {
+      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function(assert) {
         // given
         this.set('section', 'skills');
         this.set('view', view);
@@ -97,7 +97,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       });
     });
 
-    test('it should display production tubes if section is set on challenges and view is production', async function (assert) {
+    test('it should display production tubes if section is set on challenges and view is production', async function(assert) {
       // given
       this.set('view', 'production');
       this.set('section', 'challenges');
@@ -116,7 +116,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       'i18n',
       'quality',
     ].forEach((section) => {
-      test(`it should display production tubes if section is set on ${section} and view is production`, async function (assert) {
+      test(`it should display production tubes if section is set on ${section} and view is production`, async function(assert) {
         // given
         this.set('view', 'production');
         this.set('section', section);
@@ -132,7 +132,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
     });
 
     ['skills', 'challenges'].forEach((section) => {
-      test(`it should display all tubes if section is set on ${section} and view is workbench`, async function (assert) {
+      test(`it should display all tubes if section is set on ${section} and view is workbench`, async function(assert) {
         // given
         this.set('view', 'workbench');
         this.set('section', section);
@@ -147,7 +147,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       });
     });
 
-    test('it should display management tube buttons if section is skills and view is workbench and mayCreateTube is true', async function (assert) {
+    test('it should display management tube buttons if section is skills and view is workbench and mayCreateTube is true', async function(assert) {
       // given
       const mayCreateTubeStub = sinon.stub().returns(true);
       class Access extends Service {
@@ -173,8 +173,8 @@ module('Integration | Component | competence/competence-grid-thematic', function
     });
   });
 
-  module('if thematic has no tube', function (hooks) {
-    hooks.beforeEach(function () {
+  module('if thematic has no tube', function(hooks) {
+    hooks.beforeEach(function() {
       const thematic = EmberObject.create({
         name: 'Thematic',
         tubes: [],
@@ -191,7 +191,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       { section: 'i18n', view: null },
       { section: 'quality', view: null },
     ].forEach((item) => {
-      test(`it should not be display if section is ${item.section} and view is ${item.view} and mayCreateTube is false`, async function (assert) {
+      test(`it should not be display if section is ${item.section} and view is ${item.view} and mayCreateTube is false`, async function(assert) {
         // given
         const mayCreateTubeStub = sinon.stub().returns(false);
         class Access extends Service {
@@ -210,7 +210,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       });
     });
 
-    test('it should be display with a create tube button if section is skills and view is workbench and mayCreateTube is true', async function (assert) {
+    test('it should be display with a create tube button if section is skills and view is workbench and mayCreateTube is true', async function(assert) {
       // given
       const mayCreateTubeStub = sinon.stub().returns(true);
       class Access extends Service {

@@ -6,13 +6,13 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Validate Alternative Challenge', function (hooks) {
+module('Acceptance | Validate Alternative Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let competence, store, validatedPrototype, proposedPrototype, proposedAlternative1, proposedAlternative2;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
 
     this.server.create('config', 'default');
@@ -41,7 +41,7 @@ module('Acceptance | Validate Alternative Challenge', function (hooks) {
     authenticateSession();
   });
 
-  test('validate an alternative challenge', async function (assert) {
+  test('validate an alternative challenge', async function(assert) {
     // when
     const screen = await visit(`/competence/${competence.id}/prototypes/${validatedPrototype.id}`);
     await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
@@ -63,8 +63,8 @@ module('Acceptance | Validate Alternative Challenge', function (hooks) {
     assert.ok(await screen.findByText('Mise en production réussie'));
   });
 
-  module('when prototype is proposed', function () {
-    test('validate an alternative challenge', async function (assert) {
+  module('when prototype is proposed', function() {
+    test('validate an alternative challenge', async function(assert) {
       // when
       const screen = await visit(`/competence/${competence.id}/prototypes/${proposedPrototype.id}`);
       await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
