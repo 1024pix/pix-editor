@@ -48,6 +48,7 @@ export class SkillForRelease {
               skillId: this.id,
               airtablePixValue: this.#pixValue,
               postgresPixValue: value,
+              filename: 'SkillForRelease',
             },
             'difference between airtable and postgres Pix value',
           );
@@ -56,6 +57,7 @@ export class SkillForRelease {
               skillId: this.id,
               airtablePixValue: this.#pixValue,
               postgresPixValue: value,
+              filename: 'SkillForRelease',
             });
             throw new Error('difference between airtable and postgres Pix value');
           }

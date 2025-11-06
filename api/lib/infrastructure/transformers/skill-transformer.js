@@ -28,7 +28,10 @@ export function forRelease(skills) {
  */
 export function forReplication(skills) {
   if (Array.isArray(skills)) {
-    return skills.map((skill) => new SkillForReplication(skill));
+    const skillsForReplication = skills.map((skill) => new SkillForReplication(skill));
+    const pixValuesBySkill = computePixValuesBySkill(skills);
+    skillsForReplication.forEach((skill) => (skill.pixValue = pixValuesBySkill[skill.id] ?? 0));
+    return skillsForReplication;
   }
   return new SkillForReplication(skills);
 }

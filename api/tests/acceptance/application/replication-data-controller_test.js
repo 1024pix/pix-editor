@@ -129,6 +129,7 @@ async function mockCurrentContent() {
     tutorialIds: ['recTuto1'],
     learningMoreTutorialIds: ['recTuto2'],
     name: '@dvorak5',
+    pixValue: 4,
     createdAt: '2023-10-05T18:08:00Z',
     activatedAt: '2023-11-06T18:08:00.000Z',
     archivedAt: '2023-12-07T18:08:00.000Z',
