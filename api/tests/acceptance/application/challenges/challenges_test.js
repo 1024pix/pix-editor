@@ -687,7 +687,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
           maxRecords: 100,
           filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
-          sort: [{ field: 'updated_at', direction: 'desc' }],
+          sort: [
+            { field: 'updated_at', direction: 'desc' },
+            { field: 'id persistant', direction: 'asc' },
+          ],
         })
         .reply(200, {
           records: [],
@@ -716,7 +719,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
           filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
           maxRecords: 20,
-          sort: [{ field: 'updated_at', direction: 'desc' }],
+          sort: [
+            { field: 'updated_at', direction: 'desc' },
+            { field: 'id persistant', direction: 'asc' },
+          ],
         })
         .reply(200, {
           records: [],

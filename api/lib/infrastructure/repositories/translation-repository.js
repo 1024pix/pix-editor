@@ -69,6 +69,7 @@ export async function list() {
 export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
     .pluck('key')
+    .distinct()
     .whereILike('value', `%${escapeLikeWildcards(search)}%`)
     .andWhere(function () {
       for (const field of fields) {
