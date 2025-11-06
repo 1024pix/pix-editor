@@ -110,13 +110,15 @@ async function _getCurrentContent() {
     skills,
   });
 
+  const pixFrameworkCompetenceIds = competences.filter(({ origin }) => origin === 'Pix').map(({ id }) => id);
+
   return {
     frameworks: frameworkTransformer.forRelease(frameworks),
     areas: areaTransformer.forRelease(areas),
     competences: competenceTransformer.forRelease(competences),
     thematics: thematicTransformer.forRelease(thematics),
     tubes: transformedTubes,
-    skills: skillTransformer.forRelease(skills),
+    skills: skillTransformer.forRelease(skills, pixFrameworkCompetenceIds),
     challenges: transformedChallenges,
     tutorials: filteredTutorials,
     courses,

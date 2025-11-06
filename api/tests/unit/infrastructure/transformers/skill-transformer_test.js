@@ -23,7 +23,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
           learningMoreTutorialIds: ['tutorialId3'],
           learningMoreTutorialAirtableIds: ['recTutorialId3'],
           competenceId: 'competenceId',
-          pixValue: 1.5,
+          pixValue: 0,
           status: Skill.STATUSES.ARCHIVE,
           tubeId: 'tubeId',
           tubeAirtableId: 'recTubeId',
@@ -35,7 +35,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         });
 
         // when
-        const actualSkillForRelease = forRelease(skill);
+        const actualSkillForRelease = forRelease(skill, ['competenceId']);
 
         // then
         expect(actualSkillForRelease).toStrictEqual(
@@ -46,7 +46,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 1.5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
@@ -74,7 +74,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             learningMoreTutorialIds: ['tutorialId3'],
             learningMoreTutorialAirtableIds: ['recTutorialId3'],
             competenceId: 'competenceId',
-            pixValue: 1.5,
+            pixValue: 0,
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
             tubeAirtableId: 'recTubeId',
@@ -97,7 +97,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             learningMoreTutorialIds: ['tutorialId6'],
             learningMoreTutorialAirtableIds: ['recTutorialId6'],
             competenceId: 'competenceId',
-            pixValue: 5,
+            pixValue: 0,
             status: Skill.STATUSES.EN_CONSTRUCTION,
             tubeId: 'tubeId',
             tubeAirtableId: 'recTubeId',
@@ -110,7 +110,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         ];
 
         // when
-        const actualSkillsForRelease = forRelease(skills);
+        const actualSkillsForRelease = forRelease(skills, ['competenceId']);
 
         // then
         expect(actualSkillsForRelease).toStrictEqual([
@@ -121,7 +121,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 1.5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
@@ -135,7 +135,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
             tutorialIds: ['tutorialId4', 'tutorialId5'],
             learningMoreTutorialIds: ['tutorialId6'],
-            pixValue: 5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.EN_CONSTRUCTION,
             tubeId: 'tubeId',
@@ -164,7 +164,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
           learningMoreTutorialIds: ['tutorialId3'],
           learningMoreTutorialAirtableIds: ['recTutorialId3'],
           competenceId: 'competenceId',
-          pixValue: 1.5,
+          pixValue: 0,
           status: Skill.STATUSES.ARCHIVE,
           tubeId: 'tubeId',
           tubeAirtableId: 'recTubeId',
@@ -179,7 +179,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         });
 
         // when
-        const actualSkillForReplication = forReplication(skill);
+        const actualSkillForReplication = forReplication(skill, ['competenceId']);
 
         // then
         expect(actualSkillForReplication).toStrictEqual(
@@ -191,7 +191,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 1.5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
@@ -224,7 +224,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             learningMoreTutorialIds: ['tutorialId3'],
             learningMoreTutorialAirtableIds: ['recTutorialId3'],
             competenceId: 'competenceId',
-            pixValue: 1.5,
+            pixValue: 0,
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
             tubeAirtableId: 'recTubeId',
@@ -250,7 +250,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             learningMoreTutorialIds: ['tutorialId6'],
             learningMoreTutorialAirtableIds: ['recTutorialId6'],
             competenceId: 'competenceId',
-            pixValue: 5,
+            pixValue: 0,
             status: Skill.STATUSES.EN_CONSTRUCTION,
             tubeId: 'tubeId',
             tubeAirtableId: 'recTubeId',
@@ -266,7 +266,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         ];
 
         // when
-        const actualSkillsForReplication = forReplication(skills);
+        const actualSkillsForReplication = forReplication(skills, ['competenceId']);
 
         // then
         expect(actualSkillsForReplication).toStrictEqual([
@@ -278,7 +278,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 1.5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
@@ -298,7 +298,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
             hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
             tutorialIds: ['tutorialId4', 'tutorialId5'],
             learningMoreTutorialIds: ['tutorialId6'],
-            pixValue: 5,
+            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.EN_CONSTRUCTION,
             tubeId: 'tubeId',

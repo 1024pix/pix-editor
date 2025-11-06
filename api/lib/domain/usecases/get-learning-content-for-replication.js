@@ -127,6 +127,7 @@ export async function getLearningContentForReplication() {
     thematics,
     skills,
   });
+  const pixFrameworkCompetenceIds = competences.filter(({ origin }) => origin === 'Pix').map(({ id }) => id);
 
   await setImmediatePromise();
   return {
@@ -135,7 +136,7 @@ export async function getLearningContentForReplication() {
     competences: competenceTransformer.forReplication(competences),
     thematics: thematicTransformer.forReplication(thematics),
     tubes: transformedTubes,
-    skills: skillTransformer.forReplication(skills),
+    skills: skillTransformer.forReplication(skills, pixFrameworkCompetenceIds),
     challenges: allTranslatedChallenges,
     attachments: translatedAttachments,
     tutorials,

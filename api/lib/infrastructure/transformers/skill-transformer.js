@@ -1,5 +1,6 @@
 import { SkillForRelease } from '../../domain/models/release/index.js';
 import { SkillForReplication } from '../../domain/models/replication/index.js';
+import { computePixValuesBySkill } from '../../domain/services/compute-pix-values-by-skill.js';
 
 /**
  * @typedef {import('../../../lib/domain/models').Skill} Skill
@@ -11,9 +12,14 @@ import { SkillForReplication } from '../../domain/models/replication/index.js';
  * @param {Skill|Skill[]} skills
  * @returns {SkillForRelease|SkillForRelease[]}
  */
-export function forRelease(skills) {
+export function forRelease(skills, pixFrameworkCompetenceIds) {
   if (Array.isArray(skills)) {
-    return skills.map((skill) => new SkillForRelease(skill));
+    const skillsForRelease = skills.map((skill) => new SkillForRelease(skill));
+    const pixValuesBySkill = computePixValuesBySkill(
+      skills.filter(({ competenceId }) => pixFrameworkCompetenceIds.includes(competenceId)),
+    );
+    skillsForRelease.forEach((skill) => (skill.pixValue = pixValuesBySkill[skill.id] ?? 0));
+    return skillsForRelease;
   }
   return new SkillForRelease(skills);
 }
@@ -22,9 +28,14 @@ export function forRelease(skills) {
  @param {Skill|Skill[]} skills
  @returns {SkillForReplication|SkillForReplication[]}
  */
-export function forReplication(skills) {
+export function forReplication(skills, pixFrameworkCompetenceIds) {
   if (Array.isArray(skills)) {
-    return skills.map((skill) => new SkillForReplication(skill));
+    const skillsForReplication = skills.map((skill) => new SkillForReplication(skill));
+    const pixValuesBySkill = computePixValuesBySkill(
+      skills.filter(({ competenceId }) => pixFrameworkCompetenceIds.includes(competenceId)),
+    );
+    skillsForReplication.forEach((skill) => (skill.pixValue = pixValuesBySkill[skill.id] ?? 0));
+    return skillsForReplication;
   }
   return new SkillForReplication(skills);
 }
