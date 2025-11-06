@@ -66,7 +66,7 @@ async function mockCurrentContent() {
   const expectedCurrentContent = {
     translations: [],
   };
-  const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework());
+  const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework({ name: 'Pix' }));
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
 
   const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id, competenceIds: ['recCompetence1'] });
@@ -85,7 +85,7 @@ async function mockCurrentContent() {
         en: 'Description anglaise',
       },
       skillIds: ['recSkill1'],
-      origin: 'Nom du referentiel',
+      origin: 'Pix',
     }),
   );
   expectedCurrentContent.competences = [expectedCompetence];

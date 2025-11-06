@@ -34,7 +34,7 @@ async function mockCurrentContent() {
     frameworks: [
       {
         id: 'recFramework0',
-        name: 'Nom du referentiel',
+        name: 'Pix',
       },
     ],
     areas: [
@@ -62,7 +62,7 @@ async function mockCurrentContent() {
           nl: 'Nom de la Compétence - nl',
         },
         areaId: 'recArea0',
-        origin: 'Nom du referentiel',
+        origin: 'Pix',
         skillIds: ['recSkill0'],
         thematicIds: ['recThematic0'],
         description_i18n: {
@@ -531,7 +531,7 @@ async function mockContentForRelease() {
     frameworks: [
       {
         id: 'recFramework0',
-        name: 'Nom du referentiel',
+        name: 'Pix',
       },
     ],
     areas: [
@@ -554,7 +554,7 @@ async function mockContentForRelease() {
         id: 'recCompetence0',
         index: '1.1',
         areaId: 'recArea0',
-        origin: 'Nom du referentiel',
+        origin: 'Pix',
         skillIds: ['recSkill0'],
         thematicIds: ['recThematic0'],
         name_i18n: {

@@ -35,7 +35,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         });
 
         // when
-        const actualSkillForRelease = forRelease(skill);
+        const actualSkillForRelease = forRelease(skill, ['competenceId']);
 
         // then
         expect(actualSkillForRelease).toStrictEqual(
@@ -110,7 +110,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         ];
 
         // when
-        const actualSkillsForRelease = forRelease(skills);
+        const actualSkillsForRelease = forRelease(skills, ['competenceId']);
 
         // then
         expect(actualSkillsForRelease).toStrictEqual([
@@ -179,7 +179,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         });
 
         // when
-        const actualSkillForReplication = forReplication(skill);
+        const actualSkillForReplication = forReplication(skill, ['competenceId']);
 
         // then
         expect(actualSkillForReplication).toStrictEqual(
@@ -266,7 +266,7 @@ describe('Unit | Infrastructure | skill-transformer', function () {
         ];
 
         // when
-        const actualSkillsForReplication = forReplication(skills);
+        const actualSkillsForReplication = forReplication(skills, ['competenceId']);
 
         // then
         expect(actualSkillsForReplication).toStrictEqual([
