@@ -1,5 +1,11 @@
 
 
+## v3.236.2 (07/11/2025)
+
+
+### :bug: Correction
+- [#1242](https://github.com/1024pix/pix-editor/pull/1242) [BUGFIX] Différence de tri dans la recherche d’épreuves.
+
 ## v3.236.1 (07/11/2025)
 
 
