@@ -68,7 +68,7 @@ export async function list() {
 
 export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
-    .pluck('key')
+    .pluck('entityId')
     .distinct()
     .whereILike('value', `%${escapeLikeWildcards(search)}%`)
     .andWhere(function () {
@@ -76,17 +76,11 @@ export async function search({ entity, fields, search, limit }) {
         this.orWhereLike('key', `${entity}.%.${field}`);
       }
     })
-    .orderBy('key');
+    .orderBy('entityId');
 
   if (limit) query.limit(limit);
 
-  const keys = await query;
-
-  return _.sortedUniq(
-    keys.map((key) => {
-      return key.split('.')[1];
-    }),
-  );
+  return query;
 }
 
 export async function checkIfTableExistInAirtable() {

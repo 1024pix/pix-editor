@@ -77,10 +77,7 @@ export async function filter(params = {}) {
           .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
       )
       .limit(params.page?.size)
-      .orderBy([
-        { column: 'updatedAt', order: 'desc' },
-        { column: 'challenges.id', order: 'asc' },
-      ]),
+      .orderBy('challenges.id'),
   ]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
