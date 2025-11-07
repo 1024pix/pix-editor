@@ -1,5 +1,11 @@
 
 
+## v3.236.1 (07/11/2025)
+
+
+### :bug: Correction
+- [#1241](https://github.com/1024pix/pix-editor/pull/1241) [BUGFIX] Calcule la Pix Value avec la même précision qu'Airtable.
+
 ## v3.236.0 (06/11/2025)
 
 
