@@ -18,7 +18,7 @@ export function computePixValuesBySkill(skills) {
   activeSkills.forEach(({ id, competenceId, level }) => {
     pixValuesBySkill[id] = Math.min(
       MAX_PIX_VALUE_PER_SKILL,
-      (LEVELS_PER_SKILL_COUNT / skillsByCompetenceAndLevel[competenceId][level].length).toFixed(3),
+      LEVELS_PER_SKILL_COUNT / skillsByCompetenceAndLevel[competenceId][level].length,
     );
   });
   return pixValuesBySkill;
