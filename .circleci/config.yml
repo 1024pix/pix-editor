@@ -118,26 +118,6 @@ jobs:
       - store_artifacts:
           path: ./test-results
 
-  scripts_test:
-    executor: node-docker
-    working_directory: ~/pix-editor/scripts
-    steps:
-      - attach_workspace:
-          at: ~/pix-editor
-      - run: cat package*.json > cachekey
-      - restore_cache:
-          keys:
-            - v1-scripts-npm-{{ checksum "cachekey" }}
-      - run: npm ci
-      - save_cache:
-          key: v1-scripts-npm-{{ checksum "cachekey" }}
-          paths:
-            - ~/.npm
-      - run:
-          command: |
-            npm run lint
-            npm test
-
   e2e_test:
     executor: node-browsers-redis-postgres-docker
     working_directory: ~/pix-editor/pix-editor
@@ -220,8 +200,5 @@ workflows:
           requires:
             - checkout
       - e2e_test:
-          requires:
-            - checkout
-      - scripts_test:
           requires:
             - checkout
