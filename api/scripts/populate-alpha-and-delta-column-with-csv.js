@@ -1,61 +1,63 @@
-// Populate the alpha and dela columns
-// You must have 1 file:
-//  - a csv file with challengId, alpha and beta columns
-// To run the script:
-// > cd scripts
-// > npm ci
-// > node populate-alpha-and-delta-column-with-csv/
+import Joi from 'joi';
+import { Script } from '../lib/application/scripts/script.js';
+import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
+import { knex } from '../db/knex-database-connection.js';
+import { csvFileParser } from '../lib/application/scripts/parsers.js';
 
-import _ from 'lodash';
+export const csvSchemas = [
+  { name: 'challenge_id', schema: Joi.string().trim().required() },
+  { name: 'alpha', schema: Joi.number().required() },
+  { name: 'delta', schema: Joi.number().required() },
+];
 
-import fs from 'fs';
-import { parseString } from '@fast-csv/parse';
-import { knex } from '../db/knex-database-connection';
-
-const HEADERS_MAPPING = {
-  items: 'id',
-  difficulties: 'delta',
-  discriminants: 'alpha',
-};
-
-const getMissingHeaders = (headers) => Object.keys(HEADERS_MAPPING).filter((h) => !headers.includes(h));
-
-export function parseData(csvData) {
-  return new Promise((resolve, reject) => {
-    const result = [];
-
-    parseString(csvData, {
-      headers: (headers) => {
-        const missingHeaders = getMissingHeaders(headers);
-        if (missingHeaders.length > 0) {
-          reject(new Error(`Missing header: ${missingHeaders.join(',')}`));
-        }
-        return headers.map((h) => HEADERS_MAPPING[h]);
+export class PopulateAlphaAndDeltaColumnsWithCsv extends Script {
+  constructor() {
+    super({
+      description: 'Script pour mettre à jour la calibration des épreuves (alpha et delta) depuis un fichier csv',
+      permanent: true,
+      options: {
+        file: {
+          type: 'string',
+          describe:
+            'CSV File with `challenge_id`, `alpha` and `delta` columns extracted from `datawarehouse.data_active_calibrated_challenges`',
+          demandOption: true,
+          coerce: csvFileParser(csvSchemas),
+        },
+        dryRun: {
+          type: 'boolean',
+          describe: 'Run the script without making any database changes',
+          demandOption: false,
+          default: true,
+        },
       },
-    })
-      .on('error', (error) => {
-        console.error(error);
-        reject(error);
-      })
-      .on('data', (row) => {
-        result.push(row);
-      })
-      .on('end', () => resolve(result));
-  });
-}
+    });
+  }
 
-async function main() {
-  const csv = fs.readFileSync('./file.csv', 'utf-8');
+  async handle({ options, logger }) {
+    const { file: challengeCalibrations, dryRun } = options;
+    logger.debug(challengeCalibrations);
 
-  await knex('challenges').update({ alpha: null, delta: null });
-  console.log('Parsing CSV Data');
-  const matchedData = await parseData(csv);
-  console.log('Updating records');
-  for (const data of matchedData) {
-    await knex('challenges').update({ alpha: data.alpha, delta: data.delta }).where({ id: data.id });
+    const trx = await knex.transaction();
+    try {
+      let count = 0;
+      await trx('challenges').update({ alpha: null, delta: null });
+      for (const challengeCalibration of challengeCalibrations) {
+        count += await trx('challenges')
+          .update({ alpha: challengeCalibration.alpha, delta: challengeCalibration.delta })
+          .where({ id: challengeCalibration.challenge_id });
+      }
+      if (dryRun) {
+        await trx.rollback();
+        logger.info(`Dry run: ${count} challenges would be updated`);
+      }
+
+      await trx.commit();
+      logger.info(`Updated calibration of ${count} challenges`);
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    }
   }
 }
 
-if (process.env.NODE_ENV !== 'test') {
-  main();
-}
+await ScriptRunner.execute(import.meta.url, PopulateAlphaAndDeltaColumnsWithCsv);

@@ -2,6 +2,8 @@ import pino from 'pino';
 import * as config from '../config.js';
 import pretty from 'pino-pretty';
 import micromatch from 'micromatch';
+import omit from 'lodash/omit.js';
+import isEmpty from 'lodash/isEmpty.js';
 
 const nullDestination = { write() {} };
 

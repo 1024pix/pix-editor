@@ -6,7 +6,9 @@ import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
 
 export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/utils/stream-to-promise.js';
+import { createTempFile, removeTempFile } from './tooling/temporary-file.js';
 
+export { createTempFile, removeTempFile };
 // Knex
 export { knex };
 
