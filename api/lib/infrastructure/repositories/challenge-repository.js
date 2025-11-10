@@ -205,6 +205,7 @@ export async function update(challenge, transaction = knex) {
       t2Status: challenge.t2Status,
       t3Status: challenge.t3Status,
       status: challenge.status,
+      skillId: updatedChallengeDto.skillId,
       embedHeight: challenge.embedHeight,
       timer: challenge.timer,
       format: challenge.format,
