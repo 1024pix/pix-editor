@@ -59,32 +59,30 @@ export async function getMany(ids) {
 }
 
 export async function filter(params = {}) {
-  params.filter.ids = await translationRepository.search({
+  let ids = await translationRepository.search({
     entity: model,
     fields: ['instruction', 'proposals'],
     search: params.filter.search,
     limit: params.page?.size,
   });
-  const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.search(params),
-    selectChallenges()
-      .whereIn('challenges.id', params.filter.ids)
-      .orWhereIn(
-        'challenges.id',
-        knex
-          .select('challengeId')
-          .from('localized_challenges')
-          .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
-      )
-      .limit(params.page?.size)
-      .orderBy('challenges.id'),
-  ]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  ids = await knex
+    .pluck('challenges.id')
+    .from('challenges')
+    .whereIn('challenges.id', ids)
+    .orWhereIn(
+      'challenges.id',
+      knex
+        .select('challengeId')
+        .from('localized_challenges')
+        .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
+    )
+    .limit(params.page?.size)
+    .orderBy('challenges.updatedAt', 'desc');
 
-  if (!airtableDtos) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
-  return toDomainList(airtableDtos, translations, localizedChallenges);
+  if (ids.length === 0) return [];
+
+  return getMany(ids);
 }
 
 export async function create(challenge) {

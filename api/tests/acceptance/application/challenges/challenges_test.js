@@ -677,50 +677,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
     });
 
-    it('should search challenges', async () => {
-      // Given
-      const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          fields: {
-            '': challengeAirtableFields,
-          },
-          maxRecords: 100,
-          filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
-          sort: [{ field: 'id persistant', direction: 'asc' }],
-        })
-        .reply(200, {
-          records: [],
-        });
-      const server = await createServer();
-
-      // When
-      const response = await server.inject({
-        method: 'GET',
-        url: '/api/challenges?filter[search]=query term',
-        headers: generateAuthorizationHeader(user),
-      });
-
-      // Then
-      expect(airtableCall.isDone()).to.be.true;
-      expect(response.statusCode).to.equal(200);
-      expect(response.result).to.deep.equal({ data: [] });
-    });
-
     it('should search challenges with limit', async () => {
-      const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          fields: {
-            '': challengeAirtableFields,
-          },
-          filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
-          maxRecords: 20,
-          sort: [{ field: 'id persistant', direction: 'asc' }],
-        })
-        .reply(200, {
-          records: [],
-        });
       const server = await createServer();
 
       // When
@@ -731,7 +688,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
 
       // Then
-      expect(airtableCall.isDone()).to.be.true;
       expect(response.statusCode).to.equal(200);
       expect(response.result).to.deep.equal({ data: [] });
     });

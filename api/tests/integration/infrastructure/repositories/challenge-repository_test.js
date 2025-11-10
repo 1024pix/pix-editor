@@ -459,10 +459,7 @@ describe('Integration | Repository | challenge-repository', () => {
         await databaseBuilder.commit();
         vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
           if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-          if (
-            options?.filterByFormula !==
-            'OR(FIND("toto", LOWER(CONCATENATE({Embed URL}))), "challengeA_id" = {id persistant},"challengeB_id" = {id persistant})'
-          )
+          if (options?.filterByFormula !== 'OR("challengeB_id" = {id persistant},"challengeA_id" = {id persistant})')
             expect.unreachable('Wrong filterByFormula');
           return [
             {
@@ -802,7 +799,7 @@ describe('Integration | Repository | challenge-repository', () => {
         await databaseBuilder.commit();
         vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
           if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-          if (options?.filterByFormula !== 'FIND("toto", LOWER(CONCATENATE({Embed URL})))')
+          if (options?.filterByFormula !== 'OR("challengeA_id" = {id persistant})')
             expect.unreachable('Wrong filterByFormula');
           return [
             {
