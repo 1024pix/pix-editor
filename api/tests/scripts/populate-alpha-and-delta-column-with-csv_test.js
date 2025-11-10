@@ -3,12 +3,18 @@ import _ from 'lodash';
 import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
-import { parseData, findAirtableIds, updateRecords, clearDifficultyAndDiscriminant } from './index.js';
+import {
+  parseData,
+  findAirtableIds,
+  updateRecords,
+  clearDifficultyAndDiscriminant,
+} from '../../scripts/populate-alpha-and-delta-column-with-csv.js';
 
 describe('Populate alpha and delta column', function () {
   describe('#parseData', function () {
     it('should return a object table with challenge persistent id, alpha and delta', async function () {
-      const csvData = 'items,difficulties,discriminants\nrec1,0.8423189520825876,1.6760518550872801\nrec2,-0.9423189520825878,2.6760518550872802';
+      const csvData =
+        'items,difficulties,discriminants\nrec1,0.8423189520825876,1.6760518550872801\nrec2,-0.9423189520825878,2.6760518550872802';
 
       const expectedResult = [
         {
@@ -44,7 +50,10 @@ describe('Populate alpha and delta column', function () {
         },
       ];
 
-      const airtableData = [new AirtableRecord('Challenge', 'recAirtableId1', { fields: { 'id persistant': 'recPix1' } }), new AirtableRecord('Challenge', 'recAirtableId2', { fields: { 'id persistant': 'recPix2' } })];
+      const airtableData = [
+        new AirtableRecord('Challenge', 'recAirtableId1', { fields: { 'id persistant': 'recPix1' } }),
+        new AirtableRecord('Challenge', 'recAirtableId2', { fields: { 'id persistant': 'recPix2' } }),
+      ];
 
       const base = { select: vi.fn().mockReturnValue({ all: vi.fn().mockResolvedValue(airtableData) }) };
 
@@ -65,7 +74,7 @@ describe('Populate alpha and delta column', function () {
 
       expect(base.select).toHaveBeenCalledWith({
         fields: ['Record ID', 'id persistant'],
-        filterByFormula: 'OR(\'recPix1\' = {id persistant},\'recPix2\' = {id persistant})',
+        filterByFormula: "OR('recPix1' = {id persistant},'recPix2' = {id persistant})",
       });
       expect(result).to.deep.equal(expectedResult);
     });
@@ -133,14 +142,13 @@ describe('Populate alpha and delta column', function () {
   describe('#clearDifficultyAndDiscriminant', function () {
     it('deletes value of difficulty and discriminant in challenges records', async function () {
       const recordsCount = 100;
-      const records = _.range(0, recordsCount)
-        .map((recordIndex) => ({
-          id: `recAirtableId${recordIndex}`,
-          fields: {
-            'Difficulté calculée': '0.98765432166556',
-            'Discrimination calculée': '-0.321',
-          },
-        }));
+      const records = _.range(0, recordsCount).map((recordIndex) => ({
+        id: `recAirtableId${recordIndex}`,
+        fields: {
+          'Difficulté calculée': '0.98765432166556',
+          'Discrimination calculée': '-0.321',
+        },
+      }));
 
       const base = {
         update: vi.fn(),
