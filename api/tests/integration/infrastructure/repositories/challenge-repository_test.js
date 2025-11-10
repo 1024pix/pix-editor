@@ -3527,6 +3527,66 @@ describe('Integration | Repository | challenge-repository', () => {
     });
   });
 
+  describe('#update', () => {
+    it('should update the challenge’s skill', async () => {
+      // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
+      databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube1' });
+
+      const challengeData = domainBuilder.buildChallengeDatasourceObject({
+        skillId: 'skill1',
+        skills: ['recSkill1'],
+      });
+
+      databaseBuilder.factory.buildChallenge(challengeData);
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeData.id,
+        challengeId: challengeData.id,
+        locale: challengeData.locales[0],
+      });
+      await databaseBuilder.commit();
+
+      const updateRecord = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
+        new Airtable.Record(
+          'Epreuves',
+          challengeData.airtableId,
+          airtableBuilder.factory.buildChallenge({
+            ...challengeData,
+            skillId: 'skill2',
+            skills: ['recSkill2'],
+          }),
+        ),
+      );
+
+      const challenge = domainBuilder.buildChallenge({ ...challengeData, skills: ['recSkill2'] });
+
+      // when
+      const updatedChallenge = await challengeRepository.update(challenge);
+
+      // then
+      expect(updatedChallenge).toHaveProperty('skillId', 'skill2');
+      expect(updatedChallenge).toHaveProperty('skills', ['recSkill2']);
+
+      await expect(
+        knex.select('skillId').from('challenges').where('id', challengeData.id).first(),
+      ).resolves.toStrictEqual({
+        skillId: 'skill2',
+      });
+
+      expect(updateRecord).toHaveBeenCalledExactlyOnceWith('Epreuves', {
+        id: challengeData.airtableId,
+        fields: expect.objectContaining({
+          Acquix: ['recSkill2'],
+        }),
+      });
+    });
+  });
+
   describe('#listValidPrototypesBySkillIds', () => {
     it('returns domain challenges', async () => {
       // given
