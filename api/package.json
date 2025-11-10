@@ -23,7 +23,6 @@
     "db:seed": "knex --knexfile db/knexfile.js seed:run",
     "db:reset": "npm run db:prepare && npm run db:seed",
     "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
-    "airtable:compare-schemas": "node --env-file-if-exists=.env scripts/compare-airtable-schemas/fetch-schemas.js && node --env-file-if-exists=.env scripts/compare-airtable-schemas/compare-schemas.js",
     "airtable:empty": "node --env-file-if-exists=.env scripts/database/empty-airtable.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
