@@ -1,5 +1,4 @@
 import globals from 'globals';
-import mocha from 'eslint-plugin-mocha';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default [
@@ -58,10 +57,8 @@ export default [
     },
   },
   {
-    ...mocha.configs.recommended,
     files: ['**/*.test.js'],
     rules: {
-      ...mocha.configs.recommended.rules,
       'mocha/no-identical-title': 'error',
       'mocha/no-exclusive-tests': 'error',
     },
