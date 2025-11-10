@@ -110,9 +110,7 @@ async function updateStagingPixApiCache({
     });
 
     const primaryChallenges = clonedChallenges.filter((challenge) => challenge.isPrimary);
-    const transformChallenge = createChallengeTransformer({
-      attachments: clonedAttachments,
-    });
+    const transformChallenge = createChallengeTransformer({ attachments: clonedAttachments });
     const transformedChallenges = primaryChallenges.map((challenge) => transformChallenge(challenge));
     for (const transformedChallenge of transformedChallenges) {
       await updatedRecordNotifier.notify({

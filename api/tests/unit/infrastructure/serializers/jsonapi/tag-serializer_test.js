@@ -33,9 +33,7 @@ describe('Unit | Serializer | JSONAPI | tag-serializer', () => {
     it('deserializes a tag', async () => {
       // given
       const id = 'recAirtableTag1';
-      const attributes = {
-        title: 'Internet',
-      };
+      const attributes = { title: 'Internet' };
       const payload = {
         data: {
           type: 'tags',

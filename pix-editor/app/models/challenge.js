@@ -32,7 +32,7 @@ export default class ChallengeModel extends Model {
   @attr spoil;
   @attr responsive;
   @attr({
-    defaultValue: function () {
+    defaultValue: function() {
       return [];
     },
   }) locales;
@@ -49,7 +49,7 @@ export default class ChallengeModel extends Model {
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
   @attr({
-    defaultValue: function () {
+    defaultValue: function() {
       return [];
     },
   }) contextualizedFields;

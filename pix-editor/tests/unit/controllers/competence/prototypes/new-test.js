@@ -3,17 +3,17 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Unit | Controller | competence/prototypes/new', function (hooks) {
+module('Unit | Controller | competence/prototypes/new', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  module('#_setVersion', function (hooks) {
+  module('#_setVersion', function(hooks) {
     let controller,
       messageStub,
       prototype1_1,
       newPrototype1_2,
       skill;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       controller = this.owner.lookup('controller:authenticated.competence/prototypes/new');
       messageStub = sinon.stub();
       controller._message = messageStub;
@@ -41,7 +41,7 @@ module('Unit | Controller | competence/prototypes/new', function (hooks) {
       });
     });
 
-    test('it should set proper version of a prototype', async function (assert) {
+    test('it should set proper version of a prototype', async function(assert) {
       // when
       await controller._setVersion(newPrototype1_2);
 
@@ -51,7 +51,7 @@ module('Unit | Controller | competence/prototypes/new', function (hooks) {
       assert.ok(messageStub.calledWith('Nouvelle version : 2', true));
     });
 
-    test('it should not set version if is workbench prototype', async function (assert) {
+    test('it should not set version if is workbench prototype', async function(assert) {
       // given
       skill.name = '@workbench';
 

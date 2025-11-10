@@ -5,10 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | target-profile/theme-profile', function (hooks) {
+module('Integration | Component | target-profile/theme-profile', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it filter', async function (assert) {
+  test('it filter', async function(assert) {
     // given
     const theme = EmberObject.create({
       name: 'theme_name',

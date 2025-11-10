@@ -1,12 +1,12 @@
 import { helper } from '@ember/component/helper';
 
 const flagsForLanguages = {
-  'fr': '🇫🇷',
+  fr: '🇫🇷',
   'fr-fr': '🇫🇷',
-  'en': '🇬🇧',
-  'es': '🇪🇸',
+  en: '🇬🇧',
+  es: '🇪🇸',
   'es-419': '🌎',
-  'nl': '🇳🇱',
+  nl: '🇳🇱',
 };
 
 export function flagForLanguage([language]) {

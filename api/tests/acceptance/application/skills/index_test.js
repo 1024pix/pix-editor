@@ -18,13 +18,13 @@ import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.
 describe('Application | Route | Skills', () => {
   let editorUser;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
     await databaseBuilder.commit();
   });
 
   describe('GET /api/skills/{skillId}/challenges-production', () => {
-    it('returns the primary challenges list', async function () {
+    it('returns the primary challenges list', async function() {
       // given
       const server = await createServer();
       const skillId = 'recSkill1';
@@ -207,9 +207,7 @@ describe('Application | Route | Skills', () => {
 
       const airtableChallengesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}`,
-        })
+        .query({ filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}` })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableChallenges });
 
@@ -280,7 +278,11 @@ describe('Application | Route | Skills', () => {
             tutorialAirtableIds: ['recTuto2'],
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            challengeIds: [
+              'challenge3',
+              'challenge4',
+              'challenge5',
+            ],
             competenceId: 'competence1',
           }),
         ];
@@ -395,11 +397,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill1/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill1/challenges-production' } },
               },
             },
             {
@@ -462,11 +460,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill2/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill2/challenges-production' } },
               },
             },
           ],
@@ -519,7 +513,11 @@ describe('Application | Route | Skills', () => {
           tutorialAirtableIds: ['recTuto2'],
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-          challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+          challengeIds: [
+            'challenge3',
+            'challenge4',
+            'challenge5',
+          ],
           competenceId: 'competence1',
         });
 
@@ -546,7 +544,12 @@ describe('Application | Route | Skills', () => {
         databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
         databaseBuilder.factory.buildTube({ id: 'tube1', name: '@skill', thematicId: 'thematic1' });
         databaseBuilder.factory.buildTube({ id: 'tube2', name: '@skill', thematicId: 'thematic1' });
-        ['tuto1', 'tuto2', 'tuto3', 'tuto4'].forEach((tutorialId) => {
+        [
+          'tuto1',
+          'tuto2',
+          'tuto3',
+          'tuto4',
+        ].forEach((tutorialId) => {
           databaseBuilder.factory.buildTutorial(
             domainBuilder.buildTutorialDatasourceObject({
               id: tutorialId,
@@ -649,11 +652,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill1/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill1/challenges-production' } },
               },
             },
             {
@@ -716,11 +715,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill2/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill2/challenges-production' } },
               },
             },
           ],
@@ -774,7 +769,11 @@ describe('Application | Route | Skills', () => {
             tutorialAirtableIds: ['recTuto2'],
             learningMoreTutorialIds: ['tuto3', 'tuto4'],
             learningMoreTutorialAirtableIds: ['recTuto3', 'recTuto4'],
-            challengeIds: ['challenge3', 'challenge4', 'challenge5'],
+            challengeIds: [
+              'challenge3',
+              'challenge4',
+              'challenge5',
+            ],
             competenceId: 'competence1',
           }),
         ];
@@ -894,11 +893,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill1/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill1/challenges-production' } },
               },
             },
             {
@@ -961,11 +956,7 @@ describe('Application | Route | Skills', () => {
                     },
                   ],
                 },
-                'challenges-production': {
-                  links: {
-                    related: '/api/skills/skill2/challenges-production',
-                  },
-                },
+                'challenges-production': { links: { related: '/api/skills/skill2/challenges-production' } },
               },
             },
           ],
@@ -1110,11 +1101,7 @@ describe('Application | Route | Skills', () => {
                 },
               ],
             },
-            'challenges-production': {
-              links: {
-                related: '/api/skills/skill1/challenges-production',
-              },
-            },
+            'challenges-production': { links: { related: '/api/skills/skill1/challenges-production' } },
           },
         },
       });
@@ -1226,9 +1213,7 @@ describe('Application | Route | Skills', () => {
 
       airtableGetSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
-        .query({
-          filterByFormula: '{Tube (id persistant)} = "tube1"',
-        })
+        .query({ filterByFormula: '{Tube (id persistant)} = "tube1"' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableSkills });
 
@@ -1409,14 +1394,8 @@ describe('Application | Route | Skills', () => {
                 },
               ],
             },
-            challenges: {
-              data: [],
-            },
-            'challenges-production': {
-              links: {
-                related: '/api/skills/nouvelAcquis/challenges-production',
-              },
-            },
+            challenges: { data: [] },
+            'challenges-production': { links: { related: '/api/skills/nouvelAcquis/challenges-production' } },
           },
         },
       });
@@ -1445,10 +1424,7 @@ describe('Application | Route | Skills', () => {
 
       await expect(
         knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale']),
-      ).resolves.toStrictEqual([
-        { key: 'skill.nouvelAcquis.hint', locale: 'en', value: 'L indice EN de mon nouvel acquis' },
-        { key: 'skill.nouvelAcquis.hint', locale: 'fr', value: 'L indice de mon nouvel acquis' },
-      ]);
+      ).resolves.toStrictEqual([{ key: 'skill.nouvelAcquis.hint', locale: 'en', value: 'L indice EN de mon nouvel acquis' }, { key: 'skill.nouvelAcquis.hint', locale: 'fr', value: 'L indice de mon nouvel acquis' }]);
 
       await expect(
         knex.select('*').from('skills-tutorials').where('skillId', 'nouvelAcquis').orderBy(['type', 'tutorialId']),
@@ -1483,7 +1459,7 @@ describe('Application | Route | Skills', () => {
     let airtableSkill;
     let skillDataObject;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       const skillAttributes = {
         description: 'une nouvelle description',
         'description-status': Skill.DESCRIPTION_STATUSES.A_RETRAVAILLER,
@@ -1531,15 +1507,8 @@ describe('Application | Route | Skills', () => {
             status: 'new status',
           },
           relationships: {
-            'tuto-more': {
-              data: [
-                { type: 'tutorials', id: 'tutorialLMAirtableId' },
-                { type: 'tutorials', id: 'tutorialLMNewAirtableId' },
-              ],
-            },
-            'tuto-solution': {
-              data: [{ type: 'tutorials', id: 'tutorialAirtableId' }],
-            },
+            'tuto-more': { data: [{ type: 'tutorials', id: 'tutorialLMAirtableId' }, { type: 'tutorials', id: 'tutorialLMNewAirtableId' }] },
+            'tuto-solution': { data: [{ type: 'tutorials', id: 'tutorialAirtableId' }] },
           },
         },
       };
@@ -1978,7 +1947,11 @@ describe('Application | Route | Skills', () => {
           'Record ID': 'recChallengeProtoCloned',
         },
       };
-      let createdAttachmentFields = _.omit(attachment.fields, ['Record ID', 'challengeId persistant', 'createdAt']);
+      let createdAttachmentFields = _.omit(attachment.fields, [
+        'Record ID',
+        'challengeId persistant',
+        'createdAt',
+      ]);
       createdAttachmentFields = {
         ...createdAttachmentFields,
         challengeId: ['recChallengeProtoCloned'],
@@ -2046,9 +2019,7 @@ describe('Application | Route | Skills', () => {
       airtableGetTubeByIdScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes')
         .query({
-          fields: {
-            '': tubeDatasource.usedFields,
-          },
+          fields: { '': tubeDatasource.usedFields },
           filterByFormula: 'OR("tube1" = {id persistant})',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -2057,9 +2028,7 @@ describe('Application | Route | Skills', () => {
       airtableGetSkillByIdScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
         .query({
-          fields: {
-            '': skillDatasource.usedFields,
-          },
+          fields: { '': skillDatasource.usedFields },
           filterByFormula: 'OR("skill1Tube1" = {id persistant})',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -2068,17 +2037,13 @@ describe('Application | Route | Skills', () => {
       // _fetchData
       airtableGetSkillChallengesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          filterByFormula: '{Acquix (id persistant)} = "skill1Tube1"',
-        })
+        .query({ filterByFormula: '{Acquix (id persistant)} = "skill1Tube1"' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: skillToCloneChallenges });
 
       airtableGetTubeSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
-        .query({
-          filterByFormula: '{Tube (id persistant)} = "tube1"',
-        })
+        .query({ filterByFormula: '{Tube (id persistant)} = "tube1"' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: airtableSkills });
 
@@ -2127,9 +2092,7 @@ describe('Application | Route | Skills', () => {
       airtableGetSkillAirtableIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
         .query({
-          fields: {
-            '': ['Record Id', 'id persistant'],
-          },
+          fields: { '': ['Record Id', 'id persistant'] },
           filterByFormula: 'OR("clonedAcquisId" = {id persistant})',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -2145,13 +2108,7 @@ describe('Application | Route | Skills', () => {
         });
 
       airtableCreateChallengesScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Epreuves/', {
-          records: [
-            {
-              fields: createdChallengeFields,
-            },
-          ],
-        })
+        .post('/v0/airtableBaseValue/Epreuves/', { records: [{ fields: createdChallengeFields }] })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [challengeProtoCloned] });
@@ -2160,9 +2117,7 @@ describe('Application | Route | Skills', () => {
       airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': ['Record ID', 'id persistant'],
-          },
+          fields: { '': ['Record ID', 'id persistant'] },
           filterByFormula: 'OR("clonedChallengeId" = {id persistant})',
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -2178,13 +2133,7 @@ describe('Application | Route | Skills', () => {
         });
 
       airtableCreateAttachmentsScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Attachments/', {
-          records: [
-            {
-              fields: createdAttachmentFields,
-            },
-          ],
-        })
+        .post('/v0/airtableBaseValue/Attachments/', { records: [{ fields: createdAttachmentFields }] })
         .query({})
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, {

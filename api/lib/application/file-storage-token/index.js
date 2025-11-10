@@ -10,7 +10,7 @@ export async function register(server) {
       path: '/api/file-storage-token',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           try {
             const token = await fileStorageTokenRepository.create();
             return h.response({ token: token.value });

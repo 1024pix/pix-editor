@@ -11,13 +11,11 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
       findByTitle: vi.fn(),
       create: vi.fn(),
     };
-    dependencies = {
-      tagRepository,
-    };
+    dependencies = { tagRepository };
   });
 
-  context('when title already taken', function () {
-    it('should throw a ConflictError', async function () {
+  context('when title already taken', function() {
+    it('should throw a ConflictError', async function() {
       // given
       tagRepository.findByTitle.mockResolvedValue(new Tag({}));
 
@@ -29,8 +27,8 @@ describe('Unit | Domain | Use Cases | create-tag', () => {
     });
   });
 
-  context('when title is available', function () {
-    it('should return the createdTag', async function () {
+  context('when title is available', function() {
+    it('should return the createdTag', async function() {
       // given
       tagRepository.findByTitle.mockResolvedValue(null);
       tagRepository.create.mockResolvedValue(

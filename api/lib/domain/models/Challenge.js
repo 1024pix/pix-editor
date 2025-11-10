@@ -320,9 +320,7 @@ export class Challenge {
       status: LocalizedChallenge.STATUSES.PRIMARY,
       attachments,
     });
-    const primaryTranslation = {
-      [this.primaryLocale]: _.cloneDeep(this.translations[this.primaryLocale]),
-    };
+    const primaryTranslation = { [this.primaryLocale]: _.cloneDeep(this.translations[this.primaryLocale]) };
 
     const clonedChallenge = new Challenge({
       id,
@@ -421,8 +419,8 @@ export class Challenge {
   #translateStatus(localizedChallenge) {
     if (this.isPrimary) return this.#primaryStatus;
     if (
-      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) ||
-      localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY
+      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status)
+      || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY
     ) {
       return this.status;
     }

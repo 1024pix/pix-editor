@@ -4,18 +4,18 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | pop-in/tutorial', function (hooks) {
+module('Integration | Component | pop-in/tutorial', function(hooks) {
   setupIntlRenderingTest(hooks);
 
   let store;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const configService = this.owner.lookup('service:config');
     configService.tutorialLocaleToLanguageMap = { lang: 'Première langue' };
     store = this.owner.lookup('service:store');
   });
 
-  test('save input should be disabled if mandatory field are empty', async function (assert) {
+  test('save input should be disabled if mandatory field are empty', async function(assert) {
     // given
     const closeFn = () => {};
     const saveTutorialFn = () => {};
@@ -29,7 +29,7 @@ module('Integration | Component | pop-in/tutorial', function (hooks) {
     assert.dom(screen.getByRole('button', { name: 'Enregistrer' })).hasAria('disabled', 'true');
   });
 
-  test('save input should not be disabled if mandatory field are empty', async function (assert) {
+  test('save input should not be disabled if mandatory field are empty', async function(assert) {
     // given
     const closeFn = () => {};
     const saveTutorialFn = () => {};

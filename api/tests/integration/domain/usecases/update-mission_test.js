@@ -5,7 +5,7 @@ import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-h
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionRepository from '../../../../lib/infrastructure/repositories/mission-repository.js';
 
-describe('Integration | Usecases | Update mission', function () {
+describe('Integration | Usecases | Update mission', function() {
   it('when mission is totally valid, should update mission without warnings', async () => {
     // given
     const mission = databaseBuilder.factory.buildMission();
@@ -91,9 +91,7 @@ describe('Integration | Usecases | Update mission', function () {
     databaseBuilder.factory.buildThematic(thematic);
     await databaseBuilder.commit();
 
-    airtableBuilder.mockLists({
-      thematics: [airtableBuilder.factory.buildThematic(thematic)],
-    });
+    airtableBuilder.mockLists({ thematics: [airtableBuilder.factory.buildThematic(thematic)] });
 
     const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
     await databaseBuilder.commit();

@@ -5,8 +5,8 @@ import { validateUrlsFromRelease } from '../../../../lib/domain/usecases/index.j
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Domain | Usecases | Validate urls from release', function () {
-  describe('#validateUrlsFromRelease', function () {
+describe('Unit | Domain | Usecases | Validate urls from release', function() {
+  describe('#validateUrlsFromRelease', function() {
     let releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, mockedUrlUtils;
     const identifiedUrlChallenge1_1 = {
       id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr',
@@ -61,20 +61,16 @@ describe('Unit | Domain | Usecases | Validate urls from release', function () {
       url: 'https://tuto3.net/',
     };
 
-    beforeEach(function () {
+    beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence1',
         origin: 'Pix',
-        name_i18n: {
-          fr: 'competence 1.1',
-        },
+        name_i18n: { fr: 'competence 1.1' },
       });
       const wonderlandCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence2',
         origin: 'wonderland',
-        name_i18n: {
-          fr: 'competence 4.5',
-        },
+        name_i18n: { fr: 'competence 4.5' },
       });
       const pixTube = domainBuilder.buildTubeForRelease({
         id: 'tube1',
@@ -171,7 +167,11 @@ describe('Unit | Domain | Usecases | Validate urls from release', function () {
       const latestRelease = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [pixCompetence, wonderlandCompetence],
         tubesFromRelease: [pixTube, wonderlandTube],
-        skillsFromRelease: [pixSkill1, pixSkill2, wonderlandSkill1],
+        skillsFromRelease: [
+          pixSkill1,
+          pixSkill2,
+          wonderlandSkill1,
+        ],
         challengesFromRelease: [
           pixChallenge1Skill1,
           challenge2NoSkill,
@@ -226,7 +226,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function () {
       };
     });
 
-    it('should analyze and update KO urls data from tutorials and operative challenges', async function () {
+    it('should analyze and update KO urls data from tutorials and operative challenges', async function() {
       // given
       mockedUrlUtils.analyzeIdentifiedUrls
         // mocking for challenges
@@ -352,7 +352,11 @@ describe('Unit | Domain | Usecases | Validate urls from release', function () {
         ],
       ]);
       expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[1]).toStrictEqual([
-        [identifiedTutorial1, identifiedTutorial2, identifiedTutorial3],
+        [
+          identifiedTutorial1,
+          identifiedTutorial2,
+          identifiedTutorial3,
+        ],
       ]);
       expect(urlRepository.updateChallenges).toHaveBeenCalledTimes(1);
       expect(urlRepository.updateChallenges).toHaveBeenCalledWith([

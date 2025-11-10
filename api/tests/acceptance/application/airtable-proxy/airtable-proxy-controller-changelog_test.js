@@ -6,7 +6,7 @@ import { createServer } from '../../../../server.js';
 describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => {
   describe('PATCH /api/airtable/changelog/Notes', () => {
     it('should proxy patch changelog to airtable', async () => {
-      //Given
+      // Given
       const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
 
@@ -31,7 +31,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
     });
 
     it('should return airtable status code', async () => {
-      //Given
+      // Given
       const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
 
@@ -57,7 +57,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
 
     context('when user is readonly', () => {
       it('should return a 403 error code', async () => {
-        //Given
+        // Given
         const user = databaseBuilder.factory.buildReadonlyUser();
         await databaseBuilder.commit();
 

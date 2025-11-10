@@ -23,7 +23,12 @@ export class CopyAreasFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableAreas = await airtable.findRecords('Domaines', {
-      fields: ['id persistant', 'Code', 'Couleur', 'Referentiel'],
+      fields: [
+        'id persistant',
+        'Code',
+        'Couleur',
+        'Referentiel',
+      ],
     });
     logger.info({ count: airtableAreas.length }, 'Loaded areas from airtable');
 

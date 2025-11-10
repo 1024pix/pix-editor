@@ -5,7 +5,7 @@ import * as healthcheckController from '../../../../lib/application/healthcheck/
 
 describe('Unit | Controller | healthcheckController', () => {
   describe('#get', () => {
-    it('should reply with the API description', async function () {
+    it('should reply with the API description', async function() {
       // when
       const response = healthcheckController.get(null, hFake);
 

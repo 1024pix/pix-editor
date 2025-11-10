@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) {
+module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -66,7 +66,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     return authenticateSession();
   });
 
-  test('adding illustration', async function (assert) {
+  test('adding illustration', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -106,7 +106,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     assert.dom(await within(popIn).findByRole('img')).hasAttribute('src', 'data:,');
   });
 
-  test('replace illustration', async function (assert) {
+  test('replace illustration', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -152,7 +152,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     assert.strictEqual(attachments[0].url, 'data-illustrationB:,');
   });
 
-  test('delete illustration', async function (assert) {
+  test('delete illustration', async function(assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
     class StorageServiceStub extends Service {
@@ -182,7 +182,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('update illustration', async function (assert) {
+  test('update illustration', async function(assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
     class StorageServiceStub extends Service {
@@ -218,7 +218,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     assert.strictEqual(newIllustration.url, 'data:,');
   });
 
-  test('delete and upload a new illustration', async function (assert) {
+  test('delete and upload a new illustration', async function(assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
 

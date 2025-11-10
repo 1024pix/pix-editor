@@ -5,9 +5,7 @@ describe('Unit | Domain | SkillForRelease', () => {
   describe('#canExportForTranslation', () => {
     it('should return true when skill is active', () => {
       // given
-      const skillForRelease = domainBuilder.buildSkillForRelease({
-        status: SkillForRelease.STATUSES.ACTIF,
-      });
+      const skillForRelease = domainBuilder.buildSkillForRelease({ status: SkillForRelease.STATUSES.ACTIF });
 
       // when
       const result = skillForRelease.canExportForTranslation();
@@ -22,9 +20,7 @@ describe('Unit | Domain | SkillForRelease', () => {
       ),
     )('should return false when status key is %s', (status) => {
       // given
-      const skillForRelease = domainBuilder.buildSkillForRelease({
-        status,
-      });
+      const skillForRelease = domainBuilder.buildSkillForRelease({ status });
 
       // when
       const result = skillForRelease.canExportForTranslation();

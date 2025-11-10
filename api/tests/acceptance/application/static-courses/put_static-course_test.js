@@ -3,12 +3,12 @@ import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationH
 import { createServer } from '../../../../server.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
-describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function () {
+describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function() {
   let user;
   const activeCourseId = 'myAwesomeCourse66';
   const inactiveCourseId = 'myLameCourse66';
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
@@ -178,7 +178,11 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       label: 'tagD',
     });
     databaseBuilder.factory.linkTagsTo({
-      staticCourseTagIds: [123, 456, 159],
+      staticCourseTagIds: [
+        123,
+        456,
+        159,
+      ],
       staticCourseId: activeCourseId,
     });
 
@@ -194,18 +198,22 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
   });
 
-  afterEach(async function () {
+  afterEach(async function() {
     vi.useRealTimers();
   });
 
-  it('updates and returns the static course', async function () {
+  it('updates and returns the static course', async function() {
     // given
     const payload = {
       data: {
         attributes: {
           name: 'static course 1',
           description: 'static course description',
-          'challenge-ids': ['challengeid3', 'challengeid1', 'challengeidnl1'],
+          'challenge-ids': [
+            'challengeid3',
+            'challengeid1',
+            'challengeidnl1',
+          ],
           'tag-ids': ['456', '789'],
         },
       },
@@ -305,22 +313,18 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
         {
           type: 'static-course-tags',
           id: '456',
-          attributes: {
-            label: 'tagB',
-          },
+          attributes: { label: 'tagB' },
         },
         {
           type: 'static-course-tags',
           id: '789',
-          attributes: {
-            label: 'tagC',
-          },
+          attributes: { label: 'tagC' },
         },
       ],
     });
   });
 
-  it('return a 409 HTTP status code when static course is inactive', async function () {
+  it('return a 409 HTTP status code when static course is inactive', async function() {
     // given
     const payload = {
       data: {

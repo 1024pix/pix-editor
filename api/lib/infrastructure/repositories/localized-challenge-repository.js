@@ -4,10 +4,7 @@ import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
 export async function list() {
-  const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment().orderBy([
-    'localized_challenges.challengeId',
-    'localized_challenges.locale',
-  ]);
+  const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment().orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
   return localizedChallengeDtos.map(_toDomain);
 }
 

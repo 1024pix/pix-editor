@@ -10,9 +10,7 @@ export function up(knex) {
 }
 
 export async function down(knex) {
-  await knex(TABLE_NAME).update({
-    access: 'readonly'
-  }).where('access', 'readpixonly');
+  await knex(TABLE_NAME).update({ access: 'readonly' }).where('access', 'readpixonly');
 
   return knex.schema.raw(`
     ALTER TABLE "users"

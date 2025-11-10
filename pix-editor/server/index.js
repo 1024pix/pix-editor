@@ -1,6 +1,6 @@
 const morgan = require('morgan');
 
-module.exports = function (app, options) {
+module.exports = function(app, options) {
   if (options.proxy) {
     const proxy = require('http-proxy').createProxyServer({
       target: options.proxy,

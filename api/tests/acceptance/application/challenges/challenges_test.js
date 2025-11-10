@@ -74,7 +74,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges', () => {
     let user;
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
@@ -96,17 +96,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': challengeAirtableFields,
-          },
+          fields: { '': challengeAirtableFields },
           filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
         })
-        .reply(200, {
-          records: [
-            airtableBuilder.factory.buildChallenge(challenge1),
-            airtableBuilder.factory.buildChallenge(challenge2),
-          ],
-        });
+        .reply(200, { records: [airtableBuilder.factory.buildChallenge(challenge1), airtableBuilder.factory.buildChallenge(challenge2)] });
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -312,11 +305,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   },
                 ],
               },
-              attachments: {
-                links: {
-                  related: '/api/attachments?filter[localizedChallengeId]=1',
-                },
-              },
+              attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=1' } },
               'challenge-locales': {
                 data: [
                   {
@@ -427,11 +416,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                   },
                 ],
               },
-              attachments: {
-                links: {
-                  related: '/api/attachments?filter[localizedChallengeId]=2',
-                },
-              },
+              attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=2' } },
               'challenge-locales': {
                 data: [
                   {
@@ -473,45 +458,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
         ],
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: '1-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: '1-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: '1-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: '1-fr',
             relationships: {
               'localized-challenge': {
@@ -524,93 +489,49 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: '1-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: '1-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: '1-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: '1-nl',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: '2-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: '2-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: '2-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: '2-fr',
             relationships: {
               'localized-challenge': {
@@ -623,45 +544,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: '2-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: '2-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: '2-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: '2-nl',
             relationships: {
               'localized-challenge': {
@@ -695,7 +596,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges/:id', () => {
     let user;
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
@@ -704,10 +605,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({
         id: 'recChallengeId1',
-        files: [
-          { fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' },
-          { fileId: 'fileId2', localizedChallengeId: 'localizedChallengeId2' },
-        ],
+        files: [{ fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' }, { fileId: 'fileId2', localizedChallengeId: 'localizedChallengeId2' }],
         geography: 'XX',
         competenceId: 'competence1',
       });
@@ -727,9 +625,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           filterByFormula: '{id persistant} = "recChallengeId1"',
           maxRecords: 1,
         })
-        .reply(200, {
-          records: [airtableChallenge],
-        });
+        .reply(200, { records: [airtableChallenge] });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'recChallengeId1',
         challengeId: 'recChallengeId1',
@@ -885,11 +781,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-            attachments: {
-              links: {
-                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId1',
-              },
-            },
+            attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId1' } },
             'challenge-locales': {
               data: [
                 {
@@ -930,45 +822,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: 'recChallengeId1-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: 'recChallengeId1-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: 'recChallengeId1-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: 'recChallengeId1-fr',
             relationships: {
               'localized-challenge': {
@@ -981,45 +853,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: 'recChallengeId1-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: 'recChallengeId1-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: 'recChallengeId1-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: 'recChallengeId1-nl',
             relationships: {
               'localized-challenge': {
@@ -1043,9 +895,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           filterByFormula: '{id persistant} = "recChallengeId2"',
           maxRecords: 1,
         })
-        .reply(200, {
-          records: [],
-        });
+        .reply(200, { records: [] });
 
       const server = await createServer();
 
@@ -1071,7 +921,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let challenge;
     let primaryLocalizedChallenge;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       challenge = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
         locales: ['fr', 'fr-fr'],
@@ -1338,7 +1188,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
   describe('POST /challenges', () => {
     let user;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
@@ -1518,11 +1368,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-            attachments: {
-              links: {
-                related: '/api/attachments?filter[localizedChallengeId]=challengeId',
-              },
-            },
+            attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=challengeId' } },
             'challenge-locales': {
               data: [
                 {
@@ -1563,45 +1409,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: 'challengeId-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: 'challengeId-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: 'challengeId-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: 'challengeId-fr',
             relationships: {
               'localized-challenge': {
@@ -1614,51 +1440,27 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: 'challengeId-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: 'challengeId-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: 'challengeId-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: 'challengeId-nl',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
         ],
@@ -1964,7 +1766,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
   describe('PATCH /challenge', () => {
     let user;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
@@ -2213,11 +2015,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-            attachments: {
-              links: {
-                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
-              },
-            },
+            attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId' } },
             'challenge-locales': {
               data: [
                 {
@@ -2258,45 +2056,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: 'recChallengeId-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: 'recChallengeId-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: 'recChallengeId-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: 'recChallengeId-fr',
             relationships: {
               'localized-challenge': {
@@ -2309,45 +2087,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: 'recChallengeId-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: 'recChallengeId-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: 'recChallengeId-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: 'recChallengeId-nl',
             relationships: {
               'localized-challenge': {
@@ -2673,11 +2431,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 },
               ],
             },
-            attachments: {
-              links: {
-                related: '/api/attachments?filter[localizedChallengeId]=recChallengeId',
-              },
-            },
+            attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId' } },
             'challenge-locales': {
               data: [
                 {
@@ -2718,45 +2472,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
         included: [
           {
-            attributes: {
-              locale: 'en',
-            },
+            attributes: { locale: 'en' },
             id: 'recChallengeId-en',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es',
-            },
+            attributes: { locale: 'es' },
             id: 'recChallengeId-es',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'es-419',
-            },
+            attributes: { locale: 'es-419' },
             id: 'recChallengeId-es-419',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr',
-            },
+            attributes: { locale: 'fr' },
             id: 'recChallengeId-fr',
             relationships: {
               'localized-challenge': {
@@ -2769,51 +2503,27 @@ describe('Acceptance | Controller | challenges-controller', () => {
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-BE',
-            },
+            attributes: { locale: 'fr-BE' },
             id: 'recChallengeId-fr-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'fr-FR',
-            },
+            attributes: { locale: 'fr-FR' },
             id: 'recChallengeId-fr-FR',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl-BE',
-            },
+            attributes: { locale: 'nl-BE' },
             id: 'recChallengeId-nl-BE',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
-            attributes: {
-              locale: 'nl',
-            },
+            attributes: { locale: 'nl' },
             id: 'recChallengeId-nl',
-            relationships: {
-              'localized-challenge': {
-                data: null,
-              },
-            },
+            relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
         ],

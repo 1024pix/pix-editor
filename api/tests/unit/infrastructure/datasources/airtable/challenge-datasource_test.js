@@ -69,13 +69,25 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should convert language to locale', () => {
       // given
-      const expectedLocales = ['de', 'en', 'es', 'it', 'fr', 'fr-fr', 'pt'];
-      const languages = ['Allemand', 'Anglais', 'Espagnol', 'Italie', 'Francophone', 'Franco Français', 'Portugais'];
-      const challengeRecord = new AirtableRecord('Epreuves', 1, {
-        fields: {
-          Langues: languages,
-        },
-      });
+      const expectedLocales = [
+        'de',
+        'en',
+        'es',
+        'it',
+        'fr',
+        'fr-fr',
+        'pt',
+      ];
+      const languages = [
+        'Allemand',
+        'Anglais',
+        'Espagnol',
+        'Italie',
+        'Francophone',
+        'Franco Français',
+        'Portugais',
+      ];
+      const challengeRecord = new AirtableRecord('Epreuves', 1, { fields: { Langues: languages } });
 
       // when
       const challenge = challengeDatasource.fromAirTableObject(challengeRecord);
@@ -87,11 +99,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
     it('throw error when the language is unknown', () => {
       // given
       const languages = ['Belge'];
-      const challengeRecord = new AirtableRecord('Epreuves', 1, {
-        fields: {
-          Langues: languages,
-        },
-      });
+      const challengeRecord = new AirtableRecord('Epreuves', 1, { fields: { Langues: languages } });
 
       // when
       const toThrow = () => {
@@ -148,7 +156,15 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should convert locale to language', () => {
       // given
-      const locales = ['de', 'en', 'es', 'it', 'fr', 'fr-fr', 'pt'];
+      const locales = [
+        'de',
+        'en',
+        'es',
+        'it',
+        'fr',
+        'fr-fr',
+        'pt',
+      ];
 
       const expectedLanguages = [
         'Allemand',
@@ -175,7 +191,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ locales });
 
       // when
-      const toThrow = function () {
+      const toThrow = function() {
         return challengeDatasource.toAirTableObject(createdChallenge);
       };
 
@@ -233,9 +249,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       vi.spyOn(airtable, 'findRecords').mockResolvedValue([challengeRecord]);
 
       challengeDatasource.usedFields = Symbol('used fields');
-      const challenges = await challengeDatasource.search({
-        filter: { search: 'query term', ids: [] },
-      });
+      const challenges = await challengeDatasource.search({ filter: { search: 'query term', ids: [] } });
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
@@ -258,9 +272,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       vi.spyOn(airtable, 'findRecords').mockResolvedValue([challengeRecord]);
 
       challengeDatasource.usedFields = Symbol('used fields');
-      const challenges = await challengeDatasource.search({
-        filter: { search: 'query term', ids: ['challengeId1'] },
-      });
+      const challenges = await challengeDatasource.search({ filter: { search: 'query term', ids: ['challengeId1'] } });
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,

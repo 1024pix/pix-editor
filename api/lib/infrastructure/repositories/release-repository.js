@@ -93,10 +93,7 @@ async function _getCurrentContent() {
     missionRepository.list(),
   ]);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
-  const translatedChallenges = challenges.flatMap((challenge) => [
-    challenge,
-    ...challenge.alternativeLocales.map((locale) => challenge.translate(locale)),
-  ]);
+  const translatedChallenges = challenges.flatMap((challenge) => [challenge, ...challenge.alternativeLocales.map((locale) => challenge.translate(locale))]);
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedTubes = tubeTransformer.transformTubes(tubes, challenges);
@@ -128,7 +125,13 @@ async function _getCurrentContent() {
 
 async function getStaticCourses() {
   const staticCoursesDTO = await knex('static_courses')
-    .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
+    .select([
+      'id',
+      'name',
+      'description',
+      'isActive',
+      'challengeIds',
+    ])
     .orderBy('id');
 
   return staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {

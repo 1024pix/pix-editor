@@ -5,11 +5,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Unit | Controller | competence/prototypes/single', function (hooks) {
+module('Unit | Controller | competence/prototypes/single', function(hooks) {
   setupIntlRenderingTest(hooks);
   let controller, messageStub, startStub, stopStub, errorStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
 
@@ -35,7 +35,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     controller._message = messageStub;
   });
 
-  module('#prototype actions', function (hooks) {
+  module('#prototype actions', function(hooks) {
     let proposalPrototype1_1,
       validatePrototype2_1,
       proposalPrototype2_2,
@@ -46,7 +46,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       skill2,
       tube;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       const saveStub = sinon.stub().resolves({});
       const store = this.owner.lookup('service:store');
 
@@ -126,8 +126,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    module('on prototype validation', function () {
-      test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
+    module('on prototype validation', function() {
+      test('it should archive previous active prototype and alternatives or delete draft alternative', async function(assert) {
         // given
         proposalChallenge2_2.version = 1;
 
@@ -140,7 +140,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
-      test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
+      test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function(assert) {
         // when
         await controller._archiveOtherActiveSkillVersion(proposalPrototype1_1);
 
@@ -152,7 +152,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
-      test('it should validate skill', async function (assert) {
+      test('it should validate skill', async function(assert) {
         // given
         proposalPrototype1_1.validate();
 
@@ -163,7 +163,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(skill1.status, 'actif');
       });
 
-      test('it should validate alternatives', async function (assert) {
+      test('it should validate alternatives', async function(assert) {
         // given
         proposalPrototype1_1.validate();
 
@@ -175,15 +175,15 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    module('on prototype archive', function () {
-      test('it should deactivate the current active skill if there is proposal prototype', async function (assert) {
+    module('on prototype archive', function() {
+      test('it should deactivate the current active skill if there is proposal prototype', async function(assert) {
         // when
         await controller._archiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
         assert.strictEqual(skill2.status, 'en construction');
       });
-      test('it should archive the current active skill if there is no proposal prototype', async function (assert) {
+      test('it should archive the current active skill if there is no proposal prototype', async function(assert) {
         // given
         proposalPrototype2_2.archive();
 
@@ -193,7 +193,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         // then
         assert.strictEqual(skill2.status, 'archivé');
       });
-      test('it should not change the skill status if is not a production prototype', async function (assert) {
+      test('it should not change the skill status if is not a production prototype', async function(assert) {
         // when
         await controller._archiveOrDeactivateSkill(proposalPrototype2_2);
 
@@ -201,7 +201,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(skill2.status, 'actif');
         assert.strictEqual(skill1.status, 'en construction');
       });
-      test('it should archive alternatives', async function (assert) {
+      test('it should archive alternatives', async function(assert) {
         // when
         await controller._archiveAlternatives(validatePrototype2_1);
 
@@ -210,22 +210,22 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    module('on prototype obsolete', function () {
-      test('it should obsolete alternative', async function (assert) {
+    module('on prototype obsolete', function() {
+      test('it should obsolete alternative', async function(assert) {
         // when
         await controller._obsoleteAlternatives(validatePrototype2_1);
 
         // then
         assert.strictEqual(validateChallenge2_1.status, 'périmé');
       });
-      test('it should deactivate the current active skill if there is proposal prototype', async function (assert) {
+      test('it should deactivate the current active skill if there is proposal prototype', async function(assert) {
         // when
         await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
         assert.strictEqual(skill2.status, 'en construction');
       });
-      test('it should archive the current active skill if there is archive prototype', async function (assert) {
+      test('it should archive the current active skill if there is archive prototype', async function(assert) {
         // given
         await proposalPrototype2_2.archive();
 
@@ -235,7 +235,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         // then
         assert.strictEqual(skill2.status, 'archivé');
       });
-      test('it should delete the current active skill if there is no archive or proposal prototype', async function (assert) {
+      test('it should delete the current active skill if there is no archive or proposal prototype', async function(assert) {
         // given
         await proposalPrototype2_2.obsolete();
 
@@ -245,7 +245,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         // then
         assert.strictEqual(skill2.status, 'périmé');
       });
-      test('it should not change the skill status if is not a production prototype', async function (assert) {
+      test('it should not change the skill status if is not a production prototype', async function(assert) {
         // when
         await controller._obsoleteArchiveOrDeactivateSkill(proposalPrototype2_2);
 
@@ -255,8 +255,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    module('#setSkill', function () {
-      test('it should display an error message if have no skill', async function (assert) {
+    module('#setSkill', function() {
+      test('it should display an error message if have no skill', async function(assert) {
         // when
         await controller.setSkill();
 
@@ -264,7 +264,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.ok(errorStub.calledWith('Aucun acquis sélectionné'));
       });
 
-      test('it should set a new skill for prototype and is alternative with proper version', async function (assert) {
+      test('it should set a new skill for prototype and is alternative with proper version', async function(assert) {
         // when
         await controller._setSkill(proposalPrototype1_1, skill2);
 
@@ -280,7 +280,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  test('it should cancel edition', async function (assert) {
+  test('it should cancel edition', async function(assert) {
     // given
     controller.edition = true;
     controller.wasMaximized = true;
@@ -309,8 +309,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     assert.ok(messageStub.calledWith('Modification annulée'));
   });
 
-  module('#removeIllustration', function () {
-    test('it should remove illustration', async function (assert) {
+  module('#removeIllustration', function() {
+    test('it should remove illustration', async function(assert) {
       // given
       const deleteRecordStub = sinon.stub();
       const challenge = {
@@ -338,8 +338,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('#removeAttachment', function () {
-    test('it should remove the attachment', async function (assert) {
+  module('#removeAttachment', function() {
+    test('it should remove the attachment', async function(assert) {
       // given
       const deleteRecordStub = sinon.stub();
       const challenge = {
@@ -369,8 +369,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('#UrlsToConsult', function () {
-    test('it should reset urlToConsult when urlToConsultField is closed', function (assert) {
+  module('#UrlsToConsult', function() {
+    test('it should reset urlToConsult when urlToConsultField is closed', function(assert) {
       // given
       controller.displayUrlsToConsultField = true;
       controller.urlsToConsult = 'http:://other-test.com';
@@ -392,25 +392,25 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('_saveCheck', function (hooks) {
+  module('_saveCheck', function(hooks) {
     let challenge;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       challenge = EmberObject.create({ id: 'recChallenge' });
     });
 
-    test('it returns the challenge when there is no errors', function (assert) {
+    test('it returns the challenge when there is no errors', function(assert) {
       assert.ok(controller._saveCheck(challenge));
     });
 
-    test('rejects when autoReply is true and there is no embed url', function (assert) {
+    test('rejects when autoReply is true and there is no embed url', function(assert) {
       challenge.autoReply = true;
       challenge.embedURL = '';
       assert.notOk(controller._saveCheck(challenge));
       assert.ok(errorStub.calledOnce);
     });
 
-    test('accept any solution on a QCROC', function (assert) {
+    test('accept any solution on a QCROC', function(assert) {
       challenge.type = 'QROC';
       challenge.solution = `- test
 - 'hola
@@ -420,7 +420,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
 
     ['QROCM-ind', 'QROCM-dep'].forEach((type) => {
-      test('rejects when solution is not a valid YAML on a ' + type, function (assert) {
+      test('rejects when solution is not a valid YAML on a ' + type, function(assert) {
         challenge.type = type;
         challenge.solution = `- test
 - 'hola
@@ -431,14 +431,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('_handleIllustration', function (hooks) {
+  module('_handleIllustration', function(hooks) {
     let challenge;
     let storageServiceStub;
     let storeServiceStub;
     let loaderServiceStub;
     let controller;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       challenge = EmberObject.create({
         id: 'recChallenge',
         illustration: {
@@ -469,7 +469,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       controller.store = storeServiceStub;
     });
 
-    test('it uploads file', async function (assert) {
+    test('it uploads file', async function(assert) {
       // given
       const expectedIllustration = {
         url: 'data:,',
@@ -490,14 +490,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('_handlePiecesJointes', function (hooks) {
+  module('_handlePiecesJointes', function(hooks) {
     let challenge;
     let storageServiceStub;
     let storeServiceStub;
     let loaderServiceStub;
     let controller;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
 
       loaderServiceStub = { start: sinon.stub() };
@@ -507,7 +507,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       controller.store = storeServiceStub;
     });
 
-    test('it uploads one file', async function (assert) {
+    test('it uploads one file', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
@@ -560,7 +560,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(challenge.piecesJointes, expectedPiecesJointes);
     });
 
-    test('it uploads two files', async function (assert) {
+    test('it uploads two files', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
@@ -631,7 +631,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(newChallenge.piecesJointes, expectedPiecesJointes);
     });
 
-    test('it renames attachments', async function (assert) {
+    test('it renames attachments', async function(assert) {
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
         id: 'recChallenge',

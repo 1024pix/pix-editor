@@ -8,8 +8,8 @@ const COLUMN_B = 'staticCourseTagId';
  */
 export function up(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
-    table.string(COLUMN_A).alter({ alterNullable : false });
-    table.bigInteger(COLUMN_B).alter({ alterNullable : false });
+    table.string(COLUMN_A).alter({ alterNullable: false });
+    table.bigInteger(COLUMN_B).alter({ alterNullable: false });
   });
 }
 
@@ -19,8 +19,8 @@ export function up(knex) {
  */
 export function down(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
-    table.string(COLUMN_A).alter({ alterNullable : true });
-    table.bigInteger(COLUMN_B).alter({ alterNullable : true });
+    table.string(COLUMN_A).alter({ alterNullable: true });
+    table.bigInteger(COLUMN_B).alter({ alterNullable: true });
   });
 }
 

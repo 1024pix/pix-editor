@@ -11,11 +11,9 @@ export async function register(server) {
       method: 'GET',
       path: '/api/localized-challenges/{id}',
       config: {
-        handler: async function (request) {
+        handler: async function(request) {
           const localizedChallengeId = request.params.id;
-          const localizedChallenge = await localizedChallengeRepository.get({
-            id: localizedChallengeId,
-          });
+          const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
           return localizedChallengeSerializer.serialize(localizedChallenge);
         },
       },
@@ -24,11 +22,9 @@ export async function register(server) {
       method: 'GET',
       path: '/api/localized-challenges',
       config: {
-        handler: async function (request) {
+        handler: async function(request) {
           const params = extractParameters(request.query);
-          const localizedChallenges = await localizedChallengeRepository.getMany({
-            ids: params.filter.ids,
-          });
+          const localizedChallenges = await localizedChallengeRepository.getMany({ ids: params.filter.ids });
           return localizedChallengeSerializer.serialize(localizedChallenges);
         },
       },
@@ -38,7 +34,7 @@ export async function register(server) {
       path: '/api/localized-challenges/{id}',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const { locale: _, ...localizedChallenge } = await localizedChallengeSerializer.deserialize(request.payload);
           const isAdmin = hasAuthenticatedUserAccess(request, ['admin']);
           const updatedLocalizedChallenge = await modifyLocalizedChallenge(

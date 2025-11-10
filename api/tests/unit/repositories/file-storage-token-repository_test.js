@@ -5,14 +5,10 @@ import { create } from '../../../lib/infrastructure/repositories/file-storage-to
 
 describe('Unit | Repository | file-storage-token-repository', () => {
   describe('#create', () => {
-    it('call axios', async function () {
+    it('call axios', async function() {
       vi.spyOn(axios, 'post').mockResolvedValue({
         headers: { 'x-subject-token': '123' },
-        data: {
-          token: {
-            expires_at: '2021-03-23Z00:00:00',
-          },
-        },
+        data: { token: { expires_at: '2021-03-23Z00:00:00' } },
       });
       const token = await create();
 

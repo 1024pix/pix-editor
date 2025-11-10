@@ -166,7 +166,7 @@ describe('Integration | Repository | tube-repository', () => {
 
   describe('#listByCompetenceId', () => {
     it('should retrieve all tubes by competence id', async () => {
-      //given
+      // given
       const tube1 = {
         id: 'tubeId1',
         name: '@tube1',
@@ -234,17 +234,17 @@ describe('Integration | Repository | tube-repository', () => {
               Acquis: tube1.skillAirtableIds,
               'Acquis (id persistant)': tube1.skillIds,
             },
-            get: function (field) {
+            get: function(field) {
               return this.fields[field];
             },
           },
         ];
       });
 
-      //when
+      // when
       const tubes = await tubeRepository.listByCompetenceId(tube1.competenceId);
 
-      //then
+      // then
       expect(tubes).toStrictEqual([
         domainBuilder.buildTube({
           id: 'tubeId1',

@@ -92,9 +92,7 @@ export const skillDatasource = datasource.extend({
   },
 
   async filterByTubeId(tubeId) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `{Tube (id persistant)} = ${stringValue(tubeId)}`,
-    });
+    const airtableRawObjects = await findRecords(this.tableName, { filterByFormula: `{Tube (id persistant)} = ${stringValue(tubeId)}` });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },

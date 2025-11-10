@@ -17,22 +17,14 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
       create: vi.fn().mockResolvedValueOnce(createdSkill),
       listByTubeId: vi.fn().mockResolvedValueOnce(tubeSkills),
     };
-    tubeRepository = {
-      getByAirtableId: vi.fn(),
-    };
-    skillTransformer = {
-      forRelease: vi.fn().mockReturnValueOnce('skillForRelease'),
-    };
-    updatedRecordNotifier = {
-      notify: vi.fn(),
-    };
+    tubeRepository = { getByAirtableId: vi.fn() };
+    skillTransformer = { forRelease: vi.fn().mockReturnValueOnce('skillForRelease') };
+    updatedRecordNotifier = { notify: vi.fn() };
   });
 
   it('should set skill computed fields and save skill', async () => {
     // given
-    const tube = domainBuilder.buildTube({
-      id: 'tube1',
-    });
+    const tube = domainBuilder.buildTube({ id: 'tube1' });
     tubeRepository.getByAirtableId.mockResolvedValueOnce(tube);
 
     const skill = domainBuilder.buildSkill();

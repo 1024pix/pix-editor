@@ -17,9 +17,7 @@ describe('Unit | Domain | Use Cases | create-thematic', () => {
 
     thematicRepository.listByCompetenceAirtableId.mockResolvedValueOnce(competenceThematics);
 
-    thematic = domainBuilder.buildThematic({
-      competenceAirtableId: 'recCompetence1',
-    });
+    thematic = domainBuilder.buildThematic({ competenceAirtableId: 'recCompetence1' });
     prepareForCreationStub = vi.spyOn(thematic, 'prepareForCreation');
 
     thematicRepository.create.mockResolvedValueOnce(createdThematic);
@@ -30,9 +28,7 @@ describe('Unit | Domain | Use Cases | create-thematic', () => {
     updatePixApiReleaseCache.onThematicCreated.mockResolvedValueOnce();
 
     // when
-    const result = createThematic(thematic, {
-      thematicRepository,
-    });
+    const result = createThematic(thematic, { thematicRepository });
 
     // then
     await expect(result).resolves.toBe(createdThematic);

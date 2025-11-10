@@ -71,7 +71,14 @@ describe('Acceptance | Controller | embed', () => {
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
 
-      expect(headers).to.deep.equal(['origin', 'competence', 'acquis', 'challengeId', 'embedUrl', 'status']);
+      expect(headers).to.deep.equal([
+        'origin',
+        'competence',
+        'acquis',
+        'challengeId',
+        'embedUrl',
+        'status',
+      ]);
       expect(data).to.deep.equal([
         [
           'pix',

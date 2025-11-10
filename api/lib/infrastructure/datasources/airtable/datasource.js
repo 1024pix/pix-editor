@@ -86,10 +86,7 @@ const _DatasourcePrototype = {
       filterByFormula: `OR(${entityIds.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',')})`,
     });
     return Object.fromEntries(
-      airtableRawObjects.map((airtableObject) => [
-        airtableObject.get('id persistant'),
-        airtableObject.get(this.airtableIdField),
-      ]),
+      airtableRawObjects.map((airtableObject) => [airtableObject.get('id persistant'), airtableObject.get(this.airtableIdField)]),
     );
   },
 

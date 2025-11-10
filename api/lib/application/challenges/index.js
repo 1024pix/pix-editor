@@ -42,10 +42,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/challenges',
       config: {
-        handler: async function (request) {
-          const params = extractParameters(request.query, {
-            page: { size: 100 },
-          });
+        handler: async function(request) {
+          const params = extractParameters(request.query, { page: { size: 100 } });
           let challenges;
           if (params.filter?.ids) {
             challenges = await challengeRepository.getMany(params.filter.ids);
@@ -60,12 +58,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/challenges/{id}',
       config: {
-        validate: {
-          params: Joi.object({
-            id: challengeIdType,
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ id: challengeIdType }) },
+        handler: async function(request) {
           const challengeId = request.params.id;
           const challenge = await challengeRepository.get(challengeId);
           return challengeSerializer.serialize(challenge);
@@ -78,14 +72,10 @@ export async function register(server) {
       config: {
         auth: false,
         validate: {
-          params: Joi.object({
-            id: challengeIdType,
-          }),
-          query: Joi.object({
-            locale: Joi.string().min(2),
-          }),
+          params: Joi.object({ id: challengeIdType }),
+          query: Joi.object({ locale: Joi.string().min(2) }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const challengeId = request.params.id;
           const locale = request.query.locale;
 
@@ -107,7 +97,7 @@ export async function register(server) {
             frameworkName: Joi.string(),
           }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const challengeId = request.params.id;
           const locale = request.params.locale;
           const areaCode = request.params.areaCode;
@@ -129,11 +119,9 @@ export async function register(server) {
       path: '/api/challenges',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const createdChallenge = await createChallenge(challenge, {
-            challengeRepository,
-          });
+          const createdChallenge = await createChallenge(challenge, { challengeRepository });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -142,13 +130,9 @@ export async function register(server) {
       method: 'PATCH',
       path: '/api/challenges/{id}',
       config: {
-        validate: {
-          params: Joi.object({
-            id: challengeIdType,
-          }),
-        },
+        validate: { params: Joi.object({ id: challengeIdType }) },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await updateChallenge(challenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));

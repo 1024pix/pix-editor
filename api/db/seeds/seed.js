@@ -54,9 +54,7 @@ export async function seed(knex) {
 
   const canSeedAirtableBase = await canSeedOrEmptyAirtableBase();
   if (canSeedAirtableBase) {
-    const learningContentConfig = {
-      ...airtableSeedsConfig,
-    };
+    const learningContentConfig = { ...airtableSeedsConfig };
     const learningContentData = await buildFrameworksFromConfig({
       airtableClient,
       databaseBuilder,

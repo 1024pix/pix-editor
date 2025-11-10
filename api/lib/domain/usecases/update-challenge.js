@@ -7,7 +7,11 @@ import { logger } from '../../infrastructure/logger.js';
 
 export async function updateChallenge(challenge, dependencies = { challengeRepository, attachmentRepository }) {
   if (challenge.locales.includes('fr') || challenge.locales.includes('fr-fr')) {
-    const fieldsToNormalize = ['instruction', 'proposals', 'alternativeInstruction'];
+    const fieldsToNormalize = [
+      'instruction',
+      'proposals',
+      'alternativeInstruction',
+    ];
     for (const field of fieldsToNormalize) {
       if (challenge[field]) {
         challenge[field] = normalizeNonBreakingSpace(challenge[field]);

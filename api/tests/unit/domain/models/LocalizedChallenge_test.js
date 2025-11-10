@@ -98,8 +98,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
     });
   });
 
-  describe('static buildPrimary', function () {
-    it('should build a primary localized challenge', function () {
+  describe('static buildPrimary', function() {
+    it('should build a primary localized challenge', function() {
       // given
       const challengeId = 'idDuChallenge';
       const locale = 'en';
@@ -150,7 +150,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         validatedAt: null,
       });
     });
-    it('should build a primary localized challenge with default values when some not filled', function () {
+    it('should build a primary localized challenge with default values when some not filled', function() {
       // given
       const challengeId = 'idDuChallenge';
       const locale = 'en';
@@ -189,8 +189,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
     });
   });
 
-  describe('static buildAlternativeFromTranslation', function () {
-    it('should build an alternative localized challenge', function () {
+  describe('static buildAlternativeFromTranslation', function() {
+    it('should build an alternative localized challenge', function() {
       // given
       const translation = domainBuilder.buildTranslation({
         key: 'challenge.idDuChallenge.field',
@@ -222,8 +222,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
     });
   });
 
-  describe('clone', function () {
-    it('should return a cloned localized challenge and its cloned attachments', function () {
+  describe('clone', function() {
+    it('should return a cloned localized challenge and its cloned attachments', function() {
       // given
       const newId = 'newChallengeId';
       const newChallengeId = 'newChallengeId';
@@ -327,8 +327,8 @@ describe('Unit | Domain | LocalizedChallenge', () => {
     });
   });
 
-  describe('update', function () {
-    it('should update some fields', function () {
+  describe('update', function() {
+    it('should update some fields', function() {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'old id',
@@ -396,9 +396,9 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       );
     });
 
-    context('validatedAt', function () {
+    context('validatedAt', function() {
       let now;
-      beforeEach(function () {
+      beforeEach(function() {
         now = new Date('2024-10-29T03:04:00Z');
         vi.useFakeTimers({
           now,
@@ -406,11 +406,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         });
       });
 
-      afterEach(function () {
+      afterEach(function() {
         vi.useRealTimers();
       });
 
-      it('should set the date of validatedAt when localized challenge comes from any different status to PLAY', function () {
+      it('should set the date of validatedAt when localized challenge comes from any different status to PLAY', function() {
         // given
         const localizedChallengePrimary = domainBuilder.buildLocalizedChallenge({
           status: LocalizedChallenge.STATUSES.PRIMARY,
@@ -434,7 +434,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         expect(localizedChallengePause.validatedAt).toStrictEqual(now);
       });
 
-      it('should leave untouched the date of validatedAt when localized challenge is already in status PLAY', function () {
+      it('should leave untouched the date of validatedAt when localized challenge is already in status PLAY', function() {
         // given
         const originalValidatedAt = new Date('2020-01-01');
         const localizedChallengePlay1 = domainBuilder.buildLocalizedChallenge({
@@ -473,7 +473,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         expect(localizedChallengePlay3.validatedAt).toStrictEqual(originalValidatedAt);
       });
 
-      it('should leave untouched the date of validatedAt when localized challenge changes to a status different than PLAY', function () {
+      it('should leave untouched the date of validatedAt when localized challenge changes to a status different than PLAY', function() {
         // given
         const originalValidatedAt = new Date('2020-01-01');
         const localizedChallengePlay1 = domainBuilder.buildLocalizedChallenge({

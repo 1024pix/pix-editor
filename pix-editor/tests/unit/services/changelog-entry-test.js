@@ -1,11 +1,11 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Service | changelog-entry', function (hooks) {
+module('Unit | Service | changelog-entry', function(hooks) {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it should return an elementType', function (assert) {
+  test('it should return an elementType', function(assert) {
     assert.expect(2);
     // given
     const keys = ['skill', 'challenge'];

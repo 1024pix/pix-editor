@@ -166,7 +166,12 @@ export async function copyTubesFromAirtable({ airtableClient, databaseBuilder, l
   const airtableTubes = await airtableClient
     .table('Tubes')
     .select({
-      fields: ['id persistant', 'Nom', 'Index', 'Thematique (id persistant)'],
+      fields: [
+        'id persistant',
+        'Nom',
+        'Index',
+        'Thematique (id persistant)',
+      ],
     })
     .all();
 

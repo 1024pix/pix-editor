@@ -3,11 +3,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence/themes/single', function (hooks) {
+module('Unit | Controller | competence/themes/single', function(hooks) {
   setupTest(hooks);
   let controller, notifyMessageStub, notifyErrorStub, rollbackAttributesStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -38,7 +38,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     controller.model = theme;
   });
 
-  test('it should cancel edition', function (assert) {
+  test('it should cancel edition', function(assert) {
     // given
     controller.edition = true;
 
@@ -51,7 +51,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     assert.ok(notifyMessageStub.calledWith('Modification annulée'));
   });
 
-  test('it should save modification', async function (assert) {
+  test('it should save modification', async function(assert) {
     // given
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;
@@ -68,7 +68,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     assert.ok(notifyMessageStub.calledWith('Thématique mis à jour'));
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = { error: ['error-test'] };
     const saveStub = sinon.stub().rejects(errorMessage);

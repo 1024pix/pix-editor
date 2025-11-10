@@ -9,13 +9,13 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Controller | Create alternative challenge', function (hooks) {
+module('Acceptance | Controller | Create alternative challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let challenge;
   let skill;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -60,7 +60,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     return authenticateSession();
   });
 
-  test('create a challenge alternative', async function (assert) {
+  test('create a challenge alternative', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -90,7 +90,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     assert.ok(attachments.every((record) => !record.isNew));
   });
 
-  test('create a challenge alternative clone the attachments', async function (assert) {
+  test('create a challenge alternative clone the attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }
@@ -122,7 +122,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
-  test('create a challenge alternative don\'t clone deleted attachments', async function (assert) {
+  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }

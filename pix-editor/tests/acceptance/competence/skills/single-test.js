@@ -7,12 +7,12 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | skill | single', function (hooks) {
+module('Acceptance | skill | single', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let skill1, competence1, tube1;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -58,15 +58,15 @@ module('Acceptance | skill | single', function (hooks) {
     return authenticateSession();
   });
 
-  test('close single', async function (assert) {
+  test('close single', async function(assert) {
     await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
     await click(find('.icon.window.close'));
 
     assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
 
-  module('#createSkill', function () {
-    test('it should create a new skill', async function (assert) {
+  module('#createSkill', function() {
+    test('it should create a new skill', async function(assert) {
       // given
       const screen = await visit(`/competence/${competence1.id}/skills?view=workbench`);
       const store = this.owner.lookup('service:store');
@@ -94,7 +94,7 @@ module('Acceptance | skill | single', function (hooks) {
       assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/new/recTube1/2?leftMaximized=true&view=workbench`);
     });
 
-    test('it should create a new skill version', async function (assert) {
+    test('it should create a new skill version', async function(assert) {
       // given
       const screen = await visit(`/competence/${competence1.id}/skills?view=workbench`);
       const store = this.owner.lookup('service:store');
@@ -119,8 +119,8 @@ module('Acceptance | skill | single', function (hooks) {
     });
   });
 
-  module('#duplicateToLocation', function () {
-    test('it should duplicate a skill and his challenges to new location', async function (assert) {
+  module('#duplicateToLocation', function() {
+    test('it should duplicate a skill and his challenges to new location', async function(assert) {
       // given
       const SKILL_LEVEL_CHOOSE = 4;
       const store = this.owner.lookup('service:store');
@@ -144,8 +144,8 @@ module('Acceptance | skill | single', function (hooks) {
     });
   });
 
-  module('#Modify skill', function () {
-    test('it should modify skill and proto', async function (assert) {
+  module('#Modify skill', function() {
+    test('it should modify skill and proto', async function(assert) {
       // given
       const challengeProto = this.server.create('challenge', {
         id: 'recChallengeProto',

@@ -8,7 +8,7 @@ export async function register(server) {
       path: '/api/phrase/upload',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           await uploadTranslationToPhrase();
           return h.response();
         },
@@ -19,7 +19,7 @@ export async function register(server) {
       path: '/api/phrase/download',
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           await downloadTranslationFromPhrase();
           return h.response();
         },

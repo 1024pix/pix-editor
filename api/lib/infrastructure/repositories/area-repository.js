@@ -37,7 +37,11 @@ export async function create(area) {
 }
 
 export async function list() {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     areaDatasource.list(),
     selectAreas().orderBy('code'),
     translationRepository.listByModel(model),
@@ -49,7 +53,11 @@ export async function list() {
 }
 
 export async function listByFrameworkId(frameworkId) {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     areaDatasource.listByFrameworkId(frameworkId),
     selectAreas().where('frameworkId', frameworkId).orderBy('code'),
     translationRepository.listByModel(model),
@@ -64,10 +72,7 @@ export async function getByAirtableId(areaAirtableId) {
   const airtableDto = await areaDatasource.find(areaAirtableId);
   if (!airtableDto) return null;
 
-  const [pgDto, translations] = await Promise.all([
-    selectAreas().where('id', airtableDto.id).first(),
-    translationRepository.listByEntity(model, airtableDto.id),
-  ]);
+  const [pgDto, translations] = await Promise.all([selectAreas().where('id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
   compareDtos(airtableDto, pgDto, compareAreaDtos);
 

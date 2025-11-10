@@ -3,10 +3,10 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | target-profile', function (hooks) {
+module('Unit | Controller | target-profile', function(hooks) {
   setupTest(hooks);
   let store, tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, framework, controller;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
     // given
     skill1 = store.createRecord('skill', {
@@ -124,7 +124,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     controller = this.owner.lookup('controller:authenticated.target-profile');
   });
 
-  test('it should set tube-level arguments for production tube', function (assert) {
+  test('it should set tube-level arguments for production tube', function(assert) {
     // when
     controller.displayTube(tube1);
 
@@ -138,7 +138,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.ok(controller.displayTubeLevel);
   });
 
-  test('it should set a profile tube, with a level and a list of production skill id under this level ', function (assert) {
+  test('it should set a profile tube, with a level and a list of production skill id under this level ', function(assert) {
     // when
     controller.setProfileTube(tube1, 2, [skill1.pixId, skill2.pixId]);
 
@@ -146,7 +146,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [2, [skill1.pixId, skill2.pixId]]);
   });
 
-  test('it should set a profile tube, with a levelMax if have no level parameter', function (assert) {
+  test('it should set a profile tube, with a levelMax if have no level parameter', function(assert) {
     // when
     controller.setProfileTube(tube1);
 
@@ -162,7 +162,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     ]);
   });
 
-  test('it should reset a profile tube', function (assert) {
+  test('it should reset a profile tube', function(assert) {
     // when
     controller.unsetProfileTube(tube1);
 
@@ -170,7 +170,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [false, []]);
   });
 
-  test('it should set tube-level arguments for thematic result tube', function (assert) {
+  test('it should set tube-level arguments for thematic result tube', function(assert) {
     // when
     controller.displayThematicResultTube(tube1);
 
@@ -204,7 +204,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       assert.deepEqual(value, expectedResult[i]);
     });
   });
-  test('it should set a thematic result tube, with a level and a list of production skill id under this level ', function (assert) {
+  test('it should set a thematic result tube, with a level and a list of production skill id under this level ', function(assert) {
     // when
     controller.setThematicResultTube(tube1, 1, [skill1.pixId]);
 
@@ -212,7 +212,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [1, [skill1.pixId]]);
   });
 
-  test('it should reset a thematic result tube', function (assert) {
+  test('it should reset a thematic result tube', function(assert) {
     // when
     controller.unsetThematicResultTube(tube1);
 
@@ -220,7 +220,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [false, []]);
   });
 
-  test('it generate a file with a list of profile skills ids', function (assert) {
+  test('it generate a file with a list of profile skills ids', function(assert) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
@@ -234,7 +234,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
   });
 
-  test('it generate a file with a list of thematic result skills ids', function (assert) {
+  test('it generate a file with a list of thematic result skills ids', function(assert) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
@@ -248,7 +248,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
   });
 
-  test('it should save profile state', function (assert) {
+  test('it should save profile state', function(assert) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
@@ -282,8 +282,8 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual(fileSaverStub.getCall(0).args[0], expectedResult);
   });
 
-  module('_determineFileType', function () {
-    test('should return orga when the file is an array of strings', function (assert) {
+  module('_determineFileType', function() {
+    test('should return orga when the file is an array of strings', function(assert) {
       // given
       const data = ['1', '2'];
 
@@ -294,7 +294,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       assert.strictEqual(result, 'orga');
     });
 
-    test('should return editor when the file is an array of objects', function (assert) {
+    test('should return editor when the file is an array of objects', function(assert) {
       // given
       const data = [{ id: '1' }, { id: '2' }];
 
@@ -306,10 +306,10 @@ module('Unit | Controller | target-profile', function (hooks) {
     });
   });
 
-  module('_buildTargetProfileFromFile', function (hooks) {
+  module('_buildTargetProfileFromFile', function(hooks) {
     let skill10, skill11, skill12, tube3, area3, framework2;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       skill10 = store.createRecord('skill', {
         pixId: 'pixSkill3_1_1',
         name: 'skill3_1_1',
@@ -354,7 +354,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       });
     });
 
-    test('it should build a profile state from pix-editor json file', async function (assert) {
+    test('it should build a profile state from pix-editor json file', async function(assert) {
       // given
       const fileContent = [
         {
@@ -380,7 +380,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       assert.deepEqual(controller._selectedFrameworks, expectedSelectedFrameworks);
     });
 
-    test('it should build a profile state from orga json file', async function (assert) {
+    test('it should build a profile state from orga json file', async function(assert) {
       // given
       const fileContent = ['pix123456', 'pix666457'];
 

@@ -5,23 +5,23 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | competence/competence-actions', function (hooks) {
+module('Integration | Component | competence/competence-actions', function(hooks) {
   setupIntlRenderingTest(hooks);
   let selectViewStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     selectViewStub = sinon.stub();
     this.selectView = selectViewStub;
   });
 
-  module('#skillSection', function (hooks) {
-    hooks.beforeEach(function () {
+  module('#skillSection', function(hooks) {
+    hooks.beforeEach(function() {
       this.section = 'skills';
       this.exportSkills = sinon.stub();
       this.refresh = sinon.stub();
     });
 
-    test('it should display draft view', async function (assert) {
+    test('it should display draft view', async function(assert) {
       // when
       await render(hbs` <Competence::CompetenceActions
             @section={{this.section}}
@@ -36,7 +36,7 @@ module('Integration | Component | competence/competence-actions', function (hook
       assert.ok(selectViewStub.calledWith('draft'));
     });
 
-    test('it should have draft active tab if view is set to `draft`', async function (assert) {
+    test('it should have draft active tab if view is set to `draft`', async function(assert) {
       // given
       this.view = 'draft';
 
@@ -53,7 +53,7 @@ module('Integration | Component | competence/competence-actions', function (hook
     });
   });
 
-  test('it renders', async function (assert) {
+  test('it renders', async function(assert) {
     // given
 
     this.set('externalAction', () => {});

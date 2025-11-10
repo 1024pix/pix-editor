@@ -1,10 +1,10 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Model | competence', function (hooks) {
+module('Unit | Model | competence', function(hooks) {
   setupTest(hooks);
 
-  test('it should return live theme', function (assert) {
+  test('it should return live theme', function(assert) {
     const store = this.owner.lookup('service:store');
 
     const liveTheme = store.createRecord('theme', { name: 'liveTheme' });
@@ -19,8 +19,8 @@ module('Unit | Model | competence', function (hooks) {
     assert.deepEqual(competence.themes, [liveTheme]);
   });
 
-  module('#productionTubes', function () {
-    test('returns tubes with valided skills', function (assert) {
+  module('#productionTubes', function() {
+    test('returns tubes with valided skills', function(assert) {
       const store = this.owner.lookup('service:store');
 
       const liveTube = store.createRecord('tube', {
@@ -39,8 +39,8 @@ module('Unit | Model | competence', function (hooks) {
     });
   });
 
-  module('#getAreaCode', function () {
-    test('should return area code', function (assert) {
+  module('#getAreaCode', function() {
+    test('should return area code', function(assert) {
       const store = this.owner.lookup('service:store');
 
       const competence = store.createRecord('competence', { code: '2.4' });

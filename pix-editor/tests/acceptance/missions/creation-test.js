@@ -5,11 +5,11 @@ import { setupApplicationTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-module('Acceptance | Missions | Creation', function (hooks) {
+module('Acceptance | Missions | Creation', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
@@ -21,13 +21,13 @@ module('Acceptance | Missions | Creation', function (hooks) {
     this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
   });
 
-  module('when user does not have write access', function (hooks) {
-    hooks.beforeEach(function () {
+  module('when user does not have write access', function(hooks) {
+    hooks.beforeEach(function() {
       this.server.create('user', { trigram: 'ABC', access: 'readonly' });
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access creation form', async function (assert) {
+    test('should prevent user from being able to access creation form', async function(assert) {
       // when
       const screen = await visit('/');
       await clickByName('Sélectionner un référentiel');
@@ -40,14 +40,14 @@ module('Acceptance | Missions | Creation', function (hooks) {
     });
   });
 
-  module('when user has write access', function (hooks) {
-    hooks.beforeEach(function () {
+  module('when user has write access', function(hooks) {
+    hooks.beforeEach(function() {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    test('should be able to access mission creation', async function (assert) {
+    test('should be able to access mission creation', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Sélectionner un référentiel');
@@ -62,7 +62,7 @@ module('Acceptance | Missions | Creation', function (hooks) {
       assert.strictEqual(currentURL(), '/missions/new');
     });
 
-    test('should be able to create a mission', async function (assert) {
+    test('should be able to create a mission', async function(assert) {
       // given
       const screen = await visit('/missions/new');
 
@@ -83,7 +83,7 @@ module('Acceptance | Missions | Creation', function (hooks) {
       assert.dom(screen.queryByText('Nouvelle mission de test')).exists();
     });
 
-    test('should be able to cancel a mission creation', async function (assert) {
+    test('should be able to cancel a mission creation', async function(assert) {
       // given
       const screen = await visit('/missions/new');
 

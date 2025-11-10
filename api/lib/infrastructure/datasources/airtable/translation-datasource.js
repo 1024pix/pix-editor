@@ -8,7 +8,11 @@ export const translationDatasource = datasource.extend({
 
   sortField: 'key_locale',
 
-  usedFields: ['key', 'locale', 'value'],
+  usedFields: [
+    'key',
+    'locale',
+    'value',
+  ],
 
   fieldsToMergeOn: ['key', 'locale'],
 

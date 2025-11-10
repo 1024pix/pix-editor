@@ -5,10 +5,10 @@ import { Skill } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { SkillForReplication } from '../../../../lib/domain/models/replication/index.js';
 
-describe('Unit | Infrastructure | skill-transformer', function () {
-  describe('#forRelease', function () {
-    context('when providing a single Skill', function () {
-      it('should transform it into a single SkillForRelease', function () {
+describe('Unit | Infrastructure | skill-transformer', function() {
+  describe('#forRelease', function() {
+    context('when providing a single Skill', function() {
+      it('should transform it into a single SkillForRelease', function() {
         // given
         const skill = domainBuilder.buildSkill({
           id: 'skillId',
@@ -57,8 +57,8 @@ describe('Unit | Infrastructure | skill-transformer', function () {
       });
     });
 
-    context('when providing several Skills', function () {
-      it('should transform them into several SkillsForRelease', function () {
+    context('when providing several Skills', function() {
+      it('should transform them into several SkillsForRelease', function() {
         // given
         const skills = [
           domainBuilder.buildSkill({
@@ -147,9 +147,9 @@ describe('Unit | Infrastructure | skill-transformer', function () {
     });
   });
 
-  describe('#forReplication', function () {
-    context('when providing a single Skill', function () {
-      it('should transform it into a single SkillForReplication', function () {
+  describe('#forReplication', function() {
+    context('when providing a single Skill', function() {
+      it('should transform it into a single SkillForReplication', function() {
         // given
         const skill = domainBuilder.buildSkill({
           id: 'skillId',
@@ -207,8 +207,8 @@ describe('Unit | Infrastructure | skill-transformer', function () {
       });
     });
 
-    context('when providing several Skills', function () {
-      it('should transform them into several SkillsForReplication', function () {
+    context('when providing several Skills', function() {
+      it('should transform them into several SkillsForReplication', function() {
         // given
         const skills = [
           domainBuilder.buildSkill({

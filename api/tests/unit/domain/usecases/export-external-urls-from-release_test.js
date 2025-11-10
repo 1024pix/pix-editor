@@ -5,24 +5,20 @@ import { exportExternalUrlsFromRelease } from '../../../../lib/domain/usecases/i
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Domain | Usecases | Export external urls from release', function () {
-  describe('#exportExternalUrlsFromRelease', function () {
+describe('Unit | Domain | Usecases | Export external urls from release', function() {
+  describe('#exportExternalUrlsFromRelease', function() {
     let releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository;
 
-    beforeEach(function () {
+    beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence1',
         origin: 'Pix',
-        name_i18n: {
-          fr: 'competence 1.1',
-        },
+        name_i18n: { fr: 'competence 1.1' },
       });
       const wonderlandCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence2',
         origin: 'wonderland',
-        name_i18n: {
-          fr: 'competence 4.5',
-        },
+        name_i18n: { fr: 'competence 4.5' },
       });
       const pixTube = domainBuilder.buildTubeForRelease({
         id: 'tube1',
@@ -93,7 +89,11 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       const latestRelease = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [pixCompetence, wonderlandCompetence],
         tubesFromRelease: [pixTube, wonderlandTube],
-        skillsFromRelease: [pixSkill1, pixSkill2, wonderlandSkill1],
+        skillsFromRelease: [
+          pixSkill1,
+          pixSkill2,
+          wonderlandSkill1,
+        ],
         challengesFromRelease: [
           pixChallenge1Skill1,
           challenge2NoSkill,
@@ -138,12 +138,10 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
         }),
       ];
       whitelistedUrlRepository = { list: vi.fn().mockResolvedValue(whitelistedUrls) };
-      urlRepository = {
-        exportExternalUrls: vi.fn(),
-      };
+      urlRepository = { exportExternalUrls: vi.fn() };
     });
 
-    it('should export external URLs for operative challenges (and also get urls from primary localized challenge)', async function () {
+    it('should export external URLs for operative challenges (and also get urls from primary localized challenge)', async function() {
       // when
       await exportExternalUrlsFromRelease({
         releaseRepository,
@@ -156,14 +154,62 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       // then
       expect(urlRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
       expect(urlRepository.exportExternalUrls).toHaveBeenCalledWith([
-        ['Pix', '@NomTube1', 'https://examplechal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://other_examplechal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://example2chal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://example3chal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://example4chal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://exampleloc1chal1.net', 'fr', 'validé'],
-        ['Pix', '@NomTube1', 'https://exampleloc2chal1.net', 'fr', 'validé'],
-        ['wonderland', '@NomTube2', 'https://examplechal4.fr', 'nl;FR-fr', 'archivé'],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://examplechal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://other_examplechal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://example2chal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://example3chal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://example4chal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://exampleloc1chal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'Pix',
+          '@NomTube1',
+          'https://exampleloc2chal1.net',
+          'fr',
+          'validé',
+        ],
+        [
+          'wonderland',
+          '@NomTube2',
+          'https://examplechal4.fr',
+          'nl;FR-fr',
+          'archivé',
+        ],
       ]);
     });
   });

@@ -14,9 +14,7 @@ function localPostgresEnv(databaseUrl) {
       directory: './migrations',
       stub: './migration-template.js',
     },
-    seeds: {
-      directory: './seeds',
-    },
+    seeds: { directory: './seeds' },
     asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
   };
 }
@@ -36,9 +34,7 @@ export const staging = {
     tableName: 'knex_migrations',
     directory: './migrations',
   },
-  seeds: {
-    directory: './seeds',
-  },
+  seeds: { directory: './seeds' },
   asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
 };
 
@@ -53,9 +49,7 @@ export const production = {
     tableName: 'knex_migrations',
     directory: './migrations',
   },
-  seeds: {
-    directory: './seeds',
-  },
+  seeds: { directory: './seeds' },
   ssl: process.env.DATABASE_SSL_ENABLED === 'true',
   asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
 };

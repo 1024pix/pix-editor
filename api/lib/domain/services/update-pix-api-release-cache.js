@@ -26,9 +26,7 @@ import { child } from '../../infrastructure/logger.js';
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
  **/
 
-const logger = child('updatePixApiReleaseCacheService', {
-  event: 'lcms:patch-release',
-});
+const logger = child('updatePixApiReleaseCacheService', { event: 'lcms:patch-release' });
 
 /**
  * @param {Attachment} attachment
@@ -58,17 +56,13 @@ async function onAttachmentCreatedOrDeleted(attachment) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
   try {
     const localizedChallengeId = attachment.challengeId ?? attachment.localizedChallengeId;
-    const localizedChallenge = await localizedChallengeRepository.get({
-      id: localizedChallengeId,
-    });
+    const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
     const primaryChallenge = await challengeRepository.get(localizedChallenge.challengeId);
     const allChallengeAttachments = await attachmentRepository.listByLocalizedChallengeIds([localizedChallengeId]);
     const challengeToTransform = localizedChallenge.isPrimary
       ? primaryChallenge
       : primaryChallenge.translate(localizedChallenge.locale);
-    const transformChallenge = createChallengeTransformer({
-      attachments: allChallengeAttachments,
-    });
+    const transformChallenge = createChallengeTransformer({ attachments: allChallengeAttachments });
     const transformedChallenge = transformChallenge(challengeToTransform);
     await updatedRecordNotifier.notify({
       pixApiClient,

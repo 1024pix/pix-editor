@@ -5,10 +5,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migration-from-airtable.js';
 
 export async function get(id) {
-  const [airtableDto, pgDto] = await Promise.all([
-    attachmentDatasource.find(id),
-    knex.select('*').from('attachments').where('id', id).first(),
-  ]);
+  const [airtableDto, pgDto] = await Promise.all([attachmentDatasource.find(id), knex.select('*').from('attachments').where('id', id).first()]);
 
   compareDtos(airtableDto, pgDto, compareAttachmentDtos);
 
@@ -17,10 +14,7 @@ export async function get(id) {
 }
 
 export async function list() {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    attachmentDatasource.list(),
-    knex.select('*').from('attachments').orderBy('id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.list(), knex.select('*').from('attachments').orderBy('id')]);
 
   compareDtosLists(airtableDtos, pgDtos, compareAttachmentDtos);
 
@@ -28,10 +22,7 @@ export async function list() {
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds),
-    knex.select('*').from('attachments').whereIn('localizedChallengeId', localizedChallengeIds).orderBy('id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds), knex.select('*').from('attachments').whereIn('localizedChallengeId', localizedChallengeIds).orderBy('id')]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
 
@@ -40,10 +31,7 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 }
 
 export async function listByLocalizedChallengeId(localizedChallengeId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId),
-    knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId).orderBy('id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId), knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId).orderBy('id')]);
 
   compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
 

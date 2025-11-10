@@ -5,16 +5,12 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/api/missions',
-      config: {
-        handler: missionController.findMissions,
-      },
+      config: { handler: missionController.findMissions },
     },
     {
       method: 'GET',
       path: '/api/missions/{id}',
-      config: {
-        handler: missionController.getMission,
-      },
+      config: { handler: missionController.getMission },
     },
     {
       method: 'POST',

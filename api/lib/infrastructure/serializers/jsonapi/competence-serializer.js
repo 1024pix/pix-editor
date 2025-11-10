@@ -38,30 +38,18 @@ const serializer = new Serializer('competence', {
       description: description_i18n.fr,
       descriptionEn: description_i18n.en,
       source: origin,
-      area: {
-        id: areaAirtableId,
-      },
-      rawThemes: thematicAirtableIds?.map((airtableThematicId) => ({
-        id: airtableThematicId,
-      })),
-      rawTubes: tubeAirtableIds?.map((airtableTubeId) => ({
-        id: airtableTubeId,
-      })),
+      area: { id: areaAirtableId },
+      rawThemes: thematicAirtableIds?.map((airtableThematicId) => ({ id: airtableThematicId })),
+      rawTubes: tubeAirtableIds?.map((airtableTubeId) => ({ id: airtableTubeId })),
     };
   },
   typeForAttribute(attribute) {
     if (attribute === 'rawThemes') return 'themes';
     if (attribute === 'rawTubes') return 'tubes';
   },
-  area: {
-    ref: 'id',
-  },
-  rawThemes: {
-    ref: 'id',
-  },
-  rawTubes: {
-    ref: 'id',
-  },
+  area: { ref: 'id' },
+  rawThemes: { ref: 'id' },
+  rawTubes: { ref: 'id' },
 });
 
 export function serialize(competences) {

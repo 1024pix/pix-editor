@@ -9,9 +9,7 @@ export async function up(knex) {
   await knex.schema.table(TABLE_NAME, function(table) {
     table.string(STATUS_COLUMN, 255);
   });
-  await knex(TABLE_NAME).update({
-    [STATUS_COLUMN]: 'proposé'
-  }).where('id', '<>', knex.ref('challengeId'));
+  await knex(TABLE_NAME).update({ [STATUS_COLUMN]: 'proposé' }).where('id', '<>', knex.ref('challengeId'));
 }
 
 /**

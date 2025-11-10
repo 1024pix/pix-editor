@@ -24,13 +24,13 @@ const {
 describe('Acceptance | Controller | replication-data-controller', () => {
   let user;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     user = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
   });
 
-  describe('GET /api/replication-data', function () {
-    it('should return data for replication', async function () {
+  describe('GET /api/replication-data', function() {
+    it('should return data for replication', async function() {
       const expectedCurrentContent = await mockCurrentContent();
 
       const server = await createServer();
@@ -63,9 +63,7 @@ function omit(keys, obj) {
 }
 
 async function mockCurrentContent() {
-  const expectedCurrentContent = {
-    translations: [],
-  };
+  const expectedCurrentContent = { translations: [] };
   const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework({ name: 'Pix' }));
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
 
@@ -74,7 +72,13 @@ async function mockCurrentContent() {
   expectedCurrentContent.areas = [{ ...expectedArea }];
 
   const expectedCompetence = omit(
-    ['airtableId', 'thematicAirtableIds', 'tubeAirtableIds', 'tubeIds', 'areaAirtableId'],
+    [
+      'airtableId',
+      'thematicAirtableIds',
+      'tubeAirtableIds',
+      'tubeIds',
+      'areaAirtableId',
+    ],
     domainBuilder.buildCompetence({
       name_i18n: {
         fr: 'Français',
@@ -91,7 +95,11 @@ async function mockCurrentContent() {
   expectedCurrentContent.competences = [expectedCompetence];
 
   const expectedThematic = omit(
-    ['airtableId', 'competenceAirtableId', 'tubeAirtableIds'],
+    [
+      'airtableId',
+      'competenceAirtableId',
+      'tubeAirtableIds',
+    ],
     domainBuilder.buildThematic({
       id: 'recThematic1',
       name_i18n: {
@@ -105,7 +113,13 @@ async function mockCurrentContent() {
   expectedCurrentContent.thematics = [expectedThematic];
 
   const expectedTube = omit(
-    ['airtableId', 'index', 'competenceAirtableId', 'skillAirtableIds', 'thematicAirtableId'],
+    [
+      'airtableId',
+      'index',
+      'competenceAirtableId',
+      'skillAirtableIds',
+      'thematicAirtableId',
+    ],
     domainBuilder.buildTube({
       id: 'recTube1',
       thematicId: expectedThematic.id,
@@ -139,10 +153,7 @@ async function mockCurrentContent() {
 
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
-    files: [
-      { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
-      { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
-    ],
+    files: [{ fileId: 'attid1', localizedChallengeId: 'challenge-id' }, { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' }],
     version: 1,
     genealogy: Challenge.GENEALOGIES.PROTOTYPE,
     accessibility1: Challenge.ACCESSIBILITY1.OK,
@@ -164,15 +175,8 @@ async function mockCurrentContent() {
     id: 'localized-challenge-id',
     locales: ['nl'],
     embedUrl: 'https://github.io/page/epreuve.html?lang=nl',
-    translations: {
-      nl: {
-        instruction: 'Consigne en nl',
-      },
-    },
-    files: [
-      { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
-      { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
-    ],
+    translations: { nl: { instruction: 'Consigne en nl' } },
+    files: [{ fileId: 'attid1', localizedChallengeId: 'challenge-id' }, { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' }],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
     validatedAt: '2023-01-02T18:08:08.000Z',
@@ -214,7 +218,11 @@ async function mockCurrentContent() {
     area: 'RO',
   };
   delete expectedChallengeNl.localizedChallenges;
-  expectedCurrentContent.challenges = [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge];
+  expectedCurrentContent.challenges = [
+    expectedChallenge,
+    expectedChallengeNl,
+    expectedAlternativeChallenge,
+  ];
 
   const expectedAttachment = {
     id: 'attid1',
@@ -239,20 +247,25 @@ async function mockCurrentContent() {
     size: 5678,
   };
   expectedCurrentContent.attachments = [
-    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
+    omit([
+      'airtableChallengeId',
+      'mimeType',
+      'localizedChallengeId',
+    ], {
       ...domainBuilder.buildAttachment(expectedAttachment),
       alt: null,
     }),
-    omit(['airtableChallengeId', 'mimeType', 'localizedChallengeId'], {
+    omit([
+      'airtableChallengeId',
+      'mimeType',
+      'localizedChallengeId',
+    ], {
       ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
       alt: 'alt_nl',
     }),
   ];
 
-  expectedCurrentContent.tutorials = [
-    domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }),
-    domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] }),
-  ];
+  expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }), domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] })];
 
   expectedCurrentContent.courses = [
     {
@@ -324,9 +337,7 @@ async function mockCurrentContent() {
           },
         ],
       }),
-      buildChallenge({
-        ...alternativeChallenge,
-      }),
+      buildChallenge({ ...alternativeChallenge }),
     ],
     attachments: [buildAttachment(expectedAttachment), buildAttachment(expectedAttachmentNl)],
     tutorials: expectedCurrentContent.tutorials.map(buildTutorial),

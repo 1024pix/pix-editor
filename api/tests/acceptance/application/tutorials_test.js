@@ -11,7 +11,7 @@ import * as config from '../../../lib/config.js';
 describe('Application | Route | Tutorials', () => {
   let editorUser, readonlyUser, originalPixApiUrlValue;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     originalPixApiUrlValue = config.pixApi.baseUrl;
     delete config.pixApi.baseUrl;
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -19,15 +19,15 @@ describe('Application | Route | Tutorials', () => {
     await databaseBuilder.commit();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     config.pixApi.baseUrl = originalPixApiUrlValue;
   });
 
   describe('POST /api/tutorials', async () => {
     let airtableCreateTutorialScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -73,8 +73,8 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -120,7 +120,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       it('should respond with status 201 and created tutorial', async () => {
         // given
         const generateNewId = vi.spyOn(idGenerator, 'generateNewId');
@@ -280,8 +280,8 @@ describe('Application | Route | Tutorials', () => {
   describe('GET /api/tutorials/{tutorialAirtableId}', async () => {
     let airtableGetTutorialScope;
 
-    context('when param is not in the right format', function () {
-      it('should respond with status 400', async function () {
+    context('when param is not in the right format', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -297,8 +297,8 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when tutorial does not exist', function () {
-      it('should respond with status 404', async function () {
+    context('when tutorial does not exist', function() {
+      it('should respond with status 404', async function() {
         // given
         const server = await createServer();
         airtableGetTutorialScope = nock('https://api.airtable.com')
@@ -320,7 +320,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       it('should respond with status 200 and tutorial', async () => {
         // given
         const tutorial = {
@@ -400,8 +400,8 @@ describe('Application | Route | Tutorials', () => {
   describe('PATCH /api/tutorials/{tutorialAirtableId}', async () => {
     let airtableGetTutorialScope, airtableUpdateTutorialScope;
 
-    context('when user has not the right to do the operation', function () {
-      it('should respond with status 403', async function () {
+    context('when user has not the right to do the operation', function() {
+      it('should respond with status 403', async function() {
         // given
         const server = await createServer();
 
@@ -449,8 +449,8 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function () {
-      it('should respond with status 400', async function () {
+    context('when payload is not formatted correctly', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -498,8 +498,8 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('when tutorial does not exist', function () {
-      it('should respond with status 404', async function () {
+    context('when tutorial does not exist', function() {
+      it('should respond with status 404', async function() {
         // given
         const server = await createServer();
         airtableGetTutorialScope = nock('https://api.airtable.com')
@@ -553,7 +553,7 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function () {
+    context('success', function() {
       it('should respond with status 200 and updated tutorial', async () => {
         // given
         databaseBuilder.factory.buildTag({ id: 'tagId1', title: 'title1' });
@@ -743,8 +743,8 @@ describe('Application | Route | Tutorials', () => {
       airtableSearchTutorialBySourceScope,
       airtableGetManyTutorialsScope;
 
-    context('when query param is not in the right format', function () {
-      it('should respond with status 400', async function () {
+    context('when query param is not in the right format', function() {
+      it('should respond with status 400', async function() {
         // given
         const server = await createServer();
 
@@ -760,8 +760,8 @@ describe('Application | Route | Tutorials', () => {
       });
     });
 
-    context('success', function () {
-      context('when searching by tutorial title', function () {
+    context('success', function() {
+      context('when searching by tutorial title', function() {
         it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
@@ -810,9 +810,7 @@ describe('Application | Route | Tutorials', () => {
               maxRecords: 100,
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTutorials,
-            });
+            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -867,11 +865,7 @@ describe('Application | Route | Tutorials', () => {
                   language: 'es',
                   'pix-id': 'tutorialId2',
                 },
-                relationships: {
-                  tags: {
-                    data: [],
-                  },
-                },
+                relationships: { tags: { data: [] } },
               },
             ],
           });
@@ -879,7 +873,7 @@ describe('Application | Route | Tutorials', () => {
         });
       });
 
-      context('when searching by tutorial source', function () {
+      context('when searching by tutorial source', function() {
         it('should respond with status 200 and relevant tutorials, limited by 4 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
@@ -929,9 +923,7 @@ describe('Application | Route | Tutorials', () => {
               maxRecords: 4,
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTutorials,
-            });
+            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -986,11 +978,7 @@ describe('Application | Route | Tutorials', () => {
                   language: 'es',
                   'pix-id': 'tutorialId2',
                 },
-                relationships: {
-                  tags: {
-                    data: [],
-                  },
-                },
+                relationships: { tags: { data: [] } },
               },
             ],
           });
@@ -998,7 +986,7 @@ describe('Application | Route | Tutorials', () => {
         });
       });
 
-      context('when searching by tag titles', function () {
+      context('when searching by tag titles', function() {
         it('should respond with status 200 and relevant tutorials, limited by 100 tutorials and sorted by title', async () => {
           // given
           const tutorials = [
@@ -1050,9 +1038,7 @@ describe('Application | Route | Tutorials', () => {
               maxRecords: 100,
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTutorials,
-            });
+            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when
@@ -1132,7 +1118,7 @@ describe('Application | Route | Tutorials', () => {
         });
       });
 
-      context('when searching by ids', function () {
+      context('when searching by ids', function() {
         it('should respond with status 200 and relevant tutorials', async () => {
           // given
           const tutorials = [
@@ -1183,9 +1169,7 @@ describe('Application | Route | Tutorials', () => {
               sort: [{ field: tutorialDatasource.sortField, direction: 'asc' }],
             })
             .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-            .reply(200, {
-              records: airtableTutorials,
-            });
+            .reply(200, { records: airtableTutorials });
           const server = await createServer();
 
           // when

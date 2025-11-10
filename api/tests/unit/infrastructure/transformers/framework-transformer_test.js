@@ -4,10 +4,10 @@ import { Framework } from '../../../../lib/domain/models/index.js';
 import { FrameworkForRelease } from '../../../../lib/domain/models/release/index.js';
 import { FrameworkForReplication } from '../../../../lib/domain/models/replication/index.js';
 
-describe('Unit | Infrastructure | framework-transformer', function () {
-  describe('#forRelease', function () {
-    context('when providing a single Framework', function () {
-      it('should transform it into a single FrameworkForRelease', function () {
+describe('Unit | Infrastructure | framework-transformer', function() {
+  describe('#forRelease', function() {
+    context('when providing a single Framework', function() {
+      it('should transform it into a single FrameworkForRelease', function() {
         // given
         const framework = new Framework({
           id: 'frameworkABC123',
@@ -28,8 +28,8 @@ describe('Unit | Infrastructure | framework-transformer', function () {
       });
     });
 
-    context('when providing several Frameworks', function () {
-      it('should transform them into a several FrameworksForRelease', function () {
+    context('when providing several Frameworks', function() {
+      it('should transform them into a several FrameworksForRelease', function() {
         // given
         const frameworkA = new Framework({
           id: 'frameworkABC123',
@@ -60,9 +60,9 @@ describe('Unit | Infrastructure | framework-transformer', function () {
     });
   });
 
-  describe('#forReplication', function () {
-    context('when providing a single Framework', function () {
-      it('should transform it into a single FrameworkForReplication', function () {
+  describe('#forReplication', function() {
+    context('when providing a single Framework', function() {
+      it('should transform it into a single FrameworkForReplication', function() {
         // given
         const framework = new Framework({
           id: 'frameworkABC123',
@@ -83,8 +83,8 @@ describe('Unit | Infrastructure | framework-transformer', function () {
       });
     });
 
-    context('when providing several Frameworks', function () {
-      it('should transform them into a several FrameworksForReplication', function () {
+    context('when providing several Frameworks', function() {
+      it('should transform them into a several FrameworksForReplication', function() {
         // given
         const frameworkA = new Framework({
           id: 'frameworkABC123',

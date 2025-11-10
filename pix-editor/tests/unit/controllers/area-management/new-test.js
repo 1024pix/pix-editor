@@ -3,11 +3,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | area-management/new', function (hooks) {
+module('Unit | Controller | area-management/new', function(hooks) {
   setupTest(hooks);
   let controller, transitionToRouteStub, area, framework, notifyMessageStub, notifyErrorStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
     class NotifyService extends Service {
@@ -27,7 +27,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
     };
   });
 
-  test('it should cancel creation', function (assert) {
+  test('it should cancel creation', function(assert) {
     // given
     const deleteRecordStub = sinon.stub();
     controller.store.deleteRecord = deleteRecordStub;
@@ -41,9 +41,9 @@ module('Unit | Controller | area-management/new', function (hooks) {
     assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
-  module('#save', function (hooks) {
+  module('#save', function(hooks) {
     let loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       loaderStartStub = sinon.stub();
       loaderStopStub = sinon.stub();
 
@@ -55,7 +55,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
       this.owner.register('service:loader', LoaderService);
     });
 
-    test('it should save area', async function (assert) {
+    test('it should save area', async function(assert) {
       // given
       const saveStub = sinon.stub().resolves();
       area.save = saveStub;
@@ -78,7 +78,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
       assert.ok(transitionToRouteStub.calledWith('authenticated'));
     });
 
-    test('it should throw an error if saving failed', async function (assert) {
+    test('it should throw an error if saving failed', async function(assert) {
       // given
       const errorMessage = { error: ['error-test'] };
       const saveStub = sinon.stub().rejects(errorMessage);

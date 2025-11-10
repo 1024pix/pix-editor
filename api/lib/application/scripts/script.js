@@ -23,9 +23,7 @@ export class Script {
    * @param {object} [metaInfo.commands] - Commands of the script, see doc: https://yargs.js.org/docs/#api-reference-commandcmd-desc-builder-handler.
    */
   constructor(metaInfo) {
-    const result = Joi.attempt(metaInfo, META_INFO_SCHEMA, {
-      abortEarly: false,
-    });
+    const result = Joi.attempt(metaInfo, META_INFO_SCHEMA, { abortEarly: false });
     this.metaInfo = result;
   }
 

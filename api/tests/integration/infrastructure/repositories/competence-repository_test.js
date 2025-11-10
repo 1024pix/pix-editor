@@ -337,8 +337,16 @@ describe('Integration | Repository | competence-repository', () => {
         skillIds: ['skill3', 'skill4'],
         thematicIds: ['thematic3', 'thematic4'],
         thematicAirtableIds: ['recThematic3', 'recThematic4'],
-        tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
-        tubeIds: ['tube1', 'tube2', 'tube3'],
+        tubeAirtableIds: [
+          'recTube1',
+          'recTube2',
+          'recTube3',
+        ],
+        tubeIds: [
+          'tube1',
+          'tube2',
+          'tube3',
+        ],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
@@ -421,8 +429,16 @@ describe('Integration | Repository | competence-repository', () => {
           skillIds: ['skill3', 'skill4'],
           thematicIds: ['thematic3', 'thematic4'],
           thematicAirtableIds: ['recThematic3', 'recThematic4'],
-          tubeAirtableIds: ['recTube1', 'recTube2', 'recTube3'],
-          tubeIds: ['tube1', 'tube2', 'tube3'],
+          tubeAirtableIds: [
+            'recTube1',
+            'recTube2',
+            'recTube3',
+          ],
+          tubeIds: [
+            'tube1',
+            'tube2',
+            'tube3',
+          ],
           name_i18n: {
             fr: 'Nom compétence 2',
             en: 'Competence 2 name',

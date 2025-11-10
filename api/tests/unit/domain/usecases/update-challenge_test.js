@@ -7,7 +7,7 @@ import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-not
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
 import _ from 'lodash';
 
-describe('Unit | Domain | Usecases | update challenge', function () {
+describe('Unit | Domain | Usecases | update challenge', function() {
   beforeEach(() => {
     vi.spyOn(challengeRepository, 'update');
     vi.spyOn(updatedRecordNotifier, 'notify');
@@ -17,9 +17,7 @@ describe('Unit | Domain | Usecases | update challenge', function () {
   describe('when challenge id is unknown', () => {
     it('should throw a airtableError', async () => {
       // given
-      const challengeUpdates = domainBuilder.buildChallenge({
-        locales: ['en'],
-      });
+      const challengeUpdates = domainBuilder.buildChallenge({ locales: ['en'] });
 
       challengeRepository.update.mockRejectedValueOnce(new Error('Épreuve introuvable'));
 

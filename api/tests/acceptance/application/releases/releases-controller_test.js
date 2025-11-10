@@ -331,12 +331,8 @@ async function mockCurrentContent() {
         files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
       }),
     ],
-    competences: [
-      buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] }),
-    ],
-    frameworks: [
-      buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
-    ],
+    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
+    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0'] })],
     thematics: [
       buildThematic({
@@ -413,7 +409,11 @@ async function mockCurrentContent() {
     introductionMediaAlt: 'Message alternatif',
   });
 
-  for (const locale of ['fr', 'en', 'nl']) {
+  for (const locale of [
+    'fr',
+    'en',
+    'nl',
+  ]) {
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.name`,
       locale,
@@ -809,12 +809,8 @@ async function mockContentForRelease() {
         version: 8,
       }),
     ],
-    competences: [
-      buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] }),
-    ],
-    frameworks: [
-      buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] }),
-    ],
+    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
+    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
     skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0', 'recChallenge0_1'] })],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
@@ -838,7 +834,11 @@ async function mockContentForRelease() {
     imageUrl: 'Image du Course',
   });
 
-  for (const locale of ['fr', 'en', 'nl']) {
+  for (const locale of [
+    'fr',
+    'en',
+    'nl',
+  ]) {
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.name`,
       locale,
@@ -960,7 +960,7 @@ describe('Acceptance | Controller | release-controller', () => {
   describe('GET /current-content - Returns release from current Airtable data', () => {
     context('nominal case', () => {
       let user;
-      beforeEach(async function () {
+      beforeEach(async function() {
         user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });
@@ -1009,7 +1009,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
   describe('GET /releases/latest - Returns latest release', () => {
     let user;
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
     });
     context('nominal case', () => {
@@ -1060,8 +1060,8 @@ describe('Acceptance | Controller | release-controller', () => {
       });
     });
 
-    context('with if-modified-since header', function () {
-      it('should return a 304 when no latest release exist after given if-modified-since date', async function () {
+    context('with if-modified-since header', function() {
+      it('should return a 304 when no latest release exist after given if-modified-since date', async function() {
         // given
         const server = await createServer();
         const latestReleaseDate = new Date('2023-01-01T00:00:00Z');
@@ -1086,7 +1086,7 @@ describe('Acceptance | Controller | release-controller', () => {
         expect(response.statusCode).to.equal(304);
         expect(response.result).to.be.null;
       });
-      it('should return the latest release if the release is newer than given if-modified-since date', async function () {
+      it('should return the latest release if the release is newer than given if-modified-since date', async function() {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({
           content: {
@@ -1138,11 +1138,11 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
-    beforeEach(function () {
+    beforeEach(function() {
       vi.spyOn(axios, 'post').mockResolvedValue();
     });
 
-    afterEach(async function () {
+    afterEach(async function() {
       await knex('releases').delete();
     });
 
@@ -1221,7 +1221,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
     context('error case', async () => {
       it('should return a 403 when user is not allowed to create release', async () => {
-        //given
+        // given
         const user = databaseBuilder.factory.buildReadonlyUser();
         const server = await createServer();
         await databaseBuilder.commit();
@@ -1241,7 +1241,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
   describe('GET /releases/:id - Returns given release', () => {
     let user;
-    beforeEach(async function () {
+    beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
     });
 

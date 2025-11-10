@@ -25,12 +25,7 @@ describe('Unit | Domain | Release', () => {
     });
     it('should return an empty array if no operative challenges', () => {
       // given
-      const release = domainBuilder.buildDomainRelease.withContent({
-        challengesFromRelease: [
-          domainBuilder.buildChallengeForRelease({ id: 'perimeChal0', status: ChallengeForRelease.STATUSES.PERIME }),
-          domainBuilder.buildChallengeForRelease({ id: 'proposeChal0', status: ChallengeForRelease.STATUSES.PROPOSE }),
-        ],
-      });
+      const release = domainBuilder.buildDomainRelease.withContent({ challengesFromRelease: [domainBuilder.buildChallengeForRelease({ id: 'perimeChal0', status: ChallengeForRelease.STATUSES.PERIME }), domainBuilder.buildChallengeForRelease({ id: 'proposeChal0', status: ChallengeForRelease.STATUSES.PROPOSE })] });
 
       // when
       const operativeChallenges = release.operativeChallenges;
@@ -48,16 +43,12 @@ describe('Unit | Domain | Release', () => {
       const competence = domainBuilder.buildCompetenceForRelease({
         id: 'competenceId1',
         origin: 'competenceOrigin',
-        name_i18n: {
-          fr: 'competence name',
-        },
+        name_i18n: { fr: 'competence name' },
       });
       const competenceNoOrigin = domainBuilder.buildCompetenceForRelease({
         id: 'competenceNoOriginId',
         origin: null,
-        name_i18n: {
-          fr: 'competence no origin name',
-        },
+        name_i18n: { fr: 'competence no origin name' },
       });
       const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
@@ -118,8 +109,17 @@ describe('Unit | Domain | Release', () => {
       });
       release = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [competence, competenceNoOrigin],
-        tubesFromRelease: [tube, tubeNoCompetence, tubeNoOrigin],
-        skillsFromRelease: [skill, skillNoTube, skillNoCompetence, skillNoOrigin],
+        tubesFromRelease: [
+          tube,
+          tubeNoCompetence,
+          tubeNoOrigin,
+        ],
+        skillsFromRelease: [
+          skill,
+          skillNoTube,
+          skillNoCompetence,
+          skillNoOrigin,
+        ],
         challengesFromRelease: [
           challengeWithNoSkill,
           challengeWithNoTube,
@@ -179,9 +179,7 @@ describe('Unit | Domain | Release', () => {
       const competence = domainBuilder.buildCompetenceForRelease({
         id: 'competenceId1',
         origin: 'competenceOrigin',
-        name_i18n: {
-          fr: 'competence name',
-        },
+        name_i18n: { fr: 'competence name' },
       });
       const tube = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
@@ -229,8 +227,17 @@ describe('Unit | Domain | Release', () => {
       release = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [competence],
         tubesFromRelease: [tube, tubeNoCompetence],
-        skillsFromRelease: [skill, skillNoTube, skillNoCompetence],
-        challengesFromRelease: [challengeWithNoSkill, challengeWithNoTube, challengeWithNoCompetence, challengeOk],
+        skillsFromRelease: [
+          skill,
+          skillNoTube,
+          skillNoCompetence,
+        ],
+        challengesFromRelease: [
+          challengeWithNoSkill,
+          challengeWithNoTube,
+          challengeWithNoCompetence,
+          challengeOk,
+        ],
       });
     });
 
@@ -304,7 +311,11 @@ describe('Unit | Domain | Release', () => {
       release = domainBuilder.buildDomainRelease.withContent({
         tubesFromRelease: [tube],
         skillsFromRelease: [skill, skillNoTube],
-        challengesFromRelease: [challengeWithNoSkill, challengeWithNoTube, challengeOk],
+        challengesFromRelease: [
+          challengeWithNoSkill,
+          challengeWithNoTube,
+          challengeOk,
+        ],
       });
     });
 
@@ -382,15 +393,11 @@ describe('Unit | Domain | Release', () => {
     beforeEach(() => {
       const competence1 = domainBuilder.buildCompetenceForRelease({
         id: 'competenceId1',
-        name_i18n: {
-          fr: 'competence1 name',
-        },
+        name_i18n: { fr: 'competence1 name' },
       });
       const competence2 = domainBuilder.buildCompetenceForRelease({
         id: 'competenceId2',
-        name_i18n: {
-          fr: 'competence2 name',
-        },
+        name_i18n: { fr: 'competence2 name' },
       });
       const tube1 = domainBuilder.buildTubeForRelease({
         id: 'tubeId1',
@@ -420,20 +427,22 @@ describe('Unit | Domain | Release', () => {
         name: '@mySkill3',
         tutorialIds: ['tutorialWithNoCompetence'],
       });
-      tutorialInSeveralCompetences = domainBuilder.buildTutorialForRelease({
-        id: 'tutorialInSeveralCompetences',
-      });
-      tutorialWithNoCompetence = domainBuilder.buildTutorialForRelease({
-        id: 'tutorialWithNoCompetence',
-      });
-      tutorialWithNoSkill = domainBuilder.buildTutorialForRelease({
-        id: 'tutorialWithNoSkill',
-      });
+      tutorialInSeveralCompetences = domainBuilder.buildTutorialForRelease({ id: 'tutorialInSeveralCompetences' });
+      tutorialWithNoCompetence = domainBuilder.buildTutorialForRelease({ id: 'tutorialWithNoCompetence' });
+      tutorialWithNoSkill = domainBuilder.buildTutorialForRelease({ id: 'tutorialWithNoSkill' });
       release = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [competence1, competence2],
         tubesFromRelease: [tube1, tube2],
-        skillsFromRelease: [skill1, skill2, skillNoTube],
-        tutorialsFromRelease: [tutorialInSeveralCompetences, tutorialWithNoCompetence, tutorialWithNoSkill],
+        skillsFromRelease: [
+          skill1,
+          skill2,
+          skillNoTube,
+        ],
+        tutorialsFromRelease: [
+          tutorialInSeveralCompetences,
+          tutorialWithNoCompetence,
+          tutorialWithNoSkill,
+        ],
       });
     });
 
@@ -479,12 +488,8 @@ describe('Unit | Domain | Release', () => {
         tutorialIds: [],
         learningMoreTutorialIds: ['tutorialInSeveralCompetences'],
       });
-      tutorialInSeveralCompetences = domainBuilder.buildTutorialForRelease({
-        id: 'tutorialInSeveralCompetences',
-      });
-      tutorialWithNoSkill = domainBuilder.buildTutorialForRelease({
-        id: 'tutorialWithNoSkill',
-      });
+      tutorialInSeveralCompetences = domainBuilder.buildTutorialForRelease({ id: 'tutorialInSeveralCompetences' });
+      tutorialWithNoSkill = domainBuilder.buildTutorialForRelease({ id: 'tutorialWithNoSkill' });
       release = domainBuilder.buildDomainRelease.withContent({
         skillsFromRelease: [skill1, skill2],
         tutorialsFromRelease: [tutorialInSeveralCompetences, tutorialWithNoSkill],

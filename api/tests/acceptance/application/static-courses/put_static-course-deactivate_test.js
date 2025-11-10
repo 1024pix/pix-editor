@@ -2,11 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function () {
+describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
   let user;
   const staticCourseId = 'myAwesomeCourse66';
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
@@ -129,24 +129,26 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     const airtableChallenge3 = airtableBuilder.factory.buildChallenge(challenge3);
     const airtableChallenge4 = airtableBuilder.factory.buildChallenge(challenge4);
     airtableBuilder.mockLists({
-      challenges: [airtableChallenge2, airtableChallenge3, airtableChallenge4],
-      skills: [airtableSkill2, airtableSkill3, airtableSkill4],
+      challenges: [
+        airtableChallenge2,
+        airtableChallenge3,
+        airtableChallenge4,
+      ],
+      skills: [
+        airtableSkill2,
+        airtableSkill3,
+        airtableSkill4,
+      ],
     });
   });
 
-  afterEach(function () {
+  afterEach(function() {
     vi.useRealTimers();
   });
 
-  it('deactivates and returns the static course', async function () {
+  it('deactivates and returns the static course', async function() {
     // given
-    const payload = {
-      data: {
-        attributes: {
-          reason: 'je le veux',
-        },
-      },
-    };
+    const payload = { data: { attributes: { reason: 'je le veux' } } };
 
     // when
     const server = await createServer();
@@ -175,9 +177,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
           'deactivation-reason': 'je le veux',
         },
         relationships: {
-          tags: {
-            data: [],
-          },
+          tags: { data: [] },
           'challenge-summaries': {
             data: [
               {

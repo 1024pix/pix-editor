@@ -3,11 +3,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence-management/single', function (hooks) {
+module('Unit | Controller | competence-management/single', function(hooks) {
   setupTest(hooks);
   let controller, notifyMessageStub, notifyErrorStub, rollbackAttributesStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -38,7 +38,7 @@ module('Unit | Controller | competence-management/single', function (hooks) {
     controller.model = competence;
   });
 
-  test('it should start edition', function (assert) {
+  test('it should start edition', function(assert) {
     // given
     controller.edition = false;
 
@@ -49,7 +49,7 @@ module('Unit | Controller | competence-management/single', function (hooks) {
     assert.ok(controller.edition);
   });
 
-  test('it should cancel edition', function (assert) {
+  test('it should cancel edition', function(assert) {
     // given
     controller.edition = true;
 
@@ -62,7 +62,7 @@ module('Unit | Controller | competence-management/single', function (hooks) {
     assert.ok(notifyMessageStub.calledWith('Modification annulée'));
   });
 
-  test('it should save modification', async function (assert) {
+  test('it should save modification', async function(assert) {
     // given
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;
@@ -79,7 +79,7 @@ module('Unit | Controller | competence-management/single', function (hooks) {
     assert.ok(notifyMessageStub.calledWith('Compétence mise à jour'));
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = { error: ['error'] };
     const saveStub = sinon.stub().rejects(errorMessage);

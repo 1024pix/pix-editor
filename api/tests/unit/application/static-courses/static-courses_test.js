@@ -9,18 +9,18 @@ import {
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import { InvalidStaticCourseCreationOrUpdateError } from '../../../../lib/domain/errors.js';
 
-describe('Unit | Controller | static courses controller', function () {
-  describe('findSummaries', function () {
-    describe('pagination normalization', function () {
+describe('Unit | Controller | static courses controller', function() {
+  describe('findSummaries', function() {
+    describe('pagination normalization', function() {
       let stub;
       const filter = { isActive: null, name: null };
 
-      beforeEach(function () {
+      beforeEach(function() {
         stub = vi.spyOn(staticCourseRepository, 'findReadSummaries');
         stub.mockResolvedValue({ results: [], meta: {} });
       });
 
-      it('should pass along pagination from query params when all is valid', async function () {
+      it('should pass along pagination from query params when all is valid', async function() {
         // given
         const request = { query: { 'page[size]': 5, 'page[number]': 3 } };
 
@@ -31,7 +31,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(stub).toHaveBeenCalledWith({ filter, page: { number: 3, size: 5 } });
       });
 
-      it('ignore unknown pagination parameters', async function () {
+      it('ignore unknown pagination parameters', async function() {
         // given
         const request = { query: { 'page[size]': 5, 'page[number]': 3, 'page[hello]': 'oui' } };
 
@@ -42,8 +42,8 @@ describe('Unit | Controller | static courses controller', function () {
         expect(stub).toHaveBeenCalledWith({ filter, page: { number: 3, size: 5 } });
       });
 
-      context('page size', function () {
-        it('should use default page.size default value when it is not a positive integer', async function () {
+      context('page size', function() {
+        it('should use default page.size default value when it is not a positive integer', async function() {
           // given
           const request0 = { query: { 'page[size]': -5, 'page[number]': 3 } };
           const request1 = { query: { 'page[size]': 'coucou', 'page[number]': 3 } };
@@ -63,7 +63,7 @@ describe('Unit | Controller | static courses controller', function () {
           expect(stub).toHaveBeenNthCalledWith(4, { filter, page: { number: 3, size: 10 } });
         });
 
-        it('should ceil page.size value to max value when it overflows', async function () {
+        it('should ceil page.size value to max value when it overflows', async function() {
           // given
           const request0 = { query: { 'page[size]': 100, 'page[number]': 3 } };
           const request1 = { query: { 'page[size]': 101, 'page[number]': 3 } };
@@ -78,8 +78,8 @@ describe('Unit | Controller | static courses controller', function () {
         });
       });
 
-      context('page number', function () {
-        it('should use default page.number default value when it is not a positive integer', async function () {
+      context('page number', function() {
+        it('should use default page.number default value when it is not a positive integer', async function() {
           // given
           const request0 = { query: { 'page[size]': 5, 'page[number]': -3 } };
           const request1 = { query: { 'page[size]': 5, 'page[number]': 'coucou' } };
@@ -101,19 +101,17 @@ describe('Unit | Controller | static courses controller', function () {
       });
     });
 
-    describe('filter normalization', function () {
+    describe('filter normalization', function() {
       let stub;
       const page = { number: 1, size: 10 };
-      beforeEach(function () {
+      beforeEach(function() {
         stub = vi.spyOn(staticCourseRepository, 'findReadSummaries');
         stub.mockResolvedValue({ results: [], meta: {} });
       });
 
-      it('should pass along filter from query params when all is valid', async function () {
+      it('should pass along filter from query params when all is valid', async function() {
         // given
-        const request = {
-          query: { 'filter[isActive]': 'true', 'filter[name]': 'Laura', 'filter[tagIds]': ['1', '2'] },
-        };
+        const request = { query: { 'filter[isActive]': 'true', 'filter[name]': 'Laura', 'filter[tagIds]': ['1', '2'] } };
 
         // when
         await staticCourseController.findSummaries(request, hFake);
@@ -122,7 +120,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: 'Laura', tagIds: [1, 2] }, page });
       });
 
-      it('ignore unknown filter parameters', async function () {
+      it('ignore unknown filter parameters', async function() {
         // given
         const request = { query: { 'filter[isActive]': 'true', 'filter[damn]': 'ok' } };
 
@@ -133,8 +131,8 @@ describe('Unit | Controller | static courses controller', function () {
         expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: null }, page });
       });
 
-      context('filter isActive', function () {
-        it('extract isActive parameter correctly', async function () {
+      context('filter isActive', function() {
+        it('extract isActive parameter correctly', async function() {
           // given
           const request0 = { query: { 'filter[isActive]': 3 } };
           const request1 = { query: { 'filter[isActive]': 'ok' } };
@@ -160,8 +158,8 @@ describe('Unit | Controller | static courses controller', function () {
           expect(stub).toHaveBeenNthCalledWith(6, { filter: { isActive: null, name: null }, page });
         });
       });
-      context('filter name', function () {
-        it('extract name parameter correctly', async function () {
+      context('filter name', function() {
+        it('extract name parameter correctly', async function() {
           // given
           const request0 = { query: { 'filter[name]': 3 } };
           const request1 = { query: { 'filter[name]': 'ok' } };
@@ -183,14 +181,12 @@ describe('Unit | Controller | static courses controller', function () {
       });
     });
   });
-  describe('create', function () {
-    describe('creationCommand normalization', function () {
+  describe('create', function() {
+    describe('creationCommand normalization', function() {
       let saveStub, getReadStub, getManyStub, listIdsStub, generateNewIdStub;
 
-      beforeEach(function () {
-        vi.useFakeTimers({
-          now: new Date('2021-10-29T03:04:00Z'),
-        });
+      beforeEach(function() {
+        vi.useFakeTimers({ now: new Date('2021-10-29T03:04:00Z') });
         listIdsStub = vi.spyOn(staticCourseTagRepository, 'listIds');
         listIdsStub.mockResolvedValue([123, 456]);
         getManyStub = vi.spyOn(localizedChallengeRepository, 'getMany');
@@ -203,11 +199,11 @@ describe('Unit | Controller | static courses controller', function () {
         generateNewIdStub.mockReturnValue('courseDEF456');
       });
 
-      afterEach(function () {
+      afterEach(function() {
         vi.useRealTimers();
       });
 
-      it('should pass along creation command from attributes when all is valid', async function () {
+      it('should pass along creation command from attributes when all is valid', async function() {
         // given
         const request = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -239,7 +235,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).toHaveBeenCalledWith(expectedStaticCourse);
       });
 
-      it('should normalize name to an empty string when not a string, and thus throw an error', async function () {
+      it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -295,7 +291,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).not.toHaveBeenCalled();
       });
 
-      it('should normalize description to an empty string when not a string', async function () {
+      it('should normalize description to an empty string when not a string', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -356,7 +352,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).toHaveBeenNthCalledWith(3, expectedStaticCourse);
       });
 
-      it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function () {
+      it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -440,7 +436,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).not.toHaveBeenCalled();
       });
 
-      it('should normalize tagIds to an empty array when not an array', async function () {
+      it('should normalize tagIds to an empty array when not an array', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -517,14 +513,12 @@ describe('Unit | Controller | static courses controller', function () {
       });
     });
   });
-  describe('update', function () {
-    describe('updateCommand normalization', function () {
+  describe('update', function() {
+    describe('updateCommand normalization', function() {
       let saveStub, getReadStub, getManyStub, getStub, listIdsStub;
 
-      beforeEach(function () {
-        vi.useFakeTimers({
-          now: new Date('2021-10-29T03:04:00Z'),
-        });
+      beforeEach(function() {
+        vi.useFakeTimers({ now: new Date('2021-10-29T03:04:00Z') });
         listIdsStub = vi.spyOn(staticCourseTagRepository, 'listIds');
         listIdsStub.mockResolvedValue([123, 456]);
         getManyStub = vi.spyOn(localizedChallengeRepository, 'getMany');
@@ -542,11 +536,11 @@ describe('Unit | Controller | static courses controller', function () {
         getReadStub.mockResolvedValue({});
       });
 
-      afterEach(function () {
+      afterEach(function() {
         vi.useRealTimers();
       });
 
-      it('should pass along update command from attributes when all is valid', async function () {
+      it('should pass along update command from attributes when all is valid', async function() {
         // given
         const request = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -579,7 +573,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).toHaveBeenCalledWith(expectedStaticCourse);
       });
 
-      it('should normalize name to an empty string when not a string, and thus throw an error', async function () {
+      it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -638,7 +632,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).not.toHaveBeenCalled();
       });
 
-      it('should normalize description to an empty string when not a string', async function () {
+      it('should normalize description to an empty string when not a string', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -702,7 +696,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).toHaveBeenNthCalledWith(3, expectedStaticCourse);
       });
 
-      it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function () {
+      it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },
@@ -790,7 +784,7 @@ describe('Unit | Controller | static courses controller', function () {
         expect(saveStub).not.toHaveBeenCalled();
       });
 
-      it('should normalize tagIds to an empty array when not an array', async function () {
+      it('should normalize tagIds to an empty array when not an array', async function() {
         // given
         const request0 = {
           url: { host: 'host.site', protocol: 'http:' },

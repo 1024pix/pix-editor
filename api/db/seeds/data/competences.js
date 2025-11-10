@@ -76,7 +76,11 @@ export async function copyCompetencesFromAirtable({ airtableClient, databaseBuil
   const airtableCompetences = await airtableClient
     .table('Competences')
     .select({
-      fields: ['id persistant', 'Sous-domaine', 'Domaine (id persistant)'],
+      fields: [
+        'id persistant',
+        'Sous-domaine',
+        'Domaine (id persistant)',
+      ],
     })
     .all();
 

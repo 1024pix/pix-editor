@@ -19,7 +19,12 @@ import { escapeLikeWildcards } from './sql-utils.js';
 const model = 'challenge';
 
 export async function get(id) {
-  const [airtableDto, pgDto, localizedChallenges, translations] = await Promise.all([
+  const [
+    airtableDto,
+    pgDto,
+    localizedChallenges,
+    translations,
+  ] = await Promise.all([
     challengeDatasource.filterById(id),
     selectChallenges().where('challenges.id', id).first(),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
@@ -34,7 +39,12 @@ export async function get(id) {
 }
 
 export async function list() {
-  const [airtableDtos, pgDtos, translations, localizedChallenges] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+    localizedChallenges,
+  ] = await Promise.all([
     challengeDatasource.list(),
     selectChallenges().orderBy('challenges.id'),
     translationRepository.listByModel(model),
@@ -47,7 +57,11 @@ export async function list() {
 }
 
 export async function getMany(ids) {
-  const [airtableDtos, pgDtos, [translations, localizedChallenges]] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    [translations, localizedChallenges],
+  ] = await Promise.all([
     challengeDatasource.filter({ filter: { ids } }),
     selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'),
     loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
@@ -269,10 +283,7 @@ export async function update(challenge, transaction = knex) {
 }
 
 export async function listBySkillId(skillId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.filterBySkillId(skillId),
-    selectChallenges().where('challenges.skillId', skillId).orderBy('id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([challengeDatasource.filterBySkillId(skillId), selectChallenges().where('challenges.skillId', skillId).orderBy('id')]);
   compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
 
   if (!airtableDtos) return [];
@@ -314,11 +325,7 @@ export async function listPrototypesByCompetenceId(competenceId) {
 
 export async function listValidPrototypesBySkillIds(skillIds) {
   const [airtableDtos, pgDtos] = await Promise.all([
-    challengeDatasource.filter({
-      filter: {
-        formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})`,
-      },
-    }),
+    challengeDatasource.filter({ filter: { formula: `AND(OR(${skillIds.map((skillId) => `{Acquis (id persistant)} = ${stringValue(skillId)}`).join(', ')}), {Généalogie} = ${stringValue(Challenge.GENEALOGIES.PROTOTYPE)}, {Statut} = ${stringValue(Challenge.STATUSES.VALIDE)})` } }),
     selectChallenges()
       .whereIn('skills.id', skillIds)
       .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
@@ -339,10 +346,7 @@ async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos
 async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeIds) {
   if (challengeIds.length === 0) return [[], []];
 
-  return Promise.all([
-    translationRepository.listByEntities(model, challengeIds),
-    localizedChallengeRepository.listByChallengeIds({ challengeIds }),
-  ]);
+  return Promise.all([translationRepository.listByEntities(model, challengeIds), localizedChallengeRepository.listByChallengeIds({ challengeIds })]);
 }
 
 function selectChallenges() {
@@ -354,10 +358,7 @@ function selectChallenges() {
         'coalesce((??), \'[]\') as "files"',
         knex
           .select(
-            knex.raw("json_agg(json_build_object('fileId', ??, 'localizedChallengeId', ??))", [
-              'attachments.id',
-              'attachments.localizedChallengeId',
-            ]),
+            knex.raw("json_agg(json_build_object('fileId', ??, 'localizedChallengeId', ??))", ['attachments.id', 'attachments.localizedChallengeId']),
           )
           .from('attachments')
           .where('attachments.challengeId', knex.ref('challenges.id')),

@@ -6,10 +6,10 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | Form | whitelisted-url', function (hooks) {
+module('Integration | Component | Form | whitelisted-url', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('should submit correctly formed whitelisted url', async function (assert) {
+  test('should submit correctly formed whitelisted url', async function(assert) {
     const onSubmit = sinon.spy(() => {});
 
     this.set('submitButtonText', 'Ajouter');
@@ -54,7 +54,7 @@ module('Integration | Component | Form | whitelisted-url', function (hooks) {
     assert.strictEqual(onSubmit.args[3][0].checkType, 'starts_with');
   });
 
-  test('should enable add url button when mandatory information has been given', async function (assert) {
+  test('should enable add url button when mandatory information has been given', async function(assert) {
     this.set('submitButtonText', 'Ajouter');
 
     const screen = await render(
@@ -72,7 +72,7 @@ module('Integration | Component | Form | whitelisted-url', function (hooks) {
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
 
-  test('should disable create whitelisted URL button when no complete informations', async function (assert) {
+  test('should disable create whitelisted URL button when no complete informations', async function(assert) {
     this.set('submitButtonText', 'Ajouter');
 
     const screen = await render(
@@ -92,7 +92,7 @@ module('Integration | Component | Form | whitelisted-url', function (hooks) {
     assert.dom(button).hasAria('disabled', 'true');
   });
 
-  test('should display errors when input values are unexpected', async function (assert) {
+  test('should display errors when input values are unexpected', async function(assert) {
     const screen = await render(
       hbs`<Form::WhitelistedUrl
         @initialUrl=""

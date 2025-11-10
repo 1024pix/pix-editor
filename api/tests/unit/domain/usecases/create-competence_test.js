@@ -17,7 +17,7 @@ import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
-describe('Unit | Domain | Usecases | create competence', function () {
+describe('Unit | Domain | Usecases | create competence', function() {
   const transformedTube = Symbol('transformedTube');
   const skillForRelease = Symbol('skillForRelease');
 
@@ -42,9 +42,7 @@ describe('Unit | Domain | Usecases | create competence', function () {
 
       areaRepository.getByAirtableId.mockResolvedValueOnce(undefined);
 
-      const competence = domainBuilder.buildCompetence({
-        areaAirtableId,
-      });
+      const competence = domainBuilder.buildCompetence({ areaAirtableId });
 
       // when
       const result = createCompetence(competence);
@@ -65,7 +63,13 @@ describe('Unit | Domain | Usecases | create competence', function () {
       areaRepository.getByAirtableId.mockResolvedValueOnce(
         domainBuilder.buildArea({
           code: '24',
-          competenceIds: ['competence1', 'competence2', 'competence3', 'competence4', 'competence5'],
+          competenceIds: [
+            'competence1',
+            'competence2',
+            'competence3',
+            'competence4',
+            'competence5',
+          ],
         }),
       );
       const createdCompetence = domainBuilder.buildCompetence({
@@ -124,9 +128,7 @@ describe('Unit | Domain | Usecases | create competence', function () {
           name: '@workbench',
           competenceAirtableId: createdCompetence.airtableId,
           thematicAirtableId: createdThematic.airtableId,
-          practicalTitle_i18n: {
-            fr: "Tube pour l'atelier de la compétence 24.6 Fmk",
-          },
+          practicalTitle_i18n: { fr: "Tube pour l'atelier de la compétence 24.6 Fmk" },
           practicalDescription_i18n: {},
         }),
       );
@@ -224,9 +226,7 @@ describe('Unit | Domain | Usecases | create competence', function () {
           name: '@workbench',
           competenceAirtableId: createdCompetence.airtableId,
           thematicAirtableId: createdThematic.airtableId,
-          practicalTitle_i18n: {
-            fr: "Tube pour l'atelier de la compétence 24.1 Fmk",
-          },
+          practicalTitle_i18n: { fr: "Tube pour l'atelier de la compétence 24.1 Fmk" },
           practicalDescription_i18n: {},
         }),
       );
@@ -323,9 +323,7 @@ describe('Unit | Domain | Usecases | create competence', function () {
           name: '@workbench',
           competenceAirtableId: createdCompetence.airtableId,
           thematicAirtableId: createdThematic.airtableId,
-          practicalTitle_i18n: {
-            fr: "Tube pour l'atelier de la compétence 24.1 Fmk",
-          },
+          practicalTitle_i18n: { fr: "Tube pour l'atelier de la compétence 24.1 Fmk" },
           practicalDescription_i18n: {},
         }),
       );

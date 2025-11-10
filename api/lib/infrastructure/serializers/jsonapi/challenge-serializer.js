@@ -76,7 +76,7 @@ const serializer = new Serializer('challenges', {
     ref: 'id',
     ignoreRelationshipData: true,
     relationshipLinks: {
-      related: function (record, current, parent) {
+      related: function(record, current, parent) {
         return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
       },
     },
@@ -101,9 +101,7 @@ const serializer = new Serializer('challenges', {
       return {
         id: `${challenge.id}-${locale}`,
         locale,
-        localizedChallenge: {
-          id: localizedChallenge?.id,
-        },
+        localizedChallenge: { id: localizedChallenge?.id },
       };
     });
     return challenge;

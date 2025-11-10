@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Whitelisted URLs | Edition', function (hooks) {
+module('Acceptance | Whitelisted URLs | Edition', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
@@ -53,7 +53,7 @@ module('Acceptance | Whitelisted URLs | Edition', function (hooks) {
     return authenticateSession();
   });
 
-  test('should edit a whitelisted url', async function (assert) {
+  test('should edit a whitelisted url', async function(assert) {
     // given
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
@@ -72,7 +72,7 @@ module('Acceptance | Whitelisted URLs | Edition', function (hooks) {
     assert.strictEqual(screen.getAllByText('Strictement égale à').length, 2);
   });
 
-  test('should edit a whitelisted url\'s url', async function (assert) {
+  test('should edit a whitelisted url\'s url', async function(assert) {
     // given
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');

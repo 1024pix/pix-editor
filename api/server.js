@@ -18,14 +18,10 @@ export async function createServer() {
         origin: ['*'],
         additionalHeaders: ['X-Requested-With'],
       },
-      response: {
-        emptyStatusCode: 204,
-      },
+      response: { emptyStatusCode: 204 },
     },
     port: config.port,
-    router: {
-      isCaseSensitive: false,
-    },
+    router: { isCaseSensitive: false },
   });
 
   server.ext('onPreResponse', catchDomainAndInfrastructureErrors);
@@ -43,7 +39,7 @@ export async function createServer() {
   return server;
 }
 
-const enableOpsMetrics = async function (server) {
+const enableOpsMetrics = async function(server) {
   const oppsy = new Oppsy(server);
 
   oppsy.on('ops', (data) => {

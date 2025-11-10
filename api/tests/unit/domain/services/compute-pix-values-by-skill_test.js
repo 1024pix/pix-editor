@@ -3,9 +3,9 @@ import { computePixValuesBySkill } from '../../../../lib/domain/services/compute
 import { Skill } from '../../../../lib/domain/models/Skill';
 import { domainBuilder } from '../../../test-helper.js';
 
-describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
-  describe('when skills are empty', function () {
-    it('should return an empty object', function () {
+describe('Unit | Domain | Services | compute-pix-values-by-skill', function() {
+  describe('when skills are empty', function() {
+    it('should return an empty object', function() {
       // given
       const skills = [];
 
@@ -17,8 +17,8 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
     });
   });
 
-  describe('when there are some inactive skills', function () {
-    it('should return 4 for the only one active skill', function () {
+  describe('when there are some inactive skills', function() {
+    it('should return 4 for the only one active skill', function() {
       // given
       const skills = [
         { id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },
@@ -30,15 +30,13 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
       const pixValuesBySkill = computePixValuesBySkill(skills);
 
       // then
-      expect(pixValuesBySkill).toStrictEqual({
-        skill1: 4,
-      });
+      expect(pixValuesBySkill).toStrictEqual({ skill1: 4 });
     });
   });
 
-  describe('when there is only 1 competence', function () {
-    describe('when all skills are on same level', function () {
-      it('should return 4 when there is 1 validated skill', function () {
+  describe('when there is only 1 competence', function() {
+    describe('when all skills are on same level', function() {
+      it('should return 4 when there is 1 validated skill', function() {
         // given
         const skills = [
           domainBuilder.buildSkill({
@@ -53,17 +51,12 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
         const pixValuesBySkill = computePixValuesBySkill(skills);
 
         // then
-        expect(pixValuesBySkill).toStrictEqual({
-          skill1: 4,
-        });
+        expect(pixValuesBySkill).toStrictEqual({ skill1: 4 });
       });
 
-      it('should return 4 for each 2 validated skill', function () {
+      it('should return 4 for each 2 validated skill', function() {
         // given
-        const skills = [
-          { id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },
-          { id: 'skill2', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },
-        ].map(domainBuilder.buildSkill);
+        const skills = [{ id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 }, { id: 'skill2', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 }].map(domainBuilder.buildSkill);
 
         // when
         const pixValuesBySkill = computePixValuesBySkill(skills);
@@ -75,7 +68,7 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
         });
       });
 
-      it('should return 2.667 for each 3 validated skill', function () {
+      it('should return 2.667 for each 3 validated skill', function() {
         // given
         const skills = [
           { id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },
@@ -94,8 +87,8 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
         });
       });
     });
-    describe('when all skills are on different levels', function () {
-      it('should return 4 for 2 validated skill on level 1 and 1 validated skill on level 2', function () {
+    describe('when all skills are on different levels', function() {
+      it('should return 4 for 2 validated skill on level 1 and 1 validated skill on level 2', function() {
         // given
         const skills = [
           { id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },
@@ -116,8 +109,8 @@ describe('Unit | Domain | Services | compute-pix-values-by-skill', function () {
     });
   });
 
-  describe('when there are 2 competences with skills on different level', function () {
-    it('should return 2,667 for validated skills on competence 1 and 4 for validated skills on competence2 for each level', function () {
+  describe('when there are 2 competences with skills on different level', function() {
+    it('should return 2,667 for validated skills on competence 1 and 4 for validated skills on competence2 for each level', function() {
       // given
       const skills = [
         { id: 'skill1', competenceId: 'competence1', status: Skill.STATUSES.ACTIF, level: 1 },

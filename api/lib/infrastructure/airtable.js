@@ -47,11 +47,7 @@ export async function updateRecords(tableName, bodies) {
 
 export async function upsertRecords(tableName, records, fieldsToMergeOn) {
   logger.info({ tableName }, 'Upserting redords in Airtable');
-  return _airtableClient().table(tableName).update(records, {
-    performUpsert: {
-      fieldsToMergeOn,
-    },
-  });
+  return _airtableClient().table(tableName).update(records, { performUpsert: { fieldsToMergeOn } });
 }
 
 export async function deleteRecords(tableName, recordIds) {
@@ -66,11 +62,7 @@ export function stringValue(value) {
 }
 
 async function getBaseName() {
-  const res = await fetch('https://api.airtable.com/v0/meta/bases', {
-    headers: {
-      Authorization: `Bearer ${config.airtable.apiKeyMetaData}`,
-    },
-  });
+  const res = await fetch('https://api.airtable.com/v0/meta/bases', { headers: { Authorization: `Bearer ${config.airtable.apiKeyMetaData}` } });
   const body = await res.json();
   const airtableBaseName = body?.bases?.find((base) => base.id === config.airtable.base)?.name;
   if (!airtableBaseName) {

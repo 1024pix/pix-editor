@@ -14,7 +14,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/current-content',
       config: {
-        handler: function () {
+        handler: function() {
           return promiseStreamer({
             promise: releaseRepository.getCurrentContent(),
             loggingScope: SCOPES.RELEASE,
@@ -26,12 +26,8 @@ export async function register(server) {
       method: 'POST',
       path: '/api/releases',
       config: {
-        pre: [
-          {
-            method: securityPreHandlers.checkUserHasWriteAccess,
-          },
-        ],
-        handler: async function () {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function() {
           const releaseJobQueue = createReleaseJobQueue();
           const job = await releaseJobQueue.add({ slackNotification: true });
           const promise = async () => {
@@ -50,7 +46,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const ifModifiedSinceDate = request.headers?.['if-modified-since']
             ? new Date(request.headers['if-modified-since'])
             : null;
@@ -68,12 +64,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/releases/{id}',
       config: {
-        validate: {
-          params: Joi.object({
-            id: releaseIdType,
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ id: releaseIdType }) },
+        handler: async function(request) {
           const release = await releaseRepository.getRelease(request.params.id);
           if (release) {
             return JSON.stringify(release);

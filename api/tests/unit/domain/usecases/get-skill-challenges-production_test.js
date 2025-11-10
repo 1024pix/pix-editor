@@ -3,7 +3,7 @@ import { domainBuilder } from '../../../test-helper.js';
 import { getSkillChallengesProduction } from '../../../../lib/domain/usecases/index.js';
 import { Challenge } from '../../../../lib/domain/models/index.js';
 
-describe('Unit | Domain | Usecases | get-skill-challenges-production', function () {
+describe('Unit | Domain | Usecases | get-skill-challenges-production', function() {
   const skillId = 'skillABCDEF';
   let challenges;
   let challengeProtoValide, challengeProtoValideDecliPerime, challengeProtoValideDecliValide;
@@ -11,7 +11,7 @@ describe('Unit | Domain | Usecases | get-skill-challenges-production', function 
   let challengeProtoProposeDecliPropose, challengeProtoArchive, challengeProtoArchiveDecliArchive;
   let challengeRepository, logger, dependencies;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     challengeProtoPerime = domainBuilder.buildChallenge({
       id: 'challengeProtoPerimeId',
       instruction: 'Instruction FR challengeProtoPerimeId',
@@ -129,20 +129,16 @@ describe('Unit | Domain | Usecases | get-skill-challenges-production', function 
       airtableId: 'challengeProtoValideDecliValideAirtableId',
       updatedAt: new Date('2021-10-04'),
     });
-    logger = {
-      warn: vi.fn(),
-    };
-    challengeRepository = {
-      listBySkillId: vi.fn(),
-    };
+    logger = { warn: vi.fn() };
+    challengeRepository = { listBySkillId: vi.fn() };
     dependencies = {
       challengeRepository,
       logger,
     };
   });
 
-  describe('when skill has a validated proto', function () {
-    describe('when proto has alternatives', function () {
+  describe('when skill has a validated proto', function() {
+    describe('when proto has alternatives', function() {
       it('should return only validated proto and its alternatives', async () => {
         // given
         challenges = [
@@ -171,8 +167,8 @@ describe('Unit | Domain | Usecases | get-skill-challenges-production', function 
         ]);
       });
     });
-    describe('when proto has no alternative', function () {
-      it('should return an array containing the proto only', async function () {
+    describe('when proto has no alternative', function() {
+      it('should return an array containing the proto only', async function() {
         // given
         challenges = [
           challengeProtoPerime,
@@ -195,10 +191,14 @@ describe('Unit | Domain | Usecases | get-skill-challenges-production', function 
     });
   });
 
-  describe('when skill has no validated proto', function () {
+  describe('when skill has no validated proto', function() {
     it('should return an empty array and display a warn log', async () => {
       // given
-      challenges = [challengeProtoPerime, challengeProtoPropose, challengeProtoPerimeDecliPerime];
+      challenges = [
+        challengeProtoPerime,
+        challengeProtoPropose,
+        challengeProtoPerimeDecliPerime,
+      ];
       challengeRepository.listBySkillId.mockResolvedValue(challenges);
 
       // when
@@ -213,7 +213,7 @@ describe('Unit | Domain | Usecases | get-skill-challenges-production', function 
     });
   });
 
-  describe('when skill has no challenges at all', function () {
+  describe('when skill has no challenges at all', function() {
     it('should return an empty array and display a warn log', async () => {
       // given
       challengeRepository.listBySkillId.mockResolvedValue([]);

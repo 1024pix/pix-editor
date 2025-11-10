@@ -12,7 +12,11 @@ const model = 'competence';
 const TABLE_NAME = 'competences';
 
 export async function list() {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     competenceDatasource.list(),
     selectCompetences().orderBy('competences.index'),
     translationRepository.listByModel(model),
@@ -24,7 +28,11 @@ export async function list() {
 }
 
 export async function getMany(ids) {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     competenceDatasource.filter({ filter: { ids } }),
     selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'),
     translationRepository.listByEntities(model, ids),
@@ -36,7 +44,11 @@ export async function getMany(ids) {
 }
 
 export async function get(id) {
-  const [[airtableDto], pgDto, translations] = await Promise.all([
+  const [
+    [airtableDto],
+    pgDto,
+    translations,
+  ] = await Promise.all([
     competenceDatasource.filter({ filter: { ids: [id] } }),
     selectCompetences().where('competences.id', id).first(),
     translationRepository.listByEntity(model, id),
@@ -53,10 +65,7 @@ export async function getByAirtableId(airtableId) {
   const airtableDto = await competenceDatasource.find(airtableId);
   if (!airtableDto) return null;
 
-  const [pgDto, translations] = await Promise.all([
-    selectCompetences().where('competences.id', airtableDto.id).first(),
-    translationRepository.listByEntity(model, airtableDto.id),
-  ]);
+  const [pgDto, translations] = await Promise.all([selectCompetences().where('competences.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
   compareDtos(airtableDto, pgDto, compareCompetenceDtos);
 

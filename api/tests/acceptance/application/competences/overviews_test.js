@@ -14,7 +14,7 @@ import { LOCALE } from '../../../../lib/domain/constants.js';
 
 describe('Acceptance | Route | competence-overviews', () => {
   let user;
-  beforeEach(async function () {
+  beforeEach(async function() {
     user = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
   });
@@ -27,7 +27,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableSkillsScope,
       airtableChallengesScope;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       competenceId = 'recCompetence1';
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -42,9 +42,27 @@ describe('Acceptance | Route | competence-overviews', () => {
             index: '2.2',
             origin: 'Fmk 1',
             areaId: 'area1',
-            thematicIds: ['recThematic1', 'recThematic2', 'recThematic3', 'recThematic4'],
-            tubeIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTube5', 'recTube6'],
-            skillIds: ['recSkill1', 'recSkill2', 'recSkill3', 'recSkill4', 'recSkill5'],
+            thematicIds: [
+              'recThematic1',
+              'recThematic2',
+              'recThematic3',
+              'recThematic4',
+            ],
+            tubeIds: [
+              'recTube1',
+              'recTube2',
+              'recTube3',
+              'recTube4',
+              'recTube5',
+              'recTube6',
+            ],
+            skillIds: [
+              'recSkill1',
+              'recSkill2',
+              'recSkill3',
+              'recSkill4',
+              'recSkill5',
+            ],
           }),
         ),
       ];
@@ -57,9 +75,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableCompetencesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Competences')
         .query({
-          fields: {
-            '': competenceDatasource.usedFields,
-          },
+          fields: { '': competenceDatasource.usedFields },
           filterByFormula: `OR("${competenceId}" = {id persistant})`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -76,7 +92,11 @@ describe('Acceptance | Route | competence-overviews', () => {
             id: 'recThematic1',
             airtableId: 'recAirtableThematic1',
             index: 2,
-            tubeIds: ['recTube1', 'recTube2', 'recTube3'],
+            tubeIds: [
+              'recTube1',
+              'recTube2',
+              'recTube3',
+            ],
             competenceId,
           }),
         ),
@@ -112,9 +132,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableThematicsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Thematiques')
         .query({
-          fields: {
-            '': thematicDatasource.usedFields,
-          },
+          fields: { '': thematicDatasource.usedFields },
           filterByFormula: `{Competence (id persistant)} = "${competenceId}"`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -197,9 +215,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableTubesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes')
         .query({
-          fields: {
-            '': tubeDatasource.usedFields,
-          },
+          fields: { '': tubeDatasource.usedFields },
           filterByFormula: `{Competences (id persistant)} = "${competenceId}"`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -216,7 +232,11 @@ describe('Acceptance | Route | competence-overviews', () => {
           tubeId: 'recTube1',
           tutorialIds: [],
           learningMoreTutorialIds: [],
-          challengeIds: ['recChallenge1', 'recChallenge11', 'recChallenge12'],
+          challengeIds: [
+            'recChallenge1',
+            'recChallenge11',
+            'recChallenge12',
+          ],
         },
         {
           id: 'recSkill2',
@@ -277,9 +297,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
         .query({
-          fields: {
-            '': skillDatasource.usedFields,
-          },
+          fields: { '': skillDatasource.usedFields },
           filterByFormula: `AND({Compétence (via Tube) (id persistant)} = "${competenceId}", {Status} = "${Skill.STATUSES.ACTIF}")`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -454,13 +472,17 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableChallengesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': challengeDatasource.usedFields,
-          },
+          fields: { '': challengeDatasource.usedFields },
           filterByFormula: `AND({Compétences (via tube) (id persistant)} = "${competenceId}", {acquis} != "@workbench", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [...airtableChallenges, ...airtableNoiseChallenges, ...airtableEnglishChallenges] });
+        .reply(200, {
+          records: [
+            ...airtableChallenges,
+            ...airtableNoiseChallenges,
+            ...airtableEnglishChallenges,
+          ],
+        });
     });
 
     describe('without language filter', () => {
@@ -776,7 +798,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableSkillsScope,
       airtableChallengesScope;
 
-    beforeEach(async function () {
+    beforeEach(async function() {
       competenceId = 'recCompetence1';
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -791,8 +813,19 @@ describe('Acceptance | Route | competence-overviews', () => {
             index: '2.2',
             origin: 'Fmk 1',
             areaId: 'area1',
-            thematicIds: ['recThematic1', 'recThematic2', 'recThematic3', 'recThematicWorkbench'],
-            tubeIds: ['recTube1', 'recTube2', 'recTube3', 'recTube4', 'recTubeWorkbench'],
+            thematicIds: [
+              'recThematic1',
+              'recThematic2',
+              'recThematic3',
+              'recThematicWorkbench',
+            ],
+            tubeIds: [
+              'recTube1',
+              'recTube2',
+              'recTube3',
+              'recTube4',
+              'recTubeWorkbench',
+            ],
             skillIds: [
               'recSkill1',
               'recSkill2',
@@ -815,9 +848,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableCompetencesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Competences')
         .query({
-          fields: {
-            '': competenceDatasource.usedFields,
-          },
+          fields: { '': competenceDatasource.usedFields },
           filterByFormula: `OR("${competenceId}" = {id persistant})`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -857,9 +888,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableThematicsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Thematiques')
         .query({
-          fields: {
-            '': thematicDatasource.usedFields,
-          },
+          fields: { '': thematicDatasource.usedFields },
           filterByFormula: `{Competence (id persistant)} = "${competenceId}"`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -893,7 +922,11 @@ describe('Acceptance | Route | competence-overviews', () => {
           name: '@tube2',
           index: 1,
           thematicId: 'recThematic1',
-          skillIds: ['recSkill3', 'recSkill4', 'recSkill5'],
+          skillIds: [
+            'recSkill3',
+            'recSkill4',
+            'recSkill5',
+          ],
         },
         {
           id: 'recTube3',
@@ -933,9 +966,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableTubesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Tubes')
         .query({
-          fields: {
-            '': tubeDatasource.usedFields,
-          },
+          fields: { '': tubeDatasource.usedFields },
           filterByFormula: `{Competences (id persistant)} = "${competenceId}"`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -1055,9 +1086,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableSkillsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Acquis')
         .query({
-          fields: {
-            '': skillDatasource.usedFields,
-          },
+          fields: { '': skillDatasource.usedFields },
           filterByFormula: `{Compétence (via Tube) (id persistant)} = "${competenceId}"`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -1178,9 +1207,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       airtableChallengesScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
-          fields: {
-            '': challengeDatasource.usedFields,
-          },
+          fields: { '': challengeDatasource.usedFields },
           filterByFormula: `AND({Compétences (via tube) (id persistant)} = "${competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}")`,
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')

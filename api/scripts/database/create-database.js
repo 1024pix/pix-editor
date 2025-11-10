@@ -13,7 +13,7 @@ const client = new PgClient(url.href);
 
 client
   .query_and_log(`CREATE DATABASE ${DB_TO_CREATE_NAME};`)
-  .then(function () {
+  .then(function() {
     console.log('Database created');
     client.end();
     process.exit(0);

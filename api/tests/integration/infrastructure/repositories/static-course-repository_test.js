@@ -11,11 +11,11 @@ import {
   skillRepository,
 } from '../../../../lib/infrastructure/repositories/index.js';
 
-describe('Integration | Repository | static-course-repository', function () {
-  context('#findReadSummaries', function () {
-    context('content', function () {
+describe('Integration | Repository | static-course-repository', function() {
+  context('#findReadSummaries', function() {
+    context('content', function() {
       const page = { number: 1, size: 20 };
-      it('should return complete StaticCourseSummary model', async function () {
+      it('should return complete StaticCourseSummary model', async function() {
         // given
         const tagA_DB = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagA' });
         const tagB_DB = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagB' });
@@ -87,14 +87,19 @@ describe('Integration | Repository | static-course-repository', function () {
         expect(actualStaticCourseSummaries[2]).to.deep.equal(expectedStaticCourseSummary1);
       });
     });
-    context('filter', function () {
-      context('isActive', function () {
+    context('filter', function() {
+      context('isActive', function() {
         const page = { number: 1, size: 20 };
 
-        context('with results', function () {
-          beforeEach(function () {
+        context('with results', function() {
+          beforeEach(function() {
             // 4 Static courses
-            [new Date('2010-01-01'), new Date('2011-01-01'), new Date('2012-01-01'), new Date('2013-01-01')].map(
+            [
+              new Date('2010-01-01'),
+              new Date('2011-01-01'),
+              new Date('2012-01-01'),
+              new Date('2013-01-01'),
+            ].map(
               (createdAt, index) => {
                 databaseBuilder.factory.buildStaticCourse({
                   id: `courseId${index}`,
@@ -105,7 +110,7 @@ describe('Integration | Repository | static-course-repository', function () {
             );
             return databaseBuilder.commit();
           });
-          it('should return all the static courses regardless of the isActive value when isActive filter is null', async function () {
+          it('should return all the static courses regardless of the isActive value when isActive filter is null', async function() {
             // given
             const filter = { isActive: null };
 
@@ -114,7 +119,12 @@ describe('Integration | Repository | static-course-repository', function () {
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
-            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId2', 'courseId1', 'courseId0']);
+            expect(actualStaticCourseSummaryIds).toEqual([
+              'courseId3',
+              'courseId2',
+              'courseId1',
+              'courseId0',
+            ]);
             expect(meta).to.deep.equal({
               page: 1,
               pageSize: 20,
@@ -123,7 +133,7 @@ describe('Integration | Repository | static-course-repository', function () {
             });
           });
 
-          it('should return active static courses when isActive filter is true', async function () {
+          it('should return active static courses when isActive filter is true', async function() {
             // given
             const filter = { isActive: true };
 
@@ -141,7 +151,7 @@ describe('Integration | Repository | static-course-repository', function () {
             });
           });
 
-          it('should return inactive static courses when isActive filter is false', async function () {
+          it('should return inactive static courses when isActive filter is false', async function() {
             // given
             const filter = { isActive: false };
 
@@ -160,10 +170,15 @@ describe('Integration | Repository | static-course-repository', function () {
           });
         });
 
-        context('no results', function () {
-          beforeEach(function () {
+        context('no results', function() {
+          beforeEach(function() {
             // 4 Static courses
-            [new Date('2010-01-01'), new Date('2011-01-01'), new Date('2012-01-01'), new Date('2013-01-01')].map(
+            [
+              new Date('2010-01-01'),
+              new Date('2011-01-01'),
+              new Date('2012-01-01'),
+              new Date('2013-01-01'),
+            ].map(
               (createdAt, index) => {
                 databaseBuilder.factory.buildStaticCourse({
                   id: `courseId${index}`,
@@ -175,7 +190,7 @@ describe('Integration | Repository | static-course-repository', function () {
             return databaseBuilder.commit();
           });
 
-          it('should return an empty result when no static course matches the isActive filter', async function () {
+          it('should return an empty result when no static course matches the isActive filter', async function() {
             // given
             const filter = { isActive: false };
 
@@ -193,11 +208,11 @@ describe('Integration | Repository | static-course-repository', function () {
           });
         });
       });
-      context('name', function () {
+      context('name', function() {
         const page = { number: 1, size: 20 };
 
-        context('with results', function () {
-          beforeEach(function () {
+        context('with results', function() {
+          beforeEach(function() {
             // 4 Static courses
             [
               { createdAt: new Date('2010-01-01'), name: 'iRis' },
@@ -214,7 +229,7 @@ describe('Integration | Repository | static-course-repository', function () {
             return databaseBuilder.commit();
           });
 
-          it('should return all the static courses of %name% when filter name is set', async function () {
+          it('should return all the static courses of %name% when filter name is set', async function() {
             // given
             const filter = { name: 'ri' };
 
@@ -232,7 +247,7 @@ describe('Integration | Repository | static-course-repository', function () {
             });
           });
 
-          it('should return all the static courses of %name% when filter name is set in a case insensitive fashion', async function () {
+          it('should return all the static courses of %name% when filter name is set in a case insensitive fashion', async function() {
             // given
             const filter = { name: 'rI' };
 
@@ -250,7 +265,7 @@ describe('Integration | Repository | static-course-repository', function () {
             });
           });
 
-          it('should return 0 static courses of %name% when filter name is set with a value that matches none of the records', async function () {
+          it('should return 0 static courses of %name% when filter name is set with a value that matches none of the records', async function() {
             // given
             const filter = { name: 'laura' };
 
@@ -269,11 +284,11 @@ describe('Integration | Repository | static-course-repository', function () {
           });
         });
       });
-      context('with many filters', function () {
+      context('with many filters', function() {
         const page = { number: 1, size: 20 };
 
-        context('with results', function () {
-          beforeEach(function () {
+        context('with results', function() {
+          beforeEach(function() {
             // 4 Static courses
             [
               { createdAt: new Date('2010-01-01'), name: 'iris' },
@@ -291,7 +306,7 @@ describe('Integration | Repository | static-course-repository', function () {
             return databaseBuilder.commit();
           });
 
-          it('should return all the static courses according to given filters', async function () {
+          it('should return all the static courses according to given filters', async function() {
             // given
             const filter = { isActive: true, name: 'ri' };
 
@@ -310,10 +325,10 @@ describe('Integration | Repository | static-course-repository', function () {
           });
         });
       });
-      context('tags', function () {
+      context('tags', function() {
         const page = { number: 1, size: 20 };
-        context('with results', function () {
-          beforeEach(function () {
+        context('with results', function() {
+          beforeEach(function() {
             // 3 tags
             [
               {
@@ -355,7 +370,7 @@ describe('Integration | Repository | static-course-repository', function () {
 
             return databaseBuilder.commit();
           });
-          it('should return all the static courses of %tags% when filter tags is set', async function () {
+          it('should return all the static courses of %tags% when filter tags is set', async function() {
             // given
             const filter = { tagIds: [1] };
 
@@ -372,7 +387,7 @@ describe('Integration | Repository | static-course-repository', function () {
               pageCount: 1,
             });
           });
-          it('should return all the static courses when filter tags is empty', async function () {
+          it('should return all the static courses when filter tags is empty', async function() {
             // given
             const filter = { tagIds: [] };
 
@@ -381,7 +396,12 @@ describe('Integration | Repository | static-course-repository', function () {
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
-            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId2', 'courseId1', 'courseId0']);
+            expect(actualStaticCourseSummaryIds).toEqual([
+              'courseId3',
+              'courseId2',
+              'courseId1',
+              'courseId0',
+            ]);
             expect(meta).to.deep.equal({
               page: 1,
               pageSize: 20,
@@ -394,9 +414,9 @@ describe('Integration | Repository | static-course-repository', function () {
     });
   });
 
-  context('#getRead', function () {
-    it('should return the static course read model', async function () {
-      //given
+  context('#getRead', function() {
+    it('should return the static course read model', async function() {
+      // given
       const staticCourseDb = databaseBuilder.factory.buildStaticCourse({
         id: 'rec123',
         challengeIds: 'challengeA,challengeB',
@@ -451,16 +471,13 @@ describe('Integration | Repository | static-course-repository', function () {
       const challengeRepositoryGetMany = vi.spyOn(challengeRepository, 'getMany').mockResolvedValue(challenges);
       const stubFilterSkillRepository = vi
         .spyOn(skillRepository, 'getMany')
-        .mockResolvedValue([
-          domainBuilder.buildSkill({ id: 'skillA', name: '@skillA' }),
-          domainBuilder.buildSkill({ id: 'skillB', name: '@skillB' }),
-        ]);
+        .mockResolvedValue([domainBuilder.buildSkill({ id: 'skillA', name: '@skillA' }), domainBuilder.buildSkill({ id: 'skillB', name: '@skillB' })]);
       await databaseBuilder.commit();
 
-      //when
+      // when
       const staticCourse = await getRead('rec123', { baseUrl: 'host.site' });
 
-      //then
+      // then
       const challengeSummaryA = domainBuilder.buildChallengeSummary({
         id: challenges[0].id,
         instruction: challenges[0].instruction,
@@ -504,9 +521,9 @@ describe('Integration | Repository | static-course-repository', function () {
     });
   });
 
-  context('#get', function () {
-    it('should return the static course model', async function () {
-      //given
+  context('#get', function() {
+    it('should return the static course model', async function() {
+      // given
       const staticCourseDb = databaseBuilder.factory.buildStaticCourse({
         id: 'rec123',
         challengeIds: 'challengeA,challengeB',
@@ -531,10 +548,10 @@ describe('Integration | Repository | static-course-repository', function () {
       });
       await databaseBuilder.commit();
 
-      //when
+      // when
       const staticCourse = await get('rec123');
 
-      //then
+      // then
       expect(staticCourse).to.deep.equal(
         domainBuilder.buildStaticCourse({
           id: staticCourseDb.id,

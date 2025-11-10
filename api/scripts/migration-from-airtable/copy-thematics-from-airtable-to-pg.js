@@ -23,7 +23,11 @@ export class CopyThematicsFromAirtableToPg extends Script {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
     const airtableThematics = await airtable.findRecords('Thematiques', {
-      fields: ['id persistant', 'Index', 'Competence (id persistant)'],
+      fields: [
+        'id persistant',
+        'Index',
+        'Competence (id persistant)',
+      ],
     });
     logger.info({ count: airtableThematics.length }, 'Loaded thematics from airtable');
 

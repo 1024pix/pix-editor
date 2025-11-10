@@ -1,13 +1,13 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Model | theme', function (hooks) {
+module('Unit | Model | theme', function(hooks) {
   setupTest(hooks);
   let store;
   let tube_1, tube_2, tube_3, tube_4;
   let theme;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
 
     const activeSkill_1 = store.createRecord('skill', {
@@ -63,7 +63,7 @@ module('Unit | Model | theme', function (hooks) {
     });
   });
 
-  test('it should not return workbench tubes', function (assert) {
+  test('it should not return workbench tubes', function(assert) {
     assert.expect(3);
     // when
     const tubes = theme.tubes;
@@ -78,7 +78,7 @@ module('Unit | Model | theme', function (hooks) {
     });
   });
 
-  test('it should return sorted production tubes', function (assert) {
+  test('it should return sorted production tubes', function(assert) {
     assert.expect(2);
     // when
     const tubes = theme.productionTubes;
@@ -90,7 +90,7 @@ module('Unit | Model | theme', function (hooks) {
     });
   });
 
-  test('it should return number of  selected tubes', function (assert) {
+  test('it should return number of  selected tubes', function(assert) {
     // when
     const selectedProductionTubeLength = theme.selectedProductionTubeLength;
 
@@ -98,8 +98,8 @@ module('Unit | Model | theme', function (hooks) {
     assert.strictEqual(selectedProductionTubeLength, 1);
   });
 
-  module('#hasSelectedProductionTube', function () {
-    test('it should be true if has selected tube', function (assert) {
+  module('#hasSelectedProductionTube', function() {
+    test('it should be true if has selected tube', function(assert) {
       // when
       const hasSelectedProductionTube = theme.hasSelectedProductionTube;
 
@@ -107,7 +107,7 @@ module('Unit | Model | theme', function (hooks) {
       assert.ok(hasSelectedProductionTube);
     });
 
-    test('it should be false if has no selected tube', function (assert) {
+    test('it should be false if has no selected tube', function(assert) {
       // given
       theme = store.createRecord('theme', {
         name: 'themeName',

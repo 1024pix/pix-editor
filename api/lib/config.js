@@ -68,9 +68,7 @@ export let pixApp = {
   baseUrlOrg: process.env.PIX_APP_BASEURL_ORG ?? process.env.PIX_APP_BASEURL,
 };
 
-export const lcms = {
-  baseUrl: process.env.PIX_EDITOR_BASE_URL,
-};
+export const lcms = { baseUrl: process.env.PIX_EDITOR_BASE_URL };
 
 export const pixEditor = {
   storagePost: process.env.STORAGE_POST,
@@ -118,9 +116,7 @@ export const checkUrlsJobs = {
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
 };
 
-export const exportExternalUrlsJob = {
-  spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID,
-};
+export const exportExternalUrlsJob = { spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID };
 
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
@@ -170,9 +166,7 @@ export const airtableSeedsConfig = {
   locales: _getStringArray(process.env.AIRTABLE_SEEDS_LOCALES, ['fr', 'en']),
 };
 
-export const migrationFromAirtable = {
-  throwOnPostgresDifference: false,
-};
+export const migrationFromAirtable = { throwOnPostgresDifference: false };
 
 if (process.env.NODE_ENV === 'test') {
   port = 0;

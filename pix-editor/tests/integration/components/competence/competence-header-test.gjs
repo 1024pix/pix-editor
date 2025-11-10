@@ -4,11 +4,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | competence/competence-header', function (hooks) {
+module('Integration | Component | competence/competence-header', function(hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store, competence;
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
     competence = store.createRecord('competence', {
       title: 'Lancer de hache',
@@ -17,7 +17,7 @@ module('Integration | Component | competence/competence-header', function (hooks
     });
   });
 
-  test('renders the language and the challenges menu', async function (assert) {
+  test('renders the language and the challenges menu', async function(assert) {
     // given
     const mockFn = () => {};
 

@@ -5,13 +5,13 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | main-sidebar', function (hooks) {
+module('Integration | Component | main-sidebar', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders main-sideBar', async function (assert) {
-    this.set('menuOpen', function () {});
-    this.set('openLogout', function () {});
-    this.set('closeMenu', function () {});
+  test('it renders main-sideBar', async function(assert) {
+    this.set('menuOpen', function() {});
+    this.set('openLogout', function() {});
+    this.set('closeMenu', function() {});
     this.owner.register('service:currentData', class MockService extends Service {
       getFramework() {
         return { name: 'Pix 1D' };
@@ -28,8 +28,8 @@ module('Integration | Component | main-sidebar', function (hooks) {
     assert.dom('.main-sidebar').exists();
   });
 
-  module('the pix1d framework is selected', function () {
-    test('displays mission tab', async function (assert) {
+  module('the pix1d framework is selected', function() {
+    test('displays mission tab', async function(assert) {
       this.owner.register('service:currentData', class MockService extends Service {
         getFramework() {
           return { name: 'Pix 1D' };
@@ -39,9 +39,9 @@ module('Integration | Component | main-sidebar', function (hooks) {
           return [];
         }
       });
-      this.set('menuOpen', function () {});
-      this.set('openLogout', function () {});
-      this.set('closeMenu', function () {});
+      this.set('menuOpen', function() {});
+      this.set('openLogout', function() {});
+      this.set('closeMenu', function() {});
 
       const screen = await render(hbs`<Sidebar::Main @openLogout={{this.openLogout}}
                                     @open={{this.menuOpen}}
@@ -50,8 +50,8 @@ module('Integration | Component | main-sidebar', function (hooks) {
     });
   });
 
-  module('the pix1d framework is not selected', function () {
-    test('does not display the Mission Pix 1D', async function (assert) {
+  module('the pix1d framework is not selected', function() {
+    test('does not display the Mission Pix 1D', async function(assert) {
       this.owner.register('service:currentData', class MockService extends Service {
         getFramework() {
           return { name: 'Pix+ Droit' };
@@ -61,9 +61,9 @@ module('Integration | Component | main-sidebar', function (hooks) {
           return [];
         }
       });
-      this.set('menuOpen', function () {});
-      this.set('openLogout', function () {});
-      this.set('closeMenu', function () {});
+      this.set('menuOpen', function() {});
+      this.set('openLogout', function() {});
+      this.set('closeMenu', function() {});
 
       const screen = await render(hbs`<Sidebar::Main @openLogout={{this.openLogout}}
                                     @open={{this.menuOpen}}

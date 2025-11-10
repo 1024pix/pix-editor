@@ -30,14 +30,10 @@ const serializer = new Serializer('tutorial', {
       level: tutorial.level,
       crush: tutorial.crush,
       language: tutorial.locale,
-      tags: tutorial.tagAirtableIds.map((tagAirtableId) => ({
-        id: tagAirtableId,
-      })),
+      tags: tutorial.tagAirtableIds.map((tagAirtableId) => ({ id: tagAirtableId })),
     };
   },
-  tags: {
-    ref: 'id',
-  },
+  tags: { ref: 'id' },
 });
 
 export function serialize(thematics) {

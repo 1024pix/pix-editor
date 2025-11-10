@@ -255,9 +255,9 @@ function arrangeSkillsByTubeIdAndLevel(skills) {
 function isProductionPrototypeOf(skill) {
   return (challenge) => {
     return (
-      challenge.skillId === skill.id &&
-      challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE &&
-      challenge.status === Challenge.STATUSES.VALIDE
+      challenge.skillId === skill.id
+      && challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE
+      && challenge.status === Challenge.STATUSES.VALIDE
     );
   };
 }

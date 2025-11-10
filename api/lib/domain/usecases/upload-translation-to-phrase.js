@@ -29,9 +29,7 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
     });
 
     try {
-      const locales = await new phraseApi.LocalesApi(configuration).localesList({
-        projectId,
-      });
+      const locales = await new phraseApi.LocalesApi(configuration).localesList({ projectId });
 
       const defaultLocaleId = locales.find((locale) => locale._default)?.id;
 
@@ -43,9 +41,7 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
         updateDescriptions: true,
         updateTranslations: true,
         skipUploadTags: true,
-        localeMapping: {
-          fr: 2,
-        },
+        localeMapping: { fr: 2 },
         formatOptions: {
           key_index: 1,
           tag_column: 3,

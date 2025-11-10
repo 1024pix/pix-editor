@@ -26,7 +26,7 @@ function requestSerializer(req) {
 
 const plugin = {
   name: 'hapi-pino',
-  register: async function (server, options) {
+  register: async function(server, options) {
     const serializers = {
       req: stdSerializers.wrapRequestSerializer(requestSerializer),
       res: stdSerializers.wrapResponseSerializer(stdSerializers.res),
@@ -34,19 +34,19 @@ const plugin = {
     const logger = options.instance;
     logger[serializersSym] = Object.assign({}, serializers, logger[serializersSym]);
 
-    server.ext('onPostStart', async function () {
+    server.ext('onPostStart', async function() {
       logger.info(server.info, 'server started');
     });
 
-    server.ext('onPostStop', async function () {
+    server.ext('onPostStop', async function() {
       logger.info(server.info, 'server stopped');
     });
 
-    server.events.on('log', function (event) {
+    server.events.on('log', function(event) {
       logger.info({ tags: event.tags, data: event.data });
     });
 
-    server.events.on('request', function (request, event) {
+    server.events.on('request', function(request, event) {
       if (event.channel !== 'error') {
         return;
       }
@@ -77,8 +77,6 @@ const plugin = {
   },
 };
 
-const options = {
-  instance: loggerPino,
-};
+const options = { instance: loggerPino };
 
 export { options, plugin };

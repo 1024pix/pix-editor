@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
+module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -86,7 +86,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     return authenticateSession();
   });
 
-  test('adding attachments', async function (assert) {
+  test('adding attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() {
@@ -123,7 +123,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     assert.strictEqual(attachments.length, 1);
   });
 
-  test('adding attachments on localized challenge with illustration', async function (assert) {
+  test('adding attachments on localized challenge with illustration', async function(assert) {
     // given
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
 
@@ -155,7 +155,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     assert.dom(screen.getByRole('heading', { name: 'Illustration' })).exists();
   });
 
-  test('replace attachment', async function (assert) {
+  test('replace attachment', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -198,7 +198,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     assert.strictEqual(attachments[0].url, 'data-attachmentB:,');
   });
 
-  test('delete attachment', async function (assert) {
+  test('delete attachment', async function(assert) {
     // given
     this.server.create('attachment', {
       id: 'recAttachment1',
@@ -229,7 +229,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('cancel adding an attachment', async function (assert) {
+  test('cancel adding an attachment', async function(assert) {
     // given
     this.server.create('attachment', {
       id: 'recAttachment1',

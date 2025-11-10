@@ -4,9 +4,9 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | pop-in/threshold-calculation', function (hooks) {
+module('Integration | Component | pop-in/threshold-calculation', function(hooks) {
   setupIntlRenderingTest(hooks);
-  test('it display a list of selected skills count by level', async function (assert) {
+  test('it display a list of selected skills count by level', async function(assert) {
     // given
     const tube1SelectedSkills = [
       {
@@ -130,7 +130,7 @@ module('Integration | Component | pop-in/threshold-calculation', function (hooks
       },
     ];
     const selectedSkillsCount = tube1SelectedSkills.length + tube2SelectedSkills.length + tube3SelectedSkills.length + tube4SelectedSkills.length;
-    this.closeAction = function () {};
+    this.closeAction = function() {};
     this.areas = areas;
 
     // when

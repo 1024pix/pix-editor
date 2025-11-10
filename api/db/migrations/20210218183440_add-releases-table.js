@@ -1,7 +1,6 @@
 const TABLE_NAME = 'releases';
 
 export function up(knex) {
-
   function table(t) {
     t.increments().primary();
     t.json('content').notNullable();
@@ -13,7 +12,6 @@ export function up(knex) {
 }
 
 export function down(knex) {
-
   return knex.schema
     .dropTable(TABLE_NAME);
 }

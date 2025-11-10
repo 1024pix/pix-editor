@@ -85,15 +85,27 @@ export class CopySkillsFromAirtableToPg extends Script {
       .delete()
       .from('skills-tutorials')
       .whereNotIn(
-        ['skillId', 'tutorialId', 'type'],
-        skillsTutorialsRelations.map(({ skillId, tutorialId, type }) => [skillId, tutorialId, type]),
+        [
+          'skillId',
+          'tutorialId',
+          'type',
+        ],
+        skillsTutorialsRelations.map(({ skillId, tutorialId, type }) => [
+          skillId,
+          tutorialId,
+          type,
+        ]),
       );
     logger.info({ count: deletedRelationsCount }, 'Deleted skills tutorials relations into postgres');
 
     await knex
       .insert(skillsTutorialsRelations)
       .into('skills-tutorials')
-      .onConflict(['skillId', 'tutorialId', 'type'])
+      .onConflict([
+        'skillId',
+        'tutorialId',
+        'type',
+      ])
       .merge({ updatedAt: knex.fn.now() });
     logger.info({ count: skillsTutorialsRelations.length }, 'Inserted skills tutorials relations into postgres');
   }

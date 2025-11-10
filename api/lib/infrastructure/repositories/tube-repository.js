@@ -11,7 +11,11 @@ const model = 'tube';
 const TABLE_NAME = 'tubes';
 
 export async function list() {
-  const [airtableDtos, pgDtos, translations] = await Promise.all([
+  const [
+    airtableDtos,
+    pgDtos,
+    translations,
+  ] = await Promise.all([
     tubeDatasource.list(),
     selectTubes().orderBy(`${TABLE_NAME}.id`),
     translationRepository.listByModel(model),
@@ -23,7 +27,11 @@ export async function list() {
 }
 
 export async function get(id) {
-  const [[airtableDto], pgDto, translations] = await Promise.all([
+  const [
+    [airtableDto],
+    pgDto,
+    translations,
+  ] = await Promise.all([
     tubeDatasource.filter({ filter: { ids: [id] } }),
     selectTubes().where('tubes.id', id).first(),
     translationRepository.listByEntity(model, id),
@@ -37,10 +45,7 @@ export async function get(id) {
 }
 
 export async function listByCompetenceId(competenceId) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    tubeDatasource.listByCompetenceId(competenceId),
-    selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([tubeDatasource.listByCompetenceId(competenceId), selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id')]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
 
@@ -58,10 +63,7 @@ export async function getByAirtableId(airtableId) {
   const airtableDto = await tubeDatasource.find(airtableId);
   if (!airtableDto) return null;
 
-  const [pgDto, translations] = await Promise.all([
-    selectTubes().where('tubes.id', airtableDto.id).first(),
-    translationRepository.listByEntity(model, airtableDto.id),
-  ]);
+  const [pgDto, translations] = await Promise.all([selectTubes().where('tubes.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
   compareDtos(airtableDto, pgDto, compareTubeDtos);
 
@@ -76,10 +78,7 @@ export async function getManyByAirtableIds(airtableIds) {
 
   const ids = airtableDtos.map(({ id }) => id);
 
-  const [pgDtos, translations] = await Promise.all([
-    selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'),
-    translationRepository.listByEntities(model, ids),
-  ]);
+  const [pgDtos, translations] = await Promise.all([selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'), translationRepository.listByEntities(model, ids)]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
 

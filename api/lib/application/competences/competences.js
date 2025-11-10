@@ -12,7 +12,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/competences',
       config: {
-        handler: async function () {
+        handler: async function() {
           const competences = await competenceRepository.list();
           return competenceSerializer.serialize(competences);
         },
@@ -22,12 +22,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/competences/{competenceAirtableId}',
       config: {
-        validate: {
-          params: Joi.object({
-            competenceAirtableId: Types.competenceId().required(),
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ competenceAirtableId: Types.competenceId().required() }) },
+        handler: async function(request) {
           const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
           if (!competence) throw new NotFoundError('unknown competence');
           return competenceSerializer.serialize(competence);
@@ -60,7 +56,7 @@ export async function register(server) {
             },
           }),
         },
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const competence = await competenceSerializer.deserialize(request.payload);
           const createdCompetence = await usecases.createCompetence(competence);
           return h.response(competenceSerializer.serialize(createdCompetence)).code(201);
@@ -73,9 +69,7 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
         validate: {
-          params: Joi.object({
-            competenceAirtableId: Types.competenceId().required(),
-          }),
+          params: Joi.object({ competenceAirtableId: Types.competenceId().required() }),
           payload: Joi.object({
             data: {
               type: Joi.string().required().equal('competences'),
@@ -90,7 +84,7 @@ export async function register(server) {
             },
           }),
         },
-        handler: async function (request) {
+        handler: async function(request) {
           const competenceUpdates = await competenceSerializer.deserialize(request.payload);
 
           const updatedCompetence = await usecases.updateCompetence(

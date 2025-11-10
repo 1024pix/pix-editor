@@ -11,9 +11,7 @@ const serializer = new Serializer('framework', {
       areas: areaIds?.map((id) => ({ id })),
     };
   },
-  areas: {
-    ref: 'id',
-  },
+  areas: { ref: 'id' },
 });
 
 export function serialize(frameworks) {

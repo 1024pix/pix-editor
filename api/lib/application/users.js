@@ -6,7 +6,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/users/me',
       config: {
-        handler: function (request, h) {
+        handler: function(request, h) {
           const authenticatedUser = request.auth.credentials.user;
           return h.response(userSerializer.serialize(authenticatedUser));
         },

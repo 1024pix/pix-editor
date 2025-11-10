@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | target-profile/threshold-row', function (hooks) {
+module('Integration | Component | target-profile/threshold-row', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should render a row with a total skill count by level and a threshold', async function (assert) {
+  test('it should render a row with a total skill count by level and a threshold', async function(assert) {
     // given
     const selectedSkillsLevel1 = [
       {

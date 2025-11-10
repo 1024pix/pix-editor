@@ -7,7 +7,12 @@ const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 export async function register(server) {
   server.route([
     {
-      method: ['GET', 'POST', 'PATCH', 'DELETE'],
+      method: [
+        'GET',
+        'POST',
+        'PATCH',
+        'DELETE',
+      ],
       path: '/api/airtable/changelog/{path*}',
       config: {
         pre: [
@@ -20,7 +25,7 @@ export async function register(server) {
             },
           },
         ],
-        handler: async function (request, h) {
+        handler: async function(request, h) {
           const response = await _proxyRequestToAirtable(request, config.airtable.editorBase);
           return h.response(response.data).code(response.status);
         },

@@ -7,7 +7,11 @@ import { escapeLikeWildcards } from './sql-utils.js';
 let _doesTableExistInAirtable;
 let _doesTableExistInAirtablePromise;
 
-const projection = ['key', 'locale', 'value'];
+const projection = [
+  'key',
+  'locale',
+  'value',
+];
 
 export async function save({ translations, transaction: knexConnection = knex, shouldDuplicateToAirtable = true }) {
   if (translations.length === 0) return [];
@@ -71,7 +75,7 @@ export async function search({ entity, fields, search, limit }) {
     .pluck('entityId')
     .distinct()
     .whereILike('value', `%${escapeLikeWildcards(search)}%`)
-    .andWhere(function () {
+    .andWhere(function() {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);
       }
@@ -100,11 +104,7 @@ export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction
   }
 
   if (_doesTableExistInAirtable) {
-    const records = await translationDatasource.filter({
-      filter: {
-        formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))`,
-      },
-    });
+    const records = await translationDatasource.filter({ filter: { formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))` } });
     if (records.length === 0) return;
     const recordIds = records.map(({ airtableId }) => airtableId);
     await translationDatasource.delete(recordIds);

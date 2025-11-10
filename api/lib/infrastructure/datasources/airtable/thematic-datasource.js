@@ -8,7 +8,14 @@ export const thematicDatasource = datasource.extend({
 
   airtableIdField: 'Record Id',
 
-  usedFields: ['id persistant', 'Competence', 'Competence (id persistant)', 'Tubes (id persistant)', 'Tubes', 'Index'],
+  usedFields: [
+    'id persistant',
+    'Competence',
+    'Competence (id persistant)',
+    'Tubes (id persistant)',
+    'Tubes',
+    'Index',
+  ],
 
   fromAirTableObject(airtableRecord) {
     return {

@@ -13,14 +13,10 @@ export async function register(server) {
       path: '/api/competences/{competenceId}/overviews/challenges-production',
       config: {
         validate: {
-          params: Joi.object({
-            competenceId: Types.competenceId().required(),
-          }),
-          query: Joi.object({
-            locale: Types.locale(),
-          }),
+          params: Joi.object({ competenceId: Types.competenceId().required() }),
+          query: Joi.object({ locale: Types.locale() }),
         },
-        handler: async function (request) {
+        handler: async function(request) {
           const competenceId = request.params.competenceId;
           const locale = request.query.locale;
 
@@ -36,12 +32,8 @@ export async function register(server) {
       method: 'GET',
       path: '/api/competences/{competenceId}/overviews/challenges-workbench',
       config: {
-        validate: {
-          params: Joi.object({
-            competenceId: Types.competenceId().required(),
-          }),
-        },
-        handler: async function (request) {
+        validate: { params: Joi.object({ competenceId: Types.competenceId().required() }) },
+        handler: async function(request) {
           const competenceId = request.params.competenceId;
 
           const competenceOverview = await getCompetenceChallengesWorkbenchOverview({ competenceId });

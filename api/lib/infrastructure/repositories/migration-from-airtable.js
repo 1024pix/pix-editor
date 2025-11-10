@@ -1,9 +1,7 @@
 import * as config from '../../config.js';
 import { child } from '../logger.js';
 
-const logger = child('airtable:migration', {
-  event: 'migration-from-airtable',
-});
+const logger = child('airtable:migration', { event: 'migration-from-airtable' });
 
 /**
  * @param {object[]} airtableDtos

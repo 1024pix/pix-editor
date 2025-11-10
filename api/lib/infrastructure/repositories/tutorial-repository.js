@@ -169,10 +169,7 @@ export async function searchByTagTitles(tagTitles) {
 }
 
 export async function getMany(ids) {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    tutorialDatasource.filter({ filter: { ids } }),
-    selectTutorials().whereIn('id', ids).orderBy('id'),
-  ]);
+  const [airtableDtos, pgDtos] = await Promise.all([tutorialDatasource.filter({ filter: { ids } }), selectTutorials().whereIn('id', ids).orderBy('id')]);
 
   compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
 

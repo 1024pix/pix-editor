@@ -3,7 +3,7 @@ import { hFake } from '../../../test-helper.js';
 import * as AllDomainErrors from '../../../../lib/domain/errors.js';
 import { send } from '../../../../lib/infrastructure/utils/error-manager.js';
 
-describe('Unit | Infrastructure | ErrorManager', function () {
+describe('Unit | Infrastructure | ErrorManager', function() {
   describe('#send', () => {
     it('should manage properly all DomainErrors into appropriate InfraError', () => {
       const message = 'error message';
@@ -101,16 +101,12 @@ describe('Unit | Infrastructure | ErrorManager', function () {
                 status: '422',
                 title: 'Unprocessable entity',
                 detail: 'Un texte détaillant une erreur',
-                source: {
-                  pointer: '/data/attributes/name',
-                },
+                source: { pointer: '/data/attributes/name' },
               },
               {
                 status: '422',
                 title: 'Unprocessable entity',
-                source: {
-                  pointer: '/data/attributes/challenge-ids',
-                },
+                source: { pointer: '/data/attributes/challenge-ids' },
                 detail: "le détail d'une autre erreur",
               },
             ],

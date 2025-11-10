@@ -24,9 +24,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
     });
     describe('when user is admin', () => {
       it('should allow status modification', async () => {
-        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
-          status: LocalizedChallenge.STATUSES.PLAY,
-        });
+        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({ status: LocalizedChallenge.STATUSES.PLAY });
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(originalLocalizedChallenge),
@@ -49,9 +47,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
     });
     describe('when user is not admin', () => {
       it('should not allow status modification', async () => {
-        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
-          status: LocalizedChallenge.STATUSES.PLAY,
-        });
+        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({ status: LocalizedChallenge.STATUSES.PLAY });
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(originalLocalizedChallenge),
@@ -77,9 +73,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
       });
 
       it('should be able to modify when status is not modified', async () => {
-        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
-          status: LocalizedChallenge.STATUSES.PLAY,
-        });
+        const originalLocalizedChallenge = domainBuilder.buildLocalizedChallenge({ status: LocalizedChallenge.STATUSES.PLAY });
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(originalLocalizedChallenge),

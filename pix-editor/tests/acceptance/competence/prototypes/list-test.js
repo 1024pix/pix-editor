@@ -17,12 +17,12 @@ const deadSkillId = 'recDeadSkill';
 const deadSkillPixId = 'pixDeadSkill';
 const challengeId2 = 'recChallenge2';
 
-module('Acceptance | competence/prototypes/list', function () {
-  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function (hooks) {
+module('Acceptance | competence/prototypes/list', function() {
+  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function(hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
 
-    hooks.beforeEach(async function () {
+    hooks.beforeEach(async function() {
       // given
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
@@ -59,14 +59,14 @@ module('Acceptance | competence/prototypes/list', function () {
       await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}?view=workbench`);
     });
 
-    test('it should display a list of prototype of `skill1`', function (assert) {
+    test('it should display a list of prototype of `skill1`', function(assert) {
       // then
       assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.3`);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count: 1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
-    test('it should display a list of skill tab sorted by date', function (assert) {
+    test('it should display a list of skill tab sorted by date', function(assert) {
       // given
       const expectedResult = [
         `${skillName} v.3`,
@@ -82,10 +82,10 @@ module('Acceptance | competence/prototypes/list', function () {
       });
     });
 
-    test('it should display a list of prototype of selected skill', async function (assert) {
+    test('it should display a list of prototype of selected skill', async function(assert) {
       // when
       await click(findAll('[data-test-skill-tab]')[1]);
-      await waitUntil(function () {
+      await waitUntil(function() {
         return find('[data-test-prototype-list]').textContent.includes('instructionsChallenge2');
       }, { timeout: 1000 });
 
@@ -95,7 +95,7 @@ module('Acceptance | competence/prototypes/list', function () {
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge2');
     });
 
-    test('it should call prototype/new with good query params', async function (assert) {
+    test('it should call prototype/new with good query params', async function(assert) {
       // given
       const expectedResult = `/competence/recCompetence1_1/prototypes/new?from=${challengeId2}`;
 

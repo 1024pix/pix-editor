@@ -7,12 +7,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | expand-collapse-close-multipanels', function (hooks) {
+module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -108,7 +108,7 @@ module('Acceptance | expand-collapse-close-multipanels', function (hooks) {
     return authenticateSession();
   });
 
-  test('should correctly expand / collapse panels according to scenario', async function (assert) {
+  test('should correctly expand / collapse panels according to scenario', async function(assert) {
     // Grid only
     await visit('/v2/competences/recCompetence1/challenges-production');
     assert.dom('.competence-overview-grid').isVisible();

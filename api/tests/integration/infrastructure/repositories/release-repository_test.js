@@ -14,12 +14,12 @@ import {
   TutorialForRelease,
 } from '../../../../lib/domain/models/release/index.js';
 
-describe('Integration | Repository | release-repository', function () {
-  describe('#create', function () {
-    it('should save current content as a new release', async function () {
+describe('Integration | Repository | release-repository', function() {
+  describe('#create', function() {
+    it('should save current content as a new release', async function() {
       // Given
       const currentContent = { some: 'property' };
-      const fakeGetCurrentContent = async function () {
+      const fakeGetCurrentContent = async function() {
         return currentContent;
       };
 
@@ -32,7 +32,7 @@ describe('Integration | Repository | release-repository', function () {
       expect(releasesInDb[0].content).to.deep.equal(currentContent);
     });
 
-    it('should return the saved release ID', async function () {
+    it('should return the saved release ID', async function() {
       // Given
       const currentContentDTO = {
         areas: [],
@@ -45,7 +45,7 @@ describe('Integration | Repository | release-repository', function () {
         tubes: [],
         tutorials: [],
       };
-      const fakeGetCurrentContent = async function () {
+      const fakeGetCurrentContent = async function() {
         return currentContentDTO;
       };
 
@@ -58,8 +58,8 @@ describe('Integration | Repository | release-repository', function () {
     });
   });
 
-  describe('#getLatestRelease', function () {
-    it('should return content of newest created release', async function () {
+  describe('#getLatestRelease', function() {
+    it('should return content of newest created release', async function() {
       // Given
       const newestReleaseContentDTO = {
         areas: [],
@@ -99,8 +99,8 @@ describe('Integration | Repository | release-repository', function () {
     });
   });
 
-  describe('#getLatestReleaseDate', function () {
-    it('should return the date of the latest release', async function () {
+  describe('#getLatestReleaseDate', function() {
+    it('should return the date of the latest release', async function() {
       // Given
       databaseBuilder.factory.buildRelease({
         createdAt: new Date('2022-01-01'),
@@ -124,8 +124,8 @@ describe('Integration | Repository | release-repository', function () {
     });
   });
 
-  describe('#getRelease', function () {
-    it('should return content of given release', async function () {
+  describe('#getRelease', function() {
+    it('should return content of given release', async function() {
       // Given
       const otherReleaseContentDTO = { some: 'property' };
       const expectedReleaseContentDTO = {
@@ -166,8 +166,8 @@ describe('Integration | Repository | release-repository', function () {
       expect(givenRelease).toEqualInstance(expectedRelease);
     });
 
-    context('with a rich and realistic content', function () {
-      it('should return a well formed release', async function () {
+    context('with a rich and realistic content', function() {
+      it('should return a well formed release', async function() {
         // Given
         _mockRichAirtableContent();
         const richCurrentContentDTO = _getRichCurrentContentDTO();
@@ -193,8 +193,8 @@ describe('Integration | Repository | release-repository', function () {
     });
   });
 
-  describe('#getCurrentContent', function () {
-    beforeEach(function () {
+  describe('#getCurrentContent', function() {
+    beforeEach(function() {
       const { areas, competences, thematics, tubeIds, skills, challenges } = _mockRichAirtableContent();
 
       buildAreasTranslations(areas);
@@ -238,7 +238,7 @@ describe('Integration | Repository | release-repository', function () {
       return databaseBuilder.commit();
     });
 
-    it('should return current content as DTO', async function () {
+    it('should return current content as DTO', async function() {
       // When
       const currentContentDTO = await getCurrentContent();
 
@@ -689,7 +689,11 @@ function _mockRichAirtableContent() {
     level: 1,
     internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
     version: 21111,
-    challengeIds: ['challenge211111', 'challenge211112', 'challenge211113'],
+    challengeIds: [
+      'challenge211111',
+      'challenge211112',
+      'challenge211113',
+    ],
   };
   databaseBuilder.factory.buildSkill(skill21111);
   const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
@@ -1014,10 +1018,30 @@ function _mockRichAirtableContent() {
   airtableBuilder.mockLists({
     frameworks: [airtableFrameworkA],
     areas: [airtableArea1, airtableArea2],
-    competences: [airtableCompetence11, airtableCompetence12, airtableCompetence21],
-    thematics: [airtableThematic111, airtableThematic112, airtableThematic121, airtableThematic211],
-    tubes: [airtableTube1111, airtableTube1121, airtableTube1211, airtableTube1212, airtableTube2111],
-    skills: [airtableSkill11111, airtableSkill11112, airtableSkill12121, airtableSkill21111],
+    competences: [
+      airtableCompetence11,
+      airtableCompetence12,
+      airtableCompetence21,
+    ],
+    thematics: [
+      airtableThematic111,
+      airtableThematic112,
+      airtableThematic121,
+      airtableThematic211,
+    ],
+    tubes: [
+      airtableTube1111,
+      airtableTube1121,
+      airtableTube1211,
+      airtableTube1212,
+      airtableTube2111,
+    ],
+    skills: [
+      airtableSkill11111,
+      airtableSkill11112,
+      airtableSkill12121,
+      airtableSkill21111,
+    ],
     challenges: [
       airtableChallenge121211,
       airtableChallenge121212,
@@ -1026,16 +1050,47 @@ function _mockRichAirtableContent() {
       airtableChallenge211113,
     ],
     tutorials: [airtableTutorial1, airtableTutorial2],
-    attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3, airtableAttachment4],
+    attachments: [
+      airtableAttachment1,
+      airtableAttachment2,
+      airtableAttachment3,
+      airtableAttachment4,
+    ],
   });
 
   return {
     areas: [area1, area2],
-    competences: [competence11, competence12, competence21],
-    thematics: [thematic111, thematic112, thematic121, thematic211],
-    tubeIds: [airtableTube1111.id, airtableTube1121.id, airtableTube1211.id, airtableTube1212.id, airtableTube2111.id],
-    skills: [skill11111, skill11112, skill12121, skill21111],
-    challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
+    competences: [
+      competence11,
+      competence12,
+      competence21,
+    ],
+    thematics: [
+      thematic111,
+      thematic112,
+      thematic121,
+      thematic211,
+    ],
+    tubeIds: [
+      airtableTube1111.id,
+      airtableTube1121.id,
+      airtableTube1211.id,
+      airtableTube1212.id,
+      airtableTube2111.id,
+    ],
+    skills: [
+      skill11111,
+      skill11112,
+      skill12121,
+      skill21111,
+    ],
+    challenges: [
+      challenge121211,
+      challenge121212,
+      challenge211111,
+      challenge211112,
+      challenge211113,
+    ],
   };
 }
 
@@ -1572,7 +1627,11 @@ function _getRichCurrentContentDTO() {
       name: 'course1PG name',
       description: 'course1PG description',
       isActive: false,
-      challenges: ['challenge121212', 'challenge211113', 'challengeNl'],
+      challenges: [
+        'challenge121212',
+        'challenge211113',
+        'challengeNl',
+      ],
     },
   ];
   const expectedTutorialDTOs = [

@@ -22,9 +22,7 @@ export class CopyFrameworksFromAirtableToPg extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
-    const airtableFrameworks = await airtable.findRecords('Referentiel', {
-      fields: ['Nom'],
-    });
+    const airtableFrameworks = await airtable.findRecords('Referentiel', { fields: ['Nom'] });
     logger.info({ count: airtableFrameworks.length }, 'Loaded frameworks from airtable');
 
     const frameworks = airtableFrameworks.map((record) => ({

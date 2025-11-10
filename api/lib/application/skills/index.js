@@ -35,11 +35,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/skills/{skillId}/challenges-production',
       config: {
-        validate: {
-          params: Joi.object({
-            skillId: Types.skillId().required(),
-          }),
-        },
+        validate: { params: Joi.object({ skillId: Types.skillId().required() }) },
         handler: skillsController.getProductionChallenges,
       },
     },
@@ -47,11 +43,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/skills/{skillAirtableId}',
       config: {
-        validate: {
-          params: Joi.object({
-            skillAirtableId: Types.skillId().required(),
-          }),
-        },
+        validate: { params: Joi.object({ skillAirtableId: Types.skillId().required() }) },
         handler: skillsController.get,
       },
     },

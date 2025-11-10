@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | static course tags | GET /api/static-course-tags', function () {
-  it('Return the list of all static course tags', async function () {
+describe('Acceptance | API | static course tags | GET /api/static-course-tags', function() {
+  it('Return the list of all static course tags', async function() {
     // Given
     const server = await createServer();
     const user = databaseBuilder.factory.buildReadonlyUser();
@@ -29,16 +29,12 @@ describe('Acceptance | API | static course tags | GET /api/static-course-tags', 
         {
           type: 'static-course-tags',
           id: tagB.id.toString(),
-          attributes: {
-            label: tagB.label,
-          },
+          attributes: { label: tagB.label },
         },
         {
           type: 'static-course-tags',
           id: tagA.id.toString(),
-          attributes: {
-            label: tagA.label,
-          },
+          attributes: { label: tagA.label },
         },
       ],
     });

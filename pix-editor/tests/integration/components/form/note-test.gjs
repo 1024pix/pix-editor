@@ -4,11 +4,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | note-form', function (hooks) {
+module('Integration | Component | note-form', function(hooks) {
   setupIntlRenderingTest(hooks);
   let screen;
 
-  test('renders the note form with status menu', async function (assert) {
+  test('renders the note form with status menu', async function(assert) {
     // given
     const mockFn = () => {};
 

@@ -25,12 +25,8 @@ describe('Unit | Domain | Readmodels | LocalizedChallenge', () => {
           }),
         ],
         translations: {
-          fr: {
-            instruction: 'Je men fiche',
-          },
-          nl: {
-            instruction: 'Da Da Da',
-          },
+          fr: { instruction: 'Je men fiche' },
+          nl: { instruction: 'Da Da Da' },
         },
       });
 

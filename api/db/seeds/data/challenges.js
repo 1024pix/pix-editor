@@ -25,7 +25,12 @@ const iterFor = {
   ),
   alpha: cycle([...Array(5).keys(), null]),
   delta: cycle([...Array(5).keys(), null]),
-  timer: cycle([30, 120, 180, null]),
+  timer: cycle([
+    30,
+    120,
+    180,
+    null,
+  ]),
   autoReply: cycle([true, false]),
   shuffled: cycle([true, false]),
   focusable: cycle([true, false]),
@@ -168,8 +173,8 @@ export function buildChallenge({
   addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);
   if (status !== Challenge.STATUSES.PROPOSE && locales.length > 1) {
     const translatedLocales = [iterLocale.next().value, iterLocale.next().value];
-    const statusForTranslation1 =
-      status === Challenge.STATUSES.VALIDE ? LocalizedChallenge.STATUSES.PLAY : LocalizedChallenge.STATUSES.PAUSE;
+    const statusForTranslation1
+      = status === Challenge.STATUSES.VALIDE ? LocalizedChallenge.STATUSES.PLAY : LocalizedChallenge.STATUSES.PAUSE;
     addTranslationFor(
       challengeItem,
       translatedLocales[0],

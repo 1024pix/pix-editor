@@ -5,12 +5,12 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | whitelisted-urls/list', function (hooks) {
+module('Integration | Component | whitelisted-urls/list', function(hooks) {
   setupIntlRenderingTest(hooks);
   let store, whitelistedUrl1, whitelistedUrl2, hour1_create, hour1_update, hour2_create;
   let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub, onEditStub;
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
     whitelistedUrl1 = store.createRecord('whitelisted-url', {
       id: '1',
@@ -50,7 +50,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     onEditStub = sinon.stub();
   });
 
-  test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function (assert) {
+  test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -107,7 +107,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     assert.strictEqual(screen.getByLabelText('Nom d\'acquis').value, 'initialNamesValue');
   });
 
-  test('it should pass up typed url filter and keeping the previous names filter when applying', async function (assert) {
+  test('it should pass up typed url filter and keeping the previous names filter when applying', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -138,7 +138,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'different url value', 'initialNamesValue');
   });
 
-  test('it should pass up typed names filter and keeping the previous url filter when applying', async function (assert) {
+  test('it should pass up typed names filter and keeping the previous url filter when applying', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -169,7 +169,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'initialUrlValue', 'different names value');
   });
 
-  test('it should pass up both typed names and url filters when applying', async function (assert) {
+  test('it should pass up both typed names and url filters when applying', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -201,7 +201,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'different url value', 'different names value');
   });
 
-  test('it should call arg function when clearing filters', async function (assert) {
+  test('it should call arg function when clearing filters', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -230,7 +230,7 @@ module('Integration | Component | whitelisted-urls/list', function (hooks) {
     assert.ok(true);
   });
 
-  test('it should call arg edit function when clicking on list item', async function (assert) {
+  test('it should call arg edit function when clicking on list item', async function(assert) {
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';

@@ -10,7 +10,7 @@ import {
 
 describe('Unit | Domain | WhitelistedUrl', () => {
   let now;
-  beforeEach(function () {
+  beforeEach(function() {
     now = new Date('2024-10-29T03:04:00Z');
     vi.useFakeTimers({
       now,
@@ -18,16 +18,14 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     });
   });
 
-  afterEach(function () {
+  afterEach(function() {
     vi.useRealTimers();
   });
 
-  describe('#get isActive', function () {
-    it('should return true when WhitelistedUrl is not deleted', function () {
+  describe('#get isActive', function() {
+    it('should return true when WhitelistedUrl is not deleted', function() {
       // given
-      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({
-        deletedAt: null,
-      });
+      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({ deletedAt: null });
 
       // when
       const isActive = activeWhitelistedUrl.isActive;
@@ -36,11 +34,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       expect(isActive).toStrictEqual(true);
     });
 
-    it('should return false when WhitelistedUrl is deleted', function () {
+    it('should return false when WhitelistedUrl is deleted', function() {
       // given
-      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({
-        deletedAt: new Date('2020-01-01'),
-      });
+      const activeWhitelistedUrl = domainBuilder.buildWhitelistedUrl({ deletedAt: new Date('2020-01-01') });
 
       // when
       const isActive = activeWhitelistedUrl.isActive;
@@ -51,8 +47,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
   });
 
   describe('#canDelete', () => {
-    describe('can', function () {
-      it('should not throw when all conditions are reunited', function () {
+    describe('can', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -67,8 +63,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(true).to.be.true;
       });
     });
-    describe('cannot', function () {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function () {
+    describe('cannot', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -87,7 +83,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlConflictError when whitelisted url has already been deleted', function () {
+      it('should throw a CommandWhitelistedUrlConflictError when whitelisted url has already been deleted', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -106,8 +102,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     });
   });
 
-  describe('#delete', function () {
-    it('should mark as deleted the whitelisted url', function () {
+  describe('#delete', function() {
+    it('should mark as deleted the whitelisted url', function() {
       // given
       const user = domainBuilder.buildUser({ id: 888 });
       const whitelistedUrlToDelete = domainBuilder.buildWhitelistedUrl({
@@ -145,8 +141,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
   });
 
   describe('#static canCreate', () => {
-    describe('can', function () {
-      it('should not throw when all conditions are reunited', function () {
+    describe('can', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const existingWhitelistedUrls = [
@@ -182,8 +178,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(true).to.be.true;
       });
     });
-    describe('cannot', function () {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function () {
+    describe('cannot', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not editor', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const creationCommand = {
@@ -206,7 +202,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when url is not valid in creation command', function () {
+      it('should throw a CommandWhitelistedUrlError when url is not valid in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
@@ -258,7 +254,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in creation command', function () {
+      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
@@ -297,7 +293,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in creation command', function () {
+      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand = {
@@ -321,7 +317,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when checkType is not valid in creation command', function () {
+      it('should throw a CommandWhitelistedUrlError when checkType is not valid in creation command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const creationCommand1 = {
@@ -374,14 +370,10 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function () {
+      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
-        const existingWhitelistedUrls = [
-          domainBuilder.buildWhitelistedUrl({
-            url: 'https://www.brioche.com',
-          }),
-        ];
+        const existingWhitelistedUrls = [domainBuilder.buildWhitelistedUrl({ url: 'https://www.brioche.com' })];
         const creationCommand = {
           url: 'https://www.brioche.com',
           relatedSkillNames: null,
@@ -401,7 +393,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
   });
 
   describe('#static create', () => {
-    it('should return a newly created whitelisted url', function () {
+    it('should return a newly created whitelisted url', function() {
       // given
       const user = domainBuilder.buildUser({ id: 444, access: User.ROLES.EDITOR });
       const creationCommand = {
@@ -434,8 +426,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
   });
 
   describe('#canUpdate', () => {
-    describe('can', function () {
-      it('should not throw when all conditions are reunited', function () {
+    describe('can', function() {
+      it('should not throw when all conditions are reunited', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
@@ -485,8 +477,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(true).to.be.true;
       });
     });
-    describe('cannot', function () {
-      it('should throw a CommandWhitelistedUrlForbiddenError when user is not at least editor', function () {
+    describe('cannot', function() {
+      it('should throw a CommandWhitelistedUrlForbiddenError when user is not at least editor', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.READONLY });
         const updateCommand = {
@@ -511,7 +503,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when url is not valid in update command', function () {
+      it('should throw a CommandWhitelistedUrlError when url is not valid in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
@@ -567,7 +559,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in update command', function () {
+      it('should throw a CommandWhitelistedUrlError when relatedSkillNames is not in valid format in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
@@ -610,7 +602,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in update command', function () {
+      it('should throw a CommandWhitelistedUrlError when comment is not in valid format in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
@@ -638,7 +630,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlError when checkType is not valid in update command', function () {
+      it('should throw a CommandWhitelistedUrlError when checkType is not valid in update command', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand1 = {
@@ -695,7 +687,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function () {
+      it('should throw a CommandWhitelistedUrlConflictError when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const existingWhitelistedUrls = [
@@ -725,7 +717,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         }
       });
 
-      it('should throw a NotFoundWhitelistedUrlError when whitelisted url is deleted', function () {
+      it('should throw a NotFoundWhitelistedUrlError when whitelisted url is deleted', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.EDITOR });
         const updateCommand = {
@@ -750,8 +742,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     });
   });
 
-  describe('#update', function () {
-    it('should update the whitelisted url', function () {
+  describe('#update', function() {
+    it('should update the whitelisted url', function() {
       // given
       const user = domainBuilder.buildUser({ id: 888 });
       const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
@@ -796,9 +788,9 @@ describe('Unit | Domain | WhitelistedUrl', () => {
     });
   });
 
-  describe('#matches', function () {
-    describe('exact_match', function () {
-      it('should match when url is exactly the same as the whitelisted', function () {
+  describe('#matches', function() {
+    describe('exact_match', function() {
+      it('should match when url is exactly the same as the whitelisted', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -813,7 +805,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should not match when url is not the same case-wise after the domain part', function () {
+      it('should not match when url is not the same case-wise after the domain part', function() {
         // given
         const url = 'httpS://mOn-Bidet_orangE.cOm/tokEn=COuCOu';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -828,7 +820,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.false;
       });
 
-      it('should match when url is not the same case-wise before the domain part', function () {
+      it('should match when url is not the same case-wise before the domain part', function() {
         // given
         const url = 'httpS://mOn-Bidet_orangE.cOm/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -843,7 +835,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should not match when url is just partially the same', function () {
+      it('should not match when url is just partially the same', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -858,7 +850,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.false;
       });
 
-      it('should not match when url is not the same', function () {
+      it('should not match when url is not the same', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -874,8 +866,8 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       });
     });
 
-    describe('starts_with', function () {
-      it('should match when url starts exactly with the same as the whitelisted', function () {
+    describe('starts_with', function() {
+      it('should match when url starts exactly with the same as the whitelisted', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -890,7 +882,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should match when url is exactly the same', function () {
+      it('should match when url is exactly the same', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -905,7 +897,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should match when url starts the same case-wise before the domain part', function () {
+      it('should match when url starts the same case-wise before the domain part', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -920,7 +912,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.true;
       });
 
-      it('should not match when url does not start the same case-wise after the domain part', function () {
+      it('should not match when url does not start the same case-wise after the domain part', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -935,7 +927,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.false;
       });
 
-      it('should not match when url is different even if they start similar', function () {
+      it('should not match when url is different even if they start similar', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
@@ -950,7 +942,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(isMatching).to.be.false;
       });
 
-      it('should not match when url does not start the same at all', function () {
+      it('should not match when url does not start the same at all', function() {
         // given
         const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
         const whitelistedUrl = domainBuilder.buildWhitelistedUrl({

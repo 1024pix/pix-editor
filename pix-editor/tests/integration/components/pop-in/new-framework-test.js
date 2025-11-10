@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | pop-in/new-framework', function (hooks) {
+module('Integration | Component | pop-in/new-framework', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should disable save button if name field is empty', async function (assert) {
+  test('it should disable save button if name field is empty', async function(assert) {
     // given
     this.set('close', () => {});
     this.set('save', () => {});
@@ -23,7 +23,7 @@ module('Integration | Component | pop-in/new-framework', function (hooks) {
     assert.dom(saveButton).hasAria('disabled', 'true');
   });
 
-  test('it should unable save button if name field is fill', async function (assert) {
+  test('it should unable save button if name field is fill', async function(assert) {
     // given
     this.set('close', () => {});
     this.set('save', () => {});

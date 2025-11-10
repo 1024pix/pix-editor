@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenges-production | challenges-production', function (hooks) {
+module('Integration | Component | challenges-production | challenges-production', function(hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store;
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
     const skillInStore = store.createRecord('skill', {
       id: 'skillAId',
@@ -88,9 +88,9 @@ module('Integration | Component | challenges-production | challenges-production'
     screen = await render(<template><ChallengesProduction @skill={{skillInStore}} @challenges={{challengesInStore}} /></template>);
   });
 
-  module('when displaying the list', function () {
-    module('when box to display obsolete challenges not checked', function () {
-      test('should display all but obsolete', async function (assert) {
+  module('when displaying the list', function() {
+    module('when box to display obsolete challenges not checked', function() {
+      test('should display all but obsolete', async function(assert) {
         // then
         const validatedChallenges = screen.queryAllByText('validé');
         const obsoleteChallenges = screen.queryAllByText('périmé');
@@ -103,8 +103,8 @@ module('Integration | Component | challenges-production | challenges-production'
         assert.strictEqual(proposedChallenges.length, 1);
       });
     });
-    module('when box to display obsolete challenges checked', function () {
-      test('display all challenges', async function (assert) {
+    module('when box to display obsolete challenges checked', function() {
+      test('display all challenges', async function(assert) {
         // when
         await click(screen.getByLabelText('Afficher les épreuves périmées'));
 
@@ -122,8 +122,8 @@ module('Integration | Component | challenges-production | challenges-production'
     });
   });
 
-  module('list item', function () {
-    test('should display all expected info for a given challenge', async function (assert) {
+  module('list item', function() {
+    test('should display all expected info for a given challenge', async function(assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
       const prototype = validatedChallenges[1];
@@ -136,15 +136,15 @@ module('Integration | Component | challenges-production | challenges-production'
       assert.dom(prototype).includesText('Copier le lien de l\'épreuve challengeProtoValidee');
     });
 
-    module('copy preview url action', function () {
-      test('copy preview url button should exist', async function (assert) {
+    module('copy preview url action', function() {
+      test('copy preview url button should exist', async function(assert) {
         // then
         assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValidee' })).exists();
       });
     });
 
-    module('go to preview action', function () {
-      test('should redirect to preview', async function (assert) {
+    module('go to preview action', function() {
+      test('should redirect to preview', async function(assert) {
         // when
         const a = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValidee' });
 

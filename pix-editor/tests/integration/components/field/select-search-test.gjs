@@ -5,11 +5,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | Field | select-search', function (hooks) {
+module('Integration | Component | Field | select-search', function(hooks) {
   setupIntlRenderingTest(hooks);
   let screen;
 
-  test('renders select search correctly with label and placeholder', async function (assert) {
+  test('renders select search correctly with label and placeholder', async function(assert) {
     // given
     const resultList = [];
     const mockOnSelect = sinon.stub().resolves();
@@ -33,7 +33,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
     assert.dom(screen.queryByText('Rechercher un bidule')).exists();
   });
 
-  test('shows "Recherche en cours" while results are being fetched after typing for something', async function (assert) {
+  test('shows "Recherche en cours" while results are being fetched after typing for something', async function(assert) {
     // given
     const resultList = [];
     const mockOnSelect = sinon.stub().resolves();
@@ -57,7 +57,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
     assert.dom(screen.queryByText('Recherche en cours...')).exists();
   });
 
-  test('shows "Aucun résultat" when no results returned after typing for something', async function (assert) {
+  test('shows "Aucun résultat" when no results returned after typing for something', async function(assert) {
     // given
     const resultList = [];
     const mockOnInput = sinon.stub().resolves();
@@ -82,7 +82,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
     assert.ok(mockOnInput.calledWith('PISTACHE'));
   });
 
-  test('shows some results after typing for something when there are some', async function (assert) {
+  test('shows some results after typing for something when there are some', async function(assert) {
     // given
     const resultList = [];
     const mockOnInput = sinon.stub().callsFake((typedSearch) => {
@@ -111,7 +111,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
     assert.dom(screen.queryByText('NON CHOCOLAT')).exists();
   });
 
-  test('renders correctly yielded part when there are some results', async function (assert) {
+  test('renders correctly yielded part when there are some results', async function(assert) {
     // given
     const resultList = [];
     const mockOnInput = sinon.stub().callsFake(() => {
@@ -143,7 +143,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
     assert.dom(screen.queryByText('clé a 2 -- clé b 2')).exists();
   });
 
-  test('triggers slot when clicking on an item result', async function (assert) {
+  test('triggers slot when clicking on an item result', async function(assert) {
     // given
     const resultList = [];
     const mockOnInput = sinon.stub().callsFake((typedSearch) => {

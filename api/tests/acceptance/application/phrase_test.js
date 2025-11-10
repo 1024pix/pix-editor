@@ -21,9 +21,7 @@ import * as scheduleDeleteUnmentionedKeysAfterUploadJob from '../../../lib/infra
 describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/upload', () => {
     beforeEach(() => {
-      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-        { projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' },
-      ]);
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }]);
     });
 
     it('should upload the translations to phrase', async () => {
@@ -317,16 +315,16 @@ describe('Acceptance | Controller | phrase-controller', () => {
           const parsedBody = parseFormData(body);
           csvContent = findFormDataParameter(parsedBody, 'file').data.toString();
           return (
-            matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId') &&
-            matchFormDataParameter(parsedBody, 'file_format', 'csv') &&
-            matchFormDataParameter(parsedBody, 'update_descriptions', 'true') &&
-            matchFormDataParameter(parsedBody, 'update_translations', 'true') &&
-            matchFormDataParameter(parsedBody, 'skip_upload_tags', 'true') &&
-            matchFormDataParameter(parsedBody, 'locale_mapping[fr]', '2') &&
-            matchFormDataParameter(parsedBody, 'format_options[key_index]', '1') &&
-            matchFormDataParameter(parsedBody, 'format_options[tag_column]', '3') &&
-            matchFormDataParameter(parsedBody, 'format_options[comment_index]', '4') &&
-            matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true')
+            matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId')
+            && matchFormDataParameter(parsedBody, 'file_format', 'csv')
+            && matchFormDataParameter(parsedBody, 'update_descriptions', 'true')
+            && matchFormDataParameter(parsedBody, 'update_translations', 'true')
+            && matchFormDataParameter(parsedBody, 'skip_upload_tags', 'true')
+            && matchFormDataParameter(parsedBody, 'locale_mapping[fr]', '2')
+            && matchFormDataParameter(parsedBody, 'format_options[key_index]', '1')
+            && matchFormDataParameter(parsedBody, 'format_options[tag_column]', '3')
+            && matchFormDataParameter(parsedBody, 'format_options[comment_index]', '4')
+            && matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true')
           );
         })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
@@ -349,9 +347,19 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       const [headers, ...data] = await streamToPromiseArray(parseCSVString(csvContent));
 
-      expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
+      expect(headers).to.deep.equal([
+        'key',
+        'fr',
+        'tags',
+        'description',
+      ]);
       expect(_.orderBy(data, '0')).to.deep.equal([
-        ['area.recArea0.title', 'Titre du Domaine - fr', 'domaine,Pix-1,Pix', ''],
+        [
+          'area.recArea0.title',
+          'Titre du Domaine - fr',
+          'domaine,Pix-1,Pix',
+          '',
+        ],
         [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
@@ -400,14 +408,24 @@ describe('Acceptance | Controller | phrase-controller', () => {
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
-        ['competence.recCompetence0.name', 'Nom de la Compétence - fr', 'competence,Pix-1-1.1,Pix-1,Pix', ''],
+        [
+          'competence.recCompetence0.name',
+          'Nom de la Compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
         [
           'skill.recSkill0.hint',
           'Indice - fr',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
-        ['thematic.recThematic0.name', 'Nom', 'thematique,Pix-1-1.1,Pix-1,Pix', ''],
+        [
+          'thematic.recThematic0.name',
+          'Nom',
+          'thematique,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
         [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
@@ -431,10 +449,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
   describe('POST /phrase/download', () => {
     beforeEach(() => {
-      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-        { projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' },
-        { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' },
-      ]);
+      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' }, { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' }]);
     });
 
     it('should download the translations from phrase', async () => {
@@ -542,9 +557,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       const postPhraseDownloadOptions = {
         method: 'POST',
         url: '/api/phrase/download',
-        headers: {
-          ...generateAuthorizationHeader(user),
-        },
+        headers: { ...generateAuthorizationHeader(user) },
       };
 
       // When

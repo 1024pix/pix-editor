@@ -7,7 +7,11 @@ export const frameworkDatasource = datasource.extend({
 
   sortField: 'Date',
 
-  usedFields: ['Nom', 'Domaines (identifiants)', 'Domaines (identifiants) (id persistant)'],
+  usedFields: [
+    'Nom',
+    'Domaines (identifiants)',
+    'Domaines (identifiants) (id persistant)',
+  ],
 
   fromAirTableObject(airtableRecord) {
     return {
@@ -19,10 +23,6 @@ export const frameworkDatasource = datasource.extend({
   },
 
   toAirTableObject(framework) {
-    return {
-      fields: {
-        Nom: framework.name,
-      },
-    };
+    return { fields: { Nom: framework.name } };
   },
 });

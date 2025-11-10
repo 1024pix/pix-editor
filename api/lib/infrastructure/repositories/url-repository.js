@@ -49,9 +49,7 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
       auth,
       range: `${sheetName}!A:Z`,
       valueInputOption: 'RAW',
-      resource: {
-        values: dataToUpload,
-      },
+      resource: { values: dataToUpload },
     });
   } catch (error) {
     logger.error(error.message);
@@ -62,24 +60,20 @@ async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
   try {
     const auth = await getAuthClient(config.googleAuthCredentials);
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
-    const isNameForNewSheetAvailable =
-      spreadsheet.data.sheets.filter((sheet) => sheet.properties.title === sheetName).length === 0;
+    const isNameForNewSheetAvailable
+      = spreadsheet.data.sheets.filter((sheet) => sheet.properties.title === sheetName).length === 0;
     if (isNameForNewSheetAvailable) {
       await sheets.spreadsheets.batchUpdate({
         spreadsheetId,
         auth,
-        resource: {
-          requests: [{ addSheet: { properties: { title: sheetName } } }],
-        },
+        resource: { requests: [{ addSheet: { properties: { title: sheetName } } }] },
       });
       await setSpreadsheetValues({
         spreadsheetId,
         auth,
         range: `${sheetName}!A:Z`,
         valueInputOption: 'RAW',
-        resource: {
-          values: dataToUpload,
-        },
+        resource: { values: dataToUpload },
       });
     } else {
       logger.error(`A sheet with the name "${sheetName}" already exists in spreadsheet`);
@@ -95,7 +89,7 @@ async function clearOlderSheets(spreadsheetId) {
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
     const limitDate = new Date();
     limitDate.setMonth(new Date().getMonth() - DELETE_EXTERNAL_URL_SHEET_DELAY_MONTHS);
-    const isSheetOlderThanLimitDate = function (sheetTitle, limitDate) {
+    const isSheetOlderThanLimitDate = function(sheetTitle, limitDate) {
       const standardFormattedDate = sheetTitle.split('/').reverse().join('-');
       const sheetDate = new Date(standardFormattedDate);
       if (isNaN(sheetDate)) {
@@ -144,9 +138,12 @@ async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
 
     const tutorialKoUrlsToInsertInDB = [];
     for (const itemToUpload of dataToUpload) {
-      const [, , currentTutorialId, currentUrl] = itemToUpload;
-      let currentContinuousKoCount =
-        tutorialKoUrlsInDB.find(({ tutorialId, url }) => url === currentUrl && tutorialId === currentTutorialId)
+      const [
+        , , currentTutorialId,
+        currentUrl,
+      ] = itemToUpload;
+      let currentContinuousKoCount
+        = tutorialKoUrlsInDB.find(({ tutorialId, url }) => url === currentUrl && tutorialId === currentTutorialId)
           ?.continuousKoCount ?? 0;
       ++currentContinuousKoCount;
       tutorialKoUrlsToInsertInDB.push({

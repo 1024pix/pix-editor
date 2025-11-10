@@ -5,10 +5,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | competence/grid/cell-production', function (hooks) {
+module('Integration | Component | competence/grid/cell-production', function(hooks) {
   setupIntlRenderingTest(hooks);
   let skillOverview, skillOverviewNR, skillOverviewFR, skillOverviewDE, skillOverviewEN;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     skillOverview = EmberObject.create({
       name: 'skillOverview',
@@ -46,7 +46,7 @@ module('Integration | Component | competence/grid/cell-production', function (ho
     });
   });
 
-  test('it should display a number of production challenges and draft alternative', async function (assert) {
+  test('it should display a number of production challenges and draft alternative', async function(assert) {
     // given
     this.set('skillOverview', skillOverview);
 
@@ -58,7 +58,7 @@ module('Integration | Component | competence/grid/cell-production', function (ho
     assert.dom('[data-test-draft-alternative-length]').hasText('(2)');
   });
 
-  test('it should display a number of production challenges and draft alternative filtered by language', async function (assert) {
+  test('it should display a number of production challenges and draft alternative filtered by language', async function(assert) {
     // given
     this.set('languageFilter', 'Francophone');
     this.set('skillOverview', skillOverviewFR);
@@ -71,7 +71,7 @@ module('Integration | Component | competence/grid/cell-production', function (ho
     assert.dom('[data-test-draft-alternative-length]').hasText('(1)');
   });
 
-  test('it should display `NR` if prototype is not declinable', async function (assert) {
+  test('it should display `NR` if prototype is not declinable', async function(assert) {
     // given
     this.set('skillOverview', skillOverviewNR);
 
@@ -82,7 +82,7 @@ module('Integration | Component | competence/grid/cell-production', function (ho
     assert.dom('.not-declinable').hasText('NR');
   });
 
-  test('it should alert with danger class if have no challenge and no draft', async function (assert) {
+  test('it should alert with danger class if have no challenge and no draft', async function(assert) {
     // given
     this.set('languageFilter', 'Allemand');
     this.set('skillOverview', skillOverviewDE);
@@ -96,7 +96,7 @@ module('Integration | Component | competence/grid/cell-production', function (ho
     assert.dom('[data-test-skill-cell]').hasClass('danger');
   });
 
-  test('it should alert with warning class if have no challenge but draft', async function (assert) {
+  test('it should alert with warning class if have no challenge but draft', async function(assert) {
     // given
     this.set('languageFilter', 'Anglais');
     this.set('skillOverview', skillOverviewEN);

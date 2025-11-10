@@ -156,12 +156,10 @@ export class WhitelistedUrl {
     const urlFromWhitelist_wholePath = urlFromWhitelist.href.replace(urlFromWhitelist_origin, '');
 
     if (this.checkType === WhitelistedUrl.CHECK_TYPES.EXACT_MATCH) {
-      const originIsMatching =
-        urlToCompare_origin.localeCompare(urlFromWhitelist_origin, undefined, {
-          sensitivity: 'base',
-        }) === 0;
-      const wholePathIsMatching =
-        urlToCompare_wholePath.localeCompare(urlFromWhitelist_wholePath, undefined, { sensitivity: 'case' }) === 0;
+      const originIsMatching
+        = urlToCompare_origin.localeCompare(urlFromWhitelist_origin, undefined, { sensitivity: 'base' }) === 0;
+      const wholePathIsMatching
+        = urlToCompare_wholePath.localeCompare(urlFromWhitelist_wholePath, undefined, { sensitivity: 'case' }) === 0;
 
       return originIsMatching && wholePathIsMatching;
     }

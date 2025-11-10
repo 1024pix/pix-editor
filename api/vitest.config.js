@@ -12,7 +12,11 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'acc|int',
-          include: ['tests/acceptance/**/*_test.js', 'tests/integration/**/*_test.js', 'tests/scripts/**/*_test.js'],
+          include: [
+            'tests/acceptance/**/*_test.js',
+            'tests/integration/**/*_test.js',
+            'tests/scripts/**/*_test.js',
+          ],
           setupFiles: ['tests/setup-tests.js'],
           sequence: { groupOrder: 1 },
           maxWorkers: 1,

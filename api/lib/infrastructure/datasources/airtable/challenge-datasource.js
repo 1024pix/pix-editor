@@ -60,8 +60,8 @@ export const challengeDatasource = datasource.extend({
 
     const filesIds = airtableRecord.get('files');
     const filesLocalizedChallengeIds = airtableRecord.get('filesLocalizedChallengeIds');
-    const files =
-      filesIds?.map((fileId, index) => {
+    const files
+      = filesIds?.map((fileId, index) => {
         return {
           fileId,
           localizedChallengeId: filesLocalizedChallengeIds[index],
@@ -158,12 +158,12 @@ export const challengeDatasource = datasource.extend({
       sort: [{ field: 'id persistant', direction: 'asc' }],
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
-      options.filterByFormula =
-        'OR(' +
-        options.filterByFormula +
-        ', ' +
-        params.filter.ids.map((id) => `${stringValue(id)} = {id persistant}`).join(',') +
-        ')';
+      options.filterByFormula
+        = 'OR('
+          + options.filterByFormula
+          + ', '
+          + params.filter.ids.map((id) => `${stringValue(id)} = {id persistant}`).join(',')
+          + ')';
     }
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;
@@ -182,9 +182,7 @@ export const challengeDatasource = datasource.extend({
   },
 
   async filterBySkillId(skillId) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}`,
-    });
+    const airtableRawObjects = await findRecords(this.tableName, { filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}` });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },

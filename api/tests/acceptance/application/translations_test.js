@@ -304,9 +304,7 @@ describe('Acceptance | Controller | translations-controller', () => {
 
     it('should return a csv file - export only french translations with validated challenges of core framework in CSV file', async () => {
       // Given
-      databaseBuilder.factory.buildRelease({
-        content: releaseContent,
-      });
+      databaseBuilder.factory.buildRelease({ content: releaseContent });
 
       await databaseBuilder.commit();
 
@@ -326,9 +324,19 @@ describe('Acceptance | Controller | translations-controller', () => {
 
       const [headers, ...data] = await streamToPromiseArray(parseCSVString(response.payload));
 
-      expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
+      expect(headers).to.deep.equal([
+        'key',
+        'fr',
+        'tags',
+        'description',
+      ]);
       expect(_.orderBy(data, '0')).to.deep.equal([
-        ['area.recArea0.title', 'Titre du Domaine - fr', 'domaine,Pix-1,Pix', ''],
+        [
+          'area.recArea0.title',
+          'Titre du Domaine - fr',
+          'domaine,Pix-1,Pix',
+          '',
+        ],
         [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
@@ -377,14 +385,24 @@ describe('Acceptance | Controller | translations-controller', () => {
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
-        ['competence.recCompetence0.name', 'Nom de la Compétence - fr', 'competence,Pix-1-1.1,Pix-1,Pix', ''],
+        [
+          'competence.recCompetence0.name',
+          'Nom de la Compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
         [
           'skill.recSkill0.hint',
           'Indice - fr',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
-        ['thematic.recThematic0.name', 'Nom', 'thematique,Pix-1-1.1,Pix-1,Pix', ''],
+        [
+          'thematic.recThematic0.name',
+          'Nom',
+          'thematique,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
         [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
@@ -517,9 +535,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         },
       ];
 
-      databaseBuilder.factory.buildRelease({
-        content: releaseContent,
-      });
+      databaseBuilder.factory.buildRelease({ content: releaseContent });
 
       await databaseBuilder.commit();
 
@@ -606,9 +622,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           },
         ];
 
-        databaseBuilder.factory.buildRelease({
-          content: releaseContent,
-        });
+        databaseBuilder.factory.buildRelease({ content: releaseContent });
 
         await databaseBuilder.commit();
 
@@ -710,10 +724,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           .where({ key: 'challenge.challengeId.some-key' })
           .select('locale', 'value')
           .orderBy('locale'),
-      ).resolves.to.deep.equal([
-        { locale: 'fr', value: 'La clé !' },
-        { locale: 'nl', value: 'plop' },
-      ]);
+      ).resolves.to.deep.equal([{ locale: 'fr', value: 'La clé !' }, { locale: 'nl', value: 'plop' }]);
       await expect(
         knex('translations').where({ key: 'challenge.challengeId.key' }).select('locale', 'value').first(),
       ).resolves.to.deep.equal({ locale: 'nl', value: 'blip' });
@@ -834,9 +845,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(response.statusCode).to.equal(204);
 
       expect(await knex('translations').count()).to.deep.equal([{ count: 1 }]);
-      expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({
-        value: 'plop',
-      });
+      expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
     });
   });
 });

@@ -8,11 +8,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | navigation-primary-localized', function (hooks) {
+module('Acceptance | navigation-primary-localized', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -164,7 +164,7 @@ module('Acceptance | navigation-primary-localized', function (hooks) {
     return authenticateSession();
   });
 
-  test('should navigate from primary to some locale back and forth seamlessly', async function (assert) {
+  test('should navigate from primary to some locale back and forth seamlessly', async function(assert) {
     // First we are on the primary
     const screen = await visit('/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');

@@ -6,12 +6,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | Controller | Localized Challenge', function (hooks) {
+module('Acceptance | Controller | Localized Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let localizedChallenge;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -65,7 +65,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('it should display the localized challenge', async function (assert) {
+  test('it should display the localized challenge', async function(assert) {
     const screen = await visit('/');
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -87,7 +87,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en/framework-name/Pix/area-code/1'), 'href ends with /translations/en/framework-name/Pix/area-code/1');
   });
 
-  test('it should go back to the original challenge', async function (assert) {
+  test('it should go back to the original challenge', async function(assert) {
     const screen = await visit('/');
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -99,8 +99,8 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     assert.dom(screen.getByText('Version en')).exists();
   });
 
-  module('#edit localized challenge status', function () {
-    test('should set localized status to `validé`', async function (assert) {
+  module('#edit localized challenge status', function() {
+    test('should set localized status to `validé`', async function(assert) {
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
       await click(screen.getByRole('link', { name: '1.1 Title' }));
@@ -115,7 +115,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
       assert.dom(screen.getByText('En prod')).exists();
     });
 
-    test('should set localized status to `proposé`', async function (assert) {
+    test('should set localized status to `proposé`', async function(assert) {
       localizedChallenge.update({ status: 'validé' });
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
@@ -132,8 +132,8 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     });
   });
 
-  module('#edit localized challenge', function () {
-    test('should display edition form', async function (assert) {
+  module('#edit localized challenge', function() {
+    test('should display edition form', async function(assert) {
       const screen = await visit('/');
       await click(await screen.findByRole('button', { name: '1. Information et données' }));
       await click(screen.getByRole('link', { name: '1.1 Title' }));

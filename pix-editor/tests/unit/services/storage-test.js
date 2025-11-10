@@ -3,10 +3,10 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Service | storage', function (hooks) {
+module('Unit | Service | storage', function(hooks) {
   setupTest(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     class sessionServiceStub extends Service {
       get data() {
         return { authenticated: { apiKey: 'someApiKey' } };
@@ -15,8 +15,8 @@ module('Unit | Service | storage', function (hooks) {
     this.owner.register('service:session', sessionServiceStub);
   });
 
-  module('uploadFile', function () {
-    test('it should use file.name when filename is not defined', async function (assert) {
+  module('uploadFile', function() {
+    test('it should use file.name when filename is not defined', async function(assert) {
       // given
       const storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves();
@@ -51,7 +51,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.deepEqual(uploadedFile, expectedUploadedFile);
     });
 
-    test('it should use filename when it is defined', async function (assert) {
+    test('it should use filename when it is defined', async function(assert) {
       // given
       const storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves();
@@ -88,7 +88,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.deepEqual(uploadedFile, expectedUploadedFile);
     });
 
-    test('it should add Content-Type header to illustration type', async function (assert) {
+    test('it should add Content-Type header to illustration type', async function(assert) {
       // given
       const storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves('some-token');
@@ -125,7 +125,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.deepEqual(headers, expectedHeaders);
     });
 
-    test('it should add Content-* headers to attachment type', async function (assert) {
+    test('it should add Content-* headers to attachment type', async function(assert) {
       // given
       const storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves('some-token');
@@ -164,12 +164,12 @@ module('Unit | Service | storage', function (hooks) {
     });
   });
 
-  module('cloneFile', function (hooks) {
+  module('cloneFile', function(hooks) {
     let storageService;
     let fetch;
     const storageToken = 'HaveFun';
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves(storageToken);
 
@@ -180,7 +180,7 @@ module('Unit | Service | storage', function (hooks) {
       fetch = sinon.stub();
     });
 
-    test('it should clone a file', async function (assert) {
+    test('it should clone a file', async function(assert) {
       // given
       fetch.resolves();
 
@@ -208,7 +208,7 @@ module('Unit | Service | storage', function (hooks) {
       ]);
     });
 
-    test('it should clone a file when the file is in a sub directory', async function (assert) {
+    test('it should clone a file when the file is in a sub directory', async function(assert) {
       // given
       fetch.resolves();
 
@@ -236,7 +236,7 @@ module('Unit | Service | storage', function (hooks) {
       ]);
     });
 
-    test('it should retry when token has expired', async function (assert) {
+    test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({ status: 401 });
 
@@ -266,7 +266,7 @@ module('Unit | Service | storage', function (hooks) {
       ]);
     });
 
-    test('it should retry when token has expired only one time', async function (assert) {
+    test('it should retry when token has expired only one time', async function(assert) {
       assert.expect(2);
       // given
       fetch.rejects({ status: 401 });
@@ -289,7 +289,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.ok(fetch.calledTwice);
     });
 
-    test('it should raise error when API call failed', async function (assert) {
+    test('it should raise error when API call failed', async function(assert) {
       assert.expect(2);
       // given
       fetch.rejects({ status: 400 });
@@ -313,8 +313,8 @@ module('Unit | Service | storage', function (hooks) {
     });
   });
 
-  module('getStorageToken', function () {
-    test('it calls api', async function (assert) {
+  module('getStorageToken', function() {
+    test('it calls api', async function(assert) {
       const storageService = this.owner.lookup('service:storage');
 
       const token = 'token';
@@ -338,7 +338,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.strictEqual(fetchedToken, token);
     });
 
-    test('it returns the previously stored token', async function (assert) {
+    test('it returns the previously stored token', async function(assert) {
       const storageService = this.owner.lookup('service:storage');
       const configService = this.owner.lookup('service:config');
       const token = 'token';
@@ -351,7 +351,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.strictEqual(fetchedToken, token);
     });
 
-    test('it always calls the api when renew is true', async function (assert) {
+    test('it always calls the api when renew is true', async function(assert) {
       const storageService = this.owner.lookup('service:storage');
 
       const configService = this.owner.lookup('service:config');
@@ -378,12 +378,12 @@ module('Unit | Service | storage', function (hooks) {
     });
   });
 
-  module('renameFile', function (hooks) {
+  module('renameFile', function(hooks) {
     let storageService;
     let fetch;
     const storageToken = 'HaveFun';
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves(storageToken);
 
@@ -394,7 +394,7 @@ module('Unit | Service | storage', function (hooks) {
       fetch = sinon.stub();
     });
 
-    test('it should rename the header of file', async function (assert) {
+    test('it should rename the header of file', async function(assert) {
       // given
       fetch.resolves();
 
@@ -415,7 +415,7 @@ module('Unit | Service | storage', function (hooks) {
       ]);
     });
 
-    test('it should retry when token has expired', async function (assert) {
+    test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({ status: 401 });
 
@@ -438,7 +438,7 @@ module('Unit | Service | storage', function (hooks) {
       ]);
     });
 
-    test('it should retry when token has expired only one time', async function (assert) {
+    test('it should retry when token has expired only one time', async function(assert) {
       assert.expect(2);
       // given
       fetch.rejects({ status: 401 });
@@ -455,7 +455,7 @@ module('Unit | Service | storage', function (hooks) {
       assert.ok(fetch.calledTwice);
     });
 
-    test('it should raise error when API call failed', async function (assert) {
+    test('it should raise error when API call failed', async function(assert) {
       assert.expect(2);
       // given
       fetch.rejects({ status: 400 });

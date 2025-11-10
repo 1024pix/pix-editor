@@ -3,7 +3,7 @@ import { domainBuilder } from '../../../test-helper';
 
 import { findAllMissions } from '../../../../lib/domain/usecases/index.js';
 
-describe('Unit | Domain | Usecases | find all missions', function () {
+describe('Unit | Domain | Usecases | find all missions', function() {
   it('should return a list of mission summaries', async () => {
     // given
     const competence1 = domainBuilder.buildCompetence({
@@ -33,13 +33,9 @@ describe('Unit | Domain | Usecases | find all missions', function () {
       competenceId: 'recCompetence2',
     });
 
-    const competenceRepository = {
-      getMany: vi.fn().mockResolvedValueOnce([competence1, competence2]),
-    };
+    const competenceRepository = { getMany: vi.fn().mockResolvedValueOnce([competence1, competence2]) };
     const meta = Symbol('meta');
-    const missionRepository = {
-      findAllMissions: vi.fn().mockResolvedValueOnce({ missions: [mission1, mission2], meta }),
-    };
+    const missionRepository = { findAllMissions: vi.fn().mockResolvedValueOnce({ missions: [mission1, mission2], meta }) };
 
     // when
     const params = { filter: { isActive: false }, page: { number: 1, size: 20 } };
@@ -61,7 +57,7 @@ describe('Unit | Domain | Usecases | find all missions', function () {
     expect(competenceRepository.getMany).to.toHaveBeenCalledWith(['recCompetence1', 'recCompetence2']);
   });
 
-  describe('When there is no competence found', function () {
+  describe('When there is no competence found', function() {
     it('should specify there is no competence', async () => {
       // given
       const competence = domainBuilder.buildCompetence({
@@ -77,13 +73,9 @@ describe('Unit | Domain | Usecases | find all missions', function () {
         competenceId: 'recCompetence2',
       });
 
-      const competenceRepository = {
-        getMany: vi.fn().mockResolvedValueOnce([competence]),
-      };
+      const competenceRepository = { getMany: vi.fn().mockResolvedValueOnce([competence]) };
       const meta = Symbol('meta');
-      const missionRepository = {
-        findAllMissions: vi.fn().mockResolvedValueOnce({ missions: [mission], meta }),
-      };
+      const missionRepository = { findAllMissions: vi.fn().mockResolvedValueOnce({ missions: [mission], meta }) };
 
       // when
       const result = await findAllMissions(
