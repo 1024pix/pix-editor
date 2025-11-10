@@ -1,5 +1,16 @@
 
 
+## v3.237.0 (10/11/2025)
+
+
+### :building_construction: Tech
+- [#1247](https://github.com/1024pix/pix-editor/pull/1247) [TECH] Migration des scripts qui utilisent Airtable (PIX-20122).
+- [#1244](https://github.com/1024pix/pix-editor/pull/1244) [TECH] Synchronise la version de node de la CI avec le reste du repo.
+
+### :bug: Correction
+- [#1248](https://github.com/1024pix/pix-editor/pull/1248) [BUGFIX] Déplacement d’épreuve de l’atelier vers un acquis pas enregistré dans PG.
+- [#1245](https://github.com/1024pix/pix-editor/pull/1245) [BUGFIX] Résultats de recherche d’épreuves différents PG/Airtable.
+
 ## v3.236.2 (07/11/2025)
 
 

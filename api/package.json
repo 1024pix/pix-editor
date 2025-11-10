@@ -1,6 +1,6 @@
 {
   "name": "learning-content-api",
-  "version": "3.236.2",
+  "version": "3.237.0",
   "description": "API permettant d'interagir avec le référentiel de contenu Pix",
   "type": "module",
   "main": "index.js",
