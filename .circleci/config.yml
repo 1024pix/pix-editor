@@ -152,7 +152,7 @@ jobs:
       - restore_cache:
           name: Restore npm cache
           keys:
-            - v9-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
+            - v10-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
 
       - run:
           name: Install Pix Editor
@@ -176,7 +176,7 @@ jobs:
 
       - save_cache:
           name: Save npm cache
-          key: v9-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
+          key: v10-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
           paths:
             - ~/.npm
             - ~/.cache/ms-playwright
