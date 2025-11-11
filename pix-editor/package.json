@@ -28,7 +28,7 @@
     "test:ember": "ember test"
   },
   "devDependencies": {
-    "@1024pix/ember-testing-library": "^3.0.24",
+    "@1024pix/ember-testing-library": "^3.0.25",
     "@1024pix/eslint-plugin": "^2.1.13",
     "@1024pix/pix-ui": "^55.31.0",
     "@1024pix/stylelint-config": "~5.1.37",
