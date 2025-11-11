@@ -91,7 +91,7 @@
     "flush-write-stream": "^2.0.0",
     "form-data": "^4.0.4",
     "globals": "^16.0.0",
-    "nock": "^14.0.0-beta.5",
+    "nock": "14.0.0-beta.5",
     "nodemon": "^3.0.0",
     "papaparse": "^5.5.2",
     "parse-multipart-data": "^1.5.0",
@@ -100,6 +100,7 @@
     "yargs": "^18.0.0"
   },
   "overrides": {
-    "tough-cookie": "^6.0.0"
+    "tough-cookie": "^6.0.0",
+    "@rollup/plugin-commonjs": "^29.0.0"
   }
 }
