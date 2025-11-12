@@ -53,6 +53,7 @@ export const logging = {
   debugSections: process.env.LOG_DEBUG?.split(',') ?? [],
   logForHumans: _getLogForHumans(),
   logForHumansCompactFormat: process.env.LOG_FOR_HUMANS_FORMAT === 'compact',
+  logKnexQueries: isFeatureEnabled(process.env.LOG_KNEX_QUERIES),
 };
 
 export let pixApi = {
