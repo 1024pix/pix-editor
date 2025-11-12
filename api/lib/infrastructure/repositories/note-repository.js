@@ -21,6 +21,30 @@ export async function listByChallengeId(challengeId) {
       text: record.get('Texte'),
       author: record.get('Auteur'),
       createdAt: record.get('Date'),
+      challengeId,
     });
+  });
+}
+
+export async function create(note) {
+  const airtableRecordToCreate = {
+    fields: {
+      Statut: note.status,
+      Texte: note.text,
+      Auteur: note.author,
+      Record_Id: note.challengeId,
+      'Type d\'élément': 'épreuve',
+      Changelog: 'non',
+    },
+  };
+  const records = await _airtableClient().table(TABLE_NAME).create([airtableRecordToCreate]);
+
+  return new Note({
+    id: records[0].id,
+    status: records[0].get('Statut'),
+    text: records[0].get('Texte'),
+    author: records[0].get('Auteur'),
+    createdAt: records[0].get('Date'),
+    challengeId: records[0].get('Record_ID'),
   });
 }

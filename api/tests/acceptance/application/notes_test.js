@@ -3,6 +3,9 @@ import { describe, it, expect } from 'vitest';
 import { Note } from '../../../lib/domain/models/index.js';
 import { createServer } from '../../../server.js';
 import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import Airtable from 'airtable';
+
+const { Record: AirtableRecord } = Airtable;
 
 describe('Acceptance | Routes | Notes', () => {
   describe('GET /notes', () => {
@@ -84,6 +87,77 @@ describe('Acceptance | Routes | Notes', () => {
         ],
       });
 
+      expect(airtableScope.isDone()).toBe(true);
+    });
+  });
+  describe('POST /notes', () => {
+    it('returns 201 and created note', async function() {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+
+      const note = new Note({
+        id: 'note123',
+        status: Note.STATUSES.EN_COURS,
+        text: 'Un texte',
+        author: 'NLE',
+        createdAt: new Date('2025-11-10T16:33:00Z'),
+        challengeId: 'challengeAbc123',
+      });
+
+      const airtableNote = {
+        id: note.id,
+        fields: {
+          Statut: note.status,
+          Texte: note.text,
+          Auteur: note.author,
+          Date: note.createdAt,
+          Record_Id: note.challengeId,
+          'Type d\'élément': 'épreuve',
+          Changelog: 'non',
+        },
+      };
+      const expectedNoteBody = structuredClone(airtableNote);
+      delete expectedNoteBody.id;
+      delete expectedNoteBody.fields.Date;
+
+      const airtableScope = nock('https://api.airtable.com')
+        .post('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedNoteBody] })
+        .reply(200, { records: [new AirtableRecord('Notes', airtableNote.id, airtableNote)] });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/notes',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'notes',
+            attributes: {
+              status: note.status,
+              text: note.text,
+              author: note.author,
+              challengeId: 'challengeAbc123',
+            },
+          },
+        },
+      });
+
+      // then
+      expect(response.statusCode).toBe(201);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'notes',
+          id: 'note123',
+          attributes: {
+            text: 'Un texte',
+            author: 'NLE',
+            'created-at': note.createdAt.toISOString(),
+            status: Note.STATUSES.EN_COURS,
+          },
+        },
+      });
       expect(airtableScope.isDone()).toBe(true);
     });
   });

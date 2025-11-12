@@ -15,6 +15,17 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'POST',
+      path: '/api/notes',
+      config: {
+        handler: async function(request, h) {
+          const noteToCreate = await noteSerializer.deserialize(request.payload);
+          const notes = await noteRepository.create(noteToCreate);
+          return h.response(noteSerializer.serialize(notes)).created();
+        },
+      },
+    },
   ]);
 }
 

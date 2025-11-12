@@ -7,11 +7,12 @@ export class Note {
     };
   }
 
-  constructor({ id, status, text, author, createdAt }) {
+  constructor({ id, status, text, author, createdAt, challengeId }) {
     this.id = id;
     this.status = status;
     this.text = text;
     this.author = author;
     this.createdAt = createdAt;
+    this.challengeId = challengeId;
   }
 }
