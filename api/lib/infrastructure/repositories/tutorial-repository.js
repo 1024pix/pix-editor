@@ -84,25 +84,11 @@ export async function update(tutorial) {
   });
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
 export async function get(id) {
   const dto = await selectTutorials().where('id', id).first();
   if (!dto) return null;
 
   return toDomain(dto);
-}
-
-/**
- * @deprecated use {@link get}
- */
-export async function getManyByAirtableIds(ids) {
-  return getMany(ids);
 }
 
 export async function searchByTitle(title) {

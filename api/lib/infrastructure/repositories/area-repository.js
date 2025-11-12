@@ -45,13 +45,6 @@ export async function listByFrameworkId(frameworkId) {
   return toDomainList(dtos, translations);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
 export async function get(id) {
   const [dto, translations] = await Promise.all([selectAreas().where('id', id).first(), translationRepository.listByEntity(model, id)]);
 

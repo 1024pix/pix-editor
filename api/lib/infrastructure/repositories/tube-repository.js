@@ -35,20 +35,6 @@ export async function listByCompetenceId(competenceId) {
   return toDomainList(dtos, translations);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
-/**
- * @deprecated use {@link getMany}
- */
-export async function getManyByAirtableIds(ids) {
-  return getMany(ids);
-}
-
 export async function getMany(ids) {
   if (!ids?.length) return [];
 

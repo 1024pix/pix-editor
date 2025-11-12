@@ -17,7 +17,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
       create: vi.fn().mockResolvedValueOnce(createdSkill),
       listByTubeId: vi.fn().mockResolvedValueOnce(tubeSkills),
     };
-    tubeRepository = { getByAirtableId: vi.fn() };
+    tubeRepository = { get: vi.fn() };
     skillTransformer = { forRelease: vi.fn().mockReturnValueOnce('skillForRelease') };
     updatedRecordNotifier = { notify: vi.fn() };
   });
@@ -25,7 +25,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
   it('should set skill computed fields and save skill', async () => {
     // given
     const tube = domainBuilder.buildTube({ id: 'tube1' });
-    tubeRepository.getByAirtableId.mockResolvedValueOnce(tube);
+    tubeRepository.get.mockResolvedValueOnce(tube);
 
     const skill = domainBuilder.buildSkill();
     vi.spyOn(skill, 'prepareForCreation').mockReturnValueOnce();
@@ -44,7 +44,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
     // then
     expect(result).toBe(createdSkill);
 
-    expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith(skill.tubeAirtableId);
+    expect(tubeRepository.get).toHaveBeenCalledWith(skill.tubeAirtableId);
     expect(skillRepository.listByTubeId).toHaveBeenCalledWith('tube1');
     expect(skill.prepareForCreation).toHaveBeenCalledWith(
       tube,
@@ -64,7 +64,7 @@ describe('Unit | Domain | Use Cases | create-skill', () => {
   describe('when tube is not found', () => {
     it('should throw a NotFoundError', async () => {
       // given
-      tubeRepository.getByAirtableId.mockResolvedValueOnce(null);
+      tubeRepository.get.mockResolvedValueOnce(null);
 
       const skill = domainBuilder.buildSkill();
 

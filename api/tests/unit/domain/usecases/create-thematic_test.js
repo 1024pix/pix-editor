@@ -12,10 +12,10 @@ describe('Unit | Domain | Use Cases | create-thematic', () => {
     vi.spyOn(updatePixApiReleaseCache, 'onThematicCreated');
     thematicRepository = {
       create: vi.fn(),
-      listByCompetenceAirtableId: vi.fn(),
+      listByCompetenceId: vi.fn(),
     };
 
-    thematicRepository.listByCompetenceAirtableId.mockResolvedValueOnce(competenceThematics);
+    thematicRepository.listByCompetenceId.mockResolvedValueOnce(competenceThematics);
 
     thematic = new Thematic({ competenceAirtableId: 'recCompetence1' });
     prepareForCreationStub = vi.spyOn(thematic, 'prepareForCreation');
@@ -33,7 +33,7 @@ describe('Unit | Domain | Use Cases | create-thematic', () => {
     // then
     await expect(result).resolves.toBe(createdThematic);
 
-    expect(thematicRepository.listByCompetenceAirtableId).toHaveBeenCalledWith('recCompetence1');
+    expect(thematicRepository.listByCompetenceId).toHaveBeenCalledWith('recCompetence1');
     expect(prepareForCreationStub).toHaveBeenCalledWith(competenceThematics);
     expect(thematicRepository.create).toHaveBeenCalledWith(thematic);
     expect(updatePixApiReleaseCache.onThematicCreated).toHaveBeenCalledWith(createdThematic);

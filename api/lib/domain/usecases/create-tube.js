@@ -11,7 +11,7 @@ export async function createTube(
     updatePixApiReleaseCache,
   },
 ) {
-  const thematic = await dependencies.thematicRepository.getByAirtableId(tube.thematicAirtableId);
+  const thematic = await dependencies.thematicRepository.get(tube.thematicAirtableId);
   if (!thematic) throw new NotFoundError('unknown thematic id');
 
   tube.prepareForCreation(thematic);

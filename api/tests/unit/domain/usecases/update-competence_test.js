@@ -11,7 +11,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
   const updatedCompetence = Symbol('updatedCompetence');
 
   beforeEach(() => {
-    vi.spyOn(competenceRepository, 'getByAirtableId');
+    vi.spyOn(competenceRepository, 'get');
     vi.spyOn(competenceRepository, 'update');
     vi.spyOn(updatePixApiReleaseCache, 'onCompetenceUpdated');
   });
@@ -21,7 +21,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
       // given
       const competenceAirtableId = 'unknown competence id';
 
-      competenceRepository.getByAirtableId.mockResolvedValueOnce(undefined);
+      competenceRepository.get.mockResolvedValueOnce(undefined);
 
       // when
       const result = updateCompetence(competenceAirtableId, competenceUpdates);
@@ -30,7 +30,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
       await expect(result).rejects.toBeInstanceOf(NotFoundError);
       await expect(result).rejects.toHaveProperty('message', 'unknown competence');
 
-      expect(competenceRepository.getByAirtableId).toHaveBeenCalledWith(competenceAirtableId);
+      expect(competenceRepository.get).toHaveBeenCalledWith(competenceAirtableId);
     });
   });
 
@@ -39,7 +39,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
     const competenceAirtableId = 'competenceAirtableId';
     const existingCompetence = { update: vi.fn() };
 
-    competenceRepository.getByAirtableId.mockResolvedValueOnce(existingCompetence);
+    competenceRepository.get.mockResolvedValueOnce(existingCompetence);
     competenceRepository.update.mockResolvedValueOnce(updatedCompetence);
     updatePixApiReleaseCache.onCompetenceUpdated.mockResolvedValueOnce();
 
@@ -51,7 +51,7 @@ describe('Unit | Domain | Usecases | update competence', function() {
     // then
     expect(result).toBe(updatedCompetence);
 
-    expect(competenceRepository.getByAirtableId).toHaveBeenCalledWith(competenceAirtableId);
+    expect(competenceRepository.get).toHaveBeenCalledWith(competenceAirtableId);
     expect(existingCompetence.update).toHaveBeenCalledWith(competenceUpdates);
     expect(competenceRepository.update).toHaveBeenCalledWith(existingCompetence);
     expect(updatePixApiReleaseCache.onCompetenceUpdated).toHaveBeenCalledWith(updatedCompetence);

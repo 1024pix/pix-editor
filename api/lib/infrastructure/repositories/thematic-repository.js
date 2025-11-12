@@ -15,13 +15,6 @@ export async function list() {
   return toDomainList(dtos, translations);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
 export async function get(id) {
   const [dto, translations] = await Promise.all([selectThematics().where('id', id).first(), translationRepository.listByEntity(model, id)]);
 
@@ -38,13 +31,6 @@ export async function getMany(ids) {
   return toDomainList(dtos, translations);
 }
 
-/**
- * @deprecated use {@link getMany}
- */
-export async function getManyByAirtableIds(ids) {
-  return getMany(ids);
-}
-
 export async function listByCompetenceId(competenceId) {
   const dtos = await selectThematics().where('competenceId', competenceId).orderBy('id');
 
@@ -56,13 +42,6 @@ export async function listByCompetenceId(competenceId) {
   );
 
   return toDomainList(dtos, translations);
-}
-
-/**
- * @deprecated use {@link listByCompetenceId}
- */
-export async function listByCompetenceAirtableId(id) {
-  return listByCompetenceId(id);
 }
 
 export async function create(thematic) {

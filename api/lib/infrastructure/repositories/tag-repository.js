@@ -13,25 +13,11 @@ export async function create(tag) {
   return toDomain(dto);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
 export async function get(id) {
   const dto = await knex.select('*').from(TABLE_NAME).where('id', id).first();
   if (!dto) return null;
 
   return toDomain(dto);
-}
-
-/**
- * @deprecated use {@link getMany}
- */
-export async function getManyByAirtableIds(ids) {
-  return getMany(ids);
 }
 
 export async function getMany(ids) {

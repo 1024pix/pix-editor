@@ -11,12 +11,12 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
 
   beforeEach(() => {
     tubeRepository = { create: vi.fn() };
-    thematicRepository = { getByAirtableId: vi.fn() };
+    thematicRepository = { get: vi.fn() };
     updatePixApiReleaseCache = { onTubeCreated: vi.fn().mockResolvedValueOnce() };
 
     thematic = domainBuilder.buildThematic({ id: 'thematic1' });
 
-    thematicRepository.getByAirtableId.mockResolvedValueOnce(thematic);
+    thematicRepository.get.mockResolvedValueOnce(thematic);
 
     tube = new Tube({ thematicAirtableId: 'recThematic1' });
     prepareForCreationStub = vi.spyOn(tube, 'prepareForCreation');
@@ -35,7 +35,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
     // then
     await expect(result).resolves.toBe(createdTube);
 
-    expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
+    expect(thematicRepository.get).toHaveBeenCalledWith('recThematic1');
     expect(prepareForCreationStub).toHaveBeenCalledWith(thematic);
     expect(tubeRepository.create).toHaveBeenCalledWith(tube);
     expect(updatePixApiReleaseCache.onTubeCreated).toHaveBeenCalledWith(createdTube);
@@ -44,7 +44,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
   describe('when thematic id is not found', () => {
     it('throws a NotFoundError', async () => {
       // given
-      thematicRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
+      thematicRepository.get.mockReset().mockResolvedValueOnce(null);
 
       // when
       const result = createTube(tube, { thematicRepository });

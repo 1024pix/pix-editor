@@ -27,13 +27,6 @@ export async function get(id) {
   return toDomain(dto, translations);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
 export async function create(competence) {
   return knex.transaction(async (transaction) => {
     competence.id = idGenerator.generateNewId('competence');

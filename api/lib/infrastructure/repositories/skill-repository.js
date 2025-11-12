@@ -33,20 +33,6 @@ export async function getMany(ids) {
   return toDomainList(pgDtos, translations);
 }
 
-/**
- * @deprecated use {@link get}
- */
-export async function getByAirtableId(id) {
-  return get(id);
-}
-
-/**
- * @deprecated use {@link getMany}
- */
-export async function getManyByAirtableIds(ids) {
-  return getMany(ids);
-}
-
 export async function listByTubeId(tubeId) {
   const dtos = await selectSkills().where('skills.tubeId', tubeId).orderBy('skills.id');
 

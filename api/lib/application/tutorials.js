@@ -74,7 +74,7 @@ export function register(server) {
       config: {
         validate: { params: Joi.object({ tutorialAirtableId: Types.tutorialId().required() }) },
         handler: async function(request) {
-          const tutorial = await tutorialRepository.getByAirtableId(request.params.tutorialAirtableId);
+          const tutorial = await tutorialRepository.get(request.params.tutorialAirtableId);
           if (!tutorial) return new NotFoundError('unknown tutorial id');
           return tutorialSerializer.serialize(tutorial);
         },
