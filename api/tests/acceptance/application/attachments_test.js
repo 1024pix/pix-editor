@@ -603,7 +603,7 @@ describe('Acceptance | Route | attachments', () => {
         .delete('/v0/airtableBaseValue/Attachments')
         .query({ 'records[]': 'recAttachmentId' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(204, {
+        .reply(200, {
           records: [
             {
               id: 'recAttachmentId',
