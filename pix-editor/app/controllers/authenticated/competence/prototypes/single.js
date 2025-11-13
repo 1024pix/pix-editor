@@ -738,12 +738,12 @@ export default class SingleController extends Controller {
     }
     const entry = this.store.createRecord('changelog-entry', {
       text: changelog,
-      recordId: challenge.id,
+      elementId: challenge.id,
       author: this.config.author,
-      createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.challenge,
     });
     await entry.save();
+    await challenge.hasMany('changelogEntries').reload();
   }
 
   _message(text) {

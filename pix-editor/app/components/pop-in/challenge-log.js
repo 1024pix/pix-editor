@@ -1,4 +1,3 @@
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -18,13 +17,14 @@ export default class PopinChallengeLog extends Component {
   @tracked list = true;
   @tracked mayEditEntry = false;
 
-  notes = A([]);
-  changelogEntries = A([]);
-
-  constructor() {
-    super(...arguments);
-    this._loadNotes();
-    this._loadChangelog();
+  constructor(...args) {
+    super(...args);
+    this.args.challenge.hasMany('notes').load().then(() => {
+      this.notesLoaded = true;
+    });
+    this.args.challenge.hasMany('changelogEntries').load().then(() => {
+      this.changelogLoaded = true;
+    });
   }
 
   get title() {
@@ -33,14 +33,16 @@ export default class PopinChallengeLog extends Component {
       : 'no_title';
   }
 
+  get notes() {
+    if (!this.notesLoaded) return [];
+    return this.args.challenge.hasMany('notes').value();
+  }
+
   get ownNotes() {
-    if (!this.notesLoaded) {
-      return [];
-    } else {
-      const notes = this.notes;
-      const author = this.config.author;
-      return notes.filter((note) => note.author === author);
-    }
+    if (!this.notesLoaded) return [];
+    const notes = this.notes;
+    const author = this.config.author;
+    return notes.filter((note) => note.author === author);
   }
 
   get ownCount() {
@@ -51,6 +53,11 @@ export default class PopinChallengeLog extends Component {
     return this.notes.length;
   }
 
+  get changelogEntries() {
+    if (!this.changelogLoaded) return [];
+    return this.args.challenge.hasMany('changelogEntries').value();
+  }
+
   get changelogEntriesCount() {
     return this.changelogEntries.length;
   }
@@ -58,9 +65,8 @@ export default class PopinChallengeLog extends Component {
   @action
   addNote() {
     const newNote = this.store.createRecord('note', {
-      recordId: this.args.challenge.id,
+      challengeId: this.args.challenge.id,
       author: this.config.author,
-      elementType: this.changelogEntry.challenge,
     });
     this.logEntry = newNote;
     this.list = false;
@@ -68,17 +74,11 @@ export default class PopinChallengeLog extends Component {
   }
 
   @action
-  saveEntry() {
-    const entry = this.logEntry;
-    if (!entry.id) {
-      entry.createdAt = (new Date()).toISOString();
-    }
-    entry.save()
-      .then(() => {
-        this.list = true;
-        this._loadNotes();
-        this._loadChangelog();
-      });
+  async saveEntry() {
+    await this.logEntry.save();
+
+    this.list = true;
+    await Promise.all([this.args.challenge.hasMany('notes').reload(), this.args.challenge.hasMany('changelogEntries').reload()]);
   }
 
   @action
@@ -113,41 +113,5 @@ export default class PopinChallengeLog extends Component {
   @action
   editEntry() {
     this.logEntryEdition = true;
-  }
-
-  @action
-  close() {
-    this.notesLoaded = false;
-    this.changelogLoaded = false;
-    this.notes = A([]);
-    this.changelogEntries = A([]);
-    this.args.close();
-  }
-
-  _loadNotes() {
-    this.notesLoaded = false;
-    const challenge = this.args.challenge;
-    if (challenge) {
-      const pq = this.paginatedQuery;
-      return pq.query('note', { filterByFormula: `AND(Record_Id = '${challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
-        .then((notes) => {
-          this.notes = notes;
-          this.notesLoaded = true;
-          return notes;
-        });
-    }
-  }
-
-  _loadChangelog() {
-    this.changelogLoaded = false;
-    const challenge = this.args.challenge;
-    if (challenge) {
-      const pq = this.paginatedQuery;
-      return pq.query('changelog-entry', { filterByFormula: `AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
-        .then((entries) => {
-          this.changelogEntries = entries;
-          this.changelogLoaded = true;
-        });
-    }
   }
 }

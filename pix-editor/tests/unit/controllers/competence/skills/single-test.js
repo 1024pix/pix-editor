@@ -41,8 +41,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     const expectedChangelog = {
       author,
       text: changelogValue,
-      recordId: skill.pixId,
-      skillName: skill.name,
+      elementId: skill.pixId,
       elementType: changelogEntryService.skill,
       createdAt: date,
       action,
@@ -72,7 +71,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     const expectedChangelog = {
       author,
       text: changelogValue,
-      recordId: challenge.id,
+      elementId: challenge.id,
       createdAt: date,
       elementType: changelogEntryService.challenge,
     };

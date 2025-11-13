@@ -1,4 +1,3 @@
-import Service from '@ember/service';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -9,28 +8,23 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | popin-challenge-log', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  let paginatedQueryLoadNotesStub;
-
   hooks.beforeEach(function() {
-    paginatedQueryLoadNotesStub = sinon.stub();
-    class PaginatedQueryService extends Service {
-      query = paginatedQueryLoadNotesStub.resolves([note]);
-    }
+    const store = this.owner.lookup('service:store');
 
-    this.owner.unregister('service:paginatedQuery');
-    this.owner.register('service:paginatedQuery', PaginatedQueryService);
-    const note = {
+    const note = store.createRecord('note', {
       text: 'Some text 1',
       author: 'me',
-      date: new Date(2020, 8, 22),
+      createdAt: new Date(2020, 8, 22),
       status: 'en cours',
-    };
-    const challenge = {
+    });
+    const challenge = store.createRecord('challenge', {
       id: 'rec654258',
       locales: ['Francophone', 'Franco Français'],
       instruction: 'Some instructions 1',
-    };
-    this.closeAction = function() { };
+      notes: [note],
+    });
+
+    this.closeAction = sinon.stub();
     this.challenge = challenge;
   });
 
@@ -40,21 +34,5 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
 
     // then
     assert.dom('.pix-modal').exists();
-  });
-
-  test('it queries notes', async function(assert) {
-    // when
-    await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
-
-    // then
-    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(0).args, ['note', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
-  });
-
-  test('it queries changelogs', async function(assert) {
-    // when
-    await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
-
-    // then
-    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args, ['changelog-entry', { filterByFormula: `AND(Record_Id = '${this.challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
 });
