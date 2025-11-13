@@ -1,6 +1,5 @@
 import basex from 'base-x';
 import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
-import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
 import random from 'js-crypto-random';
 import slice from 'lodash/slice';
 import { createServer, Response } from 'miragejs';
@@ -176,21 +175,15 @@ function routes() {
     return createdSkill;
   });
 
-  this.get('/airtable/changelog/Notes', (schema) => {
+  this.get('/notes', (schema) => {
     schema.notes.create();
     schema.notes.create();
-    const records = schema.notes.all().models.map((note) => {
-      return _serializeModel(note, 'note');
-    });
-    return { records };
+    return schema.notes.all();
   });
 
-  this.post('/airtable/changelog/Notes', (schema, request) => {
-    const notePayload = JSON.parse(request.requestBody);
-    const note = _deserializePayload(notePayload, 'note');
-    const createdNote = schema.notes.create(note);
-    return _serializeModel(createdNote, 'note');
-  });
+  this.post('/notes');
+
+  this.post('/changelog-entries');
 
   this.post('/file-storage-token', () => {
     return { token: 'token' };
@@ -498,45 +491,6 @@ function routes() {
   this.post('/phrase/download', function() {
     return { ok: 'cool' };
   });
-}
-
-function _serializeModel(instance, modelName) {
-  const serializer = new (getDsSerializers()[modelName])();
-  const payload = { id: instance.id, fields: { [serializer.primaryKey]: instance.id } };
-  const model = new getDsModels();
-  const relationships = model[modelName].relationships;
-
-  for (const [key, value] of Object.entries(serializer.attrs)) {
-    payload.fields[value] = instance[key];
-  }
-  relationships.forEach((allRelationships) => {
-    allRelationships.forEach((relationship) => {
-      const relationshipSerializedKey = serializer.attrs[relationship.key];
-      if (relationship.kind === 'hasMany') {
-        payload.fields[relationshipSerializedKey] = instance.attrs[`${relationship.name.slice(0, -1)}Ids`];
-      }
-      if (relationship.kind === 'belongsTo') {
-        payload.fields[relationshipSerializedKey] = instance.attrs[`${relationship.name}Id`];
-      }
-    });
-  });
-  return payload;
-}
-
-function _deserializePayload(payload, modelName) {
-  const serializer = new (getDsSerializers()[modelName])();
-  for (const [key, value] of Object.entries(serializer.attrs)) {
-    const payloadValue = payload.fields[value];
-    if (payloadValue && Array.isArray(payloadValue) && key[key.length - 1] !== 's') {
-      payload[key + 'Id'] = payloadValue[0];
-    } else if (payloadValue && Array.isArray(payloadValue)) {
-      payload[key + 'Ids'] = payloadValue;
-    } else if (payloadValue) {
-      payload[key] = payloadValue;
-    }
-  }
-  payload.id = payload.fields[serializer.primaryKey];
-  return payload;
 }
 
 function _getPaginationFromQueryParams(queryParams) {

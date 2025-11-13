@@ -35,7 +35,7 @@ export default class PopinChallengeLog extends Component {
 
   get notes() {
     if (!this.notesLoaded) return [];
-    return this.args.challenge.hasMany('notes').value();
+    return this.args.challenge.hasMany('notes').value() ?? [];
   }
 
   get ownNotes() {
