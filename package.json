@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "engines": {
-    "node": "^22.20.0"
+    "node": "^22.21.1"
   },
   "scripts": {
     "install": "(cd pix-editor && npm ci) && (cd api && npm ci)",
