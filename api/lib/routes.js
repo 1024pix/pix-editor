@@ -2,6 +2,7 @@ import * as airtableProxyRoute from './application/airtable-proxy.js';
 import * as attachmentsRoute from './application/attachments.js';
 import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
+import * as changelogEntriesRoute from './application/changelog-entries.js';
 import { competenceRoutes } from './application/competences/index.js';
 import * as configRoute from './application/config.js';
 import * as embedsRoute from './application/embeds.js';
@@ -32,6 +33,7 @@ export const routes = [
   areasRoute,
   attachmentsRoute,
   challengesRoute,
+  changelogEntriesRoute,
   configRoute,
   embedsRoute,
   fileStorageTokenRoute,
