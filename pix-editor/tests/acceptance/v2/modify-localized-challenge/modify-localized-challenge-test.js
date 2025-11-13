@@ -156,7 +156,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
 
     await clickByText('Modifier');
     await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-    await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com');
+    await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\ninvalideUrl\nhttps://mon-url.fr');
     await fillByLabel('Embed URL', 'https://mon-autre-embed-url.com');
     await clickByText('Géographie');
     await click(await screen.findByRole('option', { name: 'Japon' }));
@@ -166,7 +166,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
     // then
     const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');
 
-    assert.deepEqual(localizedChallenge.urlsToConsult, ['https://mon-url.com']);
+    assert.deepEqual(localizedChallenge.urlsToConsult, ['https://mon-url.com', 'https://mon-url.fr']);
     assert.strictEqual(localizedChallenge.embedURL, 'https://mon-autre-embed-url.com');
     assert.strictEqual(localizedChallenge.geography, 'JP');
 

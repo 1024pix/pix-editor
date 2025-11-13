@@ -97,6 +97,7 @@ export default class LocalizedChallenge extends Component {
     if (!boolean) {
       this.args.localizedChallenge.urlsToConsult = null;
       this.invalidUrlsToConsult = '';
+      this.urlsToConsult = '';
     }
   }
 
@@ -117,6 +118,7 @@ export default class LocalizedChallenge extends Component {
     this.invalidUrlsToConsult = invalidUrls.join(', ');
     this.args.localizedChallenge.urlsToConsult = values;
     this.urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n') ?? '';
+    e.target.value = this.urlsToConsult;
   }
 
   @action
@@ -195,6 +197,7 @@ export default class LocalizedChallenge extends Component {
 
       this.args.cancelEdit();
       this.invalidUrlsToConsult = '';
+      this.urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
       this.displayUrlsToConsultField = false;
       this.notify.message('Épreuve mise à jour');
     } catch (error) {
