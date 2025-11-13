@@ -95,6 +95,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
               ],
             },
             attachments: { links: { related: `/api/attachments?filter[localizedChallengeId]=${challenge.id}` } },
+            notes: { links: { related: `/api/notes?filter[challengeId]=${challenge.id}` } },
+            'changelog-entries': { links: { related: `/api/changelog-entries?filter[elementId]=${challenge.id}` } },
             'challenge-locales': {
               data: [
                 {
