@@ -1,4 +1,4 @@
-import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -111,7 +111,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     return authenticateSession();
   });
 
-  test('add attachments', async function(assert) {
+  test('it should add attachments', async function(assert) {
     // given
     const file1 = new File([], 'challenge-attachment1.png', { type: 'image/png' });
     const file2 = new File([], 'challenge-attachment2.png', { type: 'image/png' });
@@ -142,7 +142,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     assert.strictEqual(attachments.length, 3);
   });
 
-  test('delete attachment', async function(assert) {
+  test('it should delete attachment', async function(assert) {
     // given
     this.server.create('attachment', {
       id: 'attachmentId1',
@@ -159,7 +159,6 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
 
     await clickByText('Enregistrer');
 
-    const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
 
     // then
@@ -168,7 +167,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('cancel adding an attachment', async function(assert) {
+  test('it should cancel adding an attachment', async function(assert) {
     // given
     this.server.create('attachment', { id: 'attachmentId', type: 'attachment', filename: 'attachmentName', challengeId: 'challengeIdProto', localizedChallengeId: 'localizedChallengeIdProto' });
 
@@ -180,12 +179,33 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     const cancelButton = await screen.findByRole('button', { name: 'Annuler l\'édition' });
     await click(cancelButton);
 
-    const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
 
     // then
     assert.dom(screen.getByText('Modification annulée')).exists();
     assert.strictEqual(attachments.length, 1);
     assert.ok(attachments.every((record) => !record.isDeleted));
+  });
+
+  test('it should rename attachment baseName', async function(assert) {
+    // given
+    this.server.create('attachment', {
+      id: 'attachmentId1',
+      filename: 'attachmentName1.csv',
+      type: 'attachment',
+      challengeId: 'challengeIdProto',
+      localizedChallengeId: 'localizedChallengeIdProto',
+    });
+    // when
+    await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    await clickByText('Modifier');
+    await fillByLabel('Nom :', 'newName');
+    await clickByText('Enregistrer');
+
+    // then
+    const attachment = await store.findRecord('attachment', 'attachmentId1');
+
+    assert.strictEqual(attachment.filename, 'newName.csv');
+    assert.notOk(attachment.isNew);
   });
 });

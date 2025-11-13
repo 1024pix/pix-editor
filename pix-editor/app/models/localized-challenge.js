@@ -61,27 +61,11 @@ export default class LocalizedChallengeModel extends Model {
     return ['validé', 'archivé'].includes(this.challenge.get('status'));
   }
 
-  get _firstAttachmentBaseName() {
+  get firstAttachmentBaseName() {
     const piecesJointes = this.piecesJointes;
     if (piecesJointes && piecesJointes.length > 0) {
       return piecesJointes[0].filename.replace(/\.[^/.]+$/, '');
     }
     return null;
-  }
-
-  get attachmentBaseName() {
-    if (this._definedBaseName) {
-      return this._definedBaseName;
-    }
-    return this._firstAttachmentBaseName;
-  }
-
-  set attachmentBaseName(value) {
-    this._definedBaseName = value;
-    return value;
-  }
-
-  baseNameUpdated() {
-    return this._firstAttachmentBaseName !== this.attachmentBaseName;
   }
 }

@@ -23,12 +23,14 @@ export default class LocalizedChallenge extends Component {
   @service notify;
   @service store;
   @service storage;
+  @service filePath;
 
   @tracked embedURLValidationStatus = 'default';
   @tracked invalidUrlsToConsult = '';
   @tracked displayUrlsToConsultField = false;
   @tracked isPopInIllustrationDisplayed = false;
   @tracked urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
+  @tracked attachmentBasename = '';
 
   @tracked urlsToConsultTextareaHeigh = this.args.localizedChallenge.urlsToConsult?.length ?? 2;
 
@@ -82,6 +84,7 @@ export default class LocalizedChallenge extends Component {
     this.urlsToConsult = localizedChallenge.urlsToConsult?.join('\n') ?? '';
     this.displayUrlsToConsultField = false;
     this.invalidUrlsToConsult = '';
+    this.attachmentBasename = '';
     await localizedChallenge.attachments;
     localizedChallenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
     this.deletedFiles = [];
@@ -261,10 +264,9 @@ export default class LocalizedChallenge extends Component {
   }
 
   async _renamePiecesJointes() {
-    if (!this.args.localizedChallenge.baseNameUpdated()) {
+    if (this.args.localizedChallenge.firstAttachmentBaseName === this.attachmentBasename || !this.attachmentBasename) {
       return;
     }
-
     const piecesJointes = await this.args.localizedChallenge.piecesJointes;
     for (const pieceJointe of [...piecesJointes]) {
       pieceJointe.filename = this._getPieceJointeFullFilename(pieceJointe.filename);
@@ -273,7 +275,7 @@ export default class LocalizedChallenge extends Component {
   }
 
   _getPieceJointeFullFilename(filename) {
-    return this.args.localizedChallenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
+    return this.attachmentBasename + '.' + this.filePath.getExtension(filename);
   }
 
   async _saveFiles() {
@@ -290,6 +292,11 @@ export default class LocalizedChallenge extends Component {
   async _saveLocalizedChallenge() {
     this.loader.start('Enregistrement...');
     return this.args.localizedChallenge.save();
+  }
+
+  @action
+  updateBasename(e) {
+    this.attachmentBasename = e.target.value;
   }
 
 <template>
@@ -337,10 +344,11 @@ export default class LocalizedChallenge extends Component {
           <Files
             @title="Pièces jointes"
             @value={{@localizedChallenge.piecesJointes}}
-            @baseName={{@localizedChallenge.attachmentBaseName}}
+            @attachmentBaseName={{@localizedChallenge.firstAttachmentBaseName}}
             @edition={{this.edition}}
             @removeAttachment={{this.removeAttachment}}
             @addAttachment={{this.addAttachment}}
+            @updateBasename={{this.updateBasename}}
           />
         {{/if}}
         <PixSelect

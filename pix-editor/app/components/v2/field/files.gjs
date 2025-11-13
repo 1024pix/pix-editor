@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import fileQueue from 'ember-file-upload/helpers/file-queue';
 import { or } from 'ember-truth-helpers';
+import { on } from '@ember/modifier';
 
 export default class Files extends Component {
   inputUploadId = `add-file-input-${guidFor(this)}`;
@@ -64,7 +65,7 @@ export default class Files extends Component {
         {{/let}}
         {{#if @value.length}}
           <div class="files-field--input-name">
-            <PixInput @id={{this.inputNameId}} @value={{@baseName}} @inlineLabel={{true}}>
+            <PixInput {{on "change" @updateBasename}} @id={{this.inputNameId}} @value={{@attachmentBaseName}} @inlineLabel={{true}}>
               <:label>Nom :</:label>
             </PixInput>
           </div>
