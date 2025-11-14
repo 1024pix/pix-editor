@@ -320,6 +320,38 @@ export default class LocalizedChallenge extends Component {
     />
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">
+        <FieldToggleFieldComponent
+          @edition={{this.edition}}
+          @model={{@localizedChallenge}}
+          @modelField="urlsToConsult"
+          @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
+          @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
+          @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
+          @displayField={{this.displayUrlsToConsultField}}
+          @setDisplayField={{this.setDisplayUrlsToConsultField}}
+          @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont pas communiquées dans la consigne ou les propositions."
+        >
+          <label class="challenge-view-url-to-consult--label" for={{this.textareaId}}>
+            URLs externes nécessaires à la résolution de l'épreuve
+          </label>
+          {{#if this.edition}}
+            <p class="challenge-view-url-to-consult--info">Séparer les liens par un retour à la ligne</p>
+          {{/if}}
+          <textarea
+            class="challenge-view-url-to-consult--textarea"
+            rows={{this.urlsToConsultTextareaHeigh}}
+            id={{this.textareaId}}
+            readonly={{this.readonly}}
+            {{on 'input' this.updateUrlsToConsultTextareaHeigh}}
+            {{on 'change' this.setUrlsToConsult}}
+          >{{this.urlsToConsult}}</textarea>
+        </FieldToggleFieldComponent>
+        {{#if this.invalidUrlsToConsult}}
+          <p class="ui red message">
+            URLs invalides :
+            {{this.invalidUrlsToConsult}}
+          </p>
+        {{/if}}
         {{#if this.shouldDisplayEmbedURL}}
           {{#if this.shouldDisplayInputEmbedURL}}
             <PixInput
@@ -371,38 +403,6 @@ export default class LocalizedChallenge extends Component {
         >
           <:label>Géographie</:label>
         </PixSelect>
-        <FieldToggleFieldComponent
-          @edition={{this.edition}}
-          @model={{@localizedChallenge}}
-          @modelField="urlsToConsult"
-          @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
-          @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
-          @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
-          @displayField={{this.displayUrlsToConsultField}}
-          @setDisplayField={{this.setDisplayUrlsToConsultField}}
-          @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont pas communiquées dans la consigne ou les propositions."
-        >
-          <label class="challenge-view-url-to-consult--label" for={{this.textareaId}}>
-            URLs externes nécessaires à la résolution de l'épreuve
-          </label>
-          {{#if this.edition}}
-            <p class="challenge-view-url-to-consult--info">Séparer les liens par un retour à la ligne</p>
-          {{/if}}
-          <textarea
-            class="challenge-view-url-to-consult--textarea"
-            rows={{this.urlsToConsultTextareaHeigh}}
-            id={{this.textareaId}}
-            readonly={{this.readonly}}
-            {{on 'input' this.updateUrlsToConsultTextareaHeigh}}
-            {{on 'change' this.setUrlsToConsult}}
-          >{{this.urlsToConsult}}</textarea>
-        </FieldToggleFieldComponent>
-        {{#if this.invalidUrlsToConsult}}
-          <p class="ui red message">
-            URLs invalides :
-            {{this.invalidUrlsToConsult}}
-          </p>
-        {{/if}}
       </div>
 
       <PixInput
