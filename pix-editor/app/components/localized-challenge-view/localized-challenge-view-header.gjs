@@ -8,10 +8,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
+import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 
 export default class LocalizedChallengeViewHeader extends Component {
   @service multipanelManager;
   @service router;
+  @service access;
 
   @action
   closePanel() {
@@ -26,11 +28,27 @@ export default class LocalizedChallengeViewHeader extends Component {
 
   @action
   async copyLocalizedChallengePreviewUrl() {
-    await navigator.clipboard.writeText(this.args.challengeLocale.url);
+    await navigator.clipboard.writeText(this.args.challengeLocale.localizedPreviewUrl);
+  }
+
+  @action
+  async toggleLocalizedChallengeStatus() {
+    await navigator.clipboard.writeText(this.args.challengeLocale.localizedPreviewUrl);
   }
 
   get localizedChallenge() {
     return this.args.challengeLocale.localizedChallengeValue;
+  }
+
+  get toggleLocalizedChallengeStatusButtonState() {
+    if (this.localizedChallenge.status === LocalizedChallenge.STATUSES.PAUSE) {
+      return { name: 'Mettre en prod', icon: 'playCircle' };
+    }
+    return { name: 'Mettre en pause', icon: 'pauseCircle' };
+  }
+
+  get mayChangeStatus() {
+    return this.access.mayChangeLocalizedChallengeStatus(this.localizedChallenge);
   }
 
   <template>
@@ -88,7 +106,7 @@ export default class LocalizedChallengeViewHeader extends Component {
                   <PixIcon @name="eye" />
                 </a>
               </:triggerElement>
-              <:tooltip>Prévisualiser l'épreuve <span class="sr-only">{{@localizedChallenge.id}}</span></:tooltip>
+              <:tooltip>Prévisualiser l'épreuve <span class="sr-only">{{this.localizedChallenge.id}}</span></:tooltip>
             </PixTooltip>
             <PixTooltip
               @id='copy-url-challenge-tooltip'
@@ -103,7 +121,7 @@ export default class LocalizedChallengeViewHeader extends Component {
                   @triggerAction={{this.copyLocalizedChallengePreviewUrl}}
                 />
               </:triggerElement>
-              <:tooltip>Copier le lien de l'épreuve <span class="sr-only">{{@localizedChallenge.id}}</span></:tooltip>
+              <:tooltip>Copier le lien de l'épreuve <span class="sr-only">{{this.localizedChallenge.id}}</span></:tooltip>
             </PixTooltip>
             {{#let (@challengeLocale.getTranslationsUrl @competence) as |translationsUrl|}}
               {{#if translationsUrl}}
@@ -131,6 +149,15 @@ export default class LocalizedChallengeViewHeader extends Component {
                 Enregistrer
               </PixButton>
             {{else}}
+              {{#if this.mayChangeStatus}}
+
+              <PixButton
+                @triggerAction={{@toggleStatus}}
+                @iconBefore={{this.toggleLocalizedChallengeStatusButtonState.icon}}
+              >
+                {{this.toggleLocalizedChallengeStatusButtonState.name}}
+              </PixButton>
+              {{/if}}
               <PixButton
                 @triggerAction={{@edit}}
                 @iconAfter="edit"
