@@ -9,11 +9,12 @@ import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | v2/field/files', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let addAttachmentStub, removeAttachmentStub;
+  let addAttachmentStub, removeAttachmentStub, updateBasenameStub;
 
   hooks.beforeEach(() => {
     addAttachmentStub = sinon.stub();
     removeAttachmentStub = sinon.stub();
+    updateBasenameStub = sinon.stub();
   });
 
   module('when edition is false', function(hooks) {
@@ -113,10 +114,11 @@ module('Integration | Component | v2/field/files', function(hooks) {
         <Files
           @title="Pièces jointes"
           @value={{piecesJointes}}
-          @baseName={{attachmentBaseName}}
+          @attachmentBaseName={{attachmentBaseName}}
           @edition={{edition}}
           @removeAttachment={{removeAttachmentStub}}
           @addAttachment={{addAttachmentStub}}
+          @updateBasename={{updateBasenameStub}}
         />
       </template>,
       );

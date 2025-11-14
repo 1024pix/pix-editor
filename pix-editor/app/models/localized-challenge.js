@@ -68,4 +68,22 @@ export default class LocalizedChallengeModel extends Model {
     }
     return null;
   }
+
+  // todo remove when v1 is deleted
+
+  get attachmentBaseName() {
+    if (this._definedBaseName) {
+      return this._definedBaseName;
+    }
+    return this.firstAttachmentBaseName;
+  }
+
+  set attachmentBaseName(value) {
+    this._definedBaseName = value;
+    return value;
+  }
+
+  baseNameUpdated() {
+    return this.firstAttachmentBaseName !== this.attachmentBaseName;
+  }
 }

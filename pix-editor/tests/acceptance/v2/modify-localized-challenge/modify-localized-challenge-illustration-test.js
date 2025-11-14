@@ -85,8 +85,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
       locales: ['fr'],
     });
 
-    const attachment = this.server.create('attachment', { id: 'attachmentId', type: 'attachment', challengeId: 'challengeIdProto' });
+    const illustration = this.server.create('attachment', { id: 'attachmentId', type: 'illustration', challengeId: 'challengeIdProto' });
 
+    challengeProduction.update({ attachments: [illustration] });
     const localizedChallengeProduction = this.server.create('localized-challenge', {
       id: 'localizedChallengeIdProto',
       locale: 'nl',
@@ -94,7 +95,6 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
       instruction: 'hallo mama',
       challenge: challengeProduction,
       embedURL: 'https://super-site.com',
-      attachments: [attachment],
     });
 
     const challengeLocale = this.server.create('challenge-locale', {
