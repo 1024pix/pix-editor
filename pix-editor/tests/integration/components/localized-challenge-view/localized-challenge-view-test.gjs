@@ -7,11 +7,12 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | localized-challenge-view | localized-challenge-view', function(hooks) {
   setupIntlRenderingTest(hooks);
-  let screen, store, challenge, competence, challengeLocale, localizedChallenge, attachment, edition;
+  let screen, store, challenge, competence, challengeLocale, localizedChallenge, edition;
 
   hooks.beforeEach(async function() {
     store = this.owner.lookup('service:store');
-    attachment = store.createRecord('attachment', { id: 'attachmentId', type: 'attachment', url: 'data:,', filename: 'attachment-name' });
+    const attachment = store.createRecord('attachment', { id: 'attachmentId', type: 'attachment', url: 'data:,', filename: 'attachment-name' });
+    const illustration = store.createRecord('attachment', { id: 'illustrationId', type: 'illustration' });
     competence = store.createRecord('competence', {
       id: 'competenceId',
       code: '1.1',
@@ -24,7 +25,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         status: Challenge.STATUSES.VALIDE,
         embedURL: 'https://mon-site.fr/my-link.html',
         geography: 'FR',
-        attachments: [attachment],
+        attachments: [attachment, illustration],
       });
     localizedChallenge
       = store.createRecord('localized-challenge', {
@@ -32,7 +33,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         locale: 'en',
         embedURL: `${challenge.embedURL}?lang=en`,
         status: LocalizedChallenge.STATUSES.PLAY,
-        attachments: [attachment, store.createRecord('attachment', { id: 'illustrationId', type: 'illustration' })],
+        attachments: [attachment, illustration],
       });
     challengeLocale = store.createRecord('challenge-locale', {
       challenge,
@@ -96,7 +97,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     });
 
     module('when primary challenge has no attachment', function() {
-      test('it should not display attachment input', async function(assert) {
+      test('it should not display attachments inputs', async function(assert) {
         // given
         challenge.attachments = [];
 
@@ -115,6 +116,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
         // then
         assert.dom(screen.queryByText('Pièces jointes')).doesNotExist();
+        assert.dom(screen.queryByText('Illustration')).doesNotExist();
       });
     });
   });

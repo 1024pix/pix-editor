@@ -76,6 +76,10 @@ export default class LocalizedChallenge extends Component {
     return !!this.primaryChallenge.piecesJointes.length;
   }
 
+  get shouldDisplayIllustration() {
+    return !!this.primaryChallenge.illustration;
+  }
+
   @action
   async cancelEdit() {
     this.args.cancelEdit();
@@ -335,14 +339,16 @@ export default class LocalizedChallenge extends Component {
             </div>
           {{/unless}}
         {{/if}}
-        <Illustration
-          @title="Illustration"
-          @value={{@localizedChallenge.illustration}}
-          @edition={{this.edition}}
-          @addIllustration={{this.addIllustration}}
-          @removeIllustration={{this.removeIllustration}}
-          @display={{this.displayPopInIllustration}}
-        />
+        {{#if this.shouldDisplayIllustration}}
+          <Illustration
+            @title="Illustration"
+            @value={{@localizedChallenge.illustration}}
+            @edition={{this.edition}}
+            @addIllustration={{this.addIllustration}}
+            @removeIllustration={{this.removeIllustration}}
+            @display={{this.displayPopInIllustration}}
+          />
+        {{/if}}
         {{#if this.shouldDisplayAttachment}}
           <Files
             @title="Pièces jointes"
@@ -406,11 +412,13 @@ export default class LocalizedChallenge extends Component {
       >
         <:label>Id</:label>
       </PixInput>
+      {{#if this.shouldDisplayIllustration}}
       <PopInImage
         @imageSrc={{@localizedChallenge.illustration.url}}
         @close={{this.closePopInIllustration}}
         @showModal={{this.isPopInIllustrationDisplayed}}
       />
+      {{/if}}
     </div>
   </template>
 }
