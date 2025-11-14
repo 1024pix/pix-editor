@@ -232,7 +232,6 @@ function routes() {
 
   this.patch('/localized-challenges/:id', (schema, request) => {
     const localizedChallenge = schema.localizedChallenges.find(request.params.id);
-    console.log(request.requestBody);
     const {
       locale,
       status,

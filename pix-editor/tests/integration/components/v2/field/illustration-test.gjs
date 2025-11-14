@@ -76,7 +76,7 @@ module('Integration | Component | v2/field/illustration', function(hooks) {
       );
 
       const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
-      await selectFiles(screen.getByLabelText('Choisir une image.'), file);
+      await selectFiles(screen.getByLabelText('Choisir une image'), file);
 
       // then
       assert.ok(removeIllustrationStub.calledOnce);

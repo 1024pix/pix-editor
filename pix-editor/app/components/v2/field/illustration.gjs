@@ -43,7 +43,7 @@ export default class Illustration extends Component {
         {{#let (fileQueue name="illustration" onFileAdded=this.add) as |queue|}}
           <div class="illustration-field--input-image">
             <label for={{this.inputId}}>
-              Choisir une image.
+              Choisir une image
             </label>
             <input id={{this.inputId}} type="file" accept="image/*" {{queue.selectFile}}>
           </div>

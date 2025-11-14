@@ -118,7 +118,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     // when
     const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
     await clickByText('Modifier');
-    await selectFiles(screen.getByLabelText('Choisir une image.'), file);
+    await selectFiles(screen.getByLabelText('Choisir une image'), file);
     await clickByText('Enregistrer');
 
     const attachments = await store.peekAll('attachment');
@@ -143,12 +143,12 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     // adding illustrationA
     const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
     await clickByText('Modifier');
-    await selectFiles(screen.getByLabelText('Choisir une image.'), illustrationA);
+    await selectFiles(screen.getByLabelText('Choisir une image'), illustrationA);
     await clickByText('Enregistrer');
 
     // replace illustrationA with illustrationB
     await clickByText('Modifier');
-    await selectFiles(screen.getByLabelText('Choisir une image.'), illustrationB);
+    await selectFiles(screen.getByLabelText('Choisir une image'), illustrationB);
     await clickByText('Enregistrer');
 
     const attachments = store.peekAll('attachment').slice();

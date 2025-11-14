@@ -193,7 +193,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
       await click(await screen.findByRole('option', { name: 'Japon' }));
       await waitForSelectToBeClosed(screen);
 
-      await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+      await selectFiles(screen.getByLabelText('Choisir une image'), file1);
       await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
 
       await click(screen.getByRole('button', { name: 'Annuler l\'édition' }));
@@ -243,7 +243,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
         await click(await screen.findByRole('option', { name: 'Japon' }));
         await waitForSelectToBeClosed(screen);
 
-        await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+        await selectFiles(screen.getByLabelText('Choisir une image'), file1);
         await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
 
         await click(await screen.findByRole('button', { name: 'Fermer l\'épreuve' }));
@@ -282,7 +282,7 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
         await click(await screen.findByRole('option', { name: 'Japon' }));
         await waitForSelectToBeClosed(screen);
 
-        await selectFiles(screen.getByLabelText('Choisir une image.'), file1);
+        await selectFiles(screen.getByLabelText('Choisir une image'), file1);
         await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
 
         await click(await screen.findByRole('button', { name: 'Fermer l\'épreuve' }));
