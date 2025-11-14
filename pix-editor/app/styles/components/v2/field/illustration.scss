@@ -1,0 +1,42 @@
+.illustration-field {
+
+  h3, label, p {
+    font-family: var(--_pix-font-family-body), sans-serif;
+  }
+
+  &--infos {
+    display: flex;
+    align-items: center;
+    gap: var(--pix-spacing-2x);
+    font-size: .875rem;
+
+    img {
+      width: 100px;
+      height: auto;
+    }
+
+    button + button {
+      align-self: start;
+    }
+  }
+
+  &--title {
+    font-size: 1rem;
+    font-weight: var(--pix-font-medium);
+    color: var(--pix-neutral-900);
+    margin-bottom: .5rem;
+  }
+
+  &--input-image {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+
+    label, input {
+      font-size: .875rem;
+    }
+  }
+
+  .illustration-field--name {
+    font-weight: var(--pix-font-normal);
+  }
+}

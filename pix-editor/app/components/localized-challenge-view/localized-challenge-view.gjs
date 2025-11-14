@@ -1,37 +1,51 @@
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import * as Sentry from '@sentry/ember';
 
-import Files from '../field/files';
-import Illustration from '../field/illustration';
-import Textarea from '../field/textarea';
-import FieldToggleFieldComponent from '../field/toggle-field';
+import PopInImage from '../pop-in/image';
+import Files from '../v2/field/files';
+import Illustration from '../v2/field/illustration';
+import FieldToggleFieldComponent from '../v2/field/toggle-field';
 import LocalizedChallengeViewHeader from './localized-challenge-view-header';
+
 export default class LocalizedChallenge extends Component {
+  textareaId = `textareaId-${guidFor()}`;
+
   @service countries;
+  @service loader;
+  @service notify;
+  @service store;
+  @service storage;
+  @service filePath;
 
-  @tracked helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
+  @tracked embedURLValidationStatus = 'default';
   @tracked invalidUrlsToConsult = '';
+  @tracked displayUrlsToConsultField = false;
+  @tracked isPopInIllustrationDisplayed = false;
+  @tracked urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
+  @tracked attachmentBasename = '';
 
-  challengeTypeOptions = [
-    { value: 'QCU', label: 'QCU' },
-    { value: 'QCM', label: 'QCM' },
-    { value: 'QROC', label: 'QROC' },
-    { value: 'QROCM-ind', label: 'QROCM-ind' },
-    { value: 'QROCM-dep', label: 'QROCM-dep' },
-    { value: 'autoReply', label: 'Embed-auto' },
-  ];
+  @tracked urlsToConsultTextareaHeigh = this.args.localizedChallenge.urlsToConsult?.length ?? 2;
+
+  deletedFiles = [];
+
+  get edition() {
+    return this.args.edition;
+  }
+
+  get readonly() {
+    return !this.edition;
+  }
 
   get primaryChallenge() {
     return this.args.challengeLocale.challenge;
-  }
-
-  get hasTimer() {
-    return !!this.args.challengeLocale.challenge.timer;
   }
 
   get countryList() {
@@ -54,65 +68,334 @@ export default class LocalizedChallenge extends Component {
     return !!this.primaryChallenge.embedURL;
   }
 
+  get shouldDisplayInputEmbedURL() {
+    return !!this.args.localizedChallenge.embedURL || this.edition;
+  }
+
   get shouldDisplayAttachment() {
     return !!this.primaryChallenge.piecesJointes.length;
   }
 
-  get urlToConsult() {
-    return this.localizedChallenge.urlsToConsult?.join('\n') ?? '';
+  get shouldDisplayIllustration() {
+    return !!this.primaryChallenge.illustration;
   }
 
   @action
-  toDeleteWhenEditionIsOK() {
-    return null;
+  async cancelEdit() {
+    this.args.cancelEdit();
+    const localizedChallenge = this.args.localizedChallenge;
+    localizedChallenge.rollbackAttributes();
+    this.urlsToConsult = localizedChallenge.urlsToConsult?.join('\n') ?? '';
+    this.displayUrlsToConsultField = false;
+    this.invalidUrlsToConsult = '';
+    this.attachmentBasename = '';
+    await localizedChallenge.attachments;
+    localizedChallenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
+    this.deletedFiles = [];
+    this.notify.message('Modification annulée');
   }
 
-  <template>
+  @action
+  setDisplayUrlsToConsultField(boolean) {
+    this.displayUrlsToConsultField = boolean;
+    if (!boolean) {
+      this.args.localizedChallenge.urlsToConsult = null;
+      this.invalidUrlsToConsult = '';
+      this.urlsToConsult = '';
+    }
+  }
+
+  @action
+  setUrlsToConsult(e) {
+    const value = e.target.value;
+    const invalidUrls = [];
+    let values = value.split('\n').map((s) => s.trim());
+    values = values.filter((value) => {
+      try {
+        new URL(value);
+        return true;
+      } catch {
+        invalidUrls.push(value);
+        return false;
+      }
+    });
+    this.invalidUrlsToConsult = invalidUrls.join(', ');
+    this.args.localizedChallenge.urlsToConsult = values;
+    this.urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n') ?? '';
+    e.target.value = this.urlsToConsult;
+  }
+
+  @action
+  setEmbedURL(e) {
+    const embedURL = e.target.value.trim();
+    this._checkEmbedURL(embedURL);
+    if (this.embedURLValidationStatus === 'error') return;
+    this.args.localizedChallenge.embedURL = embedURL;
+  }
+
+  _checkEmbedURL(embedURL) {
+    this.embedURLValidationStatus = 'default';
+    try {
+      new URL(embedURL);
+    } catch {
+      this.embedURLValidationStatus = 'error';
+    }
+  }
+
+  @action
+  updateUrlsToConsultTextareaHeigh(e) {
+    this.urlsToConsultTextareaHeigh = e.target.value.split('\n').length ?? 2;
+  }
+
+  @action
+  async addIllustration(file, alt = '') {
+    const attachmentData = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'illustration',
+      alt,
+    };
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const challengeAttachments = await this.primaryChallenge.attachments;
+    const localizedAttachments = await this.args.localizedChallenge.attachments;
+    if (this.args.localizedChallenge.illustration) {
+      return;
+    }
+    challengeAttachments.push(attachment);
+    localizedAttachments.push(attachment);
+  }
+
+  @action
+  async removeIllustration() {
+    await this.args.localizedChallenge.attachments;
+    const removedFile = this.args.localizedChallenge.illustration;
+    if (removedFile) {
+      removedFile.deleteRecord();
+      if (!removedFile.isNew) {
+        this.deletedFiles.push(removedFile);
+      }
+    }
+  }
+
+  @action
+  displayPopInIllustration() {
+    this.isPopInIllustrationDisplayed = true;
+  }
+
+  @action
+  closePopInIllustration() {
+    this.isPopInIllustrationDisplayed = false;
+  }
+
+  @action
+  async save() {
+    try {
+      this.loader.start('Enregistrement...');
+
+      await this._handleIllustration();
+      await this._handlePiecesJointes(this.localizedChallenge);
+      await this._saveFiles();
+      await this._saveLocalizedChallenge();
+
+      this.args.cancelEdit();
+      this.invalidUrlsToConsult = '';
+      this.urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
+      this.displayUrlsToConsultField = false;
+      this.notify.message('Épreuve mise à jour');
+    } catch (error) {
+      console.error('oops', error);
+      Sentry.captureException(error);
+      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+    } finally {
+      this.loader.stop();
+    }
+  }
+
+  @action
+  async addAttachment(file) {
+    const attachmentData = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'attachment',
+    };
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const attachments = await this.primaryChallenge.attachments;
+    const localizedAttachmentses = await this.args.localizedChallenge.attachments;
+    attachments.push(attachment);
+    localizedAttachmentses.push(attachment);
+  }
+
+  @action
+  async removeAttachment(removedAttachment) {
+    const attachments = await this.args.localizedChallenge.attachments;
+    const removedFile = attachments.find((file) => file.filename === removedAttachment.filename);
+    if (removedFile) {
+      removedFile.deleteRecord();
+      if (!removedFile.isNew) {
+        this.deletedFiles.push(removedFile);
+      }
+    }
+  }
+
+  async _handleIllustration() {
+    const illustration = this.args.localizedChallenge.illustration;
+    if (illustration && illustration.isNew) {
+      this.loader.start('Envoi de l\'illustration...');
+      const newIllustration = await this.storage.uploadFile({ file: illustration.file });
+      this.args.localizedChallenge.illustration.url = newIllustration.url;
+    }
+  }
+
+  async _handlePieceJointe(pieceJointe) {
+    if (!pieceJointe.isNew) {
+      return;
+    }
+    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    pieceJointe.url = remoteFile.url;
+  }
+
+  async _handlePiecesJointes() {
+    const piecesJointes = this.args.localizedChallenge.piecesJointes;
+    if (piecesJointes.length === 0) {
+      return this.args.localizedChallenge;
+    }
+    this.loader.start('Gestion des pièces jointes...');
+    await Promise.all(piecesJointes.map((pieceJointe) => this._handlePieceJointe(pieceJointe, this.args.localizedChallenge)));
+    await this._renamePiecesJointes(this.args.localizedChallenge);
+
+    return this.args.localizedChallenge;
+  }
+
+  async _renamePiecesJointes() {
+    if (this.args.localizedChallenge.firstAttachmentBaseName === this.attachmentBasename || !this.attachmentBasename) {
+      return;
+    }
+    const piecesJointes = await this.args.localizedChallenge.piecesJointes;
+    for (const pieceJointe of [...piecesJointes]) {
+      pieceJointe.filename = this._getPieceJointeFullFilename(pieceJointe.filename);
+      await this.storage.renameFile(pieceJointe.url, pieceJointe.filename);
+    }
+  }
+
+  _getPieceJointeFullFilename(filename) {
+    return this.attachmentBasename + '.' + this.filePath.getExtension(filename);
+  }
+
+  async _saveFiles() {
+    const attachments = (await this.args.localizedChallenge.attachments)?.slice() ?? [];
+    for (const attachment of attachments) {
+      await attachment.save();
+    }
+    for (const attachment of this.deletedFiles) {
+      await attachment.save();
+    }
+    this.deletedFiles = [];
+  }
+
+  async _saveLocalizedChallenge() {
+    this.loader.start('Enregistrement...');
+    return this.args.localizedChallenge.save();
+  }
+
+  @action
+  updateBasename(e) {
+    this.attachmentBasename = e.target.value;
+  }
+
+<template>
     <LocalizedChallengeViewHeader
       @challengeLocale={{@challengeLocale}}
       @localizedChallenge={{@localizedChallenge}}
       @overview={{@overview}}
       @competence={{@competence}}
       @skillId={{@skillId}}
+      @edition={{@edition}}
+      @edit={{@edit}}
+      @save={{this.save}}
+      @cancelEdit={{this.cancelEdit}}
     />
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">
+        <FieldToggleFieldComponent
+          @edition={{this.edition}}
+          @model={{@localizedChallenge}}
+          @modelField="urlsToConsult"
+          @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
+          @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
+          @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
+          @displayField={{this.displayUrlsToConsultField}}
+          @setDisplayField={{this.setDisplayUrlsToConsultField}}
+          @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont pas communiquées dans la consigne ou les propositions."
+        >
+          <label class="challenge-view-url-to-consult--label" for={{this.textareaId}}>
+            URLs externes nécessaires à la résolution de l'épreuve
+          </label>
+          {{#if this.edition}}
+            <p class="challenge-view-url-to-consult--info">Séparer les liens par un retour à la ligne</p>
+          {{/if}}
+          <textarea
+            class="challenge-view-url-to-consult--textarea"
+            rows={{this.urlsToConsultTextareaHeigh}}
+            id={{this.textareaId}}
+            readonly={{this.readonly}}
+            {{on 'input' this.updateUrlsToConsultTextareaHeigh}}
+            {{on 'change' this.setUrlsToConsult}}
+          >{{this.urlsToConsult}}</textarea>
+        </FieldToggleFieldComponent>
+        {{#if this.invalidUrlsToConsult}}
+          <p class="ui red message">
+            URLs invalides :
+            {{this.invalidUrlsToConsult}}
+          </p>
+        {{/if}}
         {{#if this.shouldDisplayEmbedURL}}
-          <div>
-            <PixInput @id="embedURL" @value={{this.embedURL}} readonly>
+          {{#if this.shouldDisplayInputEmbedURL}}
+            <PixInput
+              @id="embedURL"
+              @value={{this.embedURL}}
+              readonly={{this.readonly}}
+              {{on 'change' this.setEmbedURL}}
+              @validationStatus={{this.embedURLValidationStatus}}
+              @errorMessage="{{'Votre URL n\'est pas bien formatée'}}"
+            >
               <:label>Embed URL</:label>
             </PixInput>
-
-            {{#unless @localizedChallenge.embedURL }}
-              <div class="challenge-view-default-embed-url">
-                <p data-testid="default-embed-url">Embed URL auto-générée : {{@localizedChallenge.defaultEmbedURL}}</p>
-              </div>
-            {{/unless}}
-          </div>
+          {{/if}}
+          {{#unless @localizedChallenge.embedURL }}
+            <div class="challenge-view-default-embed-url">
+              <p data-testid="default-embed-url">Embed URL auto-générée : {{@localizedChallenge.defaultEmbedURL}}</p>
+            </div>
+          {{/unless}}
         {{/if}}
-        <Illustration
-          @title="Illustration"
-          @value={{@localizedChallenge.illustration}}
-          @edition={{false}}
-          @addIllustration={{this.toDeleteWhenEditionIsOK}}
-          @removeIllustration={{this.toDeleteWhenEditionIsOK}}
-          @display={{this.toDeleteWhenEditionIsOK}}
-          data-test-file-input-illustration
-        />
+        {{#if this.shouldDisplayIllustration}}
+          <Illustration
+            @title="Illustration"
+            @value={{@localizedChallenge.illustration}}
+            @edition={{this.edition}}
+            @addIllustration={{this.addIllustration}}
+            @removeIllustration={{this.removeIllustration}}
+            @display={{this.displayPopInIllustration}}
+          />
+        {{/if}}
         {{#if this.shouldDisplayAttachment}}
           <Files
             @title="Pièces jointes"
             @value={{@localizedChallenge.piecesJointes}}
-            @baseName={{@localizedChallenge.attachmentBaseName}}
-            @edition={{false}}
-            @removeAttachment={{this.toDeleteWhenEditionIsOK}}
-            @addAttachment={{this.toDeleteWhenEditionIsOK}}
+            @attachmentBaseName={{@localizedChallenge.firstAttachmentBaseName}}
+            @edition={{this.edition}}
+            @removeAttachment={{this.removeAttachment}}
+            @addAttachment={{this.addAttachment}}
+            @updateBasename={{this.updateBasename}}
           />
         {{/if}}
         <PixSelect
           @id="localized-select-geography"
           @placeholder="Géographie"
-          @isDisabled={{true}}
+          @isDisabled={{this.readonly}}
           @onChange={{fn (mut @localizedChallenge.geography)}}
           @value={{this.localizedChallengeGeographyValue}}
           @options={{this.countryList}}
@@ -120,33 +403,6 @@ export default class LocalizedChallenge extends Component {
         >
           <:label>Géographie</:label>
         </PixSelect>
-        <FieldToggleFieldComponent
-          @edition={{false}}
-          @model={{@localizedChallenge}}
-          @modelField="urlsToConsult"
-          @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
-          @displayTextButton="Ajouter des URLs nécessaires à la résolution de l'épreuve"
-          @confirmText="URLs externes nécessaires à la résolution de l'épreuve"
-          @displayField={{@localizedChallenge.urlsToConsult}}
-          @setDisplayField={{this.primaryChallenge.localizedChallenge}}
-          @textToolTip="Ces URLs doivent être trouvées par l’utilisateur car elles ne sont pas communiquées dans la consigne ou les propositions."
-        >
-          <Textarea
-            @title="URLs externes nécessaires à la résolution de l'épreuve"
-            @value={{this.urlToConsult}}
-            @edition={{false}}
-            @change={{this.toDeleteWhenEditionIsOK}}
-            @helpContent={{this.helpUrlsToConsult}}
-            data-test-localized-challenge-urls-to-consult
-            @id="localized-challenge-urls-to-consult"
-          />
-        </FieldToggleFieldComponent>
-        {{#if this.invalidUrlsToConsult}}
-          <p class="ui red message" data-test-invalid-urls-to-consult>
-            URLs invalides :
-            {{this.invalidUrlsToConsult}}
-          </p>
-        {{/if}}
       </div>
 
       <PixInput
@@ -156,6 +412,13 @@ export default class LocalizedChallenge extends Component {
       >
         <:label>Id</:label>
       </PixInput>
+      {{#if this.shouldDisplayIllustration}}
+      <PopInImage
+        @imageSrc={{@localizedChallenge.illustration.url}}
+        @close={{this.closePopInIllustration}}
+        @showModal={{this.isPopInIllustrationDisplayed}}
+      />
+      {{/if}}
     </div>
   </template>
 }

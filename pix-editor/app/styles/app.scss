@@ -41,11 +41,12 @@
 @use 'components/field';
 @use 'components/field/quality';
 @use 'components/field/select-search';
-@use 'components/field/toggle-field';
+@use 'components/field/toggle-field' as toggle-field-v1;
 @use 'components/field/tutorials';
 @use 'components/form/challenge';
 @use 'components/form/tutorial';
 @use 'components/dropdown-menu';
+@use 'components/pop-in/image';
 @use 'components/pop-in/tutorial' as tutorial-pop-in;
 @use 'components/pop-in/pdf-entries';
 @use 'components/select-location';
@@ -55,3 +56,9 @@
 @use 'globals/notification';
 @use 'globals/page';
 @use 'globals/table';
+
+// v2
+
+@use 'components/v2/field/files';
+@use 'components/v2/field/illustration';
+@use 'components/v2/field/toggle-field';

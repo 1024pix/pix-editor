@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ChallengeRoute extends Route {
   @service router;
@@ -11,7 +12,6 @@ export default class ChallengeRoute extends Route {
       const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
       const overview = transition.to.params.overview;
       const skillId = transition.to.params.skill_id;
-
       this.router.transitionTo('authenticated.v2.competence-overview.challenges', competenceId, overview, skillId);
     }
   }
@@ -38,6 +38,26 @@ export default class ChallengeRoute extends Route {
     await localizedChallenge.attachments;
     return { challengeLocale, localizedChallenge, challengeLocales, competence, overview, skill };
   }
+
+  @action
+  async willTransition(transition) {
+    const edition = this.controllerFor('authenticated.v2.localized-challenge').edition;
+    if (edition && (!transition.to.find((route) => route.name === this.routeName))) {
+      if (confirm('Êtes vous sur de vouloir quitter l\'edition de l\'épreuve?')) {
+        this.controllerFor('authenticated.v2.localized-challenge').cancelEdit();
+        const { localizedChallenge } = this.controllerFor('authenticated.v2.localized-challenge').model;
+        await rollBack(localizedChallenge);
+      } else {
+        transition.abort();
+      }
+    }
+  }
+}
+
+async function rollBack(localizedChallenge) {
+  const attachments = await localizedChallenge.attachments;
+  attachments.forEach((attachment) => attachment.rollbackAttributes());
+  localizedChallenge.rollbackAttributes();
 }
 
 function byAlternativeVersion(challengeA, challengeB) {

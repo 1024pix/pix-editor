@@ -61,7 +61,7 @@ export default class LocalizedChallengeModel extends Model {
     return ['validé', 'archivé'].includes(this.challenge.get('status'));
   }
 
-  get _firstAttachmentBaseName() {
+  get firstAttachmentBaseName() {
     const piecesJointes = this.piecesJointes;
     if (piecesJointes && piecesJointes.length > 0) {
       return piecesJointes[0].filename.replace(/\.[^/.]+$/, '');
@@ -69,11 +69,13 @@ export default class LocalizedChallengeModel extends Model {
     return null;
   }
 
+  // todo remove when v1 is deleted
+
   get attachmentBaseName() {
     if (this._definedBaseName) {
       return this._definedBaseName;
     }
-    return this._firstAttachmentBaseName;
+    return this.firstAttachmentBaseName;
   }
 
   set attachmentBaseName(value) {
@@ -82,6 +84,6 @@ export default class LocalizedChallengeModel extends Model {
   }
 
   baseNameUpdated() {
-    return this._firstAttachmentBaseName !== this.attachmentBaseName;
+    return this.firstAttachmentBaseName !== this.attachmentBaseName;
   }
 }

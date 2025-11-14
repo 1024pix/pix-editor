@@ -1,0 +1,50 @@
+.files-field {
+
+  h3, label, p {
+    font-family: var(--_pix-font-family-body), sans-serif;
+  }
+
+  &--display {
+    margin-bottom: 0.3rem;
+
+    button {
+      align-items: center;
+      display: flex;
+    }
+  }
+
+  &--title {
+    font-size: 1rem;
+    font-weight: var(--pix-font-medium);
+    color: var(--pix-neutral-900);
+    margin-bottom: 0.5rem;
+  }
+
+  &--display, &--download {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &--input-name {
+    margin-top: .5rem;
+
+    label {
+      font-weight: 200;
+      font-size: .875rem;
+    }
+
+    input {
+      height: 1.6rem;
+    }
+  }
+
+  &--input-file {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+
+    label, input {
+      font-size: .875rem;
+    }
+  }
+}

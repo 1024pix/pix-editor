@@ -1,0 +1,17 @@
+.toggle-field {
+  display: flex;
+  align-items: center;
+  gap: var(--pix-spacing-1x);
+
+   &--button {
+     font-size: 1rem;
+     font-weight: var(--pix-font-medium);
+     color: var(--pix-neutral-900);
+   }
+
+  &--tooltip:hover {
+      cursor: help;
+  }
+}
+
+
