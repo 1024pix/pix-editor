@@ -26,6 +26,17 @@ export function register(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/notes/{noteId}',
+      config: {
+        handler: async function(request, h) {
+          const noteToUpdate = await noteSerializer.deserialize(request.payload);
+          const note = await noteRepository.update(request.params.noteId, noteToUpdate);
+          return h.response(noteSerializer.serialize(note));
+        },
+      },
+    },
   ]);
 }
 

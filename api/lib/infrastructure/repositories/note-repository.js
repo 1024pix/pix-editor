@@ -48,3 +48,27 @@ export async function create(note) {
     challengeId: records[0].get('Record_Id'),
   });
 }
+
+export async function update(noteId, note) {
+  const airtableRecordToUpdate = {
+    id: noteId,
+    fields: {
+      Statut: note.status,
+      Texte: note.text,
+      Auteur: note.author,
+      Record_Id: note.challengeId,
+      'Type d\'élément': 'épreuve',
+      Changelog: 'non',
+    },
+  };
+  const [record] = await _airtableClient().table(TABLE_NAME).update([airtableRecordToUpdate]);
+
+  return new Note({
+    id: record.id,
+    status: record.get('Statut'),
+    text: record.get('Texte'),
+    author: record.get('Auteur'),
+    createdAt: record.get('Date'),
+    challengeId: record.get('Record_Id'),
+  });
+}

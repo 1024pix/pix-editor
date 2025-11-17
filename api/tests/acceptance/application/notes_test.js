@@ -161,4 +161,72 @@ describe('Acceptance | Routes | Notes', () => {
       expect(airtableScope.isDone()).toBe(true);
     });
   });
+  describe('PATCH /notes/:noteId', () => {
+    it('returns 200 and updated note', async function() {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+
+      const note = new Note({
+        id: 'note123',
+        status: Note.STATUSES.EN_COURS,
+        text: 'Un texte',
+        author: 'NLE',
+        createdAt: new Date('2025-11-10T16:33:00Z'),
+        challengeId: 'challengeAbc123',
+      });
+
+      const airtableNote = {
+        id: note.id,
+        fields: {
+          Statut: note.status,
+          Texte: note.text,
+          Auteur: note.author,
+          Date: note.createdAt,
+          Record_Id: note.challengeId,
+          'Type d\'élément': 'épreuve',
+          Changelog: 'non',
+        },
+      };
+      const expectedNoteBody = structuredClone(airtableNote);
+      delete expectedNoteBody.fields.Record_Id;
+      delete expectedNoteBody.fields.Auteur;
+      delete expectedNoteBody.fields.Texte;
+      delete expectedNoteBody.fields.Date;
+
+      const airtableScope = nock('https://api.airtable.com')
+        .patch('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedNoteBody] })
+        .reply(200, { records: [new AirtableRecord('Notes', airtableNote.id, airtableNote)] });
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/notes/${note.id}`,
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'notes',
+            attributes: { status: note.status },
+          },
+        },
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'notes',
+          id: 'note123',
+          attributes: {
+            text: 'Un texte',
+            author: 'NLE',
+            'created-at': note.createdAt.toISOString(),
+            status: Note.STATUSES.EN_COURS,
+          },
+        },
+      });
+      expect(airtableScope.isDone()).toBe(true);
+    });
+  });
 });
