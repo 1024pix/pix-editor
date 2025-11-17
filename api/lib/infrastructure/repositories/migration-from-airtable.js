@@ -15,7 +15,7 @@ export function compareDtosLists(airtableDtos, pgDtos, compareFunc, tableName) {
   const pgIds = new Set(pgDtos.map((pgDtos) => pgDtos.id));
 
   const airtableOnlyIds = airtableIds.values().filter((id) => !pgIds.has(id)).toArray();
-  const pgOnlyIds = airtableIds.values().filter((id) => !airtableIds.has(id)).toArray();
+  const pgOnlyIds = pgIds.values().filter((id) => !airtableIds.has(id)).toArray();
 
   if (airtableOnlyIds.length !== 0 || pgOnlyIds.length !== 0) {
     logDifference(
