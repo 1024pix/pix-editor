@@ -14,7 +14,7 @@ export function logInfoWithCorrelationIds(data) {
     logger.info(
       {
         user_id: extractUserIdFromRequest(request),
-        request_id: `${_.get(request, 'info.id', '-')}`,
+        request_id: `${_.get(request, 'headers.x-request-id', '-')}`,
         ..._.get(data, 'metrics', {}),
       },
       _.get(data, 'message', '-'),
@@ -34,7 +34,7 @@ export function logErrorWithCorrelationIds(error) {
     logger.error(
       {
         user_id: extractUserIdFromRequest(request),
-        request_id: `${_.get(request, 'info.id', '-')}`,
+        request_id: `${_.get(request, 'headers.x-request-id', '-')}`,
       },
       error,
     );
@@ -51,6 +51,10 @@ export function getInContext(path, value) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
   return _.get(store, path, value);
+}
+
+export function getRequestId() {
+  return getInContext('request.headers.x-request-id', '-');
 }
 
 export function setInContext(path, value) {

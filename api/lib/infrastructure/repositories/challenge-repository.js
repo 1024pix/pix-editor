@@ -31,7 +31,7 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareChallengeDtos);
+  compareDtos(airtableDto, pgDto, compareChallengeDtos, 'challenges');
 
   if (!airtableDto) throw new NotFoundError('Épreuve introuvable');
 
@@ -51,7 +51,7 @@ export async function list() {
     localizedChallengeRepository.list(),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareChallengeDtos, 'challenges');
 
   return toDomainList(airtableDtos, translations, localizedChallenges);
 }
@@ -66,7 +66,7 @@ export async function getMany(ids) {
     selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'),
     loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
   ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
 
   if (!airtableDtos) return [];
   return toDomainList(airtableDtos, translations, localizedChallenges);
@@ -284,7 +284,7 @@ export async function update(challenge, transaction = knex) {
 
 export async function listBySkillId(skillId) {
   const [airtableDtos, pgDtos] = await Promise.all([challengeDatasource.filterBySkillId(skillId), selectChallenges().where('challenges.skillId', skillId).orderBy('id')]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
 
   if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
@@ -300,7 +300,7 @@ export async function listActiveOrDraftByCompetenceId(competenceId) {
       .and.whereIn('challenges.status', [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE])
       .orderBy('id'),
   ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
 
   if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
@@ -316,7 +316,7 @@ export async function listPrototypesByCompetenceId(competenceId) {
       .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
       .orderBy('id'),
   ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
 
   if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
@@ -332,7 +332,7 @@ export async function listValidPrototypesBySkillIds(skillIds) {
       .andWhere('challenges.status', Challenge.STATUSES.VALIDE)
       .orderBy('challenges.id'),
   ]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareChallengeDtos, 'challenges');
 
   if (!airtableDtos) return [];
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(airtableDtos);
@@ -397,80 +397,80 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
 
 function compareChallengeDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`challenge airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (!areNullableValuesEqual(airtableDto.type, pgDto.type))
-    diff.push(`challenge airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
+    diff.push(`airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
   if (airtableDto.t1Status !== pgDto.t1Status)
-    diff.push(`challenge airtable t1Status "${airtableDto.t1Status}" != postgres t1Status "${pgDto.t1Status}"`);
+    diff.push(`airtable t1Status "${airtableDto.t1Status}" != postgres t1Status "${pgDto.t1Status}"`);
   if (airtableDto.t2Status !== pgDto.t2Status)
-    diff.push(`challenge airtable t2Status "${airtableDto.t2Status}" != postgres t2Status "${pgDto.t2Status}"`);
+    diff.push(`airtable t2Status "${airtableDto.t2Status}" != postgres t2Status "${pgDto.t2Status}"`);
   if (airtableDto.t3Status !== pgDto.t3Status)
-    diff.push(`challenge airtable t3Status "${airtableDto.t3Status}" != postgres t3Status "${pgDto.t3Status}"`);
+    diff.push(`airtable t3Status "${airtableDto.t3Status}" != postgres t3Status "${pgDto.t3Status}"`);
   if (!areNullableValuesEqual(airtableDto.status, pgDto.status))
-    diff.push(`challenge airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
+    diff.push(`airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
   if (!areNullableValuesEqual(airtableDto.skillId, pgDto.skillId))
-    diff.push(`challenge airtable skillId "${airtableDto.skillId}" != postgres skillId "${pgDto.skillId}"`);
+    diff.push(`airtable skillId "${airtableDto.skillId}" != postgres skillId "${pgDto.skillId}"`);
   if (!areNullableValuesEqual(airtableDto.embedHeight, pgDto.embedHeight))
     diff.push(
-      `challenge airtable embedHeight "${airtableDto.embedHeight}" != postgres embedHeight "${pgDto.embedHeight}"`,
+      `airtable embedHeight "${airtableDto.embedHeight}" != postgres embedHeight "${pgDto.embedHeight}"`,
     );
   if (!areNullableValuesEqual(airtableDto.timer, pgDto.timer))
-    diff.push(`challenge airtable timer "${airtableDto.timer}" != postgres timer "${pgDto.timer}"`);
+    diff.push(`airtable timer "${airtableDto.timer}" != postgres timer "${pgDto.timer}"`);
   if (!areNullableValuesEqual(airtableDto.competenceId, pgDto.competenceId))
     diff.push(
-      `challenge airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
+      `airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
     );
   if (!areNullableValuesEqual(airtableDto.format, pgDto.format))
-    diff.push(`challenge airtable format "${airtableDto.format}" != postgres format "${pgDto.format}"`);
+    diff.push(`airtable format "${airtableDto.format}" != postgres format "${pgDto.format}"`);
   if (airtableDto.autoReply !== pgDto.autoReply)
-    diff.push(`challenge airtable autoReply "${airtableDto.autoReply}" != postgres autoReply "${pgDto.autoReply}"`);
+    diff.push(`airtable autoReply "${airtableDto.autoReply}" != postgres autoReply "${pgDto.autoReply}"`);
   if (!areArrayEquals(airtableDto.locales, pgDto.locales))
     diff.push(`challenges airtable locales "${airtableDto.locales}" != postgres locales "${pgDto.locales}"`);
   if (!areNullableValuesEqual(airtableDto.genealogy, pgDto.genealogy))
-    diff.push(`challenge airtable genealogy "${airtableDto.genealogy}" != postgres genealogy "${pgDto.genealogy}"`);
+    diff.push(`airtable genealogy "${airtableDto.genealogy}" != postgres genealogy "${pgDto.genealogy}"`);
   if (!areNullableValuesEqual(airtableDto.pedagogy, pgDto.pedagogy))
-    diff.push(`challenge airtable pedagogy "${airtableDto.pedagogy}" != postgres pedagogy "${pgDto.pedagogy}"`);
+    diff.push(`airtable pedagogy "${airtableDto.pedagogy}" != postgres pedagogy "${pgDto.pedagogy}"`);
   if (!areArrayEquals(airtableDto.author, pgDto.author))
-    diff.push(`challenge airtable author "${airtableDto.author}" != postgres author "${pgDto.author}"`);
+    diff.push(`airtable author "${airtableDto.author}" != postgres author "${pgDto.author}"`);
   if (!areNullableValuesEqual(airtableDto.declinable, pgDto.declinable))
-    diff.push(`challenge airtable declinable "${airtableDto.declinable}" != postgres declinable "${pgDto.declinable}"`);
+    diff.push(`airtable declinable "${airtableDto.declinable}" != postgres declinable "${pgDto.declinable}"`);
   if (!areNullableValuesEqual(airtableDto.version, pgDto.version))
-    diff.push(`challenge airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
+    diff.push(`airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
   if (!areNullableValuesEqual(airtableDto.alternativeVersion, pgDto.alternativeVersion))
     diff.push(
-      `challenge airtable alternativeVersion "${airtableDto.alternativeVersion}" != postgres alternativeVersion "${pgDto.alternativeVersion}"`,
+      `airtable alternativeVersion "${airtableDto.alternativeVersion}" != postgres alternativeVersion "${pgDto.alternativeVersion}"`,
     );
   if (!areNullableValuesEqual(airtableDto.accessibility1, pgDto.accessibility1))
     diff.push(
-      `challenge airtable accessibility1 "${airtableDto.accessibility1}" != postgres accessibility1 "${pgDto.accessibility1}"`,
+      `airtable accessibility1 "${airtableDto.accessibility1}" != postgres accessibility1 "${pgDto.accessibility1}"`,
     );
   if (!areNullableValuesEqual(airtableDto.accessibility2, pgDto.accessibility2))
     diff.push(
-      `challenge airtable accessibility2 "${airtableDto.accessibility2}" != postgres accessibility2 "${pgDto.accessibility2}"`,
+      `airtable accessibility2 "${airtableDto.accessibility2}" != postgres accessibility2 "${pgDto.accessibility2}"`,
     );
   if (!areNullableValuesEqual(airtableDto.spoil, pgDto.spoil))
-    diff.push(`challenge airtable spoil "${airtableDto.spoil}" != postgres spoil "${pgDto.spoil}"`);
+    diff.push(`airtable spoil "${airtableDto.spoil}" != postgres spoil "${pgDto.spoil}"`);
   if (!areNullableValuesEqual(airtableDto.responsive, pgDto.responsive))
-    diff.push(`challenge airtable responsive "${airtableDto.responsive}" != postgres responsive "${pgDto.responsive}"`);
+    diff.push(`airtable responsive "${airtableDto.responsive}" != postgres responsive "${pgDto.responsive}"`);
   if (!areNullableValuesEqual(airtableDto.delta, pgDto.delta))
-    diff.push(`challenge airtable delta "${airtableDto.delta}" != postgres delta "${pgDto.delta}"`);
+    diff.push(`airtable delta "${airtableDto.delta}" != postgres delta "${pgDto.delta}"`);
   if (!areNullableValuesEqual(airtableDto.alpha, pgDto.alpha))
-    diff.push(`challenge airtable alpha "${airtableDto.alpha}" != postgres alpha "${pgDto.alpha}"`);
+    diff.push(`airtable alpha "${airtableDto.alpha}" != postgres alpha "${pgDto.alpha}"`);
   if (airtableDto.shuffled !== pgDto.shuffled)
-    diff.push(`challenge airtable shuffled "${airtableDto.shuffled}" != postgres shuffled "${pgDto.shuffled}"`);
+    diff.push(`airtable shuffled "${airtableDto.shuffled}" != postgres shuffled "${pgDto.shuffled}"`);
   if (!areArrayEquals(airtableDto.contextualizedFields, pgDto.contextualizedFields))
     diff.push(
-      `challenge airtable contextualizedFields "${airtableDto.contextualizedFields}" != postgres contextualizedFields "${pgDto.contextualizedFields}"`,
+      `airtable contextualizedFields "${airtableDto.contextualizedFields}" != postgres contextualizedFields "${pgDto.contextualizedFields}"`,
     );
   if (!areNullableDatesEqual(airtableDto.validatedAt, pgDto.validatedAt))
     diff.push(
-      `challenge airtable validatedAt "${airtableDto.validatedAt}" != postgres validatedAt "${pgDto.validatedAt}"`,
+      `airtable validatedAt "${airtableDto.validatedAt}" != postgres validatedAt "${pgDto.validatedAt}"`,
     );
   if (!areNullableDatesEqual(airtableDto.archivedAt, pgDto.archivedAt))
-    diff.push(`challenge airtable archivedAt "${airtableDto.archivedAt}" != postgres archivedAt "${pgDto.archivedAt}"`);
+    diff.push(`airtable archivedAt "${airtableDto.archivedAt}" != postgres archivedAt "${pgDto.archivedAt}"`);
   if (!areNullableDatesEqual(airtableDto.madeObsoleteAt, pgDto.madeObsoleteAt))
     diff.push(
-      `challenge airtable madeObsoleteAt "${airtableDto.madeObsoleteAt}" != postgres madeObsoleteAt "${pgDto.madeObsoleteAt}"`,
+      `airtable madeObsoleteAt "${airtableDto.madeObsoleteAt}" != postgres madeObsoleteAt "${pgDto.madeObsoleteAt}"`,
     );
   if (
     !areArrayEquals(airtableDto.files, pgDto.files, {
@@ -484,7 +484,7 @@ function compareChallengeDtos(airtableDto, pgDto) {
     })
   )
     diff.push(
-      `challenge airtable files "${JSON.stringify(airtableDto.files)}" != postgres files "${JSON.stringify(pgDto.files)}"`,
+      `airtable files "${JSON.stringify(airtableDto.files)}" != postgres files "${JSON.stringify(pgDto.files)}"`,
     );
 
   return diff;

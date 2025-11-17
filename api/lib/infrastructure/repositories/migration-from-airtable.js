@@ -1,5 +1,6 @@
 import * as config from '../../config.js';
 import { child } from '../logger.js';
+import { getRequestId } from '../monitoring-tools.js';
 
 const logger = child('airtable:migration', { event: 'migration-from-airtable' });
 
@@ -7,55 +8,48 @@ const logger = child('airtable:migration', { event: 'migration-from-airtable' })
  * @param {object[]} airtableDtos
  * @param {object[]} pgDtos
  * @param {(object, object) => string[]} compareFunc
+ * @param {string} tableName
  */
-export function compareDtosLists(airtableDtos, pgDtos, compareFunc) {
-  if (airtableDtos.length !== pgDtos.length) {
-    logger.warn(
+export function compareDtosLists(airtableDtos, pgDtos, compareFunc, tableName) {
+  const airtableIds = new Set(airtableDtos.map((airtableDtos) => airtableDtos.id));
+  const pgIds = new Set(pgDtos.map((pgDtos) => pgDtos.id));
+
+  const airtableOnlyIds = airtableIds.values().filter((id) => !pgIds.has(id)).toArray();
+  const pgOnlyIds = airtableIds.values().filter((id) => !airtableIds.has(id)).toArray();
+
+  if (airtableOnlyIds.length !== 0 || pgOnlyIds.length !== 0) {
+    logDifference(
       {
+        tableName,
         airtableCount: airtableDtos.length,
         postgresCount: pgDtos.length,
+        airtableOnlyIds,
+        pgOnlyIds,
       },
-      'difference between airtable and postgres dtos count',
+      'difference between airtable and postgres dtos',
     );
-    if (config.migrationFromAirtable.throwOnPostgresDifference) {
-      console.error('difference between airtable and postgres dtos count', {
-        airtableCount: airtableDtos.length,
-        postgresCount: pgDtos.length,
-      });
-      throw new Error('difference between airtable and postgres dtos count');
-    }
     return;
   }
+
   const sortedAirtableDtos = airtableDtos.toSorted(byId);
   const sortedPgDtos = pgDtos.toSorted(byId);
-  sortedAirtableDtos.forEach((airtableDto, i) => compareDtos(airtableDto, sortedPgDtos[i], compareFunc));
+
+  sortedAirtableDtos.forEach((airtableDto, i) => compareDtos(airtableDto, sortedPgDtos[i], compareFunc, tableName));
 }
 
-export function compareDtos(airtableDto, pgDto, compareFunc) {
+export function compareDtos(airtableDto, pgDto, compareFunc, tableName) {
   if (airtableDto == null && pgDto == null) return;
   if (airtableDto == null && pgDto != null) {
-    logger.warn('airtable dto empty whereas postgres dto not empty');
-    if (config.migrationFromAirtable.throwOnPostgresDifference) {
-      console.error('airtable dto empty whereas postgres dto not empty');
-      throw new Error('airtable dto empty whereas postgres dto not empty');
-    }
+    logDifference({ tableName, entityId: pgDto.id }, 'airtable dto empty whereas postgres dto not empty');
     return;
   }
   if (airtableDto != null && pgDto == null) {
-    logger.warn('airtable dto not empty whereas postgres dto empty');
-    if (config.migrationFromAirtable.throwOnPostgresDifference) {
-      console.error('airtable dto not empty whereas postgres dto empty');
-      throw new Error('airtable dto not empty whereas postgres dto empty');
-    }
+    logDifference({ tableName, entityId: airtableDto.id }, 'airtable dto not empty whereas postgres dto empty');
     return;
   }
   const diff = compareFunc(airtableDto, pgDto);
   if (diff.length === 0) return;
-  logger.warn({ diff }, 'difference between airtable and postgres dtos');
-  if (config.migrationFromAirtable.throwOnPostgresDifference) {
-    console.error('difference between airtable and postgres dtos', diff);
-    throw new Error('difference between airtable and postgres dtos');
-  }
+  logDifference({ diff, tableName, entityId: airtableDto.id }, 'difference between airtable and postgres dtos');
 }
 
 export function areArrayEquals(array1, array2, { sortFn, compareFn = (value1, value2) => value1 === value2 } = {}) {
@@ -81,4 +75,13 @@ export function areNullableDatesEqual(date1, date2) {
 
 function byId(dto1, dto2) {
   return dto1.id < dto2.id ? -1 : +1;
+}
+
+function logDifference(data, msg) {
+  const request_id = getRequestId();
+  logger.warn({ request_id, ...data }, msg);
+  if (config.migrationFromAirtable.throwOnPostgresDifference) {
+    console.error(msg, data);
+    throw new Error(msg);
+  }
 }
