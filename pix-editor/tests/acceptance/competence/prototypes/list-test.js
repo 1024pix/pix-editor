@@ -27,9 +27,9 @@ module('Acceptance | competence/prototypes/list', function() {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC' });
 
-      this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableRecChallenge1', instruction: 'instructionsChallenge1' });
-      this.server.create('challenge', { id: challengeId2, airtableId: 'airtableRecChallenge2', instruction: 'instructionsChallenge2' });
-      this.server.create('challenge', { id: 'recChallenge3', airtableId: 'airtableRecChallenge3' });
+      this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableRecChallenge1', instruction: 'instructionsChallenge1', notes: [this.server.create('note')] });
+      this.server.create('challenge', { id: challengeId2, airtableId: 'airtableRecChallenge2', instruction: 'instructionsChallenge2', notes: [this.server.create('note')] });
+      this.server.create('challenge', { id: 'recChallenge3', airtableId: 'airtableRecChallenge3', notes: [] });
       this.server.create('skill', { id: skillId1, pixId: skillPixId1, name: skillName, version: 3, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
       this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1, status: 'périmé', challengeIds: [] });
       this.server.create('skill', { id: skillId2, pixId: skillPixId2, name: skillName, version: 2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });

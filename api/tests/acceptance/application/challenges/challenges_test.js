@@ -306,6 +306,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 ],
               },
               attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=1' } },
+              'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=1' } },
+              notes: { links: { related: '/api/notes?filter[challengeId]=1' } },
               'challenge-locales': {
                 data: [
                   {
@@ -417,6 +419,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
                 ],
               },
               attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=2' } },
+              'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=2' } },
+              notes: { links: { related: '/api/notes?filter[challengeId]=2' } },
               'challenge-locales': {
                 data: [
                   {
@@ -782,6 +786,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               ],
             },
             attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId1' } },
+            'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=recChallengeId1' } },
+            notes: { links: { related: '/api/notes?filter[challengeId]=recChallengeId1' } },
             'challenge-locales': {
               data: [
                 {
@@ -1369,6 +1375,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               ],
             },
             attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=challengeId' } },
+            'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=challengeId' } },
+            notes: { links: { related: '/api/notes?filter[challengeId]=challengeId' } },
             'challenge-locales': {
               data: [
                 {
@@ -2016,6 +2024,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               ],
             },
             attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId' } },
+            'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=recChallengeId' } },
+            notes: { links: { related: '/api/notes?filter[challengeId]=recChallengeId' } },
             'challenge-locales': {
               data: [
                 {
@@ -2432,6 +2442,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               ],
             },
             attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=recChallengeId' } },
+            'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=recChallengeId' } },
+            notes: { links: { related: '/api/notes?filter[challengeId]=recChallengeId' } },
             'challenge-locales': {
               data: [
                 {

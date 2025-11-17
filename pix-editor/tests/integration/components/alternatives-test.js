@@ -94,7 +94,7 @@ module('Integration | Component | alternatives', function(hooks) {
 
     assert.dom(screen.queryByText('ceci est une alternative validée')).exists();
     assert.dom(screen.queryByText('ceci est une alternative proposée')).exists();
-    assert.dom(screen.queryByText('ceci est une alternative périmée')).exists();
+    assert.dom(await screen.findByText('ceci est une alternative périmée')).exists();
   });
 
   ['validé', 'proposé'].forEach((status) => {

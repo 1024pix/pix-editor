@@ -64,6 +64,8 @@ export default class ChallengeModel extends Model {
 
   @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
   @hasMany('attachment', { inverse: 'challenge', async: true }) attachments;
+  @hasMany('note', { inverse: null, async: true }) notes;
+  @hasMany('changelog-entry', { inverse: null, async: true }) changelogEntries;
   @hasMany('localized-challenge', { inverse: 'challenge', async: true }) localizedChallenges;
   @hasMany('challenge-locale', { inverse: 'challenge', async: false }) challengeLocales;
 

@@ -1,6 +1,6 @@
 <PixModal
   @title={{this.title}}
-  @onCloseButtonClick={{this.close}}
+  @onCloseButtonClick={{@close}}
   @showModal={{@showModal}}
 >
   <:content>
@@ -35,7 +35,14 @@
         </AriaTabs>
       </div>
     {{else}}
-      <Form::Note @entry={{this.logEntry}} @edition={{this.logEntryEdition}} @close={{this.closeLogForm}} @save={{this.saveEntry}} @mayEdit={{this.mayEditEntry}} @edit={{this.editEntry}} />
+      <Form::Note
+        @entry={{this.logEntry}}
+        @edition={{this.logEntryEdition}}
+        @close={{this.closeLogForm}}
+        @save={{this.saveEntry}}
+        @mayEdit={{this.mayEditEntry}}
+        @edit={{this.editEntry}}
+      />
     {{/if}}
   </:content>
 </PixModal>

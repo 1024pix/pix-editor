@@ -55,12 +55,13 @@ const serializer = new Serializer('challenges', {
     'hasEmbedInternalValidation',
     'noValidationNeeded',
     'attachments',
+    'notes',
     'challengeLocales',
+    'changelogEntries',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenges') return 'localized-challenges';
     if (attribute === 'localizedChallenge') return 'localized-challenges';
-    if (attribute === 'attachments') return 'attachments';
     if (attribute === 'challengeLocales') return 'challenge-locales';
   },
   skill: {
@@ -78,6 +79,24 @@ const serializer = new Serializer('challenges', {
     relationshipLinks: {
       related: function(record, current, parent) {
         return `/api/attachments?filter[localizedChallengeId]=${parent.id}`;
+      },
+    },
+  },
+  notes: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related: function(record, current, parent) {
+        return `/api/notes?filter[challengeId]=${parent.id}`;
+      },
+    },
+  },
+  changelogEntries: {
+    ref: 'id',
+    ignoreRelationshipData: true,
+    relationshipLinks: {
+      related: function(record, current, parent) {
+        return `/api/changelog-entries?filter[elementId]=${parent.id}`;
       },
     },
   },
@@ -104,6 +123,8 @@ const serializer = new Serializer('challenges', {
         localizedChallenge: { id: localizedChallenge?.id },
       };
     });
+    challenge.notes = [];
+    challenge.changelogEntries = [];
     return challenge;
   },
 });

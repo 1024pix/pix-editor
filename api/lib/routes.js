@@ -1,7 +1,7 @@
-import * as airtableProxyRoute from './application/airtable-proxy.js';
 import * as attachmentsRoute from './application/attachments.js';
 import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
+import * as changelogEntriesRoute from './application/changelog-entries.js';
 import { competenceRoutes } from './application/competences/index.js';
 import * as configRoute from './application/config.js';
 import * as embedsRoute from './application/embeds.js';
@@ -11,6 +11,7 @@ import * as healthcheckRoute from './application/healthcheck/index.js';
 import * as heapdumpRoute from './application/heapdump.js';
 import * as localizedChallengesRoute from './application/localized-challenges.js';
 import * as missionsRoute from './application/missions/index.js';
+import * as notesRoute from './application/notes.js';
 import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
@@ -27,10 +28,10 @@ import * as usersRoute from './application/users.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
 export const routes = [
-  airtableProxyRoute,
   areasRoute,
   attachmentsRoute,
   challengesRoute,
+  changelogEntriesRoute,
   configRoute,
   embedsRoute,
   fileStorageTokenRoute,
@@ -39,6 +40,7 @@ export const routes = [
   healthcheckRoute,
   localizedChallengesRoute,
   missionsRoute,
+  notesRoute,
   phraseRoute,
   releasesRoute,
   replicationDataRoute,

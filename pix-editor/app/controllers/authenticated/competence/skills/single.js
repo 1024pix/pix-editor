@@ -303,10 +303,8 @@ export default class SingleController extends Controller {
     }
     const entry = this.store.createRecord('changelog-entry', {
       text: changelogValue,
-      recordId: skill.pixId,
-      skillName: skill.name,
+      elementId: skill.pixId,
       author: this.config.author,
-      createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.skill,
       action,
     });
@@ -317,9 +315,8 @@ export default class SingleController extends Controller {
   _handleChallengeChangelog(challenge, changelogValue) {
     const entry = this.store.createRecord('changelog-entry', {
       text: changelogValue,
-      recordId: challenge.id,
+      elementId: challenge.id,
       author: this.config.author,
-      createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.challenge,
     });
     return entry.save()
