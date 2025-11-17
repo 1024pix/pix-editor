@@ -25,7 +25,6 @@ describe('Acceptance | Routes | Notes', () => {
             Changelog: 'oui',
             Date: new Date('2025-11-12T14:39:00Z'),
             Record_Id: challengeId,
-            Statut: ChangelogEntry.STATUSES.TERMINE,
             "Type d'élément": 'épreuve',
           },
         },
@@ -37,7 +36,6 @@ describe('Acceptance | Routes | Notes', () => {
             Changelog: 'oui',
             Date: new Date('2025-11-12T14:47:00Z'),
             Record_Id: challengeId,
-            Statut: ChangelogEntry.STATUSES.EN_COURS,
             "Type d'élément": 'épreuve',
           },
         },
@@ -46,7 +44,7 @@ describe('Acceptance | Routes | Notes', () => {
       const airtableScope = nock('https://api.airtable.com')
         .get('/v0/airtableEditorBaseValue/Notes')
         .query({
-          filterByFormula: `AND(Record_Id = "${challengeId}", Statut != "archive", Changelog = "oui")`,
+          filterByFormula: `AND(Record_Id = "${challengeId}", Changelog = "oui")`,
           sort: [{ field: 'Date', direction: 'asc' }],
         })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -73,7 +71,6 @@ describe('Acceptance | Routes | Notes', () => {
               text: 'Un texte',
               author: 'NLE',
               'created-at': '2025-11-12T14:39:00.000Z',
-              status: ChangelogEntry.STATUSES.TERMINE,
               'element-id': challengeId,
               'element-type': ChangelogEntry.ELEMENT_TYPES.EPREUVE,
             },
@@ -85,7 +82,6 @@ describe('Acceptance | Routes | Notes', () => {
               text: 'Un autre texte',
               author: 'FOO',
               'created-at': '2025-11-12T14:47:00.000Z',
-              status: ChangelogEntry.STATUSES.EN_COURS,
               'element-id': challengeId,
               'element-type': ChangelogEntry.ELEMENT_TYPES.EPREUVE,
             },
@@ -104,7 +100,6 @@ describe('Acceptance | Routes | Notes', () => {
 
       const changelogEntry = new ChangelogEntry({
         id: 'changelog123',
-        status: ChangelogEntry.STATUSES.EN_COURS,
         text: 'Un texte',
         author: 'NLE',
         createdAt: new Date('2025-11-10T16:33:00Z'),
@@ -115,7 +110,6 @@ describe('Acceptance | Routes | Notes', () => {
       const airtableChangelogEntry = {
         id: changelogEntry.id,
         fields: {
-          Statut: changelogEntry.status,
           Texte: changelogEntry.text,
           Auteur: changelogEntry.author,
           Date: changelogEntry.createdAt,
@@ -142,7 +136,6 @@ describe('Acceptance | Routes | Notes', () => {
           data: {
             type: 'changelog-entries',
             attributes: {
-              status: changelogEntry.status,
               text: changelogEntry.text,
               author: changelogEntry.author,
               'element-id': 'skillAbc123',
@@ -162,7 +155,6 @@ describe('Acceptance | Routes | Notes', () => {
             text: 'Un texte',
             author: 'NLE',
             'created-at': changelogEntry.createdAt.toISOString(),
-            status: ChangelogEntry.STATUSES.EN_COURS,
             'element-id': changelogEntry.elementId,
             'element-type': ChangelogEntry.ELEMENT_TYPES.ACQUIS,
           },

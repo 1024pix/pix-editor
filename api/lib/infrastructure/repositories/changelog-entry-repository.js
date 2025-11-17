@@ -10,14 +10,13 @@ function _airtableClient() {
 
 export async function listByElementId(elementId) {
   const airtableRecords = await _airtableClient().table(TABLE_NAME).select({
-    filterByFormula: `AND(Record_Id = "${elementId}", Statut != "archive", Changelog = "oui")`,
+    filterByFormula: `AND(Record_Id = "${elementId}", Changelog = "oui")`,
     sort: [{ field: 'Date', direction: 'asc' }],
   }).all();
 
   return airtableRecords.map((record) => {
     return new ChangelogEntry({
       id: record.id,
-      status: record.get('Statut'),
       text: record.get('Texte'),
       author: record.get('Auteur'),
       createdAt: record.get('Date'),
@@ -30,7 +29,6 @@ export async function listByElementId(elementId) {
 export async function create(changelogEntry) {
   const airtableRecordToCreate = {
     fields: {
-      Statut: changelogEntry.status,
       Texte: changelogEntry.text,
       Auteur: changelogEntry.author,
       Record_Id: changelogEntry.elementId,
@@ -42,7 +40,6 @@ export async function create(changelogEntry) {
 
   return new ChangelogEntry({
     id: records[0].id,
-    status: records[0].get('Statut'),
     text: records[0].get('Texte'),
     author: records[0].get('Auteur'),
     createdAt: records[0].get('Date'),
