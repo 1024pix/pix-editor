@@ -21,7 +21,7 @@ export async function list() {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -37,7 +37,7 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareTubeDtos);
+  compareDtos(airtableDto, pgDto, compareTubeDtos, TABLE_NAME);
 
   if (!airtableDto) return null;
 
@@ -47,7 +47,7 @@ export async function get(id) {
 export async function listByCompetenceId(competenceId) {
   const [airtableDtos, pgDtos] = await Promise.all([tubeDatasource.listByCompetenceId(competenceId), selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id')]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
 
@@ -65,7 +65,7 @@ export async function getByAirtableId(airtableId) {
 
   const [pgDto, translations] = await Promise.all([selectTubes().where('tubes.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
-  compareDtos(airtableDto, pgDto, compareTubeDtos);
+  compareDtos(airtableDto, pgDto, compareTubeDtos, TABLE_NAME);
 
   return toDomain(airtableDto, translations);
 }
@@ -80,7 +80,7 @@ export async function getManyByAirtableIds(airtableIds) {
 
   const [pgDtos, translations] = await Promise.all([selectTubes().whereIn('tubes.id', ids).orderBy('tubes.id'), translationRepository.listByEntities(model, ids)]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTubeDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -145,19 +145,19 @@ function selectTubes() {
 
 function compareTubeDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`tube airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (airtableDto.name !== pgDto.name)
-    diff.push(`tube airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
+    diff.push(`airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
   if (!areNullableValuesEqual(airtableDto.index, pgDto.index))
-    diff.push(`tube airtable index "${airtableDto.index}" != postgres index "${pgDto.index}"`);
+    diff.push(`airtable index "${airtableDto.index}" != postgres index "${pgDto.index}"`);
   if (airtableDto.thematicId !== pgDto.thematicId)
-    diff.push(`tube airtable thematicId "${airtableDto.thematicId}" != postgres thematicId "${pgDto.thematicId}"`);
+    diff.push(`airtable thematicId "${airtableDto.thematicId}" != postgres thematicId "${pgDto.thematicId}"`);
   if (airtableDto.competenceId !== pgDto.competenceId)
     diff.push(
-      `tube airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
+      `airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
     );
   if (!areArrayEquals(airtableDto.skillIds, pgDto.skillIds))
-    diff.push(`tube airtable skillIds "${airtableDto.skillIds}" != postgres skillIds "${pgDto.skillIds}"`);
+    diff.push(`airtable skillIds "${airtableDto.skillIds}" != postgres skillIds "${pgDto.skillIds}"`);
   return diff;
 }
 

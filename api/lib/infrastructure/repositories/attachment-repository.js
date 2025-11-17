@@ -7,7 +7,7 @@ import { areNullableValuesEqual, compareDtos, compareDtosLists } from './migrati
 export async function get(id) {
   const [airtableDto, pgDto] = await Promise.all([attachmentDatasource.find(id), knex.select('*').from('attachments').where('id', id).first()]);
 
-  compareDtos(airtableDto, pgDto, compareAttachmentDtos);
+  compareDtos(airtableDto, pgDto, compareAttachmentDtos, 'attachments');
 
   if (!airtableDto) return null;
   return toDomain(airtableDto);
@@ -16,7 +16,7 @@ export async function get(id) {
 export async function list() {
   const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.list(), knex.select('*').from('attachments').orderBy('id')]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareAttachmentDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareAttachmentDtos, 'attachments');
 
   return toDomainList(airtableDtos);
 }
@@ -24,7 +24,7 @@ export async function list() {
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
   const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds), knex.select('*').from('attachments').whereIn('localizedChallengeId', localizedChallengeIds).orderBy('id')]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos, 'attachments');
 
   if (!airtableDtos) return [];
   return toDomainList(airtableDtos);
@@ -33,7 +33,7 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 export async function listByLocalizedChallengeId(localizedChallengeId) {
   const [airtableDtos, pgDtos] = await Promise.all([attachmentDatasource.filterByLocalizedChallengeId(localizedChallengeId), knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId).orderBy('id')]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareAttachmentDtos, 'attachments');
 
   if (!airtableDtos) return [];
   return toDomainList(airtableDtos);
@@ -142,24 +142,24 @@ export async function remove(attachmentId) {
 
 function compareAttachmentDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`attachment airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (airtableDto.url !== pgDto.url)
-    diff.push(`attachment airtable url "${airtableDto.url}" != postgres url "${pgDto.url}"`);
+    diff.push(`airtable url "${airtableDto.url}" != postgres url "${pgDto.url}"`);
   if (airtableDto.size !== pgDto.size)
-    diff.push(`attachment airtable size "${airtableDto.size}" != postgres size "${pgDto.size}"`);
+    diff.push(`airtable size "${airtableDto.size}" != postgres size "${pgDto.size}"`);
   if (airtableDto.type !== pgDto.type)
-    diff.push(`attachment airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
+    diff.push(`airtable type "${airtableDto.type}" != postgres type "${pgDto.type}"`);
   if (!areNullableValuesEqual(airtableDto.mimeType, pgDto.mimeType))
-    diff.push(`attachment airtable mimeType "${airtableDto.mimeType}" != postgres mimeType "${pgDto.mimeType}"`);
+    diff.push(`airtable mimeType "${airtableDto.mimeType}" != postgres mimeType "${pgDto.mimeType}"`);
   if (airtableDto.filename !== pgDto.filename)
-    diff.push(`attachment airtable filename "${airtableDto.filename}" != postgres filename "${pgDto.filename}"`);
+    diff.push(`airtable filename "${airtableDto.filename}" != postgres filename "${pgDto.filename}"`);
   if (!areNullableValuesEqual(airtableDto.challengeId, pgDto.challengeId))
     diff.push(
-      `attachment airtable challengeId "${airtableDto.challengeId}" != postgres challengeId "${pgDto.challengeId}"`,
+      `airtable challengeId "${airtableDto.challengeId}" != postgres challengeId "${pgDto.challengeId}"`,
     );
   if (airtableDto.localizedChallengeId !== pgDto.localizedChallengeId)
     diff.push(
-      `attachment airtable localizedChallengeId "${airtableDto.localizedChallengeId}" != postgres localizedChallengeId "${pgDto.localizedChallengeId}"`,
+      `airtable localizedChallengeId "${airtableDto.localizedChallengeId}" != postgres localizedChallengeId "${pgDto.localizedChallengeId}"`,
     );
   return diff;
 }

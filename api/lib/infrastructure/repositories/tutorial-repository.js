@@ -94,7 +94,7 @@ export async function getByAirtableId(airtableId) {
 
   const pgDto = await selectTutorials().where('id', airtableDto.id).first();
 
-  compareDtos(airtableDto, pgDto, compareTutorialDtos);
+  compareDtos(airtableDto, pgDto, compareTutorialDtos, TABLE_NAME);
 
   return toDomain(airtableDto);
 }
@@ -111,7 +111,7 @@ export async function getManyByAirtableIds(airtableIds) {
     )
     .orderBy('id');
 
-  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos, TABLE_NAME);
 
   return airtableDtos.map(toDomain);
 }
@@ -125,7 +125,7 @@ export async function searchByTitle(title) {
       .limit(100),
   ]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
   return airtableDtos.map(toDomain);
@@ -140,7 +140,7 @@ export async function searchBySource(source) {
       .limit(4),
   ]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
   return airtableDtos.map(toDomain);
@@ -162,7 +162,7 @@ export async function searchByTagTitles(tagTitles) {
 
   const [airtableDtos, pgDtos] = await Promise.all([tutorialDatasource.searchByTagTitles(tagTitles), tutorialsQuery]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareTutorialDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
   return airtableDtos.map(toDomain);
@@ -171,7 +171,7 @@ export async function searchByTagTitles(tagTitles) {
 export async function getMany(ids) {
   const [airtableDtos, pgDtos] = await Promise.all([tutorialDatasource.filter({ filter: { ids } }), selectTutorials().whereIn('id', ids).orderBy('id')]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos, TABLE_NAME);
 
   return airtableDtos.map(toDomain);
 }
@@ -179,7 +179,7 @@ export async function getMany(ids) {
 export async function list() {
   const [airtableDtos, pgDtos] = await Promise.all([tutorialDatasource.list(), selectTutorials().orderBy('id')]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareTutorialDtos, TABLE_NAME);
 
   return airtableDtos.map(toDomain);
 }
@@ -213,29 +213,29 @@ function selectTutorials() {
 function compareTutorialDtos(airtableTutorial, pgTutorial) {
   const diff = [];
   if (airtableTutorial.id !== pgTutorial.id)
-    diff.push(`tutorial airtable id "${airtableTutorial.id}" != postgres id "${pgTutorial.id}"`);
+    diff.push(`airtable id "${airtableTutorial.id}" != postgres id "${pgTutorial.id}"`);
   if (airtableTutorial.title !== pgTutorial.title)
-    diff.push(`tutorial airtable title "${airtableTutorial.title}" != postgres title "${pgTutorial.title}"`);
+    diff.push(`airtable title "${airtableTutorial.title}" != postgres title "${pgTutorial.title}"`);
   if (airtableTutorial.duration !== pgTutorial.duration)
     diff.push(
-      `tutorial airtable duration "${airtableTutorial.duration}" != postgres duration "${pgTutorial.duration}"`,
+      `airtable duration "${airtableTutorial.duration}" != postgres duration "${pgTutorial.duration}"`,
     );
   if (airtableTutorial.source !== pgTutorial.source)
-    diff.push(`tutorial airtable source "${airtableTutorial.source}" != postgres source "${pgTutorial.source}"`);
+    diff.push(`airtable source "${airtableTutorial.source}" != postgres source "${pgTutorial.source}"`);
   if (airtableTutorial.format !== pgTutorial.format)
-    diff.push(`tutorial airtable format "${airtableTutorial.format}" != postgres format "${pgTutorial.format}"`);
+    diff.push(`airtable format "${airtableTutorial.format}" != postgres format "${pgTutorial.format}"`);
   if (airtableTutorial.link !== pgTutorial.link)
-    diff.push(`tutorial airtable link "${airtableTutorial.link}" != postgres link "${pgTutorial.link}"`);
+    diff.push(`airtable link "${airtableTutorial.link}" != postgres link "${pgTutorial.link}"`);
   if (!areNullableValuesEqual(airtableTutorial.license, pgTutorial.license))
-    diff.push(`tutorial airtable license "${airtableTutorial.license}" != postgres license "${pgTutorial.license}"`);
+    diff.push(`airtable license "${airtableTutorial.license}" != postgres license "${pgTutorial.license}"`);
   if (!areNullableValuesEqual(airtableTutorial.level, pgTutorial.level))
-    diff.push(`tutorial airtable level "${airtableTutorial.level}" != postgres level "${pgTutorial.level}"`);
+    diff.push(`airtable level "${airtableTutorial.level}" != postgres level "${pgTutorial.level}"`);
   if (airtableTutorial.crush !== pgTutorial.crush)
-    diff.push(`tutorial airtable crush "${airtableTutorial.crush}" != postgres crush "${pgTutorial.crush}"`);
+    diff.push(`airtable crush "${airtableTutorial.crush}" != postgres crush "${pgTutorial.crush}"`);
   if (!areNullableValuesEqual(airtableTutorial.locale, pgTutorial.locale))
-    diff.push(`tutorial airtable locale "${airtableTutorial.locale}" != postgres locale "${pgTutorial.locale}"`);
+    diff.push(`airtable locale "${airtableTutorial.locale}" != postgres locale "${pgTutorial.locale}"`);
   if (!areArrayEquals(airtableTutorial.tagIds, pgTutorial.tagIds))
-    diff.push(`tutorial airtable tagIds "${airtableTutorial.tagIds}" != postgres tagIds "${pgTutorial.tagIds}"`);
+    diff.push(`airtable tagIds "${airtableTutorial.tagIds}" != postgres tagIds "${pgTutorial.tagIds}"`);
   return diff;
 }
 

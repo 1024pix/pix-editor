@@ -27,7 +27,7 @@ export async function list() {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations, pgDtos);
 }
@@ -43,7 +43,7 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareSkillDtos);
+  compareDtos(airtableDto, pgDto, compareSkillDtos, TABLE_NAME);
 
   if (!airtableDto) return null;
   return toDomain(airtableDto, translations, pgDto);
@@ -60,7 +60,7 @@ export async function getMany(ids) {
     translationRepository.listByEntities(model, ids),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations, pgDtos);
 }
@@ -71,7 +71,7 @@ export async function getByAirtableId(id) {
   const translations = await translationRepository.listByEntity(model, airtableDto.id);
   const pgDto = await selectSkills().where('skills.id', airtableDto.id).first();
 
-  compareDtos(airtableDto, pgDto, compareSkillDtos);
+  compareDtos(airtableDto, pgDto, compareSkillDtos, TABLE_NAME);
 
   return toDomain(airtableDto, translations, pgDto);
 }
@@ -91,14 +91,14 @@ export async function getManyByAirtableIds(ids) {
     )
     .orderBy('skills.id');
 
-  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareSkillDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations, pgDtos);
 }
 
 export async function listByTubeId(tubeId) {
   const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.filterByTubeId(tubeId), selectSkills().where('skills.tubeId', tubeId)]);
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
   const translations = await translationRepository.listByEntities(
@@ -118,7 +118,7 @@ export async function listActiveByCompetenceId(competenceId) {
       .orderBy('skills.id'),
   ]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
 
@@ -133,7 +133,7 @@ export async function listActiveByCompetenceId(competenceId) {
 export async function listByCompetenceId(competenceId) {
   const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.listByCompetenceId(competenceId), selectSkills().where('thematics.competenceId', competenceId).orderBy('skills.id')]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
 
@@ -177,7 +177,7 @@ export async function search(params) {
 
   const [airtableDtos, pgDtos] = await Promise.all([skillDatasource.search(params), query]);
 
-  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos);
+  compareDtosLists(airtableDtos ?? [], pgDtos, compareSkillDtos, TABLE_NAME);
 
   if (!airtableDtos) return [];
 
@@ -340,42 +340,42 @@ export async function update(skill) {
 
 function compareSkillDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`skill airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (!areNullableValuesEqual(airtableDto.status, pgDto.status))
-    diff.push(`skill airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
+    diff.push(`airtable status "${airtableDto.status}" != postgres status "${pgDto.status}"`);
   if (!areNullableValuesEqual(airtableDto.hintStatus, pgDto.hintStatus))
-    diff.push(`skill airtable hintStatus "${airtableDto.hintStatus}" != postgres hintStatus "${pgDto.hintStatus}"`);
+    diff.push(`airtable hintStatus "${airtableDto.hintStatus}" != postgres hintStatus "${pgDto.hintStatus}"`);
   if (!areNullableValuesEqual(airtableDto.descriptionStatus, pgDto.descriptionStatus))
     diff.push(
-      `skill airtable descriptionStatus "${airtableDto.descriptionStatus}" != postgres descriptionStatus "${pgDto.descriptionStatus}"`,
+      `airtable descriptionStatus "${airtableDto.descriptionStatus}" != postgres descriptionStatus "${pgDto.descriptionStatus}"`,
     );
   if (!areNullableValuesEqual(airtableDto.description, pgDto.description))
-    diff.push(`skill airtable description "${airtableDto.description}" != postgres description "${pgDto.description}"`);
+    diff.push(`airtable description "${airtableDto.description}" != postgres description "${pgDto.description}"`);
   if (!areNullableValuesEqual(airtableDto.level, pgDto.level))
-    diff.push(`skill airtable level "${airtableDto.level}" != postgres level "${pgDto.level}"`);
+    diff.push(`airtable level "${airtableDto.level}" != postgres level "${pgDto.level}"`);
   if (!areNullableValuesEqual(airtableDto.internationalisation, pgDto.internationalisation))
     diff.push(
-      `skill airtable internationalisation "${airtableDto.internationalisation}" != postgres internationalisation "${pgDto.internationalisation}"`,
+      `airtable internationalisation "${airtableDto.internationalisation}" != postgres internationalisation "${pgDto.internationalisation}"`,
     );
   if (!areNullableValuesEqual(airtableDto.version, pgDto.version))
-    diff.push(`skill airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
+    diff.push(`airtable version "${airtableDto.version}" != postgres version "${pgDto.version}"`);
   if (!areNullableValuesEqual(airtableDto.tubeId, pgDto.tubeId))
-    diff.push(`skill airtable tubeId "${airtableDto.tubeId}" != postgres tubeId "${pgDto.tubeId}"`);
+    diff.push(`airtable tubeId "${airtableDto.tubeId}" != postgres tubeId "${pgDto.tubeId}"`);
   if (airtableDto.name !== pgDto.name)
-    diff.push(`skill airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
+    diff.push(`airtable name "${airtableDto.name}" != postgres name "${pgDto.name}"`);
   if (!areNullableValuesEqual(airtableDto.competenceId, pgDto.competenceId))
     diff.push(
-      `skill airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
+      `airtable competenceId "${airtableDto.competenceId}" != postgres competenceId "${pgDto.competenceId}"`,
     );
   if (!areArrayEquals(airtableDto.tutorialIds, pgDto.tutorialIds))
-    diff.push(`skill airtable tutorialIds "${airtableDto.tutorialIds}" != postgres tutorialIds "${pgDto.tutorialIds}"`);
+    diff.push(`airtable tutorialIds "${airtableDto.tutorialIds}" != postgres tutorialIds "${pgDto.tutorialIds}"`);
   if (!areArrayEquals(airtableDto.learningMoreTutorialIds, pgDto.learningMoreTutorialIds))
     diff.push(
-      `skill airtable learningMoreTutorialIds "${airtableDto.learningMoreTutorialIds}" != postgres learningMoreTutorialIds "${pgDto.learningMoreTutorialIds}"`,
+      `airtable learningMoreTutorialIds "${airtableDto.learningMoreTutorialIds}" != postgres learningMoreTutorialIds "${pgDto.learningMoreTutorialIds}"`,
     );
   if (!areArrayEquals(airtableDto.challengeIds, pgDto.challengeIds))
     diff.push(
-      `skill airtable challengeIds "${airtableDto.challengeIds}" != postgres challengeIds "${pgDto.challengeIds}"`,
+      `airtable challengeIds "${airtableDto.challengeIds}" != postgres challengeIds "${pgDto.challengeIds}"`,
     );
   return diff;
 }

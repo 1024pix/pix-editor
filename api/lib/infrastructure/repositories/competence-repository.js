@@ -22,7 +22,7 @@ export async function list() {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -38,7 +38,7 @@ export async function getMany(ids) {
     translationRepository.listByEntities(model, ids),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareCompetenceDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -54,7 +54,7 @@ export async function get(id) {
     translationRepository.listByEntity(model, id),
   ]);
 
-  compareDtos(airtableDto, pgDto, compareCompetenceDtos);
+  compareDtos(airtableDto, pgDto, compareCompetenceDtos, TABLE_NAME);
 
   if (!airtableDto) return null;
 
@@ -67,7 +67,7 @@ export async function getByAirtableId(airtableId) {
 
   const [pgDto, translations] = await Promise.all([selectCompetences().where('competences.id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
-  compareDtos(airtableDto, pgDto, compareCompetenceDtos);
+  compareDtos(airtableDto, pgDto, compareCompetenceDtos, TABLE_NAME);
 
   return toDomain(airtableDto, translations);
 }
@@ -142,24 +142,24 @@ function selectCompetences() {
 function compareCompetenceDtos(airtableCompetence, pgCompetence) {
   const diff = [];
   if (airtableCompetence.id !== pgCompetence.id)
-    diff.push(`competence airtable id "${airtableCompetence.id}" != postgres id "${pgCompetence.id}"`);
+    diff.push(`airtable id "${airtableCompetence.id}" != postgres id "${pgCompetence.id}"`);
   if (airtableCompetence.index !== pgCompetence.index)
-    diff.push(`competence airtable index "${airtableCompetence.index}" != postgres index "${pgCompetence.index}"`);
+    diff.push(`airtable index "${airtableCompetence.index}" != postgres index "${pgCompetence.index}"`);
   if (airtableCompetence.areaId !== pgCompetence.areaId)
-    diff.push(`competence airtable areaId "${airtableCompetence.areaId}" != postgres areaId "${pgCompetence.areaId}"`);
+    diff.push(`airtable areaId "${airtableCompetence.areaId}" != postgres areaId "${pgCompetence.areaId}"`);
   if (airtableCompetence.origin !== pgCompetence.origin)
-    diff.push(`competence airtable origin "${airtableCompetence.origin}" != postgres origin "${pgCompetence.origin}"`);
+    diff.push(`airtable origin "${airtableCompetence.origin}" != postgres origin "${pgCompetence.origin}"`);
   if (!areArrayEquals(airtableCompetence.thematicIds, pgCompetence.thematicIds))
     diff.push(
-      `competence airtable thematicIds "${airtableCompetence.thematicIds}" != postgres thematicIds "${pgCompetence.thematicIds}"`,
+      `airtable thematicIds "${airtableCompetence.thematicIds}" != postgres thematicIds "${pgCompetence.thematicIds}"`,
     );
   if (!areArrayEquals(airtableCompetence.tubeIds, pgCompetence.tubeIds))
     diff.push(
-      `competence airtable tubeIds "${airtableCompetence.tubeIds}" != postgres tubeIds "${pgCompetence.tubeIds}"`,
+      `airtable tubeIds "${airtableCompetence.tubeIds}" != postgres tubeIds "${pgCompetence.tubeIds}"`,
     );
   if (!areArrayEquals(airtableCompetence.skillIds, pgCompetence.skillIds))
     diff.push(
-      `competence airtable skillIds "${airtableCompetence.skillIds}" != postgres skillIds "${pgCompetence.skillIds}"`,
+      `airtable skillIds "${airtableCompetence.skillIds}" != postgres skillIds "${pgCompetence.skillIds}"`,
     );
   return diff;
 }

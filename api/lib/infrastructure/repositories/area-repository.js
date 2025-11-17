@@ -47,7 +47,7 @@ export async function list() {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareAreaDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareAreaDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -63,7 +63,7 @@ export async function listByFrameworkId(frameworkId) {
     translationRepository.listByModel(model),
   ]);
 
-  compareDtosLists(airtableDtos, pgDtos, compareAreaDtos);
+  compareDtosLists(airtableDtos, pgDtos, compareAreaDtos, TABLE_NAME);
 
   return toDomainList(airtableDtos, translations);
 }
@@ -74,7 +74,7 @@ export async function getByAirtableId(areaAirtableId) {
 
   const [pgDto, translations] = await Promise.all([selectAreas().where('id', airtableDto.id).first(), translationRepository.listByEntity(model, airtableDto.id)]);
 
-  compareDtos(airtableDto, pgDto, compareAreaDtos);
+  compareDtos(airtableDto, pgDto, compareAreaDtos, TABLE_NAME);
 
   return toDomain(airtableDto, translations);
 }
@@ -108,16 +108,16 @@ export function toDomain(datasourceArea, translations = []) {
 
 function compareAreaDtos(airtableDto, pgDto) {
   const diff = [];
-  if (airtableDto.id !== pgDto.id) diff.push(`area airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
+  if (airtableDto.id !== pgDto.id) diff.push(`airtable id "${airtableDto.id}" != postgres id "${pgDto.id}"`);
   if (airtableDto.code !== pgDto.code)
-    diff.push(`area airtable code "${airtableDto.code}" != postgres code "${pgDto.code}"`);
+    diff.push(`airtable code "${airtableDto.code}" != postgres code "${pgDto.code}"`);
   if (!areNullableValuesEqual(airtableDto.color, pgDto.color))
-    diff.push(`area airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
+    diff.push(`airtable color "${airtableDto.color}" != postgres color "${pgDto.color}"`);
   if (airtableDto.frameworkId !== pgDto.frameworkId)
-    diff.push(`area airtable frameworkId "${airtableDto.frameworkId}" != postgres frameworkId "${pgDto.frameworkId}"`);
+    diff.push(`airtable frameworkId "${airtableDto.frameworkId}" != postgres frameworkId "${pgDto.frameworkId}"`);
   if (!areArrayEquals(airtableDto.competenceIds, pgDto.competenceIds))
     diff.push(
-      `area airtable competenceIds "${airtableDto.competenceIds}" != postgres competenceIds "${pgDto.competenceIds}"`,
+      `airtable competenceIds "${airtableDto.competenceIds}" != postgres competenceIds "${pgDto.competenceIds}"`,
     );
   return diff;
 }
