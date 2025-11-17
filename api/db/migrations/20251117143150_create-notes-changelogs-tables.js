@@ -9,7 +9,7 @@ export async function up(knex) {
     table.string('author').notNullable();
     table.string('elementId').notNullable();
     table.string('elementType').nullable();
-    table.timestamp('createdAt');
+    table.timestamp('createdAt').notNullable().defaultTo(knex.fn.now());
   });
 
   await knex.schema.createTable('notes', function(table) {

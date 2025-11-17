@@ -2,7 +2,7 @@ import nock from 'nock';
 import { describe, it, expect } from 'vitest';
 import { ChangelogEntry } from '../../../lib/domain/models/index.js';
 import { createServer } from '../../../server.js';
-import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import Airtable from 'airtable';
 
 const { Record: AirtableRecord } = Airtable;
@@ -92,6 +92,7 @@ describe('Acceptance | Routes | Notes', () => {
       expect(airtableScope.isDone()).toBe(true);
     });
   });
+
   describe('POST /changelog-entries', () => {
     it('returns 201 and created changelog entry', async function() {
       // given
@@ -160,6 +161,18 @@ describe('Acceptance | Routes | Notes', () => {
           },
         },
       });
+
+      await expect(knex.select('*').from('changelog_entries')).resolves.toStrictEqual([
+        {
+          id: 'changelog123',
+          text: 'Un texte',
+          author: 'NLE',
+          createdAt: expect.any(Date),
+          elementId: changelogEntry.elementId,
+          elementType: ChangelogEntry.ELEMENT_TYPES.ACQUIS,
+        },
+      ]);
+
       expect(airtableScope.isDone()).toBe(true);
     });
   });
