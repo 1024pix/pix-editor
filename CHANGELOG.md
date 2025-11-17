@@ -1,5 +1,25 @@
 
 
+## v3.238.0 (17/11/2025)
+
+
+### :rocket: Amélioration
+- [#1257](https://github.com/1024pix/pix-editor/pull/1257) [FEATURE] Suppression du proxy Airtable des notes et changelogs (PIX-20395).
+- [#1243](https://github.com/1024pix/pix-editor/pull/1243) [FEATURE] Modifier les champs modifiables d'une épreuve localisée (PIX-19748).
+
+### :building_construction: Tech
+- [#1259](https://github.com/1024pix/pix-editor/pull/1259) [TECH] Amélioration des warnings de migration Airtable.
+- [#1256](https://github.com/1024pix/pix-editor/pull/1256) [TECH] Supprime le script de remplissage des colonnes alpha et delta.
+- [#1253](https://github.com/1024pix/pix-editor/pull/1253) [TECH] Met à jour nock en version 15.
+- [#1237](https://github.com/1024pix/pix-editor/pull/1237) [TECH] Ajout stylistic dans l'api (PIX-20341).
+
+### :arrow_up: Montée de version
+- [#1252](https://github.com/1024pix/pix-editor/pull/1252) [BUMP] Update dependency browser-tools to v2.3.2 (.circleci).
+- [#1251](https://github.com/1024pix/pix-editor/pull/1251) [BUMP] Update dependency @1024pix/pix-ui to ^55.31.1 (pix-editor).
+- [#1250](https://github.com/1024pix/pix-editor/pull/1250) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.14 (pix-editor).
+- [#1249](https://github.com/1024pix/pix-editor/pull/1249) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.25 (pix-editor).
+- [#1225](https://github.com/1024pix/pix-editor/pull/1225) [BUMP] Lock file maintenance (api).
+
 ## v3.237.0 (10/11/2025)
 
 
