@@ -1,4 +1,5 @@
 import { fillByLabel, render } from '@1024pix/ember-testing-library';
+import Service from '@ember/service';
 import LocalizedChallengeView from 'pixeditor/components/localized-challenge-view/localized-challenge-view';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
@@ -6,7 +7,6 @@ import { module, test } from 'qunit';
 import { click, find } from '@ember/test-helpers';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
-import Service from '@ember/service';
 
 module('Integration | Component | localized-challenge-view | localized-challenge-view', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -54,15 +54,50 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     });
   });
 
+  module('when user is not allowed to edit a challenge', function(hooks) {
+    let mayChangeLocalizedChallengeStatusStub, mayEditLocalizedStub;
+    hooks.beforeEach(function() {
+      mayEditLocalizedStub = sinon.stub().returns(false);
+      mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
+
+      class AccessService extends Service {
+        mayChangeLocalizedChallengeStatus = mayChangeLocalizedChallengeStatusStub;
+        mayEditLocalized = mayEditLocalizedStub;
+      }
+      this.owner.register('service:access', AccessService);
+    });
+
+    test('it should not display edit button', async function(assert) {
+      // given
+      // when
+      screen = await render(<template>
+        <LocalizedChallengeView
+          @challengeLocale={{challengeLocale}}
+          @localizedChallenge={{localizedChallenge}}
+          @competence={{competence}}
+          @overview={{'overview'}}
+          @skillId={{'skillId'}}
+          @edition={{edition}}
+        />
+      </template>,
+      );
+
+      // then
+      assert.dom(screen.queryByRole('button', { name: 'Modifier' })).doesNotExist();
+    });
+  });
+
   module('when edition is false', function(hooks) {
-    let mayChangeLocalizedChallengeStatusStub;
+    let mayChangeLocalizedChallengeStatusStub, mayEditLocalizedStub;
     hooks.beforeEach(function() {
       edition = false;
       mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
       save = sinon.stub();
+      mayEditLocalizedStub = sinon.stub().returns(true);
 
       class AccessService extends Service {
         mayChangeLocalizedChallengeStatus = mayChangeLocalizedChallengeStatusStub;
+        mayEditLocalized = mayEditLocalizedStub;
       }
       this.owner.register('service:access', AccessService);
     });

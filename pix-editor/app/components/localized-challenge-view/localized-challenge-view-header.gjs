@@ -11,9 +11,9 @@ import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 
 export default class LocalizedChallengeViewHeader extends Component {
+  @service access;
   @service multipanelManager;
   @service router;
-  @service access;
 
   @action
   closePanel() {
@@ -33,6 +33,10 @@ export default class LocalizedChallengeViewHeader extends Component {
 
   get localizedChallenge() {
     return this.args.challengeLocale.localizedChallengeValue;
+  }
+
+  get mayEditLocalized() {
+    return this.access.mayEditLocalized(this.localizedChallenge);
   }
 
   get toggleLocalizedChallengeStatusButtonState() {
@@ -130,37 +134,37 @@ export default class LocalizedChallengeViewHeader extends Component {
             {{/let}}
           </div>
           <div class="challenge-view-header-second__right-action">
-            {{#if @edition}}
-              <PixButton
-                @triggerAction={{@cancelEdit}}
-                @variant="secondary"
-                aria-label="Annuler l'édition"
-              >
-                Annuler
-              </PixButton>
-              <PixButton
-                @triggerAction={{@save}}
-              >
-                Enregistrer
-              </PixButton>
-            {{else}}
-              {{#if this.mayChangeStatus}}
-
-              <PixButton
-                @triggerAction={{@toggleStatus}}
-                @iconBefore={{this.toggleLocalizedChallengeStatusButtonState.icon}}
-              >
-                {{this.toggleLocalizedChallengeStatusButtonState.name}}
-              </PixButton>
+            {{#if this.mayEditLocalized}}
+              {{#if @edition}}
+                <PixButton
+                  @triggerAction={{@cancelEdit}}
+                  @variant="secondary"
+                  aria-label="Annuler l'édition"
+                >
+                  Annuler
+                </PixButton>
+                <PixButton
+                  @triggerAction={{@save}}
+                >
+                  Enregistrer
+                </PixButton>
+              {{else}}
+                {{#if this.mayChangeStatus}}
+                  <PixButton
+                    @triggerAction={{@toggleStatus}}
+                    @iconBefore={{this.toggleLocalizedChallengeStatusButtonState.icon}}
+                  >
+                    {{this.toggleLocalizedChallengeStatusButtonState.name}}
+                  </PixButton>
+                {{/if}}
+                <PixButton
+                  @triggerAction={{@edit}}
+                  @iconAfter="edit"
+                >
+                  Modifier
+                </PixButton>
               {{/if}}
-              <PixButton
-                @triggerAction={{@edit}}
-                @iconAfter="edit"
-              >
-                Modifier
-              </PixButton>
             {{/if}}
-
           </div>
         </div>
     </header>
