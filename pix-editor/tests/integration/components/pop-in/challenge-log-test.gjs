@@ -31,7 +31,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
 
   test('it renders', async function(assert) {
     // when
-    await render(<template><PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}}/></template>);
+    await render(<template><PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}} @showModal={{true}}/></template>);
 
     // then
     assert.dom('.pix-modal').exists();
