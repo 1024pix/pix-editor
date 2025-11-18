@@ -39,11 +39,6 @@ export const hapi = {
   shouldCompressLargeJson: isFeatureEnabled(process.env.ALLOW_COMPRESSION_ON_LARGE_JSON),
 };
 
-export const airtable = {
-  apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
-  editorBase: process.env.AIRTABLE_EDITOR_BASE,
-};
-
 export const logging = {
   enabled: isFeatureEnabled(process.env.LOG_ENABLED),
   colorEnabled: process.env.NODE_ENV === 'development',
@@ -167,9 +162,6 @@ export const seedsConfig = {
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';
-
-  airtable.apiKey = 'airtableApiKeyValue';
-  airtable.editorBase = 'airtableEditorBaseValue';
 
   logging.enabled = false;
 
