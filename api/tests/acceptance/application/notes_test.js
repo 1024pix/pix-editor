@@ -2,7 +2,7 @@ import nock from 'nock';
 import { describe, it, expect } from 'vitest';
 import { Note } from '../../../lib/domain/models/index.js';
 import { createServer } from '../../../server.js';
-import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import Airtable from 'airtable';
 
 const { Record: AirtableRecord } = Airtable;
@@ -90,6 +90,7 @@ describe('Acceptance | Routes | Notes', () => {
       expect(airtableScope.isDone()).toBe(true);
     });
   });
+
   describe('POST /notes', () => {
     it('returns 201 and created note', async function() {
       // given
@@ -158,13 +159,37 @@ describe('Acceptance | Routes | Notes', () => {
           },
         },
       });
+
+      await expect(knex.select('*').from('notes')).resolves.toStrictEqual([
+        {
+          id: 'note123',
+          text: 'Un texte',
+          author: 'NLE',
+          status: Note.STATUSES.EN_COURS,
+          challengeId: 'challengeAbc123',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
       expect(airtableScope.isDone()).toBe(true);
     });
   });
+
   describe('PATCH /notes/:noteId', () => {
     it('returns 200 and updated note', async function() {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+
+      await knex.insert({
+        id: 'note123',
+        status: Note.STATUSES.EN_COURS,
+        text: 'Un texte',
+        author: 'NLE',
+        createdAt: new Date('2025-11-10T16:33:00Z'),
+        challengeId: 'challengeAbc123',
+      }).into('notes');
+
       await databaseBuilder.commit();
 
       const note = new Note({
@@ -179,8 +204,8 @@ describe('Acceptance | Routes | Notes', () => {
       const airtableNote = {
         id: note.id,
         fields: {
-          Statut: note.status,
-          Texte: note.text,
+          Statut: Note.STATUSES.TERMINE,
+          Texte: 'Un nouveau texte',
           Auteur: note.author,
           Date: note.createdAt,
           Record_Id: note.challengeId,
@@ -189,10 +214,9 @@ describe('Acceptance | Routes | Notes', () => {
         },
       };
       const expectedNoteBody = structuredClone(airtableNote);
-      delete expectedNoteBody.fields.Record_Id;
-      delete expectedNoteBody.fields.Auteur;
-      delete expectedNoteBody.fields.Texte;
+      delete expectedNoteBody.fields.Changelog;
       delete expectedNoteBody.fields.Date;
+      delete expectedNoteBody.fields['Type d\'élément'];
 
       const airtableScope = nock('https://api.airtable.com')
         .patch('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedNoteBody] })
@@ -207,7 +231,13 @@ describe('Acceptance | Routes | Notes', () => {
         payload: {
           data: {
             type: 'notes',
-            attributes: { status: note.status },
+            attributes: {
+              status: Note.STATUSES.TERMINE,
+              text: 'Un nouveau texte',
+              author: note.author,
+              createdAt: note.createdAt,
+              challengeId: note.challengeId,
+            },
           },
         },
       });
@@ -219,13 +249,26 @@ describe('Acceptance | Routes | Notes', () => {
           type: 'notes',
           id: 'note123',
           attributes: {
-            text: 'Un texte',
+            text: 'Un nouveau texte',
             author: 'NLE',
             'created-at': note.createdAt.toISOString(),
-            status: Note.STATUSES.EN_COURS,
+            status: Note.STATUSES.TERMINE,
           },
         },
       });
+
+      await expect(knex.select('*').from('notes')).resolves.toStrictEqual([
+        {
+          id: 'note123',
+          text: 'Un nouveau texte',
+          author: 'NLE',
+          status: Note.STATUSES.TERMINE,
+          challengeId: 'challengeAbc123',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+
       expect(airtableScope.isDone()).toBe(true);
     });
   });

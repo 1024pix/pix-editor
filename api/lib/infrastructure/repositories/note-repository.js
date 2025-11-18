@@ -1,6 +1,7 @@
 import Airtable from 'airtable';
 import * as config from '../../config.js';
 import { Note } from '../../domain/models/Note.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
 const TABLE_NAME = 'Notes';
 
@@ -37,15 +38,23 @@ export async function create(note) {
       Changelog: 'non',
     },
   };
-  const records = await _airtableClient().table(TABLE_NAME).create([airtableRecordToCreate]);
+  const [record] = await _airtableClient().table(TABLE_NAME).create([airtableRecordToCreate]);
+
+  await knex.insert({
+    id: record.id,
+    status: note.status,
+    text: note.text,
+    author: note.author,
+    challengeId: note.challengeId,
+  }).into('notes');
 
   return new Note({
-    id: records[0].id,
-    status: records[0].get('Statut'),
-    text: records[0].get('Texte'),
-    author: records[0].get('Auteur'),
-    createdAt: records[0].get('Date'),
-    challengeId: records[0].get('Record_Id'),
+    id: record.id,
+    status: record.get('Statut'),
+    text: record.get('Texte'),
+    author: record.get('Auteur'),
+    createdAt: record.get('Date'),
+    challengeId: record.get('Record_Id'),
   });
 }
 
@@ -57,11 +66,17 @@ export async function update(noteId, note) {
       Texte: note.text,
       Auteur: note.author,
       Record_Id: note.challengeId,
-      'Type d\'élément': 'épreuve',
-      Changelog: 'non',
     },
   };
   const [record] = await _airtableClient().table(TABLE_NAME).update([airtableRecordToUpdate]);
+
+  await knex('notes').update({
+    status: note.status,
+    text: note.text,
+    author: note.author,
+    challengeId: note.challengeId,
+    updatedAt: knex.fn.now(),
+  }).where('id', noteId);
 
   return new Note({
     id: record.id,
