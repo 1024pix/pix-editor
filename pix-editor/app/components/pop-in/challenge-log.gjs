@@ -1,7 +1,12 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import AriaTabs from 'ember-aria-tabs';
+import FormNote from '../../components/form/note';
+import ListNotes from '../../components/list/notes';
 
 export default class PopinChallengeLog extends Component {
   @service store;
@@ -114,4 +119,55 @@ export default class PopinChallengeLog extends Component {
   editEntry() {
     this.logEntryEdition = true;
   }
+
+  <template>
+    <PixModal
+      @title={{this.title}}
+      @onCloseButtonClick={{@close}}
+      @showModal={{@showModal}}
+    >
+      <:content>
+        {{#if this.list}}
+          <div class="ui content segment basic custom-tab">
+            <AriaTabs as |at|>
+              <div class="ui top attached tabular menu">
+                <at.tabList as |tl|>
+                  <tl.tab>Mes notes</tl.tab>
+                  <tl.tab>Toutes les notes </tl.tab>
+                  <tl.tab data-test-changelog-tab>Changelog</tl.tab>
+                </at.tabList>
+              </div>
+              <at.tabPanel>
+                <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="own">
+                  <ListNotes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
+                  <div class="ui text menu note-menu">
+                    <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
+                  </div>
+                </div>
+              </at.tabPanel>
+              <at.tabPanel>
+                <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="notes">
+                  <ListNotes @list={{this.notes}} @show={{this.showNote}} />
+                </div>
+              </at.tabPanel>
+              <at.tabPanel>
+                <div class="ui bottom attached tab segment active {{unless this.changelogLoaded "loading"}}" data-tab="notes">
+                  <ListNotes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
+                </div>
+              </at.tabPanel>
+            </AriaTabs>
+          </div>
+        {{else}}
+          <FormNote
+            @entry={{this.logEntry}}
+            @edition={{this.logEntryEdition}}
+            @close={{this.closeLogForm}}
+            @save={{this.saveEntry}}
+            @mayEdit={{this.mayEditEntry}}
+            @edit={{this.editEntry}}
+          />
+        {{/if}}
+      </:content>
+    </PixModal>
+  </template>
 }
