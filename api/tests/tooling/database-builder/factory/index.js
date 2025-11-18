@@ -1,6 +1,7 @@
 export * from './build-area.js';
 export * from './build-attachment.js';
 export * from './build-challenge.js';
+export * from './build-changelog-entry.js';
 export * from './build-competence.js';
 export * from './build-framework.js';
 export * from './build-localized-challenge.js';

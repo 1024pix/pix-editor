@@ -11,10 +11,26 @@ describe('Acceptance | Routes | Notes', () => {
   describe('GET /changelog-entries', () => {
     it('returns changelog entries for a challenge', async function() {
       // given
-      const user = databaseBuilder.factory.buildAdminUser();
-      await databaseBuilder.commit();
-
       const challengeId = 'challengeAbc123';
+
+      const user = databaseBuilder.factory.buildAdminUser();
+
+      databaseBuilder.factory.buildChangelogEntry({
+        id: 'rec123',
+        text: 'Un texte',
+        author: 'NLE',
+        elementId: challengeId,
+        elementType: 'épreuve',
+      });
+      databaseBuilder.factory.buildChangelogEntry({
+        id: 'rec456',
+        text: 'Un autre texte',
+        author: 'FOO',
+        elementId: challengeId,
+        elementType: 'épreuve',
+      });
+
+      await databaseBuilder.commit();
 
       const airtableChangelogEntries = [
         {
