@@ -5,6 +5,7 @@ export * from './build-competence.js';
 export * from './build-framework.js';
 export * from './build-localized-challenge.js';
 export * from './build-mission.js';
+export * from './build-note.js';
 export * from './build-release.js';
 export * from './build-skill.js';
 export * from './build-static-course.js';
