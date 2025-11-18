@@ -2,22 +2,6 @@
 
 .popin-prototype-log,
 .popin-alternative-log {
-  .tab.segment {
-    min-height: 400px;
-    max-height: 400px;
-    padding: 0;
-
-    &.ui.bottom.attached:last-child {
-      margin-bottom: 1rem;
-    }
-
-    &.active {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-
   .own-note-list,
   .changelog-entry-list,
   .note-list {
@@ -91,6 +75,47 @@
 
     .field.disabled textarea, .field.disabled .selection {
       background-color: #f9f9f9;
+    }
+  }
+}
+
+.challenge-log__tabs {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  gap: var(--pix-spacing-2x);
+  height: min-content;
+  border-bottom: 2px solid var(--pix-primary-500);
+
+  & button {
+    padding: var(--pix-spacing-3x) var(--pix-spacing-4x);
+    color: var(--pix-neutral-900);
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: background-color ease 500ms;
+
+    &.active {
+      color: var(--pix-neutral-0);
+      font-weight: var(--pix-font-bold);
+      background-color: var(--pix-primary-500);
+    }
+
+    &:focus,
+    &:focus-visible {
+      color: var(--pix-neutral-0);
+      background-color: rgba(var(--pix-primary-500-inline), 80%);
+      outline: 1px solid var(--pix-neutral-0);
+      outline-offset: -5px;
+    }
+
+    &:active {
+      background-color: rgba(var(--pix-primary-500-inline), 50%);
+      outline: none;
+    }
+
+    &:hover:not(.active) {
+      background-color: rgba(var(--pix-primary-500-inline), 30%);
+      transition: background-color ease 500ms;
     }
   }
 }

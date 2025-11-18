@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import PopinChallengeLog from 'pixeditor/components/pop-in/challenge-log';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -7,6 +7,8 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | popin-challenge-log', function(hooks) {
   setupIntlRenderingTest(hooks);
+
+  let challenge, closeAction;
 
   hooks.beforeEach(function() {
     const store = this.owner.lookup('service:store');
@@ -17,20 +19,19 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
       createdAt: new Date(2020, 8, 22),
       status: 'en cours',
     });
-    const challenge = store.createRecord('challenge', {
+    challenge = store.createRecord('challenge', {
       id: 'rec654258',
       locales: ['Francophone', 'Franco Français'],
       instruction: 'Some instructions 1',
       notes: [note],
     });
 
-    this.closeAction = sinon.stub();
-    this.challenge = challenge;
+    closeAction = sinon.stub();
   });
 
   test('it renders', async function(assert) {
     // when
-    await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
+    await render(<template><PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}}/></template>);
 
     // then
     assert.dom('.pix-modal').exists();

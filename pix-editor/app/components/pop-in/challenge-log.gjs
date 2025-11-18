@@ -3,8 +3,9 @@ import { inject as service } from '@ember/service';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import AriaTabs from 'ember-aria-tabs';
+import { eq } from 'ember-truth-helpers';
 import FormNote from '../../components/form/note';
 import ListNotes from '../../components/list/notes';
 
@@ -21,6 +22,8 @@ export default class PopinChallengeLog extends Component {
   @tracked logEntryEdition = false;
   @tracked list = true;
   @tracked mayEditEntry = false;
+
+  @tracked currentTabId = 'tab1';
 
   constructor(...args) {
     super(...args);
@@ -120,6 +123,14 @@ export default class PopinChallengeLog extends Component {
     this.logEntryEdition = true;
   }
 
+  @action
+  onTabClick(e) {
+    const tabId = e.target.id;
+    if (tabId !== this.currentTabId) {
+      this.currentTabId = tabId;
+    }
+  }
+
   <template>
     <PixModal
       @title={{this.title}}
@@ -128,34 +139,25 @@ export default class PopinChallengeLog extends Component {
     >
       <:content>
         {{#if this.list}}
-          <div class="ui content segment basic custom-tab">
-            <AriaTabs as |at|>
-              <div class="ui top attached tabular menu">
-                <at.tabList as |tl|>
-                  <tl.tab>Mes notes</tl.tab>
-                  <tl.tab>Toutes les notes </tl.tab>
-                  <tl.tab data-test-changelog-tab>Changelog</tl.tab>
-                </at.tabList>
-              </div>
-              <at.tabPanel>
-                <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="own">
-                  <ListNotes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
-                  <div class="ui text menu note-menu">
-                    <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
-                  </div>
-                </div>
-              </at.tabPanel>
-              <at.tabPanel>
-                <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="notes">
-                  <ListNotes @list={{this.notes}} @show={{this.showNote}} />
-                </div>
-              </at.tabPanel>
-              <at.tabPanel>
-                <div class="ui bottom attached tab segment active {{unless this.changelogLoaded "loading"}}" data-tab="notes">
-                  <ListNotes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
-                </div>
-              </at.tabPanel>
-            </AriaTabs>
+          <div role="tablist" aria-label="Liste des notes" class="challenge-log__tabs">
+            <button role="tab" class="{{if (eq this.currentTabId 'tab1') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab1'}} aria-controls="tabpanel1" id="tab1">Mes notes</button>
+            <button role="tab" class="{{if (eq this.currentTabId 'tab2') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab2'}} aria-controls="tabpanel2" id="tab2">Toutes les notes</button>
+            <button role="tab" class="{{if (eq this.currentTabId 'tab3') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab3'}} aria-controls="tabpanel3" id="tab3">Changelog</button>
+          </div>
+
+          <div id="tabpanel1" role="tabpanel" tabindex="0" aria-labelledby="tab1" class="{{if (eq this.currentTabId 'tab1') "" "hidden"}}" data-tab="notes">
+            <ListNotes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
+            <div class="ui text menu note-menu">
+              <PixButton @triggerAction={{this.addNote}} @variant="tertiary" @size="small" @iconBefore="add">
+                Nouvelle note
+              </PixButton>
+            </div>
+          </div>
+          <div id="tabpanel2" role="tabpanel" tabindex="0" aria-labelledby="tab2" class="{{if (eq this.currentTabId 'tab2') "" "hidden"}}" data-tab="notes">
+            <ListNotes @list={{this.notes}} @show={{this.showNote}} />
+          </div>
+          <div id="tabpanel3" role="tabpanel" tabindex="0" aria-labelledby="tab3" class="{{if (eq this.currentTabId 'tab3') "" "hidden"}}" data-tab="notes">
+            <ListNotes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
           </div>
         {{else}}
           <FormNote
