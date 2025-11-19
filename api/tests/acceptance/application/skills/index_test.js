@@ -805,7 +805,7 @@ describe('Application | Route | Skills', () => {
         airtableSkillsScope = nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Acquis')
           .query({
-            filterByFormula: 'FIND("@skil", LOWER(Nom))',
+            filterByFormula: 'AND(FIND("@skil", LOWER(Nom)), Nom != "@workbench")',
             fields: { '': skillDatasource.usedFields },
             sort: [{ field: 'Nom', direction: 'asc' }],
             maxRecords: 10,

@@ -116,7 +116,7 @@ export const skillDatasource = datasource.extend({
   },
 
   async search(params) {
-    const filterByFormula = `FIND(${stringValue(params.filter.name.toLowerCase())}, LOWER(Nom))`;
+    const filterByFormula = `AND(FIND(${stringValue(params.filter.name.toLowerCase())}, LOWER(Nom)), Nom != "@workbench")`;
 
     let sort = params.sort
       ?.filter(([field]) => this.sortableFields[field])
