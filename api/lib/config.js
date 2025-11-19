@@ -150,13 +150,13 @@ export const phrase = {
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
 export const seedsConfig = {
-  cntFrameworks: _getNumber(process.env.AIRTABLE_SEEDS_CNT_FRAMEWORKS, 2),
-  cntAreasPerFramework: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
-  cntCompetencesPerArea: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),
-  cntThematicsPerCompetence: _getNumber(process.env.AIRTABLE_SEEDS_CNT_THEMATICS, 2),
-  cntTubesPerThematic: _getNumber(process.env.AIRTABLE_SEEDS_CNT_TUBES, 2),
-  skillMaxLevel: _getNumber(process.env.AIRTABLE_SEEDS_SKILL_LEVEL, 3),
-  locales: _getStringArray(process.env.AIRTABLE_SEEDS_LOCALES, ['fr', 'en']),
+  cntFrameworks: _getNumber(process.env.SEEDS_CNT_FRAMEWORKS, 2),
+  cntAreasPerFramework: _getNumber(process.env.SEEDS_CNT_AREAS, 2),
+  cntCompetencesPerArea: _getNumber(process.env.SEEDS_CNT_COMPETENCES, 2),
+  cntThematicsPerCompetence: _getNumber(process.env.SEEDS_CNT_THEMATICS, 2),
+  cntTubesPerThematic: _getNumber(process.env.SEEDS_CNT_TUBES, 2),
+  skillMaxLevel: _getNumber(process.env.SEEDS_SKILL_LEVEL, 3),
+  locales: _getStringArray(process.env.SEEDS_LOCALES, ['fr', 'en']),
 };
 
 if (process.env.NODE_ENV === 'test') {
