@@ -11,10 +11,26 @@ describe('Acceptance | Routes | Notes', () => {
   describe('GET /notes', () => {
     it('returns notes for a challenge', async function() {
       // given
-      const user = databaseBuilder.factory.buildAdminUser();
-      await databaseBuilder.commit();
-
       const challengeId = 'challengeAbc123';
+
+      const user = databaseBuilder.factory.buildAdminUser();
+
+      databaseBuilder.factory.buildNote({
+        id: 'rec123',
+        text: 'Un texte',
+        author: 'NLE',
+        challengeId,
+        status: Note.STATUSES.TERMINE,
+      });
+      databaseBuilder.factory.buildNote({
+        id: 'rec456',
+        text: 'Un autre texte',
+        author: 'FOO',
+        challengeId,
+        status: Note.STATUSES.EN_COURS,
+      });
+
+      await databaseBuilder.commit();
 
       const airtableNotes = [
         {
@@ -181,14 +197,14 @@ describe('Acceptance | Routes | Notes', () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
 
-      await knex.insert({
+      databaseBuilder.factory.buildNote({
         id: 'note123',
         status: Note.STATUSES.EN_COURS,
         text: 'Un texte',
         author: 'NLE',
         createdAt: new Date('2025-11-10T16:33:00Z'),
         challengeId: 'challengeAbc123',
-      }).into('notes');
+      });
 
       await databaseBuilder.commit();
 
