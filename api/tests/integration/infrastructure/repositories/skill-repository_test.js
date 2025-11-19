@@ -619,7 +619,7 @@ describe('Integration | Repository | skill-repository', () => {
         // then
         expect(results).toEqual([]);
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
-          filterByFormula: 'FIND("@notfound", LOWER(Nom))',
+          filterByFormula: 'AND(FIND("@notfound", LOWER(Nom)), Nom != "@workbench")',
           fields: skillDatasource.usedFields,
           sort: [{ field: 'Nom', direction: 'asc' }, { field: 'Version', direction: 'desc' }],
           maxRecords: 10,
@@ -738,7 +738,7 @@ describe('Integration | Repository | skill-repository', () => {
         // then
         expect(results).toStrictEqual(skills.map(domainBuilder.buildSkill));
         expect(findRecordsSpy).toHaveBeenCalledWith(skillDatasource.tableName, {
-          filterByFormula: 'FIND("@skill", LOWER(Nom))',
+          filterByFormula: 'AND(FIND("@skill", LOWER(Nom)), Nom != "@workbench")',
           fields: skillDatasource.usedFields,
           sort: [{ field: skillDatasource.sortField, direction: 'asc' }],
         });

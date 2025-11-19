@@ -150,7 +150,7 @@ export async function search(params) {
     'tubes.name',
     'skills.level',
     `${escapeLikeWildcards(params.filter.name)}%`,
-  ]);
+  ]).where('tubes.name', '<>', '@workbench');
   if (params.sort) {
     const orderBySqlAndParams = params.sort.map(([field, direction]) => {
       if (field === 'name') {
