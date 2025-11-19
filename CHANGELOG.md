@@ -1,5 +1,22 @@
 
 
+## v3.239.0 (19/11/2025)
+
+
+### :building_construction: Tech
+- [#1266](https://github.com/1024pix/pix-editor/pull/1266) [TECH] Double lecture notes et changelogs (PIX-20397).
+- [#1262](https://github.com/1024pix/pix-editor/pull/1262) [TECH] Ecrit les notes et changelogs dans PG (PIX-20396).
+
+### :bug: Correction
+- [#1268](https://github.com/1024pix/pix-editor/pull/1268) [BUGFIX] @workbench dans la recherche d'acquis.
+- [#1264](https://github.com/1024pix/pix-editor/pull/1264) [BUGFIX] Correction message warning migration Airtable.
+
+### :arrow_up: Montée de version
+- [#1261](https://github.com/1024pix/pix-editor/pull/1261) [BUMP] Update dependency @1024pix/pix-ui to ^55.31.2 (pix-editor).
+- [#1260](https://github.com/1024pix/pix-editor/pull/1260) [BUMP] Update dependency @1024pix/oppsy to ^1.0.2 (api).
+- [#1255](https://github.com/1024pix/pix-editor/pull/1255) [BUMP] Update Node.js to v24.
+- [#1258](https://github.com/1024pix/pix-editor/pull/1258) [BUMP] Update dependency js-yaml to v4.1.1 [SECURITY].
+
 ## v3.238.0 (17/11/2025)
 
 
