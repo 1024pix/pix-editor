@@ -76,7 +76,7 @@ export function register(server) {
               id: Types.tubeId().required(),
               attributes: Joi.object({
                 name: Joi.string().required().pattern(/^@.+$/),
-                index: Joi.number(),
+                index: Joi.number().allow(null),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
                 'practical-description-fr': Joi.string().allow(null),

@@ -97,7 +97,7 @@ export async function register(server) {
                 'description-status': Joi.string().allow(null),
                 clue: Joi.string().allow(null),
                 'clue-en': Joi.string().allow(null),
-                'clue-status': Joi.string().empty(''),
+                'clue-status': Joi.string().empty('').allow(null),
                 i18n: Joi.string().allow(null),
                 status: Joi.string().allow(null),
               }).unknown(true),
