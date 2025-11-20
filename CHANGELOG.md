@@ -1,5 +1,11 @@
 
 
+## v3.239.1 (20/11/2025)
+
+
+### :bug: Correction
+- [#1269](https://github.com/1024pix/pix-editor/pull/1269) [BUGFIX] Fermeture du panneau de création d’épreuves ou d’acquis (PIX-20498).
+
 ## v3.239.0 (19/11/2025)
 
 
