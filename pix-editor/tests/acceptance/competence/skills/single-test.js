@@ -3,6 +3,7 @@ import { click, currentURL, fillIn, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
@@ -10,9 +11,11 @@ import { setupApplicationTest } from '../../../setup-application-rendering';
 module('Acceptance | skill | single', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let skill1, competence1, tube1;
+  let skill1, competence1, tube1, originalWindowConfirm;
 
   hooks.beforeEach(function() {
+    originalWindowConfirm = window.confirm;
+
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -58,7 +61,14 @@ module('Acceptance | skill | single', function(hooks) {
     return authenticateSession();
   });
 
+  hooks.afterEach(function() {
+    window.confirm = originalWindowConfirm;
+  });
+
   test('close single', async function(assert) {
+    const confirmStub = sinon.stub(window, 'confirm');
+    confirmStub.returns(true);
+
     await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
     await click(find('.icon.window.close'));
 
