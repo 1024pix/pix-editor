@@ -1,6 +1,10 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import { LOCALE_TO_LANGUAGE_MAP, TUTORIAL_LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
+import { loadEnvFileIfExists } from './shared/load-env-file-if-exists.js';
+
+loadEnvFileIfExists();
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
