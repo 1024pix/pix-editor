@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
 import PopInImage from '../pop-in/image';
+import PopInConfirm from '../pop-in/confirm';
 import Files from '../v2/field/files';
 import Illustration from '../v2/field/illustration';
 import FieldToggleFieldComponent from '../v2/field/toggle-field';
@@ -31,6 +32,7 @@ export default class LocalizedChallenge extends Component {
   @tracked isPopInIllustrationDisplayed = false;
   @tracked urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
   @tracked attachmentBasename = '';
+  @tracked displayConfirm = false;
 
   @tracked urlsToConsultTextareaHeigh = this.args.localizedChallenge.urlsToConsult?.length ?? 2;
 
@@ -78,6 +80,16 @@ export default class LocalizedChallenge extends Component {
 
   get shouldDisplayIllustration() {
     return !!this.primaryChallenge.illustration;
+  }
+
+  get confirmTitle() {
+    return this.args.localizedChallenge.isInProduction ? 'Mise en pause' : 'Mise en prod';
+  }
+
+  get confirmContent() {
+    return this.args.localizedChallenge.isInProduction
+      ? 'Êtes-vous sûr de vouloir mettre en pause cette épreuve ?'
+      : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
   }
 
   @action
@@ -241,6 +253,28 @@ export default class LocalizedChallenge extends Component {
     }
   }
 
+  @action
+  async confirmApprove() {
+    this.args.localizedChallenge.status = this.args.localizedChallenge.isInProduction ? 'proposé' : 'validé';
+    try {
+      this.loader.start('Enregistrement');
+      await this.args.localizedChallenge.save();
+      this.notify.message('Statut modifié avec succès !');
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.notify.error(this.args.localizedChallenge.isInProduction ? 'Erreur de la mise en prod de l\'épreuve localisée' : 'Erreur de la mise en pause de l\'épreuve localisée');
+    } finally {
+      this.loader.stop();
+      this.displayConfirm = false;
+    }
+  }
+
+  @action
+  confirmDeny() {
+    this.displayConfirm = false;
+  }
+
   async _handleIllustration() {
     const illustration = this.args.localizedChallenge.illustration;
     if (illustration && illustration.isNew) {
@@ -302,6 +336,11 @@ export default class LocalizedChallenge extends Component {
   }
 
   @action
+  displayConfirmPopIn() {
+    this.displayConfirm = true;
+  }
+
+  @action
   updateBasename(e) {
     this.attachmentBasename = e.target.value;
   }
@@ -317,6 +356,7 @@ export default class LocalizedChallenge extends Component {
       @edit={{@edit}}
       @save={{this.save}}
       @cancelEdit={{this.cancelEdit}}
+      @toggleStatus={{this.displayConfirmPopIn}}
     />
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">
@@ -419,6 +459,13 @@ export default class LocalizedChallenge extends Component {
         @showModal={{this.isPopInIllustrationDisplayed}}
       />
       {{/if}}
+      <PopInConfirm
+        @title={{this.confirmTitle}}
+        @content={{this.confirmContent}}
+        @onApprove={{this.confirmApprove}}
+        @onDeny={{this.confirmDeny}}
+        @showModal={{this.displayConfirm}}
+      />
     </div>
   </template>
 }
