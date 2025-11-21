@@ -144,14 +144,14 @@ export default class LocalizedChallengeViewHeader extends Component {
                   Annuler
                 </PixButton>
                 <PixButton
-                  @triggerAction={{@save}}
+                  @triggerAction={{@openSaveConfirmPopin}}
                 >
                   Enregistrer
                 </PixButton>
               {{else}}
                 {{#if this.mayChangeStatus}}
                   <PixButton
-                    @triggerAction={{@toggleStatus}}
+                    @triggerAction={{@openProductionStatusConfirmPopin}}
                     @iconBefore={{this.toggleLocalizedChallengeStatusButtonState.icon}}
                   >
                     {{this.toggleLocalizedChallengeStatusButtonState.name}}
