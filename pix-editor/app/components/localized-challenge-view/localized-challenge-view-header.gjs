@@ -31,11 +31,6 @@ export default class LocalizedChallengeViewHeader extends Component {
     await navigator.clipboard.writeText(this.args.challengeLocale.localizedPreviewUrl);
   }
 
-  @action
-  async toggleLocalizedChallengeStatus() {
-    await navigator.clipboard.writeText(this.args.challengeLocale.localizedPreviewUrl);
-  }
-
   get localizedChallenge() {
     return this.args.challengeLocale.localizedChallengeValue;
   }
