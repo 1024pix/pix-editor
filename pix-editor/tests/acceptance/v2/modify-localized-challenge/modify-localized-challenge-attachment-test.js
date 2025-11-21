@@ -1,4 +1,4 @@
-import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -133,6 +133,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
     await clickByText('Enregistrer');
 
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
+
     const attachments = await store.peekAll('attachment');
 
     // then
@@ -158,6 +161,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     await clickByText('Supprimer la pièce jointe attachmentName1');
 
     await clickByText('Enregistrer');
+
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
 
     const attachments = await store.peekAll('attachment');
 
@@ -197,10 +203,13 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
       localizedChallengeId: 'localizedChallengeIdProto',
     });
     // when
-    await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
     await clickByText('Modifier');
     await fillByLabel('Nom :', 'newName');
     await clickByText('Enregistrer');
+
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
 
     // then
     const attachment = await store.findRecord('attachment', 'attachmentId1');

@@ -1,4 +1,5 @@
-import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
+import { clickByText, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
@@ -121,6 +122,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     await selectFiles(screen.getByLabelText('Choisir une image'), file);
     await clickByText('Enregistrer');
 
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
+
     const attachments = await store.peekAll('attachment');
 
     // then
@@ -147,9 +151,15 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     await clickByText('Enregistrer');
 
     // replace illustrationA with illustrationB
+    let dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
+
     await clickByText('Modifier');
     await selectFiles(screen.getByLabelText('Choisir une image'), illustrationB);
     await clickByText('Enregistrer');
+
+    dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
 
     const attachments = store.peekAll('attachment').slice();
 
@@ -165,12 +175,14 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto', localizedChallengeId: 'localizedChallengeIdProto' });
 
     // when
-    await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
 
     await clickByText('Modifier');
     await clickByText('Supprimer l\'image');
-
     await clickByText('Enregistrer');
+
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
 
     const attachments = await store.peekAll('attachment');
 
