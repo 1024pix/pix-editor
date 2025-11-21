@@ -303,6 +303,23 @@ module('Integration | Component | pop-in-select-location / form-select-location'
       assert.ok(onSubmitStub.calledWith(skill1_1_1_1_1));
       assert.true(closeModalStub.calledOnce);
     });
+
+    test('it should prevent submit when is disabled', async function(assert) {
+      // when
+      await click(screen.getByLabelText('Compétence'));
+      await click(await screen.findByRole('option', { name: '1.1 competence1_1_1' }));
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByLabelText('Sujet'));
+      await click(await screen.findByRole('option', { name: 'tube1_1_1_1' }));
+      await waitForSelectToBeClosed(screen);
+
+      await click(screen.getByRole('button', { name: 'Déplacer' }));
+      // then
+
+      assert.notOk(onSubmitStub.calledOnce);
+      assert.notOk(closeModalStub.calledOnce);
+    });
   });
 
   module('if variant is `skill`', function(hooks) {

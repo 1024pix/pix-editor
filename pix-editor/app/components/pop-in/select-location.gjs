@@ -29,6 +29,7 @@ export default class PopinSelectLocation extends Component {
 
   @action
   onSubmit(...args) {
+    if (this.disableActionButton) return;
     this.args.onSubmit(...args);
     this.closeModal();
   }
@@ -63,8 +64,8 @@ export default class PopinSelectLocation extends Component {
           @isDisabled={{this.disableActionButton}}
           @type="submit"
           form="form-select-location"
+          @iconBefore="check"
         >
-          <i class="checkmark icon"></i>
           {{this.actionButtonTitle}}
         </PixButton>
       </:footer>
