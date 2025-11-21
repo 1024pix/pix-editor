@@ -10,6 +10,7 @@ import * as frameworksRoute from './application/frameworks.js';
 import * as healthcheckRoute from './application/healthcheck/index.js';
 import * as heapdumpRoute from './application/heapdump.js';
 import * as localizedChallengesRoute from './application/localized-challenges.js';
+import * as localizedFrameworkTubesRoute from './application/localized-framework-tubes/index.js';
 import * as missionsRoute from './application/missions/index.js';
 import * as notesRoute from './application/notes.js';
 import * as phraseRoute from './application/phrase.js';
@@ -39,6 +40,7 @@ export const routes = [
   heapdumpRoute,
   healthcheckRoute,
   localizedChallengesRoute,
+  localizedFrameworkTubesRoute,
   missionsRoute,
   notesRoute,
   phraseRoute,
