@@ -1,5 +1,22 @@
 
 
+## v3.240.0 (24/11/2025)
+
+
+### :rocket: Amélioration
+- [#1267](https://github.com/1024pix/pix-editor/pull/1267) [FEATURE] Ne pas afficher le bouton de modification d'une épreuve traduite lorsqu'on n'a pas les droits (PIX-20451).
+- [#1274](https://github.com/1024pix/pix-editor/pull/1274) [FEATURE] Ajout d'une nouvelle table `localized_framework_tubes` (PIX-20504).
+- [#1263](https://github.com/1024pix/pix-editor/pull/1263) [FEATURE] Permettre de mettre en prod/pause des épreuves traduites (PIX-19749).
+
+### :bug: Correction
+- [#1271](https://github.com/1024pix/pix-editor/pull/1271) [BUGFIX] Lors d'un déplacement d'épreuves, on peut valider le déplacement alors que le bouton est disabled (PIX-20518).
+- [#1272](https://github.com/1024pix/pix-editor/pull/1272) [BUGFIX] Supprimer une méthode inutile (PIX-20525).
+
+### :arrow_up: Montée de version
+- [#1277](https://github.com/1024pix/pix-editor/pull/1277) [BUMP] Lock file maintenance (pix-editor).
+- [#1276](https://github.com/1024pix/pix-editor/pull/1276) [BUMP] Lock file maintenance (api).
+- [#1275](https://github.com/1024pix/pix-editor/pull/1275) [BUMP] Update dependency @1024pix/pix-ui to ^55.32.0 (pix-editor).
+
 ## v3.239.1 (20/11/2025)
 
 
