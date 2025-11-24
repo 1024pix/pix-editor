@@ -41,7 +41,9 @@ export default class SingleController extends Controller {
   @tracked urlsToConsult = '';
 
   deletedFiles = [];
+
   @controller('authenticated.competence') parentController;
+  @controller('authenticated.competence.prototypes') overviewController;
 
   get challengeStatusActionsId() {
     return `challenge-${this.challenge.id}-status-actions`;
@@ -408,6 +410,7 @@ export default class SingleController extends Controller {
         const prototype = this.challenge;
         await this._setSkill(prototype, skill);
         await this._handleChangelog(prototype, changelog);
+        await this.overviewController.send('refreshModel');
       } catch (error) {
         Sentry.captureException(error);
         this._message(this.intl.t('challenge.move.error'));
@@ -426,21 +429,16 @@ export default class SingleController extends Controller {
     const prototypeVersion = skill.getNextPrototypeVersion();
     const challenges = prototype.alternatives;
     challenges.push(prototype);
-    const updateChallenges = challenges.reduce((current, challenge) => {
+    await Promise.all(challenges.map(async(challenge) => {
       challenge.skill = skill;
       challenge.version = prototypeVersion;
-      current.push(challenge.save()
-        .then(() => {
-          if (challenge.isPrototype) {
-            this._message(this.intl.t('challenge.move.success-prototype-message'));
-          } else {
-            this._message(this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }));
-          }
-        }),
-      );
-      return current;
-    }, []);
-    await Promise.all(updateChallenges);
+      await challenge.save();
+      if (challenge.isPrototype) {
+        this._message(this.intl.t('challenge.move.success-prototype-message'));
+      } else {
+        this._message(this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }));
+      }
+    }));
   }
 
   @action
