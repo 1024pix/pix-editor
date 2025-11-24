@@ -184,6 +184,19 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
+        } else if (domainErrorName === 'InvalidLocalizedFrameworkTubesError') {
+          const errorInstance = new domainErrorClass('mon message');
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(400);
+          expect(responseForError.source).toStrictEqual({
+            errors: [
+              {
+                status: '400',
+                title: 'Bad Request',
+                detail: 'mon message',
+              },
+            ],
+          });
         } else {
           expect(true, `Conversion for ${domainErrorName} not tested`).to.be.false;
         }

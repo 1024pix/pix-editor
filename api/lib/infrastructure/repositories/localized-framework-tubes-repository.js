@@ -6,6 +6,21 @@ export async function findAll() {
   return localizedFrameworkTubesDtos.map(_toDomain);
 }
 
+export async function save(localizedFrameworkTube) {
+  const [insertedLocalizedFrameworkTubes] = await knex('localized_framework_tubes')
+    .insert({
+      id: localizedFrameworkTube.id,
+      tubeId: localizedFrameworkTube.tubeId,
+      maxLevel: localizedFrameworkTube.maxLevel,
+      locale: localizedFrameworkTube.locale,
+    })
+    .onConflict('id')
+    .merge()
+    .returning('*');
+
+  return _toDomain(insertedLocalizedFrameworkTubes);
+}
+
 function _toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
 }
