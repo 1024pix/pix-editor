@@ -96,6 +96,10 @@ export default class AccessService extends Service {
     return level >= EDITOR || (!production && !prototype && level === REPLICATOR);
   }
 
+  mayEditLocalized(localizedChallenge) {
+    return this.config.accessLevel >= EDITOR;
+  }
+
   mayDuplicate(challenge) {
     const level = this.config.accessLevel;
     const prototype = challenge.isPrototype;
