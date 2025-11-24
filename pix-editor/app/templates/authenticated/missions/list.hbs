@@ -59,7 +59,7 @@
               {{mission.name}}
             </td>
             <td>{{mission.competence}}</td>
-            <td>{{dayjs-format mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
+            <td>{{format-date mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
             <td>
               <PixTag @color="{{mission.statusColor}}">
                 {{mission.displayableStatus}}

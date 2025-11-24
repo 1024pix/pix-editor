@@ -46,8 +46,8 @@
             (Motif: {{this.model.staticCourse.deactivationReason}})
           {{/if}}
         </li>
-        <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
-        <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
+        <li><span class="bold">Crée le : </span>{{format-date this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
+        <li><span class="bold">Dernière modification : </span>{{format-date this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>
       <div class="static-course-details__card-information--actions">
         <PixButton
