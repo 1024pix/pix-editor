@@ -286,6 +286,8 @@ export default class SingleController extends Controller {
           await this._handleChangelog(challenge, changelog);
           await this._checkSkillValidation(challenge);
           await this._validateAlternatives(challenge);
+          const skill = await challenge.skill;
+          await skill.hasMany('challengesProduction').reload();
           this._message('Mise en production réussie');
           this.parentController.send('selectView', 'production', true);
           this.router.refresh('authenticated.competence.prototypes');
