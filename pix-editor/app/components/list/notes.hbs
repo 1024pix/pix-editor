@@ -1,22 +1,51 @@
-<EmberTable as |t|>
-  <t.head
-    @columns={{this.headers}}
-    @widthConstraint={{'gte-container'}}
-    @containerWidthAdjustment={{-7}}
-    @resizeMode={{'fluid'}}
-    @onUpdateSorts={{this.sortBy}}
-    @sorts={{this.sorts}}
-    @sortFunction={{this.sort}}/>
-  <t.body
-    @renderAll={{this.renderAll}}
-    @rows={{this.list}}
-    @rowSelectionMode={{'single'}}
-    @checkboxSelectionMode={{'none'}}
-    @onSelect={{this.selectRow}} as |b|>
-    <b.row data-test-note as |r|>
-      <r.cell  class="{{if r.columnValue.style r.columnValue.style}}" as |value|>
-        {{value}}
-      </r.cell>
-    </b.row>
-  </t.body>
-</EmberTable>
+<PixTable @data={{this.list}} @caption={{this.caption}} @onRowClick={{this.selectRow}}>
+  <:columns as |row context|>
+    <PixTableColumn
+      @context={{context}}
+    >
+      <:header>
+        Date
+      </:header>
+      <:cell>
+        {{row.date}}
+      </:cell>
+    </PixTableColumn>
+
+    {{#if this.displayAuthor}}
+        <PixTableColumn
+            @context={{context}}
+            class="author-note"
+        >
+            <:header>
+            Auteur
+            </:header>
+            <:cell>
+            {{row.author}}
+            </:cell>
+        </PixTableColumn>
+    {{/if}}
+
+    <PixTableColumn
+      @context={{context}}
+    >
+      <:header>
+        Texte
+      </:header>
+      <:cell>
+        {{row.text}}
+      </:cell>
+    </PixTableColumn>
+
+    {{#if this.displayStatus}}
+        <PixTableColumn
+            @context={{context}}
+            class="status-note"
+            max-width=150
+        >
+            <:header>Statut</:header>
+            <:cell>{{row.status}}</:cell>
+        </PixTableColumn>
+    {{/if}}
+
+  </:columns>
+</PixTable>
