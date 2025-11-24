@@ -45,6 +45,11 @@ export async function register(server) {
         },
       },
     },
+    {
+      method: 'DELETE',
+      path: '/api/localized-framework-tubes/{id}',
+      config: { handler: localizedFrameworkTubesController.remove },
+    },
   ]);
 }
 

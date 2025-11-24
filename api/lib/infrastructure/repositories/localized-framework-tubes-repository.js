@@ -21,6 +21,10 @@ export async function save(localizedFrameworkTube) {
   return _toDomain(insertedLocalizedFrameworkTubes);
 }
 
+export async function remove(id) {
+  return knex.delete().from('localized_framework_tubes').where('id', id);
+}
+
 function _toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
 }
