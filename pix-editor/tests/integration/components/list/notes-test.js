@@ -53,7 +53,7 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
     // then
-    assert.dom('.ember-table').exists();
+    assert.dom('.pix-table').exists();
   });
 
   test('it should display a list of notes', async function(assert) {
@@ -61,7 +61,8 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
     // then
-    assert.dom('[data-test-note]').exists({ count: notes.length });
+    // 1 data-test-note per note + 1 for the header
+    assert.dom('[data-test-note]').exists({ count: notes.length + 1 });
   });
 
   test('it should display authors when displayAuthor is `true`', async function(assert) {
@@ -72,7 +73,7 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}} @displayAuthor={{this.displayAuthor}}/>`);
 
     // then
-    assert.dom('[data-test-note] .author-note').exists();
+    assert.dom('.author-note').exists();
   });
 
   test('it should not display authors when displayAuthor is `false`', async function(assert) {
@@ -83,7 +84,7 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}} @displayAuthor={{this.displayAuthor}}/>`);
 
     // then
-    assert.dom('[data-test-note] .author-note').doesNotExist();
+    assert.dom('.author-note').doesNotExist();
   });
 
   test('it should display note status when displayStatus is `true`', async function(assert) {
@@ -94,7 +95,7 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}} @displayStatus={{this.displayStatus}}/>`);
 
     // then
-    assert.dom('[data-test-note] .status-note').exists();
+    assert.dom('.status-note').exists();
   });
 
   test('it should not display note status when displayStatus is `false`', async function(assert) {
@@ -105,6 +106,6 @@ module('Integration | Component | note-list', function(hooks) {
     await render(hbs`<List::Notes @list={{this.notes}} @displayStatus={{this.displayStatus}}/>`);
 
     // then
-    assert.dom('[data-test-note] .status-note').doesNotExist();
+    assert.dom('.status-note').doesNotExist();
   });
 });

@@ -25,7 +25,7 @@ export default class NoteList extends SortedList {
 <template>
   <PixTable @data={{this.list}} @caption={{this.caption}} @onRowClick={{this.selectRow}}>
     <:columns as |row context|>
-      <PixTableColumn @context={{context}} >
+      <PixTableColumn @context={{context}} data-test-note>
         <:header>Date</:header>
         <:cell>{{row.date}}</:cell>
       </PixTableColumn>
