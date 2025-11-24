@@ -12,8 +12,27 @@ export async function register(server) {
       method: 'POST',
       path: '/api/localized-framework-tubes',
       config: {
-        handler: localizedFrameworkTubesController.create,
+        handler: localizedFrameworkTubesController.upsert,
         validate: {
+          payload: Joi.object({
+            data: {
+              attributes: {
+                'tube-id': Joi.string().required(),
+                'max-level': Joi.number().required(),
+                locale: Joi.string().required(),
+              },
+            },
+          }),
+        },
+      },
+    },
+    {
+      method: 'PUT',
+      path: '/api/localized-framework-tubes/{id}',
+      config: {
+        handler: localizedFrameworkTubesController.upsert,
+        validate: {
+          params: Joi.object({ id: Joi.string().required() }),
           payload: Joi.object({
             data: {
               attributes: {

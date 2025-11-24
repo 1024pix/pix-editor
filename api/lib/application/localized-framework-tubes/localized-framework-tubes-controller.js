@@ -6,8 +6,14 @@ export async function findAll(request, h) {
   return h.response(localizedFrameworkTubesSerializer.serializeLocalizedFrameworkTubes(localizedFrameworksTubes));
 }
 
-export async function create(request, h) {
-  const localizeFrameworkTube = localizedFrameworkTubesSerializer.deserializeLocalizedFrameworkTubes(request?.payload?.data?.attributes);
+export async function upsert(request, h) {
+  const attributes = request?.payload?.data?.attributes;
+  const id = request?.params?.id;
+
+  const localizeFrameworkTube = localizedFrameworkTubesSerializer.deserializeLocalizedFrameworkTubes({
+    id,
+    ...attributes,
+  });
   localizeFrameworkTube.validate();
 
   const createdLocalizedFrameworkTubes = await localizedFrameworksTubesRepository.save(localizeFrameworkTube);
