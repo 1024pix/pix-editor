@@ -1,5 +1,26 @@
 
 
+## v3.241.0 (25/11/2025)
+
+
+### :rocket: Amélioration
+- [#1281](https://github.com/1024pix/pix-editor/pull/1281) [FEATURE] Permettre le CRUD d'un localizedFrameworkTube (PIX-20505).
+- [#1273](https://github.com/1024pix/pix-editor/pull/1273) [FEATURE] Ajout d'un popin de confirmation lors de l'édition d'un challenge (PIX-20467).
+
+### :building_construction: Tech
+- [#1283](https://github.com/1024pix/pix-editor/pull/1283) [TECH] Supprime ember-dayjs.
+- [#1246](https://github.com/1024pix/pix-editor/pull/1246) [TECH] Suppression de la dépendance ember-aria-tabs (PIX-20084).
+
+### :bug: Correction
+- [#1286](https://github.com/1024pix/pix-editor/pull/1286) [BUGFIX] Impossible de dupliquer une épreuve (PIX-20552).
+- [#1280](https://github.com/1024pix/pix-editor/pull/1280) [BUGFIX] Rafraichissement de l’overview de la compétence (PIX-20517).
+
+### :arrow_up: Montée de version
+- [#1284](https://github.com/1024pix/pix-editor/pull/1284) [BUMP] Update dependency p-queue to v9.0.1 (pix-editor).
+- [#1282](https://github.com/1024pix/pix-editor/pull/1282) [BUMP] Update dependency @1024pix/pix-ui to ^55.32.1 (pix-editor).
+- [#1279](https://github.com/1024pix/pix-editor/pull/1279) [BUMP] Update dependency postgres to v16.
+- [#1278](https://github.com/1024pix/pix-editor/pull/1278) [BUMP] Update dependency redis to v7.2.11.
+
 ## v3.240.0 (24/11/2025)
 
 
