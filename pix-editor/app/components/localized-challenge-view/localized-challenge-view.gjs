@@ -86,7 +86,7 @@ export default class LocalizedChallenge extends Component {
   }
 
   @action
-  async openSaveConfirmPopin(confirmPopinType) {
+  async openSaveConfirmPopin() {
     this.confirmTitle = 'Enregistrer les modifications';
     this.confirmContent = 'Êtes vous sûr de vouloir enregistrer ?';
     this.confirmApprove = this.save;
@@ -215,9 +215,9 @@ export default class LocalizedChallenge extends Component {
 
   @action
   async save() {
+    this.displayConfirm = false;
     try {
       this.loader.start('Enregistrement...');
-
       await this._handleIllustration();
       await this._handlePiecesJointes(this.localizedChallenge);
       await this._saveFiles();
@@ -234,7 +234,6 @@ export default class LocalizedChallenge extends Component {
       this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
     } finally {
       this.loader.stop();
-      this.displayConfirm = false;
     }
   }
 
@@ -268,6 +267,7 @@ export default class LocalizedChallenge extends Component {
 
   @action
   async updateStatusProduction() {
+    this.displayConfirm = false;
     this.args.localizedChallenge.status = this.args.localizedChallenge.isInProduction ? 'proposé' : 'validé';
     try {
       this.loader.start('Enregistrement');
@@ -279,7 +279,6 @@ export default class LocalizedChallenge extends Component {
       this.notify.error(this.args.localizedChallenge.isInProduction ? 'Erreur de la mise en prod de l\'épreuve localisée' : 'Erreur de la mise en pause de l\'épreuve localisée');
     } finally {
       this.loader.stop();
-      this.displayConfirm = false;
     }
   }
 
