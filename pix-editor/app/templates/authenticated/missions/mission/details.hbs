@@ -58,7 +58,7 @@
           <span class="bold">URL de la documentation de la mission : </span>
           <a href={{ this.model.mission.documentationUrl }} target="_blank">{{this.model.mission.documentationUrl}} </a>
         </li>
-        <li><span class="bold">Crée le : </span>{{dayjs-format this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
+        <li><span class="bold">Crée le : </span>{{format-date this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>
     </Card>
   </section>

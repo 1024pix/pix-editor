@@ -6,7 +6,7 @@ import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import dayjs from 'ember-dayjs/helpers/dayjs-format';
+import formatDate from 'ember-intl/helpers/format-date';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -87,7 +87,7 @@ export default class ChallengesViewHeader extends Component {
           <PixTag @color={{@statusColor}}>
             {{this.buildStatusText @challenge}}
           </PixTag>
-          <p>{{dayjs @challenge.updatedAt "DD/MM/YYYY" allow-empty=true}}</p>
+          <p>{{formatDate @challenge.updatedAt "DD/MM/YYYY" allow-empty=true}}</p>
         </div>
         <span class="challenge-view-header__dark-separator"></span>
         <div class="challenge-view-header-second__actions">

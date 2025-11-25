@@ -10,7 +10,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import dayjs from 'ember-dayjs/helpers/dayjs-format';
+import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
 
 import DropdownMenu from '../dropdown-menu';
@@ -100,7 +100,7 @@ export default class LocalizedChallengesProduction extends Component {
                 Dernière MAJ
               </:header>
               <:cell>
-                {{dayjs challengeLocale.primaryUpdatedAt "DD/MM/YYYY" allow-empty=true}}
+                {{formatDate challengeLocale.primaryUpdatedAt "DD/MM/YYYY" allow-empty=true}}
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>

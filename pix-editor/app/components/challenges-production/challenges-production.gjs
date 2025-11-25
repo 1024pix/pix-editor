@@ -11,7 +11,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import dayjs from 'ember-dayjs/helpers/dayjs-format';
+import formatDate from 'ember-intl/helpers/format-date';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -103,7 +103,7 @@ export default class ChallengesProduction extends Component {
                 Dernière MAJ
               </:header>
               <:cell>
-                {{dayjs challenge.updatedAt "DD/MM/YYYY" allow-empty=true}}
+                {{formatDate challenge.updatedAt "DD/MM/YYYY" allow-empty=true}}
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>
