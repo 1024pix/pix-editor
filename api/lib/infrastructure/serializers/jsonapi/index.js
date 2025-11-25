@@ -7,6 +7,7 @@ export * as configSerializer from './config-serializer.js';
 export * as errorSerializer from './error-serializer.js';
 export * as frameworkSerializer from './framework-serializer.js';
 export * as localizedChallengeSerializer from './localized-challenge-serializer.js';
+export * as localizedFrameworkTubesSerializer from './localized-framework-tubes-serializer.js';
 export * as missionSerializer from './mission-serializer.js';
 export * as skillSerializer from './skill-serializer.js';
 export * as staticCourseSerializer from './static-course-serializer.js';

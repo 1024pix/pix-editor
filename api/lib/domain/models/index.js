@@ -5,6 +5,7 @@ export * from './ChangelogEntry.js';
 export * from './Competence.js';
 export * from './Framework.js';
 export * from './LocalizedChallenge.js';
+export * from './LocalizedFrameworkTubes.js';
 export * from './Mission.js';
 export * from './Note.js';
 export * from './Skill.js';

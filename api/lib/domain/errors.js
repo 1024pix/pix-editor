@@ -91,3 +91,9 @@ export class CloneSkillError extends DomainError {
 }
 
 export class ForbiddenError extends DomainError {}
+
+export class InvalidLocalizedFrameworkTubesError extends DomainError {
+  constructor(message) {
+    super(message);
+  }
+}
