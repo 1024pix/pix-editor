@@ -1,4 +1,4 @@
-import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -162,6 +162,9 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function(hooks) {
     await click(await screen.findByRole('option', { name: 'Japon' }));
     await waitForSelectToBeClosed(screen);
     await clickByText('Enregistrer');
+
+    const dialog = screen.getByLabelText('Enregistrer les modifications');
+    await click(within(dialog).getByText('Oui'));
 
     // then
     const localizedChallenge = await store.peekRecord('localized-challenge', 'localizedChallengeIdProto');

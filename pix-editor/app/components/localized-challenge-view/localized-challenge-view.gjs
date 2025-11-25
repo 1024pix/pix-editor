@@ -33,6 +33,9 @@ export default class LocalizedChallenge extends Component {
   @tracked urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
   @tracked attachmentBasename = '';
   @tracked displayConfirm = false;
+  @tracked confirmTitle = '';
+  @tracked confirmContent = '';
+  @tracked confirmApprove;
 
   @tracked urlsToConsultTextareaHeigh = this.args.localizedChallenge.urlsToConsult?.length ?? 2;
 
@@ -82,14 +85,23 @@ export default class LocalizedChallenge extends Component {
     return !!this.primaryChallenge.illustration;
   }
 
-  get confirmTitle() {
-    return this.args.localizedChallenge.isInProduction ? 'Mise en pause' : 'Mise en prod';
+  @action
+  async openSaveConfirmPopin() {
+    this.confirmTitle = 'Enregistrer les modifications';
+    this.confirmContent = 'Êtes vous sûr de vouloir enregistrer ?';
+    this.confirmApprove = this.save;
+    this.displayConfirm = true;
   }
 
-  get confirmContent() {
-    return this.args.localizedChallenge.isInProduction
+  @action
+  async openProductionStatusConfirmPopin() {
+    this.confirmTitle = this.args.localizedChallenge.isInProduction ? 'Mise en pause' : 'Mise en prod';
+    this.confirmContent = this.args.localizedChallenge.isInProduction
       ? 'Êtes-vous sûr de vouloir mettre en pause cette épreuve ?'
       : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
+
+    this.confirmApprove = this.updateStatusProduction;
+    this.displayConfirm = true;
   }
 
   @action
@@ -203,9 +215,9 @@ export default class LocalizedChallenge extends Component {
 
   @action
   async save() {
+    this.displayConfirm = false;
     try {
       this.loader.start('Enregistrement...');
-
       await this._handleIllustration();
       await this._handlePiecesJointes(this.localizedChallenge);
       await this._saveFiles();
@@ -254,7 +266,8 @@ export default class LocalizedChallenge extends Component {
   }
 
   @action
-  async confirmApprove() {
+  async updateStatusProduction() {
+    this.displayConfirm = false;
     this.args.localizedChallenge.status = this.args.localizedChallenge.isInProduction ? 'proposé' : 'validé';
     try {
       this.loader.start('Enregistrement');
@@ -266,7 +279,6 @@ export default class LocalizedChallenge extends Component {
       this.notify.error(this.args.localizedChallenge.isInProduction ? 'Erreur de la mise en prod de l\'épreuve localisée' : 'Erreur de la mise en pause de l\'épreuve localisée');
     } finally {
       this.loader.stop();
-      this.displayConfirm = false;
     }
   }
 
@@ -336,11 +348,6 @@ export default class LocalizedChallenge extends Component {
   }
 
   @action
-  displayConfirmPopIn() {
-    this.displayConfirm = true;
-  }
-
-  @action
   updateBasename(e) {
     this.attachmentBasename = e.target.value;
   }
@@ -354,9 +361,10 @@ export default class LocalizedChallenge extends Component {
       @skillId={{@skillId}}
       @edition={{@edition}}
       @edit={{@edit}}
+      @openSaveConfirmPopin={{this.openSaveConfirmPopin}}
+      @openProductionStatusConfirmPopin={{this.openProductionStatusConfirmPopin}}
       @save={{this.save}}
       @cancelEdit={{this.cancelEdit}}
-      @toggleStatus={{this.displayConfirmPopIn}}
     />
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">
