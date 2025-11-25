@@ -52,7 +52,11 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    const controller = this.controllerFor(transition.from.name);
+    const controller = this.controllerFor(
+      transition.from.name === 'authenticated.competence.prototypes.new'
+        ? 'authenticated.competence.prototypes.new'
+        : 'authenticated.competence.prototypes.single',
+    );
     if (controller.edition) {
       if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         controller.send('cancelEdit');

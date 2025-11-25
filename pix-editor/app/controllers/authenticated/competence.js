@@ -148,7 +148,7 @@ export default class CompetenceController extends Controller {
 
   @action
   copyChallenge(challenge) {
-    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, { queryParams: { from: challenge.id } });
+    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, { queryParams: { from: challenge.id, leftMaximized: true, view: 'workbench' } });
   }
 
   @action
