@@ -113,12 +113,6 @@
     "tracked-built-ins": "^4.0.0",
     "webpack": "^5.88.1"
   },
-  "overrides": {
-    "ember-cli-page-object": ">= 2.1.0",
-    "ember-dayjs": {
-      "ember-source": "^6.8.2"
-    }
-  },
   "engines": {
     "node": "^24.11.0"
   },
