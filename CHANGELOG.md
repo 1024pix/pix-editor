@@ -1,5 +1,19 @@
 
 
+## v3.242.0 (26/11/2025)
+
+
+### :building_construction: Tech
+- [#1285](https://github.com/1024pix/pix-editor/pull/1285) [TECH] Met à jour ember-source en v6.
+
+### :bug: Correction
+- [#1289](https://github.com/1024pix/pix-editor/pull/1289) [BUGFIX] Problème d’affichage dans la vue acquis en construction (PIX-20519).
+- [#1290](https://github.com/1024pix/pix-editor/pull/1290) [BUGFIX] Création d’un nouveau proto dans un acquis à tort.
+- [#1287](https://github.com/1024pix/pix-editor/pull/1287) [BUGFIX] Ne pas sauvegarder d'autres entités que le localized challenge quand on met en prod/en pause une épreuve (PIX-20581).
+
+### :arrow_up: Montée de version
+- [#1288](https://github.com/1024pix/pix-editor/pull/1288) [BUMP] Update dependency @1024pix/pix-ui to ^55.32.2 (pix-editor).
+
 ## v3.241.0 (25/11/2025)
 
 
