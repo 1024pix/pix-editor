@@ -16,7 +16,7 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
 
   get tubes() {
     const thematic = this.args.thematic;
-    if (this.args.view === 'workbench') {
+    if (this.args.view === 'workbench' || this.args.view === 'draft') {
       return thematic.tubes;
     }
     return thematic.productionTubes;
