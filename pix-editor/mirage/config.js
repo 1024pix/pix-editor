@@ -46,6 +46,10 @@ function routes() {
     return skill.challengesProduction;
   });
 
+  this.get('/localized-framework-tubes');
+  this.post('/localized-framework-tubes');
+  this.patch('/localized-framework-tubes/:id');
+
   this.get('/frameworks');
   this.post('/frameworks');
 

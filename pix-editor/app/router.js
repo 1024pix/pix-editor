@@ -18,6 +18,7 @@ Router.map(function () {
       this.route('localized-challenge', {
         path: '/:overview/skills/:skill_id/localized-challenges/:localized_challenge_id',
       });
+      this.route('localized-framework');
     });
     this.route('competence', { path: '/competence/:competence_id' }, function () {
       this.route('prototypes', function () {

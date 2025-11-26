@@ -1,4 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import { concat, hash } from '@ember/helper';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
@@ -11,12 +12,17 @@ import { htmlSafe } from '@ember/template';
 import CompetenceOverviewSkill from './competence-overview-skill';
 
 export default class CompetenceOverview extends Component {
+  @service access;
   @service phrase;
   @service router;
   @service notifications;
   @service multipanelManager;
 
   @tracked selectedSkillId = null;
+
+  get isAdmin() {
+    return this.access.isAdmin();
+  }
 
   @action
   async fetchTranslations() {
@@ -63,30 +69,37 @@ export default class CompetenceOverview extends Component {
         </ul>
         <div class="competence-overview-actions__buttons">
           {{#if @locale}}
+            {{#if this.isAdmin}}
+                <PixButtonLink
+                  class="competence-overview-actions__fetch"
+                  @route="authenticated.v2.localized-framework"
+                  @variant="secondary"
+                >Cadre de traduction</PixButtonLink>
+              {{/if}}
+              <PixButton
+                class="competence-overview-actions__fetch"
+                @size="small"
+                @isBorderVisible={{true}}
+                @variant="secondary"
+                @loadingColor="grey"
+                @triggerAction={{this.fetchTranslations}}
+              >
+                Récupérer les traductions
+              </PixButton>
+            {{/if}}
             <PixButton
-              class="competence-overview-actions__fetch"
+              class="competence-overview-actions__refresh"
+              @iconBefore="refresh"
               @size="small"
               @isBorderVisible={{true}}
               @variant="secondary"
-              @loadingColor="grey"
-              @triggerAction={{this.fetchTranslations}}
+              @triggerAction={{this.refresh}}
             >
-              Récupérer les traductions
+              Actualiser
             </PixButton>
-          {{/if}}
-          <PixButton
-            class="competence-overview-actions__refresh"
-            @iconBefore="refresh"
-            @size="small"
-            @isBorderVisible={{true}}
-            @variant="secondary"
-            @triggerAction={{this.refresh}}
-          >
-            Actualiser
-          </PixButton>
+          </div>
         </div>
-      </div>
-      <div class="competence-overview-grid">
+        <div class="competence-overview-grid">
         {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
           <div class="thematic" style={{this.thematicStyle thematicOverview}}>
             <h3>{{thematicOverview.name}}</h3>
