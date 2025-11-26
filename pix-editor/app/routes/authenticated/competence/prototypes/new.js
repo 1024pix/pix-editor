@@ -53,6 +53,7 @@ export default class NewRoute extends PrototypeRoute {
   resetController(controller, isExiting) {
     if (isExiting) {
       controller.from = '';
+      controller.fromSkill = '';
     }
   }
 }

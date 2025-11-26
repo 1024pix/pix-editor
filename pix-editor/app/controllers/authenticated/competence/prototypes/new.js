@@ -9,6 +9,7 @@ export default class NewController extends Prototype {
   creation = true;
   queryParams = ['from', 'fromSkill'];
   @tracked from = '';
+  @tracked fromSkill = '';
   @service currentData;
   @service loader;
   @service router;
