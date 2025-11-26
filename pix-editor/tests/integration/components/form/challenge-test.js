@@ -1,5 +1,6 @@
-import { render } from '@1024pix/ember-testing-library';
+import { render, clickByName } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
+import Service from '@ember/service';
 import { click, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -102,5 +103,46 @@ module('Integration | Component | challenge-form', function(hooks) {
     // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
     await new Promise((resolve) => setTimeout(resolve, 400));
     await settled();
+  });
+
+  test('it should set locales', async function(assert) {
+    // Given
+    class ConfigService extends Service {
+      get localeToLanguageMap() {
+        return {
+          en: 'Anglais',
+          'fr-fr': 'Franco Français',
+          fr: 'Francophone',
+        };
+      }
+    }
+    this.owner.register('service:config', ConfigService);
+
+    const countries = [{ FR: 'France' }];
+    const store = this.owner.lookup('service:store');
+    const challengeData = store.createRecord('challenge', {
+      id: 'recChallenge_1',
+      name: 'challenge',
+      locales: [],
+    });
+    this.countries = countries;
+    this.challengeData = challengeData;
+    this.checkEmbedURL = () => {};
+
+    // When
+    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    await clickByName('Langue(s)');
+    await screen.findByRole('menu');
+
+    await clickByName('Anglais');
+    await clickByName('Franco Français');
+    await clickByName('Francophone');
+
+    // Then
+    assert.ok(this.challengeData.locales, [
+      'en',
+      'fr-fr',
+      'fr',
+    ]);
   });
 });
