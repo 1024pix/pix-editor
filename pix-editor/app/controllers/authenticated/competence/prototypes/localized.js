@@ -162,8 +162,16 @@ export default class LocalizedController extends Controller {
 
   @action async confirmApprove() {
     this.localizedChallenge.status = this.localizedChallenge.isInProduction ? 'proposé' : 'validé';
-    await this.save();
-    this.displayConfirm = false;
+    try {
+      await this._saveChallenge(this.localizedChallenge);
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+    } finally {
+      this.loader.stop();
+      this.displayConfirm = false;
+    }
   }
 
   @action confirmDeny() {
