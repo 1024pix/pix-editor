@@ -1,5 +1,11 @@
 
 
+## v4.0.0 (26/11/2025)
+
+
+### :building_construction: Tech
+- [#1238](https://github.com/1024pix/pix-editor/pull/1238) [TECH] Débrancher Airtable (PIX-20310, PIX-20398).
+
 ## v3.242.0 (26/11/2025)
 
 
