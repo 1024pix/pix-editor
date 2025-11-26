@@ -3,7 +3,7 @@ import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import { concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class FieldToggleFieldComponent extends Component {

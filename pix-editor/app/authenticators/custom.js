@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Base from 'ember-simple-auth/authenticators/base';
 
 export default class CustomAuthenticator extends Base {

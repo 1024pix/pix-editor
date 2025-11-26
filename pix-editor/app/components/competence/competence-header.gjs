@@ -1,6 +1,6 @@
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { LinkTo } from '@ember/routing';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class CompetenceHeader extends Component {

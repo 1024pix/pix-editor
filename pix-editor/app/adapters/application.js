@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 
 const FIND_GROUP_SIZE = 200;

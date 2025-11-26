@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 
 const READ_PIX_ONLY = 0;
 const READ_ONLY = 1;
