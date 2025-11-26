@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Model, { attr } from '@ember-data/model';
 
 export default class ChangelogEntryModel extends Model {

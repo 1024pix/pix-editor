@@ -2,7 +2,7 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { eq, or } from 'ember-truth-helpers';
 

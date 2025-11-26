@@ -4,7 +4,7 @@ import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { concat, fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import fileQueue from 'ember-file-upload/helpers/file-queue';
 import { or } from 'ember-truth-helpers';
