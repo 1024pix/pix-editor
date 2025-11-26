@@ -6,7 +6,7 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/api/localized-framework-tubes',
-      config: { handler: localizedFrameworkTubesController.findAll },
+      config: { handler: localizedFrameworkTubesController.filter },
     },
     {
       method: 'POST',
