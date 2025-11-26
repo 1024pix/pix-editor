@@ -15,7 +15,7 @@ export async function createSkill(
     normalizeNonBreakingSpaceFnc,
   },
 ) {
-  const tube = await dependencies.tubeRepository.getByAirtableId(skill.tubeAirtableId);
+  const tube = await dependencies.tubeRepository.get(skill.tubeAirtableId);
   if (tube == null) throw new NotFoundError('Tube introuvable');
 
   const tubeSkills = await dependencies.skillRepository.listByTubeId(tube.id);

@@ -3,7 +3,7 @@ import { NotFoundError } from '../errors.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function updateThematic(thematicAirtableId, thematicUpdates, dependencies = { thematicRepository }) {
-  const thematic = await dependencies.thematicRepository.getByAirtableId(thematicAirtableId);
+  const thematic = await dependencies.thematicRepository.get(thematicAirtableId);
 
   if (!thematic) {
     throw new NotFoundError('unknown thematic id');

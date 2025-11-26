@@ -13,7 +13,6 @@ export class Skill {
     tutorialAirtableIds,
     learningMoreTutorialIds,
     learningMoreTutorialAirtableIds,
-    pixValue,
     competenceId,
     internationalisation,
     status,
@@ -38,7 +37,6 @@ export class Skill {
     this.tutorialAirtableIds = tutorialAirtableIds;
     this.learningMoreTutorialIds = learningMoreTutorialIds;
     this.learningMoreTutorialAirtableIds = learningMoreTutorialAirtableIds;
-    this.pixValue = pixValue;
     this.competenceId = competenceId;
     this.status = status;
     this.tubeId = tubeId;
@@ -215,9 +213,11 @@ export class Skill {
       en: command.clueEn,
     };
     this.internationalisation = command.i18n;
+    this.learningMoreTutorialIds = command.tutoMoreAirtableIds;
     this.learningMoreTutorialAirtableIds = command.tutoMoreAirtableIds;
     const oldStatus = this.status;
     this.status = command.status;
+    this.tutorialIds = command.tutoSolutionAirtableIds;
     this.tutorialAirtableIds = command.tutoSolutionAirtableIds;
     if (oldStatus !== this.status) {
       const now = new Date();

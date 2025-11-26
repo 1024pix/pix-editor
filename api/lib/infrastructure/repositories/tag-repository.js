@@ -1,81 +1,56 @@
 import { Tag } from '../../domain/models/index.js';
-import { tagDatasource } from '../datasources/airtable/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { compareDtos, compareDtosLists } from './migration-from-airtable.js';
 import { escapeLikeWildcards } from './sql-utils.js';
 
 const TABLE_NAME = 'tutorial_tags';
 
 export async function create(tag) {
-  tag.id = generateNewId('tag');
-  const [datasourceTag] = await Promise.all([tagDatasource.create(tag), knex(TABLE_NAME).insert({ id: tag.id, title: tag.title })]);
-  return toDomain(datasourceTag);
+  const dto = { id: generateNewId('tag'), title: tag.title };
+
+  await knex(TABLE_NAME).insert(dto);
+
+  return toDomain(dto);
 }
 
-export async function getByAirtableId(tagId) {
-  const airtableDto = await tagDatasource.find(tagId);
-  if (!airtableDto) return null;
+export async function get(id) {
+  const dto = await knex.select('*').from(TABLE_NAME).where('id', id).first();
+  if (!dto) return null;
 
-  const pgDto = await knex.select('*').from(TABLE_NAME).where('id', airtableDto.id).first();
-
-  compareDtos(airtableDto, pgDto, compareTagDtos, TABLE_NAME);
-
-  return toDomain(airtableDto);
+  return toDomain(dto);
 }
 
-export async function getManyByAirtableIds(airtableIds) {
-  if (!airtableIds?.length) return [];
-  const airtableDtos = await tagDatasource.getManyByAirtableIds(airtableIds);
-  if (!airtableDtos) return [];
-  const pgDtos = await knex
-    .select('*')
-    .from(TABLE_NAME)
-    .whereIn(
-      'id',
-      airtableDtos.map((tag) => tag.id),
-    )
-    .orderBy('id');
+export async function getMany(ids) {
+  if (!ids?.length) return [];
 
-  compareDtosLists(airtableDtos, pgDtos, compareTagDtos, TABLE_NAME);
+  const dtos = await knex.select('*').from(TABLE_NAME).whereIn('id', ids).orderBy('id');
 
-  return airtableDtos.map(toDomain);
+  return dtos.map(toDomain);
 }
 
 export async function searchByTitle(title) {
-  const [airtableDtos = [], pgDtos] = await Promise.all([
-    tagDatasource.searchByTitle(title),
-    knex
-      .select('*')
-      .from(TABLE_NAME)
-      .whereILike('title', `%${escapeLikeWildcards(title)}%`)
-      .orderByRaw('?? collate ??', ['title', 'fr-x-icu'])
-      .limit(4),
-  ]);
+  const dtos = await knex
+    .select('*')
+    .from(TABLE_NAME)
+    .whereILike('title', `%${escapeLikeWildcards(title)}%`)
+    .orderByRaw('?? collate ??', ['title', 'fr-x-icu'])
+    .limit(4);
 
-  compareDtosLists(airtableDtos, pgDtos, compareTagDtos, TABLE_NAME);
-
-  return airtableDtos.map(toDomain);
+  return dtos.map(toDomain);
 }
 
 export async function findByTitle(title) {
-  const [airtableDto, pgDto] = await Promise.all([tagDatasource.findByTitle(title), knex.select('*').from(TABLE_NAME).where(knex.raw('LOWER(??)', 'title'), title.toLowerCase()).first()]);
+  const dto = await knex
+    .select('*')
+    .from(TABLE_NAME)
+    .where(knex.raw('LOWER(??)', 'title'), title.toLowerCase())
+    .first();
 
-  compareDtos(airtableDto, pgDto, compareTagDtos, TABLE_NAME);
+  if (!dto) return null;
 
-  if (!airtableDto) return null;
-
-  return toDomain(airtableDto);
+  return toDomain(dto);
 }
 
-function compareTagDtos(airtableTag, pgTag) {
-  const diff = [];
-  if (airtableTag.id !== pgTag.id) diff.push(`airtable id "${airtableTag.id}" != postgres id "${pgTag.id}"`);
-  if (airtableTag.title !== pgTag.title)
-    diff.push(`airtable title "${airtableTag.title}" != postgres title "${pgTag.title}"`);
-  return diff;
-}
-
-function toDomain(datasourceTag) {
-  return new Tag(datasourceTag);
+function toDomain({ id, ...dto }) {
+  return new Tag({ id, airtableId: id, ...dto });
 }

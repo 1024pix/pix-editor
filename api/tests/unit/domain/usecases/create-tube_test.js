@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { createTube } from '../../../../lib/domain/usecases/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { Tube } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Use Cases | create-tube', () => {
   const createdTube = Symbol('createdTube');
@@ -10,14 +11,14 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
 
   beforeEach(() => {
     tubeRepository = { create: vi.fn() };
-    thematicRepository = { getByAirtableId: vi.fn() };
+    thematicRepository = { get: vi.fn() };
     updatePixApiReleaseCache = { onTubeCreated: vi.fn().mockResolvedValueOnce() };
 
     thematic = domainBuilder.buildThematic({ id: 'thematic1' });
 
-    thematicRepository.getByAirtableId.mockResolvedValueOnce(thematic);
+    thematicRepository.get.mockResolvedValueOnce(thematic);
 
-    tube = domainBuilder.buildTube({ thematicAirtableId: 'recThematic1' });
+    tube = new Tube({ thematicAirtableId: 'recThematic1' });
     prepareForCreationStub = vi.spyOn(tube, 'prepareForCreation');
 
     tubeRepository.create.mockResolvedValueOnce(createdTube);
@@ -34,7 +35,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
     // then
     await expect(result).resolves.toBe(createdTube);
 
-    expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
+    expect(thematicRepository.get).toHaveBeenCalledWith('recThematic1');
     expect(prepareForCreationStub).toHaveBeenCalledWith(thematic);
     expect(tubeRepository.create).toHaveBeenCalledWith(tube);
     expect(updatePixApiReleaseCache.onTubeCreated).toHaveBeenCalledWith(createdTube);
@@ -43,7 +44,7 @@ describe('Unit | Domain | Use Cases | create-tube', () => {
   describe('when thematic id is not found', () => {
     it('throws a NotFoundError', async () => {
       // given
-      thematicRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
+      thematicRepository.get.mockReset().mockResolvedValueOnce(null);
 
       // when
       const result = createTube(tube, { thematicRepository });

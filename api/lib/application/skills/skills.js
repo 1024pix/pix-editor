@@ -63,7 +63,7 @@ export async function list(req) {
 }
 
 export async function get(req) {
-  const skill = await skillRepository.getByAirtableId(req.params.skillAirtableId);
+  const skill = await skillRepository.get(req.params.skillAirtableId);
   if (!skill) throw new NotFoundError('unknown skill');
   return skillSerializer.serialize(skill);
 }

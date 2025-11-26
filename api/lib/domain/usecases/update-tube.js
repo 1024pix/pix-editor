@@ -11,9 +11,9 @@ export async function updateTube(
     updatePixApiReleaseCache,
   },
 ) {
-  const tube = await dependencies.tubeRepository.getByAirtableId(tubeAirtableId);
+  const tube = await dependencies.tubeRepository.get(tubeAirtableId);
   if (!tube) throw new NotFoundError('unknown tube id');
-  const thematic = await dependencies.thematicRepository.getByAirtableId(tubeUpdates.thematicAirtableId);
+  const thematic = await dependencies.thematicRepository.get(tubeUpdates.thematicAirtableId);
   tube.update(tubeUpdates, thematic);
 
   const updatedTube = await dependencies.tubeRepository.update(tube);

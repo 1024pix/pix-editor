@@ -1,13 +1,4 @@
-import { competenceDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
-import { saveInAirtable } from './utils.js';
-
-export async function buildCompetencesFromConfig({
-  airtableClient,
-  databaseBuilder,
-  logger,
-  learningContentConfig,
-  learningContentData,
-}) {
+export async function buildCompetencesFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const competenceItems = [];
   const allAreas = learningContentData.flatMap((framework) => framework.areas);
   for (const areaItem of allAreas) {
@@ -22,7 +13,6 @@ export async function buildCompetencesFromConfig({
       competenceItems.push(competenceItem);
     }
   }
-  await persistCompetences({ items: competenceItems, airtableClient, logger });
   competenceItems.forEach((competenceItem) => {
     competenceItem.thematics = [];
   });
@@ -36,7 +26,6 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
   const competenceItem = {
     id: competenceId,
     index: `${areaItem.code}.${indexCompetence + 1}`,
-    areaAirtableId: areaItem.airtableId,
     areaId: areaItem.id,
     name: competenceName,
     description: competenceDescription,
@@ -55,44 +44,4 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
     });
   });
   return competenceItem;
-}
-
-export async function persistCompetences({ items, airtableClient, logger }) {
-  const airtableItems = items.map(competenceDatasource.toAirTableObject);
-  const records = await saveInAirtable({
-    tableName: 'Competences',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    const record = records.shift();
-    item.airtableId = record.id;
-    item.origin = record.fields['Origine2'];
-  });
-}
-
-export async function copyCompetencesFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableCompetences = await airtableClient
-    .table('Competences')
-    .select({
-      fields: [
-        'id persistant',
-        'Sous-domaine',
-        'Domaine (id persistant)',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableCompetences.length} competences from airtable...`);
-
-  airtableCompetences.forEach((record) => {
-    databaseBuilder.factory.buildCompetence({
-      id: record.get('id persistant'),
-      index: record.get('Sous-domaine'),
-      areaId: record.get('Domaine (id persistant)')[0],
-      createdAt: record._rawJson.createdTime,
-      updatedAt: new Date(),
-    });
-  });
 }

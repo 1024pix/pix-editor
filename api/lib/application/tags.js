@@ -41,7 +41,7 @@ export function register(server) {
       config: {
         validate: { params: Joi.object({ tagAirtableId: Types.tagId().required() }) },
         handler: async function(request) {
-          const tag = await tagRepository.getByAirtableId(request.params.tagAirtableId);
+          const tag = await tagRepository.get(request.params.tagAirtableId);
           if (!tag) return new NotFoundError('unknown tag id');
           return tagSerializer.serialize(tag);
         },

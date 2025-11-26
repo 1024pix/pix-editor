@@ -3,7 +3,7 @@ import { NotFoundError } from '../../infrastructure/errors.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function updateCompetence(competenceAirtableId, competenceUpdates) {
-  const competence = await competenceRepository.getByAirtableId(competenceAirtableId);
+  const competence = await competenceRepository.get(competenceAirtableId);
 
   if (!competence) throw new NotFoundError('unknown competence');
 

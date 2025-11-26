@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionValidator from '../../../../lib/domain/services/mission-validator.js';
 import { InvalidMissionContentError, MissionIntroductionMediaError } from '../../../../lib/domain/errors.js';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 
 describe('Integration | Validator | Mission', function() {
   describe('status validation', function() {
@@ -68,11 +68,6 @@ describe('Integration | Validator | Mission', function() {
           databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
           databaseBuilder.factory.buildThematic(thematic);
           await databaseBuilder.commit();
-
-          airtableBuilder.mockLists({
-            tubes: [],
-            thematics: [airtableBuilder.factory.buildThematic(thematic)],
-          });
 
           const mission = new Mission({
             name_i18n: { fr: 'Updated mission' },
@@ -139,12 +134,6 @@ describe('Integration | Validator | Mission', function() {
             databaseBuilder.factory.buildSkill(skill1);
             databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
-
-            airtableBuilder.mockLists({
-              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
-              tubes: [airtableBuilder.factory.buildTube(tube)],
-              thematics: [airtableBuilder.factory.buildThematic(thematic)],
-            });
 
             const mission = new Mission({
               name_i18n: { fr: 'Updated mission' },
@@ -214,12 +203,6 @@ describe('Integration | Validator | Mission', function() {
             databaseBuilder.factory.buildSkill(skill1);
             databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
-
-            airtableBuilder.mockLists({
-              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
-              tubes: [airtableBuilder.factory.buildTube(tube)],
-              thematics: [airtableBuilder.factory.buildThematic(thematic)],
-            });
 
             const mission = new Mission({
               name_i18n: { fr: 'Updated mission' },
@@ -309,16 +292,6 @@ describe('Integration | Validator | Mission', function() {
 
             await databaseBuilder.commit();
 
-            airtableBuilder.mockLists({
-              skills: [
-                airtableBuilder.factory.buildSkill(skill1),
-                airtableBuilder.factory.buildSkill(skill2),
-                airtableBuilder.factory.buildSkill(skill3),
-              ],
-              tubes: [airtableBuilder.factory.buildTube(tube)],
-              thematics: [airtableBuilder.factory.buildThematic(thematic)],
-            });
-
             const mission = new Mission({
               name_i18n: { fr: 'Updated mission' },
               competenceId: 'QWERTY',
@@ -387,12 +360,6 @@ describe('Integration | Validator | Mission', function() {
             databaseBuilder.factory.buildSkill(skill1);
             databaseBuilder.factory.buildSkill(skill2);
             await databaseBuilder.commit();
-
-            airtableBuilder.mockLists({
-              skills: [airtableBuilder.factory.buildSkill(skill1), airtableBuilder.factory.buildSkill(skill2)],
-              tubes: [airtableBuilder.factory.buildTube(tube)],
-              thematics: [airtableBuilder.factory.buildThematic(thematic)],
-            });
 
             const mission = new Mission({
               name_i18n: { fr: 'Updated mission' },

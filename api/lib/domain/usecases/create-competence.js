@@ -15,7 +15,7 @@ import * as idGenerator from '../../infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 export async function createCompetence(competence) {
-  const area = await areaRepository.getByAirtableId(competence.areaAirtableId);
+  const area = await areaRepository.get(competence.areaAirtableId);
 
   if (!area) {
     throw new BadRequestError('unknown area');

@@ -1,21 +1,14 @@
 import { Challenge, Mission } from '../../../lib/domain/models/index.js';
-import { buildFramework, persistFrameworks } from './frameworks.js';
-import { buildArea, persistAreas } from './areas.js';
-import { buildCompetence, persistCompetences } from './competences.js';
-import { buildThematic, persistThematics } from './thematics.js';
-import { buildTube, persistTubes } from './tubes.js';
-import { buildSkill, persistSkills } from './skills.js';
-import { buildChallenge, persistChallenges } from './challenges.js';
+import { buildFramework } from './frameworks.js';
+import { buildArea } from './areas.js';
+import { buildCompetence } from './competences.js';
+import { buildThematic } from './thematics.js';
+import { buildTube } from './tubes.js';
+import { buildSkill } from './skills.js';
+import { buildChallenge } from './challenges.js';
 
-export async function buildPix1D({ airtableClient, databaseBuilder, logger, locales, indexFramework }) {
-  logger.info('About to create whole framework Pix 1D...');
-  const pix1DFrameworkItem = buildFramework({ name: 'Pix 1D' });
-  await persistFrameworks({
-    items: [pix1DFrameworkItem],
-    airtableClient,
-    databaseBuilder,
-    logger,
-  });
+export function buildPix1D({ databaseBuilder, locales, indexFramework }) {
+  const pix1DFrameworkItem = buildFramework({ name: 'Pix 1D', databaseBuilder });
 
   const areaItem1 = buildArea({
     indexFramework,
@@ -31,7 +24,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
     databaseBuilder,
     locales,
   });
-  await persistAreas({ items: [areaItem1, areaItem2], airtableClient, logger });
 
   const competenceItems = [];
   for (const configCompetence of [
@@ -47,7 +39,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
     });
     competenceItems.push(competenceItem);
   }
-  await persistCompetences({ items: competenceItems, airtableClient, logger });
 
   const thematicItems = [];
   const workbenchThematicItems = [];
@@ -72,11 +63,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
       }),
     );
   }
-  await persistThematics({
-    items: [...thematicItems, ...workbenchThematicItems],
-    airtableClient,
-    logger,
-  });
 
   const tubeItems = [];
   const workbenchTubeItems = [];
@@ -135,11 +121,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
       }),
     );
   }
-  await persistTubes({
-    items: [...tubeItems, ...workbenchTubeItems],
-    airtableClient,
-    logger,
-  });
 
   const skillItems = [];
   const workbenchSkillItems = [];
@@ -177,11 +158,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
       }),
     );
   }
-  await persistSkills({
-    items: [...skillItems, ...workbenchSkillItems],
-    airtableClient,
-    logger,
-  });
 
   const challengeItems = [];
   for (const skillItem of skillItems) {
@@ -198,7 +174,6 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
       }),
     );
   }
-  await persistChallenges({ items: challengeItems, airtableClient, logger });
 
   let iCompetence = 0;
   let iThematic = 0;
@@ -231,5 +206,4 @@ export async function buildPix1D({ airtableClient, databaseBuilder, logger, loca
     ++iCompetence;
     iThematic += 3;
   }
-  logger.info('Done !');
 }

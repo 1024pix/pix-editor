@@ -180,7 +180,6 @@ describe('Unit | Domain | Skill', () => {
       expect(clonedAttachments).toEqual(['clonedAttachment']);
 
       expect(clonedSkill.description).toBe(skillToClone.description);
-      expect(clonedSkill.pixValue).toBeNull();
       expect(clonedSkill.hint_i18n).toEqual(skillToClone.hint_i18n);
       expect(clonedSkill.hintStatus).toBe(skillToClone.hintStatus);
       expect(clonedSkill.tutorialIds).toEqual(skillToClone.tutorialIds);
@@ -569,9 +568,7 @@ describe('Unit | Domain | Skill', () => {
         },
         hintStatus: Skill.HINT_STATUSES.A_RETRAVAILLER,
         tutorialIds: ['originalTutoId'],
-        tutorialAirtableIds: ['originalTutoAirtableId'],
         learningMoreTutorialIds: ['originalLMTutoId'],
-        learningMoreTutorialAirtableIds: ['originalLMTutoAirtableId'],
         competenceId: 'originalCompetenceId',
         pixValue: 1,
         status: Skill.STATUSES.ACTIF,
@@ -585,7 +582,6 @@ describe('Unit | Domain | Skill', () => {
       };
       const skill = domainBuilder.buildSkill(originalData);
       const updateCommand = {
-        airtableId: 'someValueWeDONotUse',
         description: 'newDescription',
         descriptionStatus: Skill.DESCRIPTION_STATUSES.VALIDE,
         clue: 'new hint fr',
@@ -612,8 +608,8 @@ describe('Unit | Domain | Skill', () => {
           },
           hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
           internationalisation: Skill.INTERNATIONALISATIONS.NONE,
-          tutorialAirtableIds: ['newTutoAirtableId'],
-          learningMoreTutorialAirtableIds: ['newLMTutoAirtableId'],
+          tutorialIds: ['newTutoAirtableId'],
+          learningMoreTutorialIds: ['newLMTutoAirtableId'],
           status: Skill.STATUSES.ARCHIVE,
           archivedAt: now,
         }),

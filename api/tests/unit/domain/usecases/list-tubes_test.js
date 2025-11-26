@@ -9,7 +9,7 @@ describe('Unit | Domain | Use Cases | list-tubes', () => {
   beforeEach(() => {
     tubeRepository = {
       list: vi.fn().mockResolvedValueOnce(allTubes),
-      getManyByAirtableIds: vi.fn().mockResolvedValueOnce(tubesByAirtableIds),
+      getMany: vi.fn().mockResolvedValueOnce(tubesByAirtableIds),
     };
   });
 
@@ -37,7 +37,7 @@ describe('Unit | Domain | Use Cases | list-tubes', () => {
 
       // then
       expect(result).toBe(tubesByAirtableIds);
-      expect(tubeRepository.getManyByAirtableIds).toHaveBeenCalledWith(['recTube1', 'recTube2']);
+      expect(tubeRepository.getMany).toHaveBeenCalledWith(['recTube1', 'recTube2']);
     });
   });
 });

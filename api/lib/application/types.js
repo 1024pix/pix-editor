@@ -13,7 +13,7 @@ export function areaId() {
 }
 
 export function attachmentId() {
-  return Joi.string().pattern(/^rec[a-zA-Z0-9]+$/);
+  return Joi.string().pattern(/^(rec|attachment)[a-zA-Z0-9]+$/);
 }
 
 export function frameworkId() {

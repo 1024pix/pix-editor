@@ -1,13 +1,4 @@
-import { areaDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
-import { saveInAirtable } from './utils.js';
-
-export async function buildAreasFromConfig({
-  airtableClient,
-  databaseBuilder,
-  logger,
-  learningContentConfig,
-  learningContentData,
-}) {
+export function buildAreasFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const areaItems = [];
   for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
     for (let j = 0; j < learningContentConfig.cntAreasPerFramework; ++j) {
@@ -24,7 +15,6 @@ export async function buildAreasFromConfig({
     }
   }
 
-  await persistAreas({ items: areaItems, airtableClient, logger });
   areaItems.forEach((areaItem) => {
     areaItem.competences = [];
   });
@@ -35,11 +25,12 @@ export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBu
   const code = `${indexArea + 1}`;
   const title = `${id} title`;
 
-  databaseBuilder.factory.buildArea({
+  const area = {
     id: id,
     code,
     frameworkId: frameworkItem.id,
-  });
+  };
+  databaseBuilder.factory.buildArea(area);
 
   locales.forEach((locale) => {
     databaseBuilder.factory.buildTranslation({
@@ -49,49 +40,5 @@ export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBu
     });
   });
 
-  return {
-    id,
-    code,
-    frameworkId: frameworkItem.airtableId,
-  };
-}
-
-export async function persistAreas({ items, airtableClient, logger }) {
-  const airtableItems = items.map(areaDatasource.toAirTableObject);
-  const records = await saveInAirtable({
-    tableName: 'Domaines',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    item.airtableId = records.shift().id;
-  });
-}
-
-export async function copyAreasFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableAreas = await airtableClient
-    .table('Domaines')
-    .select({
-      fields: [
-        'id persistant',
-        'Code',
-        'Couleur',
-        'Referentiel',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableAreas.length} areas from airtable...`);
-
-  airtableAreas.forEach((record) => {
-    databaseBuilder.factory.buildArea({
-      id: record.get('id persistant'),
-      code: record.get('Code'),
-      color: record.get('Couleur'),
-      frameworkId: record.get('Referentiel')[0],
-      createdAt: record._rawJson.createdTime,
-      updatedAt: new Date(),
-    });
-  });
+  return area;
 }

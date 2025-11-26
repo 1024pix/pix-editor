@@ -11,7 +11,7 @@ describe('Unit | Domain | Use Cases | list-skills', () => {
   beforeEach(() => {
     skillRepository = {
       list: vi.fn().mockResolvedValueOnce(allSkills),
-      getManyByAirtableIds: vi.fn().mockResolvedValueOnce(skillsByAirtableIds),
+      getMany: vi.fn().mockResolvedValueOnce(skillsByAirtableIds),
       search: vi.fn().mockResolvedValueOnce(foundSKills),
       get: vi.fn().mockResolvedValueOnce(skillByPixId),
     };
@@ -41,7 +41,7 @@ describe('Unit | Domain | Use Cases | list-skills', () => {
 
       // then
       expect(result).toBe(skillsByAirtableIds);
-      expect(skillRepository.getManyByAirtableIds).toHaveBeenCalledWith(['skill1', 'skill2']);
+      expect(skillRepository.getMany).toHaveBeenCalledWith(['skill1', 'skill2']);
     });
   });
 

@@ -23,7 +23,6 @@ describe('Unit | Infrastructure | skill-transformer', function() {
           learningMoreTutorialIds: ['tutorialId3'],
           learningMoreTutorialAirtableIds: ['recTutorialId3'],
           competenceId: 'competenceId',
-          pixValue: 0,
           status: Skill.STATUSES.ARCHIVE,
           tubeId: 'tubeId',
           tubeAirtableId: 'recTubeId',
@@ -35,7 +34,7 @@ describe('Unit | Infrastructure | skill-transformer', function() {
         });
 
         // when
-        const actualSkillForRelease = forRelease(skill, ['competenceId']);
+        const actualSkillForRelease = forRelease(skill);
 
         // then
         expect(actualSkillForRelease).toStrictEqual(
@@ -46,7 +45,6 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',
@@ -164,7 +162,6 @@ describe('Unit | Infrastructure | skill-transformer', function() {
           learningMoreTutorialIds: ['tutorialId3'],
           learningMoreTutorialAirtableIds: ['recTutorialId3'],
           competenceId: 'competenceId',
-          pixValue: 0,
           status: Skill.STATUSES.ARCHIVE,
           tubeId: 'tubeId',
           tubeAirtableId: 'recTubeId',
@@ -179,7 +176,7 @@ describe('Unit | Infrastructure | skill-transformer', function() {
         });
 
         // when
-        const actualSkillForReplication = forReplication(skill, ['competenceId']);
+        const actualSkillForReplication = forReplication(skill);
 
         // then
         expect(actualSkillForReplication).toStrictEqual(
@@ -191,7 +188,6 @@ describe('Unit | Infrastructure | skill-transformer', function() {
             hintStatus: Skill.HINT_STATUSES.VALIDE,
             tutorialIds: ['tutorialId1', 'tutorialId2'],
             learningMoreTutorialIds: ['tutorialId3'],
-            pixValue: 0,
             competenceId: 'competenceId',
             status: Skill.STATUSES.ARCHIVE,
             tubeId: 'tubeId',

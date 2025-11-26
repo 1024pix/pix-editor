@@ -1,4 +1,4 @@
-import { cycle, saveInAirtable } from './utils.js';
+import { cycle } from './utils.js';
 import { Skill } from '../../../lib/domain/models/index.js';
 
 const ignoreEmptyValues = (val) => Boolean(val);
@@ -17,14 +17,7 @@ function* cycleTutorials(tutotialItems) {
   }
 }
 
-export async function buildSkillsFromConfig({
-  airtableClient,
-  databaseBuilder,
-  logger,
-  learningContentConfig,
-  learningContentData,
-  tutorialItems,
-}) {
+export function buildSkillsFromConfig({ databaseBuilder, learningContentConfig, learningContentData, tutorialItems }) {
   const skillItems = [];
   const allTubes = learningContentData.flatMap((framework) =>
     framework.areas
@@ -106,29 +99,9 @@ export async function buildSkillsFromConfig({
       }
     }
   }
-  await persistSkills({ items: skillItems, airtableClient, logger });
   skillItems.forEach((skillItem) => {
     skillItem.challenges = [];
   });
-}
-
-function toAirtableObject(item) {
-  return {
-    fields: {
-      'id persistant': item.id,
-      "Statut de l'indice": item.hintStatus,
-      Comprendre: [],
-      'En savoir plus': [],
-      Status: item.status,
-      Tube: [item.tubeAirtableId],
-      Description: item.description,
-      Level: item.level,
-      Internationalisation: item.internationalisation,
-      Version: item.version,
-      Comprendre: item.tutorialAirtableIds,
-      'En savoir plus': item.learningMoreTutorialAirtableIds,
-    },
-  };
 }
 
 export function buildSkill({
@@ -155,11 +128,8 @@ export function buildSkill({
     status: isWorkbench ? 'en construction' : status,
     internationalisation: isWorkbench ? null : 'Monde',
     version: isWorkbench ? null : version,
-    tubeAirtableId: tubeItem.airtableId,
     tubeId: tubeItem.id,
-    tutorialAirtableIds: tutorialItems?.map(({ airtableId }) => airtableId),
     tutorialIds: tutorialItems?.map(({ id }) => id),
-    learningMoreTutorialAirtableIds: learningMoreTutorialItems?.map(({ airtableId }) => airtableId),
     learningMoreTutorialIds: learningMoreTutorialItems?.map(({ id }) => id),
   };
   databaseBuilder.factory.buildSkill(skillItem);
@@ -171,58 +141,4 @@ export function buildSkill({
     });
   });
   return skillItem;
-}
-
-export async function persistSkills({ items, airtableClient, logger }) {
-  const airtableItems = items.map(toAirtableObject);
-  const records = await saveInAirtable({
-    tableName: 'Acquis',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    item.airtableId = records.shift().id;
-  });
-}
-
-export async function copySkillsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableSkills = await airtableClient
-    .table('Acquis')
-    .select({
-      fields: [
-        'id persistant',
-        "Statut de l'indice",
-        'Comprendre (id persistant)',
-        'En savoir plus (id persistant)',
-        'Status',
-        'Tube (id persistant)',
-        'Description',
-        'Level',
-        'Internationalisation',
-        'Version',
-        'Statut de la description',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableSkills.length} skills from airtable...`);
-
-  airtableSkills.forEach((record) => {
-    databaseBuilder.factory.buildSkill({
-      id: record.get('id persistant'),
-      hintStatus: record.get("Statut de l'indice"),
-      status: record.get('Status'),
-      tubeId: record.get('Tube (id persistant)')[0],
-      description: record.get('Description'),
-      level: record.get('Level'),
-      internationalisation: record.get('Internationalisation'),
-      version: record.get('Version'),
-      descriptionStatus: record.get('Statut de la description'),
-      tutorialIds: record.get('Comprendre (id persistant)'),
-      learningMoreTutorialIds: record.get('En savoir plus (id persistant)'),
-      createdAt: record._rawJson.createdTime,
-      updatedAt: new Date(),
-    });
-  });
 }

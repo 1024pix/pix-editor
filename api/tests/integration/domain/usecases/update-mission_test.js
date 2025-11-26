@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { updateMission } from '../../../../lib/domain/usecases/index.js';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { Mission, Skill } from '../../../../lib/domain/models/index.js';
 import * as missionRepository from '../../../../lib/infrastructure/repositories/mission-repository.js';
 
@@ -55,12 +55,6 @@ describe('Integration | Usecases | Update mission', function() {
     databaseBuilder.factory.buildSkill(skill);
     await databaseBuilder.commit();
 
-    airtableBuilder.mockLists({
-      skills: [airtableBuilder.factory.buildSkill(skill)],
-      tubes: [airtableBuilder.factory.buildTube(tube)],
-      thematics: [airtableBuilder.factory.buildThematic(thematic)],
-    });
-
     const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
     await databaseBuilder.commit();
 
@@ -90,8 +84,6 @@ describe('Integration | Usecases | Update mission', function() {
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic(thematic);
     await databaseBuilder.commit();
-
-    airtableBuilder.mockLists({ thematics: [airtableBuilder.factory.buildThematic(thematic)] });
 
     const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
     await databaseBuilder.commit();

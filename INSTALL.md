@@ -9,20 +9,6 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 > ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
 
-### Airtable
-
-Pix Editor utilise [Airtable](https://airtable.com/). 
-La structure de la base peut être fournie en contactant l'équipe de développement.
-
-Naviguer dans votre "developer hub".
-Générer un access token avec les droits suivant :
-```
-data.records:read
-data.records:write
-```
-Donner l'accès à la base qui contient votre schéma dupliqué.
-Une fois la base dupliquée, utilisez un compte nominatif pour générer un personal access token.
-
 ## Récupérer le code source
 
 ```bash
@@ -93,7 +79,7 @@ select "apiKey" from users where trigram = 'ADM';
 Vous obtenez un token, ici  `b00d647e-1cb2-11ee-adb2-0242ac11003e`
 
 
-## Activer les attachments (image, fichier) 
+## Activer les attachments (image, fichier)
 
 ### OVH
 

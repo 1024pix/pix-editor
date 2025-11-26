@@ -1,14 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
-import { frameworkDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as config from '../../../lib/config.js';
 
 const TABLE_NAME = 'frameworks';
@@ -29,8 +21,6 @@ describe('Acceptance | Route | frameworks', () => {
   });
 
   describe('GET /frameworks', () => {
-    let airtableFrameworksScope;
-
     beforeEach(async () => {
       databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix', createdAt: '20250905T07:20:00Z' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
@@ -45,66 +35,6 @@ describe('Acceptance | Route | frameworks', () => {
       databaseBuilder.factory.buildArea({ id: 'area8', code: '8', frameworkId: 'framework3' });
       databaseBuilder.factory.buildFramework({ id: 'framework4', name: 'Prix', createdAt: '20250905T07:23:00Z' });
       await databaseBuilder.commit();
-
-      const airtableFrameworks = [
-        airtableBuilder.factory.buildFramework(
-          domainBuilder.buildFrameworkDatasourceObject({
-            id: 'framework1',
-            name: 'Pix',
-            areaIds: ['area1', 'area2'],
-            areaAirtableIds: ['recArea1', 'recArea2'],
-          }),
-        ),
-        airtableBuilder.factory.buildFramework(
-          domainBuilder.buildFrameworkDatasourceObject({
-            id: 'framework3',
-            name: 'Poux',
-            areaIds: [
-              'area6',
-              'area7',
-              'area8',
-            ],
-            areaAirtableIds: [
-              'recArea6',
-              'recArea7',
-              'recArea8',
-            ],
-          }),
-        ),
-        airtableBuilder.factory.buildFramework(
-          domainBuilder.buildFrameworkDatasourceObject({
-            id: 'framework2',
-            name: 'Paix',
-            areaIds: [
-              'area3',
-              'area4',
-              'area5',
-            ],
-            areaAirtableIds: [
-              'recArea3',
-              'recArea4',
-              'recArea5',
-            ],
-          }),
-        ),
-        airtableBuilder.factory.buildFramework(
-          domainBuilder.buildFrameworkDatasourceObject({
-            id: 'framework4',
-            name: 'Prix',
-            areaIds: null,
-            areaAirtableIds: null,
-          }),
-        ),
-      ];
-
-      airtableFrameworksScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Referentiel')
-        .query({
-          fields: { '': frameworkDatasource.usedFields },
-          sort: [{ field: frameworkDatasource.sortField, direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableFrameworks });
     });
 
     it('should respond with status 200 and frameworks', async () => {
@@ -127,7 +57,7 @@ describe('Acceptance | Route | frameworks', () => {
             type: 'frameworks',
             id: 'framework1',
             attributes: { name: 'Pix' },
-            relationships: { areas: { data: [{ id: 'recArea1', type: 'areas' }, { id: 'recArea2', type: 'areas' }] } },
+            relationships: { areas: { data: [{ id: 'area1', type: 'areas' }, { id: 'area2', type: 'areas' }] } },
           },
           {
             type: 'frameworks',
@@ -136,9 +66,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'recArea6', type: 'areas' },
-                  { id: 'recArea7', type: 'areas' },
-                  { id: 'recArea8', type: 'areas' },
+                  { id: 'area6', type: 'areas' },
+                  { id: 'area7', type: 'areas' },
+                  { id: 'area8', type: 'areas' },
                 ],
               },
             },
@@ -150,9 +80,9 @@ describe('Acceptance | Route | frameworks', () => {
             relationships: {
               areas: {
                 data: [
-                  { id: 'recArea3', type: 'areas' },
-                  { id: 'recArea4', type: 'areas' },
-                  { id: 'recArea5', type: 'areas' },
+                  { id: 'area3', type: 'areas' },
+                  { id: 'area4', type: 'areas' },
+                  { id: 'area5', type: 'areas' },
                 ],
               },
             },
@@ -165,16 +95,10 @@ describe('Acceptance | Route | frameworks', () => {
           },
         ],
       });
-
-      expect(airtableFrameworksScope.isDone()).toBe(true);
     });
   });
 
   describe('POST /frameworks', () => {
-    beforeEach(async () => {
-      await knex.delete().from(TABLE_NAME);
-    });
-
     describe('when user is NOT admin', () => {
       it('should respond with status 403', async () => {
         // given
@@ -223,21 +147,6 @@ describe('Acceptance | Route | frameworks', () => {
 
     it('should respond with status 201 and created framework', async () => {
       // given
-      const airtableFramework = airtableBuilder.factory.buildFramework(
-        domainBuilder.buildFrameworkDatasourceObject({
-          id: 'framework4',
-          name: 'Prix',
-          areaIds: null,
-          areaAirtableIds: null,
-        }),
-      );
-
-      const airtableFrameworksScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Referentiel/', { records: [{ fields: { Nom: 'Prix' } }] })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableFramework] });
-
       const server = await createServer();
 
       // when
@@ -258,15 +167,15 @@ describe('Acceptance | Route | frameworks', () => {
       expect(response.result).toEqual({
         data: {
           type: 'frameworks',
-          id: 'framework4',
+          id: expect.stringMatching(/^framework.+$/),
           attributes: { name: 'Prix' },
           relationships: { areas: { data: [] } },
         },
       });
-      expect(airtableFrameworksScope.isDone()).toBe(true);
+
       await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
         {
-          id: 'framework4',
+          id: expect.stringMatching(/^framework.+$/),
           name: 'Prix',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),

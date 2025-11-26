@@ -9,7 +9,7 @@ describe('Unit | Domain | Use Cases | list-thematics', () => {
   beforeEach(() => {
     thematicRepository = {
       list: vi.fn().mockResolvedValueOnce(allThematics),
-      getManyByAirtableIds: vi.fn().mockResolvedValueOnce(thematicsByAirtableIds),
+      getMany: vi.fn().mockResolvedValueOnce(thematicsByAirtableIds),
     };
   });
 
@@ -37,7 +37,7 @@ describe('Unit | Domain | Use Cases | list-thematics', () => {
 
       // then
       expect(result).toBe(thematicsByAirtableIds);
-      expect(thematicRepository.getManyByAirtableIds).toHaveBeenCalledWith(['recThematic1', 'recThematic2']);
+      expect(thematicRepository.getMany).toHaveBeenCalledWith(['recThematic1', 'recThematic2']);
     });
   });
 });

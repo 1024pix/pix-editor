@@ -15,7 +15,7 @@ export function register(server) {
       config: {
         validate: { params: Joi.object({ tubeAirtableId: Types.tubeId().required() }) },
         handler: async function(request) {
-          const tube = await tubeRepository.getByAirtableId(request.params.tubeAirtableId);
+          const tube = await tubeRepository.get(request.params.tubeAirtableId);
           if (!tube) return Boom.notFound('unknown tube id');
           return tubeSerializer.serialize(tube);
         },
@@ -76,7 +76,7 @@ export function register(server) {
               id: Types.tubeId().required(),
               attributes: Joi.object({
                 name: Joi.string().required().pattern(/^@.+$/),
-                index: Joi.number(),
+                index: Joi.number().allow(null),
                 'practical-title-fr': Joi.string().allow(null),
                 'practical-title-en': Joi.string().allow(null),
                 'practical-description-fr': Joi.string().allow(null),

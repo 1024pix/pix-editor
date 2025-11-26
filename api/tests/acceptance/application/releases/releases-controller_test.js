@@ -1,12 +1,6 @@
 import { beforeEach, describe, describe as context, expect, it, vi, afterEach } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Attachment, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
@@ -16,18 +10,6 @@ import {
   SkillForRelease,
   TutorialForRelease,
 } from '../../../../lib/domain/models/release/index.js';
-
-const {
-  buildArea,
-  buildAttachment,
-  buildChallenge,
-  buildCompetence,
-  buildFramework,
-  buildSkill,
-  buildThematic,
-  buildTube,
-  buildTutorial,
-} = airtableBuilder.factory;
 
 async function mockCurrentContent() {
   const expectedCurrentContent = {
@@ -156,6 +138,7 @@ async function mockCurrentContent() {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
         accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
         accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
         requireGafamWebsiteAccess: true,
@@ -196,6 +179,7 @@ async function mockCurrentContent() {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
         accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
         accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
         requireGafamWebsiteAccess: true,
@@ -321,33 +305,6 @@ async function mockCurrentContent() {
       localizedChallengeId: 'recChallenge0En',
     },
   ].map(domainBuilder.buildAttachmentDatasourceObject);
-
-  airtableBuilder.mockLists({
-    areas: [buildArea(expectedCurrentContent.areas[0])],
-    attachments: attachments.map(buildAttachment),
-    challenges: [
-      buildChallenge({
-        ...expectedCurrentContent.challenges[0],
-        files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
-      }),
-    ],
-    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
-    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
-    skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0'] })],
-    thematics: [
-      buildThematic({
-        ...expectedCurrentContent.thematics[0],
-        airtableId: expectedCurrentContent.thematics[0].id + 'Airtable',
-      }),
-    ],
-    tubes: [
-      buildTube({
-        ...expectedCurrentContent.tubes[0],
-        thematicAirtableId: expectedCurrentContent.thematics[0].id + 'Airtable',
-      }),
-    ],
-    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
-  });
 
   databaseBuilder.factory.buildFramework(expectedCurrentContent.frameworks[0]);
   databaseBuilder.factory.buildArea(expectedCurrentContent.areas[0]);
@@ -650,6 +607,7 @@ async function mockContentForRelease() {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
         attachments: ['url de la pièce jointe'],
         illustrationUrl: 'url de l‘illustration',
         illustrationAlt: 'Texte alternatif illustration',
@@ -690,6 +648,7 @@ async function mockContentForRelease() {
         alpha: 0.9,
         responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
         genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
+        alternativeVersion: null,
         illustrationAlt: 'Texte alternatif illustration',
         illustrationUrl: null,
         accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
@@ -792,30 +751,6 @@ async function mockContentForRelease() {
       localizedChallengeId: 'recChallenge0',
     },
   ].map(domainBuilder.buildAttachmentDatasourceObject);
-
-  airtableBuilder.mockLists({
-    areas: [buildArea(expectedCurrentContent.areas[0])],
-    attachments: attachments.map(buildAttachment),
-    challenges: [
-      buildChallenge({
-        ...expectedCurrentContent.challenges[0],
-        files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId })),
-        version: 8,
-      }),
-      buildChallenge({
-        ...expectedCurrentContent.challenges[1],
-        accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
-        accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
-        version: 8,
-      }),
-    ],
-    competences: [buildCompetence({ ...expectedCurrentContent.competences[0], tubeIds: [expectedCurrentContent.tubes[0].id] })],
-    frameworks: [buildFramework({ ...expectedCurrentContent.frameworks[0], areaIds: [expectedCurrentContent.areas[0].id] })],
-    skills: [buildSkill({ ...expectedCurrentContent.skills[0], challengeIds: ['recChallenge0', 'recChallenge0_1'] })],
-    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    tubes: [buildTube(expectedCurrentContent.tubes[0])],
-    tutorials: expectedCurrentContent.tutorials.map(buildTutorial),
-  });
 
   expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
   expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
@@ -982,36 +917,16 @@ describe('Acceptance | Controller | release-controller', () => {
         // Then
         expect(JSON.parse(response.result)).to.deep.equal(JSON.parse(JSON.stringify(expectedCurrentContent)));
       });
-
-      it('should handle error', async () => {
-        // Given
-        airtableBuilder.mockList({ tableName: 'Domaines' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Competences' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Tubes' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Acquis' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Epreuves' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Tutoriels' }).returns().activate(500);
-
-        const server = await createServer();
-
-        // When
-        const response = await server.inject({
-          method: 'GET',
-          url: '/api/current-content',
-          headers: generateAuthorizationHeader(user),
-        });
-
-        // Then
-        expect(() => JSON.parse(response.result)).to.throw(Error);
-      });
     });
   });
 
   describe('GET /releases/latest - Returns latest release', () => {
     let user;
+
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
     });
+
     context('nominal case', () => {
       it('should return latest release of learning content', async () => {
         // Given
@@ -1086,6 +1001,7 @@ describe('Acceptance | Controller | release-controller', () => {
         expect(response.statusCode).to.equal(304);
         expect(response.result).to.be.null;
       });
+
       it('should return the latest release if the release is newer than given if-modified-since date', async function() {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({

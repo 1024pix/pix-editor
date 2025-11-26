@@ -1,5 +1,4 @@
-import { cycle, saveInAirtable } from './utils.js';
-import { attachmentDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import { cycle } from './utils.js';
 
 const iterForData = cycle([
   {
@@ -56,7 +55,8 @@ export function buildAttachment({ challengeId, localizedChallengeId, type, datab
     value: `value ${locale} for illustrationAlt`,
   });
   const attachmentData = iterForData.next().value;
-  return {
+  return databaseBuilder.factory.buildAttachment({
+    id: `attachment${localizedChallengeId.split('challenge')[1]}`,
     filename: attachmentData.filename,
     mimeType: attachmentData.mimeType,
     size: attachmentData.size,
@@ -64,62 +64,5 @@ export function buildAttachment({ challengeId, localizedChallengeId, type, datab
     url: type === 'illustration' ? attachmentData.urlForTypeIllustration : attachmentData.urlForTypeAttachment,
     challengeId,
     localizedChallengeId,
-  };
-}
-
-export async function persistAttachments({ items, airtableClient, logger, databaseBuilder }) {
-  const airtableItems = items.map((item) =>
-    attachmentDatasource.toAirTableObject({
-      ...item,
-      challengeId: item.challengeAirtableId,
-    }),
-  );
-  const records = await saveInAirtable({
-    tableName: 'Attachments',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    const record = records.shift();
-    item.airtableId = record.id;
-    item.id = record.id;
-    item.challengeId = record.get('challengeId persistant')[0];
-  });
-  items.forEach((item) => {
-    databaseBuilder.factory.buildAttachment(item);
-  });
-}
-
-export async function copyAttachmentsFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableAttachments = await airtableClient
-    .table('Attachments')
-    .select({
-      fields: [
-        'Record ID',
-        'url',
-        'size',
-        'type',
-        'mimeType',
-        'filename',
-        'challengeId persistant',
-        'localizedChallengeId',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableAttachments.length} attachments from airtable...`);
-
-  airtableAttachments.forEach((record) => {
-    databaseBuilder.factory.buildAttachment({
-      id: record.get('Record ID'),
-      url: record.get('url'),
-      size: record.get('size'),
-      type: record.get('type'),
-      mimeType: record.get('mimeType'),
-      filename: record.get('filename'),
-      challengeId: record.get('challengeId persistant')?.[0],
-      localizedChallengeId: record.get('localizedChallengeId'),
-    });
   });
 }

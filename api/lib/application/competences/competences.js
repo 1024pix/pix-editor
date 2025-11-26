@@ -24,7 +24,7 @@ export async function register(server) {
       config: {
         validate: { params: Joi.object({ competenceAirtableId: Types.competenceId().required() }) },
         handler: async function(request) {
-          const competence = await competenceRepository.getByAirtableId(request.params.competenceAirtableId);
+          const competence = await competenceRepository.get(request.params.competenceAirtableId);
           if (!competence) throw new NotFoundError('unknown competence');
           return competenceSerializer.serialize(competence);
         },

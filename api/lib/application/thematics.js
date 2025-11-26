@@ -15,7 +15,7 @@ export function register(server) {
       config: {
         validate: { params: Joi.object({ thematicAirtableId: Types.thematicId().required() }) },
         handler: async function(request) {
-          const thematic = await thematicRepository.getByAirtableId(request.params.thematicAirtableId);
+          const thematic = await thematicRepository.get(request.params.thematicAirtableId);
           if (!thematic) return Boom.notFound('unknown thematic id');
           return thematicSerializer.serialize(thematic);
         },

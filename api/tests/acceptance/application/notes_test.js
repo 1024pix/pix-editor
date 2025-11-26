@@ -1,11 +1,7 @@
-import nock from 'nock';
 import { describe, it, expect } from 'vitest';
 import { Note } from '../../../lib/domain/models/index.js';
 import { createServer } from '../../../server.js';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
-import Airtable from 'airtable';
-
-const { Record: AirtableRecord } = Airtable;
 
 describe('Acceptance | Routes | Notes', () => {
   describe('GET /notes', () => {
@@ -21,6 +17,7 @@ describe('Acceptance | Routes | Notes', () => {
         author: 'NLE',
         challengeId,
         status: Note.STATUSES.TERMINE,
+        createdAt: '2025-11-12T14:39:00Z',
       });
       databaseBuilder.factory.buildNote({
         id: 'rec456',
@@ -28,43 +25,10 @@ describe('Acceptance | Routes | Notes', () => {
         author: 'FOO',
         challengeId,
         status: Note.STATUSES.EN_COURS,
+        createdAt: '2025-11-12T14:47:00Z',
       });
 
       await databaseBuilder.commit();
-
-      const airtableNotes = [
-        {
-          id: 'rec123',
-          fields: {
-            Texte: 'Un texte',
-            Auteur: 'NLE',
-            Changelog: 'non',
-            Date: new Date('2025-11-12T14:39:00Z'),
-            Record_Id: challengeId,
-            Statut: Note.STATUSES.TERMINE,
-          },
-        },
-        {
-          id: 'rec456',
-          fields: {
-            Texte: 'Un autre texte',
-            Auteur: 'FOO',
-            Changelog: 'non',
-            Date: new Date('2025-11-12T14:47:00Z'),
-            Record_Id: challengeId,
-            Statut: Note.STATUSES.EN_COURS,
-          },
-        },
-      ];
-
-      const airtableScope = nock('https://api.airtable.com')
-        .get('/v0/airtableEditorBaseValue/Notes')
-        .query({
-          filterByFormula: `AND(Record_Id = "${challengeId}", Statut != "archive", Changelog = "non")`,
-          sort: [{ field: 'Date', direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableNotes });
 
       const server = await createServer();
 
@@ -86,7 +50,7 @@ describe('Acceptance | Routes | Notes', () => {
             attributes: {
               text: 'Un texte',
               author: 'NLE',
-              'created-at': '2025-11-12T14:39:00.000Z',
+              'created-at': new Date('2025-11-12T14:39:00Z'),
               status: Note.STATUSES.TERMINE,
             },
           },
@@ -96,14 +60,12 @@ describe('Acceptance | Routes | Notes', () => {
             attributes: {
               text: 'Un autre texte',
               author: 'FOO',
-              'created-at': '2025-11-12T14:47:00.000Z',
+              'created-at': new Date('2025-11-12T14:47:00Z'),
               status: Note.STATUSES.EN_COURS,
             },
           },
         ],
       });
-
-      expect(airtableScope.isDone()).toBe(true);
     });
   });
 
@@ -122,25 +84,6 @@ describe('Acceptance | Routes | Notes', () => {
         challengeId: 'challengeAbc123',
       });
 
-      const airtableNote = {
-        id: note.id,
-        fields: {
-          Statut: note.status,
-          Texte: note.text,
-          Auteur: note.author,
-          Date: note.createdAt,
-          Record_Id: note.challengeId,
-          'Type d\'élément': 'épreuve',
-          Changelog: 'non',
-        },
-      };
-      const expectedNoteBody = structuredClone(airtableNote);
-      delete expectedNoteBody.id;
-      delete expectedNoteBody.fields.Date;
-
-      const airtableScope = nock('https://api.airtable.com')
-        .post('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedNoteBody] })
-        .reply(200, { records: [new AirtableRecord('Notes', airtableNote.id, airtableNote)] });
       const server = await createServer();
 
       // when
@@ -166,11 +109,11 @@ describe('Acceptance | Routes | Notes', () => {
       expect(response.result).toStrictEqual({
         data: {
           type: 'notes',
-          id: 'note123',
+          id: expect.stringMatching(/^note.+/),
           attributes: {
             text: 'Un texte',
             author: 'NLE',
-            'created-at': note.createdAt.toISOString(),
+            'created-at': expect.any(Date),
             status: Note.STATUSES.EN_COURS,
           },
         },
@@ -178,7 +121,7 @@ describe('Acceptance | Routes | Notes', () => {
 
       await expect(knex.select('*').from('notes')).resolves.toStrictEqual([
         {
-          id: 'note123',
+          id: expect.stringMatching(/^note.+/),
           text: 'Un texte',
           author: 'NLE',
           status: Note.STATUSES.EN_COURS,
@@ -187,8 +130,6 @@ describe('Acceptance | Routes | Notes', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      expect(airtableScope.isDone()).toBe(true);
     });
   });
 
@@ -217,26 +158,6 @@ describe('Acceptance | Routes | Notes', () => {
         challengeId: 'challengeAbc123',
       });
 
-      const airtableNote = {
-        id: note.id,
-        fields: {
-          Statut: Note.STATUSES.TERMINE,
-          Texte: 'Un nouveau texte',
-          Auteur: note.author,
-          Date: note.createdAt,
-          Record_Id: note.challengeId,
-          'Type d\'élément': 'épreuve',
-          Changelog: 'non',
-        },
-      };
-      const expectedNoteBody = structuredClone(airtableNote);
-      delete expectedNoteBody.fields.Changelog;
-      delete expectedNoteBody.fields.Date;
-      delete expectedNoteBody.fields['Type d\'élément'];
-
-      const airtableScope = nock('https://api.airtable.com')
-        .patch('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedNoteBody] })
-        .reply(200, { records: [new AirtableRecord('Notes', airtableNote.id, airtableNote)] });
       const server = await createServer();
 
       // when
@@ -267,7 +188,7 @@ describe('Acceptance | Routes | Notes', () => {
           attributes: {
             text: 'Un nouveau texte',
             author: 'NLE',
-            'created-at': note.createdAt.toISOString(),
+            'created-at': note.createdAt,
             status: Note.STATUSES.TERMINE,
           },
         },
@@ -284,8 +205,6 @@ describe('Acceptance | Routes | Notes', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      expect(airtableScope.isDone()).toBe(true);
     });
   });
 });

@@ -1,5 +1,4 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import nock from 'nock';
+import { beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
 
@@ -34,41 +33,6 @@ describe('Integration | Repository | translation-repository', function() {
       await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal(
         translations,
       );
-    });
-
-    context('when Airtable has a translations table', () => {
-      beforeEach(async function() {
-        await _setDoesTableExistInAirtable(true);
-      });
-
-      afterEach(async function() {
-        await _setDoesTableExistInAirtable(false);
-      });
-
-      it('should save translations to airtable', async function() {
-        // given
-        nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/translations/?', {
-            records: [
-              {
-                fields: {
-                  key: 'entity.recordid.key',
-                  locale: 'fr',
-                  value: 'translationValue',
-                },
-              },
-            ],
-            performUpsert: { fieldsToMergeOn: ['key', 'locale'] },
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [] });
-
-        // when
-        await translationRepository.save({ translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }] });
-
-        // then
-        expect(nock.isDone()).to.be.true;
-      });
     });
   });
 
@@ -106,67 +70,6 @@ describe('Integration | Repository | translation-repository', function() {
           value: 'Hallo, het mif',
         },
       ]);
-    });
-
-    context('when Airtable has a translations table', () => {
-      beforeEach(async function() {
-        await _setDoesTableExistInAirtable(true);
-      });
-
-      afterEach(async function() {
-        await _setDoesTableExistInAirtable(false);
-      });
-
-      it('should delete keys in Airtable', async () => {
-        // given
-        nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/translations')
-          .query({
-            fields: {
-              '': [
-                'key',
-                'locale',
-                'value',
-              ],
-            },
-            filterByFormula: "AND(REGEX_MATCH(key, '^some\\.prefix\\.'), OR(locale = 'fr', locale = 'en'))",
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, {
-            records: [
-              {
-                id: 'recTranslation1',
-                fields: {
-                  key: 'some.prefix.key',
-                  locale: 'fr',
-                  value: 'Bonjour, la mif',
-                },
-              },
-              {
-                id: 'recTranslation2',
-                fields: {
-                  key: 'some.prefix.key',
-                  locale: 'en',
-                  value: 'Hello, the mif',
-                },
-              },
-            ],
-          });
-
-        nock('https://api.airtable.com')
-          .delete('/v0/airtableBaseValue/translations')
-          .query({ records: { '': ['recTranslation1', 'recTranslation2'] } })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [{ id: 'recTranslation1', deleted: true }, { id: 'recTranslation2', deleted: true }] });
-
-        const prefixToDelete = 'some.prefix.';
-        const locales = ['fr', 'en'];
-
-        // when
-        await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
-
-        expect(nock.isDone()).toBe(true);
-      });
     });
   });
 
@@ -615,41 +518,3 @@ describe('Integration | Repository | translation-repository', function() {
     });
   });
 });
-
-async function _setDoesTableExistInAirtable(value) {
-  if (value) {
-    nock('https://api.airtable.com')
-      .get('/v0/airtableBaseValue/translations')
-      .query({
-        fields: {
-          '': [
-            'key',
-            'locale',
-            'value',
-          ],
-        },
-        sort: [{ field: 'key_locale', direction: 'asc' }],
-        maxRecords: 1,
-      })
-      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .reply(200, { records: [] });
-  } else {
-    nock('https://api.airtable.com')
-      .get('/v0/airtableBaseValue/translations')
-      .query({
-        fields: {
-          '': [
-            'key',
-            'locale',
-            'value',
-          ],
-        },
-        sort: [{ field: 'key_locale', direction: 'asc' }],
-        maxRecords: 1,
-      })
-      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .reply(404);
-  }
-
-  await translationRepository.checkIfTableExistInAirtable();
-}

@@ -1,20 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
-import Airtable from 'airtable';
 
-import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { create, list } from '../../../../lib/infrastructure/repositories/area-repository.js';
 import { Area } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
-import * as airtable from '../../../../lib/infrastructure/airtable.js';
 
 const TABLE_NAME = 'areas';
-const AIRTABLE_NAME = 'Domaines';
 
 describe('Integration | Infrastructure | Repository | area-repository', () => {
   describe('#create', () => {
-    it('inserts area in airtable and postgres w/ its translations', async () => {
+    it('inserts area w/ its translations', async () => {
       // given
-      const airtableId = 'rec123Abc';
       const id = 'area123Abc';
       const code = '6';
       const titleFr = 'Nouveau domaine';
@@ -22,16 +18,6 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
       const frameworkId = 'recFmk123';
 
       const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce(id);
-
-      const createRecord = vi.spyOn(airtable, 'createRecord').mockResolvedValueOnce(
-        new Airtable.Record(AIRTABLE_NAME, airtableId, {
-          fields: {
-            'id persistant': id,
-            Code: code,
-            Referentiel: [frameworkId],
-          },
-        }),
-      );
 
       databaseBuilder.factory.buildFramework({
         id: frameworkId,
@@ -54,9 +40,10 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
       // then
       expect(createdArea).toStrictEqual(
         new Area({
-          airtableId,
+          airtableId: id,
           id,
           code,
+          color: null,
           title_i18n: {
             fr: titleFr,
             en: titleEn,
@@ -68,13 +55,6 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
       );
 
       expect(generateNewId).toHaveBeenCalledExactlyOnceWith('area');
-      expect(createRecord).toHaveBeenCalledExactlyOnceWith(AIRTABLE_NAME, {
-        fields: {
-          'id persistant': id,
-          Code: code,
-          Referentiel: [frameworkId],
-        },
-      });
 
       await expect(knex.select('*').from(TABLE_NAME)).resolves.toStrictEqual([
         {
@@ -92,30 +72,6 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
   describe('#list', () => {
     it('should return the list of all areas', async () => {
       // given
-      const airtableScope = airtableBuilder
-        .mockList({ tableName: AIRTABLE_NAME })
-        .returns([
-          airtableBuilder.factory.buildArea({
-            id: 'areaId1',
-            airtableId: 'recAreaId1',
-            code: '1',
-            color: Area.COLORS.BUTTERFLY_BUSH,
-            competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
-            competenceIds: ['competenceId11', 'competenceId12'],
-            frameworkId: 'frameworkId1',
-          }),
-          airtableBuilder.factory.buildArea({
-            id: 'areaId2',
-            airtableId: 'recAreaId2',
-            code: '2',
-            color: Area.COLORS.WILD_STRAWBERRY,
-            competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
-            competenceIds: ['competenceId21', 'competenceId22'],
-            frameworkId: 'frameworkId1',
-          }),
-        ])
-        .activate().nockScope;
-
       databaseBuilder.factory.buildFramework({ id: 'frameworkId1', name: 'Fmk' });
       databaseBuilder.factory.buildArea({
         id: 'areaId1',
@@ -164,10 +120,8 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
       expect(areas).toEqual([
         domainBuilder.buildArea({
           id: 'areaId1',
-          airtableId: 'recAreaId1',
           code: '1',
           color: Area.COLORS.BUTTERFLY_BUSH,
-          competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
           competenceIds: ['competenceId11', 'competenceId12'],
           frameworkId: 'frameworkId1',
           title_i18n: {
@@ -177,10 +131,8 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
         }),
         domainBuilder.buildArea({
           id: 'areaId2',
-          airtableId: 'recAreaId2',
           code: '2',
           color: Area.COLORS.WILD_STRAWBERRY,
-          competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
           competenceIds: ['competenceId21', 'competenceId22'],
           frameworkId: 'frameworkId1',
           title_i18n: {
@@ -189,8 +141,6 @@ describe('Integration | Infrastructure | Repository | area-repository', () => {
           },
         }),
       ]);
-
-      airtableScope.done();
     });
   });
 });

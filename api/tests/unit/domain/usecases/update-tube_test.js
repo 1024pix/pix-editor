@@ -15,18 +15,18 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
 
   beforeEach(() => {
     tubeRepository = {
-      getByAirtableId: vi.fn(),
+      get: vi.fn(),
       update: vi.fn(),
     };
 
-    thematicRepository = { getByAirtableId: vi.fn().mockReturnValueOnce(thematicDestination) };
+    thematicRepository = { get: vi.fn().mockReturnValueOnce(thematicDestination) };
 
     updatePixApiReleaseCache = { onTubeUpdated: vi.fn().mockResolvedValueOnce() };
 
     tube = domainBuilder.buildTube();
     updateStub = vi.spyOn(tube, 'update').mockReturnValueOnce();
 
-    tubeRepository.getByAirtableId.mockResolvedValueOnce(tube);
+    tubeRepository.get.mockResolvedValueOnce(tube);
 
     tubeRepository.update.mockResolvedValueOnce(updatedTube);
   });
@@ -42,7 +42,7 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
     // then
     await expect(result).resolves.toBe(updatedTube);
 
-    expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith('recTube1');
+    expect(tubeRepository.get).toHaveBeenCalledWith('recTube1');
     expect(updateStub).toHaveBeenCalledWith(tubeUpdates, thematicDestination);
     expect(tubeRepository.update).toHaveBeenCalledWith(tube);
     expect(updatePixApiReleaseCache.onTubeUpdated).toHaveBeenCalledWith(updatedTube);
@@ -51,14 +51,14 @@ describe('Unit | Domain | Use Cases | update-tube', () => {
   describe('when tube is not found', () => {
     it('throws a NotFoundError', async () => {
       // given
-      tubeRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
+      tubeRepository.get.mockReset().mockResolvedValueOnce(null);
 
       // when
       const result = updateTube('recTube1', tubeUpdates, { tubeRepository });
 
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown tube id'));
-      expect(tubeRepository.getByAirtableId).toHaveBeenCalledWith('recTube1');
+      expect(tubeRepository.get).toHaveBeenCalledWith('recTube1');
     });
   });
 });

@@ -1,14 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
-import { areaDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 import * as config from '../../../lib/config.js';
 
@@ -28,73 +20,7 @@ describe('Acceptance | Route | areas', () => {
   });
 
   describe('GET /areas', async () => {
-    let airtableAreasScope;
-
     beforeEach(async () => {
-      const airtableAreas = [
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area1',
-            airtableId: 'recArea1',
-            code: '1',
-            frameworkId: 'framework1',
-            competenceAirtableIds: ['recCompetence1', 'recCompetence2'],
-            competenceIds: ['competence1', 'competence2'],
-            color: null,
-          }),
-        ),
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area4',
-            airtableId: 'recArea4',
-            code: '1',
-            frameworkId: 'framework2',
-            competenceAirtableIds: ['recCompetence8', 'recCompetence9'],
-            competenceIds: ['competence8', 'competence9'],
-            color: null,
-          }),
-        ),
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area2',
-            airtableId: 'recArea2',
-            code: '2',
-            frameworkId: 'framework1',
-            competenceAirtableIds: ['recCompetence4', 'recCompetence3'],
-            competenceIds: ['competence4', 'competence3'],
-            color: null,
-          }),
-        ),
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area3',
-            airtableId: 'recArea3',
-            code: '3',
-            frameworkId: 'framework1',
-            competenceAirtableIds: [
-              'recCompetence7',
-              'recCompetence5',
-              'recCompetence6',
-            ],
-            competenceIds: [
-              'competence7',
-              'competence5',
-              'competence6',
-            ],
-            color: null,
-          }),
-        ),
-      ];
-
-      airtableAreasScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Domaines')
-        .query({
-          fields: { '': areaDatasource.usedFields },
-          sort: [{ field: areaDatasource.sortField, direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableAreas });
-
       databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
@@ -141,7 +67,7 @@ describe('Acceptance | Route | areas', () => {
         data: [
           {
             type: 'areas',
-            id: 'recArea1',
+            id: 'area1',
             attributes: {
               'pix-id': 'area1',
               code: '1',
@@ -156,12 +82,12 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework1',
                 },
               },
-              competences: { data: [{ id: 'recCompetence1', type: 'competences' }, { id: 'recCompetence2', type: 'competences' }] },
+              competences: { data: [{ id: 'competence1', type: 'competences' }, { id: 'competence2', type: 'competences' }] },
             },
           },
           {
             type: 'areas',
-            id: 'recArea4',
+            id: 'area4',
             attributes: {
               'pix-id': 'area4',
               code: '1',
@@ -176,12 +102,12 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework2',
                 },
               },
-              competences: { data: [{ id: 'recCompetence8', type: 'competences' }, { id: 'recCompetence9', type: 'competences' }] },
+              competences: { data: [{ id: 'competence8', type: 'competences' }, { id: 'competence9', type: 'competences' }] },
             },
           },
           {
             type: 'areas',
-            id: 'recArea2',
+            id: 'area2',
             attributes: {
               'pix-id': 'area2',
               code: '2',
@@ -196,12 +122,12 @@ describe('Acceptance | Route | areas', () => {
                   id: 'framework1',
                 },
               },
-              competences: { data: [{ id: 'recCompetence4', type: 'competences' }, { id: 'recCompetence3', type: 'competences' }] },
+              competences: { data: [{ id: 'competence3', type: 'competences' }, { id: 'competence4', type: 'competences' }] },
             },
           },
           {
             type: 'areas',
-            id: 'recArea3',
+            id: 'area3',
             attributes: {
               'pix-id': 'area3',
               code: '3',
@@ -218,17 +144,15 @@ describe('Acceptance | Route | areas', () => {
               },
               competences: {
                 data: [
-                  { id: 'recCompetence7', type: 'competences' },
-                  { id: 'recCompetence5', type: 'competences' },
-                  { id: 'recCompetence6', type: 'competences' },
+                  { id: 'competence5', type: 'competences' },
+                  { id: 'competence6', type: 'competences' },
+                  { id: 'competence7', type: 'competences' },
                 ],
               },
             },
           },
         ],
       });
-
-      expect(airtableAreasScope.isDone()).toBe(true);
     });
   });
 
@@ -296,18 +220,6 @@ describe('Acceptance | Route | areas', () => {
 
     it('should respond with status 201 and created area', async () => {
       // given
-      const airtableArea = airtableBuilder.factory.buildArea(
-        domainBuilder.buildAreaDatasourceObject({
-          id: 'area5',
-          airtableId: 'recArea5',
-          code: '2',
-          frameworkId: 'framework2',
-          competenceAirtableIds: null,
-          competenceIds: null,
-          color: null,
-        }),
-      );
-
       databaseBuilder.factory.buildFramework({
         id: 'framework1',
         name: 'Ref 1',
@@ -332,64 +244,6 @@ describe('Acceptance | Route | areas', () => {
         frameworkId: 'framework2',
       });
       await databaseBuilder.commit();
-
-      const airtableAreas = [
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area1',
-            airtableId: 'recArea1',
-            code: '1',
-            color: null,
-            frameworkId: 'framework1',
-            competenceIds: null,
-          }),
-        ),
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area4',
-            airtableId: 'recArea4',
-            code: '1',
-            color: null,
-            frameworkId: 'framework2',
-            competenceIds: null,
-          }),
-        ),
-        airtableBuilder.factory.buildArea(
-          domainBuilder.buildAreaDatasourceObject({
-            id: 'area2',
-            airtableId: 'recArea2',
-            code: '2',
-            color: null,
-            frameworkId: 'framework1',
-            competenceIds: null,
-          }),
-        ),
-      ];
-
-      const airtableGetAreasScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Domaines')
-        .query({
-          fields: { '': areaDatasource.usedFields },
-          sort: [{ field: areaDatasource.sortField, direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableAreas });
-
-      const airtablePostAreaScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Domaines/', {
-          records: [
-            {
-              fields: {
-                'id persistant': 'area5',
-                Code: '2',
-                Referentiel: ['framework2'],
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableArea] });
 
       const generateNewId = vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('area5');
 
@@ -425,7 +279,7 @@ describe('Acceptance | Route | areas', () => {
       expect(response.result).toEqual({
         data: {
           type: 'areas',
-          id: 'recArea5',
+          id: 'area5',
           attributes: {
             'pix-id': 'area5',
             code: '2',
@@ -450,9 +304,6 @@ describe('Acceptance | Route | areas', () => {
       await expect(knex.select('key', 'locale', 'value').from('translations').orderBy('locale')).resolves.toStrictEqual(
         [{ key: 'area.area5.title', locale: 'en', value: 'Fifth domain' }, { key: 'area.area5.title', locale: 'fr', value: 'Cinquième domaine' }],
       );
-
-      expect(airtableGetAreasScope.isDone()).toBe(true);
-      expect(airtablePostAreaScope.isDone()).toBe(true);
     });
   });
 });

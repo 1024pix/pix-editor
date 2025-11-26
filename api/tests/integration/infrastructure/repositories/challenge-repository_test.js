@@ -1,12 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
-import * as airtable from '../../../../lib/infrastructure/airtable.js';
-import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models/index.js';
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
-import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
-import _ from 'lodash';
-import Airtable from 'airtable';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Integration | Repository | challenge-repository', () => {
@@ -16,7 +11,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeA_data = {
         id: 'challengeA_id',
         localizedEsId: 'locES_challengeA_id',
-        airtableId: 'airtableChallengeA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -38,7 +32,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: false,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['QWE'],
@@ -124,58 +117,6 @@ describe('Integration | Repository | challenge-repository', () => {
         }),
       );
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        return [
-          {
-            id: challengeA_data.airtableId,
-            fields: {
-              'id persistant': challengeA_data.id,
-              'Record ID': challengeA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeA_data.competenceId],
-              "Type d'épreuve": challengeA_data.type,
-              'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-              Statut: challengeA_data.status,
-              'Embed URL': challengeA_data.embedUrl,
-              'Embed height': challengeA_data.embedHeight,
-              Timer: challengeA_data.timer,
-              Format: challengeA_data.format,
-              'Réponse automatique': challengeA_data.autoReply,
-              Langues: challengeA_data.localesAirtable,
-              Focalisée: challengeA_data.focusable,
-              'Difficulté calculée': challengeA_data.deltaAirtable,
-              'Discrimination calculée': challengeA_data.alphaAirtable,
-              Acquix: challengeA_data.skills,
-              'Acquix (id persistant)': [challengeA_data.skillId],
-              Généalogie: challengeA_data.genealogy,
-              'Type péda': challengeA_data.pedagogy,
-              Auteur: challengeA_data.author,
-              Déclinable: challengeA_data.declinable,
-              'Version prototype': challengeA_data.version,
-              'Version déclinaison': challengeA_data.alternativeVersion,
-              'Non voyant': challengeA_data.accessibility1,
-              Daltonien: challengeA_data.accessibility2,
-              Spoil: challengeA_data.spoil,
-              Responsive: challengeA_data.responsive,
-              Géographie: challengeA_data.geography,
-              files: challengeA_data.files.map(({ fileId }) => fileId),
-              filesLocalizedChallengeIds: challengeA_data.files.map(({ localizedChallengeId }) => localizedChallengeId),
-              validated_at: challengeA_data.validatedAt,
-              archived_at: challengeA_data.archivedAt,
-              created_at: challengeA_data.createdAt,
-              made_obsolete_at: challengeA_data.madeObsoleteAt,
-              updated_at: challengeA_data.updatedAt,
-              shuffled: challengeA_data.shuffled,
-              contextualizedFields: challengeA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const challenge = await challengeRepository.get(challengeA_data.id);
@@ -185,7 +126,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeA_data.accessibility1,
           accessibility2: challengeA_data.accessibility2,
-          airtableId: challengeA_data.airtableId,
           alternativeVersion: challengeA_data.alternativeVersion,
           alpha: challengeA_data.alpha,
           archivedAt: challengeA_data.archivedAt,
@@ -221,7 +161,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeA_data.responsive,
           shuffled: challengeA_data.shuffled,
           skillId: challengeA_data.skillId,
-          skills: challengeA_data.skills,
           spoil: challengeA_data.spoil,
           status: challengeA_data.status,
           t1Status: challengeA_data.t1Status,
@@ -244,12 +183,6 @@ describe('Integration | Repository | challenge-repository', () => {
     });
 
     it('should throw a NotFound error when no challenge exist for given id', async () => {
-      // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        return [];
-      });
-
       // when
       const promise = challengeRepository.get('someChallengeId');
 
@@ -265,7 +198,6 @@ describe('Integration | Repository | challenge-repository', () => {
         const challengeA_data = {
           id: 'challengeA_id',
           localizedEsId: 'locES_challengeA_id',
-          airtableId: 'airtableChallengeA_id',
           skillId: 'skillId',
           competenceId: 'competence1',
           alpha: 1,
@@ -288,7 +220,6 @@ describe('Integration | Repository | challenge-repository', () => {
           localesAirtable: ['Francophone'],
           locales: ['fr'],
           focusable: true,
-          skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
           author: ['TRO'],
@@ -375,7 +306,6 @@ describe('Integration | Repository | challenge-repository', () => {
         );
         const challengeB_data = {
           id: 'challengeB_id',
-          airtableId: 'airtableChallengeB_id',
           skillId: 'skillId',
           competenceId: 'competence1',
           alpha: 3,
@@ -398,7 +328,6 @@ describe('Integration | Repository | challenge-repository', () => {
           localesAirtable: ['Francophone'],
           locales: ['fr'],
           focusable: false,
-          skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
           author: ['QWE'],
@@ -451,108 +380,6 @@ describe('Integration | Repository | challenge-repository', () => {
           value: 'solution FR challengeC ToTO but solution not in the search fields',
         });
         await databaseBuilder.commit();
-        vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-          if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-          if (options?.filterByFormula !== 'OR("challengeB_id" = {id persistant},"challengeA_id" = {id persistant})')
-            expect.unreachable('Wrong filterByFormula');
-          return [
-            {
-              id: challengeA_data.airtableId,
-              fields: {
-                'id persistant': challengeA_data.id,
-                'Record ID': challengeA_data.airtableId,
-                'Compétences (via tube) (id persistant)': [challengeA_data.competenceId],
-                "Type d'épreuve": challengeA_data.type,
-                'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-                'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-                "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-                Statut: challengeA_data.status,
-                'Embed URL': challengeA_data.embedUrl,
-                'Embed height': challengeA_data.embedHeight,
-                Timer: challengeA_data.timer,
-                Format: challengeA_data.format,
-                'Réponse automatique': challengeA_data.autoReply,
-                Langues: challengeA_data.localesAirtable,
-                Focalisée: challengeA_data.focusable,
-                'Difficulté calculée': challengeA_data.deltaAirtable,
-                'Discrimination calculée': challengeA_data.alphaAirtable,
-                Acquix: challengeA_data.skills,
-                'Acquix (id persistant)': [challengeA_data.skillId],
-                Généalogie: challengeA_data.genealogy,
-                'Type péda': challengeA_data.pedagogy,
-                Auteur: challengeA_data.author,
-                Déclinable: challengeA_data.declinable,
-                'Version prototype': challengeA_data.version,
-                'Version déclinaison': challengeA_data.alternativeVersion,
-                'Non voyant': challengeA_data.accessibility1,
-                Daltonien: challengeA_data.accessibility2,
-                Spoil: challengeA_data.spoil,
-                Responsive: challengeA_data.responsive,
-                Géographie: challengeA_data.geography,
-                files: challengeA_data.files.map(({ fileId }) => fileId),
-                filesLocalizedChallengeIds: challengeA_data.files.map(
-                  ({ localizedChallengeId }) => localizedChallengeId,
-                ),
-                validated_at: challengeA_data.validatedAt,
-                archived_at: challengeA_data.archivedAt,
-                created_at: challengeA_data.createdAt,
-                made_obsolete_at: challengeA_data.madeObsoleteAt,
-                updated_at: challengeA_data.updatedAt,
-                shuffled: challengeA_data.shuffled,
-                contextualizedFields: challengeA_data.contextualizedFields,
-              },
-              get: function(field) {
-                return this.fields[field];
-              },
-            },
-            {
-              id: challengeB_data.airtableId,
-              fields: {
-                'id persistant': challengeB_data.id,
-                'Record ID': challengeB_data.airtableId,
-                'Compétences (via tube) (id persistant)': [challengeB_data.competenceId],
-                "Type d'épreuve": challengeB_data.type,
-                'T1 - Espaces, casse & accents': challengeB_data.t1StatusAirtable,
-                'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
-                "T3 - Distance d'édition": challengeB_data.t3StatusAirtable,
-                Statut: challengeB_data.status,
-                'Embed URL': challengeB_data.embedUrl,
-                'Embed height': challengeB_data.embedHeight,
-                Timer: challengeB_data.timer,
-                Format: challengeB_data.format,
-                'Réponse automatique': challengeB_data.autoReply,
-                Langues: challengeB_data.localesAirtable,
-                Focalisée: challengeB_data.focusable,
-                'Difficulté calculée': challengeB_data.deltaAirtable,
-                'Discrimination calculée': challengeB_data.alphaAirtable,
-                Acquix: challengeB_data.skills,
-                'Acquix (id persistant)': [challengeB_data.skillId],
-                Généalogie: challengeB_data.genealogy,
-                'Type péda': challengeB_data.pedagogy,
-                Auteur: challengeB_data.author,
-                Déclinable: challengeB_data.declinable,
-                'Version prototype': challengeB_data.version,
-                'Version déclinaison': challengeB_data.alternativeVersion,
-                'Non voyant': challengeB_data.accessibility1,
-                Daltonien: challengeB_data.accessibility2,
-                Spoil: challengeB_data.spoil,
-                Responsive: challengeB_data.responsive,
-                Géographie: challengeB_data.geography,
-                files: challengeB_data.files,
-                validated_at: challengeB_data.validatedAt,
-                archived_at: challengeB_data.archivedAt,
-                made_obsolete_at: challengeB_data.madeObsoleteAt,
-                created_at: challengeB_data.createdAt,
-                updated_at: challengeB_data.updatedAt,
-                shuffled: challengeB_data.shuffled,
-                contextualizedFields: challengeB_data.contextualizedFields,
-              },
-              get: function(field) {
-                return this.fields[field];
-              },
-            },
-          ];
-        });
 
         // when
         const challenges = await challengeRepository.filter({ filter: { search: 'toto' }, page: { size: 5 } });
@@ -562,7 +389,6 @@ describe('Integration | Repository | challenge-repository', () => {
           domainBuilder.buildChallenge({
             accessibility1: challengeA_data.accessibility1,
             accessibility2: challengeA_data.accessibility2,
-            airtableId: challengeA_data.airtableId,
             alternativeVersion: challengeA_data.alternativeVersion,
             alpha: challengeA_data.alpha,
             archivedAt: challengeA_data.archivedAt,
@@ -598,7 +424,6 @@ describe('Integration | Repository | challenge-repository', () => {
             responsive: challengeA_data.responsive,
             shuffled: challengeA_data.shuffled,
             skillId: challengeA_data.skillId,
-            skills: challengeA_data.skills,
             spoil: challengeA_data.spoil,
             status: challengeA_data.status,
             t1Status: challengeA_data.t1Status,
@@ -620,7 +445,6 @@ describe('Integration | Repository | challenge-repository', () => {
           domainBuilder.buildChallenge({
             accessibility1: challengeB_data.accessibility1,
             accessibility2: challengeB_data.accessibility2,
-            airtableId: challengeB_data.airtableId,
             alternativeVersion: challengeB_data.alternativeVersion,
             alpha: challengeB_data.alpha,
             archivedAt: challengeB_data.archivedAt,
@@ -651,7 +475,6 @@ describe('Integration | Repository | challenge-repository', () => {
             responsive: challengeB_data.responsive,
             shuffled: challengeB_data.shuffled,
             skillId: challengeB_data.skillId,
-            skills: challengeB_data.skills,
             spoil: challengeB_data.spoil,
             status: challengeB_data.status,
             t1Status: challengeB_data.t1Status,
@@ -679,7 +502,6 @@ describe('Integration | Repository | challenge-repository', () => {
         const challengeA_data = {
           id: 'challengeA_id',
           localizedEsId: 'locES_challengeA_id',
-          airtableId: 'airtableChallengeA_id',
           skillId: 'skillId',
           competenceId: 'competence1',
           alpha: 1,
@@ -702,7 +524,6 @@ describe('Integration | Repository | challenge-repository', () => {
           localesAirtable: ['Francophone'],
           locales: ['fr'],
           focusable: true,
-          skills: ['airtableSkillId'],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
           author: ['TRO'],
@@ -788,62 +609,6 @@ describe('Integration | Repository | challenge-repository', () => {
           }),
         );
         await databaseBuilder.commit();
-        vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-          if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-          if (options?.filterByFormula !== 'OR("challengeA_id" = {id persistant})')
-            expect.unreachable('Wrong filterByFormula');
-          return [
-            {
-              id: challengeA_data.airtableId,
-              fields: {
-                'id persistant': challengeA_data.id,
-                'Record ID': challengeA_data.airtableId,
-                'Compétences (via tube) (id persistant)': [challengeA_data.competenceId],
-                "Type d'épreuve": challengeA_data.type,
-                'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-                'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-                "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-                Statut: challengeA_data.status,
-                'Embed URL': challengeA_data.embedUrl,
-                'Embed height': challengeA_data.embedHeight,
-                Timer: challengeA_data.timer,
-                Format: challengeA_data.format,
-                'Réponse automatique': challengeA_data.autoReply,
-                Langues: challengeA_data.localesAirtable,
-                Focalisée: challengeA_data.focusable,
-                'Difficulté calculée': challengeA_data.deltaAirtable,
-                'Discrimination calculée': challengeA_data.alphaAirtable,
-                Acquix: challengeA_data.skills,
-                'Acquix (id persistant)': [challengeA_data.skillId],
-                Généalogie: challengeA_data.genealogy,
-                'Type péda': challengeA_data.pedagogy,
-                Auteur: challengeA_data.author,
-                Déclinable: challengeA_data.declinable,
-                'Version prototype': challengeA_data.version,
-                'Version déclinaison': challengeA_data.alternativeVersion,
-                'Non voyant': challengeA_data.accessibility1,
-                Daltonien: challengeA_data.accessibility2,
-                Spoil: challengeA_data.spoil,
-                Responsive: challengeA_data.responsive,
-                Géographie: challengeA_data.geography,
-                files: challengeA_data.files.map(({ fileId }) => fileId),
-                filesLocalizedChallengeIds: challengeA_data.files.map(
-                  ({ localizedChallengeId }) => localizedChallengeId,
-                ),
-                validated_at: challengeA_data.validatedAt,
-                archived_at: challengeA_data.archivedAt,
-                created_at: challengeA_data.createdAt,
-                made_obsolete_at: challengeA_data.madeObsoleteAt,
-                updated_at: challengeA_data.updatedAt,
-                shuffled: challengeA_data.shuffled,
-                contextualizedFields: challengeA_data.contextualizedFields,
-              },
-              get: function(field) {
-                return this.fields[field];
-              },
-            },
-          ];
-        });
 
         // when
         const challenges = await challengeRepository.filter({ filter: { search: 'toto' }, page: { size: 5 } });
@@ -853,7 +618,6 @@ describe('Integration | Repository | challenge-repository', () => {
           domainBuilder.buildChallenge({
             accessibility1: challengeA_data.accessibility1,
             accessibility2: challengeA_data.accessibility2,
-            airtableId: challengeA_data.airtableId,
             alternativeVersion: challengeA_data.alternativeVersion,
             alpha: challengeA_data.alpha,
             archivedAt: challengeA_data.archivedAt,
@@ -889,7 +653,6 @@ describe('Integration | Repository | challenge-repository', () => {
             responsive: challengeA_data.responsive,
             shuffled: challengeA_data.shuffled,
             skillId: challengeA_data.skillId,
-            skills: challengeA_data.skills,
             spoil: challengeA_data.spoil,
             status: challengeA_data.status,
             t1Status: challengeA_data.t1Status,
@@ -919,7 +682,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeA_data = {
         id: 'challengeA_id',
         localizedEsId: 'locES_challengeA_id',
-        airtableId: 'airtableChallengeA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -942,7 +704,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: true,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['TRO'],
@@ -1029,7 +790,6 @@ describe('Integration | Repository | challenge-repository', () => {
       );
       const challengeB_data = {
         id: 'challengeB_id',
-        airtableId: 'airtableChallengeB_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 3,
@@ -1052,7 +812,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: false,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
         author: ['QWE'],
@@ -1100,106 +859,6 @@ describe('Integration | Repository | challenge-repository', () => {
         ...primaryLoc_challengeB_data,
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (options?.filterByFormula !== '{Acquix (id persistant)} = "skillId"')
-          expect.unreachable('Wrong filterByFormula');
-        return [
-          {
-            id: challengeA_data.airtableId,
-            fields: {
-              'id persistant': challengeA_data.id,
-              'Record ID': challengeA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeA_data.competenceId],
-              "Type d'épreuve": challengeA_data.type,
-              'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-              Statut: challengeA_data.status,
-              'Embed URL': challengeA_data.embedUrl,
-              'Embed height': challengeA_data.embedHeight,
-              Timer: challengeA_data.timer,
-              Format: challengeA_data.format,
-              'Réponse automatique': challengeA_data.autoReply,
-              Langues: challengeA_data.localesAirtable,
-              Focalisée: challengeA_data.focusable,
-              'Difficulté calculée': challengeA_data.deltaAirtable,
-              'Discrimination calculée': challengeA_data.alphaAirtable,
-              Acquix: challengeA_data.skills,
-              'Acquix (id persistant)': [challengeA_data.skillId],
-              Généalogie: challengeA_data.genealogy,
-              'Type péda': challengeA_data.pedagogy,
-              Auteur: challengeA_data.author,
-              Déclinable: challengeA_data.declinable,
-              'Version prototype': challengeA_data.version,
-              'Version déclinaison': challengeA_data.alternativeVersion,
-              'Non voyant': challengeA_data.accessibility1,
-              Daltonien: challengeA_data.accessibility2,
-              Spoil: challengeA_data.spoil,
-              Responsive: challengeA_data.responsive,
-              Géographie: challengeA_data.geography,
-              files: challengeA_data.files.map(({ fileId }) => fileId),
-              filesLocalizedChallengeIds: challengeA_data.files.map(({ localizedChallengeId }) => localizedChallengeId),
-              validated_at: challengeA_data.validatedAt,
-              archived_at: challengeA_data.archivedAt,
-              created_at: challengeA_data.createdAt,
-              made_obsolete_at: challengeA_data.madeObsoleteAt,
-              updated_at: challengeA_data.updatedAt,
-              shuffled: challengeA_data.shuffled,
-              contextualizedFields: challengeA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-          {
-            id: challengeB_data.airtableId,
-            fields: {
-              'id persistant': challengeB_data.id,
-              'Record ID': challengeB_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeB_data.competenceId],
-              "Type d'épreuve": challengeB_data.type,
-              'T1 - Espaces, casse & accents': challengeB_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeB_data.t3StatusAirtable,
-              Statut: challengeB_data.status,
-              'Embed URL': challengeB_data.embedUrl,
-              'Embed height': challengeB_data.embedHeight,
-              Timer: challengeB_data.timer,
-              Format: challengeB_data.format,
-              'Réponse automatique': challengeB_data.autoReply,
-              Langues: challengeB_data.localesAirtable,
-              Focalisée: challengeB_data.focusable,
-              'Difficulté calculée': challengeB_data.deltaAirtable,
-              'Discrimination calculée': challengeB_data.alphaAirtable,
-              Acquix: challengeB_data.skills,
-              'Acquix (id persistant)': [challengeB_data.skillId],
-              Généalogie: challengeB_data.genealogy,
-              'Type péda': challengeB_data.pedagogy,
-              Auteur: challengeB_data.author,
-              Déclinable: challengeB_data.declinable,
-              'Version prototype': challengeB_data.version,
-              'Version déclinaison': challengeB_data.alternativeVersion,
-              'Non voyant': challengeB_data.accessibility1,
-              Daltonien: challengeB_data.accessibility2,
-              Spoil: challengeB_data.spoil,
-              Responsive: challengeB_data.responsive,
-              Géographie: challengeB_data.geography,
-              files: challengeB_data.files,
-              validated_at: challengeB_data.validatedAt,
-              archived_at: challengeB_data.archivedAt,
-              made_obsolete_at: challengeB_data.madeObsoleteAt,
-              created_at: challengeB_data.createdAt,
-              updated_at: challengeB_data.updatedAt,
-              shuffled: challengeB_data.shuffled,
-              contextualizedFields: challengeB_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const challenges = await challengeRepository.listBySkillId('skillId');
@@ -1209,7 +868,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeA_data.accessibility1,
           accessibility2: challengeA_data.accessibility2,
-          airtableId: challengeA_data.airtableId,
           alternativeVersion: challengeA_data.alternativeVersion,
           alpha: challengeA_data.alpha,
           archivedAt: challengeA_data.archivedAt,
@@ -1245,7 +903,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeA_data.responsive,
           shuffled: challengeA_data.shuffled,
           skillId: challengeA_data.skillId,
-          skills: challengeA_data.skills,
           spoil: challengeA_data.spoil,
           status: challengeA_data.status,
           t1Status: challengeA_data.t1Status,
@@ -1267,7 +924,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeB_data.accessibility1,
           accessibility2: challengeB_data.accessibility2,
-          airtableId: challengeB_data.airtableId,
           alternativeVersion: challengeB_data.alternativeVersion,
           alpha: challengeB_data.alpha,
           archivedAt: challengeB_data.archivedAt,
@@ -1298,7 +954,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeB_data.responsive,
           shuffled: challengeB_data.shuffled,
           skillId: challengeB_data.skillId,
-          skills: challengeB_data.skills,
           spoil: challengeB_data.spoil,
           status: challengeB_data.status,
           t1Status: challengeB_data.t1Status,
@@ -1320,14 +975,6 @@ describe('Integration | Repository | challenge-repository', () => {
     });
 
     it('should return an empty array when no challenges found for provided skill id', async () => {
-      // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (options?.filterByFormula !== '{Acquix (id persistant)} = "someSkillId"')
-          expect.unreachable('Wrong filterByFormula');
-        return [];
-      });
-
       // when
       const challenges = await challengeRepository.listBySkillId('someSkillId');
 
@@ -1342,7 +989,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeA_data = {
         id: 'challengeA_id',
         localizedEsId: 'locES_challengeA_id',
-        airtableId: 'airtableChallengeA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -1365,7 +1011,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: true,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['TRO'],
@@ -1452,7 +1097,6 @@ describe('Integration | Repository | challenge-repository', () => {
       );
       const challengeB_data = {
         id: 'challengeB_id',
-        airtableId: 'airtableChallengeB_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 3,
@@ -1475,7 +1119,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: false,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
         author: ['QWE'],
@@ -1523,105 +1166,6 @@ describe('Integration | Repository | challenge-repository', () => {
         ...primaryLoc_challengeB_data,
       });
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        return [
-          {
-            id: challengeA_data.airtableId,
-            fields: {
-              'id persistant': challengeA_data.id,
-              'Record ID': challengeA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeA_data.competenceId],
-              "Type d'épreuve": challengeA_data.type,
-              'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-              Statut: challengeA_data.status,
-              'Embed URL': challengeA_data.embedUrl,
-              'Embed height': challengeA_data.embedHeight,
-              Timer: challengeA_data.timer,
-              Format: challengeA_data.format,
-              'Réponse automatique': challengeA_data.autoReply,
-              Langues: challengeA_data.localesAirtable,
-              Focalisée: challengeA_data.focusable,
-              'Difficulté calculée': challengeA_data.deltaAirtable,
-              'Discrimination calculée': challengeA_data.alphaAirtable,
-              Acquix: challengeA_data.skills,
-              'Acquix (id persistant)': [challengeA_data.skillId],
-              Généalogie: challengeA_data.genealogy,
-              'Type péda': challengeA_data.pedagogy,
-              Auteur: challengeA_data.author,
-              Déclinable: challengeA_data.declinable,
-              'Version prototype': challengeA_data.version,
-              'Version déclinaison': challengeA_data.alternativeVersion,
-              'Non voyant': challengeA_data.accessibility1,
-              Daltonien: challengeA_data.accessibility2,
-              Spoil: challengeA_data.spoil,
-              Responsive: challengeA_data.responsive,
-              Géographie: challengeA_data.geography,
-              files: challengeA_data.files.map(({ fileId }) => fileId),
-              filesLocalizedChallengeIds: challengeA_data.files.map(({ localizedChallengeId }) => localizedChallengeId),
-              validated_at: challengeA_data.validatedAt,
-              archived_at: challengeA_data.archivedAt,
-              created_at: challengeA_data.createdAt,
-              made_obsolete_at: challengeA_data.madeObsoleteAt,
-              updated_at: challengeA_data.updatedAt,
-              shuffled: challengeA_data.shuffled,
-              contextualizedFields: challengeA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-          {
-            id: challengeB_data.airtableId,
-            fields: {
-              'id persistant': challengeB_data.id,
-              'Record ID': challengeB_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeB_data.competenceId],
-              "Type d'épreuve": challengeB_data.type,
-              'T1 - Espaces, casse & accents': challengeB_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeB_data.t3StatusAirtable,
-              Statut: challengeB_data.status,
-              'Embed URL': challengeB_data.embedUrl,
-              'Embed height': challengeB_data.embedHeight,
-              Timer: challengeB_data.timer,
-              Format: challengeB_data.format,
-              'Réponse automatique': challengeB_data.autoReply,
-              Langues: challengeB_data.localesAirtable,
-              Focalisée: challengeB_data.focusable,
-              'Difficulté calculée': challengeB_data.deltaAirtable,
-              'Discrimination calculée': challengeB_data.alphaAirtable,
-              Acquix: challengeB_data.skills,
-              'Acquix (id persistant)': [challengeB_data.skillId],
-              Généalogie: challengeB_data.genealogy,
-              'Type péda': challengeB_data.pedagogy,
-              Auteur: challengeB_data.author,
-              Déclinable: challengeB_data.declinable,
-              'Version prototype': challengeB_data.version,
-              'Version déclinaison': challengeB_data.alternativeVersion,
-              'Non voyant': challengeB_data.accessibility1,
-              Daltonien: challengeB_data.accessibility2,
-              Spoil: challengeB_data.spoil,
-              Responsive: challengeB_data.responsive,
-              Géographie: challengeB_data.geography,
-              files: challengeB_data.files.map(({ fileId }) => fileId),
-              filesLocalizedChallengeIds: challengeB_data.files.map(({ localizedChallengeId }) => localizedChallengeId),
-              validated_at: challengeB_data.validatedAt,
-              archived_at: challengeB_data.archivedAt,
-              made_obsolete_at: challengeB_data.madeObsoleteAt,
-              created_at: challengeB_data.createdAt,
-              updated_at: challengeB_data.updatedAt,
-              shuffled: challengeB_data.shuffled,
-              contextualizedFields: challengeB_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const challenges = await challengeRepository.list();
@@ -1631,7 +1175,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeA_data.accessibility1,
           accessibility2: challengeA_data.accessibility2,
-          airtableId: challengeA_data.airtableId,
           alternativeVersion: challengeA_data.alternativeVersion,
           alpha: challengeA_data.alpha,
           archivedAt: challengeA_data.archivedAt,
@@ -1667,7 +1210,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeA_data.responsive,
           shuffled: challengeA_data.shuffled,
           skillId: challengeA_data.skillId,
-          skills: challengeA_data.skills,
           spoil: challengeA_data.spoil,
           status: challengeA_data.status,
           t1Status: challengeA_data.t1Status,
@@ -1689,7 +1231,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeB_data.accessibility1,
           accessibility2: challengeB_data.accessibility2,
-          airtableId: challengeB_data.airtableId,
           alternativeVersion: challengeB_data.alternativeVersion,
           alpha: challengeB_data.alpha,
           archivedAt: challengeB_data.archivedAt,
@@ -1720,7 +1261,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeB_data.responsive,
           shuffled: challengeB_data.shuffled,
           skillId: challengeB_data.skillId,
-          skills: challengeB_data.skills,
           spoil: challengeB_data.spoil,
           status: challengeB_data.status,
           t1Status: challengeB_data.t1Status,
@@ -1742,14 +1282,6 @@ describe('Integration | Repository | challenge-repository', () => {
     });
 
     it('should return an empty array when no challenges found for provided skill id', async () => {
-      // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (options?.filterByFormula !== '{Acquix (id persistant)} = "someSkillId"')
-          expect.unreachable('Wrong filterByFormula');
-        return [];
-      });
-
       // when
       const challenges = await challengeRepository.listBySkillId('someSkillId');
 
@@ -1764,7 +1296,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeDraftA_data = {
         id: 'challengeDraftA_id',
         localizedEsId: 'locES_challengeDraftA_id',
-        airtableId: 'airtableChallengeDraftA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -1787,7 +1318,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: true,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['ASD'],
@@ -1819,7 +1349,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
       const challengeActiveA_data = {
         id: 'challengeActiveA_id',
-        airtableId: 'airtableChallengeActiveA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -1842,7 +1371,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: false,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['QWE'],
@@ -1945,111 +1473,6 @@ describe('Integration | Repository | challenge-repository', () => {
         }),
       );
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (
-          options?.filterByFormula
-          !== `AND({Compétences (via tube) (id persistant)} = "${challengeDraftA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
-        )
-          expect.unreachable('Wrong filterByFormula');
-        return [
-          {
-            id: challengeDraftA_data.airtableId,
-            fields: {
-              'id persistant': challengeDraftA_data.id,
-              'Record ID': challengeDraftA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeDraftA_data.competenceId],
-              "Type d'épreuve": challengeDraftA_data.type,
-              'T1 - Espaces, casse & accents': challengeDraftA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeDraftA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeDraftA_data.t3StatusAirtable,
-              Statut: challengeDraftA_data.status,
-              'Embed URL': challengeDraftA_data.embedUrl,
-              'Embed height': challengeDraftA_data.embedHeight,
-              Timer: challengeDraftA_data.timer,
-              Format: challengeDraftA_data.format,
-              'Réponse automatique': challengeDraftA_data.autoReply,
-              Langues: challengeDraftA_data.localesAirtable,
-              Focalisée: challengeDraftA_data.focusable,
-              'Difficulté calculée': challengeDraftA_data.deltaAirtable,
-              'Discrimination calculée': challengeDraftA_data.alphaAirtable,
-              Acquix: challengeDraftA_data.skills,
-              'Acquix (id persistant)': [challengeDraftA_data.skillId],
-              Généalogie: challengeDraftA_data.genealogy,
-              'Type péda': challengeDraftA_data.pedagogy,
-              Auteur: challengeDraftA_data.author,
-              Déclinable: challengeDraftA_data.declinable,
-              'Version prototype': challengeDraftA_data.version,
-              'Version déclinaison': challengeDraftA_data.alternativeVersion,
-              'Non voyant': challengeDraftA_data.accessibility1,
-              Daltonien: challengeDraftA_data.accessibility2,
-              Spoil: challengeDraftA_data.spoil,
-              Responsive: challengeDraftA_data.responsive,
-              Géographie: challengeDraftA_data.geography,
-              files: challengeDraftA_data.files.map(({ fileId }) => fileId),
-              filesLocalizedChallengeIds: challengeDraftA_data.files.map(
-                ({ localizedChallengeId }) => localizedChallengeId,
-              ),
-              validated_at: challengeDraftA_data.validatedAt,
-              archived_at: challengeDraftA_data.archivedAt,
-              created_at: challengeDraftA_data.createdAt,
-              made_obsolete_at: challengeDraftA_data.madeObsoleteAt,
-              updated_at: challengeDraftA_data.updatedAt,
-              shuffled: challengeDraftA_data.shuffled,
-              contextualizedFields: challengeDraftA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-          {
-            id: challengeActiveA_data.airtableId,
-            fields: {
-              'id persistant': challengeActiveA_data.id,
-              'Record ID': challengeActiveA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeActiveA_data.competenceId],
-              "Type d'épreuve": challengeActiveA_data.type,
-              'T1 - Espaces, casse & accents': challengeActiveA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeActiveA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeActiveA_data.t3StatusAirtable,
-              Statut: challengeActiveA_data.status,
-              'Embed URL': challengeActiveA_data.embedUrl,
-              'Embed height': challengeActiveA_data.embedHeight,
-              Timer: challengeActiveA_data.timer,
-              Format: challengeActiveA_data.format,
-              'Réponse automatique': challengeActiveA_data.autoReply,
-              Langues: challengeActiveA_data.localesAirtable,
-              Focalisée: challengeActiveA_data.focusable,
-              'Difficulté calculée': challengeActiveA_data.deltaAirtable,
-              'Discrimination calculée': challengeActiveA_data.alphaAirtable,
-              Acquix: challengeActiveA_data.skills,
-              'Acquix (id persistant)': [challengeActiveA_data.skillId],
-              Généalogie: challengeActiveA_data.genealogy,
-              'Type péda': challengeActiveA_data.pedagogy,
-              Auteur: challengeActiveA_data.author,
-              Déclinable: challengeActiveA_data.declinable,
-              'Version prototype': challengeActiveA_data.version,
-              'Version déclinaison': challengeActiveA_data.alternativeVersion,
-              'Non voyant': challengeActiveA_data.accessibility1,
-              Daltonien: challengeActiveA_data.accessibility2,
-              Spoil: challengeActiveA_data.spoil,
-              Responsive: challengeActiveA_data.responsive,
-              Géographie: challengeActiveA_data.geography,
-              files: challengeActiveA_data.files,
-              validated_at: challengeActiveA_data.validatedAt,
-              archived_at: challengeActiveA_data.archivedAt,
-              created_at: challengeActiveA_data.createdAt,
-              made_obsolete_at: challengeActiveA_data.madeObsoleteAt,
-              updated_at: challengeActiveA_data.updatedAt,
-              shuffled: challengeActiveA_data.shuffled,
-              contextualizedFields: challengeActiveA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const challenges = await challengeRepository.listActiveOrDraftByCompetenceId(challengeDraftA_data.competenceId);
@@ -2057,9 +1480,58 @@ describe('Integration | Repository | challenge-repository', () => {
       // then
       expect(challenges).toStrictEqual([
         domainBuilder.buildChallenge({
+          accessibility1: challengeActiveA_data.accessibility1,
+          accessibility2: challengeActiveA_data.accessibility2,
+          alternativeVersion: challengeActiveA_data.alternativeVersion,
+          alpha: challengeActiveA_data.alpha,
+          archivedAt: challengeActiveA_data.archivedAt,
+          author: challengeActiveA_data.author,
+          autoReply: challengeActiveA_data.autoReply,
+          competenceId: challengeActiveA_data.competenceId,
+          contextualizedFields: challengeActiveA_data.contextualizedFields,
+          createdAt: challengeActiveA_data.createdAt,
+          declinable: challengeActiveA_data.declinable,
+          delta: challengeActiveA_data.delta,
+          embedHeight: challengeActiveA_data.embedHeight,
+          files: challengeActiveA_data.files,
+          focusable: challengeActiveA_data.focusable,
+          format: challengeActiveA_data.format,
+          genealogy: challengeActiveA_data.genealogy,
+          geography: challengeActiveA_data.geography,
+          id: challengeActiveA_data.id,
+          locales: challengeActiveA_data.locales,
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeActiveA_data.id,
+              challengeId: challengeActiveA_data.id,
+              ...primaryLoc_challengeActiveA_data,
+            }),
+          ],
+          madeObsoleteAt: challengeActiveA_data.madeObsoleteAt,
+          pedagogy: challengeActiveA_data.pedagogy,
+          responsive: challengeActiveA_data.responsive,
+          shuffled: challengeActiveA_data.shuffled,
+          skillId: challengeActiveA_data.skillId,
+          spoil: challengeActiveA_data.spoil,
+          status: challengeActiveA_data.status,
+          t1Status: challengeActiveA_data.t1Status,
+          t2Status: challengeActiveA_data.t2Status,
+          t3Status: challengeActiveA_data.t3Status,
+          timer: challengeActiveA_data.timer,
+          translations: {
+            fr: {
+              instruction: 'instruction FR challengeActiveA',
+              solution: 'solution FR challengeActiveA',
+            },
+          },
+          type: challengeActiveA_data.type,
+          updatedAt: challengeActiveA_data.updatedAt,
+          validatedAt: challengeActiveA_data.validatedAt,
+          version: challengeActiveA_data.version,
+        }),
+        domainBuilder.buildChallenge({
           accessibility1: challengeDraftA_data.accessibility1,
           accessibility2: challengeDraftA_data.accessibility2,
-          airtableId: challengeDraftA_data.airtableId,
           alternativeVersion: challengeDraftA_data.alternativeVersion,
           alpha: challengeDraftA_data.alpha,
           archivedAt: challengeDraftA_data.archivedAt,
@@ -2095,7 +1567,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeDraftA_data.responsive,
           shuffled: challengeDraftA_data.shuffled,
           skillId: challengeDraftA_data.skillId,
-          skills: challengeDraftA_data.skills,
           spoil: challengeDraftA_data.spoil,
           status: challengeDraftA_data.status,
           t1Status: challengeDraftA_data.t1Status,
@@ -2114,73 +1585,10 @@ describe('Integration | Repository | challenge-repository', () => {
           validatedAt: challengeDraftA_data.validatedAt,
           version: challengeDraftA_data.version,
         }),
-        domainBuilder.buildChallenge({
-          accessibility1: challengeActiveA_data.accessibility1,
-          accessibility2: challengeActiveA_data.accessibility2,
-          airtableId: challengeActiveA_data.airtableId,
-          alternativeVersion: challengeActiveA_data.alternativeVersion,
-          alpha: challengeActiveA_data.alpha,
-          archivedAt: challengeActiveA_data.archivedAt,
-          author: challengeActiveA_data.author,
-          autoReply: challengeActiveA_data.autoReply,
-          competenceId: challengeActiveA_data.competenceId,
-          contextualizedFields: challengeActiveA_data.contextualizedFields,
-          createdAt: challengeActiveA_data.createdAt,
-          declinable: challengeActiveA_data.declinable,
-          delta: challengeActiveA_data.delta,
-          embedHeight: challengeActiveA_data.embedHeight,
-          files: challengeActiveA_data.files,
-          focusable: challengeActiveA_data.focusable,
-          format: challengeActiveA_data.format,
-          genealogy: challengeActiveA_data.genealogy,
-          geography: challengeActiveA_data.geography,
-          id: challengeActiveA_data.id,
-          locales: challengeActiveA_data.locales,
-          localizedChallenges: [
-            domainBuilder.buildLocalizedChallenge({
-              id: challengeActiveA_data.id,
-              challengeId: challengeActiveA_data.id,
-              ...primaryLoc_challengeActiveA_data,
-            }),
-          ],
-          madeObsoleteAt: challengeActiveA_data.madeObsoleteAt,
-          pedagogy: challengeActiveA_data.pedagogy,
-          responsive: challengeActiveA_data.responsive,
-          shuffled: challengeActiveA_data.shuffled,
-          skillId: challengeActiveA_data.skillId,
-          skills: challengeActiveA_data.skills,
-          spoil: challengeActiveA_data.spoil,
-          status: challengeActiveA_data.status,
-          t1Status: challengeActiveA_data.t1Status,
-          t2Status: challengeActiveA_data.t2Status,
-          t3Status: challengeActiveA_data.t3Status,
-          timer: challengeActiveA_data.timer,
-          translations: {
-            fr: {
-              instruction: 'instruction FR challengeActiveA',
-              solution: 'solution FR challengeActiveA',
-            },
-          },
-          type: challengeActiveA_data.type,
-          updatedAt: challengeActiveA_data.updatedAt,
-          validatedAt: challengeActiveA_data.validatedAt,
-          version: challengeActiveA_data.version,
-        }),
       ]);
     });
 
     it('should return an empty array when no challenges found for provided competence id', async () => {
-      // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (
-          options?.filterByFormula
-          !== `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
-        )
-          expect.unreachable('Wrong filterByFormula');
-        return [];
-      });
-
       // when
       const challenges = await challengeRepository.listActiveOrDraftByCompetenceId('someCompetenceId');
 
@@ -2195,7 +1603,6 @@ describe('Integration | Repository | challenge-repository', () => {
       const challengeProtoA_data = {
         id: 'challengeProtoA_id',
         localizedEsId: 'locES_challengeProtoA_id',
-        airtableId: 'airtableChallengeDraftA_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -2218,7 +1625,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: true,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['ASD'],
@@ -2251,7 +1657,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
       const challengeProtoB_data = {
         id: 'challengeProtoB_id',
-        airtableId: 'airtableChallengeProtoB_id',
         skillId: 'skillId',
         competenceId: 'competence1',
         alpha: 1,
@@ -2274,7 +1679,6 @@ describe('Integration | Repository | challenge-repository', () => {
         localesAirtable: ['Francophone'],
         locales: ['fr'],
         focusable: false,
-        skills: ['airtableSkillId'],
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         author: ['QWE'],
@@ -2352,109 +1756,6 @@ describe('Integration | Repository | challenge-repository', () => {
         }),
       );
       await databaseBuilder.commit();
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (
-          options?.filterByFormula
-          !== `AND({Compétences (via tube) (id persistant)} = "${challengeProtoA_data.competenceId}", {acquis} != "${Skill.WORKBENCH_NAME}", {Généalogie} = "${Challenge.GENEALOGIES.PROTOTYPE}")`
-        )
-          expect.unreachable('Wrong filterByFormula');
-        return [
-          {
-            id: challengeProtoA_data.airtableId,
-            fields: {
-              'id persistant': challengeProtoA_data.id,
-              'Record ID': challengeProtoA_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeProtoA_data.competenceId],
-              "Type d'épreuve": challengeProtoA_data.type,
-              'T1 - Espaces, casse & accents': challengeProtoA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeProtoA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeProtoA_data.t3StatusAirtable,
-              Statut: challengeProtoA_data.status,
-              'Embed URL': challengeProtoA_data.embedUrl,
-              'Embed height': challengeProtoA_data.embedHeight,
-              Timer: challengeProtoA_data.timer,
-              Format: challengeProtoA_data.format,
-              'Réponse automatique': challengeProtoA_data.autoReply,
-              Langues: challengeProtoA_data.localesAirtable,
-              Focalisée: challengeProtoA_data.focusable,
-              'Difficulté calculée': challengeProtoA_data.deltaAirtable,
-              'Discrimination calculée': challengeProtoA_data.alphaAirtable,
-              Acquix: challengeProtoA_data.skills,
-              'Acquix (id persistant)': [challengeProtoA_data.skillId],
-              Généalogie: challengeProtoA_data.genealogy,
-              'Type péda': challengeProtoA_data.pedagogy,
-              Auteur: challengeProtoA_data.author,
-              Déclinable: challengeProtoA_data.declinable,
-              'Version prototype': challengeProtoA_data.version,
-              'Version déclinaison': challengeProtoA_data.alternativeVersion,
-              'Non voyant': challengeProtoA_data.accessibility1,
-              Daltonien: challengeProtoA_data.accessibility2,
-              Spoil: challengeProtoA_data.spoil,
-              Responsive: challengeProtoA_data.responsive,
-              Géographie: challengeProtoA_data.geography,
-              files: challengeProtoA_data.files,
-              filesLocalizedChallengeIds: challengeProtoA_data.filesLocalizedChallengeIds,
-              validated_at: challengeProtoA_data.validatedAt,
-              archived_at: challengeProtoA_data.archivedAt,
-              created_at: challengeProtoA_data.createdAt,
-              made_obsolete_at: challengeProtoA_data.madeObsoleteAt,
-              updated_at: challengeProtoA_data.updatedAt,
-              shuffled: challengeProtoA_data.shuffled,
-              contextualizedFields: challengeProtoA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-          {
-            id: challengeProtoB_data.airtableId,
-            fields: {
-              'id persistant': challengeProtoB_data.id,
-              'Record ID': challengeProtoB_data.airtableId,
-              'Compétences (via tube) (id persistant)': [challengeProtoB_data.competenceId],
-              "Type d'épreuve": challengeProtoB_data.type,
-              'T1 - Espaces, casse & accents': challengeProtoB_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeProtoB_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeProtoB_data.t3StatusAirtable,
-              Statut: challengeProtoB_data.status,
-              'Embed URL': challengeProtoB_data.embedUrl,
-              'Embed height': challengeProtoB_data.embedHeight,
-              Timer: challengeProtoB_data.timer,
-              Format: challengeProtoB_data.format,
-              'Réponse automatique': challengeProtoB_data.autoReply,
-              Langues: challengeProtoB_data.localesAirtable,
-              Focalisée: challengeProtoB_data.focusable,
-              'Difficulté calculée': challengeProtoB_data.deltaAirtable,
-              'Discrimination calculée': challengeProtoB_data.alphaAirtable,
-              Acquix: challengeProtoB_data.skills,
-              'Acquix (id persistant)': [challengeProtoB_data.skillId],
-              Généalogie: challengeProtoB_data.genealogy,
-              'Type péda': challengeProtoB_data.pedagogy,
-              Auteur: challengeProtoB_data.author,
-              Déclinable: challengeProtoB_data.declinable,
-              'Version prototype': challengeProtoB_data.version,
-              'Version déclinaison': challengeProtoB_data.alternativeVersion,
-              'Non voyant': challengeProtoB_data.accessibility1,
-              Daltonien: challengeProtoB_data.accessibility2,
-              Spoil: challengeProtoB_data.spoil,
-              Responsive: challengeProtoB_data.responsive,
-              Géographie: challengeProtoB_data.geography,
-              files: challengeProtoB_data.files,
-              validated_at: challengeProtoB_data.validatedAt,
-              archived_at: challengeProtoB_data.archivedAt,
-              created_at: challengeProtoB_data.createdAt,
-              made_obsolete_at: challengeProtoB_data.madeObsoleteAt,
-              updated_at: challengeProtoB_data.updatedAt,
-              shuffled: challengeProtoB_data.shuffled,
-              contextualizedFields: challengeProtoB_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
 
       // when
       const challenges = await challengeRepository.listPrototypesByCompetenceId(challengeProtoA_data.competenceId);
@@ -2464,7 +1765,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeProtoA_data.accessibility1,
           accessibility2: challengeProtoA_data.accessibility2,
-          airtableId: challengeProtoA_data.airtableId,
           alternativeVersion: challengeProtoA_data.alternativeVersion,
           alpha: challengeProtoA_data.alpha,
           archivedAt: challengeProtoA_data.archivedAt,
@@ -2495,7 +1795,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeProtoA_data.responsive,
           shuffled: challengeProtoA_data.shuffled,
           skillId: challengeProtoA_data.skillId,
-          skills: challengeProtoA_data.skills,
           spoil: challengeProtoA_data.spoil,
           status: challengeProtoA_data.status,
           t1Status: challengeProtoA_data.t1Status,
@@ -2516,7 +1815,6 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeProtoB_data.accessibility1,
           accessibility2: challengeProtoB_data.accessibility2,
-          airtableId: challengeProtoB_data.airtableId,
           alternativeVersion: challengeProtoB_data.alternativeVersion,
           alpha: challengeProtoB_data.alpha,
           archivedAt: challengeProtoB_data.archivedAt,
@@ -2547,7 +1845,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeProtoB_data.responsive,
           shuffled: challengeProtoB_data.shuffled,
           skillId: challengeProtoB_data.skillId,
-          skills: challengeProtoB_data.skills,
           spoil: challengeProtoB_data.spoil,
           status: challengeProtoB_data.status,
           t1Status: challengeProtoB_data.t1Status,
@@ -2569,17 +1866,6 @@ describe('Integration | Repository | challenge-repository', () => {
     });
 
     it('should return an empty array when no challenges found for provided competence id', async () => {
-      // given
-      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (
-          options?.filterByFormula
-          !== `AND({Compétences (via tube) (id persistant)} = "someCompetenceId", {acquis} != "${Skill.WORKBENCH_NAME}", OR({Statut} = "${Challenge.STATUSES.PROPOSE}", {Statut} = "${Challenge.STATUSES.VALIDE}"))`
-        )
-          expect.unreachable('Wrong filterByFormula');
-        return [];
-      });
-
       // when
       const challenges = await challengeRepository.listActiveOrDraftByCompetenceId('someCompetenceId');
 
@@ -2629,7 +1915,6 @@ describe('Integration | Repository | challenge-repository', () => {
         id: 'challengeA_id',
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY1.KO,
-        airtableId: null,
         alternativeVersion: 1,
         alpha: null,
         delta: null,
@@ -2655,7 +1940,6 @@ describe('Integration | Repository | challenge-repository', () => {
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         shuffled: false,
         skillId: 'skillId1',
-        skills: [],
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.PROPOSE,
         t1Status: false,
@@ -2701,7 +1985,6 @@ describe('Integration | Repository | challenge-repository', () => {
         id: 'challengeB_id',
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY1.OK,
-        airtableId: null,
         alternativeVersion: 3,
         alpha: null,
         delta: null,
@@ -2727,7 +2010,6 @@ describe('Integration | Repository | challenge-repository', () => {
         responsive: Challenge.RESPONSIVES.TABLETTE,
         shuffled: true,
         skillId: 'skillId2',
-        skills: [],
         spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
         status: Challenge.STATUSES.VALIDE,
         t1Status: true,
@@ -2760,185 +2042,6 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildSkill({ id: challengeB_data.skillId, tubeId: 'tube1' });
       await databaseBuilder.commit();
 
-      const airtableIdsByIds = {
-        skillId1: 'airtableSkillId1',
-        skillId2: 'airtableSkillId2',
-      };
-      vi.spyOn(skillDatasource, 'getAirtableIdsByIds').mockImplementation((necessaryChallengeIds) => {
-        if (necessaryChallengeIds.join(',') !== 'skillId1,skillId2')
-          expect.unreachable('Wrong skill ids for fetching corresponding airtable ids');
-        return airtableIdsByIds;
-      });
-      vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
-        if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (
-          airtableRequestBodies.length !== 2
-          || !_.isEqual(airtableRequestBodies[0], {
-            fields: {
-              'id persistant': challengeA_data.id,
-              "Type d'épreuve": challengeA_data.type,
-              'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-              Statut: challengeA_data.status,
-              'Embed URL': challengeA.localizedChallenges[0].embedUrl,
-              'Embed height': challengeA_data.embedHeight,
-              Timer: challengeA_data.timer,
-              Format: challengeA_data.format,
-              'Réponse automatique': challengeA_data.autoReply,
-              Langues: challengeA_data.localesAirtable,
-              Focalisée: challengeA_data.focusable,
-              Acquix: [airtableIdsByIds[challengeA_data.skillId]],
-              Généalogie: challengeA_data.genealogy,
-              'Type péda': challengeA_data.pedagogy,
-              Auteur: challengeA_data.author,
-              Déclinable: challengeA_data.declinable,
-              'Version prototype': challengeA_data.version,
-              'Version déclinaison': challengeA_data.alternativeVersion,
-              'Non voyant': challengeA_data.accessibility1,
-              Daltonien: challengeA_data.accessibility2,
-              Spoil: challengeA_data.spoil,
-              Responsive: challengeA_data.responsive,
-              Géographie: challengeA_data.geography,
-              validated_at: challengeA_data.validatedAt,
-              archived_at: challengeA_data.archivedAt,
-              made_obsolete_at: challengeA_data.madeObsoleteAt,
-              shuffled: challengeA_data.shuffled,
-              contextualizedFields: challengeA_data.contextualizedFields,
-            },
-          })
-          || !_.isEqual(airtableRequestBodies[1], {
-            fields: {
-              'id persistant': challengeB_data.id,
-              "Type d'épreuve": challengeB_data.type,
-              'T1 - Espaces, casse & accents': challengeB_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeB_data.t3StatusAirtable,
-              Statut: challengeB_data.status,
-              'Embed URL': challengeB.localizedChallenges[0].embedUrl,
-              'Embed height': challengeB_data.embedHeight,
-              Timer: challengeB_data.timer,
-              Format: challengeB_data.format,
-              'Réponse automatique': challengeB_data.autoReply,
-              Langues: challengeB_data.localesAirtable,
-              Focalisée: challengeB_data.focusable,
-              Acquix: [airtableIdsByIds[challengeB_data.skillId]],
-              Généalogie: challengeB_data.genealogy,
-              'Type péda': challengeB_data.pedagogy,
-              Auteur: challengeB_data.author,
-              Déclinable: challengeB_data.declinable,
-              'Version prototype': challengeB_data.version,
-              'Version déclinaison': challengeB_data.alternativeVersion,
-              'Non voyant': challengeB_data.accessibility1,
-              Daltonien: challengeB_data.accessibility2,
-              Spoil: challengeB_data.spoil,
-              Responsive: challengeB_data.responsive,
-              Géographie: challengeA_data.geography,
-              validated_at: challengeB_data.validatedAt,
-              archived_at: challengeB_data.archivedAt,
-              made_obsolete_at: challengeB_data.madeObsoleteAt,
-              shuffled: challengeB_data.shuffled,
-              contextualizedFields: challengeB_data.contextualizedFields,
-            },
-          })
-        )
-          expect.unreachable('Challenges to create to airtable wrong bodies');
-        return [
-          {
-            id: 'airtableIdChallengeA',
-            fields: {
-              'id persistant': challengeA_data.id,
-              'Record ID': 'airtableIdChallengeA',
-              'Compétences (via tube) (id persistant)': ['theRightCompetenceId'],
-              "Type d'épreuve": challengeA_data.type,
-              'T1 - Espaces, casse & accents': challengeA_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeA_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeA_data.t3StatusAirtable,
-              Statut: challengeA_data.status,
-              'Embed URL': challengeA_data.embedUrl,
-              'Embed height': challengeA_data.embedHeight,
-              Timer: challengeA_data.timer,
-              Format: challengeA_data.format,
-              'Réponse automatique': challengeA_data.autoReply,
-              Langues: challengeA_data.localesAirtable,
-              Focalisée: challengeA_data.focusable,
-              'Difficulté calculée': NaN,
-              'Discrimination calculée': NaN,
-              Acquix: challengeA_data.skills,
-              'Acquix (id persistant)': [challengeA_data.skillId],
-              Généalogie: challengeA_data.genealogy,
-              'Type péda': challengeA_data.pedagogy,
-              Auteur: challengeA_data.author,
-              Déclinable: challengeA_data.declinable,
-              'Version prototype': challengeA_data.version,
-              'Version déclinaison': challengeA_data.alternativeVersion,
-              'Non voyant': challengeA_data.accessibility1,
-              Daltonien: challengeA_data.accessibility2,
-              Spoil: challengeA_data.spoil,
-              Responsive: challengeA_data.responsive,
-              Géographie: challengeA_data.geography,
-              files: challengeA_data.files,
-              validated_at: challengeA_data.validatedAt,
-              archived_at: challengeA_data.archivedAt,
-              created_at: challengeA_data.createdAt,
-              made_obsolete_at: challengeA_data.madeObsoleteAt,
-              updated_at: challengeA_data.updatedAt,
-              shuffled: challengeA_data.shuffled,
-              contextualizedFields: challengeA_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-          {
-            id: 'airtableIdChallengeB',
-            fields: {
-              'id persistant': challengeB_data.id,
-              'Record ID': 'airtableIdChallengeB',
-              'Compétences (via tube) (id persistant)': ['theRightCompetenceId'],
-              "Type d'épreuve": challengeB_data.type,
-              'T1 - Espaces, casse & accents': challengeB_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeB_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeB_data.t3StatusAirtable,
-              Statut: challengeB_data.status,
-              'Embed URL': challengeB_data.embedUrl,
-              'Embed height': challengeB_data.embedHeight,
-              Timer: challengeB_data.timer,
-              Format: challengeB_data.format,
-              'Réponse automatique': challengeB_data.autoReply,
-              Langues: challengeB_data.localesAirtable,
-              Focalisée: challengeB_data.focusable,
-              'Difficulté calculée': NaN,
-              'Discrimination calculée': NaN,
-              Acquix: challengeB_data.skills,
-              'Acquix (id persistant)': [challengeB_data.skillId],
-              Généalogie: challengeB_data.genealogy,
-              'Type péda': challengeB_data.pedagogy,
-              Auteur: challengeB_data.author,
-              Déclinable: challengeB_data.declinable,
-              'Version prototype': challengeB_data.version,
-              'Version déclinaison': challengeB_data.alternativeVersion,
-              'Non voyant': challengeB_data.accessibility1,
-              Daltonien: challengeB_data.accessibility2,
-              Spoil: challengeB_data.spoil,
-              Responsive: challengeB_data.responsive,
-              Géographie: challengeB_data.geography,
-              files: challengeB_data.files,
-              validated_at: challengeB_data.validatedAt,
-              archived_at: challengeB_data.archivedAt,
-              made_obsolete_at: challengeB_data.madeObsoleteAt,
-              created_at: challengeB_data.createdAt,
-              updated_at: challengeB_data.updatedAt,
-              shuffled: challengeB_data.shuffled,
-              contextualizedFields: challengeB_data.contextualizedFields,
-            },
-            get: function(field) {
-              return this.fields[field];
-            },
-          },
-        ];
-      });
-
       // when
       const challenges = await challengeRepository.createBatch([challengeA, challengeB]);
 
@@ -2947,17 +2050,16 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeA_data.accessibility1,
           accessibility2: challengeA_data.accessibility2,
-          airtableId: 'airtableIdChallengeA',
           alternativeVersion: challengeA_data.alternativeVersion,
-          alpha: NaN,
+          alpha: null,
           archivedAt: challengeA_data.archivedAt,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
-          competenceId: 'theRightCompetenceId',
+          competenceId: 'competence1',
           contextualizedFields: challengeA_data.contextualizedFields,
-          createdAt: challengeA_data.createdAt,
+          createdAt: expect.any(Date),
           declinable: challengeA_data.declinable,
-          delta: NaN,
+          delta: null,
           embedHeight: challengeA_data.embedHeight,
           files: challengeA_data.files,
           focusable: challengeA_data.focusable,
@@ -2972,7 +2074,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeA_data.responsive,
           shuffled: challengeA_data.shuffled,
           skillId: challengeA_data.skillId,
-          skills: challengeA_data.skills,
           spoil: challengeA_data.spoil,
           status: challengeA_data.status,
           t1Status: challengeA_data.t1Status,
@@ -2981,24 +2082,23 @@ describe('Integration | Repository | challenge-repository', () => {
           timer: challengeA_data.timer,
           translations: challengeA.translations,
           type: challengeA_data.type,
-          updatedAt: challengeA_data.updatedAt,
+          updatedAt: expect.any(Date),
           validatedAt: challengeA_data.validatedAt,
           version: challengeA_data.version,
         }),
         domainBuilder.buildChallenge({
           accessibility1: challengeB_data.accessibility1,
           accessibility2: challengeB_data.accessibility2,
-          airtableId: 'airtableIdChallengeB',
           alternativeVersion: challengeB_data.alternativeVersion,
-          alpha: NaN,
+          alpha: null,
           archivedAt: challengeB_data.archivedAt,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
-          competenceId: 'theRightCompetenceId',
+          competenceId: 'competence1',
           contextualizedFields: challengeB_data.contextualizedFields,
-          createdAt: challengeB_data.createdAt,
+          createdAt: expect.any(Date),
           declinable: challengeB_data.declinable,
-          delta: NaN,
+          delta: null,
           embedHeight: challengeB_data.embedHeight,
           files: challengeB_data.files,
           focusable: challengeB_data.focusable,
@@ -3013,7 +2113,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeB_data.responsive,
           shuffled: challengeB_data.shuffled,
           skillId: challengeB_data.skillId,
-          skills: challengeB_data.skills,
           spoil: challengeB_data.spoil,
           status: challengeB_data.status,
           t1Status: challengeB_data.t1Status,
@@ -3022,7 +2121,7 @@ describe('Integration | Repository | challenge-repository', () => {
           timer: challengeB_data.timer,
           translations: challengeB.translations,
           type: challengeB_data.type,
-          updatedAt: challengeB_data.updatedAt,
+          updatedAt: expect.any(Date),
           validatedAt: challengeB_data.validatedAt,
           version: challengeB_data.version,
         }),
@@ -3192,7 +2291,6 @@ describe('Integration | Repository | challenge-repository', () => {
         id: 'challengeToCreate_id',
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY1.KO,
-        airtableId: null,
         alternativeVersion: 1,
         alpha: null,
         delta: null,
@@ -3218,7 +2316,6 @@ describe('Integration | Repository | challenge-repository', () => {
         responsive: Challenge.RESPONSIVES.SMARTPHONE,
         shuffled: false,
         skillId: 'skillId1',
-        skills: ['airtableSkillId1'],
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.PROPOSE,
         t1Status: false,
@@ -3272,96 +2369,6 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildSkill({ id: challengeToCreate_data.skillId, tubeId: 'tube1' });
       await databaseBuilder.commit();
 
-      vi.spyOn(airtableClient, 'createRecord').mockImplementation((tableName, airtableRequestBody) => {
-        if (tableName !== 'Epreuves') {
-          expect.unreachable('Airtable tableName should be Epreuves');
-        }
-        if (
-          !_.isEqual(airtableRequestBody, {
-            fields: {
-              'id persistant': challengeToCreate_data.id,
-              "Type d'épreuve": challengeToCreate_data.type,
-              'T1 - Espaces, casse & accents': challengeToCreate_data.t1StatusAirtable,
-              'T2 - Ponctuation': challengeToCreate_data.t2StatusAirtable,
-              "T3 - Distance d'édition": challengeToCreate_data.t3StatusAirtable,
-              Statut: challengeToCreate_data.status,
-              'Embed URL': challengeToCreate.localizedChallenges[0].embedUrl,
-              'Embed height': challengeToCreate_data.embedHeight,
-              Timer: challengeToCreate_data.timer,
-              Format: challengeToCreate_data.format,
-              'Réponse automatique': challengeToCreate_data.autoReply,
-              Langues: challengeToCreate_data.localesAirtable,
-              Focalisée: challengeToCreate_data.focusable,
-              Acquix: challengeToCreate_data.skills,
-              Généalogie: challengeToCreate_data.genealogy,
-              'Type péda': challengeToCreate_data.pedagogy,
-              Auteur: challengeToCreate_data.author,
-              Déclinable: challengeToCreate_data.declinable,
-              'Version prototype': challengeToCreate_data.version,
-              'Version déclinaison': challengeToCreate_data.alternativeVersion,
-              'Non voyant': challengeToCreate_data.accessibility1,
-              Daltonien: challengeToCreate_data.accessibility2,
-              Spoil: challengeToCreate_data.spoil,
-              Responsive: challengeToCreate_data.responsive,
-              Géographie: challengeToCreate_data.geography,
-              validated_at: challengeToCreate_data.validatedAt,
-              archived_at: challengeToCreate_data.archivedAt,
-              made_obsolete_at: challengeToCreate_data.madeObsoleteAt,
-              shuffled: challengeToCreate_data.shuffled,
-              contextualizedFields: challengeToCreate_data.contextualizedFields,
-            },
-          })
-        ) {
-          expect.unreachable('Challenges to create to airtable wrong body');
-        }
-        return {
-          id: 'airtableIdChallengeToCreate',
-          fields: {
-            'id persistant': challengeToCreate_data.id,
-            'Record ID': 'airtableIdChallengeToCreate',
-            'Compétences (via tube) (id persistant)': ['theRightCompetenceId'],
-            "Type d'épreuve": challengeToCreate_data.type,
-            'T1 - Espaces, casse & accents': challengeToCreate_data.t1StatusAirtable,
-            'T2 - Ponctuation': challengeToCreate_data.t2StatusAirtable,
-            "T3 - Distance d'édition": challengeToCreate_data.t3StatusAirtable,
-            Statut: challengeToCreate_data.status,
-            'Embed URL': challengeToCreate_data.embedUrl,
-            'Embed height': challengeToCreate_data.embedHeight,
-            Timer: challengeToCreate_data.timer,
-            Format: challengeToCreate_data.format,
-            'Réponse automatique': challengeToCreate_data.autoReply,
-            Langues: challengeToCreate_data.localesAirtable,
-            Focalisée: challengeToCreate_data.focusable,
-            'Difficulté calculée': NaN,
-            'Discrimination calculée': NaN,
-            Acquix: challengeToCreate_data.skills,
-            'Acquix (id persistant)': [challengeToCreate_data.skillId],
-            Généalogie: challengeToCreate_data.genealogy,
-            'Type péda': challengeToCreate_data.pedagogy,
-            Auteur: challengeToCreate_data.author,
-            Déclinable: challengeToCreate_data.declinable,
-            'Version prototype': challengeToCreate_data.version,
-            'Version déclinaison': challengeToCreate_data.alternativeVersion,
-            'Non voyant': challengeToCreate_data.accessibility1,
-            Daltonien: challengeToCreate_data.accessibility2,
-            Spoil: challengeToCreate_data.spoil,
-            Responsive: challengeToCreate_data.responsive,
-            Géographie: challengeToCreate_data.geography,
-            files: challengeToCreate_data.files,
-            validated_at: challengeToCreate_data.validatedAt,
-            archived_at: challengeToCreate_data.archivedAt,
-            created_at: challengeToCreate_data.createdAt,
-            made_obsolete_at: challengeToCreate_data.madeObsoleteAt,
-            updated_at: challengeToCreate_data.updatedAt,
-            shuffled: challengeToCreate_data.shuffled,
-            contextualizedFields: challengeToCreate_data.contextualizedFields,
-          },
-          get: function(field) {
-            return this.fields[field];
-          },
-        };
-      });
-
       // when
       const challenge = await challengeRepository.create(challengeToCreate);
 
@@ -3370,17 +2377,16 @@ describe('Integration | Repository | challenge-repository', () => {
         domainBuilder.buildChallenge({
           accessibility1: challengeToCreate_data.accessibility1,
           accessibility2: challengeToCreate_data.accessibility2,
-          airtableId: 'airtableIdChallengeToCreate',
           alternativeVersion: challengeToCreate_data.alternativeVersion,
-          alpha: NaN,
+          alpha: null,
           archivedAt: challengeToCreate_data.archivedAt,
           author: challengeToCreate_data.author,
           autoReply: challengeToCreate_data.autoReply,
-          competenceId: 'theRightCompetenceId',
+          competenceId: 'competence1',
           contextualizedFields: challengeToCreate_data.contextualizedFields,
-          createdAt: challengeToCreate_data.createdAt,
+          createdAt: expect.any(Date),
           declinable: challengeToCreate_data.declinable,
-          delta: NaN,
+          delta: null,
           embedHeight: challengeToCreate_data.embedHeight,
           files: challengeToCreate_data.files,
           focusable: challengeToCreate_data.focusable,
@@ -3395,7 +2401,6 @@ describe('Integration | Repository | challenge-repository', () => {
           responsive: challengeToCreate_data.responsive,
           shuffled: challengeToCreate_data.shuffled,
           skillId: challengeToCreate_data.skillId,
-          skills: challengeToCreate_data.skills,
           spoil: challengeToCreate_data.spoil,
           status: challengeToCreate_data.status,
           t1Status: challengeToCreate_data.t1Status,
@@ -3404,7 +2409,7 @@ describe('Integration | Repository | challenge-repository', () => {
           timer: challengeToCreate_data.timer,
           translations: challengeToCreate.translations,
           type: challengeToCreate_data.type,
-          updatedAt: challengeToCreate_data.updatedAt,
+          updatedAt: expect.any(Date),
           validatedAt: challengeToCreate_data.validatedAt,
           version: challengeToCreate_data.version,
         }),
@@ -3520,10 +2525,7 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
       databaseBuilder.factory.buildSkill({ id: 'skill2', tubeId: 'tube1' });
 
-      const challengeData = domainBuilder.buildChallengeDatasourceObject({
-        skillId: 'skill1',
-        skills: ['recSkill1'],
-      });
+      const challengeData = domainBuilder.buildChallengeDatasourceObject({ skillId: 'skill1' });
 
       databaseBuilder.factory.buildChallenge(challengeData);
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -3533,35 +2535,18 @@ describe('Integration | Repository | challenge-repository', () => {
       });
       await databaseBuilder.commit();
 
-      const updateRecord = vi.spyOn(airtable, 'updateRecord').mockResolvedValueOnce(
-        new Airtable.Record(
-          'Epreuves',
-          challengeData.airtableId,
-          airtableBuilder.factory.buildChallenge({
-            ...challengeData,
-            skillId: 'skill2',
-            skills: ['recSkill2'],
-          }),
-        ),
-      );
-
-      const challenge = domainBuilder.buildChallenge({ ...challengeData, skills: ['recSkill2'] });
+      const challenge = domainBuilder.buildChallenge({ ...challengeData, skillId: 'skill2' });
 
       // when
       const updatedChallenge = await challengeRepository.update(challenge);
 
       // then
       expect(updatedChallenge).toHaveProperty('skillId', 'skill2');
-      expect(updatedChallenge).toHaveProperty('skills', ['recSkill2']);
+      expect(updatedChallenge).toHaveProperty('skills', ['skill2']);
 
       await expect(
         knex.select('skillId').from('challenges').where('id', challengeData.id).first(),
       ).resolves.toStrictEqual({ skillId: 'skill2' });
-
-      expect(updateRecord).toHaveBeenCalledExactlyOnceWith('Epreuves', {
-        id: challengeData.airtableId,
-        fields: expect.objectContaining({ Acquix: ['recSkill2'] }),
-      });
     });
   });
 
@@ -3593,17 +2578,6 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildSkill({ id: expectedChallenges[0].skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(expectedChallenges[0]);
 
-      const airtableChallenges = expectedChallenges.map((challenge) =>
-        airtableBuilder.factory.buildChallenge(challenge),
-      );
-      const findRecordsSpy = vi
-        .spyOn(airtable, 'findRecords')
-        .mockResolvedValueOnce(
-          airtableChallenges.map(
-            (airtableChallenge) =>
-              new Airtable.Record(challengeDatasource.tableName, airtableChallenge.airtableId, airtableChallenge),
-          ),
-        );
       for (const challenge of expectedChallenges) {
         databaseBuilder.factory.buildTranslation({
           key: `challenge.${challenge.id}.instruction`,
@@ -3645,11 +2619,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
       // then
       expect(result).toStrictEqual(expectedChallenges);
-      expect(findRecordsSpy).toHaveBeenCalledWith(challengeDatasource.tableName, {
-        filterByFormula:
-          'AND(OR({Acquis (id persistant)} = "skillId1", {Acquis (id persistant)} = "skillId2"), {Généalogie} = "Prototype 1", {Statut} = "validé")',
-        fields: challengeDatasource.usedFields,
-      });
     });
   });
 });

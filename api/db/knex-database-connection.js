@@ -1,8 +1,12 @@
 import pg from 'pg';
 import Knex from 'knex';
 import _ from 'lodash';
+
+import { child } from '../lib/infrastructure/logger.js';
 import * as knexConfigs from './knexfile.js';
-import { environment } from '../lib/config.js';
+import { environment, logging } from '../lib/config.js';
+
+const logger = child('knex', { event: 'knex' });
 
 /*
 By default, node-postgres casts a DATE value (PostgreSQL type) as a Date Object (JS type).
@@ -25,6 +29,22 @@ pg.types.setTypeParser(pg.types.builtins.INT8, (value) => parseInt(value));
 
 const knexConfig = knexConfigs[environment];
 export const knex = Knex(knexConfig);
+
+const knexQueryStartTimes = new Map();
+
+knex.on('query', function(data) {
+  if (logging.logKnexQueries) {
+    knexQueryStartTimes.set(data.__knexQueryUid, performance.now());
+  }
+});
+
+knex.on('query-response', function(response, data) {
+  if (logging.logKnexQueries) {
+    const queryTime = (performance.now() - knexQueryStartTimes.get(data.__knexQueryUid)).toFixed();
+    knexQueryStartTimes.delete(data.__knexQueryUid);
+    logger.trace({ queryTime, sql: data.sql }, 'query time');
+  }
+});
 
 const _databaseName = knex.client.database();
 

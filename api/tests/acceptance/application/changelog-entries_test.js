@@ -1,11 +1,7 @@
-import nock from 'nock';
 import { describe, it, expect } from 'vitest';
 import { ChangelogEntry } from '../../../lib/domain/models/index.js';
 import { createServer } from '../../../server.js';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
-import Airtable from 'airtable';
-
-const { Record: AirtableRecord } = Airtable;
 
 describe('Acceptance | Routes | Notes', () => {
   describe('GET /changelog-entries', () => {
@@ -21,6 +17,7 @@ describe('Acceptance | Routes | Notes', () => {
         author: 'NLE',
         elementId: challengeId,
         elementType: 'épreuve',
+        createdAt: '2025-11-12T14:39:00.000Z',
       });
       databaseBuilder.factory.buildChangelogEntry({
         id: 'rec456',
@@ -28,43 +25,10 @@ describe('Acceptance | Routes | Notes', () => {
         author: 'FOO',
         elementId: challengeId,
         elementType: 'épreuve',
+        createdAt: '2025-11-12T14:47:00.000Z',
       });
 
       await databaseBuilder.commit();
-
-      const airtableChangelogEntries = [
-        {
-          id: 'rec123',
-          fields: {
-            Texte: 'Un texte',
-            Auteur: 'NLE',
-            Changelog: 'oui',
-            Date: new Date('2025-11-12T14:39:00Z'),
-            Record_Id: challengeId,
-            "Type d'élément": 'épreuve',
-          },
-        },
-        {
-          id: 'rec456',
-          fields: {
-            Texte: 'Un autre texte',
-            Auteur: 'FOO',
-            Changelog: 'oui',
-            Date: new Date('2025-11-12T14:47:00Z'),
-            Record_Id: challengeId,
-            "Type d'élément": 'épreuve',
-          },
-        },
-      ];
-
-      const airtableScope = nock('https://api.airtable.com')
-        .get('/v0/airtableEditorBaseValue/Notes')
-        .query({
-          filterByFormula: `AND(Record_Id = "${challengeId}", Changelog = "oui")`,
-          sort: [{ field: 'Date', direction: 'asc' }],
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableChangelogEntries });
 
       const server = await createServer();
 
@@ -86,7 +50,7 @@ describe('Acceptance | Routes | Notes', () => {
             attributes: {
               text: 'Un texte',
               author: 'NLE',
-              'created-at': '2025-11-12T14:39:00.000Z',
+              'created-at': new Date('2025-11-12T14:39:00Z'),
               'element-id': challengeId,
               'element-type': ChangelogEntry.ELEMENT_TYPES.EPREUVE,
             },
@@ -97,15 +61,13 @@ describe('Acceptance | Routes | Notes', () => {
             attributes: {
               text: 'Un autre texte',
               author: 'FOO',
-              'created-at': '2025-11-12T14:47:00.000Z',
+              'created-at': new Date('2025-11-12T14:47:00Z'),
               'element-id': challengeId,
               'element-type': ChangelogEntry.ELEMENT_TYPES.EPREUVE,
             },
           },
         ],
       });
-
-      expect(airtableScope.isDone()).toBe(true);
     });
   });
 
@@ -124,24 +86,6 @@ describe('Acceptance | Routes | Notes', () => {
         elementType: ChangelogEntry.ELEMENT_TYPES.ACQUIS,
       });
 
-      const airtableChangelogEntry = {
-        id: changelogEntry.id,
-        fields: {
-          Texte: changelogEntry.text,
-          Auteur: changelogEntry.author,
-          Date: changelogEntry.createdAt,
-          Record_Id: changelogEntry.elementId,
-          'Type d\'élément': 'acquis',
-          Changelog: 'oui',
-        },
-      };
-      const expectedChangelogEntryBody = structuredClone(airtableChangelogEntry);
-      delete expectedChangelogEntryBody.id;
-      delete expectedChangelogEntryBody.fields.Date;
-
-      const airtableScope = nock('https://api.airtable.com')
-        .post('/v0/airtableEditorBaseValue/Notes/?', { records: [expectedChangelogEntryBody] })
-        .reply(200, { records: [new AirtableRecord('Notes', airtableChangelogEntry.id, airtableChangelogEntry)] });
       const server = await createServer();
 
       // when
@@ -167,11 +111,11 @@ describe('Acceptance | Routes | Notes', () => {
       expect(response.result).toStrictEqual({
         data: {
           type: 'changelog-entries',
-          id: 'changelog123',
+          id: expect.stringMatching(/^changelog.+$/),
           attributes: {
             text: 'Un texte',
             author: 'NLE',
-            'created-at': changelogEntry.createdAt.toISOString(),
+            'created-at': expect.any(Date),
             'element-id': changelogEntry.elementId,
             'element-type': ChangelogEntry.ELEMENT_TYPES.ACQUIS,
           },
@@ -180,7 +124,7 @@ describe('Acceptance | Routes | Notes', () => {
 
       await expect(knex.select('*').from('changelog_entries')).resolves.toStrictEqual([
         {
-          id: 'changelog123',
+          id: expect.stringMatching(/^changelog.+$/),
           text: 'Un texte',
           author: 'NLE',
           createdAt: expect.any(Date),
@@ -188,8 +132,6 @@ describe('Acceptance | Routes | Notes', () => {
           elementType: ChangelogEntry.ELEMENT_TYPES.ACQUIS,
         },
       ]);
-
-      expect(airtableScope.isDone()).toBe(true);
     });
   });
 });

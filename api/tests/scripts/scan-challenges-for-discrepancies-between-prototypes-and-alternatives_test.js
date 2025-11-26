@@ -1,13 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { airtableBuilder, databaseBuilder, domainBuilder } from '../test-helper.js';
-import nock from 'nock';
+import { databaseBuilder, domainBuilder } from '../test-helper.js';
 import { Challenge } from '../../lib/domain/models/index.js';
-import { challengeDatasource } from '../../lib/infrastructure/datasources/airtable/index.js';
 import { ScanChallengesForDiscrepanciesBetweenPrototypesAndAlternatives } from '../../scripts/scan-challenges-for-discrepancies-between-prototypes-and-alternatives.js';
 
 describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alternatives', () => {
-  let dataThatShouldBeTheSame, someOtherCommonData, airtableChallengesScope;
-  beforeEach(() => {
+  let dataThatShouldBeTheSame, someOtherCommonData;
+
+  beforeEach(async () => {
     dataThatShouldBeTheSame = {
       accessibility1: Challenge.ACCESSIBILITY1.OK,
       accessibility2: Challenge.ACCESSIBILITY2.OK,
@@ -50,9 +49,9 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       files: [],
       updatedAt: '2021-10-04',
       createdAt: '1986-07-14',
-      validatedAt: '2023-02-02T14:17:30.820Z',
-      archivedAt: '2023-03-03T10:47:05.555Z',
-      madeObsoleteAt: '2023-04-04T10:47:05.555Z',
+      validatedAt: '2023-02-02T14:17:30Z',
+      archivedAt: '2023-03-03T10:47:05Z',
+      madeObsoleteAt: '2023-04-04T10:47:05Z',
       skillId: 'recSkillId',
       alpha: 1,
       delta: 1,
@@ -102,9 +101,9 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       files: [],
       updatedAt: '2020-10-04',
       createdAt: '2020-07-14',
-      validatedAt: '2020-02-02T14:17:30.820Z',
-      archivedAt: '2020-03-03T10:47:05.555Z',
-      madeObsoleteAt: '2020-04-04T10:47:05.555Z',
+      validatedAt: '2020-02-02T14:17:30Z',
+      archivedAt: '2020-03-03T10:47:05Z',
+      madeObsoleteAt: '2020-04-04T10:47:05Z',
       alpha: 2,
       delta: 2,
       version: 1,
@@ -195,23 +194,8 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       ...someOtherCommonData,
       ...dataThatShouldBeTheSame,
     });
-    const airtableChallenges = [
-      airtableBuilder.factory.buildChallenge(proto),
-      airtableBuilder.factory.buildChallenge(decli1),
-      airtableBuilder.factory.buildChallenge(decli2),
-      airtableBuilder.factory.buildChallenge(decliOrphanVersion),
-      airtableBuilder.factory.buildChallenge(decliOrphanSkill),
-    ];
 
-    airtableChallengesScope = nock('https://api.airtable.com')
-      .get('/v0/airtableBaseValue/Epreuves')
-      .query({
-        fields: { '': challengeDatasource.usedFields },
-        sort: [{ field: challengeDatasource.sortField, direction: 'asc' }],
-      })
-      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .reply(200, { records: airtableChallenges });
-    return databaseBuilder.commit();
+    await databaseBuilder.commit();
   });
 
   it('should detect all discrepancies in proto and alternatives if any', async () => {
@@ -284,6 +268,5 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
     );
     expect(loggerErrorStub).toHaveBeenCalledWith('Alternative: DECLI_ORPHAN_VERSION - cannot found related prototype');
     expect(loggerErrorStub).toHaveBeenCalledWith('Alternative: DECLI_ORPHAN_SKILL - cannot found related prototype');
-    expect(airtableChallengesScope.isDone()).to.be.true;
   });
 });

@@ -13,13 +13,13 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
   beforeEach(() => {
     vi.spyOn(updatePixApiReleaseCache, 'onThematicUpdated');
     thematicRepository = {
-      getByAirtableId: vi.fn(),
+      get: vi.fn(),
       update: vi.fn(),
     };
 
     thematic = domainBuilder.buildThematic();
     updateStub = vi.spyOn(thematic, 'update').mockReturnValueOnce();
-    thematicRepository.getByAirtableId.mockResolvedValueOnce(thematic);
+    thematicRepository.get.mockResolvedValueOnce(thematic);
     thematicRepository.update.mockResolvedValueOnce(updatedThematic);
   });
 
@@ -33,7 +33,7 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
     // then
     await expect(result).resolves.toBe(updatedThematic);
 
-    expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
+    expect(thematicRepository.get).toHaveBeenCalledWith('recThematic1');
     expect(updateStub).toHaveBeenCalledWith(thematicUpdates);
     expect(thematicRepository.update).toHaveBeenCalledWith(thematic);
     expect(updatePixApiReleaseCache.onThematicUpdated).toHaveBeenCalledWith(updatedThematic);
@@ -42,14 +42,14 @@ describe('Unit | Domain | Use Cases | update-thematic', () => {
   describe('when thematic is not found', () => {
     it('throws a NotFoundError', async () => {
       // given
-      thematicRepository.getByAirtableId.mockReset().mockResolvedValueOnce(null);
+      thematicRepository.get.mockReset().mockResolvedValueOnce(null);
 
       // when
       const result = updateThematic('recThematic1', thematicUpdates, { thematicRepository });
 
       // then
       await expect(result).rejects.toStrictEqual(new NotFoundError('unknown thematic id'));
-      expect(thematicRepository.getByAirtableId).toHaveBeenCalledWith('recThematic1');
+      expect(thematicRepository.get).toHaveBeenCalledWith('recThematic1');
     });
   });
 });

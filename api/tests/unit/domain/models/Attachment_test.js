@@ -13,7 +13,6 @@ describe('Unit | Domain | Attachment', () => {
         mimeType: 'image/png',
         filename: 'nom_du_fichier',
         challengeId: 'challengeId',
-        airtableChallengeId: 'challengeAirtableId',
         localizedChallengeId: 'localizedChallengeId',
       });
 
@@ -33,12 +32,12 @@ describe('Unit | Domain | Attachment', () => {
         filename: 'nom_du_fichier',
         challengeId: 'newChallengeId',
         localizedChallengeId: 'newLocalizedChallengeId',
-        airtableChallengeId: null,
       });
 
       expect(clonedAttachment).toStrictEqual(expectedAttachment);
     });
   });
+
   context('#update', () => {
     it('should update allowed attributes from update command', () => {
       // given

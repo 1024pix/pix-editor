@@ -1,12 +1,5 @@
-import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../test-helper.js';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import * as config from '../../../lib/config.js';
 
@@ -56,7 +49,7 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    context('when user is NOT editor', () => {
+    describe('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
         const server = await createServer();
@@ -74,7 +67,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when payload is NOT valid', () => {
+    describe('when payload is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -135,53 +128,6 @@ describe('Acceptance | Route | attachments', () => {
         locale: 'es',
       });
       await databaseBuilder.commit();
-      const airtableGetAirtableChallengeIdsByIdsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
-        .query({
-          fields: { '': ['Record ID', 'id persistant'] },
-          filterByFormula: 'OR("challenge123" = {id persistant})',
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, {
-          records: [
-            {
-              fields: {
-                'id persistant': 'challenge123',
-                'Record ID': 'challengeAirtable123',
-              },
-            },
-          ],
-        });
-      const airtableAttachment = airtableBuilder.factory.buildAttachment({
-        id: 'airtableAttachmentId',
-        type: validPayload.data.attributes.type,
-        url: validPayload.data.attributes.url,
-        size: validPayload.data.attributes.size,
-        mimeType: validPayload.data.attributes['mime-type'],
-        filename: validPayload.data.attributes.filename,
-        challengeId: 'challenge123',
-        airtableChallengeId: 'airtableChallenge123',
-        localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
-      });
-      const airtablePostAttachmentScope = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Attachments/', {
-          records: [
-            {
-              fields: {
-                url: validPayload.data.attributes.url,
-                size: validPayload.data.attributes.size,
-                type: validPayload.data.attributes.type,
-                mimeType: validPayload.data.attributes['mime-type'],
-                filename: validPayload.data.attributes.filename,
-                challengeId: ['challengeAirtable123'],
-                localizedChallengeId: validPayload.data.relationships['localized-challenge'].data.id,
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableAttachment] });
       const server = await createServer();
 
       // when
@@ -197,7 +143,7 @@ describe('Acceptance | Route | attachments', () => {
       expect(response.result).toEqual({
         data: {
           type: 'attachments',
-          id: 'airtableAttachmentId',
+          id: expect.stringMatching(/^attachment.+$/),
           attributes: {
             url: validPayload.data.attributes.url,
             size: validPayload.data.attributes.size,
@@ -224,7 +170,7 @@ describe('Acceptance | Route | attachments', () => {
 
       await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([
         {
-          id: 'airtableAttachmentId',
+          id: expect.stringMatching(/^attachment.+$/),
           url: validPayload.data.attributes.url,
           size: validPayload.data.attributes.size,
           type: validPayload.data.attributes.type,
@@ -236,9 +182,6 @@ describe('Acceptance | Route | attachments', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      expect(airtablePostAttachmentScope.isDone()).toBe(true);
-      expect(airtableGetAirtableChallengeIdsByIdsScope.isDone()).toBe(true);
     });
   });
 
@@ -274,7 +217,7 @@ describe('Acceptance | Route | attachments', () => {
       };
     });
 
-    context('when user is NOT editor', () => {
+    describe('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
         const server = await createServer();
@@ -292,7 +235,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when payload is NOT valid', () => {
+    describe('when payload is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -312,14 +255,9 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
+    describe('when attachment does not exist', function() {
       it('should return a 404 not found', async function() {
         // given
-        const airtableGetAttachmentScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Attachments/recABC123')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
         const server = await createServer();
 
         // when
@@ -332,7 +270,6 @@ describe('Acceptance | Route | attachments', () => {
 
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableGetAttachmentScope.isDone()).toBe(true);
       });
     });
 
@@ -348,10 +285,6 @@ describe('Acceptance | Route | attachments', () => {
         challengeId: 'challenge123',
         airtableChallengeId: 'challengeAirtable123',
         localizedChallengeId: 'challenge123ES',
-      };
-      const attachmentAfter = {
-        ...attachmentBefore,
-        filename: validPayload.data.attributes.filename,
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -397,34 +330,6 @@ describe('Acceptance | Route | attachments', () => {
 
       await databaseBuilder.commit();
 
-      const airtableAttachmentBefore = airtableBuilder.factory.buildAttachment(attachmentBefore);
-      const airtableAttachmentAfter = airtableBuilder.factory.buildAttachment(attachmentAfter);
-      const airtableGetAttachmentScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments/recABC123')
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableAttachmentBefore);
-
-      const airtablePatchAttachmentScope = nock('https://api.airtable.com')
-        .patch('/v0/airtableBaseValue/Attachments/', {
-          records: [
-            {
-              id: 'recABC123',
-              fields: {
-                url: 'url avant',
-                size: 1024,
-                type: 'type avant',
-                mimeType: 'mimeType avant',
-                filename: 'filename APRES',
-                challengeId: ['challengeAirtable123'],
-                localizedChallengeId: 'challenge123ES',
-              },
-            },
-          ],
-        })
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [airtableAttachmentAfter] });
       const server = await createServer();
 
       // when
@@ -479,14 +384,11 @@ describe('Acceptance | Route | attachments', () => {
           updatedAt: expect.any(Date),
         },
       ]);
-
-      expect(airtableGetAttachmentScope.isDone()).toBe(true);
-      expect(airtablePatchAttachmentScope.isDone()).toBe(true);
     });
   });
 
   describe('DELETE /attachments/{attachmentId}', () => {
-    context('when user is NOT editor', () => {
+    describe('when user is NOT editor', () => {
       it('should respond with status 403', async () => {
         // given
         const server = await createServer();
@@ -503,7 +405,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when param id is NOT valid', () => {
+    describe('when param id is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -520,24 +422,20 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
+    describe('when attachment does not exist', function() {
       it('should return a 404 not found', async function() {
         // given
-        const airtableGetAttachmentScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
         const server = await createServer();
+
         // when
         const response = await server.inject({
           method: 'DELETE',
           url: '/api/attachments/recAttachmentId',
           headers: generateAuthorizationHeader(editorUser),
         });
+
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableGetAttachmentScope.isDone()).toBe(true);
       });
     });
 
@@ -593,24 +491,6 @@ describe('Acceptance | Route | attachments', () => {
 
       await databaseBuilder.commit();
 
-      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
-      const airtableGetAttachmentScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments/recAttachmentId')
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableAttachment);
-      const airtableDeleteAttachmentScope = nock('https://api.airtable.com')
-        .delete('/v0/airtableBaseValue/Attachments')
-        .query({ 'records[]': 'recAttachmentId' })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, {
-          records: [
-            {
-              id: 'recAttachmentId',
-              deleted: true,
-            },
-          ],
-        });
       const server = await createServer();
 
       // when
@@ -624,13 +504,11 @@ describe('Acceptance | Route | attachments', () => {
       await expect(knex.select('*').from('attachments')).resolves.toStrictEqual([]);
 
       expect(response.statusCode).toBe(204);
-      expect(airtableGetAttachmentScope.isDone()).toBe(true);
-      expect(airtableDeleteAttachmentScope.isDone()).toBe(true);
     });
   });
 
   describe('GET /attachments/{attachmentId}', () => {
-    context('when user is NOT authenticated', () => {
+    describe('when user is NOT authenticated', () => {
       it('should respond with status 401', async () => {
         // given
         const server = await createServer();
@@ -646,7 +524,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachmentId is NOT valid', () => {
+    describe('when attachmentId is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -663,14 +541,9 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when attachment does not exist', function() {
+    describe('when attachment does not exist', function() {
       it('should return a 404 not found', async function() {
         // given
-        const airtableGetAttachmentScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Attachments/recABC123')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
         const server = await createServer();
 
         // when
@@ -682,7 +555,6 @@ describe('Acceptance | Route | attachments', () => {
 
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableGetAttachmentScope.isDone()).toBe(true);
       });
     });
 
@@ -739,12 +611,6 @@ describe('Acceptance | Route | attachments', () => {
       };
       databaseBuilder.factory.buildAttachment(attachment);
       await databaseBuilder.commit();
-      const airtableAttachment = airtableBuilder.factory.buildAttachment(attachment);
-      const airtableGetAttachmentScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments/recABC123')
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableAttachment);
       const server = await createServer();
 
       // when
@@ -783,12 +649,11 @@ describe('Acceptance | Route | attachments', () => {
           },
         },
       });
-      expect(airtableGetAttachmentScope.isDone()).toBe(true);
     });
   });
 
   describe('GET /attachments?filter[localizedChallengeId]=%', () => {
-    context('when user is NOT authenticated', () => {
+    describe('when user is NOT authenticated', () => {
       it('should respond with status 401', async () => {
         // given
         const server = await createServer();
@@ -804,7 +669,7 @@ describe('Acceptance | Route | attachments', () => {
       });
     });
 
-    context('when query is NOT valid', () => {
+    describe('when query is NOT valid', () => {
       it('should respond with status 400', async () => {
         // given
         const server = await createServer();
@@ -874,13 +739,6 @@ describe('Acceptance | Route | attachments', () => {
       };
       databaseBuilder.factory.buildAttachment(attachment);
       await databaseBuilder.commit();
-      const airtableAttachments = [airtableBuilder.factory.buildAttachment(attachment)];
-
-      const airtableGetAttachmentScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
-        .query({ filterByFormula: 'OR({localizedChallengeId} = "localizedChallenge123")' })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: airtableAttachments });
       const server = await createServer();
 
       // when
@@ -921,7 +779,6 @@ describe('Acceptance | Route | attachments', () => {
           },
         ],
       });
-      expect(airtableGetAttachmentScope.isDone()).toBe(true);
     });
   });
 });

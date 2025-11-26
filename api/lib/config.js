@@ -1,6 +1,10 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import { LOCALE_TO_LANGUAGE_MAP, TUTORIAL_LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
+import { loadEnvFileIfExists } from './shared/load-env-file-if-exists.js';
+
+loadEnvFileIfExists();
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -39,13 +43,6 @@ export const hapi = {
   shouldCompressLargeJson: isFeatureEnabled(process.env.ALLOW_COMPRESSION_ON_LARGE_JSON),
 };
 
-export const airtable = {
-  apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
-  apiKeyMetaData: process.env.AIRTABLE_API_KEY_META_DATA,
-  base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
-  editorBase: process.env.AIRTABLE_EDITOR_BASE,
-};
-
 export const logging = {
   enabled: isFeatureEnabled(process.env.LOG_ENABLED),
   colorEnabled: process.env.NODE_ENV === 'development',
@@ -55,6 +52,7 @@ export const logging = {
   debugSections: process.env.LOG_DEBUG?.split(',') ?? [],
   logForHumans: _getLogForHumans(),
   logForHumansCompactFormat: process.env.LOG_FOR_HUMANS_FORMAT === 'compact',
+  logKnexQueries: isFeatureEnabled(process.env.LOG_KNEX_QUERIES),
 };
 
 export let pixApi = {
@@ -155,26 +153,19 @@ export const phrase = {
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
-export const airtableSeedsConfig = {
-  force: process.env.FORCE_AIRTABLE_SEEDS === 'true',
-  cntFrameworks: _getNumber(process.env.AIRTABLE_SEEDS_CNT_FRAMEWORKS, 2),
-  cntAreasPerFramework: _getNumber(process.env.AIRTABLE_SEEDS_CNT_AREAS, 2),
-  cntCompetencesPerArea: _getNumber(process.env.AIRTABLE_SEEDS_CNT_COMPETENCES, 2),
-  cntThematicsPerCompetence: _getNumber(process.env.AIRTABLE_SEEDS_CNT_THEMATICS, 2),
-  cntTubesPerThematic: _getNumber(process.env.AIRTABLE_SEEDS_CNT_TUBES, 2),
-  skillMaxLevel: _getNumber(process.env.AIRTABLE_SEEDS_SKILL_LEVEL, 3),
-  locales: _getStringArray(process.env.AIRTABLE_SEEDS_LOCALES, ['fr', 'en']),
+export const seedsConfig = {
+  cntFrameworks: _getNumber(process.env.SEEDS_CNT_FRAMEWORKS, 2),
+  cntAreasPerFramework: _getNumber(process.env.SEEDS_CNT_AREAS, 2),
+  cntCompetencesPerArea: _getNumber(process.env.SEEDS_CNT_COMPETENCES, 2),
+  cntThematicsPerCompetence: _getNumber(process.env.SEEDS_CNT_THEMATICS, 2),
+  cntTubesPerThematic: _getNumber(process.env.SEEDS_CNT_TUBES, 2),
+  skillMaxLevel: _getNumber(process.env.SEEDS_SKILL_LEVEL, 3),
+  locales: _getStringArray(process.env.SEEDS_LOCALES, ['fr', 'en']),
 };
-
-export const migrationFromAirtable = { throwOnPostgresDifference: false };
 
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';
-
-  airtable.apiKey = 'airtableApiKeyValue';
-  airtable.base = 'airtableBaseValue';
-  airtable.editorBase = 'airtableEditorBaseValue';
 
   logging.enabled = false;
 
@@ -211,6 +202,4 @@ if (process.env.NODE_ENV === 'test') {
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }];
-
-  migrationFromAirtable.throwOnPostgresDifference = true;
 }

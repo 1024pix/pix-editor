@@ -27,7 +27,6 @@ export default defineConfig({
         test: {
           name: 'unit',
           include: ['tests/unit/**/*_test.js'],
-          setupFiles: ['tests/setup-unit-tests.js'],
           sequence: { groupOrder: 2, concurrent: true },
         },
       },

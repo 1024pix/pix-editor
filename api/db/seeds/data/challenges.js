@@ -1,9 +1,7 @@
-import { cycle, saveInAirtable } from './utils.js';
+import { cycle } from './utils.js';
 import { Challenge, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 import { fields } from '../../../lib/infrastructure/translations/challenge.js';
-import { challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
-import { buildAttachment, persistAttachments } from './attachments.js';
-import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
+import { buildAttachment } from './attachments.js';
 
 const ignoreEmptyValues = (val) => Boolean(val);
 
@@ -46,13 +44,7 @@ const iterFor = {
 };
 
 let iterLocale;
-export async function buildChallengesFromConfig({
-  airtableClient,
-  databaseBuilder,
-  logger,
-  learningContentConfig,
-  learningContentData,
-}) {
+export function buildChallengesFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   iterLocale = cycle(learningContentConfig.locales.slice(1));
   const challengeItems = [];
   const allTubes = learningContentData.flatMap((framework) =>
@@ -118,14 +110,7 @@ export async function buildChallengesFromConfig({
     challengeItems.push(...challenges);
     skillItem.challenges.push(...challenges);
   }
-  await persistChallenges({ items: challengeItems, airtableClient, logger });
-  const allAttachments = challengeItems.flatMap((challengeItem) => challengeItem.attachments);
-  await persistAttachments({
-    items: allAttachments,
-    airtableClient,
-    logger,
-    databaseBuilder,
-  });
+  challengeItems.flatMap((challengeItem) => challengeItem.attachments);
 }
 
 export function buildChallenge({
@@ -145,17 +130,7 @@ export function buildChallenge({
   const partId = skillItem.id.split('skill')[1];
   const challengeId = `challenge${partId}Ch${indexChallenge}`;
   const attachments = [];
-  if (shouldAddAttachment) {
-    attachments.push(
-      buildAttachment({
-        challengeId,
-        localizedChallengeId: challengeId,
-        type: typeForAttachment,
-        databaseBuilder,
-        locale: locales[0],
-      }),
-    );
-  }
+
   const challengeItem = {
     ...generateBaseChallengeData(status, autoReply),
     id: challengeId,
@@ -196,25 +171,19 @@ export function buildChallenge({
       );
     }
   }
+  if (shouldAddAttachment) {
+    attachments.push(
+      buildAttachment({
+        challengeId,
+        localizedChallengeId: challengeId,
+        type: typeForAttachment,
+        databaseBuilder,
+        locale: locales[0],
+      }),
+    );
+  }
   challengeItem.attachments = attachments;
   return challengeItem;
-}
-
-export async function persistChallenges({ items, airtableClient, logger }) {
-  const airtableItems = items.map(challengeDatasource.toAirTableObject);
-  const records = await saveInAirtable({
-    tableName: 'Epreuves',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-  items.forEach((item) => {
-    const airtableId = records.shift().id;
-    item.airtableId = airtableId;
-    item.attachments.forEach((att) => {
-      att.challengeAirtableId = airtableId;
-    });
-  });
 }
 
 function buildChallengesForEnConstructionSkill(
@@ -615,85 +584,4 @@ function generateBaseLocalizedChallengeData() {
     geography: 'VN',
     urlsToConsult: null,
   };
-}
-
-export async function copyChallengesFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableChallenges = await airtableClient
-    .table('Epreuves')
-    .select({
-      fields: [
-        'id persistant',
-        'Timer',
-        "Type d'épreuve",
-        'T1 - Espaces, casse & accents',
-        'T2 - Ponctuation',
-        "T3 - Distance d'édition",
-        'Statut',
-        'Acquix (id persistant)',
-        'Embed height',
-        'Format',
-        'Réponse automatique',
-        'Langues',
-        'Focalisée',
-        'Généalogie',
-        'Type péda',
-        'Auteur',
-        'Déclinable',
-        'Version prototype',
-        'Version déclinaison',
-        'Non voyant',
-        'Daltonien',
-        'Spoil',
-        'Responsive',
-        'Difficulté calculée',
-        'Discrimination calculée',
-        'updated_at',
-        'created_at',
-        'validated_at',
-        'archived_at',
-        'made_obsolete_at',
-        'shuffled',
-        'contextualizedFields',
-      ],
-    })
-    .all();
-
-  logger.info(`Copying ${airtableChallenges.length} challenges from airtable...`);
-
-  airtableChallenges.forEach((record) => {
-    databaseBuilder.factory.buildChallenge({
-      id: record.get('id persistant'),
-      type: record.get("Type d'épreuve"),
-      t1Status: record.get('T1 - Espaces, casse & accents') === 'Activé',
-      t2Status: record.get('T2 - Ponctuation') === 'Activé',
-      t3Status: record.get("T3 - Distance d'édition") === 'Activé',
-      status: record.get('Statut'),
-      skillId: record.get('Acquix (id persistant)')?.[0],
-      embedHeight: record.get('Embed height'),
-      timer: record.get('Timer'),
-      format: record.get('Format'),
-      autoReply: record.get('Réponse automatique') ?? false,
-      locales: convertLanguagesToLocales(record.get('Langues')),
-      focusable: record.get('Focalisée') ?? false,
-      genealogy: record.get('Généalogie'),
-      pedagogy: record.get('Type péda'),
-      author: record.get('Auteur'),
-      declinable: record.get('Déclinable'),
-      version: record.get('Version prototype'),
-      alternativeVersion: record.get('Version déclinaison'),
-      accessibility1: record.get('Non voyant'),
-      accessibility2: record.get('Daltonien'),
-      spoil: record.get('Spoil'),
-      responsive: record.get('Responsive'),
-      delta: record.get('Difficulté calculée'),
-      alpha: record.get('Discrimination calculée'),
-      updatedAt: record.get('updated_at'),
-      validatedAt: record.get('validated_at'),
-      archivedAt: record.get('archived_at'),
-      madeObsoleteAt: record.get('made_obsolete_at'),
-      createdAt: record.get('created_at'),
-      shuffled: record.get('shuffled') ?? false,
-      contextualizedFields: record.get('contextualizedFields') ?? [],
-    });
-  });
 }

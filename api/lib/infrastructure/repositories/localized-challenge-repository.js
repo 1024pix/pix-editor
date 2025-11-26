@@ -119,6 +119,7 @@ function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
         knex
           .select(knex.raw('json_agg(??)', 'attachments.id'))
           .from('attachments')
+          .where('attachments.challengeId', knex.ref('localized_challenges.challengeId')) // necessary to use index on (challengeId, localizedChallengeId)
           .where('attachments.localizedChallengeId', knex.ref('localized_challenges.id')),
       ),
     )

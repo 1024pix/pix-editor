@@ -1,11 +1,7 @@
 import { knex } from '../../../db/knex-database-connection.js';
-import { translationDatasource } from '../datasources/airtable/index.js';
 import { Translation } from '../../domain/models/index.js';
 import _ from 'lodash';
 import { escapeLikeWildcards } from './sql-utils.js';
-
-let _doesTableExistInAirtable;
-let _doesTableExistInAirtablePromise;
 
 const projection = [
   'key',
@@ -13,20 +9,10 @@ const projection = [
   'value',
 ];
 
-export async function save({ translations, transaction: knexConnection = knex, shouldDuplicateToAirtable = true }) {
+export async function save({ translations, transaction: knexConnection = knex }) {
   if (translations.length === 0) return [];
 
   await knexConnection('translations').insert(translations).onConflict(['key', 'locale']).merge();
-
-  if (!shouldDuplicateToAirtable) return;
-
-  if (_doesTableExistInAirtable == null && _doesTableExistInAirtablePromise == null) {
-    await checkIfTableExistInAirtable();
-  }
-
-  if (_doesTableExistInAirtable) {
-    await translationDatasource.upsert(translations);
-  }
 }
 
 /**
@@ -87,26 +73,10 @@ export async function search({ entity, fields, search, limit }) {
   return query;
 }
 
-export async function checkIfTableExistInAirtable() {
-  _doesTableExistInAirtablePromise = translationDatasource.exists();
-  _doesTableExistInAirtable = await _doesTableExistInAirtablePromise;
-}
-
 function _toDomain(dto) {
   return new Translation(dto);
 }
 
 export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction: knexConnection = knex }) {
   await knexConnection('translations').delete().whereLike('key', `${prefix}%`).whereIn('locale', locales);
-
-  if (_doesTableExistInAirtable == null && _doesTableExistInAirtablePromise == null) {
-    await checkIfTableExistInAirtable();
-  }
-
-  if (_doesTableExistInAirtable) {
-    const records = await translationDatasource.filter({ filter: { formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))` } });
-    if (records.length === 0) return;
-    const recordIds = records.map(({ airtableId }) => airtableId);
-    await translationDatasource.delete(recordIds);
-  }
 }

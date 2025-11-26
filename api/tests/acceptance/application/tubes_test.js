@@ -1,15 +1,7 @@
-import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
-import nock from 'nock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  airtableBuilder,
-  databaseBuilder,
-  domainBuilder,
-  generateAuthorizationHeader,
-  knex,
-} from '../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
-import { tubeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import * as idGenerator from '../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Application | Route | Tubes', () => {
@@ -22,9 +14,7 @@ describe('Application | Route | Tubes', () => {
   });
 
   describe('GET /api/tubes/{tubeAirtableId}', () => {
-    let airtableTubeScope;
-
-    context('when provided id has not the right format', function() {
+    describe('when provided id has not the right format', function() {
       it('should respond with a status 400', async function() {
         const server = await createServer();
 
@@ -40,25 +30,19 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when tube does not exist', function() {
+    describe('when tube does not exist', function() {
       it('should respond with a status 404', async function() {
         const server = await createServer();
-        airtableTubeScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tubes/recTube1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(404);
 
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/tubes/recTube1',
+          url: '/api/tubes/tube1',
           headers: generateAuthorizationHeader(editorUser),
         });
 
         // then
         expect(response.statusCode).toBe(404);
-        expect(airtableTubeScope.isDone()).toBe(true);
       });
     });
 
@@ -66,14 +50,11 @@ describe('Application | Route | Tubes', () => {
       // given
       const tube = {
         id: 'tube1',
-        airtableId: 'recTube1',
         name: '@test',
         index: 1,
-        competenceAirtableId: 'recCompetence1',
         competenceId: 'competence1',
-        thematicAirtableId: 'recThematic1',
         thematicId: 'thematic1',
-        skillAirtableIds: ['recSkill1', 'recSkill2'],
+        skillAirtableIds: ['skill1', 'skill2'],
         skillIds: ['skill1', 'skill2'],
       };
 
@@ -83,14 +64,6 @@ describe('Application | Route | Tubes', () => {
       databaseBuilder.factory.buildThematic({ id: tube.thematicId, competenceId: tube.competenceId });
       databaseBuilder.factory.buildTube(tube);
       tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
-
-      const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
-
-      airtableTubeScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Tubes/recTube1')
-        .query({})
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, airtableTube);
 
       databaseBuilder.factory.buildTranslation({
         key: 'tube.tube1.practicalTitle',
@@ -119,7 +92,7 @@ describe('Application | Route | Tubes', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: '/api/tubes/recTube1',
+        url: '/api/tubes/tube1',
         headers: generateAuthorizationHeader(editorUser),
       });
 
@@ -128,7 +101,7 @@ describe('Application | Route | Tubes', () => {
       expect(response.result).toEqual({
         data: {
           type: 'tubes',
-          id: 'recTube1',
+          id: 'tube1',
           attributes: {
             'pix-id': 'tube1',
             name: '@test',
@@ -141,24 +114,24 @@ describe('Application | Route | Tubes', () => {
           relationships: {
             competence: {
               data: {
-                id: 'recCompetence1',
+                id: 'competence1',
                 type: 'competences',
               },
             },
             theme: {
               data: {
-                id: 'recThematic1',
+                id: 'thematic1',
                 type: 'themes',
               },
             },
             'raw-skills': {
               data: [
                 {
-                  id: 'recSkill1',
+                  id: 'skill1',
                   type: 'skills',
                 },
                 {
-                  id: 'recSkill2',
+                  id: 'skill2',
                   type: 'skills',
                 },
               ],
@@ -166,7 +139,6 @@ describe('Application | Route | Tubes', () => {
           },
         },
       });
-      expect(airtableTubeScope.isDone()).toBe(true);
     });
   });
 
@@ -174,46 +146,6 @@ describe('Application | Route | Tubes', () => {
     describe('when using no filters', () => {
       it('should respond with status 200 and tubes data', async () => {
         // given
-        const airtableTubes = [
-          airtableBuilder.factory.buildTube(
-            domainBuilder.buildTubeDatasourceObject({
-              id: 'tube1',
-              airtableId: 'recTube1',
-              name: '@test',
-              index: 1,
-              competenceAirtableId: 'recCompetence1',
-              competenceId: 'competence1',
-              thematicAirtableId: 'recThematic1',
-              thematicId: 'thematic1',
-              skillAirtableIds: ['recSkill1', 'recSkill2'],
-              skillIds: ['skill1', 'skill2'],
-            }),
-          ),
-          airtableBuilder.factory.buildTube(
-            domainBuilder.buildTubeDatasourceObject({
-              id: 'tube2',
-              airtableId: 'recTube2',
-              name: '@pouet',
-              index: 2,
-              competenceAirtableId: 'recCompetence2',
-              competenceId: 'competence2',
-              thematicAirtableId: 'recThematic2',
-              thematicId: 'thematic2',
-              skillAirtableIds: ['recSkill3', 'recSkill4'],
-              skillIds: ['skill3', 'skill4'],
-            }),
-          ),
-        ];
-
-        const airtableTubesScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tubes')
-          .query({
-            fields: { '': tubeDatasource.usedFields },
-            sort: [{ field: tubeDatasource.sortField, direction: 'asc' }],
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableTubes });
-
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
         databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
@@ -286,7 +218,7 @@ describe('Application | Route | Tubes', () => {
           data: [
             {
               type: 'tubes',
-              id: 'recTube1',
+              id: 'tube1',
               attributes: {
                 'pix-id': 'tube1',
                 name: '@test',
@@ -299,24 +231,24 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence1',
+                    id: 'competence1',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill1',
+                      id: 'skill1',
                       type: 'skills',
                     },
                     {
-                      id: 'recSkill2',
+                      id: 'skill2',
                       type: 'skills',
                     },
                   ],
@@ -325,7 +257,7 @@ describe('Application | Route | Tubes', () => {
             },
             {
               type: 'tubes',
-              id: 'recTube2',
+              id: 'tube2',
               attributes: {
                 'pix-id': 'tube2',
                 name: '@pouet',
@@ -338,24 +270,24 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence2',
+                    id: 'competence2',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic2',
+                    id: 'thematic2',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill3',
+                      id: 'skill3',
                       type: 'skills',
                     },
                     {
-                      id: 'recSkill4',
+                      id: 'skill4',
                       type: 'skills',
                     },
                   ],
@@ -364,8 +296,6 @@ describe('Application | Route | Tubes', () => {
             },
           ],
         });
-
-        expect(airtableTubesScope.isDone()).toBe(true);
       });
     });
 
@@ -375,26 +305,20 @@ describe('Application | Route | Tubes', () => {
         const tubes = [
           {
             id: 'tube1',
-            airtableId: 'recTube1',
             name: '@test',
             index: 1,
-            competenceAirtableId: 'recCompetence1',
             competenceId: 'competence1',
-            thematicAirtableId: 'recThematic1',
             thematicId: 'thematic1',
-            skillAirtableIds: ['recSkill1', 'recSkill2'],
+            skillAirtableIds: ['skill1', 'skill2'],
             skillIds: ['skill1', 'skill2'],
           },
           {
             id: 'tube2',
-            airtableId: 'recTube2',
             name: '@pouet',
             index: 2,
-            competenceAirtableId: 'recCompetence2',
             competenceId: 'competence2',
-            thematicAirtableId: 'recThematic2',
             thematicId: 'thematic2',
-            skillAirtableIds: ['recSkill3', 'recSkill4'],
+            skillAirtableIds: ['skill3', 'skill4'],
             skillIds: ['skill3', 'skill4'],
           },
         ];
@@ -409,20 +333,6 @@ describe('Application | Route | Tubes', () => {
           databaseBuilder.factory.buildTube(tube);
           tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
         });
-
-        const airtableTubes = tubes.map((tube) =>
-          airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube)),
-        );
-
-        const airtableTubesScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tubes')
-          .query({
-            filterByFormula: 'OR(RECORD_ID() = "recTube1", RECORD_ID() = "recTube2")',
-            fields: { '': tubeDatasource.usedFields },
-            sort: [{ field: tubeDatasource.sortField, direction: 'asc' }],
-          })
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: airtableTubes });
 
         databaseBuilder.factory.buildTranslation({
           key: 'tube.tube1.practicalTitle',
@@ -472,7 +382,7 @@ describe('Application | Route | Tubes', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/tubes?filter[ids][]=recTube1&filter[ids][]=recTube2',
+          url: '/api/tubes?filter[ids][]=tube1&filter[ids][]=tube2',
           headers: generateAuthorizationHeader(editorUser),
         });
 
@@ -483,7 +393,7 @@ describe('Application | Route | Tubes', () => {
           data: [
             {
               type: 'tubes',
-              id: 'recTube1',
+              id: 'tube1',
               attributes: {
                 'pix-id': 'tube1',
                 name: '@test',
@@ -496,24 +406,24 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence1',
+                    id: 'competence1',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill1',
+                      id: 'skill1',
                       type: 'skills',
                     },
                     {
-                      id: 'recSkill2',
+                      id: 'skill2',
                       type: 'skills',
                     },
                   ],
@@ -522,7 +432,7 @@ describe('Application | Route | Tubes', () => {
             },
             {
               type: 'tubes',
-              id: 'recTube2',
+              id: 'tube2',
               attributes: {
                 'pix-id': 'tube2',
                 name: '@pouet',
@@ -535,24 +445,24 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence2',
+                    id: 'competence2',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic2',
+                    id: 'thematic2',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill3',
+                      id: 'skill3',
                       type: 'skills',
                     },
                     {
-                      id: 'recSkill4',
+                      id: 'skill4',
                       type: 'skills',
                     },
                   ],
@@ -561,16 +471,12 @@ describe('Application | Route | Tubes', () => {
             },
           ],
         });
-
-        expect(airtableTubesScope.isDone()).toBe(true);
       });
     });
   });
 
   describe('POST /api/tubes', async () => {
-    let airtableCreateTubeScope, airtableThematicScope;
-
-    context('when user has not the right to do the operation', function() {
+    describe('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
         // given
         const server = await createServer();
@@ -592,13 +498,13 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence1',
+                    id: 'competence1',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
@@ -614,7 +520,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when payload is not formatted correctly', function() {
+    describe('when payload is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -637,7 +543,7 @@ describe('Application | Route | Tubes', () => {
                 competence: { data: null },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
@@ -653,7 +559,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('success', function() {
+    describe('success', function() {
       beforeEach(async () => {
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'fmk1' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -662,56 +568,6 @@ describe('Application | Route | Tubes', () => {
         databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', index: 0, thematicId: 'thematic1' });
         databaseBuilder.factory.buildTube({ id: 'tube2', name: '@bar', index: 1, thematicId: 'thematic1' });
         await databaseBuilder.commit();
-
-        const airtableThematic = airtableBuilder.factory.buildThematic(
-          domainBuilder.buildThematicDatasourceObject({
-            id: 'thematic1',
-            airtableId: 'recThematic1',
-            competenceAirtableId: 'recCompetence1',
-            competenceId: 'competence1',
-            tubeAirtableIds: ['recTube1', 'recTube2'],
-            tubeIds: ['tube1', 'tube2'],
-          }),
-        );
-
-        airtableThematicScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Thematiques/recThematic1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableThematic);
-
-        const createdAirtableTube = airtableBuilder.factory.buildTube(
-          domainBuilder.buildTubeDatasourceObject({
-            id: 'tube3',
-            airtableId: 'recTube3',
-            name: '@pouic',
-            index: 2,
-            competenceAirtableId: 'recCompetence1',
-            competenceId: 'competence1',
-            thematicAirtableId: 'recThematic1',
-            thematicId: 'thematic1',
-            skillAirtableIds: [],
-            skillIds: [],
-          }),
-        );
-
-        airtableCreateTubeScope = nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Tubes/', {
-            records: [
-              {
-                fields: {
-                  'id persistant': 'tube3',
-                  Nom: '@pouic',
-                  Index: 2,
-                  Competences: ['recCompetence1'],
-                  Thematique: ['recThematic1'],
-                },
-              },
-            ],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [createdAirtableTube] });
 
         vi.spyOn(idGenerator, 'generateNewId').mockReturnValueOnce('tube3');
       });
@@ -739,7 +595,7 @@ describe('Application | Route | Tubes', () => {
                 theme: {
                   data: {
                     type: 'themes',
-                    id: 'recThematic1',
+                    id: 'thematic1',
                   },
                 },
                 'raw-skills': { data: [] },
@@ -754,7 +610,7 @@ describe('Application | Route | Tubes', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tubes',
-            id: 'recTube3',
+            id: 'tube3',
             attributes: {
               'pix-id': 'tube3',
               name: '@pouic',
@@ -767,23 +623,20 @@ describe('Application | Route | Tubes', () => {
             relationships: {
               competence: {
                 data: {
-                  id: 'recCompetence1',
+                  id: 'competence1',
                   type: 'competences',
                 },
               },
               theme: {
                 data: {
                   type: 'themes',
-                  id: 'recThematic1',
+                  id: 'thematic1',
                 },
               },
               'raw-skills': { data: [] },
             },
           },
         });
-
-        expect(airtableCreateTubeScope.isDone()).toBe(true);
-        expect(airtableThematicScope.isDone()).toBe(true);
 
         await expect(knex.select('*').from('tubes').orderBy('id')).resolves.toStrictEqual([
           {
@@ -825,9 +678,7 @@ describe('Application | Route | Tubes', () => {
   });
 
   describe('PATCH /api/tubes/{tubeAirtableId}', async () => {
-    let airtableUpdateTubeScope, airtableTubeScope;
-
-    context('when user has not the right to do the operation', function() {
+    describe('when user has not the right to do the operation', function() {
       it('should respond with status 403', async function() {
         // given
         const server = await createServer();
@@ -835,11 +686,11 @@ describe('Application | Route | Tubes', () => {
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: '/api/tubes/recTube1',
+          url: '/api/tubes/tube1',
           payload: {
             data: {
               type: 'tubes',
-              id: 'recTube1',
+              id: 'tube1',
               attributes: {
                 name: '@test',
                 index: 2,
@@ -851,20 +702,20 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence1',
+                    id: 'competence1',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill1',
+                      id: 'skill1',
                       type: 'skills',
                     },
                   ],
@@ -880,7 +731,7 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('when the payload is not formatted correctly', function() {
+    describe('when the payload is not formatted correctly', function() {
       it('should respond with status 400', async function() {
         // given
         const server = await createServer();
@@ -888,11 +739,11 @@ describe('Application | Route | Tubes', () => {
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: '/api/tubes/recTube1',
+          url: '/api/tubes/tube1',
           payload: {
             data: {
               type: 'sujets',
-              id: 'recTube1',
+              id: 'tube1',
               attributes: {
                 name: '@test',
                 index: 2,
@@ -904,20 +755,20 @@ describe('Application | Route | Tubes', () => {
               relationships: {
                 competence: {
                   data: {
-                    id: 'recCompetence1',
+                    id: 'competence1',
                     type: 'competences',
                   },
                 },
                 theme: {
                   data: {
-                    id: 'recThematic1',
+                    id: 'thematic1',
                     type: 'themes',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
-                      id: 'recSkill1',
+                      id: 'skill1',
                       type: 'skills',
                     },
                   ],
@@ -933,18 +784,15 @@ describe('Application | Route | Tubes', () => {
       });
     });
 
-    context('success', function() {
+    describe('success', function() {
       beforeEach(async () => {
         const tube = {
           id: 'tube1',
-          airtableId: 'recTube1',
           name: '@test',
           index: 1,
-          competenceAirtableId: 'recCompetence0',
           competenceId: 'competence0',
-          thematicAirtableId: 'recThematic0',
           thematicId: 'thematic0',
-          skillAirtableIds: ['recSkill1', 'recSkill2'],
+          skillAirtableIds: ['skill1', 'skill2'],
           skillIds: ['skill1', 'skill2'],
         };
 
@@ -957,31 +805,6 @@ describe('Application | Route | Tubes', () => {
         databaseBuilder.factory.buildTube(tube);
         tube.skillIds.forEach((id) => databaseBuilder.factory.buildSkill({ id, tubeId: tube.id }));
         await databaseBuilder.commit();
-
-        const airtableTube = airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject(tube));
-        const airtableThematic = airtableBuilder.factory.buildThematic(
-          domainBuilder.buildThematicDatasourceObject({
-            id: 'thematic1',
-            airtableId: 'recThematic1',
-            competenceId: 'competence1',
-            competenceAirtableId: 'recCompetence1',
-            tubeIds: [],
-            tubeAirtableIds: [],
-            index: 0,
-          }),
-        );
-
-        airtableTubeScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Tubes/recTube1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableTube);
-
-        airtableTubeScope = nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Thematiques/recThematic1')
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, airtableThematic);
 
         databaseBuilder.factory.buildTranslation({
           key: 'tube.tube1.practicalTitle',
@@ -1011,40 +834,6 @@ describe('Application | Route | Tubes', () => {
         });
 
         await databaseBuilder.commit();
-
-        const updatedAirtableTube = airtableBuilder.factory.buildTube(
-          domainBuilder.buildTubeDatasourceObject({
-            id: 'tube1',
-            airtableId: 'recTube1',
-            name: '@pouet',
-            index: 2,
-            competenceAirtableId: 'recCompetence1',
-            competenceId: 'competence1',
-            thematicAirtableId: 'recThematic1',
-            thematicId: 'thematic1',
-            skillAirtableIds: ['recSkill1', 'recSkill2'],
-            skillIds: ['skill1', 'skill2'],
-          }),
-        );
-
-        airtableUpdateTubeScope = nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/Tubes/', {
-            records: [
-              {
-                fields: {
-                  'id persistant': 'tube1',
-                  Nom: '@pouet',
-                  Index: 2,
-                  Competences: ['recCompetence1'],
-                  Thematique: ['recThematic1'],
-                },
-                id: 'recTube1',
-              },
-            ],
-          })
-          .query({})
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [updatedAirtableTube] });
       });
 
       it('should respond with status 200 and updated tube', async () => {
@@ -1054,11 +843,11 @@ describe('Application | Route | Tubes', () => {
         // when
         const response = await server.inject({
           method: 'PATCH',
-          url: '/api/tubes/recTube1',
+          url: '/api/tubes/tube1',
           payload: {
             data: {
               type: 'tubes',
-              id: 'recTube1',
+              id: 'tube1',
               attributes: {
                 'pix-id': 'tube1',
                 name: '@pouet',
@@ -1072,18 +861,18 @@ describe('Application | Route | Tubes', () => {
                 theme: {
                   data: {
                     type: 'themes',
-                    id: 'recThematic1',
+                    id: 'thematic1',
                   },
                 },
                 'raw-skills': {
                   data: [
                     {
                       type: 'skills',
-                      id: 'recSkill1',
+                      id: 'skill1',
                     },
                     {
                       type: 'skills',
-                      id: 'recSkill2',
+                      id: 'skill2',
                     },
                   ],
                 },
@@ -1098,7 +887,7 @@ describe('Application | Route | Tubes', () => {
         expect(response.result).toEqual({
           data: {
             type: 'tubes',
-            id: 'recTube1',
+            id: 'tube1',
             attributes: {
               'pix-id': 'tube1',
               name: '@pouet',
@@ -1112,33 +901,30 @@ describe('Application | Route | Tubes', () => {
               competence: {
                 data: {
                   type: 'competences',
-                  id: 'recCompetence1',
+                  id: 'competence1',
                 },
               },
               theme: {
                 data: {
                   type: 'themes',
-                  id: 'recThematic1',
+                  id: 'thematic1',
                 },
               },
               'raw-skills': {
                 data: [
                   {
                     type: 'skills',
-                    id: 'recSkill1',
+                    id: 'skill1',
                   },
                   {
                     type: 'skills',
-                    id: 'recSkill2',
+                    id: 'skill2',
                   },
                 ],
               },
             },
           },
         });
-
-        expect(airtableUpdateTubeScope.isDone()).toBe(true);
-        expect(airtableTubeScope.isDone()).toBe(true);
 
         await expect(knex.select('*').from('tubes')).resolves.toStrictEqual([
           {

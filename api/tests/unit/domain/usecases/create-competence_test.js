@@ -13,7 +13,7 @@ import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
 import * as updatedRecordNotifier from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 import { skillTransformer, tubeTransformer } from '../../../../lib/infrastructure/transformers/index.js';
 import * as pixApiClient from '../../../../lib/infrastructure/pix-api-client.js';
-import { Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
+import { Competence, Skill, Thematic, Tube } from '../../../../lib/domain/models/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import * as updatePixApiReleaseCache from '../../../../lib/domain/services/update-pix-api-release-cache.js';
 
@@ -22,7 +22,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
   const skillForRelease = Symbol('skillForRelease');
 
   beforeEach(() => {
-    vi.spyOn(areaRepository, 'getByAirtableId');
+    vi.spyOn(areaRepository, 'get');
     vi.spyOn(competenceRepository, 'create');
     vi.spyOn(thematicRepository, 'create');
     vi.spyOn(tubeRepository, 'create');
@@ -40,9 +40,9 @@ describe('Unit | Domain | Usecases | create competence', function() {
       // given
       const areaAirtableId = 'unknown area id';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(undefined);
+      areaRepository.get.mockResolvedValueOnce(undefined);
 
-      const competence = domainBuilder.buildCompetence({ areaAirtableId });
+      const competence = new Competence({ areaAirtableId });
 
       // when
       const result = createCompetence(competence);
@@ -51,7 +51,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       await expect(result).rejects.toBeInstanceOf(BadRequestError);
       await expect(result).rejects.toHaveProperty('message', 'unknown area');
 
-      expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
+      expect(areaRepository.get).toHaveBeenCalledWith(areaAirtableId);
     });
   });
 
@@ -60,7 +60,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(
+      areaRepository.get.mockResolvedValueOnce(
         domainBuilder.buildArea({
           code: '24',
           competenceIds: [
@@ -94,7 +94,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,
@@ -114,7 +114,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('thematicAirtableIds', [createdThematic.airtableId]);
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
-      expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
+      expect(areaRepository.get).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(
         new Thematic({
@@ -164,7 +164,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(
+      areaRepository.get.mockResolvedValueOnce(
         domainBuilder.buildArea({
           code: '24',
           competenceIds: [],
@@ -192,7 +192,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,
@@ -212,7 +212,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('thematicAirtableIds', [createdThematic.airtableId]);
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
-      expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
+      expect(areaRepository.get).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(
         new Thematic({
@@ -262,7 +262,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       // given
       const areaAirtableId = 'areaAirtableId';
 
-      areaRepository.getByAirtableId.mockResolvedValueOnce(
+      areaRepository.get.mockResolvedValueOnce(
         domainBuilder.buildArea({
           code: '24',
           competenceIds: [],
@@ -289,7 +289,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       updatePixApiReleaseCache.onThematicCreated.mockResolvedValue();
       idGenerator.generateNewId.mockReturnValueOnce('skill1');
 
-      const competence = domainBuilder.buildCompetence({
+      const competence = new Competence({
         id: null,
         airtableId: null,
         areaAirtableId,
@@ -309,7 +309,7 @@ describe('Unit | Domain | Usecases | create competence', function() {
       expect(result).toHaveProperty('thematicAirtableIds', [createdThematic.airtableId]);
       expect(result).toHaveProperty('tubeAirtableIds', [createdTube.airtableId]);
 
-      expect(areaRepository.getByAirtableId).toHaveBeenCalledWith(areaAirtableId);
+      expect(areaRepository.get).toHaveBeenCalledWith(areaAirtableId);
       expect(competenceRepository.create).toHaveBeenCalledWith(competence);
       expect(thematicRepository.create).toHaveBeenCalledWith(
         new Thematic({

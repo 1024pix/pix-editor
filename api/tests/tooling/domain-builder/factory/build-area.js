@@ -2,22 +2,20 @@ import { Area } from '../../../../lib/domain/models/index.js';
 
 export function buildArea({
   id = 'recArea1',
-  airtableId = id,
   code = '1',
   color = Area.COLORS.CERULEAN,
   competenceIds = ['recComp1', 'recComp2'],
-  competenceAirtableIds = ['recAirComp1', 'recAirComp2'],
   frameworkId = 'recFramework1',
   title_i18n = { fr: 'titreArea1', en: 'titleArea1' },
 } = {}) {
   return new Area({
     id,
-    airtableId,
+    airtableId: id,
     name: `${code}. ${title_i18n.fr}`,
     code,
     title_i18n,
     competenceIds,
-    competenceAirtableIds,
+    competenceAirtableIds: competenceIds,
     color,
     frameworkId,
   });

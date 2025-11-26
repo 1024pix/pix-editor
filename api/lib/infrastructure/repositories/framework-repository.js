@@ -1,63 +1,48 @@
 import { Framework } from '../../domain/models/index.js';
-import { frameworkDatasource } from '../datasources/airtable/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { areArrayEquals, compareDtosLists } from './migration-from-airtable.js';
+import * as idGenerator from '../utils/id-generator.js';
 
 const TABLE_NAME = 'frameworks';
 
 export async function list() {
-  const [airtableDtos, pgDtos] = await Promise.all([
-    frameworkDatasource.list(),
-    knex
-      .select(
-        '*',
-        knex.raw(
-          'coalesce((??), \'[]\') as "areaIds"',
-          knex
-            .select(knex.raw('json_agg(??)', knex.ref('areas.id')))
-            .from('areas')
-            .where('areas.frameworkId', '=', knex.ref(`${TABLE_NAME}.id`)),
-        ),
-      )
-      .from(TABLE_NAME)
-      .orderBy('createdAt'),
-  ]);
+  const dtos = await selectFrameworks().orderBy('createdAt');
 
-  compareDtosLists(airtableDtos, pgDtos, compareFrameworkDtos, TABLE_NAME);
-
-  return airtableDtos.map(toDomain);
+  return dtos.map(toDomain);
 }
 
 /**
  * @param {Framework} framework
  */
 export async function create(framework) {
-  const createdFrameworkDto = await frameworkDatasource.create(framework);
+  const id = idGenerator.generateNewId('framework');
 
   await knex
     .insert({
-      id: createdFrameworkDto.id,
+      id,
       name: framework.name,
     })
     .into(TABLE_NAME);
 
-  return toDomain(createdFrameworkDto);
+  const dto = await selectFrameworks().where('id', id).first();
+
+  return toDomain(dto);
 }
 
-function compareFrameworkDtos(airtableFramework, pgFramework) {
-  const diff = [];
-  if (airtableFramework.id !== pgFramework.id)
-    diff.push(`airtable id "${airtableFramework.id}" != postgres id "${pgFramework.id}"`);
-  if (airtableFramework.name !== pgFramework.name)
-    diff.push(`airtable name "${airtableFramework.name}" != postgres name "${pgFramework.name}"`);
-  if (!areArrayEquals(airtableFramework.areaIds, pgFramework.areaIds))
-    diff.push(`airtable areaIds "${airtableFramework.areaIds}" != postgres areaIds "${pgFramework.areaIds}"`);
-  return diff;
+function selectFrameworks() {
+  return knex
+    .select(
+      '*',
+      knex.raw(
+        'coalesce((??), \'[]\') as "areaIds"',
+        knex
+          .select(knex.raw('json_agg(?? order by ??)', ['areas.id', 'areas.code']))
+          .from('areas')
+          .where('areas.frameworkId', '=', knex.ref(`${TABLE_NAME}.id`)),
+      ),
+    )
+    .from(TABLE_NAME);
 }
 
-function toDomain(frameworkDto) {
-  return new Framework({
-    ...frameworkDto,
-    areaIds: frameworkDto.areaAirtableIds,
-  });
+function toDomain(dto) {
+  return new Framework(dto);
 }

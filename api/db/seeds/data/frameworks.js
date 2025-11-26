@@ -1,19 +1,10 @@
-import { frameworkDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
-import { saveInAirtable } from './utils.js';
-
-export async function buildFrameworksFromConfig({ airtableClient, databaseBuilder, logger, learningContentConfig }) {
+export function buildFrameworksFromConfig({ databaseBuilder, learningContentConfig }) {
   const frameworkItems = [];
-  for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
-    const name = i === 0 ? 'Pix' : `RéfComplémentaire_${i}`;
-    frameworkItems.push(buildFramework({ name }));
+  for (let indexFramework = 0; indexFramework < learningContentConfig.cntFrameworks; ++indexFramework) {
+    const name = indexFramework === 0 ? 'Pix' : `RéfComplémentaire_${indexFramework}`;
+    frameworkItems.push(buildFramework({ name, indexFramework, databaseBuilder }));
   }
 
-  await persistFrameworks({
-    items: frameworkItems,
-    airtableClient,
-    databaseBuilder,
-    logger,
-  });
   return frameworkItems.map((frameworkItem) => {
     return {
       ...frameworkItem,
@@ -22,48 +13,9 @@ export async function buildFrameworksFromConfig({ airtableClient, databaseBuilde
   });
 }
 
-export function buildFramework({ name }) {
-  return { name };
-}
-
-export async function persistFrameworks({ items, airtableClient, databaseBuilder, logger }) {
-  const airtableItems = items.map(frameworkDatasource.toAirTableObject);
-  const records = await saveInAirtable({
-    tableName: 'Referentiel',
-    data: airtableItems,
-    logger,
-    airtableClient,
-  });
-
-  records.forEach((record) => {
-    databaseBuilder.factory.buildFramework({
-      id: record.id,
-      name: record.get('Nom'),
-      createdAt: record.get('Date'),
-    });
-  });
-
-  items.forEach((item) => {
-    const airtableId = records.shift().id;
-    item.airtableId = airtableId;
-    item.id = airtableId;
-  });
-}
-
-export async function copyFrameworksFromAirtable({ airtableClient, databaseBuilder, logger }) {
-  const airtableFrameworks = await airtableClient
-    .table('Referentiel')
-    .select({ fields: ['Nom'] })
-    .all();
-
-  logger.info(`Copying ${airtableFrameworks.length} frameworks from airtable...`);
-
-  airtableFrameworks.forEach((record) => {
-    databaseBuilder.factory.buildFramework({
-      id: record.id,
-      name: record.get('Nom'),
-      createdAt: record._rawJson.createdTime,
-      updatedAt: new Date(),
-    });
+export function buildFramework({ name, indexFramework, databaseBuilder }) {
+  return databaseBuilder.factory.buildFramework({
+    id: `frameworkF${indexFramework}`,
+    name,
   });
 }
