@@ -1,5 +1,11 @@
 
 
+## v4.0.1 (27/11/2025)
+
+
+### :bug: Correction
+- [#1291](https://github.com/1024pix/pix-editor/pull/1291) [BUGFIX] Impossible de créer un tuto sans tags (PIX-20602).
+
 ## v4.0.0 (26/11/2025)
 
 
