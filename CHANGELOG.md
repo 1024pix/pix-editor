@@ -1,5 +1,17 @@
 
 
+## v4.0.2 (27/11/2025)
+
+
+### :building_construction: Tech
+- [#1292](https://github.com/1024pix/pix-editor/pull/1292) [TECH] Ne plus utiliser de fonction Ember privée dans les tests.
+
+### :bug: Correction
+- [#1293](https://github.com/1024pix/pix-editor/pull/1293) [BUGFIX] Ajout puis suppression d’une illustration sans sauvegarder (PIX-20516).
+
+### :arrow_up: Montée de version
+- [#1294](https://github.com/1024pix/pix-editor/pull/1294) [BUMP] Update dependency @glimmer/component to v2 (pix-editor).
+
 ## v4.0.1 (27/11/2025)
 
 
