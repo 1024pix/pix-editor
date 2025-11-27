@@ -125,5 +125,9 @@
   "dependencies": {
     "@floating-ui/dom": "^1.6.13",
     "countries-list": "^3.1.1"
+  },
+  "exports": {
+    "./tests/*": "./tests/*",
+    "./*": "./app/*"
   }
 }

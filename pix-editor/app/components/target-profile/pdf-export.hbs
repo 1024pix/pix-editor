@@ -1,8 +1,0 @@
-<button class="ui button" {{on "click" this.export}} type="button">
-  <i class="pdf file icon"></i>PDF
-</button>
-<PopIn::PdfEntries
-  @validateAction={{this.generatePDF}}
-  @close={{this.closeTitleInput}}
-  @showModal={{this.displayTitleInput}}
-/>

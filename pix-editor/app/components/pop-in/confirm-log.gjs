@@ -1,0 +1,46 @@
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import Checkbox from 'pixeditor/components/field/checkbox';
+import { Textarea } from '@ember/component';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import t from 'ember-intl/helpers/t';
+import { fn } from '@ember/helper';
+
+export default class PopInConfirmLog extends Component {
+<template><PixModal @title={{@title}} @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}}>
+  <:content>
+    <p>
+      {{@content}}
+    </p>
+    <form class="ui form">
+      <Checkbox class="checkbox-layout" @label="Je veux ajouter une note de changelog" @checked={{this.displayTextarea}} data-test-confirm-log-check />
+      {{#if this.displayTextarea}}
+        <div class="changelog-layout">
+          <label for={{this.inputId}}>
+            {{@label}}
+          </label>
+          <Textarea id={{this.inputId}} @value={{this.defaultValue}} rows="4" class="changelog-textarea" />
+        </div>
+      {{/if}}
+    </form>
+  </:content>
+  <:footer>
+    <PixButton data-test-confirm-log-cancel @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@onDeny}}>
+      {{t "common.cancel"}}
+    </PixButton>
+    <PixButton data-test-confirm-log-approve @triggerAction={{fn @onApprove this.changeLogValue}}>{{t "common.validate"}}</PixButton>
+  </:footer>
+</PixModal></template>
+
+@tracked displayTextarea = false;
+defaultValue = this.args.defaultValue;
+inputId = this.args.inputId;
+
+get changeLogValue() {
+  if (this.displayTextarea) {
+    return this.defaultValue;
+  }
+  return null;
+}
+}
