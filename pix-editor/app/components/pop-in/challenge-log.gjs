@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { on } from '@ember/modifier';
+import { concat } from '@ember/helper';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
@@ -146,7 +147,12 @@ export default class PopinChallengeLog extends Component {
           </div>
 
           <div id="tabpanel1" role="tabpanel" tabindex="0" aria-labelledby="tab1" class="{{if (eq this.currentTabId 'tab1') "" "hidden"}}" data-tab="notes">
-            <ListNotes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
+            <ListNotes
+              @list={{this.ownNotes}}
+              @displayAuthor={{false}}
+              @show={{this.showOwnNote}}
+              @caption={{concat "Mes notes sur l’épreuve de " this.args.challenge.skillName}}
+            />
             <div class="ui text menu note-menu">
               <PixButton @triggerAction={{this.addNote}} @variant="tertiary" @size="small" @iconBefore="add">
                 Nouvelle note
@@ -154,10 +160,19 @@ export default class PopinChallengeLog extends Component {
             </div>
           </div>
           <div id="tabpanel2" role="tabpanel" tabindex="0" aria-labelledby="tab2" class="{{if (eq this.currentTabId 'tab2') "" "hidden"}}" data-tab="notes">
-            <ListNotes @list={{this.notes}} @show={{this.showNote}} />
+            <ListNotes
+              @list={{this.notes}}
+              @show={{this.showNote}}
+              @caption={{concat "Toutes les notes sur l’épreuve de " this.args.challenge.skillName}}
+            />
           </div>
           <div id="tabpanel3" role="tabpanel" tabindex="0" aria-labelledby="tab3" class="{{if (eq this.currentTabId 'tab3') "" "hidden"}}" data-tab="notes">
-            <ListNotes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
+            <ListNotes
+              @list={{this.changelogEntries}}
+              @displayStatus={{false}}
+              @show={{this.showChangelogEntry}}
+              @caption={{concat "Changelog de l’épreuve de " this.args.challenge.skillName}}
+            />
           </div>
         {{else}}
           <FormNote

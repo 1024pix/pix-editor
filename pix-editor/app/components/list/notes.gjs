@@ -23,7 +23,7 @@ export default class NoteList extends SortedList {
   }
 
 <template>
-  <PixTable @data={{this.list}} @caption={{this.caption}} @onRowClick={{this.selectRow}}>
+  <PixTable @data={{this.list}} @caption={{@caption}} @onRowClick={{this.selectRow}}>
     <:columns as |row context|>
       <PixTableColumn @context={{context}} data-test-note>
         <:header>Date</:header>
@@ -31,10 +31,10 @@ export default class NoteList extends SortedList {
       </PixTableColumn>
 
       {{#if this.displayAuthor}}
-          <PixTableColumn @context={{context}} class="author-note">
-              <:header>Auteur</:header>
-              <:cell>{{row.author}}</:cell>
-          </PixTableColumn>
+        <PixTableColumn @context={{context}} class="author-note">
+          <:header>Auteur</:header>
+          <:cell>{{row.author}}</:cell>
+        </PixTableColumn>
       {{/if}}
 
       <PixTableColumn @context={{context}}>
@@ -43,10 +43,10 @@ export default class NoteList extends SortedList {
       </PixTableColumn>
 
       {{#if this.displayStatus}}
-          <PixTableColumn @context={{context}} class="status-note">
-              <:header>Statut</:header>
-              <:cell>{{row.status}}</:cell>
-          </PixTableColumn>
+        <PixTableColumn @context={{context}} class="status-note">
+          <:header>Statut</:header>
+          <:cell>{{row.status}}</:cell>
+        </PixTableColumn>
       {{/if}}
     </:columns>
   </PixTable>
