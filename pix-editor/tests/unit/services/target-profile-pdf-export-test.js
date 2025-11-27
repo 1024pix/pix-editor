@@ -1,14 +1,12 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import createGlimmerComponent from '../../../helpers/create-glimmer-component';
-
-module('Unit | Component | target-profile/pdf-export', function(hooks) {
+module('Unit | Service | target-profiles-pdf-export', function(hooks) {
   setupTest(hooks);
-  let component;
+  let service;
 
   hooks.beforeEach(function() {
-    component = createGlimmerComponent('component:target-profile/pdf-export');
+    service = this.owner.lookup('service:target-profiles-pdf-export');
   });
 
   module('#_getTranslatedField', function(hooks) {
@@ -31,7 +29,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       const language = 'en';
 
       // when
-      const result = component._getTranslatedField(keys, language, model);
+      const result = service._getTranslatedField(keys, language, model);
 
       // then
       assert.strictEqual(result, 'English name');
@@ -42,7 +40,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       const language = 'fr';
 
       // when
-      const result = component._getTranslatedField(keys, language, model);
+      const result = service._getTranslatedField(keys, language, model);
 
       // then
       assert.strictEqual(result, 'French name');
