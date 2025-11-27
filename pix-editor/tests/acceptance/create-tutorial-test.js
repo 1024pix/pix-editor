@@ -82,7 +82,7 @@ module('Acceptance | Create-Tutorial', function(hooks) {
     await click(modifyButton);
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Tutoriel créé');
+    assert.dom('[data-test-main-message]').hasText('Tutoriel enregistré');
 
     assert.dom(screen.getByText('Titre de mon tutoriel')).exists();
 

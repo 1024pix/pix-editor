@@ -106,9 +106,10 @@ export default class Tutorials extends Component {
       return;
     }
     try {
+      const { isNew } = this.tutorial;
       const tutorial = await this.tutorial.save();
-      this.notify.message('Tutoriel créé');
-      this.args.addTutorial(this.args.tutorials, tutorial);
+      this.notify.message('Tutoriel enregistré');
+      if (isNew) this.args.addTutorial(this.args.tutorials, tutorial);
       this.displayTutorialPopin = false;
     } catch (error) {
       Sentry.captureException(error);

@@ -25,7 +25,7 @@ export async function create(tutorial) {
       })
       .into(TABLE_NAME);
 
-    if (tutorial.tagAirtableIds.length !== 0) {
+    if (tutorial.tagAirtableIds?.length) {
       await transaction
         .insert(
           tutorial.tagAirtableIds.map((tutorialTagId) => ({
