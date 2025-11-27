@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { eq } from 'ember-truth-helpers';
+import { htmlSafe } from '@ember/template';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
 
@@ -37,6 +38,10 @@ export default class CompetenceOverview extends Component {
   @action
   async updateSelectedSkillId(id) {
     this.selectedSkillId = id;
+  }
+
+  thematicStyle(thematicOverview) {
+    return htmlSafe(`--tubes-count: ${thematicOverview.tubeOverviews.length};`);
   }
 
   <template>
@@ -77,7 +82,7 @@ export default class CompetenceOverview extends Component {
         </div>
         <div class="competence-overview-grid">
         {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
-          <div class="thematic" style={{concat "--tubes-count: " thematicOverview.tubeOverviews.length ";"}}>
+          <div class="thematic" style={{(this.thematicStyle thematicOverview)}}>
             <h3>{{thematicOverview.name}}</h3>
             {{#each thematicOverview.tubeOverviews as |tubeOverview|}}
             <div class="tube">

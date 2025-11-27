@@ -446,10 +446,10 @@ export default class SingleController extends Controller {
     await this.challenge.attachments;
     const removedFile = this.challenge.illustration;
     if (removedFile) {
-      removedFile.deleteRecord();
-      if (removedFile.id) {
+      if (!removedFile.isNew) {
         this.deletedFiles.push(removedFile);
       }
+      removedFile.deleteRecord();
     }
   }
 
