@@ -156,4 +156,40 @@ describe('Integration | Infrastructure | Repository | Tutorial', () => {
       ).resolves.toStrictEqual([{ tutorialId: 'tuto3', tutorialTagId: 'tag1', createdAt: expect.any(Date), updatedAt: expect.any(Date) }, { tutorialId: 'tuto3', tutorialTagId: 'tag3', createdAt: expect.any(Date), updatedAt: expect.any(Date) }]);
     });
   });
+
+  describe('#create', () => {
+    describe('when tutorial has no tags', () => {
+      it('saves tutorial and returns it with empty tag ids', async () => {
+        // given
+        const tutorial = new Tutorial({
+          title: 'Tuto Nico',
+          locale: 'fr',
+          link: 'https://example.com',
+          source: 'Example',
+          format: Tutorial.FORMATS.SITE,
+          duration: '00:03:00',
+        });
+
+        // when
+        const createdTutorial = await tutorialRepository.create(tutorial);
+
+        // then
+        expect(createdTutorial).toStrictEqual(new Tutorial({
+          id: expect.stringMatching(/^tutorial.+$/),
+          airtableId: expect.stringMatching(/^tutorial.+$/),
+          title: 'Tuto Nico',
+          locale: 'fr',
+          link: 'https://example.com',
+          source: 'Example',
+          format: Tutorial.FORMATS.SITE,
+          duration: '00:03:00',
+          tagAirtableIds: [],
+          tagIds: [],
+          crush: false,
+          level: null,
+          license: null,
+        }));
+      });
+    });
+  });
 });
