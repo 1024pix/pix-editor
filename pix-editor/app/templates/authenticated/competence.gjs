@@ -3,8 +3,10 @@ import CompetenceActions from 'pixeditor/components/competence/competence-action
 import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
 import Workbench from 'pixeditor/components/list/workbench';
 import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
+// eslint-disable-next-line ember/no-at-ember-render-modifiers
 import didInsert from '@ember/render-modifiers/modifiers/did-insert';
 import Sorting from 'pixeditor/components/pop-in/sorting';
+
 <template><div class="main-left">
   <CompetenceHeader @competence={{@controller.competence}} @section={{@controller.section}} @languageFilter={{@controller.languageFilter}} @selectLanguageToFilter={{@controller.selectLanguageToFilter}} @view={{@controller.view}} @selectSection={{@controller.selectSection}} />
   {{#unless @controller.leftMaximized}}
