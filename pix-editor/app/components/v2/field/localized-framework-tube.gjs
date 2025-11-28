@@ -1,0 +1,42 @@
+import PixInput from '@1024pix/pix-ui/components/pix-input';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { on } from '@ember/modifier';
+import { service } from '@ember/service';
+
+export default class LocalizedFrameworkTube extends Component {
+  @service store;
+  @service router;
+  @tracked validationStatus = 'default';
+
+  @tracked errorMessage = 'la valeur doit être comprise entre 0 et 8';
+
+  @action
+  updateMaxLevel(e) {
+    const maxLevel = parseInt(e.target.value, 10);
+    if (0 <= maxLevel && maxLevel <= 8 && !Number.isNaN(maxLevel)) {
+      this.args.updateMaxLevel(this.args.tube.id, maxLevel);
+      this.args.inputStateList[this.args.index] = '';
+      this.validationStatus = 'default';
+    } else {
+      this.args.inputStateList[this.args.index] = 'error';
+      this.validationStatus = 'error';
+    }
+  }
+
+  <template>
+    <PixInput
+      max=8
+      min=0
+      type="number"
+      @screenReaderOnly={{true}}
+      @validationStatus={{this.validationStatus}}
+      @errorMessage={{this.errorMessage}}
+      @value={{@value}}
+      {{on "change" this.updateMaxLevel}}
+    >
+      <:label>Modifier le niveau max du tube {{@tube.name}}</:label>
+    </PixInput>
+  </template>
+}

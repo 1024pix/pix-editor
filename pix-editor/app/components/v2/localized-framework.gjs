@@ -1,17 +1,22 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { concat, fn } from '@ember/helper';
 import { tracked } from '@glimmer/tracking';
-import { on } from '@ember/modifier';
+import { trackedArray } from '@ember/reactive/collections';
 import { service } from '@ember/service';
+import LocalizedFrameworkTube from './field/localized-framework-tube';
 
 export default class LocalizedFramework extends Component {
   @service store;
   @service router;
 
   @tracked tubeMaxLevelById = Object.fromEntries(this.args.localizedFrameworkTubes.map(({ tubeId, maxLevel }) => [tubeId, maxLevel]));
+  @tracked inputStateList = trackedArray([]);
+
+  get isInvalidForm() {
+    return this.inputStateList.some((state) => state === 'error');
+  }
 
   @action
   getMaxLevelLocalizedFrameworkTube(tubeId) {
@@ -39,8 +44,8 @@ export default class LocalizedFramework extends Component {
   }
 
   @action
-  updateMaxLevel(tubeId, e) {
-    this.tubeMaxLevelById[tubeId] = Number(e.target.value);
+  updateMaxLevel(tubeId, value) {
+    this.tubeMaxLevelById[tubeId] = value;
   }
 
   <template>
@@ -52,6 +57,7 @@ export default class LocalizedFramework extends Component {
           @isBorderVisible={{true}}
           @variant="secondary"
           @loadingColor="grey"
+          @isDisabled={{this.isInvalidForm}}
           @triggerAction={{this.save}}
         >
           Enregistrer
@@ -61,12 +67,16 @@ export default class LocalizedFramework extends Component {
       {{#each @competence.sortedThemes as |theme|}}
         <div class="thematic" style={{concat "--tubes-count: " theme.tubes.length ";"}}>
           <h3>{{theme.name}}</h3>
-          {{#each theme.tubes as |tube|}}
+          {{#each theme.tubes as |tube index|}}
           <div class="tube">
             <h4>{{tube.name}}</h4>
-            <PixInput max=8 min=0 type="number" @screenReaderOnly={{true}} @value={{this.getMaxLevelLocalizedFrameworkTube tube.id}} {{on "change" (fn this.updateMaxLevel tube.id)}}>
-              <:label>Modifier le niveau max du tube {{tube.name}}</:label>
-            </PixInput>
+            <LocalizedFrameworkTube
+              @tube={{tube}}
+              @index={{index}}
+              @updateMaxLevel={{this.updateMaxLevel}}
+              @inputStateList={{this.inputStateList}}
+              @value={{this.getMaxLevelLocalizedFrameworkTube tube.id}}
+            />
           </div>
           {{/each}}
         </div>
