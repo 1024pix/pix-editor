@@ -23,11 +23,7 @@ export default class DropdownMenu extends Component {
     this.updatePosition();
     menu.style.visibility = 'visible';
 
-    this.cleanup = autoUpdate(
-      button,
-      menu,
-      this.updatePosition.bind(this),
-    );
+    this.cleanup = autoUpdate(button, menu, this.updatePosition.bind(this));
     menu.focus();
   }
 
@@ -86,7 +82,7 @@ export default class DropdownMenu extends Component {
           id={{this.randomMenuId}}
           tabindex="-1"
           class="dropdown-menu"
-          {{on 'focusout' this.onHide}}
+          {{on "focusout" this.onHide}}
           aria-labelledby={{this.randomButtonId}}
           role="menu"
         >

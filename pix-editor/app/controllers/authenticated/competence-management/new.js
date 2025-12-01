@@ -32,7 +32,9 @@ export default class CompetenceManagementNewController extends Controller {
       await this._createCompetence(area);
       this.notify.message('Compétence créée');
       this.edition = false;
-      this.router.transitionTo('authenticated.competence.skills', this.competence.id, { queryParams: { view: 'workbench' } });
+      this.router.transitionTo('authenticated.competence.skills', this.competence.id, {
+        queryParams: { view: 'workbench' },
+      });
     } catch (error) {
       Sentry.captureException(error);
       this.notify.error('Erreur lors de la création de la compétence');

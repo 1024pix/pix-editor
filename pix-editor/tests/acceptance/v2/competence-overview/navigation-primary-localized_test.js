@@ -8,18 +8,30 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | navigation-primary-localized', function(hooks) {
+module('Acceptance | navigation-primary-localized', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('competence', { id: 'recCompetence1', pixId: 'competence1', rawTubeIds: [], rawThemeIds: [], code: '1.1', title: 'ma compétence' });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1'] });
+    this.server.create('competence', {
+      id: 'recCompetence1',
+      pixId: 'competence1',
+      rawTubeIds: [],
+      rawThemeIds: [],
+      code: '1.1',
+      title: 'ma compétence',
+    });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
 
     this.server.create('competence-overview', {
@@ -159,12 +171,15 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
     });
 
     challengeProduction.update({ challengeLocales: [challengeLocaleNl, challengeLocale] });
-    skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProductionFr, localizedChallengeProductionNl] });
+    skill.update({
+      challengesProduction: [challengeProduction],
+      localizedChallengesProduction: [localizedChallengeProductionFr, localizedChallengeProductionNl],
+    });
 
     return authenticateSession();
   });
 
-  test('should navigate from primary to some locale back and forth seamlessly', async function(assert) {
+  test('should navigate from primary to some locale back and forth seamlessly', async function (assert) {
     // First we are on the primary
     const screen = await visit('/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
     assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges');
@@ -174,14 +189,20 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
     // Then we go to FR
     await clickByText('Choix de la langue');
     await clickByText('Français');
-    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=fr');
+    assert.strictEqual(
+      currentURL(),
+      '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=fr',
+    );
     assert.dom(screen.getByText('Coucou maman'));
     assert.dom(screen.queryByText('Source')).exists();
 
     // Then we go to NL
     await clickByText('Choix de la langue');
     await clickByText('Néerlandais');
-    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=nl');
+    assert.strictEqual(
+      currentURL(),
+      '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=nl',
+    );
     assert.dom(screen.getByText('Hallo mama'));
     assert.dom(screen.queryByText('Source')).exists();
 
@@ -195,9 +216,15 @@ module('Acceptance | navigation-primary-localized', function(hooks) {
     // Click on primary details then switch language, it will go back to grid/table view
     await clickByText('@tube1');
     await clickByText('Proto');
-    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges/challengeIdProto');
+    assert.strictEqual(
+      currentURL(),
+      '/v2/competences/recCompetence1/challenges-production/skills/skill1/challenges/challengeIdProto',
+    );
     await clickByText('Choix de la langue');
     await clickByText('Néerlandais');
-    assert.strictEqual(currentURL(), '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=nl');
+    assert.strictEqual(
+      currentURL(),
+      '/v2/competences/recCompetence1/challenges-production/skills/skill1/localized-challenges?locale=nl',
+    );
   });
 });

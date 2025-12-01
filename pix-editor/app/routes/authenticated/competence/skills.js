@@ -7,14 +7,24 @@ export default class SkillsRoute extends Route {
     if (this.refreshing) {
       const themes = await competence.hasMany('rawThemes').reload();
       const themesTubes = await Promise.all(themes.map((theme) => theme.hasMany('rawTubes').reload()));
-      const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())));
-      await Promise.all(tubesSkills.flatMap((skills) => skills.flatMap((skill) => [skill.hasMany('tutoMore').reload(), skill.hasMany('tutoSolution').reload()])));
+      const tubesSkills = await Promise.all(
+        themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())),
+      );
+      await Promise.all(
+        tubesSkills.flatMap((skills) =>
+          skills.flatMap((skill) => [skill.hasMany('tutoMore').reload(), skill.hasMany('tutoSolution').reload()]),
+        ),
+      );
       this.refreshing = false;
     } else {
       const themes = await competence.rawThemes;
       const themesTubes = await Promise.all(themes.map((theme) => theme.rawTubes));
       const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.rawSkills)));
-      await Promise.all(tubesSkills.flatMap((skills) => skills.flatMap((skill) => [skill.hasMany('tutoMore').load(), skill.hasMany('tutoSolution').load()])));
+      await Promise.all(
+        tubesSkills.flatMap((skills) =>
+          skills.flatMap((skill) => [skill.hasMany('tutoMore').load(), skill.hasMany('tutoSolution').load()]),
+        ),
+      );
     }
     return competence;
   }

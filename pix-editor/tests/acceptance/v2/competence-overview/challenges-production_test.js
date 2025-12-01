@@ -8,12 +8,14 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | competences | challenge-production', function(hooks) {
+module('Acceptance | competences | challenge-production', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
+  const skillId = 'skill1',
+    skillName = '@tube1',
+    prototypeId = 'prototype1';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -107,7 +109,11 @@ module('Acceptance | competences | challenge-production', function(hooks) {
       locales: ['fr'],
     });
 
-    const attachment = this.server.create('attachment', { id: 'attachmentId', type: 'attachment', challengeId: 'challengeIdProto' });
+    const attachment = this.server.create('attachment', {
+      id: 'attachmentId',
+      type: 'attachment',
+      challengeId: 'challengeIdProto',
+    });
 
     const localizedChallengeProduction = this.server.create('localized-challenge', {
       id: 'localizedChallengeIdProto',
@@ -127,12 +133,15 @@ module('Acceptance | competences | challenge-production', function(hooks) {
 
     challengeProduction.update({ challengeLocales: [challengeLocale] });
 
-    skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProduction] });
+    skill.update({
+      challengesProduction: [challengeProduction],
+      localizedChallengesProduction: [localizedChallengeProduction],
+    });
 
     return authenticateSession();
   });
 
-  test('should visit challenge production v2', async function(assert) {
+  test('should visit challenge production v2', async function (assert) {
     // when
     const screen = await visit('/v2/competences/recCompetence1/challenges-production');
 
@@ -141,57 +150,81 @@ module('Acceptance | competences | challenge-production', function(hooks) {
     assert.ok(screen.getByRole('heading', { name: 'thematic name' }));
     assert.ok(screen.getByRole('heading', { name: '@tube' }));
     assert.ok(screen.getByText('@tube1'));
-    assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('1');
-    assert.dom(screen.getByTitle('Nombre d\'épreuves en cours de construction')).hasText('(1)');
+    assert.dom(screen.getByTitle("Nombre d'épreuves en production")).hasText('1');
+    assert.dom(screen.getByTitle("Nombre d'épreuves en cours de construction")).hasText('(1)');
     await clickByText('Néerlandais');
     assert.ok(screen.getByText('@tube1'));
-    assert.dom(screen.getByTitle('Nombre d\'épreuves en production')).hasText('1');
-    assert.dom(screen.queryByTitle('Nombre d\'épreuves en cours de construction')).doesNotExist();
+    assert.dom(screen.getByTitle("Nombre d'épreuves en production")).hasText('1');
+    assert.dom(screen.queryByTitle("Nombre d'épreuves en cours de construction")).doesNotExist();
   });
 
-  test('should display a challenge production list', async function(assert) {
+  test('should display a challenge production list', async function (assert) {
     // when
     const screen = await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('@tube1');
 
     // then
     assert.dom(screen.getByText('Coucou maman'));
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
   });
 
-  test('it should navigate to challenge view', async function(assert) {
+  test('it should navigate to challenge view', async function (assert) {
     await visit('/v2/competences/recCompetence1/challenges-production');
     await clickByText('@tube1');
     await clickByText('Proto');
 
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
-    await clickByText('Fermer l\'épreuve');
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`,
+    );
+    await clickByText("Fermer l'épreuve");
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
     await clickByText('Coucou maman');
 
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`,
+    );
   });
 
-  test('should display a localized challenge production list', async function(assert) {
+  test('should display a localized challenge production list', async function (assert) {
     // when
     const screen = await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
     await clickByText('@tube1');
 
     // then
     assert.dom(screen.getByText('hallo mama'));
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`,
+    );
   });
 
-  test('it should navigate to localized-challenge view', async function(assert) {
+  test('it should navigate to localized-challenge view', async function (assert) {
     await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
     await clickByText('@tube1');
     await clickByText('Proto');
 
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
 
-    await clickByText('Fermer l\'épreuve');
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`);
+    await clickByText("Fermer l'épreuve");
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`,
+    );
     await clickByText('hallo mama');
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
   });
 });

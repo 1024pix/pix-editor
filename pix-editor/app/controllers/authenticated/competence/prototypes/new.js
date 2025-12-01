@@ -40,7 +40,11 @@ export default class NewController extends Prototype {
       this.edition = false;
       this.send('minimize');
       this._message('Prototype enregistré');
-      this.router.transitionTo('authenticated.competence.prototypes.single', this.currentData.getCompetence(), this.challenge.id);
+      this.router.transitionTo(
+        'authenticated.competence.prototypes.single',
+        this.currentData.getCompetence(),
+        this.challenge.id,
+      );
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);

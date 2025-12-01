@@ -45,7 +45,10 @@ export default class WhitelistedUrlsController extends Controller {
   @action
   async deleteUrl(whitelistedUrl) {
     try {
-      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer cette URL ? (Cette URL pourra à nouveau être analysée par les moulinettes)');
+      await this.confirm.ask(
+        'Suppression',
+        'Êtes-vous sûr de vouloir supprimer cette URL ? (Cette URL pourra à nouveau être analysée par les moulinettes)',
+      );
     } catch {
       return;
     }

@@ -1,0 +1,220 @@
+import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
+import { on } from '@ember/modifier';
+import and from 'ember-truth-helpers/helpers/and';
+import not from 'ember-truth-helpers/helpers/not';
+import or from 'ember-truth-helpers/helpers/or';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import t from 'ember-intl/helpers/t';
+import formatDate from 'ember-intl/helpers/format-date';
+import scrollTop from 'pixeditor/modifiers/scroll-top';
+import Challenge from 'pixeditor/components/form/challenge';
+import CopyLink from 'pixeditor/components/buttons/copy-link';
+import { LinkTo } from '@ember/routing';
+import ChallengeLog from 'pixeditor/components/pop-in/challenge-log';
+import Image from 'pixeditor/components/pop-in/image';
+import Changelog from 'pixeditor/components/pop-in/changelog';
+import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
+import SelectLocation from 'pixeditor/components/pop-in/select-location';
+<template>
+  <ChallengeHeader
+    @class={{@controller.challenge.statusCSS}}
+    @maximized={{@controller.maximized}}
+    @minimize={{@controller.minimize}}
+    @maximize={{@controller.maximize}}
+    @close={{@controller.close}}
+  >
+    <:actions>
+      {{#if @controller.mayAccessLog}}
+        <button class="ui button icon item" {{on "click" @controller.challengeLog}} type="button"><i
+            class="icon window chat"
+          ></i></button>
+      {{/if}}
+      {{#unless @controller.edition}}
+        {{#if (and @controller.challenge.isPrototype (not @controller.challenge.isWorkbench))}}
+          <button
+            class="ui button icon item"
+            {{on "click" @controller.showVersions}}
+            type="button"
+            title="Afficher les différentes versions d'épreuves"
+          ><i class="clone icon"></i>&nbsp;v{{@controller.challenge.version}}</button>
+        {{/if}}
+        {{#if (or @controller.mayValidate @controller.mayArchive @controller.mayObsolete)}}
+          <div class="challenge-status-actions" id={{@controller.challengeStatusActionsId}}>
+            <PixIconButton
+              @ariaLabel={{@controller.challengeStatusActionsLabel}}
+              @iconName="bolt"
+              @plainIcon={{true}}
+              @triggerAction={{@controller.toggleStatusActionMenu}}
+              {{on "focusout" @controller.hideStatusActionMenu}}
+            />
+            {{#if @controller.isStatusActionMenuOpen}}
+              <div class="challenge-status-actions__menu">
+                {{#if @controller.mayValidate}}
+                  <button class="ui button validate item" {{on "click" @controller.validate}} type="button">
+                    <i class="checkmark icon"></i>
+                    {{t "common.validate"}}
+                  </button>
+                {{/if}}
+                {{#if @controller.mayArchive}}
+                  <button class="ui button archive item" {{on "click" @controller.archive}} type="button">
+                    <i class="archive icon"></i>
+                    {{t "competence.prototypes.archive"}}
+                  </button>
+                {{/if}}
+                {{#if @controller.mayObsolete}}
+                  <button class="ui button archive item" {{on "click" @controller.obsolete}} type="button">
+                    <i class="trash alternate icon"></i>
+                    {{t "competence.prototypes.obsolete"}}
+                  </button>
+                {{/if}}
+              </div>
+            {{/if}}
+          </div>
+        {{/if}}
+        {{#if @controller.mayMove}}
+          <button
+            title="Déplacer l'épreuve"
+            class="ui icon button item"
+            {{on "click" @controller.movePrototype}}
+            type="button"
+          ><i class="icon random"></i></button>
+        {{/if}}
+      {{/unless}}
+    </:actions>
+    <:default>
+      <div class={{if @controller.creation " creation" ""}}>
+        {{@controller.challengeTitle}}
+      </div>
+      <div class="ui circular label {{@controller.challenge.statusCSS}}">{{@controller.challenge.status}}</div>
+      {{#unless @controller.challenge.isNew}}
+        <time
+          class="ui colored label"
+          title="Dernière modification"
+          datetime="{{@controller.lastUpdatedAtISO}}"
+        >{{formatDate @controller.challenge.updatedAt}}</time>
+      {{/unless}}
+    </:default>
+  </ChallengeHeader>
+  <div class="challenge">
+    <div class="challenge-data {{@controller.elementClass}}" {{scrollTop @controller.edition}}>
+      <Challenge
+        @challenge={{@controller.challenge}}
+        @countries={{@controller.countryList}}
+        @showIllustration={{@controller.showIllustration}}
+        @edition={{@controller.edition}}
+        @displayAlternativeInstructionsField={{@controller.displayAlternativeInstructionsField}}
+        @setDisplayAlternativeInstructionsField={{@controller.setDisplayAlternativeInstructionsField}}
+        @displaySolutionToDisplayField={{@controller.displaySolutionToDisplayField}}
+        @setDisplaySolutionToDisplayField={{@controller.setDisplaySolutionToDisplayField}}
+        @removeIllustration={{@controller.removeIllustration}}
+        @removeAttachment={{@controller.removeAttachment}}
+        @invalidUrlsToConsult={{@controller.invalidUrlsToConsult}}
+        @displayUrlsToConsultField={{@controller.displayUrlsToConsultField}}
+        @setDisplayUrlsToConsultField={{@controller.setDisplayUrlsToConsultField}}
+        @urlsToConsult={{@controller.urlsToConsult}}
+        @setUrlsToConsult={{@controller.setUrlsToConsult}}
+        @invalidEmbedURL={{@controller.invalidEmbedURL}}
+        @checkEmbedURL={{@controller.checkEmbedURL}}
+      />
+    </div>
+    <div class="ui vertical compact labeled icon menu challenge-menu">
+      {{#if @controller.edition}}
+        <button
+          data-test-save-challenge-button
+          class="ui button item important-action"
+          {{on "click" @controller.save}}
+          type="button"
+        >
+          <i class="save icon"></i>
+          Enregistrer
+        </button>
+        <button
+          data-test-cancel-challenge-button
+          class="ui button item"
+          {{on "click" @controller.cancelEdit}}
+          type="button"
+        >
+          <i class="ban icon"></i>
+          Annuler
+        </button>
+      {{else}}
+        <a class="ui button item" href={{@controller.absolutePreviewUrl}} target="_blank" rel="noopener noreferrer">
+          <i class="eye icon"></i>
+          Prévisualiser
+        </a>
+        <CopyLink @link={{@controller.absolutePreviewUrl}} />
+        {{#each @controller.challenge.otherLocalizedChallenges as |localizedChallenge|}}
+          <LinkTo
+            @route={{@controller.localizedChallengeLinkRoute}}
+            @models={{@controller.getLocalizedChallengeLinkModels localizedChallenge}}
+            class="ui button item"
+          >
+            <i class="globe icon"></i>
+            Version
+            {{localizedChallenge.locale}}
+          </LinkTo>
+        {{/each}}
+        {{#if @controller.mayEdit}}
+          <button
+            data-test-modify-challenge-button={{@controller.challenge.id}}
+            class="ui button item"
+            {{on "click" @controller.edit}}
+            type="button"
+          >
+            <i class="edit icon"></i>
+            Modifier
+          </button>
+        {{/if}}
+        {{#if @controller.mayDuplicate}}
+          <button class="ui button item" {{on "click" @controller.duplicate}} type="button">
+            <i class="copy icon"></i>
+            Dupliquer
+          </button>
+        {{/if}}
+        {{#if @controller.mayAccessAlternatives}}
+          <button class="ui button item alternatives" {{on "click" @controller.showAlternatives}} type="button">
+            <i class="cubes icon"></i>
+            Déclinaisons &gt;&gt;
+          </button>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+  <ChallengeLog
+    @challenge={{@controller.challenge}}
+    @close={{@controller.closeChallengeLog}}
+    @showModal={{@controller.displayChallengeLog}}
+  />
+  <Image
+    @imageSrc={{@controller.popinImageSrc}}
+    @close={{@controller.closeIllustration}}
+    @showModal={{@controller.displayImage}}
+  />
+  <Changelog
+    @onApprove={{@controller.changelogApprove}}
+    @defaultValue={{@controller.changelogDefault}}
+    @showModal={{@controller.displayChangeLog}}
+  />
+  <ConfirmLog
+    @title={{t "common.confirm-log.save"}}
+    @onApprove={{@controller.saveChallengeCallback}}
+    @defaultValue={{@controller.defaultSaveChangelog}}
+    @inputId="changelog-message"
+    @onDeny={{@controller.closeComfirmLogPopin}}
+    @content={{t "common.confirm-log.content"}}
+    @label={{t "common.confirm-log.label"}}
+    @showModal={{@controller.displayConfirmLog}}
+  />
+  {{#if @controller.mayMove}}
+    <SelectLocation
+      @variant="prototype"
+      @onSubmit={{@controller.setSkill}}
+      @title="Déplacer le prototype dans un autre acquis"
+      @tube={{@controller.challenge.skill.tube}}
+      @skill={{@controller.challenge.skill}}
+      @close={{@controller.closeMovePrototype}}
+      @showModal={{@controller.displaySelectLocation}}
+    />
+  {{/if}}
+  {{outlet}}
+</template>

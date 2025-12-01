@@ -23,20 +23,18 @@ export default class CompetenceSkillsSingleArchiveController extends Controller 
   }
 
   get challengeList() {
-    return this.skill.challengesArray
-      .slice()
-      .sort((a, b) => {
-        if (a.version > b.version) {
-          return 1;
-        } else if (a.version < b.version) {
-          return -1;
-        } else if (a.isPrototype) {
-          return -1;
-        } else if (b.isPrototype) {
-          return 1;
-        }
-        return 0;
-      });
+    return this.skill.challengesArray.slice().sort((a, b) => {
+      if (a.version > b.version) {
+        return 1;
+      } else if (a.version < b.version) {
+        return -1;
+      } else if (a.isPrototype) {
+        return -1;
+      } else if (b.isPrototype) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   get alternativesCount() {

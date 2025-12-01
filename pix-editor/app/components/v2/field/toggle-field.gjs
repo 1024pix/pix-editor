@@ -34,21 +34,12 @@ export default class FieldToggleFieldComponent extends Component {
   <template>
     {{#if @edition}}
       <div class="toggle-field">
-        <button
-          type="button"
-          class="toggle-field--button"
-          {{on "click" this.toggleFieldDisplay}}
-        >
+        <button type="button" class="toggle-field--button" {{on "click" this.toggleFieldDisplay}}>
           <i class="{{this.buttonIcon}} icon"></i>
           {{this.buttonTitle}}
         </button>
         {{#if @textToolTip}}
-          <PixTooltip
-            class="toggle-field--tooltip"
-            @position="bottom"
-            @isLight={{false}}
-            @isWide={{true}}
-          >
+          <PixTooltip class="toggle-field--tooltip" @position="bottom" @isLight={{false}} @isWide={{true}}>
             <:triggerElement>
               <PixIcon @name="help" @plainIcon={{true}} />
             </:triggerElement>

@@ -7,7 +7,7 @@ import Skill from './single';
 export default class NewController extends Skill {
   competence = null;
   tubeId = null;
-  defaultSaveSkillChangelog = 'Création de l\'acquis';
+  defaultSaveSkillChangelog = "Création de l'acquis";
 
   get skill() {
     return this.model;
@@ -39,7 +39,7 @@ export default class NewController extends Skill {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error('Erreur lors de la création de l\'acquis');
+      this.notify.error("Erreur lors de la création de l'acquis");
     }
   }
 }

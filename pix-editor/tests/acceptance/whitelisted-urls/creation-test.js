@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
+module('Acceptance | Whitelisted URLs | Creation', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
@@ -53,7 +53,7 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     return authenticateSession();
   });
 
-  test('should create a whitelisted url', async function(assert) {
+  test('should create a whitelisted url', async function (assert) {
     // given
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
@@ -73,14 +73,14 @@ module('Acceptance | Whitelisted URLs | Creation', function(hooks) {
     assert.strictEqual(screen.getAllByText('Strictement égale à').length, 3);
   });
 
-  test('should create a whitelisted url without comment and different check type', async function(assert) {
+  test('should create a whitelisted url without comment and different check type', async function (assert) {
     // given
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
     await clickByName('Ajouter une nouvelle URL');
 
     // when
-    await clickByName('Type de comparaison d\'URL');
+    await clickByName("Type de comparaison d'URL");
     await clickByText('Commence par');
     await fillByLabel('URL à ne pas analyser', 'https://example.org');
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');

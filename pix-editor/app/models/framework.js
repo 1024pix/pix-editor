@@ -11,8 +11,6 @@ export default class FrameworkModel extends Model {
 
     if (areas === null) return [];
 
-    return areas
-      .slice()
-      .sort((areaA, areaB) => parseInt(areaA.code) - parseInt(areaB.code));
+    return areas.slice().sort((areaA, areaB) => parseInt(areaA.code) - parseInt(areaB.code));
   }
 }

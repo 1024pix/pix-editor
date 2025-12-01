@@ -4,14 +4,14 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Unit | Controller | competence/skills/single', function(hooks) {
+module('Unit | Controller | competence/skills/single', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let storeStub, controller, changelogEntryService;
   const date = '14/07/1986';
   const author = 'DEV';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     controller = this.owner.lookup('controller:authenticated.competence/skills/single');
     changelogEntryService = this.owner.lookup('service:ChangelogEntry');
     class ConfigService extends Service {
@@ -26,7 +26,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     this.owner.register('service:Config', ConfigService);
   });
 
-  test('it should create a skill changelogEntry', async function(assert) {
+  test('it should create a skill changelogEntry', async function (assert) {
     // given
     const note = { save: sinon.stub().resolves() };
     storeStub = { createRecord: sinon.stub().returns(note) };
@@ -57,7 +57,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelog-entry', expectedChangelog]);
   });
 
-  test('it should create a challenge changelogEntry', async function(assert) {
+  test('it should create a challenge changelogEntry', async function (assert) {
     // given
     const note = { save: sinon.stub().resolves() };
     storeStub = { createRecord: sinon.stub().returns(note) };
@@ -86,7 +86,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelog-entry', expectedChangelog]);
   });
 
-  test('it should clone skill with new location', async function(assert) {
+  test('it should clone skill with new location', async function (assert) {
     // given
     const store = this.owner.lookup('service:store');
 

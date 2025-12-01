@@ -26,18 +26,23 @@ export default class Illustration extends Component {
         <h3 class="illustration-field--title">{{@title}}</h3>
       {{/if}}
       {{#if @value}}
-      <div class="illustration-field--infos">
-        {{#if @value.url}}
-          <button aria-label="agrandir l'image" class="illustration-field--display-image" {{on "click" @display}}>
-            <img src={{@value.url}} alt="" role="presentation">
-          </button>
-        {{else}}
-          <p class="illustration-field--name">{{@value.file.name}} ({{@value.file.size}} octets)</p>
-        {{/if}}
-        {{#if @edition}}
-          <PixIconButton @ariaLabel="Supprimer l'image" @iconName="close" @triggerAction={{this.remove}} />
-        {{/if}}
-      </div>
+        <div class="illustration-field--infos">
+          {{#if @value.url}}
+            <button
+              aria-label="agrandir l'image"
+              class="illustration-field--display-image"
+              type="button"
+              {{on "click" @display}}
+            >
+              <img src={{@value.url}} alt="" />
+            </button>
+          {{else}}
+            <p class="illustration-field--name">{{@value.file.name}} ({{@value.file.size}} octets)</p>
+          {{/if}}
+          {{#if @edition}}
+            <PixIconButton @ariaLabel="Supprimer l'image" @iconName="close" @triggerAction={{this.remove}} />
+          {{/if}}
+        </div>
       {{/if}}
       {{#if @edition}}
         {{#let (fileQueue name="illustration" onFileAdded=this.add) as |queue|}}
@@ -45,11 +50,10 @@ export default class Illustration extends Component {
             <label for={{this.inputId}}>
               Choisir une image
             </label>
-            <input id={{this.inputId}} type="file" accept="image/*" {{queue.selectFile}}>
+            <input id={{this.inputId}} type="file" accept="image/*" {{queue.selectFile}} />
           </div>
         {{/let}}
       {{/if}}
     </div>
-
   </template>
 }

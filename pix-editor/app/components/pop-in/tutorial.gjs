@@ -8,13 +8,15 @@ import TutorialForm from '../form/tutorial';
 export default class TutorialPopIn extends Component {
   get hasEmptyMandatoryField() {
     const tutorial = this.args.tutorial;
-    return tutorial && (
-      this._fieldIsEmpty(tutorial.language)
-      || this._fieldIsEmpty(tutorial.title)
-      || this._fieldIsEmpty(tutorial.link)
-      || this._fieldIsEmpty(tutorial.source)
-      || this._fieldIsEmpty(tutorial.format)
-      || this._fieldIsEmpty(tutorial.duration));
+    return (
+      tutorial &&
+      (this._fieldIsEmpty(tutorial.language) ||
+        this._fieldIsEmpty(tutorial.title) ||
+        this._fieldIsEmpty(tutorial.link) ||
+        this._fieldIsEmpty(tutorial.source) ||
+        this._fieldIsEmpty(tutorial.format) ||
+        this._fieldIsEmpty(tutorial.duration))
+    );
   }
 
   get title() {
@@ -26,24 +28,15 @@ export default class TutorialPopIn extends Component {
   }
 
   <template>
-    <PixModal
-      class="tutorial-pop-in"
-      @title={{this.title}}
-      @onCloseButtonClick={{@close}}
-      @showModal={{@showModal}}
-    >
+    <PixModal class="tutorial-pop-in" @title={{this.title}} @onCloseButtonClick={{@close}} @showModal={{@showModal}}>
       <:content>
         {{#if @tutorial}}
-          <TutorialForm @tutorial={{@tutorial}} @onSubmit={{@saveTutorial}}/>
+          <TutorialForm @tutorial={{@tutorial}} @onSubmit={{@saveTutorial}} />
         {{/if}}
       </:content>
       <:footer>
-        <PixButton
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{@close}}
-        >
-          {{t 'common.cancel'}}
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@close}}>
+          {{t "common.cancel"}}
         </PixButton>
         <PixButton
           @type="submit"

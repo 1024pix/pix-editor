@@ -34,7 +34,7 @@ export default class SkillModel extends Model {
 
   get date() {
     const createdDate = this.createdAt;
-    return (new Date(createdDate)).toLocaleDateString('fr', {
+    return new Date(createdDate).toLocaleDateString('fr', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -69,7 +69,7 @@ export default class SkillModel extends Model {
   }
 
   get clueNA() {
-    return (this.clueStatus === 'inapplicable');
+    return this.clueStatus === 'inapplicable';
   }
 
   get prototypes() {
@@ -144,13 +144,15 @@ export default class SkillModel extends Model {
   }
 
   getNextPrototypeVersion() {
-    return this.prototypes.reduce((current, prototype) => {
-      const version = prototype.version;
-      if (version > current) {
-        return version;
-      }
-      return current;
-    }, 0) + 1;
+    return (
+      this.prototypes.reduce((current, prototype) => {
+        const version = prototype.version;
+        if (version > current) {
+          return version;
+        }
+        return current;
+      }, 0) + 1
+    );
   }
 
   activate() {

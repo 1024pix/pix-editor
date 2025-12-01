@@ -7,31 +7,41 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | competence-management/new', function(hooks) {
+module('Acceptance | competence-management/new', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store, originalWindowConfirm;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     originalWindowConfirm = window.confirm;
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Titre', source: 'Pix+' });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'pixIdRecCompetence1.1',
+      title: 'Titre',
+      source: 'Pix+',
+    });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix+', areaIds: ['recArea1'] });
     this.server.create('framework', { id: 'recFramework0', name: 'Pix' });
 
     return authenticateSession();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     window.confirm = originalWindowConfirm;
   });
 
-  test('it should create a new competence', async function(assert) {
+  test('it should create a new competence', async function (assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -52,7 +62,7 @@ module('Acceptance | competence-management/new', function(hooks) {
     assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 
-  test('it should cancel creation', async function(assert) {
+  test('it should cancel creation', async function (assert) {
     // when
     await visit('/competence-management/new/recArea1');
     await click(find('[data-test-cancel-button]'));
@@ -62,7 +72,7 @@ module('Acceptance | competence-management/new', function(hooks) {
     assert.strictEqual(currentURL(), '/');
   });
 
-  test('it should prevent transition', async function(assert) {
+  test('it should prevent transition', async function (assert) {
     // given
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(false);

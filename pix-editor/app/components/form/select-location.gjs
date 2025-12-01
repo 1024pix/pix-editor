@@ -20,11 +20,7 @@ export default class FormSelectLocation extends Component {
   constructor(...args) {
     super(...args);
 
-    const supportedVariants = [
-      'prototype',
-      'skill',
-      'tube',
-    ];
+    const supportedVariants = ['prototype', 'skill', 'tube'];
     if (!supportedVariants.includes(this.args.variant)) {
       throw new Error(`[Form::SelectLocation] the @variant argument must be a valid option (${supportedVariants})`);
     }
@@ -36,18 +32,21 @@ export default class FormSelectLocation extends Component {
     if (this.selectedCompetenceId) {
       this._loadTubes(this.selectedCompetenceId);
     }
-    if (this.isMovingTube) { // theme
+    if (this.isMovingTube) {
+      // theme
       if (!this.args.theme) {
         throw new Error('[Form::SelectLocation] @variant=`tube` requires @thematic argument');
       }
       this.selectedThemeId = this.args.theme.id;
-    } else if (this.isMovingPrototype) { // tube and skill
+    } else if (this.isMovingPrototype) {
+      // tube and skill
       if (!this.args.tube || !this.args.skill) {
         throw new Error('[Form::SelectLocation] @variant=`prototype` requires @skill and @tube arguments');
       }
       this.selectedTubeId = this.args.tube?.id;
       this.selectedSkillId = this.args.skill?.id;
-    } else if (this.isMovingSkill) { // tube only
+    } else if (this.isMovingSkill) {
+      // tube only
       if (!this.args.tube) {
         throw new Error('[Form::SelectLocation] @variant=`skill` requires @tube argument');
       }
@@ -153,13 +152,16 @@ export default class FormSelectLocation extends Component {
 
   _loadTubes(competenceId) {
     const currentCompetence = this.competenceList.find((competence) => competence.id === competenceId);
-    currentCompetence.hasMany('rawTubes').load().then(() => {
-      this.areTubesLoaded = true;
+    currentCompetence
+      .hasMany('rawTubes')
+      .load()
+      .then(() => {
+        this.areTubesLoaded = true;
 
-      if (this.selectedTubeId) {
-        this._loadSkills(this.selectedTubeId);
-      }
-    });
+        if (this.selectedTubeId) {
+          this._loadSkills(this.selectedTubeId);
+        }
+      });
   }
 
   @action
@@ -191,7 +193,10 @@ export default class FormSelectLocation extends Component {
 
   _loadSkills(tubeId) {
     const currentTube = this.tubeList.find((tube) => tube.id === tubeId);
-    currentTube.hasMany('rawSkills').load().then(() => this.areSkillsLoaded = true);
+    currentTube
+      .hasMany('rawSkills')
+      .load()
+      .then(() => (this.areSkillsLoaded = true));
   }
 
   @action
@@ -336,6 +341,5 @@ export default class FormSelectLocation extends Component {
         {{/if}}
       {{/if}}
     </form>
-
   </template>
 }

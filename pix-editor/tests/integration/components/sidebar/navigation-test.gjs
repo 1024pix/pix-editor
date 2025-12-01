@@ -7,12 +7,12 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | sidebar/navigation', function(hooks) {
+module('Integration | Component | sidebar/navigation', function (hooks) {
   setupIntlRenderingTest(hooks);
-  module('#isAdmin', function(hooks) {
+  module('#isAdmin', function (hooks) {
     let areas, frameworks, pixFramework, pixFranceFramework, closeAction, displayFrameworkList;
 
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       closeAction = sinon.stub();
       displayFrameworkList = sinon.stub().returns(true);
 
@@ -56,41 +56,47 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       };
 
       frameworks = [pixFramework, pixFranceFramework];
-      this.owner.register('service:currentData', class MockService extends Service {
-        get isPixFramework() {
-          return true;
-        }
+      this.owner.register(
+        'service:currentData',
+        class MockService extends Service {
+          get isPixFramework() {
+            return true;
+          }
 
-        getAreas() {
-          return areas;
-        }
+          getAreas() {
+            return areas;
+          }
 
-        getFrameworks() {
-          return frameworks;
-        }
+          getFrameworks() {
+            return frameworks;
+          }
 
-        getFramework() {
-          return pixFramework;
-        }
-      });
-      this.owner.register('service:access', class MockService extends Service {
-        isAdmin() {
-          return true;
-        }
-      });
+          getFramework() {
+            return pixFramework;
+          }
+        },
+      );
+      this.owner.register(
+        'service:access',
+        class MockService extends Service {
+          isAdmin() {
+            return true;
+          }
+        },
+      );
     });
 
-    test('it should display a list of frameworks with a creation item', async function(assert) {
+    test('it should display a list of frameworks with a creation item', async function (assert) {
       assert.expect(3);
       // given
-      const expectedFrameworks = [
-        'Pix',
-        'Pix +',
-        'Créer un nouveau référentiel',
-      ];
+      const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
-      const screen = await render(<template><SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}}/></template>);
+      const screen = await render(
+        <template>
+          <SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}} />
+        </template>,
+      );
 
       await clickByName('Sélectionner un référentiel');
 
@@ -101,13 +107,13 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
     });
 
-    test('it should display only a list of areas', async function(assert) {
+    test('it should display only a list of areas', async function (assert) {
       assert.expect(3);
       // given
       const expectedAreas = ['area_1', 'area_2'];
 
       // when
-      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}} /></template>);
 
       // then
       const areasList = screen.getAllByRole('button');
@@ -117,39 +123,42 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       assert.dom(await screen.queryByRole('link', { name: 'Ajouter un domaine' })).doesNotExist();
     });
 
-    test('it should display a button to create area if `source` is not `Pix`', async function(assert) {
+    test('it should display a button to create area if `source` is not `Pix`', async function (assert) {
       // given
-      this.owner.register('service:currentData', class MockService extends Service {
-        get isPixFramework() {
-          return false;
-        }
+      this.owner.register(
+        'service:currentData',
+        class MockService extends Service {
+          get isPixFramework() {
+            return false;
+          }
 
-        getAreas() {
-          return areas;
-        }
+          getAreas() {
+            return areas;
+          }
 
-        getFrameworks() {
-          return frameworks;
-        }
+          getFrameworks() {
+            return frameworks;
+          }
 
-        getFramework() {
-          return pixFranceFramework;
-        }
-      });
+          getFramework() {
+            return pixFranceFramework;
+          }
+        },
+      );
 
       // when
-      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}} /></template>);
 
       // then
       assert.dom(screen.getByRole('link', { name: 'Ajouter un domaine' })).exists();
     });
 
-    test('it should display only a list of competences', async function(assert) {
+    test('it should display only a list of competences', async function (assert) {
       // given
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
       // when
-      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}} /></template>);
       await click(screen.getByRole('button', { name: 'area_1' }));
 
       // then
@@ -159,28 +168,31 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       assert.dom(await screen.queryByRole('link', { name: 'Ajouter une compétence' })).doesNotExist();
     });
 
-    test('it should display a button to create competence if `source` is not `Pix`', async function(assert) {
+    test('it should display a button to create competence if `source` is not `Pix`', async function (assert) {
       // given
-      this.owner.register('service:currentData', class MockService extends Service {
-        get isPixFramework() {
-          return false;
-        }
+      this.owner.register(
+        'service:currentData',
+        class MockService extends Service {
+          get isPixFramework() {
+            return false;
+          }
 
-        getAreas() {
-          return areas;
-        }
+          getAreas() {
+            return areas;
+          }
 
-        getFrameworks() {
-          return frameworks;
-        }
+          getFrameworks() {
+            return frameworks;
+          }
 
-        getFramework() {
-          return pixFranceFramework;
-        }
-      });
+          getFramework() {
+            return pixFranceFramework;
+          }
+        },
+      );
 
       // when
-      const screen = await render(<template><SidebarNavigation @close={{closeAction}}/></template>);
+      const screen = await render(<template><SidebarNavigation @close={{closeAction}} /></template>);
 
       await click(screen.getByRole('button', { name: 'area_1' }));
 

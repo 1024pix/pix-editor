@@ -3,11 +3,11 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Model | challenge', function(hooks) {
+module('Unit | Model | challenge', function (hooks) {
   setupTest(hooks);
   let store, idGeneratorStub, alternative, prototype;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
 
     class ConfigService extends Service {
@@ -126,8 +126,8 @@ module('Unit | Model | challenge', function(hooks) {
     };
   });
 
-  module('#duplicate', function() {
-    test('it should duplicate challenge to create new prototype version', async function(assert) {
+  module('#duplicate', function () {
+    test('it should duplicate challenge to create new prototype version', async function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
 
@@ -139,7 +139,11 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.id, 'generatedId', 'champ id');
       assert.strictEqual(clonedChallenge.airtableId, undefined, 'champ airtableId');
       assert.strictEqual(clonedChallenge.instruction, prototype.instruction, 'champ instruction');
-      assert.strictEqual(clonedChallenge.alternativeInstruction, prototype.alternativeInstruction, 'champ alternativeInstruction');
+      assert.strictEqual(
+        clonedChallenge.alternativeInstruction,
+        prototype.alternativeInstruction,
+        'champ alternativeInstruction',
+      );
       assert.strictEqual(clonedChallenge.type, prototype.type, 'champ type');
       assert.strictEqual(clonedChallenge.format, prototype.format, 'champ format');
       assert.strictEqual(clonedChallenge.proposals, prototype.proposals, 'champ proposals');
@@ -172,22 +176,46 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.archivedAt, undefined, 'champ archivedAt');
       assert.strictEqual(clonedChallenge.madeObsoleteAt, undefined, 'champ madeObsoleteAt');
       assert.strictEqual(clonedChallenge.shuffled, prototype.shuffled, 'champ shuffled');
-      assert.deepEqual(clonedChallenge.contextualizedFields, prototype.contextualizedFields, 'champ contextualizedFields');
+      assert.deepEqual(
+        clonedChallenge.contextualizedFields,
+        prototype.contextualizedFields,
+        'champ contextualizedFields',
+      );
       assert.strictEqual(clonedChallenge.status, 'proposé', 'champ status');
       assert.strictEqual(clonedChallenge.genealogy, prototype.genealogy, 'champ genealogy');
       assert.deepEqual(clonedChallenge.author, ['NEW'], 'champ author');
       assert.strictEqual(clonedChallenge.version, undefined, 'champ version');
       assert.ok(clonedChallenge.skill, 'champ skill');
-      assert.strictEqual(clonedChallenge.requireGafamWebsiteAccess, prototype.requireGafamWebsiteAccess, 'champ requireGafamWebsiteAccess');
-      assert.strictEqual(clonedChallenge.isIncompatibleIpadCertif, prototype.isIncompatibleIpadCertif, 'champ isIncompatibleIpadCertif');
-      assert.strictEqual(clonedChallenge.deafAndHardOfHearing, prototype.deafAndHardOfHearing, 'champ deafAndHardOfHearing');
-      assert.strictEqual(clonedChallenge.isAwarenessChallenge, prototype.isAwarenessChallenge, 'champ isAwarenessChallenge');
+      assert.strictEqual(
+        clonedChallenge.requireGafamWebsiteAccess,
+        prototype.requireGafamWebsiteAccess,
+        'champ requireGafamWebsiteAccess',
+      );
+      assert.strictEqual(
+        clonedChallenge.isIncompatibleIpadCertif,
+        prototype.isIncompatibleIpadCertif,
+        'champ isIncompatibleIpadCertif',
+      );
+      assert.strictEqual(
+        clonedChallenge.deafAndHardOfHearing,
+        prototype.deafAndHardOfHearing,
+        'champ deafAndHardOfHearing',
+      );
+      assert.strictEqual(
+        clonedChallenge.isAwarenessChallenge,
+        prototype.isAwarenessChallenge,
+        'champ isAwarenessChallenge',
+      );
       assert.strictEqual(clonedChallenge.toRephrase, prototype.toRephrase, 'champ toRephrase');
-      assert.strictEqual(clonedChallenge.hasEmbedInternalValidation, prototype.hasEmbedInternalValidation, 'champ hasEmbedInternalValidation');
+      assert.strictEqual(
+        clonedChallenge.hasEmbedInternalValidation,
+        prototype.hasEmbedInternalValidation,
+        'champ hasEmbedInternalValidation',
+      );
       assert.strictEqual(clonedChallenge.noValidationNeeded, prototype.noValidationNeeded, 'champ noValidationNeeded');
     });
 
-    test('it should duplicate challenge to create new alternative version', async function(assert) {
+    test('it should duplicate challenge to create new alternative version', async function (assert) {
       // given
       const challenge = store.createRecord('challenge', alternative);
 
@@ -199,7 +227,11 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.id, 'generatedId', 'champ id');
       assert.strictEqual(clonedChallenge.airtableId, undefined, 'champ airtableId');
       assert.strictEqual(clonedChallenge.instruction, alternative.instruction, 'champ instruction');
-      assert.strictEqual(clonedChallenge.alternativeInstruction, alternative.alternativeInstruction, 'champ alternativeInstruction');
+      assert.strictEqual(
+        clonedChallenge.alternativeInstruction,
+        alternative.alternativeInstruction,
+        'champ alternativeInstruction',
+      );
       assert.strictEqual(clonedChallenge.type, alternative.type, 'champ type');
       assert.strictEqual(clonedChallenge.format, alternative.format, 'champ format');
       assert.strictEqual(clonedChallenge.proposals, alternative.proposals, 'champ proposals');
@@ -232,25 +264,62 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.archivedAt, undefined, 'champ archivedAt');
       assert.strictEqual(clonedChallenge.madeObsoleteAt, undefined, 'champ madeObsoleteAt');
       assert.strictEqual(clonedChallenge.shuffled, alternative.shuffled, 'champ shuffled');
-      assert.deepEqual(clonedChallenge.contextualizedFields, alternative.contextualizedFields, 'champ contextualizedFields');
+      assert.deepEqual(
+        clonedChallenge.contextualizedFields,
+        alternative.contextualizedFields,
+        'champ contextualizedFields',
+      );
       assert.strictEqual(clonedChallenge.status, 'proposé', 'champ status');
       assert.strictEqual(clonedChallenge.genealogy, alternative.genealogy, 'champ genealogy');
       assert.deepEqual(clonedChallenge.author, ['NEW'], 'champ author');
       assert.strictEqual(clonedChallenge.version, alternative.version, 'champ version');
       assert.ok(clonedChallenge.skill, 'champ skill');
-      assert.strictEqual(clonedChallenge.requireGafamWebsiteAccess, alternative.requireGafamWebsiteAccess, 'champ requireGafamWebsiteAccess');
-      assert.strictEqual(clonedChallenge.isIncompatibleIpadCertif, alternative.isIncompatibleIpadCertif, 'champ isIncompatibleIpadCertif');
-      assert.strictEqual(clonedChallenge.deafAndHardOfHearing, alternative.deafAndHardOfHearing, 'champ deafAndHardOfHearing');
-      assert.strictEqual(clonedChallenge.isAwarenessChallenge, alternative.isAwarenessChallenge, 'champ isAwarenessChallenge');
+      assert.strictEqual(
+        clonedChallenge.requireGafamWebsiteAccess,
+        alternative.requireGafamWebsiteAccess,
+        'champ requireGafamWebsiteAccess',
+      );
+      assert.strictEqual(
+        clonedChallenge.isIncompatibleIpadCertif,
+        alternative.isIncompatibleIpadCertif,
+        'champ isIncompatibleIpadCertif',
+      );
+      assert.strictEqual(
+        clonedChallenge.deafAndHardOfHearing,
+        alternative.deafAndHardOfHearing,
+        'champ deafAndHardOfHearing',
+      );
+      assert.strictEqual(
+        clonedChallenge.isAwarenessChallenge,
+        alternative.isAwarenessChallenge,
+        'champ isAwarenessChallenge',
+      );
       assert.strictEqual(clonedChallenge.toRephrase, alternative.toRephrase, 'champ toRephrase');
-      assert.strictEqual(clonedChallenge.hasEmbedInternalValidation, alternative.hasEmbedInternalValidation, 'champ hasEmbedInternalValidation');
-      assert.strictEqual(clonedChallenge.noValidationNeeded, alternative.noValidationNeeded, 'champ noValidationNeeded');
+      assert.strictEqual(
+        clonedChallenge.hasEmbedInternalValidation,
+        alternative.hasEmbedInternalValidation,
+        'champ hasEmbedInternalValidation',
+      );
+      assert.strictEqual(
+        clonedChallenge.noValidationNeeded,
+        alternative.noValidationNeeded,
+        'champ noValidationNeeded',
+      );
     });
 
-    test('it should clone the attachments', async function(assert) {
+    test('it should clone the attachments', async function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
+      const illustration = store.createRecord('attachment', {
+        id: 'rec1234156',
+        filename: 'filename.test',
+        url: 'data:;',
+        size: 10,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: 'alt message',
+        challenge,
+      });
 
       // when
       const clonedChallenge = await challenge.duplicate();
@@ -264,8 +333,8 @@ module('Unit | Model | challenge', function(hooks) {
     });
   });
 
-  module('#copyForDifferentSkill', function() {
-    test('it should create a copy of the challenge for a different skill', async function(assert) {
+  module('#copyForDifferentSkill', function () {
+    test('it should create a copy of the challenge for a different skill', async function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
 
@@ -281,10 +350,19 @@ module('Unit | Model | challenge', function(hooks) {
       assert.notOk(skill);
     });
 
-    test('it should clone the attachments', async function(assert) {
+    test('it should clone the attachments', async function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
+      const illustration = store.createRecord('attachment', {
+        id: 'rec1234156',
+        filename: 'filename.test',
+        url: 'data:;',
+        size: 10,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: 'alt message',
+        challenge,
+      });
 
       // when
       const clonedChallenge = await challenge.copyForDifferentSkill();
@@ -298,11 +376,19 @@ module('Unit | Model | challenge', function(hooks) {
     });
   });
 
-  module('#baseNameUpdated', function() {
-    test('it should return true if the base name is updated', function(assert) {
+  module('#baseNameUpdated', function () {
+    test('it should return true if the base name is updated', function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', {
+        id: 'rec1234156',
+        filename: 'filename.test',
+        url: 'data:;',
+        size: 10,
+        mimeType: 'image/png',
+        type: 'attachment',
+        challenge,
+      });
 
       // when
       challenge.attachmentBaseName = 'otherName';
@@ -311,10 +397,18 @@ module('Unit | Model | challenge', function(hooks) {
       assert.true(challenge.baseNameUpdated());
     });
 
-    test('it should return false if the base name is not updated', function(assert) {
+    test('it should return false if the base name is not updated', function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', {
+        id: 'rec1234156',
+        filename: 'filename.test',
+        url: 'data:;',
+        size: 10,
+        mimeType: 'image/png',
+        type: 'attachment',
+        challenge,
+      });
 
       // when
       challenge.attachmentBaseName = 'filename';
@@ -323,18 +417,26 @@ module('Unit | Model | challenge', function(hooks) {
       assert.false(challenge.baseNameUpdated());
     });
 
-    test('it should return true if the base name undefined', function(assert) {
+    test('it should return true if the base name undefined', function (assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', {
+        id: 'rec1234156',
+        filename: 'filename.test',
+        url: 'data:;',
+        size: 10,
+        mimeType: 'image/png',
+        type: 'attachment',
+        challenge,
+      });
 
       // then
       assert.false(challenge.baseNameUpdated());
     });
   });
 
-  module('#getNextAlternativeVersion', function() {
-    test('it should return 1 if no other alternatives', function(assert) {
+  module('#getNextAlternativeVersion', function () {
+    test('it should return 1 if no other alternatives', function (assert) {
       // given
       const proto = store.createRecord('challenge', {
         id: 'challengeProto',
@@ -349,7 +451,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(nextAlternativeVersion, 1);
     });
 
-    test('it should return "highest current decli + 1" when there are alternatives', function(assert) {
+    test('it should return "highest current decli + 1" when there are alternatives', function (assert) {
       // given
       const skill = store.createRecord('skill', {});
       const proto = store.createRecord('challenge', {

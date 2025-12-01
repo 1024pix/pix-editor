@@ -27,7 +27,9 @@ export default class V2Route extends Route {
       return;
     }
     const view = extractViewFromTransition(transition);
-    this.router.transitionTo('authenticated.competence.prototypes', competence_id, { queryParams: { languageFilter: locale, view } });
+    this.router.transitionTo('authenticated.competence.prototypes', competence_id, {
+      queryParams: { languageFilter: locale, view },
+    });
   }
 }
 

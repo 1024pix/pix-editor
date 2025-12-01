@@ -17,14 +17,12 @@ export default class CompetenceHeader extends Component {
   @action
   setSection(section) {
     if (section === 'skills') {
-      this.router.transitionTo('authenticated.competence.skills',
-        this.args.competence.id,
-        {
-          queryParams: {
-            view: 'production',
-            languageFilter: this.args.locale,
-          },
-        });
+      this.router.transitionTo('authenticated.competence.skills', this.args.competence.id, {
+        queryParams: {
+          view: 'production',
+          languageFilter: this.args.locale,
+        },
+      });
     }
     if (section === 'quality') {
       this.router.transitionTo('authenticated.competence.quality', this.args.competence.id);
@@ -94,11 +92,15 @@ export default class CompetenceHeader extends Component {
     <div class="competence-header">
       {{#if this.hasLocaleSelected}}
         <p class="locale-tag">
-          <span>{{flagForLanguage this.localeEntry.value}}</span> {{this.localeEntry.label}}
+          <span>{{flagForLanguage this.localeEntry.value}}</span>
+          {{this.localeEntry.label}}
         </p>
       {{/if}}
       <h2>
-        <LinkTo @route="authenticated.competence-management.single" @model={{@competence.id}}>{{@competence.name}}</LinkTo>
+        <LinkTo
+          @route="authenticated.competence-management.single"
+          @model={{@competence.id}}
+        >{{@competence.name}}</LinkTo>
       </h2>
       <div class="competence-header__spacer"></div>
       <PixSelect

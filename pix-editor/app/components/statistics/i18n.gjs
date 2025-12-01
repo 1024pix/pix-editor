@@ -1,0 +1,373 @@
+import Component from '@glimmer/component';
+
+const NEUTRAL = 0;
+const OCCIDENT = 1;
+const AFRICA = 2;
+const UNESCO = 3;
+export default class StatisticsI18nComponent extends Component {
+  <template>
+    <h2 class="ui header">
+      <i class="globe icon"></i>
+      <div class="content">
+        Internationalisation
+      </div>
+    </h2>
+    <div class="ui four column padded grid">
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nWorldSkills}}
+            <div class="sub header">
+              Acquis Monde
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nEuropeanSkills}}
+            <div class="sub header">
+              Acquis Europe
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nFrenchSkills}}
+            <div class="sub header">
+              Acquis France
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column"></div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nNeutralTotal.validated}}
+            ({{this.i18nNeutralTotal.suggested}})
+            <div class="sub header">
+              Neutres
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nOccidentTotal.validated}}
+            ({{this.i18nOccidentTotal.suggested}})
+            <div class="sub header">
+              Occident
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nAfricaTotal.validated}}
+            ({{this.i18nAfricaTotal.suggested}})
+            <div class="sub header">
+              Afrique
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment center aligned">
+          <div class="ui header">
+            {{this.i18nUnescoTotal.validated}}
+            ({{this.i18nUnescoTotal.suggested}})
+            <div class="sub header">
+              Pays UNESCO
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="four columns">
+        <div class="ui yellow segment five column grid center aligned statistics-table">
+          <div class="column">
+            Compétence
+          </div>
+          <div class="column">
+            Neutres
+          </div>
+          <div class="column">
+            Pays Occident
+          </div>
+          <div class="column">
+            Pays Afrique
+          </div>
+          <div class="column">
+            Pays UNESCO
+          </div>
+          {{#each this.i18nData as |item|}}
+            <div class="column">
+              {{item.name}}
+            </div>
+            <div class="column">
+              {{item.neutralValidated}}
+              ({{item.neutralSuggested}})
+            </div>
+            <div class="column">
+              {{item.occidentValidated}}
+              ({{item.occidentSuggested}})
+            </div>
+            <div class="column">
+              {{item.africaValidated}}
+              ({{item.africaSuggested}})
+            </div>
+            <div class="column">
+              {{item.unescoValidated}}
+              ({{item.unescoSuggested}})
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    <div class="ui two column padded grid">
+      <div class="column">
+        <div class="ui yellow segment two column grid center aligned statistics-table">
+          <div class="column">
+            Pays Occident
+          </div>
+          <div class="column">
+            Épreuves
+          </div>
+          {{#each this.i18nOccidentCountries as |country|}}
+            <div class="column">{{country.name}}</div>
+            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment two column grid center aligned statistics-table">
+          <div class="column">
+            Pays Afrique
+          </div>
+          <div class="column">
+            Épreuves
+          </div>
+          {{#each this.i18nAfricanCountries as |country|}}
+            <div class="column">{{country.name}}</div>
+            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui yellow segment two column grid center aligned statistics-table">
+          <div class="column">
+            Pays UNESCO
+          </div>
+          <div class="column">
+            Épreuves
+          </div>
+          {{#each this.i18nUnescoCountries as |country|}}
+            <div class="column">{{country.name}}</div>
+            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </template>
+
+  _i18nAreas = new Map([
+    ['Neutre', NEUTRAL],
+    ['Institutions internationales', NEUTRAL],
+    ['Allemagne', OCCIDENT],
+    ['Argentine', OCCIDENT],
+    ['Belgique', OCCIDENT],
+    ['Brésil', OCCIDENT],
+    ['Canada', OCCIDENT],
+    ['Chine', OCCIDENT],
+    ['Espagne', OCCIDENT],
+    ['France', OCCIDENT],
+    ['Grèce', OCCIDENT],
+    ['Italie', OCCIDENT],
+    ['Japon', OCCIDENT],
+    ['Mexique', OCCIDENT],
+    ['Portugal', OCCIDENT],
+    ['Suisse', OCCIDENT],
+    ['UK', OCCIDENT],
+    ['USA', OCCIDENT],
+    ['Vénézuela', OCCIDENT],
+    ['Bénin', AFRICA],
+    ['Burkina Faso', AFRICA],
+    ['Burundi', AFRICA],
+    ['Cameroun', AFRICA],
+    ['Les Comores', AFRICA],
+    ["Côte d'Ivoire", AFRICA],
+    ['Djibouti', AFRICA],
+    ['Gabon', AFRICA],
+    ['Guinée', AFRICA],
+    ['Madagascar', AFRICA],
+    ['Mali', AFRICA],
+    ['Niger', AFRICA],
+    ['République centrafricaine', AFRICA],
+    ['Congo', AFRICA],
+    ['Rwanda', AFRICA],
+    ['Sénégal', AFRICA],
+    ['Seychelles', AFRICA],
+    ['Tchad', AFRICA],
+    ['Togo', AFRICA],
+    ['Algérie', UNESCO],
+    ['Israël', UNESCO],
+    ['Jordanie', UNESCO],
+    ['Liban', UNESCO],
+    ['Libye', UNESCO],
+    ['Maroc', UNESCO],
+    ['Palestine', UNESCO],
+    ['Tunisie', UNESCO],
+  ]);
+
+  get i18nCountryCounts() {
+    return this.args.areas.reduce(
+      (current, area) => {
+        return area.competencesArray.reduce((current, competence) => {
+          const competenceCountries = competence.tubes.reduce((current, tube) => {
+            return tube.productionSkills.reduce((current, skill) => {
+              if (skill.i18n === 'Monde') {
+                return skill.challengesArray.reduce((current, challenge) => {
+                  const geography = challenge.geography;
+                  if (!current.has(geography)) {
+                    current.set(geography, [0, 0]);
+                  }
+                  const value = current.get(geography);
+                  if (challenge.isValidated) {
+                    value[0]++;
+                    current.set(geography, value);
+                  } else if (challenge.isDraft) {
+                    value[1]++;
+                    current.set(geography, value);
+                  }
+                  return current;
+                }, current);
+              }
+              return current;
+            }, current);
+          }, new Map());
+
+          const countries = current.countries;
+          const areaCounts = [
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+          ];
+
+          for (const [country, values] of competenceCountries) {
+            if (!countries.has(country)) {
+              countries.set(country, values);
+            } else {
+              const counts = countries.get(country);
+              countries.set(country, [counts[0] + values[0], counts[1] + values[1]]);
+            }
+            if (this._i18nAreas.has(country)) {
+              const index = this._i18nAreas.get(country);
+              areaCounts[index][0] += values[0];
+              areaCounts[index][1] += values[1];
+            }
+          }
+          current.areas[competence.code] = areaCounts;
+          return current;
+        }, current);
+      },
+      { areas: {}, countries: new Map() },
+    );
+  }
+
+  get i18nData() {
+    const areaCounts = this.i18nCountryCounts.areas;
+    return this.args.competenceCodes.map((code) => ({
+      name: code,
+      neutralValidated: areaCounts[code][0][0],
+      neutralSuggested: areaCounts[code][0][1],
+      occidentValidated: areaCounts[code][1][0],
+      occidentSuggested: areaCounts[code][1][1],
+      africaValidated: areaCounts[code][2][0],
+      africaSuggested: areaCounts[code][2][1],
+      unescoValidated: areaCounts[code][3][0],
+      unescoSuggested: areaCounts[code][3][1],
+    }));
+  }
+
+  i18nTotal(validatedKey, suggestedKey) {
+    return Object.values(this.i18nData).reduce(
+      (current, value) => {
+        current.validated += value[validatedKey];
+        current.suggested += value[suggestedKey];
+        return current;
+      },
+      { validated: 0, suggested: 0 },
+    );
+  }
+
+  get i18nNeutralTotal() {
+    return this.i18nTotal('neutralValidated', 'neutralSuggested');
+  }
+
+  get i18nAfricaTotal() {
+    return this.i18nTotal('africaValidated', 'africaSuggested');
+  }
+
+  get i18nOccidentTotal() {
+    return this.i18nTotal('occidentValidated', 'occidentSuggested');
+  }
+
+  get i18nUnescoTotal() {
+    return this.i18nTotal('unescoValidated', 'unescoSuggested');
+  }
+
+  i18nSkills(region) {
+    return this.args.areas.reduce((current, area) => {
+      return area.competencesArray.reduce((current, competence) => {
+        return competence.tubes.reduce((current, tube) => {
+          return tube.productionSkills.reduce((current, skill) => {
+            if (skill.i18n === region) {
+              current++;
+            }
+            return current;
+          }, current);
+        }, current);
+      }, current);
+    }, 0);
+  }
+
+  get i18nWorldSkills() {
+    return this.i18nSkills('Monde');
+  }
+
+  get i18nEuropeanSkills() {
+    return this.i18nSkills('Union Européenne');
+  }
+
+  get i18nFrenchSkills() {
+    return this.i18nSkills('France');
+  }
+
+  i18nCountries(countryCode) {
+    const countries = this.i18nCountryCounts.countries;
+    const names = Array.from(countries.keys()).filter((name) => this._i18nAreas.get(name) === countryCode);
+    return names.reduce((current, name) => {
+      const values = countries.get(name);
+      current.push({ name: name, validated: values[0], suggested: values[1] });
+      return current;
+    }, []);
+  }
+
+  get i18nOccidentCountries() {
+    return this.i18nCountries(OCCIDENT);
+  }
+
+  get i18nAfricanCountries() {
+    return this.i18nCountries(AFRICA);
+  }
+
+  get i18nUnescoCountries() {
+    return this.i18nCountries(UNESCO);
+  }
+}

@@ -5,21 +5,13 @@ import emberGjsRecommendedConfig from 'eslint-plugin-ember/configs/recommended-g
 import n from 'eslint-plugin-n';
 import qunitRecommendedConfig from 'eslint-plugin-qunit/configs/recommended';
 import globals from 'globals';
+import prettierRecommendedConfig from 'eslint-plugin-prettier/recommended';
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
 const compiledOutputFiles = ['dist/*', 'tmp/*'];
 const dependenciesFiles = ['bower_components/*', 'node_modules/*'];
-const miscFiles = [
-  'coverage/*',
-  '!**/.*',
-  '**/.eslintcache',
-];
-const emberTryFiles = [
-  '.node_modules.ember-try/*',
-  'bower.json.ember-try',
-  'package.json.ember-try',
-];
-import stylistic from '@stylistic/eslint-plugin';
+const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache'];
+const emberTryFiles = ['.node_modules.ember-try/*', 'bower.json.ember-try', 'package.json.ember-try'];
 
 const nodeFiles = [
   '.template-lintrc.js',
@@ -38,42 +30,8 @@ export default [
   ...emberRecommendedConfig,
   ...emberGjsRecommendedConfig,
   qunitRecommendedConfig,
-  stylistic.configs.customize({
-    jsx: false,
-    semi: true,
-  }),
-  {
-    plugins: { '@stylistic': stylistic },
-    rules: {
-      '@stylistic/array-bracket-newline': ['error', { multiline: true }],
-      '@stylistic/array-element-newline': ['error', { multiline: true, minItems: 3 }],
-      '@stylistic/arrow-parens': ['error', 'always'],
-      '@stylistic/brace-style': ['error', '1tbs'],
-      '@stylistic/curly-newline': ['error', { consistent: true, ClassBody: { minElements: 1 } }],
-      '@stylistic/function-call-spacing': ['error', 'never'],
-      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
-      '@stylistic/object-curly-newline': ['error', { multiline: true }],
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-      '@stylistic/quotes': [
-        'error',
-        'single',
-        { avoidEscape: true },
-      ],
-      '@stylistic/quote-props': ['error', 'as-needed'],
-      '@stylistic/space-before-function-paren': ['error', { anonymous: 'never', named: 'never', asyncArrow: 'ignore' }],
-      '@stylistic/space-infix-ops': ['error'],
-      '@stylistic/switch-colon-spacing': ['error', { after: true, before: false }],
-    },
-  },
-  {
-    ignores: [
-      ...unconventionalJsFiles,
-      ...compiledOutputFiles,
-      ...dependenciesFiles,
-      ...miscFiles,
-      ...emberTryFiles,
-    ],
-  },
+  prettierRecommendedConfig,
+  { ignores: [...unconventionalJsFiles, ...compiledOutputFiles, ...dependenciesFiles, ...miscFiles, ...emberTryFiles] },
   {
     ignores: ['**/*.yaml'],
     languageOptions: {

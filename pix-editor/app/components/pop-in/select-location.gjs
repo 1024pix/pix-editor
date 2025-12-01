@@ -35,11 +35,7 @@ export default class PopinSelectLocation extends Component {
   }
 
   <template>
-    <PixModal
-      @title={{@title}}
-      @onCloseButtonClick={{this.closeModal}}
-      @showModal={{@showModal}}
-    >
+    <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
       <:content>
         {{#if @showModal}}
           <FormSelectLocation
@@ -53,12 +49,8 @@ export default class PopinSelectLocation extends Component {
         {{/if}}
       </:content>
       <:footer>
-        <PixButton
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{this.closeModal}}
-        >
-          {{t 'common.cancel'}}
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
+          {{t "common.cancel"}}
         </PixButton>
         <PixButton
           @isDisabled={{this.disableActionButton}}

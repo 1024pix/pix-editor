@@ -26,8 +26,7 @@ export default class CompetenceManagementSingleRoute extends Route {
   @action
   willTransition(transition) {
     const controller = this.controllerFor('authenticated.competence-management.single');
-    if (controller.edition
-      && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+    if (controller.edition && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else if (controller.edition) {
       controller.model.rollbackAttributes();

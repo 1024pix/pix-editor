@@ -12,16 +12,18 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks) {
+module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
+  const skillId = 'skill1',
+    skillName = '@tube1',
+    prototypeId = 'prototype1';
   let storageServiceStub, store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
     this.owner.register('service:storage', StorageServiceStub);
     storageServiceStub = this.owner.lookup('service:storage');
@@ -106,12 +108,15 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
 
     challengeProduction.update({ challengeLocales: [challengeLocale] });
 
-    skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProduction] });
+    skill.update({
+      challengesProduction: [challengeProduction],
+      localizedChallengesProduction: [localizedChallengeProduction],
+    });
 
     return authenticateSession();
   });
 
-  test('it should add attachments', async function(assert) {
+  test('it should add attachments', async function (assert) {
     // given
     const file1 = new File([], 'challenge-attachment1.png', { type: 'image/png' });
     const file2 = new File([], 'challenge-attachment2.png', { type: 'image/png' });
@@ -126,7 +131,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
       .resolves({ url: 'data:,', filename: 'challenge-attachment2' });
 
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
 
     await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file1);
@@ -145,7 +152,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     assert.strictEqual(attachments.length, 3);
   });
 
-  test('it should delete attachment', async function(assert) {
+  test('it should delete attachment', async function (assert) {
     // given
     this.server.create('attachment', {
       id: 'attachmentId1',
@@ -156,7 +163,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     });
 
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
     await clickByText('Supprimer la pièce jointe attachmentName1');
 
@@ -173,16 +182,24 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('it should cancel adding an attachment', async function(assert) {
+  test('it should cancel adding an attachment', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'attachmentId', type: 'attachment', filename: 'attachmentName', challengeId: 'challengeIdProto', localizedChallengeId: 'localizedChallengeIdProto' });
+    this.server.create('attachment', {
+      id: 'attachmentId',
+      type: 'attachment',
+      filename: 'attachmentName',
+      challengeId: 'challengeIdProto',
+      localizedChallengeId: 'localizedChallengeIdProto',
+    });
 
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
     await clickByText('Supprimer la pièce jointe attachmentName');
 
-    const cancelButton = await screen.findByRole('button', { name: 'Annuler l\'édition' });
+    const cancelButton = await screen.findByRole('button', { name: "Annuler l'édition" });
     await click(cancelButton);
 
     const attachments = await store.peekAll('attachment');
@@ -193,7 +210,7 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('it should rename attachment baseName', async function(assert) {
+  test('it should rename attachment baseName', async function (assert) {
     // given
     this.server.create('attachment', {
       id: 'attachmentId1',
@@ -203,7 +220,9 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function(hooks
       localizedChallengeId: 'localizedChallengeIdProto',
     });
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
     await fillByLabel('Nom :', 'newName');
     await clickByText('Enregistrer');

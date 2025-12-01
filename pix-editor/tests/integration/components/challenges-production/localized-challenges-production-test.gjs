@@ -7,11 +7,11 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenges-production | localized-challenges-production', function(hooks) {
+module('Integration | Component | challenges-production | localized-challenges-production', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen, store, skill, challengeLocalesNl, challengeLocalesFr, challengeLocalesEs, competence;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
     skill = store.createRecord('skill', {
       id: 'skillAId',
@@ -49,7 +49,8 @@ module('Integration | Component | challenges-production | localized-challenges-p
       challenge: challengeProtoValide,
       locale: 'nl',
       status: LocalizedChallenge.STATUSES.PLAY,
-      instruction: 'Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie.',
+      instruction:
+        'Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie, Een super maxi lange instructie.',
     });
     const challengeLocaleProtoValideFr = store.createRecord('challenge-locale', {
       id: 'challengeLocaleId1',
@@ -250,18 +251,20 @@ module('Integration | Component | challenges-production | localized-challenges-p
     ];
   });
 
-  module('list item', function(hooks) {
+  module('list item', function (hooks) {
     hooks.beforeEach(async () => {
-      screen = await render(<template>
-        <LocalizedChallengesProduction
-          @skill={{skill}}
-          @challengeLocales={{challengeLocalesNl}}
-          @competence={{competence}}
-        />
-      </template>);
+      screen = await render(
+        <template>
+          <LocalizedChallengesProduction
+            @skill={{skill}}
+            @challengeLocales={{challengeLocalesNl}}
+            @competence={{competence}}
+          />
+        </template>,
+      );
     });
 
-    test('should display all expected info for a given challenge', async function(assert) {
+    test('should display all expected info for a given challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
       const prototype = validatedChallenges[1];
@@ -272,35 +275,41 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
     });
-    module('it should display actions', function() {
-      test('when have translation for current locale', async function(assert) {
+    module('it should display actions', function () {
+      test('when have translation for current locale', async function (assert) {
         // when
-        await clickByText('ouvrir option pour l\'épreuve challengeProtoValide');
+        await clickByText("ouvrir option pour l'épreuve challengeProtoValide");
 
         // then
         assert.dom(screen.getByRole('list', { name: 'source' })).exists();
         assert.dom(screen.getByRole('list', { name: 'traduction' })).exists();
-        const primaryPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValide' });
-        const localizedPreview = screen.getByRole('link', { name: 'Prévisualiser l\'épreuve challengeProtoValideeNl' });
-        const localizedTranslationLink = screen.getByRole('link', { name: 'traduction de l\'épreuve de version 1' });
+        const primaryPreview = screen.getByRole('link', { name: "Prévisualiser l'épreuve challengeProtoValide" });
+        const localizedPreview = screen.getByRole('link', { name: "Prévisualiser l'épreuve challengeProtoValideeNl" });
+        const localizedTranslationLink = screen.getByRole('link', { name: "traduction de l'épreuve de version 1" });
         assert.ok(primaryPreview.href.endsWith('api/urlto/challengeProtoValide'));
         assert.ok(localizedPreview.href.endsWith('api/urlto/challengeProtoValide?locale=nl'));
-        assert.ok(localizedTranslationLink.href.endsWith('api/challenges/challengeDecliArchivee/translations/nl/framework-name/Pix/area-code/1'));
-        assert.dom(screen.getByRole('button', { name: 'Copier le lien de l\'épreuve challengeProtoValideeNl' })).exists();
+        assert.ok(
+          localizedTranslationLink.href.endsWith(
+            'api/challenges/challengeDecliArchivee/translations/nl/framework-name/Pix/area-code/1',
+          ),
+        );
+        assert
+          .dom(screen.getByRole('button', { name: "Copier le lien de l'épreuve challengeProtoValideeNl" }))
+          .exists();
       });
 
-      test('when primary is in current locale', async function(assert) {
+      test('when primary is in current locale', async function (assert) {
         // when
-        await clickByText('ouvrir option pour l\'épreuve challengeDecliNl');
+        await clickByText("ouvrir option pour l'épreuve challengeDecliNl");
 
         // then
         assert.dom(screen.getByRole('list', { name: 'source' })).exists();
         assert.dom(screen.queryByRole('list', { name: 'traduction' })).doesNotExist();
       });
 
-      test('when have not translation for current locale', async function(assert) {
+      test('when have not translation for current locale', async function (assert) {
         // when
-        await clickByText('ouvrir option pour l\'épreuve challengeDecliProposee');
+        await clickByText("ouvrir option pour l'épreuve challengeDecliProposee");
 
         // then
         assert.dom(screen.getByRole('list', { name: 'source' })).exists();
@@ -308,7 +317,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       });
     });
 
-    test('should display appropriate translation statuses for each challenge', async function(assert) {
+    test('should display appropriate translation statuses for each challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
 
@@ -334,18 +343,20 @@ module('Integration | Component | challenges-production | localized-challenges-p
     });
   });
 
-  module('when displaying the list', function() {
-    test('it should display only challenge who has selected locale or fr', async function(assert) {
+  module('when displaying the list', function () {
+    test('it should display only challenge who has selected locale or fr', async function (assert) {
       // given
 
       // when
-      screen = await render(<template>
-        <LocalizedChallengesProduction
-          @skill={{skill}}
-          @challengeLocales={{challengeLocalesEs}}
-          @competence={{competence}}
-        />
-      </template>);
+      screen = await render(
+        <template>
+          <LocalizedChallengesProduction
+            @skill={{skill}}
+            @challengeLocales={{challengeLocalesEs}}
+            @competence={{competence}}
+          />
+        </template>,
+      );
 
       // then
       const challengesList = screen.queryAllByRole('row');
@@ -353,18 +364,20 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.strictEqual(challengeListWithoutThead.length, 3);
     });
 
-    module('when locale is not in phrase', function() {
-      test('when locale is not in phrase', async function(assert) {
+    module('when locale is not in phrase', function () {
+      test('when locale is not in phrase', async function (assert) {
         // given
 
         // when
-        screen = await render(<template>
-          <LocalizedChallengesProduction
-            @skill={{skill}}
-            @challengeLocales={{challengeLocalesFr}}
-            @competence={{competence}}
-          />
-        </template>);
+        screen = await render(
+          <template>
+            <LocalizedChallengesProduction
+              @skill={{skill}}
+              @challengeLocales={{challengeLocalesFr}}
+              @competence={{competence}}
+            />
+          </template>,
+        );
 
         // then
         const phraseLinks = screen.queryAllByRole('link', { name: /traduction de l'épreuve de version/ });
@@ -373,16 +386,18 @@ module('Integration | Component | challenges-production | localized-challenges-p
       });
     });
 
-    module('when box to display obsolete challenges not checked', function() {
-      test('should display all but obsolete', async function(assert) {
+    module('when box to display obsolete challenges not checked', function () {
+      test('should display all but obsolete', async function (assert) {
         // when
-        screen = await render(<template>
-          <LocalizedChallengesProduction
-            @skill={{skill}}
-            @challengeLocales={{challengeLocalesNl}}
-            @competence={{competence}}
-          />
-        </template>);
+        screen = await render(
+          <template>
+            <LocalizedChallengesProduction
+              @skill={{skill}}
+              @challengeLocales={{challengeLocalesNl}}
+              @competence={{competence}}
+            />
+          </template>,
+        );
 
         // then
         const validatedChallenges = screen.queryAllByText('validé');
@@ -396,16 +411,18 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.strictEqual(obsoleteChallenges.length, 0);
       });
     });
-    module('when box to display obsolete challenges checked', function() {
-      test('display all challenges', async function(assert) {
+    module('when box to display obsolete challenges checked', function () {
+      test('display all challenges', async function (assert) {
         // when
-        screen = await render(<template>
-          <LocalizedChallengesProduction
-            @skill={{skill}}
-            @challengeLocales={{challengeLocalesNl}}
-            @competence={{competence}}
-          />
-        </template>);
+        screen = await render(
+          <template>
+            <LocalizedChallengesProduction
+              @skill={{skill}}
+              @challengeLocales={{challengeLocalesNl}}
+              @competence={{competence}}
+            />
+          </template>,
+        );
 
         await click(screen.getByLabelText('Afficher les épreuves périmées'));
 

@@ -1,18 +1,18 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Service | target-profiles-pdf-export', function(hooks) {
+module('Unit | Service | target-profiles-pdf-export', function (hooks) {
   setupTest(hooks);
   let service;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     service = this.owner.lookup('service:target-profiles-pdf-export');
   });
 
-  module('#_getTranslatedField', function(hooks) {
+  module('#_getTranslatedField', function (hooks) {
     let model, keys;
 
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       model = {
         id: 'modelId',
         titleEnUs: 'English name',
@@ -24,7 +24,7 @@ module('Unit | Service | target-profiles-pdf-export', function(hooks) {
       };
     });
 
-    test('it should get the english field if language is `en`', async function(assert) {
+    test('it should get the english field if language is `en`', async function (assert) {
       // given
       const language = 'en';
 
@@ -35,7 +35,7 @@ module('Unit | Service | target-profiles-pdf-export', function(hooks) {
       assert.strictEqual(result, 'English name');
     });
 
-    test('it should get the french field if language is `fr`', async function(assert) {
+    test('it should get the french field if language is `fr`', async function (assert) {
       // given
       const language = 'fr';
 

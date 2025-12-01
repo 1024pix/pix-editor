@@ -7,21 +7,32 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge', function(hooks) {
+module('Acceptance | Modify-Localized-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
     const prototype = this.server.create('challenge', { id: 'recChallenge1' });
     this.server.create('localizedChallenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
-    this.server.create('localizedChallenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', geography: 'NL' });
+    this.server.create('localizedChallenge', {
+      id: 'recChallenge1NL',
+      challengeId: 'recChallenge1',
+      locale: 'nl',
+      geography: 'NL',
+    });
     const skill = this.server.create('skill', { id: 'recSkill1', name: '@trululu2', challengeIds: ['recChallenge1'] });
     const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      title: 'ma competence',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: ['recTheme1'],
+      rawTubeIds: ['recTube1'],
+    });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
       thematicOverviews: [
@@ -53,12 +64,17 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
         },
       ],
     });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('should modify attributes in localized challenge', async function(assert) {
+  test('should modify attributes in localized challenge', async function (assert) {
     // when
     const store = this.owner.lookup('service:store');
 
@@ -71,8 +87,11 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     assert.dom('[data-test-localized-challenge-urls-to-consult]').doesNotExist();
 
     await clickByText('Modifier');
-    await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-    await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\n mon-autre-url.com');
+    await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
+    await fillByLabel(
+      "URLs externes nécessaires à la résolution de l'épreuve",
+      'https://mon-url.com\n mon-autre-url.com',
+    );
     await clickByText('Géographie');
     await click(await screen.findByRole('option', { name: 'Japon' }));
     await waitForSelectToBeClosed(screen);

@@ -23,7 +23,8 @@ export default class LoginForm extends Component {
       await this.args.onLogInClicked(this.apiKey);
     } catch {
       this.isErrorMessagePresent = true;
-      this.errorMessage = 'La clé saisie n\'a pas pu être validée ou n\'est pas valide. Vérifiez votre connexion, votre saisie ou contactez l\'équipe de développement.';
+      this.errorMessage =
+        "La clé saisie n'a pas pu être validée ou n'est pas valide. Vérifiez votre connexion, votre saisie ou contactez l'équipe de développement.";
     }
   }
 

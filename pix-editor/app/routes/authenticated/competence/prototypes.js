@@ -12,11 +12,7 @@ export default class PrototypesRoute extends Route {
   refreshing = false;
 
   beforeModel(transition) {
-    if (![
-      'production',
-      'workbench',
-      'workbench-list',
-    ].includes(transition.to.queryParams.view)) {
+    if (!['production', 'workbench', 'workbench-list'].includes(transition.to.queryParams.view)) {
       this.router.replaceWith({ queryParams: { view: 'production' } });
     }
   }
@@ -31,7 +27,9 @@ export default class PrototypesRoute extends Route {
       if (this.refreshing) {
         const themes = await competence.hasMany('rawThemes').reload();
         const themesTubes = await Promise.all(themes.map((theme) => theme.hasMany('rawTubes').reload()));
-        const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())));
+        const tubesSkills = await Promise.all(
+          themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())),
+        );
         await Promise.all(tubesSkills.flatMap((skills) => skills.map((skill) => skill.hasMany('challenges').reload())));
         this.refreshing = false;
       } else {
@@ -61,7 +59,9 @@ export default class PrototypesRoute extends Route {
     const locale = model.locale;
     const overview = 'challenges-production';
 
-    this.router.transitionTo('authenticated.v2.competence-overview', model.airtableId, overview, { queryParams: { locale } });
+    this.router.transitionTo('authenticated.v2.competence-overview', model.airtableId, overview, {
+      queryParams: { locale },
+    });
   }
 
   @action

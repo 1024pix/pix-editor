@@ -83,7 +83,8 @@ export default class SingleController extends Controller {
   save() {
     this.loader.start();
     const tube = this.tube;
-    return tube.save()
+    return tube
+      .save()
       .then(() => {
         this.edition = false;
         this.loader.stop();
@@ -114,7 +115,8 @@ export default class SingleController extends Controller {
     this.loader.start();
     tube.competence = newCompetence;
     tube.theme = newTheme;
-    return tube.save()
+    return tube
+      .save()
       .then(() => {
         this.loader.stop();
         this.notify.message('Tube mis à jour');

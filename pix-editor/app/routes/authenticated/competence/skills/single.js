@@ -36,8 +36,7 @@ export default class SingleRoute extends Route {
   @action
   async willTransition(transition) {
     const controller = this.controllerFor(transition.from.name);
-    if (controller.edition
-      && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+    if (controller.edition && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
       const modelSkillSingle = controller.model;
@@ -53,7 +52,10 @@ export default class SingleRoute extends Route {
           const tube = skill.tube;
           return this.router.transitionTo('authenticated.competence.prototypes.list', tube.get('id'), skill.id);
         }
-      } else if (transition.targetName === 'authenticated.competence.quality.index' && controller.skill.productionPrototype) {
+      } else if (
+        transition.targetName === 'authenticated.competence.quality.index' &&
+        controller.skill.productionPrototype
+      ) {
         return this.router.transitionTo('authenticated.competence.quality.single', controller.skill);
       }
 

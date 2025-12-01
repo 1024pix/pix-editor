@@ -11,14 +11,18 @@ export default class MissionsRoute extends Route {
   @service store;
   @service access;
   async model(params) {
-    const missions = await this.store.query('mission-summary', {
-      page: {
-        number: params.pageNumber,
-        size: params.pageSize,
-      },
+    const missions = await this.store.query(
+      'mission-summary',
+      {
+        page: {
+          number: params.pageNumber,
+          size: params.pageSize,
+        },
 
-      filter: { statuses: params.statuses },
-    }, { reload: true });
+        filter: { statuses: params.statuses },
+      },
+      { reload: true },
+    );
     return {
       missions,
       mayCreateOrEditMissions: this.access.isEditor(),

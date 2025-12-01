@@ -56,7 +56,7 @@ export default class CellQuality extends Component {
     const blind = this._isNonTested(productionPrototype.accessibility1);
     const colorblind = this._isNonTested(productionPrototype.accessibility2);
     const skillClue = this.args.skill.clueStatus;
-    const clue = skillClue ? skillClue : 'Pas d\'indice';
+    const clue = skillClue ? skillClue : "Pas d'indice";
     const skillTimer = productionPrototype.timer;
     const timer = skillTimer ? `<tr><td>Timer</td><td>${skillTimer} s</td></tr>` : '';
     const classTuto = this.classTutorial;
@@ -83,7 +83,7 @@ export default class CellQuality extends Component {
       'Facilement Sp': 1,
       default: 0,
     };
-    return (quality[spoil] || quality['default']) / 3 * weight;
+    return ((quality[spoil] || quality['default']) / 3) * weight;
   }
 
   _responsiveWeight(responsive) {
@@ -94,7 +94,7 @@ export default class CellQuality extends Component {
       'Tablette/Smartphone': 2,
       default: 0,
     };
-    return (quality[responsive] || quality['default']) / 2 * weight;
+    return ((quality[responsive] || quality['default']) / 2) * weight;
   }
 
   _colorblindWeight(colorblind) {
@@ -116,7 +116,7 @@ export default class CellQuality extends Component {
       KO: 0,
       default: 0,
     };
-    return (quality[a11Y] || quality['default']) / 2 * weight;
+    return ((quality[a11Y] || quality['default']) / 2) * weight;
   }
 
   _clueWeight(clue) {
@@ -130,7 +130,7 @@ export default class CellQuality extends Component {
       archiver: 0,
       default: 0,
     };
-    return (quality[clue] || quality['default']) / 4 * weight;
+    return ((quality[clue] || quality['default']) / 4) * weight;
   }
 
   _isNonTested(skillDetail) {
@@ -144,7 +144,7 @@ export default class CellQuality extends Component {
     <td class="skill-cell quality-skill-cell">
       <LinkTo @route="authenticated.competence.quality.single" @model={{@skill}} class="skill-cell__link">
         <div class="quality {{this.qualityClassColor}}">
-          <div class=" quality-indication">
+          <div class="quality-indication">
             <span>{{@skill.name}}</span>
             <span>
               {{#if this.loadingChallenges}}
@@ -156,19 +156,14 @@ export default class CellQuality extends Component {
           </div>
           <div class="quality-icons">
             {{#unless this.loadingChallenges}}
-              <PixTooltip
-                @id="quality-tooltip"
-                @position="bottom"
-                @isLight={{true}}
-                @isWide={{true}}
-              >
+              <PixTooltip @id="quality-tooltip" @position="bottom" @isLight={{true}} @isWide={{true}}>
                 <:triggerElement>
-                  <PixIcon aria-describedby="quality-tooltip" @name="info"/>
+                  <PixIcon aria-describedby="quality-tooltip" @name="info" />
                 </:triggerElement>
                 <:tooltip>
                   <table class="quality-indication-details">
                     <tbody>
-                    {{this.popupBuild}}
+                      {{this.popupBuild}}
                     </tbody>
                   </table>
                 </:tooltip>
@@ -177,13 +172,12 @@ export default class CellQuality extends Component {
             {{#if this.classTutorial}}
               <i class="lab icon {{this.classTutorial}}"></i>
             {{/if}}
-            {{#if @skill.productionPrototype.timer }}
+            {{#if @skill.productionPrototype.timer}}
               <i class="time icon"></i>
             {{/if}}
           </div>
         </div>
       </LinkTo>
     </td>
-
   </template>
 }

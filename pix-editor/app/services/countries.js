@@ -29,5 +29,5 @@ export default class CountriesService extends Service {
     const countryList = [...standardCountries, ...nonStandardCountries];
 
     return countryList.sort((a, b) => a.name.localeCompare(b.name));
-  };
+  }
 }

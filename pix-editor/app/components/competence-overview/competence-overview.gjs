@@ -45,81 +45,90 @@ export default class CompetenceOverview extends Component {
   }
 
   <template>
-      <div class="competence-overview {{if this.multipanelManager.gridShouldBeMinimized "competence-overview--hidden" ""}}">
-        <div class="competence-overview-actions">
-          <ul class="competence-overview-actions__tabs">
-            <li class="active">En production</li>
-            <li>
-              <LinkTo @route="authenticated.competence.prototypes" @model={{@competenceOverview.airtableId}} @query={{hash view="workbench" languageFilter=@locale}}>
-                Atelier
-              </LinkTo>
-            </li>
-          </ul>
-          <div class="competence-overview-actions__buttons">
-            {{#if @locale}}
-              <PixButton
-                class="competence-overview-actions__fetch"
-                @size="small"
-                @isBorderVisible={{true}}
-                @variant="secondary"
-                @loadingColor="grey"
-                @triggerAction={{this.fetchTranslations}}
-              >
-                Récupérer les traductions
-              </PixButton>
-            {{/if}}
+    <div
+      class="competence-overview {{if this.multipanelManager.gridShouldBeMinimized 'competence-overview--hidden' ''}}"
+    >
+      <div class="competence-overview-actions">
+        <ul class="competence-overview-actions__tabs">
+          <li class="active">En production</li>
+          <li>
+            <LinkTo
+              @route="authenticated.competence.prototypes"
+              @model={{@competenceOverview.airtableId}}
+              @query={{hash view="workbench" languageFilter=@locale}}
+            >
+              Atelier
+            </LinkTo>
+          </li>
+        </ul>
+        <div class="competence-overview-actions__buttons">
+          {{#if @locale}}
             <PixButton
-              class="competence-overview-actions__refresh"
-              @iconBefore="refresh"
+              class="competence-overview-actions__fetch"
               @size="small"
               @isBorderVisible={{true}}
               @variant="secondary"
-              @triggerAction={{this.refresh}}
+              @loadingColor="grey"
+              @triggerAction={{this.fetchTranslations}}
             >
-              Actualiser
+              Récupérer les traductions
             </PixButton>
-          </div>
+          {{/if}}
+          <PixButton
+            class="competence-overview-actions__refresh"
+            @iconBefore="refresh"
+            @size="small"
+            @isBorderVisible={{true}}
+            @variant="secondary"
+            @triggerAction={{this.refresh}}
+          >
+            Actualiser
+          </PixButton>
         </div>
-        <div class="competence-overview-grid">
+      </div>
+      <div class="competence-overview-grid">
         {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
-          <div class="thematic" style={{(this.thematicStyle thematicOverview)}}>
+          <div class="thematic" style={{this.thematicStyle thematicOverview}}>
             <h3>{{thematicOverview.name}}</h3>
             {{#each thematicOverview.tubeOverviews as |tubeOverview|}}
-            <div class="tube">
-              <h4>{{tubeOverview.name}}</h4>
-              {{#each tubeOverview.skillOverviews as |skillOverview|}}
-                <CompetenceOverviewSkill
-                  @skillOverview={{skillOverview}}
-                  @locale={{@locale}}
-                  class="skill"
-                  @onSkillClicked={{this.updateSelectedSkillId}}
-                  @isActive={{eq skillOverview.id this.selectedSkillId}}
-                />
-              {{/each}}
-            </div>
+              <div class="tube">
+                <h4>{{tubeOverview.name}}</h4>
+                {{#each tubeOverview.skillOverviews as |skillOverview|}}
+                  <CompetenceOverviewSkill
+                    @skillOverview={{skillOverview}}
+                    @locale={{@locale}}
+                    class="skill"
+                    @onSkillClicked={{this.updateSelectedSkillId}}
+                    @isActive={{eq skillOverview.id this.selectedSkillId}}
+                  />
+                {{/each}}
+              </div>
             {{/each}}
           </div>
         {{/each}}
+      </div>
+      <div class="competence-overview-footer">
+        {{#if @locale}}
+          <ul class="competence-overview-legend">
+            <li>
+              <span class="circle green"></span>
+              L'acquis possède des épreuves validées
+            </li>
+            <li>
+              <span class="circle red"></span>
+              L'acquis ne possède pas d’épreuve
+            </li>
+            <li>
+              <span class="circle blue"></span>
+              L'acquis possède seulement des épreuves proposées
+            </li>
+          </ul>
+        {{/if}}
+        <div class="competence-overview-counts">
+          <p>Tubes : {{@competenceOverview.tubesCount}}</p>
+          <p>Acquix : {{@competenceOverview.skillsCount}}</p>
         </div>
-        <div class="competence-overview-footer">
-          {{#if @locale}}
-            <ul class="competence-overview-legend">
-              <li>
-                <span class="circle green"></span> L'acquis possède des épreuves validées
-              </li>
-              <li>
-                <span class="circle red"></span> L'acquis ne possède pas d’épreuve
-              </li>
-              <li>
-                <span class="circle blue"></span> L'acquis possède seulement des épreuves proposées
-              </li>
-            </ul>
-          {{/if}}
-          <div class="competence-overview-counts">
-            <p>Tubes : {{@competenceOverview.tubesCount}}</p>
-            <p>Acquix : {{@competenceOverview.skillsCount}}</p>
-          </div>
-        </div>
+      </div>
     </div>
   </template>
 }

@@ -32,10 +32,11 @@ export default class ChallengeModel extends Model {
   @attr spoil;
   @attr responsive;
   @attr({
-    defaultValue: function() {
+    defaultValue: function () {
       return [];
     },
-  }) locales;
+  })
+  locales;
 
   @attr alternativeLocales;
   @attr geography;
@@ -49,10 +50,11 @@ export default class ChallengeModel extends Model {
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
   @attr({
-    defaultValue: function() {
+    defaultValue: function () {
       return [];
     },
-  }) contextualizedFields;
+  })
+  contextualizedFields;
 
   @attr requireGafamWebsiteAccess;
   @attr isIncompatibleIpadCertif;
@@ -117,7 +119,7 @@ export default class ChallengeModel extends Model {
   }
 
   get isPrototype() {
-    return (this.genealogy === ChallengeModel.GENEALOGIES.PROTOTYPE);
+    return this.genealogy === ChallengeModel.GENEALOGIES.PROTOTYPE;
   }
 
   get isWorkbench() {
@@ -175,11 +177,14 @@ export default class ChallengeModel extends Model {
     const currentVersion = this.version;
     const skill = this.skill;
     if (skill) {
-      return skill.get('alternatives').filter((alternative) => {
-        return (alternative.version === currentVersion);
-      }).sort((a, b) => {
-        return a.alternativeVersion - b.alternativeVersion;
-      });
+      return skill
+        .get('alternatives')
+        .filter((alternative) => {
+          return alternative.version === currentVersion;
+        })
+        .sort((a, b) => {
+          return a.alternativeVersion - b.alternativeVersion;
+        });
     } else {
       return [];
     }
@@ -192,7 +197,7 @@ export default class ChallengeModel extends Model {
     const currentVersion = this.version;
     const skill = this.skill;
     if (skill) {
-      return skill.get('prototypes').find((prototype) => (prototype.version === currentVersion));
+      return skill.get('prototypes').find((prototype) => prototype.version === currentVersion);
     }
     return null;
   }
@@ -211,17 +216,12 @@ export default class ChallengeModel extends Model {
 
   get isTextBased() {
     const type = this.type;
-    return [
-      'QROC',
-      'QROCM',
-      'QROCM-ind',
-      'QROCM-dep',
-    ].includes(type);
+    return ['QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep'].includes(type);
   }
 
   get timerOn() {
     const timer = this.timer;
-    return (timer && timer > 0) ? true : false;
+    return timer && timer > 0 ? true : false;
   }
 
   set timerOn(value) {
@@ -298,15 +298,7 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = [
-      'skill',
-      'author',
-      'airtableId',
-      'updatedAt',
-      'archivedAt',
-      'madeObsoleteAt',
-      'validatedAt',
-    ];
+    const ignoredFields = ['skill', 'author', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -324,14 +316,7 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = [
-      'skill',
-      'airtableId',
-      'updatedAt',
-      'archivedAt',
-      'madeObsoleteAt',
-      'validatedAt',
-    ];
+    const ignoredFields = ['skill', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';
@@ -349,7 +334,9 @@ export default class ChallengeModel extends Model {
   }
 
   getNextAlternativeVersion() {
-    const currentVersions = this.alternatives.map((alternative) => parseInt(alternative.alternativeVersion)).filter(Number.isInteger);
+    const currentVersions = this.alternatives
+      .map((alternative) => parseInt(alternative.alternativeVersion))
+      .filter(Number.isInteger);
     return Math.max(...currentVersions, 0) + 1;
   }
 

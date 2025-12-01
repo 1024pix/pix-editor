@@ -19,7 +19,7 @@ export default class PopInSortingComponent extends Component {
 
   @action
   reorderItems(models) {
-    models.forEach((model, index) => model.index = index);
+    models.forEach((model, index) => (model.index = index));
   }
 
   @action
@@ -35,10 +35,11 @@ export default class PopInSortingComponent extends Component {
   }
 
   <template>
-    <PixModal data-test-sorting-pop-in-title
-              @title={{this.title}}
-              @onCloseButtonClick={{this.onDeny}}
-              @showModal={{@showModal}}
+    <PixModal
+      data-test-sorting-pop-in-title
+      @title={{this.title}}
+      @onCloseButtonClick={{this.onDeny}}
+      @showModal={{@showModal}}
     >
       <:content>
         <div data-test-sorting-pop-in-content class="sortable-content">
@@ -52,18 +53,17 @@ export default class PopInSortingComponent extends Component {
         </div>
       </:content>
       <:footer>
-        <PixButton data-test-sorting-pop-in-deny
-                  @backgroundColor="transparent-light"
-                  @isBorderVisible={{true}}
-                  @triggerAction={{this.onDeny}}
+        <PixButton
+          data-test-sorting-pop-in-deny
+          @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
+          @triggerAction={{this.onDeny}}
         >
-          <i class="remove icon" ></i>
-          {{t 'common.cancel'}}
+          <i class="remove icon"></i>
+          {{t "common.cancel"}}
         </PixButton>
-        <PixButton data-test-sorting-pop-in-approve
-                  @triggerAction={{this.onApprove}}
-        >
-          <i class="checkmark icon" ></i>
+        <PixButton data-test-sorting-pop-in-approve @triggerAction={{this.onApprove}}>
+          <i class="checkmark icon"></i>
           Ok
         </PixButton>
       </:footer>

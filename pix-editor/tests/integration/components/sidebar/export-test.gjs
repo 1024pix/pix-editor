@@ -1,0 +1,144 @@
+import { render, clickByText } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+import Service from '@ember/service';
+import SidebarExport from 'pixeditor/components/sidebar/export';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+
+module('Integration | Component | sidebar/export', function (hooks) {
+  setupIntlRenderingTest(hooks);
+
+  let loaderStartStub, loaderStopStub, notifyMessageStub, notifyErrorStub;
+
+  hooks.beforeEach(function () {
+    const loader = this.owner.lookup('service:loader');
+    class NotifyServiceStub extends Service {
+      message() {}
+      setTarget() {}
+      error() {}
+    }
+    this.owner.register('service:notify', NotifyServiceStub);
+    const notify = this.owner.lookup('service:notify');
+    loaderStartStub = sinon.stub(loader, 'start');
+    loaderStopStub = sinon.stub(loader, 'stop');
+    notifyMessageStub = sinon.stub(notify, 'message');
+    notifyErrorStub = sinon.stub(notify, 'error');
+
+    const productionSkill_1_1 = [
+      { name: 'skill1_1', level: 1 },
+      { name: 'skill1_3', level: 3 },
+      { name: 'skill1_6', level: 6 },
+    ];
+
+    const productionSkill_1_2 = [
+      { name: 'skill2_2', level: 2 },
+      { name: 'skill2_3', level: 3 },
+      { name: 'skill2_4', level: 4 },
+    ];
+
+    const productionSkill_2_1 = [
+      { name: 'skill3_1', level: 1 },
+      { name: 'skill3_5', level: 5 },
+      { name: 'skill3_6', level: 6 },
+    ];
+
+    const productionTubes_1_1 = {
+      name: 'tube1',
+      practicalTitleFr: 'practicalTitleFr_tube1',
+      practicalDescriptionFr: 'practicalDescriptionFr_tube1',
+      productionSkills: productionSkill_1_1,
+      rawSkills: productionSkill_1_1,
+    };
+
+    const productionTubes_1_2 = {
+      name: 'tube2',
+      practicalTitleFr: 'practicalTitleFr_tube2',
+      practicalDescriptionFr: 'practicalDescriptionFr_tube2',
+      productionSkills: productionSkill_1_2,
+      rawSkills: productionSkill_1_2,
+    };
+
+    const productionTubes_2_1 = {
+      name: 'tube3',
+      practicalTitleFr: 'practicalTitleFr_tube3',
+      practicalDescriptionFr: 'practicalDescriptionFr_tube3',
+      productionSkills: productionSkill_2_1,
+      rawSkills: productionSkill_2_1,
+    };
+
+    const theme1 = {
+      name: 'theme1',
+      productionTubes: [productionTubes_1_1, productionTubes_1_2],
+      rawTubes: [productionTubes_1_1, productionTubes_1_2],
+    };
+
+    const theme2 = {
+      name: 'theme2',
+      productionTubes: [productionTubes_2_1],
+      rawTubes: [productionTubes_2_1],
+    };
+
+    const competence1 = {
+      name: 'competence1',
+      sortedThemes: [theme1],
+      rawThemes: [theme1],
+    };
+
+    const competence2 = {
+      name: 'competence2',
+      sortedThemes: [theme2],
+      rawThemes: [theme2],
+    };
+
+    this.areas = [
+      {
+        name: 'area',
+        sortedCompetences: [competence1, competence2],
+        competences: [competence1, competence2],
+      },
+    ];
+  });
+
+  test('it should export formatted csv content', async function (assert) {
+    const self = this;
+
+    // given
+    const fileSaverServiceStub = this.owner.lookup('service:file-saver');
+    sinon.stub(fileSaverServiceStub, 'saveAs').resolves();
+
+    const expectedCsvContent = `"Domaine","Compétence","Thématique","Tube","Titre pratique","Description pratique","Liste des acquis"
+"area","competence1","theme1","tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
+"area","competence1","theme1","tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
+"area","competence2","theme2","tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`;
+
+    await render(<template><SidebarExport @areas={{self.areas}} /></template>);
+
+    // when
+    await clickByText('Exporter les sujets');
+
+    // then
+    assert.ok(fileSaverServiceStub.saveAs.calledWith(expectedCsvContent));
+    assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
+    assert.ok(notifyMessageStub.calledWith('Sujets exportés'));
+    assert.ok(loaderStopStub.calledOnce);
+  });
+
+  test('it should catch an error if export subject failed', async function (assert) {
+    const self = this;
+
+    // given
+    const fileSaverServiceStub = this.owner.lookup('service:file-saver');
+    sinon.stub(fileSaverServiceStub, 'saveAs').throws();
+
+    await render(<template><SidebarExport @areas={{self.areas}} /></template>);
+
+    // when
+    await clickByText('Exporter les sujets');
+
+    // then
+    assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
+    assert.ok(loaderStopStub.calledOnce);
+    assert.ok(notifyErrorStub.calledWith("Erreur lors de l'exportation des sujets"));
+  });
+});

@@ -44,7 +44,10 @@ export default class CompetenceModel extends Model {
 
     if (rawTubes === null) return [];
 
-    return sortBy(rawTubes.filter((tube) => tube.hasProductionSkills), 'index');
+    return sortBy(
+      rawTubes.filter((tube) => tube.hasProductionSkills),
+      'index',
+    );
   }
 
   get areaCode() {
@@ -72,15 +75,19 @@ export default class CompetenceModel extends Model {
   }
 
   get skillCount() {
-    return this.tubes.map((tube) => tube.skillCount).reduce((count, value) => {
-      return count + value;
-    }, 0);
+    return this.tubes
+      .map((tube) => tube.skillCount)
+      .reduce((count, value) => {
+        return count + value;
+      }, 0);
   }
 
   get productionSkillCount() {
-    return this.tubes.map((tube) => tube.productionSkillCount).reduce((count, value) => {
-      return count + value;
-    }, 0);
+    return this.tubes
+      .map((tube) => tube.productionSkillCount)
+      .reduce((count, value) => {
+        return count + value;
+      }, 0);
   }
 
   get workbenchTube() {

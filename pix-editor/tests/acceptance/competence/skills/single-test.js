@@ -8,12 +8,12 @@ import sinon from 'sinon';
 import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | skill | single', function(hooks) {
+module('Acceptance | skill | single', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let skill1, competence1, tube1, originalWindowConfirm;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     originalWindowConfirm = window.confirm;
 
     this.server.create('config', 'default');
@@ -21,10 +21,20 @@ module('Acceptance | skill | single', function(hooks) {
 
     const challenge1 = this.server.create('challenge', { id: 'recChallenge1', status: 'proposé', version: 1 });
     const challenge2 = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', version: 2 });
-    skill1 = this.server.create('skill', { id: 'skillId1', name: '@monAcquisÀMoi', challengeIds: [challenge1.id, challenge2.id], level: 1 });
+    skill1 = this.server.create('skill', {
+      id: 'skillId1',
+      name: '@monAcquisÀMoi',
+      challengeIds: [challenge1.id, challenge2.id],
+      level: 1,
+    });
     tube1 = this.server.create('tube', { id: 'recTube1', name: '@tube', rawSkillIds: [skill1.id] });
     const theme1 = this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tube1.id] });
-    competence1 = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: [theme1.id], rawTubeIds: [tube1.id] });
+    competence1 = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: [theme1.id],
+      rawTubeIds: [tube1.id],
+    });
     this.server.create('competence-overview', {
       id: `${competence1.pixId}:challenges-workbench`,
       thematicOverviews: [
@@ -56,16 +66,21 @@ module('Acceptance | skill | single', function(hooks) {
         },
       ],
     });
-    const area1 = this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: [competence1.id] });
+    const area1 = this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: [competence1.id],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: [area1.id] });
     return authenticateSession();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     window.confirm = originalWindowConfirm;
   });
 
-  test('close single', async function(assert) {
+  test('close single', async function (assert) {
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(true);
 
@@ -75,8 +90,8 @@ module('Acceptance | skill | single', function(hooks) {
     assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
 
-  module('#createSkill', function() {
-    test('it should create a new skill', async function(assert) {
+  module('#createSkill', function () {
+    test('it should create a new skill', async function (assert) {
       // given
       const screen = await visit(`/competence/${competence1.id}/skills?view=workbench`);
       const store = this.owner.lookup('service:store');
@@ -93,7 +108,7 @@ module('Acceptance | skill | single', function(hooks) {
       const frOption = await screen.findByRole('option', { name: 'France' });
       await frOption.click();
 
-      const saveButton = await screen.getByRole('button', { name: 'Enregistrer l\'acquis @tube2' });
+      const saveButton = await screen.getByRole('button', { name: "Enregistrer l'acquis @tube2" });
       await saveButton.click();
 
       // then
@@ -101,10 +116,13 @@ module('Acceptance | skill | single', function(hooks) {
       const newSkill = tube.rawSkillsArray.find((skill) => skill.description === skillDescription);
 
       assert.ok(newSkill);
-      assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/new/recTube1/2?leftMaximized=true&view=workbench`);
+      assert.strictEqual(
+        currentURL(),
+        `/competence/${competence1.id}/skills/new/recTube1/2?leftMaximized=true&view=workbench`,
+      );
     });
 
-    test('it should create a new skill version', async function(assert) {
+    test('it should create a new skill version', async function (assert) {
       // given
       const screen = await visit(`/competence/${competence1.id}/skills?view=workbench`);
       const store = this.owner.lookup('service:store');
@@ -117,20 +135,25 @@ module('Acceptance | skill | single', function(hooks) {
       const descriptionInput = await screen.findByLabelText('Description');
       await fillIn(descriptionInput, skillDescription);
 
-      const saveButton = await screen.getByRole('button', { name: 'Enregistrer l\'acquis @tube1' });
+      const saveButton = await screen.getByRole('button', { name: "Enregistrer l'acquis @tube1" });
       await saveButton.click();
 
       // then
       const tube = await store.peekRecord('tube', 'recTube1');
-      const newSkillVersion = tube.rawSkillsArray.find((skill) => skill.description === skillDescription && skill.level === 1);
+      const newSkillVersion = tube.rawSkillsArray.find(
+        (skill) => skill.description === skillDescription && skill.level === 1,
+      );
 
       assert.ok(newSkillVersion);
-      assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/new/recTube1/1?leftMaximized=true&view=workbench`);
+      assert.strictEqual(
+        currentURL(),
+        `/competence/${competence1.id}/skills/new/recTube1/1?leftMaximized=true&view=workbench`,
+      );
     });
   });
 
-  module('#duplicateToLocation', function() {
-    test('it should duplicate a skill and his challenges to new location', async function(assert) {
+  module('#duplicateToLocation', function () {
+    test('it should duplicate a skill and his challenges to new location', async function (assert) {
       // given
       const SKILL_LEVEL_CHOOSE = 4;
       const store = this.owner.lookup('service:store');
@@ -150,12 +173,15 @@ module('Acceptance | skill | single', function(hooks) {
       // then
       assert.ok(newSkill);
       assert.strictEqual(newSkill.challenges.length, 2);
-      assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/${newSkill.id}?leftMaximized=true&view=workbench`);
+      assert.strictEqual(
+        currentURL(),
+        `/competence/${competence1.id}/skills/${newSkill.id}?leftMaximized=true&view=workbench`,
+      );
     });
   });
 
-  module('#Modify skill', function() {
-    test('it should modify skill and proto', async function(assert) {
+  module('#Modify skill', function () {
+    test('it should modify skill and proto', async function (assert) {
       // given
       const challengeProto = this.server.create('challenge', {
         id: 'recChallengeProto',
@@ -197,7 +223,7 @@ module('Acceptance | skill | single', function(hooks) {
       await clickByText('Responsive');
       await click(await screen.findByRole('option', { name: 'Non' }));
       await waitForSelectToBeClosed(screen);
-      const saveButton = screen.getByRole('button', { name: 'Enregistrer l\'acquis @monAcquisÀMoi' });
+      const saveButton = screen.getByRole('button', { name: "Enregistrer l'acquis @monAcquisÀMoi" });
       await click(saveButton);
       await clickByText('Valider');
       // then
@@ -212,7 +238,7 @@ module('Acceptance | skill | single', function(hooks) {
 
       assert.strictEqual(screen.getByLabelText('Responsive').childNodes[3].textContent, 'Non');
       assert.strictEqual(screen.getByLabelText('Description').value, skillDescription);
-      assert.dom(screen.queryByRole('button', { name: 'Enregistrer l\'acquis @monAcquisÀMoi' })).doesNotExist();
+      assert.dom(screen.queryByRole('button', { name: "Enregistrer l'acquis @monAcquisÀMoi" })).doesNotExist();
     });
   });
 });

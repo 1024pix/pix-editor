@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
+module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -22,7 +22,12 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     const skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: ['recTheme1'],
+      rawTubeIds: ['recTube1'],
+    });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
       thematicOverviews: [
@@ -54,15 +59,20 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
         },
       ],
     });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('adding attachments', async function(assert) {
+  test('adding attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -79,7 +89,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     const file = new File([], 'challenge-attachment.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-attachment] input', file);
 
-    await runTask(this, async () => { }, 400);
+    await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -93,10 +103,10 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.strictEqual(attachments.length, 1);
   });
 
-  test('replace attachment', async function(assert) {
+  test('replace attachment', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -104,8 +114,12 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     const attachmentA = new File([], 'challenge-attachmentA.png', { type: 'image/png' });
     const attachmentB = new File([], 'challenge-attachmentB.png', { type: 'image/png' });
     const uploadFileStub = sinon.stub(storageService, 'uploadFile');
-    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentA }), filename: 'challenge-attachmentA.png', isAttachment: true }).resolves({ url: 'data-attachmentA:,', filename: 'attachment-nameA' });
-    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentB }), filename: 'challenge-attachmentB.png', isAttachment: true }).resolves({ url: 'data-attachmentB:,', filename: 'attachment-nameB' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: attachmentA }), filename: 'challenge-attachmentA.png', isAttachment: true })
+      .resolves({ url: 'data-attachmentA:,', filename: 'attachment-nameA' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: attachmentB }), filename: 'challenge-attachmentB.png', isAttachment: true })
+      .resolves({ url: 'data-attachmentB:,', filename: 'attachment-nameB' });
 
     // when
     // adding attachmentA
@@ -115,7 +129,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
     await selectFiles('[data-test-file-input-attachment] input', attachmentA);
-    await runTask(this, async () => { }, 400);
+    await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -123,7 +137,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
     await selectFiles('[data-test-file-input-attachment] input', attachmentB);
-    await runTask(this, async () => { }, 400);
+    await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -138,16 +152,21 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.strictEqual(attachments[0].url, 'data-attachmentB:,');
   });
 
-  test('delete attachment', async function(assert) {
+  test('delete attachment', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'attachment',
+      challengeId: 'recChallenge1',
+      filename: 'attachment.png',
+    });
 
     // when
     await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -160,16 +179,21 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('cancel adding an attachment', async function(assert) {
+  test('cancel adding an attachment', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge1', filename: 'attachment.png' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'attachment',
+      challengeId: 'recChallenge1',
+      filename: 'attachment.png',
+    });
 
     // when
     await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     await click(find('[data-test-cancel-challenge-button]'));
 
     const store = this.owner.lookup('service:store');

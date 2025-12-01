@@ -29,9 +29,16 @@ export default class ChallengeRoute extends Route {
         .sort(byAlternativeVersion)
         .map((challenge) => challenge.getChallengeForLocale(locale)),
     );
-    const challengeLocale = challengeLocales.find((challengeLocale) => challengeLocale?.localizedChallengeValue?.id === localized_challenge_id);
+    const challengeLocale = challengeLocales.find(
+      (challengeLocale) => challengeLocale?.localizedChallengeValue?.id === localized_challenge_id,
+    );
     if (!challengeLocale) {
-      return this.router.transitionTo('authenticated.v2.competence-overview.challenges', competence_id, overview, skill_id);
+      return this.router.transitionTo(
+        'authenticated.v2.competence-overview.challenges',
+        competence_id,
+        overview,
+        skill_id,
+      );
     }
     const localizedChallenge = challengeLocale.localizedChallengeValue;
     await challengeLocale.challenge.attachments;
@@ -42,8 +49,8 @@ export default class ChallengeRoute extends Route {
   @action
   async willTransition(transition) {
     const edition = this.controllerFor('authenticated.v2.localized-challenge').edition;
-    if (edition && (!transition.to.find((route) => route.name === this.routeName))) {
-      if (confirm('Êtes vous sur de vouloir quitter l\'edition de l\'épreuve?')) {
+    if (edition && !transition.to.find((route) => route.name === this.routeName)) {
+      if (confirm("Êtes vous sur de vouloir quitter l'edition de l'épreuve?")) {
         this.controllerFor('authenticated.v2.localized-challenge').cancelEdit();
         const { localizedChallenge } = this.controllerFor('authenticated.v2.localized-challenge').model;
         await rollBack(localizedChallenge);

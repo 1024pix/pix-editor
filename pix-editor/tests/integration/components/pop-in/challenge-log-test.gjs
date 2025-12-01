@@ -5,12 +5,12 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | popin-challenge-log', function(hooks) {
+module('Integration | Component | popin-challenge-log', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let challenge, closeAction;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const store = this.owner.lookup('service:store');
 
     const note = store.createRecord('note', {
@@ -29,9 +29,13 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     closeAction = sinon.stub();
   });
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     // when
-    await render(<template><PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}} @showModal={{true}}/></template>);
+    await render(
+      <template>
+        <PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}} @showModal={{true}} />
+      </template>,
+    );
 
     // then
     assert.dom('.pix-modal').exists();

@@ -26,17 +26,16 @@ function routes() {
     if (request.queryParams.locale) {
       id += `:${request.queryParams.locale}`;
     }
-    const competenceOverview = schema.competenceOverviews
-      .where((competenceOverview) => competenceOverview.id === id)
+    const competenceOverview = schema.competenceOverviews.where((competenceOverview) => competenceOverview.id === id)
       .models[0];
     if (!competenceOverview) return;
     return schema.competenceOverviews.find(competenceOverview.id);
   });
 
   this.get('/competences/:id/overviews/challenges-workbench', (schema, request) => {
-    const competenceOverview = schema.competenceOverviews
-      .where((competenceOverview) => competenceOverview.id === `${request.params.id}:challenges-workbench`)
-      .models[0];
+    const competenceOverview = schema.competenceOverviews.where(
+      (competenceOverview) => competenceOverview.id === `${request.params.id}:challenges-workbench`,
+    ).models[0];
     if (!competenceOverview) return;
     return schema.competenceOverviews.find(competenceOverview.id);
   });
@@ -53,9 +52,11 @@ function routes() {
   this.get('/areas');
   this.post('/areas');
 
-  this.get('/attachments', function(schema, request) {
+  this.get('/attachments', function (schema, request) {
     const { 'filter[localizedChallengeId]': localizedChallengeId } = request.queryParams;
-    return schema.attachments.all().filter((attachment) => [localizedChallengeId].includes(attachment.localizedChallengeId));
+    return schema.attachments
+      .all()
+      .filter((attachment) => [localizedChallengeId].includes(attachment.localizedChallengeId));
   });
   this.get('/attachments/:id');
   this.post('/attachments');
@@ -65,7 +66,7 @@ function routes() {
   this.get('/competences');
   this.get('/competences/:id');
   this.patch('/competences/:id');
-  this.post('/competences', function(schema) {
+  this.post('/competences', function (schema) {
     const competence = this.normalizedRequestAttrs();
     const area = schema.areas.find(competence.areaId);
     const areaCompetences = schema.competences.where({ areaId: competence.areaId });
@@ -156,7 +157,7 @@ function routes() {
     return createdSkill;
   });
 
-  this.post('/skills/clone', function(schema, request) {
+  this.post('/skills/clone', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const level = attributes.level;
     const skillToClone = schema.skills.findBy({ pixId: attributes.skillIdToClone });
@@ -278,7 +279,7 @@ function routes() {
   });
 
   // TODO extraire le contenu des configs liées aux missions dans un fichier dédié
-  this.get('/missions', function(schema, request) {
+  this.get('/missions', function (schema, request) {
     const queryParams = request.queryParams;
     const { 'filter[statuses]': statuses } = queryParams;
     let allmissionSummaries;
@@ -301,14 +302,14 @@ function routes() {
     return json;
   });
 
-  this.post('/missions', function(schema, request) {
+  this.post('/missions', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const mission = schema.create('mission', { ...attributes });
     schema.create('mission-summary', { id: mission.id, ...attributes });
     return mission;
   });
 
-  this.get('/missions/:id', function(schema, request) {
+  this.get('/missions/:id', function (schema, request) {
     const id = request.params.id;
     const mission = schema.missions.find(id);
     if (mission) return mission;
@@ -323,18 +324,22 @@ function routes() {
     });
   });
 
-  this.patch('/missions/:id', function(schema, request) {
+  this.patch('/missions/:id', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     if (attributes.name === 'will trigger error') {
-      return new Response(400, {}, {
-        errors: [
-          {
-            status: '400',
-            title: 'Bad Request',
-            detail: 'La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.',
-          },
-        ],
-      });
+      return new Response(
+        400,
+        {},
+        {
+          errors: [
+            {
+              status: '400',
+              title: 'Bad Request',
+              detail: 'La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.',
+            },
+          ],
+        },
+      );
     }
     const id = request.params.id;
     const mission = schema.missions.find(id);
@@ -343,13 +348,9 @@ function routes() {
     return mission;
   });
 
-  this.get('/static-course-summaries', function(schema, request) {
+  this.get('/static-course-summaries', function (schema, request) {
     const queryParams = request.queryParams;
-    const {
-      'filter[isActive]': isActiveFilter,
-      'filter[name]': nameFilter,
-      'filter[tagIds]': tagFilter,
-    } = queryParams;
+    const { 'filter[isActive]': isActiveFilter, 'filter[name]': nameFilter, 'filter[tagIds]': tagFilter } = queryParams;
     let allStaticCourseSummaries;
     if (isActiveFilter === '') {
       allStaticCourseSummaries = schema.staticCourseSummaries.all().models;
@@ -376,7 +377,10 @@ function routes() {
     const pagination = _getPaginationFromQueryParams(queryParams);
     const paginatedStaticCourseSummaries = _applyPagination(allStaticCourseSummaries, pagination);
 
-    const json = this.serialize({ modelName: 'static-course-summary', models: paginatedStaticCourseSummaries }, 'static-course-summary');
+    const json = this.serialize(
+      { modelName: 'static-course-summary', models: paginatedStaticCourseSummaries },
+      'static-course-summary',
+    );
     json.meta = {
       page: pagination.page,
       pageSize: pagination.pageSize,
@@ -390,7 +394,7 @@ function routes() {
 
   this.get('/static-course-tags');
 
-  this.post('/static-courses', function(schema, request) {
+  this.post('/static-courses', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const tagIds = attributes['tag-ids'];
     const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
@@ -403,7 +407,7 @@ function routes() {
     });
   });
 
-  this.put('/static-courses/:id', function(schema, request) {
+  this.put('/static-courses/:id', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const tagIds = attributes['tag-ids'];
     const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
@@ -417,7 +421,7 @@ function routes() {
     return staticCourse;
   });
 
-  this.put('/static-courses/:id/deactivate', function(schema, request) {
+  this.put('/static-courses/:id/deactivate', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
@@ -427,7 +431,7 @@ function routes() {
     return staticCourse;
   });
 
-  this.put('/static-courses/:id/reactivate', function(schema, request) {
+  this.put('/static-courses/:id/reactivate', function (schema, request) {
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
       isActive: true,
@@ -436,18 +440,15 @@ function routes() {
     return staticCourse;
   });
 
-  this.get('/tags', function(schema, request) {
+  this.get('/tags', function (schema, request) {
     const { 'filter[title]': title } = request.queryParams;
     return schema.tags.all().filter((tag) => tag.title.toLowerCase().includes(title.toLowerCase()));
   });
   this.get('/tags/:id');
   this.post('/tags');
 
-  this.get('/tutorials', function(schema, request) {
-    const {
-      'filter[title]': title,
-      'filter[source]': source,
-    } = request.queryParams;
+  this.get('/tutorials', function (schema, request) {
+    const { 'filter[title]': title, 'filter[source]': source } = request.queryParams;
     if (title) {
       return schema.tutorials.all().filter((tutorial) => tutorial.title.toLowerCase().includes(title.toLowerCase()));
     }
@@ -459,7 +460,7 @@ function routes() {
 
   this.get('/whitelisted-urls');
   this.delete('/whitelisted-urls/:id');
-  this.patch('/whitelisted-urls/:id', function(schema, request) {
+  this.patch('/whitelisted-urls/:id', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const whitelistedUrl = schema.whitelistedUrls.find(request.params.id);
     whitelistedUrl.update({
@@ -474,7 +475,7 @@ function routes() {
     });
     return whitelistedUrl;
   });
-  this.post('/whitelisted-urls', function(schema, request) {
+  this.post('/whitelisted-urls', function (schema, request) {
     const whitelistedUrl = JSON.parse(request.requestBody).data.attributes;
     return schema.create('whitelisted-url', {
       url: whitelistedUrl.url,
@@ -488,7 +489,7 @@ function routes() {
     });
   });
 
-  this.post('/phrase/download', function() {
+  this.post('/phrase/download', function () {
     return { ok: 'cool' };
   });
 }

@@ -7,20 +7,20 @@ import { module, test } from 'qunit';
 import { waitForSelectToBeClosed } from '../../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Challenge', function(hooks) {
+module('Acceptance | Modify-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     return authenticateSession();
   });
 
-  module('modifying a draft challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying a draft challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -35,7 +35,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         genealogy: 'Prototype 1',
         version: 1,
         status: 'proposé',
-        instruction: 'Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        instruction:
+          "Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         geography: 'FR',
@@ -57,10 +58,23 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         instruction: 'Cliquer sur instructions de la décli pour interagir avec',
         geography: 'FR',
       });
-      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1', 'recChallenge2'], status: 'en construction' });
+      const skill = this.server.create('skill', {
+        id: 'recSkill1',
+        level: 2,
+        name: '@trululu2',
+        challengeIds: ['recChallenge1', 'recChallenge2'],
+        status: 'en construction',
+      });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
       const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
+        id: 'recCompetence1.1',
+        code: '1',
+        title: 'titre compétence',
+        pixId: 'pixId recCompetence1.1',
+        rawThemeIds: ['recTheme1'],
+        rawTubeIds: ['recTube1'],
+      });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
@@ -96,26 +110,36 @@ module('Acceptance | Modify-Challenge', function(hooks) {
           },
         ],
       });
-      this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+      this.server.create('area', {
+        id: 'recArea1',
+        name: '1. Information et données',
+        code: '1',
+        competenceIds: ['recCompetence1.1'],
+      });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes when challenge is a prototype', async function(assert) {
+    test('can modify attributes when challenge is a prototype', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
       await clickByText('@trululu2');
-      await clickByText('Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText(
+        "Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
+      );
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
+      await fillByLabel(
+        "URLs externes nécessaires à la résolution de l'épreuve",
+        ' https://mon-url.com \n mon-autre-url.com',
+      );
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
       await clickByText('Incompatible iPad certif');
       await clickByText('Sans validation (Pix Junior)');
-      await clickByText('Validation par l\'embed (Pix Junior)');
+      await clickByText("Validation par l'embed (Pix Junior)");
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
       await waitForSelectToBeClosed(screen);
@@ -152,28 +176,35 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
-      assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
+      assert.true(screen.getByRole('checkbox', { name: "Validation par l'embed (Pix Junior)" }).checked);
     });
 
-    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function(assert) {
+    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function (assert) {
       await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
       await clickByText('@trululu2');
-      await clickByText('Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText(
+        "Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
+      );
       await clickByText('Déclinaisons >>');
       await clickByText('Cliquer sur instructions de la décli pour interagir avec');
       await click('[data-test-modify-challenge-button="recChallenge2"]');
-      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
+      await fillByLabel(
+        "URLs externes nécessaires à la résolution de l'épreuve",
+        ' https://mon-url.com \n mon-autre-url.com',
+      );
       assert.dom(find('[data-test-accessibility1-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-accessibility2-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-spoil-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-responsive-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-deaf-and-hard-of-hearing-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-is-awareness-challenge-challenge-id="recChallenge2"]')).doesNotExist();
-      assert.dom(find('[data-test-require-gafam-website-access-challenge-challenge-id="recChallenge2"]')).doesNotExist();
+      assert
+        .dom(find('[data-test-require-gafam-website-access-challenge-challenge-id="recChallenge2"]'))
+        .doesNotExist();
       assert.dom(find('[data-test-to-rephrase-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-is-incompatible-ipad-certif-challenge-id="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-no-validation-needed-checkbox="recChallenge2"]')).doesNotExist();
@@ -187,8 +218,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying a production challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying a production challenge', function (hooks) {
+    hooks.beforeEach(function () {
       const prototype = this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -202,15 +233,29 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         toRephrase: false,
         genealogy: 'Prototype 1',
         status: 'validé',
-        instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        instruction:
+          "Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         geography: 'FR',
       });
-      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'actif' });
+      const skill = this.server.create('skill', {
+        id: 'recSkill1',
+        level: 2,
+        name: '@trululu2',
+        challengeIds: ['recChallenge1'],
+        status: 'actif',
+      });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
       const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
+        id: 'recCompetence1.1',
+        code: '1',
+        title: 'titre compétence',
+        pixId: 'pixId recCompetence1.1',
+        rawThemeIds: ['recTheme1'],
+        rawTubeIds: ['recTube1'],
+      });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [
@@ -242,20 +287,28 @@ module('Acceptance | Modify-Challenge', function(hooks) {
           },
         ],
       });
-      this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+      this.server.create('area', {
+        id: 'recArea1',
+        name: '1. Information et données',
+        code: '1',
+        competenceIds: ['recCompetence1.1'],
+      });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function(assert) {
+    test('can modify attributes', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('@trululu2');
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
+      await fillByLabel(
+        "URLs externes nécessaires à la résolution de l'épreuve",
+        ' https://mon-url.com \n mon-autre-url.com',
+      );
       await clickByText('Sans validation (Pix Junior)');
-      await clickByText('Validation par l\'embed (Pix Junior)');
+      await clickByText("Validation par l'embed (Pix Junior)");
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
@@ -288,7 +341,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.deepEqual(challenge.geography, 'JP');
     });
 
-    test('modify a challenge\'s urlsToConsult when playing around with the field', async function(assert) {
+    test("modify a challenge's urlsToConsult when playing around with the field", async function (assert) {
       // when
       const store = this.owner.lookup('service:store');
 
@@ -300,9 +353,12 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
 
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
+      await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
 
-      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', 'https://mon-url.com\n mon-autre-url.com');
+      await fillByLabel(
+        "URLs externes nécessaires à la résolution de l'épreuve",
+        'https://mon-url.com\n mon-autre-url.com',
+      );
 
       // then
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
@@ -317,8 +373,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying an archived challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying an archived challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -332,15 +388,29 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         toRephrase: false,
         genealogy: 'Prototype 1',
         status: 'archivé',
-        instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        instruction:
+          "Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         geography: 'FR',
       });
-      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
+      const skill = this.server.create('skill', {
+        id: 'recSkill1',
+        level: 2,
+        name: '@trululu2',
+        challengeIds: ['recChallenge1'],
+        status: 'archivé',
+      });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
       const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
+        id: 'recCompetence1.1',
+        code: '1',
+        title: 'titre compétence',
+        pixId: 'pixId recCompetence1.1',
+        rawThemeIds: ['recTheme1'],
+        rawTubeIds: ['recTube1'],
+      });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
@@ -376,22 +446,32 @@ module('Acceptance | Modify-Challenge', function(hooks) {
           },
         ],
       });
-      this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+      this.server.create('area', {
+        id: 'recArea1',
+        name: '1. Information et données',
+        code: '1',
+        competenceIds: ['recCompetence1.1'],
+      });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify attributes', async function(assert) {
+    test('can modify attributes', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
       await clickByText('@trululu2');
-      await clickByText('Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText(
+        "Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
+      );
       await clickByText('Modifier');
-      await clickByText('Ajouter des URLs nécessaires à la résolution de l\'épreuve');
-      await fillByLabel('URLs externes nécessaires à la résolution de l\'épreuve', ' https://mon-url.com \n mon-autre-url.com');
+      await clickByText("Ajouter des URLs nécessaires à la résolution de l'épreuve");
+      await fillByLabel(
+        "URLs externes nécessaires à la résolution de l'épreuve",
+        ' https://mon-url.com \n mon-autre-url.com',
+      );
       await clickByText('Sans validation (Pix Junior)');
-      await clickByText('Validation par l\'embed (Pix Junior)');
+      await clickByText("Validation par l'embed (Pix Junior)");
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
       await clickByText('Formulation à revoir');
@@ -432,8 +512,8 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     });
   });
 
-  module('modifying an obsolete challenge', function(hooks) {
-    hooks.beforeEach(function() {
+  module('modifying an obsolete challenge', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('challenge', {
         id: 'recChallenge1',
         accessibility1: 'RAS',
@@ -447,15 +527,29 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         toRephrase: false,
         genealogy: 'Prototype 1',
         status: 'périmé',
-        instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        instruction:
+          "Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
         geography: 'FR',
       });
-      const skill = this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'archivé' });
+      const skill = this.server.create('skill', {
+        id: 'recSkill1',
+        level: 2,
+        name: '@trululu2',
+        challengeIds: ['recChallenge1'],
+        status: 'archivé',
+      });
       const tube = this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
       const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-      const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+      const competence = this.server.create('competence', {
+        id: 'recCompetence1.1',
+        code: '1',
+        title: 'titre compétence',
+        pixId: 'pixId recCompetence1.1',
+        rawThemeIds: ['recTheme1'],
+        rawTubeIds: ['recTube1'],
+      });
       this.server.create('competence-overview', {
         id: `${competence.pixId}:challenges-production`,
         thematicOverviews: [],
@@ -491,17 +585,24 @@ module('Acceptance | Modify-Challenge', function(hooks) {
           },
         ],
       });
-      this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+      this.server.create('area', {
+        id: 'recArea1',
+        name: '1. Information et données',
+        code: '1',
+        competenceIds: ['recCompetence1.1'],
+      });
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('cannot modify an obsolete challenge', async function(assert) {
+    test('cannot modify an obsolete challenge', async function (assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
       await clickByText('@trululu2');
-      await clickByText('Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText(
+        "Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l'acquis",
+      );
 
       assert.dom(screen.queryByText('Modifier')).doesNotExist();
     });

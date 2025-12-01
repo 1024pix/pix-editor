@@ -12,7 +12,9 @@ export default class StatisticsRoute extends Route {
     const getCompetences = model.map((area) => area.competences);
     return Promise.all(getCompetences)
       .then((areaCompetences) => {
-        const getTubes = areaCompetences.map((competences) => competences.map((competence) => competence.rawTubes)).flat();
+        const getTubes = areaCompetences
+          .map((competences) => competences.map((competence) => competence.rawTubes))
+          .flat();
         return Promise.all(getTubes);
       })
       .then((competenceTubes) => {

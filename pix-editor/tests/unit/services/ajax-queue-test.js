@@ -2,16 +2,16 @@ import { setupTest } from 'ember-qunit';
 import ENV from 'pixeditor/config/environment';
 import { module, test } from 'qunit';
 
-module('Unit | Service | ajax-queue', function(hooks) {
+module('Unit | Service | ajax-queue', function (hooks) {
   setupTest(hooks);
   let ajaxQueueService;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     ajaxQueueService = this.owner.lookup('service:ajax-queue');
   });
 
-  module('add()', function() {
-    test('should execute the passed job', async function(assert) {
+  module('add()', function () {
+    test('should execute the passed job', async function (assert) {
       // given
       const expectedValue = 1;
 
@@ -24,9 +24,10 @@ module('Unit | Service | ajax-queue', function(hooks) {
       assert.strictEqual(actualValue, expectedValue);
     });
 
-    test('should execute concurrently as many jobs as indicated in settings file', async function(assert) {
+    test('should execute concurrently as many jobs as indicated in settings file', async function (assert) {
       // given
-      let counter = 0, maxCounter = 0;
+      let counter = 0,
+        maxCounter = 0;
       async function job() {
         counter++;
         maxCounter = Math.max(counter, maxCounter);
@@ -35,7 +36,7 @@ module('Unit | Service | ajax-queue', function(hooks) {
         return counter;
       }
       const maxJobsInQueue = ENV.APP.MAX_CONCURRENT_AJAX_CALLS;
-      for (let i = 0; i < (2 * maxJobsInQueue); ++i) {
+      for (let i = 0; i < 2 * maxJobsInQueue; ++i) {
         ajaxQueueService.add(job);
       }
 

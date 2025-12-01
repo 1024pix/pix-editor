@@ -1,0 +1,28 @@
+import { concat } from '@ember/helper';
+import { on } from '@ember/modifier';
+<template>
+  <div class={{concat "challenge-header " @class}} data-testid="challenge-header">
+    <div class="ui menu">
+      <div class="ui left menu">
+        {{yield to="actions"}}
+      </div>
+      <div class="item header">
+        {{yield}}
+      </div>
+      <div class="ui right menu">
+        {{#if @maximized}}
+          <button class="ui icon button item" {{on "click" @minimize}} type="button"><i
+              class="window minimize icon"
+            ></i></button>
+        {{else}}
+          <button class="ui icon button item" {{on "click" @maximize}} type="button"><i
+              class="window maximize outline icon"
+            ></i></button>
+        {{/if}}
+        <button class="ui icon button item" {{on "click" @close}} type="button"><i
+            class="icon window close"
+          ></i></button>
+      </div>
+    </div>
+  </div>
+</template>
