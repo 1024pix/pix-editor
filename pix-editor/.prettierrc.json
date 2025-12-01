@@ -1,0 +1,6 @@
+{
+  "printWidth": 120,
+  "singleQuote": true,
+  "templateSingleQuote": false,
+  "plugins": ["prettier-plugin-ember-template-tag"]
+}
