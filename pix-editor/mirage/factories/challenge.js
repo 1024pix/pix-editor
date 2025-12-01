@@ -1,7 +1,6 @@
 import { Factory } from 'miragejs';
 
 export default Factory.extend({
-
   instruction: 'instructions',
   type: 'QCU',
   format: 'format',

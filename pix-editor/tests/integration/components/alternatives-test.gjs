@@ -1,17 +1,18 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
+import Alternatives from 'pixeditor/components/alternatives';
+
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
-module('Integration | Component | alternatives', function(hooks) {
+module('Integration | Component | alternatives', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let newAlternativeStub, store, alternatives;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     alternatives = [
       store.createRecord('challenge', {
@@ -53,22 +54,26 @@ module('Integration | Component | alternatives', function(hooks) {
 
     newAlternativeStub = sinon.stub();
 
-    this.set('challenge', challenge);
-    this.set('newAlternative', newAlternativeStub);
+    this.challenge = challenge;
+    this.newAlternative = newAlternativeStub;
   });
 
-  test('displays challenge\'s alternatives', async function(assert) {
+  test("displays challenge's alternatives", async function (assert) {
+    const self = this;
+
     // when
-    const screen = await render(hbs`
-      <Alternatives
-        @challenge={{this.challenge}}
-        @maximizeRight={{false}}
-        @mayCreateAlternative={{false}}
-        @newAlternative={{this.newAlternative}}
-        @rightMaximized={{false}}
-        @size="full"
-      />
-    `);
+    const screen = await render(
+      <template>
+        <Alternatives
+          @challenge={{self.challenge}}
+          @maximizeRight={{false}}
+          @mayCreateAlternative={{false}}
+          @newAlternative={{self.newAlternative}}
+          @rightMaximized={{false}}
+          @size="full"
+        />
+      </template>,
+    );
 
     assert.dom(screen.queryByText('ceci est une alternative validée')).exists();
     assert.dom(screen.queryByText('ceci est une alternative proposée')).exists();
@@ -77,18 +82,22 @@ module('Integration | Component | alternatives', function(hooks) {
     assert.dom(screen.queryByRole('button', { name: 'Nouvelle déclinaison' })).doesNotExist();
   });
 
-  test('displays obsolete alternatives when checked', async function(assert) {
+  test('displays obsolete alternatives when checked', async function (assert) {
+    const self = this;
+
     // when
-    const screen = await render(hbs`
-      <Alternatives
-        @challenge={{this.challenge}}
-        @maximizeRight={{false}}
-        @mayCreateAlternative={{false}}
-        @newAlternative={{this.newAlternative}}
-        @rightMaximized={{false}}
-        @size="full"
-      />
-    `);
+    const screen = await render(
+      <template>
+        <Alternatives
+          @challenge={{self.challenge}}
+          @maximizeRight={{false}}
+          @mayCreateAlternative={{false}}
+          @newAlternative={{self.newAlternative}}
+          @rightMaximized={{false}}
+          @size="full"
+        />
+      </template>,
+    );
 
     await click(await screen.getByRole('checkbox', { name: 'Afficher les déclinaisons périmées' }));
 
@@ -98,19 +107,23 @@ module('Integration | Component | alternatives', function(hooks) {
   });
 
   ['validé', 'proposé'].forEach((status) => {
-    test(`alternative button exist for alternative status ${status}`, async function(assert) {
+    test(`alternative button exist for alternative status ${status}`, async function (assert) {
+      const self = this;
+
       // when
-      this.set('challenge', alternatives.find((challenge) => challenge.status === status));
-      const screen = await render(hbs`
-      <Alternatives
-        @challenge={{this.challenge}}
-        @maximizeRight={{false}}
-        @mayCreateAlternative={{true}}
-        @newAlternative={{this.newAlternative}}
-        @rightMaximized={{false}}
-        @size="full"
-      />
-    `);
+      this.challenge = alternatives.find((challenge) => challenge.status === status);
+      const screen = await render(
+        <template>
+          <Alternatives
+            @challenge={{self.challenge}}
+            @maximizeRight={{false}}
+            @mayCreateAlternative={{true}}
+            @newAlternative={{self.newAlternative}}
+            @rightMaximized={{false}}
+            @size="full"
+          />
+        </template>,
+      );
 
       await click(screen.getByRole('button', { name: 'Nouvelle déclinaison' }));
       sinon.assert.calledOnce(newAlternativeStub);
@@ -118,19 +131,23 @@ module('Integration | Component | alternatives', function(hooks) {
     });
   });
   ['périmé', 'archivé'].forEach((status) => {
-    test(`alternative button does not exist for alternative status ${status}`, async function(assert) {
+    test(`alternative button does not exist for alternative status ${status}`, async function (assert) {
+      const self = this;
+
       // when
-      this.set('challenge', alternatives.find((challenge) => challenge.status === status));
-      const screen = await render(hbs`
-      <Alternatives
-        @challenge={{this.challenge}}
-        @maximizeRight={{false}}
-        @mayCreateAlternative={{true}}
-        @newAlternative={{this.newAlternative}}
-        @rightMaximized={{false}}
-        @size="full"
-      />
-    `);
+      this.challenge = alternatives.find((challenge) => challenge.status === status);
+      const screen = await render(
+        <template>
+          <Alternatives
+            @challenge={{self.challenge}}
+            @maximizeRight={{false}}
+            @mayCreateAlternative={{true}}
+            @newAlternative={{self.newAlternative}}
+            @rightMaximized={{false}}
+            @size="full"
+          />
+        </template>,
+      );
       assert.dom(screen.queryByRole('button', { name: 'Nouvelle déclinaison' })).doesNotExist();
     });
   });

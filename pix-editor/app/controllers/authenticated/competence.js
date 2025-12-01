@@ -143,17 +143,23 @@ export default class CompetenceController extends Controller {
 
   @action
   newPrototype() {
-    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, { queryParams: { view: 'workbench-list' } });
+    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, {
+      queryParams: { view: 'workbench-list' },
+    });
   }
 
   @action
   copyChallenge(challenge) {
-    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, { queryParams: { from: challenge.id, leftMaximized: true, view: 'workbench' } });
+    this.router.transitionTo('authenticated.competence.prototypes.new', this.competence, {
+      queryParams: { from: challenge.id, leftMaximized: true, view: 'workbench' },
+    });
   }
 
   @action
   newTube(theme) {
-    this.router.transitionTo('authenticated.competence.tubes.new', this.competence, { queryParams: { themeId: theme.id } });
+    this.router.transitionTo('authenticated.competence.tubes.new', this.competence, {
+      queryParams: { themeId: theme.id },
+    });
   }
 
   @action
@@ -167,22 +173,20 @@ export default class CompetenceController extends Controller {
     const competence = this.competence;
     const productionTubes = competence.productionTubes;
     const filledSkills = productionTubes.map((productionTube) => productionTube.filledProductionSkills);
-    const skillData = filledSkills.flat()
+    const skillData = filledSkills
+      .flat()
       .filter((filledSkill) => filledSkill !== false)
       .map((filledSkill) => {
         const tube = filledSkill.tube;
         const description = this._formatCSVString(filledSkill.description);
-        return [
-          competence.name,
-          tube.get('name'),
-          filledSkill.name,
-          description,
-        ];
+        return [competence.name, tube.get('name'), filledSkill.name, description];
       });
-    const contentCSV = skillData.filter((data) => data !== false).reduce((content, data) => {
-      return content + `\n${data.map((item) => item ? `"${item}"` : ' ').join(',')}`;
-    }, '"Compétence","Tube","Acquis","Description"');
-    const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+    const contentCSV = skillData
+      .filter((data) => data !== false)
+      .reduce((content, data) => {
+        return content + `\n${data.map((item) => (item ? `"${item}"` : ' ')).join(',')}`;
+      }, '"Compétence","Tube","Acquis","Description"');
+    const fileName = `Export_acquis_${competence.name}_${new Date().toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(contentCSV, fileName);
     this.notify.message('acquis exportés');
     this.loader.stop();
@@ -206,7 +210,12 @@ export default class CompetenceController extends Controller {
 
   @action
   displaySortThemesPopIn() {
-    this._displaySortPopIn(this.sortThemes, this.cancelThemesSorting, 'Tri des thématiques', this.competence.sortedThemes);
+    this._displaySortPopIn(
+      this.sortThemes,
+      this.cancelThemesSorting,
+      'Tri des thématiques',
+      this.competence.sortedThemes,
+    );
   }
 
   @action

@@ -1,29 +1,34 @@
 import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+import FormWhitelistedUrl from 'pixeditor/components/form/whitelisted-url';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | Form | whitelisted-url', function(hooks) {
+module('Integration | Component | Form | whitelisted-url', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('should submit correctly formed whitelisted url', async function(assert) {
+  test('should submit correctly formed whitelisted url', async function (assert) {
+    const self = this;
+
     const onSubmit = sinon.spy(() => {});
 
-    this.set('submitButtonText', 'Ajouter');
-    this.set('createWhitelistedUrl', onSubmit);
+    this.submitButtonText = 'Ajouter';
+    this.createWhitelistedUrl = onSubmit;
 
     const screen = await render(
-      hbs`<Form::WhitelistedUrl
-        @initialUrl=""
-        @initialComment=""
-        @initialRelatedSkillNames=""
-        @initialCheckType=""
-        @submitButtonText={{this.submitButtonText}}
-        @onFormSubmitted={{this.createWhitelistedUrl}}
-      />`);
+      <template>
+        <FormWhitelistedUrl
+          @initialUrl=""
+          @initialComment=""
+          @initialRelatedSkillNames=""
+          @initialCheckType=""
+          @submitButtonText={{self.submitButtonText}}
+          @onFormSubmitted={{self.createWhitelistedUrl}}
+        />
+      </template>,
+    );
 
     await fillByLabel('URL à ne pas analyser', 'https://example.org');
 
@@ -47,24 +52,29 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.ok(onSubmit.calledThrice);
     assert.strictEqual(onSubmit.args[2][0].relatedSkillNames, '@test1,@test2');
 
-    await clickByName('Type de comparaison d\'URL');
+    await clickByName("Type de comparaison d'URL");
     await clickByText('Commence par');
     await click(submitButton);
     assert.strictEqual(onSubmit.callCount, 4);
     assert.strictEqual(onSubmit.args[3][0].checkType, 'starts_with');
   });
 
-  test('should enable add url button when mandatory information has been given', async function(assert) {
-    this.set('submitButtonText', 'Ajouter');
+  test('should enable add url button when mandatory information has been given', async function (assert) {
+    const self = this;
+
+    this.submitButtonText = 'Ajouter';
 
     const screen = await render(
-      hbs`<Form::WhitelistedUrl
-        @initialUrl=""
-        @initialComment=""
-        @initialRelatedSkillNames=""
-        @initialCheckType=""
-        @submitButtonText={{this.submitButtonText}}
-      />`);
+      <template>
+        <FormWhitelistedUrl
+          @initialUrl=""
+          @initialComment=""
+          @initialRelatedSkillNames=""
+          @initialCheckType=""
+          @submitButtonText={{self.submitButtonText}}
+        />
+      </template>,
+    );
 
     await fillByLabel('URL à ne pas analyser', 'https://example.org');
 
@@ -72,17 +82,22 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
 
-  test('should disable create whitelisted URL button when no complete informations', async function(assert) {
-    this.set('submitButtonText', 'Ajouter');
+  test('should disable create whitelisted URL button when no complete informations', async function (assert) {
+    const self = this;
+
+    this.submitButtonText = 'Ajouter';
 
     const screen = await render(
-      hbs`<Form::WhitelistedUrl
-        @initialUrl=""
-        @initialComment=""
-        @initialRelatedSkillNames=""
-        @initialCheckType=""
-        @submitButtonText={{this.submitButtonText}}
-      />`);
+      <template>
+        <FormWhitelistedUrl
+          @initialUrl=""
+          @initialComment=""
+          @initialRelatedSkillNames=""
+          @initialCheckType=""
+          @submitButtonText={{self.submitButtonText}}
+        />
+      </template>,
+    );
 
     const button = screen.getByRole('button', { name: 'Ajouter' });
     assert.dom(button).hasAria('disabled', 'true');
@@ -92,22 +107,27 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.dom(button).hasAria('disabled', 'true');
   });
 
-  test('should display errors when input values are unexpected', async function(assert) {
+  test('should display errors when input values are unexpected', async function (assert) {
+    const self = this;
+
     const screen = await render(
-      hbs`<Form::WhitelistedUrl
-        @initialUrl=""
-        @initialComment=""
-        @initialRelatedSkillNames=""
-        @initialCheckType=""
-        @submitButtonText={{this.submitButtonText}}
-      />`);
+      <template>
+        <FormWhitelistedUrl
+          @initialUrl=""
+          @initialComment=""
+          @initialRelatedSkillNames=""
+          @initialCheckType=""
+          @submitButtonText={{self.submitButtonText}}
+        />
+      </template>,
+    );
 
     await fillByLabel('URL à ne pas analyser', '');
-    const urlErrorMandatoryField = screen.getByText('L\'URL est obligatoire');
+    const urlErrorMandatoryField = screen.getByText("L'URL est obligatoire");
     assert.dom(urlErrorMandatoryField).isVisible();
 
     await fillByLabel('URL à ne pas analyser *', 'chouchou beignets');
-    const urlErrorInvalidUrl = screen.getByText('L\'URL n\'est pas valide');
+    const urlErrorInvalidUrl = screen.getByText("L'URL n'est pas valide");
     assert.dom(urlErrorInvalidUrl).isVisible();
 
     await fillByLabel('URL à ne pas analyser *', 'https://example.org');
@@ -115,7 +135,9 @@ module('Integration | Component | Form | whitelisted-url', function(hooks) {
     assert.dom(urlErrorMandatoryField).isNotVisible();
 
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', 'test');
-    const skillNamesError = screen.getByText('Les noms d\'acquis doivent être séparés par des virgules et ne peuvent pas être vides.');
+    const skillNamesError = screen.getByText(
+      "Les noms d'acquis doivent être séparés par des virgules et ne peuvent pas être vides.",
+    );
     assert.dom(skillNamesError).isVisible();
 
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test');

@@ -4,52 +4,67 @@ import SortedList from './sorted';
 import EmberTable from 'ember-table/components/ember-table/component';
 
 export default class PrototypesList extends SortedList {
-<template><EmberTable as |t|>
-  <t.head @columns={{this.headers}} @widthConstraint={{"gte-container"}} @resizeMode={{"fluid"}} @onUpdateSorts={{this.sortBy}} @sortFunction={{this.sort}} @sorts={{this.sorts}} />
-  <t.body @renderAll={{this.renderAll}} @rows={{@list}} @rowSelectionMode={{"single"}} @checkboxSelectionMode={{"none"}} @onSelect={{this.selectRow}} as |b|>
-    <b.row as |r|>
-      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
-        {{value}}
-      </r.cell>
-    </b.row>
-  </t.body>
-</EmberTable>
-</template>
+  <template>
+    <EmberTable as |t|>
+      <t.head
+        @columns={{this.headers}}
+        @widthConstraint="gte-container"
+        @resizeMode="fluid"
+        @onUpdateSorts={{this.sortBy}}
+        @sortFunction={{this.sort}}
+        @sorts={{this.sorts}}
+      />
+      <t.body
+        @renderAll={{this.renderAll}}
+        @rows={{@list}}
+        @rowSelectionMode="single"
+        @checkboxSelectionMode="none"
+        @onSelect={{this.selectRow}}
+        as |b|
+      >
+        <b.row as |r|>
+          <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+            {{value}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </EmberTable>
+  </template>
 
-@service router;
+  @service router;
 
-headers = [
-  {
-    name: 'Version',
-    valuePath: 'version',
-    maxWidth: 150,
-  },
-  {
-    name: 'Consigne',
-    valuePath: 'instruction',
-  },
-  {
-    name: 'Auteur',
-    valuePath: 'author',
-    maxWidth: 150,
-  },
-  {
-    name: 'Statut',
-    valuePath: 'status',
-    maxWidth: 150,
-    style: true,
-  },
-];
+  headers = [
+    {
+      name: 'Version',
+      valuePath: 'version',
+      maxWidth: 150,
+    },
+    {
+      name: 'Consigne',
+      valuePath: 'instruction',
+    },
+    {
+      name: 'Auteur',
+      valuePath: 'author',
+      maxWidth: 150,
+    },
+    {
+      name: 'Statut',
+      valuePath: 'status',
+      maxWidth: 150,
+      style: true,
+    },
+  ];
 
-sortTypes = {
-  Version: 'string',
-  instruction: 'string',
-  type: 'string',
-  status: 'string',
-};
+  sortTypes = {
+    Version: 'string',
+    instruction: 'string',
+    type: 'string',
+    status: 'string',
+  };
 
-@action
-selectRow(row) {
-  this.router.transitionTo('authenticated.competence.prototypes.single', row);
-}
+  @action
+  selectRow(row) {
+    this.router.transitionTo('authenticated.competence.prototypes.single', row);
+  }
 }

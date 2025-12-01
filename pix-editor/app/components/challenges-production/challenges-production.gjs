@@ -67,10 +67,22 @@ export default class ChallengesProduction extends Component {
   }
 
   <template>
-    <ChallengesProductionHeader @skill={{@skill}} @overview={{@overview}} @competenceId={{@competenceId}} @canExpand={{@canExpand}} />
-    <section class="challenges-production {{if this.multipanelManager.tableShouldBeMinimized "challenges-production--hidden" ""}}">
+    <ChallengesProductionHeader
+      @skill={{@skill}}
+      @overview={{@overview}}
+      @competenceId={{@competenceId}}
+      @canExpand={{@canExpand}}
+    />
+    <section
+      class="challenges-production
+        {{if this.multipanelManager.tableShouldBeMinimized 'challenges-production--hidden' ''}}"
+    >
       <div class="challenges-production-table">
-        <PixTable @data={{this.challenges}} @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}} @condensed={{true}}>
+        <PixTable
+          @data={{this.challenges}}
+          @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}
+          @condensed={{true}}
+        >
           <:columns as |challenge context|>
             <PixTableColumn @context={{context}}>
               <:header>
@@ -131,7 +143,8 @@ export default class ChallengesProduction extends Component {
               <:cell>
                 {{#each challenge.locales as |locale|}}
                   <div class="challenges-production-table__locale">
-                    {{flagForLanguage locale}} {{locale}}
+                    {{flagForLanguage locale}}
+                    {{locale}}
                   </div>
                 {{/each}}
               </:cell>

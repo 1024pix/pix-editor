@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Notes from 'pixeditor/components/list/notes';
 
-module('Integration | Component | note-list', function(hooks) {
+module('Integration | Component | note-list', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   const myNote1 = {
@@ -36,18 +36,12 @@ module('Integration | Component | note-list', function(hooks) {
     date: new Date(2020, 8, 28),
     changelog: true,
   };
-  const notes = [
-    myNote1,
-    myNote2,
-    otherNote,
-    log1,
-    log2,
-  ];
-  hooks.beforeEach(function() {
+  const notes = [myNote1, myNote2, otherNote, log1, log2];
+  hooks.beforeEach(function () {
     this.notes = notes;
   });
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     const self = this;
 
     // when
@@ -57,7 +51,7 @@ module('Integration | Component | note-list', function(hooks) {
     assert.dom('.pix-table').exists();
   });
 
-  test('it should display a list of notes', async function(assert) {
+  test('it should display a list of notes', async function (assert) {
     const self = this;
 
     // when
@@ -68,7 +62,7 @@ module('Integration | Component | note-list', function(hooks) {
     assert.dom('[data-test-note]').exists({ count: notes.length + 1 });
   });
 
-  test('it should display authors when displayAuthor is `true`', async function(assert) {
+  test('it should display authors when displayAuthor is `true`', async function (assert) {
     const self = this;
 
     // given
@@ -81,7 +75,7 @@ module('Integration | Component | note-list', function(hooks) {
     assert.dom('.author-note').exists();
   });
 
-  test('it should not display authors when displayAuthor is `false`', async function(assert) {
+  test('it should not display authors when displayAuthor is `false`', async function (assert) {
     const self = this;
 
     // given
@@ -94,7 +88,7 @@ module('Integration | Component | note-list', function(hooks) {
     assert.dom('.author-note').doesNotExist();
   });
 
-  test('it should display note status when displayStatus is `true`', async function(assert) {
+  test('it should display note status when displayStatus is `true`', async function (assert) {
     const self = this;
 
     // given
@@ -107,7 +101,7 @@ module('Integration | Component | note-list', function(hooks) {
     assert.dom('.status-note').exists();
   });
 
-  test('it should not display note status when displayStatus is `false`', async function(assert) {
+  test('it should not display note status when displayStatus is `false`', async function (assert) {
     const self = this;
 
     // given

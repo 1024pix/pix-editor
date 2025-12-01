@@ -53,7 +53,7 @@ export default class SingleController extends Controller {
     if (!this.challenge.isPrototype) {
       return 'Modifier le statut de la déclinaison';
     }
-    return 'Modifier le statut de l\'épreuve';
+    return "Modifier le statut de l'épreuve";
   }
 
   get maximized() {
@@ -131,7 +131,9 @@ export default class SingleController extends Controller {
   }
 
   get localizedChallengeLinkRoute() {
-    return this.challenge.get('isPrototype') ? 'authenticated.competence.prototypes.localized' : 'authenticated.competence.prototypes.single.alternatives.localized';
+    return this.challenge.get('isPrototype')
+      ? 'authenticated.competence.prototypes.localized'
+      : 'authenticated.competence.prototypes.single.alternatives.localized';
   }
 
   get defaultSaveChangelog() {
@@ -269,15 +271,21 @@ export default class SingleController extends Controller {
 
   @action
   showAlternatives() {
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
+    this.router.transitionTo(
+      'authenticated.competence.prototypes.single.alternatives',
+      this.currentData.getCompetence(),
+      this.challenge,
+    );
   }
 
   @action
   async validate() {
     this.isStatusActionMenuOpen = false;
     try {
-      await this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?');
-      const defaultLogMessage = this.challenge.isPrototype ? 'Mise en production du prototype' : 'Mise en production de la déclinaison';
+      await this.confirm.ask('Mise en production', "Êtes-vous sûr de vouloir mettre l'épreuve en production ?");
+      const defaultLogMessage = this.challenge.isPrototype
+        ? 'Mise en production du prototype'
+        : 'Mise en production de la déclinaison';
       this._displayChangelogPopIn(defaultLogMessage, async (changelog) => {
         try {
           this.loader.start();
@@ -310,8 +318,8 @@ export default class SingleController extends Controller {
   async archive() {
     this.isStatusActionMenuOpen = false;
     try {
-      await this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?');
-      this._displayChangelogPopIn('Archivage de l\'épreuve', async (changelog) => {
+      await this.confirm.ask('Archivage', "Êtes-vous sûr de vouloir archiver l'épreuve ?");
+      this._displayChangelogPopIn("Archivage de l'épreuve", async (changelog) => {
         try {
           this.loader.start();
           await this._archiveAlternatives(this.challenge);
@@ -324,7 +332,7 @@ export default class SingleController extends Controller {
         } catch (error) {
           console.error(error);
           Sentry.captureException(error);
-          this._errorMessage('Erreur lors de l\'archivage');
+          this._errorMessage("Erreur lors de l'archivage");
         } finally {
           this.loader.stop();
         }
@@ -339,7 +347,10 @@ export default class SingleController extends Controller {
   async obsolete() {
     this.isStatusActionMenuOpen = false;
     try {
-      await this.confirm.ask(this.intl.t('challenge.obsolete.confirm.title'), this.intl.t('challenge.obsolete.confirm.message'));
+      await this.confirm.ask(
+        this.intl.t('challenge.obsolete.confirm.title'),
+        this.intl.t('challenge.obsolete.confirm.message'),
+      );
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
         try {
           this.loader.start();
@@ -429,16 +440,20 @@ export default class SingleController extends Controller {
     const prototypeVersion = skill.getNextPrototypeVersion();
     const challenges = prototype.alternatives;
     challenges.push(prototype);
-    await Promise.all(challenges.map(async(challenge) => {
-      challenge.skill = skill;
-      challenge.version = prototypeVersion;
-      await challenge.save();
-      if (challenge.isPrototype) {
-        this._message(this.intl.t('challenge.move.success-prototype-message'));
-      } else {
-        this._message(this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }));
-      }
-    }));
+    await Promise.all(
+      challenges.map(async (challenge) => {
+        challenge.skill = skill;
+        challenge.version = prototypeVersion;
+        await challenge.save();
+        if (challenge.isPrototype) {
+          this._message(this.intl.t('challenge.move.success-prototype-message'));
+        } else {
+          this._message(
+            this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }),
+          );
+        }
+      }),
+    );
   }
 
   @action
@@ -456,7 +471,9 @@ export default class SingleController extends Controller {
   @action
   async removeAttachment(removedAttachment) {
     await this.challenge.attachments;
-    const removedFile = this.challenge.piecesJointes?.find((pieceJointe) => pieceJointe.filename === removedAttachment.filename);
+    const removedFile = this.challenge.piecesJointes?.find(
+      (pieceJointe) => pieceJointe.filename === removedAttachment.filename,
+    );
     if (removedFile) {
       removedFile.deleteRecord();
       if (removedFile.id) {
@@ -508,17 +525,17 @@ export default class SingleController extends Controller {
   _validationChecks(challenge) {
     this._loadingMessage('Vérifications');
     if (challenge.isValidated) {
-      return this._error('L\'épreuve est déjà en production');
+      return this._error("L'épreuve est déjà en production");
     }
     if (challenge.isPrototype) {
       if (challenge.skill == null) {
-        return this._error('L\'épreuve n\'est pas rattachée à un acquis');
+        return this._error("L'épreuve n'est pas rattachée à un acquis");
       }
       return Promise.resolve(challenge);
     } else {
       const prototype = challenge.relatedPrototype;
       if (!prototype.isValidated) {
-        return this._error('Le prototype correspondant n\'est pas validé');
+        return this._error("Le prototype correspondant n'est pas validé");
       }
       return Promise.resolve(challenge);
     }
@@ -530,7 +547,10 @@ export default class SingleController extends Controller {
     if (!challenge.isPrototype || productionPrototype == null) {
       return;
     }
-    await this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?');
+    await this.confirm.ask(
+      'Archivage du prototype précédent',
+      'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?',
+    );
     await productionPrototype.archive();
     await this._archiveAlternatives(productionPrototype);
   }
@@ -541,7 +561,10 @@ export default class SingleController extends Controller {
     }
     const alternatives = challenge.draftAlternatives;
     try {
-      await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
+      await this.confirm.ask(
+        'Mise en production des déclinaisons',
+        'Souhaitez-vous mettre en production les déclinaisons proposées ?',
+      );
       const alternativesPublication = alternatives.map(async (alternative) => {
         const validatedAlternative = await alternative.validate();
         this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
@@ -563,16 +586,21 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     }
     const alternativesArchive = toArchive.map((alternative) => {
-      return alternative.archive()
-        .then((alternative) => this._message(this.intl.t('challenge.alternative.archive', { number: alternative.alternativeVersion })));
+      return alternative
+        .archive()
+        .then((alternative) =>
+          this._message(this.intl.t('challenge.alternative.archive', { number: alternative.alternativeVersion })),
+        );
     });
     const alternativesObsolete = toObsolete.map((alternative) => {
-      return alternative.obsolete()
-        .then((alternative) => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
+      return alternative
+        .obsolete()
+        .then((alternative) =>
+          this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })),
+        );
     });
     const alternativesArchiveAndObsolete = [...alternativesArchive, ...alternativesObsolete];
-    return Promise.all(alternativesArchiveAndObsolete)
-      .then(() => challenge);
+    return Promise.all(alternativesArchiveAndObsolete).then(() => challenge);
   }
 
   _obsoleteAlternatives(challenge) {
@@ -584,11 +612,13 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     }
     const alternativesObsolete = toObsolete.map((alternative) => {
-      return alternative.obsolete()
-        .then((alternative) => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
+      return alternative
+        .obsolete()
+        .then((alternative) =>
+          this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })),
+        );
     });
-    return Promise.all(alternativesObsolete)
-      .then(() => challenge);
+    return Promise.all(alternativesObsolete).then(() => challenge);
   }
 
   async _archiveOtherActiveSkillVersion(challenge) {
@@ -602,7 +632,10 @@ export default class SingleController extends Controller {
     if (!activeSkill) {
       return;
     }
-    await this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`);
+    await this.confirm.ask(
+      "Archivage de la version précédente de l'acquis",
+      `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`,
+    );
     await activeSkill.archive();
     const challengesToArchiveOrObsolete = activeSkill.liveChallenges.map((liveChallenge) => {
       if (liveChallenge.isValidated) {
@@ -660,15 +693,13 @@ export default class SingleController extends Controller {
   }
 
   _getPrototypesStatusOtherVersion(skill, challenge) {
-    return skill.prototypes
-      .filter((prototype) => prototype.id !== challenge.id)
-      .map((prototype) => prototype.status);
+    return skill.prototypes.filter((prototype) => prototype.id !== challenge.id).map((prototype) => prototype.status);
   }
 
   async _handleIllustration(challenge) {
     const illustration = await challenge.illustration;
     if (illustration && illustration.isNew && !illustration.cloneBeforeSave) {
-      this._loadingMessage('Envoi de l\'illustration...');
+      this._loadingMessage("Envoi de l'illustration...");
       const newIllustration = await this.storage.uploadFile({ file: illustration.file });
       challenge.illustration.url = newIllustration.url;
     }
@@ -691,7 +722,11 @@ export default class SingleController extends Controller {
     if (!pieceJointe.isNew || pieceJointe.cloneBeforeSave) {
       return;
     }
-    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    const remoteFile = await this.storage.uploadFile({
+      file: pieceJointe.file,
+      filename: pieceJointe.filename,
+      isAttachment: true,
+    });
     pieceJointe.url = remoteFile.url;
   }
 

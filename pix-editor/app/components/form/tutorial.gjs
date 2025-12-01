@@ -25,36 +25,9 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options = {
-    format: [
-      'audio',
-      'frise',
-      'image',
-      'jeu',
-      'outil',
-      'page',
-      'pdf',
-      'site',
-      'slide',
-      'son',
-      'vidéo',
-    ],
-    level: [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-    ],
-    license: [
-      'CC-BY-SA',
-      '(c)',
-      'Youtube',
-    ],
+    format: ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
+    level: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    license: ['CC-BY-SA', '(c)', 'Youtube'],
   };
 
   constructor() {
@@ -107,12 +80,11 @@ export default class TutorialForm extends Component {
       return;
     }
     const queryLowerCase = query.toLowerCase();
-    this.tagListOptions = await this.store.query('tag', { filter: { title: queryLowerCase } })
-      .then((tags) => {
-        const results = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
-        results.push({ label: 'Ajouter', description: 'Créer un tag', value: 'create' });
-        return results;
-      });
+    this.tagListOptions = await this.store.query('tag', { filter: { title: queryLowerCase } }).then((tags) => {
+      const results = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
+      results.push({ label: 'Ajouter', description: 'Créer un tag', value: 'create' });
+      return results;
+    });
   }
 
   @action
@@ -121,10 +93,11 @@ export default class TutorialForm extends Component {
       this.sourceList = [];
       return;
     }
-    const queryLowerCaseWithEscapedQuote = query.toLowerCase().replaceAll('\'', '\\\'');
-    this.sourceList = await this.store.query('tutorial', { filter: { source: queryLowerCaseWithEscapedQuote } })
+    const queryLowerCaseWithEscapedQuote = query.toLowerCase().replaceAll("'", "\\'");
+    this.sourceList = await this.store
+      .query('tutorial', { filter: { source: queryLowerCaseWithEscapedQuote } })
       .then((tutorials) => {
-        const results = tutorials.map((tutorial) => (tutorial.get('source')));
+        const results = tutorials.map((tutorial) => tutorial.get('source'));
         results.push(query);
         return results.reduce((uniques, item) => {
           return uniques.includes(item) ? uniques : [...uniques, item];
@@ -197,14 +170,10 @@ export default class TutorialForm extends Component {
   }
 
   <template>
-    <form
-      id="tutorial-form"
-      class="tutorial-form"
-      {{on 'submit' this.onSubmit}}
-    >
+    <form id="tutorial-form" class="tutorial-form" {{on "submit" this.onSubmit}}>
       <div class="span-two">
         <PixInput
-          @requiredLabel={{"Le titre est requis"}}
+          @requiredLabel="Le titre est requis"
           @value={{@tutorial.title}}
           placeholder="Comment manger une pomme"
           {{on "input" this.setTitle}}
@@ -215,14 +184,14 @@ export default class TutorialForm extends Component {
       <PixSelect
         @options={{this.tutorialLanguageOptions}}
         @onChange={{this.setTutorialLanguage}}
-        @requiredLabel={{"Champ obligatoire"}}
+        @requiredLabel="Champ obligatoire"
         @value={{@tutorial.normalizedLanguage}}
         @hideDefaultOption={{true}}
       >
         <:label>Langue</:label>
       </PixSelect>
       <PixInput
-        @requiredLabel={{"Le lien est requis"}}
+        @requiredLabel="Le lien est requis"
         @value={{@tutorial.link}}
         placeholder="http://example.org"
         {{on "input" this.setLink}}
@@ -235,9 +204,9 @@ export default class TutorialForm extends Component {
         @onSearch={{this.getSearchSourceResults}}
         @value={{@tutorial.source}}
         @isSearchable={{true}}
-        @searchLabel={{"Rechercher une source"}}
+        @searchLabel="Rechercher une source"
         @searchPlaceholder="Rechercher..."
-        @requiredLabel={{"Champ obligatoire"}}
+        @requiredLabel="Champ obligatoire"
         @hideDefaultOption={{true}}
       >
         <:label>Source</:label>
@@ -255,13 +224,13 @@ export default class TutorialForm extends Component {
         @options={{this.formattedFormatOptionList}}
         @onChange={{fn (mut @tutorial.format)}}
         @value={{@tutorial.format}}
-        @requiredLabel={{"Champ obligatoire"}}
+        @requiredLabel="Champ obligatoire"
         @hideDefaultOption={{true}}
       >
         <:label>Format</:label>
       </PixSelect>
       <PixInput
-        @requiredLabel={{"La durée est requise"}}
+        @requiredLabel="La durée est requise"
         @value={{@tutorial.duration}}
         placeholder="03:54:39"
         {{on "input" this.setDuration}}
@@ -291,7 +260,8 @@ export default class TutorialForm extends Component {
           <:default as |option|>
             <div class="search-title">
               {{#if (eq option.value "create")}}
-                {{option.label}} <i class="add icon"></i>
+                {{option.label}}
+                <i class="add icon"></i>
               {{else}}
                 {{option.label}}
               {{/if}}
@@ -314,10 +284,10 @@ export default class TutorialForm extends Component {
                 <PixIconButton
                   @ariaLabel="Supprimer le tag: {{tag.title}}"
                   @iconName="close"
-                  @triggerAction={{(fn this.unselectTag tag.id)}}
+                  @triggerAction={{fn this.unselectTag tag.id}}
                   @size="small"
-                  class="delete-tag-button">
-                </PixIconButton>
+                  class="delete-tag-button"
+                />
               </span>
             {{/each}}
           </section>
@@ -326,7 +296,7 @@ export default class TutorialForm extends Component {
       <label class="span-three">
         Coup de coeur
         <PixIconButton
-          @ariaLabel={{"Coup de coeur"}}
+          @ariaLabel="Coup de coeur"
           @iconName="favorite"
           @plainIcon={{@tutorial.crush}}
           @triggerAction={{this.toggleCrush}}

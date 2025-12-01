@@ -50,17 +50,13 @@ export default class SelectSearch extends Component {
         @triggerFiltering={{this.onSearchValueInput}}
         @class="search-input"
         autocomplete="off"
-        {{on 'focusout' this.hideResults}}
+        {{on "focusout" this.hideResults}}
       >
         <:label>{{@searchLabel}}</:label>
       </PixSearchInput>
 
       {{#if this.isQuerying}}
-        <ul
-          role="listbox"
-          class="results-list"
-          aria-busy="{{@isLoading}}"
-        >
+        <ul role="listbox" class="results-list" aria-busy="{{@isLoading}}">
           {{#if @isLoading}}
             <div class="result-info" role="progressbar">
               Recherche en cours...
@@ -71,21 +67,13 @@ export default class SelectSearch extends Component {
             </div>
           {{else}}
             {{#each @options as |option|}}
-              <li
-                role="option"
-                aria-selected="false"
-              >
-                <button
-                  class="result-option"
-                  {{on 'click' (fn this.onSelectItem option)}}
-                >
-                  {{#if (has-block "option")}}
-                    {{yield option to="option"}}
-                  {{else}}
-                    {{this.getDefaultOptionLabel option}}
-                  {{/if}}
-                </button>
-              </li>
+              <button class="result-option" type="button" {{on "click" (fn this.onSelectItem option)}}>
+                {{#if (has-block "option")}}
+                  {{yield option to="option"}}
+                {{else}}
+                  {{this.getDefaultOptionLabel option}}
+                {{/if}}
+              </button>
             {{/each}}
           {{/if}}
         </ul>

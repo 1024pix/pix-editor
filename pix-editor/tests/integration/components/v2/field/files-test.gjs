@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | v2/field/files', function(hooks) {
+module('Integration | Component | v2/field/files', function (hooks) {
   setupIntlRenderingTest(hooks);
   let addAttachmentStub, removeAttachmentStub, updateBasenameStub;
 
@@ -17,13 +17,13 @@ module('Integration | Component | v2/field/files', function(hooks) {
     updateBasenameStub = sinon.stub();
   });
 
-  module('when edition is false', function(hooks) {
+  module('when edition is false', function (hooks) {
     let edition;
     hooks.beforeEach(() => {
       edition = false;
     });
 
-    test('it should display a downloadable file', async function(assert) {
+    test('it should display a downloadable file', async function (assert) {
       // given
       const piecesJointes = [
         {
@@ -38,16 +38,16 @@ module('Integration | Component | v2/field/files', function(hooks) {
 
       // when
       const screen = await render(
-      <template>
-        <Files
-          @title="Pièces jointes"
-          @value={{piecesJointes}}
-          @baseName={{attachmentBaseName}}
-          @edition={{edition}}
-          @removeAttachment={{removeAttachmentStub}}
-          @addAttachment={{addAttachmentStub}}
-        />
-      </template>,
+        <template>
+          <Files
+            @title="Pièces jointes"
+            @value={{piecesJointes}}
+            @baseName={{attachmentBaseName}}
+            @edition={{edition}}
+            @removeAttachment={{removeAttachmentStub}}
+            @addAttachment={{addAttachmentStub}}
+          />
+        </template>,
       );
 
       // then
@@ -56,13 +56,13 @@ module('Integration | Component | v2/field/files', function(hooks) {
     });
   });
 
-  module('when edition is true', function(hooks) {
+  module('when edition is true', function (hooks) {
     let edition;
     hooks.beforeEach(() => {
       edition = true;
     });
 
-    test('it should add a file', async function(assert) {
+    test('it should add a file', async function (assert) {
       // given
       const attachmentBaseName = 'attachmentBaseName';
       const file = new File([], 'challenge-file.csv', { type: 'text/csv' });
@@ -70,15 +70,15 @@ module('Integration | Component | v2/field/files', function(hooks) {
 
       // when
       const screen = await render(
-      <template>
-        <Files
-          @title="Pièces jointes"
-          @baseName={{attachmentBaseName}}
-          @edition={{edition}}
-          @removeAttachment={{removeAttachmentStub}}
-          @addAttachment={{addAttachmentStub}}
-        />
-      </template>,
+        <template>
+          <Files
+            @title="Pièces jointes"
+            @baseName={{attachmentBaseName}}
+            @edition={{edition}}
+            @removeAttachment={{removeAttachmentStub}}
+            @addAttachment={{addAttachmentStub}}
+          />
+        </template>,
       );
 
       await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file);
@@ -87,7 +87,7 @@ module('Integration | Component | v2/field/files', function(hooks) {
       assert.ok(addAttachmentStub.calledOnce);
     });
 
-    test('it should remove a file', async function(assert) {
+    test('it should remove a file', async function (assert) {
       // given
       const file1 = {
         filename: 'file_name',
@@ -95,13 +95,12 @@ module('Integration | Component | v2/field/files', function(hooks) {
         size: 123,
         type: 'text/csv',
       };
-      const file2
-        = {
-          filename: 'file_name2',
-          url: 'url2',
-          size: 456,
-          type: 'text/csv',
-        };
+      const file2 = {
+        filename: 'file_name2',
+        url: 'url2',
+        size: 456,
+        type: 'text/csv',
+      };
 
       const piecesJointes = [file1, file2];
 
@@ -110,17 +109,17 @@ module('Integration | Component | v2/field/files', function(hooks) {
 
       // when
       const screen = await render(
-      <template>
-        <Files
-          @title="Pièces jointes"
-          @value={{piecesJointes}}
-          @attachmentBaseName={{attachmentBaseName}}
-          @edition={{edition}}
-          @removeAttachment={{removeAttachmentStub}}
-          @addAttachment={{addAttachmentStub}}
-          @updateBasename={{updateBasenameStub}}
-        />
-      </template>,
+        <template>
+          <Files
+            @title="Pièces jointes"
+            @value={{piecesJointes}}
+            @attachmentBaseName={{attachmentBaseName}}
+            @edition={{edition}}
+            @removeAttachment={{removeAttachmentStub}}
+            @addAttachment={{addAttachmentStub}}
+            @updateBasename={{updateBasenameStub}}
+          />
+        </template>,
       );
 
       await click(screen.getByRole('button', { name: 'Supprimer la pièce jointe file_name2' }));

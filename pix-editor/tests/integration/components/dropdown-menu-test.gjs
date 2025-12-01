@@ -4,23 +4,22 @@ import { module, test } from 'qunit';
 import DropdownMenu from '../../../components/dropdown-menu';
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
-module('Integration | Component | dropdown-menu', function(hooks) {
+module('Integration | Component | dropdown-menu', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let screen;
 
-  test('it should display menu on click', async function(assert) {
+  test('it should display menu on click', async function (assert) {
     // given
 
     // when
-    screen = await (render(<template>
-      <DropdownMenu
-        @ariaLabel="dropdown menu label"
-        @iconName="moreVert"
-      >
-        <li>Bonjour</li>
-      </DropdownMenu>
-</template>));
+    screen = await render(
+      <template>
+        <DropdownMenu @ariaLabel="dropdown menu label" @iconName="moreVert">
+          <li>Bonjour</li>
+        </DropdownMenu>
+      </template>,
+    );
 
     // then
     assert.dom(await screen.queryByText('Bonjour')).doesNotExist();

@@ -1,17 +1,17 @@
 import { render, clickByText } from '@1024pix/ember-testing-library';
-import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import Service from '@ember/service';
+import SidebarExport from 'pixeditor/components/sidebar/export';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | sidebar/export', function(hooks) {
+module('Integration | Component | sidebar/export', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let loaderStartStub, loaderStopStub, notifyMessageStub, notifyErrorStub;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const loader = this.owner.lookup('service:loader');
     class NotifyServiceStub extends Service {
       message() {}
@@ -100,7 +100,9 @@ module('Integration | Component | sidebar/export', function(hooks) {
     ];
   });
 
-  test('it should export formatted csv content', async function(assert) {
+  test('it should export formatted csv content', async function (assert) {
+    const self = this;
+
     // given
     const fileSaverServiceStub = this.owner.lookup('service:file-saver');
     sinon.stub(fileSaverServiceStub, 'saveAs').resolves();
@@ -110,7 +112,7 @@ module('Integration | Component | sidebar/export', function(hooks) {
 "area","competence1","theme1","tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
 "area","competence2","theme2","tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`;
 
-    await render(hbs`<Sidebar::Export @areas={{this.areas}}/>`);
+    await render(<template><SidebarExport @areas={{self.areas}} /></template>);
 
     // when
     await clickByText('Exporter les sujets');
@@ -122,12 +124,14 @@ module('Integration | Component | sidebar/export', function(hooks) {
     assert.ok(loaderStopStub.calledOnce);
   });
 
-  test('it should catch an error if export subject failed', async function(assert) {
+  test('it should catch an error if export subject failed', async function (assert) {
+    const self = this;
+
     // given
     const fileSaverServiceStub = this.owner.lookup('service:file-saver');
     sinon.stub(fileSaverServiceStub, 'saveAs').throws();
 
-    await render(hbs`<Sidebar::Export @areas={{this.areas}}/>`);
+    await render(<template><SidebarExport @areas={{self.areas}} /></template>);
 
     // when
     await clickByText('Exporter les sujets');
@@ -135,6 +139,6 @@ module('Integration | Component | sidebar/export', function(hooks) {
     // then
     assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de l\'exportation des sujets'));
+    assert.ok(notifyErrorStub.calledWith("Erreur lors de l'exportation des sujets"));
   });
 });

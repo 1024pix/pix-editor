@@ -18,8 +18,10 @@ export default class SingleRoute extends SkillRoute {
 
   @action
   willTransition(transition) {
-    if (this.controllerFor('authenticated.competence.quality.single').edition
-      && !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+    if (
+      this.controllerFor('authenticated.competence.quality.single').edition &&
+      !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')
+    ) {
       transition.abort();
     } else {
       this.controllerFor('authenticated.competence.quality.single').model.rollbackAttributes();
@@ -27,10 +29,18 @@ export default class SingleRoute extends SkillRoute {
         const skill = this.controllerFor('authenticated.competence.quality.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
-          return this.router.transitionTo('authenticated.competence.prototypes.single', this.currentData.getCompetence(), prototype);
+          return this.router.transitionTo(
+            'authenticated.competence.prototypes.single',
+            this.currentData.getCompetence(),
+            prototype,
+          );
         }
       } else if (transition.targetName === 'authenticated.competence.skills.index') {
-        return this.router.transitionTo('authenticated.competence.skills.single', this.currentData.getCompetence(), this.controllerFor('authenticated.competence.quality.single').model);
+        return this.router.transitionTo(
+          'authenticated.competence.skills.single',
+          this.currentData.getCompetence(),
+          this.controllerFor('authenticated.competence.quality.single').model,
+        );
       }
       return true;
     }

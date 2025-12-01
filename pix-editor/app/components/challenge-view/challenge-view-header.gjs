@@ -17,7 +17,12 @@ export default class ChallengesViewHeader extends Component {
   @action
   closePanel() {
     this.multipanelManager.onDetailsClosed();
-    this.router.transitionTo('authenticated.v2.competence-overview.challenges', this.args.competenceId, this.args.overview, this.args.skillId);
+    this.router.transitionTo(
+      'authenticated.v2.competence-overview.challenges',
+      this.args.competenceId,
+      this.args.overview,
+      this.args.skillId,
+    );
   }
 
   @action
@@ -55,7 +60,8 @@ export default class ChallengesViewHeader extends Component {
           {{#if @challenge.isPrototype}}
             Proto
           {{else}}
-            Déclinaison {{@challenge.alternativeVersion}}
+            Déclinaison
+            {{@challenge.alternativeVersion}}
           {{/if}}
           (V{{@challenge.version}})
         </p>
@@ -79,7 +85,8 @@ export default class ChallengesViewHeader extends Component {
         <div class="challenge-view-header-second__locales">
           {{#each @challenge.locales as |locale|}}
             <p>
-              {{flagForLanguage locale}} {{locale}}
+              {{flagForLanguage locale}}
+              {{locale}}
             </p>
           {{/each}}
         </div>
@@ -91,12 +98,7 @@ export default class ChallengesViewHeader extends Component {
         </div>
         <span class="challenge-view-header__dark-separator"></span>
         <div class="challenge-view-header-second__actions">
-          <PixTooltip
-            @id='preview-challenge-tooltip'
-            @position="top"
-            @isInline={{true}}
-            @isLight={{true}}
-          >
+          <PixTooltip @id="preview-challenge-tooltip" @position="top" @isInline={{true}} @isLight={{true}}>
             <:triggerElement>
               <a
                 class="challenge-view-header-action__preview"
@@ -110,12 +112,7 @@ export default class ChallengesViewHeader extends Component {
             </:triggerElement>
             <:tooltip>Prévisualiser l'épreuve <span class="sr-only">{{@challenge.id}}</span></:tooltip>
           </PixTooltip>
-          <PixTooltip
-            @id='copy-url-challenge-tooltip'
-            @position="top"
-            @isInline={{true}}
-            @isLight={{true}}
-          >
+          <PixTooltip @id="copy-url-challenge-tooltip" @position="top" @isInline={{true}} @isLight={{true}}>
             <:triggerElement>
               <PixIconButton
                 aria-labelledby="copy-url-challenge-tooltip"

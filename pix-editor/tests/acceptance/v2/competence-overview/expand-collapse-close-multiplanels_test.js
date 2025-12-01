@@ -7,12 +7,14 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
+module('Acceptance | expand-collapse-close-multipanels', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
+  const skillId = 'skill1',
+    skillName = '@tube1',
+    prototypeId = 'prototype1';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     window.localStorage.setItem('v2', 'true');
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -108,7 +110,7 @@ module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
     return authenticateSession();
   });
 
-  test('should correctly expand / collapse panels according to scenario', async function(assert) {
+  test('should correctly expand / collapse panels according to scenario', async function (assert) {
     // Grid only
     await visit('/v2/competences/recCompetence1/challenges-production');
     assert.dom('.competence-overview-grid').isVisible();
@@ -120,7 +122,10 @@ module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
     assert.dom('.competence-overview-grid').isVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
 
     // Close table
     await clickByText('Fermer la liste des épreuves');
@@ -135,54 +140,78 @@ module('Acceptance | expand-collapse-close-multipanels', function(hooks) {
     assert.dom('.competence-overview-grid').isNotVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
 
     // Collapse table
     await clickByText('Agrandir la liste des épreuves'); // #clown
     assert.dom('.competence-overview-grid').isVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
 
     // Click on details, display details and table
     await clickByText('Proto');
     assert.dom('.competence-overview-grid').isNotVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`,
+    );
 
     // Close details
-    await clickByText('Fermer l\'épreuve');
+    await clickByText("Fermer l'épreuve");
     assert.dom('.competence-overview-grid').isVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
 
     // Expand details from collapsed table, then close back to collapsed table
     await clickByText('Proto');
-    await clickByText('Agrandir l\'épreuve');
+    await clickByText("Agrandir l'épreuve");
     assert.dom('.competence-overview-grid').isNotVisible();
     assert.dom('.pix-table').isNotVisible();
     assert.dom('.challenge-view').isVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
-    await clickByText('Fermer l\'épreuve');
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`,
+    );
+    await clickByText("Fermer l'épreuve");
     assert.dom('.competence-overview-grid').isVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
 
     // Expand details from expanded table, then close back to expanded table
     await clickByText('Agrandir la liste des épreuves');
     await clickByText('Proto');
-    await clickByText('Agrandir l\'épreuve');
+    await clickByText("Agrandir l'épreuve");
     assert.dom('.competence-overview-grid').isNotVisible();
     assert.dom('.pix-table').isNotVisible();
     assert.dom('.challenge-view').isVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`);
-    await clickByText('Fermer l\'épreuve');
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges/challengeIdProto`,
+    );
+    await clickByText("Fermer l'épreuve");
     assert.dom('.competence-overview-grid').isNotVisible();
     assert.dom('.pix-table').isVisible();
     assert.dom('.challenge-view').isNotVisible();
-    assert.strictEqual(currentURL(), `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`);
+    assert.strictEqual(
+      currentURL(),
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/challenges`,
+    );
   });
 });

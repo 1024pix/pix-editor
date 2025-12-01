@@ -2,25 +2,35 @@ import { render, clickByName } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { click, settled } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import FormChallenge from 'pixeditor/components/form/challenge';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | challenge-form', function(hooks) {
+module('Integration | Component | challenge-form', function (hooks) {
   setupIntlRenderingTest(hooks);
   let screen;
 
-  test('it should display expected fields if challenge type is `QROC`', async function(assert) {
+  test('it should display expected fields if challenge type is `QROC`', async function (assert) {
+    const self = this;
+
     // Given
     const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ type: 'QROC', isTextBased: true, isPrototype: true });
-    this.set('countries', countries);
-    this.set('challengeData', challengeData);
-    this.set('checkEmbedURL', () => {});
+    this.countries = countries;
+    this.challengeData = challengeData;
+    this.checkEmbedURL = () => {};
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    screen = await render(
+      <template>
+        <FormChallenge
+          @challenge={{self.challengeData}}
+          @checkEmbedURL={{self.checkEmbedURL}}
+          @countries={{self.countries}}
+        />
+      </template>,
+    );
 
     // Then
     assert.dom(screen.getByLabelText('Format QROC')).exists();
@@ -28,28 +38,36 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-suggestion-field]').exists();
   });
 
-  test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
+  test('it should hide useless fields if challenge autoReply is `true`', async function (assert) {
+    const self = this;
+
     // Given
     const countries = [{ FR: 'France' }];
     const challengeData = EmberObject.create({ autoReply: true, isTextBased: true, isPrototype: true });
-    this.set('countries', countries);
-    this.set('challengeData', challengeData);
-    this.set('checkEmbedURL', () => {});
+    this.countries = countries;
+    this.challengeData = challengeData;
+    this.checkEmbedURL = () => {};
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    await render(
+      <template>
+        <FormChallenge
+          @challenge={{self.challengeData}}
+          @checkEmbedURL={{self.checkEmbedURL}}
+          @countries={{self.countries}}
+        />
+      </template>,
+    );
 
     // Then
-    [
-      'data-test-format-field',
-      'data-test-tolerence-fields',
-      'data-test-suggestion-field',
-    ].forEach((field) => {
+    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
       assert.dom(`[${field}]`).doesNotExist();
     });
   });
 
-  test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
+  test('it should display autochecked checkbox if challenge type is `QCM`', async function (assert) {
+    const self = this;
+
     // Given
     const store = this.owner.lookup('service:store');
     const countries = [{ FR: 'France' }];
@@ -58,12 +76,21 @@ module('Integration | Component | challenge-form', function(hooks) {
       genealogy: 'Prototype 1',
       type: 'QCU',
     });
-    this.set('countries', countries);
-    this.set('challengeData', challengeData);
-    this.set('checkEmbedURL', () => {});
+    this.countries = countries;
+    this.challengeData = challengeData;
+    this.checkEmbedURL = () => {};
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    screen = await render(
+      <template>
+        <FormChallenge
+          @challenge={{self.challengeData}}
+          @edition={{true}}
+          @checkEmbedURL={{self.checkEmbedURL}}
+          @countries={{self.countries}}
+        />
+      </template>,
+    );
     await click(screen.getByRole('button', { name: 'Modalité' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));
@@ -77,7 +104,9 @@ module('Integration | Component | challenge-form', function(hooks) {
     await settled();
   });
 
-  test('it should display autochecked checkbox if challenge type is `QCU`', async function(assert) {
+  test('it should display autochecked checkbox if challenge type is `QCU`', async function (assert) {
+    const self = this;
+
     // Given
     const countries = [{ FR: 'France' }];
     const store = this.owner.lookup('service:store');
@@ -86,12 +115,21 @@ module('Integration | Component | challenge-form', function(hooks) {
       genealogy: 'Prototype 1',
       type: 'QCM',
     });
-    this.set('countries', countries);
-    this.set('challengeData', challengeData);
-    this.set('checkEmbedURL', () => {});
+    this.countries = countries;
+    this.challengeData = challengeData;
+    this.checkEmbedURL = () => {};
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    screen = await render(
+      <template>
+        <FormChallenge
+          @challenge={{self.challengeData}}
+          @edition={{true}}
+          @checkEmbedURL={{self.checkEmbedURL}}
+          @countries={{self.countries}}
+        />
+      </template>,
+    );
     await click(screen.getByRole('button', { name: 'Modalité' }));
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'QCM' }));
@@ -105,7 +143,9 @@ module('Integration | Component | challenge-form', function(hooks) {
     await settled();
   });
 
-  test('it should set locales', async function(assert) {
+  test('it should set locales', async function (assert) {
+    const self = this;
+
     // Given
     class ConfigService extends Service {
       get localeToLanguageMap() {
@@ -130,7 +170,16 @@ module('Integration | Component | challenge-form', function(hooks) {
     this.checkEmbedURL = () => {};
 
     // When
-    screen = await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}  @checkEmbedURL={{this.checkEmbedURL}} @countries={{this.countries}}/>`);
+    screen = await render(
+      <template>
+        <FormChallenge
+          @challenge={{self.challengeData}}
+          @edition={{true}}
+          @checkEmbedURL={{self.checkEmbedURL}}
+          @countries={{self.countries}}
+        />
+      </template>,
+    );
     await clickByName('Langue(s)');
     await screen.findByRole('menu');
 
@@ -139,10 +188,6 @@ module('Integration | Component | challenge-form', function(hooks) {
     await clickByName('Francophone');
 
     // Then
-    assert.ok(this.challengeData.locales, [
-      'en',
-      'fr-fr',
-      'fr',
-    ]);
+    assert.ok(this.challengeData.locales, ['en', 'fr-fr', 'fr']);
   });
 });

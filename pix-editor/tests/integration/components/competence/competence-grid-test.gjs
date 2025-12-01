@@ -4,17 +4,17 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
 
-module('Integration | Component | competence-grid', function(hooks) {
+module('Integration | Component | competence-grid', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  module('using competence-overview', function(hooks) {
-    hooks.beforeEach(function() {
+  module('using competence-overview', function (hooks) {
+    hooks.beforeEach(function () {
       const competenceOverview = EmberObject.create({ thematicOverviews: [] });
 
       this.competenceOverview = competenceOverview;
     });
 
-    test('it renders', async function(assert) {
+    test('it renders', async function (assert) {
       const self = this;
 
       // when
@@ -25,14 +25,14 @@ module('Integration | Component | competence-grid', function(hooks) {
     });
   });
 
-  module('using competence', function(hooks) {
-    hooks.beforeEach(function() {
+  module('using competence', function (hooks) {
+    hooks.beforeEach(function () {
       const competence = EmberObject.create({ sortedThemes: [] });
 
       this.competence = competence;
     });
 
-    test('it renders', async function(assert) {
+    test('it renders', async function (assert) {
       const self = this;
 
       // when

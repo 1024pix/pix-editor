@@ -41,7 +41,7 @@ export default class Tutorials extends Component {
         .filter((tag) => tag)
         .map((tag) => tag.trim());
     } else {
-      filter.title = query.replace(/'/g, '\\\'');
+      filter.title = query.replace(/'/g, "\\'");
     }
     try {
       const tutorials = await this.store.query('tutorial', { filter });
@@ -125,7 +125,7 @@ export default class Tutorials extends Component {
   }
 
   <template>
-    <div class="field {{if this.edition "" " disabled"}}">
+    <div class="field {{if this.edition '' ' disabled'}}">
       {{#if @edition}}
         <SelectSearch
           @onSearch={{this.getSearchTutorialResults}}
@@ -159,22 +159,39 @@ export default class Tutorials extends Component {
                 <div class="header">
                   {{tutorial.title}}
                   <span>
-                    <a class="ui right floated button tutorial-link" href={{tutorial.link}} target="_blank"
-                       rel="noreferrer noopener">
+                    <a
+                      class="ui right floated button tutorial-link"
+                      href={{tutorial.link}}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
                       <PixIcon @name="openNew" />
                     </a>
                     {{#if @edition}}
-                      <PixIconButton @ariaLabel="Modifier le tutoriel" @iconName="edit" @triggerAction={{fn this.editTutorial tutorial}} class="ui right floated" />
-                      <PixIconButton @ariaLabel="Supprimer le tutoriel" @iconName="close" @triggerAction={{fn @removeTutorial @tutorials tutorial}} class="ui right floated" />
+                      <PixIconButton
+                        @ariaLabel="Modifier le tutoriel"
+                        @iconName="edit"
+                        @triggerAction={{fn this.editTutorial tutorial}}
+                        class="ui right floated"
+                      />
+                      <PixIconButton
+                        @ariaLabel="Supprimer le tutoriel"
+                        @iconName="close"
+                        @triggerAction={{fn @removeTutorial @tutorials tutorial}}
+                        class="ui right floated"
+                      />
                     {{/if}}
                   </span>
                 </div>
                 <div class="description">
                   <div>Format : {{tutorial.format}}</div>
                   <div>Durée : {{tutorial.duration}}</div>
-                  <div>Source : {{tutorial.source}}
+                  <div>Source :
+                    {{tutorial.source}}
                     <div class="ui right floated favorite">
-                      <span class="flag" aria-label={{tutorial.language}}>{{flagForLanguage tutorial.normalizedLanguage}}</span>
+                      <span class="flag" aria-label={{tutorial.language}}>{{flagForLanguage
+                          tutorial.normalizedLanguage
+                        }}</span>
                       {{#if tutorial.crush}}
                         <PixIcon @name="favorite" @plainIcon={{true}} />
                       {{/if}}
@@ -194,7 +211,8 @@ export default class Tutorials extends Component {
             <div class="card">
               <div class="content">
                 <PixButton @triggerAction={{this.addTutorial}} @variant="tertiary" @size="small" @iconBefore="add">
-                  Ajouter un tutoriel <span class="sr-only">{{@title}}</span>
+                  Ajouter un tutoriel
+                  <span class="sr-only">{{@title}}</span>
                 </PixButton>
               </div>
             </div>

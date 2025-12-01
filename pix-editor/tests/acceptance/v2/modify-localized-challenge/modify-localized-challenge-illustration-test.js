@@ -11,16 +11,18 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hooks) {
+module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const skillId = 'skill1', skillName = '@tube1', prototypeId = 'prototype1';
+  const skillId = 'skill1',
+    skillName = '@tube1',
+    prototypeId = 'prototype1';
   let storageServiceStub, store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
     this.owner.register('service:storage', StorageServiceStub);
     storageServiceStub = this.owner.lookup('service:storage');
@@ -86,7 +88,11 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
       locales: ['fr'],
     });
 
-    const illustration = this.server.create('attachment', { id: 'attachmentId', type: 'illustration', challengeId: 'challengeIdProto' });
+    const illustration = this.server.create('attachment', {
+      id: 'attachmentId',
+      type: 'illustration',
+      challengeId: 'challengeIdProto',
+    });
 
     challengeProduction.update({ attachments: [illustration] });
     const localizedChallengeProduction = this.server.create('localized-challenge', {
@@ -106,18 +112,23 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
 
     challengeProduction.update({ challengeLocales: [challengeLocale] });
 
-    skill.update({ challengesProduction: [challengeProduction], localizedChallengesProduction: [localizedChallengeProduction] });
+    skill.update({
+      challengesProduction: [challengeProduction],
+      localizedChallengesProduction: [localizedChallengeProduction],
+    });
 
     return authenticateSession();
   });
 
-  test('adding illustration', async function(assert) {
+  test('adding illustration', async function (assert) {
     // given
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
     await selectFiles(screen.getByLabelText('Choisir une image'), file);
     await clickByText('Enregistrer');
@@ -134,18 +145,24 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     assert.strictEqual(attachments.length, 2);
   });
 
-  test('replace illustration', async function(assert) {
+  test('replace illustration', async function (assert) {
     // given
     const illustrationA = new File([], 'challenge-illustrationA.png', { type: 'image/png' });
     const illustrationB = new File([], 'challenge-illustrationB.png', { type: 'image/png' });
 
     const uploadFileStub = sinon.stub(storageServiceStub, 'uploadFile');
-    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationA }) }).resolves({ url: 'data-illustrationA:,', filename: 'illustration-nameA' });
-    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationB }) }).resolves({ url: 'data-illustrationB:,', filename: 'illustration-nameB' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: illustrationA }) })
+      .resolves({ url: 'data-illustrationA:,', filename: 'illustration-nameA' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: illustrationB }) })
+      .resolves({ url: 'data-illustrationB:,', filename: 'illustration-nameB' });
 
     // when
     // adding illustrationA
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
     await clickByText('Modifier');
     await selectFiles(screen.getByLabelText('Choisir une image'), illustrationA);
     await clickByText('Enregistrer');
@@ -170,15 +187,22 @@ module('Acceptance | V2 | Modify-Localized-Challenge-Illustration', function(hoo
     assert.ok(attachments.find(({ url }) => url === 'data-illustrationB:,'));
   });
 
-  test('delete illustration', async function(assert) {
+  test('delete illustration', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'challengeIdProto', localizedChallengeId: 'localizedChallengeIdProto' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'illustration',
+      challengeId: 'challengeIdProto',
+      localizedChallengeId: 'localizedChallengeIdProto',
+    });
 
     // when
-    const screen = await visit(`/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`);
+    const screen = await visit(
+      `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges/localizedChallengeIdProto?locale=nl`,
+    );
 
     await clickByText('Modifier');
-    await clickByText('Supprimer l\'image');
+    await clickByText("Supprimer l'image");
     await clickByText('Enregistrer');
 
     const dialog = screen.getByLabelText('Enregistrer les modifications');

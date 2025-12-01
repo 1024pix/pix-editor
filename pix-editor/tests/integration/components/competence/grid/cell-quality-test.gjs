@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | quality-view', function(hooks) {
+module('Integration | Component | quality-view', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     // given
     const skill = {
       productionPrototype: {},
@@ -20,6 +20,10 @@ module('Integration | Component | quality-view', function(hooks) {
     await render(<template><CellQuality @skill={{skill}} /></template>);
 
     // then
-    assert.dom(this.element).hasText('0 Spoil Non testé Responsive Non testé Non/Mal voyant Non testé Daltonien Non testé Indice Pas d\'indice');
+    assert
+      .dom(this.element)
+      .hasText(
+        "0 Spoil Non testé Responsive Non testé Non/Mal voyant Non testé Daltonien Non testé Indice Pas d'indice",
+      );
   });
 });

@@ -4,27 +4,36 @@ import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import CompetenceActions from 'pixeditor/components/competence/competence-actions';
 
-module('Integration | Component | competence/competence-actions', function(hooks) {
+module('Integration | Component | competence/competence-actions', function (hooks) {
   setupIntlRenderingTest(hooks);
   let selectViewStub;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     selectViewStub = sinon.stub();
     this.selectView = selectViewStub;
   });
 
-  module('#skillSection', function(hooks) {
-    hooks.beforeEach(function() {
+  module('#skillSection', function (hooks) {
+    hooks.beforeEach(function () {
       this.section = 'skills';
       this.exportSkills = sinon.stub();
       this.refresh = sinon.stub();
     });
 
-    test('it should display draft view', async function(assert) {
+    test('it should display draft view', async function (assert) {
       const self = this;
 
       // when
-      await render(<template> <CompetenceActions @section={{self.section}} @refresh={{self.refresh}} @selectView={{self.selectView}} @shareSkills={{self.exportSkills}} /></template>);
+      await render(
+        <template>
+          <CompetenceActions
+            @section={{self.section}}
+            @refresh={{self.refresh}}
+            @selectView={{self.selectView}}
+            @shareSkills={{self.exportSkills}}
+          />
+        </template>,
+      );
 
       await click('[data-test-select-draft-view]');
 
@@ -33,21 +42,31 @@ module('Integration | Component | competence/competence-actions', function(hooks
       assert.ok(selectViewStub.calledWith('draft'));
     });
 
-    test('it should have draft active tab if view is set to `draft`', async function(assert) {
+    test('it should have draft active tab if view is set to `draft`', async function (assert) {
       const self = this;
 
       // given
       this.view = 'draft';
 
       // when
-      await render(<template> <CompetenceActions @section={{self.section}} @refresh={{self.refresh}} @selectView={{self.selectView}} @view={{self.view}} @shareSkills={{self.exportSkills}} /></template>);
+      await render(
+        <template>
+          <CompetenceActions
+            @section={{self.section}}
+            @refresh={{self.refresh}}
+            @selectView={{self.selectView}}
+            @view={{self.view}}
+            @shareSkills={{self.exportSkills}}
+          />
+        </template>,
+      );
 
       // then
       assert.dom('[data-test-select-draft-view]').hasClass('active');
     });
   });
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     const self = this;
 
     // given
@@ -55,7 +74,16 @@ module('Integration | Component | competence/competence-actions', function(hooks
     this.externalAction = () => {};
 
     // when
-    await render(<template> <CompetenceActions @section="challenges" @refresh={{self.externalAction}} @selectView={{self.externalAction}} @shareSkills={{self.externalAction}} /></template>);
+    await render(
+      <template>
+        <CompetenceActions
+          @section="challenges"
+          @refresh={{self.externalAction}}
+          @selectView={{self.externalAction}}
+          @shareSkills={{self.externalAction}}
+        />
+      </template>,
+    );
 
     // then
 

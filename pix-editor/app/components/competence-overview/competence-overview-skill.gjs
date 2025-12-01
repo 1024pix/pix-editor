@@ -28,7 +28,11 @@ export default class CompetenceOverviewSkill extends Component {
       {{#if @skillOverview}}
         <LinkTo
           class={{this.classes}}
-          @route={{if this.args.locale "authenticated.v2.competence-overview.localized-challenges" "authenticated.v2.competence-overview.challenges"}}
+          @route={{if
+            @locale
+            "authenticated.v2.competence-overview.localized-challenges"
+            "authenticated.v2.competence-overview.challenges"
+          }}
           @model={{@skillOverview.airtableId}}
           {{on "click" this.skillClicked}}
         >

@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Theme from 'pixeditor/components/form/theme';
 
-module('Integration | Component | form/theme', function(hooks) {
+module('Integration | Component | form/theme', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it should display theme name in french and in english', async function(assert) {
+  test('it should display theme name in french and in english', async function (assert) {
     const self = this;
 
     // given

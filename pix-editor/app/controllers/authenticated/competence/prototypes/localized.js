@@ -54,23 +54,24 @@ export default class LocalizedController extends Controller {
   }
 
   get translationsUrl() {
-    return new URL(`${this.localizedChallenge.translations}/framework-name/${this.competence.source}/area-code/${this.competence.areaCode}`, window.location).href;
+    return new URL(
+      `${this.localizedChallenge.translations}/framework-name/${this.competence.source}/area-code/${this.competence.areaCode}`,
+      window.location,
+    ).href;
   }
 
   get challengeRoute() {
-    return this.isPrototype ? 'authenticated.competence.prototypes.single' : 'authenticated.competence.prototypes.single.alternatives.single';
+    return this.isPrototype
+      ? 'authenticated.competence.prototypes.single'
+      : 'authenticated.competence.prototypes.single.alternatives.single';
   }
 
   get challengeModels() {
-    return this.isPrototype
-      ? [this.challenge]
-      : [this.challenge.relatedPrototype, this.challenge];
+    return this.isPrototype ? [this.challenge] : [this.challenge.relatedPrototype, this.challenge];
   }
 
   get challengeTitle() {
-    return this.isPrototype
-      ? this.challenge.skillName
-      : `Déclinaison n°${this.challenge.alternativeVersion}`;
+    return this.isPrototype ? this.challenge.skillName : `Déclinaison n°${this.challenge.alternativeVersion}`;
   }
 
   get isPrototype() {
@@ -167,7 +168,7 @@ export default class LocalizedController extends Controller {
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
       this.displayConfirm = false;
@@ -218,7 +219,7 @@ export default class LocalizedController extends Controller {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
     }
   }
 
@@ -240,11 +241,9 @@ export default class LocalizedController extends Controller {
 
   @action close() {
     if (this.isPrototype) {
-      this.router.transitionTo(
-        'authenticated.competence.prototypes',
-        this.competenceController.competence,
-        { queryParams: { leftMaximized: false } },
-      );
+      this.router.transitionTo('authenticated.competence.prototypes', this.competenceController.competence, {
+        queryParams: { leftMaximized: false },
+      });
     } else {
       this.router.transitionTo(
         'authenticated.competence.prototypes.single.alternatives',
@@ -316,7 +315,7 @@ export default class LocalizedController extends Controller {
   async _handleIllustration(challenge) {
     const illustration = challenge.illustration;
     if (illustration && illustration.isNew) {
-      this.loader.start('Envoi de l\'illustration...');
+      this.loader.start("Envoi de l'illustration...");
       const newIllustration = await this.storage.uploadFile({ file: illustration.file });
       challenge.illustration.url = newIllustration.url;
     }
@@ -339,7 +338,11 @@ export default class LocalizedController extends Controller {
     if (!pieceJointe.isNew) {
       return;
     }
-    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    const remoteFile = await this.storage.uploadFile({
+      file: pieceJointe.file,
+      filename: pieceJointe.filename,
+      isAttachment: true,
+    });
     pieceJointe.url = remoteFile.url;
   }
 

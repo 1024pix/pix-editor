@@ -27,7 +27,10 @@ export default class FieldTextarea extends Component {
   }
 
   <template>
-    <div class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}} ...attributes>
+    <div
+      class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}}
+      ...attributes
+    >
       <div>
         <label class="bold" for={{@id}}>
           {{@title}}
@@ -42,13 +45,9 @@ export default class FieldTextarea extends Component {
           </button>
           {{#if @helpContent}}
             <div class="ui compact icon right floated button basic">
-              <PixTooltip
-                @id="info-tooltip"
-                @position="left"
-                @isInline ={{true}}
-              >
+              <PixTooltip @id="info-tooltip" @position="left" @isInline={{true}}>
                 <:triggerElement>
-                  <PixIcon aria-describedby="info-tooltip" @name="help"/>
+                  <PixIcon aria-describedby="info-tooltip" @name="help" />
                 </:triggerElement>
                 <:tooltip>
                   {{this.safeHelpContent}}
@@ -58,8 +57,14 @@ export default class FieldTextarea extends Component {
           {{/if}}
         {{/if}}
       </div>
-      <Textarea id={{@id}} @value={{@value}} rows="4" readonly={{not @edition}} class="attached" {{on "change" this.change}}/>
+      <Textarea
+        id={{@id}}
+        @value={{@value}}
+        rows="4"
+        readonly={{not @edition}}
+        class="attached"
+        {{on "change" this.change}}
+      />
     </div>
-
   </template>
 }

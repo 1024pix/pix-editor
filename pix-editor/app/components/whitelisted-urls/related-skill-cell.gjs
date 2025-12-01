@@ -26,9 +26,7 @@ export default class RelatedSkillCell extends Component {
       return '';
     }
     const skillsArray = this.args.skills.split(',');
-    return skillsArray
-      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'case' }))
-      .join(',');
+    return skillsArray.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'case' })).join(',');
   }
 
   <template>

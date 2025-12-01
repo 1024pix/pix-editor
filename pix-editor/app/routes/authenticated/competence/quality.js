@@ -12,7 +12,9 @@ export default class QualityRoute extends Route {
     if (this.refreshing) {
       const themes = await competence.hasMany('rawThemes').reload();
       const themesTubes = await Promise.all(themes.map((theme) => theme.hasMany('rawTubes').reload()));
-      const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())));
+      const tubesSkills = await Promise.all(
+        themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())),
+      );
       await Promise.all(tubesSkills.flatMap((skills) => skills.map((skill) => skill.hasMany('challenges').reload())));
       this.refreshing = false;
     } else {

@@ -22,33 +22,33 @@ export default class NoteList extends SortedList {
     return this.args.displayStatus ?? true;
   }
 
-<template>
-  <PixTable @data={{this.list}} @caption={{@caption}} @onRowClick={{this.selectRow}}>
-    <:columns as |row context|>
-      <PixTableColumn @context={{context}} data-test-note>
-        <:header>Date</:header>
-        <:cell>{{row.date}}</:cell>
-      </PixTableColumn>
-
-      {{#if this.displayAuthor}}
-        <PixTableColumn @context={{context}} class="author-note">
-          <:header>Auteur</:header>
-          <:cell>{{row.author}}</:cell>
+  <template>
+    <PixTable @data={{this.list}} @caption={{@caption}} @onRowClick={{this.selectRow}}>
+      <:columns as |row context|>
+        <PixTableColumn @context={{context}} data-test-note>
+          <:header>Date</:header>
+          <:cell>{{row.date}}</:cell>
         </PixTableColumn>
-      {{/if}}
 
-      <PixTableColumn @context={{context}}>
-        <:header>Texte</:header>
-        <:cell>{{row.text}}</:cell>
-      </PixTableColumn>
+        {{#if this.displayAuthor}}
+          <PixTableColumn @context={{context}} class="author-note">
+            <:header>Auteur</:header>
+            <:cell>{{row.author}}</:cell>
+          </PixTableColumn>
+        {{/if}}
 
-      {{#if this.displayStatus}}
-        <PixTableColumn @context={{context}} class="status-note">
-          <:header>Statut</:header>
-          <:cell>{{row.status}}</:cell>
+        <PixTableColumn @context={{context}}>
+          <:header>Texte</:header>
+          <:cell>{{row.text}}</:cell>
         </PixTableColumn>
-      {{/if}}
-    </:columns>
-  </PixTable>
-</template>
+
+        {{#if this.displayStatus}}
+          <PixTableColumn @context={{context}} class="status-note">
+            <:header>Statut</:header>
+            <:cell>{{row.status}}</:cell>
+          </PixTableColumn>
+        {{/if}}
+      </:columns>
+    </PixTable>
+  </template>
 }

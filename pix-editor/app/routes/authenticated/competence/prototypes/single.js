@@ -29,7 +29,13 @@ export default class SingleRoute extends Route {
     const skillId = skill.id;
     const overview = 'challenges-production';
 
-    this.router.transitionTo('authenticated.v2.competence-overview.challenges', competenceAirtableId, overview, skillId, { queryParams: { locale } });
+    this.router.transitionTo(
+      'authenticated.v2.competence-overview.challenges',
+      competenceAirtableId,
+      overview,
+      skillId,
+      { queryParams: { locale } },
+    );
   }
 
   setupController(controller, model) {
@@ -65,15 +71,29 @@ export default class SingleRoute extends Route {
         transition.abort();
       }
     } else {
-      if (transition.targetName === 'authenticated.competence.skills.index' || transition.targetName === 'authenticated.competence.quality.index') {
+      if (
+        transition.targetName === 'authenticated.competence.skills.index' ||
+        transition.targetName === 'authenticated.competence.quality.index'
+      ) {
         const challenge = controller.model;
         if (!challenge.isWorkbench) {
           const skill = challenge.skill;
           if (skill) {
-            if (transition.targetName === 'authenticated.competence.quality.index' && skill.get('productionPrototype')) {
-              return this.router.transitionTo('authenticated.competence.quality.single', this.currentData.getCompetence(), skill);
+            if (
+              transition.targetName === 'authenticated.competence.quality.index' &&
+              skill.get('productionPrototype')
+            ) {
+              return this.router.transitionTo(
+                'authenticated.competence.quality.single',
+                this.currentData.getCompetence(),
+                skill,
+              );
             } else if (transition.targetName === 'authenticated.competence.skills.index') {
-              return this.router.transitionTo('authenticated.competence.skills.single', this.currentData.getCompetence(), skill);
+              return this.router.transitionTo(
+                'authenticated.competence.skills.single',
+                this.currentData.getCompetence(),
+                skill,
+              );
             }
           }
         }

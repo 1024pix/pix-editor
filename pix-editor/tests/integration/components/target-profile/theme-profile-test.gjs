@@ -4,20 +4,16 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import ThemeProfile from 'pixeditor/components/target-profile/theme-profile';
 
-module('Integration | Component | target-profile/theme-profile', function(hooks) {
+module('Integration | Component | target-profile/theme-profile', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it filter', async function(assert) {
+  test('it filter', async function (assert) {
     const self = this;
 
     // given
     const theme = EmberObject.create({
       name: 'theme_name',
-      productionTubes: [
-        { selectedLevel: 5 },
-        { selectedLevel: 5 },
-        { selectedLevel: false },
-      ],
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }, { selectedLevel: false }],
     });
 
     this.theme = theme;

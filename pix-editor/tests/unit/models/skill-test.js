@@ -2,7 +2,7 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Model | skill', function(hooks) {
+module('Unit | Model | skill', function (hooks) {
   setupTest(hooks);
   let store;
   const challenge1 = {
@@ -25,11 +25,11 @@ module('Unit | Model | skill', function(hooks) {
     locales: ['Franco Français'],
     status: 'validé',
   };
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
   });
 
-  test('it should return a map of unique language and alternatives', function(assert) {
+  test('it should return a map of unique language and alternatives', function (assert) {
     // given
     const skill = store.createRecord('skill', {
       id: 'rec123456',
@@ -49,7 +49,7 @@ module('Unit | Model | skill', function(hooks) {
     assert.strictEqual(languagesAndAlternativesCount.get('Anglais'), 2);
   });
 
-  test('it should return an array of unique language sorted', function(assert) {
+  test('it should return an array of unique language sorted', function (assert) {
     // given
     const skill = store.createRecord('skill', {
       id: 'rec123456',
@@ -64,17 +64,13 @@ module('Unit | Model | skill', function(hooks) {
 
     // when
     const languages = skill.languages;
-    const expected = [
-      'Anglais',
-      'Franco Français',
-      'Francophone',
-    ];
+    const expected = ['Anglais', 'Franco Français', 'Francophone'];
 
     // then
     assert.deepEqual(languages, expected);
   });
 
-  test('it should clone skill with save method and adapterOptions', async function(assert) {
+  test('it should clone skill with save method and adapterOptions', async function (assert) {
     // given
     const level = Symbol('level');
     const storeStub = { createRecord: sinon.stub() };
@@ -95,15 +91,17 @@ module('Unit | Model | skill', function(hooks) {
 
     // then
     assert.ok(saveStub.calledOnce);
-    assert.ok(saveStub.calledWith({
-      adapterOptions: {
-        clone: true,
-        body: {
-          skillIdToClone: 'pix_1',
-          tubeDestinationId: 'tubeId',
-          level,
+    assert.ok(
+      saveStub.calledWith({
+        adapterOptions: {
+          clone: true,
+          body: {
+            skillIdToClone: 'pix_1',
+            tubeDestinationId: 'tubeId',
+            level,
+          },
         },
-      },
-    }));
+      }),
+    );
   });
 });

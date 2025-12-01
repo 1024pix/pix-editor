@@ -9,7 +9,12 @@ import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
 
 export default class PopinPDFEntries extends Component {
-  options = { language: [{ value: 'en', label: 'Anglais' }, { value: 'fr', label: 'Français' }] };
+  options = {
+    language: [
+      { value: 'en', label: 'Anglais' },
+      { value: 'fr', label: 'Français' },
+    ],
+  };
 
   @tracked title = 'Liste des thèmes et des sujets abordés dans Pix';
   @tracked language = false;
@@ -45,18 +50,14 @@ export default class PopinPDFEntries extends Component {
 
   <template>
     <PixModal
-      @title={{t 'target_profile.pdf_export.title'}}
+      @title={{t "target_profile.pdf_export.title"}}
       @onCloseButtonClick={{this.closeModal}}
       @showModal={{@showModal}}
     >
       <:content>
         <form class="pdf-entries" {{on "submit" this.validate}}>
           <div>
-            <PixInput
-              @value={{this.title}}
-              class="field"
-              {{on "input" this.setTitle}}
-            >
+            <PixInput @value={{this.title}} class="field" {{on "input" this.setTitle}}>
               <:label>Titre</:label>
             </PixInput>
           </div>
@@ -68,24 +69,17 @@ export default class PopinPDFEntries extends Component {
               @hideDefaultOption={{true}}
               class="field"
             >
-              <:label>{{t 'target_profile.pdf_export.field.language'}}</:label>
+              <:label>{{t "target_profile.pdf_export.field.language"}}</:label>
             </PixSelect>
           </div>
         </form>
       </:content>
       <:footer>
-        <PixButton
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{this.closeModal}}
-        >
-          {{t 'common.cancel'}}
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
+          {{t "common.cancel"}}
         </PixButton>
-        <PixButton
-          @triggerAction={{this.validate}}
-          @iconBefore="check"
-        >
-          {{t 'common.validate'}}
+        <PixButton @triggerAction={{this.validate}} @iconBefore="check">
+          {{t "common.validate"}}
         </PixButton>
       </:footer>
     </PixModal>

@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import CellSkillWorkbench from 'pixeditor/components/competence/grid/cell-skill-workbench';
 
-module('Integration | Component | competence/grid/cell-skill-workbench', function(hooks) {
+module('Integration | Component | competence/grid/cell-skill-workbench', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let store;
@@ -11,7 +11,7 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
   const skillName = '@skill1';
   let tube;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     const self = this;
 
     // given
@@ -62,31 +62,19 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
     tube = store.createRecord('tube', {
       id: 'rec123456',
       name: 'tubeName',
-      rawSkills: [
-        skillRecord1,
-        skillRecord2,
-        skillRecord3,
-        skillRecord4,
-        skillRecord5,
-        skillRecord6,
-      ],
+      rawSkills: [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6],
     });
     this.skill = skillRecord1;
-    this.skills = [
-      skillRecord1,
-      skillRecord2,
-      skillRecord3,
-      skillRecord4,
-      skillRecord5,
-      skillRecord6,
-    ];
+    this.skills = [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6];
     this.tube = tube;
 
     // when
-    await render(<template><CellSkillWorkbench @tube={{self.tube}} @skill={{self.skill}} @skills={{self.skills}} /></template>);
+    await render(
+      <template><CellSkillWorkbench @tube={{self.tube}} @skill={{self.skill}} @skills={{self.skills}} /></template>,
+    );
   });
 
-  test('it should display a skill count by status', async function(assert) {
+  test('it should display a skill count by status', async function (assert) {
     // then
     assert.dom('[data-test-draft-count]').hasText('2');
     assert.dom('[data-test-active-count]').hasText('1');

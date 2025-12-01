@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Production from 'pixeditor/components/statistics/production';
 
-module('Integration | Component | statistics/production', function(hooks) {
+module('Integration | Component | statistics/production', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     const self = this;
 
     this.areas = [];

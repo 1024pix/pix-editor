@@ -6,11 +6,11 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Whitelisted URLs | List', function(hooks) {
+module('Acceptance | Whitelisted URLs | List', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('whitelisted-url', {
@@ -51,7 +51,7 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
     return authenticateSession();
   });
 
-  test('should display whitelisted urls when accessing list', async function(assert) {
+  test('should display whitelisted urls when accessing list', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
@@ -64,12 +64,12 @@ module('Acceptance | Whitelisted URLs | List', function(hooks) {
     assert.dom(screen.getByText('http://chiens.fr')).exists();
   });
 
-  test('should delete delete whitelisted url', async function(assert) {
+  test('should delete delete whitelisted url', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('URLs à ne pas analyser');
 
-    const deleteButtons = await screen.findAllByRole('button', { name: 'Supprimer l\'URL' });
+    const deleteButtons = await screen.findAllByRole('button', { name: "Supprimer l'URL" });
     await click(deleteButtons[0]);
     await click(await screen.findByRole('button', { name: 'Oui' }));
 

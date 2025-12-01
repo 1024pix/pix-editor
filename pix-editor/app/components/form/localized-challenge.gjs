@@ -50,8 +50,8 @@ export default class LocalizedChallengeForm extends Component {
         @placeholder="Url de l'embed"
         @change={{@checkEmbedURL}}
       />
-      {{#if @shouldDisplayPrimaryEmbedUrl }}
-        <div class="ui  blue message">
+      {{#if @shouldDisplayPrimaryEmbedUrl}}
+        <div class="ui blue message">
           <p data-testid="default-embed-url">Embed URL auto-générée : {{@localizedChallenge.defaultEmbedURL}}</p>
         </div>
       {{/if}}
@@ -101,12 +101,7 @@ export default class LocalizedChallengeForm extends Component {
       {{/if}}
 
       {{#unless @edition}}
-        <Input
-          @id="localized-challenge-id"
-          @value={{@localizedChallenge.id}}
-          @label="Id"
-          @edition={{false}}
-        />
+        <Input @id="localized-challenge-id" @value={{@localizedChallenge.id}} @label="Id" @edition={{false}} />
       {{/unless}}
     </form>
   </template>

@@ -10,11 +10,11 @@ import sinon from 'sinon';
 import { waitForSelectToBeClosed } from '../helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Create-Challenge', function(hooks) {
+module('Acceptance | Create-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -33,22 +33,50 @@ module('Acceptance | Create-Challenge', function(hooks) {
     this.server.create('theme', { id: 'recTheme2', name: 'monTheme2', rawTubeIds: ['recTube2'] });
     this.server.create('theme', { id: 'recThemeWorkbench', name: 'workbench_1_1', rawSkillIds: ['recTubeWorkbench'] });
 
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'Titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1', 'recThemeWorkbench'], rawTubeIds: ['recTube1', 'recTubeWorkbench'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+    const competence = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      code: '1',
+      title: 'Titre compétence',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: ['recTheme1', 'recThemeWorkbench'],
+      rawTubeIds: ['recTube1', 'recTubeWorkbench'],
+    });
+    this.server.create('competence', {
+      id: 'recCompetence2.1',
+      pixId: 'pixId recCompetence2.1',
+      rawThemeIds: ['recTheme2'],
+      rawTubeIds: ['recTube2'],
+    });
 
-    this.server.create('competence-overview', { id: `${competence.pixId}:challenges-production`, thematicOverviews: [] });
-    this.server.create('competence-overview', { id: `${competence.pixId}:challenges-workbench`, thematicOverviews: [] });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [],
+    });
+    this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-workbench`,
+      thematicOverviews: [],
+    });
 
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
-    this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
+    this.server.create('area', {
+      id: 'recArea2',
+      name: '2. Communication et collaboration',
+      code: '2',
+      competenceIds: ['recCompetence2.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
     return authenticateSession();
   });
 
-  test('creating a new challenge', async function(assert) {
+  test('creating a new challenge', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -56,9 +84,15 @@ module('Acceptance | Create-Challenge', function(hooks) {
     const illustrationFile = new File([], 'challenge-illustration.png', { type: 'image/png' });
     const attachmentFile = new File([], 'challenge-attachment.csv', { type: 'text/csv' });
     const uploadFileStub = sinon.stub(storageService, 'uploadFile');
-    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationFile }) })
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: illustrationFile }) })
       .resolves({ url: 'data_illustration:,', filename: 'illustration-name' });
-    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentFile }), filename: 'challenge-attachment.csv', isAttachment: true })
+    uploadFileStub
+      .withArgs({
+        file: sinon.match({ file: attachmentFile }),
+        filename: 'challenge-attachment.csv',
+        isAttachment: true,
+      })
       .resolves({ url: 'data_attachment:,', filename: 'attachment-name' });
 
     // when
@@ -74,7 +108,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await clickByText('Formulation à revoir');
     await clickByText('Incompatible iPad certif');
     await clickByText('Sans validation (Pix Junior)');
-    await clickByText('Validation par l\'embed (Pix Junior)');
+    await clickByText("Validation par l'embed (Pix Junior)");
     await clickByText('Sourds et malentendants');
     await click(await screen.findByRole('option', { name: 'RAS' }));
     await waitForSelectToBeClosed(screen);
@@ -114,7 +148,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
     assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
     assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
-    assert.true(screen.getByRole('checkbox', { name: 'Validation par l\'embed (Pix Junior)' }).checked);
+    assert.true(screen.getByRole('checkbox', { name: "Validation par l'embed (Pix Junior)" }).checked);
     assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
   });
 });

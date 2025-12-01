@@ -1,4 +1,5 @@
-
-<template><div class="page">
-  {{outlet}}
-</div></template>
+<template>
+  <div class="page">
+    {{outlet}}
+  </div>
+</template>

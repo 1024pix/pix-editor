@@ -7,12 +7,12 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | competence-management/single', function(hooks) {
+module('Acceptance | competence-management/single', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store, originalWindowConfirm;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     originalWindowConfirm = window.confirm;
     store = this.owner.lookup('service:store');
@@ -20,16 +20,21 @@ module('Acceptance | competence-management/single', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'persistantPixIdRecCompetence', title: 'Titre' });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix+', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     window.confirm = originalWindowConfirm;
   });
 
-  test('it should edit a competence', async function(assert) {
+  test('it should edit a competence', async function (assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -45,7 +50,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.strictEqual(competence.title, 'Nouveau titre');
   });
 
-  test('it should cancel edit', async function(assert) {
+  test('it should cancel edit', async function (assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -61,7 +66,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.strictEqual(competence.title, 'Titre');
   });
 
-  test('it should prevent transition on edition', async function(assert) {
+  test('it should prevent transition on edition', async function (assert) {
     // given
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(false);

@@ -9,13 +9,13 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../setup-application-rendering';
 
-module('Acceptance | Controller | Create alternative challenge', function(hooks) {
+module('Acceptance | Controller | Create alternative challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let challenge;
   let skill;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -23,7 +23,12 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    const competence = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: ['recTheme1'],
+      rawTubeIds: ['recTube1'],
+    });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
       thematicOverviews: [
@@ -55,15 +60,20 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
         },
       ],
     });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('create a challenge alternative', async function(assert) {
+  test('create a challenge alternative', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -90,10 +100,10 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.ok(attachments.every((record) => !record.isNew));
   });
 
-  test('create a challenge alternative clone the attachments', async function(assert) {
+  test('create a challenge alternative clone the attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      cloneFile() { }
+      cloneFile() {}
     }
     const attachment = this.server.create('attachment', { url: 'data:1,', challenge });
     challenge.update({ filesIds: [attachment.id] });
@@ -122,13 +132,19 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
-  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
+  test("create a challenge alternative don't clone deleted attachments", async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      cloneFile() { }
+      cloneFile() {}
     }
     const challenge2 = this.server.create('challenge', { id: 'recChallenge2', filesIds: ['recAttachment1'] });
-    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', url: 'data:,', filename: 'test.ods', challenge: challenge2 });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'attachment',
+      url: 'data:,',
+      filename: 'test.ods',
+      challenge: challenge2,
+    });
     skill.update({ challengeIds: ['recChallenge2'] });
 
     this.owner.register('service:storage', StorageServiceStub);

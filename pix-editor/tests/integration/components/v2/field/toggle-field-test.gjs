@@ -7,11 +7,11 @@ import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Integration | Component | v2/field/toggle-field', function(hooks) {
+module('Integration | Component | v2/field/toggle-field', function (hooks) {
   setupIntlRenderingTest(hooks);
   let setDisplayFieldStub;
   let confirmAskStub;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     confirmAskStub = sinon.stub().resolves();
     class ConfirmService extends Service {
       ask = confirmAskStub;
@@ -21,11 +21,12 @@ module('Integration | Component | v2/field/toggle-field', function(hooks) {
     setDisplayFieldStub = sinon.stub();
   });
 
-  test('if `edition` is `false` toggle button should be hidden', async function(assert) {
+  test('if `edition` is `false` toggle button should be hidden', async function (assert) {
     // given
     const modelData = EmberObject.create({ someField: '' });
     // when
-    const screen = await render(<template>
+    const screen = await render(
+      <template>
         <ToggleField
           @edition={{false}}
           @model={{modelData}}
@@ -34,60 +35,68 @@ module('Integration | Component | v2/field/toggle-field', function(hooks) {
           @displayTextButton="Ajouter un champ"
           @confirmText="le champ"
           @displayField={{false}}
-          @setDisplayField={{setDisplayFieldStub}}>
-            <label for="input">input</label>
-            <input type="text" id="input">
+          @setDisplayField={{setDisplayFieldStub}}
+        >
+          <label for="input">input</label>
+          <input type="text" id="input" />
         </ToggleField>
-      </template>);
+      </template>,
+    );
 
     // then
     assert.dom(screen.queryByRole('button', { name: 'Ajouter un champ' })).doesNotExist();
   });
 
-  module('if model field is empty', function(hooks) {
+  module('if model field is empty', function (hooks) {
     let modelData;
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       modelData = EmberObject.create({ someField: '' });
     });
 
-    test('if `displayField` is `false` yield content should be hidden', async function(assert) {
+    test('if `displayField` is `false` yield content should be hidden', async function (assert) {
       // when
-      const screen = await render(<template>
-        <ToggleField
-          @edition={{true}}
-          @model={{modelData}}
-          @modelField="someField"
-          @hideTextButton="Supprimer le champ"
-          @displayTextButton="Ajouter un champ"
-          @confirmText="le champ"
-          @displayField={{false}}
-          @setDisplayField={{setDisplayFieldStub}}>
+      const screen = await render(
+        <template>
+          <ToggleField
+            @edition={{true}}
+            @model={{modelData}}
+            @modelField="someField"
+            @hideTextButton="Supprimer le champ"
+            @displayTextButton="Ajouter un champ"
+            @confirmText="le champ"
+            @displayField={{false}}
+            @setDisplayField={{setDisplayFieldStub}}
+          >
             <label for="input">input</label>
-            <input type="text" id="input">
-        </ToggleField>
-      </template>);
+            <input type="text" id="input" />
+          </ToggleField>
+        </template>,
+      );
 
       // then
       assert.dom(screen.getByRole('button', { name: 'Ajouter un champ' })).exists();
       assert.dom(screen.queryByRole('input', { name: 'input' })).doesNotExist();
     });
 
-    test('it should call `setDisplayField` on click with `true` as argument', async function(assert) {
+    test('it should call `setDisplayField` on click with `true` as argument', async function (assert) {
       // when
-      await render(<template>
-        <ToggleField
-          @edition={{true}}
-          @model={{modelData}}
-          @modelField="someField"
-          @hideTextButton="Supprimer le champ"
-          @displayTextButton="Ajouter un champ"
-          @confirmText="le champ"
-          @displayField={{false}}
-          @setDisplayField={{setDisplayFieldStub}}>
+      await render(
+        <template>
+          <ToggleField
+            @edition={{true}}
+            @model={{modelData}}
+            @modelField="someField"
+            @hideTextButton="Supprimer le champ"
+            @displayTextButton="Ajouter un champ"
+            @confirmText="le champ"
+            @displayField={{false}}
+            @setDisplayField={{setDisplayFieldStub}}
+          >
             <label for="input">input</label>
-            <input type="text" id="input">
-        </ToggleField>
-      </template>);
+            <input type="text" id="input" />
+          </ToggleField>
+        </template>,
+      );
 
       await clickByText('Ajouter un champ');
 
@@ -95,22 +104,25 @@ module('Integration | Component | v2/field/toggle-field', function(hooks) {
       assert.ok(setDisplayFieldStub.calledWith(true));
     });
 
-    test('if displayField is `true` yield content should be display', async function(assert) {
+    test('if displayField is `true` yield content should be display', async function (assert) {
       // when
-      const screen = await render(<template>
-        <ToggleField
-          @edition={{true}}
-          @model={{modelData}}
-          @modelField="someField"
-          @hideTextButton="Supprimer le champ"
-          @displayTextButton="Ajouter un champ"
-          @confirmText="le champ"
-          @displayField={{true}}
-          @setDisplayField={{setDisplayFieldStub}}>
+      const screen = await render(
+        <template>
+          <ToggleField
+            @edition={{true}}
+            @model={{modelData}}
+            @modelField="someField"
+            @hideTextButton="Supprimer le champ"
+            @displayTextButton="Ajouter un champ"
+            @confirmText="le champ"
+            @displayField={{true}}
+            @setDisplayField={{setDisplayFieldStub}}
+          >
             <label for="input">input</label>
-            <input type="text" id="input">
-        </ToggleField>
-      </template>);
+            <input type="text" id="input" />
+          </ToggleField>
+        </template>,
+      );
 
       // then
       assert.dom(screen.getByRole('button', { name: 'Supprimer le champ' })).exists();
@@ -118,51 +130,57 @@ module('Integration | Component | v2/field/toggle-field', function(hooks) {
     });
   });
 
-  module('if model field is fill', function(hooks) {
+  module('if model field is fill', function (hooks) {
     let modelData;
 
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       modelData = EmberObject.create({ someField: 'Some data' });
     });
 
-    test('yield content should be display', async function(assert) {
+    test('yield content should be display', async function (assert) {
       // when
-      const screen = await render(<template>
-        <ToggleField
-          @edition={{true}}
-          @model={{modelData}}
-          @modelField="someField"
-          @hideTextButton="Supprimer le champ"
-          @displayTextButton="Ajouter un champ"
-          @confirmText="le champ"
-          @displayField={{false}}
-          @setDisplayField={{setDisplayFieldStub}}>
+      const screen = await render(
+        <template>
+          <ToggleField
+            @edition={{true}}
+            @model={{modelData}}
+            @modelField="someField"
+            @hideTextButton="Supprimer le champ"
+            @displayTextButton="Ajouter un champ"
+            @confirmText="le champ"
+            @displayField={{false}}
+            @setDisplayField={{setDisplayFieldStub}}
+          >
             <label for="input">input</label>
-            <input type="text" id="input">
-        </ToggleField>
-      </template>);
+            <input type="text" id="input" />
+          </ToggleField>
+        </template>,
+      );
 
       // then
       assert.dom(screen.getByRole('button', { name: 'Supprimer le champ' })).exists();
       assert.dom(screen.getByLabelText('input')).exists();
     });
 
-    test('it should call `setDisplayField` on click with `false` as argument and empty model field', async function(assert) {
+    test('it should call `setDisplayField` on click with `false` as argument and empty model field', async function (assert) {
       // when
-      await render(<template>
-        <ToggleField
-          @edition={{true}}
-          @model={{modelData}}
-          @modelField="someField"
-          @hideTextButton="Supprimer le champ"
-          @displayTextButton="Ajouter un champ"
-          @confirmText="le champ"
-          @displayField={{true}}
-          @setDisplayField={{setDisplayFieldStub}}>
+      await render(
+        <template>
+          <ToggleField
+            @edition={{true}}
+            @model={{modelData}}
+            @modelField="someField"
+            @hideTextButton="Supprimer le champ"
+            @displayTextButton="Ajouter un champ"
+            @confirmText="le champ"
+            @displayField={{true}}
+            @setDisplayField={{setDisplayFieldStub}}
+          >
             <label for="input">input</label>
-            <input type="text" id="input">
-        </ToggleField>
-      </template>);
+            <input type="text" id="input" />
+          </ToggleField>
+        </template>,
+      );
 
       await clickByText('Supprimer le champ');
 

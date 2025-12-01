@@ -60,7 +60,7 @@ export default class NoteForm extends Component {
             </:label>
           </PixSelect>
         </div>
-        <div class="field {{if @edition "" "disabled"}}">
+        <div class="field {{if @edition '' 'disabled'}}">
           <label for="note">Texte</label>
           <div class="ui input">
             <Textarea id="note" @value={{@entry.text}} rows="4" readonly={{not @edition}} />

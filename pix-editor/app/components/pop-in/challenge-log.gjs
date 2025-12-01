@@ -28,18 +28,22 @@ export default class PopinChallengeLog extends Component {
 
   constructor(...args) {
     super(...args);
-    this.args.challenge.hasMany('notes').load().then(() => {
-      this.notesLoaded = true;
-    });
-    this.args.challenge.hasMany('changelogEntries').load().then(() => {
-      this.changelogLoaded = true;
-    });
+    this.args.challenge
+      .hasMany('notes')
+      .load()
+      .then(() => {
+        this.notesLoaded = true;
+      });
+    this.args.challenge
+      .hasMany('changelogEntries')
+      .load()
+      .then(() => {
+        this.changelogLoaded = true;
+      });
   }
 
   get title() {
-    return this.args.challenge
-      ? `Journal de ${this.args.challenge.skillName}`
-      : 'no_title';
+    return this.args.challenge ? `Journal de ${this.args.challenge.skillName}` : 'no_title';
   }
 
   get notes() {
@@ -87,7 +91,10 @@ export default class PopinChallengeLog extends Component {
     await this.logEntry.save();
 
     this.list = true;
-    await Promise.all([this.args.challenge.hasMany('notes').reload(), this.args.challenge.hasMany('changelogEntries').reload()]);
+    await Promise.all([
+      this.args.challenge.hasMany('notes').reload(),
+      this.args.challenge.hasMany('changelogEntries').reload(),
+    ]);
   }
 
   @action
@@ -107,7 +114,7 @@ export default class PopinChallengeLog extends Component {
   showNote(note) {
     this.logEntryEdition = false;
     this.logEntry = note;
-    this.mayEditEntry = (note.author === this.config.author);
+    this.mayEditEntry = note.author === this.config.author;
     this.list = false;
   }
 
@@ -133,25 +140,52 @@ export default class PopinChallengeLog extends Component {
   }
 
   <template>
-    <PixModal
-      @title={{this.title}}
-      @onCloseButtonClick={{@close}}
-      @showModal={{@showModal}}
-    >
+    <PixModal @title={{this.title}} @onCloseButtonClick={{@close}} @showModal={{@showModal}}>
       <:content>
         {{#if this.list}}
           <div role="tablist" aria-label="Liste des notes" class="challenge-log__tabs">
-            <button role="tab" class="{{if (eq this.currentTabId 'tab1') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab1'}} aria-controls="tabpanel1" id="tab1">Mes notes</button>
-            <button role="tab" class="{{if (eq this.currentTabId 'tab2') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab2'}} aria-controls="tabpanel2" id="tab2">Toutes les notes</button>
-            <button role="tab" class="{{if (eq this.currentTabId 'tab3') "active" ""}}" {{on "click" this.onTabClick}} aria-selected={{eq this.currentTabId 'tab3'}} aria-controls="tabpanel3" id="tab3">Changelog</button>
+            <button
+              role="tab"
+              class="{{if (eq this.currentTabId 'tab1') 'active' ''}}"
+              aria-selected={{eq this.currentTabId "tab1"}}
+              aria-controls="tabpanel1"
+              id="tab1"
+              type="button"
+              {{on "click" this.onTabClick}}
+            >Mes notes</button>
+            <button
+              role="tab"
+              class="{{if (eq this.currentTabId 'tab2') 'active' ''}}"
+              aria-selected={{eq this.currentTabId "tab2"}}
+              aria-controls="tabpanel2"
+              id="tab2"
+              type="button"
+              {{on "click" this.onTabClick}}
+            >Toutes les notes</button>
+            <button
+              role="tab"
+              class="{{if (eq this.currentTabId 'tab3') 'active' ''}}"
+              aria-selected={{eq this.currentTabId "tab3"}}
+              aria-controls="tabpanel3"
+              id="tab3"
+              type="button"
+              {{on "click" this.onTabClick}}
+            >Changelog</button>
           </div>
 
-          <div id="tabpanel1" role="tabpanel" tabindex="0" aria-labelledby="tab1" class="{{if (eq this.currentTabId 'tab1') "" "hidden"}}" data-tab="notes">
+          <div
+            id="tabpanel1"
+            role="tabpanel"
+            tabindex="0"
+            aria-labelledby="tab1"
+            class="{{if (eq this.currentTabId 'tab1') '' 'hidden'}}"
+            data-tab="notes"
+          >
             <ListNotes
               @list={{this.ownNotes}}
               @displayAuthor={{false}}
               @show={{this.showOwnNote}}
-              @caption={{concat "Mes notes sur l’épreuve de " this.args.challenge.skillName}}
+              @caption={{concat "Mes notes sur l’épreuve de " @challenge.skillName}}
             />
             <div class="ui text menu note-menu">
               <PixButton @triggerAction={{this.addNote}} @variant="tertiary" @size="small" @iconBefore="add">
@@ -159,19 +193,33 @@ export default class PopinChallengeLog extends Component {
               </PixButton>
             </div>
           </div>
-          <div id="tabpanel2" role="tabpanel" tabindex="0" aria-labelledby="tab2" class="{{if (eq this.currentTabId 'tab2') "" "hidden"}}" data-tab="notes">
+          <div
+            id="tabpanel2"
+            role="tabpanel"
+            tabindex="0"
+            aria-labelledby="tab2"
+            class="{{if (eq this.currentTabId 'tab2') '' 'hidden'}}"
+            data-tab="notes"
+          >
             <ListNotes
               @list={{this.notes}}
               @show={{this.showNote}}
-              @caption={{concat "Toutes les notes sur l’épreuve de " this.args.challenge.skillName}}
+              @caption={{concat "Toutes les notes sur l’épreuve de " @challenge.skillName}}
             />
           </div>
-          <div id="tabpanel3" role="tabpanel" tabindex="0" aria-labelledby="tab3" class="{{if (eq this.currentTabId 'tab3') "" "hidden"}}" data-tab="notes">
+          <div
+            id="tabpanel3"
+            role="tabpanel"
+            tabindex="0"
+            aria-labelledby="tab3"
+            class="{{if (eq this.currentTabId 'tab3') '' 'hidden'}}"
+            data-tab="notes"
+          >
             <ListNotes
               @list={{this.changelogEntries}}
               @displayStatus={{false}}
               @show={{this.showChangelogEntry}}
-              @caption={{concat "Changelog de l’épreuve de " this.args.challenge.skillName}}
+              @caption={{concat "Changelog de l’épreuve de " @challenge.skillName}}
             />
           </div>
         {{else}}

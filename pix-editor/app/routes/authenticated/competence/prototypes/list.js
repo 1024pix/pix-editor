@@ -7,7 +7,10 @@ export default class ListRoute extends Route {
   @service store;
 
   async model(params) {
-    const [tube, skill] = await Promise.all([this.store.findRecord('tube', params.tube_id), this.store.findRecord('skill', params.skill_id)]);
+    const [tube, skill] = await Promise.all([
+      this.store.findRecord('tube', params.tube_id),
+      this.store.findRecord('skill', params.skill_id),
+    ]);
     const skills = await tube.rawSkills;
     await Promise.all(skills.map((skill) => skill.challenges));
     return { skills: tube.filledSkills[skill.level - 1], skill };
@@ -25,9 +28,20 @@ export default class ListRoute extends Route {
   @action
   willTransition(transition) {
     if (transition.targetName === 'authenticated.competence.skills.index') {
-      return this.router.transitionTo('authenticated.competence.skills.single', this.controllerFor('authenticated.competence').model, this.controllerFor('authenticated.competence.prototypes.list').selectedSkill);
-    } else if (transition.targetName === 'authenticated.competence.quality.index' && this.controllerFor('authenticated.competence.prototypes.list').selectedSkill.productionPrototype) {
-      return this.router.transitionTo('authenticated.competence.quality.single', this.controllerFor('authenticated.competence').model, this.controllerFor('authenticated.competence.prototypes.list').selectedSkill);
+      return this.router.transitionTo(
+        'authenticated.competence.skills.single',
+        this.controllerFor('authenticated.competence').model,
+        this.controllerFor('authenticated.competence.prototypes.list').selectedSkill,
+      );
+    } else if (
+      transition.targetName === 'authenticated.competence.quality.index' &&
+      this.controllerFor('authenticated.competence.prototypes.list').selectedSkill.productionPrototype
+    ) {
+      return this.router.transitionTo(
+        'authenticated.competence.quality.single',
+        this.controllerFor('authenticated.competence').model,
+        this.controllerFor('authenticated.competence.prototypes.list').selectedSkill,
+      );
     }
     return true;
   }

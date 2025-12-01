@@ -1,7 +1,6 @@
 import { Factory } from 'miragejs';
 
 export default Factory.extend({
-
   name: '',
   code: '',
   competenceIds() {
@@ -9,5 +8,4 @@ export default Factory.extend({
   },
   titleFrFr: '',
   titleEnUs: '',
-
 });

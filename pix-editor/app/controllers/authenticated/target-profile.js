@@ -166,7 +166,7 @@ export default class TargetProfileController extends Controller {
   generateThematicResult(title) {
     const ids = this._getSelectedSkillsIds();
     const fileTitle = title ? `${title}-RT` : 'Résultat_thématique';
-    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
+    const fileName = `${fileTitle}_${new Date().toLocaleString('fr-FR')}.txt`;
     this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
@@ -174,7 +174,7 @@ export default class TargetProfileController extends Controller {
   generate(title) {
     const ids = this._getSelectedSkillsIds(true);
     const fileTitle = title ? title : 'profil_identifiants';
-    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
+    const fileName = `${fileTitle}_${new Date().toLocaleString('fr-FR')}.txt`;
     this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
@@ -205,7 +205,7 @@ export default class TargetProfileController extends Controller {
       }, areaValues);
     }, []);
     const fileTitle = title ? title : 'profil';
-    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.json`;
+    const fileName = `${fileTitle}_${new Date().toLocaleString('fr-FR')}.json`;
     this.fileSaver.saveAs(JSON.stringify(data), fileName);
   }
 
@@ -228,7 +228,7 @@ export default class TargetProfileController extends Controller {
     const sql = ids.reduce((content, id) => {
       return content + `\n${profileId},${id}`;
     }, 'targetProfileId,skillId');
-    const fileName = `${profileId}_generate_profile_${(new Date()).toLocaleString('fr-FR')}.csv`;
+    const fileName = `${profileId}_generate_profile_${new Date().toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(sql, fileName);
   }
 
@@ -251,7 +251,7 @@ export default class TargetProfileController extends Controller {
       };
       reader.readAsText(file);
     } catch (error) {
-      this.notify.error('Erreur lors de l\'ouverture du fichier');
+      this.notify.error("Erreur lors de l'ouverture du fichier");
       Sentry.captureException(error);
     }
   }
@@ -272,7 +272,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _determineFileType(data) {
-    if (Array.isArray(data) && data.length > 0 && typeof (data[0]) === 'string') {
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'string') {
       return 'orga';
     }
     return 'editor';

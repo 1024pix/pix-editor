@@ -13,16 +13,13 @@ export default class AreaModel extends Model {
   get sortedCompetences() {
     const competences = this.competencesArray;
 
-    return competences
-      .slice()
-      .sort((competenceA, competenceB) => {
-        if (!competenceA.code || !competenceB.code) return 0;
-        const [domainCodeA, competenceCodeA] = competenceA.code.split('.');
-        const [domainCodeB, competenceCodeB] = competenceB.code.split('.');
-        if (parseInt(domainCodeA) === parseInt(domainCodeB))
-          return parseInt(competenceCodeA) - parseInt(competenceCodeB);
-        return parseInt(domainCodeA) - parseInt(domainCodeB);
-      });
+    return competences.slice().sort((competenceA, competenceB) => {
+      if (!competenceA.code || !competenceB.code) return 0;
+      const [domainCodeA, competenceCodeA] = competenceA.code.split('.');
+      const [domainCodeB, competenceCodeB] = competenceB.code.split('.');
+      if (parseInt(domainCodeA) === parseInt(domainCodeB)) return parseInt(competenceCodeA) - parseInt(competenceCodeB);
+      return parseInt(domainCodeA) - parseInt(domainCodeB);
+    });
   }
 
   get competencesArray() {

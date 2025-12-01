@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import CellProduction from 'pixeditor/components/competence/grid/cell-production';
 
-module('Integration | Component | competence/grid/cell-production', function(hooks) {
+module('Integration | Component | competence/grid/cell-production', function (hooks) {
   setupIntlRenderingTest(hooks);
   let skillOverview, skillOverviewNR, skillOverviewFR, skillOverviewDE, skillOverviewEN;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     skillOverview = EmberObject.create({
       name: 'skillOverview',
@@ -45,7 +45,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     });
   });
 
-  test('it should display a number of production challenges and draft alternative', async function(assert) {
+  test('it should display a number of production challenges and draft alternative', async function (assert) {
     const self = this;
 
     // given
@@ -59,7 +59,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     assert.dom('[data-test-draft-alternative-length]').hasText('(2)');
   });
 
-  test('it should display a number of production challenges and draft alternative filtered by language', async function(assert) {
+  test('it should display a number of production challenges and draft alternative filtered by language', async function (assert) {
     const self = this;
 
     // given
@@ -67,14 +67,18 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     this.skillOverview = skillOverviewFR;
 
     // when
-    await render(<template><CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} /></template>);
+    await render(
+      <template>
+        <CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} />
+      </template>,
+    );
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('3');
     assert.dom('[data-test-draft-alternative-length]').hasText('(1)');
   });
 
-  test('it should display `NR` if prototype is not declinable', async function(assert) {
+  test('it should display `NR` if prototype is not declinable', async function (assert) {
     const self = this;
 
     // given
@@ -87,7 +91,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     assert.dom('.not-declinable').hasText('NR');
   });
 
-  test('it should alert with danger class if have no challenge and no draft', async function(assert) {
+  test('it should alert with danger class if have no challenge and no draft', async function (assert) {
     const self = this;
 
     // given
@@ -95,7 +99,11 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     this.skillOverview = skillOverviewDE;
 
     // when
-    await render(<template><CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} /></template>);
+    await render(
+      <template>
+        <CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} />
+      </template>,
+    );
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('0');
@@ -103,7 +111,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     assert.dom('[data-test-skill-cell]').hasClass('danger');
   });
 
-  test('it should alert with warning class if have no challenge but draft', async function(assert) {
+  test('it should alert with warning class if have no challenge but draft', async function (assert) {
     const self = this;
 
     // given
@@ -111,7 +119,11 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     this.skillOverview = skillOverviewEN;
 
     // when
-    await render(<template><CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} /></template>);
+    await render(
+      <template>
+        <CellProduction @skillOverview={{self.skillOverview}} @languageFilter={{self.languageFilter}} />
+      </template>,
+    );
 
     // then
     assert.dom('[data-test-production-alternative-length]').hasText('0');

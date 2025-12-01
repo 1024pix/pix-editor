@@ -13,7 +13,7 @@ export default class AccessService extends Service {
 
   isReadonly() {
     const level = this.config.accessLevel;
-    return (level === READ_ONLY);
+    return level === READ_ONLY;
   }
 
   mayCreatePrototype() {
@@ -184,17 +184,17 @@ export default class AccessService extends Service {
 
   isReplicator() {
     const level = this.config.accessLevel;
-    return (level >= REPLICATOR);
+    return level >= REPLICATOR;
   }
 
   isEditor() {
     const level = this.config.accessLevel;
-    return (level >= EDITOR);
+    return level >= EDITOR;
   }
 
   isAdmin() {
     const level = this.config.accessLevel;
-    return (level === ADMIN);
+    return level === ADMIN;
   }
 
   getLevel(accessString) {

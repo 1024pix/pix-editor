@@ -17,8 +17,7 @@ export default class NewRoute extends SingleRoute {
     });
   }
 
-  async afterModel() {
-  }
+  async afterModel() {}
 
   setupController(controller) {
     super.setupController(...arguments);

@@ -6,12 +6,12 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | area-management/new', function(hooks) {
+module('Acceptance | area-management/new', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
@@ -23,7 +23,7 @@ module('Acceptance | area-management/new', function(hooks) {
     return authenticateSession();
   });
 
-  test('it should create a new area', async function(assert) {
+  test('it should create a new area', async function (assert) {
     // given
     const newAreaTitle = 'Nouveau titre';
 
@@ -37,12 +37,17 @@ module('Acceptance | area-management/new', function(hooks) {
 
     // then
     const framework = await store.peekRecord('framework', 'recFramework1');
-    assert.ok(framework.hasMany('areas').value().find((area) => area.titleFrFr === newAreaTitle));
+    assert.ok(
+      framework
+        .hasMany('areas')
+        .value()
+        .find((area) => area.titleFrFr === newAreaTitle),
+    );
     assert.dom(find('[data-test-main-message]')).hasText('Domaine créé');
     assert.strictEqual(currentURL(), '/');
   });
 
-  test('it should cancel creation', async function(assert) {
+  test('it should cancel creation', async function (assert) {
     // when
     await visit('/area-management/new/recFramework1');
     await click(find('[data-test-cancel-button]'));

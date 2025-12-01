@@ -9,7 +9,10 @@ export default class ChallengesRoute extends Route {
   beforeModel(transition) {
     const locale = transition.to.queryParams.locale;
     if (locale) {
-      this.router.transitionTo('authenticated.v2.competence-overview.localized-challenges', transition.to.params.skill_id);
+      this.router.transitionTo(
+        'authenticated.v2.competence-overview.localized-challenges',
+        transition.to.params.skill_id,
+      );
     }
   }
 
@@ -36,6 +39,8 @@ export default class ChallengesRoute extends Route {
 
     const prototype = challenges.find((challenge) => challenge.isPrototype);
 
-    this.router.transitionTo('authenticated.competence.prototypes.single', competence_id, prototype.id, { queryParams: { languageFilter: locale, view } });
+    this.router.transitionTo('authenticated.competence.prototypes.single', competence_id, prototype.id, {
+      queryParams: { languageFilter: locale, view },
+    });
   }
 }

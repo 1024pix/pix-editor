@@ -6,41 +6,57 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Static Courses | Creation', function(hooks) {
+module('Acceptance | Static Courses | Creation', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
-    this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01') });
-    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01') });
+    this.server.create('static-course-summary', {
+      id: 'courseA',
+      name: 'Premier test statique',
+      challengeCount: 3,
+      createdAt: new Date('2020-01-01'),
+    });
+    this.server.create('static-course-summary', {
+      id: 'courseB',
+      name: 'Deuxième test statique',
+      challengeCount: 10,
+      createdAt: new Date('2019-01-01'),
+    });
     this.server.create('static-course-tag', { id: 123, label: 'COUleur' });
     this.server.create('static-course-tag', { id: 456, label: 'COUrage' });
     this.server.create('static-course-tag', { id: 789, label: 'Foin' });
 
     const challengeSummaries = [];
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalA',
-      instruction: 'instruction chalA',
-      skillName: '@acquisPourChalA',
-      status: 'proposé',
-      index: 1,
-    }));
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalB',
-      instruction: 'instruction chalB',
-      skillName: '@acquisPourChalB',
-      status: 'validé',
-      index: 0,
-    }));
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalC',
-      instruction: 'instruction chalC',
-      skillName: '@acquisPourChalC',
-      status: 'archivé',
-      index: 2,
-    }));
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalA',
+        instruction: 'instruction chalA',
+        skillName: '@acquisPourChalA',
+        status: 'proposé',
+        index: 1,
+      }),
+    );
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalB',
+        instruction: 'instruction chalB',
+        skillName: '@acquisPourChalB',
+        status: 'validé',
+        index: 0,
+      }),
+    );
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalC',
+        instruction: 'instruction chalC',
+        skillName: '@acquisPourChalC',
+        status: 'archivé',
+        index: 2,
+      }),
+    );
     this.server.create('static-course', {
       id: 'courseA',
       name: 'Premier test statique',
@@ -51,14 +67,14 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
     });
   });
 
-  module('when user does not have write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user does not have write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'readonly' });
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access creation form', async function(assert) {
+    test('should prevent user from being able to access creation form', async function (assert) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -66,18 +82,18 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
 
       // then
       assert.strictEqual(currentURL(), '/static-courses');
-      assert.dom(screen.getByText('Vous n\'avez pas les droits suffisants pour créer un test statique.')).exists();
+      assert.dom(screen.getByText("Vous n'avez pas les droits suffisants pour créer un test statique.")).exists();
     });
   });
 
-  module('when user has write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user has write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    test('should create a static course', async function(assert) {
+    test('should create a static course', async function (assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -99,17 +115,21 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       // then
       assert.strictEqual(currentURL(), '/static-courses/newStaticCourseId');
       const [nameItem, descriptionItem] = screen.getAllByRole('listitem');
-      const removeWhitespacesFnc = (str) => str
-        .trim()
-        .replace(/\s{2,}/g, '')
-        .replace(/\s?:\s?/g, ':');
+      const removeWhitespacesFnc = (str) =>
+        str
+          .trim()
+          .replace(/\s{2,}/g, '')
+          .replace(/\s?:\s?/g, ':');
       assert.strictEqual(removeWhitespacesFnc(nameItem.textContent), 'Nom:Mon nouveau test statique');
-      assert.strictEqual(removeWhitespacesFnc(descriptionItem.textContent), 'Description:Une super description pour mon nouveau test');
+      assert.strictEqual(
+        removeWhitespacesFnc(descriptionItem.textContent),
+        'Description:Une super description pour mon nouveau test',
+      );
       assert.dom(screen.getByText('COUrage')).exists();
       assert.dom(screen.getByText('COUleur')).exists();
     });
 
-    test('should cancel static course creation', async function(assert) {
+    test('should cancel static course creation', async function (assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');

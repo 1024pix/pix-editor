@@ -110,7 +110,7 @@ export default class SidebarNavigationComponent extends Component {
         @value={{this.selectedFrameworkId}}
         @options={{this.frameworkOptionList}}
         @onChange={{this.setFramework}}
-        @placeholder={{"Sélectionner un référentiel"}}
+        @placeholder="Sélectionner un référentiel"
         @placement="bottom"
         class="select-framework"
         @hideDefaultOption={{true}}

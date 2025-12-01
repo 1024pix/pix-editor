@@ -10,11 +10,11 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
+module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -27,8 +27,18 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
     this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    const competence = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+    const competence = this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'pixId recCompetence1.1',
+      rawThemeIds: ['recTheme1'],
+      rawTubeIds: ['recTube1'],
+    });
+    this.server.create('competence', {
+      id: 'recCompetence2.1',
+      pixId: 'pixId recCompetence2.1',
+      rawThemeIds: ['recTheme2'],
+      rawTubeIds: ['recTube2'],
+    });
     this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production`,
       thematicOverviews: [
@@ -60,16 +70,26 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
         },
       ],
     });
-    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
-    this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
+    this.server.create('area', {
+      id: 'recArea1',
+      name: '1. Information et données',
+      code: '1',
+      competenceIds: ['recCompetence1.1'],
+    });
+    this.server.create('area', {
+      id: 'recArea2',
+      name: '2. Communication et collaboration',
+      code: '2',
+      competenceIds: ['recCompetence2.1'],
+    });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
     return authenticateSession();
   });
 
-  test('adding illustration', async function(assert) {
+  test('adding illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -87,7 +107,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -106,10 +126,10 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.dom(await within(popIn).findByRole('img')).hasAttribute('src', 'data:,');
   });
 
-  test('replace illustration', async function(assert) {
+  test('replace illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -117,8 +137,12 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const illustrationA = new File([], 'challenge-illustrationA.png', { type: 'image/png' });
     const illustrationB = new File([], 'challenge-illustrationB.png', { type: 'image/png' });
     const uploadFileStub = sinon.stub(storageService, 'uploadFile');
-    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationA }) }).resolves({ url: 'data-illustrationA:,', filename: 'illustration-nameA' });
-    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationB }) }).resolves({ url: 'data-illustrationB:,', filename: 'illustration-nameB' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: illustrationA }) })
+      .resolves({ url: 'data-illustrationA:,', filename: 'illustration-nameA' });
+    uploadFileStub
+      .withArgs({ file: sinon.match({ file: illustrationB }) })
+      .resolves({ url: 'data-illustrationB:,', filename: 'illustration-nameB' });
 
     // when
     // adding illustrationA
@@ -129,7 +153,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     await clickByText('Version nl');
     await clickByText('Modifier');
     await selectFiles('[data-test-file-input-illustration] input', illustrationA);
-    await runTask(this, async () => { }, 400);
+    await runTask(this, async () => {}, 400);
     let saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -137,7 +161,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     await clickByText('Modifier');
     await click(find('[data-test-delete-illustration-button]'));
     await selectFiles('[data-test-file-input-illustration] input', illustrationB);
-    await runTask(this, async () => { }, 400);
+    await runTask(this, async () => {}, 400);
     saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -152,11 +176,16 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.strictEqual(attachments[0].url, 'data-illustrationB:,');
   });
 
-  test('delete illustration', async function(assert) {
+  test('delete illustration', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'illustration',
+      challengeId: 'recChallenge1',
+      localizedChallengeId: 'recChallenge1NL',
+    });
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -169,7 +198,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     await clickByText('Modifier');
     await click(find('[data-test-delete-illustration-button]'));
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -182,11 +211,16 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('update illustration', async function(assert) {
+  test('update illustration', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'illustration',
+      challengeId: 'recChallenge1',
+      localizedChallengeId: 'recChallenge1NL',
+    });
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -201,7 +235,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -209,7 +243,10 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
     await localizedChallenge.attachments;
-    const newIllustration = localizedChallenge.hasMany('attachments').value().find((attachment) => attachment.type === 'illustration');
+    const newIllustration = localizedChallenge
+      .hasMany('attachments')
+      .value()
+      .find((attachment) => attachment.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
@@ -218,12 +255,17 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     assert.strictEqual(newIllustration.url, 'data:,');
   });
 
-  test('delete and upload a new illustration', async function(assert) {
+  test('delete and upload a new illustration', async function (assert) {
     // given
-    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge1', localizedChallengeId: 'recChallenge1NL' });
+    this.server.create('attachment', {
+      id: 'recAttachment1',
+      type: 'illustration',
+      challengeId: 'recChallenge1',
+      localizedChallengeId: 'recChallenge1NL',
+    });
 
     class StorageServiceStub extends Service {
-      uploadFile() { }
+      uploadFile() {}
     }
     this.owner.register('service:storage', StorageServiceStub);
     const storageServiceStub = this.owner.lookup('service:storage');
@@ -237,7 +279,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => { }, 200);
+    await runTask(this, async () => {}, 200);
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
@@ -245,7 +287,10 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
     await localizedChallenge.attachments;
-    const newIllustration = localizedChallenge.hasMany('attachments').value().find((attachment) => attachment.type === 'illustration');
+    const newIllustration = localizedChallenge
+      .hasMany('attachments')
+      .value()
+      .find((attachment) => attachment.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');

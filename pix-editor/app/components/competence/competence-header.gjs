@@ -80,7 +80,11 @@ export default class CompetenceHeader extends Component {
   <template>
     <section class="ui main-title{{this.liteClass}}">
       <h1 class="ui left floated header">
-        <LinkTo @route="authenticated.competence-management.single" @model={{@competence}} class="competence-management-link">{{@competence.name}}</LinkTo>
+        <LinkTo
+          @route="authenticated.competence-management.single"
+          @model={{@competence}}
+          class="competence-management-link"
+        >{{@competence.name}}</LinkTo>
       </h1>
       <div class="main-title-filters">
         {{#if this.displayLanguageFilter}}
@@ -106,6 +110,5 @@ export default class CompetenceHeader extends Component {
         </PixSelect>
       </div>
     </section>
-
   </template>
 }

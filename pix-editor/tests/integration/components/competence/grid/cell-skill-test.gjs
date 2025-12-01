@@ -3,9 +3,9 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import CellSkill from 'pixeditor/components/competence/grid/cell-skill';
 
-module('Integration | Component | competence/grid/cell-skill', function(hooks) {
+module('Integration | Component | competence/grid/cell-skill', function (hooks) {
   setupIntlRenderingTest(hooks);
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     // given
     const store = this.owner.lookup('service:store');
 
@@ -33,7 +33,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
     this.skill = skill;
   });
 
-  test('it should display a clue status and number of tutorials ', async function(assert) {
+  test('it should display a clue status and number of tutorials ', async function (assert) {
     const self = this;
 
     // when
@@ -45,8 +45,8 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
     assert.dom('.tuto-count').hasText('2 - 1');
   });
 
-  module('#languageFilter activated', function() {
-    test('it should display a clue status and number of tutorials filtered by language', async function(assert) {
+  module('#languageFilter activated', function () {
+    test('it should display a clue status and number of tutorials filtered by language', async function (assert) {
       const self = this;
 
       // given
@@ -60,7 +60,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
       assert.dom('.tuto-count').hasText('1 - 0');
     });
 
-    test('it should alert with warning class if have no `tutoMore` or `tutoSolution`', async function(assert) {
+    test('it should alert with warning class if have no `tutoMore` or `tutoSolution`', async function (assert) {
       const self = this;
 
       // given
@@ -73,7 +73,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
       assert.dom('.skill-cell').hasClass('warning');
     });
 
-    test('it should alert with danger class if have no `tutoMore` and `tutoSolution`', async function(assert) {
+    test('it should alert with danger class if have no `tutoMore` and `tutoSolution`', async function (assert) {
       const self = this;
 
       // given

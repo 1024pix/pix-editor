@@ -36,7 +36,8 @@ export default class CompetenceManagementSingleController extends Controller {
   save() {
     this.loader.start();
     const competence = this.model;
-    return competence.save()
+    return competence
+      .save()
       .then(() => {
         this.edition = false;
         this.loader.stop();

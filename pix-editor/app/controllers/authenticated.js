@@ -57,7 +57,7 @@ export default class ApplicationController extends Controller {
   }
 
   get isIndex() {
-    return (this.router.currentRouteName === 'authenticated.index');
+    return this.router.currentRouteName === 'authenticated.index';
   }
 
   get shouldApplyV2Styles() {
@@ -164,7 +164,10 @@ export default class ApplicationController extends Controller {
     clearInterval(this.checkApiVersionInterval);
 
     try {
-      await this.confirm.ask('Charger la nouvelle version ?', 'Une nouvelle version de PixEditor a été mise en prod. Voulez-vous recharger ?');
+      await this.confirm.ask(
+        'Charger la nouvelle version ?',
+        'Une nouvelle version de PixEditor a été mise en prod. Voulez-vous recharger ?',
+      );
       reload(true);
     } catch {
       // do nothing

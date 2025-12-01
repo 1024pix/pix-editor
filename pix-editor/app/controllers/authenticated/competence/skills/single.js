@@ -142,8 +142,10 @@ export default class SingleController extends Controller {
 
   @action
   duplicateToLocation(competence, newTube, level) {
-    this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
-      (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
+    this._displayChangelogPopIn(
+      `Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+      (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level),
+    );
   }
 
   async _duplicateToLocationCallback(changelogValue, competence, tubeDestination, level) {
@@ -160,7 +162,7 @@ export default class SingleController extends Controller {
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la duplication de l\'acquis');
+      this.notify.error("Erreur lors de la duplication de l'acquis");
     } finally {
       this.loader.stop();
     }
@@ -179,28 +181,40 @@ export default class SingleController extends Controller {
     }
     this.isStatusActionMenuOpen = false;
     const challenges = this.skill.challengesArray;
-    return this.confirm.ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
+    return this.confirm
+      .ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
       .then(() => {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.archive'), (changelogValue) => {
           this.loader.start(this.intl.t('skill.archive.loader_start'));
-          return this.skill.archive()
+          return this.skill
+            .archive()
             .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
             .then(() => {
               this.close();
               this.notify.message(this.intl.t('skill.archive.success'));
             })
             .then(() => {
-              const updateChallenges = challenges.filter((challenge) => challenge.isDraft).map((challenge) => {
-                return challenge.archive()
-                  .then(() => this._handleChallengeChangelog(challenge, this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name })))
-                  .then(() => {
-                    if (challenge.isPrototype) {
-                      this.notify.message(this.intl.t('skill.archive.challenge.prototype'));
-                    } else {
-                      this.notify.message(this.intl.t('skill.archive.challenge.prototype', { number: challenge.alternativeVersion }));
-                    }
-                  });
-              });
+              const updateChallenges = challenges
+                .filter((challenge) => challenge.isDraft)
+                .map((challenge) => {
+                  return challenge
+                    .archive()
+                    .then(() =>
+                      this._handleChallengeChangelog(
+                        challenge,
+                        this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name }),
+                      ),
+                    )
+                    .then(() => {
+                      if (challenge.isPrototype) {
+                        this.notify.message(this.intl.t('skill.archive.challenge.prototype'));
+                      } else {
+                        this.notify.message(
+                          this.intl.t('skill.archive.challenge.prototype', { number: challenge.alternativeVersion }),
+                        );
+                      }
+                    });
+                });
               return Promise.all(updateChallenges);
             })
             .catch((error) => {
@@ -227,28 +241,40 @@ export default class SingleController extends Controller {
     }
     this.isStatusActionMenuOpen = false;
     const challenges = this.skill.challengesArray;
-    return this.confirm.ask(this.intl.t('skill.obsolete.confirm.title'), this.intl.t('skill.obsolete.confirm.message'))
+    return this.confirm
+      .ask(this.intl.t('skill.obsolete.confirm.title'), this.intl.t('skill.obsolete.confirm.message'))
       .then(() => {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.obsolete'), (changelogValue) => {
           this.loader.start(this.intl.t('skill.obsolete.loader_start'));
-          return this.skill.obsolete()
+          return this.skill
+            .obsolete()
             .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
               this.notify.message(this.intl.t('skill.obsolete.success'));
             })
             .then(() => {
-              const updateChallenges = challenges.filter((challenge) => !challenge.isObsolete).map((challenge) => {
-                return challenge.obsolete()
-                  .then(() => this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
-                  .then(() => {
-                    if (challenge.isPrototype) {
-                      this.notify.message(this.intl.t('skill.obsolete.challenge.prototype'));
-                    } else {
-                      this.notify.message(this.intl.t('skill.obsolete.challenge.prototype', { number: challenge.alternativeVersion }));
-                    }
-                  });
-              });
+              const updateChallenges = challenges
+                .filter((challenge) => !challenge.isObsolete)
+                .map((challenge) => {
+                  return challenge
+                    .obsolete()
+                    .then(() =>
+                      this._handleChallengeChangelog(
+                        challenge,
+                        this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name }),
+                      ),
+                    )
+                    .then(() => {
+                      if (challenge.isPrototype) {
+                        this.notify.message(this.intl.t('skill.obsolete.challenge.prototype'));
+                      } else {
+                        this.notify.message(
+                          this.intl.t('skill.obsolete.challenge.prototype', { number: challenge.alternativeVersion }),
+                        );
+                      }
+                    });
+                });
               return Promise.all(updateChallenges);
             })
             .catch((error) => {
@@ -308,8 +334,7 @@ export default class SingleController extends Controller {
       elementType: this.changelogEntry.skill,
       action,
     });
-    return entry.save()
-      .then(() => skill);
+    return entry.save().then(() => skill);
   }
 
   _handleChallengeChangelog(challenge, changelogValue) {
@@ -319,7 +344,6 @@ export default class SingleController extends Controller {
       author: this.config.author,
       elementType: this.changelogEntry.challenge,
     });
-    return entry.save()
-      .then(() => challenge);
+    return entry.save().then(() => challenge);
   }
 }

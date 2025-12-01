@@ -6,14 +6,19 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Missions | Edit', function(hooks) {
+module('Acceptance | Missions | Edit', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('theme', { id: 'recTheme1' });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'recCompetence1.1', rawThemeIds: ['recTheme1'], title: 'Notre compétence' });
+    this.server.create('competence', {
+      id: 'recCompetence1.1',
+      pixId: 'recCompetence1.1',
+      rawThemeIds: ['recTheme1'],
+      title: 'Notre compétence',
+    });
     this.server.create('area', {
       id: 'recArea1',
       name: '1. Information et données',
@@ -31,14 +36,14 @@ module('Acceptance | Missions | Edit', function(hooks) {
     });
   });
 
-  module('when user has write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user has write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    test('should be able to edit a mission', async function(assert) {
+    test('should be able to edit a mission', async function (assert) {
       // given
       await visit('/missions/2');
 
@@ -49,7 +54,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       assert.strictEqual(currentURL(), '/missions/2/edit');
     });
 
-    test('should save updated informations', async function(assert) {
+    test('should save updated informations', async function (assert) {
       // given
       this.server.create('mission', {
         id: 3,
@@ -69,12 +74,15 @@ module('Acceptance | Missions | Edit', function(hooks) {
       await fillByLabel('Nom de la mission *', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
-      await fillByLabel('URL de l\'image de la carte', 'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg');
+      await fillByLabel(
+        "URL de l'image de la carte",
+        'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg',
+      );
 
       await clickByText('Compétence');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
-      await fillByLabel('URL du média d\'introduction de la mission', 'http://example.com');
+      await fillByLabel("URL du média d'introduction de la mission", 'http://example.com');
       await fillByLabel('URL de la documentation de la mission', 'http://doc.com');
 
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
@@ -82,12 +90,14 @@ module('Acceptance | Missions | Edit', function(hooks) {
       // then
       assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
-      assert.dom(screen.getByText('https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg')).exists();
+      assert
+        .dom(screen.getByText('https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg'))
+        .exists();
       assert.dom(screen.getByText('http://example.com')).exists();
       assert.dom(screen.getByText('http://doc.com')).exists();
     });
 
-    test('should display errors if any', async function(assert) {
+    test('should display errors if any', async function (assert) {
       // given
       this.server.create('mission', {
         id: 3,
@@ -110,7 +120,13 @@ module('Acceptance | Missions | Edit', function(hooks) {
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
 
       // then
-      assert.dom(screen.getByText('La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.')).exists();
+      assert
+        .dom(
+          screen.getByText(
+            'La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.',
+          ),
+        )
+        .exists();
     });
   });
 });

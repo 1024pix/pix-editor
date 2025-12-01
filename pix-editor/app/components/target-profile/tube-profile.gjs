@@ -1,18 +1,20 @@
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
-<template><div {{on "click" (fn @clickAction @tube)}} ...attributes>
-  <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>
-    <i class="square icon {{if @selectedSkillLevel "active check" "outline"}}">
-    </i>
-    {{#if @showTubeDetails}}
-      <div class="max-skill-level"><p>{{if @selectedSkillLevel @selectedSkillLevel ""}}</p></div>
-    {{/if}}
-    <div class="practicalTitle-profile {{if @selectedSkillLevel " active" ""}}">
-      <p>
-        <span class="practicalTitle-profile__color-red">{{@tube.name}} </span>: {{@tube.practicalTitleFr}}
-      </p>
+<template>
+  <div {{on "click" (fn @clickAction @tube)}} ...attributes>
+    <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>
+      <i class="square icon {{if @selectedSkillLevel 'active check' 'outline'}}">
+      </i>
+      {{#if @showTubeDetails}}
+        <div class="max-skill-level"><p>{{if @selectedSkillLevel @selectedSkillLevel ""}}</p></div>
+      {{/if}}
+      <div class="practicalTitle-profile {{if @selectedSkillLevel ' active' ''}}">
+        <p>
+          <span class="practicalTitle-profile__color-red">{{@tube.name}} </span>:
+          {{@tube.practicalTitleFr}}
+        </p>
+      </div>
     </div>
+    <p class="practicalDescription-profile {{if @selectedSkillLevel ' active'}}">{{@tube.practicalDescriptionFr}}</p>
   </div>
-  <p class="practicalDescription-profile {{if @selectedSkillLevel " active"}}">{{@tube.practicalDescriptionFr}}</p>
-</div>
 </template>

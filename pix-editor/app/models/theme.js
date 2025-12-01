@@ -15,7 +15,10 @@ export default class ThemeModel extends Model {
 
     if (rawTubes === null) return [];
 
-    return sortBy(rawTubes.filter((tube) => tube.name !== '@workbench'), 'index');
+    return sortBy(
+      rawTubes.filter((tube) => tube.name !== '@workbench'),
+      'index',
+    );
   }
 
   get productionTubes() {

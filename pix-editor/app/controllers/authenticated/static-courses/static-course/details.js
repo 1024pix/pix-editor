@@ -51,7 +51,9 @@ export default class StaticCoursesController extends Controller {
   @action
   async deactivateStaticCourse() {
     try {
-      await this.model.staticCourse.save({ adapterOptions: { reason: this.deactivationReason.trim(), action: 'deactivate' } });
+      await this.model.staticCourse.save({
+        adapterOptions: { reason: this.deactivationReason.trim(), action: 'deactivate' },
+      });
       this.notifications.success('Test statique désactivé avec succès.');
     } catch {
       await this.notifications.error('Une erreur est survenue lors de la désactivation du test statique.');

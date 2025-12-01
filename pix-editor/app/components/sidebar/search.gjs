@@ -128,8 +128,8 @@ export default class SidebarSearch extends Component {
     <PixSelect
       @isSearchable={{true}}
       @searchLabel="Rechercher..."
-      @searchPlaceholder={{"@patate1, recABCD1234"}}
-      @placeholder={{"Acquix ou recordId"}}
+      @searchPlaceholder="@patate1, recABCD1234"
+      @placeholder="Acquix ou recordId"
       @options={{this.searchResultOptions}}
       @onSearch={{this.getSearchResults}}
       @onChange={{this.linkToModelId}}
@@ -137,7 +137,7 @@ export default class SidebarSearch extends Component {
       @value=""
       @hideDefaultOption={{true}}
       class="sidebar-search"
-      @emptySearchMessage={{"Pas de résultat"}}
+      @emptySearchMessage="Pas de résultat"
     >
       <:label>
         <span class="sr-only">Rechercher un acquis ou une épreuve...</span>

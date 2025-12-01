@@ -47,7 +47,8 @@ export default class CompetenceThemesSingleController extends Controller {
   save() {
     this.loader.start();
     const theme = this.theme;
-    return theme.save()
+    return theme
+      .save()
       .then(() => {
         this.edition = false;
         this.loader.stop();

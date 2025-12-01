@@ -231,7 +231,7 @@ export default class LocalizedChallenge extends Component {
     } catch (error) {
       console.error('oops', error);
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
     }
@@ -276,7 +276,11 @@ export default class LocalizedChallenge extends Component {
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error(this.args.localizedChallenge.isInProduction ? 'Erreur de la mise en prod de l\'épreuve localisée' : 'Erreur de la mise en pause de l\'épreuve localisée');
+      this.notify.error(
+        this.args.localizedChallenge.isInProduction
+          ? "Erreur de la mise en prod de l'épreuve localisée"
+          : "Erreur de la mise en pause de l'épreuve localisée",
+      );
     } finally {
       this.loader.stop();
     }
@@ -290,7 +294,7 @@ export default class LocalizedChallenge extends Component {
   async _handleIllustration() {
     const illustration = this.args.localizedChallenge.illustration;
     if (illustration && illustration.isNew) {
-      this.loader.start('Envoi de l\'illustration...');
+      this.loader.start("Envoi de l'illustration...");
       const newIllustration = await this.storage.uploadFile({ file: illustration.file });
       this.args.localizedChallenge.illustration.url = newIllustration.url;
     }
@@ -300,7 +304,11 @@ export default class LocalizedChallenge extends Component {
     if (!pieceJointe.isNew) {
       return;
     }
-    const remoteFile = await this.storage.uploadFile({ file: pieceJointe.file, filename: pieceJointe.filename, isAttachment: true });
+    const remoteFile = await this.storage.uploadFile({
+      file: pieceJointe.file,
+      filename: pieceJointe.filename,
+      isAttachment: true,
+    });
     pieceJointe.url = remoteFile.url;
   }
 
@@ -310,7 +318,9 @@ export default class LocalizedChallenge extends Component {
       return this.args.localizedChallenge;
     }
     this.loader.start('Gestion des pièces jointes...');
-    await Promise.all(piecesJointes.map((pieceJointe) => this._handlePieceJointe(pieceJointe, this.args.localizedChallenge)));
+    await Promise.all(
+      piecesJointes.map((pieceJointe) => this._handlePieceJointe(pieceJointe, this.args.localizedChallenge)),
+    );
     await this._renamePiecesJointes(this.args.localizedChallenge);
 
     return this.args.localizedChallenge;
@@ -352,7 +362,7 @@ export default class LocalizedChallenge extends Component {
     this.attachmentBasename = e.target.value;
   }
 
-<template>
+  <template>
     <LocalizedChallengeViewHeader
       @challengeLocale={{@challengeLocale}}
       @localizedChallenge={{@localizedChallenge}}
@@ -390,8 +400,8 @@ export default class LocalizedChallenge extends Component {
             rows={{this.urlsToConsultTextareaHeigh}}
             id={{this.textareaId}}
             readonly={{this.readonly}}
-            {{on 'input' this.updateUrlsToConsultTextareaHeigh}}
-            {{on 'change' this.setUrlsToConsult}}
+            {{on "input" this.updateUrlsToConsultTextareaHeigh}}
+            {{on "change" this.setUrlsToConsult}}
           >{{this.urlsToConsult}}</textarea>
         </FieldToggleFieldComponent>
         {{#if this.invalidUrlsToConsult}}
@@ -406,14 +416,14 @@ export default class LocalizedChallenge extends Component {
               @id="embedURL"
               @value={{this.embedURL}}
               readonly={{this.readonly}}
-              {{on 'change' this.setEmbedURL}}
+              {{on "change" this.setEmbedURL}}
               @validationStatus={{this.embedURLValidationStatus}}
-              @errorMessage="{{'Votre URL n\'est pas bien formatée'}}"
+              @errorMessage="Votre URL n'est pas bien formatée"
             >
               <:label>Embed URL</:label>
             </PixInput>
           {{/if}}
-          {{#unless @localizedChallenge.embedURL }}
+          {{#unless @localizedChallenge.embedURL}}
             <div class="challenge-view-default-embed-url">
               <p data-testid="default-embed-url">Embed URL auto-générée : {{@localizedChallenge.defaultEmbedURL}}</p>
             </div>
@@ -453,19 +463,15 @@ export default class LocalizedChallenge extends Component {
         </PixSelect>
       </div>
 
-      <PixInput
-        @id="localized-challenge-id"
-        @value={{@localizedChallenge.id}}
-        readonly
-      >
+      <PixInput @id="localized-challenge-id" @value={{@localizedChallenge.id}} readonly>
         <:label>Id</:label>
       </PixInput>
       {{#if this.shouldDisplayIllustration}}
-      <PopInImage
-        @imageSrc={{@localizedChallenge.illustration.url}}
-        @close={{this.closePopInIllustration}}
-        @showModal={{this.isPopInIllustrationDisplayed}}
-      />
+        <PopInImage
+          @imageSrc={{@localizedChallenge.illustration.url}}
+          @close={{this.closePopInIllustration}}
+          @showModal={{this.isPopInIllustrationDisplayed}}
+        />
       {{/if}}
       <PopInConfirm
         @title={{this.confirmTitle}}

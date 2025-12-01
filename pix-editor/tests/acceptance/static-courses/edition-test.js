@@ -6,39 +6,57 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | Static Courses | Edition', function(hooks) {
+module('Acceptance | Static Courses | Edition', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let staticCourse, staticCourseSummary;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
-    staticCourseSummary = this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01'), isActive: true });
-    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01'), isActive: true });
+    staticCourseSummary = this.server.create('static-course-summary', {
+      id: 'courseA',
+      name: 'Premier test statique',
+      challengeCount: 3,
+      createdAt: new Date('2020-01-01'),
+      isActive: true,
+    });
+    this.server.create('static-course-summary', {
+      id: 'courseB',
+      name: 'Deuxième test statique',
+      challengeCount: 10,
+      createdAt: new Date('2019-01-01'),
+      isActive: true,
+    });
 
     const challengeSummaries = [];
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalA',
-      instruction: 'instruction chalA',
-      skillName: '@acquisPourChalA',
-      status: 'proposé',
-      index: 1,
-    }));
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalB',
-      instruction: 'instruction chalB',
-      skillName: '@acquisPourChalB',
-      status: 'validé',
-      index: 0,
-    }));
-    challengeSummaries.push(this.server.create('challenge-summary', {
-      id: 'chalC',
-      instruction: 'instruction chalC',
-      skillName: '@acquisPourChalC',
-      status: 'archivé',
-      index: 2,
-    }));
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalA',
+        instruction: 'instruction chalA',
+        skillName: '@acquisPourChalA',
+        status: 'proposé',
+        index: 1,
+      }),
+    );
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalB',
+        instruction: 'instruction chalB',
+        skillName: '@acquisPourChalB',
+        status: 'validé',
+        index: 0,
+      }),
+    );
+    challengeSummaries.push(
+      this.server.create('challenge-summary', {
+        id: 'chalC',
+        instruction: 'instruction chalC',
+        skillName: '@acquisPourChalC',
+        status: 'archivé',
+        index: 2,
+      }),
+    );
     this.server.create('static-course-tag', { id: 123, label: 'tagA' });
     this.server.create('static-course-tag', { id: 456, label: 'tagB' });
     this.server.create('static-course-tag', { id: 789, label: 'tagC' });
@@ -54,14 +72,14 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
     });
   });
 
-  module('when user does not have write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user does not have write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'readonly' });
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access edition form through action button', async function(assert) {
+    test('should prevent user from being able to access edition form through action button', async function (assert) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -72,7 +90,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       assert.strictEqual(currentURL(), '/static-courses/courseA');
     });
 
-    test('should prevent user from being able to access edition form through URL', async function(assert) {
+    test('should prevent user from being able to access edition form through URL', async function (assert) {
       // when
       await visit('/static-courses/courseA/edit');
 
@@ -81,15 +99,15 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
     });
   });
 
-  module('when user has write access', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user has write access', function (hooks) {
+    hooks.beforeEach(function () {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    module('when static course is inactive', function() {
-      test('should not be able to edit the static course through the action button', async function(assert) {
+    module('when static course is inactive', function () {
+      test('should not be able to edit the static course through the action button', async function (assert) {
         // given
         staticCourseSummary.update({ isActive: false });
         staticCourse.update({ isActive: false });
@@ -106,7 +124,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
         assert.strictEqual(currentURL(), '/static-courses/courseA');
       });
 
-      test('should not be able to edit the static course by navigating directly to the edition page', async function(assert) {
+      test('should not be able to edit the static course by navigating directly to the edition page', async function (assert) {
         // given
         staticCourseSummary.update({ isActive: false });
         staticCourse.update({ isActive: false });
@@ -119,7 +137,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       });
     });
 
-    test('should edit the static course', async function(assert) {
+    test('should edit the static course', async function (assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -147,7 +165,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       assert.dom(screen.getByText('tagC')).exists();
     });
 
-    test('should cancel static course edition', async function(assert) {
+    test('should cancel static course edition', async function (assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');

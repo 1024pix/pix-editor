@@ -74,12 +74,7 @@ export default class SkillForm extends Component {
 
   <template>
     <form action="" class="ui form">
-      <Textarea
-        @title="Description"
-        @value={{@skill.description}}
-        @edition={{@edition}}
-        @id="skill-description"
-      />
+      <Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} @id="skill-description" />
       <PixSelect
         @id="select-description-status"
         @value={{@skill.descriptionStatus}}
@@ -90,18 +85,8 @@ export default class SkillForm extends Component {
       >
         <:label>Statut de la description</:label>
       </PixSelect>
-      <Textarea
-        @title="Indice (fr)"
-        @value={{@skill.clue}}
-        @edition={{@edition}}
-        @id="skill-clue-fr"
-      />
-      <Textarea
-        @title="Indice (en)"
-        @value={{@skill.clueEn}}
-        @edition={{@edition}}
-        @id="skill-clue-en"
-      />
+      <Textarea @title="Indice (fr)" @value={{@skill.clue}} @edition={{@edition}} @id="skill-clue-fr" />
+      <Textarea @title="Indice (en)" @value={{@skill.clueEn}} @edition={{@edition}} @id="skill-clue-en" />
       <PixSelect
         @id="select-clue-status"
         @value={{@skill.clueStatus}}

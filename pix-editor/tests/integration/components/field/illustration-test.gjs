@@ -5,16 +5,16 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
 import Illustration from 'pixeditor/components/field/illustration';
 
-module('Integration | Component | form-illustration', function(hooks) {
+module('Integration | Component | form-illustration', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     await render(<template><Illustration /></template>);
 
     assert.dom('.field').exists();
   });
 
-  test('it should remove old illustration before add new illustration', async function(assert) {
+  test('it should remove old illustration before add new illustration', async function (assert) {
     const self = this;
 
     // given
@@ -22,7 +22,15 @@ module('Integration | Component | form-illustration', function(hooks) {
     this.removeIllustrationStub = sinon.stub().resolves();
     this.addIllustrationStub = sinon.stub();
 
-    await render(<template><Illustration @edition="true" @addIllustration={{self.addIllustrationStub}} @removeIllustration={{self.removeIllustrationStub}} /></template>);
+    await render(
+      <template>
+        <Illustration
+          @edition="true"
+          @addIllustration={{self.addIllustrationStub}}
+          @removeIllustration={{self.removeIllustrationStub}}
+        />
+      </template>,
+    );
 
     // when
     await selectFiles('input[type=file]', file);

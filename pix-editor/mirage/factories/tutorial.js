@@ -1,7 +1,6 @@
 import { Factory } from 'miragejs';
 
 export default Factory.extend({
-
   title: 'tuto frite',
   duration: '00:01:12',
   source: 'tkt',

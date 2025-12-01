@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 
-module('Integration | Component | target-profile/competence-thematic-result', function(hooks) {
+module('Integration | Component | target-profile/competence-thematic-result', function (hooks) {
   setupIntlRenderingTest(hooks);
   let tube;
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     // given
     tube = {
       id: 'rec123456',
@@ -16,11 +16,10 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     };
 
     this.tube = tube;
-    this.clickOnTube = () => {
-    };
+    this.clickOnTube = () => {};
   });
 
-  test('it should be selected if tube have a `selectedSkillLevel` if `showTubeDetails` is `false`', async function(assert) {
+  test('it should be selected if tube have a `selectedSkillLevel` if `showTubeDetails` is `false`', async function (assert) {
     const self = this;
 
     // given
@@ -28,7 +27,16 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.showTubeDetails = false;
 
     // when
-    await render(<template><TubeProfile @tube={{self.tube}} @clickAction={{self.clickOnTube}} @selectedSkillLevel={{self.selectedLevel}} @showTubeDetails={{self.showTubeDetails}} /></template>);
+    await render(
+      <template>
+        <TubeProfile
+          @tube={{self.tube}}
+          @clickAction={{self.clickOnTube}}
+          @selectedSkillLevel={{self.selectedLevel}}
+          @showTubeDetails={{self.showTubeDetails}}
+        />
+      </template>,
+    );
 
     // then
     assert.dom(this.element.querySelector('[data-test-tube-profile]')).hasClass('active');
@@ -36,7 +44,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     assert.dom(this.element.querySelector('.square.icon')).hasClass('check');
   });
 
-  test('it should display a `selectedSkillLevel` if `showTubeDetails` is `true`', async function(assert) {
+  test('it should display a `selectedSkillLevel` if `showTubeDetails` is `true`', async function (assert) {
     const self = this;
 
     // given
@@ -44,7 +52,16 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.selectedLevel = 6;
 
     // when
-    await render(<template><TubeProfile @tube={{self.tube}} @clickAction={{self.clickOnTube}} @selectedSkillLevel={{self.selectedLevel}} @showTubeDetails={{self.showTubeDetails}} /></template>);
+    await render(
+      <template>
+        <TubeProfile
+          @tube={{self.tube}}
+          @clickAction={{self.clickOnTube}}
+          @selectedSkillLevel={{self.selectedLevel}}
+          @showTubeDetails={{self.showTubeDetails}}
+        />
+      </template>,
+    );
 
     // then
     assert.dom('.max-skill-level').hasText('6');

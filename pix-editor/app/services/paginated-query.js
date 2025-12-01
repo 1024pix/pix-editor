@@ -14,16 +14,15 @@ export default class PaginatedQueryService extends Service {
       if (!current) {
         current = A();
       }
-      return store.query(model, parameters)
-        .then((result) => {
-          current.push(...result);
-          if (result.meta && result.meta.offset) {
-            parameters.offset = result.meta.offset;
-            return queryPage(model, parameters, current);
-          } else {
-            return current;
-          }
-        });
+      return store.query(model, parameters).then((result) => {
+        current.push(...result);
+        if (result.meta && result.meta.offset) {
+          parameters.offset = result.meta.offset;
+          return queryPage(model, parameters, current);
+        } else {
+          return current;
+        }
+      });
     }
 
     return queryPage(model, parameters);
@@ -40,16 +39,15 @@ export default class PaginatedQueryService extends Service {
     if (offset !== undefined) {
       parameters.offset = offset;
     }
-    return store.query(model, parameters)
-      .then((result) => {
-        currentModel.push(...result);
-        if (result.meta && result.meta.offset) {
-          this.offset = result.meta.offset;
-        } else {
-          this.offset = false;
-        }
-        return currentModel;
-      });
+    return store.query(model, parameters).then((result) => {
+      currentModel.push(...result);
+      if (result.meta && result.meta.offset) {
+        this.offset = result.meta.offset;
+      } else {
+        this.offset = false;
+      }
+      return currentModel;
+    });
   }
 
   getLastOffset() {

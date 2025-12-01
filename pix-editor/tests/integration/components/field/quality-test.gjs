@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Quality from 'pixeditor/components/field/quality';
 
-module('Integration | Component | quality', function(hooks) {
+module('Integration | Component | quality', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     const self = this;
 
     this.challenge = { accessibility1: false, accessibility2: false, spoil: false, responsive: false };

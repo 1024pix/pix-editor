@@ -3,10 +3,10 @@ import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Unit | Controller | competence-management/new', function(hooks) {
+module('Unit | Controller | competence-management/new', function (hooks) {
   setupTest(hooks);
   let controller, transitionToRouteStub, area, competence, notifyMessageStub, notifyErrorStub;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
     class NotifyService extends Service {
@@ -33,7 +33,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     };
   });
 
-  test('it should cancel creation', function(assert) {
+  test('it should cancel creation', function (assert) {
     // given
     const deleteRecordStub = sinon.stub();
     controller.store.deleteRecord = deleteRecordStub;
@@ -48,9 +48,9 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
-  module('#save', function(hooks) {
+  module('#save', function (hooks) {
     let loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       loaderStartStub = sinon.stub();
       loaderStopStub = sinon.stub();
       class LoaderService extends Service {
@@ -60,7 +60,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       this.owner.register('service:loader', LoaderService);
     });
 
-    test('it should save competence', async function(assert) {
+    test('it should save competence', async function (assert) {
       // given
       const saveStub = sinon.stub().resolves();
       competence.save = saveStub;
@@ -81,10 +81,14 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.deepEqual(controller.model.competence, expectedCompetence);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
-      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence.id, { queryParams: { view: 'workbench' } }));
+      assert.ok(
+        transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence.id, {
+          queryParams: { view: 'workbench' },
+        }),
+      );
     });
 
-    test('it should throw an error if saving failed', async function(assert) {
+    test('it should throw an error if saving failed', async function (assert) {
       // given
       const errorMessage = { error: ['error-test'] };
       const saveStub = sinon.stub().rejects(errorMessage);

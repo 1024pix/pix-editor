@@ -1,22 +1,22 @@
 import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
-import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+import WhitelistedUrlsList from 'pixeditor/components/whitelisted-urls/list';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | whitelisted-urls/list', function(hooks) {
+module('Integration | Component | whitelisted-urls/list', function (hooks) {
   setupIntlRenderingTest(hooks);
   let store, whitelistedUrl1, whitelistedUrl2, hour1_create, hour1_update, hour2_create;
   let onApplyFiltersClickedStub, onClearFiltersClickedStub, onDeleteItemClickedStub, onEditStub;
 
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
     whitelistedUrl1 = store.createRecord('whitelisted-url', {
       id: '1',
       url: 'https://foo.com',
       creatorName: 'Laura le chocolat',
-      latestUpdatorName: 'Iris l\'anis',
+      latestUpdatorName: "Iris l'anis",
       relatedSkillNames: '',
       checkType: 'exact_match',
       comment: 'Un commentaire sur Laura',
@@ -50,7 +50,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     onEditStub = sinon.stub();
   });
 
-  test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function(assert) {
+  test('it should display list of whitelisted urls passed in params and initialize filter inputs', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -61,53 +63,54 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    const screen = await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
+    const screen = await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
 
     // then
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'Nom des acquis concernés' }),
-    );
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'Type de comparaison' }),
-    );
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'URL' }),
-    );
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'Commentaire' }),
-    );
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'Créée le' }),
-    );
-    assert.ok(
-      screen.getByRole('columnheader', { name: 'Modifiée le' }),
-    );
+    assert.ok(screen.getByRole('columnheader', { name: 'Nom des acquis concernés' }));
+    assert.ok(screen.getByRole('columnheader', { name: 'Type de comparaison' }));
+    assert.ok(screen.getByRole('columnheader', { name: 'URL' }));
+    assert.ok(screen.getByRole('columnheader', { name: 'Commentaire' }));
+    assert.ok(screen.getByRole('columnheader', { name: 'Créée le' }));
+    assert.ok(screen.getByRole('columnheader', { name: 'Modifiée le' }));
     assert.strictEqual(screen.getAllByRole('row').length, 3);
     assert.ok(screen.getByRole('cell', { name: 'https://foo.com' }), 'https://foo.com');
     assert.ok(screen.getByRole('cell', { name: 'Strictement égale à' }), 'Strictement égale à');
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Laura' }), 'Un commentaire sur Laura');
-    assert.ok(screen.getByRole('cell', { name: `01/01/2020 à ${hour1_create}:00 par Laura le chocolat` }), `01/01/2020 à ${hour1_create}:00 par Laura le chocolat`);
-    assert.ok(screen.getByRole('cell', { name: `01/01/2021 à ${hour1_update}:00 par Iris l'anis` }), `01/01/2021 à ${hour1_update}:00 par Iris l'anis`);
+    assert.ok(
+      screen.getByRole('cell', { name: `01/01/2020 à ${hour1_create}:00 par Laura le chocolat` }),
+      `01/01/2020 à ${hour1_create}:00 par Laura le chocolat`,
+    );
+    assert.ok(
+      screen.getByRole('cell', { name: `01/01/2021 à ${hour1_update}:00 par Iris l'anis` }),
+      `01/01/2021 à ${hour1_update}:00 par Iris l'anis`,
+    );
     assert.ok(screen.getByText('@fruit4 et 1 autre acquis'));
     assert.ok(screen.getByRole('cell', { name: 'https://bar.com' }), 'https://bar.com');
     assert.ok(screen.getByRole('cell', { name: 'Commence par' }), 'Commence par');
     assert.ok(screen.getByRole('cell', { name: 'Un commentaire sur Fael' }), 'Un commentaire sur Fael');
-    assert.ok(screen.getByRole('cell', { name: `01/12/2021 à ${hour2_create}:00 par Fael le miel` }), `01/12/2021 à ${hour2_create}:00 par Fael le miel`);
+    assert.ok(
+      screen.getByRole('cell', { name: `01/12/2021 à ${hour2_create}:00 par Fael le miel` }),
+      `01/12/2021 à ${hour2_create}:00 par Fael le miel`,
+    );
     assert.strictEqual(screen.getByLabelText('URL').value, 'initialUrlValue');
-    assert.strictEqual(screen.getByLabelText('Nom d\'acquis').value, 'initialNamesValue');
+    assert.strictEqual(screen.getByLabelText("Nom d'acquis").value, 'initialNamesValue');
   });
 
-  test('it should pass up typed url filter and keeping the previous names filter when applying', async function(assert) {
+  test('it should pass up typed url filter and keeping the previous names filter when applying', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -118,27 +121,31 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    const screen = await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
+    const screen = await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
 
     // then
-    assert.strictEqual(screen.getByLabelText('Nom d\'acquis').value, 'initialNamesValue');
+    assert.strictEqual(screen.getByLabelText("Nom d'acquis").value, 'initialNamesValue');
     assert.strictEqual(screen.getByLabelText('URL').value, 'different url value');
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'different url value', 'initialNamesValue');
   });
 
-  test('it should pass up typed names filter and keeping the previous url filter when applying', async function(assert) {
+  test('it should pass up typed names filter and keeping the previous url filter when applying', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -149,27 +156,31 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    const screen = await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
-    await fillByLabel('Nom d\'acquis', 'different names value');
+    const screen = await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
+    await fillByLabel("Nom d'acquis", 'different names value');
     await clickByName('Filtrer');
 
     // then
-    assert.strictEqual(screen.getByLabelText('Nom d\'acquis').value, 'different names value');
+    assert.strictEqual(screen.getByLabelText("Nom d'acquis").value, 'different names value');
     assert.strictEqual(screen.getByLabelText('URL').value, 'initialUrlValue');
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'initialUrlValue', 'different names value');
   });
 
-  test('it should pass up both typed names and url filters when applying', async function(assert) {
+  test('it should pass up both typed names and url filters when applying', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -180,28 +191,32 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    const screen = await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
-    await fillByLabel('Nom d\'acquis', 'different names value');
+    const screen = await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
+    await fillByLabel("Nom d'acquis", 'different names value');
     await fillByLabel('URL', 'different url value');
     await clickByName('Filtrer');
 
     // then
-    assert.strictEqual(screen.getByLabelText('Nom d\'acquis').value, 'different names value');
+    assert.strictEqual(screen.getByLabelText("Nom d'acquis").value, 'different names value');
     assert.strictEqual(screen.getByLabelText('URL').value, 'different url value');
     sinon.assert.calledWithExactly(onApplyFiltersClickedStub, 'different url value', 'different names value');
   });
 
-  test('it should call arg function when clearing filters', async function(assert) {
+  test('it should call arg function when clearing filters', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -212,17 +227,19 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
+    await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
     await clickByName('Réinitialiser les filtres');
 
     // then
@@ -230,7 +247,9 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     assert.ok(true);
   });
 
-  test('it should call arg edit function when clicking on list item', async function(assert) {
+  test('it should call arg edit function when clicking on list item', async function (assert) {
+    const self = this;
+
     // given
     this.whitelistedUrls = [whitelistedUrl1, whitelistedUrl2];
     this.urlFilterValue = 'initialUrlValue';
@@ -241,17 +260,19 @@ module('Integration | Component | whitelisted-urls/list', function(hooks) {
     this.goToEditWhitelistedUrl = onEditStub;
 
     // when
-    await render(hbs`
-      <WhitelistedUrls::List
-        @whitelistedUrls={{this.whitelistedUrls}}
-        @urlFilterValue={{this.urlFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @namesFilterValue={{this.namesFilterValue}}
-        @onApplyFiltersClicked={{this.onApplyFiltersClicked}}
-        @onClearFiltersClicked={{this.onClearFiltersClicked}}
-        @onDeleteItemClicked={{this.onDeleteItemClicked}}
-        @goToEditWhitelistedUrl={{this.goToEditWhitelistedUrl}}
-      />`);
+    await render(
+      <template>
+        <WhitelistedUrlsList
+          @whitelistedUrls={{self.whitelistedUrls}}
+          @urlFilterValue={{self.urlFilterValue}}
+          @namesFilterValue={{self.namesFilterValue}}
+          @onApplyFiltersClicked={{self.onApplyFiltersClicked}}
+          @onClearFiltersClicked={{self.onClearFiltersClicked}}
+          @onDeleteItemClicked={{self.onDeleteItemClicked}}
+          @goToEditWhitelistedUrl={{self.goToEditWhitelistedUrl}}
+        />
+      </template>,
+    );
     await clickByText('Strictement égale à');
     await clickByText('Un commentaire sur Laura');
     await clickByText('https://foo.com');

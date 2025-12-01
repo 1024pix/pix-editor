@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
 
-module('Integration | Component | competence/competence-footer', function(hooks) {
+module('Integration | Component | competence/competence-footer', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     const self = this;
 
     // given
@@ -18,7 +18,19 @@ module('Integration | Component | competence/competence-footer', function(hooks)
 
     // when
 
-    await render(<template> <CompetenceFooter @competence={{self.competence}} @section={{self.section}} @view={{self.view}} @selectView={{self.externalAction}} @newTheme={{self.externalAction}} @displaySortThemesPopIn={{self.externalAction}} @newPrototype={{self.externalAction}} /></template>);
+    await render(
+      <template>
+        <CompetenceFooter
+          @competence={{self.competence}}
+          @section={{self.section}}
+          @view={{self.view}}
+          @selectView={{self.externalAction}}
+          @newTheme={{self.externalAction}}
+          @displaySortThemesPopIn={{self.externalAction}}
+          @newPrototype={{self.externalAction}}
+        />
+      </template>,
+    );
 
     // then
 

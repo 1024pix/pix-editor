@@ -1,13 +1,13 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-module('Unit | Model | tube', function(hooks) {
+module('Unit | Model | tube', function (hooks) {
   setupTest(hooks);
   let store;
   let skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6;
   let tube;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     skillRecord1 = store.createRecord('skill', {
       id: 'rec654258',
@@ -64,18 +64,11 @@ module('Unit | Model | tube', function(hooks) {
     tube = store.createRecord('tube', {
       id: 'rec123456',
       name: 'tubeName',
-      rawSkills: [
-        skillRecord1,
-        skillRecord2,
-        skillRecord3,
-        skillRecord4,
-        skillRecord5,
-        skillRecord6,
-      ],
+      rawSkills: [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6],
     });
   });
 
-  test('it should return an array of skill with status is not `archivé` or `périmé`', function(assert) {
+  test('it should return an array of skill with status is not `archivé` or `périmé`', function (assert) {
     assert.expect(4);
     // given
     const wrongStatus = ['archivé', 'périmé'];
@@ -89,7 +82,7 @@ module('Unit | Model | tube', function(hooks) {
     });
   });
 
-  test('it should return an array of all versions skills sorted and positioned by level', function(assert) {
+  test('it should return an array of all versions skills sorted and positioned by level', function (assert) {
     // given
     const expectedArray = [
       [skillRecord1, skillRecord2],
@@ -108,17 +101,9 @@ module('Unit | Model | tube', function(hooks) {
     assert.deepEqual(filledSkills, expectedArray);
   });
 
-  test('it should return an array of productionSkill positioned by level', function(assert) {
+  test('it should return an array of productionSkill positioned by level', function (assert) {
     // given
-    const expectedArray = [
-      skillRecord1,
-      false,
-      skillRecord3,
-      skillRecord4,
-      false,
-      false,
-      false,
-    ];
+    const expectedArray = [skillRecord1, false, skillRecord3, skillRecord4, false, false, false];
 
     // when
     const filledSkills = tube.filledProductionSkills;
@@ -126,9 +111,9 @@ module('Unit | Model | tube', function(hooks) {
     // then
     assert.deepEqual(filledSkills, expectedArray);
   });
-  module('#draftSkill', function(hooks) {
+  module('#draftSkill', function (hooks) {
     let skillRecord5v2, skillRecord1v2;
-    hooks.beforeEach(async function() {
+    hooks.beforeEach(async function () {
       skillRecord1v2 = store.createRecord('skill', {
         id: 'skillRecord1v2',
         level: 1,
@@ -147,17 +132,9 @@ module('Unit | Model | tube', function(hooks) {
       tube.rawSkills = rawSkills;
     });
 
-    test('it should return an array of draftSkill positioned by level', function(assert) {
+    test('it should return an array of draftSkill positioned by level', function (assert) {
       // given
-      const expectedArray = [
-        [skillRecord1v2],
-        false,
-        false,
-        false,
-        [skillRecord5, skillRecord5v2],
-        false,
-        false,
-      ];
+      const expectedArray = [[skillRecord1v2], false, false, false, [skillRecord5, skillRecord5v2], false, false];
 
       // when
       const filledSkills = tube.filledDraftSkills;
@@ -166,17 +143,9 @@ module('Unit | Model | tube', function(hooks) {
       assert.deepEqual(filledSkills, expectedArray);
     });
 
-    test('it should return an array of last draftSkill positioned by level', function(assert) {
+    test('it should return an array of last draftSkill positioned by level', function (assert) {
       // given
-      const expectedArray = [
-        skillRecord1v2,
-        false,
-        false,
-        false,
-        skillRecord5v2,
-        false,
-        false,
-      ];
+      const expectedArray = [skillRecord1v2, false, false, false, skillRecord5v2, false, false];
 
       // when
       const filledSkills = tube.filledLastDraftSkills;
@@ -186,14 +155,10 @@ module('Unit | Model | tube', function(hooks) {
     });
   });
 
-  module('#productionSkills', function() {
-    test('returns validated skills in the tube', function(assert) {
+  module('#productionSkills', function () {
+    test('returns validated skills in the tube', function (assert) {
       assert.strictEqual(tube.productionSkillCount, 3);
-      assert.deepEqual(tube.productionSkills, [
-        skillRecord1,
-        skillRecord3,
-        skillRecord4,
-      ]);
+      assert.deepEqual(tube.productionSkills, [skillRecord1, skillRecord3, skillRecord4]);
       assert.ok(tube.hasProductionSkills);
     });
   });

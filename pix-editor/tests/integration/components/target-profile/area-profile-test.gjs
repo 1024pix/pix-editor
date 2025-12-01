@@ -4,10 +4,10 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import AreaProfile from 'pixeditor/components/target-profile/area-profile';
 
-module('Integration | Component | target-profile/area-profile', function(hooks) {
+module('Integration | Component | target-profile/area-profile', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it filter', async function(assert) {
+  test('it filter', async function (assert) {
     const self = this;
 
     // given
@@ -29,11 +29,7 @@ module('Integration | Component | target-profile/area-profile', function(hooks) 
 
     const area = EmberObject.create({
       name: 'area_name',
-      sortedCompetences: [
-        competence_1,
-        competence_2,
-        competence_3,
-      ],
+      sortedCompetences: [competence_1, competence_2, competence_3],
     });
     this.area = area;
     this.filter = true;

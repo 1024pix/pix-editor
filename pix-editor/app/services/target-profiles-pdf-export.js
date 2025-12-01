@@ -24,7 +24,7 @@ import {
 
 const legalMentionByLanguage = {
   en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',
-  fr: 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.',
+  fr: "Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l'accompagnement de leurs publics.",
 };
 const firstPageTitleSize = 30;
 const firstPagePSize = 20;
@@ -36,61 +36,18 @@ const pSize = 7.4;
 const footerSize = 4;
 const margin = 15;
 const areaTitleHeight = 69;
-const fontColor = [
-  65,
-  70,
-  87,
-];
-const lightGrey = [
-  250,
-  250,
-  250,
-];
-const grey = [
-  240,
-  240,
-  240,
-];
+const fontColor = [65, 70, 87];
+const lightGrey = [250, 250, 250];
+const grey = [240, 240, 240];
 const colors = [
-  [
-    241,
-    161,
-    65,
-  ],
-  [
-    87,
-    200,
-    132,
-  ],
-  [
-    18,
-    163,
-    255,
-  ],
-  [
-    255,
-    63,
-    148,
-  ],
-  [
-    87,
-    77,
-    166,
-  ],
-  [
-    56,
-    138,
-    255,
-  ],
+  [241, 161, 65],
+  [87, 200, 132],
+  [18, 163, 255],
+  [255, 63, 148],
+  [87, 77, 166],
+  [56, 138, 255],
 ];
-const areaGradient = [
-  area1bg,
-  area2bg,
-  area3bg,
-  area4bg,
-  area5bg,
-  area6bg,
-];
+const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
 
 const defaultLanguage = 'fr';
 
@@ -132,14 +89,7 @@ export default class TargetProfilesPdfExportService extends Service {
     await v.render();
     const blob = await canvas.convertToBlob();
     const pngUrl = URL.createObjectURL(blob);
-    pdf.addImage(
-      pngUrl,
-      'PNG',
-      margin / 2,
-      margin / 2,
-      pdfWidth - margin,
-      pdfHeight - margin,
-    );
+    pdf.addImage(pngUrl, 'PNG', margin / 2, margin / 2, pdfWidth - margin, pdfHeight - margin);
     pdf.setDrawColor(255, 255, 255);
     pdf.setLineWidth(margin);
     pdf.roundedRect(margin / 2, margin / 2, pdfWidth - margin, pdfHeight - margin, 15, 15, 'S');
@@ -158,7 +108,9 @@ export default class TargetProfilesPdfExportService extends Service {
 
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
-      const competences = hasSelectedTubes ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
+      const competences = hasSelectedTubes
+        ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0)
+        : area.sortedCompetences;
       y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
@@ -167,7 +119,7 @@ export default class TargetProfilesPdfExportService extends Service {
         pdf.setFont('AmpleSoft', 'bold');
         pdf.setFontSize(areaTitleSize);
         pdf.setTextColor('#fff');
-        pdf.text(this._getCenteredX(pdf, areaName), (areaTitleHeight / 2) - 10, areaName);
+        pdf.text(this._getCenteredX(pdf, areaName), areaTitleHeight / 2 - 10, areaName);
 
         competences.forEach((competence) => {
           const competenceColor = colors[i];
@@ -196,10 +148,14 @@ export default class TargetProfilesPdfExportService extends Service {
             ],
           ];
 
-          const themes = hasSelectedTubes ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube) : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
+          const themes = hasSelectedTubes
+            ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube)
+            : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
 
           const tableBody = themes.reduce((values, theme) => {
-            const tubes = hasSelectedTubes ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
+            const tubes = hasSelectedTubes
+              ? theme.productionTubes.filter((tube) => tube.selectedLevel)
+              : theme.productionTubes;
             const buildCell = this._buildCell(theme, tubes, language);
             return [...values, ...buildCell];
           }, []);
@@ -249,7 +205,9 @@ export default class TargetProfilesPdfExportService extends Service {
           // Draw separation between theme
           let indexCell = 0;
           themes.forEach((theme) => {
-            const tubes = hasSelectedTubes ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
+            const tubes = hasSelectedTubes
+              ? theme.productionTubes.filter((tube) => tube.selectedLevel)
+              : theme.productionTubes;
             indexCell += tubes.length;
             const positionCell = pdf.lastAutoTable.body[indexCell]?.cells[0];
             if (positionCell) {
@@ -324,46 +282,49 @@ export default class TargetProfilesPdfExportService extends Service {
         },
       },
     ];
-    return tubes.reduce((values, tube, index) => {
-      const fillColor = index % 2 === 0 ? grey : lightGrey;
-      const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, tube);
-      const cells = [
-        {
-          content: tubeName,
-          styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
-            cellWidth: 100,
-            valign: 'middle',
-            font: 'RobotoCondensed',
-            fontStyle: 'normal',
-            fontSize: pSize,
-            textColor: fontColor,
-            fillColor,
+    return tubes.reduce(
+      (values, tube, index) => {
+        const fillColor = index % 2 === 0 ? grey : lightGrey;
+        const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, tube);
+        const cells = [
+          {
+            content: tubeName,
+            styles: {
+              cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+              cellWidth: 100,
+              valign: 'middle',
+              font: 'RobotoCondensed',
+              fontStyle: 'normal',
+              fontSize: pSize,
+              textColor: fontColor,
+              fillColor,
+            },
           },
-        },
-        {
-          content: tubeDescription,
-          styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
-            fontSize: pSize,
-            valign: 'middle',
-            font: 'RobotoCondensed',
-            fontStyle: 'light',
-            textColor: fontColor,
-            fillColor,
+          {
+            content: tubeDescription,
+            styles: {
+              cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+              fontSize: pSize,
+              valign: 'middle',
+              font: 'RobotoCondensed',
+              fontStyle: 'light',
+              textColor: fontColor,
+              fillColor,
+            },
           },
-        },
-      ];
-      values.push(cells);
-      return values;
-    }, [firstCell]);
+        ];
+        values.push(cells);
+        return values;
+      },
+      [firstCell],
+    );
   }
 
   _getVersionText(language) {
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     const versionTextByLanguage = {
-      en: `Version ${(new Date()).toLocaleDateString('en', dateOptions)}`,
-      fr: `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`,
+      en: `Version ${new Date().toLocaleDateString('en', dateOptions)}`,
+      fr: `Version du ${new Date().toLocaleDateString('fr', dateOptions)}`,
     };
     return versionTextByLanguage[language];
   }
@@ -408,11 +369,13 @@ export default class TargetProfilesPdfExportService extends Service {
 
   _getTranslatedField(keys, language, model) {
     const translatedField = model[keys[language]];
-    return isEmpty(translatedField?.trim()) ? `${model[keys[defaultLanguage]]} [English version coming soon]` : translatedField;
+    return isEmpty(translatedField?.trim())
+      ? `${model[keys[defaultLanguage]]} [English version coming soon]`
+      : translatedField;
   }
 
   _getCenteredX(pdf, text) {
-    const textWidth = pdf.getStringUnitWidth(text) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+    const textWidth = (pdf.getStringUnitWidth(text) * pdf.internal.getFontSize()) / pdf.internal.scaleFactor;
     return (pdf.internal.pageSize.width - textWidth) / 2;
   }
 
@@ -428,12 +391,20 @@ export default class TargetProfilesPdfExportService extends Service {
     pdf.addImage(pngUrl, 'PNG', x - strokeWidth / 2, y + strokeWidth / 2, width + strokeWidth, height + strokeWidth);
     pdf.setDrawColor(255, 255, 255);
     pdf.setLineWidth(strokeWidth);
-    pdf.roundedRect(x + strokeWidth / 2, y + strokeWidth / 2, width - strokeWidth, height + strokeWidth, radius, radius, 'S');
+    pdf.roundedRect(
+      x + strokeWidth / 2,
+      y + strokeWidth / 2,
+      width - strokeWidth,
+      height + strokeWidth,
+      radius,
+      radius,
+      'S',
+    );
   }
 
   _generatePdfName(title) {
     const id = `${Date.now()}`.slice(5, 9);
-    const generateDate = `${(new Date()).toLocaleDateString('fr')}_${id}`;
+    const generateDate = `${new Date().toLocaleDateString('fr')}_${id}`;
     return `${title}-${generateDate}`;
   }
 

@@ -3,9 +3,9 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import ThresholdCalculation from 'pixeditor/components/pop-in/threshold-calculation';
 
-module('Integration | Component | pop-in/threshold-calculation', function(hooks) {
+module('Integration | Component | pop-in/threshold-calculation', function (hooks) {
   setupIntlRenderingTest(hooks);
-  test('it display a list of selected skills count by level', async function(assert) {
+  test('it display a list of selected skills count by level', async function (assert) {
     const self = this;
 
     // given
@@ -130,12 +130,17 @@ module('Integration | Component | pop-in/threshold-calculation', function(hooks)
         ],
       },
     ];
-    const selectedSkillsCount = tube1SelectedSkills.length + tube2SelectedSkills.length + tube3SelectedSkills.length + tube4SelectedSkills.length;
-    this.closeAction = function() {};
+    const selectedSkillsCount =
+      tube1SelectedSkills.length + tube2SelectedSkills.length + tube3SelectedSkills.length + tube4SelectedSkills.length;
+    this.closeAction = function () {};
     this.areas = areas;
 
     // when
-    await render(<template><ThresholdCalculation @title="Paliers indicatifs" @close={{self.closeAction}} @model={{self.areas}} /></template>);
+    await render(
+      <template>
+        <ThresholdCalculation @title="Paliers indicatifs" @close={{self.closeAction}} @model={{self.areas}} />
+      </template>,
+    );
 
     // then
     assert.strictEqual(this.element.querySelectorAll('tr').length, 10);
