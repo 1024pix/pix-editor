@@ -12,7 +12,6 @@ const compiledOutputFiles = ['dist/*', 'tmp/*'];
 const dependenciesFiles = ['bower_components/*', 'node_modules/*'];
 const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache'];
 const emberTryFiles = ['.node_modules.ember-try/*', 'bower.json.ember-try', 'package.json.ember-try'];
-import stylistic from '@stylistic/eslint-plugin';
 
 const nodeFiles = [
   '.template-lintrc.js',

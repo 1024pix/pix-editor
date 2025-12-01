@@ -48,7 +48,6 @@
     "@glimmer/tracking": "^1.1.2",
     "@playwright/test": "1.56.1",
     "@sentry/ember": "^10.0.0",
-    "@stylistic/eslint-plugin": "^5.5.0",
     "acorn": "^8.8.1",
     "base-x": "^5.0.0",
     "canvg": "^4.0.1",

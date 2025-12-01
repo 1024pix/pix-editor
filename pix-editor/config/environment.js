@@ -1,11 +1,10 @@
-/* eslint-disable @stylistic/object-curly-newline */
 'use strict';
 
 function _isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
 }
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'pixeditor',
     environment,
@@ -34,7 +33,7 @@ module.exports = function(environment) {
       disablePerformance: true,
       sentry: {
         dsn: process.env.SENTRY_DSN,
-        environment: (process.env.SENTRY_ENVIRONMENT || 'development'),
+        environment: process.env.SENTRY_ENVIRONMENT || 'development',
         maxBreadcrumbs: _getEnvironmentVariableAsNumber({
           environmentVariable: process.env.SENTRY_MAX_BREADCRUMBS,
           defaultValue: 100,
@@ -85,5 +84,7 @@ function _getEnvironmentVariableAsNumber({ environmentVariableName, defaultValue
   if (!isNaN(number) && number >= minValue) {
     return number;
   }
-  throw new Error(`Invalid value '${valueToValidate}' for environment variable '${environmentVariableName}'. It should be a number greater than or equal ${minValue}.`);
+  throw new Error(
+    `Invalid value '${valueToValidate}' for environment variable '${environmentVariableName}'. It should be a number greater than or equal ${minValue}.`,
+  );
 }
