@@ -6,29 +6,62 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | v2 | Localized-framework', function(hooks) {
+module('Acceptance | v2 | Localized-framework', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     window.localStorage.setItem('v2', 'true');
 
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    const prototype1 = this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Prototype 1', version: 1 });
+    const prototype1 = this.server.create('challenge', {
+      id: 'recChallenge1',
+      airtableId: 'airtableId1',
+      embedURL: 'https://mon-site.fr/my-link.html?lang=fr',
+      genealogy: 'Prototype 1',
+      version: 1,
+    });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
-    this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
+    this.server.create('localized-challenge', {
+      id: 'recChallenge1NL',
+      challengeId: 'recChallenge1',
+      locale: 'nl',
+      defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl',
+    });
 
-    const prototype2 = this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId2', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Prototype 1', version: 1 });
+    const prototype2 = this.server.create('challenge', {
+      id: 'recChallenge2',
+      airtableId: 'airtableId2',
+      embedURL: 'https://mon-site.fr/my-link.html?lang=fr',
+      genealogy: 'Prototype 1',
+      version: 1,
+    });
     this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
-    this.server.create('localized-challenge', { id: 'recChallenge2NL', challengeId: 'recChallenge2', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
+    this.server.create('localized-challenge', {
+      id: 'recChallenge2NL',
+      challengeId: 'recChallenge2',
+      locale: 'nl',
+      defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl',
+    });
 
-    const prototype3 = this.server.create('challenge', { id: 'recChallenge3', airtableId: 'airtableId3', embedURL: 'https://mon-site.fr/my-link.html?lang=fr', genealogy: 'Prototype 1', version: 1 });
+    const prototype3 = this.server.create('challenge', {
+      id: 'recChallenge3',
+      airtableId: 'airtableId3',
+      embedURL: 'https://mon-site.fr/my-link.html?lang=fr',
+      genealogy: 'Prototype 1',
+      version: 1,
+    });
     this.server.create('localized-challenge', { id: 'recChallenge3', challengeId: 'recChallenge3', locale: 'fr' });
-    this.server.create('localized-challenge', { id: 'recChallenge3NL', challengeId: 'recChallenge3', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
+    this.server.create('localized-challenge', {
+      id: 'recChallenge3NL',
+      challengeId: 'recChallenge3',
+      locale: 'nl',
+      defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl',
+    });
 
     const skill1 = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
     const skill2 = this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'], level: 2 });
@@ -36,11 +69,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
 
     const tube = this.server.create('tube', {
       id: 'recTube1',
-      rawSkillIds: [
-        'recSkill1',
-        'recSkill2',
-        'recSkill3',
-      ],
+      rawSkillIds: ['recSkill1', 'recSkill2', 'recSkill3'],
       name: '@tubeName',
     });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -153,7 +182,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     return authenticateSession();
   });
 
-  test('should navigate to localized framework editor', async function(assert) {
+  test('should navigate to localized framework editor', async function (assert) {
     // when
     const screen = await visit('/v2/competences/competence1-1/challenges-production?locale=nl');
     await click(await screen.findByRole('link', { name: 'Cadre de traduction' }));
@@ -162,7 +191,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/localized-framework?locale=nl');
   });
 
-  test('it should create localized framework tubes', async function(assert) {
+  test('it should create localized framework tubes', async function (assert) {
     // given
     const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
@@ -182,7 +211,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
   });
 
-  test('it should update localized framework tubes', async function(assert) {
+  test('it should update localized framework tubes', async function (assert) {
     // given
     this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
     const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
@@ -196,7 +225,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
   });
 
-  test('it should redirect to challenges-production when user choose source language', async function(assert) {
+  test('it should redirect to challenges-production when user choose source language', async function (assert) {
     // given
     this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
     const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
@@ -207,7 +236,7 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production');
   });
 
-  test('user can exit without save modifications', async function(assert) {
+  test('user can exit without save modifications', async function (assert) {
     // given
     this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
     const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');

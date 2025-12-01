@@ -5,11 +5,11 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { fillIn } from '@ember/test-helpers';
 
-module('Integration | Component | v2/localized-framework', function(hooks) {
+module('Integration | Component | v2/localized-framework', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let screen;
-  hooks.beforeEach(async function() {
+  hooks.beforeEach(async function () {
     const tubeId = 'tubeId1';
     const competence = {
       id: 'competenceId1',
@@ -30,18 +30,18 @@ module('Integration | Component | v2/localized-framework', function(hooks) {
 
     // when
     screen = await render(
-    <template>
-      <LocalizedFramework
-        @competence={{competence}}
-        @locale={{locale}}
-        @localizedFrameworkTubes={{localizedFrameworkTubes}}
-      />
-    </template>,
+      <template>
+        <LocalizedFramework
+          @competence={{competence}}
+          @locale={{locale}}
+          @localizedFrameworkTubes={{localizedFrameworkTubes}}
+        />
+      </template>,
     );
   });
 
-  module('it should warn', function() {
-    test('if max-level is out of range', async function(assert) {
+  module('it should warn', function () {
+    test('if max-level is out of range', async function (assert) {
       // when
       await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), '30');
 
@@ -49,7 +49,7 @@ module('Integration | Component | v2/localized-framework', function(hooks) {
       assert.dom(screen.getByText('la valeur doit être comprise entre 0 et 8')).exists();
     });
 
-    test('if max-level is not a number', async function(assert) {
+    test('if max-level is not a number', async function (assert) {
       // when
       await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 'george');
 
@@ -58,7 +58,7 @@ module('Integration | Component | v2/localized-framework', function(hooks) {
     });
   });
 
-  test('save action should be disabled if form is not valid', async function(assert) {
+  test('save action should be disabled if form is not valid', async function (assert) {
     // when
     await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 'george');
 

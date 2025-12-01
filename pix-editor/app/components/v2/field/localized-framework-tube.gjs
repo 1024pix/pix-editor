@@ -27,8 +27,8 @@ export default class LocalizedFrameworkTube extends Component {
 
   <template>
     <PixInput
-      max=8
-      min=0
+      max="8"
+      min="0"
       type="number"
       @screenReaderOnly={{true}}
       @validationStatus={{this.validationStatus}}

@@ -11,7 +11,9 @@ export default class LocalizedFramework extends Component {
   @service store;
   @service router;
 
-  @tracked tubeMaxLevelById = Object.fromEntries(this.args.localizedFrameworkTubes.map(({ tubeId, maxLevel }) => [tubeId, maxLevel]));
+  @tracked tubeMaxLevelById = Object.fromEntries(
+    this.args.localizedFrameworkTubes.map(({ tubeId, maxLevel }) => [tubeId, maxLevel]),
+  );
   @tracked inputStateList = trackedArray([]);
 
   get isInvalidForm() {
@@ -27,16 +29,20 @@ export default class LocalizedFramework extends Component {
   async save() {
     const localizedFrameworkTubesToSave = [];
     for (const tubeId in this.tubeMaxLevelById) {
-      const existingLocalizedFrameworkTube = this.args.localizedFrameworkTubes.find((localizedFrameworkTube) => localizedFrameworkTube.tubeId === tubeId);
+      const existingLocalizedFrameworkTube = this.args.localizedFrameworkTubes.find(
+        (localizedFrameworkTube) => localizedFrameworkTube.tubeId === tubeId,
+      );
       if (existingLocalizedFrameworkTube) {
         existingLocalizedFrameworkTube.maxLevel = this.tubeMaxLevelById[tubeId];
         localizedFrameworkTubesToSave.push(existingLocalizedFrameworkTube);
       } else {
-        localizedFrameworkTubesToSave.push(this.store.createRecord('localized-framework-tube', {
-          locale: this.args.locale,
-          tubeId,
-          maxLevel: this.tubeMaxLevelById[tubeId],
-        }));
+        localizedFrameworkTubesToSave.push(
+          this.store.createRecord('localized-framework-tube', {
+            locale: this.args.locale,
+            tubeId,
+            maxLevel: this.tubeMaxLevelById[tubeId],
+          }),
+        );
       }
     }
     await Promise.all(localizedFrameworkTubesToSave.map((localizedFramework) => localizedFramework.save()));
@@ -79,23 +85,23 @@ export default class LocalizedFramework extends Component {
         </PixButton>
       </div>
       <div class="competence-overview-grid">
-      {{#each @competence.sortedThemes as |theme|}}
-        <div class="thematic" style={{concat "--tubes-count: " theme.tubes.length ";"}}>
-          <h3>{{theme.name}}</h3>
-          {{#each theme.tubes as |tube index|}}
-          <div class="tube">
-            <h4>{{tube.name}}</h4>
-            <LocalizedFrameworkTube
-              @tube={{tube}}
-              @index={{index}}
-              @updateMaxLevel={{this.updateMaxLevel}}
-              @inputStateList={{this.inputStateList}}
-              @value={{this.getMaxLevelLocalizedFrameworkTube tube.id}}
-            />
+        {{#each @competence.sortedThemes as |theme|}}
+          <div class="thematic" style={{concat "--tubes-count: " theme.tubes.length ";"}}>
+            <h3>{{theme.name}}</h3>
+            {{#each theme.tubes as |tube index|}}
+              <div class="tube">
+                <h4>{{tube.name}}</h4>
+                <LocalizedFrameworkTube
+                  @tube={{tube}}
+                  @index={{index}}
+                  @updateMaxLevel={{this.updateMaxLevel}}
+                  @inputStateList={{this.inputStateList}}
+                  @value={{this.getMaxLevelLocalizedFrameworkTube tube.id}}
+                />
+              </div>
+            {{/each}}
           </div>
-          {{/each}}
-        </div>
-      {{/each}}
+        {{/each}}
       </div>
     </div>
   </template>

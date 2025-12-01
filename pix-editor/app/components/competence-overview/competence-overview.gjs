@@ -70,36 +70,36 @@ export default class CompetenceOverview extends Component {
         <div class="competence-overview-actions__buttons">
           {{#if @locale}}
             {{#if this.isAdmin}}
-                <PixButtonLink
-                  class="competence-overview-actions__fetch"
-                  @route="authenticated.v2.localized-framework"
-                  @variant="secondary"
-                >Cadre de traduction</PixButtonLink>
-              {{/if}}
-              <PixButton
+              <PixButtonLink
                 class="competence-overview-actions__fetch"
-                @size="small"
-                @isBorderVisible={{true}}
+                @route="authenticated.v2.localized-framework"
                 @variant="secondary"
-                @loadingColor="grey"
-                @triggerAction={{this.fetchTranslations}}
-              >
-                Récupérer les traductions
-              </PixButton>
+              >Cadre de traduction</PixButtonLink>
             {{/if}}
             <PixButton
-              class="competence-overview-actions__refresh"
-              @iconBefore="refresh"
+              class="competence-overview-actions__fetch"
               @size="small"
               @isBorderVisible={{true}}
               @variant="secondary"
-              @triggerAction={{this.refresh}}
+              @loadingColor="grey"
+              @triggerAction={{this.fetchTranslations}}
             >
-              Actualiser
+              Récupérer les traductions
             </PixButton>
-          </div>
+          {{/if}}
+          <PixButton
+            class="competence-overview-actions__refresh"
+            @iconBefore="refresh"
+            @size="small"
+            @isBorderVisible={{true}}
+            @variant="secondary"
+            @triggerAction={{this.refresh}}
+          >
+            Actualiser
+          </PixButton>
         </div>
-        <div class="competence-overview-grid">
+      </div>
+      <div class="competence-overview-grid">
         {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
           <div class="thematic" style={{this.thematicStyle thematicOverview}}>
             <h3>{{thematicOverview.name}}</h3>
