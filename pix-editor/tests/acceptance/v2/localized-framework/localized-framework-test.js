@@ -59,6 +59,52 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
 
     this.server.create('competence-overview', {
+      id: `${competence.pixId}:challenges-production`,
+      thematicOverviews: [
+        {
+          id: thematic.id,
+          name: thematic.name,
+          tubeOverviews: [
+            {
+              id: tube.id,
+              name: tube.name,
+              skillOverviews: [
+                {
+                  id: skill1.id,
+                  name: skill1.name,
+                  prototypeId: prototype1.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 2,
+                  validatedChallengesCount: 1,
+                },
+                {
+                  id: skill2.id,
+                  name: skill2.name,
+                  prototypeId: prototype2.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 2,
+                  validatedChallengesCount: 1,
+                },
+                {
+                  id: skill3.id,
+                  name: skill3.name,
+                  prototypeId: prototype3.id,
+                  isPrototypeDeclinable: true,
+                  proposedChallengesCount: 2,
+                  validatedChallengesCount: 1,
+                },
+                null,
+                null,
+                null,
+                null,
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    this.server.create('competence-overview', {
       id: `${competence.pixId}:challenges-production:nl`,
       thematicOverviews: [
         {
@@ -148,5 +194,16 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
 
     assert.strictEqual(localizedFrameworkTube.maxLevel, 5);
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+  });
+
+  test('it should redirect to challenges-production when user choose source language', async function(assert) {
+    // given
+    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+
+    await click(screen.getByRole('button', { name: 'Choix de la langue' }));
+    await clickByText('Langue source');
+
+    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production');
   });
 });

@@ -5,7 +5,13 @@ export default class CompetenceOverviewRoute extends Route {
   @service router;
   @service store;
 
-  async model(params) {
+  async beforeModel() {
+    const { competence, locale } = this.modelFor('authenticated.v2');
+
+    if (!locale) this.router.transitionTo('authenticated.v2.competence-overview', competence.id, 'challenges-production');
+  }
+
+  async model() {
     const { competence, locale } = this.modelFor('authenticated.v2');
     const themes = await competence.rawThemes;
     await Promise.all(themes.map((theme) => theme.rawTubes));
