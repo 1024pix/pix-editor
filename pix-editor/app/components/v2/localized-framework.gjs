@@ -44,6 +44,11 @@ export default class LocalizedFramework extends Component {
   }
 
   @action
+  undo() {
+    this.router.transitionTo('authenticated.v2.competence-overview', this.args.competence.id, 'challenges-production');
+  }
+
+  @action
   updateMaxLevel(tubeId, value) {
     this.tubeMaxLevelById[tubeId] = value;
   }
@@ -61,6 +66,16 @@ export default class LocalizedFramework extends Component {
           @triggerAction={{this.save}}
         >
           Enregistrer
+        </PixButton>
+        <PixButton
+          class="competence-overview-actions__fetch"
+          @size="small"
+          @isBorderVisible={{true}}
+          @variant="secondary"
+          @loadingColor="grey"
+          @triggerAction={{this.undo}}
+        >
+          Annuler
         </PixButton>
       </div>
       <div class="competence-overview-grid">

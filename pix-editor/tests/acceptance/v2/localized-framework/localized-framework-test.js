@@ -206,4 +206,18 @@ module('Acceptance | v2 | Localized-framework', function(hooks) {
 
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production');
   });
+
+  test('user can exit without save modifications', async function(assert) {
+    // given
+    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+
+    await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+    await click(screen.getByRole('button', { name: 'Annuler' }));
+
+    const localizedFrameworkTube = await store.peekRecord('localized-framework-tube', 'lft-1');
+
+    assert.strictEqual(localizedFrameworkTube.maxLevel, 2);
+    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+  });
 });
