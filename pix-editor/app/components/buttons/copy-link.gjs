@@ -1,30 +1,25 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
-import CopyButton from 'ember-cli-clipboard/components/copy-button';
 
 export default class CopyLink extends Component {
   @service notify;
 
   @action
-  linkCopySuccess() {
-    this.notify.message('Lien copié');
-  }
-
-  @action
-  linkCopyError() {
-    this.notify.error('Erreur lors de la copie');
+  async copyLink() {
+    try {
+      await navigator.clipboard.writeText(this.args.link);
+      this.notify.message('Lien copié');
+    } catch {
+      this.notify.error('Erreur lors de la copie');
+    }
   }
 
   <template>
-    <CopyButton
-      class="ui button item"
-      @text={{@link}}
-      @onSuccess={{this.linkCopySuccess}}
-      @onError={{this.linkCopyError}}
-    >
+    <button class="ui button item" {{on "click" this.copyLink}} type="button">
       <i class="linkify icon"></i>
       Copier le lien
-    </CopyButton>
+    </button>
   </template>
 }
