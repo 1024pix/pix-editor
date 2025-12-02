@@ -250,7 +250,6 @@ module('Acceptance | v2 | Localized-framework', function (hooks) {
     assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
   });
 
-
   test('it should redirect to overview V1 when user click on versionToggle', async function (assert) {
     // given
     this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
@@ -258,7 +257,7 @@ module('Acceptance | v2 | Localized-framework', function (hooks) {
 
     await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
 
-    await clickByText('V1')
+    await clickByText('V1');
 
     assert.strictEqual(currentURL(), '/competence/competence1-1/prototypes?languageFilter=nl&view=production');
   });

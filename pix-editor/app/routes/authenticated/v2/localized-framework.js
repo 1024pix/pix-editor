@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-export default class CompetenceOverviewRoute extends Route {
+export default class LocalizedFrameworkRoute extends Route {
   @service router;
   @service store;
 

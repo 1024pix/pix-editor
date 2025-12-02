@@ -15,14 +15,14 @@ export default class LocalizedFrameworkTube extends Component {
   @action
   updateMaxLevel(e) {
     const maxLevel = parseInt(e.target.value, 10);
-    if (0 <= maxLevel && maxLevel <= 8 && !Number.isNaN(maxLevel)) {
-      this.args.updateMaxLevel(this.args.tube.id, maxLevel);
-      this.args.inputStateList[this.args.index] = '';
-      this.validationStatus = 'default';
-    } else {
+    if (Number.isNaN(maxLevel) || 0 > maxLevel || maxLevel > 8) {
       this.args.inputStateList[this.args.index] = 'error';
       this.validationStatus = 'error';
+      return;
     }
+    this.args.updateMaxLevel(this.args.tube.id, maxLevel);
+    this.args.inputStateList[this.args.index] = '';
+    this.validationStatus = 'default';
   }
 
   <template>

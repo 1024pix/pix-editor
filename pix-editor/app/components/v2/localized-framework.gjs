@@ -50,7 +50,7 @@ export default class LocalizedFramework extends Component {
   }
 
   @action
-  undo() {
+  cancel() {
     this.router.transitionTo('authenticated.v2.competence-overview', this.args.competence.id, 'challenges-production');
   }
 
@@ -79,7 +79,7 @@ export default class LocalizedFramework extends Component {
           @isBorderVisible={{true}}
           @variant="secondary"
           @loadingColor="grey"
-          @triggerAction={{this.undo}}
+          @triggerAction={{this.cancel}}
         >
           Annuler
         </PixButton>
