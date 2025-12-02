@@ -6,7 +6,6 @@ import { concat } from '@ember/helper';
 import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
-import TuiEditor from 'ember-tui-editor/components/tui-editor';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
 import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor';
 
