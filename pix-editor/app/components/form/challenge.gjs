@@ -15,7 +15,7 @@ import Files from 'pixeditor/components/field/files';
 import Input from 'pixeditor/components/field/input';
 import Quality from 'pixeditor/components/field/quality';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import mime from 'mime';
+import getMimeType from 'pixeditor/helpers/get-mime-type';
 
 export default class ChallengeForm extends Component {
   <template>
@@ -498,7 +498,7 @@ export default class ChallengeForm extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: mime.getType(file.name),
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'illustration',
     };
@@ -512,7 +512,7 @@ export default class ChallengeForm extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: mime.getType(file.name),
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'attachment',
     };

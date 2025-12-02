@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
-import mime from 'mime';
+import getMimeType from 'pixeditor/helpers/get-mime-type';
 
 import PopInImage from '../pop-in/image';
 import PopInConfirm from '../pop-in/confirm';
@@ -177,7 +177,7 @@ export default class LocalizedChallenge extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: mime.getType(file.name),
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'illustration',
       alt,
@@ -243,7 +243,7 @@ export default class LocalizedChallenge extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: mime.getType(file.name),
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'attachment',
     };
