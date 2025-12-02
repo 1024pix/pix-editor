@@ -8,6 +8,7 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import TuiEditor from 'ember-tui-editor/components/tui-editor';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
+import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor';
 
 export default class Mde extends Component {
   <template>
@@ -37,7 +38,7 @@ export default class Mde extends Component {
         </span>
       </label>
       {{#if @edition}}
-        <TuiEditor data-test-tui-editor @value={{@value}} @onChange={{@setValue}} @usageStatistics={{false}} />
+        <MarkdownEditor @value={{@value}} @onChange={{@setValue}} />
       {{else}}
         <div data-test-markdow-to-html class="mde-preview">
           <MarkdownToHtml @markdown={{@value}} />
