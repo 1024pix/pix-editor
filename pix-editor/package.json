@@ -100,6 +100,7 @@
     "jspdf-autotable": "^5.0.0",
     "loader.js": "^4.7.0",
     "lodash": "^4.17.21",
+    "mime": "^4.1.0",
     "miragejs": "^0.1.47",
     "morgan": "^1.10.0",
     "npm-run-all2": "^8.0.0",

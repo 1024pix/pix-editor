@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
+import getMimeType from 'pixeditor/helpers/get-mime-type';
 
 export default class LocalizedController extends Controller {
   @service router;
@@ -259,7 +260,7 @@ export default class LocalizedController extends Controller {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type,
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'illustration',
       alt,
@@ -289,7 +290,7 @@ export default class LocalizedController extends Controller {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type,
+      mimeType: file.type ? file.type : getMimeType(file.name),
       file,
       type: 'attachment',
     };
