@@ -35,7 +35,7 @@ export default class Mde extends Component {
         <MarkdownEditor @value={{@value}} @onChange={{@setValue}} />
       {{else}}
         <div data-test-markdow-to-html class="mde-preview">
-          <MarkdownToHtml @markdown={{@value}} @maximized={{this.maximized}} />
+          <MarkdownToHtml @strikethrough={{true}} @tables={{true}} @markdown={{@value}} @maximized={{this.maximized}} />
         </div>
       {{/if}}
     </div>
