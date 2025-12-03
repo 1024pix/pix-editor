@@ -1,5 +1,29 @@
 
 
+## v4.1.0 (03/12/2025)
+
+
+### :rocket: Amélioration
+- [#1308](https://github.com/1024pix/pix-editor/pull/1308) [FEATURE] Filtrer la vue épreuves production avec le référentiel cadre (PIX-20508).
+- [#1301](https://github.com/1024pix/pix-editor/pull/1301) [FEATURE] Ajout de la page pour editer le maxLevel des localizedFrameworkTube (PIX-20506).
+
+### :building_construction: Tech
+- [#1306](https://github.com/1024pix/pix-editor/pull/1306) [TECH] Remplace la dépendance `ember-tui-editor` (PIX-20073).
+- [#1303](https://github.com/1024pix/pix-editor/pull/1303) [TECH] Supprime `ember-cli-clipboard` (PIX-20634).
+- [#1297](https://github.com/1024pix/pix-editor/pull/1297) [TECH] Migre les composants au format gjs.
+
+### :bug: Correction
+- [#1310](https://github.com/1024pix/pix-editor/pull/1310) [BUGFIX] Corrige les styles de la prévisualisation de markdown.
+- [#1302](https://github.com/1024pix/pix-editor/pull/1302) [BUGFIX] Impossible d'importer des fichiers PSD/XCF dans les PJ des épreuves sous windows (PIX-19477).
+- [#1307](https://github.com/1024pix/pix-editor/pull/1307) [BUGFIX] Passage à la vue épreuves lorsqu’une version acquis possède plusieurs versions de proto (PIX-19793).
+
+### :arrow_up: Montée de version
+- [#1305](https://github.com/1024pix/pix-editor/pull/1305) [BUMP] Update dependency @playwright/test to v1.57.0.
+- [#1304](https://github.com/1024pix/pix-editor/pull/1304) [BUMP] Update dependency ember-cli-htmlbars to v7 (pix-editor).
+- [#1300](https://github.com/1024pix/pix-editor/pull/1300) [BUMP] Lock file maintenance (pix-editor).
+- [#1299](https://github.com/1024pix/pix-editor/pull/1299) [BUMP] Lock file maintenance (api).
+- [#1296](https://github.com/1024pix/pix-editor/pull/1296) [BUMP] Update actions/checkout action to v6 (workflows).
+
 ## v4.0.2 (27/11/2025)
 
 
