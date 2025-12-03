@@ -150,10 +150,6 @@ module('Acceptance | competence/prototypes/list', function () {
       // when
       await click(findAll('[data-test-skill-tab]')[1]);
       await click(find('[data-test-new-prototype-action]'));
-      // Ugly hack to wait for ToastUI to be ready
-      // otherwise test is flacky and fails with error message
-      // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
-      await runTask(this, async () => {}, 100);
 
       // then
       assert.strictEqual(currentURL().indexOf(expectedResult), 0);
