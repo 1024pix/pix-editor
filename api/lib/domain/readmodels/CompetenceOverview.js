@@ -10,7 +10,7 @@ export class CompetenceOverview {
     this.skillsCount = sumBy(thematicOverviews, ({ skillsCount }) => skillsCount);
   }
 
-  static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale }) {
+  static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale, localizedFrameworkTubes }) {
     let id = `${competence.id}:challenges-production`;
     if (locale) id += `:${locale}`;
     return new CompetenceOverview({
@@ -26,6 +26,7 @@ export class CompetenceOverview {
             skills,
             challenges,
             locale,
+            localizedFrameworkTubes,
           }),
         )
         .filter((thematicOverview) => !thematicOverview.isEmpty),
@@ -73,8 +74,9 @@ class ThematicOverview {
     return this.isEmpty ? 0 : sumBy(this.tubeOverviews, ({ skillsCount }) => skillsCount);
   }
 
-  static buildForChallengesProduction({ thematic, tubes, skills, challenges, locale }) {
+  static buildForChallengesProduction({ thematic, tubes, skills, challenges, locale, localizedFrameworkTubes }) {
     const tubesById = Object.fromEntries(tubes.map((tube) => [tube.id, tube]));
+    const localizedFrameworkTubesById = localizedFrameworkTubes ? Object.fromEntries(localizedFrameworkTubes.map((localizedFrameworkTube) => [localizedFrameworkTube.tubeId, localizedFrameworkTube])) : null;
 
     return new ThematicOverview({
       airtableId: thematic.airtableId,
@@ -88,6 +90,7 @@ class ThematicOverview {
             skills,
             challenges,
             locale,
+            localizedFrameworkTube: localizedFrameworkTubesById?.[tube.id],
           }),
         )
         .filter((tubeOverview) => !tubeOverview.isEmpty),
@@ -130,8 +133,9 @@ class TubeOverview {
     return this.isEmpty ? 0 : sumBy(this.skillOverviews, (skillOverview) => (skillOverview === null ? 0 : 1));
   }
 
-  static buildForChallengesProduction({ tube, skills, challenges, locale }) {
-    const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(skills);
+  static buildForChallengesProduction({ tube, skills, challenges, locale, localizedFrameworkTube }) {
+    const localizedFrameworkSkills = localizedFrameworkTube ? skills.filter((skill) => skill.level <= localizedFrameworkTube.maxLevel) : skills;
+    const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(localizedFrameworkSkills);
 
     return new TubeOverview({
       airtableId: tube.airtableId,
