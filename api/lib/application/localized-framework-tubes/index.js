@@ -6,7 +6,7 @@ export async function register(server) {
     {
       method: 'GET',
       path: '/api/localized-framework-tubes',
-      config: { handler: localizedFrameworkTubesController.findAll },
+      config: { handler: localizedFrameworkTubesController.filter },
     },
     {
       method: 'POST',
@@ -16,6 +16,7 @@ export async function register(server) {
         validate: {
           payload: Joi.object({
             data: {
+              type: 'localized-framework-tubes',
               attributes: {
                 'tube-id': Joi.string().required(),
                 'max-level': Joi.number().required(),
@@ -27,7 +28,7 @@ export async function register(server) {
       },
     },
     {
-      method: 'PUT',
+      method: 'PATCH',
       path: '/api/localized-framework-tubes/{id}',
       config: {
         handler: localizedFrameworkTubesController.upsert,
@@ -35,6 +36,8 @@ export async function register(server) {
           params: Joi.object({ id: Joi.string().required() }),
           payload: Joi.object({
             data: {
+              id: Joi.number().required(),
+              type: 'localized-framework-tubes',
               attributes: {
                 'tube-id': Joi.string().required(),
                 'max-level': Joi.number().required(),

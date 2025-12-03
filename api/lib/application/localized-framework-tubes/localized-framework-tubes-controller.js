@@ -1,8 +1,13 @@
 import { localizedFrameworksTubesRepository } from '../../infrastructure/repositories/index.js';
 import { localizedFrameworkTubesSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
-export async function findAll(request, h) {
-  const localizedFrameworksTubes = await localizedFrameworksTubesRepository.findAll();
+export async function filter(request, h) {
+  const params = extractParameters(request.query);
+  const competenceId = params.filter.competenceId;
+  const locale = params.filter.locale;
+
+  const localizedFrameworksTubes = await localizedFrameworksTubesRepository.filter({ competenceId, locale });
   return h.response(localizedFrameworkTubesSerializer.serializeLocalizedFrameworkTubes(localizedFrameworksTubes));
 }
 

@@ -1,8 +1,14 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { LocalizedFrameworkTubes } from '../../domain/models/index.js';
 
-export async function findAll() {
-  const localizedFrameworkTubesDtos = await knex('localized_framework_tubes').select('*');
+export async function filter({ competenceId, locale }) {
+  const localizedFrameworkTubesDtos = await knex
+    .select('localized_framework_tubes.*')
+    .from('thematics')
+    .join('tubes', 'tubes.thematicId', 'thematics.id')
+    .join('localized_framework_tubes', 'localized_framework_tubes.tubeId', 'tubes.id')
+    .where('thematics.competenceId', competenceId)
+    .where('localized_framework_tubes.locale', locale);
   return localizedFrameworkTubesDtos.map(_toDomain);
 }
 

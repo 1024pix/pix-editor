@@ -26,7 +26,7 @@ export default class V2Route extends Route {
       }
       return;
     }
-    const view = extractViewFromTransition(transition);
+    const view = extractV1ViewFromTransition(transition);
     this.router.transitionTo('authenticated.competence.prototypes', competence_id, {
       queryParams: { languageFilter: locale, view },
     });
@@ -36,11 +36,12 @@ export default class V2Route extends Route {
 // L'information sur la vue est au niveau de la route enfant
 // On peut trouver cette info dans la transition
 // On parcourt tous les RouteInfo dans la transition jusqu'à trouver celui de la route qui contient la vue
-function extractViewFromTransition(transition) {
+function extractV1ViewFromTransition(transition) {
   if (!transition?.from) {
     return 'production';
   }
   const routeInfoOfCompetenceOverview = transition.from.find((item) => item.params.overview);
+  if (!routeInfoOfCompetenceOverview) return 'production';
   const [, view] = routeInfoOfCompetenceOverview.params.overview.split('-');
   return view;
 }

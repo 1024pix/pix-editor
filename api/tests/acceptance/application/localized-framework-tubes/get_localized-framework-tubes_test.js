@@ -3,7 +3,7 @@ import { databaseBuilder, generateAuthorizationHeader } from '../../../test-help
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | localized_framework_tubes | GET /api/localized-framework-tubes', function() {
-  it('Should return serialized localizedFrameworkTubes', async function() {
+  it('Should return serialized localizedFrameworkTubes filtered by competenceId and local', async function() {
     // given
     const user = databaseBuilder.factory.buildAdminUser();
     const { id: frameworkId } = databaseBuilder.factory.buildFramework({
@@ -44,7 +44,7 @@ describe('Acceptance | API | localized_framework_tubes | GET /api/localized-fram
     const server = await createServer();
     const response = await server.inject({
       method: 'GET',
-      url: '/api/localized-framework-tubes',
+      url: '/api/localized-framework-tubes?filter[competenceId]=competenceId&filter[locale]=bz',
       headers: generateAuthorizationHeader(user),
     });
 

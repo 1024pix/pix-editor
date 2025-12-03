@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
-describe('Acceptance | API | localized_framework_tubes | PUT /api/localized-framework-tubes', function() {
+describe('Acceptance | API | localized_framework_tubes | PATCH /api/localized-framework-tubes', function() {
   let user, tubeId, localizedFrameworkTubeId;
 
   beforeEach(async function() {
@@ -50,6 +50,8 @@ describe('Acceptance | API | localized_framework_tubes | PUT /api/localized-fram
     // given
     const payload = {
       data: {
+        id: localizedFrameworkTubeId,
+        type: 'localized-framework-tubes',
         attributes: {
           'tube-id': tubeId,
           'max-level': 2,
@@ -61,7 +63,7 @@ describe('Acceptance | API | localized_framework_tubes | PUT /api/localized-fram
     // when
     const server = await createServer();
     const response = await server.inject({
-      method: 'PUT',
+      method: 'PATCH',
       url: `/api/localized-framework-tubes/${localizedFrameworkTubeId}`,
       headers: generateAuthorizationHeader(user),
       payload,
