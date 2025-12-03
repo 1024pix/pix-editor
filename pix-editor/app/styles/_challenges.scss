@@ -1,4 +1,4 @@
-@use "global";
+@use 'global';
 
 // stylelint-disable color-no-hex, color-named
 .alternative {
@@ -22,7 +22,6 @@
   }
 }
 
-
 .challenge {
   display: flex;
   flex: 1 1 0;
@@ -43,13 +42,12 @@
     }
   }
 
-   .ui.icon.right {
+  .ui.icon.right {
     border: none;
     box-shadow: none;
   }
 
   .ui.cards > .card {
-
     .header .ui.button > .icon {
       margin-right: 0;
     }
@@ -80,7 +78,7 @@ img.clickable {
 .dropdown-content-challenge {
   & > .item {
     margin: 0;
-    padding: .7em 1.4em;
+    padding: 0.7em 1.4em;
     font-size: 16px !important;
     border-radius: 0;
 
@@ -94,7 +92,6 @@ img.clickable {
       background-color: global.$archived-background-color !important;
     }
   }
-
 }
 
 .challenge-header {
@@ -196,18 +193,9 @@ img.clickable {
       }
     }
 
-    .mde-preview {
-      height: 95px;
-      padding: 0.78571429em 1em;
-      overflow: scroll;
-      background-color: #f9f9f9;
-      border: 1px solid rgba(34, 36, 38, 0.15);
-      border-radius: 0.28571429rem;
-    }
-
     .field.disabled {
       textarea,
-      input[type="text"],
+      input[type='text'],
       .selection {
         background-color: #f9f9f9;
       }
@@ -233,7 +221,6 @@ img.clickable {
         flex-grow: 1;
         margin-bottom: 20px;
       }
-
     }
   }
 }
@@ -264,7 +251,6 @@ img.clickable {
   }
 
   .item {
-
     &.alternatives {
       color: #2185d0;
     }
@@ -290,7 +276,7 @@ img.clickable {
 }
 
 .file-remove i {
-  vertical-align: top
+  vertical-align: top;
 }
 
 .ui.form .field > label.file-upload {

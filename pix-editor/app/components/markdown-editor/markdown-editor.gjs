@@ -40,6 +40,7 @@ export default class MarkdownEditor extends Component {
       spellChecker: false,
       nativeSpellcheck: false,
       status: false,
+      previewClass: 'mde-preview',
       toolbar,
     });
     this.easyMDE.codemirror.on('change', () => {

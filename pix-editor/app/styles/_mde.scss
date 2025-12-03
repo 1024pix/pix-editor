@@ -12,3 +12,175 @@
     }
   }
 }
+
+// stylelint-disable color-no-hex, color-named
+.mde-preview {
+  --background: #efefef;
+  --focus: #0096bfab;
+  --border: #dbdbdb;
+
+  box-sizing: border-box;
+  height: 95px;
+  padding: 0.78571429em 1em;
+  overflow: scroll;
+  color: #253858;
+  font-size: 14px;
+  line-height: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+
+  ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 2.5em;
+    list-style-type: disc;
+  }
+
+  ol {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 2.5em;
+    list-style-type: decimal;
+  }
+
+  a {
+    color: #00e;
+  }
+
+  p {
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 12px;
+    color: #000;
+  }
+
+  strong {
+    color: #000;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  b,
+  strong,
+  th {
+    font-weight: 600;
+  }
+
+  q::before {
+    content: none;
+  }
+
+  q::after {
+    content: none;
+  }
+
+  blockquote {
+    margin: 1.5em 0;
+    padding: 0.5em 1em;
+    font-style: italic;
+    border-left: 4px solid var(--focus);
+  }
+
+  q {
+    margin: 1.5em 0;
+    padding: 0.5em 1em;
+    font-style: italic;
+    border-left: 4px solid var(--focus);
+  }
+
+  blockquote > footer {
+    font-style: normal;
+    border: 0;
+  }
+
+  blockquote cite {
+    font-style: normal;
+  }
+
+  mark {
+    padding: 0 2px;
+    color: #000;
+    background-color: #ff0;
+    border-radius: 2px;
+  }
+
+  code {
+    padding: 2.5px 5px;
+    color: #000;
+    font-size: 1em;
+    background: var(--background);
+    border-radius: 6px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    margin-bottom: 10px;
+    table-layout: fixed;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    border-collapse: collapse;
+  }
+
+  table caption {
+    text-align: left;
+  }
+
+  td,
+  th {
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    border-right: 1px solid var(--border);
+  }
+
+  thead {
+    border-bottom: 1px solid var(--border);
+  }
+
+  tfoot {
+    border-top: 1px solid var(--border);
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #efefef;
+  }
+
+  tbody tr:nth-child(even) button {
+    background-color: #f7f7f7;
+  }
+
+  tbody tr:nth-child(even) button:hover {
+    background-color: #fff;
+  }
+}
