@@ -15,7 +15,12 @@ export default class SingleRoute extends Route {
   async afterModel(model) {
     await model.challenges;
     if (model.prototypes.length > 0) {
-      this.currentData.setPrototype(model.prototypes[0]);
+      this.currentData.setPrototype(
+        model.prototypes.find((prototype) => prototype.isValidated) ??
+          model.prototypes.reduce((prototype1, prototype2) =>
+            prototype1.version > prototype2.version ? prototype1 : prototype2,
+          ),
+      );
     }
     return model.pinRelationships();
   }
