@@ -449,8 +449,7 @@ describe('Acceptance | Route | competence-overviews', () => {
     });
 
     describe('with language filter set to english', () => {
-      it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
-        // given
+      beforeEach(async () => {
         databaseBuilder.factory.buildLocalizedChallenge({
           id: 'recChallenge3_en',
           challengeId: 'recChallenge3',
@@ -470,7 +469,10 @@ describe('Acceptance | Route | competence-overviews', () => {
           locale: LOCALE.ENGLISH_SPOKEN,
         });
         await databaseBuilder.commit();
+      });
 
+      it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
+        // given
         const server = await createServer();
 
         // when
@@ -600,6 +602,119 @@ describe('Acceptance | Route | competence-overviews', () => {
               ],
             },
           },
+        });
+      });
+
+      describe('with a defined localized framework', () => {
+        it('should respond status 200 and overview of competence’s production, filtered according to localized framework', async () => {
+          // given
+          databaseBuilder.factory.buildLocalizedFrameworkTubes({ tubeId: 'recTube1', locale: 'en', maxLevel: 3 });
+          databaseBuilder.factory.buildLocalizedFrameworkTubes({ tubeId: 'recTube2', locale: 'en', maxLevel: 8 });
+          databaseBuilder.factory.buildLocalizedFrameworkTubes({ tubeId: 'recTube4', locale: 'en', maxLevel: 0 });
+          databaseBuilder.factory.buildLocalizedFrameworkTubes({ tubeId: 'recTube5', locale: 'en', maxLevel: 6 });
+          await databaseBuilder.commit();
+
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: `/api/competences/${competenceId}/overviews/challenges-production?locale=en`,
+            headers: generateAuthorizationHeader(user),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+
+          expect(response.result).toEqual({
+            data: {
+              type: 'competence-overviews',
+              id: `${competenceId}:challenges-production:en`,
+              attributes: {
+                'airtable-id': 'recCompetence1',
+                name: '2.2 Mon super titre',
+                'tubes-count': 3,
+                'skills-count': 3,
+                'thematic-overviews': [
+                  {
+                    airtableId: 'recThematic2',
+                    name: 'Thématique 2',
+                    tubeOverviews: [
+                      {
+                        airtableId: 'recTube5',
+                        name: '@tube5',
+                        skillOverviews: [
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          {
+                            id: 'recSkill5',
+                            airtableId: 'recSkill5',
+                            name: '@tube56',
+                            prototypeId: 'recChallenge5',
+                            validatedChallengesCount: 0,
+                            proposedChallengesCount: 0,
+                            isPrototypeDeclinable: false,
+                          },
+                          null,
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    airtableId: 'recThematic1',
+                    name: 'Thématique 1',
+                    tubeOverviews: [
+                      {
+                        airtableId: 'recTube2',
+                        name: '@tube2',
+                        skillOverviews: [
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          {
+                            id: 'recSkill3',
+                            airtableId: 'recSkill3',
+                            name: '@tube27',
+                            prototypeId: 'recChallenge3',
+                            validatedChallengesCount: 1,
+                            proposedChallengesCount: 1,
+                            isPrototypeDeclinable: true,
+                          },
+                        ],
+                      },
+                      {
+                        airtableId: 'recTube1',
+                        name: '@tube1',
+                        skillOverviews: [
+                          null,
+                          null,
+                          {
+                            id: 'recSkill2',
+                            airtableId: 'recSkill2',
+                            name: '@tube13',
+                            prototypeId: 'recChallenge2',
+                            validatedChallengesCount: 0,
+                            proposedChallengesCount: 0,
+                            isPrototypeDeclinable: false,
+                          },
+                          null,
+                          null,
+                          null,
+                          null,
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          });
         });
       });
     });

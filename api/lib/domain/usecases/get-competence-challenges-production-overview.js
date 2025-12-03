@@ -1,6 +1,7 @@
 import {
   challengeRepository,
   competenceRepository,
+  localizedFrameworksTubesRepository,
   skillRepository,
   thematicRepository,
   tubeRepository,
@@ -21,6 +22,7 @@ export async function getCompetenceChallengesProductionOverview({ competenceId, 
     skillRepository.listActiveByCompetenceId(competenceId),
     challengeRepository.listActiveOrDraftByCompetenceId(competenceId),
   ]);
+  const localizedFrameworkTubes = locale ? await localizedFrameworksTubesRepository.filter({ competenceId, locale }) : null;
   return CompetenceOverview.buildForChallengesProduction({
     competence,
     thematics,
@@ -28,5 +30,6 @@ export async function getCompetenceChallengesProductionOverview({ competenceId, 
     skills,
     challenges,
     locale,
+    localizedFrameworkTubes,
   });
 }
