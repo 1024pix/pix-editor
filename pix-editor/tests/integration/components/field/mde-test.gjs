@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Mde from 'pixeditor/components/field/mde';
@@ -13,10 +13,10 @@ module('Integration | Component | form-mde.hbs', function (hooks) {
     this.edition = true;
 
     // when
-    await render(<template><Mde @edition={{self.edition}} /></template>);
+    const screen = await render(<template><Mde @edition={{self.edition}} /></template>);
 
     // then
-    assert.dom('[data-test-tui-editor]').exists();
+    assert.dom(screen.getByRole('textbox')).exists();
   });
 
   test('it should display `MarkdownToHtml` if `edition` is `false`', async function (assert) {
