@@ -8,6 +8,7 @@ import EasyMDE from 'easymde';
 const toolbar = [
   'preview',
   'side-by-side',
+  'fullscreen',
   '|',
   'heading',
   'bold',

@@ -11,7 +11,7 @@ import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor
 
 export default class Mde extends Component {
   <template>
-    <div class={{concat "field textArea mde" (if this.maximized " maximized" "")}} ...attributes>
+    <div class={{concat "field textArea mde"}} ...attributes>
       <label>
         {{@title}}
         <span>
@@ -28,11 +28,6 @@ export default class Mde extends Component {
                 </PixTooltip>
               </div>
             {{/if}}
-            <button
-              {{on "click" this.toggleMaximized}}
-              class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}}
-              type="button"
-            ><i class={{concat (if this.maximized "compress " "expand ") "icon"}}></i></button>
           {{/if}}
         </span>
       </label>
@@ -40,7 +35,7 @@ export default class Mde extends Component {
         <MarkdownEditor @value={{@value}} @onChange={{@setValue}} />
       {{else}}
         <div data-test-markdow-to-html class="mde-preview">
-          <MarkdownToHtml @markdown={{@value}} />
+          <MarkdownToHtml @markdown={{@value}} @maximized={{this.maximized}} />
         </div>
       {{/if}}
     </div>
