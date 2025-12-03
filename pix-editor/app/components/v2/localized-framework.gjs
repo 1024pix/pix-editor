@@ -61,12 +61,12 @@ export default class LocalizedFramework extends Component {
 
   <template>
     <div class="competence-overview localized-framework-tube">
-      <div class="competence-overview-actions">
+      <div class="localized-framework-tube-actions">
         <PixButton
           class="competence-overview-actions__fetch"
           @size="small"
           @isBorderVisible={{true}}
-          @variant="secondary"
+          @variant="primary"
           @loadingColor="grey"
           @isDisabled={{this.isInvalidForm}}
           @triggerAction={{this.save}}

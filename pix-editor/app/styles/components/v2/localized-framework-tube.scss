@@ -1,5 +1,17 @@
+@use 'pix-design-tokens/shadows' as *;
+
 .localized-framework-tube {
   .pix-input {
     grid-column: span 7;
+  }
+
+  &-actions {
+    display: flex;
+    align-items: stretch;
+    background: white;
+    padding: 0 var(--pix-spacing-6x);
+    @extend %pix-shadow-sm;
+    border-radius: 8px;
+    gap: var(--pix-spacing-6x);
   }
 }
