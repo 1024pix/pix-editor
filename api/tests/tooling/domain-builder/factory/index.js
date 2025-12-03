@@ -12,6 +12,7 @@ export * from './build-course-postgres-data-object.js';
 export * from './build-domain-release.js';
 export * from './build-framework.js';
 export * from './build-framework-for-release.js';
+export * from './build-group-from-framework-to-challenge.js';
 export * from './build-localized-challenge.js';
 export * from './build-mission.js';
 export * from './build-mission-summary.js';
