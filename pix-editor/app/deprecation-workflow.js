@@ -8,26 +8,6 @@ setupDeprecationWorkflow({
     },
     {
       handler: 'silence',
-      matchId: 'deprecate-import--is-destroying-from-ember',
-    },
-    {
-      handler: 'silence',
-      matchId: 'deprecate-import--is-destroyed-from-ember',
-    },
-    {
-      handler: 'silence',
-      matchId: 'deprecate-import-destroy-from-ember',
-    },
-    {
-      handler: 'silence',
-      matchId: 'deprecate-import--register-destructor-from-ember',
-    },
-    {
-      handler: 'silence',
-      matchId: 'deprecate-import-onerror-from-ember',
-    },
-    {
-      handler: 'silence',
       matchId: 'warp-drive.deprecate-tracking-package',
     },
     {
