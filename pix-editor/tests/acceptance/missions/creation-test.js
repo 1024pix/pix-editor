@@ -1,6 +1,6 @@
 import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { setupApplicationTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
