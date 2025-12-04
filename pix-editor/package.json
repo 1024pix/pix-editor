@@ -68,7 +68,6 @@
     "ember-concurrency": "^5.0.0",
     "ember-data": "^5.3.8",
     "ember-eslint-parser": "^0.5.3",
-    "ember-fetch": "^8.1.2",
     "ember-file-upload": "^9.5.0",
     "ember-intl": "^7.3.1",
     "ember-lifeline": "7.0.0",
