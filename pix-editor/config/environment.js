@@ -49,8 +49,6 @@ module.exports = function (environment) {
     'ember-simple-auth': { routeAfterAuthentication: 'authenticated' },
 
     'ember-cli-notifications': { autoClear: true },
-
-    'ember-cli-mirage': { usingProxy: true },
   };
 
   if (environment === 'development') {

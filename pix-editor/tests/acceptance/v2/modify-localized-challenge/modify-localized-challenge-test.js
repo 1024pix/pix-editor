@@ -1,6 +1,6 @@
 import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
-import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';

@@ -1,21 +1,10 @@
 import basex from 'base-x';
-import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
 import random from 'js-crypto-random';
 import slice from 'lodash/slice';
-import { createServer, Response } from 'miragejs';
+import { Response } from 'miragejs';
 
-export default function makeServer(config) {
-  const finalConfig = {
-    ...config,
-    models: { ...discoverEmberDataModels(config.store), ...config.models },
-    serializers: applyEmberDataSerializers(config.serializers),
-    routes,
-  };
-
-  return createServer(finalConfig);
-}
-
-function routes() {
+/* eslint-disable ember/no-get */
+export default function routes() {
   this.namespace = 'api';
 
   this.get('/users/me', ({ users }) => users.first());
@@ -497,6 +486,7 @@ function routes() {
     return { ok: 'cool' };
   });
 }
+/* eslint-enable ember/no-get */
 
 function _getPaginationFromQueryParams(queryParams) {
   return {

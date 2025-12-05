@@ -1,7 +1,7 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find } from '@ember/test-helpers';
-import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
