@@ -138,7 +138,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
           Annuler
         </button>
       {{else}}
-        <a class="ui button item" href={{@controller.absolutePreviewUrl}} target="_blank" rel="noopener noreferrer">
+        <a class="ui button item" href={{@controller.absolutePreviewUrl}} target="_blank">
           <i class="eye icon"></i>
           Prévisualiser
         </a>

@@ -97,7 +97,7 @@ import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
         </button>
       {{else}}
         {{#if @controller.skill.productionPrototype}}
-          <a class="ui button item" href={{@controller.previewPrototypeUrl}} target="_blank" rel="noopener noreferrer">
+          <a class="ui button item" href={{@controller.previewPrototypeUrl}} target="_blank">
             <i class="eye icon"></i>
             Prévisualiser
           </a>

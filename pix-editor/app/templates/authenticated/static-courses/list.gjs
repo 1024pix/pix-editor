@@ -159,7 +159,6 @@ import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
                       <a
                         href="{{staticCourseSummary.previewURL}}"
                         target="_blank"
-                        rel="noopener noreferrer"
                         aria-describedby="open-static-course-link-tooltip"
                         class="{{if staticCourseSummary.isActive '' 'disabled-link-with-icon'}}"
                       >

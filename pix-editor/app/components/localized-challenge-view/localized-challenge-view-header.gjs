@@ -100,7 +100,6 @@ export default class LocalizedChallengeViewHeader extends Component {
                 class="challenge-view-header-action__preview"
                 href="{{@challengeLocale.localizedPreviewUrl}}"
                 target="_blank"
-                rel="noopener noreferrer"
                 aria-labelledby="preview-challenge-tooltip"
               >
                 <PixIcon @name="eye" />
@@ -124,7 +123,7 @@ export default class LocalizedChallengeViewHeader extends Component {
                 class="phrase-link"
                 href={{translationsUrl}}
                 target="_blank"
-                rel="noopener noreferrer"
+                referrerpolicy="strict-origin"
                 aria-label={{concat "traduction de l'épreuve de version " @challengeLocale.alternativeVersion}}
               >
                 <svg

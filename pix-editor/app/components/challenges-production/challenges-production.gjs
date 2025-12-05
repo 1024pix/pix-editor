@@ -157,7 +157,6 @@ export default class ChallengesProduction extends Component {
                 <a
                   href="{{this.getChallengePreviewUrl challenge}}"
                   target="_blank"
-                  rel="noopener noreferrer"
                   aria-label="Prévisualiser l'épreuve {{challenge.id}}"
                 >
                   <PixIcon @name="eye" />

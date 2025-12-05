@@ -6,6 +6,7 @@ export default {
     'no-inline-styles': false,
     'style-concatenation': false,
     'no-potential-path-strings': false,
+    'link-rel-noopener': false,
   },
   overrides: [
     {

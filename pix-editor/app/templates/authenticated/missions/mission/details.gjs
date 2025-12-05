@@ -55,7 +55,7 @@ import formatDate from 'ember-intl/helpers/format-date';
             <a
               href={{@controller.model.mission.introductionMediaUrl}}
               target="_blank"
-              rel="noopener noreferrer"
+              referrerpolicy="strict-origin"
             >{{@controller.model.mission.introductionMediaUrl}}</a>
           </li>
           <li>
@@ -71,7 +71,7 @@ import formatDate from 'ember-intl/helpers/format-date';
             <a
               href={{@controller.model.mission.documentationUrl}}
               target="_blank"
-              rel="noopener noreferrer"
+              referrerpolicy="strict-origin"
             >{{@controller.model.mission.documentationUrl}} </a>
           </li>
           <li><span class="bold">Crée le : </span>{{formatDate

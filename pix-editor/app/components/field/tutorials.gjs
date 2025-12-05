@@ -163,7 +163,7 @@ export default class Tutorials extends Component {
                       class="ui right floated button tutorial-link"
                       href={{tutorial.link}}
                       target="_blank"
-                      rel="noreferrer noopener"
+                      referrerpolicy="strict-origin"
                     >
                       <PixIcon @name="openNew" />
                     </a>
