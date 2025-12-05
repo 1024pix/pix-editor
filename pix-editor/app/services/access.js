@@ -149,7 +149,7 @@ export default class AccessService extends Service {
   }
 
   mayMove(challenge) {
-    return this.isAdmin() && challenge.isPrototype && challenge.isDraft;
+    return this.isEditor() && challenge.isPrototype && challenge.isDraft;
   }
 
   mayAccessStaticCourses() {
