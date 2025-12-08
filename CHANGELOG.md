@@ -1,5 +1,24 @@
 
 
+## v4.2.0 (08/12/2025)
+
+
+### :rocket: Amélioration
+- [#1314](https://github.com/1024pix/pix-editor/pull/1314) [FEATURE] Permettre aux éditeurs de déplacer des épreuves à l'état "proposé" (PIX-20689).
+
+### :building_construction: Tech
+- [#1312](https://github.com/1024pix/pix-editor/pull/1312) [TECH] Remplacer ember-cli-mirage par miragejs.
+- [#1311](https://github.com/1024pix/pix-editor/pull/1311) [TECH] Supprime la dépendance non utilisée `ember-fetch`.
+
+### :bug: Correction
+- [#1318](https://github.com/1024pix/pix-editor/pull/1318) [BUGFIX] Rechargement épreuves lors de la sélection d’un acquis (PIX-17285).
+- [#1315](https://github.com/1024pix/pix-editor/pull/1315) [BUGFIX] Liens vers les tutos youtube cassés.
+
+### :arrow_up: Montée de version
+- [#1317](https://github.com/1024pix/pix-editor/pull/1317) [BUMP] Lock file maintenance (pix-editor).
+- [#1316](https://github.com/1024pix/pix-editor/pull/1316) [BUMP] Lock file maintenance (api).
+- [#1309](https://github.com/1024pix/pix-editor/pull/1309) [BUMP] Update dependency @ember/test-helpers to v5 (pix-editor).
+
 ## v4.1.0 (03/12/2025)
 
 
