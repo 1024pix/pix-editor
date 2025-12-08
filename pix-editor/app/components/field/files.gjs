@@ -15,7 +15,7 @@ export default class Files extends Component {
       {{/if}}
       {{#if @value.length}}
         {{#each @value as |file|}}
-          <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i
+          <a href={{file.url}} download={{file.filename}} target="_blank" referrerpolicy="strict-origin"><i
               class="file icon"
             ></i>
             {{file.filename}}</a>

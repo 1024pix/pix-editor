@@ -156,7 +156,7 @@ export default class LocalizedChallengesProduction extends Component {
                     <span class="title">Source</span>
                     <ul aria-label="source">
                       <li class="localized-menu-action__item">
-                        <a href="{{challengeLocale.primaryPreviewUrl}}" target="_blank" rel="noopener noreferrer">
+                        <a href="{{challengeLocale.primaryPreviewUrl}}" target="_blank">
                           <PixIcon @name="eye" aria-hidden="true" />
                           Prévisualiser
                           <span class="sr-only">l'épreuve {{challengeLocale.challenge.id}}</span>
@@ -169,7 +169,7 @@ export default class LocalizedChallengesProduction extends Component {
                       <span class="title">Traduction</span>
                       <ul aria-label="traduction">
                         <li class="localized-menu-action__item">
-                          <a href="{{challengeLocale.localizedPreviewUrl}}" target="_blank" rel="noopener noreferrer">
+                          <a href="{{challengeLocale.localizedPreviewUrl}}" target="_blank">
                             <PixIcon @name="eye" aria-hidden="true" />
                             Prévisualiser
                             <span class="sr-only">l'épreuve {{challengeLocale.localizedChallenge.id}}</span>
@@ -195,7 +195,7 @@ export default class LocalizedChallengesProduction extends Component {
                       class="ui button item"
                       href={{translationsUrl}}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      referrerpolicy="strict-origin"
                       aria-label={{concat "traduction de l'épreuve de version " challengeLocale.alternativeVersion}}
                     >
                       <svg

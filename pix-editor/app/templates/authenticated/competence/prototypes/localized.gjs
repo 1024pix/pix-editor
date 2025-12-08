@@ -59,7 +59,7 @@ import Image from 'pixeditor/components/pop-in/image';
           Annuler
         </button>
       {{else}}
-        <a class="ui button item" href={{@controller.previewUrl}} target="_blank" rel="noopener noreferrer">
+        <a class="ui button item" href={{@controller.previewUrl}} target="_blank">
           <i class="eye icon"></i>
           Prévisualiser
         </a>
@@ -68,7 +68,7 @@ import Image from 'pixeditor/components/pop-in/image';
           <i class="globe icon"></i>
           Version originale
         </LinkTo>
-        <a class="ui button item" href={{@controller.translationsUrl}} target="_blank" rel="noopener noreferrer">
+        <a class="ui button item" href={{@controller.translationsUrl}} target="_blank" referrerpolicy="strict-origin">
           <i class="language icon"></i>
           Traductions
         </a>

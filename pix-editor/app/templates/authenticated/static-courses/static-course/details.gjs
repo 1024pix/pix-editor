@@ -86,7 +86,6 @@ import { on } from '@ember/modifier';
           <PixButtonLink
             @href={{if @controller.model.staticCourse.isActive @controller.model.staticCourse.previewURL "#"}}
             target={{if @controller.model.staticCourse.isActive "_blank" "_self"}}
-            rel="noopener noreferrer"
             @backgroundColor="transparent-light"
             @isBorderVisible={{true}}
             class="pix-button-link-with-icon"
@@ -149,7 +148,7 @@ import { on } from '@ember/modifier';
                     {{/if}}
                   </td>
                   <td>
-                    <a href="{{challengeSummary.previewUrl}}" target="_blank" rel="noopener noreferrer">
+                    <a href="{{challengeSummary.previewUrl}}" target="_blank">
                       <PixIcon @name="eye" @plainIcon={{true}} />
                     </a>
                   </td>

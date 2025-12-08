@@ -38,7 +38,7 @@ export default class Files extends Component {
               href={{file.url}}
               download={{file.filename}}
               target="_blank"
-              rel="noopener noreferrer"
+              referrerpolicy="strict-origin"
               class="files-field--download"
             >
               <PixIcon @name="infoUser" @plainIcon={{true}} @ariaHidden={{true}} />
