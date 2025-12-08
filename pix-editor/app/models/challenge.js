@@ -104,7 +104,7 @@ export default class ChallengeModel extends Model {
     const challengeLocale = this.challengeLocales.find((challengeLocale) => {
       return challengeLocale.locale === canonicalLocale;
     });
-    await challengeLocale.localizedChallenge;
+    await challengeLocale.belongsTo('localizedChallenge').reload();
     return challengeLocale;
   }
 
