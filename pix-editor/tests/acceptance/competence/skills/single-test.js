@@ -5,7 +5,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
+import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
 module('Acceptance | skill | single', function (hooks) {

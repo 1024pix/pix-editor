@@ -5,7 +5,7 @@ import PopinSelectLocation from 'pixeditor/components/pop-in/select-location';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
+import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in-select-location / form-select-location', function (hooks) {
