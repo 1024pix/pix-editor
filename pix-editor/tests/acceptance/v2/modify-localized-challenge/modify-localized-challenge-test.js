@@ -6,7 +6,7 @@ import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
 
-import { waitForSelectToBeClosed } from '../../../helpers/wait-for-select-to-be-closed';
+import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 import { selectFiles } from 'ember-file-upload/test-support';
 import sinon from 'sinon';
