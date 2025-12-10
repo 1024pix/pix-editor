@@ -3,8 +3,8 @@ import CompetenceActions from 'pixeditor/components/competence/competence-action
 import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
 import Workbench from 'pixeditor/components/list/workbench';
 import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
-// eslint-disable-next-line ember/no-at-ember-render-modifiers
-import didInsert from '@ember/render-modifiers/modifiers/did-insert';
+import MainRightSlot from 'pixeditor/components/main-right-slot';
+
 import Sorting from 'pixeditor/components/pop-in/sorting';
 
 <template>
@@ -60,7 +60,7 @@ import Sorting from 'pixeditor/components/pop-in/sorting';
     {{outlet}}
   </div>
   {{#if @controller.twoColumns}}
-    <div class="main-right" {{didInsert @controller.setMainRightSlot}}></div>
+    <MainRightSlot @onMount={{@controller.setMainRightSlot}} />
   {{/if}}
   <Sorting
     @title={{@controller.sortingPopInTitle}}

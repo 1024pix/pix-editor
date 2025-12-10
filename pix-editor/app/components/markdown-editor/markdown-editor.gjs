@@ -2,7 +2,6 @@ import { Textarea } from '@ember/component';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { modifier } from 'ember-modifier';
-import { on } from '@ember/modifier';
 import EasyMDE from 'easymde';
 
 const toolbar = [

@@ -38,7 +38,6 @@
     "@ember-data/model": "^5.3.8",
     "@ember-data/serializer": "^5.3.8",
     "@ember/optional-features": "^2.0.0",
-    "@ember/render-modifiers": "^3.0.0",
     "@ember/string": "^3.1.1",
     "@ember/test-helpers": "^5.0.0",
     "@embroider/compat": "^3.2.0",
