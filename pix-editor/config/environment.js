@@ -6,7 +6,7 @@ function _isFeatureEnabled(environmentVariable) {
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'pixeditor',
+    modulePrefix: 'pix-editor',
     environment,
     rootURL: '/',
     locationType: 'history',

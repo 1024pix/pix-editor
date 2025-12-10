@@ -1,7 +1,7 @@
 import { clickByText, render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
-import ToggleField from 'pixeditor/components/v2/field/toggle-field';
+import ToggleField from 'pix-editor/components/v2/field/toggle-field';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

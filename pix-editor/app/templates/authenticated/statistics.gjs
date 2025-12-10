@@ -1,5 +1,5 @@
-import Production from 'pixeditor/components/statistics/production';
-import I18n from 'pixeditor/components/statistics/i18n';
+import Production from 'pix-editor/components/statistics/production';
+import I18n from 'pix-editor/components/statistics/i18n';
 <template>
   <div class="main-left">
     <div class="main-title">

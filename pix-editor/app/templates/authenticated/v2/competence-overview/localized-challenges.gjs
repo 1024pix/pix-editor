@@ -1,4 +1,4 @@
-import LocalizedChallengesProduction from 'pixeditor/components/challenges-production/localized-challenges-production';
+import LocalizedChallengesProduction from 'pix-editor/components/challenges-production/localized-challenges-production';
 <template>
   <LocalizedChallengesProduction
     @skill={{@controller.model.skill}}

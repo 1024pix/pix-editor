@@ -1,7 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 
-import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
+import CompetenceOverview from 'pix-editor/components/competence-overview/competence-overview';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
 import Service from '@ember/service';

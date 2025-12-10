@@ -1,7 +1,7 @@
 import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
-import SidebarNavigation from 'pixeditor/components/sidebar/navigation';
+import SidebarNavigation from 'pix-editor/components/sidebar/navigation';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

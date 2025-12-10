@@ -1,5 +1,5 @@
 import { on } from '@ember/modifier';
-import Skills from 'pixeditor/components/list/skills';
+import Skills from 'pix-editor/components/list/skills';
 <template>
   <div class="main-title skill-header">
     <h1 class="ui header">

@@ -1,7 +1,7 @@
 import { clickByName, render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 
-import DropdownMenu from 'pixeditor/components/dropdown-menu';
+import DropdownMenu from 'pix-editor/components/dropdown-menu';
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
 module('Integration | Component | dropdown-menu', function (hooks) {

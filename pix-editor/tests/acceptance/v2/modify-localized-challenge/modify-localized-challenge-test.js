@@ -1,12 +1,12 @@
 import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { setupMirage } from 'pix-editor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
+import Challenge from 'pix-editor/models/challenge';
+import LocalizedChallengeModel from 'pix-editor/models/localized-challenge';
 import { module, test } from 'qunit';
 
-import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
+import { waitForSelectToBeClosed } from 'pix-editor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from '../../../setup-application-rendering';
 import { selectFiles } from 'ember-file-upload/test-support';
 import sinon from 'sinon';

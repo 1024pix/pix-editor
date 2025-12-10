@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import { on } from '@ember/modifier';
-import Input from 'pixeditor/components/field/input';
+import Input from 'pix-editor/components/field/input';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class PopInNewFrameworkComponent extends Component {

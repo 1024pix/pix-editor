@@ -2,7 +2,7 @@ import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { module, test } from 'qunit';
 
-import SidebarMain from 'pixeditor/components/sidebar/main';
+import SidebarMain from 'pix-editor/components/sidebar/main';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

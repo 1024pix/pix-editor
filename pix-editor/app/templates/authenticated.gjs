@@ -1,8 +1,8 @@
 import { concat } from '@ember/helper';
-import Main from 'pixeditor/components/sidebar/main';
+import Main from 'pix-editor/components/sidebar/main';
 import { on } from '@ember/modifier';
-import Logout from 'pixeditor/components/pop-in/logout';
-import Confirm from 'pixeditor/components/pop-in/confirm';
+import Logout from 'pix-editor/components/pop-in/logout';
+import Confirm from 'pix-editor/components/pop-in/confirm';
 <template>
   <div class="ui container fluid application">
     <div class={{concat "ui page dimmer inverted" (if @controller.loading " active" "")}}>

@@ -1,7 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Mde from 'pixeditor/components/field/mde';
+import Mde from 'pix-editor/components/field/mde';
 
 module('Integration | Component | form-mde.hbs', function (hooks) {
   setupIntlRenderingTest(hooks);

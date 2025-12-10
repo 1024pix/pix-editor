@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
-import CompetenceGridTube from 'pixeditor/components/competence/competence-grid-tube';
+import CompetenceGridTube from 'pix-editor/components/competence/competence-grid-tube';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

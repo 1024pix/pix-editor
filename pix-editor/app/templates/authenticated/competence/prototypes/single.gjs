@@ -1,4 +1,4 @@
-import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
+import ChallengeHeader from 'pix-editor/components/competence/prototypes/challenge-header';
 import { on } from '@ember/modifier';
 import and from 'ember-truth-helpers/helpers/and';
 import not from 'ember-truth-helpers/helpers/not';
@@ -6,15 +6,15 @@ import or from 'ember-truth-helpers/helpers/or';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import t from 'ember-intl/helpers/t';
 import formatDate from 'ember-intl/helpers/format-date';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
-import Challenge from 'pixeditor/components/form/challenge';
-import CopyLink from 'pixeditor/components/buttons/copy-link';
+import scrollTop from 'pix-editor/modifiers/scroll-top';
+import Challenge from 'pix-editor/components/form/challenge';
+import CopyLink from 'pix-editor/components/buttons/copy-link';
 import { LinkTo } from '@ember/routing';
-import ChallengeLog from 'pixeditor/components/pop-in/challenge-log';
-import Image from 'pixeditor/components/pop-in/image';
-import Changelog from 'pixeditor/components/pop-in/changelog';
-import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
-import SelectLocation from 'pixeditor/components/pop-in/select-location';
+import ChallengeLog from 'pix-editor/components/pop-in/challenge-log';
+import Image from 'pix-editor/components/pop-in/image';
+import Changelog from 'pix-editor/components/pop-in/changelog';
+import ConfirmLog from 'pix-editor/components/pop-in/confirm-log';
+import SelectLocation from 'pix-editor/components/pop-in/select-location';
 <template>
   <ChallengeHeader
     @class={{@controller.challenge.statusCSS}}

@@ -4,7 +4,7 @@ import { click, find, render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import ToggleField from 'pixeditor/components/field/toggle-field';
+import ToggleField from 'pix-editor/components/field/toggle-field';
 
 module('Integration | Component | field/toggle-field', function (hooks) {
   setupIntlRenderingTest(hooks);

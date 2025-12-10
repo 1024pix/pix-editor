@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import SearchSidebar from 'pixeditor/components/sidebar/search';
+import SearchSidebar from 'pix-editor/components/sidebar/search';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

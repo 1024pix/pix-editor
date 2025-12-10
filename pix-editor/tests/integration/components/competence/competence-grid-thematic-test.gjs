@@ -4,7 +4,7 @@ import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import CompetenceGridThematic from 'pixeditor/components/competence/competence-grid-thematic';
+import CompetenceGridThematic from 'pix-editor/components/competence/competence-grid-thematic';
 
 module('Integration | Component | competence/competence-grid-thematic', function (hooks) {
   setupIntlRenderingTest(hooks);

@@ -2,20 +2,20 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import Mde from 'pixeditor/components/field/mde';
+import Mde from 'pix-editor/components/field/mde';
 import { fn } from '@ember/helper';
-import ToggleField from 'pixeditor/components/field/toggle-field';
+import ToggleField from 'pix-editor/components/field/toggle-field';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import not from 'ember-truth-helpers/helpers/not';
-import Checkbox from 'pixeditor/components/field/checkbox';
+import Checkbox from 'pix-editor/components/field/checkbox';
 import and from 'ember-truth-helpers/helpers/and';
-import Textarea from 'pixeditor/components/field/textarea';
-import Illustration from 'pixeditor/components/field/illustration';
-import Files from 'pixeditor/components/field/files';
-import Input from 'pixeditor/components/field/input';
-import Quality from 'pixeditor/components/field/quality';
+import Textarea from 'pix-editor/components/field/textarea';
+import Illustration from 'pix-editor/components/field/illustration';
+import Files from 'pix-editor/components/field/files';
+import Input from 'pix-editor/components/field/input';
+import Quality from 'pix-editor/components/field/quality';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import getMimeType from 'pixeditor/helpers/get-mime-type';
+import getMimeType from 'pix-editor/helpers/get-mime-type';
 
 export default class ChallengeForm extends Component {
   <template>

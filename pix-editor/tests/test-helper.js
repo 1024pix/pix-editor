@@ -2,8 +2,8 @@ import { setApplication } from '@ember/test-helpers';
 import NotificationMessageService from 'ember-cli-notifications/services/notifications';
 import { start } from 'ember-qunit';
 import { loadTests } from 'ember-qunit/test-loader';
-import Application from 'pixeditor/app';
-import config from 'pixeditor/config/environment';
+import Application from 'pix-editor/app';
+import config from 'pix-editor/config/environment';
 import * as QUnit from 'qunit';
 import { setup } from 'qunit-dom';
 

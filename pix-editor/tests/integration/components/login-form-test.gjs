@@ -2,7 +2,7 @@ import { click, fillIn, render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
-import LoginForm from 'pixeditor/components/login-form';
+import LoginForm from 'pix-editor/components/login-form';
 
 module('Integration | Component | login-form', function (hooks) {
   setupIntlRenderingTest(hooks);

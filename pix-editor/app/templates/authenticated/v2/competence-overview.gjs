@@ -1,4 +1,4 @@
-import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
+import CompetenceOverview from 'pix-editor/components/competence-overview/competence-overview';
 <template>
   <CompetenceOverview
     @competenceOverview={{@controller.model.competenceOverview}}

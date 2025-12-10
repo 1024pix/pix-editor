@@ -2,7 +2,7 @@ import { render, clickByName } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { click, settled } from '@ember/test-helpers';
-import FormChallenge from 'pixeditor/components/form/challenge';
+import FormChallenge from 'pix-editor/components/form/challenge';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

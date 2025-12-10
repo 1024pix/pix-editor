@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import { triggerEvent } from '@ember/test-helpers';
-import RelatedSkillCell from 'pixeditor/components/whitelisted-urls/related-skill-cell';
+import RelatedSkillCell from 'pix-editor/components/whitelisted-urls/related-skill-cell';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

@@ -2,7 +2,7 @@ import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import not from 'ember-truth-helpers/helpers/not';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import List from 'pixeditor/components/whitelisted-urls/list';
+import List from 'pix-editor/components/whitelisted-urls/list';
 <template>
   <header class="page-header">
     <h1 class="page-title">URLs à ne pas analyser dans les moulinettes</h1>

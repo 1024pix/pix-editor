@@ -5,7 +5,7 @@ import { Canvg, presets } from 'canvg';
 import { isEmpty } from 'lodash';
 import { service } from '@ember/service';
 import { on } from '@ember/modifier';
-import PdfEntries from 'pixeditor/components/pop-in/pdf-entries';
+import PdfEntries from 'pix-editor/components/pop-in/pdf-entries';
 
 export default class TargetProfilePdfExportComponent extends Component {
   <template>

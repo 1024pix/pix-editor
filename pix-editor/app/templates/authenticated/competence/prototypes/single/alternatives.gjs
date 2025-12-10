@@ -1,4 +1,4 @@
-import Alternatives from 'pixeditor/components/alternatives';
+import Alternatives from 'pix-editor/components/alternatives';
 <template>
   {{#if @controller.competenceController.mainRightSlot}}
     {{#in-element @controller.competenceController.mainRightSlot}}

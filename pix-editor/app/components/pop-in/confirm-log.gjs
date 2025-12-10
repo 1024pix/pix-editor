@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import Checkbox from 'pixeditor/components/field/checkbox';
+import Checkbox from 'pix-editor/components/field/checkbox';
 import { Textarea } from '@ember/component';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import t from 'ember-intl/helpers/t';

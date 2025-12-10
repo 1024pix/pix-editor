@@ -1,4 +1,4 @@
-import WhitelistedUrl from 'pixeditor/components/form/whitelisted-url';
+import WhitelistedUrl from 'pix-editor/components/form/whitelisted-url';
 <template>
   <header class="page-header">
     <h1 class="page-title">Ajout d'une URL à ne pas analyser dans les moulinettes</h1>

@@ -2,7 +2,7 @@ import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
+import CompetenceGrid from 'pix-editor/components/competence/competence-grid';
 
 module('Integration | Component | competence-grid', function (hooks) {
   setupIntlRenderingTest(hooks);

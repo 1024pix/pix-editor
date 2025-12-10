@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import CompetenceProfile from 'pixeditor/components/target-profile/competence-profile';
+import CompetenceProfile from 'pix-editor/components/target-profile/competence-profile';
 
 export default class AreaProfile extends Component {
   <template>

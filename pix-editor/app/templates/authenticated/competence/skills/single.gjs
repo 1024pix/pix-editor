@@ -4,11 +4,11 @@ import { array, concat } from '@ember/helper';
 import or from 'ember-truth-helpers/helpers/or';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import t from 'ember-intl/helpers/t';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
-import Skill from 'pixeditor/components/form/skill';
-import SelectLocation from 'pixeditor/components/pop-in/select-location';
-import Changelog from 'pixeditor/components/pop-in/changelog';
-import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
+import scrollTop from 'pix-editor/modifiers/scroll-top';
+import Skill from 'pix-editor/components/form/skill';
+import SelectLocation from 'pix-editor/components/pop-in/select-location';
+import Changelog from 'pix-editor/components/pop-in/changelog';
+import ConfirmLog from 'pix-editor/components/pop-in/confirm-log';
 <template>
   <div class="skill-header {{@controller.skill.statusCSS}}">
     <div class="ui menu">

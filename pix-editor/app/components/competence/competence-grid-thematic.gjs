@@ -5,7 +5,7 @@ import { LinkTo } from '@ember/routing';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import eq from 'ember-truth-helpers/helpers/eq';
-import CompetenceGridTube from 'pixeditor/components/competence/competence-grid-tube';
+import CompetenceGridTube from 'pix-editor/components/competence/competence-grid-tube';
 
 export default class CompetenceCompetenceGridThematicComponent extends Component {
   <template>

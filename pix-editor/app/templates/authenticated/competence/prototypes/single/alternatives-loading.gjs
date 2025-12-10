@@ -1,4 +1,4 @@
-import Loader from 'pixeditor/components/loader';
+import Loader from 'pix-editor/components/loader';
 <template>
   {{#if @controller.competenceController.mainRightSlot}}
     {{#in-element @controller.competenceController.mainRightSlot}}

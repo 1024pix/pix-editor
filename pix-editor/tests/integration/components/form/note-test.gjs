@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import NoteForm from 'pixeditor/components/form/note';
+import NoteForm from 'pix-editor/components/form/note';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

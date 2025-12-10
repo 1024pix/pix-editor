@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import eq from 'ember-truth-helpers/helpers/eq';
 import { LinkTo } from '@ember/routing';
-import GridCell from 'pixeditor/components/competence/grid/grid-cell';
+import GridCell from 'pix-editor/components/competence/grid/grid-cell';
 
 export default class CompetenceCompetenceGridTubeComponent extends Component {
   <template>

@@ -7,7 +7,7 @@ import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { on } from '@ember/modifier';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import RelatedSkillCell from 'pixeditor/components/whitelisted-urls/related-skill-cell';
+import RelatedSkillCell from 'pix-editor/components/whitelisted-urls/related-skill-cell';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';

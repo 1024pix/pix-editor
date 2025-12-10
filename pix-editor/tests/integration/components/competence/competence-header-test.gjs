@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import CompetenceHeader from 'pixeditor/components/competence-header';
+import CompetenceHeader from 'pix-editor/components/competence-header';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

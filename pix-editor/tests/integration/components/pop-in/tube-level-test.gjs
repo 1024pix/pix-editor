@@ -2,7 +2,7 @@ import { click, findAll, render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import TubeLevel from 'pixeditor/components/pop-in/tube-level';
+import TubeLevel from 'pix-editor/components/pop-in/tube-level';
 
 module('Integration | Component | popin-tube-level', function (hooks) {
   setupIntlRenderingTest(hooks);

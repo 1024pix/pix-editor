@@ -1,8 +1,8 @@
 import { fillByLabel, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import LocalizedChallengeView from 'pixeditor/components/localized-challenge-view/localized-challenge-view';
-import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import LocalizedChallengeView from 'pix-editor/components/localized-challenge-view/localized-challenge-view';
+import Challenge from 'pix-editor/models/challenge';
+import LocalizedChallenge from 'pix-editor/models/localized-challenge';
 import { module, test } from 'qunit';
 import { click, find } from '@ember/test-helpers';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

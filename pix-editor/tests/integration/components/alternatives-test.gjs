@@ -3,7 +3,7 @@ import { click } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import Alternatives from 'pixeditor/components/alternatives';
+import Alternatives from 'pix-editor/components/alternatives';
 
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 

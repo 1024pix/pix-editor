@@ -1,15 +1,15 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import ENV from 'pixeditor/config/environment';
+import ENV from 'pix-editor/config/environment';
 import FrameworkModel from '../../models/framework';
 import PixToggleButton from '@1024pix/pix-ui/components/pix-toggle-button';
-import Search from 'pixeditor/components/sidebar/search';
-import Navigation from 'pixeditor/components/sidebar/navigation';
+import Search from 'pix-editor/components/sidebar/search';
+import Navigation from 'pix-editor/components/sidebar/navigation';
 import { LinkTo } from '@ember/routing';
 import { on } from '@ember/modifier';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import Export from 'pixeditor/components/sidebar/export';
+import Export from 'pix-editor/components/sidebar/export';
 
 export default class SidebarMain extends Component {
   <template>

@@ -1,7 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import ChallengesProduction from 'pixeditor/components/challenges-production/challenges-production';
-import Challenge from 'pixeditor/models/challenge';
+import ChallengesProduction from 'pix-editor/components/challenges-production/challenges-production';
+import Challenge from 'pix-editor/models/challenge';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

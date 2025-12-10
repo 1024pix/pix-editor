@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Files from 'pixeditor/components/field/files';
+import Files from 'pix-editor/components/field/files';
 
 module('Integration | Component | form-files', function (hooks) {
   setupIntlRenderingTest(hooks);

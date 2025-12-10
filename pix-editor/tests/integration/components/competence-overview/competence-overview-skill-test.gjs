@@ -1,7 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 
-import CompetenceOverviewSkill from 'pixeditor/components/competence-overview/competence-overview-skill';
+import CompetenceOverviewSkill from 'pix-editor/components/competence-overview/competence-overview-skill';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence-overview | competence-overview-skill', function (hooks) {

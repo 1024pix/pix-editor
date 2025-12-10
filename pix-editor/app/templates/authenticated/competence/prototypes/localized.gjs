@@ -1,12 +1,12 @@
-import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
-import convertLanguageAsFlag from 'pixeditor/helpers/convert-language-as-flag';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
-import LocalizedChallenge from 'pixeditor/components/form/localized-challenge';
+import ChallengeHeader from 'pix-editor/components/competence/prototypes/challenge-header';
+import convertLanguageAsFlag from 'pix-editor/helpers/convert-language-as-flag';
+import scrollTop from 'pix-editor/modifiers/scroll-top';
+import LocalizedChallenge from 'pix-editor/components/form/localized-challenge';
 import { on } from '@ember/modifier';
-import CopyLink from 'pixeditor/components/buttons/copy-link';
+import CopyLink from 'pix-editor/components/buttons/copy-link';
 import { LinkTo } from '@ember/routing';
-import Confirm from 'pixeditor/components/pop-in/confirm';
-import Image from 'pixeditor/components/pop-in/image';
+import Confirm from 'pix-editor/components/pop-in/confirm';
+import Image from 'pix-editor/components/pop-in/image';
 <template>
   <ChallengeHeader
     @class=""

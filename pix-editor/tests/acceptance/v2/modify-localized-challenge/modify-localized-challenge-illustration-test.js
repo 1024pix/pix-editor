@@ -1,11 +1,11 @@
 import { click } from '@ember/test-helpers';
 import { clickByText, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { setupMirage } from 'pix-editor/tests/test-support/setup-mirage';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
+import Challenge from 'pix-editor/models/challenge';
+import LocalizedChallengeModel from 'pix-editor/models/localized-challenge';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

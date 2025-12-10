@@ -1,9 +1,9 @@
-import 'pixeditor/vendor/AmpleSoft-bold.js';
-import 'pixeditor/vendor/AmpleSoft-normal.js';
-import 'pixeditor/vendor/Roboto-normal.js';
-import 'pixeditor/vendor/Roboto-condensed.js';
-import 'pixeditor/vendor/Roboto-condensedBold.js';
-import 'pixeditor/vendor/Roboto-condensedLight.js';
+import 'pix-editor/vendor/AmpleSoft-bold.js';
+import 'pix-editor/vendor/AmpleSoft-normal.js';
+import 'pix-editor/vendor/Roboto-normal.js';
+import 'pix-editor/vendor/Roboto-condensed.js';
+import 'pix-editor/vendor/Roboto-condensedBold.js';
+import 'pix-editor/vendor/Roboto-condensedLight.js';
 
 import Service from '@ember/service';
 import { Canvg, presets } from 'canvg';
@@ -20,7 +20,7 @@ import {
   area6bg,
   firstPageBackground,
   pixLogoWhite,
-} from 'pixeditor/vendor/pdf-assets.js';
+} from 'pix-editor/vendor/pdf-assets.js';
 
 const legalMentionByLanguage = {
   en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',

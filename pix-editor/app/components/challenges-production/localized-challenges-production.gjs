@@ -11,7 +11,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
-import Challenge from 'pixeditor/models/challenge';
+import Challenge from 'pix-editor/models/challenge';
 
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';

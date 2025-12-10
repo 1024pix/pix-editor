@@ -1,6 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
+import TubeProfile from 'pix-editor/components/target-profile/tube-profile';
 
 export default class ThemeProfile extends Component {
   <template>

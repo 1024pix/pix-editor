@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import PopinChallengeLog from 'pixeditor/components/pop-in/challenge-log';
+import PopinChallengeLog from 'pix-editor/components/pop-in/challenge-log';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

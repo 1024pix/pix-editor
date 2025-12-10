@@ -2,7 +2,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { LinkTo } from '@ember/routing';
-import Alternatives0 from 'pixeditor/components/list/alternatives';
+import Alternatives0 from 'pix-editor/components/list/alternatives';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
 

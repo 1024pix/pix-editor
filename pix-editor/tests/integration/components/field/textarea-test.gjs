@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import Textarea from 'pixeditor/components/field/textarea';
+import Textarea from 'pix-editor/components/field/textarea';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

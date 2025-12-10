@@ -1,4 +1,4 @@
-import LocalizedFramework from 'pixeditor/components/v2/localized-framework';
+import LocalizedFramework from 'pix-editor/components/v2/localized-framework';
 
 <template>
   <LocalizedFramework

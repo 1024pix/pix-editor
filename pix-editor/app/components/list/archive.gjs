@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import SortedList from './sorted';
 import EmberTable from 'ember-table/components/ember-table/component';
-import convertLanguageAsFlag from 'pixeditor/helpers/convert-language-as-flag';
+import convertLanguageAsFlag from 'pix-editor/helpers/convert-language-as-flag';
 
 export default class ArchiveList extends SortedList {
   <template>

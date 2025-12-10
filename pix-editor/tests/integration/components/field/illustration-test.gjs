@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
-import Illustration from 'pixeditor/components/field/illustration';
+import Illustration from 'pix-editor/components/field/illustration';
 
 module('Integration | Component | form-illustration', function (hooks) {
   setupIntlRenderingTest(hooks);

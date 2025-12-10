@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import flagForLanguage from 'pixeditor/helpers/flag-for-language.js';
+import flagForLanguage from 'pix-editor/helpers/flag-for-language.js';
 
 export default class CompetenceHeader extends Component {
   @service router;

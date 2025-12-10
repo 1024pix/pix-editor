@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 
-import { convertLanguageAsFlag } from 'pixeditor/helpers/convert-language-as-flag';
+import { convertLanguageAsFlag } from 'pix-editor/helpers/convert-language-as-flag';
 
 module('Unit | Helpers | convert language as flag', function () {
   [

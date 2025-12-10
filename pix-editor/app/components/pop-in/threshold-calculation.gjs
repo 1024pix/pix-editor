@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import ThresholdRow from 'pixeditor/components/target-profile/threshold-row';
+import ThresholdRow from 'pix-editor/components/target-profile/threshold-row';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class PopinThresholdCalculation extends Component {

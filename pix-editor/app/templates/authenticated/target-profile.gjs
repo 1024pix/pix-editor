@@ -1,11 +1,11 @@
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
-import PdfExport from 'pixeditor/components/target-profile/pdf-export';
+import PdfExport from 'pix-editor/components/target-profile/pdf-export';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import AreaProfile from 'pixeditor/components/target-profile/area-profile';
-import TubeLevel from 'pixeditor/components/pop-in/tube-level';
-import SingleEntry from 'pixeditor/components/pop-in/single-entry';
-import ThresholdCalculation from 'pixeditor/components/pop-in/threshold-calculation';
+import AreaProfile from 'pix-editor/components/target-profile/area-profile';
+import TubeLevel from 'pix-editor/components/pop-in/tube-level';
+import SingleEntry from 'pix-editor/components/pop-in/single-entry';
+import ThresholdCalculation from 'pix-editor/components/pop-in/threshold-calculation';
 <template>
   <div class="main-left">
     <div class="main-title">

@@ -1,6 +1,6 @@
 import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
-import CompetenceProfile from 'pixeditor/components/target-profile/competence-profile';
+import CompetenceProfile from 'pix-editor/components/target-profile/competence-profile';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

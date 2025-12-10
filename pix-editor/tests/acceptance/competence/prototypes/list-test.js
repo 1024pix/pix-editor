@@ -1,5 +1,5 @@
 import { click, currentURL, find, findAll, visit, waitUntil } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { setupMirage } from 'pix-editor/tests/test-support/setup-mirage';
 import { runTask } from 'ember-lifeline';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';

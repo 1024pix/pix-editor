@@ -1,4 +1,4 @@
-import { flagForLanguage } from 'pixeditor/helpers/flag-for-language';
+import { flagForLanguage } from 'pix-editor/helpers/flag-for-language';
 import { module, test } from 'qunit';
 
 module('Unit | Helpers | flag for language', function () {

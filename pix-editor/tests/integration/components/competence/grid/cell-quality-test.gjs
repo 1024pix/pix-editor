@@ -1,5 +1,5 @@
 import { render } from '@ember/test-helpers';
-import CellQuality from 'pixeditor/components/competence/grid/cell-quality';
+import CellQuality from 'pix-editor/components/competence/grid/cell-quality';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';

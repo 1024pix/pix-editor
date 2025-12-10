@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Workbench from 'pixeditor/components/list/workbench';
+import Workbench from 'pix-editor/components/list/workbench';
 
 module('Integration | Component | workbench-list', function (hooks) {
   setupIntlRenderingTest(hooks);

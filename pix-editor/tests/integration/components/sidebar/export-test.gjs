@@ -2,7 +2,7 @@ import { render, clickByText } from '@1024pix/ember-testing-library';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import Service from '@ember/service';
-import SidebarExport from 'pixeditor/components/sidebar/export';
+import SidebarExport from 'pix-editor/components/sidebar/export';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

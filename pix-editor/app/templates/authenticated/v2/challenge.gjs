@@ -1,5 +1,5 @@
-import ChallengesProduction from 'pixeditor/components/challenges-production/challenges-production';
-import ChallengeView from 'pixeditor/components/challenge-view/challenge-view';
+import ChallengesProduction from 'pix-editor/components/challenges-production/challenges-production';
+import ChallengeView from 'pix-editor/components/challenge-view/challenge-view';
 <template>
   <ChallengesProduction
     @skill={{@controller.model.skill}}

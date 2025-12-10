@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
-import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import Challenge from 'pix-editor/models/challenge';
+import LocalizedChallenge from 'pix-editor/models/localized-challenge';
 
 const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
 const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';

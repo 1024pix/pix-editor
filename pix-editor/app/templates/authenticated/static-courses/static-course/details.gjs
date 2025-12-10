@@ -2,7 +2,7 @@ import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import not from 'ember-truth-helpers/helpers/not';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import Card from 'pixeditor/components/card';
+import Card from 'pix-editor/components/card';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import formatDate from 'ember-intl/helpers/format-date';
 import { fn } from '@ember/helper';

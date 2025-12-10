@@ -1,5 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
-import Challenge from 'pixeditor/models/challenge';
+import Challenge from 'pix-editor/models/challenge';
 
 const inProductionCombinations = ['validé:validé', 'archivé:validé'];
 

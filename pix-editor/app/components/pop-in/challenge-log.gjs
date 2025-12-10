@@ -7,8 +7,8 @@ import { tracked } from '@glimmer/tracking';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import { eq } from 'ember-truth-helpers';
-import FormNote from 'pixeditor/components/form/note';
-import ListNotes from 'pixeditor/components/list/notes';
+import FormNote from 'pix-editor/components/form/note';
+import ListNotes from 'pix-editor/components/list/notes';
 
 export default class PopinChallengeLog extends Component {
   @service store;

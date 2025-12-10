@@ -1,6 +1,6 @@
 import { clickByText, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import TutorialForm from 'pixeditor/components/form/tutorial';
+import TutorialForm from 'pix-editor/components/form/tutorial';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

@@ -7,8 +7,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import formatDate from 'ember-intl/helpers/format-date';
-import flagForLanguage from 'pixeditor/helpers/flag-for-language';
-import Challenge from 'pixeditor/models/challenge';
+import flagForLanguage from 'pix-editor/helpers/flag-for-language';
+import Challenge from 'pix-editor/models/challenge';
 
 export default class ChallengesViewHeader extends Component {
   @service router;

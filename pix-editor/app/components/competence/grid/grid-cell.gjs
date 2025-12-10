@@ -1,13 +1,13 @@
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import eq from 'ember-truth-helpers/helpers/eq';
-import CellProduction from 'pixeditor/components/competence/grid/cell-production';
-import CellWorkbench from 'pixeditor/components/competence/grid/cell-workbench';
-import CellSkillWorkbench from 'pixeditor/components/competence/grid/cell-skill-workbench';
-import CellSkill from 'pixeditor/components/competence/grid/cell-skill';
+import CellProduction from 'pix-editor/components/competence/grid/cell-production';
+import CellWorkbench from 'pix-editor/components/competence/grid/cell-workbench';
+import CellSkillWorkbench from 'pix-editor/components/competence/grid/cell-skill-workbench';
+import CellSkill from 'pix-editor/components/competence/grid/cell-skill';
 import { LinkTo } from '@ember/routing';
 import { array, concat } from '@ember/helper';
-import CellQuality from 'pixeditor/components/competence/grid/cell-quality';
+import CellQuality from 'pix-editor/components/competence/grid/cell-quality';
 
 export default class GridCell extends Component {
   <template>

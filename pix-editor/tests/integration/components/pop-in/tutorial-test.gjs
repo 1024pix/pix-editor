@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import TutorialPopin from 'pixeditor/components/pop-in/tutorial';
+import TutorialPopin from 'pix-editor/components/pop-in/tutorial';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

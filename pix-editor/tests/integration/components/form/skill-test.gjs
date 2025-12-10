@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import SkillForm from 'pixeditor/components/form/skill';
+import SkillForm from 'pix-editor/components/form/skill';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

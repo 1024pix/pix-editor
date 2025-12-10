@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
+import CompetenceFooter from 'pix-editor/components/competence/competence-footer';
 
 module('Integration | Component | competence/competence-footer', function (hooks) {
   setupIntlRenderingTest(hooks);

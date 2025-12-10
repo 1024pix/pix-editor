@@ -1,9 +1,9 @@
 import and from 'ember-truth-helpers/helpers/and';
 import not from 'ember-truth-helpers/helpers/not';
 import { on } from '@ember/modifier';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
-import Tube from 'pixeditor/components/form/tube';
-import SelectLocation from 'pixeditor/components/pop-in/select-location';
+import scrollTop from 'pix-editor/modifiers/scroll-top';
+import Tube from 'pix-editor/components/form/tube';
+import SelectLocation from 'pix-editor/components/pop-in/select-location';
 import { concat } from '@ember/helper';
 <template>
   <div class="tube-header">

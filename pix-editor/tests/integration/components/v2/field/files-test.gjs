@@ -1,7 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
 import { selectFiles } from 'ember-file-upload/test-support';
-import Files from 'pixeditor/components/v2/field/files';
+import Files from 'pix-editor/components/v2/field/files';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

@@ -1,7 +1,7 @@
 import { on } from '@ember/modifier';
 import eq from 'ember-truth-helpers/helpers/eq';
 import { fn } from '@ember/helper';
-import Prototypes from 'pixeditor/components/list/prototypes';
+import Prototypes from 'pix-editor/components/list/prototypes';
 <template>
   <div class="main-title {{if @controller.config.lite 'lite' ''}}">
     <h1 class="ui header">

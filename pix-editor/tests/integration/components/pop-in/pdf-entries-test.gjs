@@ -1,6 +1,6 @@
 import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import PopinPdfEntries from 'pixeditor/components/pop-in/pdf-entries';
+import PopinPdfEntries from 'pix-editor/components/pop-in/pdf-entries';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

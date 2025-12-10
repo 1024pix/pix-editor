@@ -1,4 +1,4 @@
-import CompetenceHeader from 'pixeditor/components/competence-header';
+import CompetenceHeader from 'pix-editor/components/competence-header';
 <template>
   <CompetenceHeader @competence={{@controller.model.competence}} @locale={{@controller.model.locale}} />
   {{outlet}}

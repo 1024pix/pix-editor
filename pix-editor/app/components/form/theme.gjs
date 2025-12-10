@@ -1,4 +1,4 @@
-import Input from 'pixeditor/components/field/input';
+import Input from 'pix-editor/components/field/input';
 <template>
   <form action class="ui form">
     <Input

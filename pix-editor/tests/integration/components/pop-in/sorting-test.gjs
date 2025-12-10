@@ -4,7 +4,7 @@ import { drag } from 'ember-sortable/test-support';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Sorting from 'pixeditor/components/pop-in/sorting';
+import Sorting from 'pix-editor/components/pop-in/sorting';
 
 module('Integration | Component | pop-in/sorting', function (hooks) {
   setupIntlRenderingTest(hooks);

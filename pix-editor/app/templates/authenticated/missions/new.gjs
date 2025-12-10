@@ -1,4 +1,4 @@
-import Mission from 'pixeditor/components/form/mission';
+import Mission from 'pix-editor/components/form/mission';
 <template>
   <header class="page-header">
     <h1 class="page-title">Création d'une mission</h1>

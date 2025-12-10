@@ -2,7 +2,7 @@ import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import ThemeProfile from 'pixeditor/components/target-profile/theme-profile';
+import ThemeProfile from 'pix-editor/components/target-profile/theme-profile';
 
 module('Integration | Component | target-profile/theme-profile', function (hooks) {
   setupIntlRenderingTest(hooks);

@@ -1,5 +1,5 @@
 import { LinkTo } from '@ember/routing';
-import Archive from 'pixeditor/components/list/archive';
+import Archive from 'pix-editor/components/list/archive';
 <template>
   {{#if @controller.competenceController.mainRightSlot}}
     {{#in-element @controller.competenceController.mainRightSlot}}

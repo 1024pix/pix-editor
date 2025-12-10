@@ -1,4 +1,4 @@
-import ChallengesProduction from 'pixeditor/components/challenges-production/challenges-production';
+import ChallengesProduction from 'pix-editor/components/challenges-production/challenges-production';
 <template>
   <ChallengesProduction
     @skill={{@controller.model.skill}}

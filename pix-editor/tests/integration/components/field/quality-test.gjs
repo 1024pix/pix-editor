@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Quality from 'pixeditor/components/field/quality';
+import Quality from 'pix-editor/components/field/quality';
 
 module('Integration | Component | quality', function (hooks) {
   setupIntlRenderingTest(hooks);

@@ -1,7 +1,7 @@
 import { find, render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import NewFramework from 'pixeditor/components/pop-in/new-framework';
+import NewFramework from 'pix-editor/components/pop-in/new-framework';
 
 module('Integration | Component | pop-in/new-framework', function (hooks) {
   setupIntlRenderingTest(hooks);

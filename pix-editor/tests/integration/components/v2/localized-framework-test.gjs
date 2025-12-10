@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import LocalizedFramework from 'pixeditor/components/v2/localized-framework';
+import LocalizedFramework from 'pix-editor/components/v2/localized-framework';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

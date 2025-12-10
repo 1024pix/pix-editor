@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { default as PQueue } from 'p-queue';
-import ENV from 'pixeditor/config/environment';
+import ENV from 'pix-editor/config/environment';
 
 export default class AjaxQueueService extends Service {
   constructor() {

@@ -2,7 +2,7 @@ import { click, render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
+import ConfirmLog from 'pix-editor/components/pop-in/confirm-log';
 
 module('Integration | Component | popin-confirm-log', function (hooks) {
   setupIntlRenderingTest(hooks);

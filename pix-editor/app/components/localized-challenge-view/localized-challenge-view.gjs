@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
-import getMimeType from 'pixeditor/helpers/get-mime-type';
+import getMimeType from 'pix-editor/helpers/get-mime-type';
 
 import PopInImage from '../pop-in/image';
 import PopInConfirm from '../pop-in/confirm';

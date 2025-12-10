@@ -3,7 +3,7 @@ import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import Component from '@glimmer/component';
-import Challenge from 'pixeditor/models/challenge';
+import Challenge from 'pix-editor/models/challenge';
 
 import ChallengeViewHeader from './challenge-view-header';
 

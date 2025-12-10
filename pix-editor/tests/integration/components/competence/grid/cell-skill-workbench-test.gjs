@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
-import CellSkillWorkbench from 'pixeditor/components/competence/grid/cell-skill-workbench';
+import CellSkillWorkbench from 'pix-editor/components/competence/grid/cell-skill-workbench';
 
 module('Integration | Component | competence/grid/cell-skill-workbench', function (hooks) {
   setupIntlRenderingTest(hooks);

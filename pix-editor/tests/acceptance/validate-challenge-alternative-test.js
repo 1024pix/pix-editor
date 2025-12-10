@@ -1,6 +1,6 @@
 import { visit } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { setupMirage } from 'pix-editor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 

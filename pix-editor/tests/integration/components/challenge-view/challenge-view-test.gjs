@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
-import ChallengeView from 'pixeditor/components/challenge-view/challenge-view';
-import Challenge from 'pixeditor/models/challenge';
+import ChallengeView from 'pix-editor/components/challenge-view/challenge-view';
+import Challenge from 'pix-editor/models/challenge';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

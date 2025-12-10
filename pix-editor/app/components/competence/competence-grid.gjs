@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import CompetenceGridThematic from 'pixeditor/components/competence/competence-grid-thematic';
+import CompetenceGridThematic from 'pix-editor/components/competence/competence-grid-thematic';
 
 export default class CompetenceCompetenceGridComponent extends Component {
   <template>

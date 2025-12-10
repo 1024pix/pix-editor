@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
-import ENV from 'pixeditor/config/environment';
+import ENV from 'pix-editor/config/environment';
 import { TrackedArray } from 'tracked-built-ins';
 
 export default class ApplicationController extends Controller {

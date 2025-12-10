@@ -7,7 +7,7 @@ import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
-import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor';
+import MarkdownEditor from 'pix-editor/components/markdown-editor/markdown-editor';
 
 export default class Mde extends Component {
   <template>

@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { render } from '@ember/test-helpers';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import GridCell from 'pixeditor/components/competence/grid/grid-cell';
+import GridCell from 'pix-editor/components/competence/grid/grid-cell';
 
 module('Integration | Component | competence/grid/grid-cell', function (hooks) {
   setupIntlRenderingTest(hooks);

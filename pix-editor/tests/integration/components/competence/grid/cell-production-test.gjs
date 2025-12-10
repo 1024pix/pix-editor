@@ -2,7 +2,7 @@ import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
-import CellProduction from 'pixeditor/components/competence/grid/cell-production';
+import CellProduction from 'pix-editor/components/competence/grid/cell-production';
 
 module('Integration | Component | competence/grid/cell-production', function (hooks) {
   setupIntlRenderingTest(hooks);

@@ -7,8 +7,8 @@ import { concat } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import flagForLanguage from 'pixeditor/helpers/flag-for-language';
-import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import flagForLanguage from 'pix-editor/helpers/flag-for-language';
+import LocalizedChallenge from 'pix-editor/models/localized-challenge';
 
 export default class LocalizedChallengeViewHeader extends Component {
   @service access;

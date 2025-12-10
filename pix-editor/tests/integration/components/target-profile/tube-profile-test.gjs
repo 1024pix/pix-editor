@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
+import TubeProfile from 'pix-editor/components/target-profile/tube-profile';
 
 module('Integration | Component | target-profile/competence-thematic-result', function (hooks) {
   setupIntlRenderingTest(hooks);

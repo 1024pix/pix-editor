@@ -1,8 +1,8 @@
 import { clickByText, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import LocalizedChallengesProduction from 'pixeditor/components/challenges-production/localized-challenges-production';
-import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import LocalizedChallengesProduction from 'pix-editor/components/challenges-production/localized-challenges-production';
+import Challenge from 'pix-editor/models/challenge';
+import LocalizedChallenge from 'pix-editor/models/localized-challenge';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';

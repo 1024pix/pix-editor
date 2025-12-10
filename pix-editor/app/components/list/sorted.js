@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import ENV from 'pixeditor/config/environment';
+import ENV from 'pix-editor/config/environment';
 
 export default class SortedList extends Component {
   @tracked ascending = true;

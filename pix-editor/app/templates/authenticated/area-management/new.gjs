@@ -1,4 +1,4 @@
-import Input from 'pixeditor/components/field/input';
+import Input from 'pix-editor/components/field/input';
 import { on } from '@ember/modifier';
 <template>
   <div class="main-left area-management">

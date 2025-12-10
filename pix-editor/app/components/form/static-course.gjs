@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
-import Card from 'pixeditor/components/card';
+import Card from 'pix-editor/components/card';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';

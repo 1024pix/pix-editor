@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Archive from 'pixeditor/components/list/archive';
+import Archive from 'pix-editor/components/list/archive';
 
 module('Integration | Component | list/archive', function (hooks) {
   setupIntlRenderingTest(hooks);

@@ -1,5 +1,5 @@
 import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
-import SelectSearch from 'pixeditor/components/field/select-search';
+import SelectSearch from 'pix-editor/components/field/select-search';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 

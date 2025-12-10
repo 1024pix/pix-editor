@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import ThresholdCalculation from 'pixeditor/components/pop-in/threshold-calculation';
+import ThresholdCalculation from 'pix-editor/components/pop-in/threshold-calculation';
 
 module('Integration | Component | pop-in/threshold-calculation', function (hooks) {
   setupIntlRenderingTest(hooks);

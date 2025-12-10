@@ -1,7 +1,7 @@
 import { render } from '@ember/test-helpers';
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
-import CellSkill from 'pixeditor/components/competence/grid/cell-skill';
+import CellSkill from 'pix-editor/components/competence/grid/cell-skill';
 
 module('Integration | Component | competence/grid/cell-skill', function (hooks) {
   setupIntlRenderingTest(hooks);
