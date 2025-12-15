@@ -22,7 +22,6 @@ export default class TutorialForm extends Component {
   @service config;
   @service notify;
   @service store;
-  @service idGenerator;
 
   options = {
     format: ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],

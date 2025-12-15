@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 module('Unit | Model | challenge', function (hooks) {
   setupTest(hooks);
-  let store, idGeneratorStub, alternative, prototype;
+  let store, alternative, prototype;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
@@ -19,7 +19,6 @@ module('Unit | Model | challenge', function (hooks) {
     this.owner.unregister('service:config');
     this.owner.register('service:config', ConfigService);
 
-    idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
     prototype = {
       id: 'pix_1',
       airtableId: 'rec_1',
@@ -63,7 +62,6 @@ module('Unit | Model | challenge', function (hooks) {
       author: 'DEV',
       version: 1,
       skill: store.createRecord('skill', {}),
-      idGenerator: idGeneratorStub,
       requireGafamWebsiteAccess: true,
       isIncompatibleIpadCertif: true,
       deafAndHardOfHearing: 'OK',
@@ -79,7 +77,6 @@ module('Unit | Model | challenge', function (hooks) {
       author: 'DEV',
       alternativeVersion: 1,
       skill: store.createRecord('skill', {}),
-      idGenerator: idGeneratorStub,
       instruction: 'alternative instruction',
       alternativeInstruction: 'alternative alternativeInstruction',
       type: 'alternative type',
@@ -136,7 +133,6 @@ module('Unit | Model | challenge', function (hooks) {
 
       // then
       assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge', 'check modèle challenge');
-      assert.strictEqual(clonedChallenge.id, 'generatedId', 'champ id');
       assert.strictEqual(clonedChallenge.airtableId, undefined, 'champ airtableId');
       assert.strictEqual(clonedChallenge.instruction, prototype.instruction, 'champ instruction');
       assert.strictEqual(
@@ -224,7 +220,6 @@ module('Unit | Model | challenge', function (hooks) {
 
       // then
       assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge', 'check modèle challenge');
-      assert.strictEqual(clonedChallenge.id, 'generatedId', 'champ id');
       assert.strictEqual(clonedChallenge.airtableId, undefined, 'champ airtableId');
       assert.strictEqual(clonedChallenge.instruction, alternative.instruction, 'champ instruction');
       assert.strictEqual(
@@ -344,7 +339,6 @@ module('Unit | Model | challenge', function (hooks) {
 
       // then
       assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge');
-      assert.strictEqual(clonedChallenge.id, 'generatedId');
       assert.strictEqual(clonedChallenge.airtableId, undefined);
       assert.strictEqual(clonedChallenge.status, 'proposé');
       assert.notOk(skill);
