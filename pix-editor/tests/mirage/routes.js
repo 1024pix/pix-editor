@@ -1,5 +1,3 @@
-import basex from 'base-x';
-import random from 'js-crypto-random';
 import slice from 'lodash/slice';
 import { Response } from 'miragejs';
 
