@@ -75,7 +75,7 @@ export default class Quality extends Component {
         />
         <Checkbox
           data-test-to-rephrase-challenge-id={{@challenge.id}}
-          @label="Formulation à revoir"
+          @label="Épreuve à revoir"
           @checked={{@challenge.toRephrase}}
           @disabled={{not @edition}}
         />

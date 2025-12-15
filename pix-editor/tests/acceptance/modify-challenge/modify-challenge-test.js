@@ -136,7 +136,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       );
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
-      await clickByText('Formulation à revoir');
+      await clickByText('Épreuve à revoir');
       await clickByText('Incompatible iPad certif');
       await clickByText('Sans validation (Pix Junior)');
       await clickByText("Validation par l'embed (Pix Junior)");
@@ -173,7 +173,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       assert.strictEqual((await screen.getByLabelText('Géographie')).childNodes[3].textContent, 'Japon');
       assert.true(screen.getByRole('checkbox', { name: 'Épreuve de sensibilisation' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
-      assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
+      assert.true(screen.getByRole('checkbox', { name: 'Épreuve à revoir' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
       assert.true(screen.getByRole('checkbox', { name: "Validation par l'embed (Pix Junior)" }).checked);
@@ -311,7 +311,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await clickByText("Validation par l'embed (Pix Junior)");
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
-      await clickByText('Formulation à revoir');
+      await clickByText('Épreuve à revoir');
       await clickByText('Incompatible iPad certif');
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
@@ -474,7 +474,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await clickByText("Validation par l'embed (Pix Junior)");
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
-      await clickByText('Formulation à revoir');
+      await clickByText('Épreuve à revoir');
       await clickByText('Incompatible iPad certif');
 
       await clickByText('Sourds et malentendants');

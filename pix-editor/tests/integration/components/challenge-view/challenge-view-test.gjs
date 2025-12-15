@@ -89,7 +89,7 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
     assert.dom(screen.getByLabelText('Sourds et malentendants')).hasValue('Ok');
     assert.dom(screen.getByLabelText('Épreuve de sensibilisation')).isChecked();
     assert.dom(screen.getByLabelText('Accès GAFAM requis')).isChecked();
-    assert.dom(screen.getByLabelText('Formulation à revoir')).isNotChecked();
+    assert.dom(screen.getByLabelText('Épreuve à revoir')).isNotChecked();
     assert.dom(screen.getByLabelText('Incompatible iPad certif')).isChecked();
     assert.dom(screen.getByLabelText('Champs contextualisés')).hasValue('contextualizedFields');
     assert.dom(screen.getByLabelText('Id')).hasValue('challengeProtoValidee');
