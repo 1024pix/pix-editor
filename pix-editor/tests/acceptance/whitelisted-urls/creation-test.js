@@ -4,7 +4,7 @@ import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | Whitelisted URLs | Creation', function (hooks) {
   setupApplicationTest(hooks);

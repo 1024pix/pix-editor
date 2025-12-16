@@ -8,7 +8,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
   setupApplicationTest(hooks);

@@ -5,7 +5,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | Modify-Localized-Challenge', function (hooks) {
   setupApplicationTest(hooks);

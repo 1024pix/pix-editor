@@ -4,7 +4,7 @@ import { runTask } from 'ember-lifeline';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';
