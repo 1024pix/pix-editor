@@ -1,4 +1,4 @@
-'use strict';;
+'use strict';
 const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
@@ -24,7 +24,7 @@ const config = {
   },
 };
 
-if (typeof module !== "undefined") {
+if (typeof module !== 'undefined') {
   module.exports = process.env.CI
     ? {
         ...config,
