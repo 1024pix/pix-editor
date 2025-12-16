@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { extensions, classicEmberSupport, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import { NodePackageImporter } from 'sass-embedded';
+import url from 'postcss-url';
 
 export default defineConfig({
   plugins: [
@@ -37,6 +38,22 @@ export default defineConfig({
           },
         ],
       },
+    },
+    postcss: {
+      plugins: [
+        url({
+          url: (asset) => {
+            if (asset.url.startsWith('../@1024pix/')) {
+              // Pix UI static files are referenced by url starting with "../"
+              // but vite is bunlding those files in root asset folder
+              // so we need to remove the "../" prefix
+              // ../@1024pix/pix-ui/fonts/Nunito/Nunito-Bold.woff2
+              return asset.url.replace('..', '');
+            }
+            return undefined;
+          },
+        }),
+      ],
     },
   },
 });
