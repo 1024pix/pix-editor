@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict';;
 const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
@@ -25,10 +24,12 @@ const config = {
   },
 };
 
-module.exports = process.env.CI
-  ? {
-      ...config,
-      reporter: 'xunit',
-      report_file: './test-results/report.xml',
-    }
-  : config;
+if (typeof module !== "undefined") {
+  module.exports = process.env.CI
+    ? {
+        ...config,
+        reporter: 'xunit',
+        report_file: './test-results/report.xml',
+      }
+    : config;
+}

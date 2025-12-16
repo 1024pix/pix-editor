@@ -2,7 +2,11 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+const { compatBuild } = require('@embroider/compat');
+
+module.exports = async function (defaults) {
+  const { buildOnce } = await import('@embroider/vite');
+
   const app = new EmberApp(defaults, {
     sassOptions: { includePaths: ['node_modules/@1024pix/pix-ui/addon/styles'] },
     babel: { plugins: [require.resolve('ember-concurrency/async-arrow-task-transform')] },
@@ -25,27 +29,25 @@ module.exports = function (defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
-  app.import('node_modules/semantic-ui-css/semantic.css');
+  // app.import('node_modules/semantic-ui-css/semantic.css');
 
-  // TODO: remove this once outline icons are included in ember-semantic-ui
-  ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach((type) => {
-    ['brand', 'outline'].forEach((asset) => {
-      app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/${asset}-icons.${type}`, {
-        destDir: 'assets/themes/default/assets/fonts',
-      });
-    });
-    app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/icons.${type}`, {
-      destDir: 'assets/themes/default/assets/fonts',
-    });
-  });
+  // // TODO: remove this once outline icons are included in ember-semantic-ui
+  // ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach((type) => {
+  //   ['brand', 'outline'].forEach((asset) => {
+  //     app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/${asset}-icons.${type}`, {
+  //       destDir: 'assets/themes/default/assets/fonts',
+  //     });
+  //   });
+  //   app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/icons.${type}`, {
+  //     destDir: 'assets/themes/default/assets/fonts',
+  //   });
+  // });
 
-  app.import('node_modules/semantic-ui-css/themes/default/assets/images/flags.png', {
-    destDir: 'assets/themes/default/assets/images',
-  });
+  // app.import('node_modules/semantic-ui-css/themes/default/assets/images/flags.png', {
+  //   destDir: 'assets/themes/default/assets/images',
+  // });
 
-  const { Webpack } = require('@embroider/webpack');
-
-  return require('@embroider/compat').compatBuild(app, Webpack, {
+  return compatBuild(app, buildOnce, {
     staticEmberSource: true,
     staticAddonTestSupportTrees: true,
     staticAddonTrees: true,
