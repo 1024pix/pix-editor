@@ -55,6 +55,7 @@
     "babel-plugin-ember-template-compilation": "^2.3.0",
     "canvg": "^4.0.3",
     "countries-list": "^3.2.2",
+    "css-element-queries": "file:external/css-element-queries",
     "decorator-transforms": "^2.3.0",
     "easymde": "^2.20.0",
     "ember-auto-import": "^2.12.0",
