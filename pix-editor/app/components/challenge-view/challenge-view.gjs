@@ -158,7 +158,7 @@ export default class ChallengeViewProduction extends Component {
               <:label>Accès GAFAM requis</:label>
             </PixCheckbox>
             <PixCheckbox @checked={{@challenge.toRephrase}} disabled>
-              <:label>Formulation à revoir</:label>
+              <:label>Épreuve à revoir</:label>
             </PixCheckbox>
             <PixCheckbox @checked={{@challenge.isIncompatibleIpadCertif}} disabled>
               <:label>Incompatible iPad certif</:label>

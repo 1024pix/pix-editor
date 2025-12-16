@@ -206,7 +206,7 @@ module('Acceptance | skill | single', function (hooks) {
       await fillIn(descriptionInput, skillDescription);
       await clickByText('Épreuve de sensibilisation');
       await clickByText('Accès GAFAM requis');
-      await clickByText('Formulation à revoir');
+      await clickByText('Épreuve à revoir');
       await clickByText('Incompatible iPad certif');
       await clickByText('Sourds et malentendants');
       await click(await screen.findByRole('option', { name: 'RAS' }));
@@ -233,7 +233,7 @@ module('Acceptance | skill | single', function (hooks) {
       assert.strictEqual(screen.getByLabelText('Spoil').childNodes[3].textContent, 'Facilement Sp');
       assert.false(screen.getByRole('checkbox', { name: 'Épreuve de sensibilisation' }).checked);
       assert.false(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
-      assert.false(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
+      assert.false(screen.getByRole('checkbox', { name: 'Épreuve à revoir' }).checked);
       assert.false(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
 
       assert.strictEqual(screen.getByLabelText('Responsive').childNodes[3].textContent, 'Non');
