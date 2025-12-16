@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { extensions, classicEmberSupport, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
+import { NodePackageImporter } from 'sass-embedded';
 
 export default defineConfig({
   plugins: [
@@ -25,6 +26,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         importers: [
+          new NodePackageImporter(),
           {
             findFileUrl(url) {
               if (url.startsWith('pix-design-token')) {
