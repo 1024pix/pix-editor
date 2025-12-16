@@ -5,7 +5,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import Challenge from 'pixeditor/models/challenge';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | fetch-translations', function (hooks) {
   setupApplicationTest(hooks);

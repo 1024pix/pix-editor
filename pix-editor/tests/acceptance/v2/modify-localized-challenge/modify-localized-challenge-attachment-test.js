@@ -10,7 +10,7 @@ import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | V2 | Modify-Localized-Challenge-Attachment', function (hooks) {
   setupApplicationTest(hooks);

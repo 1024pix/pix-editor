@@ -6,7 +6,7 @@ import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | competences | challenge-production', function (hooks) {
   setupApplicationTest(hooks);

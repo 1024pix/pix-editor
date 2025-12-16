@@ -6,7 +6,7 @@ import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | navigation-primary-localized', function (hooks) {
   setupApplicationTest(hooks);

@@ -6,7 +6,7 @@ import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | skill | single', function (hooks) {
   setupApplicationTest(hooks);
