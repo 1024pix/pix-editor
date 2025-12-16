@@ -1,8 +1,8 @@
-@use 'node_modules/easymde/dist/easymde.min.css';
+@use 'pkg:easymde/dist/easymde.min.css';
 
 .EasyMDEContainer {
-    .mde-preview {
-        border-radius: 0;
-        height: 100%;
-    }
+  .mde-preview {
+    border-radius: 0;
+    height: 100%;
+  }
 }

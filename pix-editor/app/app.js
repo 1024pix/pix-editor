@@ -8,8 +8,6 @@ import config from './config/environment';
 
 import compatModules from '@embroider/virtual/compat-modules';
 
-import 'semantic-ui-css/semantic.css';
-
 if (config.sentry.enabled) {
   initSentry();
 }
