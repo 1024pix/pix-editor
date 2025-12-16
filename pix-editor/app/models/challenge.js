@@ -73,7 +73,6 @@ export default class ChallengeModel extends Model {
 
   @service('store') myStore;
   @service config;
-  @service idGenerator;
 
   @tracked _definedBaseName;
 
@@ -308,7 +307,6 @@ export default class ChallengeModel extends Model {
     data.author = [this.config.author];
     data.status = 'proposé';
     data.skill = await this.skill;
-    data.id = this.idGenerator.newId('challenge');
 
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
@@ -318,9 +316,8 @@ export default class ChallengeModel extends Model {
   async copyForDifferentSkill() {
     const ignoredFields = ['skill', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
     const data = this._getJSON(ignoredFields);
-
     data.status = 'proposé';
-    data.id = this.idGenerator.newId('challenge');
+
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;

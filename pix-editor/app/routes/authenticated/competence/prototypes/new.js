@@ -6,7 +6,6 @@ export default class NewRoute extends PrototypeRoute {
   templateName = 'authenticated/competence/prototypes/single';
 
   @service config;
-  @service idGenerator;
   @service store;
 
   async model(params) {
@@ -15,7 +14,6 @@ export default class NewRoute extends PrototypeRoute {
       return prototype.duplicate();
     } else {
       const newChallenge = this.store.createRecord('challenge', {
-        id: this.idGenerator.newId('challenge'),
         competence: [this.modelFor('authenticated.competence').id],
         status: 'proposé',
         t1Status: true,

@@ -1125,7 +1125,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         payload: {
           data: {
             type: 'challenges',
-            id: challengeData.id,
             attributes: {
               instruction: challengeData.instruction,
               'alternative-instruction': challengeData.alternativeInstruction,
@@ -1197,9 +1196,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(response.result).toStrictEqual({
         data: {
           type: 'challenges',
-          id: 'challengeId',
+          id: expect.stringMatching(/^challenge/),
           attributes: {
-            'airtable-id': challengeData.airtableId,
+            'airtable-id': expect.stringMatching(/^challenge/),
             instruction: 'consigne',
             'alternative-instruction': 'consigne alternative',
             type: Challenge.TYPES.QCM,
@@ -1216,7 +1215,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             status: Challenge.STATUSES.VALIDE,
-            preview: '/api/challenges/challengeId/preview',
+            preview: expect.stringMatching(/^\/api\/challenges\/challenge.*\/preview$/),
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': "Titre d'embed",
@@ -1257,46 +1256,46 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'localized-challenges': {
               data: [
                 {
-                  id: 'challengeId',
+                  id: expect.stringMatching(/^challenge/),
                   type: 'localized-challenges',
                 },
               ],
             },
-            attachments: { links: { related: '/api/attachments?filter[localizedChallengeId]=challengeId' } },
-            'changelog-entries': { links: { related: '/api/changelog-entries?filter[elementId]=challengeId' } },
-            notes: { links: { related: '/api/notes?filter[challengeId]=challengeId' } },
+            attachments: { links: { related: expect.stringMatching(/^\/api\/attachments\?filter\[localizedChallengeId\]=challenge.*/) } },
+            'changelog-entries': { links: { related: expect.stringMatching(/^\/api\/changelog-entries\?filter\[elementId\]=challenge.*/) } },
+            notes: { links: { related: expect.stringMatching(/^\/api\/notes\?filter\[challengeId\]=challenge.*/) } },
             'challenge-locales': {
               data: [
                 {
-                  id: 'challengeId-en',
+                  id: expect.stringMatching(/^challenge.*en$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-es',
+                  id: expect.stringMatching(/^challenge.*es$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-es-419',
+                  id: expect.stringMatching(/^challenge.*es-419$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-fr',
+                  id: expect.stringMatching(/^challenge.*fr$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-fr-BE',
+                  id: expect.stringMatching(/^challenge.*fr-BE$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-fr-FR',
+                  id: expect.stringMatching(/^challenge.*fr-FR$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-nl-BE',
+                  id: expect.stringMatching(/^challenge.*nl-BE$/),
                   type: 'challenge-locales',
                 },
                 {
-                  id: 'challengeId-nl',
+                  id: expect.stringMatching(/^challenge.*nl$/),
                   type: 'challenge-locales',
                 },
               ],
@@ -1306,29 +1305,29 @@ describe('Acceptance | Controller | challenges-controller', () => {
         included: [
           {
             attributes: { locale: 'en' },
-            id: 'challengeId-en',
+            id: expect.stringMatching(/^challenge.*en$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'es' },
-            id: 'challengeId-es',
+            id: expect.stringMatching(/^challenge.*es$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'es-419' },
-            id: 'challengeId-es-419',
+            id: expect.stringMatching(/^challenge.*es-419$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'fr' },
-            id: 'challengeId-fr',
+            id: expect.stringMatching(/^challenge.*fr$/),
             relationships: {
               'localized-challenge': {
                 data: {
-                  id: 'challengeId',
+                  id: expect.stringMatching(/^challenge.*/),
                   type: 'localized-challenges',
                 },
               },
@@ -1337,25 +1336,25 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
           {
             attributes: { locale: 'fr-BE' },
-            id: 'challengeId-fr-BE',
+            id: expect.stringMatching(/^challenge.*fr-BE$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'fr-FR' },
-            id: 'challengeId-fr-FR',
+            id: expect.stringMatching(/^challenge.*fr-FR$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'nl-BE' },
-            id: 'challengeId-nl-BE',
+            id: expect.stringMatching(/^challenge.*nl-BE$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
           {
             attributes: { locale: 'nl' },
-            id: 'challengeId-nl',
+            id: expect.stringMatching(/^challenge.*nl$/),
             relationships: { 'localized-challenge': { data: null } },
             type: 'challenge-locales',
           },
@@ -1378,7 +1377,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           focusable: challengeData.focusable,
           format: challengeData.format,
           genealogy: challengeData.genealogy,
-          id: challengeData.id,
+          id: expect.stringMatching(/^challenge.*/),
           locales: challengeData.locales,
           madeObsoleteAt: null,
           pedagogy: challengeData.pedagogy,
@@ -1399,8 +1398,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
       await expect(knex('localized_challenges').select()).resolves.toStrictEqual([
         {
-          id: 'challengeId',
-          challengeId: 'challengeId',
+          id: expect.stringMatching(/^challenge.*/),
+          challengeId: expect.stringMatching(/^challenge.*/),
           locale: 'fr',
           embedUrl: challengeData.embedUrl,
           status: null,
@@ -1418,32 +1417,32 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
       await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.toStrictEqual([
         {
-          key: 'challenge.challengeId.alternativeInstruction',
+          key: expect.stringMatching(/^challenge\.challenge.*\.alternativeInstruction$/),
           locale: 'fr',
           value: 'consigne alternative',
         },
         {
-          key: 'challenge.challengeId.embedTitle',
+          key: expect.stringMatching(/^challenge\.challenge.*\.embedTitle$/),
           locale: 'fr',
           value: challengeData.embedTitle,
         },
         {
-          key: 'challenge.challengeId.instruction',
+          key: expect.stringMatching(/^challenge\.challenge.*\.instruction$/),
           locale: 'fr',
           value: 'consigne',
         },
         {
-          key: 'challenge.challengeId.proposals',
+          key: expect.stringMatching(/^challenge\.challenge.*\.proposals$/),
           locale: 'fr',
           value: 'propositions',
         },
         {
-          key: 'challenge.challengeId.solution',
+          key: expect.stringMatching(/^challenge\.challenge.*\.solution$/),
           locale: 'fr',
           value: 'solution',
         },
         {
-          key: 'challenge.challengeId.solutionToDisplay',
+          key: expect.stringMatching(/^challenge\.challenge.*\.solutionToDisplay$/),
           locale: 'fr',
           value: 'solution à afficher',
         },

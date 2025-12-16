@@ -2373,6 +2373,7 @@ describe('Integration | Repository | challenge-repository', () => {
       const challenge = await challengeRepository.create(challengeToCreate);
 
       // then
+      expect(challenge.id).toStrictEqual(expect.stringMatching(/^challenge/));
       expect(challenge).toStrictEqual(
         domainBuilder.buildChallenge({
           accessibility1: challengeToCreate_data.accessibility1,
@@ -2393,9 +2394,9 @@ describe('Integration | Repository | challenge-repository', () => {
           format: challengeToCreate_data.format,
           genealogy: challengeToCreate_data.genealogy,
           geography: challengeToCreate_data.geography,
-          id: challengeToCreate_data.id,
           locales: challengeToCreate_data.locales,
-          localizedChallenges: challengeToCreate.localizedChallenges,
+          id: challenge.id,
+          localizedChallenges: [{ ...challengeToCreate.localizedChallenges[0], challengeId: challenge.id, id: challenge.id }],
           madeObsoleteAt: challengeToCreate_data.madeObsoleteAt,
           pedagogy: challengeToCreate_data.pedagogy,
           responsive: challengeToCreate_data.responsive,
@@ -2432,7 +2433,7 @@ describe('Integration | Repository | challenge-repository', () => {
           focusable: challengeToCreate_data.focusable,
           format: challengeToCreate_data.format,
           genealogy: challengeToCreate_data.genealogy,
-          id: challengeToCreate_data.id,
+          id: challenge.id,
           locales: challengeToCreate_data.locales,
           madeObsoleteAt: challengeToCreate_data.madeObsoleteAt,
           pedagogy: challengeToCreate_data.pedagogy,
@@ -2455,8 +2456,8 @@ describe('Integration | Repository | challenge-repository', () => {
       const localizedChallenges = await knex('localized_challenges').select('*').orderBy(['challengeId', 'id']);
       expect(localizedChallenges).toStrictEqual([
         {
-          id: challengeToCreate_data.id,
-          challengeId: challengeToCreate_data.id,
+          id: challenge.id,
+          challengeId: challenge.id,
           embedUrl: localizedChallengeToCreate.embedUrl,
           locale: localizedChallengeToCreate.locale,
           status: localizedChallengeToCreate.status,
@@ -2476,37 +2477,37 @@ describe('Integration | Repository | challenge-repository', () => {
       const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy(['key', 'locale']);
       expect(allTranslations).to.deep.have.members([
         {
-          key: 'challenge.challengeToCreate_id.instruction',
+          key: `challenge.${challenge.id}.instruction`,
           locale: 'fr',
           value: 'instruction FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.solution',
+          key: `challenge.${challenge.id}.solution`,
           locale: 'fr',
           value: 'solution FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.alternativeInstruction',
+          key: `challenge.${challenge.id}.alternativeInstruction`,
           locale: 'fr',
           value: 'alternativeInstruction FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.proposals',
+          key: `challenge.${challenge.id}.proposals`,
           locale: 'fr',
           value: 'proposals FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.solutionToDisplay',
+          key: `challenge.${challenge.id}.solutionToDisplay`,
           locale: 'fr',
           value: 'solutionToDisplay FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.embedTitle',
+          key: `challenge.${challenge.id}.embedTitle`,
           locale: 'fr',
           value: 'embedTitle FR challengeToCreate',
         },
         {
-          key: 'challenge.challengeToCreate_id.illustrationAlt',
+          key: `challenge.${challenge.id}.illustrationAlt`,
           locale: 'fr',
           value: 'illustrationAlt FR challengeToCreate',
         },

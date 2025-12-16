@@ -1,5 +1,3 @@
-import basex from 'base-x';
-import random from 'js-crypto-random';
 import slice from 'lodash/slice';
 import { Response } from 'miragejs';
 
@@ -502,14 +500,6 @@ function _applyPagination(data, { page, pageSize }) {
   return slice(data, start, end);
 }
 
-const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const base62_encode = basex(BASE62).encode;
-
-const RECORD_ID_PREFIX = 'rec';
-
 function newId(prefix = RECORD_ID_PREFIX) {
-  const randomString = random.getRandomAsciiString(10);
-  const buf = new TextEncoder('utf-8').encode(randomString);
-  const randomBase62 = base62_encode(buf);
-  return `${prefix}${randomBase62}`;
+  return `${prefix}${window.crypto.randomUUID()}`;
 }

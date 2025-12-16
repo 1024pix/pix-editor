@@ -6,7 +6,6 @@ export default class CompetenceManagementNewRoute extends Route {
   templateName = 'authenticated/competence-management/single';
   @service confirm;
   @service currentData;
-  @service idGenerator;
   @service store;
 
   model(params) {

@@ -6,6 +6,7 @@ import * as localizedChallengeRepository from './localized-challenge-repository.
 import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { escapeLikeWildcards } from './sql-utils.js';
+import { generateNewId } from '../utils/id-generator.js';
 
 const model = 'challenge';
 
@@ -75,6 +76,7 @@ export async function filter(params = {}) {
 
 export async function create(challenge) {
   return knex.transaction(async (transaction) => {
+    challenge.id = generateNewId(Challenge.ID_PREFIX);
     await transaction
       .insert({
         id: challenge.id,
@@ -105,7 +107,7 @@ export async function create(challenge) {
       })
       .into('challenges');
 
-    const primaryLocalizedChallenge = challenge.localizedChallenges[0];
+    const primaryLocalizedChallenge = { ...challenge.localizedChallenges[0], id: challenge.id, challengeId: challenge.id };
     await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge], transaction });
 
     const translations = extractTranslationsFromChallenge(challenge);

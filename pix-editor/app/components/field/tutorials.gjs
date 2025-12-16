@@ -20,7 +20,6 @@ export default class Tutorials extends Component {
   @tracked isTutorialQueryOngoing = false;
 
   @service store;
-  @service idGenerator;
   @service notify;
   @service loader;
 
