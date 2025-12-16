@@ -8,7 +8,6 @@ module.exports = async function (defaults) {
   const { buildOnce } = await import('@embroider/vite');
 
   const app = new EmberApp(defaults, {
-    sassOptions: { includePaths: ['node_modules/@1024pix/pix-ui/addon/styles'] },
     babel: { plugins: [require.resolve('ember-concurrency/async-arrow-task-transform')] },
 
     // Add options here

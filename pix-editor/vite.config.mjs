@@ -21,4 +21,23 @@ export default defineConfig({
       },
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        importers: [
+          {
+            findFileUrl(url) {
+              if (url.startsWith('pix-design-token')) {
+                return new URL(`file://${process.cwd()}/node_modules/@1024pix/pix-ui/addon/styles/${url}`);
+              }
+              if (url.endsWith('easymde.min.css')) {
+                return new URL(`file://${process.cwd()}/node_modules/easymde/dist/easymde.min.css`);
+              }
+              return null;
+            },
+          },
+        ],
+      },
+    },
+  },
 });
