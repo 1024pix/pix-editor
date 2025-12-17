@@ -561,7 +561,7 @@ describe('Integration | Repository | skill-repository', () => {
 
         await databaseBuilder.commit();
 
-        const params = { filter: { name: '@skill' } };
+        const params = { filter: { name: '@sKîl' } };
 
         // when
         const results = await skillRepository.search(params);
