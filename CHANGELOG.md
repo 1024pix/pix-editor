@@ -1,5 +1,29 @@
 
 
+## v4.3.0 (17/12/2025)
+
+
+### :rocket: Amélioration
+- [#1331](https://github.com/1024pix/pix-editor/pull/1331) [FEATURE] Ignorer les accents dans la recherche d’acquis (PIX-20822).
+- [#1332](https://github.com/1024pix/pix-editor/pull/1332) [FEATURE] Trier les prototypes par statut puis version (PIX-20800).
+
+### :building_construction: Tech
+- [#1328](https://github.com/1024pix/pix-editor/pull/1328) [TECH] Migre Pix Editor vers Vite.
+- [#1321](https://github.com/1024pix/pix-editor/pull/1321) [TECH] "Check node version availability on Scalingo" seulement sur les PRs Renovate Node.
+- [#1327](https://github.com/1024pix/pix-editor/pull/1327) [TECH] Mise à jour de toutes les dépendances de Pix Editor.
+- [#1325](https://github.com/1024pix/pix-editor/pull/1325) [TECH] Centralise la génération des id côté API.
+- [#1320](https://github.com/1024pix/pix-editor/pull/1320) [TECH] Supprime ember-render-modifier.
+- [#1319](https://github.com/1024pix/pix-editor/pull/1319) [TECH] Déplace les tests e2e en dehors de l'application Ember.
+
+### :arrow_up: Montée de version
+- [#1326](https://github.com/1024pix/pix-editor/pull/1326) [BUMP] Update dependency ember-intl to v8 (pix-editor).
+- [#1323](https://github.com/1024pix/pix-editor/pull/1323) [BUMP] Lock file maintenance (pix-editor).
+- [#1322](https://github.com/1024pix/pix-editor/pull/1322) [BUMP] Lock file maintenance (api).
+- [#1265](https://github.com/1024pix/pix-editor/pull/1265) [BUMP] Update Node.js to v24.11.1.
+
+### :coffee: Autre
+- [#1324](https://github.com/1024pix/pix-editor/pull/1324)  [REFACTO] Renommer `Formulation à revoir` pour une épreuve (PIX-20718).
+
 ## v4.2.0 (08/12/2025)
 
 
