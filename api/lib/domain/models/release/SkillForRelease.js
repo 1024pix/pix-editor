@@ -42,6 +42,10 @@ export class SkillForRelease {
     return Skill.INTERNATIONALISATIONS;
   }
 
+  get isPerime() {
+    return this.status === Skill.STATUSES.PERIME;
+  }
+
   canExportForTranslation() {
     return this.status === SkillForRelease.STATUSES.ACTIF;
   }

@@ -33,16 +33,19 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       const pixSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill1',
         tubeId: 'tube1',
+        competenceId: 'competence1',
         name: '@mySkill1',
       });
       const pixSkill2 = domainBuilder.buildSkillForRelease({
         id: 'skill2',
         tubeId: 'tube1',
+        competenceId: 'competence1',
         name: '@mySkill2',
       });
       const wonderlandSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill23',
         tubeId: 'tube2',
+        competenceId: 'competence2',
         name: '@mySkill23',
       });
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
