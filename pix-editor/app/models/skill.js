@@ -1,6 +1,7 @@
 import { service } from '@ember/service';
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class SkillModel extends Model {
   _pinnedRelationships = {};
@@ -81,7 +82,15 @@ export default class SkillModel extends Model {
   }
 
   get sortedPrototypes() {
-    return this.prototypes.sort((a, b) => a.version < b.version);
+    const statusesOrder = [
+      Challenge.STATUSES.VALIDE,
+      Challenge.STATUSES.PROPOSE,
+      Challenge.STATUSES.ARCHIVE,
+      Challenge.STATUSES.PERIME,
+    ];
+    return this.prototypes
+      .sort((a, b) => b.version - a.version)
+      .sort((a, b) => statusesOrder.indexOf(a.status) - statusesOrder.indexOf(b.status));
   }
 
   get productionPrototype() {
