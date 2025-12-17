@@ -2,7 +2,6 @@ import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { escapeLikeWildcards } from './sql-utils.js';
 
 const TABLE_NAME = 'skills';
 const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
@@ -76,10 +75,12 @@ export async function listByCompetenceId(competenceId) {
 }
 
 export async function search(params) {
-  let query = selectSkills().whereRaw("?? || coalesce(??::varchar, '') ilike ?", [
+  let query = selectSkills().whereRaw("left(?? || coalesce(??::varchar, ''), ?) = ? collate ??", [
     'tubes.name',
     'skills.level',
-    `${escapeLikeWildcards(params.filter.name)}%`,
+    params.filter.name.length,
+    params.filter.name,
+    'ignore-case-accents',
   ]).where('tubes.name', '<>', '@workbench');
   if (params.sort) {
     const orderBySqlAndParams = params.sort.map(([field, direction]) => {
