@@ -4,7 +4,9 @@ import Application from '@ember/application';
 import { init as initSentry } from '@sentry/ember';
 import loadInitializers from 'ember-load-initializers';
 import Resolver from 'ember-resolver';
-import config from 'pixeditor/config/environment';
+import config from './config/environment';
+
+import compatModules from '@embroider/virtual/compat-modules';
 
 if (config.sentry.enabled) {
   initSentry();
@@ -13,7 +15,7 @@ if (config.sentry.enabled) {
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
   podModulePrefix = config.podModulePrefix;
-  Resolver = Resolver;
+  Resolver = Resolver.withModules(compatModules);
 }
 
-loadInitializers(App, config.modulePrefix);
+loadInitializers(App, config.modulePrefix, compatModules);

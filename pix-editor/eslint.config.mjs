@@ -1,4 +1,4 @@
-import babelParser from '@babel/eslint-parser';
+import babelParser from '@babel/eslint-parser/experimental-worker';
 import emberParser from 'ember-eslint-parser';
 import emberRecommendedConfig from 'eslint-plugin-ember/configs/recommended';
 import emberGjsRecommendedConfig from 'eslint-plugin-ember/configs/recommended-gjs';
@@ -9,7 +9,7 @@ import prettierRecommendedConfig from 'eslint-plugin-prettier/recommended';
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
 const compiledOutputFiles = ['dist/*', 'tmp/*'];
-const dependenciesFiles = ['bower_components/*', 'node_modules/*'];
+const dependenciesFiles = ['bower_components/*', 'node_modules/*', 'external/*'];
 const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache'];
 const emberTryFiles = ['.node_modules.ember-try/*', 'bower.json.ember-try', 'package.json.ember-try'];
 
