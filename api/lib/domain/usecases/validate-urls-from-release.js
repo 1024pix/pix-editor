@@ -47,17 +47,26 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
   });
 }
 
-function findUrlsFromTutorials(tutorials, release, UrlUtils) {
-  return tutorials.map((tutorial) => {
-    return {
-      id: [
-        release.findCompetenceNamesForTutorial(tutorial).join(' '),
-        release.findSkillNamesForTutorial(tutorial).join(' '),
-        tutorial.id,
-      ].join(';'),
-      url: UrlUtils.findUrlsInText(tutorial.link)[0],
-    };
-  });
+function findUrlsFromTutorials(release, UrlUtils) {
+  const notObsoleteSkills = release.content.skills.filter((skill) => !skill.isPerime);
+  const accessibleTutorialIds = new Set(
+    notObsoleteSkills.flatMap((skill) => [...skill.tutorialIds, ...skill.learningMoreTutorialIds]),
+  );
+  return release.content.tutorials
+    .filter((tutorial) => accessibleTutorialIds.has(tutorial.id))
+    .map((tutorial) => {
+      const skills = notObsoleteSkills.filter((skill) => skill.tutorialIds.includes(tutorial.id) || skill.learningMoreTutorialIds.includes(tutorial.id));
+      const competenceIds = new Set(skills.flatMap((skill) => skill.competenceId));
+      const competences = release.content.competences.filter((competence) => competenceIds.has(competence.id));
+      return {
+        id: [
+          competences.map((competence) => competence.name_i18n.fr).join(' '),
+          skills.map((skill) => skill.name).join(' '),
+          tutorial.id,
+        ].join(';'),
+        url: UrlUtils.findUrlsInText(tutorial.link)[0],
+      };
+    });
 }
 
 function keepAndFormatKOUrls(analyzedLines) {
@@ -93,8 +102,7 @@ async function checkAndUploadKOUrlsFromChallenges(
 }
 
 async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
-  const tutorials = release.content.tutorials;
-  const urlList = findUrlsFromTutorials(tutorials, release, UrlUtils);
+  const urlList = findUrlsFromTutorials(release, UrlUtils);
   const finalUrlList = urlList.filter(
     ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );

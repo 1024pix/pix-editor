@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
+import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import { validateUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
@@ -67,36 +67,41 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         origin: 'Pix',
         name_i18n: { fr: 'competence 1.1' },
       });
+      const pixCompetence2 = domainBuilder.buildCompetenceForRelease({
+        id: 'competence3',
+        origin: 'Pix',
+        name_i18n: { fr: 'competence 1.3' },
+      });
       const wonderlandCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence2',
         origin: 'wonderland',
         name_i18n: { fr: 'competence 4.5' },
       });
-      const pixTube = domainBuilder.buildTubeForRelease({
-        id: 'tube1',
-        competenceId: 'competence1',
-      });
-      const wonderlandTube = domainBuilder.buildTubeForRelease({
-        id: 'tube2',
-        competenceId: 'competence2',
-      });
       const pixSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill1',
-        tubeId: 'tube1',
+        competenceId: 'competence1',
         name: '@mySkill1',
         tutorialIds: ['tutorial1', 'tutorial3'],
         learningMoreTutorialIds: [],
       });
       const pixSkill2 = domainBuilder.buildSkillForRelease({
         id: 'skill2',
-        tubeId: 'tube1',
+        competenceId: 'competence1',
         name: '@mySkill2',
         tutorialIds: [],
         learningMoreTutorialIds: [],
       });
+      const obsoletePixSkill = domainBuilder.buildSkillForRelease({
+        id: 'skill3',
+        competenceId: 'competence3',
+        name: '@mySkill3',
+        tutorialIds: ['tutorial1', 'tutorial4'],
+        learningMoreTutorialIds: ['tutorial5'],
+        status: SkillForRelease.STATUSES.PERIME,
+      });
       const wonderlandSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill23',
-        tubeId: 'tube2',
+        competenceId: 'competence2',
         name: '@mySkill23',
         tutorialIds: [],
         learningMoreTutorialIds: ['tutorial2'],
@@ -105,6 +110,8 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         domainBuilder.buildTutorialForRelease({ id: 'tutorial1', link: 'https://tuto1.net/' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial2', link: 'www.tuto2.net/' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial3', link: 'https://tuto3.net/' }),
+        domainBuilder.buildTutorialForRelease({ id: 'tutorial4', link: 'https://tuto4.net/' }),
+        domainBuilder.buildTutorialForRelease({ id: 'tutorial5', link: 'https://tuto5.net/' }),
       ];
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
         id: 'challenge1',
@@ -165,11 +172,15 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         locales: ['nl'],
       });
       const latestRelease = domainBuilder.buildDomainRelease.withContent({
-        competencesFromRelease: [pixCompetence, wonderlandCompetence],
-        tubesFromRelease: [pixTube, wonderlandTube],
+        competencesFromRelease: [
+          pixCompetence,
+          pixCompetence2,
+          wonderlandCompetence,
+        ],
         skillsFromRelease: [
           pixSkill1,
           pixSkill2,
+          obsoletePixSkill,
           wonderlandSkill1,
         ],
         challengesFromRelease: [
