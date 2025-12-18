@@ -1,5 +1,11 @@
 
 
+## v4.3.1 (18/12/2025)
+
+
+### :rocket: Amélioration
+- [#1335](https://github.com/1024pix/pix-editor/pull/1335) [FEATURE] Moulinette URLs KO : analyser tutos liés à au moins un acquis non périmé (PIX-20836).
+
 ## v4.3.0 (17/12/2025)
 
 
