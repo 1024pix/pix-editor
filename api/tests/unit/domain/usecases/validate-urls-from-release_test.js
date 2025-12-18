@@ -77,21 +77,8 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         origin: 'wonderland',
         name_i18n: { fr: 'competence 4.5' },
       });
-      const pixTube = domainBuilder.buildTubeForRelease({
-        id: 'tube1',
-        competenceId: 'competence1',
-      });
-      const pixTube2 = domainBuilder.buildTubeForRelease({
-        id: 'tube3',
-        competenceId: 'competence3',
-      });
-      const wonderlandTube = domainBuilder.buildTubeForRelease({
-        id: 'tube2',
-        competenceId: 'competence2',
-      });
       const pixSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill1',
-        tubeId: 'tube1',
         competenceId: 'competence1',
         name: '@mySkill1',
         tutorialIds: ['tutorial1', 'tutorial3'],
@@ -99,7 +86,6 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       });
       const pixSkill2 = domainBuilder.buildSkillForRelease({
         id: 'skill2',
-        tubeId: 'tube1',
         competenceId: 'competence1',
         name: '@mySkill2',
         tutorialIds: [],
@@ -107,7 +93,6 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       });
       const obsoletePixSkill = domainBuilder.buildSkillForRelease({
         id: 'skill3',
-        tubeId: 'tube3',
         competenceId: 'competence3',
         name: '@mySkill3',
         tutorialIds: ['tutorial1', 'tutorial4'],
@@ -116,7 +101,6 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       });
       const wonderlandSkill1 = domainBuilder.buildSkillForRelease({
         id: 'skill23',
-        tubeId: 'tube2',
         competenceId: 'competence2',
         name: '@mySkill23',
         tutorialIds: [],
@@ -192,11 +176,6 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
           pixCompetence,
           pixCompetence2,
           wonderlandCompetence,
-        ],
-        tubesFromRelease: [
-          pixTube,
-          pixTube2,
-          wonderlandTube,
         ],
         skillsFromRelease: [
           pixSkill1,
