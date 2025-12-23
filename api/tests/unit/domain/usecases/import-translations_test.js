@@ -1,135 +1,72 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { LocalizedChallenge, Translation } from '../../../../lib/domain/models/index.js';
-import { importTranslations, InvalidFileError } from '../../../../lib/domain/usecases/index.js';
-import { PassThrough } from 'node:stream';
+import { domainBuilder } from '../../../test-helper.js';
 
-describe('Unit | Domain | Usecases | import-translations', function() {
-  let csvStream;
-  let localizedChallengeRepository;
-  let translationRepository;
+import { importTranslations } from '../../../../lib/domain/usecases/index.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+
+describe('Unit | Domain | Use Cases | import-translations', () => {
+  let localizedChallengeRepository, translationRepository;
 
   beforeEach(() => {
-    csvStream = new PassThrough();
     localizedChallengeRepository = { create: vi.fn() };
     translationRepository = { save: vi.fn() };
   });
 
-  it('should write in database translation from CSV', async () => {
-    // when
-    const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write('key_name,nl,comment\nsome.key,Hallo,');
-    csvStream.end();
+  describe('when given translations array is empty', () => {
+    it('does nothing', async () => {
+      // given
+      const translations = [];
 
-    // then
-    await promise;
+      // when
+      await importTranslations(translations, { localizedChallengeRepository, translationRepository });
 
-    expect(translationRepository.save).toHaveBeenCalledOnce();
-    expect(translationRepository.save).toHaveBeenCalledWith({
-      translations: [
-        new Translation({
-          key: 'some.key',
-          locale: 'nl',
-          value: 'Hallo',
-        }),
-      ],
-      shouldDuplicateToAirtable: false,
+      // then
+      expect(localizedChallengeRepository.create).not.toHaveBeenCalled();
+      expect(translationRepository.save).not.toHaveBeenCalled();
     });
   });
 
-  it("should return an error when the CSV doesn't have key_name as first column", async () => {
-    // when
-    const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write('one invalid header,nl,comment\navalue,anotherone,');
-    csvStream.end();
+  describe('when there is no challenge translations', () => {
+    it('save only translations to DB', async () => {
+      // given
+      const translations = [domainBuilder.buildTranslation({ key: 'area.area123.title', locale: 'nl', value: 'area123 title nl' }), domainBuilder.buildTranslation({ key: 'competence.competence456.name', locale: 'es', value: 'competence456 name es' })];
 
-    // then
-    await expect(promise).rejects.toThrow(new InvalidFileError('Expected first column to be key_name'));
-    expect(translationRepository.save).not.toHaveBeenCalled();
-  });
+      // when
+      await importTranslations(translations, { localizedChallengeRepository, translationRepository });
 
-  it("should return an error when the CSV doesn't have a valid locale as second column", async () => {
-    // when
-    const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write('key_name,invalid_locale,comment\navalue,anotherone,');
-    csvStream.end();
-
-    // then
-    await expect(promise).rejects.toThrow(new InvalidFileError('Expected second column to be a valid locale'));
-    expect(translationRepository.save).not.toHaveBeenCalled();
-  });
-
-  it('should create a localized challenge when a new locale is added', async () => {
-    // when
-    const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write(
-      'key_name,nl,comment\nchallenge.id.key,Hallo,\nchallenge.id.key2,Hallo2,\nchallenge.id2.key,Hallo3,',
-    );
-    csvStream.end();
-
-    // then
-    await promise;
-
-    expect(translationRepository.save).toHaveBeenCalledOnce();
-    expect(translationRepository.save).toHaveBeenCalledWith({
-      translations: [
-        new Translation({
-          key: 'challenge.id.key',
-          locale: 'nl',
-          value: 'Hallo',
-        }),
-        new Translation({
-          key: 'challenge.id.key2',
-          locale: 'nl',
-          value: 'Hallo2',
-        }),
-        new Translation({
-          key: 'challenge.id2.key',
-          locale: 'nl',
-          value: 'Hallo3',
-        }),
-      ],
-      shouldDuplicateToAirtable: false,
+      // then
+      expect(localizedChallengeRepository.create).not.toHaveBeenCalled();
+      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations, transaction: expect.any(Function) });
     });
-    expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
-    expect(localizedChallengeRepository.create).toHaveBeenCalledWith({
-      localizedChallenges: [
-        new LocalizedChallenge({
-          id: null,
-          challengeId: 'id',
-          locale: 'nl',
-          status: LocalizedChallenge.STATUSES.PAUSE,
-          embedUrl: null,
-          fileIds: [],
-          geography: 'AA',
-          urlsToConsult: null,
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
-          validatedAt: null,
-        }),
-        new LocalizedChallenge({
-          id: null,
-          challengeId: 'id2',
-          locale: 'nl',
-          status: LocalizedChallenge.STATUSES.PAUSE,
-          embedUrl: null,
-          fileIds: [],
-          geography: 'AA',
-          urlsToConsult: null,
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
-          validatedAt: null,
-        }),
-      ],
+  });
+
+  describe('when there are challenge translations', () => {
+    it('save translations and localizedChallenges to DB', async () => {
+      // given
+      const translations = [
+        domainBuilder.buildTranslation({ key: 'area.area123.title', locale: 'nl', value: 'area123 title nl' }),
+        domainBuilder.buildTranslation({ key: 'competence.competence456.name', locale: 'es', value: 'competence456 name es' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge789.instruction', locale: 'nl', value: 'challenge789 instruction nl' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge789.solution', locale: 'nl', value: 'challenge789 solution nl' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge789.instruction', locale: 'es', value: 'challenge789 instruction es' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge789.solution', locale: 'es', value: 'challenge789 solution es' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge321.instruction', locale: 'nl', value: 'challenge321 instruction nl' }),
+        domainBuilder.buildTranslation({ key: 'challenge.challenge321.solution', locale: 'nl', value: 'challenge321 solution nl' }),
+      ];
+
+      // when
+      await importTranslations(translations, { localizedChallengeRepository, translationRepository });
+
+      // then
+      expect(localizedChallengeRepository.create).toHaveBeenCalledExactlyOnceWith({
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({ challengeId: 'challenge789', locale: 'nl', id: null, embedUrl: null, status: LocalizedChallenge.STATUSES.PAUSE, urlsToConsult: null }),
+          domainBuilder.buildLocalizedChallenge({ challengeId: 'challenge789', locale: 'es', id: null, embedUrl: null, status: LocalizedChallenge.STATUSES.PAUSE, urlsToConsult: null }),
+          domainBuilder.buildLocalizedChallenge({ challengeId: 'challenge321', locale: 'nl', id: null, embedUrl: null, status: LocalizedChallenge.STATUSES.PAUSE, urlsToConsult: null }),
+        ],
+        transaction: expect.any(Function),
+      });
+      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations, transaction: expect.any(Function) });
     });
   });
 });

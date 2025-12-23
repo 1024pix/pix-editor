@@ -1,8 +1,10 @@
+import { Readable } from 'node:stream';
 import { Configuration, LocalesApi } from 'phrase-js';
+
 import * as config from '../../config.js';
 import { logger } from '../../infrastructure/logger.js';
 import { importTranslations } from './import-translations.js';
-import { Readable } from 'node:stream';
+import { parseTranslationsCsvStream } from '../services/parse-translations-csv-stream.js';
 
 export async function downloadTranslationFromPhrase(phraseApi = { Configuration, LocalesApi }) {
   const { apiKey, projects } = config.phrase;
@@ -30,7 +32,10 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
           id: phraseLocale.id,
           fileFormat: 'csv',
         });
-        await importTranslations(Readable.fromWeb(csvFile.stream()));
+
+        const translations = await parseTranslationsCsvStream(Readable.fromWeb(csvFile.stream()));
+
+        await importTranslations(translations);
       }
     } catch (e) {
       const text = (await e.text?.()) ?? e;

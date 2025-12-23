@@ -1,58 +1,26 @@
-import { localizedChallengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
-import { LocalizedChallenge, Translation } from '../models/index.js';
-import { parseStream } from 'fast-csv';
 import fp from 'lodash/fp.js';
 
-export class InvalidFileError extends Error {}
+import { knex } from '../../../db/knex-database-connection.js';
+import { localizedChallengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
+import { LocalizedChallenge } from '../models/index.js';
 
-export function importTranslations(csvStream, dependencies = { translationRepository, localizedChallengeRepository }) {
-  return new Promise((resolve, reject) => {
-    const translations = [];
-    let locale;
-    parseStream(csvStream, {
-      headers: (headers) => {
-        if (headers[0] !== 'key_name') throw new InvalidFileError('Expected first column to be key_name');
-        locale = headers[1];
-        try {
-          new Intl.Locale(locale);
-        } catch {
-          throw new InvalidFileError('Expected second column to be a valid locale');
-        }
-        return [
-          'key',
-          'value',
-          ...Array(headers.length - 2),
-        ];
-      },
-      objectMode: true,
-      strictColumnHandling: true,
-    })
-      .validate((data) => data.key && data.value)
-      .on('error', reject)
-      .on('data-invalid', (invalidData) => {
-        reject(new InvalidFileError(`Invalid data: ${JSON.stringify(invalidData)}`));
-      })
-      .on('data', (row) => {
-        translations.push(new Translation({ ...row, locale }));
-      })
-      .on('end', async () => {
-        const challengesLocales = extractChallengesLocales(translations);
-        await dependencies.localizedChallengeRepository.create({ localizedChallenges: challengesLocales });
+export async function importTranslations(translations, dependencies = { translationRepository, localizedChallengeRepository }) {
+  return knex.transaction(async (transaction) => {
+    if (translations.length === 0) return;
 
-        await dependencies.translationRepository.save({
-          translations,
-          shouldDuplicateToAirtable: false,
-        });
+    await dependencies.translationRepository.save({ translations, transaction });
 
-        resolve();
-      });
+    const localizedChallenges = extractLocalizedChallengesFromTranslations(translations);
+    if (localizedChallenges.length === 0) return;
+
+    await dependencies.localizedChallengeRepository.create({ localizedChallenges, transaction });
   });
 }
 
-const extractChallengesLocales = fp.flow(
+const extractLocalizedChallengesFromTranslations = fp.flow(
   fp.filter((translation) => {
     return translation.key.startsWith('challenge.');
   }),
+  fp.uniqBy(({ key, locale }) => `${key.slice(0, key.lastIndexOf('.'))}:${locale}`),
   fp.map(LocalizedChallenge.buildAlternativeFromTranslation),
-  fp.uniqBy(({ challengeId, locale }) => `${challengeId}:${locale}`),
 );

@@ -1,13 +1,14 @@
 import { PassThrough } from 'node:stream';
 import fs from 'node:fs';
 import Boom from '@hapi/boom';
-import { exportTranslations } from '../domain/usecases/export-translations.js';
-import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
+import Joi from 'joi';
+
+import { exportTranslations, importTranslations } from '../domain/usecases/index.js';
 import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import * as config from '../config.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import Joi from 'joi';
+import { parseTranslationsCsvStream, InvalidFileError } from '../domain/services/parse-translations-csv-stream.js';
 
 export async function register(server) {
   server.route([
@@ -54,7 +55,8 @@ export async function importTranslationsHandler(request, h) {
   }
   try {
     const stream = fs.createReadStream(request.payload.file.path);
-    await importTranslations(stream);
+    const translations = await parseTranslationsCsvStream(stream);
+    await importTranslations(translations);
   } catch (error) {
     if (error instanceof InvalidFileError) {
       logger.error(error);
