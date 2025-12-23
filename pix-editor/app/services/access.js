@@ -33,7 +33,7 @@ export default class AccessService extends Service {
   }
 
   mayEditSkill(skill) {
-    return this.mayEditSkills() && skill.isLive;
+    return this.mayEditSkills() && !skill.isObsolete;
   }
 
   mayMoveTube(tube) {
