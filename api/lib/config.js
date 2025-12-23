@@ -149,6 +149,7 @@ export const phrase = {
       projectId: process.env.PHRASE_PIX_NR_PROJECT_ID,
     },
   ].filter(({ projectId }) => projectId),
+  webhookSecret: process.env.PHRASE_WEBHOOK_SECRET,
 };
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
@@ -202,4 +203,5 @@ if (process.env.NODE_ENV === 'test') {
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }];
+  phrase.webhookSecret = 'le secret de phrase';
 }

@@ -625,4 +625,278 @@ describe('Acceptance | Controller | phrase-controller', () => {
       ]);
     });
   });
+
+  describe('POST /phrase/webhook', () => {
+    describe('when x-phraseapp-signature header is missing', () => {
+      it('returns a 401 status code', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+        });
+
+        // then
+        expect(response.statusCode).toBe(401);
+      });
+    });
+
+    describe('when x-phraseapp-signature does not match payload', () => {
+      it('returns a 400 status code', async () => {
+        // given
+        const payload = { event: 'test:event' };
+        const serializedPayload = JSON.stringify(payload);
+        const wrongSignature = Buffer.from('wrong signature').toString('base64');
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': wrongSignature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    describe('when event is test:event', () => {
+      it('returns a 204 status code', async () => {
+        // given
+        const payload = { event: 'test:event' };
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(204);
+      });
+    });
+
+    describe('when event is none of test:event, translations:create or translations:update', () => {
+      it('returns a 400 status code', async () => {
+        const payload = { event: 'unknown:event' };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    describe('when branch is not null', () => {
+      it('returns a 400 status code', async () => {
+        const payload = {
+          event: 'translations:create',
+          branch: { id: 'branchId' },
+        };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    describe('when project id does not match config', () => {
+      it('returns a 400 status code', async () => {
+        const payload = {
+          event: 'translations:create',
+          branch: null,
+          project: { id: 'NOT_MY_PHRASE_PROJECT_ID' },
+        };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+
+    describe('when event is translations:create', () => {
+      it('saves the translation in database', async () => {
+        const payload = {
+          event: 'translations:create',
+          project: { id: config.phrase.projects[0].projectId },
+          branch: null,
+          translation: {
+            id: 'translationId',
+            content: 'area1’s english title',
+            unverified: false,
+            excluded: false,
+            plural_suffix: '',
+            created_at: '2025-12-22T21:30:39Z',
+            updated_at: '2025-12-22T21:30:39Z',
+            placeholders: [],
+            state: 'translated',
+            linked_translation: null,
+            key: {
+              id: 'keyId',
+              name: 'area.area1.title',
+              plural: false,
+              use_ordinal_rules: false,
+              data_type: 'string',
+              tags: ['tag-1', 'tag-2'],
+              description: '',
+            },
+            locale: {
+              id: 'localeId',
+              name: 'en',
+              code: 'en',
+            },
+          },
+        };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+        databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(204);
+
+        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([{ key: 'area.area1.title', locale: 'en', value: 'area1’s english title' }, { key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' }]);
+      });
+    });
+
+    describe('when event is translations:update', () => {
+      it('saves the translation in database', async () => {
+        const payload = {
+          event: 'translations:update',
+          project: { id: config.phrase.projects[0].projectId },
+          branch: null,
+          translation: {
+            id: 'translationId',
+            content: 'area1’s english title',
+            unverified: false,
+            excluded: false,
+            plural_suffix: '',
+            created_at: '2025-12-22T21:30:39Z',
+            updated_at: '2025-12-22T21:30:39Z',
+            placeholders: [],
+            state: 'translated',
+            linked_translation: null,
+            key: {
+              id: 'keyId',
+              name: 'area.area1.title',
+              plural: false,
+              use_ordinal_rules: false,
+              data_type: 'string',
+              tags: ['tag-1', 'tag-2'],
+              description: '',
+            },
+            locale: {
+              id: 'localeId',
+              name: 'en',
+              code: 'en',
+            },
+          },
+        };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+        databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
+        databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'en', value: 'area1’s english former title' });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(204);
+
+        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([{ key: 'area.area1.title', locale: 'en', value: 'area1’s english title' }, { key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' }]);
+      });
+    });
+  });
 });
+
+async function generatePhraseAppSignature(payload) {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(config.phrase.webhookSecret),
+    { name: 'HMAC', hash: { name: 'SHA-256' } },
+    false,
+    ['sign'],
+  );
+  const data = encoder.encode(payload);
+
+  return Buffer.from(await crypto.subtle.sign('HMAC', key, data)).toString('base64');
+}
