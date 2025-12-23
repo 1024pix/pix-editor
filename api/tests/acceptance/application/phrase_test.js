@@ -765,7 +765,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
     });
 
     describe('when event is translations:create', () => {
-      it.fails('saves the translation in database', async () => {
+      it('saves the translation in database', async () => {
         const payload = {
           event: 'translations:create',
           project: { id: config.phrase.projects[0].projectId },
@@ -805,7 +805,67 @@ describe('Acceptance | Controller | phrase-controller', () => {
         databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
         databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
+        await databaseBuilder.commit();
 
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/phrase/webhook',
+          payload: serializedPayload,
+          headers: { 'x-phraseapp-signature': signature },
+        });
+
+        // then
+        expect(response.statusCode).toBe(204);
+
+        await expect(knex.select('key', 'locale', 'value').from('translations').orderBy(['key', 'locale'])).resolves.toStrictEqual([{ key: 'area.area1.title', locale: 'en', value: 'area1’s english title' }, { key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' }]);
+      });
+    });
+
+    describe('when event is translations:update', () => {
+      it('saves the translation in database', async () => {
+        const payload = {
+          event: 'translations:update',
+          project: { id: config.phrase.projects[0].projectId },
+          branch: null,
+          translation: {
+            id: 'translationId',
+            content: 'area1’s english title',
+            unverified: false,
+            excluded: false,
+            plural_suffix: '',
+            created_at: '2025-12-22T21:30:39Z',
+            updated_at: '2025-12-22T21:30:39Z',
+            placeholders: [],
+            state: 'translated',
+            linked_translation: null,
+            key: {
+              id: 'keyId',
+              name: 'area.area1.title',
+              plural: false,
+              use_ordinal_rules: false,
+              data_type: 'string',
+              tags: ['tag-1', 'tag-2'],
+              description: '',
+            },
+            locale: {
+              id: 'localeId',
+              name: 'en',
+              code: 'en',
+            },
+          },
+        };
+
+        const serializedPayload = JSON.stringify(payload);
+
+        const signature = await generatePhraseAppSignature(serializedPayload);
+
+        databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+        databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
+        databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'en', value: 'area1’s english former title' });
         await databaseBuilder.commit();
 
         const server = await createServer();

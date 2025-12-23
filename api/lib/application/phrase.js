@@ -1,7 +1,8 @@
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { downloadTranslationFromPhrase, uploadTranslationToPhrase } from '../domain/usecases/index.js';
+import { downloadTranslationFromPhrase, importTranslations, uploadTranslationToPhrase } from '../domain/usecases/index.js';
 import { child } from '../infrastructure/logger.js';
 import * as config from '../config.js';
+import * as translationSerializer from '../infrastructure/serializers/phrase/translation-serializer.js';
 
 const logger = child('application:phrase', { event: 'phrase' });
 
@@ -37,7 +38,8 @@ export async function register(server) {
         payload: { parse: false },
         pre: [{ method: checkPhraseappSignature }, { method: validatePhraseWebhookRequest }],
         handler: async function(request, h) {
-          logger.info({ payload: request.payload }, 'Phrase webhook called');
+          const translation = translationSerializer.deserialize(request.payload);
+          await importTranslations([translation]);
           return h.response();
         },
         tags: [
@@ -100,7 +102,7 @@ async function getPhraseWebhookSecretKey() {
 }
 
 const TEST_EVENT = 'test:event';
-const TRANSLATIONS_EVENTS = ['translations:create', 'translations:udpate'];
+const TRANSLATIONS_EVENTS = ['translations:create', 'translations:update'];
 
 function validatePhraseWebhookRequest(request, h) {
   if (request.payload.event === TEST_EVENT) {
