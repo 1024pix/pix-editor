@@ -1,5 +1,15 @@
 
 
+## v4.4.0 (23/12/2025)
+
+
+### :rocket: Amélioration
+- [#1339](https://github.com/1024pix/pix-editor/pull/1339) [FEATURE] Permettre l’édition des acquis archivés (PIX-20823).
+- [#1338](https://github.com/1024pix/pix-editor/pull/1338) [FEATURE] Recevoir les traductions des épreuves etc. via les webhooks Phrase (PIX-20914).
+
+### :arrow_up: Montée de version
+- [#1336](https://github.com/1024pix/pix-editor/pull/1336) [BUMP] Lock file maintenance (api).
+
 ## v4.3.1 (18/12/2025)
 
 
