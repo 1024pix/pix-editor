@@ -1,3 +1,4 @@
+export * as adminSchemaRepository from './admin-schema-repository.js';
 export * as areaRepository from './area-repository.js';
 export * as attachmentRepository from './attachment-repository.js';
 export * as challengeRepository from './challenge-repository.js';
