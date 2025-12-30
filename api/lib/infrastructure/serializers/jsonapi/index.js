@@ -1,3 +1,4 @@
+export * as adminEntitySerializer from './admin-entity-serializer.js';
 export * as adminSchemaSerializer from './admin-schema-serializer.js';
 export * as areaSerializer from './area-serializer.js';
 export * as challengeSerializer from './challenge-serializer.js';
