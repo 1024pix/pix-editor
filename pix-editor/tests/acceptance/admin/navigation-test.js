@@ -54,7 +54,7 @@ module('Acceptance | Admin | Navigation', function (hooks) {
 
     test('it should navigate to admin dashboard', async function (assert) {
       // given
-      this.server.create('admin-schema', { label: 'Utilisateurs' });
+      this.server.create('admin-schema', { label: 'Utilisateurs', entityName: 'users' });
 
       // when
       await click(await screen.findByRole('link', { name: 'Administration' }));
@@ -63,6 +63,32 @@ module('Acceptance | Admin | Navigation', function (hooks) {
       assert.strictEqual(currentURL(), '/administration');
       assert.dom(await screen.findByRole('link', { name: 'Retourner sur Pix Editor' }));
       assert.dom(await screen.findByRole('link', { name: 'Utilisateurs' }));
+    });
+
+    test('it should navigate to admin entity list', async function (assert) {
+      // given
+      this.server.create('admin-schema', {
+        label: 'Utilisateurs',
+        entityName: 'users',
+        fields: [
+          { key: 'name', label: 'Nom', type: 'string' },
+          { key: 'patate', label: 'Chocolat', type: 'string' },
+        ],
+      });
+      this.server.create('admin-entity', { properties: { name: 'Dinguou', patate: '123' } });
+
+      // when
+      await click(await screen.findByRole('link', { name: 'Administration' }));
+      await click(await screen.findByRole('link', { name: 'Utilisateurs' }));
+
+      // then
+      assert.strictEqual(currentURL(), '/administration/users');
+
+      assert.dom(await screen.findByRole('columnheader', { name: 'Nom' }));
+      assert.dom(await screen.findByRole('columnheader', { name: 'Chocolat' }));
+
+      assert.dom(await screen.findByRole('cell', { name: 'Dinguou' }));
+      assert.dom(await screen.findByRole('cell', { name: '123' }));
     });
   });
 });

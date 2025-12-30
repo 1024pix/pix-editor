@@ -1,5 +1,7 @@
 // This file imports and exports all models for explicit registration in config.js
 
+import adminSchema from './models/admin-schema';
+import adminEntity from './models/admin-entity';
 import api from './models/api';
 import area from './models/area';
 import attachment from './models/attachment';
@@ -27,9 +29,9 @@ import tube from './models/tube';
 import tutorial from './models/tutorial';
 import user from './models/user';
 import whitelistedUrl from './models/whitelisted-url';
-import adminSchema from './models/admin-schema';
 
 export default {
+  adminEntity,
   adminSchema,
   api,
   area,

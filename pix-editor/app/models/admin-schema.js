@@ -5,5 +5,6 @@ export default class AdminSchemaModel extends Model {
   @attr editable;
   @attr deletable;
   @attr creatable;
+  @attr entityName;
   @attr fields;
 }
