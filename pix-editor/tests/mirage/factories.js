@@ -1,5 +1,6 @@
 // This file imports and exports all factories for explicit registration in config.js
 
+import adminSchema from './factories/admin-schema';
 import area from './factories/area';
 import attachment from './factories/attachment';
 import challenge from './factories/challenge';
@@ -15,6 +16,7 @@ import tutorial from './factories/tutorial';
 import user from './factories/user';
 
 export default {
+  adminSchema,
   area,
   attachment,
   challenge,

@@ -1,0 +1,37 @@
+.admin {
+  a:hover {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  .elephant-container {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background: white;
+    border-radius: 16px;
+
+    img {
+      height: 64px;
+      aspect-ratio: initial;
+    }
+  }
+
+  .breadcrumbs {
+    margin: 1.5rem 0;
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    padding-top: 2rem;
+  }
+
+  .table-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+  }
+}

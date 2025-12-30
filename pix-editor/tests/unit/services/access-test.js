@@ -195,4 +195,28 @@ module('Unit | Service | access', function (hooks) {
       assert.ok(accessResultAsEditor);
     });
   });
+
+  module('mayAccessAdministration', function () {
+    test('it should return `false` when is not admin', function (assert) {
+      // given
+      _stubAccessLevel(REPLICATOR, this.owner);
+
+      // when
+      const accessResult = accessService.mayAccessAdministration();
+
+      // then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `true` when is admin', function (assert) {
+      // given
+      _stubAccessLevel(ADMIN, this.owner);
+
+      // when
+      const accessResult = accessService.mayAccessAdministration();
+
+      // then
+      assert.ok(accessResult);
+    });
+  });
 });

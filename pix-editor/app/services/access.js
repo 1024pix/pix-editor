@@ -152,6 +152,10 @@ export default class AccessService extends Service {
     return this.isEditor() && challenge.isPrototype && challenge.isDraft;
   }
 
+  mayAccessAdministration() {
+    return this.isAdmin();
+  }
+
   mayAccessStaticCourses() {
     const level = this.config.accessLevel;
     return level >= READ_ONLY;

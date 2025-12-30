@@ -27,8 +27,10 @@ import tube from './models/tube';
 import tutorial from './models/tutorial';
 import user from './models/user';
 import whitelistedUrl from './models/whitelisted-url';
+import adminSchema from './models/admin-schema';
 
 export default {
+  adminSchema,
   api,
   area,
   attachment,
