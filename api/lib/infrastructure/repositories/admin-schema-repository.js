@@ -1,7 +1,8 @@
+import releaseSchema from './admin-schemas/release-schema.json' with { type: 'json' };
 import userSchema from './admin-schemas/user-schema.json' with { type: 'json' };
 
 export function list() {
-  return [userSchema].map(stripJsonSchemaReference);
+  return [userSchema, releaseSchema].map(stripJsonSchemaReference);
 }
 
 /**
