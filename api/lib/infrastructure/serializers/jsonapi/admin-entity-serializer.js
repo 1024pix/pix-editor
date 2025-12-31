@@ -7,8 +7,13 @@ export function serialize(entities, meta) {
     attributes: ['properties'],
     meta,
     transform({ id, type, entityName, ...properties }) {
+      let entityId = id;
+      if (ENTITIES_WITH_UNUSUAL_IDS.includes(entityName)) {
+        entityId = ID_GENERATORS[entityName](properties);
+      }
+
       return {
-        id: `${entityName}:${id}`,
+        id: `${entityName}:${entityId}`,
         type,
         properties: {
           id,
@@ -19,3 +24,11 @@ export function serialize(entities, meta) {
   });
   return serializer.serialize(entities);
 }
+
+const ID_GENERATORS = {
+  translations(translation) {
+    return `${translation.locale}:${translation.key}`;
+  },
+};
+
+const ENTITIES_WITH_UNUSUAL_IDS = Object.keys(ID_GENERATORS);
