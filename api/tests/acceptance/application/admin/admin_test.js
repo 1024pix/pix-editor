@@ -26,69 +26,71 @@ describe('Acceptance | Controller | admin', () => {
 
         // then
         expect(response.statusCode).to.equal(200);
-        expect(response.result).to.deep.equal({
-          data: [
-            {
-              id: 'user-schema',
-              type: 'admin-schemas',
-              attributes: {
-                label: 'Utilisateurs',
-                'entity-name': 'users',
-                editable: true,
-                deletable: true,
-                creatable: true,
-                fields: [
+        expect(response.result.data.map(({ id }) => id)).to.deep.equal([
+          'localized-challenge-schema',
+          'release-schema',
+          'translation-schema',
+          'user-schema',
+        ]);
+        expect(response.result.data.find((schema) => schema.id === 'user-schema')).to.deep.equal({
+          id: 'user-schema',
+          type: 'admin-schemas',
+          attributes: {
+            label: 'Utilisateurs',
+            'entity-name': 'users',
+            editable: true,
+            deletable: true,
+            creatable: true,
+            fields: [
+              {
+                key: 'id',
+                label: 'Identifiant',
+                type: 'number',
+              },
+              {
+                key: 'name',
+                label: 'Nom',
+                type: 'string',
+              },
+              {
+                key: 'trigram',
+                label: 'Trigramme',
+                type: 'string',
+              },
+              {
+                key: 'apiKey',
+                label: 'Clé API',
+                type: 'secret',
+              },
+              {
+                key: 'access',
+                label: 'Niveau d\'accès',
+                type: 'enum',
+                options: [
                   {
-                    key: 'id',
-                    label: 'Identifiant',
-                    type: 'number',
+                    value: 'admin',
+                    label: 'Administrateur',
                   },
                   {
-                    key: 'name',
-                    label: 'Nom',
-                    type: 'string',
+                    value: 'editor',
+                    label: 'Éditeur',
                   },
                   {
-                    key: 'trigram',
-                    label: 'Trigramme',
-                    type: 'string',
+                    value: 'readonly',
+                    label: 'Lecture seule',
                   },
                   {
-                    key: 'apiKey',
-                    label: 'Clé API',
-                    type: 'secret',
+                    value: 'readpixonly',
+                    label: 'Lecture Pix',
                   },
                   {
-                    key: 'access',
-                    label: 'Niveau d\'accès',
-                    type: 'enum',
-                    options: [
-                      {
-                        value: 'admin',
-                        label: 'Administrateur',
-                      },
-                      {
-                        value: 'editor',
-                        label: 'Éditeur',
-                      },
-                      {
-                        value: 'readonly',
-                        label: 'Lecture seule',
-                      },
-                      {
-                        value: 'readpixonly',
-                        label: 'Lecture Pix',
-                      },
-                      {
-                        value: 'replicator',
-                        label: 'Déclinateur',
-                      },
-                    ],
+                    value: 'replicator',
+                    label: 'Déclinateur',
                   },
                 ],
               },
-            },
-          ],
+            ],
+          },
         });
       });
     });

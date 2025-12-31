@@ -6,8 +6,8 @@ import userSchema from './admin-schemas/user-schema.json' with { type: 'json' };
 export function list() {
   return [
     localizedChallengeSchema,
-    translationSchema,
     releaseSchema,
+    translationSchema,
     userSchema,
   ].map(stripJsonSchemaReference);
 }
