@@ -9,6 +9,7 @@ import makeServer from '../mirage/config';
 export function setupMirage(hooks) {
   hooks.beforeEach(function () {
     this.server = makeServer({ environment: 'test' });
+    this.server.logging = true;
   });
 
   hooks.afterEach(async function () {
