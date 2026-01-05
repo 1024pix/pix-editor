@@ -42,46 +42,52 @@ export async function create(tutorial) {
   });
 }
 
-export async function update(tutorial) {
-  return knex.transaction(async (transaction) => {
-    await transaction(TABLE_NAME)
-      .update({
-        title: tutorial.title,
-        duration: tutorial.duration,
-        source: tutorial.source,
-        format: tutorial.format,
-        link: tutorial.link,
-        license: tutorial.license,
-        level: tutorial.level,
-        crush: tutorial.crush,
-        locale: tutorial.locale,
-        updatedAt: transaction.fn.now(),
-      })
-      .where('id', tutorial.id);
+export async function update(tutorial, { transaction } = {}) {
+  if (transaction) {
+    return doUpdate(tutorial, transaction);
+  } else {
+    return knex.transaction(async(transaction) => doUpdate(tutorial, transaction));
+  }
+}
 
+async function doUpdate(tutorial, transaction) {
+  await transaction(TABLE_NAME)
+    .update({
+      title: tutorial.title,
+      duration: tutorial.duration,
+      source: tutorial.source,
+      format: tutorial.format,
+      link: tutorial.link,
+      license: tutorial.license,
+      level: tutorial.level,
+      crush: tutorial.crush,
+      locale: tutorial.locale,
+      updatedAt: transaction.fn.now(),
+    })
+    .where('id', tutorial.id);
+
+  await transaction
+    .delete()
+    .from(TAGS_RELATION_TABLE_NAME)
+    .where('tutorialId', tutorial.id)
+    .whereNotIn('tutorialTagId', tutorial.tagAirtableIds);
+  if (tutorial.tagAirtableIds.length !== 0) {
     await transaction
-      .delete()
-      .from(TAGS_RELATION_TABLE_NAME)
-      .where('tutorialId', tutorial.id)
-      .whereNotIn('tutorialTagId', tutorial.tagAirtableIds);
-    if (tutorial.tagAirtableIds.length !== 0) {
-      await transaction
-        .insert(
-          tutorial.tagAirtableIds.map((tutorialTagId) => ({
-            tutorialId: tutorial.id,
-            tutorialTagId,
-            updatedAt: transaction.fn.now(),
-          })),
-        )
-        .into(TAGS_RELATION_TABLE_NAME)
-        .onConflict(['tutorialId', 'tutorialTagId'])
-        .merge({ updatedAt: transaction.fn.now() });
-    }
+      .insert(
+        tutorial.tagAirtableIds.map((tutorialTagId) => ({
+          tutorialId: tutorial.id,
+          tutorialTagId,
+          updatedAt: transaction.fn.now(),
+        })),
+      )
+      .into(TAGS_RELATION_TABLE_NAME)
+      .onConflict(['tutorialId', 'tutorialTagId'])
+      .merge({ updatedAt: transaction.fn.now() });
+  }
 
-    const dto = await selectTutorials(transaction).where('tutorials.id', tutorial.id).first();
+  const dto = await selectTutorials(transaction).where('tutorials.id', tutorial.id).first();
 
-    return toDomain(dto);
-  });
+  return toDomain(dto);
 }
 
 export async function get(id) {
@@ -136,8 +142,11 @@ export async function getMany(ids) {
   return dtos.map(toDomain);
 }
 
-export async function list() {
-  const dtos = await selectTutorials().orderBy('id');
+export async function list({ transaction, forUpdate = false } = {}) {
+  const query = selectTutorials(transaction).orderBy('id');
+  if (forUpdate) query.forUpdate();
+
+  const dtos = await query;
 
   return dtos.map(toDomain);
 }
