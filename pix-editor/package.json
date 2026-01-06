@@ -91,7 +91,7 @@
     "globals": "^16.5.0",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.1",
-    "jspdf": "^3.0.4",
+    "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.21",
     "mime": "^4.1.0",
