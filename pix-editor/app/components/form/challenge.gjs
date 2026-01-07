@@ -321,6 +321,8 @@ export default class ChallengeForm extends Component {
       { label: 'e-preuve', value: 'e-preuve' },
       { label: 'q-savoir', value: 'q-savoir' },
       { label: 'q-situation', value: 'q-situation' },
+      { label: 'e-rechinfo', value: 'e-rechinfo' },
+      { label: 'e-simulation', value: 'e-simulation' },
     ],
     declinable: [
       { label: 'facilement', value: 'facilement' },
