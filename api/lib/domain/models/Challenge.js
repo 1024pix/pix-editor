@@ -118,6 +118,8 @@ export class Challenge {
       E_PREUVE: 'e-preuve',
       Q_SAVOIR: 'q-savoir',
       Q_SITUATION: 'q-situation',
+      E_RECHINFO: 'e-rechinfo',
+      E_SIMULATION: 'e-simulation',
     };
   }
 
