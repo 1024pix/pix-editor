@@ -1,5 +1,29 @@
 
 
+## v4.5.0 (08/01/2026)
+
+
+### :rocket: Amélioration
+- [#1352](https://github.com/1024pix/pix-editor/pull/1352) [FEATURE] Script de migration des tutos Youtube vers app.pix.fr/youtube-video.html (PIX-20898).
+- [#1351](https://github.com/1024pix/pix-editor/pull/1351) [FEATURE] Ajout de 2 nouveaux types pédagogies pour les épreuves (PIX-20824).
+
+### :building_construction: Tech
+- [#1348](https://github.com/1024pix/pix-editor/pull/1348) [TECH] Afficher les logs des appels réseaux mirage dans le cadre des tests de PixEditor.
+
+### :arrow_up: Montée de version
+- [#1350](https://github.com/1024pix/pix-editor/pull/1350) [BUMP] Update dependency @1024pix/pix-ui to ^55.34.0 (pix-editor).
+- [#1349](https://github.com/1024pix/pix-editor/pull/1349) [BUMP] Update dependency jspdf to v4 [SECURITY].
+- [#1347](https://github.com/1024pix/pix-editor/pull/1347) [BUMP] Lock file maintenance (pix-editor).
+- [#1345](https://github.com/1024pix/pix-editor/pull/1345) [BUMP] Update dependency @1024pix/pix-ui to ^55.33.1 (pix-editor).
+- [#1346](https://github.com/1024pix/pix-editor/pull/1346) [BUMP] Lock file maintenance (api).
+- [#1337](https://github.com/1024pix/pix-editor/pull/1337) [BUMP] Lock file maintenance (pix-editor).
+- [#1329](https://github.com/1024pix/pix-editor/pull/1329) [BUMP] Update dependency @googleapis/sheets to v13 (api).
+- [#1344](https://github.com/1024pix/pix-editor/pull/1344) [BUMP] Update dependency @1024pix/pix-ui to ^55.33.0 (pix-editor).
+- [#1330](https://github.com/1024pix/pix-editor/pull/1330) [BUMP] Update Node.js to v24.12.0.
+- [#1343](https://github.com/1024pix/pix-editor/pull/1343) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.15 (pix-editor).
+- [#1342](https://github.com/1024pix/pix-editor/pull/1342) [BUMP] Update dependency qs to v6.14.1 [SECURITY].
+- [#1340](https://github.com/1024pix/pix-editor/pull/1340) [BUMP] Update dependency ember-cli-deprecation-workflow to v4 (pix-editor).
+
 ## v4.4.0 (23/12/2025)
 
 
