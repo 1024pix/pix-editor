@@ -102,7 +102,10 @@ export class Tutorial {
       return;
     }
 
-    const oldLink = new URL(HAS_PROTOCOL_PATTERN.test(this.link) ? this.link : `https://${this.link}`);
+    const linkWithProtocol = HAS_PROTOCOL_PATTERN.test(this.link) ? this.link : `https://${this.link}`;
+    const linkWithoutHtmlEntities = linkWithProtocol.replace(/&amp;/g, '&');
+
+    const oldLink = new URL(linkWithoutHtmlEntities);
     const videoId = youtubeDomain.getVideoId(oldLink);
 
     if (videoId == null) {

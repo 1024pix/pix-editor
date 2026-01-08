@@ -56,6 +56,7 @@ describe('Unit | Domain | Tutorial', () => {
         { given: 'https://www.youtube-nocookie.com/embed/youtubenocookie1videoId', expected: 'https://app.pix.fr/youtube-video.html?v=youtubenocookie1videoId' },
         { given: 'https://www.youtube-nocookie.com/embed/youtubenocookie3videoId?start=123', expected: 'https://app.pix.fr/youtube-video.html?v=youtubenocookie3videoId&start=123' },
         { given: 'https://www.youtube-nocookie.com/embed/youtubenocookie3videoId?start=123&end=456', expected: 'https://app.pix.fr/youtube-video.html?v=youtubenocookie3videoId&start=123&end=456' },
+        { given: 'https://www.youtube-nocookie.com/embed/youtubenocookie4videoId?si=trackingId&amp;start=22', expected: 'https://app.pix.fr/youtube-video.html?v=youtubenocookie4videoId&start=22' },
       ];
 
       const tutorials = links.map((link) => new Tutorial({ link: link.given }));
