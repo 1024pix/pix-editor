@@ -12,17 +12,25 @@ export async function filter({ competenceId, locale }) {
   return localizedFrameworkTubesDtos.map(_toDomain);
 }
 
-export async function save(localizedFrameworkTube) {
-  const [insertedLocalizedFrameworkTubes] = await knex('localized_framework_tubes')
-    .insert({
+export async function save(localizedFrameworkTubes, { transaction: knexConn = knex, onConflict = 'merge' } = {}) {
+  let query = knexConn('localized_framework_tubes')
+    .insert(localizedFrameworkTubes.map((localizedFrameworkTube) => ({
       id: localizedFrameworkTube.id,
       tubeId: localizedFrameworkTube.tubeId,
       maxLevel: localizedFrameworkTube.maxLevel,
       locale: localizedFrameworkTube.locale,
-    })
-    .onConflict('id')
-    .merge()
-    .returning('*');
+    })))
+    .onConflict('id');
+
+  if (onConflict === 'merge') {
+    query = query.merge();
+  } else {
+    query = query.ignore();
+  }
+
+  query = query.returning('*');
+
+  const [insertedLocalizedFrameworkTubes] = await query;
 
   return _toDomain(insertedLocalizedFrameworkTubes);
 }

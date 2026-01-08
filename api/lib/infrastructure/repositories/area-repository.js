@@ -39,8 +39,8 @@ export async function list() {
   return toDomainList(dtos, translations);
 }
 
-export async function listByFrameworkId(frameworkId) {
-  const [dtos, translations] = await Promise.all([selectAreas().where('frameworkId', frameworkId).orderBy('code'), translationRepository.listByModel(model)]);
+export async function listByFrameworkId(frameworkId, { transaction: knexConn } = {}) {
+  const [dtos, translations] = await Promise.all([selectAreas(knexConn).where('frameworkId', frameworkId).orderBy('code'), translationRepository.listByModel(model, { knexConn })]);
 
   return toDomainList(dtos, translations);
 }

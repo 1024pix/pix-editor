@@ -21,7 +21,7 @@ export async function upsert(request, h) {
   });
   localizeFrameworkTube.validate();
 
-  const createdLocalizedFrameworkTubes = await localizedFrameworksTubesRepository.save(localizeFrameworkTube);
+  const createdLocalizedFrameworkTubes = await localizedFrameworksTubesRepository.save([localizeFrameworkTube]);
   return h.response(localizedFrameworkTubesSerializer.serializeLocalizedFrameworkTubes(createdLocalizedFrameworkTubes)).created();
 }
 
