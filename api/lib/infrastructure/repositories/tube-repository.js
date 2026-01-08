@@ -22,7 +22,7 @@ export async function get(id) {
   return toDomain(dto, translations);
 }
 
-export async function listByCompetenceId(competenceId, { transaction: knexConn }) {
+export async function listByCompetenceId(competenceId, { transaction: knexConn = knex } = {}) {
   const dtos = await selectTubes(knexConn).where('thematics.competenceId', competenceId).orderBy('tubes.id');
 
   if (dtos.length === 0) return [];

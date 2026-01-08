@@ -30,9 +30,8 @@ export async function save(localizedFrameworkTubes, { transaction: knexConn = kn
 
   query = query.returning('*');
 
-  const [insertedLocalizedFrameworkTubes] = await query;
-
-  return _toDomain(insertedLocalizedFrameworkTubes);
+  const insertedLocalizedFrameworkTubes = await query;
+  return _toDomainList(insertedLocalizedFrameworkTubes);
 }
 
 export async function remove(id) {
@@ -41,4 +40,8 @@ export async function remove(id) {
 
 function _toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
+}
+
+function _toDomainList(dtos) {
+  return dtos.map((dto) => _toDomain(dto));
 }

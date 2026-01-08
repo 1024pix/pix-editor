@@ -62,17 +62,21 @@ describe('Acceptance | API | localized_framework_tubes | POST /api/localized-fra
     const { id: localizedFrameworkTubesId } = await knex('localized_framework_tubes').select('id').first();
 
     expect(response.statusCode).to.equal(201);
-    expect(response.result).to.deep.equal({
-      data: {
-        type: 'localized-framework-tubes',
-        id: localizedFrameworkTubesId.toString(),
-        attributes: {
-          'tube-id': 'tubeId',
-          'max-level': 2,
-          locale: 'nl',
-        },
+    expect(response.result).toStrictEqual(
+      {
+        data: [
+          {
+            type: 'localized-framework-tubes',
+            id: localizedFrameworkTubesId.toString(),
+            attributes: {
+              'tube-id': 'tubeId',
+              'max-level': 2,
+              locale: 'nl',
+            },
+          },
+        ],
       },
-    });
+    );
   });
 
   it('Should return bad request', async function() {
