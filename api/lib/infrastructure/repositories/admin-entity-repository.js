@@ -9,7 +9,7 @@ import { fetchPage } from '../utils/knex-utils.js';
  * @param {number} pagination.number
  * @returns {Promise<{ entities: object[], meta: object }>}
  */
-export async function getByEntityName(entityName, fields, pagination) {
+export async function listByEntityName(entityName, fields, pagination) {
   const getEntitiesQuery = knex(entityName).select(fields);
   const { results, pagination: meta } = await fetchPage(getEntitiesQuery, pagination);
 

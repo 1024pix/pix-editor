@@ -13,6 +13,13 @@ export function list() {
 }
 
 /**
+ * @param {string} name
+ */
+export function listByEntityName(name) {
+  return list().find(({ entityName }) => entityName === name);
+}
+
+/**
  * @function
  * @template T
  * @param {T} obj

@@ -13,13 +13,13 @@ export async function getEntities(request) {
   const { entityName } = request.params;
   const query = extractParameters(request.query, { page: { size: 10, number: 1 } });
 
-  const entitySchema = adminSchemaRepository.list().find((schema) => schema.entityName === entityName);
+  const entitySchema = adminSchemaRepository.listByEntityName(entityName);
   if (!entitySchema) {
     return Boom.notFound(`Entity with name '${entityName}' not found in admin schemas list`);
   }
   const fields = entitySchema.fields.map((field) => field.key);
 
-  const { entities, meta } = await adminEntityRepository.getByEntityName(entityName, fields, query.page);
+  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page);
 
   return adminEntitySerializer.serialize(entities, meta);
 }
