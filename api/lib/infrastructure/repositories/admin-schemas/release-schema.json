@@ -1,0 +1,21 @@
+{
+  "$schema": "./$schema.json",
+  "id": "release-schema",
+  "label": "Releases",
+  "entityName": "releases",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "fields": [
+    {
+      "key": "id",
+      "label": "Identifiant",
+      "type": "number"
+    },
+    {
+      "key": "createdAt",
+      "label": "Date de création",
+      "type": "timestamp"
+    }
+  ]
+}

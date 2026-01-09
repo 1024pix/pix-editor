@@ -5,6 +5,9 @@ import { Response } from 'miragejs';
 export default function routes() {
   this.namespace = 'api';
 
+  this.get('/admin/entities/:entity_name', ({ adminEntities }) => adminEntities.all());
+  this.get('/admin/schemas', ({ adminSchemas }) => adminSchemas.all());
+
   this.get('/users/me', ({ users }) => users.first());
   this.get('/config', ({ configs }) => configs.first());
 

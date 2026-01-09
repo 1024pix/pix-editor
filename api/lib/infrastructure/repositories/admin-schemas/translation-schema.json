@@ -1,0 +1,62 @@
+{
+  "$schema": "./$schema.json",
+  "id": "translation-schema",
+  "label": "Traductions",
+  "entityName": "translations",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "fields": [
+    {
+      "key": "key",
+      "label": "Clé",
+      "type": "string"
+    },
+    {
+      "key": "locale",
+      "label": "Locale",
+      "type": "string"
+    },
+    {
+      "key": "value",
+      "label": "Contenu",
+      "type": "string"
+    },
+    {
+      "key": "model",
+      "label": "Modèle",
+      "type": "enum",
+      "options": [
+        {
+          "label": "Épreuve",
+          "value": "challenge"
+        },
+        {
+          "label": "Acquis",
+          "value": "skill"
+        },
+        {
+          "label": "Sujet",
+          "value": "tube"
+        },
+        {
+          "label": "Thématique",
+          "value": "thematic"
+        },
+        {
+          "label": "Compétence",
+          "value": "competence"
+        },
+        {
+          "label": "Domaine",
+          "value": "area"
+        }
+      ]
+    },
+    {
+      "key": "entityId",
+      "label": "Identifiant de l'entité",
+      "type": "string"
+    }
+  ]
+}

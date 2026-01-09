@@ -1,0 +1,55 @@
+{
+  "$schema": "./$schema.json",
+  "id": "localized-challenge-schema",
+  "label": "Épreuves traduites",
+  "entityName": "localized_challenges",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "fields": [
+    {
+      "key": "id",
+      "label": "Identifiant",
+      "type": "number"
+    },
+    {
+      "key": "geography",
+      "label": "Géographie",
+      "type": "string"
+    },
+    {
+      "key": "embedUrl",
+      "label": "URL de l'embed",
+      "type": "string"
+    },
+    {
+      "key": "status",
+      "label": "Statut",
+      "type": "enum",
+      "options": [
+        {
+          "label": "Validé",
+          "value": "validé"
+        },
+        {
+          "label": "Proposé",
+          "value": "proposé"
+        },
+        {
+          "label": "Aucun",
+          "value": null
+        }
+      ]
+    },
+    {
+      "key": "locale",
+      "label": "Locale",
+      "type": "string"
+    },
+    {
+      "key": "challengeId",
+      "label": "Identifiant de l'épreuve",
+      "type": "string"
+    }
+  ]
+}

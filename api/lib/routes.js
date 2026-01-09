@@ -1,3 +1,4 @@
+import * as adminRoute from './application/admin/index.js';
 import * as attachmentsRoute from './application/attachments.js';
 import * as areasRoute from './application/areas.js';
 import * as challengesRoute from './application/challenges/index.js';
@@ -29,6 +30,7 @@ import * as usersRoute from './application/users.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
 export const routes = [
+  adminRoute,
   areasRoute,
   attachmentsRoute,
   challengesRoute,

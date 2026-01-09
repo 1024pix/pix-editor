@@ -77,6 +77,9 @@ export default class SidebarMain extends Component {
           <i class="chart bar icon"></i>
           Statistiques
         </LinkTo>
+        {{#if this.mayAccessAdministration}}
+          <LinkTo @route="admin"><i class="shield icon"></i> Administration</LinkTo>
+        {{/if}}
       </div>
       <div class="ui labelled icon menu">
         <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion
@@ -108,6 +111,10 @@ export default class SidebarMain extends Component {
 
   get areas() {
     return this.currentData.getAreas();
+  }
+
+  get mayAccessAdministration() {
+    return this.access.mayAccessAdministration();
   }
 
   get mayAccessStaticCourses() {

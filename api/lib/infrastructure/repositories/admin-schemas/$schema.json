@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Admin entity JSON schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "entityName": {
+      "type": "string"
+    },
+    "editable": {
+      "type": "boolean"
+    },
+    "deletable": {
+      "type": "boolean"
+    },
+    "creatable": {
+      "type": "boolean"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "enum": ["string", "number", "enum", "secret", "timestamp"]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": ["string", "null"]
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["value", "label"]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["key", "label", "type"]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["id", "label", "entityName", "editable", "deletable", "creatable", "fields"]
+}

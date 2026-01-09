@@ -33,6 +33,7 @@
 @use 'authenticated/whitelisted-urls/list' as whitelisted-urls-list;
 @use 'authenticated/whitelisted-urls/new' as whitelisted-urls-new;
 @use 'authenticated/synchronize-translations';
+@use 'components/admin';
 @use 'components/card';
 @use 'components/competence-header';
 @use 'components/competence-overview';

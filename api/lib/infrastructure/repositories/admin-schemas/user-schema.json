@@ -1,0 +1,58 @@
+{
+  "$schema": "./$schema.json",
+  "id": "user-schema",
+  "label": "Utilisateurs",
+  "entityName": "users",
+  "editable": true,
+  "deletable": true,
+  "creatable": true,
+  "fields": [
+    {
+      "key": "id",
+      "label": "Identifiant",
+      "type": "number"
+    },
+    {
+      "key": "name",
+      "label": "Nom",
+      "type": "string"
+    },
+    {
+      "key": "trigram",
+      "label": "Trigramme",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "label": "Clé API",
+      "type": "secret"
+    },
+    {
+      "key": "access",
+      "label": "Niveau d'accès",
+      "type": "enum",
+      "options": [
+        {
+          "value": "admin",
+          "label": "Administrateur"
+        },
+        {
+          "value": "editor",
+          "label": "Éditeur"
+        },
+        {
+          "value": "readonly",
+          "label": "Lecture seule"
+        },
+        {
+          "value": "readpixonly",
+          "label": "Lecture Pix"
+        },
+        {
+          "value": "replicator",
+          "label": "Déclinateur"
+        }
+      ]
+    }
+  ]
+}
