@@ -18,6 +18,11 @@ export async function listByEntityName(entityName, fields, pagination) {
   return { entities, meta };
 }
 
+export async function save(entityName, entityToSave) {
+  const [record] = await knex(entityName).insert(entityToSave, ['*']);
+  return record;
+}
+
 function toDomain(entityName) {
   return (entity) => ({
     entityName,

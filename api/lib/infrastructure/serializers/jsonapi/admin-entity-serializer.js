@@ -1,6 +1,6 @@
 import Jsonapi from 'jsonapi-serializer';
 
-const { Serializer } = Jsonapi;
+const { Deserializer, Serializer } = Jsonapi;
 
 export function serialize(entities, meta) {
   const serializer = new Serializer('admin-entity', {
@@ -20,6 +20,18 @@ export function serialize(entities, meta) {
     },
   });
   return serializer.serialize(entities);
+}
+
+export async function deserialize(entity) {
+  const deserializer = new Deserializer({
+    keyForAttribute: 'camelCase',
+    transform(entity) {
+      return entity;
+    },
+  });
+
+  const data = await deserializer.deserialize(entity);
+  return data.properties;
 }
 
 const ID_GENERATORS = {
