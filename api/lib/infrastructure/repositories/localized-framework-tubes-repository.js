@@ -9,7 +9,8 @@ export async function filter({ competenceId, locale }) {
     .join('localized_framework_tubes', 'localized_framework_tubes.tubeId', 'tubes.id')
     .where('thematics.competenceId', competenceId)
     .where('localized_framework_tubes.locale', locale);
-  return localizedFrameworkTubesDtos.map(_toDomain);
+
+  return toDomainList(localizedFrameworkTubesDtos);
 }
 
 export async function save(localizedFrameworkTubes, { transaction: knexConn = knex, onConflict = 'merge' } = {}) {
@@ -31,17 +32,18 @@ export async function save(localizedFrameworkTubes, { transaction: knexConn = kn
   query = query.returning('*');
 
   const insertedLocalizedFrameworkTubes = await query;
-  return _toDomainList(insertedLocalizedFrameworkTubes);
+
+  return toDomainList(insertedLocalizedFrameworkTubes);
 }
 
 export async function remove(id) {
   return knex.delete().from('localized_framework_tubes').where('id', id);
 }
 
-function _toDomain(dto) {
+function toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
 }
 
-function _toDomainList(dtos) {
-  return dtos.map((dto) => _toDomain(dto));
+function toDomainList(dtos) {
+  return dtos.map((dto) => toDomain(dto));
 }
