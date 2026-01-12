@@ -10,6 +10,6 @@ describe('Integration | Repository | localized-framework-tubes-repository', func
       tubeId: 'unknown',
     };
 
-    await expect(localizedFrameworksTubesRepository.save(localizedFrameworkTubesDTO)).rejects.to.contain({ constraint: 'localized_framework_tubes_tubeid_foreign' });
+    await expect(localizedFrameworksTubesRepository.save([localizedFrameworkTubesDTO])).rejects.to.contain({ constraint: 'localized_framework_tubes_tubeid_foreign' });
   });
 });

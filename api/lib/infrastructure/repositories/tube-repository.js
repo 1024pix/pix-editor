@@ -8,8 +8,8 @@ import { knex } from '../../../db/knex-database-connection.js';
 const model = 'tube';
 const TABLE_NAME = 'tubes';
 
-export async function list() {
-  const [dtos, translations] = await Promise.all([selectTubes().orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model)]);
+export async function list({ transaction: knexConn } = {}) {
+  const [dtos, translations] = await Promise.all([selectTubes(knexConn).orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model, { knexConn })]);
 
   return toDomainList(dtos, translations);
 }
@@ -22,14 +22,15 @@ export async function get(id) {
   return toDomain(dto, translations);
 }
 
-export async function listByCompetenceId(competenceId) {
-  const dtos = await selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id');
+export async function listByCompetenceId(competenceId, { transaction: knexConn } = {}) {
+  const dtos = await selectTubes(knexConn).where('thematics.competenceId', competenceId).orderBy('tubes.id');
 
   if (dtos.length === 0) return [];
 
   const translations = await translationRepository.listByEntities(
     model,
     dtos.map(({ id }) => id),
+    { knexConn },
   );
 
   return toDomainList(dtos, translations);

@@ -9,28 +9,41 @@ export async function filter({ competenceId, locale }) {
     .join('localized_framework_tubes', 'localized_framework_tubes.tubeId', 'tubes.id')
     .where('thematics.competenceId', competenceId)
     .where('localized_framework_tubes.locale', locale);
-  return localizedFrameworkTubesDtos.map(_toDomain);
+
+  return toDomainList(localizedFrameworkTubesDtos);
 }
 
-export async function save(localizedFrameworkTube) {
-  const [insertedLocalizedFrameworkTubes] = await knex('localized_framework_tubes')
-    .insert({
+export async function save(localizedFrameworkTubes, { transaction: knexConn = knex, onConflict = 'merge' } = {}) {
+  let query = knexConn('localized_framework_tubes')
+    .insert(localizedFrameworkTubes.map((localizedFrameworkTube) => ({
       id: localizedFrameworkTube.id,
       tubeId: localizedFrameworkTube.tubeId,
       maxLevel: localizedFrameworkTube.maxLevel,
       locale: localizedFrameworkTube.locale,
-    })
-    .onConflict('id')
-    .merge()
-    .returning('*');
+    })))
+    .onConflict('id');
 
-  return _toDomain(insertedLocalizedFrameworkTubes);
+  if (onConflict === 'merge') {
+    query = query.merge();
+  } else {
+    query = query.ignore();
+  }
+
+  query = query.returning('*');
+
+  const insertedLocalizedFrameworkTubes = await query;
+
+  return toDomainList(insertedLocalizedFrameworkTubes);
 }
 
 export async function remove(id) {
   return knex.delete().from('localized_framework_tubes').where('id', id);
 }
 
-function _toDomain(dto) {
+function toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
+}
+
+function toDomainList(dtos) {
+  return dtos.map((dto) => toDomain(dto));
 }
