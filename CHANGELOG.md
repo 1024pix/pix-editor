@@ -1,5 +1,20 @@
 
 
+## v4.6.0 (12/01/2026)
+
+
+### :rocket: Amélioration
+- [#1341](https://github.com/1024pix/pix-editor/pull/1341) [FEATURE] Afficher la liste des entités dans un nouveau back-office d'administration (PIX-21036).
+
+### :building_construction: Tech
+- [#1354](https://github.com/1024pix/pix-editor/pull/1354) [TECH] Ajout d'un script pour créer des entité localizedFrameworkTubes (PIX-20981).
+
+### :bug: Correction
+- [#1361](https://github.com/1024pix/pix-editor/pull/1361) [BUGFIX] Impossible de vider les champs facultatifs d’un acquis (PIX-21046).
+
+### :arrow_up: Montée de version
+- [#1359](https://github.com/1024pix/pix-editor/pull/1359) [BUMP] Lock file maintenance (api).
+
 ## v4.5.0 (08/01/2026)
 
 
