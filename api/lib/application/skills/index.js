@@ -93,10 +93,10 @@ export async function register(server) {
             data: Joi.object({
               type: Joi.string().required().equal('skills'),
               attributes: Joi.object({
-                description: Joi.string().allow(null),
+                description: Joi.string().empty('').allow(null).default(null),
                 'description-status': Joi.string().allow(null),
-                clue: Joi.string().allow(null),
-                'clue-en': Joi.string().allow(null),
+                clue: Joi.string().empty('').allow(null),
+                'clue-en': Joi.string().empty('').allow(null),
                 'clue-status': Joi.string().empty('').allow(null),
                 i18n: Joi.string().allow(null),
                 status: Joi.string().allow(null),
