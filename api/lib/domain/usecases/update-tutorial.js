@@ -1,3 +1,4 @@
+import { logger } from '../../infrastructure/logger.js';
 import { NotFoundError } from '../errors.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
@@ -7,6 +8,9 @@ export async function updateTutorial(tutorialData, dependencies = { tutorialRepo
     throw new NotFoundError('unknown tutorial id');
   }
   tutorial.update(tutorialData);
+  if (tutorial.isYoutubeVideoLink) {
+    tutorial.rewriteYoutubeVideoLink({ logger });
+  }
   const updatedTutorial = await dependencies.tutorialRepository.update(tutorial);
   await updatePixApiReleaseCache.onTutorialUpdated(updatedTutorial);
   return updatedTutorial;
