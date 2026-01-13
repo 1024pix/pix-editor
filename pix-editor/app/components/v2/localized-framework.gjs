@@ -22,7 +22,7 @@ export default class LocalizedFramework extends Component {
 
   @action
   getMaxLevelLocalizedFrameworkTube(tubeId) {
-    return this.tubeMaxLevelById[tubeId] ?? 8;
+    return this.tubeMaxLevelById[tubeId] ?? 0;
   }
 
   @action
