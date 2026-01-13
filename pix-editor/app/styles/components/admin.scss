@@ -33,4 +33,28 @@
   .pagination {
     margin-top: 1rem;
   }
+
+  .secret-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &__secret {
+      font-family: monospace;
+      transition: filter 0.15s ease;
+
+      * {
+        font-family: monospace;
+      }
+
+      &--blurred {
+        filter: blur(6px);
+        cursor: not-allowed;
+        background: rgb(0 0 0 / 0.15);
+        border-radius: 100px;
+        color: transparent;
+        user-select: none;
+      }
+    }
+  }
 }
