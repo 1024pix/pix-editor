@@ -1,6 +1,8 @@
+import _ from 'lodash';
+
 import { knex } from '../../../db/knex-database-connection.js';
 import { Translation } from '../../domain/models/index.js';
-import _ from 'lodash';
+import { LocalizedEntity } from '../../domain/readmodels/index.js';
 import { escapeLikeWildcards } from './sql-utils.js';
 
 const projection = [
@@ -56,21 +58,23 @@ export async function list() {
   return translationDtos.map(_toDomain);
 }
 
-export async function search({ entity, fields, search, limit }) {
+export async function searchLocalizedEntities({ model, fields, search, limit }) {
   const query = knex('translations')
-    .pluck('entityId')
+    .select('model', 'entityId', 'locale')
     .distinct()
     .whereILike('value', `%${escapeLikeWildcards(search)}%`)
     .andWhere(function() {
       for (const field of fields) {
-        this.orWhereLike('key', `${entity}.%.${field}`);
+        this.orWhereLike('key', `${model}.%.${field}`);
       }
     })
     .orderBy('entityId');
 
   if (limit) query.limit(limit);
 
-  return query;
+  const dtos = await query;
+
+  return dtos.map((dto) => new LocalizedEntity(dto));
 }
 
 function _toDomain(dto) {

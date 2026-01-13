@@ -17,6 +17,7 @@ import * as notesRoute from './application/notes.js';
 import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
+import * as searchRoute from './application/search/index.js';
 import * as skillsRoute from './application/skills/index.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
@@ -48,6 +49,7 @@ export const routes = [
   phraseRoute,
   releasesRoute,
   replicationDataRoute,
+  searchRoute,
   skillsRoute,
   staticCoursesRoute,
   staticCourseTagsRoute,

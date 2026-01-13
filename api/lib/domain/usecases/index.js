@@ -29,6 +29,7 @@ export * from './list-tubes.js';
 export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';
 export * from './search-tags.js';
+export * from './search.js';
 export * from './search-tutorials.js';
 export * from './update-attachment.js';
 export * from './update-challenge.js';

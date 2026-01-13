@@ -1,6 +1,7 @@
 import { beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
+import { LocalizedEntity } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Integration | Repository | translation-repository', function() {
   context('#save', function() {
@@ -73,7 +74,7 @@ describe('Integration | Repository | translation-repository', function() {
     });
   });
 
-  context('#search', function() {
+  context('#searchLocalizedEntities', function() {
     it('should search for fields in entities', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
@@ -94,14 +95,20 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await translationRepository.search({
-        entity: 'entity',
+      const entityIds = await translationRepository.searchLocalizedEntities({
+        model: 'entity',
         fields: ['key'],
         search: 'coucou',
       });
 
       // then
-      expect(entityIds).to.deep.equal(['entityId1']);
+      expect(entityIds).toStrictEqual([
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId1',
+          locale: 'fr',
+        }),
+      ]);
     });
 
     it('should return distinct entity ids', async function() {
@@ -119,14 +126,20 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await translationRepository.search({
-        entity: 'entity',
+      const entityIds = await translationRepository.searchLocalizedEntities({
+        model: 'entity',
         fields: ['key', 'key2'],
         search: 'coucou',
       });
 
       // then
-      expect(entityIds).to.deep.equal(['entityId1']);
+      expect(entityIds).toStrictEqual([
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId1',
+          locale: 'fr',
+        }),
+      ]);
     });
 
     it('should return entity ids sorted alphabetically', async function() {
@@ -144,14 +157,25 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await translationRepository.search({
-        entity: 'entity',
+      const entityIds = await translationRepository.searchLocalizedEntities({
+        model: 'entity',
         fields: ['key'],
         search: 'coucou',
       });
 
       // then
-      expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
+      expect(entityIds).toStrictEqual([
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId1',
+          locale: 'fr',
+        }),
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId2',
+          locale: 'fr',
+        }),
+      ]);
     });
 
     it('should return a limited number of ids', async function() {
@@ -169,15 +193,21 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await translationRepository.search({
-        entity: 'entity',
+      const entityIds = await translationRepository.searchLocalizedEntities({
+        model: 'entity',
         fields: ['key'],
         search: 'coucou',
         limit: 1,
       });
 
       // then
-      expect(entityIds).to.deep.equal(['entityId1']);
+      expect(entityIds).toStrictEqual([
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId1',
+          locale: 'fr',
+        }),
+      ]);
     });
 
     it('should perform a case-insensitive search', async function() {
@@ -195,15 +225,26 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await translationRepository.search({
-        entity: 'entity',
+      const entityIds = await translationRepository.searchLocalizedEntities({
+        model: 'entity',
         fields: ['key'],
         search: 'coucou',
         limit: 2,
       });
 
       // then
-      expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
+      expect(entityIds).toStrictEqual([
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId1',
+          locale: 'fr',
+        }),
+        new LocalizedEntity({
+          model: 'entity',
+          entityId: 'entityId2',
+          locale: 'fr',
+        }),
+      ]);
     });
 
     describe('when search string contains wildcard characters', () => {
@@ -231,14 +272,20 @@ describe('Integration | Repository | translation-repository', function() {
         const searchString = '%';
 
         // when
-        const entityIds = await translationRepository.search({
-          entity: 'entity',
+        const entityIds = await translationRepository.searchLocalizedEntities({
+          model: 'entity',
           fields: ['key'],
           search: searchString,
         });
 
         // then
-        expect(entityIds).to.deep.equal(['entityId2']);
+        expect(entityIds).toStrictEqual([
+          new LocalizedEntity({
+            model: 'entity',
+            entityId: 'entityId2',
+            locale: 'fr',
+          }),
+        ]);
       });
 
       it('should escape _ character', async () => {
@@ -246,14 +293,20 @@ describe('Integration | Repository | translation-repository', function() {
         const searchString = 'N_n';
 
         // when
-        const entityIds = await translationRepository.search({
-          entity: 'entity',
+        const entityIds = await translationRepository.searchLocalizedEntities({
+          model: 'entity',
           fields: ['key'],
           search: searchString,
         });
 
         // then
-        expect(entityIds).to.deep.equal(['entityId1']);
+        expect(entityIds).toStrictEqual([
+          new LocalizedEntity({
+            model: 'entity',
+            entityId: 'entityId1',
+            locale: 'fr',
+          }),
+        ]);
       });
     });
   });
