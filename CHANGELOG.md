@@ -1,5 +1,12 @@
 
 
+## v4.7.0 (14/01/2026)
+
+
+### :rocket: Amélioration
+- [#1357](https://github.com/1024pix/pix-editor/pull/1357) [FEATURE] Changement de la valeur par défaut de maxLevel de localizedFrameworkTubes (PIX-20937).
+- [#1353](https://github.com/1024pix/pix-editor/pull/1353) [FEATURE] Enregistrement de tutos Youtube (PIX-20899).
+
 ## v4.6.0 (12/01/2026)
 
 
