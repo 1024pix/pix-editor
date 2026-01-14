@@ -134,13 +134,14 @@ class TubeOverview {
   }
 
   static buildForChallengesProduction({ tube, skills, challenges, locale, localizedFrameworkTube }) {
-    const localizedFrameworkSkills = localizedFrameworkTube ? skills.filter((skill) => skill.level <= localizedFrameworkTube.maxLevel) : skills;
-    const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(localizedFrameworkSkills);
+    const tubeSkills = skills.filter((skill) => skill.tubeId === tube.id);
+    const localizedFrameworkSkills = TubeOverview.getLocalizedFrameworkSkills({ skills: tubeSkills, locale, localizedFrameworkTube });
+    const skillsByLevel = arrangeSkillsByLevel(localizedFrameworkSkills);
 
     return new TubeOverview({
       airtableId: tube.airtableId,
       name: tube.name,
-      skillOverviews: skillsByTubeIdAndLevel[tube.id]?.map((skills) =>
+      skillOverviews: skillsByLevel?.map((skills) =>
         SkillOverview.buildForChallengesProduction({
           skill: skills?.[0],
           challenges,
@@ -150,13 +151,20 @@ class TubeOverview {
     });
   }
 
+  static getLocalizedFrameworkSkills({ skills, locale, localizedFrameworkTube }) {
+    if (!locale) return skills;
+    if (!localizedFrameworkTube) return [];
+    return skills.filter((skill) => skill.level <= localizedFrameworkTube.maxLevel);
+  }
+
   static buildForChallengesWorkbench({ tube, skills, challenges }) {
-    const skillsByTubeIdAndLevel = arrangeSkillsByTubeIdAndLevel(skills);
+    const tubeSkills = skills.filter((skill) => skill.tubeId === tube.id);
+    const skillsByLevel = arrangeSkillsByLevel(tubeSkills);
 
     return new TubeOverview({
       airtableId: tube.airtableId,
       name: tube.name,
-      skillOverviews: skillsByTubeIdAndLevel[tube.id]?.map((skills) =>
+      skillOverviews: skillsByLevel?.map((skills) =>
         SkillOverview.buildForChallengesWorkbench({ skills, challenges }),
       ),
     });
@@ -240,20 +248,19 @@ function byIndex({ index: index1 }, { index: index2 }) {
   return index1 - index2;
 }
 
-function arrangeSkillsByTubeIdAndLevel(skills) {
-  const skillsByTubeIdAndLevel = {};
+function arrangeSkillsByLevel(skills) {
+  if (skills.length === 0) return null;
 
-  for (const skill of skills) {
-    if (!skillsByTubeIdAndLevel[skill.tubeId]) {
-      skillsByTubeIdAndLevel[skill.tubeId] = new Array(7).fill(null);
-    }
-    if (!skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1]) {
-      skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1] = [];
-    }
-    skillsByTubeIdAndLevel[skill.tubeId][skill.level - 1].push(skill);
-  }
+  const skillsByLevel = new Array(7).fill(null);
 
-  return skillsByTubeIdAndLevel;
+  skills.forEach((skill) => {
+    if (!skillsByLevel[skill.level - 1]) {
+      skillsByLevel[skill.level - 1] = [];
+    }
+    skillsByLevel[skill.level - 1].push(skill);
+  });
+
+  return skillsByLevel;
 }
 
 function isProductionPrototypeOf(skill) {
