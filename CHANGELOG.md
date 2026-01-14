@@ -1,5 +1,11 @@
 
 
+## v4.7.1 (14/01/2026)
+
+
+### :rocket: Amélioration
+- [#1364](https://github.com/1024pix/pix-editor/pull/1364) [FEATURE] Filtrer la vue épreuves production avec le cadre de traduction (PIX-20937).
+
 ## v4.7.0 (14/01/2026)
 
 
