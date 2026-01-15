@@ -88,7 +88,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-qunit": "^8.2.5",
     "file-saver": "2.0.5",
-    "globals": "^16.5.0",
+    "globals": "^17.0.0",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.1",
     "jspdf": "^4.0.0",
