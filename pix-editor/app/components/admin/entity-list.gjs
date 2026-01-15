@@ -1,21 +1,12 @@
 import Component from '@glimmer/component';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { fn } from '@ember/helper';
-import { eq, or } from 'ember-truth-helpers';
+
+import AdminEntityCell from './entity-cell';
 
 export default class AdminEntityList extends Component {
   get lowercaseEntityName() {
     return this.args.schema.label.toLowerCase();
-  }
-
-  getKeyValue(row, key) {
-    return row.properties[key];
-  }
-
-  getEnumLabel(row, field) {
-    return field.options.find((option) => option.value === row.properties[field.key])?.label;
   }
 
   getColumnType(field) {
@@ -40,13 +31,7 @@ export default class AdminEntityList extends Component {
               {{field.label}}
             </:header>
             <:cell>
-              {{#if (eq field.type "enum")}}
-                <PixTag>
-                  {{this.getEnumLabel row field}}
-                </PixTag>
-              {{else}}
-                {{this.getKeyValue row field.key}}
-              {{/if}}
+              <AdminEntityCell @row={{row}} @field={{field}} />
             </:cell>
           </PixTableColumn>
         {{/each}}
