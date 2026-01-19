@@ -45,7 +45,7 @@ describe('Application | Route | Search', () => {
     databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
     databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-    databaseBuilder.factory.buildSkill({ id: 'skillId1', level: 5, tubeId: 'tube1', status: 'en construction' });
+    databaseBuilder.factory.buildSkill({ id: 'skillId1', level: 5, tubeId: 'tube1', status: 'en construction', version: 6 });
     databaseBuilder.factory.buildChallenge(challenge);
     databaseBuilder.factory.buildChallenge(decli);
     databaseBuilder.factory.buildChallenge(localizedChallenge);
@@ -99,7 +99,6 @@ describe('Application | Route | Search', () => {
       const server = await createServer();
 
       // when
-      //
       const response = await server.inject({
         method: 'GET',
         url: '/api/search?filter[name]=@tube5',
@@ -117,7 +116,7 @@ describe('Application | Route | Search', () => {
               type: 'skill',
               status: 'en construction',
               title: '@tube5',
-              locale: null,
+              version: 6,
             },
           },
         ],

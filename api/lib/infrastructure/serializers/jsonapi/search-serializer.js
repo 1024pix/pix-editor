@@ -9,6 +9,7 @@ const serializer = new Serializer('search-result', {
     'type',
     'locale',
     'isPrimary',
+    'version',
   ],
 });
 

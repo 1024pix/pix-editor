@@ -17,6 +17,7 @@ export async function search(filter, dependencies = { skillRepository, challenge
       id: skill.id,
       title: skill.name,
       status: skill.status,
+      version: skill.version,
     }));
   }
 

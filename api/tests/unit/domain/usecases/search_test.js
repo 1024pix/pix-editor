@@ -29,11 +29,13 @@ describe('Unit | Domain | Use Case | search', () => {
             id: 'skill1',
             name: '@skill1',
             status: Skill.STATUSES.EN_CONSTRUCTION,
+            version: 1,
           }),
           domainBuilder.buildSkill({
             id: 'skill2',
             name: '@skill2',
             status: Skill.STATUSES.ACTIF,
+            version: 2,
           }),
         ]),
       };
@@ -48,14 +50,14 @@ describe('Unit | Domain | Use Case | search', () => {
           id: 'skill1',
           status: Skill.STATUSES.EN_CONSTRUCTION,
           title: '@skill1',
-          locale: null,
+          version: 1,
         }),
         new SearchResult({
           type: 'skill',
           id: 'skill2',
           status: Skill.STATUSES.ACTIF,
           title: '@skill2',
-          locale: null,
+          version: 2,
         }),
       ]);
 
