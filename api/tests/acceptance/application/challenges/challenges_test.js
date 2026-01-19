@@ -28,51 +28,34 @@ describe('Acceptance | Controller | challenges-controller', () => {
         competenceId: 'competence1',
       });
 
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-      databaseBuilder.factory.buildSkill({ id: challenge1.skillId, tubeId: 'tube1' });
-      databaseBuilder.factory.buildChallenge(challenge1);
+      databaseBuilder.factory.buildChallengeInGroup({
+        challenge: challenge1,
+        localizedChallenge: {
+          locale: 'fr',
+          embedUrl: 'http://example.com/my_embed.html',
+          geography: 'BR',
+          urlsToConsult: ['truc.fr'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
+        },
+        challengeTranslations: {
+          instruction: "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
+          alternativeInstruction: 'Débrouille toi',
+          embedTitle: 'Epreuve de selection de dossier',
+          illustrationAlt: 'La belle image',
+          solution: '1, 5',
+          solutionToDisplay: '1',
+          proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
+        },
+      });
+
       databaseBuilder.factory.buildChallenge(challenge2);
 
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.instruction',
-        locale: 'fr',
-        value:
-          "Les moteurs de recherche affichent certains liens en raison d'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?",
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.alternativeInstruction',
-        locale: 'fr',
-        value: 'Débrouille toi',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.embedTitle',
-        locale: 'fr',
-        value: 'Epreuve de selection de dossier',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.illustrationAlt',
-        locale: 'fr',
-        value: 'La belle image',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.solution',
-        locale: 'fr',
-        value: '1, 5',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.solutionToDisplay',
-        locale: 'fr',
-        value: '1',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.1.proposals',
-        locale: 'fr',
-        value: '- 1\n- 2\n- 3\n- 4\n- 5',
-      });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.instruction',
         locale: 'fr',
@@ -110,21 +93,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: '1',
-        challengeId: '1',
-        locale: 'fr',
-        embedUrl: 'http://example.com/my_embed.html',
-        geography: 'BR',
-        urlsToConsult: ['truc.fr'],
-        requireGafamWebsiteAccess: true,
-        isIncompatibleIpadCertif: true,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-        isAwarenessChallenge: true,
-        toRephrase: true,
-        hasEmbedInternalValidation: true,
-        noValidationNeeded: true,
-      });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
         challengeId: '2',
