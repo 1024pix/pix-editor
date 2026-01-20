@@ -37,6 +37,7 @@ export function buildChallengeDatasourceObject({
   madeObsoleteAt = '2023-04-04T10:47:05Z',
   shuffled = false,
   contextualizedFields = [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
+  isQualityOk = false,
 } = {}) {
   return {
     id,
@@ -77,5 +78,6 @@ export function buildChallengeDatasourceObject({
     madeObsoleteAt: typeof madeObsoleteAt === 'string' ? new Date(madeObsoleteAt) : madeObsoleteAt,
     shuffled,
     contextualizedFields,
+    isQualityOk,
   };
 }

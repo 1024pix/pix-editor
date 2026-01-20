@@ -25,6 +25,7 @@ describe('Integration | Repository | challenge-repository', () => {
         t3StatusAirtable: 'Activé',
         t3Status: true,
         status: Challenge.STATUSES.PROPOSE,
+        isQualityOk: false,
         embedHeight: 678,
         timer: 789,
         format: Challenge.FORMATS.MOTS,
@@ -143,6 +144,7 @@ describe('Integration | Repository | challenge-repository', () => {
           genealogy: challengeA_data.genealogy,
           geography: challengeA_data.geography,
           id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
           locales: challengeA_data.locales,
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
@@ -320,6 +322,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t3StatusAirtable: 'Activé',
           t3Status: true,
           status: Challenge.STATUSES.PROPOSE,
+          isQualityOk: false,
           embedUrl: 'embedUrl challengeB',
           embedHeight: null,
           timer: 145,
@@ -406,6 +409,7 @@ describe('Integration | Repository | challenge-repository', () => {
             genealogy: challengeA_data.genealogy,
             geography: challengeA_data.geography,
             id: challengeA_data.id,
+            isQualityOk: challengeA_data.isQualityOk,
             locales: challengeA_data.locales,
             localizedChallenges: [
               domainBuilder.buildLocalizedChallenge({
@@ -635,6 +639,7 @@ describe('Integration | Repository | challenge-repository', () => {
             genealogy: challengeA_data.genealogy,
             geography: challengeA_data.geography,
             id: challengeA_data.id,
+            isQualityOk: challengeA_data.isQualityOk,
             locales: challengeA_data.locales,
             localizedChallenges: [
               domainBuilder.buildLocalizedChallenge({
@@ -885,6 +890,7 @@ describe('Integration | Repository | challenge-repository', () => {
           genealogy: challengeA_data.genealogy,
           geography: challengeA_data.geography,
           id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
           locales: challengeA_data.locales,
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
@@ -1192,6 +1198,7 @@ describe('Integration | Repository | challenge-repository', () => {
           genealogy: challengeA_data.genealogy,
           geography: challengeA_data.geography,
           id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
           locales: challengeA_data.locales,
           localizedChallenges: [
             domainBuilder.buildLocalizedChallenge({
@@ -1942,6 +1949,7 @@ describe('Integration | Repository | challenge-repository', () => {
         skillId: 'skillId1',
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.PROPOSE,
+        isQualityOk: false,
         t1Status: false,
         t1StatusAirtable: 'Désactivé',
         t2Status: false,
@@ -2012,6 +2020,7 @@ describe('Integration | Repository | challenge-repository', () => {
         skillId: 'skillId2',
         spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
         status: Challenge.STATUSES.VALIDE,
+        isQualityOk: false,
         t1Status: true,
         t1StatusAirtable: 'Activé',
         t2Status: true,
@@ -2067,6 +2076,7 @@ describe('Integration | Repository | challenge-repository', () => {
           genealogy: challengeA_data.genealogy,
           geography: challengeA_data.geography,
           id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
           locales: challengeA_data.locales,
           localizedChallenges: challengeA.localizedChallenges,
           madeObsoleteAt: challengeA_data.madeObsoleteAt,
@@ -2180,7 +2190,6 @@ describe('Integration | Repository | challenge-repository', () => {
           validatedAt: null,
         },
       ]);
-
       await expect(knex.select('*').from('challenges').orderBy('id')).resolves.toStrictEqual([
         {
           accessibility1: challengeA_data.accessibility1,
@@ -2199,6 +2208,7 @@ describe('Integration | Repository | challenge-repository', () => {
           format: challengeA_data.format,
           genealogy: challengeA_data.genealogy,
           id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
           locales: challengeA_data.locales,
           madeObsoleteAt: challengeA_data.madeObsoleteAt,
           pedagogy: challengeA_data.pedagogy,
@@ -2233,6 +2243,7 @@ describe('Integration | Repository | challenge-repository', () => {
           format: challengeB_data.format,
           genealogy: challengeB_data.genealogy,
           id: challengeB_data.id,
+          isQualityOk: challengeB_data.isQualityOk,
           locales: challengeB_data.locales,
           madeObsoleteAt: challengeB_data.madeObsoleteAt,
           pedagogy: challengeB_data.pedagogy,
@@ -2434,6 +2445,7 @@ describe('Integration | Repository | challenge-repository', () => {
           format: challengeToCreate_data.format,
           genealogy: challengeToCreate_data.genealogy,
           id: challenge.id,
+          isQualityOk: challenge.isQualityOk,
           locales: challengeToCreate_data.locales,
           madeObsoleteAt: challengeToCreate_data.madeObsoleteAt,
           pedagogy: challengeToCreate_data.pedagogy,

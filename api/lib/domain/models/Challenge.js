@@ -27,6 +27,7 @@ export class Challenge {
     format,
     genealogy,
     id,
+    isQualityOk,
     locales,
     localizedChallenges,
     madeObsoleteAt,
@@ -65,6 +66,7 @@ export class Challenge {
     this.format = format ?? Challenge.FORMATS.MOTS;
     this.genealogy = genealogy;
     this.id = id;
+    this.isQualityOk = isQualityOk;
     this.madeObsoleteAt = madeObsoleteAt;
     this.pedagogy = pedagogy;
     this.responsive = responsive;

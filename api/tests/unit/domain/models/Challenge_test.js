@@ -721,6 +721,7 @@ describe('Unit | Domain | Challenge', () => {
         skills: ['videz moi'],
         spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.VALIDE,
+        isQualityOk: true,
         t1Status: 'super t1',
         t2Status: 'super t2',
         t3Status: 'super t3',
@@ -769,6 +770,7 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.shuffled).toEqual(challenge.shuffled);
       expect(clonedChallenge.skillId).toEqual(skillId);
       expect(clonedChallenge.status).toEqual(Challenge.STATUSES.PROPOSE);
+      expect(clonedChallenge.isQualityOk).toBeFalsy();
       expect(clonedChallenge.t1Status).toEqual(challenge.t1Status);
       expect(clonedChallenge.t2Status).toEqual(challenge.t2Status);
       expect(clonedChallenge.t3Status).toEqual(challenge.t3Status);

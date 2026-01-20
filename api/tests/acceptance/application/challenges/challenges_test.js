@@ -20,12 +20,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         geography: 'XX',
         files: [],
         competenceId: 'competence1',
+        isQualityOk: false,
       });
       const challenge2 = domainBuilder.buildChallengeDatasourceObject({
         id: '2',
         geography: 'XX',
         files: [],
         competenceId: 'competence1',
+        isQualityOk: true,
       });
 
       databaseBuilder.factory.buildChallengeInGroup({
@@ -182,6 +184,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'to-rephrase': true,
               'has-embed-internal-validation': true,
               'no-validation-needed': true,
+              'is-quality-ok': false,
             },
             relationships: {
               skill: {
@@ -291,6 +294,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'to-rephrase': false,
               'has-embed-internal-validation': false,
               'no-validation-needed': false,
+              'is-quality-ok': true,
             },
             relationships: {
               skill: {
@@ -651,6 +655,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'is-quality-ok': false,
           },
           relationships: {
             skill: {
@@ -1213,6 +1218,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'is-quality-ok': false,
           },
           relationships: {
             skill: {
@@ -1346,6 +1352,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           format: challengeData.format,
           genealogy: challengeData.genealogy,
           id: expect.stringMatching(/^challenge.*/),
+          isQualityOk: challengeData.isQualityOk,
           locales: challengeData.locales,
           madeObsoleteAt: null,
           pedagogy: challengeData.pedagogy,
@@ -1696,6 +1703,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         t1Status: false,
         t2Status: true,
         t3Status: false,
+        isQualityOk: true,
       };
 
       const server = await createServer();
@@ -1755,6 +1763,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'to-rephrase': false,
               'has-embed-internal-validation': true,
               'no-validation-needed': true,
+              'is-quality-ok': true,
             },
             relationships: {
               skill: {
@@ -1830,6 +1839,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'to-rephrase': false,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'is-quality-ok': true,
           },
           relationships: {
             skill: {
@@ -1975,6 +1985,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           format: newChallenge.format,
           genealogy: newChallenge.genealogy,
           id: newChallenge.id,
+          isQualityOk: newChallenge.isQualityOk,
           locales: newChallenge.locales,
           madeObsoleteAt: new Date(newChallenge.madeObsoleteAt),
           pedagogy: newChallenge.pedagogy,
@@ -2169,6 +2180,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'to-rephrase': true,
               'has-embed-internal-validation': false,
               'no-validation-needed': false,
+              'is-quality-ok': false,
             },
             relationships: {
               skill: {
@@ -2244,6 +2256,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': false,
             'no-validation-needed': false,
+            'is-quality-ok': false,
           },
           relationships: {
             skill: {
@@ -2378,6 +2391,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           format: challenge.format,
           genealogy: challenge.genealogy,
           id: challenge.id,
+          isQualityOk: challenge.isQualityOk,
           locales: challenge.locales,
           madeObsoleteAt: new Date(challenge.madeObsoleteAt),
           pedagogy: challenge.pedagogy,

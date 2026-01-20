@@ -44,6 +44,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       validatedAt: new Date('2023-02-02T14:17:30Z'),
       archivedAt: new Date('2023-03-03T10:47:05Z'),
       madeObsoleteAt: new Date('2023-04-04T10:47:05Z'),
+      isQualityOk: false,
     });
     expect(result.localizedChallenge).deep.equal({
       id: 'challenge1',
