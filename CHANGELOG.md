@@ -1,5 +1,26 @@
 
 
+## v4.8.0 (21/01/2026)
+
+
+### :rocket: Amélioration
+- [#1375](https://github.com/1024pix/pix-editor/pull/1375) [FEATURE] Recherche d’épreuves traduites (PIX-20098).
+- [#1373](https://github.com/1024pix/pix-editor/pull/1373) [FEATURE] Nouveau endpoint de recherche d’épreuves/acquis (PIX-21070).
+- [#1363](https://github.com/1024pix/pix-editor/pull/1363) [FEATURE] Cacher les valeurs des champs ayant le type "secret" dans le back-office (PIX-21074).
+
+### :building_construction: Tech
+- [#1362](https://github.com/1024pix/pix-editor/pull/1362) [TECH] Ajouter des databasebuilder qui crée l'ensemble d'une grappe pour un challenge donné. (tech-time).
+
+### :arrow_up: Montée de version
+- [#1372](https://github.com/1024pix/pix-editor/pull/1372) [BUMP] Lock file maintenance (api).
+- [#1368](https://github.com/1024pix/pix-editor/pull/1368) [BUMP] Update dependency browser-tools to v2.4.0 (.circleci).
+- [#1360](https://github.com/1024pix/pix-editor/pull/1360) [BUMP] Lock file maintenance (pix-editor).
+- [#1370](https://github.com/1024pix/pix-editor/pull/1370) [BUMP] Update Node.js to v24.13.0.
+- [#1366](https://github.com/1024pix/pix-editor/pull/1366) [BUMP] Update dependency p-queue to v9.1.0 (pix-editor).
+- [#1355](https://github.com/1024pix/pix-editor/pull/1355) [BUMP] Update dependency globals to v17 (api).
+- [#1365](https://github.com/1024pix/pix-editor/pull/1365) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.16 (pix-editor).
+- [#1356](https://github.com/1024pix/pix-editor/pull/1356) [BUMP] Update dependency globals to v17 (pix-editor).
+
 ## v4.7.1 (14/01/2026)
 
 
