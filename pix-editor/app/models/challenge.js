@@ -31,6 +31,7 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
+  @attr isQualityOk;
   @attr({
     defaultValue: function () {
       return [];
@@ -83,6 +84,10 @@ export default class ChallengeModel extends Model {
       ARCHIVE: 'archivé',
       PERIME: 'périmé',
     };
+  }
+
+  static get QUALITY_OK() {
+    return this.isQualityOk;
   }
 
   static get GENEALOGIES() {

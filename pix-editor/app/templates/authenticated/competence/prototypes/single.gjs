@@ -15,6 +15,7 @@ import Image from 'pixeditor/components/pop-in/image';
 import Changelog from 'pixeditor/components/pop-in/changelog';
 import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
 import SelectLocation from 'pixeditor/components/pop-in/select-location';
+
 <template>
   <ChallengeHeader
     @class={{@controller.challenge.statusCSS}}
@@ -58,7 +59,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
                 {{#if @controller.mayValidateQuality}}
                   <button class="ui button validate item" {{on "click" @controller.validateQuality}} type="button">
                     <i class="checkmark icon"></i>
-                    {{t "common.validate-quality"}}
+                    Valider qualité
                   </button>
                 {{/if}}
                 {{#if @controller.mayArchive}}
