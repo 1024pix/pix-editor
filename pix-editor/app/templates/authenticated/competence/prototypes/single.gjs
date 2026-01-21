@@ -55,6 +55,12 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
                     {{t "common.validate"}}
                   </button>
                 {{/if}}
+                {{#if @controller.mayValidateQuality}}
+                  <button class="ui button validate item" {{on "click" @controller.validateQuality}} type="button">
+                    <i class="checkmark icon"></i>
+                    {{t "common.validate-quality"}}
+                  </button>
+                {{/if}}
                 {{#if @controller.mayArchive}}
                   <button class="ui button archive item" {{on "click" @controller.archive}} type="button">
                     <i class="archive icon"></i>

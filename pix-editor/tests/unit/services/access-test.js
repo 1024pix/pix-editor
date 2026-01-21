@@ -219,4 +219,58 @@ module('Unit | Service | access', function (hooks) {
       assert.ok(accessResult);
     });
   });
+
+  module('mayValidateQuality', function () {
+    module('when user is editor', function (hooks) {
+      hooks.beforeEach(function () {
+        _stubAccessLevel(EDITOR, this.owner);
+      });
+      test('it should return false if challenge is not validated', function (assert) {
+        // given
+        const draftChallenge = EmberObject.create({
+          id: 'rec123656',
+          name: 'deletedChallenge',
+          isValidated: false,
+        });
+
+        // when
+        const accessResult = accessService.mayValidateQuality(draftChallenge);
+
+        // then
+        assert.notOk(accessResult);
+      });
+
+      test('it should return true if challenge is validated and user is Editor', function (assert) {
+        // given
+        const draftChallenge = EmberObject.create({
+          id: 'rec123656',
+          name: 'deletedChallenge',
+          isValidated: true,
+        });
+
+        // when
+        const accessResult = accessService.mayValidateQuality(draftChallenge);
+
+        // then
+        assert.ok(accessResult);
+      });
+    });
+
+    test('it should return false if challenge is validated and user is lower than Editor level', function (assert) {
+      // given
+      _stubAccessLevel(REPLICATOR, this.owner);
+
+      const draftChallenge = EmberObject.create({
+        id: 'rec123656',
+        name: 'deletedChallenge',
+        isValidated: true,
+      });
+
+      // when
+      const accessResult = accessService.mayValidateQuality(draftChallenge);
+
+      // then
+      assert.notOk(accessResult);
+    });
+  });
 });

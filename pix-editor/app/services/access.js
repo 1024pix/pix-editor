@@ -116,6 +116,10 @@ export default class AccessService extends Service {
     return this.isAdmin() && challenge.isDraft && !challenge.isWorkbench;
   }
 
+  mayValidateQuality(challenge) {
+    return this.isEditor() && challenge.isValidated;
+  }
+
   mayArchive(challenge) {
     if (!challenge.isLive) {
       return false;

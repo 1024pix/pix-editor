@@ -315,6 +315,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  validateQuality() {
+    return;
+  }
+
+  @action
   async archive() {
     this.isStatusActionMenuOpen = false;
     try {
