@@ -49,14 +49,15 @@ export async function getMany(ids) {
 }
 
 export async function filter(params = {}) {
-  const ids = await translationRepository.search({
-    entity: model,
+  const localizedEntities = await translationRepository.searchLocalizedEntities({
+    model,
     fields: ['instruction', 'proposals'],
     search: params.filter.search,
     limit: params.page?.size,
   });
+
   const dtos = await selectChallenges()
-    .whereIn('challenges.id', ids)
+    .whereIn('challenges.id', localizedEntities.map(({ entityId }) => entityId))
     .orWhereIn(
       'challenges.id',
       knex

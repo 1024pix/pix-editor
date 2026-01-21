@@ -2,10 +2,12 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
+import * as translationRepository from './translation-repository.js';
+import { escapeLikeWildcards } from './sql-utils.js';
 
 export async function list() {
   const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment().orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
-  return localizedChallengeDtos.map(_toDomain);
+  return localizedChallengeDtos.map(toDomain);
 }
 
 function _generateId() {
@@ -34,14 +36,14 @@ export async function getByChallengeIdAndLocale({ challengeId, locale }) {
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomain(dto);
+  return toDomain(dto);
 }
 
 export async function listByChallengeIds({ challengeIds, transaction: knexConnection = knex }) {
   const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection)
     .whereIn('localized_challenges.challengeId', challengeIds)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
-  return dtos.map(_toDomain);
+  return dtos.map(toDomain);
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
@@ -49,7 +51,7 @@ export async function get({ id, transaction: knexConnection = knex }) {
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomain(dto);
+  return toDomain(dto);
 }
 
 export async function getMany({ ids, transaction: knexConnection = knex }) {
@@ -57,7 +59,29 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
     .whereIn('localized_challenges.id', ids)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
 
-  return dtos.map(_toDomain);
+  return dtos.map(toDomain);
+}
+
+export async function filter(params = {}) {
+  const localizedEntities = await translationRepository.searchLocalizedEntities({
+    model: 'challenge',
+    fields: ['instruction', 'proposals'],
+    search: params.filter.search,
+    limit: params.page?.limit,
+  });
+
+  let query = knex.select().from('localized_challenges')
+    .whereIn(['challengeId', 'locale'], localizedEntities.map(({ entityId, locale }) => [entityId, locale]))
+    .orWhereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`)
+    .orderBy('id');
+
+  if (params.page?.limit) query = query.limit(params.page?.limit);
+
+  const dtos = await query;
+
+  if (dtos.length === 0) return [];
+
+  return dtos.map(toDomain);
 }
 
 export async function update({ localizedChallenge, transaction: knexConnection = knex }) {
@@ -74,14 +98,14 @@ export async function update({ localizedChallenge, transaction: knexConnection =
     .where({ id: dto.challengeId })
     .pluck('embedUrl');
 
-  return _toDomain({
+  return toDomain({
     ...dto,
     primaryEmbedUrl,
     fileIds: localizedChallenge.fileIds,
   });
 }
 
-function _toDomain(dto) {
+function toDomain(dto) {
   return new LocalizedChallenge(dto);
 }
 
