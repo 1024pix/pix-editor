@@ -22,11 +22,13 @@ export default class ChallengeRoute extends Route {
     try {
       const challenge = await localizedChallenge.challenge;
       const skill = await challenge.get('skill');
-      await skill.challenges; // in order to load model.relatedPrototype later on
+      await skill.challenges; // in order to use model.relatedPrototype later on
       const tube = await skill.tube;
       const competence = await tube.competence;
-      if (challenge.get('isPrototype') && localizedChallenge.isPrimaryChallenge) {
-        if (this.versionManager.isV2 && challenge.get('isValidated')) {
+      const prototype = challenge.get('isPrototype') ? challenge : challenge.get('relatedPrototype');
+
+      if (this.versionManager.isV2 && prototype?.get('isValidated')) {
+        if (localizedChallenge.isPrimaryChallenge) {
           return this.router.transitionTo(
             'authenticated.v2.challenge',
             competence.get('id'),
@@ -34,7 +36,20 @@ export default class ChallengeRoute extends Route {
             skill.get('id'),
             challenge.get('id'),
           );
-        } else {
+        }
+
+        return this.router.transitionTo(
+          'authenticated.v2.localized-challenge',
+          competence.get('id'),
+          'challenges-production',
+          skill.get('id'),
+          localizedChallenge.id,
+          { queryParams: { locale: localizedChallenge.locale } },
+        );
+      }
+
+      if (challenge.get('isPrototype')) {
+        if (localizedChallenge.isPrimaryChallenge) {
           return this.router.transitionTo(
             'authenticated.competence.prototypes.single',
             competence.get('id'),
@@ -42,41 +57,32 @@ export default class ChallengeRoute extends Route {
             { queryParams: { view: challenge.get('isValidated') ? 'production' : 'workbench' } },
           );
         }
-      } else if (challenge.get('isPrototype')) {
+
         return this.router.transitionTo(
           'authenticated.competence.prototypes.localized',
           competence.get('id'),
           challenge.get('id'),
           localizedChallenge.get('id'),
         );
-      } else if (localizedChallenge.isPrimaryChallenge) {
-        const prototype = challenge.get('relatedPrototype');
-        if (this.versionManager.isV2 && prototype.get('isValidated')) {
-          return this.router.transitionTo(
-            'authenticated.v2.challenge',
-            competence.get('id'),
-            'challenges-production',
-            skill.get('id'),
-            challenge.get('id'),
-          );
-        } else {
-          return this.router.transitionTo(
-            'authenticated.competence.prototypes.single.alternatives.single',
-            competence.get('id'),
-            prototype.get('id'),
-            challenge.get('id'),
-            { queryParams: { view: prototype.get('isValidated') ? 'production' : 'workbench' } },
-          );
-        }
-      } else {
+      }
+
+      if (localizedChallenge.isPrimaryChallenge) {
         return this.router.transitionTo(
-          'authenticated.competence.prototypes.single.alternatives.localized',
+          'authenticated.competence.prototypes.single.alternatives.single',
           competence.get('id'),
-          challenge.get('relatedPrototype').get('id'),
+          prototype.get('id'),
           challenge.get('id'),
-          localizedChallenge.get('id'),
+          { queryParams: { view: prototype.get('isValidated') ? 'production' : 'workbench' } },
         );
       }
+
+      return this.router.transitionTo(
+        'authenticated.competence.prototypes.single.alternatives.localized',
+        competence.get('id'),
+        prototype.get('id'),
+        challenge.get('id'),
+        localizedChallenge.get('id'),
+      );
     } catch {
       this.router.transitionTo('authenticated');
     }

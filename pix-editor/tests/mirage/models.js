@@ -19,6 +19,7 @@ import localizedFrameworkTube from './models/localized-framework-tube';
 import missionSummary from './models/mission-summary';
 import mission from './models/mission';
 import note from './models/note';
+import searchResult from './models/search-result';
 import skill from './models/skill';
 import staticCourseSummary from './models/static-course-summary';
 import staticCourseTag from './models/static-course-tag';
@@ -50,6 +51,7 @@ export default {
   missionSummary,
   mission,
   note,
+  searchResult,
   skill,
   staticCourseSummary,
   staticCourseTag,

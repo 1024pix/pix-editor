@@ -486,6 +486,8 @@ export default function routes() {
   this.post('/phrase/download', function () {
     return { ok: 'cool' };
   });
+
+  this.get('/search', (schema) => schema.searchResults.all());
 }
 /* eslint-enable ember/no-get */
 

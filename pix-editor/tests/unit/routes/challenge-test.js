@@ -47,6 +47,7 @@ module('Unit | Route | challenge', function (hooks) {
     secondaryLocalizedPrototype = store.createRecord('localized-challenge', {
       id: `${prototypeId}nl`,
       challenge: prototype,
+      locale: 'nl',
     });
     alternative = store.createRecord('challenge', {
       id: alternativeId,
@@ -61,6 +62,7 @@ module('Unit | Route | challenge', function (hooks) {
     secondaryLocalizedAlternative = store.createRecord('localized-challenge', {
       id: `${alternativeId}nl`,
       challenge: alternative,
+      locale: 'nl',
     });
   });
 
@@ -118,7 +120,7 @@ module('Unit | Route | challenge', function (hooks) {
         });
 
         module('when navigating to prototype’s secondary', function () {
-          test('redirects to v1 localized challenge', async function (assert) {
+          test('redirects to v2 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedPrototype;
 
@@ -128,17 +130,19 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.competence.prototypes.localized',
+              'authenticated.v2.localized-challenge',
               competenceId,
-              prototypeId,
+              'challenges-production',
+              skillId,
               secondaryLocalizedPrototype.get('id'),
+              { queryParams: { locale: 'nl' } },
             );
             assert.ok(true);
           });
         });
 
         module('when navigating to alternative’s secondary', function () {
-          test('redirects to v1 localized challenge', async function (assert) {
+          test('redirects to v2 localized challenge', async function (assert) {
             // given
             const model = secondaryLocalizedAlternative;
 
@@ -148,11 +152,12 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.competence.prototypes.single.alternatives.localized',
+              'authenticated.v2.localized-challenge',
               competenceId,
-              prototypeId,
-              alternativeId,
+              'challenges-production',
+              skillId,
               secondaryLocalizedAlternative.get('id'),
+              { queryParams: { locale: 'nl' } },
             );
             assert.ok(true);
           });
