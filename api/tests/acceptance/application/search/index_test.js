@@ -138,13 +138,12 @@ describe('Application | Route | Search', () => {
       expect(response.statusCode).to.equal(200);
       expect(JSON.parse(response.payload)).to.deep.equal({
         data: [
-
           {
             type: 'search-results',
             id: 'challengeId',
             attributes: {
               type: 'challenge',
-              status: Challenge.STATUSES.VALIDE,
+              status: Challenge.STATUSES.PROPOSE,
               title: 'Bobï, een kleine, onhandige eekhoorn is uit de boom gevallen',
               locale: 'nl',
               'is-primary': false,
@@ -185,7 +184,7 @@ describe('Application | Route | Search', () => {
             id: 'challengeId',
             attributes: {
               type: 'challenge',
-              status: Challenge.STATUSES.VALIDE,
+              status: Challenge.STATUSES.PROPOSE,
               title: 'Bobï, een kleine, onhandige eekhoorn is uit de boom gevallen',
               locale: 'nl',
               'is-primary': false,
@@ -256,7 +255,7 @@ describe('Application | Route | Search', () => {
             id: 'challengeId',
             attributes: {
               type: 'challenge',
-              status: Challenge.STATUSES.VALIDE,
+              status: Challenge.STATUSES.PROPOSE,
               title: 'Bobï, een kleine, onhandige eekhoorn is uit de boom gevallen',
               locale: 'nl',
               'is-primary': false,

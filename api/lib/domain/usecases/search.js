@@ -48,11 +48,12 @@ export async function search(filter, dependencies = { skillRepository, challenge
 }
 
 function localizedChallengeToSearchResult(localizedChallenge, challenge) {
+  const translatedChallenge = challenge.translate(localizedChallenge.locale);
   return new SearchResult({
     type: 'challenge',
     id: localizedChallenge.id,
-    title: challenge.translate(localizedChallenge.locale).instruction,
-    status: challenge.status,
+    title: translatedChallenge.instruction,
+    status: translatedChallenge.status,
     locale: localizedChallenge.locale,
     isPrimary: localizedChallenge.isPrimary,
   });
