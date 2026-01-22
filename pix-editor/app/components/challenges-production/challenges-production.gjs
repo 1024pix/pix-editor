@@ -132,7 +132,7 @@ export default class ChallengesProduction extends Component {
               </:header>
               <:cell>
                 <PixTag @color={{this.getChallengeStatusColor challenge.status}}>
-                  {{this.getChallengeStatus challenge.status}}
+                  {{this.getChallengeStatus challenge.computedStatus}}
                 </PixTag>
               </:cell>
             </PixTableColumn>

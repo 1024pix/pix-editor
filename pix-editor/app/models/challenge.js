@@ -86,10 +86,6 @@ export default class ChallengeModel extends Model {
     };
   }
 
-  static get QUALITY_OK() {
-    return this.isQualityOk;
-  }
-
   static get GENEALOGIES() {
     return {
       PROTOTYPE: 'Prototype 1',
@@ -168,6 +164,13 @@ export default class ChallengeModel extends Model {
       default:
         return '';
     }
+  }
+
+  get computedStatus() {
+    if (this.isQualityOk && this.isValidated) {
+      return 'validé qualité';
+    }
+    return this.status;
   }
 
   get isLive() {

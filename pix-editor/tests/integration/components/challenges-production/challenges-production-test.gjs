@@ -29,6 +29,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.VALIDE,
         locales: ['fr', 'en'],
         preview: 'api/urlto/challengeDecliValidee1',
+        isQualityOk: false,
       }),
       store.createRecord('challenge', {
         id: 'challengeDecliArchivee2',
@@ -40,6 +41,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.ARCHIVE,
         locales: ['fr'],
         preview: 'api/urlto/challengeDecliArchivee2',
+        isQualityOk: false,
       }),
       store.createRecord('challenge', {
         id: 'challengeDecliProposee3',
@@ -51,6 +53,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.PROPOSE,
         locales: ['fr'],
         preview: 'api/urlto/challengeDecliProposee3',
+        isQualityOk: false,
       }),
       store.createRecord('challenge', {
         id: 'challengeDecliPerimee4',
@@ -62,6 +65,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.PERIME,
         locales: ['fr'],
         preview: 'api/urlto/challengeDecliPerimee4',
+        isQualityOk: false,
       }),
       store.createRecord('challenge', {
         id: 'challengeDecliValidee5',
@@ -73,6 +77,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.VALIDE,
         locales: ['fr'],
         preview: 'api/urlto/challengeDecliValidee5',
+        isQualityOk: false,
       }),
       store.createRecord('challenge', {
         id: 'challengeProtoValidee',
@@ -84,6 +89,7 @@ module('Integration | Component | challenges-production | challenges-production'
         status: Challenge.STATUSES.VALIDE,
         locales: ['fr'],
         preview: 'api/urlto/challengeProtoValidee',
+        isQualityOk: true,
       }),
     ];
     screen = await render(
@@ -96,11 +102,13 @@ module('Integration | Component | challenges-production | challenges-production'
       test('should display all but obsolete', async function (assert) {
         // then
         const validatedChallenges = screen.queryAllByText('validé');
+        const validatedQualityChallenges = screen.queryAllByText('validé qualité');
         const obsoleteChallenges = screen.queryAllByText('périmé');
         const archivedChallenges = screen.queryAllByText('archivé');
         const proposedChallenges = screen.queryAllByText('proposé');
 
-        assert.strictEqual(validatedChallenges.length, 3);
+        assert.strictEqual(validatedQualityChallenges.length, 1);
+        assert.strictEqual(validatedChallenges.length, 2);
         assert.strictEqual(obsoleteChallenges.length, 0);
         assert.strictEqual(archivedChallenges.length, 1);
         assert.strictEqual(proposedChallenges.length, 1);
@@ -113,11 +121,13 @@ module('Integration | Component | challenges-production | challenges-production'
 
         // then
         const validatedChallenges = screen.queryAllByText('validé');
+        const validatedQualityChallenges = screen.queryAllByText('validé qualité');
         const obsoleteChallenges = screen.queryAllByText('périmé');
         const archivedChallenges = screen.queryAllByText('archivé');
         const proposedChallenges = screen.queryAllByText('proposé');
 
-        assert.strictEqual(validatedChallenges.length, 3);
+        assert.strictEqual(validatedQualityChallenges.length, 1);
+        assert.strictEqual(validatedChallenges.length, 2);
         assert.strictEqual(obsoleteChallenges.length, 1);
         assert.strictEqual(archivedChallenges.length, 1);
         assert.strictEqual(proposedChallenges.length, 1);

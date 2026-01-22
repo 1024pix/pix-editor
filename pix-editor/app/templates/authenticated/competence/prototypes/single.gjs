@@ -92,7 +92,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
       <div class={{if @controller.creation " creation" ""}}>
         {{@controller.challengeTitle}}
       </div>
-      <div class="ui circular label {{@controller.challenge.statusCSS}}">{{@controller.challenge.status}}</div>
+      <div class="ui circular label {{@controller.challenge.statusCSS}}">{{@controller.challenge.computedStatus}}</div>
       {{#unless @controller.challenge.isNew}}
         <time
           class="ui colored label"

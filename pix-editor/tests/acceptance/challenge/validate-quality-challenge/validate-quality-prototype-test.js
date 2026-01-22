@@ -110,6 +110,7 @@ module('Acceptance | Validate-quality-challenge', function (hooks) {
     const alternativePerime = await store.findRecord('challenge', 'challengeId1-2');
     const alternativePropose = await store.findRecord('challenge', 'challengeId1-3');
 
+    assert.dom(screen.getByText('validé qualité')).exists();
     assert.ok(proto.isQualityOk);
     assert.ok(alternativeValide.isQualityOk);
     assert.notOk(alternativePerime.isQualityOk);

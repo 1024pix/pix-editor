@@ -337,6 +337,7 @@ export default class SingleController extends Controller {
         }
 
         this.challenge.save();
+        this.router.refresh('authenticated.competence.prototypes');
         this._message('Validation qualité confirmée');
       } catch (err) {
         console.error(err);

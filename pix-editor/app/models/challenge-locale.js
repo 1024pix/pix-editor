@@ -51,6 +51,10 @@ export default class ChallengeLocaleModel extends Model {
     return this.challenge.status;
   }
 
+  get primaryComputedStatus() {
+    return this.challenge.computedStatus;
+  }
+
   get status() {
     if (this.isPrimaryInLocale) return PRIMARY_IN_LOCALE_STATUS;
     return this.localizedChallengeValue?.status ?? NOT_TRANSLATED_STATUS;
@@ -92,7 +96,7 @@ export default class ChallengeLocaleModel extends Model {
   }
 
   get primaryStatusText() {
-    return this.primaryStatus ?? 'absence de statut ❓';
+    return this.primaryComputedStatus ?? 'absence de statut ❓';
   }
 
   get localizedStatusColor() {

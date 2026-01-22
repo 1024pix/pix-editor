@@ -36,6 +36,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       status: Challenge.STATUSES.VALIDE,
       locales: ['fr'],
       preview: 'api/urlto/challengeProtoValide',
+      isQualityOk: true,
     });
     const localizedProtoValideFr = store.createRecord('localized-challenge', {
       id: challengeProtoValide.id,
@@ -401,11 +402,13 @@ module('Integration | Component | challenges-production | localized-challenges-p
 
         // then
         const validatedChallenges = screen.queryAllByText('validé');
+        const validatedQualityChallenges = screen.queryAllByText('validé qualité');
         const obsoleteChallenges = screen.queryAllByText('périmé');
         const archivedChallenges = screen.queryAllByText('archivé');
         const proposedChallenges = screen.queryAllByText('proposé');
 
-        assert.strictEqual(validatedChallenges.length, 2);
+        assert.strictEqual(validatedChallenges.length, 1);
+        assert.strictEqual(validatedQualityChallenges.length, 1);
         assert.strictEqual(archivedChallenges.length, 1);
         assert.strictEqual(proposedChallenges.length, 1);
         assert.strictEqual(obsoleteChallenges.length, 0);
@@ -428,11 +431,13 @@ module('Integration | Component | challenges-production | localized-challenges-p
 
         // then
         const validatedChallenges = screen.queryAllByText('validé');
+        const validatedQualityChallenges = screen.queryAllByText('validé qualité');
         const obsoleteChallenges = screen.queryAllByText('périmé');
         const archivedChallenges = screen.queryAllByText('archivé');
         const proposedChallenges = screen.queryAllByText('proposé');
 
-        assert.strictEqual(validatedChallenges.length, 2);
+        assert.strictEqual(validatedChallenges.length, 1);
+        assert.strictEqual(validatedQualityChallenges.length, 1);
         assert.strictEqual(obsoleteChallenges.length, 1);
         assert.strictEqual(archivedChallenges.length, 1);
         assert.strictEqual(proposedChallenges.length, 1);

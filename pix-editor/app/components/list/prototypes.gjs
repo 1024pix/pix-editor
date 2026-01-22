@@ -50,7 +50,7 @@ export default class PrototypesList extends SortedList {
     },
     {
       name: 'Statut',
-      valuePath: 'status',
+      valuePath: 'computedStatus',
       maxWidth: 150,
       style: true,
     },

@@ -66,7 +66,7 @@ export default class AlternativesList extends SortedList {
     },
     {
       name: 'Statut',
-      valuePath: 'status',
+      valuePath: 'computedStatus',
       maxWidth: 130,
       style: true,
     },
