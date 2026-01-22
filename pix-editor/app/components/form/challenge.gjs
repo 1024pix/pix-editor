@@ -453,6 +453,10 @@ export default class ChallengeForm extends Component {
     if (!this.args.challenge.format) {
       return 'mots';
     }
+    // todo doit on le gérer
+    if (this.args.challenge.format === 'date') {
+      return 'mots';
+    }
 
     return this.options.format.find((format) => format.value === this.args.challenge.format).value;
   }
