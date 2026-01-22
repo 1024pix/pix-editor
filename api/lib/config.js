@@ -161,6 +161,7 @@ export const seedsConfig = {
   cntThematicsPerCompetence: _getNumber(process.env.SEEDS_CNT_THEMATICS, 2),
   cntTubesPerThematic: _getNumber(process.env.SEEDS_CNT_TUBES, 2),
   skillMaxLevel: _getNumber(process.env.SEEDS_SKILL_LEVEL, 3),
+  localizedFrameworkTubesMaxLevel: _getNumber(process.env.SEEDS_LOCALIZED_FRAMEWORK_TUBES_LEVEL, 8),
   locales: _getStringArray(process.env.SEEDS_LOCALES, ['fr', 'en']),
 };
 

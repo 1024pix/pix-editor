@@ -8,6 +8,7 @@ import { buildPix1D } from './data/pix-1d.js';
 import { buildSkillsFromConfig } from './data/skills.js';
 import { buildThematicsFromConfig } from './data/thematics.js';
 import { buildTubesFromConfig } from './data/tubes.js';
+import { buildLocalizedFrameworkTubesFromConfig } from './data/localized-framework-tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTags } from './data/tags.js';
@@ -49,6 +50,7 @@ export async function seed(knex) {
   buildCompetencesFromConfig({ databaseBuilder, learningContentConfig, learningContentData });
   buildThematicsFromConfig({ databaseBuilder, learningContentConfig, learningContentData });
   buildTubesFromConfig({ databaseBuilder, learningContentConfig, learningContentData });
+  buildLocalizedFrameworkTubesFromConfig({ databaseBuilder, learningContentConfig, learningContentData });
   const tagItems = buildTags({ databaseBuilder });
   const tutorialItems = buildTutorials({ databaseBuilder, locales: learningContentConfig.locales, tagItems });
   buildSkillsFromConfig({ databaseBuilder, learningContentConfig, learningContentData, tutorialItems });
