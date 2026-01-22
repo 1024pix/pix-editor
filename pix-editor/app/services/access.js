@@ -117,6 +117,7 @@ export default class AccessService extends Service {
   }
 
   mayValidateQuality(challenge) {
+    if (challenge.isQualityOk) return false;
     return this.isEditor() && challenge.isValidated;
   }
 

@@ -225,6 +225,22 @@ module('Unit | Service | access', function (hooks) {
       hooks.beforeEach(function () {
         _stubAccessLevel(EDITOR, this.owner);
       });
+
+      test('it should return true if challenge is validated and user is Editor', function (assert) {
+        // given
+        const draftChallenge = EmberObject.create({
+          id: 'rec123656',
+          name: 'deletedChallenge',
+          isValidated: true,
+        });
+
+        // when
+        const accessResult = accessService.mayValidateQuality(draftChallenge);
+
+        // then
+        assert.ok(accessResult);
+      });
+
       test('it should return false if challenge is not validated', function (assert) {
         // given
         const draftChallenge = EmberObject.create({
@@ -240,19 +256,20 @@ module('Unit | Service | access', function (hooks) {
         assert.notOk(accessResult);
       });
 
-      test('it should return true if challenge is validated and user is Editor', function (assert) {
+      test('it should return false if challenge is validated and isQualityOk is true and user is Editor', function (assert) {
         // given
         const draftChallenge = EmberObject.create({
           id: 'rec123656',
           name: 'deletedChallenge',
           isValidated: true,
+          isQualityOk: true,
         });
 
         // when
         const accessResult = accessService.mayValidateQuality(draftChallenge);
 
         // then
-        assert.ok(accessResult);
+        assert.notOk(accessResult);
       });
     });
 
