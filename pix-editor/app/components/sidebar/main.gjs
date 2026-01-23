@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
 import FrameworkModel from '../../models/framework';
-import PixToggleButton from '@1024pix/pix-ui/components/pix-toggle-button';
+import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
 import Search from 'pixeditor/components/sidebar/search';
 import Navigation from 'pixeditor/components/sidebar/navigation';
 import { LinkTo } from '@ember/routing';
@@ -20,16 +20,11 @@ export default class SidebarMain extends Component {
     >
       <div class="main-sidebar__header">
         <h1>Pix Editor</h1>
-        <PixToggleButton
-          @size="small"
-          @screenReaderOnly={{true}}
-          @onChange={{this.switchVersion}}
-          @toggled={{this.isV2}}
-        >
+        <PixSegmentedControl @screenReaderOnly={{true}} @onChange={{this.switchVersion}} @toggled={{this.isV2}}>
           <:label>changer de version</:label>
-          <:viewA>V2</:viewA>
-          <:viewB>V1</:viewB>
-        </PixToggleButton>
+          <:viewA>V1</:viewA>
+          <:viewB>V2</:viewB>
+        </PixSegmentedControl>
       </div>
       <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
       {{#if this.maySearch}}
