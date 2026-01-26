@@ -42,7 +42,6 @@ export async function list() {
 
 export async function getMany(ids) {
   const [dtos, [translations, localizedChallenges]] = await Promise.all([selectChallenges().whereIn('challenges.id', ids).orderBy('challenges.id'), loadTranslationsAndLocalizedChallengesForChallengeIds(ids)]);
-
   if (dtos.length === 0) return [];
 
   return toDomainList(dtos, translations, localizedChallenges);
@@ -105,6 +104,7 @@ export async function create(challenge) {
         responsive: challenge.responsive,
         shuffled: challenge.shuffled,
         contextualizedFields: challenge.contextualizedFields,
+        isQualityOk: challenge.isQualityOk,
       })
       .into('challenges');
 
@@ -169,6 +169,7 @@ export async function createBatch(challenges) {
           responsive: challenge.responsive,
           shuffled: challenge.shuffled,
           contextualizedFields: challenge.contextualizedFields,
+          isQualityOk: challenge.isQualityOk,
         })),
       )
       .into('challenges');
@@ -220,6 +221,7 @@ export async function update(challenge, transaction = knex) {
       madeObsoleteAt: challenge.madeObsoleteAt,
       validatedAt: challenge.validatedAt,
       updatedAt: transaction.fn.now(),
+      isQualityOk: challenge.isQualityOk,
     })
     .where('id', challenge.id);
 

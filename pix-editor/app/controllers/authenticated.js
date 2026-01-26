@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/ember';
 import ENV from 'pixeditor/config/environment';
 import { TrackedArray } from 'tracked-built-ins';
 
-export default class ApplicationController extends Controller {
+export default class AuthenticatedController extends Controller {
   confirmCallback = null;
 
   @tracked confirmTitle = '';

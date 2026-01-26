@@ -33,6 +33,15 @@ export default class SkillModel extends Model {
 
   @tracked _selected = false;
 
+  static get STATUSES() {
+    return {
+      EN_CONSTRUCTION: 'en construction',
+      ACTIF: 'actif',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
+
   get date() {
     const createdDate = this.createdAt;
     return new Date(createdDate).toLocaleDateString('fr', {

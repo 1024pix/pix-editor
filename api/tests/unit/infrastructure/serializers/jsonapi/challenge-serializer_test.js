@@ -78,6 +78,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'is-quality-ok': false,
           },
           relationships: {
             skill: {
@@ -277,6 +278,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'to-rephrase': true,
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
+            'is-quality-ok': false,
           },
           relationships: {
             skill: {

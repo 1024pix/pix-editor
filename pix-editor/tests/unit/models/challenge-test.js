@@ -69,6 +69,7 @@ module('Unit | Model | challenge', function (hooks) {
       toRephrase: true,
       hasEmbedInternalValidation: true,
       noValidationNeeded: true,
+      isQualityOk: true,
     };
     alternative = {
       id: 'pix_1',
@@ -120,6 +121,7 @@ module('Unit | Model | challenge', function (hooks) {
       toRephrase: true,
       hasEmbedInternalValidation: true,
       noValidationNeeded: true,
+      isQualityOk: true,
     };
   });
 

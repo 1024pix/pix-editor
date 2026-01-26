@@ -97,6 +97,10 @@ export default class SingleController extends Controller {
     return this.access.mayValidate(this.challenge);
   }
 
+  get mayValidateQuality() {
+    return this.access.mayValidateQuality(this.challenge);
+  }
+
   get mayArchive() {
     return this.access.mayArchive(this.challenge);
   }
@@ -312,6 +316,37 @@ export default class SingleController extends Controller {
     } catch {
       this._message('Mise en production abandonnée');
     }
+  }
+
+  @action
+  async validateQuality() {
+    this.isStatusActionMenuOpen = false;
+    try {
+      await this.confirm.ask('Validation qualité', 'Êtes-vous sûr de vouloir valider la qualité ?');
+
+      try {
+        this.challenge.isQualityOk = true;
+        if (this.challenge.isPrototype) {
+          const skill = await this.challenge.skill;
+          await skill.challenges;
+          await this.challenge.alternatives;
+          this.challenge.productionAlternatives.map(async (alternative) => {
+            alternative.isQualityOk = true;
+            await alternative.save();
+          });
+        }
+
+        this.challenge.save();
+        this.router.refresh('authenticated.competence.prototypes');
+        this._message('Validation qualité confirmée');
+      } catch (err) {
+        console.error(err);
+        Sentry.captureException(err);
+      }
+    } catch {
+      this._message('Validation qualité abandonnée');
+    }
+    return;
   }
 
   @action

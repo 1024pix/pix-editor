@@ -134,6 +134,7 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
         // then
         assert.dom(screen.getByText('Validée')).exists();
       });
+
       test('it should display "Validée le 21/02/2025" when date provided', async function (assert) {
         // given
         challengeFromStore.validatedAt = new Date('2025-02-21T12:00:00Z');
@@ -156,6 +157,7 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
         assert.dom(screen.getByText('Validée le 21/02/2025')).exists();
       });
     });
+
     module('when challenge is archived', function () {
       test('it should display only "Archivée" when no date provided', async function (assert) {
         // given

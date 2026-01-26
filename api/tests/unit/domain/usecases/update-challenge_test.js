@@ -68,6 +68,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
       'urlsToConsult',
       'validatedAt',
       'version',
+      'isQualityOk',
     ];
     const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
@@ -151,6 +152,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
         'urlsToConsult',
         'validatedAt',
         'version',
+        'isQualityOk',
       ];
       const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 

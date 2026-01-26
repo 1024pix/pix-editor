@@ -71,6 +71,7 @@ prototype:
     update-error: Erreur lors de la mise à jour
 common:
   validate: Valider
+  validate-quality: Valider qualité
   cancel: Annuler
   pop_in:
     close: Fermer la boite de dialogue
@@ -80,4 +81,3 @@ common:
     label: Message d'enregistrement
   modify:
     cancel: Modification annulée
-

@@ -31,6 +31,7 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
+  @attr isQualityOk;
   @attr({
     defaultValue: function () {
       return [];
@@ -163,6 +164,13 @@ export default class ChallengeModel extends Model {
       default:
         return '';
     }
+  }
+
+  get computedStatus() {
+    if (this.isQualityOk && this.isValidated) {
+      return 'validé qualité';
+    }
+    return this.status;
   }
 
   get isLive() {
