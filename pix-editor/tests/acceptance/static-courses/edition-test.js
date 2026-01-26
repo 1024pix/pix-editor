@@ -1,4 +1,4 @@
-import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -115,7 +115,7 @@ module('Acceptance | Static Courses | Edition', function (hooks) {
         // when
         const screen = await visit('/');
         await clickByName('Tests statiques');
-        await click(await screen.findByRole('button', { name: 'Statut' }));
+        await clickByText('Tous');
         await click(await screen.findByRole('button', { name: 'Filtrer' }));
         await click(screen.getAllByRole('cell')[0]);
         await click(screen.getAllByText('Éditer le test statique')[0]);
@@ -152,7 +152,6 @@ module('Acceptance | Static Courses | Edition', function (hooks) {
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
-      await clickByName('Enregistrer');
       await clickByName('Enregistrer');
 
       // then

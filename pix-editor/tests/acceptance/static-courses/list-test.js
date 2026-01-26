@@ -1,4 +1,4 @@
-import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, triggerEvent } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -61,7 +61,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
-    await click(await screen.findByRole('button', { name: 'Statut' }));
+    await clickByText('Tous');
     await fillByLabel('Nom', 'prem');
     await triggerEvent(await screen.getByLabelText('Nom'), 'keyup', '');
     await click(await screen.findByRole('button', { name: 'Filtrer' }));
@@ -76,7 +76,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
-    await click(await screen.findByRole('button', { name: 'Statut' }));
+    await clickByText('Tous');
     await fillByLabel('Tags', 'ta');
     await click(await screen.findByLabelText('tagC'));
     // 2 clicks to go outside the dropdown and then to effectively click on the button
@@ -94,7 +94,7 @@ module('Acceptance | Static Courses | List', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
-    await click(await screen.findByRole('button', { name: 'Statut' }));
+    await clickByText('Tous');
     await fillByLabel('Nom', 'prem');
     await triggerEvent(await screen.getByLabelText('Nom'), 'keyup', '');
     await click(await screen.findByRole('button', { name: 'Filtrer' }));
