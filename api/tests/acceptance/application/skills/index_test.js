@@ -1696,11 +1696,9 @@ describe('Application | Route | Skills', () => {
       };
       const challengeForPixApi = {
         id: 'clonedChallengeId',
-        alpha: null,
         alternativeInstruction: '',
         autoReply: false,
         competenceId: 'competence1',
-        delta: null,
         embedUrl: 'https://github.io/page/epreuve.html',
         embedTitle: '',
         embedHeight: 500,
@@ -1825,7 +1823,6 @@ describe('Application | Route | Skills', () => {
         {
           accessibility1: 'OK',
           accessibility2: 'RAS',
-          alpha: null,
           alternativeVersion: null,
           archivedAt: null,
           author: ['SPS'],
@@ -1833,7 +1830,6 @@ describe('Application | Route | Skills', () => {
           contextualizedFields: ['instruction', 'illustration'],
           createdAt: expect.any(Date),
           declinable: 'facilement',
-          delta: null,
           embedHeight: 500,
           focusable: false,
           format: 'mots',

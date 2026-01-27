@@ -48,8 +48,6 @@ export function buildChallenge(
     shuffled = false,
     contextualizedFields = [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
     skillId = 'recSkillId',
-    alpha = 0.5,
-    delta = 0.2,
     illustrationAlt = null,
     translations = {
       [Challenge.getPrimaryLocale(locales)]: {
@@ -111,8 +109,6 @@ export function buildChallenge(
     contextualizedFields,
     translations,
     skillId,
-    alpha,
-    delta,
     localizedChallenges,
   };
   return new Challenge(_.omit(data, fieldsToOmit));

@@ -219,11 +219,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge(
         { localizedChallenges: [expectedLocalizedChallenge] },
-        [
-          'alpha',
-          'delta',
-          'skillId',
-        ],
+        ['skillId'],
       );
       const json = {
         data: {

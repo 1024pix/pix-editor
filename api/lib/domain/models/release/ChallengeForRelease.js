@@ -23,8 +23,6 @@ export class ChallengeForRelease {
     autoReply,
     locales,
     focusable,
-    delta,
-    alpha,
     responsive,
     genealogy,
     attachments,
@@ -65,8 +63,6 @@ export class ChallengeForRelease {
     this.focusable = focusable;
     this.genealogy = genealogy;
     this.responsive = responsive;
-    this.delta = delta;
-    this.alpha = alpha;
     this.attachments = attachments;
     this.illustrationAlt = illustrationAlt;
     this.illustrationUrl = illustrationUrl;

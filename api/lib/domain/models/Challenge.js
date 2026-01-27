@@ -12,7 +12,6 @@ export class Challenge {
     accessibility2,
     airtableId,
     alternativeVersion,
-    alpha,
     archivedAt,
     author,
     autoReply,
@@ -20,7 +19,6 @@ export class Challenge {
     contextualizedFields,
     createdAt,
     declinable,
-    delta,
     embedHeight,
     files,
     focusable,
@@ -51,7 +49,6 @@ export class Challenge {
     this.accessibility1 = accessibility1;
     this.accessibility2 = accessibility2;
     this.airtableId = airtableId;
-    this.alpha = alpha;
     this.alternativeVersion = alternativeVersion;
     this.archivedAt = archivedAt;
     this.author = author;
@@ -60,7 +57,6 @@ export class Challenge {
     this.contextualizedFields = contextualizedFields;
     this.createdAt = createdAt;
     this.declinable = declinable;
-    this.delta = delta;
     this.embedHeight = embedHeight;
     this.focusable = focusable;
     this.format = format ?? Challenge.FORMATS.MOTS;
@@ -336,7 +332,6 @@ export class Challenge {
       accessibility1: this.accessibility1,
       accessibility2: this.accessibility2,
       alternativeVersion,
-      alpha: null,
       archivedAt: null,
       author: this.author,
       autoReply: this.autoReply,
@@ -344,7 +339,6 @@ export class Challenge {
       contextualizedFields: this.contextualizedFields,
       createdAt: null,
       declinable: this.declinable,
-      delta: null,
       embedHeight: this.embedHeight,
       focusable: this.focusable,
       format: this.format,

@@ -21,8 +21,6 @@ const iterFor = {
   deafAndHardOfHearing: cycle(
     Object.values(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES).filter(ignoreEmptyValues),
   ),
-  alpha: cycle([...Array(5).keys(), null]),
-  delta: cycle([...Array(5).keys(), null]),
   timer: cycle([
     30,
     120,
@@ -469,12 +467,10 @@ function generateBaseChallengeData(status, autoReply) {
   return {
     accessibility1: iterFor.accessibility1.next().value,
     accessibility2: iterFor.accessibility2.next().value,
-    alpha: iterFor.alpha.next().value,
     author: ['DEV'],
     autoReply,
     contextualizedFields: [iterFor.contextualizedFields.next().value, iterFor.contextualizedFields.next().value],
     declinable: iterFor.declinable.next().value,
-    delta: iterFor.delta.next().value,
     files: [],
     focusable: iterFor.focusable.next().value,
     format: iterFor.format.next().value,
