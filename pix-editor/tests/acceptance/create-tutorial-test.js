@@ -1,5 +1,5 @@
 import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
-import { click } from '@ember/test-helpers';
+import { click, fillIn } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -15,7 +15,6 @@ module('Acceptance | Create-Tutorial', function (hooks) {
 
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('tag', { id: 'recTag1' });
-    this.server.create('tutorial', { id: 'recTuto1', source: 'ma source' });
 
     this.server.create('challenge', { id: 'recChallenge1' });
 
@@ -63,6 +62,9 @@ module('Acceptance | Create-Tutorial', function (hooks) {
   });
 
   test('create a new tutorial', async function (assert) {
+    // given
+    const store = this.owner.lookup('service:store');
+
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await click(screen.getByRole('button', { name: 'Modifier' }));
@@ -75,27 +77,35 @@ module('Acceptance | Create-Tutorial', function (hooks) {
     await fillByLabel('Titre *', 'Titre de mon tutoriel');
 
     await clickByText('Langue');
-    await click(await screen.findByRole('option', { name: 'Français' }));
+    await screen.findByRole('listbox');
+    await screen.getByRole('option', { name: 'Français' }).click();
 
     await fillByLabel('Lien *', 'http://www.google.com');
 
     await clickByText('Source');
-    await fillByLabel('Rechercher une source', 'ma source');
+    await fillIn(screen.getByPlaceholderText('Rechercher une source'), 'ma source');
+    await screen.findByRole('listbox');
     await click(await screen.findByRole('option', { name: 'ma source' }));
 
+    await clickByText('Licence');
+    await screen.findByRole('listbox');
+    await click(await screen.findByRole('option', { name: 'Youtube' }));
+
     await clickByText('Format');
+    await screen.findByRole('listbox');
     await click(await screen.findByRole('option', { name: 'jeu' }));
 
     await clickByText('Niveau');
+    await screen.findByRole('listbox');
     await click(await screen.findByRole('option', { name: '2' }));
 
     await fillByLabel('Durée (hh:mm:ss) *', '12:30:00');
 
     await clickByText('Rechercher tags');
-    await fillByLabel('Rechercher tags', 'Super tag');
+    await fillIn(screen.getByPlaceholderText('Rechercher un tag'), 'Super tag');
+    await screen.findByRole('menu');
     await clickByText('Ajouter');
 
-    assert.strictEqual(screen.getAllByText('Super tag').length, 2);
     assert.dom(screen.getByRole('button', { name: 'Supprimer le tag: Super tag' })).exists();
 
     const dialog = screen.getByRole('dialog', { name: 'Créer un tutoriel' });
@@ -103,61 +113,42 @@ module('Acceptance | Create-Tutorial', function (hooks) {
     await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
     await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
 
-    const modifyButton = await screen.findByRole('button', { name: 'Modifier le tutoriel' });
-    await click(modifyButton);
-
     // then
+    const tutorial = await store.peekAll('tutorial')[0];
     assert.dom('[data-test-main-message]').hasText('Tutoriel enregistré');
 
-    assert.dom(screen.getByText('Titre de mon tutoriel')).exists();
-
-    const languageMenu = await screen.getByLabelText('Langue *');
-    assert.strictEqual(languageMenu.textContent.trim(), 'Français');
-    assert.dom(languageMenu).selected;
-
-    assert.dom(screen.getByLabelText('Lien *')).hasValue('http://www.google.com');
-
-    const formatMenu = await screen.getByLabelText('Format *');
-    assert.strictEqual(formatMenu.textContent.trim(), 'jeu');
-    assert.dom(formatMenu).selected;
-
-    assert.dom(screen.getByLabelText('Durée (hh:mm:ss) *')).hasValue('12:30:00');
-    await clickByText('Niveau');
-    assert.dom(await screen.findByRole('option', { name: '2' })).hasAria('selected', 'true');
-    await clickByText('Niveau');
-    await clickByText('Licence');
-    assert.dom(await screen.findByRole('option', { name: 'Licence non renseignée' })).hasAria('selected', 'true');
-
-    assert.strictEqual(screen.getAllByText('Super tag').length, 2);
+    assert.strictEqual(tutorial.title, 'Titre de mon tutoriel');
+    assert.strictEqual(tutorial.duration, '12:30:00');
+    assert.strictEqual(tutorial.source, 'ma source');
+    assert.strictEqual(tutorial.format, 'jeu');
+    assert.strictEqual(tutorial.link, 'http://www.google.com');
+    assert.strictEqual(tutorial.license, 'Youtube');
+    assert.strictEqual(tutorial.level, '2');
+    assert.notOk(tutorial.crush);
+    assert.strictEqual(tutorial.language, 'fr');
+    assert.strictEqual(tutorial.tagsTitle, 'Super tag');
   });
 
   test('verify if the url link is valid', async function (assert) {
+    // given
+    this.server.create('tutorial', {
+      id: 'tutoId',
+      title: 'mon tuto',
+    });
+    skill.update({ tutoSolutionIds: ['tutoId'] });
+
     // when
     const screen = await visit(`/competence/${competence.id}/skills/${skill.id}?view=production`);
     await clickByText('Modifier');
-    const createTutorialLink = screen.getByRole('button', {
-      name: 'Ajouter un tutoriel Pour réussir la prochaine fois',
-    });
 
-    await click(createTutorialLink);
-
-    await fillByLabel('Titre *', 'Titre de mon tutoriel');
-
-    await clickByText('Langue');
-    await click(await screen.findByRole('option', { name: 'Français' }));
-
+    await click(
+      screen.getByRole('button', {
+        name: 'Modifier le tutoriel',
+      }),
+    );
     await fillByLabel('Lien *', 'PAS BON LE LINK');
 
-    await clickByText('Source');
-    await fillByLabel('Rechercher une source', 'ma source');
-    await click(await screen.findByRole('option', { name: 'ma source' }));
-
-    await clickByText('Format');
-    await click(await screen.findByRole('option', { name: 'jeu' }));
-
-    await fillByLabel('Durée (hh:mm:ss) *', '12:30:00');
-
-    const dialog = screen.getByRole('dialog', { name: 'Créer un tutoriel' });
+    const dialog = screen.getByRole('dialog', { name: 'Modifier un tutoriel' });
     await click(within(dialog).getByRole('button', { name: 'Enregistrer' }));
 
     assert.dom(screen.getByText('Lien du tutoriel non valide')).exists();

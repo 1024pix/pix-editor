@@ -132,7 +132,7 @@ module('Acceptance | navigation-v1-v2', function (hooks) {
     await visit('/');
     await clickByText('V2');
     await visit('/v2/competences/recCompetence1/challenges-production');
-    await clickByText('V2');
+    await clickByText('V1');
 
     // then
     assert.strictEqual(currentURL(), '/competence/recCompetence1/prototypes?view=production');

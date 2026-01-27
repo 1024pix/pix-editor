@@ -6,7 +6,7 @@ import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { on } from '@ember/modifier';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixToggleButton from '@1024pix/pix-ui/components/pix-toggle-button';
+import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
 import { fn } from '@ember/helper';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import formatDate from 'ember-intl/helpers/format-date';
@@ -71,16 +71,15 @@ import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
           <:label>Tags</:label>
           <:default as |option|>{{option.label}}</:default>
         </PixMultiSelect>
-        <PixToggleButton
-          @inlineLabel={{true}}
+        <PixSegmentedControl
           @toggled={{@controller.showActiveOnly}}
           @onChange={{@controller.toggleShowActiveOnly}}
           @screenReaderOnly={{true}}
         >
           <:label>Statut</:label>
-          <:viewA>Actifs</:viewA>
-          <:viewB>Tous</:viewB>
-        </PixToggleButton>
+          <:viewA>Tous</:viewA>
+          <:viewB>Actifs</:viewB>
+        </PixSegmentedControl>
       </PixFilterBanner>
       <div class="panel-table-v2">
         <table class="content-text content-text--small">

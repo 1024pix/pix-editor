@@ -109,7 +109,6 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
       await triggerEvent(find('#static-course-name'), 'keyup', '');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
-      await clickByName('Créer le test statique'); // once to lose focus on the tag dropdown
       await clickByName('Créer le test statique');
 
       // then

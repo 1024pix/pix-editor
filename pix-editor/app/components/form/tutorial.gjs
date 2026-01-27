@@ -204,7 +204,7 @@ export default class TutorialForm extends Component {
         @value={{@tutorial.source}}
         @isSearchable={{true}}
         @searchLabel="Rechercher une source"
-        @searchPlaceholder="Rechercher..."
+        @searchPlaceholder="Rechercher une source"
         @requiredLabel="Champ obligatoire"
         @hideDefaultOption={{true}}
       >
@@ -250,6 +250,7 @@ export default class TutorialForm extends Component {
           @isSearchable={{true}}
           @onSearch={{this.getSearchTagsResults}}
           @placeholder="cloud clavier ..."
+          @searchPlaceholder="Rechercher un tag"
           @onChange={{this.onChangeTags}}
           @values={{this.tutorialTagIds}}
           @emptyMessage="Aucun tag"

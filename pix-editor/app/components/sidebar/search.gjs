@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { uniqBy } from 'lodash';
 
 export default class SidebarSearch extends Component {
   routeModel = null;
@@ -43,7 +42,6 @@ export default class SidebarSearch extends Component {
   <template>
     <PixSelect
       @isSearchable={{true}}
-      @searchLabel="Rechercher..."
       @searchPlaceholder="@patate1, recABCD1234"
       @placeholder="Acquix ou recordId"
       @options={{this.searchResultOptions}}

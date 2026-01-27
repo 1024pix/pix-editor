@@ -106,6 +106,7 @@ module('Acceptance | Controller | Get Challenge', function (hooks) {
     );
     await click(screen.getByRole('button', { name: "Déplacer l'épreuve" }));
     await click(screen.getByLabelText('Acquis'));
+    await screen.findByRole('listbox');
     await click(await screen.findByRole('option', { name: '@skill2 (v.1) 🔵' }));
     await click(screen.getByRole('button', { name: 'Déplacer' }));
     await click(await screen.findByRole('button', { name: 'Enregistrer' }));

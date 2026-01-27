@@ -1,5 +1,5 @@
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL } from '@ember/test-helpers';
+import { click, currentURL, fillIn } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -145,7 +145,7 @@ module('Acceptance | Search', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByText('Rechercher un acquis ou une épreuve...');
-    await fillByLabel('Rechercher...', '  recChallenge1  ');
+    await fillIn(screen.getByPlaceholderText('@patate1, recABCD1234'), '   recChallenge1   ');
     await click(await screen.findByRole('option', { name: '🟢 Le challenge avec l’ID recChallenge1' }));
 
     // then
@@ -168,7 +168,7 @@ module('Acceptance | Search', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByText('Rechercher un acquis ou une épreuve...');
-    await fillByLabel('Rechercher...', '  challengeLocalizedChallenge1  ');
+    await fillIn(screen.getByPlaceholderText('@patate1, recABCD1234'), '  challengeLocalizedChallenge1  ');
     await click(await screen.findByRole('option', { name: '🔵 The challenge with ID challengeLocalizedChallenge1' }));
 
     // then
@@ -189,7 +189,7 @@ module('Acceptance | Search', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByText('Rechercher un acquis ou une épreuve...');
-    await fillByLabel('Rechercher...', '@skill1');
+    await fillIn(screen.getByPlaceholderText('@patate1, recABCD1234'), '@skill1');
     await click(await screen.findByRole('option', { name: '🟢 @skill1 v1' }));
 
     // then
@@ -217,7 +217,8 @@ module('Acceptance | Search', function (hooks) {
       // when
       const screen = await visit('/');
       await clickByText('Rechercher un acquis ou une épreuve...');
-      await fillByLabel('Rechercher...', 'test');
+      await fillIn(screen.getByPlaceholderText('@patate1, recABCD1234'), 'test');
+
       await click(await screen.findByRole('option', { name: '🔴 Le challenge avec test dans la consigne' }));
 
       // then
@@ -240,7 +241,7 @@ module('Acceptance | Search', function (hooks) {
       // when
       const screen = await visit('/');
       await clickByText('Rechercher un acquis ou une épreuve...');
-      await fillByLabel('Rechercher...', '  challengeLocalizedChallenge1  ');
+      await fillIn(screen.getByPlaceholderText('@patate1, recABCD1234'), 'challengeLocalizedChallenge1');
       await click(await screen.findByRole('option', { name: '🟢 The challenge with ID challengeLocalizedChallenge1' }));
 
       // then

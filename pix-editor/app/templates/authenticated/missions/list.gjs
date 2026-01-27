@@ -33,7 +33,7 @@ import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
         @isClearFilterButtonDisabled={{false}}
       >
         <PixMultiSelect
-          id="mission-status-multi-select"
+          @id="mission-status-multi-select"
           @screenReaderOnly={{true}}
           @placeholder="Aucun"
           @onChange={{@controller.onChangesStatus}}
