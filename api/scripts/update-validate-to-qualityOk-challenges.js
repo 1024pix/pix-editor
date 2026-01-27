@@ -25,11 +25,21 @@ export class UpdateValidateToQualityOkChallenges extends Script {
 
     await knex.transaction(
       async (transaction) => {
-        const changedChallenges = await transaction
+        const challengesToUpdate = await transaction('challenges')
+          .select('challenges.*')
+          .join('skills', 'challenges.skillId', '=', 'skills.id')
+          .join('tubes', 'skills.tubeId', '=', 'tubes.id')
+          .join('thematics', 'tubes.thematicId', '=', 'thematics.id')
+          .join('competences', 'thematics.competenceId', '=', 'competences.id')
+          .join('areas', 'competences.areaId', '=', 'areas.id')
+          .join('frameworks', 'areas.frameworkId', '=', 'frameworks.id')
+          .where('frameworks.name', '<>', 'Pix 1D')
+          .where('challenges.status', 'validé')
+          .where('challenges.validatedAt', '<=', date);
+
+        const changedChallenges = await transaction('challenges')
           .update({ isQualityOk: true })
-          .from('challenges')
-          .where('status', 'validé')
-          .where('validatedAt', '<=', date);
+          .whereIn('id', challengesToUpdate.map((ch) => ch.id));
 
         if (options.dryRun) await transaction.rollback();
 

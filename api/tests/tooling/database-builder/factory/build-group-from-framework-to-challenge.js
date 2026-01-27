@@ -10,11 +10,13 @@ import { buildChallenge } from './build-challenge.js';
 import { buildLocalizedChallenge } from './build-localized-challenge.js';
 import { buildTranslation } from './build-translation.js';
 
-export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill }) {
+export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework }) {
+  const randomId = generateRandomId();
+
   const chalengeDTO = buildChallengeDatasourceObject({
-    id: 'challenge1',
-    competenceId: 'competence1',
-    skillId: 'skill1',
+    id: `challenge${randomId}`,
+    competenceId: `competence${randomId}`,
+    skillId: `skill${randomId}`,
     ...challenge,
   });
 
@@ -47,7 +49,7 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   };
 
   const skillDTO = buildSkillDatasourceObject({
-    tubeId: 'tube1',
+    tubeId: `tube${randomId}`,
     createdAt: chalengeDTO.createdAt,
     ...skill,
     id: chalengeDTO.skillId,
@@ -60,11 +62,11 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   }));
 
   return {
-    framework: buildFramework({ id: 'framework1', name: 'Pix' }),
-    area: buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' }),
-    competence: buildCompetence({ id: chalengeDTO.competenceId, index: '1.1', areaId: 'area1' }),
-    thematic: buildThematic({ id: 'thematic1', competenceId: chalengeDTO.competenceId }),
-    tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: 'thematic1' }),
+    framework: buildFramework({ id: `framework${randomId}`, name: 'Pix', ...framework }),
+    area: buildArea({ id: `area${randomId}`, code: '1', frameworkId: framework?.id ?? `framework${randomId}` }),
+    competence: buildCompetence({ id: chalengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
+    thematic: buildThematic({ id: `thematic${randomId}`, competenceId: chalengeDTO.competenceId }),
+    tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}` }),
     skill: buildSkill({ ...skillDTO, tutorialIds: [], learningMoreTutorialIds: [] }),
     challenge: buildChallenge(chalengeDTO),
     localizedChallenge: buildLocalizedChallenge(localizedChallengeDTO),
@@ -72,3 +74,6 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   };
 }
 
+function generateRandomId() {
+  return (Math.random() * 100).toFixed();
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder } from '../../../test-helper.js';
+import { databaseBuilder, knex } from '../../../test-helper.js';
 
 describe('Unit | Tooling | database Builder | buildGroup', function() {
   it('should build a challenge in group', async () => {
@@ -10,6 +10,8 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
     const result = databaseBuilder.factory.buildChallengeInGroup({ challenge });
     await databaseBuilder.commit();
 
+    const challengeCreated = await knex('challenges').select('*').where('id', challenge.id).first();
+
     // then
     expect(result.challenge).deep.equal({
       id: 'challenge1',
@@ -18,7 +20,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       t2Status: false,
       t3Status: true,
       status: 'validé',
-      skillId: 'skill1',
+      skillId: challengeCreated.skillId,
       embedHeight: 500,
       timer: 1234,
       format: 'mots',
@@ -62,7 +64,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       validatedAt: null,
     });
     expect(result.skill).deep.equal({
-      id: 'skill1',
+      id: result.skill.id,
       status: 'actif',
       hintStatus: 'Validé',
       descriptionStatus: 'Validé',
@@ -70,7 +72,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       level: 5,
       internationalisation: 'Monde',
       version: 1,
-      tubeId: 'tube1',
+      tubeId: result.skill.tubeId,
       activatedAt: undefined,
       archivedAt: undefined,
       obsoletedAt: undefined,
@@ -80,37 +82,37 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       learningMoreTutorialIds: [],
     });
     expect(result.tube).deep.equal({
-      id: 'tube1',
+      id: result.tube.id,
       name: '@tube',
       index: undefined,
-      thematicId: 'thematic1',
+      thematicId: result.tube.thematicId,
       createdAt: undefined,
       updatedAt: undefined,
     });
     expect(result.thematic).deep.equal({
-      id: 'thematic1',
+      id: result.thematic.id,
       index: undefined,
-      competenceId: 'competence1',
+      competenceId: result.thematic.competenceId,
       createdAt: undefined,
       updatedAt: undefined,
     });
     expect(result.competence).deep.equal({
-      id: 'competence1',
+      id: result.competence.id,
       index: '1.1',
-      areaId: 'area1',
+      areaId: result.competence.areaId,
       createdAt: undefined,
       updatedAt: undefined,
     });
     expect(result.area).deep.equal({
-      id: 'area1',
+      id: result.area.id,
       code: '1',
       color: undefined,
-      frameworkId: 'framework1',
+      frameworkId: result.area.frameworkId,
       createdAt: undefined,
       updatedAt: undefined,
     });
     expect(result.framework).deep.equal({
-      id: 'framework1',
+      id: result.framework.id,
       name: 'Pix',
       createdAt: undefined,
       updatedAt: undefined,
