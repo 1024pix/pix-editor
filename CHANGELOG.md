@@ -1,5 +1,22 @@
 
 
+## v4.9.0 (27/01/2026)
+
+
+### :rocket: Amélioration
+- [#1382](https://github.com/1024pix/pix-editor/pull/1382) [FEATURE] Ajouter un statut "Qualité validée" au niveau des épreuves (PIX-20679).
+
+### :building_construction: Tech
+- [#1380](https://github.com/1024pix/pix-editor/pull/1380) [TECH] Le cadre de traduction n'est pas seedé (PIX-21152).
+- [#1376](https://github.com/1024pix/pix-editor/pull/1376) [TECH] Correction warning `legacy ember-template-compiler.js AMD bundle`.
+
+### :arrow_up: Montée de version
+- [#1379](https://github.com/1024pix/pix-editor/pull/1379) [BUMP] Update dependency @1024pix/pix-ui to v58 (pix-editor).
+- [#1374](https://github.com/1024pix/pix-editor/pull/1374) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.27 (pix-editor).
+- [#1371](https://github.com/1024pix/pix-editor/pull/1371) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.17 (pix-editor).
+- [#1377](https://github.com/1024pix/pix-editor/pull/1377) [BUMP] Update dependency lodash to v4.17.23 [SECURITY].
+- [#1378](https://github.com/1024pix/pix-editor/pull/1378) [BUMP] Update dependency lodash to v4.17.23 [SECURITY].
+
 ## v4.8.0 (21/01/2026)
 
 
