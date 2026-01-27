@@ -16,7 +16,7 @@ import { LinkTo } from '@ember/routing';
         </:brand>
         <:navElements>
           {{#each @schemas as |schema|}}
-            <PixNavigationButton @route="admin.entity-list" @model={{schema.entityName}}>
+            <PixNavigationButton @route="admin.entities.list" @model={{schema.entityName}}>
               {{schema.label}}
             </PixNavigationButton>
           {{/each}}

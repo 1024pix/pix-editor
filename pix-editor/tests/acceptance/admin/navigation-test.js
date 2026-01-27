@@ -82,7 +82,7 @@ module('Acceptance | Admin | Navigation', function (hooks) {
       await click(await screen.findByRole('link', { name: 'Utilisateurs' }));
 
       // then
-      assert.strictEqual(currentURL(), '/administration/users');
+      assert.strictEqual(currentURL(), '/administration/users/list');
 
       assert.dom(await screen.findByRole('columnheader', { name: 'Nom' }));
       assert.dom(await screen.findByRole('columnheader', { name: 'Chocolat' }));
