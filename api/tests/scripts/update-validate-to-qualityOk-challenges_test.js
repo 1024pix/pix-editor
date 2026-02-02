@@ -73,10 +73,24 @@ describe('Script | UpdateValidateToQualityOkChallenges', () => {
         locale: 'fr',
       });
 
+      const challengeToUpdate2 = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId_update2',
+        skillId: 'skillId1',
+        status: 'validé',
+        validatedAt: null,
+        isQualityOk: false,
+      });
+      databaseBuilder.factory.buildChallenge(challengeToUpdate2);
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeToUpdate2.id,
+        challengeId: challengeToUpdate2.id,
+        locale: 'fr',
+      });
+
       await databaseBuilder.commit();
     });
 
-    it('update only challenges with status validate and validateAt older than 15days ', async () => {
+    it('update only challenges with status validate and validateAt older than 15days or null ', async () => {
       // given
       const options = { dryRun: false };
 
@@ -84,11 +98,14 @@ describe('Script | UpdateValidateToQualityOkChallenges', () => {
       await script.handle({ options, logger });
 
       // then
+
       const challengesNotToUpdate1 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_notupdate1' }).first();
       const challengesNotToUpdate2 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_notupdate2' }).first();
       const challengesToUpdate = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId' }).first();
+      const challengesToUpdate2 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_update2' }).first();
       const challengesFromPix1D = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_fromPix1D' }).first();
       expect(challengesToUpdate.isQualityOk).to.be.true;
+      expect(challengesToUpdate2.isQualityOk).to.be.true;
       expect(challengesNotToUpdate1.isQualityOk).to.be.false;
       expect(challengesNotToUpdate2.isQualityOk).to.be.false;
       expect(challengesFromPix1D.isQualityOk).to.be.false;
@@ -106,8 +123,10 @@ describe('Script | UpdateValidateToQualityOkChallenges', () => {
         const challengesNotToUpdate1 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_notupdate1' }).first();
         const challengesNotToUpdate2 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_notupdate2' }).first();
         const challengesToUpdate = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId' }).first();
+        const challengesToUpdate2 = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_update2' }).first();
         const challengesFromPix1D = await knex.select('isQualityOk').from('challenges').where({ id: 'challengeId_fromPix1D' }).first();
         expect(challengesToUpdate.isQualityOk).to.be.false;
+        expect(challengesToUpdate2.isQualityOk).to.be.false;
         expect(challengesNotToUpdate1.isQualityOk).to.be.false;
         expect(challengesNotToUpdate2.isQualityOk).to.be.false;
         expect(challengesFromPix1D.isQualityOk).to.be.false;
