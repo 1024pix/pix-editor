@@ -699,7 +699,6 @@ describe('Unit | Domain | Challenge', () => {
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY2.RAS,
         alternativeVersion: 5,
-        alpha: 'olé',
         archivedAt: new Date('2020-01-01'),
         author: 'CHU',
         autoReply: 'oui c auto reply',
@@ -707,7 +706,6 @@ describe('Unit | Domain | Challenge', () => {
         contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
         createdAt: new Date('2019-01-01'),
         declinable: Challenge.DECLINABLES.NON,
-        delta: 'super delta',
         embedHeight: 800,
         focusable: 'oui avec plaisir',
         format: Challenge.FORMATS.PETIT,
@@ -749,7 +747,6 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.accessibility1).toEqual(challenge.accessibility1);
       expect(clonedChallenge.accessibility2).toEqual(challenge.accessibility2);
       expect(clonedChallenge.alternativeVersion).toEqual(alternativeVersion);
-      expect(clonedChallenge.alpha).toBeNull;
       expect(clonedChallenge.airtableId).toBeNull;
       expect(clonedChallenge.archivedAt).toBeNull;
       expect(clonedChallenge.author).toEqual(challenge.author);
@@ -758,7 +755,6 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.contextualizedFields).toEqual(challenge.contextualizedFields);
       expect(clonedChallenge.createdAt).toBeNull;
       expect(clonedChallenge.declinable).toEqual(challenge.declinable);
-      expect(clonedChallenge.delta).toBeNull;
       expect(clonedChallenge.embedHeight).toEqual(challenge.embedHeight);
       expect(clonedChallenge.focusable).toEqual(challenge.focusable);
       expect(clonedChallenge.format).toEqual(challenge.format);

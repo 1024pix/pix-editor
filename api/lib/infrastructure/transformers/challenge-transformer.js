@@ -48,12 +48,10 @@ function _fillAlternativeQualityFields(challenge, prototype) {
 function _filterChallengeFields(challenge) {
   const fieldsToInclude = [
     'id',
-    'alpha',
     'alternativeInstruction',
     'attachments',
     'autoReply',
     'competenceId',
-    'delta',
     'embedUrl',
     'embedTitle',
     'embedHeight',

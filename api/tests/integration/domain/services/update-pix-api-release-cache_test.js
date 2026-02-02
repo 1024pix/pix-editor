@@ -76,12 +76,10 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
-              alpha: 0.5,
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'competence1',
-              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
               embedHeight: 500,
@@ -182,12 +180,10 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
-              alpha: 0.5,
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'competence1',
-              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
               embedHeight: 500,
@@ -303,12 +299,10 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA', {
               id: 'challengeIdA',
-              alpha: 0.5,
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'competence1',
-              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
               embedHeight: 500,
@@ -408,12 +402,10 @@ describe('Integration | Service | update pix api release cache', function() {
           const pixApiCacheScope = nock('https://some-api-base-url.fr')
             .patch('/api/cache/challenges/challengeIdA_ES', {
               id: 'challengeIdA_ES',
-              alpha: 0.5,
               alternativeInstruction: '',
               attachments: ['http://url-piecejointe.com'],
               autoReply: false,
               competenceId: 'competence1',
-              delta: 0.2,
               embedUrl: null,
               embedTitle: '',
               embedHeight: 500,

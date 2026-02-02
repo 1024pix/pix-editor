@@ -53,8 +53,6 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       archivedAt: '2023-03-03T10:47:05Z',
       madeObsoleteAt: '2023-04-04T10:47:05Z',
       skillId: 'recSkillId',
-      alpha: 1,
-      delta: 1,
       version: 1,
       locale: 'fr',
       urlsToConsult: ['a'],
@@ -104,8 +102,6 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       validatedAt: '2020-02-02T14:17:30Z',
       archivedAt: '2020-03-03T10:47:05Z',
       madeObsoleteAt: '2020-04-04T10:47:05Z',
-      alpha: 2,
-      delta: 2,
       version: 1,
       ...dataThatShouldBeTheSame,
     });

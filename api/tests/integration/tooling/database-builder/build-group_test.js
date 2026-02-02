@@ -35,8 +35,6 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       accessibility2: 'RAS',
       spoil: 'Non Sp',
       responsive: 'Non',
-      delta: 0.2,
-      alpha: 0.5,
       shuffled: false,
       contextualizedFields: ['instruction', 'illustration'],
       createdAt: new Date('1986-07-14T00:00:00Z'),
