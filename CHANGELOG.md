@@ -1,5 +1,11 @@
 
 
+## v4.10.1 (02/02/2026)
+
+
+### :building_construction: Tech
+- [#1390](https://github.com/1024pix/pix-editor/pull/1390) [TECH] Prendre en compte les épreuve dont le champ `validatedAt` n'est pas remplis lors de la reprise de donner pour le status validé qualité (PIX-21355).
+
 ## v4.10.0 (02/02/2026)
 
 
