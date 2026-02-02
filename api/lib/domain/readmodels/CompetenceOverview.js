@@ -182,6 +182,8 @@ class SkillOverview {
     validatedChallengesCount,
     archivedChallengesCount,
     obsoleteChallengesCount,
+    isPrototypeQualityOk,
+    isPrototypeToRephrase,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -192,6 +194,8 @@ class SkillOverview {
     this.validatedChallengesCount = validatedChallengesCount;
     this.archivedChallengesCount = archivedChallengesCount;
     this.obsoleteChallengesCount = obsoleteChallengesCount;
+    this.isPrototypeQualityOk = isPrototypeQualityOk;
+    this.isPrototypeToRephrase = isPrototypeToRephrase;
   }
 
   static buildForChallengesProduction({ skill, challenges, locale }) {
@@ -207,6 +211,8 @@ class SkillOverview {
       name: skill.name,
       prototypeId: productionPrototype?.id,
       isPrototypeDeclinable: productionPrototype?.isDeclinable,
+      isPrototypeQualityOk: productionPrototype?.isQualityOk,
+      isPrototypeToRephrase: productionPrototype?.primaryLocalizedChallenge?.toRephrase,
       proposedChallengesCount: countChallengesByStatusAndLocale(
         productionChallenges,
         Challenge.STATUSES.PROPOSE,
