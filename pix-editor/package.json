@@ -51,7 +51,7 @@
     "@rollup/plugin-babel": "^6.1.0",
     "@sentry/ember": "^10.31.0",
     "acorn": "^8.15.0",
-    "babel-plugin-ember-template-compilation": "^3.0.1",
+    "babel-plugin-ember-template-compilation": "^4.0.0",
     "canvg": "^4.0.3",
     "countries-list": "^3.2.2",
     "css-element-queries": "file:external/css-element-queries",
