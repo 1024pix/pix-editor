@@ -35,7 +35,9 @@ export class UpdateValidateToQualityOkChallenges extends Script {
           .join('frameworks', 'areas.frameworkId', '=', 'frameworks.id')
           .where('frameworks.name', '<>', 'Pix 1D')
           .where('challenges.status', 'validé')
-          .where('challenges.validatedAt', '<=', date);
+          .where(function() {
+            this.where('challenges.validatedAt', '<=', date).orWhereNull('challenges.validatedAt');
+          });
 
         const changedChallenges = await transaction('challenges')
           .update({ isQualityOk: true })
