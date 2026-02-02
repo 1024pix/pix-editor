@@ -1,5 +1,18 @@
 
 
+## v4.10.0 (02/02/2026)
+
+
+### :rocket: Amélioration
+- [#1387](https://github.com/1024pix/pix-editor/pull/1387) [FEATURE] Besoin de mettre en Qualité Validé les épreuves en prod à J+15 (PIX-21098).
+
+### :arrow_up: Montée de version
+- [#1383](https://github.com/1024pix/pix-editor/pull/1383) [BUMP] Update dependency @1024pix/pix-ui to ^58.4.0 (pix-editor).
+- [#1381](https://github.com/1024pix/pix-editor/pull/1381) [BUMP] Update dependency babel-plugin-ember-template-compilation to v4 (pix-editor).
+
+### :coffee: Autre
+- [#1386](https://github.com/1024pix/pix-editor/pull/1386) [REFACTO] Supprimer les champs alpha et delta des épreuves (PIX-21229).
+
 ## v4.9.0 (27/01/2026)
 
 
