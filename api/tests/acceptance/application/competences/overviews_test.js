@@ -231,7 +231,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           competenceId,
           files: [],
-          isQualityOk: true,
+          isQualityOk: false,
         },
         {
           id: 'recChallenge5',
@@ -348,8 +348,8 @@ describe('Acceptance | Route | competence-overviews', () => {
             attributes: {
               'airtable-id': 'recCompetence1',
               name: '2.2 Mon super titre',
-              'tubes-count': 3,
-              'skills-count': 4,
+              'tubes-count': 4,
+              'skills-count': 5,
               'thematic-overviews': [
                 {
                   airtableId: 'recThematic2',
@@ -367,7 +367,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                           validatedChallengesCount: 1,
                           proposedChallengesCount: 0,
                           isPrototypeDeclinable: true,
-                          isPrototypeQualityOk: true,
+                          isPrototypeQualityOk: false,
                           isPrototypeToRephrase: false,
                         },
                         null,
@@ -375,6 +375,29 @@ describe('Acceptance | Route | competence-overviews', () => {
                         null,
                         null,
                         null,
+                        null,
+                      ],
+                    },
+                    {
+                      airtableId: 'recTube5',
+                      name: '@tube5',
+                      skillOverviews: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        {
+                          id: 'recSkill5',
+                          airtableId: 'recSkill5',
+                          name: '@tube56',
+                          prototypeId: 'recChallenge5',
+                          validatedChallengesCount: 1,
+                          proposedChallengesCount: 0,
+                          isPrototypeDeclinable: false,
+                          isPrototypeQualityOk: false,
+                          isPrototypeToRephrase: false,
+                        },
                         null,
                       ],
                     },
@@ -493,38 +516,9 @@ describe('Acceptance | Route | competence-overviews', () => {
             attributes: {
               'airtable-id': 'recCompetence1',
               name: '2.2 Mon super titre',
-              'tubes-count': 3,
-              'skills-count': 3,
+              'tubes-count': 2,
+              'skills-count': 2,
               'thematic-overviews': [
-                {
-                  airtableId: 'recThematic2',
-                  name: 'Thématique 2',
-                  tubeOverviews: [
-                    {
-                      airtableId: 'recTube4',
-                      name: '@tube4',
-                      skillOverviews: [
-                        {
-                          id: 'recSkill4',
-                          airtableId: 'recSkill4',
-                          name: '@tube41',
-                          prototypeId: 'recChallenge4',
-                          validatedChallengesCount: 0,
-                          proposedChallengesCount: 1,
-                          isPrototypeDeclinable: true,
-                          isPrototypeQualityOk: true,
-                          isPrototypeToRephrase: false,
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                      ],
-                    },
-                  ],
-                },
                 {
                   airtableId: 'recThematic1',
                   name: 'Thématique 1',

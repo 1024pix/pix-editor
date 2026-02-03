@@ -12,12 +12,15 @@ export class CompetenceOverview {
 
   static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale, localizedFrameworkTubes }) {
     let id = `${competence.id}:challenges-production`;
-    const challengesIdWithQualityOk = challenges.filter(({ isQualityOk }) => isQualityOk).map(({ id }) => id);
-    const skillsFilterByChallengeWithQualityOk = skills.filter(
-      ({ challengeIds }) => {
-        const challengesWithQualityCheck = challengeIds.filter((c) => challengesIdWithQualityOk.indexOf(c) !== -1);
-        return challengesWithQualityCheck.length > 0;
-      });
+    let skillsFiltered = skills;
+    if (locale) {
+      const challengesIdWithQualityOk = challenges.filter(({ isQualityOk }) => isQualityOk).map(({ id }) => id);
+      skillsFiltered = skills.filter(
+        ({ challengeIds }) => {
+          const challengesWithQualityCheck = challengeIds.filter((c) => challengesIdWithQualityOk.indexOf(c) !== -1);
+          return challengesWithQualityCheck.length > 0;
+        });
+    }
     if (locale) id += `:${locale}`;
     return new CompetenceOverview({
       id,
@@ -29,7 +32,7 @@ export class CompetenceOverview {
           ThematicOverview.buildForChallengesProduction({
             thematic,
             tubes,
-            skills: skillsFilterByChallengeWithQualityOk,
+            skills: skillsFiltered,
             challenges,
             locale,
             localizedFrameworkTubes,
