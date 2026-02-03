@@ -49,6 +49,11 @@ export default class CompetenceOverviewSkill extends Component {
             {{#unless @skillOverview.isPrototypeDeclinable}}
               <span class="">NR</span>
             {{/unless}}
+            {{#if @locale}}
+              {{#if @skillOverview.isPrototypeToRephrase}}
+                <span title="L'épreuve doit être revue"><i class="exclamation icon"></i></span>
+              {{/if}}
+            {{/if}}
           </span>
         </LinkTo>
       {{/if}}
