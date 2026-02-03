@@ -37,6 +37,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       locales: ['fr'],
       preview: 'api/urlto/challengeProtoValide',
       isQualityOk: true,
+      toRephrase: true,
     });
     const localizedProtoValideFr = store.createRecord('localized-challenge', {
       id: challengeProtoValide.id,
@@ -326,6 +327,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
+      assert.dom(prototype).includesText('A revoir');
 
       const archivedAndPausedNl = validatedChallenges[2];
       assert.dom(archivedAndPausedNl).includesText('consigne NL challengeDecliArchivee');
