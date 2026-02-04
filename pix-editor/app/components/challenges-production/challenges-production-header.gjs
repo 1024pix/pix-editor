@@ -29,6 +29,11 @@ export default class ChallengesProduction extends Component {
         </PixTag>
         <span class="challenges-production-header__separator"></span>
         V{{@skill.version}}
+        {{#if @isToRephrase}}
+          <PixTag @color="error">
+            A revoir
+          </PixTag>
+        {{/if}}
       </p>
       <div class="challenges-production-header__action-buttons">
         {{#if @canExpand}}

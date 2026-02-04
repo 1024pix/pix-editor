@@ -38,6 +38,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       preview: 'api/urlto/challengeProtoValide',
       isQualityOk: true,
       toRephrase: true,
+      skill,
     });
     const localizedProtoValideFr = store.createRecord('localized-challenge', {
       id: challengeProtoValide.id,
@@ -266,6 +267,12 @@ module('Integration | Component | challenges-production | localized-challenges-p
       );
     });
 
+    test('it should display resume skill state', async function (assert) {
+      // then
+      assert.dom(screen.getByText(`actif`)).exists();
+      assert.dom(screen.getByText(`A revoir`)).exists();
+    });
+
     test('should display all expected info for a given challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
@@ -277,6 +284,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
     });
+
     module('it should display actions', function () {
       test('when have translation for current locale', async function (assert) {
         // when
@@ -327,7 +335,6 @@ module('Integration | Component | challenges-production | localized-challenges-p
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
-      assert.dom(prototype).includesText('A revoir');
 
       const archivedAndPausedNl = validatedChallenges[2];
       assert.dom(archivedAndPausedNl).includesText('consigne NL challengeDecliArchivee');

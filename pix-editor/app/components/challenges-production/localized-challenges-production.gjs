@@ -12,7 +12,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
-import { and } from 'ember-truth-helpers';
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 
@@ -33,6 +32,10 @@ export default class LocalizedChallengesProduction extends Component {
     );
   }
 
+  get isToRephrase() {
+    return this.args.skill.productionPrototype.toRephrase;
+  }
+
   @action
   toggleDisplayObsoleteChallenges() {
     this.shouldDisplayObsoleteChallenges = !this.shouldDisplayObsoleteChallenges;
@@ -49,6 +52,7 @@ export default class LocalizedChallengesProduction extends Component {
       @overview={{@overview}}
       @competenceId={{@competence.id}}
       @canExpand={{@canExpand}}
+      @isToRephrase={{this.isToRephrase}}
     />
     <section
       class="challenges-production
@@ -133,11 +137,6 @@ export default class LocalizedChallengesProduction extends Component {
                 <PixTag @color={{challengeLocale.primaryStatusColor}}>
                   {{challengeLocale.primaryStatusText}}
                 </PixTag>
-                {{#if (and challengeLocale.toRephrase challengeLocale.isPrototype)}}
-                  <PixTag @color="error">
-                    A revoir
-                  </PixTag>
-                {{/if}}
               </:cell>
             </PixTableColumn>
             <PixTableColumn @context={{context}}>

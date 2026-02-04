@@ -39,10 +39,6 @@ export default class ChallengeLocaleModel extends Model {
     return this.localizedChallengeValue?.instruction ?? this.challenge.instruction;
   }
 
-  get toRephrase() {
-    return this.challenge.toRephrase;
-  }
-
   get primaryUpdatedAt() {
     return this.challenge.updatedAt;
   }
