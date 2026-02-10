@@ -3,6 +3,8 @@ export * from './Attachment.js';
 export * from './Challenge.js';
 export * from './ChangelogEntry.js';
 export * from './Competence.js';
+export * from './Embed.js';
+export * from './EmbedConfig.js';
 export * from './Framework.js';
 export * from './LocalizedChallenge.js';
 export * from './LocalizedFrameworkTubes.js';

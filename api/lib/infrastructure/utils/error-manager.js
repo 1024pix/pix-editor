@@ -105,6 +105,14 @@ function _mapToInfrastructureError(error) {
     };
   }
 
+  if (error instanceof DomainErrors.EmbedAlreadyExistsError) {
+    const infraError = new InfraErrors.ConflictError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+
   const infraError = new InfraErrors.InfrastructureError(error.message);
   return {
     infraErrors: [infraError],

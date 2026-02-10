@@ -97,3 +97,9 @@ export class InvalidLocalizedFrameworkTubesError extends DomainError {
     super(message);
   }
 }
+
+export class EmbedAlreadyExistsError extends DomainError {
+  constructor(name) {
+    super(`Un embed avec le nom "${name}" existe déjà`);
+  }
+}

@@ -23,6 +23,7 @@ export * from './get-skill-challenges-production.js';
 export * from './find-attachment.js';
 export * from './find-attachments.js';
 export * from './import-translations.js';
+export * from './install-embed.js';
 export * from './list-skills.js';
 export * from './list-thematics.js';
 export * from './list-tubes.js';

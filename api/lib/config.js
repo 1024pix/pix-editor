@@ -165,6 +165,12 @@ export const seedsConfig = {
   locales: _getStringArray(process.env.SEEDS_LOCALES, ['fr', 'en']),
 };
 
+export const pixEpreuves = {
+  githubAccessToken: process.env.EPREUVES_GITHUB_ACCESS_TOKEN,
+  githubOwner: process.env.EPREUVES_GITHUB_OWNER,
+  githubRepo: process.env.EPREUVES_GITHUB_REPO,
+};
+
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';

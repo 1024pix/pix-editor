@@ -6,6 +6,7 @@ export * as competenceOverviewSerializer from './competence-overview-serializer.
 export * as countrySerializer from './country-serializer.js';
 export * as competenceSerializer from './competence-serializer.js';
 export * as configSerializer from './config-serializer.js';
+export * as embedSerializer from './embed-serializer.js';
 export * as errorSerializer from './error-serializer.js';
 export * as frameworkSerializer from './framework-serializer.js';
 export * as localizedChallengeSerializer from './localized-challenge-serializer.js';
