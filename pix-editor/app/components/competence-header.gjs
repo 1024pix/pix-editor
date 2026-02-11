@@ -43,6 +43,14 @@ export default class CompetenceHeader extends Component {
       value: 'fr-fr',
     },
     {
+      label: 'Français (Belgique)',
+      value: 'fr-BE',
+    },
+    {
+      label: 'Allemand (Autriche)',
+      value: 'de-AT',
+    },
+    {
       label: 'Anglais',
       value: 'en',
     },
@@ -53,6 +61,10 @@ export default class CompetenceHeader extends Component {
     {
       label: 'Espagnol (Amérique latine)',
       value: 'es-419',
+    },
+    {
+      label: 'Italien',
+      value: 'it',
     },
     {
       label: 'Néerlandais',

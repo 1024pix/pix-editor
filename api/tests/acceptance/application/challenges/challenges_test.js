@@ -6,6 +6,19 @@ import * as config from '../../../../lib/config.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | challenges-controller', () => {
+  beforeEach(() => {
+    vi.spyOn(LocalizedChallenge, 'SUPPORTED_LOCALES', 'get').mockReturnValue([
+      'en',
+      'es',
+      'es-419',
+      'fr',
+      'fr-BE',
+      'fr-FR',
+      'nl-BE',
+      'nl',
+    ]);
+  });
+
   describe('GET /challenges', () => {
     let user;
     beforeEach(async function() {

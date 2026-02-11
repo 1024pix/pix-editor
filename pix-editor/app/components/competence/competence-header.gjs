@@ -23,6 +23,10 @@ export default class CompetenceHeader extends Component {
 
   languageOptions = [
     {
+      label: 'Allemand (Autriche)',
+      value: 'de-AT',
+    },
+    {
       label: 'Anglais',
       value: 'en',
     },
@@ -43,7 +47,11 @@ export default class CompetenceHeader extends Component {
       value: 'fr-fr',
     },
     {
-      label: 'Italie',
+      label: 'Français (Belgique)',
+      value: 'fr-BE',
+    },
+    {
+      label: 'Italien',
       value: 'it',
     },
     {
