@@ -134,9 +134,12 @@ class TubeOverview {
   }
 
   static buildForChallengesProduction({ tube, skills, challenges, locale, localizedFrameworkTube }) {
-    const tubeSkills = skills.filter((skill) => skill.tubeId === tube.id);
-    const localizedFrameworkSkills = TubeOverview.getLocalizedFrameworkSkills({ skills: tubeSkills, locale, localizedFrameworkTube });
-    const skillsByLevel = arrangeSkillsByLevel(localizedFrameworkSkills);
+    const filteredSkills = skills
+      .filter(skillFilters.byTube(tube))
+      .filter(skillFilters.byLocalizedFramework({ locale, localizedFrameworkTube }))
+      .filter(skillFilters.byValidatedPrototypeIsQualityOk({ challenges, locale }));
+
+    const skillsByLevel = arrangeSkillsByLevel(filteredSkills);
 
     return new TubeOverview({
       airtableId: tube.airtableId,
@@ -149,12 +152,6 @@ class TubeOverview {
         }),
       ),
     });
-  }
-
-  static getLocalizedFrameworkSkills({ skills, locale, localizedFrameworkTube }) {
-    if (!locale) return skills;
-    if (!localizedFrameworkTube) return [];
-    return skills.filter((skill) => skill.level <= localizedFrameworkTube.maxLevel);
   }
 
   static buildForChallengesWorkbench({ tube, skills, challenges }) {
@@ -171,6 +168,30 @@ class TubeOverview {
   }
 }
 
+const skillFilters = {
+  byTube(tube) {
+    return (skill) => skill.tubeId === tube.id;
+  },
+
+  byLocalizedFramework({ locale, localizedFrameworkTube }) {
+    if (!locale) return () => true; // no filter
+    if (!localizedFrameworkTube) return () => false; // discard everything
+
+    return (skill) => skill.level <= localizedFrameworkTube.maxLevel;
+  },
+
+  byValidatedPrototypeIsQualityOk({ challenges, locale }) {
+    if (!locale) return () => true; // no filter
+
+    return (skill) => {
+      const validatedPrototype = challenges.find((challenge) => {
+        return challenge.skillId === skill.id && challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE && challenge.status === Challenge.STATUSES.VALIDE;
+      });
+      return validatedPrototype?.isQualityOk;
+    };
+  },
+};
+
 class SkillOverview {
   constructor({
     id,
@@ -182,6 +203,7 @@ class SkillOverview {
     validatedChallengesCount,
     archivedChallengesCount,
     obsoleteChallengesCount,
+    isPrototypeToRephrase,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -192,13 +214,13 @@ class SkillOverview {
     this.validatedChallengesCount = validatedChallengesCount;
     this.archivedChallengesCount = archivedChallengesCount;
     this.obsoleteChallengesCount = obsoleteChallengesCount;
+    this.isPrototypeToRephrase = isPrototypeToRephrase;
   }
 
   static buildForChallengesProduction({ skill, challenges, locale }) {
     if (!skill) return null;
 
     const productionPrototype = challenges.find(isProductionPrototypeOf(skill));
-
     const productionChallenges = challenges.filter(hasSkillIdAndVersionOf(productionPrototype));
 
     return new SkillOverview({
@@ -207,6 +229,7 @@ class SkillOverview {
       name: skill.name,
       prototypeId: productionPrototype?.id,
       isPrototypeDeclinable: productionPrototype?.isDeclinable,
+      isPrototypeToRephrase: productionPrototype?.primaryLocalizedChallenge?.toRephrase,
       proposedChallengesCount: countChallengesByStatusAndLocale(
         productionChallenges,
         Challenge.STATUSES.PROPOSE,

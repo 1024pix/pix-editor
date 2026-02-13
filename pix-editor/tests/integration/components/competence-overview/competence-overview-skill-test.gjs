@@ -106,4 +106,26 @@ module('Integration | Component | competence-overview | competence-overview-skil
 
     assert.dom(screen.getByText('NR')).exists();
   });
+
+  test('it should display a skill cell with `toRephrase` challenge when locale exists', async function (assert) {
+    // given
+    const skillOverview = {
+      id: 'skillOverviewId',
+      name: '@skillOverviewName1',
+      prototypeId: 'rec123',
+      isPrototypeDeclinable: true,
+      validatedChallengesCount: 1,
+      proposedChallengesCount: 0,
+      isPrototypeToRephrase: true,
+    };
+
+    // when
+    screen = await render(
+      <template><CompetenceOverviewSkill @skillOverview={{skillOverview}} @locale="en" /></template>,
+    );
+
+    // then
+    assert.dom(screen.getByText('@skillOverviewName1')).exists();
+    assert.dom(screen.getByTitle("L'épreuve doit être revue")).exists();
+  });
 });

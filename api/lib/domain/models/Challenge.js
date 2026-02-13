@@ -283,12 +283,12 @@ export class Challenge {
     return [Challenge.RESPONSIVES.TABLETTE_ET_SMARTPHONE, Challenge.RESPONSIVES.TABLETTE].includes(this.responsive);
   }
 
-  get #primaryLocalizedChallenge() {
+  get primaryLocalizedChallenge() {
     return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale);
   }
 
   get #primaryUrlsToConsult() {
-    return this.#primaryLocalizedChallenge.urlsToConsult;
+    return this.primaryLocalizedChallenge.urlsToConsult;
   }
 
   get translations() {
@@ -313,7 +313,7 @@ export class Challenge {
     attachments,
   }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
-    const localizedChallengePrimary = this.#primaryLocalizedChallenge;
+    const localizedChallengePrimary = this.primaryLocalizedChallenge;
     const { clonedLocalizedChallenge, clonedAttachments } = localizedChallengePrimary.clone({
       id,
       challengeId: id,
@@ -401,13 +401,13 @@ export class Challenge {
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = localizedChallenge.geography;
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
-    this.requireGafamWebsiteAccess = this.#primaryLocalizedChallenge.requireGafamWebsiteAccess;
-    this.isIncompatibleIpadCertif = this.#primaryLocalizedChallenge.isIncompatibleIpadCertif;
-    this.deafAndHardOfHearing = this.#primaryLocalizedChallenge.deafAndHardOfHearing;
-    this.isAwarenessChallenge = this.#primaryLocalizedChallenge.isAwarenessChallenge;
-    this.toRephrase = this.#primaryLocalizedChallenge.toRephrase;
-    this.hasEmbedInternalValidation = this.#primaryLocalizedChallenge.hasEmbedInternalValidation;
-    this.noValidationNeeded = this.#primaryLocalizedChallenge.noValidationNeeded;
+    this.requireGafamWebsiteAccess = this.primaryLocalizedChallenge.requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = this.primaryLocalizedChallenge.isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = this.primaryLocalizedChallenge.deafAndHardOfHearing;
+    this.isAwarenessChallenge = this.primaryLocalizedChallenge.isAwarenessChallenge;
+    this.toRephrase = this.primaryLocalizedChallenge.toRephrase;
+    this.hasEmbedInternalValidation = this.primaryLocalizedChallenge.hasEmbedInternalValidation;
+    this.noValidationNeeded = this.primaryLocalizedChallenge.noValidationNeeded;
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)

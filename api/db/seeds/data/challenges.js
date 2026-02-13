@@ -121,6 +121,7 @@ export function buildChallenge({
   type = Challenge.TYPES.QCM,
   autoReply = false,
   shouldAddAttachment = false,
+  isQualityOk = false,
   typeForAttachment,
   databaseBuilder,
   locales,
@@ -141,6 +142,7 @@ export function buildChallenge({
     alternativeVersion: decliVersion,
     type,
     autoReply,
+    isQualityOk,
   };
   databaseBuilder.factory.buildChallenge(challengeItem);
   addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);
@@ -263,6 +265,7 @@ function buildChallengesForActiveSkill(
       isProto: true,
       protoVersion: skillItem.version,
       decliVersion: null,
+      isQualityOk: true,
       type,
       autoReply,
       shouldAddAttachment,
