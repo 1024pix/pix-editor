@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import sinon from 'sinon';
 
 module('Unit | Model | challenge', function (hooks) {
   setupTest(hooks);
@@ -121,7 +120,6 @@ module('Unit | Model | challenge', function (hooks) {
       toRephrase: true,
       hasEmbedInternalValidation: true,
       noValidationNeeded: true,
-      isQualityOk: true,
     };
   });
 
@@ -211,6 +209,7 @@ module('Unit | Model | challenge', function (hooks) {
         'champ hasEmbedInternalValidation',
       );
       assert.strictEqual(clonedChallenge.noValidationNeeded, prototype.noValidationNeeded, 'champ noValidationNeeded');
+      assert.strictEqual(clonedChallenge.isQualityOk, undefined, 'champ isQualityOk');
     });
 
     test('it should duplicate challenge to create new alternative version', async function (assert) {
@@ -302,6 +301,7 @@ module('Unit | Model | challenge', function (hooks) {
         alternative.noValidationNeeded,
         'champ noValidationNeeded',
       );
+      assert.strictEqual(clonedChallenge.isQualityOk, undefined, 'champ isQualityOk');
     });
 
     test('it should clone the attachments', async function (assert) {
@@ -343,6 +343,7 @@ module('Unit | Model | challenge', function (hooks) {
       assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge');
       assert.strictEqual(clonedChallenge.airtableId, undefined);
       assert.strictEqual(clonedChallenge.status, 'proposé');
+      assert.strictEqual(clonedChallenge.isQualityOk, undefined);
       assert.notOk(skill);
     });
 

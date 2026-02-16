@@ -305,7 +305,16 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = ['skill', 'author', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
+    const ignoredFields = [
+      'skill',
+      'author',
+      'airtableId',
+      'updatedAt',
+      'archivedAt',
+      'madeObsoleteAt',
+      'validatedAt',
+      'isQualityOk',
+    ];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -322,7 +331,15 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = ['skill', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
+    const ignoredFields = [
+      'skill',
+      'airtableId',
+      'updatedAt',
+      'archivedAt',
+      'madeObsoleteAt',
+      'validatedAt',
+      'isQualityOk',
+    ];
     const data = this._getJSON(ignoredFields);
     data.status = 'proposé';
 
