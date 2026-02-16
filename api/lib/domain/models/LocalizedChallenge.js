@@ -203,12 +203,14 @@ function isSupportedLocale(s) {
 }
 
 const SUPPORTED_LOCALES = [
+  'de-AT',
   'en',
   'es',
   'es-419',
   'fr',
   'fr-BE',
   'fr-FR',
+  'it',
   'nl-BE',
   'nl',
 ];

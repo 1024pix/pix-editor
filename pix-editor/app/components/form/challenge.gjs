@@ -307,7 +307,7 @@ export default class ChallengeForm extends Component {
   @service confirm;
   @service store;
 
-  @tracked languageOptions = [];
+  languageOptions = [];
   options = {
     types: [
       { value: 'QCU', label: 'QCU' },
@@ -358,18 +358,12 @@ export default class ChallengeForm extends Component {
     '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
   helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
 
-  constructor() {
-    super(...arguments);
-
-    const localeToLanguageMap = this.config.localeToLanguageMap;
-
-    for (const localeToLanguageMapKey in localeToLanguageMap) {
-      const option = {
-        label: localeToLanguageMap[localeToLanguageMapKey],
-        value: localeToLanguageMapKey,
-      };
-      this.languageOptions.push(option);
-    }
+  constructor(...args) {
+    super(...args);
+    this.languageOptions = Object.entries(this.config.localeToLanguageMap ?? {}).map(([value, label]) => ({
+      value,
+      label,
+    }));
   }
 
   get geographyOptionList() {
