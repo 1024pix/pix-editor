@@ -12,14 +12,25 @@ export function getSchemas() {
 export async function save(request, h) {
   const entityToDeserialize = request.payload;
   const { entityName } = request.params;
-  const entityToSave = await adminEntitySerializer.deserialize(entityToDeserialize);
+  const entityPayload = await adminEntitySerializer.deserialize(entityToDeserialize);
 
   const schema = adminSchemaRepository.getByEntityName(entityName);
-  if (!schema.creatable) return Boom.forbidden();
+  if (!schema.creatable) return Boom.forbidden(`Schema "${entityName}" is not creatable`);
 
-  const allowedProperties = schema.fields.map((field) => field.key);
-  for (const property of Object.keys(entityToSave)) {
-    if (!allowedProperties.includes(property)) return Boom.forbidden();
+  const entityToSave = {};
+  for (const field of schema.fields.filter(({ readonly }) => !readonly)) {
+    const value = entityPayload[field.key];
+
+    const isEmpty = value === undefined || value === null || value.toString().trim() === '';
+    if (isEmpty) {
+      return Boom.badRequest(`Missing value for "${field.key}" in payload`);
+    }
+
+    if (field.pattern && !new RegExp(field.pattern).test(value)) {
+      return Boom.badRequest(`Invalid value "${value}" for property "${field.key}"`);
+    }
+
+    entityToSave[field.key] = value;
   }
 
   const newEntity = await adminEntityRepository.save(entityName, entityToSave);

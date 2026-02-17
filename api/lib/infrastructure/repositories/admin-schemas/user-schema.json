@@ -10,7 +10,8 @@
     {
       "key": "id",
       "label": "Identifiant",
-      "type": "number"
+      "type": "number",
+      "readonly": true
     },
     {
       "key": "name",
@@ -20,12 +21,14 @@
     {
       "key": "trigram",
       "label": "Trigramme",
-      "type": "string"
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
     },
     {
       "key": "apiKey",
       "label": "Clé API",
-      "type": "secret"
+      "type": "secret",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
     },
     {
       "key": "access",

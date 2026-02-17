@@ -26,13 +26,13 @@ describe('Acceptance | Controller | admin', () => {
 
         // then
         expect(response.statusCode).to.equal(200);
-        expect(response.result.data.map(({ id }) => id)).to.deep.equal([
+        expect(response.result.data.map(({ id }) => id)).toStrictEqual([
           'localized-challenge-schema',
           'release-schema',
           'translation-schema',
           'user-schema',
         ]);
-        expect(response.result.data.find((schema) => schema.id === 'user-schema')).to.deep.equal({
+        expect(response.result.data.find((schema) => schema.id === 'user-schema')).toStrictEqual({
           id: 'user-schema',
           type: 'admin-schemas',
           attributes: {
@@ -46,6 +46,7 @@ describe('Acceptance | Controller | admin', () => {
                 key: 'id',
                 label: 'Identifiant',
                 type: 'number',
+                readonly: true,
               },
               {
                 key: 'name',
@@ -56,11 +57,13 @@ describe('Acceptance | Controller | admin', () => {
                 key: 'trigram',
                 label: 'Trigramme',
                 type: 'string',
+                pattern: expect.any(String),
               },
               {
                 key: 'apiKey',
                 label: 'Clé API',
                 type: 'secret',
+                pattern: expect.any(String),
               },
               {
                 key: 'access',
@@ -272,8 +275,8 @@ describe('Acceptance | Controller | admin', () => {
         });
       });
 
-      describe('when payload is invalid', () => {
-        it('should return a 403 error', async () => {
+      describe('when payload is missing properties', () => {
+        it('should return a 400 error', async () => {
           // given
           const uuid = crypto.randomUUID();
           const server = await createServer();
@@ -287,9 +290,8 @@ describe('Acceptance | Controller | admin', () => {
                 attributes: {
                   properties: {
                     name: 'Fael',
-                    pouet: 'POUET',
+                    trigram: 'FBA',
                     apiKey: uuid,
-                    access: 'admin',
                   },
                 },
               },
@@ -300,7 +302,84 @@ describe('Acceptance | Controller | admin', () => {
           const response = await server.inject(request);
 
           // then
-          expect(response.statusCode).to.equal(403);
+          expect(response.statusCode).to.equal(400);
+          expect(response.result.message).to.equal('Missing value for "access" in payload');
+        });
+      });
+
+      describe('when payload has some invalid properties', () => {
+        it('should return a 400 error', async () => {
+          // given
+          const server = await createServer();
+          const request = {
+            method: 'POST',
+            url: '/api/admin/entities/users',
+            headers: generateAuthorizationHeader(user),
+            payload: {
+              data: {
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    name: 'Fael',
+                    trigram: 'FBA',
+                    apiKey: 'NOT-A-UUID',
+                  },
+                },
+              },
+            },
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(400);
+          expect(response.result.message).to.equal('Invalid value "NOT-A-UUID" for property "apiKey"');
+        });
+      });
+
+      describe('when payload has unknown properties', () => {
+        it('should ignore extra properties and proceed', async () => {
+          // given
+          const uuid = crypto.randomUUID();
+          const server = await createServer();
+          const request = {
+            method: 'POST',
+            url: '/api/admin/entities/users',
+            headers: generateAuthorizationHeader(user),
+            payload: {
+              data: {
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    name: 'Fael',
+                    trigram: 'FBA',
+                    pouet: 'POUET',
+                    patate: 'DOUCE',
+                    chocolat: 'FRAMBOISE',
+                    apiKey: uuid,
+                    access: 'admin',
+                  },
+                },
+              },
+            },
+          };
+
+          // when
+          const response = await server.inject(request);
+          const users = await knex.select('*').from('users');
+
+          // then
+          expect(response.statusCode).to.equal(201);
+          expect(users.at(-1)).toStrictEqual({
+            id: expect.any(Number),
+            name: 'Fael',
+            trigram: 'FBA',
+            apiKey: uuid,
+            access: 'admin',
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          });
         });
       });
     });

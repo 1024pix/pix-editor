@@ -10,7 +10,8 @@
     {
       "key": "key",
       "label": "Clé",
-      "type": "string"
+      "type": "string",
+      "pattern": "^\\w+\\.\\w+\\.\\w+$"
     },
     {
       "key": "locale",
