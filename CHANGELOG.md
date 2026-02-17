@@ -1,5 +1,18 @@
 
 
+## v4.11.0 (17/02/2026)
+
+
+### :rocket: Amélioration
+- [#1393](https://github.com/1024pix/pix-editor/pull/1393) [FEATURE] Ajout de nouvelles locales de-AT fr-BE it (PIX-21402).
+- [#1391](https://github.com/1024pix/pix-editor/pull/1391) [FEATURE] Afficher uniquement les acquis prêts à être traduits sur la V2 (PIX-20938).
+
+### :bug: Correction
+- [#1397](https://github.com/1024pix/pix-editor/pull/1397) [BUGFIX] Une déclinaison "validée" passe automatiquement au statut "validé qualité" (PIX-21562).
+
+### :arrow_up: Montée de version
+- [#1388](https://github.com/1024pix/pix-editor/pull/1388) [BUMP] Update dependency @playwright/test to v1.58.0.
+
 ## v4.10.1 (02/02/2026)
 
 
