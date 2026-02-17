@@ -43,7 +43,7 @@ export default class CompetenceHeader extends Component {
       value: 'fr-fr',
     },
     {
-      label: 'Français (Belgique)',
+      label: 'Franco Belge',
       value: 'fr-BE',
     },
     {

@@ -18,7 +18,7 @@ export const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
   [LOCALE.ENGLISH_SPOKEN]: 'Anglais',
   [LOCALE.SPANISH_SPOKEN]: 'Espagnol',
   [LOCALE.FRENCH_FRANCE]: 'Franco Français',
-  [LOCALE.FRENCH_BELGIUM]: 'Français (Belgique)',
+  [LOCALE.FRENCH_BELGIUM]: 'Franco Belge',
   [LOCALE.FRENCH_SPOKEN]: 'Francophone',
   [LOCALE.ITALIAN_SPOKEN]: 'Italien',
   [LOCALE.DUTCH_SPOKEN]: 'Néerlandais',
