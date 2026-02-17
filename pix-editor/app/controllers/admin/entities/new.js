@@ -13,7 +13,7 @@ export default class NewAdminEntityController extends Controller {
   }
 
   get fieldsToDisplay() {
-    return this.model.schema.fields.filter((field) => field.key !== 'id');
+    return this.model.schema.fields.filter(({ readonly }) => !readonly);
   }
 
   onSubmit = async (data) => {
