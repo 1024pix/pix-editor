@@ -18,22 +18,38 @@ export default class NewAdminEntityForm extends Component {
       .map(([key]) => key);
   }
 
-  get formFields() {
-    return this.args.entityFields.map((field) => {
-      let error = null;
-      if (this.hasFailedSubmitting && this.emptyFields.includes(field.key)) {
-        error = 'Ce champ est requis';
-      }
+  get fieldErrors() {}
 
-      return {
-        ...field,
-        error,
-        onChange: (newValue) => {
-          this.newEntity[field.key] = newValue;
-        },
-        value: this.newEntity[field.key],
-      }
-    });
+  get formFields() {
+    return this.args.entityFields
+      .map((field) => {
+        return {
+          ...field,
+          onChange: (newValue) => {
+            this.changeFieldValue(field.key, newValue);
+          },
+          value: this.newEntity[field.key],
+        };
+      })
+      .map((field) => {
+        let error = null;
+
+        if (this.hasFailedSubmitting && this.emptyFields.includes(field.key)) {
+          error = 'Ce champ est requis';
+        }
+
+        if (!error && field.value && field.pattern) {
+          const fieldRegex = new RegExp(field.pattern);
+          if (!fieldRegex.test(field.value)) {
+            error = `La valeur de ce champ doit respecter l'expression régulière suivante : /${field.pattern}/`;
+          }
+        }
+
+        return {
+          ...field,
+          error,
+        };
+      });
   }
 
   changeFieldValue = (fieldKey, value) => {
@@ -42,7 +58,7 @@ export default class NewAdminEntityForm extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    if (this.emptyFields.length > 0) {
+    if (this.emptyFields.length > 0 || this.formFields.some(({ error }) => error)) {
       this.hasFailedSubmitting = true;
       return;
     }

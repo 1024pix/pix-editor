@@ -24,6 +24,10 @@ export default class AdminEntityFormField extends Component {
     return this.args.field.type === 'enum';
   }
 
+  get validationStatus() {
+    return this.args.field.error !== null ? 'error' : undefined;
+  }
+
   onInputChange = (inputEvent) => {
     this.args.onChange(inputEvent.target.value);
   };
@@ -35,6 +39,7 @@ export default class AdminEntityFormField extends Component {
         @requiredLabel="Champ obligatoire"
         @value={{@field.value}}
         @errorMessage={{@field.error}}
+        @validationStatus={{this.validationStatus}}
         autocomplete="off"
         type="text"
         {{on "change" this.onInputChange}}
@@ -47,8 +52,9 @@ export default class AdminEntityFormField extends Component {
       <PixInputPassword
         @id="{{@field.key}}"
         @requiredLabel="Champ obligatoire"
-        @value={{@value}}
+        @value={{@field.value}}
         @errorMessage={{@field.error}}
+        @validationStatus={{this.validationStatus}}
         autocomplete="off"
         {{on "change" this.onInputChange}}
       >
@@ -60,8 +66,9 @@ export default class AdminEntityFormField extends Component {
       <PixInput
         @id="{{@field.key}}"
         @requiredLabel="Champ obligatoire"
-        @value={{@value}}
+        @value={{@field.value}}
         @errorMessage={{@field.error}}
+        @validationStatus={{this.validationStatus}}
         autocomplete="off"
         type="number"
         {{on "change" this.onInputChange}}
@@ -74,7 +81,7 @@ export default class AdminEntityFormField extends Component {
       <PixSelect
         @id="{{@field.key}}"
         @options={{@field.options}}
-        @value={{@value}}
+        @value={{@field.value}}
         @onChange={{@onChange}}
         @requiredLabel="Champ obligatoire"
         @hideDefaultOption={{true}}
