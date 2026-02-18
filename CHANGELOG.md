@@ -1,5 +1,11 @@
 
 
+## v4.11.1 (18/02/2026)
+
+
+### :bug: Correction
+- [#1398](https://github.com/1024pix/pix-editor/pull/1398) [BUGFIX] Impossible d'afficher épreuves traduites d'un acquis avec 2 protos (PIX-21584).
+
 ## v4.11.0 (17/02/2026)
 
 
