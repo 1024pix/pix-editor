@@ -18,8 +18,6 @@ export default class NewAdminEntityForm extends Component {
       .map(([key]) => key);
   }
 
-  get fieldErrors() {}
-
   get formFields() {
     return this.args.entityFields
       .map((field) => {

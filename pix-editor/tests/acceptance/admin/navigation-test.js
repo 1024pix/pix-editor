@@ -90,5 +90,21 @@ module('Acceptance | Admin | Navigation', function (hooks) {
       assert.dom(await screen.findByRole('cell', { name: 'Dinguou' }));
       assert.dom(await screen.findByRole('cell', { name: '123' }));
     });
+
+    module('when entity is not creatable', function () {
+      test('should not display a create button', async function (assert) {
+        // given
+        this.server.create('admin-schema', {
+          label: 'Fraises',
+          entityName: 'strawberries',
+          creatable: false,
+          fields: [{ key: 'name', label: 'Nom', type: 'string' }],
+        });
+        const screen = await visit('/administration/strawberries/list');
+
+        // then
+        assert.notOk(await screen.queryByRole('link', { name: 'Créer' }), 'Create button is not visible');
+      });
+    });
   });
 });
