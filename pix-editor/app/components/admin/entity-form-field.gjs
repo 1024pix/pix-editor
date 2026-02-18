@@ -29,7 +29,8 @@ export default class AdminEntityFormField extends Component {
   }
 
   onInputChange = (inputEvent) => {
-    this.args.onChange(inputEvent.target.value);
+    const newValue = this.isNumber ? Number(inputEvent.target.value) : inputEvent.target.value;
+    this.args.onChange(newValue);
   };
 
   <template>
