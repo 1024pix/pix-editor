@@ -25,83 +25,133 @@ module('Unit | Model | skill', function (hooks) {
     locales: ['Franco Français'],
     status: 'validé',
   };
+
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
   });
 
-  test('it should return a map of unique language and alternatives', function (assert) {
-    // given
-    const skill = store.createRecord('skill', {
-      id: 'rec123456',
-      name: 'skillName',
-      challenges: [
-        store.createRecord('challenge', challenge1),
-        store.createRecord('challenge', challenge2),
-        store.createRecord('challenge', challenge3),
-        store.createRecord('challenge', challenge4),
-      ],
+  module('#languagesAndAlternativesCount', function () {
+    test('it should return a map of unique language and alternatives', function (assert) {
+      // given
+      const skill = store.createRecord('skill', {
+        id: 'rec123456',
+        name: 'skillName',
+        challenges: [
+          store.createRecord('challenge', challenge1),
+          store.createRecord('challenge', challenge2),
+          store.createRecord('challenge', challenge3),
+          store.createRecord('challenge', challenge4),
+        ],
+      });
+
+      // when
+      const languagesAndAlternativesCount = skill.languagesAndAlternativesCount;
+
+      // then
+      assert.strictEqual(languagesAndAlternativesCount.get('Anglais'), 2);
     });
-
-    // when
-    const languagesAndAlternativesCount = skill.languagesAndAlternativesCount;
-
-    // then
-    assert.strictEqual(languagesAndAlternativesCount.get('Anglais'), 2);
   });
 
-  test('it should return an array of unique language sorted', function (assert) {
-    // given
-    const skill = store.createRecord('skill', {
-      id: 'rec123456',
-      name: 'skillName',
-      challenges: [
-        store.createRecord('challenge', challenge1),
-        store.createRecord('challenge', challenge2),
-        store.createRecord('challenge', challenge3),
-        store.createRecord('challenge', challenge4),
-      ],
+  module('#languages', function () {
+    test('it should return an array of unique language sorted', function (assert) {
+      // given
+      const skill = store.createRecord('skill', {
+        id: 'rec123456',
+        name: 'skillName',
+        challenges: [
+          store.createRecord('challenge', challenge1),
+          store.createRecord('challenge', challenge2),
+          store.createRecord('challenge', challenge3),
+          store.createRecord('challenge', challenge4),
+        ],
+      });
+
+      // when
+      const languages = skill.languages;
+      const expected = ['Anglais', 'Franco Français', 'Francophone'];
+
+      // then
+      assert.deepEqual(languages, expected);
     });
-
-    // when
-    const languages = skill.languages;
-    const expected = ['Anglais', 'Franco Français', 'Francophone'];
-
-    // then
-    assert.deepEqual(languages, expected);
   });
 
-  test('it should clone skill with save method and adapterOptions', async function (assert) {
-    // given
-    const level = Symbol('level');
-    const storeStub = { createRecord: sinon.stub() };
-    const saveStub = sinon.stub();
-    storeStub.createRecord.returns({ save: saveStub });
+  module('#clone', function () {
+    test('it should clone skill with save method and adapterOptions', async function (assert) {
+      // given
+      const level = Symbol('level');
+      const storeStub = { createRecord: sinon.stub() };
+      const saveStub = sinon.stub();
+      storeStub.createRecord.returns({ save: saveStub });
 
-    const tube = store.createRecord('tube', { pixId: 'tubeId' });
-    const skill = store.createRecord('skill', {
-      id: 'rec_1',
-      pixId: 'pix_1',
-      status: 'actif',
-      competence: ['competenceId'],
-    });
+      const tube = store.createRecord('tube', { pixId: 'tubeId' });
+      const skill = store.createRecord('skill', {
+        id: 'rec_1',
+        pixId: 'pix_1',
+        status: 'actif',
+        competence: ['competenceId'],
+      });
 
-    skill.myStore = storeStub;
-    // when
-    await skill.clone({ tubeDestination: tube, level });
+      skill.myStore = storeStub;
+      // when
+      await skill.clone({ tubeDestination: tube, level });
 
-    // then
-    assert.ok(saveStub.calledOnce);
-    assert.ok(
-      saveStub.calledWith({
-        adapterOptions: {
-          clone: true,
-          body: {
-            skillIdToClone: 'pix_1',
-            tubeDestinationId: 'tubeId',
-            level,
+      // then
+      assert.ok(saveStub.calledOnce);
+      assert.ok(
+        saveStub.calledWith({
+          adapterOptions: {
+            clone: true,
+            body: {
+              skillIdToClone: 'pix_1',
+              tubeDestinationId: 'tubeId',
+              level,
+            },
           },
-        },
-      }),
-    );
+        }),
+      );
+    });
+  });
+
+  module('#productionPrototype', function () {
+    module('when challenges relationship is loaded', function () {
+      test('returns validated prototype', function (assert) {
+        // given
+        const skill = store.createRecord('skill', {
+          id: 'skill123',
+          name: 'skillName',
+          challenges: [
+            store.createRecord('challenge', { id: 'challenge1', genealogy: 'Prototype 1', status: 'proposé' }),
+            store.createRecord('challenge', { id: 'challenge2', genealogy: 'Décliné 1', status: 'proposé' }),
+            store.createRecord('challenge', { id: 'challenge3', genealogy: 'Prototype 1', status: 'validé' }),
+          ],
+        });
+
+        // when
+        const { productionPrototype } = skill;
+
+        // then
+        assert.strictEqual(productionPrototype?.id, 'challenge3');
+      });
+    });
+
+    module('when challengesProduction relationship is loaded', function () {
+      test('returns validated prototype', function (assert) {
+        // given
+        const skill = store.createRecord('skill', {
+          id: 'skill123',
+          name: 'skillName',
+          challengesProduction: [
+            store.createRecord('challenge', { id: 'challenge1', genealogy: 'Prototype 1', status: 'validé' }),
+            store.createRecord('challenge', { id: 'challenge2', genealogy: 'Décliné 1', status: 'validé' }),
+          ],
+        });
+
+        // when
+        const { productionPrototype } = skill;
+
+        // then
+        assert.strictEqual(productionPrototype?.id, 'challenge1');
+      });
+    });
   });
 });

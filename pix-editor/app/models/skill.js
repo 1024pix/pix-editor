@@ -83,11 +83,7 @@ export default class SkillModel extends Model {
   }
 
   get prototypes() {
-    const challenges = this.hasMany('challenges').value();
-
-    if (challenges === null) return [];
-
-    return challenges.filter((challenge) => challenge.isPrototype);
+    return this.challengesArray.filter((challenge) => challenge.isPrototype);
   }
 
   get sortedPrototypes() {
@@ -106,12 +102,8 @@ export default class SkillModel extends Model {
     return this.prototypes.find((prototype) => prototype.isValidated);
   }
 
-  get productionPrototypes() {
-    return this.prototypes.filter((prototype) => prototype.isValidated);
-  }
-
   get challengesArray() {
-    return this.hasMany('challenges').value() || [];
+    return this.hasMany('challenges').value() ?? this.hasMany('challengesProduction').value() ?? [];
   }
 
   get alternatives() {
