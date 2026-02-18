@@ -82,6 +82,7 @@ module('Acceptance | Admin | Create-Admin-Entity', function (hooks) {
       await clickByName('Créer');
 
       // then
+      assert.dom(screen.getByRole('button', { name: 'Créer' })).hasAria('disabled');
       assert.notOk(await screen.queryByText('Entité créée avec succès'), 'Notification is not visible');
       assert.strictEqual(currentURL(), '/administration/potatoes/new', 'Stayed on the creation page');
       assert.ok(

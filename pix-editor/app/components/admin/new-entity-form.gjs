@@ -50,13 +50,17 @@ export default class NewAdminEntityForm extends Component {
       });
   }
 
+  get hasErrors() {
+    return this.emptyFields.length > 0 || this.formFields.some(({ error }) => error);
+  }
+
   changeFieldValue = (fieldKey, value) => {
     this.newEntity[fieldKey] = value;
   };
 
   onSubmit = (event) => {
     event.preventDefault();
-    if (this.emptyFields.length > 0 || this.formFields.some(({ error }) => error)) {
+    if (this.hasErrors) {
       this.hasFailedSubmitting = true;
       return;
     }
@@ -72,7 +76,7 @@ export default class NewAdminEntityForm extends Component {
           <AdminEntityFormField @field={{field}} @onChange={{field.onChange}} />
           <br />
         {{/each}}
-        <PixButton @type="submit" @iconBefore="add" class="new-entity-form__submit">
+        <PixButton @type="submit" @iconBefore="add" @isDisabled={{this.hasErrors}} class="new-entity-form__submit">
           Créer
         </PixButton>
       </form>

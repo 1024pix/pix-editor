@@ -57,9 +57,11 @@ module('Integration | Component | admin | new-entity-form', function (hooks) {
         );
         await fillByLabel('Pays *', country);
         await fillByLabel('Plat *', dish);
-        await click(screen.getByRole('button', { name: 'Créer' }));
+        const createButton = screen.getByRole('button', { name: 'Créer' });
+        await click(createButton);
 
         // then
+        assert.dom(createButton).hasAria('disabled');
         assert.notOk(onSubmit.calledOnce, '@onSubmit has not been called');
         assert
           .dom(
