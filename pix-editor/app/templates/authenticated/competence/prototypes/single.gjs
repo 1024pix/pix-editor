@@ -39,7 +39,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
             title="Afficher les différentes versions d'épreuves"
           ><i class="clone icon"></i>&nbsp;v{{@controller.challenge.version}}</button>
         {{/if}}
-        {{#if (or @controller.mayValidate @controller.mayArchive @controller.mayObsolete)}}
+        {{#if @controller.shouldDisplayStatusActionsMenu}}
           <div class="challenge-status-actions" id={{@controller.challengeStatusActionsId}}>
             <PixIconButton
               @ariaLabel={{@controller.challengeStatusActionsLabel}}
