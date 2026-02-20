@@ -19,7 +19,8 @@ export async function save(request, h) {
   if (!schema.creatable) return Boom.forbidden(`Schema "${entityName}" is not creatable`);
 
   const entityToSave = {};
-  for (const field of schema.fields.filter(({ readonly }) => !readonly)) {
+  const fillableFields = schema.fields.filter(({ readonly }) => !readonly);
+  for (const field of fillableFields) {
     const value = entityPayload[field.key];
 
     const isEmpty = value === undefined || value === null || value.toString().trim() === '';

@@ -4,8 +4,9 @@ import PixButton from '@1024pix/pix-ui/components/pix-button';
 import { on } from '@ember/modifier';
 import { tracked } from '@glimmer/tracking';
 import { trackedObject } from '@ember/reactive/collections';
+import { action } from '@ember/object';
 
-import AdminEntityFormField from 'pixeditor/components/admin/entity-form-field';
+import AdminEntityFormInput from 'pixeditor/components/admin/entity-form-input';
 
 export default class NewAdminEntityForm extends Component {
   @tracked hasFailedSubmitting = false;
@@ -54,11 +55,13 @@ export default class NewAdminEntityForm extends Component {
     return this.emptyFields.length > 0 || this.formFields.some(({ error }) => error);
   }
 
-  changeFieldValue = (fieldKey, value) => {
+  @action
+  changeFieldValue(fieldKey, value) {
     this.newEntity[fieldKey] = value;
-  };
+  }
 
-  onSubmit = (event) => {
+  @action
+  onSubmit(event) {
     event.preventDefault();
     if (this.hasErrors) {
       this.hasFailedSubmitting = true;
@@ -67,14 +70,21 @@ export default class NewAdminEntityForm extends Component {
     this.hasFailedSubmitting = false;
 
     this.args.onSubmit(this.newEntity);
-  };
+  }
 
   <template>
     <PixBlock class="new-entity-form">
       <form {{on "submit" this.onSubmit}}>
         {{#each this.formFields as |field|}}
-          <AdminEntityFormField @field={{field}} @onChange={{field.onChange}} />
-          <br />
+          <AdminEntityFormInput
+            @key={{field.key}}
+            @type={{field.type}}
+            @label={{field.label}}
+            @options={{field.options}}
+            @value={{field.value}}
+            @error={{field.error}}
+            @onChange={{field.onChange}}
+          />
         {{/each}}
         <PixButton @type="submit" @iconBefore="add" @isDisabled={{this.hasErrors}} class="new-entity-form__submit">
           Créer

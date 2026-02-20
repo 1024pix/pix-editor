@@ -3,10 +3,10 @@ import { module, test } from 'qunit';
 import { click } from '@ember/test-helpers';
 import sinon from 'sinon';
 
-import AdminEntityFormField from 'pixeditor/components/admin/entity-form-field';
+import AdminEntityFormInput from 'pixeditor/components/admin/entity-form-input';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | admin | entity-form-field', function (hooks) {
+module('Integration | Component | admin | entity-form-input', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   let screen;
@@ -26,7 +26,18 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
 
     test('it should display a select', async function (assert) {
       // when
-      screen = await render(<template><AdminEntityFormField @field={{field}} /></template>);
+      screen = await render(
+        <template>
+          <AdminEntityFormInput
+            @key={{field.key}}
+            @type={{field.type}}
+            @label={{field.label}}
+            @options={{field.options}}
+            @value={{field.value}}
+            @error={{field.error}}
+          />
+        </template>,
+      );
 
       // then
       const select = await screen.findByRole('button', { name: 'Goût *' });
@@ -44,7 +55,18 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
         const onChange = sinon.stub();
 
         // when
-        screen = await render(<template><AdminEntityFormField @field={{field}} @onChange={{onChange}} /></template>);
+        screen = await render(
+          <template>
+            <AdminEntityFormInput
+              @type={{field.type}}
+              @label={{field.label}}
+              @options={{field.options}}
+              @value={{field.value}}
+              @error={{field.error}}
+              @onChange={{onChange}}
+            />
+          </template>,
+        );
 
         // then
         await clickByName('Goût *');
@@ -65,7 +87,16 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
 
     test('it should display an password input', async function (assert) {
       // when
-      screen = await render(<template><AdminEntityFormField @field={{field}} /></template>);
+      screen = await render(
+        <template>
+          <AdminEntityFormInput
+            @type={{field.type}}
+            @label={{field.label}}
+            @value={{field.value}}
+            @error={{field.error}}
+          />
+        </template>,
+      );
 
       // then
       const input = await screen.findByLabelText('Goût *');
@@ -82,7 +113,17 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
         const onChange = sinon.stub();
 
         // when
-        screen = await render(<template><AdminEntityFormField @field={{field}} @onChange={{onChange}} /></template>);
+        screen = await render(
+          <template>
+            <AdminEntityFormInput
+              @type={{field.type}}
+              @label={{field.label}}
+              @value={{field.value}}
+              @error={{field.error}}
+              @onChange={{onChange}}
+            />
+          </template>,
+        );
 
         // then
         await fillByLabel('Goût *', 'patate');
@@ -102,7 +143,16 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
 
     test('it should display an input with type "number"', async function (assert) {
       // when
-      screen = await render(<template><AdminEntityFormField @field={{field}} /></template>);
+      screen = await render(
+        <template>
+          <AdminEntityFormInput
+            @type={{field.type}}
+            @label={{field.label}}
+            @value={{field.value}}
+            @error={{field.error}}
+          />
+        </template>,
+      );
 
       // then
       const input = await screen.findByLabelText('Goût *');
@@ -118,7 +168,17 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
         const onChange = sinon.stub();
 
         // when
-        screen = await render(<template><AdminEntityFormField @field={{field}} @onChange={{onChange}} /></template>);
+        screen = await render(
+          <template>
+            <AdminEntityFormInput
+              @type={{field.type}}
+              @label={{field.label}}
+              @value={{field.value}}
+              @error={{field.error}}
+              @onChange={{onChange}}
+            />
+          </template>,
+        );
 
         // then
         await fillByLabel('Goût *', 999);
@@ -138,7 +198,16 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
 
     test('it should display an input', async function (assert) {
       // when
-      screen = await render(<template><AdminEntityFormField @field={{field}} /></template>);
+      screen = await render(
+        <template>
+          <AdminEntityFormInput
+            @type={{field.type}}
+            @label={{field.label}}
+            @value={{field.value}}
+            @error={{field.error}}
+          />
+        </template>,
+      );
 
       // then
       const input = await screen.findByLabelText('Goût *');
@@ -153,7 +222,17 @@ module('Integration | Component | admin | entity-form-field', function (hooks) {
         const onChange = sinon.stub();
 
         // when
-        screen = await render(<template><AdminEntityFormField @field={{field}} @onChange={{onChange}} /></template>);
+        screen = await render(
+          <template>
+            <AdminEntityFormInput
+              @type={{field.type}}
+              @label={{field.label}}
+              @value={{field.value}}
+              @error={{field.error}}
+              @onChange={{onChange}}
+            />
+          </template>,
+        );
 
         // then
         await fillByLabel('Goût *', 'camembert');

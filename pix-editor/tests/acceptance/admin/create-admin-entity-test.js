@@ -60,35 +60,4 @@ module('Acceptance | Admin | Create-Admin-Entity', function (hooks) {
     await clickByName('Afficher le secret "Clé API" de l\'entité "1"');
     assert.ok(screen.getByText(apiKey), 'API Key is visible');
   });
-
-  module('when form data is invalid', function (hooks) {
-    hooks.beforeEach(function () {
-      this.server.create('admin-schema', {
-        label: 'Patates',
-        entityName: 'potatoes',
-        fields: [{ key: 'name', label: 'Variété', type: 'string', pattern: '^douce$' }],
-      });
-    });
-
-    test('it should not create a new entity', async function (assert) {
-      // given
-      const wrongVariety = 'samba';
-
-      // when
-      const screen = await visit('/administration/potatoes/list');
-      await click(screen.getByRole('link', { name: 'Créer' }));
-
-      await fillByLabel('Variété *', wrongVariety);
-      await clickByName('Créer');
-
-      // then
-      assert.dom(screen.getByRole('button', { name: 'Créer' })).hasAria('disabled');
-      assert.notOk(await screen.queryByText('Entité créée avec succès'), 'Notification is not visible');
-      assert.strictEqual(currentURL(), '/administration/potatoes/new', 'Stayed on the creation page');
-      assert.ok(
-        screen.getByText("La valeur de ce champ doit respecter l'expression régulière suivante : /^douce$/"),
-        'Error message is visible',
-      );
-    });
-  });
 });

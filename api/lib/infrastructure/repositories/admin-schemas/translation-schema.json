@@ -22,6 +22,44 @@
       "key": "value",
       "label": "Contenu",
       "type": "string"
+    },
+    {
+      "key": "model",
+      "label": "Modèle",
+      "type": "enum",
+      "readonly": true,
+      "options": [
+        {
+          "label": "Épreuve",
+          "value": "challenge"
+        },
+        {
+          "label": "Acquis",
+          "value": "skill"
+        },
+        {
+          "label": "Sujet",
+          "value": "tube"
+        },
+        {
+          "label": "Thématique",
+          "value": "thematic"
+        },
+        {
+          "label": "Compétence",
+          "value": "competence"
+        },
+        {
+          "label": "Domaine",
+          "value": "area"
+        }
+      ]
+    },
+    {
+      "key": "entityId",
+      "label": "Identifiant de l'entité",
+      "type": "string",
+      "readonly": true
     }
   ]
 }

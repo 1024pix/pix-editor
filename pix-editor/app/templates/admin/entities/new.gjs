@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 
-import AdminEntityFormField from 'pixeditor/components/admin/entity-form-field';
 import NewAdminEntityForm from 'pixeditor/components/admin/new-entity-form';
 
 <template>

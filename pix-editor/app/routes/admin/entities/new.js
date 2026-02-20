@@ -8,7 +8,7 @@ export default class AdminNewEntityRoute extends Route {
   @service store;
   @service router;
 
-  beforeModel(transition) {
+  beforeModel() {
     const { schemas } = this.modelFor('admin');
     if (schemas.length === 0) this.router.transitionTo('admin');
 
@@ -16,7 +16,7 @@ export default class AdminNewEntityRoute extends Route {
     if (!schemas.find(({ entityName }) => entityName === entity_name)) this.router.transitionTo('admin');
   }
 
-  async model(params) {
+  async model() {
     const { schemas } = this.modelFor('admin');
     const { entity_name } = this.paramsFor('admin.entities');
     const schema = schemas.find(({ entityName }) => {

@@ -27,7 +27,6 @@ export default class NewAdminEntityController extends Controller {
       this.notifications.success('Entité créée avec succès');
       this.router.transitionTo('admin.entities.list', this.model.schema.entityName);
     } catch (err) {
-      console.error(err);
       Sentry.captureException(err);
       this.notifications.error("Erreur lors de la création de l'entité");
     }

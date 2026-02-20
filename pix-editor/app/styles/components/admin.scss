@@ -83,11 +83,13 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 1.5rem;
 
       .pix-input,
       .pix-input-password,
       .pix-select {
         min-width: 300px;
+        width: 100%;
       }
     }
 

@@ -7,89 +7,90 @@ import { eq } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 
-export default class AdminEntityFormField extends Component {
+export default class AdminEntityFormInput extends Component {
   get isString() {
-    return this.args.field.type === 'string';
+    return this.args.type === 'string';
   }
 
   get isNumber() {
-    return this.args.field.type === 'number';
+    return this.args.type === 'number';
   }
 
   get isPassword() {
-    return this.args.field.type === 'secret';
+    return this.args.type === 'secret';
   }
 
   get isSelect() {
-    return this.args.field.type === 'enum';
+    return this.args.type === 'enum';
   }
 
   get validationStatus() {
-    return this.args.field.error !== null ? 'error' : undefined;
+    return this.args.error !== null ? 'error' : undefined;
   }
 
-  onInputChange = (inputEvent) => {
+  @action
+  onInputChange(inputEvent) {
     const newValue = this.isNumber ? Number(inputEvent.target.value) : inputEvent.target.value;
     this.args.onChange(newValue);
-  };
+  }
 
   <template>
     {{#if this.isString}}
       <PixInput
-        @id="{{@field.key}}"
+        @id="{{@key}}"
         @requiredLabel="Champ obligatoire"
-        @value={{@field.value}}
-        @errorMessage={{@field.error}}
+        @value={{@value}}
+        @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
         autocomplete="off"
         type="text"
         {{on "change" this.onInputChange}}
       >
         <:label>
-          {{@field.label}}
+          {{@label}}
         </:label>
       </PixInput>
     {{else if this.isPassword}}
       <PixInputPassword
-        @id="{{@field.key}}"
+        @id="{{@key}}"
         @requiredLabel="Champ obligatoire"
-        @value={{@field.value}}
-        @errorMessage={{@field.error}}
+        @value={{@value}}
+        @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
         autocomplete="off"
         {{on "change" this.onInputChange}}
       >
         <:label>
-          {{@field.label}}
+          {{@label}}
         </:label>
       </PixInputPassword>
     {{else if this.isNumber}}
       <PixInput
-        @id="{{@field.key}}"
+        @id="{{@key}}"
         @requiredLabel="Champ obligatoire"
-        @value={{@field.value}}
-        @errorMessage={{@field.error}}
+        @value={{@value}}
+        @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
         autocomplete="off"
         type="number"
         {{on "change" this.onInputChange}}
       >
         <:label>
-          {{@field.label}}
+          {{@label}}
         </:label>
       </PixInput>
     {{else if this.isSelect}}
       <PixSelect
-        @id="{{@field.key}}"
-        @options={{@field.options}}
-        @value={{@field.value}}
+        @id="{{@key}}"
+        @options={{@options}}
+        @value={{@value}}
         @onChange={{@onChange}}
         @requiredLabel="Champ obligatoire"
         @hideDefaultOption={{true}}
-        @errorMessage={{@field.error}}
+        @errorMessage={{@error}}
       >
         <:label>
-          {{@field.label}}
+          {{@label}}
         </:label>
       </PixSelect>
     {{/if}}

@@ -10,7 +10,7 @@ export default class AdminEntityListRoute extends Route {
 
   queryParams = { pageNumber: { refreshModel: true }, pageSize: { refreshModel: true } };
 
-  beforeModel(transition) {
+  beforeModel() {
     const { schemas } = this.modelFor('admin');
     if (schemas.length === 0) this.router.transitionTo('admin');
 
