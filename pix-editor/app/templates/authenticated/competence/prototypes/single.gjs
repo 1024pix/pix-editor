@@ -1,8 +1,5 @@
 import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
 import { on } from '@ember/modifier';
-import and from 'ember-truth-helpers/helpers/and';
-import not from 'ember-truth-helpers/helpers/not';
-import or from 'ember-truth-helpers/helpers/or';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import t from 'ember-intl/helpers/t';
 import formatDate from 'ember-intl/helpers/format-date';
@@ -31,7 +28,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
           ></i></button>
       {{/if}}
       {{#unless @controller.edition}}
-        {{#if (and @controller.challenge.isPrototype (not @controller.challenge.isWorkbench))}}
+        {{#if @controller.mayHaveDifferentChallengeVersions}}
           <button
             class="ui button icon item"
             {{on "click" @controller.showVersions}}
