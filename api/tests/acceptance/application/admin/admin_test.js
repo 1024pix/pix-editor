@@ -382,6 +382,42 @@ describe('Acceptance | Controller | admin', () => {
           });
         });
       });
+
+      describe('when a database error occurs', () => {
+        it('should return a 400 error', async () => {
+          // given
+          const uuid = crypto.randomUUID();
+          databaseBuilder.factory.buildUser({ name: 'Dupe Licat', access: 'readonly', trigram: 'ZOW' });
+          await databaseBuilder.commit();
+
+          const server = await createServer();
+          const request = {
+            method: 'POST',
+            url: '/api/admin/entities/users',
+            headers: generateAuthorizationHeader(user),
+            payload: {
+              data: {
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    name: 'SSL Legend',
+                    trigram: 'ZOW',
+                    apiKey: uuid,
+                    access: 'admin',
+                  },
+                },
+              },
+            },
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(400);
+          expect(response.result.message).to.equal('Entity was unable to be saved');
+        });
+      });
     });
 
     describe('when user is not an admin', () => {

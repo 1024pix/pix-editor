@@ -2,6 +2,7 @@ import Boom from '@hapi/boom';
 import { adminEntitySerializer, adminSchemaSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { adminEntityRepository, adminSchemaRepository } from '../../infrastructure/repositories/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import { logger } from '../../infrastructure/logger.js';
 
 export function getSchemas() {
   const adminSchemas = adminSchemaRepository.list();
@@ -33,9 +34,14 @@ export async function save(request, h) {
     entityToSave[field.key] = value;
   }
 
-  const newEntity = await adminEntityRepository.save(entityName, entityToSave);
+  try {
+    const newEntity = await adminEntityRepository.save(entityName, entityToSave);
 
-  return h.response(adminEntitySerializer.serialize({ ...newEntity, entityName })).created();
+    return h.response(adminEntitySerializer.serialize({ ...newEntity, entityName })).created();
+  } catch (err) {
+    logger.error({ err, data: { entityName, entityToSave, entityPayload } });
+    return Boom.badRequest('Entity was unable to be saved');
+  }
 }
 
 export async function getEntities(request) {
