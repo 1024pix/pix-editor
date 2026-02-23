@@ -47,15 +47,20 @@ export async function save(request, h) {
 
 export async function getEntities(request) {
   const { entityName } = request.params;
-  const query = extractParameters(request.query, { page: { size: 10, number: 1 } });
-
   const entitySchema = adminSchemaRepository.getByEntityName(entityName);
   if (!entitySchema) {
     return Boom.notFound(`Entity with name '${entityName}' not found in admin schemas list`);
   }
-  const fields = entitySchema.fields.map((field) => field.key);
 
-  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page, entitySchema.defaultSort);
+  const defaultSort = [entitySchema.defaultSort.field, entitySchema.defaultSort.direction];
+  const { page, sort: [querySort] } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [defaultSort] });
+
+  const sort = {
+    field: querySort[0],
+    direction: querySort[1],
+  };
+  const fields = entitySchema.fields.map((field) => field.key);
+  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, page, sort);
 
   return adminEntitySerializer.serialize(entityName, entities, meta);
 }

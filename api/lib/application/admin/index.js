@@ -26,6 +26,7 @@ export async function register(server) {
             entityName: Joi.string().optional().description('Redundant but still sent by Ember Data'),
             'page[size]': Joi.number().min(1).max(100).optional(),
             'page[number]': Joi.number().min(1).max(999_999).optional(),
+            sort: Joi.string().optional(),
           }).unknown(false),
         },
       },
