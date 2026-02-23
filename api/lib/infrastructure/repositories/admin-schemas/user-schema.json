@@ -6,6 +6,10 @@
   "editable": true,
   "deletable": true,
   "creatable": true,
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
   "fields": [
     {
       "key": "id",

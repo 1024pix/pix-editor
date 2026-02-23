@@ -24,8 +24,20 @@
     "creatable": {
       "type": "boolean"
     },
+    "defaultSort": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "direction": {
+          "enum": ["asc", "desc"]
+        }
+      }
+    },
     "fields": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -67,5 +79,5 @@
     }
   },
   "additionalProperties": false,
-  "required": ["id", "label", "entityName", "editable", "deletable", "creatable", "fields"]
+  "required": ["id", "label", "entityName", "editable", "deletable", "creatable", "fields", "defaultSort"]
 }

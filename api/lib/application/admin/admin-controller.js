@@ -55,7 +55,7 @@ export async function getEntities(request) {
   }
   const fields = entitySchema.fields.map((field) => field.key);
 
-  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page);
+  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page, entitySchema.defaultSort);
 
   return adminEntitySerializer.serialize(entityName, entities, meta);
 }
