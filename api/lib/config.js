@@ -148,6 +148,10 @@ export const phrase = {
       frameworkName: 'Numérique Responsable',
       projectId: process.env.PHRASE_PIX_NR_PROJECT_ID,
     },
+    {
+      frameworkName: 'Edu',
+      projectId: process.env.PHRASE_PIX_EDU_PROJECT_ID,
+    },
   ].filter(({ projectId }) => projectId),
   webhookSecret: process.env.PHRASE_WEBHOOK_SECRET,
 };
