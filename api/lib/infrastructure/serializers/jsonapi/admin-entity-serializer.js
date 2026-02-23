@@ -2,11 +2,11 @@ import Jsonapi from 'jsonapi-serializer';
 
 const { Deserializer, Serializer } = Jsonapi;
 
-export function serialize(entities, meta) {
+export function serialize(entityName, entities, meta) {
   const serializer = new Serializer('admin-entity', {
     attributes: ['properties'],
     meta,
-    transform({ id, type, entityName, ...properties }) {
+    transform({ id, type, ...properties }) {
       const entityId = id ?? ID_GENERATORS[entityName]?.(properties);
 
       return {

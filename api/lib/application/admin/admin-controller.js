@@ -38,7 +38,7 @@ export async function save(request, h) {
   try {
     const newEntity = await adminEntityRepository.save(entityName, entityToSave);
 
-    return h.response(adminEntitySerializer.serialize({ ...newEntity, entityName })).created();
+    return h.response(adminEntitySerializer.serialize(entityName, newEntity)).created();
   } catch (err) {
     logger.error({ err, data: { entityName, entityToSave, entityPayload } });
     return Boom.badRequest('Entity was unable to be saved');
@@ -57,5 +57,5 @@ export async function getEntities(request) {
 
   const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page);
 
-  return adminEntitySerializer.serialize(entities, meta);
+  return adminEntitySerializer.serialize(entityName, entities, meta);
 }
