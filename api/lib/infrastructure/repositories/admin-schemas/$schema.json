@@ -38,6 +38,12 @@
           "type": {
             "enum": ["string", "number", "enum", "secret", "timestamp"]
           },
+          "pattern": {
+            "type": "string"
+          },
+          "readonly": {
+            "type": "boolean"
+          },
           "options": {
             "type": "array",
             "items": {

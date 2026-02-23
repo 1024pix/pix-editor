@@ -5,6 +5,12 @@ import { Response } from 'miragejs';
 export default function routes() {
   this.namespace = 'api';
 
+  this.post('/admin/entities/:entity_name', function (schema) {
+    const adminEntity = this.normalizedRequestAttrs('admin-entity');
+    return schema.create('admin-entity', adminEntity);
+  });
+  // this route doesn't exist, but ember-data calls it in tests ☺️
+  this.get('/admin/entities', ({ adminEntities }) => adminEntities.all());
   this.get('/admin/entities/:entity_name', ({ adminEntities }) => adminEntities.all());
   this.get('/admin/schemas', ({ adminSchemas }) => adminSchemas.all());
 

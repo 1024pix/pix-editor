@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 
 import AdminEntityCell from './entity-cell';
@@ -21,8 +22,14 @@ export default class AdminEntityList extends Component {
   }
 
   <template>
-    <h1>Liste des {{this.lowercaseEntityName}}</h1>
-    <br />
+    <div class="entity-list__header">
+      <h1>Liste des {{this.lowercaseEntityName}}</h1>
+      {{#if @schema.creatable}}
+        <PixButtonLink @route="admin.entities.new" @variant="secondary" @iconBefore="add">
+          Créer
+        </PixButtonLink>
+      {{/if}}
+    </div>
     <PixTable @data={{@entityList}} @caption="liste">
       <:columns as |row context|>
         {{#each @schema.fields as |field|}}

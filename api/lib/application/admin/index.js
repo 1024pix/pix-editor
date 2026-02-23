@@ -30,6 +30,24 @@ export async function register(server) {
         },
       },
     },
+    {
+      method: 'POST',
+      path: '/api/admin/entities/{entityName}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        handler: adminController.save,
+        tags: ['api', 'admin'],
+        validate: {
+          params: Joi.object({ entityName: Joi.string().required() }).unknown(false),
+          payload: Joi.object({
+            data: Joi.object({
+              attributes: Joi.object({ properties: Joi.object().unknown(true) }),
+              type: Joi.string().required(),
+            }),
+          }),
+        },
+      },
+    },
   ]);
 }
 

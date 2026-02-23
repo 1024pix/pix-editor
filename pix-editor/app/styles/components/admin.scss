@@ -1,3 +1,5 @@
+@use 'pix-design-tokens/typography' as *;
+
 .admin {
   a:hover {
     color: inherit;
@@ -18,8 +20,9 @@
   }
 
   h1 {
-    font-size: 2rem;
     padding-top: 2rem;
+
+    @extend %pix-title-l;
   }
 
   .table-actions {
@@ -55,6 +58,43 @@
         color: transparent;
         user-select: none;
       }
+    }
+  }
+
+  .entity-list__header {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  .new-entity {
+    &__header {
+      display: flex;
+      margin-bottom: 10px;
+      justify-content: space-between;
+      align-items: end;
+    }
+  }
+
+  .new-entity-form {
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+
+      .pix-input,
+      .pix-input-password,
+      .pix-select {
+        min-width: 300px;
+        width: 100%;
+      }
+    }
+
+    &__submit {
+      align-self: end;
     }
   }
 }

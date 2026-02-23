@@ -10,4 +10,8 @@ export default class AdminEntityAdapter extends ApplicationAdapter {
   urlForQuery(params, type) {
     return `${this.buildURL(type)}/${params.entityName}`;
   }
+
+  urlForCreateRecord(type, payload) {
+    return `${this.buildURL(type)}/${payload.adapterOptions.entityName}`;
+  }
 }

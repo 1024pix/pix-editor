@@ -15,7 +15,7 @@ export function list() {
 /**
  * @param {string} name
  */
-export function listByEntityName(name) {
+export function getByEntityName(name) {
   return list().find(({ entityName }) => entityName === name);
 }
 

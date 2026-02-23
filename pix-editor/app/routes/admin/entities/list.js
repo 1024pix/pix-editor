@@ -10,19 +10,21 @@ export default class AdminEntityListRoute extends Route {
 
   queryParams = { pageNumber: { refreshModel: true }, pageSize: { refreshModel: true } };
 
-  beforeModel(transition) {
+  beforeModel() {
     const { schemas } = this.modelFor('admin');
     if (schemas.length === 0) this.router.transitionTo('admin');
 
-    const { entity_name } = transition.to.params;
+    const { entity_name } = this.paramsFor('admin.entities');
     if (!schemas.find(({ entityName }) => entityName === entity_name)) this.router.transitionTo('admin');
   }
 
   async model(params) {
     const { schemas } = this.modelFor('admin');
-    const { entity_name } = params;
+    const { entity_name } = this.paramsFor('admin.entities');
+    const schema = schemas.find(({ entityName }) => {
+      return entityName === entity_name;
+    });
 
-    const schema = schemas.find(({ entityName }) => entityName === entity_name);
     const entityList = await this.store.query(
       'admin-entity',
       {
