@@ -117,6 +117,14 @@ export default class SingleController extends Controller {
     return this.challenge.isPrototype && !this.challenge.isWorkbench;
   }
 
+  get mayHaveDifferentChallengeVersions() {
+    return this.challenge.isPrototype && !this.challenge.isWorkbench;
+  }
+
+  get shouldDisplayStatusActionsMenu() {
+    return this.mayValidate || this.mayArchive || this.mayObsolete || this.mayValidateQuality;
+  }
+
   get level() {
     const challenge = this.challenge;
     if (challenge.skillLevel) {

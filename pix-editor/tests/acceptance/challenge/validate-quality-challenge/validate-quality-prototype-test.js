@@ -27,7 +27,7 @@ module('Acceptance | Validate-quality-challenge', function (hooks) {
     messageStub = sinon.stub(notifyServiceStub, 'message');
 
     this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
+    this.server.create('user', { trigram: 'ABC', access: 'editor' });
 
     prototype = this.server.create('challenge', {
       id: 'challengeId1',

@@ -1,9 +1,9 @@
-import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { log, module, test } from 'qunit';
+import { module, test } from 'qunit';
 import Challenge from 'pixeditor/models/challenge.js';
 import Skill from 'pixeditor/models/skill.js';
 import sinon from 'sinon';
@@ -27,7 +27,7 @@ module('Acceptance | Validate-quality-challenge', function (hooks) {
     messageStub = sinon.stub(notifyServiceStub, 'message');
 
     this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
+    this.server.create('user', { trigram: 'ABC', access: 'editor' });
 
     prototype = this.server.create('challenge', {
       id: 'challengeId1',
