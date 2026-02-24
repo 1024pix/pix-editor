@@ -70,6 +70,10 @@ module('Acceptance | Admin | Navigation', function (hooks) {
       this.server.create('admin-schema', {
         label: 'Utilisateurs',
         entityName: 'users',
+        defaultSort: {
+          field: 'name',
+          direction: 'asc',
+        },
         fields: [
           { key: 'name', label: 'Nom', type: 'string' },
           { key: 'patate', label: 'Chocolat', type: 'string' },
@@ -98,6 +102,10 @@ module('Acceptance | Admin | Navigation', function (hooks) {
           label: 'Fraises',
           entityName: 'strawberries',
           creatable: false,
+          defaultSort: {
+            field: 'name',
+            direction: 'asc',
+          },
           fields: [{ key: 'name', label: 'Nom', type: 'string' }],
         });
         const screen = await visit('/administration/strawberries/list');

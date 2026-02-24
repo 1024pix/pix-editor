@@ -11,7 +11,29 @@ export default function routes() {
   });
   // this route doesn't exist, but ember-data calls it in tests ☺️
   this.get('/admin/entities', ({ adminEntities }) => adminEntities.all());
-  this.get('/admin/entities/:entity_name', ({ adminEntities }) => adminEntities.all());
+  this.get('/admin/entities/:entity_name', ({ adminEntities, adminSchemas }, { params, queryParams }) => {
+    let columnToSort;
+    let sortOrder;
+
+    if (!queryParams.sort) {
+      const entityName = params.entity_name;
+      const entitySchema = adminSchemas.findBy({ entityName });
+      columnToSort = entitySchema.defaultSort.field;
+      sortOrder = entitySchema.defaultSort.direction;
+    }
+
+    const adminEntitiesObject = adminEntities.all();
+
+    adminEntitiesObject.models.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a[columnToSort].localeCompare(b[columnToSort]);
+      } else {
+        return b[columnToSort].localeCompare(a[columnToSort]);
+      }
+    });
+
+    return adminEntitiesObject;
+  });
   this.get('/admin/schemas', ({ adminSchemas }) => adminSchemas.all());
 
   this.get('/users/me', ({ users }) => users.first());
@@ -495,6 +517,7 @@ export default function routes() {
 
   this.get('/search', (schema) => schema.searchResults.all());
 }
+
 /* eslint-enable ember/no-get */
 
 function _getPaginationFromQueryParams(queryParams) {
