@@ -1,5 +1,27 @@
 
 
+## v4.12.0 (24/02/2026)
+
+
+### :rocket: Amélioration
+- [#1399](https://github.com/1024pix/pix-editor/pull/1399) [FEATURE] Permettre la création d'entités dans le nouveau back-office (PIX-21038).
+- [#1408](https://github.com/1024pix/pix-editor/pull/1408) [FEATURE] Ajouter le référentiel Pix+Edu à Phrase pour pouvoir le traduire en fr-be et en (PIX-21585).
+
+### :bug: Correction
+- [#1401](https://github.com/1024pix/pix-editor/pull/1401) [BUGFIX] Permettre aux éditeurs d'attribuer le statut "validé qualité" (PIX-21669).
+
+### :arrow_up: Montée de version
+- [#1404](https://github.com/1024pix/pix-editor/pull/1404) [BUMP] Update Node.js to v24.13.1.
+- [#1403](https://github.com/1024pix/pix-editor/pull/1403) [BUMP] Update dependency @playwright/test to v1.58.2.
+- [#1402](https://github.com/1024pix/pix-editor/pull/1402) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.18 (pix-editor).
+- [#1384](https://github.com/1024pix/pix-editor/pull/1384) [BUMP] Update dependency stylelint to v17 (pix-editor).
+- [#1394](https://github.com/1024pix/pix-editor/pull/1394) [BUMP] Update dependency axios to v1.13.5 [SECURITY].
+- [#1392](https://github.com/1024pix/pix-editor/pull/1392) [BUMP] Update dependency @playwright/test to v1.58.1.
+- [#1395](https://github.com/1024pix/pix-editor/pull/1395) [BUMP] Update dependency qs to v6.14.2 [SECURITY].
+- [#1400](https://github.com/1024pix/pix-editor/pull/1400) [BUMP] Update dependency jspdf to v4.2.0 [SECURITY].
+- [#1396](https://github.com/1024pix/pix-editor/pull/1396) [BUMP] Update dependency jspdf to v4.1.0 [SECURITY].
+- [#1389](https://github.com/1024pix/pix-editor/pull/1389) [BUMP] Update dependency @1024pix/pix-ui to ^58.4.6 (pix-editor).
+
 ## v4.11.1 (18/02/2026)
 
 
