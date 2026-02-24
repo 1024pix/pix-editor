@@ -75,6 +75,7 @@ export default class SidebarMain extends Component {
         {{#if this.mayAccessAdministration}}
           <LinkTo @route="admin"><i class="shield icon"></i> Administration</LinkTo>
         {{/if}}
+          <LinkTo @route="authenticated.modulix.edit"><i class="shield icon"></i>Editer des modules</LinkTo>
       </div>
       <div class="ui labelled icon menu">
         <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion

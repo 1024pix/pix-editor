@@ -26,6 +26,7 @@
 @use 'popin';
 @use 'pages/login';
 @use 'authenticated';
+@use 'authenticated/modulix';
 @use 'authenticated/missions/new' as missions-new;
 @use 'authenticated/missions/details' as missions-details;
 @use 'authenticated/static-courses/list' as static-courses-list;

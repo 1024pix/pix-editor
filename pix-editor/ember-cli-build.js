@@ -18,5 +18,6 @@ module.exports = async function (defaults) {
 
   return compatBuild(app, buildOnce, {
     staticModifiers: true,
+    staticAppPaths: [require.resolve('jodit/es2018/jodit.fat.min.js')]
   });
 };

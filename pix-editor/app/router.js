@@ -91,6 +91,9 @@ Router.map(function () {
         this.route('edit');
       });
     });
+    this.route('modulix', function () {
+      this.route('edit', { path: '/edition' });
+    });
     this.route('synchronize-translations');
     this.route('whitelisted-urls', function () {
       this.route('list', { path: '/' });

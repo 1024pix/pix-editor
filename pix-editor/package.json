@@ -120,7 +120,8 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.4",
-    "countries-list": "^3.2.2"
+    "countries-list": "^3.2.2",
+    "jodit": "^4.2.27"
   },
   "exports": {
     "./tests/*": "./tests/*",

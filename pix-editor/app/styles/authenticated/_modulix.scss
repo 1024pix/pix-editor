@@ -1,0 +1,67 @@
+body {
+  padding: 8px;
+}
+
+.modulix-editor {
+  display: flex;
+  gap: 16px;
+}
+
+.modulix-editor__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: black;
+}
+
+.modulix-editor__buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.modulix-editor__logo {
+  width: 48px;
+  height: 48px;
+}
+
+.modulix-editor__editor {
+  flex-grow: 1;
+}
+
+.modulix-editor__render {
+  display: none;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 16px);
+  width: 35%;
+}
+
+.modulix-editor-render__external-link {
+  color: black;
+}
+
+.modulix-editor-render__input {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.modulix-editor-render__input--has-error {
+  border: 1px solid red;
+}
+
+.card-body:has(
+  > .btn-group > .json-editor-btn-delete:hover,
+  ~ .btn-group > .json-editor-btn-delete:hover
+) {
+  border-color: #ff4d4f;
+  transition: border ease-in 0.2s;
+}
+
+.json-editor-btn-delete:hover {
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+  transition: all ease-in 0.2s;
+}
