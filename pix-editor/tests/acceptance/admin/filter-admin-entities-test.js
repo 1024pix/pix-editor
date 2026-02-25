@@ -1,4 +1,5 @@
 import { visit, within } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -70,5 +71,48 @@ module('Acceptance | Admin | Filter-Admin-Entities', function (hooks) {
     const row3 = rows[3];
     assert.dom(within(row3).getByText('100')).exists();
     assert.dom(within(row3).getByText('Dernier')).exists();
+  });
+
+  module('when sorting a column on demand', function () {
+    test('it should sort entities by given order and column', async function (assert) {
+      // given
+      this.server.create('admin-entity', {
+        id: 'users:200',
+        properties: { id: 200, name: 'AAAA', trigram: 'AAA', access: 'readonly' },
+      });
+      this.server.create('admin-entity', {
+        id: 'users:300',
+        properties: { id: 300, name: 'CCCC', trigram: 'CCC', access: 'readonly' },
+      });
+      this.server.create('admin-entity', {
+        id: 'users:100',
+        properties: { id: 100, name: 'BBBB', trigram: 'BBB', access: 'readonly' },
+      });
+
+      // when
+      const screen = await visit('/administration/users/list');
+      const sortNameAscButton = await screen.findByRole('button', {
+        name: "Trier le tableau dans l'ordre croissant du champ Nom",
+      });
+      await click(sortNameAscButton);
+
+      // then
+      assert.strictEqual(currentURL(), '/administration/users/list?sort=name');
+      assert.dom(screen.getByText("Trier le tableau dans l'ordre décroissant du champ Nom")).exists();
+
+      const rows = await screen.findAllByRole('row');
+
+      const row1 = rows[1];
+      assert.dom(within(row1).getByText('200')).exists();
+      assert.dom(within(row1).getByText('AAAA')).exists();
+
+      const row2 = rows[2];
+      assert.dom(within(row2).getByText('100')).exists();
+      assert.dom(within(row2).getByText('BBBB')).exists();
+
+      const row3 = rows[3];
+      assert.dom(within(row3).getByText('300')).exists();
+      assert.dom(within(row3).getByText('CCCC')).exists();
+    });
   });
 });

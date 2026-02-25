@@ -20,15 +20,24 @@ export default function routes() {
       const entitySchema = adminSchemas.findBy({ entityName });
       columnToSort = entitySchema.defaultSort.field;
       sortOrder = entitySchema.defaultSort.direction;
+    } else {
+      sortOrder = 'asc';
+      columnToSort = queryParams.sort;
+      if (columnToSort.startsWith('-')) {
+        sortOrder = 'desc';
+      }
+      columnToSort = columnToSort.replace('-', '');
     }
 
     const adminEntitiesObject = adminEntities.all();
 
     adminEntitiesObject.models.sort((a, b) => {
+      const aField = a.attrs.properties[columnToSort].toString();
+      const bField = b.attrs.properties[columnToSort].toString();
       if (sortOrder === 'asc') {
-        return a[columnToSort].localeCompare(b[columnToSort]);
+        return aField.localeCompare(bField);
       } else {
-        return b[columnToSort].localeCompare(a[columnToSort]);
+        return bField.localeCompare(aField);
       }
     });
 
