@@ -1,18 +1,21 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { databaseBuilder } from '../test-helper.js';
-import { BindEnglishChallengesToFrenchPrimaryEquivalent, listActiveSkillsByFrameworkName } from '../../scripts/bind-english-challenges-to-french-primary-equivalent.js';
+import {
+  BindEnglishChallengesToFrenchPrimaryEquivalent,
+  listActiveSkillsByFrameworkName,
+  listLegacyEnglishChallengesBySkillId,
+} from '../../scripts/bind-english-challenges-to-french-primary-equivalent.js';
 import { logger } from '../../lib/infrastructure/logger.js';
-import { Skill } from '../../lib/domain/models/Skill.js';
-import { Challenge } from '../../lib/domain/models/Challenge.js';
+import { Challenge, Skill } from '../../lib/domain/models/index.js';
 
 describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
   /** @type {BindEnglishChallengesToFrenchPrimaryEquivalent} */
   let script;
 
-  beforeEach(() => {
-    script = new BindEnglishChallengesToFrenchPrimaryEquivalent();
-  });
+  // beforeEach(() => {
+  //   script = new BindEnglishChallengesToFrenchPrimaryEquivalent();
+  // });
 
   describe('Unit', () => {
     describe('listActiveSkillsByFrameworkName', () => {
@@ -102,6 +105,140 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           // then
           await expect(listActiveSkillsByFrameworkName('')).rejects.toThrow(new Error('framework with this given name does not exist'));
         });
+      });
+    });
+
+    describe('listLegacyEnglishChallengesBySkillId', () => {
+      it('should retrieve all legacy english challenges for the given skill id', async () => {
+        // given
+        const { skill } = databaseBuilder.factory.buildChallengeInGroup({
+          framework: { name: 'Pix' },
+          skill: {
+            status: Skill.STATUSES.ACTIF,
+            name: '@activeSkill1',
+          },
+          challenge: {
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            status: Challenge.STATUSES.VALIDE,
+          },
+        });
+
+        const validatedChallenge1 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId1',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['en'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedChallenge1.id,
+          challengeId: validatedChallenge1.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId1.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+
+        const validatedChallenge2 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId2',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['en'],
+          isQualityOk: false,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedChallenge2.id,
+          challengeId: validatedChallenge2.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId2.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+        const proposedChallenge3 = databaseBuilder.factory.buildChallenge({
+          id: 'proposedChallengeId3',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PROPOSE,
+          locales: ['en'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: proposedChallenge3.id,
+          challengeId: proposedChallenge3.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.proposedChallengeId3.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+        const archivedChallenge4 = databaseBuilder.factory.buildChallenge({
+          id: 'archivedChallengeId4',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.ARCHIVE,
+          locales: ['en'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: archivedChallenge4.id,
+          challengeId: archivedChallenge4.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.archivedChallengeId4.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+        const proposedChallenge5 = databaseBuilder.factory.buildChallenge({
+          id: 'proposedChallengeId5',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PROPOSE,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: proposedChallenge5.id,
+          challengeId: proposedChallenge5.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.proposedChallengeId5.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+        const validatedChallenge6 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId6',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedChallenge6.id,
+          challengeId: validatedChallenge6.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId6.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const legacyChallenges = await listLegacyEnglishChallengesBySkillId(skill.id);
+
+        // then
+        expect(legacyChallenges).toHaveLength(3);
+        expect(legacyChallenges.some((legacyChallenge) => legacyChallenge.id === 'validatedChallengeId1')).toBe(true);
+        expect(legacyChallenges.every((challenge) => challenge.isPrimary)).toBe(true);
+        expect(legacyChallenges.every((challenge) => challenge.locales.includes('en') && challenge.locales.length === 1)).toBe(true);
       });
     });
   });

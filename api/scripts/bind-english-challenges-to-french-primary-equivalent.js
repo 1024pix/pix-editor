@@ -17,3 +17,11 @@ export async function listActiveSkillsByFrameworkName(frameworkName) {
 
   return activeSkills;
 }
+
+export async function listLegacyEnglishChallengesBySkillId(skillId) {
+  const challenges = await challengeRepository.listBySkillId(skillId);
+  const decliChallenges = challenges.filter((challenge) => challenge.genealogy !== Challenge.GENEALOGIES.PROTOTYPE);
+  const validatedAndProposedChallenges = decliChallenges.filter((decli) => decli.status === Challenge.STATUSES.VALIDE || decli.status === Challenge.STATUSES.PROPOSE);
+  // Existe-t-il des prototypes en english, ou ne sont-ce que des déclis ?
+  return validatedAndProposedChallenges.filter((decliChallenge) => decliChallenge.locale === 'en');
+}
