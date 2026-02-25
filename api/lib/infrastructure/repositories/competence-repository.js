@@ -8,19 +8,19 @@ const model = 'competence';
 const TABLE_NAME = 'competences';
 
 export async function list() {
-  const [dtos, translations] = await Promise.all([selectCompetences().orderBy('competences.index'), translationRepository.listByModel(model)]);
+  const [dtos, translations] = await Promise.all([_selectCompetences().orderBy('competences.index'), translationRepository.listByModel(model)]);
 
   return toDomainList(dtos, translations);
 }
 
 export async function getMany(ids) {
-  const [dtos, translations] = await Promise.all([selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'), translationRepository.listByEntities(model, ids)]);
+  const [dtos, translations] = await Promise.all([_selectCompetences().whereIn('competences.id', ids).orderBy('competences.index'), translationRepository.listByEntities(model, ids)]);
 
   return toDomainList(dtos, translations);
 }
 
 export async function get(id) {
-  const [dto, translations] = await Promise.all([selectCompetences().where('competences.id', id).first(), translationRepository.listByEntity(model, id)]);
+  const [dto, translations] = await Promise.all([_selectCompetences().where('competences.id', id).first(), translationRepository.listByEntity(model, id)]);
 
   if (!dto) return null;
 
@@ -43,7 +43,7 @@ export async function create(competence) {
       translationRepository.save({ translations, transaction }),
     ]);
 
-    const dto = await selectCompetences(transaction).where('competences.id', competence.id).first();
+    const dto = await _selectCompetences(transaction).where('competences.id', competence.id).first();
 
     return toDomain(dto, translations);
   });
@@ -64,7 +64,7 @@ export async function update(competence) {
   });
 }
 
-function selectCompetences(knexConn = knex) {
+export function _selectCompetences(knexConn = knex) {
   return knexConn
     .select(
       'competences.*',

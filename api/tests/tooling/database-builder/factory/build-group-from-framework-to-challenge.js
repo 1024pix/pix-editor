@@ -10,7 +10,7 @@ import { buildChallenge } from './build-challenge.js';
 import { buildLocalizedChallenge } from './build-localized-challenge.js';
 import { buildTranslation } from './build-translation.js';
 
-export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework }) {
+export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework, tube }) {
   const randomId = generateRandomId();
 
   const chalengeDTO = buildChallengeDatasourceObject({
@@ -66,7 +66,7 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
     area: buildArea({ id: `area${randomId}`, code: '1', frameworkId: framework?.id ?? `framework${randomId}` }),
     competence: buildCompetence({ id: chalengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
     thematic: buildThematic({ id: `thematic${randomId}`, competenceId: chalengeDTO.competenceId }),
-    tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}` }),
+    tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}`, ...tube }),
     skill: buildSkill({ ...skillDTO, tutorialIds: [], learningMoreTutorialIds: [] }),
     challenge: buildChallenge(chalengeDTO),
     localizedChallenge: buildLocalizedChallenge(localizedChallengeDTO),
