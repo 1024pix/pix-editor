@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { databaseBuilder } from '../test-helper.js';
+import { databaseBuilder, domainBuilder } from '../test-helper.js';
 import {
+  assertEachLegacyEnglishChallengeHasActiveFrenchChallenge,
   BindEnglishChallengesToFrenchPrimaryEquivalent,
   listActiveFrenchChallengesBySkillId,
   listActiveSkillsByFrameworkName,
@@ -373,6 +374,119 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         expect(activeFrenchChallenges.map((challenge) => challenge.id)).toStrictEqual([challenge.id, 'validatedChallengeId2']);
         expect(activeFrenchChallenges.every((challenge) => challenge.status === Challenge.STATUSES.VALIDE)).toBe(true);
         expect(activeFrenchChallenges.every((challenge) => challenge.locales.includes('fr') && challenge.locales.length === 1)).toBe(true);
+      });
+    });
+
+    describe('assertEachLegacyEnglishChallengeHasActiveFrenchChallenge', () => {
+      describe('when there are enough french challenges to accomodate every english challenge', () => {
+        describe('exactly the same amount of french and english challenges', () => {
+          it('should not throw', async () => {
+            // given
+            const frenchChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId1',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId2',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+            ];
+            const englishChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId1',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId2',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+            ];
+
+            // then
+            expect(assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges)).toBeUndefined();
+          });
+        });
+
+        describe('less english challenges than validated french challenges', () => {
+          it('should not throw', async () => {
+            // given
+            const frenchChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId1',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId2',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PROPOSE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId3',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PERIME,
+              }),
+            ];
+            const englishChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId1',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+            ];
+
+            // then
+            expect(assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges)).toBeUndefined();
+          });
+        });
+      });
+
+      describe('when there aren\'t enough french challenges for every english challenge', () => {
+        it('should throw', async () => {
+          // given
+          const frenchChallenges = [
+            domainBuilder.buildChallenge({
+              id: 'challengeFrId1',
+              locales: ['fr'],
+              status: Challenge.STATUSES.VALIDE,
+            }),
+            domainBuilder.buildChallenge({
+              id: 'challengeFrId2',
+              locales: ['fr'],
+              status: Challenge.STATUSES.PROPOSE,
+            }),
+            domainBuilder.buildChallenge({
+              id: 'challengeFrId3',
+              locales: ['fr'],
+              status: Challenge.STATUSES.PERIME,
+            }),
+            domainBuilder.buildChallenge({
+              id: 'challengeFrId3',
+              locales: ['fr'],
+              status: Challenge.STATUSES.ARCHIVE,
+            }),
+          ];
+          const englishChallenges = [
+            domainBuilder.buildChallenge({
+              id: 'challengeEnId1',
+              locales: ['en'],
+              status: Challenge.STATUSES.VALIDE,
+            }),
+            domainBuilder.buildChallenge({
+              id: 'challengeEnId2',
+              locales: ['en'],
+              status: Challenge.STATUSES.VALIDE,
+            }),
+          ];
+
+          // then
+          expect(() => assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges)).toThrowError('Not enough active french challenges for each english challenge');
+        });
       });
     });
   });

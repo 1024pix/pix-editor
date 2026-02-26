@@ -35,3 +35,8 @@ export async function listActiveFrenchChallengesBySkillId(skillId) {
   const validatedChallenges = challenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE);
   return validatedChallenges.filter((challenge) => challenge.locale === 'fr');
 }
+
+export function assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(legacyEnglishChallenges, activeFrenchChallenges) {
+  if (legacyEnglishChallenges.length <= activeFrenchChallenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE).length) return;
+  throw new Error('Not enough active french challenges for each english challenge');
+}
