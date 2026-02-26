@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { databaseBuilder } from '../test-helper.js';
 import {
   BindEnglishChallengesToFrenchPrimaryEquivalent,
+  listActiveFrenchChallengesBySkillId,
   listActiveSkillsByFrameworkName,
   listLegacyEnglishChallengesBySkillId,
 } from '../../scripts/bind-english-challenges-to-french-primary-equivalent.js';
@@ -239,6 +240,139 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         expect(legacyChallenges.some((legacyChallenge) => legacyChallenge.id === 'validatedChallengeId1')).toBe(true);
         expect(legacyChallenges.every((challenge) => challenge.isPrimary)).toBe(true);
         expect(legacyChallenges.every((challenge) => challenge.locales.includes('en') && challenge.locales.length === 1)).toBe(true);
+      });
+    });
+
+    describe('listActiveFrenchChallengesBySkillId', () => {
+      it('should retrieve all active french challenges for a given skill id', async () => {
+        const { skill, challenge } = databaseBuilder.factory.buildChallengeInGroup({
+          framework: { name: 'Pix' },
+          skill: {
+            status: Skill.STATUSES.ACTIF,
+            name: '@activeSkill1',
+          },
+          challenge: {
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            status: Challenge.STATUSES.VALIDE,
+          },
+        });
+
+        const validatedEnglishChallenge1 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId1',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['en'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedEnglishChallenge1.id,
+          challengeId: validatedEnglishChallenge1.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId1.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+
+        const validatedFrenchChallenge2 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId2',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['fr'],
+          isQualityOk: false,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedFrenchChallenge2.id,
+          challengeId: validatedFrenchChallenge2.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId2.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+        const proposedFrenchChallenge3 = databaseBuilder.factory.buildChallenge({
+          id: 'proposedChallengeId3',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PROPOSE,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: proposedFrenchChallenge3.id,
+          challengeId: proposedFrenchChallenge3.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.proposedChallengeId3.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+        const archivedFrenchChallenge4 = databaseBuilder.factory.buildChallenge({
+          id: 'archivedChallengeId4',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.ARCHIVE,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: archivedFrenchChallenge4.id,
+          challengeId: archivedFrenchChallenge4.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.archivedChallengeId4.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+        const proposedChallenge5 = databaseBuilder.factory.buildChallenge({
+          id: 'proposedChallengeId5',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PROPOSE,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: proposedChallenge5.id,
+          challengeId: proposedChallenge5.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.proposedChallengeId5.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+        const validatedNLChallenge6 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedChallengeId6',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['nl'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedNLChallenge6.id,
+          challengeId: validatedNLChallenge6.id,
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedChallengeId6.instructions',
+          locale: 'nl',
+          value: 'NL instructions',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const activeFrenchChallenges = await listActiveFrenchChallengesBySkillId(skill.id);
+
+        // then
+        expect(activeFrenchChallenges).toHaveLength(2);
+        expect(activeFrenchChallenges.map((challenge) => challenge.id)).toStrictEqual([challenge.id, 'validatedChallengeId2']);
+        expect(activeFrenchChallenges.every((challenge) => challenge.status === Challenge.STATUSES.VALIDE)).toBe(true);
+        expect(activeFrenchChallenges.every((challenge) => challenge.locales.includes('fr') && challenge.locales.length === 1)).toBe(true);
       });
     });
   });

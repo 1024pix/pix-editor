@@ -1,5 +1,10 @@
-import { challengeRepository, competenceRepository, frameworkRepository, skillRepository } from '../lib/infrastructure/repositories/index.js';
-import { Challenge, Skill } from '../lib/domain/models/index.js';
+import {
+  challengeRepository,
+  competenceRepository,
+  frameworkRepository,
+  skillRepository,
+} from '../lib/infrastructure/repositories/index.js';
+import { Challenge } from '../lib/domain/models/index.js';
 
 export async function listActiveSkillsByFrameworkName(frameworkName) {
   const frameworks = await frameworkRepository.list();
@@ -22,6 +27,11 @@ export async function listLegacyEnglishChallengesBySkillId(skillId) {
   const challenges = await challengeRepository.listBySkillId(skillId);
   const decliChallenges = challenges.filter((challenge) => challenge.genealogy !== Challenge.GENEALOGIES.PROTOTYPE);
   const validatedAndProposedChallenges = decliChallenges.filter((decli) => decli.status === Challenge.STATUSES.VALIDE || decli.status === Challenge.STATUSES.PROPOSE);
-  // Existe-t-il des prototypes en english, ou ne sont-ce que des déclis ?
   return validatedAndProposedChallenges.filter((decliChallenge) => decliChallenge.locale === 'en');
+}
+
+export async function listActiveFrenchChallengesBySkillId(skillId) {
+  const challenges = await challengeRepository.listBySkillId(skillId);
+  const validatedChallenges = challenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE);
+  return validatedChallenges.filter((challenge) => challenge.locale === 'fr');
 }
