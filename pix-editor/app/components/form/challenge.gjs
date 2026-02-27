@@ -4,6 +4,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import Mde from 'pixeditor/components/field/mde';
 import { fn } from '@ember/helper';
+import { guidFor } from '@ember/object/internals';
 import ToggleField from 'pixeditor/components/field/toggle-field';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import not from 'ember-truth-helpers/helpers/not';
@@ -100,7 +101,7 @@ export default class ChallengeForm extends Component {
         @edition={{@edition}}
         @helpContent={{this.helpAnswers}}
         data-test-answers-field
-        @id="challenge-solution"
+        @id={{this.solutionsFieldId}}
       />
       {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
         <div id="toleranceField" data-test-tolerence-fields class="field {{if @edition '' 'disabled'}}">
@@ -137,7 +138,7 @@ export default class ChallengeForm extends Component {
           @value={{@challenge.solutionToDisplay}}
           @edition={{@edition}}
           data-test-solution-to-display-field
-          @id="challenge-solution-to-display"
+          @id={{this.solutionToDisplayFieldId}}
         />
       </ToggleField>
 
@@ -159,7 +160,7 @@ export default class ChallengeForm extends Component {
           @change={{@setUrlsToConsult}}
           @helpContent={{this.helpUrlsToConsult}}
           data-test-urls-to-consult-field
-          @id="urls-to-consult-to-display"
+          @id={{this.urlToConsultFieldId}}
         />
       </ToggleField>
       {{#if @invalidUrlsToConsult}}
@@ -183,7 +184,7 @@ export default class ChallengeForm extends Component {
           @value={{@challenge.illustrationAlt}}
           @title="Texte alternatif"
           @edition={{@edition}}
-          @id="challenge-illustration-alt"
+          @id={{this.illustrationAltFieldId}}
         />
       {{/if}}
       <Files
@@ -200,7 +201,7 @@ export default class ChallengeForm extends Component {
         @value={{@challenge.embedURL}}
         @edition={{@edition}}
         @label="URL"
-        @id="challenge-embed-url"
+        @id={{this.embedUrlFieldId}}
         @change={{@checkEmbedURL}}
       />
       {{#if @invalidEmbedURL}}
@@ -209,8 +210,8 @@ export default class ChallengeForm extends Component {
           {{@invalidEmbedURL}}
         </p>
       {{/if}}
-      <Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" @id="challenge-embed-height" />
-      <Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" @id="challenge-embed-title" />
+      <Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" @id={{this.embedHeightFieldId}} />
+      <Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" @id={{this.embedTitleFieldId}} />
       {{#if @challenge.isPrototype}}
         <div class="fields--selectors">
           <div class="field">
@@ -269,7 +270,7 @@ export default class ChallengeForm extends Component {
           </div>
           <div class="field">
             <PixSelect
-              @id="challenge-select-geography"
+              @id={{this.geographyFieldId}}
               @placeholder="Géographie"
               @onChange={{fn (mut @challenge.geography)}}
               @value={{this.challengeGeographyValue}}
@@ -298,10 +299,20 @@ export default class ChallengeForm extends Component {
         {{/if}}
       </div>
       {{#unless @edition}}
-        <Input @value={{@challenge.id}} @title="Id" @edition={{false}} />
+        <Input @id={{this.idFieldId}} @value={{@challenge.id}} @title="Id" @edition={{false}} />
       {{/unless}}
     </form>
   </template>
+
+  solutionsFieldId = `solutionsFieldId-${guidFor(this)}`;
+  solutionToDisplayFieldId = `solutionToDisplayFieldId-${guidFor(this)}`;
+  urlToConsultFieldId = `urlToConsultFieldId-${guidFor(this)}`;
+  illustrationAltFieldId = `illustrationAltFieldId-${guidFor(this)}`;
+  embedUrlFieldId = `embedUrlFieldId-${guidFor(this)}`;
+  embedHeightFieldId = `embedHeightFieldId-${guidFor(this)}`;
+  embedTitleFieldId = `embedTitleFieldId-${guidFor(this)}`;
+  geographyFieldId = `geographyFieldId-${guidFor(this)}`;
+  idFieldId = `idFieldId-${guidFor(this)}`;
 
   @service config;
   @service confirm;

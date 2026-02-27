@@ -8,7 +8,7 @@ import { on } from '@ember/modifier';
 export default class Input extends Component {
   <template>
     <div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
-      <p>{{@title}}</p>
+      <p id="title-{{@id}}">{{@title}}</p>
       <div class="ui input">
         {{#if @label}}
           <label class="label-input" for={{@id}}>{{@label}} : </label>
@@ -16,6 +16,7 @@ export default class Input extends Component {
         <Input0
           id={{@id}}
           @value={{@value}}
+          aria-labelledby={{this.ariaLabeledBy}}
           placeholder={{@placeholder}}
           readonly={{not @edition}}
           {{on "change" this.change}}
@@ -23,6 +24,8 @@ export default class Input extends Component {
       </div>
     </div>
   </template>
+
+  ariaLabeledBy = this.args.title && !this.args.label ? `title-${this.args.id}` : false;
 
   @action
   change(evt) {

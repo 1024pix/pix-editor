@@ -99,7 +99,7 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
       {{/unless}}
     </:default>
   </ChallengeHeader>
-  <div class="challenge">
+  <div class="challenge" data-testid="panel-{{@controller.elementClass}}">
     <div class="challenge-data {{@controller.elementClass}}" {{scrollTop @controller.edition}}>
       <Challenge
         @challenge={{@controller.challenge}}
