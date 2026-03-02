@@ -1,3 +1,6 @@
+import { Script } from '../lib/application/scripts/script.js';
+import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
+
 import {
   challengeRepository,
   competenceRepository,
@@ -5,6 +8,58 @@ import {
   skillRepository,
 } from '../lib/infrastructure/repositories/index.js';
 import { Challenge } from '../lib/domain/models/index.js';
+
+export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
+  constructor() {
+    super({
+      description: 'Script de transformation des épreuves anglaises sous forme de décli en épreuves traduites rattachées à leur équivalent primary français',
+      permanent: true,
+      options: {
+        dryRun: {
+          type: 'boolean',
+          describe: 'If true, it does not persist any deletion made during the script.',
+          demandOption: true,
+          default: true,
+        },
+      },
+    });
+  }
+
+  async handle({ options, logger }) {
+    logger.info({ dryRun: options.dryRun }, 'Script bindEnglishChallengesToFrenchPrimaryEquivalent has started');
+
+    // lister les acquis actifs par nom de référentiel
+    const activeSkills = await listActiveSkillsByFrameworkName(options.frameworkName);
+
+    // pour chaque acquis, lister les challenges anglais legacy validés ou proposés
+    for (const activeSkill of activeSkills) {
+      const legacyEnglishChallenges = await listLegacyEnglishChallengesBySkillId(activeSkill.id);
+
+      // pour chaque acquis, lister les challenges français validés.
+      const skillChallenges = await challengeRepository.listBySkillId(activeSkill.id);
+      const activeFrenchChallenges = skillChallenges.filter(byActiveFrenchChallenges);
+
+      // On vérifie qu'il y a suffisamment de challenges français validés pour le nbre de challenges anglais.
+      if (legacyEnglishChallenges.length > activeFrenchChallenges.length) {
+        logger.error({
+          skillId: activeSkill.id,
+          activeFrenchChallengeIds: activeFrenchChallenges.map(({ id }) => id),
+          legacyEnglishChallengeIds: legacyEnglishChallenges.map(({ id }) => id),
+        }, 'Not enough active french challenges without english localized for each english challenge');
+        continue;
+      }
+      // On veut dupliquer les localized anglais et changer le challengeId pour que celui-ci corresponde au challenge ayant un primary français et id += id-en
+      for (const legacyEnglishChallenge of legacyEnglishChallenges) {
+        const [localizedToClone] = legacyEnglishChallenge.localizedChallenges;
+        // on clone le legacy localized et ses attachments
+        // si challenge anglais === rpoposé ? localized.status = 'pause', si challenge anglais === validé ? localized.status = 'play'
+        // on met les bons ids
+        // on clone les clés de trads
+        // On périme le challenge anglais
+      }
+    }
+  }
+}
 
 export async function listActiveSkillsByFrameworkName(frameworkName) {
   const frameworks = await frameworkRepository.list();
@@ -18,8 +73,6 @@ export async function listActiveSkillsByFrameworkName(frameworkName) {
     activeSkills.push(...competenceActiveSkills);
   }
 
-  console.log(activeSkills);
-
   return activeSkills;
 }
 
@@ -30,25 +83,8 @@ export async function listLegacyEnglishChallengesBySkillId(skillId) {
   return validatedAndProposedChallenges.filter((decliChallenge) => decliChallenge.locale === 'en');
 }
 
-export async function listActiveFrenchChallengesBySkillId(skillId) {
-  const challenges = await challengeRepository.listBySkillId(skillId);
-  const validatedChallenges = challenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE);
-  return validatedChallenges.filter((challenge) => challenge.locale === 'fr');
+export function byActiveFrenchChallenges(challenge) {
+  return challenge.status === Challenge.STATUSES.VALIDE && challenge.locale === 'fr' && !challenge.localizedChallenges.map((localized) => localized.locale).includes('en');
 }
 
-export function assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(legacyEnglishChallenges, frenchChallenges) {
-  const skillId = legacyEnglishChallenges[0]?.skillId ?? frenchChallenges?.[0]?.skillId;
-
-  const validatedChallenges = frenchChallenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE);
-  if (legacyEnglishChallenges.length > validatedChallenges.length) {
-    throw new Error(`Not enough active french challenges (${validatedChallenges.length}) for each english challenge (${legacyEnglishChallenges.length}) in skill ${skillId}`);
-  }
-
-  const notEnglishChallenges = validatedChallenges.filter((challenge) => {
-    const locales = challenge.localizedChallenges.map((localized) => localized.locale);
-    return !locales.includes('en');
-  });
-  if (legacyEnglishChallenges.length > notEnglishChallenges.length) {
-    throw new Error(`Not enough active french challenges without english localized (${notEnglishChallenges.length}) for each english challenge (${legacyEnglishChallenges.length}) in skill ${skillId}`);
-  };
-}
+await ScriptRunner.execute(import.meta.url, BindEnglishChallengesToFrenchPrimaryEquivalent);
