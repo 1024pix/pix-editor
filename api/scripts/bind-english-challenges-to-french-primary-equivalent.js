@@ -36,7 +36,19 @@ export async function listActiveFrenchChallengesBySkillId(skillId) {
   return validatedChallenges.filter((challenge) => challenge.locale === 'fr');
 }
 
-export function assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(legacyEnglishChallenges, activeFrenchChallenges) {
-  if (legacyEnglishChallenges.length <= activeFrenchChallenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE).length) return;
-  throw new Error('Not enough active french challenges for each english challenge');
+export function assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(legacyEnglishChallenges, frenchChallenges) {
+  const skillId = legacyEnglishChallenges[0]?.skillId ?? frenchChallenges?.[0]?.skillId;
+
+  const validatedChallenges = frenchChallenges.filter((challenge) => challenge.status === Challenge.STATUSES.VALIDE);
+  if (legacyEnglishChallenges.length > validatedChallenges.length) {
+    throw new Error(`Not enough active french challenges (${validatedChallenges.length}) for each english challenge (${legacyEnglishChallenges.length}) in skill ${skillId}`);
+  }
+
+  const notEnglishChallenges = validatedChallenges.filter((challenge) => {
+    const locales = challenge.localizedChallenges.map((localized) => localized.locale);
+    return !locales.includes('en');
+  });
+  if (legacyEnglishChallenges.length > notEnglishChallenges.length) {
+    throw new Error(`Not enough active french challenges without english localized (${notEnglishChallenges.length}) for each english challenge (${legacyEnglishChallenges.length}) in skill ${skillId}`);
+  };
 }

@@ -9,7 +9,7 @@ import {
   listLegacyEnglishChallengesBySkillId,
 } from '../../scripts/bind-english-challenges-to-french-primary-equivalent.js';
 import { logger } from '../../lib/infrastructure/logger.js';
-import { Challenge, Skill } from '../../lib/domain/models/index.js';
+import { Challenge, LocalizedChallenge, Skill } from '../../lib/domain/models/index.js';
 
 describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
   /** @type {BindEnglishChallengesToFrenchPrimaryEquivalent} */
@@ -390,8 +390,21 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
               }),
               domainBuilder.buildChallenge({
                 id: 'challengeFrId2',
-                locales: ['fr'],
+                locales: ['fr', 'nl'],
                 status: Challenge.STATUSES.VALIDE,
+                localizedChallenges: [
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrId2',
+                    challengeId: 'challengeFrId2',
+                    locale: 'fr',
+                  }),
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrId2-NL',
+                    challengeId: 'challengeFrId2',
+                    locale: 'nl',
+                    status: LocalizedChallenge.STATUSES.PLAY,
+                  }),
+                ],
               }),
             ];
             const englishChallenges = [
@@ -430,6 +443,68 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
                 id: 'challengeFrId3',
                 locales: ['fr'],
                 status: Challenge.STATUSES.PERIME,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId4',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrEnId5',
+                locales: ['fr', 'en'],
+                status: Challenge.STATUSES.VALIDE,
+                localizedChallenges: [
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrEnId5',
+                    challengeId: 'challengeFrEnId5',
+                    locale: 'fr',
+                  }),
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrEnId5-EN',
+                    challengeId: 'challengeFrEnId5',
+                    locale: 'en',
+                    status: LocalizedChallenge.STATUSES.PLAY,
+                  }),
+                ],
+              }),
+            ];
+            const englishChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId1',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+            ];
+
+            // then
+            expect(assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges)).toBeUndefined();
+          });
+        });
+
+        describe('when there already are english localized but enough validated french challenges without english localized', () => {
+          it('should not throw', () => {
+            // given
+            const frenchChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId1',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId2',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PROPOSE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId3',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PERIME,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrEnId4',
+                locales: ['fr', 'en'],
+                status: Challenge.STATUSES.VALIDE,
               }),
             ];
             const englishChallenges = [
@@ -485,7 +560,67 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           ];
 
           // then
-          expect(() => assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges)).toThrowError('Not enough active french challenges for each english challenge');
+          expect(
+            () => assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges),
+          ).toThrowError('Not enough active french challenges (1) for each english challenge (2) in skill recSkillId');
+        });
+
+        describe('when there already are english localized but not enough validated french challenges without english localized', () => {
+          it('should throw', () => {
+            // given
+            const frenchChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId1',
+                locales: ['fr'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId2',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PROPOSE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrId3',
+                locales: ['fr'],
+                status: Challenge.STATUSES.PERIME,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeFrEnId4',
+                locales: ['fr', 'en'],
+                status: Challenge.STATUSES.VALIDE,
+                localizedChallenges: [
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrEnId4',
+                    challengeId: 'challengeFrEnId4',
+                    locale: 'fr',
+                  }),
+                  domainBuilder.buildLocalizedChallenge({
+                    id: 'challengeFrEnId4-EN',
+                    challengeId: 'challengeFrEnId4',
+                    locale: 'en',
+                    status: LocalizedChallenge.STATUSES.PLAY,
+                  }),
+                ],
+              }),
+            ];
+            const englishChallenges = [
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId1',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+              domainBuilder.buildChallenge({
+                id: 'challengeEnId2',
+                locales: ['en'],
+                status: Challenge.STATUSES.VALIDE,
+              }),
+            ];
+
+            // then
+            expect(
+              () => assertEachLegacyEnglishChallengeHasActiveFrenchChallenge(englishChallenges, frenchChallenges),
+            ).toThrowError('Not enough active french challenges without english localized (1) for each english challenge (2) in skill recSkillId');
+          });
         });
       });
     });
