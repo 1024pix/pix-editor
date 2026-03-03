@@ -325,6 +325,49 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         }),
       ]);
     });
+
+    describe('when validatedAt is filled', function() {
+      it('should return a localized challenge with the given validatedAt', function() {
+        // given
+        const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'oldLocId',
+          challengeId: 'oldLocId',
+          embedUrl: 'https://example.com/embed.html',
+          fileIds: [],
+          locale: 'fr',
+          status: LocalizedChallenge.STATUSES.PAUSE,
+          geography: 'FR',
+          urlsToConsult: ['http://url.com'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+          hasEmbedInternalValidation: true,
+          noValidationNeeded: true,
+          validatedAt: new Date('2020-01-01'),
+        });
+
+        // when
+        const { clonedLocalizedChallenge } = localizedChallenge.clone({
+          id: 'newLocId',
+          challengeId: 'newLocId',
+          status: LocalizedChallenge.STATUSES.PLAY,
+          attachments: [],
+          validatedAt: new Date('2023-03-03'),
+        });
+
+        // then
+        expect(clonedLocalizedChallenge).toStrictEqual(domainBuilder.buildLocalizedChallenge({
+          ...localizedChallenge,
+          id: 'newLocId',
+          challengeId: 'newLocId',
+          status: LocalizedChallenge.STATUSES.PLAY,
+          attachments: [],
+          validatedAt: new Date('2023-03-03'),
+        }));
+      });
+    });
   });
 
   describe('update', function() {

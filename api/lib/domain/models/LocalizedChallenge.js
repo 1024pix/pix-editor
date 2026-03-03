@@ -135,12 +135,13 @@ export class LocalizedChallenge {
     });
   }
 
-  clone({ id, challengeId, status, attachments }) {
+  clone({ id, challengeId, status, attachments, validatedAt = null }) {
     const clonedAttachments = [];
     const clonedLocalizedChallenge = new LocalizedChallenge({
       id,
       challengeId,
       status,
+      validatedAt,
       locale: this.locale,
       embedUrl: this.embedUrl,
       fileIds: [],
@@ -153,7 +154,6 @@ export class LocalizedChallenge {
       toRephrase: this.toRephrase,
       hasEmbedInternalValidation: this.hasEmbedInternalValidation,
       noValidationNeeded: this.noValidationNeeded,
-      validatedAt: null,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
