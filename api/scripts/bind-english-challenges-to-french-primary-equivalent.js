@@ -2,12 +2,16 @@ import { Script } from '../lib/application/scripts/script.js';
 import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
 
 import {
+  attachmentRepository,
   challengeRepository,
   competenceRepository,
   frameworkRepository,
+  localizedChallengeRepository,
   skillRepository,
+  translationRepository,
 } from '../lib/infrastructure/repositories/index.js';
-import { Challenge } from '../lib/domain/models/index.js';
+import { Challenge, LocalizedChallenge } from '../lib/domain/models/index.js';
+import { extractFromChallenge } from '../lib/infrastructure/translations/challenge.js';
 
 export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
   constructor() {
@@ -48,14 +52,36 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
         }, 'Not enough active french challenges without english localized for each english challenge');
         continue;
       }
+
       // On veut dupliquer les localized anglais et changer le challengeId pour que celui-ci corresponde au challenge ayant un primary français et id += id-en
       for (const legacyEnglishChallenge of legacyEnglishChallenges) {
+        const frenchChallenge = activeFrenchChallenges.pop();
         const [localizedToClone] = legacyEnglishChallenge.localizedChallenges;
+        const localizedAttachments = await attachmentRepository.listByLocalizedChallengeId(localizedToClone.id);
+
         // on clone le legacy localized et ses attachments
-        // si challenge anglais === rpoposé ? localized.status = 'pause', si challenge anglais === validé ? localized.status = 'play'
         // on met les bons ids
+        // si challenge anglais === rpoposé ? localized.status = 'pause', si challenge anglais === validé ? localized.status = 'play'
+        const { clonedAttachments, clonedLocalizedChallenge } = localizedToClone.clone({
+          id: `${localizedToClone.id}-EN`,
+          challengeId: frenchChallenge.id,
+          status: legacyEnglishChallenge.status === Challenge.STATUSES.VALIDE ? LocalizedChallenge.STATUSES.PLAY : LocalizedChallenge.STATUSES.PAUSE,
+          attachments: localizedAttachments,
+          validatedAt: localizedToClone.validatedAt,
+        });
+
         // on clone les clés de trads
+        const translations = extractFromChallenge(legacyEnglishChallenge);
+        for (const translation of translations) {
+          translation.key = translation.key.replace(legacyEnglishChallenge.id, frenchChallenge.id);
+        }
+
         // On périme le challenge anglais
+
+        // on persiste tout
+        await localizedChallengeRepository.create({ localizedChallenges: [clonedLocalizedChallenge] });
+        await attachmentRepository.createBatch(clonedAttachments);
+        await translationRepository.save({ translations });
       }
     }
   }
