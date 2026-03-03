@@ -14,13 +14,13 @@
   },
   "addons": [
     {
-      "plan": "postgresql:postgresql-sandbox",
+      "plan": "postgresql:postgresql-starter-512",
       "options": {
         "version": "16.9"
       }
     },
     {
-      "plan": "redis:redis-sandbox",
+      "plan": "redis:redis-starter-256",
       "options": {
         "version": "7.2.11"
       }
