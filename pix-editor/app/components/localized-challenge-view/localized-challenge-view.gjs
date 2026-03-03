@@ -18,7 +18,7 @@ import FieldToggleFieldComponent from '../v2/field/toggle-field';
 import LocalizedChallengeViewHeader from './localized-challenge-view-header';
 
 export default class LocalizedChallenge extends Component {
-  textareaId = `textareaId-${guidFor()}`;
+  textareaId = `textareaId-${guidFor(this)}`;
 
   @service countries;
   @service loader;

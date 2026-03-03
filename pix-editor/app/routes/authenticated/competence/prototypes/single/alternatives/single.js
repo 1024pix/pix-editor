@@ -16,9 +16,11 @@ export default class SingleRoute extends Route {
     await model?.attachments;
   }
 
-  setupController(controller) {
+  setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
+    controller.urlsToConsult = model.urlsToConsult?.join('\n') ?? '';
+    controller.invalidUrlsToConsult = '';
   }
 
   @action
