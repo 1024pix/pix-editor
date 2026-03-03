@@ -42,6 +42,12 @@ a, p, span, li {
   font-family: var(--_pix-font-family-body), Arial, sans-serif;
 }
 
+.monaco-editor {
+  a, p, span, li {
+    font-family: revert;
+  }
+}
+
 .waiting {
   height: 100%;
 }
@@ -313,4 +319,3 @@ footer.ui.attached.header {
   border: 0;
   clip-path: inset(50%);
 }
-
