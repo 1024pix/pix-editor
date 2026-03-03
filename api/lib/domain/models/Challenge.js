@@ -7,6 +7,9 @@ export class Challenge {
   #primaryStatus;
   #translations;
 
+  /** @type {LocalizedChallenge[]} */
+  localizedChallenges;
+
   constructor({
     accessibility1,
     accessibility2,

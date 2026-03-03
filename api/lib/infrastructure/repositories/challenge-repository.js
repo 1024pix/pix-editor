@@ -352,6 +352,12 @@ function selectChallenges(knexConn = knex) {
     .leftOuterJoin('thematics', 'thematics.id', 'tubes.thematicId');
 }
 
+/**
+ *
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ * @param {object[]} localizedChallenges
+ */
 function toDomainList(dtos, translations, localizedChallenges) {
   const translationsByChallengeId = Object.groupBy(translations, (translation) => translation.entityId);
   const localizedChallengesByChallengeId = Object.groupBy(

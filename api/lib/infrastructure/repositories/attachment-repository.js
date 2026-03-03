@@ -90,6 +90,9 @@ export async function remove(attachmentId) {
   await knex.delete().from('attachments').where('id', attachmentId);
 }
 
+/**
+ * @param {object[]} dtos
+ */
 function toDomainList(dtos) {
   return dtos.map(toDomain);
 }

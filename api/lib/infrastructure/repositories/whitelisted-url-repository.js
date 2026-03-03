@@ -43,6 +43,9 @@ export async function save(whitelistedUrl) {
   return id;
 }
 
+/**
+ * @param {object[]} whitelistedUrlDtos
+ */
 function toDomainList(whitelistedUrlDtos) {
   return whitelistedUrlDtos.map(toDomain);
 }

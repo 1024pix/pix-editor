@@ -88,6 +88,10 @@ function _toDomain(mission, translations) {
   });
 }
 
+/**
+ * @param {object[]} missions
+ * @param {object[]} translations
+ */
 function _toDomainList(missions, translations) {
   const translationsByMissionId = _.groupBy(translations, 'entityId');
   return missions.map((mission) => _toDomain(mission, translationsByMissionId[mission.id]));

@@ -266,6 +266,10 @@ export async function update(skill) {
   });
 }
 
+/**
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ */
 function toDomainList(dtos, translations) {
   const translationsBySkillId = Object.groupBy(translations, (translation) => translation.entityId);
   return dtos.map((dto) => toDomain(dto, translationsBySkillId[dto.id]));

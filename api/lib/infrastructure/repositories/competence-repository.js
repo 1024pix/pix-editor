@@ -99,6 +99,10 @@ export function _selectCompetences(knexConn = knex) {
     .join('frameworks', 'frameworks.id', 'areas.frameworkId');
 }
 
+/**
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ */
 function toDomainList(dtos, translations) {
   const translationsByCompetenceId = Object.groupBy(translations, (translation) => translation.entityId);
   return dtos.map((datasourceCompetence) =>

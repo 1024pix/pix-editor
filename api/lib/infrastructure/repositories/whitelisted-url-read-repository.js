@@ -32,6 +32,9 @@ export async function find(id) {
   return toDomain(whitelistedUrlDto);
 }
 
+/**
+ * @param {object[]} whitelistedUrlDtos
+ */
 function toDomainList(whitelistedUrlDtos) {
   return whitelistedUrlDtos.map(toDomain);
 }

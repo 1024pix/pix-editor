@@ -101,6 +101,10 @@ function selectThematics(knexConn = knex) {
     .from(TABLE_NAME);
 }
 
+/**
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ */
 function toDomainList(dtos, translations) {
   const translationsByThematicId = Object.groupBy(translations, (translation) => translation.entityId);
   return _.orderBy(

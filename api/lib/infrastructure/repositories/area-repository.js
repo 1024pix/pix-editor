@@ -68,6 +68,10 @@ function selectAreas(knexConn = knex) {
     .from(TABLE_NAME);
 }
 
+/**
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ */
 function toDomainList(dtos, translations) {
   const translationsByAreaId = Object.groupBy(translations, (translation) => translation.entityId);
   return dtos.map((dto) => toDomain(dto, translationsByAreaId[dto.id]));
