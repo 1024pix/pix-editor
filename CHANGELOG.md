@@ -1,5 +1,14 @@
 
 
+## v4.13.0 (04/03/2026)
+
+
+### :building_construction: Tech
+- [#1410](https://github.com/1024pix/pix-editor/pull/1410) [TECH] Mettre à jour le plan des addons Scalingo.
+
+### :bug: Correction
+- [#1409](https://github.com/1024pix/pix-editor/pull/1409) [BUGFIX] Problème d'affichage des URLs externes à consulter (PIX-21189).
+
 ## v4.12.0 (24/02/2026)
 
 
