@@ -567,13 +567,81 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
     describe('when dryRun option is true', () => {
       it('stops before deletion', async () => {
         // given
-        const options = { dryRun: true };
+        const options = { dryRun: true, frameworkName: 'Pix' };
+        const { skill, challenge } = databaseBuilder.factory.buildChallengeInGroup({
+          framework: { name: 'Pix' },
+          tube: { name: 'activePixTube' },
+          skill: {
+            status: Skill.STATUSES.ACTIF,
+            level: 6,
+          },
+          challenge: {
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            status: Challenge.STATUSES.VALIDE,
+            locales: ['fr'],
+          },
+          localizedChallenge: { embedUrl: 'https://pix.fr' },
+        });
+
+        const validatedEnglishChallenge1 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedEnglishChallenge1',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['en'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedEnglishChallenge1.id,
+          challengeId: validatedEnglishChallenge1.id,
+          locale: 'en',
+          embedUrl: 'https://pix.org/en-UK',
+          urlsToConsult: ['https://pix.fr'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+          geography: 'UK',
+          hasEmbedInternalValidation: false,
+          noValidationNeeded: false,
+          validatedAt: new Date(),
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedEnglishChallenge1.instruction',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+
+        await databaseBuilder.commit();
+
+        const errorLoggerSpy = vi.spyOn(logger, 'error');
 
         // when
-        await script.handle({ options, logger });
+        await script.handle({
+          options,
+          logger,
+        });
+
+        const frenchChallenge = await challengeRepository.get(challenge.id);
+        const localizedChallenges = frenchChallenge.localizedChallenges;
+        const englishLocalized = localizedChallenges.find(({ locale }) => locale === 'en');
+        const attachments = await attachmentRepository.list();
+        const newEnglishAttachments = attachments.filter((attachment) => attachment.localizedChallengeId.endsWith('-EN'));
+        const translations = await translationRepository.listByEntity('challenge', frenchChallenge.id);
+        const englishTranslations = translations.filter(({ locale }) => locale === 'en');
+
+        const legacyEnglishChallenge = await challengeRepository.get(validatedEnglishChallenge1.id);
 
         // then
-        expect(true).toBe(false);
+        expect(errorLoggerSpy).not.toHaveBeenCalled();
+        expect(localizedChallenges.length).toEqual(1);
+        expect(englishLocalized).toBeUndefined();
+        expect(newEnglishAttachments).toHaveLength(0);
+        expect(englishTranslations).toHaveLength(0);
+
+        expect(legacyEnglishChallenge.status).not.toStrictEqual(Challenge.STATUSES.PERIME);
+        expect(legacyEnglishChallenge.localizedChallenges[0].status).not.toStrictEqual(LocalizedChallenge.STATUSES.PAUSE);
       });
     });
   });

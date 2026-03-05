@@ -80,10 +80,14 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
         legacyEnglishChallenge.obsolete();
 
         // on persiste tout
-        await localizedChallengeRepository.create({ localizedChallenges: [clonedLocalizedChallenge] });
-        await attachmentRepository.createBatch(clonedAttachments);
-        await translationRepository.save({ translations });
-        await challengeRepository.update(legacyEnglishChallenge);
+        if (options.dryRun) {
+          logger.info('Dry run, stopping before deletion');
+        } else {
+          await localizedChallengeRepository.create({ localizedChallenges: [clonedLocalizedChallenge] });
+          await attachmentRepository.createBatch(clonedAttachments);
+          await translationRepository.save({ translations });
+          await challengeRepository.update(legacyEnglishChallenge);
+        }
       }
     }
   }
