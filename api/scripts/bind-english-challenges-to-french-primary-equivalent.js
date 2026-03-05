@@ -25,6 +25,11 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           demandOption: true,
           default: true,
         },
+        frameworkName: {
+          type: 'string',
+          describe: 'Framework name (not ID)',
+          demandOption: true,
+        },
       },
     });
   }
@@ -32,12 +37,25 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun }, 'Script bindEnglishChallengesToFrenchPrimaryEquivalent has started');
 
+    let processedEnglishChallengesCount = 0;
+    let skippedSkillsCount = 0;
+
     // lister les acquis actifs par nom de référentiel
     const activeSkills = await listActiveSkillsByFrameworkName(options.frameworkName);
 
     // pour chaque acquis, lister les challenges anglais legacy validés ou proposés
     for (const activeSkill of activeSkills) {
       const legacyEnglishChallenges = await listLegacyEnglishChallengesBySkillId(activeSkill.id);
+      if (legacyEnglishChallenges.length === 0) {
+        logger.info(`Ignored skill ${activeSkill.name} - ${activeSkill.id}`);
+        continue;
+      }
+
+      logger.info(`Now processing ${activeSkill.name} - ${activeSkill.id}`);
+
+      // compteurs
+      let clonedTranslationsCount = 0;
+      let clonedAttachmentsCount = 0;
 
       // pour chaque acquis, lister les challenges français validés.
       const skillChallenges = await challengeRepository.listBySkillId(activeSkill.id);
@@ -50,6 +68,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           activeFrenchChallengeIds: activeFrenchChallenges.map(({ id }) => id),
           legacyEnglishChallengeIds: legacyEnglishChallenges.map(({ id }) => id),
         }, 'Not enough active french challenges without english localized for each english challenge');
+        skippedSkillsCount++;
         continue;
       }
 
@@ -69,11 +88,18 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           attachments: localizedAttachments,
           validatedAt: localizedToClone.validatedAt,
         });
+        clonedAttachmentsCount += clonedAttachments.length;
+        logger.info({
+          skillId: activeSkill.id,
+          clonedEnglishLocalizedId: clonedLocalizedChallenge.id,
+          frenchChallengeId: frenchChallenge.id,
+        });
 
         // on clone les clés de trads
         const translations = extractFromChallenge(legacyEnglishChallenge);
         for (const translation of translations) {
           translation.key = translation.key.replace(legacyEnglishChallenge.id, frenchChallenge.id);
+          clonedTranslationsCount++;
         }
 
         // On périme le challenge anglais
@@ -81,7 +107,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
 
         // on persiste tout
         if (options.dryRun) {
-          logger.info('Dry run, stopping before deletion');
+          logger.info('Dry run is enabled, not persisting changes');
         } else {
           await localizedChallengeRepository.create({ localizedChallenges: [clonedLocalizedChallenge] });
           await attachmentRepository.createBatch(clonedAttachments);
@@ -89,7 +115,20 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           await challengeRepository.update(legacyEnglishChallenge);
         }
       }
+
+      logger.info({
+        skillId: activeSkill.id,
+        obsoletedEnglishChallengesCount: legacyEnglishChallenges.length,
+        clonedTranslationsCount,
+        clonedAttachmentsCount,
+      });
+      processedEnglishChallengesCount += legacyEnglishChallenges.length;
     }
+
+    logger.info({
+      processedEnglishChallengesCount,
+      skippedSkillsCount,
+    }, 'DONE');
   }
 }
 

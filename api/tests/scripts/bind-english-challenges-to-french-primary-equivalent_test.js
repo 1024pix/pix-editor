@@ -358,7 +358,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
     it('binds english challenges to french primary equivalent', async () => {
       // given
       const options = { dryRun: false, frameworkName: 'Pix' };
-      const { skill, challenge, localizedChallenge } = databaseBuilder.factory.buildChallengeInGroup({
+      const { skill, challenge, localizedChallenge, tube } = databaseBuilder.factory.buildChallengeInGroup({
         framework: { name: 'Pix' },
         tube: { name: 'activePixTube' },
         skill: {
@@ -416,6 +416,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
       await databaseBuilder.commit();
 
       const errorLoggerSpy = vi.spyOn(logger, 'error');
+      const infoLoggerSpy = vi.spyOn(logger, 'info');
 
       // when
       await script.handle({
@@ -433,7 +434,6 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
       const legacyEnglishChallenge = await challengeRepository.get(validatedEnglishChallenge1.id);
 
       // then
-      expect(errorLoggerSpy).not.toHaveBeenCalled();
       expect(localizedChallenges.length).toEqual(2);
       expect(englishLocalized).toStrictEqual(domainBuilder.buildLocalizedChallenge({
         id: `${validatedEnglishChallenge1.id}-EN`,
@@ -473,8 +473,13 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           value: 'EN instructions',
         }),
       ]);
-
       expect(legacyEnglishChallenge.status).toStrictEqual(Challenge.STATUSES.PERIME);
+      expect(errorLoggerSpy).not.toHaveBeenCalled();
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(1, { dryRun: false }, 'Script bindEnglishChallengesToFrenchPrimaryEquivalent has started');
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(2, `Now processing ${tube.name}${skill.level} - ${skill.id}`);
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(3, { skillId: skill.id, clonedEnglishLocalizedId: englishLocalized.id, frenchChallengeId: frenchChallenge.id });
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(4, { skillId: skill.id, obsoletedEnglishChallengesCount: 1, clonedTranslationsCount: 1, clonedAttachmentsCount: 1 });
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(5, { processedEnglishChallengesCount: 1, skippedSkillsCount: 0 }, 'DONE');
     });
 
     describe('when framework name does not exist', () => {
