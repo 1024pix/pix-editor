@@ -9,7 +9,11 @@ import {
 } from '../../scripts/bind-english-challenges-to-french-primary-equivalent.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { Attachment, Challenge, LocalizedChallenge, Skill } from '../../lib/domain/models/index.js';
-import { attachmentRepository, challengeRepository, translationRepository } from '../../lib/infrastructure/repositories/index.js';
+import {
+  attachmentRepository,
+  challengeRepository,
+  translationRepository,
+} from '../../lib/infrastructure/repositories/index.js';
 
 describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
   /** @type {BindEnglishChallengesToFrenchPrimaryEquivalent} */
@@ -317,7 +321,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         expect(filterResult).toBeFalsy();
       });
 
-      it('should return an validated french challenge without any english localized', () => {
+      it('should return a validated french challenge without any english localized', () => {
         // given
         const frenchChallengeWithoutEnglishLocalized = domainBuilder.buildChallenge({
           id: 'challengeFrId1',
@@ -426,6 +430,8 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
       const translations = await translationRepository.listByEntity('challenge', frenchChallenge.id);
       const englishTranslations = translations.filter(({ locale }) => locale === 'en');
 
+      const legacyEnglishChallenge = await challengeRepository.get(validatedEnglishChallenge1.id);
+
       // then
       expect(errorLoggerSpy).not.toHaveBeenCalled();
       expect(localizedChallenges.length).toEqual(2);
@@ -467,6 +473,8 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           value: 'EN instructions',
         }),
       ]);
+
+      expect(legacyEnglishChallenge.status).toStrictEqual(Challenge.STATUSES.PERIME);
     });
 
     describe('when framework name does not exist', () => {

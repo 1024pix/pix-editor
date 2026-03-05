@@ -434,6 +434,11 @@ export class Challenge {
     if (this.isPrimary) return this.validatedAt;
     return localizedChallenge.validatedAt;
   }
+
+  obsolete() {
+    this.status = Challenge.STATUSES.PERIME;
+    this.madeObsoleteAt = new Date();
+  }
 }
 
 function findCorrespondingLocalizedChallenge(localizedChallenges, challengeLocale) {

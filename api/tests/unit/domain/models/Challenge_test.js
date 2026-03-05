@@ -1017,4 +1017,18 @@ describe('Unit | Domain | Challenge', () => {
       ]);
     });
   });
+
+  describe('obsolete', () => {
+    it('obsoletes a challenge', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ status: Challenge.STATUSES.PROPOSE });
+
+      // when
+      challenge.obsolete();
+
+      // then
+      expect(challenge.status).toStrictEqual(Challenge.STATUSES.PERIME);
+      expect(challenge.madeObsoleteAt).toBeInstanceOf(Date);
+    });
+  });
 });

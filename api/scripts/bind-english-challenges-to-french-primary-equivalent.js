@@ -77,11 +77,13 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
         }
 
         // On périme le challenge anglais
+        legacyEnglishChallenge.obsolete();
 
         // on persiste tout
         await localizedChallengeRepository.create({ localizedChallenges: [clonedLocalizedChallenge] });
         await attachmentRepository.createBatch(clonedAttachments);
         await translationRepository.save({ translations });
+        await challengeRepository.update(legacyEnglishChallenge);
       }
     }
   }
