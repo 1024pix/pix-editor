@@ -31,10 +31,10 @@ export async function listByLocalizedChallengeId(localizedChallengeId) {
   return toDomainList(dtos);
 }
 
-export async function createBatch(attachments) {
+export async function createBatch(attachments, transaction = knex) {
   if (!attachments || attachments.length === 0) return [];
 
-  const dtos = await knex
+  const dtos = await transaction
     .insert(
       attachments.map((attachment) => ({
         id: idGenerator.generateNewId('attachment'),
