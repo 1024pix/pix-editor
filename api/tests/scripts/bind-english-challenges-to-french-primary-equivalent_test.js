@@ -373,6 +373,31 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         localizedChallenge: { embedUrl: 'https://pix.fr' },
       });
 
+      const validatedFrenchChallenge = databaseBuilder.factory.buildChallenge({
+        id: 'validatedFrenchChallenge',
+        skillId: skill.id,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.VALIDE,
+        locales: ['fr'],
+        isQualityOk: true,
+      });
+      const validatedFrenchChallengeLocalized = databaseBuilder.factory.buildLocalizedChallenge({
+        id: validatedFrenchChallenge.id,
+        challengeId: validatedFrenchChallenge.id,
+        locale: 'fr',
+        embedUrl: 'https://pix.org/fr-FTR',
+        urlsToConsult: ['https://pix.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        geography: 'FR',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+        validatedAt: new Date(),
+      });
+
       const validatedEnglishChallenge1 = databaseBuilder.factory.buildChallenge({
         id: 'validatedEnglishChallenge1',
         skillId: skill.id,
@@ -413,6 +438,46 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         localizedChallengeId: validatedEnglishChallenge1.id,
       });
 
+      const validatedEnglishChallenge2 = databaseBuilder.factory.buildChallenge({
+        id: 'validatedEnglishChallenge2',
+        skillId: skill.id,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        status: Challenge.STATUSES.VALIDE,
+        locales: ['en'],
+        isQualityOk: true,
+      });
+      const englishLegacyLocalized2 = databaseBuilder.factory.buildLocalizedChallenge({
+        id: validatedEnglishChallenge2.id,
+        challengeId: validatedEnglishChallenge2.id,
+        locale: 'en',
+        embedUrl: 'https://pix.org/en-UK',
+        urlsToConsult: ['https://pix.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        geography: 'UK',
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+        validatedAt: new Date(),
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.validatedEnglishChallenge2.instruction',
+        locale: 'en',
+        value: 'EN instructions',
+      });
+      const englishLegacyAttachment2 = databaseBuilder.factory.buildAttachment({
+        id: 'attachmentEn2',
+        url: 'https://',
+        size: 3,
+        type: Attachment.TYPES.ILLUSTRATION,
+        filename: 'test.jpg',
+        mimeType: 'image/jpeg',
+        challengeId: validatedEnglishChallenge2.id,
+        localizedChallengeId: validatedEnglishChallenge2.id,
+      });
+
       await databaseBuilder.commit();
 
       const errorLoggerSpy = vi.spyOn(logger, 'error');
@@ -424,23 +489,48 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         logger,
       });
 
-      const frenchChallenge = await challengeRepository.get(challenge.id);
-      const localizedChallenges = frenchChallenge.localizedChallenges;
-      const englishLocalized = localizedChallenges.find(({ locale }) => locale === 'en');
-      const attachments = await attachmentRepository.listByLocalizedChallengeId(englishLocalized.id);
-      const translations = await translationRepository.listByEntity('challenge', frenchChallenge.id);
+      const frenchChallenges = await challengeRepository.getMany([challenge.id, 'validatedFrenchChallenge']);
+      const localizedChallenges = frenchChallenges.flatMap((challenge) => challenge.localizedChallenges);
+      const [englishLocalized1, englishLocalized2] = localizedChallenges.filter(({ locale }) => locale === 'en');
+
+      const englishLocalized1Attachments = await attachmentRepository.listByLocalizedChallengeId(englishLocalized1.id);
+      const englishLocalized2Attachments = await attachmentRepository.listByLocalizedChallengeId(englishLocalized2.id);
+
+      const translations = await translationRepository.listByEntities('challenge', frenchChallenges.map((challenge) => challenge.id));
       const englishTranslations = translations.filter(({ locale }) => locale === 'en');
 
-      const legacyEnglishChallenge = await challengeRepository.get(validatedEnglishChallenge1.id);
+      const legacyEnglishChallenge = await challengeRepository.getMany([validatedEnglishChallenge1.id, validatedEnglishChallenge2.id]);
 
       // then
-      expect(localizedChallenges.length).toEqual(2);
-      expect(englishLocalized).toStrictEqual(domainBuilder.buildLocalizedChallenge({
+      expect(localizedChallenges.length).toEqual(4);
+
+      expect(englishLocalized1).toStrictEqual(
+        domainBuilder.buildLocalizedChallenge({
+          id: `${validatedEnglishChallenge2.id}-EN`,
+          challengeId: challenge.id,
+          locale: 'en',
+          status: LocalizedChallenge.STATUSES.PLAY,
+          fileIds: [englishLocalized1Attachments[0].id],
+          embedUrl: englishLegacyLocalized.embedUrl,
+          primaryEmbedUrl: localizedChallenge.embedUrl,
+          urlsToConsult: englishLegacyLocalized.urlsToConsult,
+          requireGafamWebsiteAccess: englishLegacyLocalized.requireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: englishLegacyLocalized.isIncompatibleIpadCertif,
+          deafAndHardOfHearing: englishLegacyLocalized.deafAndHardOfHearing,
+          isAwarenessChallenge: englishLegacyLocalized.isAwarenessChallenge,
+          toRephrase: englishLegacyLocalized.toRephrase,
+          geography: englishLegacyLocalized.geography,
+          hasEmbedInternalValidation: englishLegacyLocalized.hasEmbedInternalValidation,
+          noValidationNeeded: englishLegacyLocalized.noValidationNeeded,
+          validatedAt: englishLegacyLocalized.validatedAt,
+        }));
+
+      expect(englishLocalized2).toStrictEqual(domainBuilder.buildLocalizedChallenge({
         id: `${validatedEnglishChallenge1.id}-EN`,
-        challengeId: frenchChallenge.id,
+        challengeId: validatedFrenchChallenge.id,
         locale: 'en',
         status: LocalizedChallenge.STATUSES.PLAY,
-        fileIds: attachments.map(({ id }) => id),
+        fileIds: [englishLocalized2Attachments[0].id],
         embedUrl: englishLegacyLocalized.embedUrl,
         primaryEmbedUrl: localizedChallenge.embedUrl,
         urlsToConsult: englishLegacyLocalized.urlsToConsult,
@@ -453,8 +543,9 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         hasEmbedInternalValidation: englishLegacyLocalized.hasEmbedInternalValidation,
         noValidationNeeded: englishLegacyLocalized.noValidationNeeded,
         validatedAt: englishLegacyLocalized.validatedAt,
-      }));
-      expect(attachments).toStrictEqual([
+      },
+      ));
+      expect(englishLocalized2Attachments).toStrictEqual([
         domainBuilder.buildAttachment({
           id: expect.any(String),
           url: englishLegacyAttachment.url,
@@ -462,24 +553,59 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           type: englishLegacyAttachment.type,
           filename: englishLegacyAttachment.filename,
           mimeType: englishLegacyAttachment.mimeType,
-          challengeId: frenchChallenge.id,
-          localizedChallengeId: englishLocalized.id,
+          challengeId: frenchChallenges[1].id,
+          localizedChallengeId: englishLocalized2.id,
+        }),
+      ]);
+      expect(englishLocalized1Attachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: expect.any(String),
+          url: englishLegacyAttachment.url,
+          size: englishLegacyAttachment.size,
+          type: englishLegacyAttachment.type,
+          filename: englishLegacyAttachment.filename,
+          mimeType: englishLegacyAttachment.mimeType,
+          challengeId: frenchChallenges[0].id,
+          localizedChallengeId: englishLocalized1.id,
         }),
       ]);
       expect(englishTranslations).toStrictEqual([
         domainBuilder.buildTranslation({
-          key: `challenge.${frenchChallenge.id}.instruction`,
+          key: `challenge.${frenchChallenges[0].id}.instruction`,
+          locale: 'en',
+          value: 'EN instructions',
+        }),
+        domainBuilder.buildTranslation({
+          key: `challenge.${frenchChallenges[1].id}.instruction`,
           locale: 'en',
           value: 'EN instructions',
         }),
       ]);
-      expect(legacyEnglishChallenge.status).toStrictEqual(Challenge.STATUSES.PERIME);
+      expect(legacyEnglishChallenge[0].status).toStrictEqual(Challenge.STATUSES.PERIME);
+      expect(legacyEnglishChallenge[1].status).toStrictEqual(Challenge.STATUSES.PERIME);
       expect(errorLoggerSpy).not.toHaveBeenCalled();
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(1, { dryRun: false }, 'Script bindEnglishChallengesToFrenchPrimaryEquivalent has started');
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(2, `Now processing ${tube.name}${skill.level} - ${skill.id}`);
-      expect(infoLoggerSpy).toHaveBeenNthCalledWith(3, { skillId: skill.id, clonedEnglishLocalizedId: englishLocalized.id, frenchChallengeId: frenchChallenge.id });
-      expect(infoLoggerSpy).toHaveBeenNthCalledWith(4, { skillId: skill.id, obsoletedEnglishChallengesCount: 1, clonedTranslationsCount: 1, clonedAttachmentsCount: 1 });
-      expect(infoLoggerSpy).toHaveBeenNthCalledWith(5, { processedEnglishChallengesCount: 1, skippedSkillsCount: 0 }, 'DONE');
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(3, {
+        skillId: skill.id,
+        clonedEnglishLocalizedId: englishLocalized2.id,
+        frenchChallengeId: frenchChallenges[1].id,
+      });
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(4, {
+        skillId: skill.id,
+        clonedEnglishLocalizedId: englishLocalized1.id,
+        frenchChallengeId: frenchChallenges[0].id,
+      });
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(5, {
+        skillId: skill.id,
+        obsoletedEnglishChallengesCount: 2,
+        clonedTranslationsCount: 2,
+        clonedAttachmentsCount: 2,
+      });
+      expect(infoLoggerSpy).toHaveBeenNthCalledWith(6, {
+        processedEnglishChallengesCount: 2,
+        skippedSkillsCount: 0,
+      }, 'DONE');
     });
 
     describe('when framework name does not exist', () => {

@@ -111,13 +111,12 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           await attachmentRepository.createBatch(clonedAttachments, transaction);
           await translationRepository.save({ translations, transaction });
           await challengeRepository.update(legacyEnglishChallenge, transaction);
-
-          if (options.dryRun) {
-            logger.info('Dry run is enabled, not persisting changes');
-            await transaction.rollback();
-          } else {
-            await transaction.commit();
-          }
+        }
+        if (options.dryRun) {
+          logger.info('Dry run is enabled, not persisting changes');
+          await transaction.rollback();
+        } else {
+          await transaction.commit();
         }
         logger.info({
           skillId: activeSkill.id,
