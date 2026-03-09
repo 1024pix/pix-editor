@@ -2,7 +2,7 @@ import './job-process.js';
 import { child } from '../logger.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
-const logger = child('releases-cleaning-and-retention-job', { event: 'lcms:releases-cleaning' });
+const logger = child('job:release-table-cleaning-and-retention', { event: 'release-table-cleaning-and-retention' });
 const MONTHS_FULL_DATA = 3;
 
 export default async function releasesTableCleaningAndRetention(dependencies = { logger: logger }) {

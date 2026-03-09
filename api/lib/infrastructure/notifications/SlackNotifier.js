@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+import { child } from '../logger';
+
+const logger = child('slack-notifier', { event: 'slack-notifier' });
+
 export class SlackNotifier {
   constructor(webhookUrl) {
     if (!webhookUrl) {
@@ -8,7 +12,11 @@ export class SlackNotifier {
     this.webhookUrl = webhookUrl;
   }
 
-  send(blocks) {
-    return axios.post(this.webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+  async send(blocks) {
+    try {
+      await axios.post(this.webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+    } catch (err) {
+      logger.error({ err }, 'error while sending notification to slack');
+    }
   }
 }

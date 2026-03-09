@@ -5,14 +5,16 @@ import * as uploadTranslationJob from './upload-translation-job.js';
 import * as config from '../../config.js';
 import { downloadTranslationFromPhrase } from '../../domain/usecases/index.js';
 import * as learningContentNotification from '../../domain/services/learning-content-notification.js';
-import { logger } from '../logger.js';
+import { child } from '../logger.js';
 import { releaseRepository } from '../repositories/index.js';
+
+const logger = child('job:create-release', { event: 'create-release' });
 
 export default async function releaseJobProcessor(job) {
   try {
     await downloadTranslationFromPhrase();
     const releaseId = await releaseRepository.create();
-    if (_isSlackNotificationGloballyEnabled() && job.data.slackNotification === true) {
+    if (config.notifications.slack.enable && job.data.slackNotification) {
       await learningContentNotification.notifyReleaseCreationSuccess(
         new SlackNotifier(config.notifications.slack.webhookUrl),
       );
@@ -25,15 +27,11 @@ export default async function releaseJobProcessor(job) {
     return releaseId;
   } catch (error) {
     logger.error(error);
-    if (_isSlackNotificationGloballyEnabled()) {
+    if (config.notifications.slack.enable) {
       await learningContentNotification.notifyReleaseCreationFailure(
         error.message,
         new SlackNotifier(config.notifications.slack.webhookUrl),
       );
     }
   }
-}
-
-function _isSlackNotificationGloballyEnabled() {
-  return config.notifications.slack.enable;
 }
