@@ -31,6 +31,8 @@ describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleanin
     databaseBuilder.factory.buildRelease({ id: 9, createdAt: new Date('2020-10-10T00:00:00Z'), content: {} }); // del
     databaseBuilder.factory.buildRelease({ id: 10, createdAt: new Date('2020-10-18T00:00:00Z'), content: {} }); // del
     databaseBuilder.factory.buildRelease({ id: 11, createdAt: new Date('2020-10-30T00:00:00Z'), content: {} }); // del
+    databaseBuilder.factory.buildRelease({ id: 12, createdAt: new Date('2019-11-14T00:00:00Z'), content: {} }); // del
+    databaseBuilder.factory.buildRelease({ id: 13, createdAt: new Date('2019-11-02T00:00:00Z'), content: {} }); // keep
     await databaseBuilder.commit();
 
     // when
@@ -45,8 +47,9 @@ describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleanin
       4,
       6,
       7,
+      13,
     ]);
-    expect(logger.info).toHaveBeenCalledWith('5 rows deleted');
+    expect(logger.info).toHaveBeenCalledWith('6 rows deleted');
     expect(logger.error).not.toHaveBeenCalled();
   });
 });

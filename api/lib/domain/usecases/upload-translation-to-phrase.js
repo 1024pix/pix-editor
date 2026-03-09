@@ -2,17 +2,19 @@ import { PassThrough } from 'node:stream';
 import { exportTranslations } from './export-translations.js';
 import { Configuration, LocalesApi, UploadsApi } from 'phrase-js';
 import * as config from '../../config.js';
-import { logger } from '../../infrastructure/logger.js';
+import { child } from '../../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
 import { streamToPromise } from '../../infrastructure/utils/stream-to-promise.js';
 import { schedule as scheduleDeleteUnmentionedKeysAfterUploadJob } from '../../infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
+
+const logger = child('uc:uploadTranslationToPhrase', { event: 'uploadTranslationToPhrase' });
 
 export async function uploadTranslationToPhrase(phraseApi = { Configuration, LocalesApi, UploadsApi }) {
   const { apiKey, projects } = config.phrase;
   const baseUrl = config.lcms.baseUrl;
 
   if (!apiKey || !projects.length) {
-    logger.info('Phrase API Key or Project Id is not defined. Skipping upload translations.');
+    logger.warn('Phrase API Key or Project Id is not defined. Skipping upload translations.');
     return;
   }
 
