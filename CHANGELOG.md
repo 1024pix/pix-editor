@@ -1,5 +1,22 @@
 
 
+## v4.13.1 (09/03/2026)
+
+
+### :building_construction: Tech
+- [#1411](https://github.com/1024pix/pix-editor/pull/1411) [TECH] Intégration de Monaco Editor.
+
+### :bug: Correction
+- [#1419](https://github.com/1024pix/pix-editor/pull/1419) [BUGFIX] Réparer le job de nettoyage des releases (PIX-21857).
+
+### :arrow_up: Montée de version
+- [#1417](https://github.com/1024pix/pix-editor/pull/1417) [BUMP] Lock file maintenance (api).
+- [#1416](https://github.com/1024pix/pix-editor/pull/1416) [BUMP] Upgrade ember-table et @ember/string.
+- [#1415](https://github.com/1024pix/pix-editor/pull/1415) [BUMP] Update dependency @1024pix/pix-ui to v60 (pix-editor).
+- [#1413](https://github.com/1024pix/pix-editor/pull/1413) [BUMP] Update dependency @1024pix/eslint-plugin to ^2.1.19 (pix-editor).
+- [#1414](https://github.com/1024pix/pix-editor/pull/1414) [BUMP] Update Node.js to v24.14.0.
+- [#1407](https://github.com/1024pix/pix-editor/pull/1407) [BUMP] Update dependency @ember/optional-features to v3 (pix-editor).
+
 ## v4.13.0 (04/03/2026)
 
 
