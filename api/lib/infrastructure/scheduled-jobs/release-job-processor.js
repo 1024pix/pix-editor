@@ -24,13 +24,13 @@ export default async function releaseJobProcessor(job) {
     await uploadTranslationJob.start();
     return releaseId;
   } catch (error) {
+    logger.error(error);
     if (_isSlackNotificationGloballyEnabled()) {
       await learningContentNotification.notifyReleaseCreationFailure(
         error.message,
         new SlackNotifier(config.notifications.slack.webhookUrl),
       );
     }
-    logger.error(error);
   }
 }
 
