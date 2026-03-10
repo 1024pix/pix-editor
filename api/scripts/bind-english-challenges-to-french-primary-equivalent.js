@@ -40,6 +40,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
 
     let processedEnglishChallengesCount = 0;
     let skippedSkillsCount = 0;
+    let ignoredSkillsCount = 0;
 
     // lister les acquis actifs par nom de référentiel
     const activeSkills = await listActiveSkillsByFrameworkName(options.frameworkName);
@@ -49,6 +50,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
       const legacyEnglishChallenges = await listLegacyEnglishChallengesBySkillId(activeSkill.id);
       if (legacyEnglishChallenges.length === 0) {
         logger.info(`Ignored skill ${activeSkill.name} - ${activeSkill.id}`);
+        ignoredSkillsCount++;
         continue;
       }
       await knex.transaction(async (transaction) => {
@@ -139,6 +141,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
 
     logger.info({
       processedEnglishChallengesCount,
+      ignoredSkillsCount,
       skippedSkillsCount,
     }, 'DONE');
   }

@@ -607,6 +607,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(6, {
         processedEnglishChallengesCount: 2,
         skippedSkillsCount: 0,
+        ignoredSkillsCount: 0,
       }, 'DONE');
     });
 
@@ -698,6 +699,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         }, 'Error in transaction while processing skill activePixTube6');
         expect(infoLoggerSpy).toHaveBeenCalledWith({
           processedEnglishChallengesCount: 0,
+          ignoredSkillsCount: 0,
           skippedSkillsCount: 1,
         }, 'DONE');
       });
