@@ -1,54 +1,48 @@
-import { logger } from '../logger.js';
+import { child } from '../logger.js';
 import Queue from 'bull';
 import * as config from '../../config.js';
 
 export const queues = [];
 
-const queueError = (queueName, err, ...messages) => {
-  logger.error(err, queueName, ...messages);
-};
-const queueMessage = (queueName, message) => {
-  logger.info(queueName + ': ' + message);
-};
-
 export function createQueue(queueName) {
   const queue = new Queue(queueName, config.scheduledJobs.redisUrl);
-  queue.on('error', (err, additionalError) => queueError(queueName, err, 'Queue error', additionalError));
-  queue.on('failed', (job, err) => queueError(queueName, err, `Job ${job.id} failed`));
-  queue.on('waiting', (jobId) => queueMessage(queueName, `Job ${jobId} has been scheduled`));
-  queue.on('active', (job) => queueMessage(queueName, `Job ${job.id} has started`));
-  queue.on('stalled', (job) => queueMessage(queueName, `Job ${job.id} has stalled`));
-  queue.on('completed', (job) => queueMessage(queueName, `Job ${job.id} has finished`));
-  queue.on('paused', () => queueMessage(queueName, 'The queue has been paused'));
-  queue.on('resumed', () => queueMessage(queueName, 'The queue has been resumed'));
-  queue.on('cleaned', () => queueMessage(queueName, 'The queue has been cleaned'));
+  const logger = child(`job:${queueName}`, { event: queueName });
+  queue.on('error', (err, additionalError) => logger.error({ err, additionalError }, 'Error in job queue'));
+  queue.on('failed', (job, err) => logger.error({ jobId: job.id, err }, 'Job failed'));
+  queue.on('waiting', (jobId) => logger.info({ jobId }, 'Job has been scheduled'));
+  queue.on('active', (job) => logger.info({ jobId: job.id }, 'Job has started'));
+  queue.on('stalled', (job) => logger.info({ jobId: job.id }, 'Job has stalled'));
+  queue.on('completed', (job) => logger.info({ jobId: job.id }, 'Job has finished'));
+  queue.on('paused', () => logger.info('The queue has been paused'));
+  queue.on('resumed', () => logger.info('The queue has been resumed'));
+  queue.on('cleaned', () => logger.info('The queue has been cleaned'));
   queue.on('drained', async function() {
-    queueMessage(queueName, 'The queue has been drained');
-    await cleanQueue(queues.find((queue) => queue.name === queueName));
+    logger.info('The queue has been drained');
+    await cleanQueue(queues.find((queue) => queue.name === queueName), logger);
   });
-  queue.on('removed', () => queueMessage(queueName, 'A job has been removed'));
+  queue.on('removed', () => logger.info('A job has been removed'));
   queues.push(queue);
   return queue;
 }
 
-async function cleanQueue(queue) {
+async function cleanQueue(queue, logger) {
   if (!queue.childPool) {
-    logger.info(`No childPool to clean up for queue '${queue.name}'`);
+    logger.info('No childPool to clean up');
     return;
   }
 
   const freeProcesses = queue.childPool?.getAllFree();
   if (!freeProcesses || freeProcesses.length === 0) {
-    logger.info(`No free process to clean up in childPool for queue '${queue.name}'`);
+    logger.info('No free process to clean up in childPool');
     return;
   }
 
-  logger.info(`About to kill ${freeProcesses.length} free Bull processes to free memory in queue '${queue.name}'...`);
+  logger.info({ count: freeProcesses.length }, 'About to kill free Bull processes to free memory');
   for (const freeProcess of freeProcesses) {
     try {
       await queue.childPool.kill(freeProcess, 'SIGTERM');
-    } catch (error) {
-      logger.error(`Error while killing free bull process in queue '${queue.name}'`, error);
+    } catch (err) {
+      logger.error({ err }, 'Error while killing free bull process');
     }
   }
 }
