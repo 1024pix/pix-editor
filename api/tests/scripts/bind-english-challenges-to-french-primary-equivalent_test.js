@@ -12,6 +12,7 @@ import { Attachment, Challenge, LocalizedChallenge, Skill } from '../../lib/doma
 import {
   attachmentRepository,
   challengeRepository,
+  localizedChallengeRepository,
   translationRepository,
 } from '../../lib/infrastructure/repositories/index.js';
 
@@ -618,6 +619,87 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           options,
           logger,
         })).rejects.toThrow(new Error('framework with this given name does not exist'));
+      });
+    });
+
+    describe('when an error occurs in the transaction', () => {
+      it('should rollback all changes and skip the problematic skill', async () => {
+        // given
+        const options = { dryRun: false, frameworkName: 'Pix' };
+        const { skill } = databaseBuilder.factory.buildChallengeInGroup({
+          framework: { name: 'Pix' },
+          tube: { name: 'activePixTube' },
+          skill: {
+            status: Skill.STATUSES.ACTIF,
+            level: 6,
+          },
+          challenge: {
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            status: Challenge.STATUSES.VALIDE,
+            locales: ['fr'],
+          },
+        });
+
+        const validatedFrenchChallenge = databaseBuilder.factory.buildChallenge({
+          id: 'validatedFrenchChallenge',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['fr'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedFrenchChallenge.id,
+          challengeId: validatedFrenchChallenge.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedFrenchChallenge.instruction',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+
+        const validatedEnglishChallenge2 = databaseBuilder.factory.buildChallenge({
+          id: 'validatedEnglishChallenge2',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.VALIDE,
+          locales: ['en'],
+          isQualityOk: false,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: validatedEnglishChallenge2.id,
+          challengeId: validatedEnglishChallenge2.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.validatedFrenchChallenge.instruction',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+
+        await databaseBuilder.commit();
+
+        const errorLoggerSpy = vi.spyOn(logger, 'error');
+        const infoLoggerSpy = vi.spyOn(logger, 'info');
+        const saveLocalizedChallengeSpy = vi.spyOn(localizedChallengeRepository, 'create').mockRejectedValue(new Error('The database disappeared 🪄'));
+
+        // when
+        await script.handle({
+          options,
+          logger,
+        });
+
+        // then
+        expect(saveLocalizedChallengeSpy).toHaveBeenCalledOnce();
+        expect(errorLoggerSpy).toHaveBeenCalledExactlyOnceWith({
+          skillId: skill.id,
+          err: expect.any(Error),
+        }, 'Error in transaction while processing skill activePixTube6');
+        expect(infoLoggerSpy).toHaveBeenCalledWith({
+          processedEnglishChallengesCount: 0,
+          skippedSkillsCount: 1,
+        }, 'DONE');
       });
     });
 

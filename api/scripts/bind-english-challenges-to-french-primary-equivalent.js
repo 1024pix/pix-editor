@@ -113,20 +113,27 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           await challengeRepository.update(legacyEnglishChallenge, transaction);
         }
 
+        logger.info({
+          skillId: activeSkill.id,
+          obsoletedEnglishChallengesCount: legacyEnglishChallenges.length,
+          clonedTranslationsCount,
+          clonedAttachmentsCount,
+        }, `Finished processing skill ${activeSkill.name}`);
+
+        processedEnglishChallengesCount += legacyEnglishChallenges.length;
+
         if (options.dryRun) {
           logger.info('Dry run is enabled, not persisting changes');
           await transaction.rollback();
         } else {
           await transaction.commit();
         }
-
-        logger.info({
+      }).catch((error) => {
+        logger.error({
           skillId: activeSkill.id,
-          obsoletedEnglishChallengesCount: legacyEnglishChallenges.length,
-          clonedTranslationsCount,
-          clonedAttachmentsCount,
-        }, `Finished processing skill ${skill.name}`);
-        processedEnglishChallengesCount += legacyEnglishChallenges.length;
+          err: error,
+        }, `Error in transaction while processing skill ${activeSkill.name}`);
+        skippedSkillsCount++;
       });
     }
 
