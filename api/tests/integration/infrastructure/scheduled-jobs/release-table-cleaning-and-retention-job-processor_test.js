@@ -3,12 +3,7 @@ import releasesTableCleaningAndRetention from '../../../../lib/infrastructure/sc
 import { databaseBuilder, knex } from '../../../test-helper.js';
 
 describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleaning-and-retention-job', function() {
-  let logger;
   beforeEach(function() {
-    logger = {
-      info: vi.fn(),
-      error: vi.fn(),
-    };
     vi.useFakeTimers({ now: new Date('2021-02-15T03:04:00Z') });
   });
 
@@ -36,7 +31,7 @@ describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleanin
     await databaseBuilder.commit();
 
     // when
-    await releasesTableCleaningAndRetention({ logger });
+    await releasesTableCleaningAndRetention({ data: { chunkSize: 2 } });
 
     // then
     const idsInDB = await knex('releases').pluck('id').orderBy('id');
@@ -49,7 +44,5 @@ describe('Integration | Infrastructure | scheduled-jobs | releases-table-cleanin
       7,
       13,
     ]);
-    expect(logger.info).toHaveBeenCalledWith('6 rows deleted');
-    expect(logger.error).not.toHaveBeenCalled();
   });
 });

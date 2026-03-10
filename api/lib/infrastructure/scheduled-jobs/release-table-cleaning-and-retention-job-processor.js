@@ -5,44 +5,53 @@ import { knex } from '../../../db/knex-database-connection.js';
 const logger = child('job:release-table-cleaning-and-retention', { event: 'release-table-cleaning-and-retention' });
 const MONTHS_FULL_DATA = 3;
 
-export default async function releasesTableCleaningAndRetention() {
-  const deletedReleasesCount = await knex.transaction(async (transaction) => {
-    try {
-      const now = new Date();
-      const dailyRetentionDate = new Date(now.getFullYear(), now.getMonth() - MONTHS_FULL_DATA, now.getDate());
+export default async function releasesTableCleaningAndRetention(job) {
+  const { chunkSize = 10 } = job.data;
+  let totalDeletedCount = 0;
 
-      const releaseDtos = await transaction
-        .select(
-          'id',
-          transaction.raw('to_char(??, ?) as ??', [
-            'createdAt',
-            'YYYYMM',
-            'yearMonth',
-          ]),
-        )
-        .from('releases')
-        .where('createdAt', '<', dailyRetentionDate)
-        .orderBy('createdAt');
+  try {
+    const now = new Date();
+    const dailyRetentionDate = new Date(now.getFullYear(), now.getMonth() - MONTHS_FULL_DATA, now.getDate());
 
-      const groupedByMonth = Object.groupBy(releaseDtos, (release) => release.yearMonth);
+    const releaseDtos = await knex
+      .select(
+        'id',
+        knex.raw('to_char(??, ?) as ??', [
+          'createdAt',
+          'YYYYMM',
+          'yearMonth',
+        ]),
+      )
+      .from('releases')
+      .where('createdAt', '<', dailyRetentionDate)
+      .orderBy('createdAt');
 
-      const releaseIdsToDelete = Object.values(groupedByMonth).flatMap(
-        (releasesInSameMonth) => releasesInSameMonth
-          .slice(1)
-          .map((release) => release.id),
-      );
+    const groupedByMonth = Object.groupBy(releaseDtos, (release) => release.yearMonth);
 
-      const deletedReleasesCount = await transaction.delete().from('releases').whereIn('id', releaseIdsToDelete);
+    const releaseIdsToDelete = Object.values(groupedByMonth).flatMap(
+      (releasesInSameMonth) => releasesInSameMonth
+        .slice(1)
+        .map((release) => release.id),
+    );
+
+    for (const chunk of chunks(releaseIdsToDelete, chunkSize)) {
+      logger.info({ ids: chunk }, 'will delete releases');
+      const deletedReleasesCount = await knex.delete().from('releases').whereIn('id', chunk);
       logger.info(`${deletedReleasesCount} rows deleted`);
-
-      return deletedReleasesCount;
-    } catch (err) {
-      logger.error(err);
-      throw err;
+      totalDeletedCount += deletedReleasesCount;
     }
-  });
+  } catch (err) {
+    logger.error(err);
+    throw err;
+  }
 
-  if (deletedReleasesCount === 0) return;
-
+  if (totalDeletedCount === 0) return;
+  logger.info(`${totalDeletedCount} rows deleted in total`);
   await knex.raw('VACUUM ANALYZE releases');
+}
+
+function* chunks(array, chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
+    yield array.slice(i, i + chunkSize);
+  }
 }
