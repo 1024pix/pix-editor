@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { child } from '../logger';
+import { child } from '../logger.js';
 
 const logger = child('slack-notifier', { event: 'slack-notifier' });
 
