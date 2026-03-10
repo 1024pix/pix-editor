@@ -1,5 +1,11 @@
 
 
+## v4.13.2 (10/03/2026)
+
+
+### :bug: Correction
+- [#1420](https://github.com/1024pix/pix-editor/pull/1420) [BUGFIX] Réparation du job de release (PIX-21857).
+
 ## v4.13.1 (09/03/2026)
 
 
