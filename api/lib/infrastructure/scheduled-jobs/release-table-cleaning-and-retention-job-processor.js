@@ -5,7 +5,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 const logger = child('job:release-table-cleaning-and-retention', { event: 'release-table-cleaning-and-retention' });
 const MONTHS_FULL_DATA = 3;
 
-export default async function releasesTableCleaningAndRetention(dependencies = { logger: logger }) {
+export default async function releasesTableCleaningAndRetention() {
   const deletedReleasesCount = await knex.transaction(async (transaction) => {
     try {
       const now = new Date();
@@ -33,11 +33,11 @@ export default async function releasesTableCleaningAndRetention(dependencies = {
       );
 
       const deletedReleasesCount = await transaction.delete().from('releases').whereIn('id', releaseIdsToDelete);
-      dependencies.logger.info(`${deletedReleasesCount} rows deleted`);
+      logger.info(`${deletedReleasesCount} rows deleted`);
 
       return deletedReleasesCount;
     } catch (err) {
-      dependencies.logger.error(err);
+      logger.error(err);
       throw err;
     }
   });
