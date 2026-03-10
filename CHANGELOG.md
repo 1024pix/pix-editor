@@ -1,5 +1,11 @@
 
 
+## v4.13.3 (10/03/2026)
+
+
+### :rocket: Amélioration
+- [#1421](https://github.com/1024pix/pix-editor/pull/1421) [FEATURE] Amélioration du job qui nettoie la table des releases (PIX-21869).
+
 ## v4.13.2 (10/03/2026)
 
 
