@@ -355,6 +355,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
     beforeEach(async () => {
       await databaseBuilder.commit();
     });
+
     it('binds english challenges to french primary equivalent', async () => {
       // given
       const options = { dryRun: false, frameworkName: 'Pix' };
@@ -381,7 +382,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         locales: ['fr'],
         isQualityOk: true,
       });
-      const validatedFrenchChallengeLocalized = databaseBuilder.factory.buildLocalizedChallenge({
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: validatedFrenchChallenge.id,
         challengeId: validatedFrenchChallenge.id,
         locale: 'fr',
@@ -446,7 +447,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         locales: ['en'],
         isQualityOk: true,
       });
-      const englishLegacyLocalized2 = databaseBuilder.factory.buildLocalizedChallenge({
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: validatedEnglishChallenge2.id,
         challengeId: validatedEnglishChallenge2.id,
         locale: 'en',
@@ -467,7 +468,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         locale: 'en',
         value: 'EN instructions',
       });
-      const englishLegacyAttachment2 = databaseBuilder.factory.buildAttachment({
+      databaseBuilder.factory.buildAttachment({
         id: 'attachmentEn2',
         url: 'https://',
         size: 3,
@@ -590,18 +591,18 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         skillId: skill.id,
         clonedEnglishLocalizedId: englishLocalized2.id,
         frenchChallengeId: frenchChallenges[1].id,
-      });
+      }, 'Binding cloned english localized challenge to french challenge');
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(4, {
         skillId: skill.id,
         clonedEnglishLocalizedId: englishLocalized1.id,
         frenchChallengeId: frenchChallenges[0].id,
-      });
+      }, 'Binding cloned english localized challenge to french challenge');
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(5, {
         skillId: skill.id,
         obsoletedEnglishChallengesCount: 2,
         clonedTranslationsCount: 2,
         clonedAttachmentsCount: 2,
-      });
+      }, 'Finished processing skill activePixTube6');
       expect(infoLoggerSpy).toHaveBeenNthCalledWith(6, {
         processedEnglishChallengesCount: 2,
         skippedSkillsCount: 0,

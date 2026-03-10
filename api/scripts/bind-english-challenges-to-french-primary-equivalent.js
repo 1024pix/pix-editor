@@ -18,7 +18,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
   constructor() {
     super({
       description: 'Script de transformation des épreuves anglaises sous forme de décli en épreuves traduites rattachées à leur équivalent primary français',
-      permanent: true,
+      permanent: false,
       options: {
         dryRun: {
           type: 'boolean',
@@ -94,7 +94,7 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
             skillId: activeSkill.id,
             clonedEnglishLocalizedId: clonedLocalizedChallenge.id,
             frenchChallengeId: frenchChallenge.id,
-          });
+          }, 'Binding cloned english localized challenge to french challenge');
 
           // on clone les clés de trads
           const translations = extractFromChallenge(legacyEnglishChallenge);
@@ -112,18 +112,20 @@ export class BindEnglishChallengesToFrenchPrimaryEquivalent extends Script {
           await translationRepository.save({ translations, transaction });
           await challengeRepository.update(legacyEnglishChallenge, transaction);
         }
+
         if (options.dryRun) {
           logger.info('Dry run is enabled, not persisting changes');
           await transaction.rollback();
         } else {
           await transaction.commit();
         }
+
         logger.info({
           skillId: activeSkill.id,
           obsoletedEnglishChallengesCount: legacyEnglishChallenges.length,
           clonedTranslationsCount,
           clonedAttachmentsCount,
-        });
+        }, `Finished processing skill ${skill.name}`);
         processedEnglishChallengesCount += legacyEnglishChallenges.length;
       });
     }
