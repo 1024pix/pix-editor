@@ -8,7 +8,7 @@ import * as learningContentNotification from '../../domain/services/learning-con
 import { child } from '../logger.js';
 import { releaseRepository } from '../repositories/index.js';
 
-const logger = child('job:create-release', { event: 'create-release' });
+const logger = child('job:create-release-queue', { event: 'create-release-queue' });
 
 export default async function releaseJobProcessor(job) {
   try {
