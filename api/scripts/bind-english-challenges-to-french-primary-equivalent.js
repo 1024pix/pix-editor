@@ -164,7 +164,10 @@ export async function listActiveSkillsByFrameworkName(frameworkName) {
 
 export async function listLegacyEnglishChallengesBySkillId(skillId) {
   const challenges = await challengeRepository.listBySkillId(skillId);
-  const decliChallenges = challenges.filter((challenge) => challenge.genealogy !== Challenge.GENEALOGIES.PROTOTYPE);
+  const validatedPrototype = challenges.find((challenge) => challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE && challenge.status === Challenge.STATUSES.VALIDE);
+  if (!validatedPrototype) return [];
+  const prototypeVersion = validatedPrototype.version;
+  const decliChallenges = challenges.filter((challenge) => challenge.genealogy !== Challenge.GENEALOGIES.PROTOTYPE && challenge.version === prototypeVersion);
   const validatedAndProposedChallenges = decliChallenges.filter((decli) => decli.status === Challenge.STATUSES.VALIDE || decli.status === Challenge.STATUSES.PROPOSE);
   return validatedAndProposedChallenges.filter((decliChallenge) => decliChallenge.locale === 'en');
 }

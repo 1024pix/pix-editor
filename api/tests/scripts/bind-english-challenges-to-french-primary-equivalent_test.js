@@ -127,7 +127,86 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           challenge: {
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             status: Challenge.STATUSES.VALIDE,
+            version: 2,
           },
+        });
+
+        const oldVersionObsoletePrototype = databaseBuilder.factory.buildChallenge({
+          id: 'oldVersionObsoletePrototype',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.PERIME,
+          version: 1,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: oldVersionObsoletePrototype.id,
+          challengeId: oldVersionObsoletePrototype.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.oldVersionObsoletePrototype.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+
+        const oldVersionObsoleteDecli = databaseBuilder.factory.buildChallenge({
+          id: 'oldVersionObsoleteDecli',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PERIME,
+          version: 1,
+          locales: ['en'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: oldVersionObsoleteDecli.id,
+          challengeId: oldVersionObsoleteDecli.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.oldVersionObsoleteDecli.instructions',
+          locale: 'en',
+          value: 'EN instructions',
+        });
+
+        const newVersionProposedPrototype = databaseBuilder.factory.buildChallenge({
+          id: 'newVersionProposedPrototype',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          status: Challenge.STATUSES.PROPOSE,
+          version: 3,
+          locales: ['fr'],
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: newVersionProposedPrototype.id,
+          challengeId: newVersionProposedPrototype.id,
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.newVersionProposedPrototype.instructions',
+          locale: 'fr',
+          value: 'FR instructions',
+        });
+
+        const newVersionProposedDecli = databaseBuilder.factory.buildChallenge({
+          id: 'newVersionProposedDecli',
+          skillId: skill.id,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          status: Challenge.STATUSES.PROPOSE,
+          version: 3,
+          locales: ['en'],
+          isQualityOk: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: newVersionProposedDecli.id,
+          challengeId: newVersionProposedDecli.id,
+          locale: 'en',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'challenge.newVersionProposedDecli.instructions',
+          locale: 'en',
+          value: 'EN instructions',
         });
 
         const validatedChallenge1 = databaseBuilder.factory.buildChallenge({
@@ -137,6 +216,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['en'],
           isQualityOk: true,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedChallenge1.id,
@@ -156,6 +236,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['en'],
           isQualityOk: false,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedChallenge2.id,
@@ -167,12 +248,14 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           locale: 'en',
           value: 'EN instructions',
         });
+
         const proposedChallenge3 = databaseBuilder.factory.buildChallenge({
           id: 'proposedChallengeId3',
           skillId: skill.id,
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           status: Challenge.STATUSES.PROPOSE,
           locales: ['en'],
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: proposedChallenge3.id,
@@ -184,12 +267,14 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           locale: 'en',
           value: 'EN instructions',
         });
+
         const archivedChallenge4 = databaseBuilder.factory.buildChallenge({
           id: 'archivedChallengeId4',
           skillId: skill.id,
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           status: Challenge.STATUSES.ARCHIVE,
           locales: ['en'],
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: archivedChallenge4.id,
@@ -201,12 +286,14 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           locale: 'en',
           value: 'EN instructions',
         });
+
         const proposedChallenge5 = databaseBuilder.factory.buildChallenge({
           id: 'proposedChallengeId5',
           skillId: skill.id,
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           status: Challenge.STATUSES.PROPOSE,
           locales: ['fr'],
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: proposedChallenge5.id,
@@ -218,12 +305,14 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           locale: 'fr',
           value: 'FR instructions',
         });
+
         const validatedChallenge6 = databaseBuilder.factory.buildChallenge({
           id: 'validatedChallengeId6',
           skillId: skill.id,
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
           status: Challenge.STATUSES.VALIDE,
           locales: ['fr'],
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedChallenge6.id,
@@ -371,6 +460,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
           status: Challenge.STATUSES.VALIDE,
           locales: ['fr'],
+          version: 2,
         },
         localizedChallenge: { embedUrl: 'https://pix.fr' },
       });
@@ -382,6 +472,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         status: Challenge.STATUSES.VALIDE,
         locales: ['fr'],
         isQualityOk: true,
+        version: 2,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: validatedFrenchChallenge.id,
@@ -407,6 +498,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         status: Challenge.STATUSES.VALIDE,
         locales: ['en'],
         isQualityOk: true,
+        version: 2,
       });
       const englishLegacyLocalized = databaseBuilder.factory.buildLocalizedChallenge({
         id: validatedEnglishChallenge1.id,
@@ -447,6 +539,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         status: Challenge.STATUSES.VALIDE,
         locales: ['en'],
         isQualityOk: true,
+        version: 2,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: validatedEnglishChallenge2.id,
@@ -638,6 +731,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             status: Challenge.STATUSES.VALIDE,
             locales: ['fr'],
+            version: 2,
           },
         });
 
@@ -648,6 +742,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['fr'],
           isQualityOk: true,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedFrenchChallenge.id,
@@ -667,6 +762,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['en'],
           isQualityOk: false,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedEnglishChallenge2.id,
@@ -720,6 +816,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
             genealogy: Challenge.GENEALOGIES.PROTOTYPE,
             status: Challenge.STATUSES.VALIDE,
             locales: ['fr'],
+            version: 2,
           },
         });
 
@@ -730,6 +827,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['en'],
           isQualityOk: true,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedEnglishChallenge1.id,
@@ -749,6 +847,7 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
           status: Challenge.STATUSES.VALIDE,
           locales: ['en'],
           isQualityOk: false,
+          version: 2,
         });
         databaseBuilder.factory.buildLocalizedChallenge({
           id: validatedEnglishChallenge2.id,
