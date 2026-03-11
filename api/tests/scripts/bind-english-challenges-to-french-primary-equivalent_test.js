@@ -871,6 +871,9 @@ describe('Script | BindEnglishChallengesToFrenchPrimaryEquivalent', () => {
         });
 
         // then
+        const frenchChallenge = await challengeRepository.get(challenge.id);
+        expect(frenchChallenge.localizedChallenges.length).toBe(1);
+        expect(frenchChallenge.localizedChallenges.every((localized) => localized.locale === 'fr')).toBe(true);
         expect(errorLoggerSpy).toHaveBeenCalledExactlyOnceWith({
           skillId: skill.id,
           activeFrenchChallengeIds: [challenge.id],
