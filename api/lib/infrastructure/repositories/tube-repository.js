@@ -110,6 +110,10 @@ function selectTubes(knexConn = knex) {
     .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`);
 }
 
+/**
+ * @param {object[]} dtos
+ * @param {object[]} translations
+ */
 function toDomainList(dtos, translations) {
   const translationsByTubeId = Object.groupBy(translations, (translation) => translation.entityId);
   return dtos.map((dto) => toDomain(dto, translationsByTubeId[dto.id]));

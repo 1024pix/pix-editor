@@ -7,6 +7,9 @@ export class Challenge {
   #primaryStatus;
   #translations;
 
+  /** @type {LocalizedChallenge[]} */
+  localizedChallenges;
+
   constructor({
     accessibility1,
     accessibility2,
@@ -433,6 +436,11 @@ export class Challenge {
   #translateValidatedAt(localizedChallenge) {
     if (this.isPrimary) return this.validatedAt;
     return localizedChallenge.validatedAt;
+  }
+
+  obsolete() {
+    this.status = Challenge.STATUSES.PERIME;
+    this.madeObsoleteAt = new Date();
   }
 }
 

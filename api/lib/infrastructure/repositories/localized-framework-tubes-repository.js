@@ -44,6 +44,9 @@ function toDomain(dto) {
   return new LocalizedFrameworkTubes(dto);
 }
 
+/**
+ * @param {object[]} dtos
+ */
 function toDomainList(dtos) {
   return dtos.map((dto) => toDomain(dto));
 }
