@@ -1,5 +1,11 @@
 
 
+## v4.13.4 (11/03/2026)
+
+
+### :rocket: Amélioration
+- [#1412](https://github.com/1024pix/pix-editor/pull/1412) [FEATURE] Reprendre les déclis anglaises pour les transformer en localized rattachés à leur proto français (PIX-21563).
+
 ## v4.13.3 (10/03/2026)
 
 
