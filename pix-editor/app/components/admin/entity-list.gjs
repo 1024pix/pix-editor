@@ -15,12 +15,17 @@ export default class AdminEntityList extends Component {
 
   get columns() {
     return this.args.schema.fields.map((field) => {
-      const columnType = this.getColumnType(field);
+      const column = {
+        columnType: this.getColumnType(field),
+        field,
+      };
+
+      if (field.sortable === false) return column;
+
       const sortOrder = this.getFieldSortOrder(field);
 
       return {
-        field,
-        type: columnType,
+        ...column,
         onSort: () => this.onFieldSort(field, sortOrder),
         sortOrder,
         ariaLabelDefaultSort: `Trier le tableau dans l'ordre croissant du champ ${field.label}`,

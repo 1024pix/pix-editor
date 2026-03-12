@@ -75,8 +75,8 @@ module('Acceptance | Admin | Navigation', function (hooks) {
           direction: 'asc',
         },
         fields: [
-          { key: 'name', label: 'Nom', type: 'string' },
-          { key: 'patate', label: 'Chocolat', type: 'string' },
+          { key: 'name', label: 'Nom', type: 'string', sortable: false },
+          { key: 'patate', label: 'Chocolat', type: 'string', sortable: false },
         ],
       });
       this.server.create('admin-entity', { properties: { name: 'Dinguou', patate: '123' } });
