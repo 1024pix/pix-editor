@@ -40,7 +40,7 @@ module('Integration | Component | competence-overview | competence-overview', fu
     module(`when user has role ${roleName}`, function (hooks) {
       hooks.beforeEach(function () {
         class Config extends Service {
-          accessLevel = EDITOR;
+          accessLevel = role;
         }
         this.owner.register('service:config', Config);
       });

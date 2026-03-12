@@ -16,7 +16,6 @@ module('Acceptance | v2 | Localized-framework', function (hooks) {
     window.localStorage.setItem('v2', 'true');
 
     this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
 
     const prototype1 = this.server.create('challenge', {
       id: 'recChallenge1',
@@ -178,87 +177,105 @@ module('Acceptance | v2 | Localized-framework', function (hooks) {
         },
       ],
     });
-
-    return authenticateSession();
   });
 
-  test('should navigate to localized framework editor', async function (assert) {
-    // when
-    const screen = await visit('/v2/competences/competence1-1/challenges-production?locale=nl');
-    await click(await screen.findByRole('link', { name: 'Cadre de traduction' }));
+  module('when user has no edition rights', (hooks) => {
+    hooks.beforeEach(async function () {
+      this.server.create('user', { apiKey: window.crypto.randomUUID(), trigram: 'ABC', access: 'readonly' });
+      await authenticateSession();
+      this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+    });
+    test('it should redirect to overview', async function (assert) {
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
-    // then
-    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/localized-framework?locale=nl');
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+    });
   });
 
-  test('it should create localized framework tubes', async function (assert) {
-    // given
-    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+  module('when user has edition rights', (hooks) => {
+    hooks.beforeEach(async function () {
+      this.server.create('user', { apiKey: window.crypto.randomUUID(), trigram: 'ABC', access: 'editor' });
+      await authenticateSession();
+    });
 
-    const localizedFrameworkTubesBeforeSave = await store.peekAll('localized-framework-tube');
-    assert.strictEqual(localizedFrameworkTubesBeforeSave.length, 0);
+    test('should navigate to localized framework editor', async function (assert) {
+      // when
+      const screen = await visit('/v2/competences/competence1-1/challenges-production?locale=nl');
+      await click(await screen.findByRole('link', { name: 'Cadre de traduction' }));
 
-    await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
-    await clickByText('Enregistrer');
+      // then
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/localized-framework?locale=nl');
+    });
 
-    const localizedFrameworkTubes = await store.peekAll('localized-framework-tube');
-    const createdLocalizedFrameworkTube = localizedFrameworkTubes[0];
+    test('it should create localized framework tubes', async function (assert) {
+      // given
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
-    assert.strictEqual(localizedFrameworkTubes.length, 1);
-    assert.strictEqual(createdLocalizedFrameworkTube.maxLevel, 5);
-    assert.strictEqual(createdLocalizedFrameworkTube.locale, 'nl');
-    assert.strictEqual(createdLocalizedFrameworkTube.tubeId, 'recTube1');
-    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
-  });
+      const localizedFrameworkTubesBeforeSave = await store.peekAll('localized-framework-tube');
+      assert.strictEqual(localizedFrameworkTubesBeforeSave.length, 0);
 
-  test('it should update localized framework tubes', async function (assert) {
-    // given
-    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
-    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+      await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+      await clickByText('Enregistrer');
 
-    await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
-    await clickByText('Enregistrer');
+      const localizedFrameworkTubes = await store.peekAll('localized-framework-tube');
+      const createdLocalizedFrameworkTube = localizedFrameworkTubes[0];
 
-    const localizedFrameworkTube = await store.peekRecord('localized-framework-tube', 'lft-1');
+      assert.strictEqual(localizedFrameworkTubes.length, 1);
+      assert.strictEqual(createdLocalizedFrameworkTube.maxLevel, 5);
+      assert.strictEqual(createdLocalizedFrameworkTube.locale, 'nl');
+      assert.strictEqual(createdLocalizedFrameworkTube.tubeId, 'recTube1');
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+    });
 
-    assert.strictEqual(localizedFrameworkTube.maxLevel, 5);
-    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
-  });
+    test('it should update localized framework tubes', async function (assert) {
+      // given
+      this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
-  test('it should redirect to challenges-production when user choose source language', async function (assert) {
-    // given
-    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
-    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+      await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+      await clickByText('Enregistrer');
 
-    await click(screen.getByRole('button', { name: 'Choix de la langue' }));
-    await clickByText('Langue source');
+      const localizedFrameworkTube = await store.peekRecord('localized-framework-tube', 'lft-1');
 
-    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production');
-  });
+      assert.strictEqual(localizedFrameworkTube.maxLevel, 5);
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+    });
 
-  test('user can exit without saving modifications', async function (assert) {
-    // given
-    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
-    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+    test('it should redirect to challenges-production when user choose source language', async function (assert) {
+      // given
+      this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
-    await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
-    await click(screen.getByRole('button', { name: 'Annuler' }));
+      await click(screen.getByRole('button', { name: 'Choix de la langue' }));
+      await clickByText('Langue source');
 
-    const localizedFrameworkTube = await store.peekRecord('localized-framework-tube', 'lft-1');
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production');
+    });
 
-    assert.strictEqual(localizedFrameworkTube.maxLevel, 2);
-    assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
-  });
+    test('user can exit without saving modifications', async function (assert) {
+      // given
+      this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
-  test('it should redirect to overview V1 when user click on versionToggle', async function (assert) {
-    // given
-    this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
-    const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+      await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+      await click(screen.getByRole('button', { name: 'Annuler' }));
 
-    await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+      const localizedFrameworkTube = await store.peekRecord('localized-framework-tube', 'lft-1');
 
-    await clickByText('V1');
+      assert.strictEqual(localizedFrameworkTube.maxLevel, 2);
+      assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
+    });
 
-    assert.strictEqual(currentURL(), '/competence/competence1-1/prototypes?languageFilter=nl&view=production');
+    test('it should redirect to overview V1 when user click on versionToggle', async function (assert) {
+      // given
+      this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
+      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+
+      await fillIn(screen.getByLabelText('Modifier le niveau max du tube @tubeName'), 5);
+
+      await clickByText('V1');
+
+      assert.strictEqual(currentURL(), '/competence/competence1-1/prototypes?languageFilter=nl&view=production');
+    });
   });
 });

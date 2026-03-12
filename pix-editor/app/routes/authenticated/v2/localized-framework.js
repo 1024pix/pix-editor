@@ -4,11 +4,12 @@ import { service } from '@ember/service';
 export default class LocalizedFrameworkRoute extends Route {
   @service router;
   @service store;
+  @service access;
 
   async beforeModel() {
     const { competence, locale } = this.modelFor('authenticated.v2');
 
-    if (!locale)
+    if (!locale || !this.access.mayEditLocalized)
       this.router.transitionTo('authenticated.v2.competence-overview', competence.id, 'challenges-production');
   }
 
