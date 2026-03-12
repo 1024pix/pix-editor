@@ -41,7 +41,7 @@ export default class LocalizedChallengeViewHeader extends Component {
   }
 
   get mayEditLocalized() {
-    return this.access.mayEditLocalized(this.localizedChallenge);
+    return this.access.mayEditLocalized;
   }
 
   get toggleLocalizedChallengeStatusButtonState() {

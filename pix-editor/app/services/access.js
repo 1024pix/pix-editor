@@ -1,10 +1,10 @@
 import Service, { service } from '@ember/service';
 
-const READ_PIX_ONLY = 0;
-const READ_ONLY = 1;
-const REPLICATOR = 2;
-const EDITOR = 3;
-const ADMIN = 4;
+export const READ_PIX_ONLY = 0;
+export const READ_ONLY = 1;
+export const REPLICATOR = 2;
+export const EDITOR = 3;
+export const ADMIN = 4;
 
 export default class AccessService extends Service {
   @service config;
@@ -96,7 +96,7 @@ export default class AccessService extends Service {
     return level >= EDITOR || (!production && !prototype && level === REPLICATOR);
   }
 
-  mayEditLocalized(localizedChallenge) {
+  get mayEditLocalized() {
     return this.config.accessLevel >= EDITOR;
   }
 
