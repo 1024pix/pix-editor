@@ -33,11 +33,11 @@
       "type": "enum",
       "options": [
         {
-          "label": "Validé",
+          "label": "En prod",
           "value": "validé"
         },
         {
-          "label": "Proposé",
+          "label": "En pause",
           "value": "proposé"
         },
         {
