@@ -1,4 +1,5 @@
 import * as localizedFrameworkTubesController from './localized-framework-tubes-controller.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
 import Joi from 'joi';
 
 export async function register(server) {
@@ -12,6 +13,7 @@ export async function register(server) {
       method: 'POST',
       path: '/api/localized-framework-tubes',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: localizedFrameworkTubesController.upsert,
         validate: {
           payload: Joi.object({
@@ -31,6 +33,7 @@ export async function register(server) {
       method: 'PATCH',
       path: '/api/localized-framework-tubes/{id}',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: localizedFrameworkTubesController.upsert,
         validate: {
           params: Joi.object({ id: Joi.string().required() }),

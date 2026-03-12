@@ -75,7 +75,7 @@ describe('Acceptance | API | localized_framework_tubes | POST /api/localized-fra
     });
   });
 
-  it('Should return bad request', async function() {
+  it('Should return bad request if invalid payload', async function() {
     // given
     const payload = {
       data: {
@@ -102,5 +102,37 @@ describe('Acceptance | API | localized_framework_tubes | POST /api/localized-fra
     expect(localizedFrameworkTube).to.be.undefined;
     expect(response.statusCode).to.equal(400);
     expect(response.payload).to.equal('{"errors":[{"status":"400","title":"Bad Request","detail":"MaxLevel out of range"}]}');
+  });
+
+  it('Should return 403 if user doesn\'t have access', async function() {
+    // given
+    user = databaseBuilder.factory.buildReadonlyUser();
+    const payload = {
+      data: {
+        attributes: {
+          'tube-id': tubeId,
+          'max-level': 10,
+          locale: 'nl',
+        },
+      },
+    };
+
+    await databaseBuilder.commit();
+
+    // when
+    const server = await createServer();
+    const response = await server.inject({
+      method: 'POST',
+      url: '/api/localized-framework-tubes',
+      headers: generateAuthorizationHeader(user),
+      payload,
+    });
+
+    // then
+    const localizedFrameworkTube = await knex('localized_framework_tubes').select('id').first();
+
+    expect(localizedFrameworkTube).to.be.undefined;
+    expect(response.statusCode).to.equal(403);
+    expect(response.payload).to.equal('{"errors":[{"code":403,"title":"Forbidden access","detail":"Missing or insufficient permissions."}]}');
   });
 });
