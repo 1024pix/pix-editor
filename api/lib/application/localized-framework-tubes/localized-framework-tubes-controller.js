@@ -25,9 +25,3 @@ export async function upsert(request, h) {
 
   return h.response(localizedFrameworkTubesSerializer.serializeLocalizedFrameworkTubes(createdLocalizedFrameworkTube)).created();
 }
-
-export async function remove(request, h) {
-  const id = request?.params?.id;
-  await localizedFrameworksTubesRepository.remove(id);
-  return h.response().code(204);
-}
