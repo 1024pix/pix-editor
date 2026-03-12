@@ -24,7 +24,8 @@
     {
       "key": "embedUrl",
       "label": "URL de l'embed",
-      "type": "string"
+      "type": "string",
+      "sortable": false
     },
     {
       "key": "status",

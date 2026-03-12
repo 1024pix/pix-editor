@@ -64,6 +64,7 @@ describe('Acceptance | Controller | admin', () => {
                 label: 'Clé API',
                 type: 'secret',
                 pattern: expect.any(String),
+                sortable: false,
               },
               {
                 key: 'access',
@@ -284,6 +285,25 @@ describe('Acceptance | Controller | admin', () => {
                 },
               },
             ],
+          });
+        });
+
+        describe('when given field is not sortable', () => {
+          it('should return a 400', async () => {
+            // given
+            const server = await createServer();
+            const request = {
+              method: 'GET',
+              url: '/api/admin/entities/users?sort=apiKey',
+              headers: generateAuthorizationHeader(user),
+            };
+
+            // when
+            const response = await server.inject(request);
+
+            // then
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('Column apiKey is not sortable for entity users');
           });
         });
       });

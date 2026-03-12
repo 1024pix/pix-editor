@@ -25,7 +25,8 @@
     {
       "key": "value",
       "label": "Contenu",
-      "type": "string"
+      "type": "string",
+      "sortable": false
     },
     {
       "key": "model",

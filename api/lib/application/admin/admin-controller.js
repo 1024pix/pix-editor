@@ -53,11 +53,16 @@ export async function getEntities(request) {
   }
 
   const defaultSort = [entitySchema.defaultSort.field, entitySchema.defaultSort.direction];
-  const { page, sort: [querySort] } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [defaultSort] });
+  const { page, sort: [[sortField, sortDirection]] } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [defaultSort] });
+
+  const sortableFields = entitySchema.fields.filter((field) => field.sortable !== false).map((field) => field.key);
+  if (!sortableFields.includes(sortField)) {
+    return Boom.badRequest(`Column ${sortField} is not sortable for entity ${entityName}`);
+  }
 
   const sort = {
-    field: querySort[0],
-    direction: querySort[1],
+    field: sortField,
+    direction: sortDirection,
   };
   const fields = entitySchema.fields.map((field) => field.key);
   const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, page, sort);

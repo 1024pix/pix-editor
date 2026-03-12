@@ -56,6 +56,10 @@
           "readonly": {
             "type": "boolean"
           },
+          "sortable": {
+            "type": "boolean",
+            "default": true
+          },
           "options": {
             "type": "array",
             "items": {
