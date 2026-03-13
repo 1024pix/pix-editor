@@ -3,32 +3,10 @@ import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import flagForLanguage from 'pixeditor/helpers/flag-for-language.js';
+import LocaleTag from './v2/locale-tag';
 
 export default class CompetenceHeader extends Component {
   @service router;
-
-  @action
-  setLocale(locale) {
-    if (locale === 'source') locale = undefined;
-    this.router.transitionTo({ queryParams: { locale } });
-  }
-
-  @action
-  setSection(section) {
-    if (section === 'skills') {
-      this.router.transitionTo('authenticated.competence.skills', this.args.competence.id, {
-        queryParams: {
-          view: 'production',
-          languageFilter: this.args.locale,
-        },
-      });
-    }
-    if (section === 'quality') {
-      this.router.transitionTo('authenticated.competence.quality', this.args.competence.id);
-    }
-  }
-
   localeOptions = [
     {
       label: 'Langue source',
@@ -71,7 +49,6 @@ export default class CompetenceHeader extends Component {
       value: 'nl',
     },
   ];
-
   sections = [
     {
       label: 'Epreuves',
@@ -100,13 +77,31 @@ export default class CompetenceHeader extends Component {
     return !!this.args.locale;
   }
 
+  @action
+  setLocale(locale) {
+    if (locale === 'source') locale = undefined;
+    this.router.transitionTo({ queryParams: { locale } });
+  }
+
+  @action
+  setSection(section) {
+    if (section === 'skills') {
+      this.router.transitionTo('authenticated.competence.skills', this.args.competence.id, {
+        queryParams: {
+          view: 'production',
+          languageFilter: this.args.locale,
+        },
+      });
+    }
+    if (section === 'quality') {
+      this.router.transitionTo('authenticated.competence.quality', this.args.competence.id);
+    }
+  }
+
   <template>
     <div class="competence-header">
       {{#if this.hasLocaleSelected}}
-        <p class="locale-tag">
-          <span>{{flagForLanguage this.localeEntry.value}}</span>
-          {{this.localeEntry.label}}
-        </p>
+        <LocaleTag @locale={{this.localeEntry.value}} />
       {{/if}}
       <h2>
         <LinkTo
