@@ -32,7 +32,7 @@ export default class ChallengesProductionHeader extends Component {
         V{{@skill.version}}
         {{#if @isToRephrase}}
           <PixTag @color="error">
-            A revoir
+            À revoir
           </PixTag>
         {{/if}}
       </p>
