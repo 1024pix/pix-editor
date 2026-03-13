@@ -33,6 +33,7 @@ export default class LocalizedChallengesRoute extends Route {
       skill,
       competence,
       overview,
+      locale,
     };
   }
 }

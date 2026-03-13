@@ -53,6 +53,7 @@ export default class LocalizedChallengesProduction extends Component {
       @competenceId={{@competence.id}}
       @canExpand={{@canExpand}}
       @isToRephrase={{this.isToRephrase}}
+      @locale={{@locale}}
     />
     <section
       class="challenges-production

@@ -4,8 +4,9 @@ import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import LocaleTag from '../v2/locale-tag';
 
-export default class ChallengesProduction extends Component {
+export default class ChallengesProductionHeader extends Component {
   @service router;
   @service multipanelManager;
 
@@ -22,7 +23,7 @@ export default class ChallengesProduction extends Component {
 
   <template>
     <header class="challenges-production-header">
-      <p>
+      <p class="challenges-production-header__info">
         {{@skill.name}}
         <PixTag @color="green">
           actif
@@ -35,6 +36,9 @@ export default class ChallengesProduction extends Component {
           </PixTag>
         {{/if}}
       </p>
+      {{#if @locale}}
+        <LocaleTag @locale={{@locale}} />
+      {{/if}}
       <div class="challenges-production-header__action-buttons">
         {{#if @canExpand}}
           <PixIconButton
