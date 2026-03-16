@@ -16,6 +16,10 @@ module('Acceptance | Admin | Create-Admin-Entity', function (hooks) {
     this.server.create('admin-schema', {
       label: 'Utilisateurs',
       entityName: 'users',
+      defaultSort: {
+        field: 'id',
+        direction: 'desc',
+      },
       fields: [
         { key: 'id', label: 'Identifiant', type: 'number', readonly: true },
         { key: 'name', label: 'Nom', type: 'string' },

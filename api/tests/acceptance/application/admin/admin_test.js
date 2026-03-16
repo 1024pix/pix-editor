@@ -64,6 +64,7 @@ describe('Acceptance | Controller | admin', () => {
                 label: 'Clé API',
                 type: 'secret',
                 pattern: expect.any(String),
+                sortable: false,
               },
               {
                 key: 'access',
@@ -162,6 +163,148 @@ describe('Acceptance | Controller | admin', () => {
               },
             },
           ],
+        });
+      });
+
+      describe('when sort query params are passed', () => {
+        beforeEach(async function() {
+          databaseBuilder.factory.buildRelease({
+            id: 1,
+            content: { name: 'release1' },
+            createdAt: new Date('2026-01-01'),
+          });
+          databaseBuilder.factory.buildRelease({
+            id: 2,
+            content: { name: 'release2' },
+            createdAt: new Date('2025-01-01'),
+          });
+          databaseBuilder.factory.buildRelease({
+            id: 3,
+            content: { name: 'release3' },
+            createdAt: new Date('2024-01-01'),
+          });
+          await databaseBuilder.commit();
+        });
+
+        it('should return the list of entities sorted asc', async () => {
+          // given
+          const server = await createServer();
+          const request = {
+            method: 'GET',
+            url: '/api/admin/entities/releases?sort=createdAt',
+            headers: generateAuthorizationHeader(user),
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(200);
+          expect(response.result).toStrictEqual({
+            meta: { page: 1, pageSize: 10, rowCount: 3, pageCount: 1 },
+            data: [
+              {
+                id: expect.stringContaining('releases:3'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 3,
+                  },
+                },
+              },
+              {
+                id: expect.stringContaining('releases:2'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 2,
+                  },
+                },
+              },
+              {
+                id: expect.stringContaining('releases:1'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 1,
+                  },
+                },
+              },
+            ],
+          });
+        });
+
+        it('should return the list of entities sorted desc', async () => {
+          // given
+          const server = await createServer();
+          const request = {
+            method: 'GET',
+            url: '/api/admin/entities/releases?sort=-createdAt',
+            headers: generateAuthorizationHeader(user),
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(200);
+          expect(response.result).toStrictEqual({
+            meta: { page: 1, pageSize: 10, rowCount: 3, pageCount: 1 },
+            data: [
+              {
+                id: expect.stringContaining('releases:1'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 1,
+                  },
+                },
+              },
+              {
+                id: expect.stringContaining('releases:2'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 2,
+                  },
+                },
+              },
+              {
+                id: expect.stringContaining('releases:3'),
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    createdAt: expect.any(Date),
+                    id: 3,
+                  },
+                },
+              },
+            ],
+          });
+        });
+
+        describe('when given field is not sortable', () => {
+          it('should return a 400', async () => {
+            // given
+            const server = await createServer();
+            const request = {
+              method: 'GET',
+              url: '/api/admin/entities/users?sort=apiKey',
+              headers: generateAuthorizationHeader(user),
+            };
+
+            // when
+            const response = await server.inject(request);
+
+            // then
+            expect(response.statusCode).to.equal(400);
+            expect(response.result.message).to.equal('Column apiKey is not sortable for entity users');
+          });
         });
       });
 

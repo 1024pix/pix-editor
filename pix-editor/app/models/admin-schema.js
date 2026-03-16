@@ -7,4 +7,5 @@ export default class AdminSchemaModel extends Model {
   @attr creatable;
   @attr entityName;
   @attr fields;
+  @attr defaultSort;
 }

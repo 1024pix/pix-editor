@@ -6,6 +6,10 @@
   "editable": false,
   "deletable": false,
   "creatable": false,
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
   "fields": [
     {
       "key": "id",
@@ -20,7 +24,8 @@
     {
       "key": "embedUrl",
       "label": "URL de l'embed",
-      "type": "string"
+      "type": "string",
+      "sortable": false
     },
     {
       "key": "status",
@@ -28,11 +33,11 @@
       "type": "enum",
       "options": [
         {
-          "label": "Validé",
+          "label": "En prod",
           "value": "validé"
         },
         {
-          "label": "Proposé",
+          "label": "En pause",
           "value": "proposé"
         },
         {

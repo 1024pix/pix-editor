@@ -8,7 +8,11 @@ export default class AdminEntityListRoute extends Route {
   @service store;
   @service router;
 
-  queryParams = { pageNumber: { refreshModel: true }, pageSize: { refreshModel: true } };
+  queryParams = {
+    pageNumber: { refreshModel: true },
+    pageSize: { refreshModel: true },
+    sort: { refreshModel: true },
+  };
 
   beforeModel() {
     const { schemas } = this.modelFor('admin');
@@ -33,6 +37,7 @@ export default class AdminEntityListRoute extends Route {
           number: params.pageNumber,
           size: params.pageSize,
         },
+        sort: params.sort,
       },
       { reload: true },
     );

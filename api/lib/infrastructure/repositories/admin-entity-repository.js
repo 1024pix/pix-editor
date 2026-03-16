@@ -7,13 +7,14 @@ import { fetchPage } from '../utils/knex-utils.js';
  * @param {object} pagination
  * @param {number} pagination.size
  * @param {number} pagination.number
+ * @param {object} sort
+ * @param {string} sort.field
+ * @param {'desc' | 'asc'} sort.direction
  * @returns {Promise<{ entities: object[], meta: object }>}
  */
-export async function listByEntityName(entityName, fields, pagination) {
-  const getEntitiesQuery = knex(entityName).select(fields);
-  const { results, pagination: meta } = await fetchPage(getEntitiesQuery, pagination);
-
-  const entities = results.map(toDomain(entityName));
+export async function listByEntityName(entityName, fields, pagination, sort) {
+  const getEntitiesQuery = knex(entityName).select(fields).orderBy(sort.field, sort.direction);
+  const { results: entities, pagination: meta } = await fetchPage(getEntitiesQuery, pagination);
 
   return { entities, meta };
 }
@@ -21,11 +22,4 @@ export async function listByEntityName(entityName, fields, pagination) {
 export async function save(entityName, entityToSave) {
   const [record] = await knex(entityName).insert(entityToSave, ['*']);
   return record;
-}
-
-function toDomain(entityName) {
-  return (entity) => ({
-    entityName,
-    ...entity,
-  });
 }

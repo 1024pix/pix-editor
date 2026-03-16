@@ -6,6 +6,10 @@
   "editable": false,
   "deletable": false,
   "creatable": true,
+  "defaultSort": {
+    "field": "key",
+    "direction": "asc"
+  },
   "fields": [
     {
       "key": "key",
@@ -21,7 +25,8 @@
     {
       "key": "value",
       "label": "Contenu",
-      "type": "string"
+      "type": "string",
+      "sortable": false
     },
     {
       "key": "model",

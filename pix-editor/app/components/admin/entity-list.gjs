@@ -2,12 +2,37 @@ import Component from '@glimmer/component';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import { inject as service } from '@ember/service';
 
 import AdminEntityCell from './entity-cell';
 
 export default class AdminEntityList extends Component {
+  @service router;
+
   get lowercaseEntityName() {
     return this.args.schema.label.toLowerCase();
+  }
+
+  get columns() {
+    return this.args.schema.fields.map((field) => {
+      const column = {
+        columnType: this.getColumnType(field),
+        field,
+      };
+
+      if (field.sortable === false) return column;
+
+      const sortOrder = this.getFieldSortOrder(field);
+
+      return {
+        ...column,
+        onSort: () => this.onFieldSort(field, sortOrder),
+        sortOrder,
+        ariaLabelDefaultSort: `Trier le tableau dans l'ordre croissant du champ ${field.label}`,
+        ariaLabelSortAsc: 'Rétablir le tri par défaut du tableau',
+        ariaLabelSortDesc: `Trier le tableau dans l'ordre décroissant du champ ${field.label}`,
+      };
+    });
   }
 
   getColumnType(field) {
@@ -21,6 +46,32 @@ export default class AdminEntityList extends Component {
     }
   }
 
+  getFieldSortOrder(field) {
+    if (!this.args.sort) return;
+
+    let sortedField = this.args.sort;
+    let sortOrder = 'asc';
+    if (sortedField.startsWith('-')) {
+      sortedField = sortedField.slice(1);
+      sortOrder = 'desc';
+    }
+
+    if (sortedField !== field.key) return;
+
+    return sortOrder;
+  }
+
+  onFieldSort(field, currentSortOrder) {
+    let sort = field.key;
+    if (currentSortOrder === 'asc') {
+      sort = `-${sort}`;
+    }
+    if (currentSortOrder === 'desc') {
+      sort = undefined;
+    }
+    this.router.replaceWith({ queryParams: { sort } });
+  }
+
   <template>
     <div class="entity-list__header">
       <h1>Liste des {{this.lowercaseEntityName}}</h1>
@@ -32,13 +83,21 @@ export default class AdminEntityList extends Component {
     </div>
     <PixTable @data={{@entityList}} @caption="liste">
       <:columns as |row context|>
-        {{#each @schema.fields as |field|}}
-          <PixTableColumn @context={{context}} @type={{this.getColumnType field}}>
+        {{#each this.columns as |column|}}
+          <PixTableColumn
+            @context={{context}}
+            @type={{column.type}}
+            @onSort={{column.onSort}}
+            @sortOrder={{column.sortOrder}}
+            @ariaLabelDefaultSort={{column.ariaLabelDefaultSort}}
+            @ariaLabelSortAsc={{column.ariaLabelSortAsc}}
+            @ariaLabelSortDesc={{column.ariaLabelSortDesc}}
+          >
             <:header>
-              {{field.label}}
+              {{column.field.label}}
             </:header>
             <:cell>
-              <AdminEntityCell @row={{row}} @field={{field}} />
+              <AdminEntityCell @row={{row}} @field={{column.field}} />
             </:cell>
           </PixTableColumn>
         {{/each}}

@@ -38,7 +38,7 @@ export async function save(request, h) {
   try {
     const newEntity = await adminEntityRepository.save(entityName, entityToSave);
 
-    return h.response(adminEntitySerializer.serialize({ ...newEntity, entityName })).created();
+    return h.response(adminEntitySerializer.serialize(entityName, newEntity)).created();
   } catch (err) {
     logger.error({ err, data: { entityName, entityToSave, entityPayload } });
     return Boom.badRequest('Entity was unable to be saved');
@@ -47,15 +47,25 @@ export async function save(request, h) {
 
 export async function getEntities(request) {
   const { entityName } = request.params;
-  const query = extractParameters(request.query, { page: { size: 10, number: 1 } });
-
   const entitySchema = adminSchemaRepository.getByEntityName(entityName);
   if (!entitySchema) {
     return Boom.notFound(`Entity with name '${entityName}' not found in admin schemas list`);
   }
+
+  const defaultSort = [entitySchema.defaultSort.field, entitySchema.defaultSort.direction];
+  const { page, sort: [[sortField, sortDirection]] } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [defaultSort] });
+
+  const sortableFields = entitySchema.fields.filter((field) => field.sortable !== false).map((field) => field.key);
+  if (!sortableFields.includes(sortField)) {
+    return Boom.badRequest(`Column ${sortField} is not sortable for entity ${entityName}`);
+  }
+
+  const sort = {
+    field: sortField,
+    direction: sortDirection,
+  };
   const fields = entitySchema.fields.map((field) => field.key);
+  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, page, sort);
 
-  const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, query.page);
-
-  return adminEntitySerializer.serialize(entities, meta);
+  return adminEntitySerializer.serialize(entityName, entities, meta);
 }
