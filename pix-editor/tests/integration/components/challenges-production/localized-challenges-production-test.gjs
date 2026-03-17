@@ -270,7 +270,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
     test('it should display resume skill state', async function (assert) {
       // then
       assert.dom(screen.getByText(`actif`)).exists();
-      assert.dom(screen.getByText(`A revoir`)).exists();
+      assert.dom(screen.getByText(`À revoir`)).exists();
     });
 
     test('should display all expected info for a given challenge', async function (assert) {

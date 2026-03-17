@@ -4,8 +4,8 @@ export const LOCALE = {
   FRENCH_BELGIUM: 'fr-BE',
   FRENCH_SPOKEN: 'fr',
   ITALIAN_SPOKEN: 'it',
-  DEUTSCH_AUSTRIA: 'de-AT',
-  DEUTSCH_SPOKEN: 'de',
+  GERMAN_AUSTRIA: 'de-AT',
+  GERMAN_SPOKEN: 'de',
   PORTUGUESE_SPOKEN: 'pt',
   SPANISH_SPOKEN: 'es',
   DUTCH_SPOKEN: 'nl',
@@ -13,8 +13,8 @@ export const LOCALE = {
 };
 
 export const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
-  [LOCALE.DEUTSCH_SPOKEN]: 'Allemand (Autriche)',
-  [LOCALE.DEUTSCH_SPOKEN]: 'Allemand',
+  [LOCALE.GERMAN_AUSTRIA]: 'Allemand (Autriche)',
+  [LOCALE.GERMAN_SPOKEN]: 'Allemand',
   [LOCALE.ENGLISH_SPOKEN]: 'Anglais',
   [LOCALE.SPANISH_SPOKEN]: 'Espagnol',
   [LOCALE.FRENCH_FRANCE]: 'Franco Français',

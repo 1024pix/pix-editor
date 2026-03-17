@@ -5,6 +5,7 @@ import LocalizedChallengesProduction from 'pixeditor/components/challenges-produ
     @challengeLocales={{@controller.model.challengeLocales}}
     @overview={{@controller.model.overview}}
     @competence={{@controller.model.competence}}
+    @locale={{@controller.model.locale}}
     @canExpand={{true}}
   />
 </template>

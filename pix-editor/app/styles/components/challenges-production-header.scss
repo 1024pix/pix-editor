@@ -1,26 +1,33 @@
 .challenges-production-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   color: var(--pix-neutral-0);
   background-color: var(--pix-neutral-900);
   padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
   border-bottom: 1px solid var(--pix-neutral-100);
 
-  p {
+  &__info {
+    flex: 1;
     display: flex;
     gap: var(--pix-spacing-2x);
+    align-items: center;
+    font-weight: 700;
+    font-size: 16px;
   }
 
   &__separator {
-    height: 24px;
+    height: 28px;
     width: 1px;
     border-right: solid 1px var(--pix-neutral-0);
+    margin-right: 4px;
+    margin-left: 4px;
   }
 
   &__action-buttons {
+    flex: 1;
     display: flex;
-    align-items:center;
+    align-items: center;
+    justify-content: end;
     gap: var(--pix-spacing-2x);
   }
 
