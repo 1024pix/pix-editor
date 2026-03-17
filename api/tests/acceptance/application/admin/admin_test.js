@@ -30,6 +30,7 @@ describe('Acceptance | Controller | admin', () => {
           'localized-challenge-schema',
           'release-schema',
           'translation-schema',
+          'translations-config-schema',
           'user-schema',
         ]);
         expect(response.result.data.find((schema) => schema.id === 'user-schema')).toStrictEqual({

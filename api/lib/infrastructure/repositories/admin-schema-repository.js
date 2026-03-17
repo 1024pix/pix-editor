@@ -2,12 +2,14 @@ import localizedChallengeSchema from './admin-schemas/localized-challenge-schema
 import translationSchema from './admin-schemas/translation-schema.json' with { type: 'json' };
 import releaseSchema from './admin-schemas/release-schema.json' with { type: 'json' };
 import userSchema from './admin-schemas/user-schema.json' with { type: 'json' };
+import translationsConfigSchema from './admin-schemas/translations-config-schema.json' with { type: 'json' };
 
 export function list() {
   return [
     localizedChallengeSchema,
     releaseSchema,
     translationSchema,
+    translationsConfigSchema,
     userSchema,
   ].map(stripJsonSchemaReference);
 }
