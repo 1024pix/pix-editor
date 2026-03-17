@@ -70,12 +70,11 @@ module('Integration | Component | localized-challenge-view | localized-challenge
   module('when user is not allowed to edit a challenge', function (hooks) {
     let mayChangeLocalizedChallengeStatusStub, mayEditLocalizedStub;
     hooks.beforeEach(function () {
-      mayEditLocalizedStub = sinon.stub().returns(false);
       mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
 
       class AccessService extends Service {
         mayChangeLocalizedChallengeStatus = mayChangeLocalizedChallengeStatusStub;
-        mayEditLocalized = mayEditLocalizedStub;
+        mayEditLocalized = false;
       }
       this.owner.register('service:access', AccessService);
     });

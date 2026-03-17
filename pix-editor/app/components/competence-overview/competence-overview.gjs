@@ -20,8 +20,8 @@ export default class CompetenceOverview extends Component {
 
   @tracked selectedSkillId = null;
 
-  get isAdmin() {
-    return this.access.isAdmin();
+  get mayEditLocalizedFramework() {
+    return this.access.mayEditLocalized;
   }
 
   @action
@@ -69,7 +69,7 @@ export default class CompetenceOverview extends Component {
         </ul>
         <div class="competence-overview-actions__buttons">
           {{#if @locale}}
-            {{#if this.isAdmin}}
+            {{#if this.mayEditLocalizedFramework}}
               <PixButtonLink
                 class="competence-overview-actions__fetch"
                 @route="authenticated.v2.localized-framework"

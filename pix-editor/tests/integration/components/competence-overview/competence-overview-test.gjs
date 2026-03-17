@@ -5,6 +5,7 @@ import CompetenceOverview from 'pixeditor/components/competence-overview/compete
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
 import Service from '@ember/service';
+import { READ_PIX_ONLY, READ_ONLY, REPLICATOR, EDITOR, ADMIN } from '../../../../app/services/access.js';
 
 module('Integration | Component | competence-overview | competence-overview', function (hooks) {
   setupIntlRenderingTest(hooks);
@@ -32,64 +33,71 @@ module('Integration | Component | competence-overview | competence-overview', fu
     };
   });
 
-  module('when user is admin', function (hooks) {
-    hooks.beforeEach(function () {
-      const isAdminStub = sinon.stub().returns(true);
-      class Access extends Service {
-        isAdmin = isAdminStub;
-      }
-      this.owner.register('service:access', Access);
-    });
+  [
+    ['EDITOR', EDITOR],
+    ['ADMIN', ADMIN],
+  ].forEach(([roleName, role]) => {
+    module(`when user has role ${roleName}`, function (hooks) {
+      hooks.beforeEach(function () {
+        class Config extends Service {
+          accessLevel = role;
+        }
+        this.owner.register('service:config', Config);
+      });
 
-    test('it should display localized framework link if locale is defined', async function (assert) {
-      // given
-      const locale = 'nl';
+      test('it should display localizedFrameworkTubes button', async function (assert) {
+        // given
+        const locale = 'nl';
 
-      // when
-      screen = await render(
-        <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
-      );
+        // when
+        screen = await render(
+          <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
+        );
 
-      // then
-      const link = screen.getByText('Cadre de traduction');
-      assert.dom(link).exists();
-    });
+        // then
+        const link = screen.getByText('Cadre de traduction');
+        assert.dom(link).exists();
+      });
 
-    test('it should hide localized framework link if locale is undefined', async function (assert) {
-      // given
-      const locale = undefined;
+      test('it should hide localized framework link if locale is undefined', async function (assert) {
+        // given
+        const locale = undefined;
 
-      // when
-      screen = await render(
-        <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
-      );
+        // when
+        screen = await render(
+          <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
+        );
 
-      // then
-      const link = await screen.queryByText('Cadre de traduction');
-      assert.dom(link).doesNotExist();
+        // then
+        const link = await screen.queryByText('Cadre de traduction');
+        assert.dom(link).doesNotExist();
+      });
     });
   });
-  module('when user not admin', function (hooks) {
-    hooks.beforeEach(function () {
-      const isAdminStub = sinon.stub().returns(false);
-      class Access extends Service {
-        isAdmin = isAdminStub;
-      }
-      this.owner.register('service:access', Access);
-    });
 
-    test('it should hide localized framework link ', async function (assert) {
-      // given
-      const locale = 'nl';
+  [
+    ['READ_PIX_ONLY', READ_PIX_ONLY],
+    ['READ_ONLY', READ_ONLY],
+    ['REPLICATOR', REPLICATOR],
+  ].forEach(([roleName, role]) => {
+    module(`when user has role ${roleName}`, function (hooks) {
+      test(`it should hide localizedFrameworkTubes button`, async function (assert) {
+        class Config extends Service {
+          accessLevel = role;
+        }
+        this.owner.register('service:config', Config);
 
-      // when
-      screen = await render(
-        <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
-      );
+        const locale = 'nl';
 
-      // then
-      const link = await screen.queryByText('Cadre de traduction');
-      assert.dom(link).doesNotExist();
+        // when
+        screen = await render(
+          <template><CompetenceOverview @competenceOverview={{competenceOverview}} @locale={{locale}} /></template>,
+        );
+
+        // then
+        const link = await screen.queryByText('Cadre de traduction');
+        assert.dom(link).doesNotExist();
+      });
     });
   });
 });

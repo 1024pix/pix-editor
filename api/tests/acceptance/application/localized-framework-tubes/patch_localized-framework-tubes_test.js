@@ -80,4 +80,43 @@ describe('Acceptance | API | localized_framework_tubes | PATCH /api/localized-fr
       locale: 'nl',
     });
   });
+
+  it('Should return 403 if user doesn\'t have access', async function() {
+    // given
+    user = databaseBuilder.factory.buildReadonlyUser();
+    const payload = {
+      data: {
+        id: localizedFrameworkTubeId,
+        type: 'localized-framework-tubes',
+        attributes: {
+          'tube-id': tubeId,
+          'max-level': 2,
+          locale: 'nl',
+        },
+      },
+    };
+
+    await databaseBuilder.commit();
+
+    // when
+    const server = await createServer();
+    const response = await server.inject({
+      method: 'PATCH',
+      url: `/api/localized-framework-tubes/${localizedFrameworkTubeId}`,
+      headers: generateAuthorizationHeader(user),
+      payload,
+    });
+
+    // then
+    const localizedFrameworkTube = await knex('localized_framework_tubes').select().first();
+
+    expect(localizedFrameworkTube).to.deep.equal({
+      id: localizedFrameworkTubeId,
+      tubeId,
+      maxLevel: 8,
+      locale: 'nl',
+    });
+    expect(response.statusCode).to.equal(403);
+    expect(response.payload).to.equal('{"errors":[{"code":403,"title":"Forbidden access","detail":"Missing or insufficient permissions."}]}');
+  });
 });
