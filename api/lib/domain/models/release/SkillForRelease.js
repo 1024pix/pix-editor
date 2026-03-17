@@ -46,7 +46,7 @@ export class SkillForRelease {
     return this.status === Skill.STATUSES.PERIME;
   }
 
-  canExportForTranslation() {
-    return this.status === SkillForRelease.STATUSES.ACTIF;
+  get isActif() {
+    return this.status === Skill.STATUSES.ACTIF;
   }
 }

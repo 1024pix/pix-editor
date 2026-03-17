@@ -20,10 +20,6 @@ import * as scheduleDeleteUnmentionedKeysAfterUploadJob from '../../../lib/infra
 
 describe('Acceptance | Controller | phrase-controller', () => {
   describe('POST /phrase/upload', () => {
-    beforeEach(() => {
-      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }]);
-    });
-
     it('should upload the translations to phrase', async () => {
       // Given
       const spyScheduleDeleteUnmentionedKeysAfterUploadJob = vi.spyOn(
@@ -273,6 +269,12 @@ describe('Acceptance | Controller | phrase-controller', () => {
         locale: 'fr',
       });
 
+      databaseBuilder.factory.buildTranslationsConfig({
+        phraseProjectId: 'MY_PHRASE_PROJECT_ID',
+        frameworkId: 'recFramework0',
+        uploadedLocales: ['fr'],
+      });
+
       await databaseBuilder.commit();
 
       const parseFormData = (body) => {
@@ -338,8 +340,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(204);
-      expect(phraseLocalesAPI.isDone()).to.be.true;
-      expect(phraseUploadAPI.isDone()).to.be.true;
+      expect(phraseLocalesAPI.isDone()).toBe(true);
+      expect(phraseUploadAPI.isDone()).toBe(true);
 
       const [headers, ...data] = await streamToPromiseArray(parseCSVString(csvContent));
 

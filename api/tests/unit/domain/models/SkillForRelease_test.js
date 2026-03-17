@@ -2,31 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 describe('Unit | Domain | SkillForRelease', () => {
-  describe('#canExportForTranslation', () => {
-    it('should return true when skill is active', () => {
-      // given
-      const skillForRelease = domainBuilder.buildSkillForRelease({ status: SkillForRelease.STATUSES.ACTIF });
-
-      // when
-      const result = skillForRelease.canExportForTranslation();
-
-      // then
-      expect(result).to.be.true;
-    });
-
-    it.each(
-      Object.keys(SkillForRelease.STATUSES).filter(
-        (status) => SkillForRelease.STATUSES[status] !== SkillForRelease.STATUSES.ACTIF,
-      ),
-    )('should return false when status key is %s', (status) => {
+  describe('#isActif', () => {
+    it.each([
+      [SkillForRelease.STATUSES.ACTIF, true],
+      [SkillForRelease.STATUSES.ARCHIVE, false],
+      [SkillForRelease.STATUSES.EN_CONSTRUCTION, false],
+      [SkillForRelease.STATUSES.PERIME, false],
+    ])('returns $1 when status is $0', (status, expectedIsActif) => {
       // given
       const skillForRelease = domainBuilder.buildSkillForRelease({ status });
 
       // when
-      const result = skillForRelease.canExportForTranslation();
+      const result = skillForRelease.isActif;
 
       // then
-      expect(result).not.to.be.true;
+      expect(result).toBe(expectedIsActif);
     });
   });
 });

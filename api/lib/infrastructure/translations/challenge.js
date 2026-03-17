@@ -19,7 +19,7 @@ export function extractFromChallenge(challenge) {
     .map((field) => {
       return new Translation({
         key: `${prefixFor(challenge)}${field}`,
-        locale: locale,
+        locale,
         value: challenge[field],
       });
     });

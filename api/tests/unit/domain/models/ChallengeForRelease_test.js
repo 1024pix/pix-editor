@@ -3,70 +3,52 @@ import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Domain | ChallengeForRelease', () => {
-  describe('#canExportForTranslation', () => {
-    it('should return true when all conditions are reunited', () => {
+  describe('#hasLocale', () => {
+    it('returns whether challenge has given locale', () => {
       // given
-      const challengeForRelease = domainBuilder.buildChallengeForRelease({
-        status: ChallengeForRelease.STATUSES.VALIDE,
-        locales: ['fr', 'en'],
-      });
-      const locale = 'en';
-
-      // when
-      const result = challengeForRelease.canExportForTranslation(locale);
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({ locales: ['fr', 'en'] });
 
       // then
-      expect(result).to.be.true;
+      expect(challengeForRelease.hasLocale('fr')).toBe(true);
+      expect(challengeForRelease.hasLocale('en')).toBe(true);
+      expect(challengeForRelease.hasLocale('nl')).toBe(false);
+      expect(challengeForRelease.hasLocale('fr-FR')).toBe(false);
     });
+  });
 
-    it.each(
-      Object.keys(ChallengeForRelease.STATUSES).filter(
-        (status) => ChallengeForRelease.STATUSES[status] !== ChallengeForRelease.STATUSES.VALIDE,
-      ),
-    )('should return false when status key is %s', (status) => {
+  describe('#get isValide', () => {
+    it.each([
+      [ChallengeForRelease.STATUSES.ARCHIVE, false],
+      [ChallengeForRelease.STATUSES.PERIME, false],
+      [ChallengeForRelease.STATUSES.PROPOSE, false],
+      [ChallengeForRelease.STATUSES.VALIDE, true],
+    ])('returns $1 when status is $0', (status, expectedIsValide) => {
       // given
-      const challengeForRelease = domainBuilder.buildChallengeForRelease({
-        status,
-        locales: ['fr', 'en'],
-      });
-      const locale = 'en';
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({ status });
 
       // when
-      const result = challengeForRelease.canExportForTranslation(locale);
+      const actual = challengeForRelease.isValide;
 
       // then
-      expect(result).not.to.be.true;
-    });
-
-    it('should return false when locale is not included in challenge', () => {
-      // given
-      const challengeForRelease = domainBuilder.buildChallengeForRelease({
-        status: ChallengeForRelease.STATUSES.VALIDE,
-        locales: ['fr', 'en'],
-      });
-      const locale = 'nl';
-
-      // when
-      const result = challengeForRelease.canExportForTranslation(locale);
-
-      // then
-      expect(result).not.to.be.true;
+      expect(actual).toBe(expectedIsValide);
     });
   });
 
   describe('#get isOperative', () => {
-    it.each(Object.values(ChallengeForRelease.STATUSES))('is "%s" is operative ?', (currentStatus) => {
+    it.each([
+      [ChallengeForRelease.STATUSES.ARCHIVE, true],
+      [ChallengeForRelease.STATUSES.PERIME, false],
+      [ChallengeForRelease.STATUSES.PROPOSE, false],
+      [ChallengeForRelease.STATUSES.VALIDE, true],
+    ])('returns $1 when status is $0', (status, expectedIsOperative) => {
       // given
-      const challengeForRelease = domainBuilder.buildChallengeForRelease({ status: currentStatus });
-      const expectedIsOperative = [ChallengeForRelease.STATUSES.ARCHIVE, ChallengeForRelease.STATUSES.VALIDE].includes(
-        currentStatus,
-      );
+      const challengeForRelease = domainBuilder.buildChallengeForRelease({ status });
 
       // when
       const actual = challengeForRelease.isOperative;
 
       // then
-      expect(actual).to.equal(expectedIsOperative);
+      expect(actual).toBe(expectedIsOperative);
     });
   });
 
