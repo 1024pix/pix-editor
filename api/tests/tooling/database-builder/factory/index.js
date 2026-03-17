@@ -18,5 +18,6 @@ export * from './build-thematic.js';
 export * from './build-tube.js';
 export * from './build-tutorial.js';
 export * from './build-translation.js';
+export * from './build-translations-config.js';
 export * from './build-user.js';
 export * from './build-whitelisted-url.js';

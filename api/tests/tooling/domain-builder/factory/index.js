@@ -25,6 +25,7 @@ export * from './build-tag.js';
 export * from './build-thematic.js';
 export * from './build-thematic-for-release.js';
 export * from './build-translation.js';
+export * from './build-translations-config.js';
 export * from './build-tube.js';
 export * from './build-tube-for-release.js';
 export * from './build-tutorial-for-release.js';
