@@ -1,5 +1,13 @@
 
 
+## v4.14.0 (17/03/2026)
+
+
+### :rocket: Amélioration
+- [#1424](https://github.com/1024pix/pix-editor/pull/1424) [FEATURE] Ajout visuel de la langue et de son drapeau (PIX-21870).
+- [#1422](https://github.com/1024pix/pix-editor/pull/1422) [FEATURE] Permettre aux éditeurs de modifier le cadre de traduction (PIX-21871).
+- [#1423](https://github.com/1024pix/pix-editor/pull/1423) [FEATURE] Permettre de trier les entités dans le nouveau back-office (PIX-21072).
+
 ## v4.13.4 (11/03/2026)
 
 
