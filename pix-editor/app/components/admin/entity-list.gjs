@@ -2,7 +2,9 @@ import Component from '@glimmer/component';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { inject as service } from '@ember/service';
+import { fn } from '@ember/helper';
 
 import AdminEntityCell from './entity-cell';
 
@@ -33,6 +35,10 @@ export default class AdminEntityList extends Component {
         ariaLabelSortDesc: `Trier le tableau dans l'ordre décroissant du champ ${field.label}`,
       };
     });
+  }
+
+  get hasActions() {
+    return !!this.args.actions.length;
   }
 
   getColumnType(field) {
@@ -101,6 +107,20 @@ export default class AdminEntityList extends Component {
             </:cell>
           </PixTableColumn>
         {{/each}}
+        {{#if this.hasActions}}
+          {{#each @actions as |actionDetails|}}
+            <PixTableColumn @context={{context}} @type="text">
+              <:header>Actions</:header>
+              <:cell>
+                <PixIconButton
+                  @iconName={{actionDetails.iconName}}
+                  @triggerAction={{fn @onDeleteEntity actionDetails row}}
+                  @ariaLabel={{actionDetails.label}}
+                />
+              </:cell>
+            </PixTableColumn>
+          {{/each}}
+        {{/if}}
       </:columns>
     </PixTable>
   </template>

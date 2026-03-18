@@ -14,4 +14,9 @@ export default class AdminEntityAdapter extends ApplicationAdapter {
   urlForCreateRecord(type, payload) {
     return `${this.buildURL(type)}/${payload.adapterOptions.entityName}`;
   }
+
+  urlForDeleteRecord(idToDestroy, type) {
+    const [entityName, entityId] = idToDestroy.split(':');
+    return `${this.buildURL(type)}/${entityName}/${entityId}`;
+  }
 }

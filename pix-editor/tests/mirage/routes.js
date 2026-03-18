@@ -43,6 +43,10 @@ export default function routes() {
 
     return adminEntitiesObject;
   });
+  this.delete('/admin/entities/:entity_name/:entity_id', function (schema, request) {
+    schema.db.adminEntities.remove(request.params.entity_id);
+    return new Response(204);
+  });
   this.get('/admin/schemas', ({ adminSchemas }) => adminSchemas.all());
 
   this.get('/users/me', ({ users }) => users.first());
