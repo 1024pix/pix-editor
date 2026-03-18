@@ -19,7 +19,33 @@ export async function listByEntityName(entityName, fields, pagination, sort) {
   return { entities, meta };
 }
 
+/**
+ * @param {string} entityName
+ * @param {object} entityToSave
+ * @returns {Promise<object>}
+ */
 export async function save(entityName, entityToSave) {
   const [record] = await knex(entityName).insert(entityToSave, ['*']);
   return record;
+}
+
+/**
+ * @param {string} entityName
+ * @param {string} primaryKeyColumn
+ * @param {string | number} id
+ * @returns {Promise<object | undefined>}
+ */
+export async function get(entityName, primaryKeyColumn, id) {
+  const record = await knex(entityName).where(primaryKeyColumn, id).first();
+  return record;
+}
+
+/**
+ * @param {string} entityName
+ * @param {string} primaryKeyColumn
+ * @param {string | number} id
+ * @returns {Promise<void>}
+ */
+export async function destroy(entityName, primaryKeyColumn, id) {
+  await knex(entityName).where(primaryKeyColumn, id).del();
 }

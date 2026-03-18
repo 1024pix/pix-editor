@@ -6,6 +6,7 @@
   "editable": true,
   "deletable": true,
   "creatable": true,
+  "primaryKey": "id",
   "defaultSort": {
     "field": "id",
     "direction": "asc"
