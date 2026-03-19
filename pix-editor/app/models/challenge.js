@@ -286,6 +286,10 @@ export default class ChallengeModel extends Model {
     return localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
   }
 
+  get previewUrl() {
+    return new URL(this.preview, window.location).href;
+  }
+
   archive() {
     this.status = 'archivé';
     this.archivedAt = new Date();

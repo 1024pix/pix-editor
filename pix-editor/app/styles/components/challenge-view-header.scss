@@ -17,6 +17,30 @@
     width: 100%;
     align-items: center;
     font-size: 18px;
+
+    .preview-menu {
+      &__item a,
+      &__item button {
+        display: flex;
+        align-items: center;
+        gap: var(--pix-spacing-2x);
+        padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
+        border-radius: var(--pix-spacing-2x);
+        white-space: nowrap;
+
+        &:hover {
+          color: var(--pix-neutral-800);
+          background: var(--pix-primary-10);
+        }
+      }
+
+      .title {
+        display: block;
+        background: var(--pix-neutral-20);
+        padding: var(--pix-spacing-2x) var(--pix-spacing-4x);
+        border-radius: var(--pix-spacing-2x);
+      }
+    }
   }
 
   &-first {

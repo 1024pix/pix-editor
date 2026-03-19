@@ -142,11 +142,11 @@ import SelectLocation from 'pixeditor/components/pop-in/select-location';
           Annuler
         </button>
       {{else}}
-        <a class="ui button item" href={{@controller.absolutePreviewUrl}} target="_blank">
+        <a class="ui button item" href={{@controller.challenge.previewUrl}} target="_blank">
           <i class="eye icon"></i>
           Prévisualiser
         </a>
-        <CopyLink @link={{@controller.absolutePreviewUrl}} />
+        <CopyLink @link={{@controller.challenge.previewUrl}} />
         {{#each @controller.challenge.otherLocalizedChallenges as |localizedChallenge|}}
           <LinkTo
             @route={{@controller.localizedChallengeLinkRoute}}

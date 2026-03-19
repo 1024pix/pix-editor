@@ -52,13 +52,9 @@ export default class ChallengesProduction extends Component {
     return challengeStatus ?? 'absence de statut ❓';
   }
 
-  getChallengePreviewUrl(challenge) {
-    return new URL(challenge.preview, window.location).href;
-  }
-
   @action
   async copyChallengePreviewUrl(challenge) {
-    await navigator.clipboard.writeText(this.getChallengePreviewUrl(challenge));
+    await navigator.clipboard.writeText(challenge.previewUrl);
   }
 
   @action
@@ -155,7 +151,7 @@ export default class ChallengesProduction extends Component {
               </:header>
               <:cell>
                 <a
-                  href="{{this.getChallengePreviewUrl challenge}}"
+                  href="{{challenge.previewUrl}}"
                   target="_blank"
                   aria-label="Prévisualiser l'épreuve {{challenge.id}}"
                 >

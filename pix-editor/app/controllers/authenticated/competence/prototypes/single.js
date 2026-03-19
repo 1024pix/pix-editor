@@ -139,7 +139,7 @@ export default class SingleController extends Controller {
   }
 
   get absolutePreviewUrl() {
-    return new URL(this.challenge.preview, window.location).href;
+    return this.challenge.previewUrl;
   }
 
   get localizedChallengeLinkRoute() {

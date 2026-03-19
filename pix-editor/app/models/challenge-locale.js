@@ -61,12 +61,12 @@ export default class ChallengeLocaleModel extends Model {
   }
 
   get primaryPreviewUrl() {
-    return new URL(this.challenge.preview, window.location).href;
+    return this.challenge.previewUrl;
   }
 
   get localizedPreviewUrl() {
     if (this.isPrimaryInLocale || !this.localizedChallengeValue) return null;
-    return new URL(`${this.challenge.preview}?locale=${this.localizedChallengeValue.locale}`, window.location).href;
+    return `${this.primaryPreviewUrl}?locale=${this.localizedChallengeValue.locale}`;
   }
 
   get translationsUrl() {
