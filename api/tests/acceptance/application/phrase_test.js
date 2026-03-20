@@ -757,6 +757,13 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
         const signature = await generatePhraseAppSignature(serializedPayload);
 
+        databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+        databaseBuilder.factory.buildFramework({ id: 'framework2', name: 'Pix+Edu' });
+
+        databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject666', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] });
+        databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject333', frameworkId: 'framework2', uploadedLocales: ['fr', 'fr-FR'] });
+
         const server = await createServer();
 
         // when
@@ -776,7 +783,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       it('saves the translation in database', async () => {
         const payload = {
           event: 'translations:create',
-          project: { id: config.phrase.projects[0].projectId },
+          project: { id: 'phraseProject666' },
           branch: null,
           translation: {
             id: 'translationId',
@@ -813,6 +820,9 @@ describe('Acceptance | Controller | phrase-controller', () => {
         databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Pix' });
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
         databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
+
+        databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject666', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] });
+
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -836,7 +846,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       it('saves the translation in database', async () => {
         const payload = {
           event: 'translations:update',
-          project: { id: config.phrase.projects[0].projectId },
+          project: { id: 'phraseProject123' },
           branch: null,
           translation: {
             id: 'translationId',
@@ -874,6 +884,9 @@ describe('Acceptance | Controller | phrase-controller', () => {
         databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
         databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'fr', value: 'le titre français de area1' });
         databaseBuilder.factory.buildTranslation({ key: 'area.area1.title', locale: 'en', value: 'area1’s english former title' });
+
+        databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject123', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] });
+
         await databaseBuilder.commit();
 
         const server = await createServer();

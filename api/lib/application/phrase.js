@@ -3,6 +3,7 @@ import { downloadTranslationFromPhrase, importTranslations, uploadTranslationToP
 import { child } from '../infrastructure/logger.js';
 import * as config from '../config.js';
 import * as translationSerializer from '../infrastructure/serializers/phrase/translation-serializer.js';
+import { translationsConfigRepository } from '../infrastructure/repositories/index.js';
 
 const logger = child('application:phrase', { event: 'phrase' });
 
@@ -104,7 +105,7 @@ async function getPhraseWebhookSecretKey() {
 const TEST_EVENT = 'test:event';
 const TRANSLATIONS_EVENTS = ['translations:create', 'translations:update'];
 
-function validatePhraseWebhookRequest(request, h) {
+async function validatePhraseWebhookRequest(request, h) {
   if (request.payload.event === TEST_EVENT) {
     logger.info('received test event from phrase webhook');
     return h.response().takeover();
@@ -120,7 +121,9 @@ function validatePhraseWebhookRequest(request, h) {
     return h.response().code(400).takeover();
   }
 
-  if (!config.phrase.projects.some((project) => project.projectId === request.payload.project.id)) {
+  const translationConfigs = await translationsConfigRepository.list();
+
+  if (!translationConfigs.some((translationConfig) => translationConfig.phraseProjectId === request.payload.project.id)) {
     logger.warn({ project: request.payload.project }, 'received translations event on unexpected project');
     return h.response().code(400).takeover();
   }
