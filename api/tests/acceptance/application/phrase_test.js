@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
 import { Buffer } from 'node:buffer';
@@ -446,10 +446,6 @@ describe('Acceptance | Controller | phrase-controller', () => {
   });
 
   describe('POST /phrase/download', () => {
-    beforeEach(() => {
-      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([{ projectId: 'MY_AREA_1_PROJECT_ID', areaCode: 1, frameworkName: 'Pix' }, { projectId: 'MY_AREA_2_PROJECT_ID', areaCode: 2, frameworkName: 'Pix' }]);
-    });
-
     it('should download the translations from phrase', async () => {
       const user = databaseBuilder.factory.buildAdminUser();
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -469,6 +465,20 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildChallenge(
         domainBuilder.buildChallengeDatasourceObject({ id: 'challengeDeLAreaDeux', skillId: 'skill2' }),
       );
+
+      databaseBuilder.factory.buildTranslationsConfig({
+        phraseProjectId: 'MY_AREA_1_PROJECT_ID',
+        frameworkId: 'recFmk1',
+        areaId: 'recnrCmBiPXGbgIyQ',
+        uploadedLocales: ['fr'],
+      });
+      databaseBuilder.factory.buildTranslationsConfig({
+        phraseProjectId: 'MY_AREA_2_PROJECT_ID',
+        frameworkId: 'recFmk1',
+        areaId: 'recDesCodesLaAreaDeux',
+        uploadedLocales: ['fr'],
+      });
+
       await databaseBuilder.commit();
 
       const phraseAPIAreaOneLocales = nock('https://api.phrase.com')
@@ -563,12 +573,12 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(204);
-      expect(phraseAPIAreaOneLocales.isDone()).to.be.true;
-      expect(phraseAPIAreaOneDownloadEn.isDone()).to.be.true;
-      expect(phraseAPIAreaOneDownloadNl.isDone()).to.be.true;
-      expect(phraseAPIAreaTwoLocales.isDone()).to.be.true;
-      expect(phraseAPIAreaTwoDownloadEn.isDone()).to.be.true;
-      expect(phraseAPIAreaTwoDownloadNl.isDone()).to.be.true;
+      expect(phraseAPIAreaOneLocales.isDone()).toBe(true);
+      expect(phraseAPIAreaOneDownloadEn.isDone()).toBe(true);
+      expect(phraseAPIAreaOneDownloadNl.isDone()).toBe(true);
+      expect(phraseAPIAreaTwoLocales.isDone()).toBe(true);
+      expect(phraseAPIAreaTwoDownloadEn.isDone()).toBe(true);
+      expect(phraseAPIAreaTwoDownloadNl.isDone()).toBe(true);
       await expect(knex('translations').select('key', 'locale', 'value').orderBy('key', 'asc')).resolves.to.deep.equal([
         { key: 'area.recDesCodesLaAreaDeux.title', locale: 'nl', value: 'Environnement digital' },
         { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
