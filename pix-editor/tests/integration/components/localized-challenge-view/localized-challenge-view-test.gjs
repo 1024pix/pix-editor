@@ -326,7 +326,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
       );
       assert
         .dom(screen.getByRole('link', { name: "traduction de l'épreuve de version Proto" }))
-        .hasAttribute('href', '/api/challenges/challengeProtoValidee/translations/en/framework-name/Pix/area-code/1');
+        .hasAttribute('href', '/api/challenges/challengeProtoValidee/translations/en');
       assert.ok(clipboardStub.calledOnce);
     });
 

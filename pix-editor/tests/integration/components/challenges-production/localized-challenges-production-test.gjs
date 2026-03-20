@@ -298,11 +298,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
         const localizedTranslationLink = screen.getByRole('link', { name: "traduction de l'épreuve de version 1" });
         assert.ok(primaryPreview.href.endsWith('api/urlto/challengeProtoValide'));
         assert.ok(localizedPreview.href.endsWith('api/urlto/challengeProtoValide?locale=nl'));
-        assert.ok(
-          localizedTranslationLink.href.endsWith(
-            'api/challenges/challengeDecliArchivee/translations/nl/framework-name/Pix/area-code/1',
-          ),
-        );
+        assert.ok(localizedTranslationLink.href.endsWith('api/challenges/challengeDecliArchivee/translations/nl'));
         assert
           .dom(screen.getByRole('button', { name: "Copier le lien de l'épreuve challengeProtoValideeNl" }))
           .exists();

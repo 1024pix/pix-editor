@@ -86,28 +86,22 @@ export async function register(server) {
     },
     {
       method: 'GET',
-      path: '/api/challenges/{id}/translations/{locale}/framework-name/{frameworkName}/area-code/{areaCode}',
+      path: '/api/challenges/{id}/translations/{locale}',
       config: {
         auth: false,
         validate: {
           params: Joi.object({
             id: challengeIdType,
             locale: Joi.string().min(2),
-            areaCode: Joi.number(),
-            frameworkName: Joi.string(),
           }),
         },
         handler: async function(request, h) {
           const challengeId = request.params.id;
           const locale = request.params.locale;
-          const areaCode = request.params.areaCode;
-          const frameworkName = request.params.frameworkName;
 
           const translationsUrl = await getPhraseTranslationsURL({
             challengeId,
             locale,
-            areaCode,
-            frameworkName,
           });
 
           return h.redirect(translationsUrl);

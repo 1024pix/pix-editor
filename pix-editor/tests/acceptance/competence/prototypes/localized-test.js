@@ -99,10 +99,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     assert.dom(header).hasText(/Pas en prod/);
 
     const translationsLink = await screen.findByText('Traductions');
-    assert.ok(
-      translationsLink.getAttribute('href').endsWith('/translations/en/framework-name/Pix/area-code/1'),
-      'href ends with /translations/en/framework-name/Pix/area-code/1',
-    );
+    assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en'), 'href ends with /translations/en');
   });
 
   test('it should go back to the original challenge', async function (assert) {
