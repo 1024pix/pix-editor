@@ -16,7 +16,7 @@ export class MigrationTranslationsConfig extends Script {
     const frameworks = await frameworkRepository.list();
     const areas = await areaRepository.list();
 
-    const configs = config.phrase.projects.map((project) => {
+    const configs = config.phrase.deprecatedProjects.map((project) => {
       const { id: frameworkId } = frameworks.find((framework) => framework.name === project.frameworkName);
 
       let areaId;
