@@ -1,0 +1,42 @@
+{
+  "$schema": "./$schema.json",
+  "id": "translations-config-schema",
+  "label": "Configurations des traductions",
+  "entityName": "translations_config",
+  "editable": true,
+  "deletable": true,
+  "creatable": true,
+  "primaryKey": "id",
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "Identifiant",
+      "type": "number",
+      "readonly": true
+    },
+    {
+      "key": "phraseProjectId",
+      "label": "Identifiant projet Phrase",
+      "type": "string"
+    },
+    {
+      "key": "frameworkId",
+      "label": "Identifiant référentiel",
+      "type": "string"
+    },
+    {
+      "key": "areaId",
+      "label": "Identifiant domaine",
+      "type": "string"
+    },
+    {
+      "key": "uploadedLocales",
+      "label": "Locales exportées",
+      "type": "string"
+    }
+  ]
+}

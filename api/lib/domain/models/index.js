@@ -13,6 +13,7 @@ export * from './StaticCourse.js';
 export * from './Tag.js';
 export * from './Thematic.js';
 export * from './Translation.js';
+export * from './TranslationsConfig.js';
 export * from './Tube.js';
 export * from './Tutorial.js';
 export * from './User.js';

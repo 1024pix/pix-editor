@@ -69,11 +69,11 @@ export default class ChallengeLocaleModel extends Model {
     return new URL(`${this.challenge.preview}?locale=${this.localizedChallengeValue.locale}`, window.location).href;
   }
 
-  getTranslationsUrl = (competence) => {
+  get translationsUrl() {
     if (this.isPrimaryInLocale) return null;
     if (this.locale === 'fr-fr') return null;
-    return `/api/challenges/${this.challenge.id}/translations/${this.locale}/framework-name/${competence.source}/area-code/${competence.areaCode}`;
-  };
+    return `/api/challenges/${this.challenge.id}/translations/${this.locale}`;
+  }
 
   get isTranslated() {
     return !this.isPrimaryInLocale && !!this.localizedChallengeValue;

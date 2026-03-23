@@ -92,11 +92,21 @@ describe('Acceptance | Controller | translations-controller', () => {
         {
           id: 'recThematic0',
           name_i18n: {
-            fr: 'Nom',
-            en: 'name',
+            fr: 'Thématique 0',
+            en: 'Thematic 0',
           },
           competenceId: 'recCompetence0',
           tubeIds: ['recTube0'],
+          index: 0,
+        },
+        {
+          id: 'recThematic1',
+          name_i18n: {
+            fr: 'Thématique 1',
+            en: 'Thematic 1',
+          },
+          competenceId: 'recCompetence1',
+          tubeIds: ['recTube2'],
           index: 0,
         },
       ];
@@ -136,6 +146,23 @@ describe('Acceptance | Controller | translations-controller', () => {
           isMobileCompliant: true,
           isTabletCompliant: false,
         },
+        {
+          id: 'recTube2',
+          name: '@tube',
+          practicalTitle_i18n: {
+            fr: 'Titre pratique du Tube 2 - fr',
+            en: 'Titre pratique du Tube 2 - en',
+          },
+          practicalDescription_i18n: {
+            fr: 'Description pratique du Tube 2 - fr',
+            en: 'Description pratique du Tube 2 - en',
+          },
+          competenceId: 'recCompetence1',
+          thematicId: 'recThematic1',
+          skillIds: ['recSkill2'],
+          isMobileCompliant: true,
+          isTabletCompliant: false,
+        },
       ];
 
       const skills = [
@@ -147,8 +174,8 @@ describe('Acceptance | Controller | translations-controller', () => {
             en: 'Indice - en',
           },
           hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['recTutorial0'],
-          learningMoreTutorialIds: ['recTutorial1'],
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
           pixValue: 8,
           competenceId: 'recCompetence0',
           status: SkillForRelease.STATUSES.ACTIF,
@@ -170,6 +197,23 @@ describe('Acceptance | Controller | translations-controller', () => {
           competenceId: 'recCompetence0',
           status: SkillForRelease.STATUSES.ARCHIVE,
           tubeId: 'recTube1',
+          version: 1,
+          level: 1,
+        },
+        {
+          id: 'recSkill2',
+          name: '@tube1',
+          hint_i18n: {
+            fr: 'Indice 2 - fr',
+            en: 'Indice 2 - en',
+          },
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+          tutorialIds: [],
+          learningMoreTutorialIds: [],
+          pixValue: 8,
+          competenceId: 'recCompetence1',
+          status: SkillForRelease.STATUSES.ACTIF,
+          tubeId: 'recTube2',
           version: 1,
           level: 1,
         },
@@ -263,14 +307,44 @@ describe('Acceptance | Controller | translations-controller', () => {
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
           shuffled: false,
         },
+        {
+          id: 'recChallenge3',
+          instruction: 'Consigne du Challenge',
+          proposals: 'Propositions du Challenge',
+          type: ChallengeForRelease.TYPES.QCM,
+          solution: 'Bonnes réponses du Challenge',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+          t1Status: false,
+          t2Status: true,
+          t3Status: false,
+          status: ChallengeForRelease.STATUSES.VALIDE,
+          skillId: 'recSkill2',
+          embedUrl: 'Embed URL',
+          embedTitle: 'Embed title',
+          embedHeight: 123,
+          timer: 12,
+          illustrationUrl: 'url de l‘illustration',
+          attachments: ['url de la pièce jointe'],
+          competenceId: 'recCompetence1',
+          illustrationAlt: 'Texte alternatif illustration',
+          format: ChallengeForRelease.FORMATS.MOTS,
+          autoReply: false,
+          locales: ['fr'],
+          alternativeInstruction: 'Consigne alternative',
+          focusable: false,
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+          shuffled: false,
+        },
       ];
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
-      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
-      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
-      databaseBuilder.factory.buildSkill({ id: 'recSkill0', tubeId: 'tube1' });
-      challenges.forEach((challenge) => databaseBuilder.factory.buildChallenge(challenge));
+
+      frameworks.forEach(databaseBuilder.factory.buildFramework);
+      areas.forEach(databaseBuilder.factory.buildArea);
+      competences.forEach(databaseBuilder.factory.buildCompetence);
+      thematics.forEach(databaseBuilder.factory.buildThematic);
+      tubes.forEach(databaseBuilder.factory.buildTube);
+      skills.forEach(databaseBuilder.factory.buildSkill);
+      challenges.forEach(databaseBuilder.factory.buildChallenge);
 
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
@@ -290,6 +364,11 @@ describe('Acceptance | Controller | translations-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge2',
         id: 'recChallenge2',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge3',
+        id: 'recChallenge3',
         locale: 'fr',
       });
 
@@ -393,7 +472,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         ],
         [
           'thematic.recThematic0.name',
-          'Nom',
+          'Thématique 0',
           'thematique,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
@@ -414,88 +493,6 @@ describe('Acceptance | Controller | translations-controller', () => {
 
     it('should still export csv file even when a challenge has no skill', async () => {
       // Given
-
-      releaseContent.frameworks = [
-        {
-          id: 'recFramework0',
-          name: 'Pix',
-        },
-      ];
-      releaseContent.areas = [
-        {
-          id: 'recArea0',
-          name: '1. Titre du Domaine - fr',
-          code: '1',
-          title_i18n: {
-            fr: 'Titre du Domaine - fr',
-            en: 'Titre du Domaine - en',
-          },
-          competenceIds: ['recCompetence0'],
-          color: Area.COLORS.JAFFA,
-          frameworkId: 'recFramework0',
-        },
-      ];
-
-      releaseContent.competences = [
-        {
-          id: 'recCompetence0',
-          index: '1.1',
-          name_i18n: {
-            fr: 'Nom de la Compétence - fr',
-            en: 'Nom de la Compétence - en',
-          },
-          areaId: 'recArea0',
-          origin: 'Pix',
-          skillIds: ['recSkill0'],
-          thematicIds: ['recThematic0'],
-          description_i18n: {
-            fr: 'Description de la compétence - fr',
-            en: 'Description de la compétence - en',
-          },
-        },
-      ];
-      releaseContent.tubes = [
-        {
-          id: 'recTube0',
-          name: '@acquis',
-          title: 'Titre du Tube',
-          description: 'Description du Tube',
-          practicalTitle_i18n: {
-            fr: 'Titre pratique du Tube - fr',
-            en: 'Titre pratique du Tube - en',
-          },
-          practicalDescription_i18n: {
-            fr: 'Description pratique du Tube - fr',
-            en: 'Description pratique du Tube - en',
-          },
-          competenceId: 'recCompetence0',
-          thematicId: 'recThematic0',
-          skillIds: ['recSkill0'],
-          isMobileCompliant: true,
-          isTabletCompliant: false,
-        },
-      ];
-
-      releaseContent.skills = [
-        {
-          id: 'recSkill0',
-          name: '@acquis1',
-          hint_i18n: {
-            fr: 'Indice - fr',
-            en: 'Indice - en',
-          },
-          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-          tutorialIds: ['recTutorial0'],
-          learningMoreTutorialIds: ['recTutorial1'],
-          pixValue: 8,
-          competenceId: 'recCompetence0',
-          status: SkillForRelease.STATUSES.ACTIF,
-          tubeId: 'recTube0',
-          version: 1,
-          level: 1,
-        },
-      ];
-
       releaseContent.challenges = [
         {
           id: 'recChallenge0',
@@ -552,85 +549,13 @@ describe('Acceptance | Controller | translations-controller', () => {
         'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
-        'thematic.recThematic0.name,Nom,"thematique,Pix-1-1.1,Pix-1,Pix",',
+        'thematic.recThematic0.name,Thématique 0,"thematique,Pix-1-1.1,Pix-1,Pix",',
         'tube.recTube0.practicalDescription,Description pratique du Tube - fr,"sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
         'tube.recTube0.practicalTitle,Titre pratique du Tube - fr,"sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
       ]);
     });
-
-    describe('when an error occurs during streaming', () => {
-      it('should manage unexpected errors', async () => {
-        // Given
-        releaseContent = {};
-        releaseContent.skills = [
-          {
-            id: 'recSkill0',
-            name: '@acquis1',
-            hint_i18n: {
-              fr: 'Indice - fr',
-              en: 'Indice - en',
-            },
-            hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
-            tutorialIds: ['recTutorial0'],
-            learningMoreTutorialIds: ['recTutorial1'],
-            pixValue: 8,
-            competenceId: 'recCompetence0',
-            status: SkillForRelease.STATUSES.ACTIF,
-            tubeId: 'recTube0',
-            version: 1,
-            level: 1,
-          },
-        ];
-        releaseContent.challenges = [
-          {
-            id: 'recChallenge0',
-            instruction: 'Consigne du Challenge',
-            proposals: 'Propositions du Challenge',
-            type: ChallengeForRelease.TYPES.QCM,
-            solution: 'Bonnes réponses du Challenge',
-            solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
-            t1Status: false,
-            t2Status: true,
-            t3Status: false,
-            status: ChallengeForRelease.STATUSES.VALIDE,
-            skillId: 'recSkill0',
-            embedUrl: 'Embed URL',
-            embedTitle: 'Embed title',
-            embedHeight: 123,
-            timer: 12,
-            illustrationUrl: 'url de l‘illustration',
-            attachments: ['url de la pièce jointe'],
-            competenceId: 'recCompetence0',
-            illustrationAlt: 'Texte alternatif illustration',
-            format: ChallengeForRelease.FORMATS.MOTS,
-            autoReply: false,
-            locales: ['fr'],
-            alternativeInstruction: 'Consigne alternative',
-            focusable: false,
-            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
-            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
-          },
-        ];
-
-        databaseBuilder.factory.buildRelease({ content: releaseContent });
-
-        await databaseBuilder.commit();
-
-        const server = await createServer();
-        const getTranslationsOptions = {
-          method: 'GET',
-          url: '/api/translations.csv?frameworkName=Pix',
-          headers: generateAuthorizationHeader(user),
-        };
-
-        // When
-        const response = server.inject(getTranslationsOptions);
-
-        // Then
-        await expect(response).rejects.toHaveProperty('isBoom', true);
-      });
-    });
   });
+
   describe('PATCH /translations.csv - import translations from a CSV file', () => {
     it('should update the translations', async () => {
       // Given

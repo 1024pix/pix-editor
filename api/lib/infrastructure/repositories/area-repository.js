@@ -53,10 +53,26 @@ export async function get(id) {
   return toDomain(dto, translations);
 }
 
+export async function getByChallengeId(challengeId) {
+  const dto = await selectAreas()
+    .whereIn(
+      'areas.id',
+      knex.select('competences.areaId')
+        .from('challenges')
+        .join('skills', 'skills.id', 'challenges.skillId')
+        .join('tubes', 'tubes.id', 'skills.tubeId')
+        .join('thematics', 'thematics.id', 'tubes.thematicId')
+        .join('competences', 'competences.id', 'thematics.competenceId')
+        .where('challenges.id', challengeId),
+    )
+    .first();
+  return toDomain(dto);
+}
+
 function selectAreas(knexConn = knex) {
   return knexConn
     .select(
-      '*',
+      'areas.*',
       knexConn.raw(
         'coalesce((??), \'[]\') as "competenceIds"',
         knexConn

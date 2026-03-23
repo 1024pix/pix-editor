@@ -29,6 +29,8 @@ export default class NewAdminEntityController extends Controller {
     } catch (err) {
       Sentry.captureException(err);
       this.notifications.error("Erreur lors de la création de l'entité");
+    } finally {
+      this.loader.stop();
     }
   };
 }

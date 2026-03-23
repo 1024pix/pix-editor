@@ -5,7 +5,7 @@ import Joi from 'joi';
 
 import { exportTranslations, importTranslations } from '../domain/usecases/index.js';
 import { logger } from '../infrastructure/logger.js';
-import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
+import { releaseRepository, localizedChallengeRepository, frameworkRepository } from '../infrastructure/repositories/index.js';
 import * as config from '../config.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { parseTranslationsCsvStream, InvalidFileError } from '../domain/services/parse-translations-csv-stream.js';
@@ -21,11 +21,23 @@ export async function register(server) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
           const release = await releaseRepository.getLatestRelease();
-          await exportTranslations(stream, request.query, {
-            localizedChallengeRepository,
-            release,
-            baseUrl,
-          });
+          const frameworks = await frameworkRepository.list();
+
+          const framework = frameworks.find((framework) => framework.name === request.query.frameworkName);
+          if (!framework) {
+            return Boom.badRequest('Unknown framework name');
+          }
+
+          await exportTranslations(
+            stream,
+            { frameworkId: framework.id, locale: 'fr' },
+            {
+              localizedChallengeRepository,
+              release,
+              baseUrl,
+            },
+          );
+
           return h.response(stream).header('Content-type', 'text/csv');
         },
       },

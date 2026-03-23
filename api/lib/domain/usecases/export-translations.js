@@ -12,85 +12,87 @@ import { logger } from '../../infrastructure/logger.js';
 
 export async function exportTranslations(stream, filters, dependencies) {
   const release = dependencies.release;
-  const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
-  const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
-  const releaseContent = Object.fromEntries(
-    Object.entries(release.content).map(([collection, entities]) => [collection, Object.fromEntries(entities.map((entity) => [entity.id, entity]))]),
+  const releaseContent = mapValues(release.content, (entities) => Object.fromEntries(entities.map((entity) => [entity.id, entity])));
+
+  const localizedChallenges = Object.groupBy(
+    await dependencies.localizedChallengeRepository.list(),
+    ({ challengeId }) => challengeId,
   );
 
-  const localeToExtract = 'fr';
+  const areas = filters.areaId
+    ? [releaseContent.areas[filters.areaId]]
+    : release.content.areas.filter((area) => area.frameworkId === filters.frameworkId);
+  const areaIds = areas.map((area) => area.id);
 
-  const filteredActiveSkills = release.content.skills.filter((skill) => skill.canExportForTranslation());
+  const competences = release.content.competences.filter((competence) => areaIds.includes(competence.areaId));
+  const competenceIds = competences.map((competence) => competence.id);
 
-  const activeTubeIds = filteredActiveSkills.map(({ tubeId }) => tubeId);
-  const filteredTubes = release.content.tubes.filter((tube) => activeTubeIds.includes(tube.id));
+  const thematics = release.content.thematics.filter((thematic) => competenceIds.includes(thematic.competenceId));
 
-  const filteredValidatedChallenges = release.content.challenges.filter((challenge) =>
-    challenge.canExportForTranslation(localeToExtract),
+  const skills = release.content.skills.filter((skill) => competenceIds.includes(skill.competenceId) && skill.isActif);
+  const skillIds = skills.map((skill) => skill.id);
+
+  const tubeIds = skills.map((skill) => skill.tubeId);
+  const tubes = release.content.tubes.filter((tube) => tubeIds.includes(tube.id));
+
+  const challenges = release.content.challenges.filter(
+    (challenge) => challenge.isValide && challenge.hasLocale(filters.locale) && skillIds.includes(challenge.skillId),
   );
 
-  const translationsStreams = mergeStreams(
+  let translationsStreams = mergeStreams(
     createTranslationsStream(
-      release.content.competences,
-      extractMetadataFromCompetence,
-      releaseContent,
-      'competence',
-      competenceTranslations.extractFromReleaseObject,
-    ),
-    createTranslationsStream(
-      release.content.thematics,
-      extractMetadataFromThematic,
-      releaseContent,
-      'thematique',
-      thematicTranslations.extractFromReleaseObject,
-    ),
-    createTranslationsStream(
-      release.content.areas,
+      areas,
       extractMetadataFromArea,
       releaseContent,
       'domaine',
       areaTranslations.extractFromReleaseObject,
     ),
     createTranslationsStream(
-      filteredTubes,
+      competences,
+      extractMetadataFromCompetence,
+      releaseContent,
+      'competence',
+      competenceTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      thematics,
+      extractMetadataFromThematic,
+      releaseContent,
+      'thematique',
+      thematicTranslations.extractFromReleaseObject,
+    ),
+    createTranslationsStream(
+      tubes,
       extractMetadataFromTube,
       releaseContent,
       'sujet',
       tubeTranslations.extractFromReleaseObject,
     ),
     createTranslationsStream(
-      filteredActiveSkills,
+      skills,
       extractMetadataFromSkill,
       releaseContent,
       'acquis',
       skillTranslations.extractFromReleaseObject,
     ),
     createTranslationsStream(
-      filteredValidatedChallenges,
-      _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges),
+      challenges,
+      (challenge, releaseContent) => extractMetadataFromChallenge(dependencies.baseUrl, localizedChallenges, challenge, releaseContent),
       releaseContent,
       'epreuve',
       extractFromChallenge,
     ),
   );
 
-  let csvLinesStream = translationsStreams.filter(({ translation }) => translation.locale === localeToExtract);
+  // english is still included for entities other than challenges
+  translationsStreams = translationsStreams.filter(({ translation }) => translation.locale === filters.locale);
 
-  if (filters) {
-    csvLinesStream = csvLinesStream.filter(makeTranslationsFilters(filters));
-  }
-
-  csvLinesStream = csvLinesStream.map(translationAndTagsToCSVLine);
+  const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine);
 
   pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
     if (!error) return;
     logger.error({ error }, 'Error while exporting translations from release');
   });
-}
-
-function makeTranslationsFilters({ frameworkName, areaCode }) {
-  if (!areaCode) return ({ tags }) => tags.includes(toTag(frameworkName));
-  return ({ tags }) => tags.includes(`${toTag(frameworkName)}-${toTag(areaCode)}`);
 }
 
 function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
@@ -100,7 +102,7 @@ function createTranslationsStream(entities, extractMetadataFn, releaseContent, t
 }
 
 function toTag(tagName) {
-  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '');
+  return _.deburr(tagName).replaceAll(' ', '_').replaceAll('@', '');
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
@@ -134,10 +136,10 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
   };
 }
 
-function translationAndTagsToCSVLine({ translation: { key, value }, tags, description }) {
+function translationAndTagsToCSVLine({ translation: { key, locale, value }, tags, description }) {
   return {
     key,
-    fr: value,
+    [locale]: value,
     tags: tags.join(),
     description,
   };
@@ -216,4 +218,8 @@ function extractTagsFromCompetence(competence, releaseContent) {
 
 function extractTagsFromArea(area, releaseContent) {
   return [toTag(area.code), toTag(releaseContent.frameworks[area.frameworkId].name)];
+}
+
+function mapValues(object, mapper) {
+  return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, mapper(value)]));
 }

@@ -982,19 +982,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
   });
 
-  describe('GET /challenges/:id/translations/:locale/framework-name/:frameworkName/area-code/:code', () => {
-    it('should redirect to the phrase project corresponding to area code', async () => {
+  describe('GET /challenges/:id/translations/:locale', () => {
+    it('should redirect to the phrase project', async () => {
       // given
-      vi.spyOn(config.phrase, 'projects', 'get').mockReturnValue([
-        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_3', frameworkName: 'Pix+' },
-        { areaCode: 1, projectId: 'PHRASE_PROJECT_ID_AREA_1', frameworkName: 'Pix' },
-        { areaCode: 2, projectId: 'PHRASE_PROJECT_ID_AREA_2', frameworkName: 'Pix' },
-      ]);
       const challengeId = 'challenge123';
       const locale = 'nl';
 
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
@@ -1014,6 +1010,19 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale,
       });
 
+      databaseBuilder.factory.buildTranslationsConfig({
+        phraseProjectId: 'PHRASE_PROJECT_ID_AREA_1',
+        frameworkId: 'recFmk1',
+        areaId: 'area1',
+        uploadedLocales: ['fr'],
+      });
+      databaseBuilder.factory.buildTranslationsConfig({
+        phraseProjectId: 'PHRASE_PROJECT_ID_AREA_2',
+        frameworkId: 'recFmk1',
+        areaId: 'area2',
+        uploadedLocales: ['fr'],
+      });
+
       await databaseBuilder.commit();
 
       const phraseAccountsApiScope = nock('https://api.phrase.com')
@@ -1028,7 +1037,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         ]);
 
       const phraseLocalesApiScope = nock('https://api.phrase.com')
-        .get('/v2/projects/PHRASE_PROJECT_ID_AREA_2/locales')
+        .get('/v2/projects/PHRASE_PROJECT_ID_AREA_1/locales')
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(200, [
           {
@@ -1056,13 +1065,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: `/api/challenges/${challengeId}/translations/${locale}/framework-name/Pix/area-code/2`,
+        url: `/api/challenges/${challengeId}/translations/${locale}`,
       });
 
       // then
       expect(response.statusCode).toBe(302);
       expect(response.headers.location).toBe(
-        `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_2?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`,
+        `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_1?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`,
       );
 
       expect(phraseAccountsApiScope.isDone()).toBe(true);
@@ -1528,7 +1537,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       // Then
       expect(response).to.have.property('statusCode', 201);
-      expect(apiScope.isDone()).to.be.false;
+      expect(apiScope.isDone()).toBe(false);
     });
 
     describe('when no base URL is defined for Pix API', () => {

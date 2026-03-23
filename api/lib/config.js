@@ -118,7 +118,7 @@ export const exportExternalUrlsJob = { spreadsheetId: process.env.EXPORT_EXTERNA
 
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
-  projects: [
+  deprecatedProjects: [
     {
       frameworkName: 'Pix',
       areaCode: 1,
@@ -207,6 +207,6 @@ if (process.env.NODE_ENV === 'test') {
   notifications.slack.enable = false;
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
-  phrase.projects = [{ projectId: 'MY_PHRASE_PROJECT_ID', frameworkName: 'Pix' }];
+  phrase.deprecatedProjects = [];
   phrase.webhookSecret = 'le secret de phrase';
 }

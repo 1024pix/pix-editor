@@ -111,7 +111,11 @@ export class ChallengeForRelease {
     return [Challenge.STATUSES.VALIDE, Challenge.STATUSES.ARCHIVE].includes(this.status);
   }
 
-  canExportForTranslation(locale) {
-    return this.locales.includes(locale) && this.status === ChallengeForRelease.STATUSES.VALIDE;
+  get isValide() {
+    return this.status === ChallengeForRelease.STATUSES.VALIDE;
+  }
+
+  hasLocale(locale) {
+    return this.locales.includes(locale);
   }
 }
