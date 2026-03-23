@@ -121,9 +121,9 @@ async function validatePhraseWebhookRequest(request, h) {
     return h.response().code(400).takeover();
   }
 
-  const translationConfigs = await translationsConfigRepository.list();
+  const translationConfig = await translationsConfigRepository.getByPhraseProjectId(request.payload.project.id);
 
-  if (!translationConfigs.some((translationConfig) => translationConfig.phraseProjectId === request.payload.project.id)) {
+  if (translationConfig === undefined) {
     logger.warn({ project: request.payload.project }, 'received translations event on unexpected project');
     return h.response().code(400).takeover();
   }
