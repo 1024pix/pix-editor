@@ -17,7 +17,7 @@ export async function list({ transaction: knexConn } = {}) {
 
 export async function listForReplication() {
   const dtos = await knex
-    .select(`${TABLE_NAME}.id`, `${TABLE_NAME}.name`, 'thematics.competenceId')
+    .select(`${TABLE_NAME}.id`, `${TABLE_NAME}.name`, `${TABLE_NAME}.thematicId`, 'thematics.competenceId')
     .from(TABLE_NAME)
     .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`)
     .orderBy(`${TABLE_NAME}.id`);

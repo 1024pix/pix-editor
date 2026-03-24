@@ -1,6 +1,10 @@
+import { PassThrough, Writable } from 'node:stream';
+
+import { iterableToStream, stringifyMultiJsonStream } from 'json-stream-es';
+
 import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
-import { getLearningContentForReplication } from '../domain/usecases/get-learning-content-for-replication.js';
-import { SCOPES } from '../infrastructure/logger.js';
+import { getLearningContentForReplication, streamLearningContentForReplication } from '../domain/usecases/index.js';
+import { logger, SCOPES } from '../infrastructure/logger.js';
 
 export async function register(server) {
   server.route([
@@ -13,6 +17,26 @@ export async function register(server) {
             promise: getLearningContentForReplication(),
             loggingScope: SCOPES.REPLICATION,
           });
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/replication-stream',
+      config: {
+        auth: false,
+        handler: function(request, h) {
+          const stream = new PassThrough({ highWaterMark: 2 ** 10 });
+          const controller = new AbortController();
+          iterableToStream(streamLearningContentForReplication(controller.signal))
+            .pipeThrough(stringifyMultiJsonStream())
+            .pipeThrough(new TextEncoderStream())
+            .pipeTo(Writable.toWeb(stream))
+            .catch((err) => {
+              logger.error({ event: SCOPES.REPLICATION, err }, 'error while streaming replication');
+              controller.abort();
+            });
+          return h.response(stream);
         },
       },
     },

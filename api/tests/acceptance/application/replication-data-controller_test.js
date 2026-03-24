@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+
 import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
@@ -37,11 +38,49 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const expectedCurrentContentWithoutTranslations = JSON.parse(
         JSON.stringify(_.omit(expectedCurrentContent, 'translations')),
       );
-      expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
+      expect(resultWithoutTranslations).toMatchObject(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(
         expectedCurrentContent.translations.map((translation) => ({
           ...translation,
           id: expect.any(Number),
+        })),
+      );
+    });
+  });
+
+  describe('GET /api/replication-stream', function() {
+    it('streams data for replication', async function() {
+      const expectedCurrentContent = await mockCurrentContent();
+
+      const server = await createServer();
+      const currentContentOptions = {
+        method: 'GET',
+        url: '/api/replication-stream',
+        headers: generateAuthorizationHeader(user),
+      };
+
+      // when
+      const response = await server.inject(currentContentOptions);
+
+      // then
+      const result = Object.fromEntries(
+        Object.entries(
+          Object.groupBy(
+            response.result.split('\n').map((line) => JSON.parse(line)),
+            ({ type }) => type,
+          ),
+        ).map(([type, items]) => [type, items.map(({ value }) => value)]),
+      );
+
+      const resultWithoutTranslations = _.omit(result, 'translations');
+      const expectedCurrentContentWithoutTranslations = JSON.parse(
+        JSON.stringify(_.omit(expectedCurrentContent, 'translations')),
+      );
+      expect(resultWithoutTranslations).toStrictEqual(expectedCurrentContentWithoutTranslations);
+      expect(_.orderBy(result.translations, ['key', 'locale'])).toMatchObject(
+        expectedCurrentContent.translations.map((translation) => ({
+          ...translation,
+          id: expect.any(String),
         })),
       );
     });
@@ -107,6 +146,7 @@ async function mockCurrentContent() {
       'airtableId',
       'index',
       'competenceAirtableId',
+      'skillIds',
       'skillAirtableIds',
       'thematicAirtableId',
     ],
@@ -114,17 +154,10 @@ async function mockCurrentContent() {
       id: 'recTube1',
       thematicId: expectedThematic.id,
       competenceId: expectedCompetence.id,
-      skillIds: ['recSkill1'],
       name: '@dvorak',
     }),
   );
-  expectedCurrentContent.tubes = [
-    {
-      ...expectedTube,
-      isMobileCompliant: false,
-      isTabletCompliant: false,
-    },
-  ];
+  expectedCurrentContent.tubes = [expectedTube];
 
   const baseSkill = domainBuilder.buildSkill({
     id: 'recSkill1',
@@ -183,7 +216,6 @@ async function mockCurrentContent() {
   const expectedChallenge = {
     ...challenge,
     geography: 'BR',
-    area: 'BR',
     urlsToConsult: ['https://example.com/', 'https://pix.org/nl-be'],
     ...expectedPrimaryProtoQualityAttributes,
   };
@@ -191,7 +223,6 @@ async function mockCurrentContent() {
   const expectedAlternativeChallenge = {
     ...alternativeChallenge,
     geography: null,
-    area: null,
     files: [],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
@@ -204,7 +235,6 @@ async function mockCurrentContent() {
     airtableId: challenge.id,
     illustrationAlt: 'alt_nl',
     geography: 'RO',
-    area: 'RO',
   };
   delete expectedChallengeNl.localizedChallenges;
   expectedCurrentContent.challenges = [

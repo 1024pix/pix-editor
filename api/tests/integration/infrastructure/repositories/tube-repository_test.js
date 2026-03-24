@@ -108,8 +108,8 @@ describe('Integration | Repository | tube-repository', () => {
     });
   });
 
-  describe('#list', () => {
-    it('should return the list of all tubes', async () => {
+  describe('#listForReplication', () => {
+    it('returns all tubes for replication', async () => {
       // given
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
@@ -179,6 +179,7 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'Description tube 1 fr',
             en: 'Description tube 1 en',
           },
+          thematicId: 'thematicId1',
           competenceId: 'competenceId1',
         }),
         new TubeForReplication({
@@ -192,6 +193,7 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'Description tube 2 fr',
             en: 'Description tube 2 en',
           },
+          thematicId: 'thematicId2',
           competenceId: 'competenceId2',
         }),
       ]);
