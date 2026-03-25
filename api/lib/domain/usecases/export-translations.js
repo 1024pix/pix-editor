@@ -39,13 +39,14 @@ export async function exportTranslations(stream, filters, dependencies) {
     (challenge) => challenge.isValide && challenge.hasLocale(filters.locales[0]) && skillIds.includes(challenge.skillId),
   );
 
-  let translationsStreams = mergeStreams(
+  const translationsStreams = mergeStreams(
     createTranslationsStream(
       areas,
       extractMetadataFromArea,
       releaseContent,
       'domaine',
       areaTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       competences,
@@ -53,6 +54,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'competence',
       competenceTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       thematics,
@@ -60,6 +62,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'thematique',
       thematicTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       tubes,
@@ -67,6 +70,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'sujet',
       tubeTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       skills,
@@ -74,6 +78,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'acquis',
       skillTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       challenges,
@@ -84,9 +89,6 @@ export async function exportTranslations(stream, filters, dependencies) {
     ),
   );
 
-  // english is still included for entities other than challenges
-  translationsStreams = translationsStreams.filter(({ translation }) => filters.locales.includes(translation.locale));
-
   const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine(filters.locales));
 
   pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
@@ -95,10 +97,10 @@ export async function exportTranslations(stream, filters, dependencies) {
   });
 }
 
-function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
+function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn, locales) {
   return Readable.from(entities)
     .map(extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag))
-    .flatMap(extractTranslationsFromObject(extractTranslationsFn));
+    .flatMap(extractTranslationsFromObject(extractTranslationsFn, locales));
 }
 
 function toTag(tagName) {
@@ -145,9 +147,9 @@ function translationAndTagsToCSVLine(locales) {
   });
 }
 
-function extractTranslationsFromObject(extractFn) {
+function extractTranslationsFromObject(extractFn, locales) {
   return ({ description, tags, object }) => {
-    return extractFn(object).map((translation) => {
+    return extractFn(object, locales).map((translation) => {
       return { description, tags, translation };
     });
   };

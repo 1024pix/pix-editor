@@ -42,9 +42,12 @@ function extractFromDomainObject({ localizedFields, prefix }) {
 }
 
 function extractFromReleaseObject({ localizedFields, prefix }) {
-  return (entity) => {
+  return (entity, locales) => {
     return localizedFields
-      .filter(({ field, locale }) => entity[`${field}_i18n`][locale])
+      .filter(({ field, locale }) => (
+        (locales === undefined || locales.includes(locale))
+        && entity[`${field}_i18n`][locale]
+      ))
       .map(
         ({ field, locale }) =>
           new Translation({
