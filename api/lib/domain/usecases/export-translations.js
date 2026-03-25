@@ -106,11 +106,11 @@ function toTag(tagName) {
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
-  const primaryLocalePreviewUrl = `Prévisualisation FR: ${baseUrl}/api/challenges/${challenge.id}/preview`;
+  const primaryLocalePreviewUrl = `Preview FR: ${baseUrl}/api/challenges/${challenge.id}/preview`;
   const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
     .filter(({ locale }) => locale !== 'fr')
     .map(({ locale }) => {
-      return `Prévisualisation ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
+      return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
   const peURL = `Pix Editor: ${baseUrl}/challenge/${challenge.id}`;
 

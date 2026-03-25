@@ -362,43 +362,43 @@ describe('Acceptance | Controller | phrase-controller', () => {
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.embedTitle',
           'Embed title',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.illustrationAlt',
           'Texte alternatif illustration',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.proposals',
           'Propositions du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solution',
           'Bonnes réponses du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solutionToDisplay',
           'Bonnes réponses du Challenge à afficher',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
+          'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'competence.recCompetence0.description',
@@ -517,7 +517,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(
           200,
-          'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
+          'key_name,nl,comment\narea.recnrCmBiPXGbgIyQ.title,Environnement numérique,\nchallenge.challenge1nwE8BcKcmiNvR.instruction,"Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Preview FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
           { 'Content-type': 'text/csv' },
         );
 
@@ -557,7 +557,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(
           200,
-          'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Prévisualisation FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
+          'key_name,nl,comment\narea.recDesCodesLaAreaDeux.title,Environnement digital,\nchallenge.challengeDeLAreaDeux.instruction,"Quelle technologie filaire est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n","Preview FR: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/api/challenges/challenge1nwE8BcKcmiNvR/preview, Pix Editor: http://pix-lcms-review-pr556.osc-fr1.scalingo.io/challenge/challenge1nwE8BcKcmiNvR"\n',
           { 'Content-type': 'text/csv' },
         );
 
