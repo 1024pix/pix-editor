@@ -272,7 +272,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildTranslationsConfig({
         phraseProjectId: 'MY_PHRASE_PROJECT_ID',
         frameworkId: 'recFramework0',
-        uploadedLocales: ['fr'],
+        uploadedLocales: ['fr', 'fr-FR'],
       });
 
       await databaseBuilder.commit();
@@ -296,15 +296,15 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .reply(200, [
           {
             id: 'frLocaleId',
-            name: 'fr',
             code: 'fr',
-            default: true,
+          },
+          {
+            id: 'frFRLocaleId',
+            code: 'fr-FR',
           },
           {
             id: 'nlLocaleId',
-            name: 'nl',
             code: 'nl',
-            default: false,
           },
         ]);
 
@@ -319,14 +319,15 @@ describe('Acceptance | Controller | phrase-controller', () => {
             && matchFormDataParameter(parsedBody, 'update_translations', 'true')
             && matchFormDataParameter(parsedBody, 'skip_upload_tags', 'true')
             && matchFormDataParameter(parsedBody, 'locale_mapping[fr]', '2')
+            && matchFormDataParameter(parsedBody, 'locale_mapping[fr-FR]', '3')
             && matchFormDataParameter(parsedBody, 'format_options[key_index]', '1')
-            && matchFormDataParameter(parsedBody, 'format_options[tag_column]', '3')
-            && matchFormDataParameter(parsedBody, 'format_options[comment_index]', '4')
+            && matchFormDataParameter(parsedBody, 'format_options[tag_column]', '4')
+            && matchFormDataParameter(parsedBody, 'format_options[comment_index]', '5')
             && matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true')
           );
         })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(201, { id: 'uplaodId' });
+        .reply(201, { id: 'uploadId' });
 
       const server = await createServer();
       const postPhraseUploadOptions = {
@@ -348,6 +349,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       expect(headers).to.deep.equal([
         'key',
         'fr',
+        'fr-FR',
         'tags',
         'description',
       ]);
@@ -355,91 +357,105 @@ describe('Acceptance | Controller | phrase-controller', () => {
         [
           'area.recArea0.title',
           'Titre du Domaine - fr',
+          '',
           'domaine,Pix-1,Pix',
           '',
         ],
         [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.embedTitle',
           'Embed title',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.illustrationAlt',
           'Texte alternatif illustration',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.proposals',
           'Propositions du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solution',
           'Bonnes réponses du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solutionToDisplay',
           'Bonnes réponses du Challenge à afficher',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'competence.recCompetence0.description',
           'Description de la compétence - fr',
+          '',
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'competence.recCompetence0.name',
           'Nom de la Compétence - fr',
+          '',
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'skill.recSkill0.hint',
           'Indice - fr',
+          '',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'thematic.recThematic0.name',
           'Nom',
+          '',
           'thematique,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
+          '',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'tube.recTube0.practicalTitle',
           'Titre pratique du Tube - fr',
+          '',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
       ]);
 
       expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({
-        uploadId: 'uplaodId',
+        uploadId: 'uploadId',
         projectId: 'MY_PHRASE_PROJECT_ID',
       });
     });

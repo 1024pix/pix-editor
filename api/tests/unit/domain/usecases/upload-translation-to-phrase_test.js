@@ -67,7 +67,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       {
         frameworkId: 'frameworkPix',
         areaId: null,
-        locale: 'fr',
+        locales: ['fr'],
       },
       {
         baseUrl: 'http://test.site',
@@ -114,8 +114,8 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     ]);
 
     localesListStub
-      .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr', name: 'fr', _default: true }])
-      .mockResolvedValueOnce([{ id: 'frLocaleId-2', code: 'fr', name: 'fr', _default: true }]);
+      .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr' }])
+      .mockResolvedValueOnce([{ id: 'frLocaleId-2', code: 'fr' }, { id: 'frFRLocaleId', code: 'fr-FR' }]);
 
     uploadCreateStub
       .mockResolvedValueOnce({ id: 'upload-id-1' })
@@ -143,7 +143,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       {
         frameworkId: 'frameworkPix',
         areaId: 'area1',
-        locale: 'fr',
+        locales: ['fr'],
       },
       {
         baseUrl: 'http://test.site',
@@ -156,7 +156,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       {
         frameworkId: 'frameworkPixEdu',
         areaId: null,
-        locale: 'fr',
+        locales: ['fr', 'fr-FR'],
       },
       {
         baseUrl: 'http://test.site',
@@ -190,11 +190,11 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       updateDescriptions: true,
       updateTranslations: true,
       skipUploadTags: true,
-      localeMapping: { fr: 2 },
+      localeMapping: { fr: 2, 'fr-FR': 3 },
       formatOptions: {
         key_index: 1,
-        tag_column: 3,
-        comment_index: 4,
+        tag_column: 4,
+        comment_index: 5,
         header_content_row: true,
       },
     });

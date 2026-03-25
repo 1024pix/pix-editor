@@ -36,7 +36,7 @@ export async function exportTranslations(stream, filters, dependencies) {
   const tubes = release.content.tubes.filter((tube) => tubeIds.includes(tube.id));
 
   const challenges = release.content.challenges.filter(
-    (challenge) => challenge.isValide && challenge.hasLocale(filters.locale) && skillIds.includes(challenge.skillId),
+    (challenge) => challenge.isValide && challenge.hasLocale(filters.locales[0]) && skillIds.includes(challenge.skillId),
   );
 
   let translationsStreams = mergeStreams(
@@ -85,9 +85,9 @@ export async function exportTranslations(stream, filters, dependencies) {
   );
 
   // english is still included for entities other than challenges
-  translationsStreams = translationsStreams.filter(({ translation }) => translation.locale === filters.locale);
+  translationsStreams = translationsStreams.filter(({ translation }) => filters.locales.includes(translation.locale));
 
-  const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine);
+  const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine(filters.locales));
 
   pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
     if (!error) return;
@@ -136,13 +136,13 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
   };
 }
 
-function translationAndTagsToCSVLine({ translation: { key, locale, value }, tags, description }) {
-  return {
+function translationAndTagsToCSVLine(locales) {
+  return ({ translation: { key, locale: translationLocale, value }, tags, description }) => ({
     key,
-    [locale]: value,
+    ...Object.fromEntries(locales.map((locale) => [locale, locale === translationLocale ? value : ''])),
     tags: tags.join(),
     description,
-  };
+  });
 }
 
 function extractTranslationsFromObject(extractFn) {

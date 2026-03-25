@@ -30,7 +30,7 @@ export async function register(server) {
 
           await exportTranslations(
             stream,
-            { frameworkId: framework.id, locale: 'fr' },
+            { frameworkId: framework.id, locales: ['fr'] },
             {
               localizedChallengeRepository,
               release,
