@@ -9,6 +9,7 @@ import * as areaTranslations from '../../infrastructure/translations/area.js';
 import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
+import { Challenge } from '../models/index.js';
 
 export async function exportTranslations(stream, filters, dependencies) {
   const release = dependencies.release;
@@ -35,9 +36,23 @@ export async function exportTranslations(stream, filters, dependencies) {
   const tubeIds = skills.map((skill) => skill.tubeId);
   const tubes = release.content.tubes.filter((tube) => tubeIds.includes(tube.id));
 
-  const challenges = release.content.challenges.filter(
-    (challenge) => challenge.isValide && challenge.hasLocale(filters.locales[0]) && skillIds.includes(challenge.skillId),
+  const validChallengesBySkillId = Map.groupBy(
+    release.content.challenges.filter((challenge) => challenge.isValide),
+    (challenge) => challenge.skillId,
   );
+
+  const challenges = skillIds.flatMap((skillId) => {
+    const skillValidChallenges = validChallengesBySkillId.get(skillId) ?? [];
+
+    for (const locale of filters.locales) {
+      const localeChallenges = skillValidChallenges.filter((challenge) => challenge.hasLocale(locale));
+      if (localeChallenges.length !== 0) {
+        return localeChallenges;
+      }
+    }
+
+    return [];
+  });
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(
@@ -108,9 +123,10 @@ function toTag(tagName) {
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
-  const primaryLocalePreviewUrl = `Preview FR: ${baseUrl}/api/challenges/${challenge.id}/preview`;
+  const challengeLocale = Challenge.getPrimaryLocale(challenge.locales);
+  const primaryLocalePreviewUrl = `Preview ${challengeLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview`;
   const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
-    .filter(({ locale }) => locale !== 'fr')
+    .filter(({ locale }) => locale !== challengeLocale)
     .map(({ locale }) => {
       return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
