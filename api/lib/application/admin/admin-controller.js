@@ -16,6 +16,7 @@ export async function save(request, h) {
   const entityPayload = await adminEntitySerializer.deserialize(entityToDeserialize);
 
   const schema = adminSchemaRepository.getByEntityName(entityName);
+  if (!schema) return Boom.notFound(`Entity with name '${entityName}' not found in admin schemas list`);
   if (!schema.creatable) return Boom.forbidden(`Schema "${entityName}" is not creatable`);
 
   const entityToSave = {};
@@ -41,7 +42,7 @@ export async function save(request, h) {
     return h.response(adminEntitySerializer.serialize(entityName, newEntity)).created();
   } catch (err) {
     logger.error({ err, data: { entityName, entityToSave, entityPayload } });
-    return Boom.badRequest('Entity was unable to be saved');
+    return h.response().code(500);
   }
 }
 
@@ -68,4 +69,25 @@ export async function getEntities(request) {
   const { entities, meta } = await adminEntityRepository.listByEntityName(entityName, fields, page, sort);
 
   return adminEntitySerializer.serialize(entityName, entities, meta);
+}
+
+export async function destroy(request, h) {
+  const { entityName, entityId } = request.params;
+
+  try {
+    const schema = adminSchemaRepository.getByEntityName(entityName);
+
+    if (!schema) return Boom.notFound(`Entity with name '${entityName}' not found in admin schemas list`);
+    if (!schema.deletable) return Boom.forbidden(`Schema '${entityName}' is not deletable`);
+
+    const elementToDelete = await adminEntityRepository.get(schema.entityName, schema.primaryKey, entityId);
+    if (!elementToDelete) return Boom.notFound();
+
+    await adminEntityRepository.destroy(schema.entityName, schema.primaryKey, entityId);
+
+    return h.response().code(204);
+  } catch (err) {
+    logger.error({ err, data: { entityName, entityId } });
+    return h.response().code(500);
+  }
 }

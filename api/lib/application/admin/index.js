@@ -49,6 +49,16 @@ export async function register(server) {
         },
       },
     },
+    {
+      method: 'DELETE',
+      path: '/api/admin/entities/{entityName}/{entityId}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
+        handler: adminController.destroy,
+        tags: ['api', 'admin'],
+        validate: { params: Joi.object({ entityName: Joi.string().required(), entityId: Joi.string().required() }).unknown(false) },
+      },
+    },
   ]);
 }
 

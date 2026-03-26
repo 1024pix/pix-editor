@@ -8,26 +8,19 @@ export default class AdminRoute extends Route {
   @service store;
   @service router;
 
-  beforeModel(transition) {
+  async beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
     if (transition.isAborted) return;
-  }
 
-  async model() {
     await this.config.load();
-    const user = await this.store.queryRecord('user', { me: true });
-
-    if (!this.access.mayAccessAdministration()) {
-      return { schemas: [], user };
-    }
-
-    const schemas = await this.store.findAll('admin-schema');
-    return { schemas, user };
-  }
-
-  async afterModel() {
     if (!this.access.mayAccessAdministration()) {
       this.router.transitionTo('authenticated');
     }
+  }
+
+  async model() {
+    const user = await this.store.queryRecord('user', { me: true });
+    const schemas = await this.store.findAll('admin-schema');
+    return { schemas, user };
   }
 }

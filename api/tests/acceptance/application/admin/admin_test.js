@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | admin', () => {
@@ -419,6 +419,31 @@ describe('Acceptance | Controller | admin', () => {
         });
       });
 
+      describe('when entity type does not exist', () => {
+        it('should return a 404 error', async () => {
+          // given
+          const server = await createServer();
+          const request = {
+            method: 'POST',
+            url: '/api/admin/entities/potatoes',
+            headers: generateAuthorizationHeader(user),
+            payload: {
+              data: {
+                type: 'admin-entities',
+                attributes: { properties: { idk: 'jsp' } },
+              },
+            },
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(404);
+          expect(response.result.message).to.equal('Entity with name \'potatoes\' not found in admin schemas list');
+        });
+      });
+
       describe('when payload is missing properties', () => {
         it('should return a 400 error', async () => {
           // given
@@ -528,7 +553,7 @@ describe('Acceptance | Controller | admin', () => {
       });
 
       describe('when a database error occurs', () => {
-        it('should return a 400 error', async () => {
+        it('should return a 500 error', async () => {
           // given
           const uuid = crypto.randomUUID();
           databaseBuilder.factory.buildUser({ name: 'Dupe Licat', access: 'readonly', trigram: 'ZOW' });
@@ -558,8 +583,7 @@ describe('Acceptance | Controller | admin', () => {
           const response = await server.inject(request);
 
           // then
-          expect(response.statusCode).to.equal(400);
-          expect(response.result.message).to.equal('Entity was unable to be saved');
+          expect(response.statusCode).to.equal(500);
         });
       });
     });
@@ -590,6 +614,128 @@ describe('Acceptance | Controller | admin', () => {
               },
             },
           },
+        };
+
+        // when
+        const response = await server.inject(request);
+
+        // then
+        expect(response.statusCode).to.equal(403);
+      });
+    });
+  });
+
+  describe('DELETE api/admin/entities/{entityName}/{entityId}', () => {
+    let user;
+
+    describe('when user is an admin', () => {
+      beforeEach(async function() {
+        user = databaseBuilder.factory.buildAdminUser();
+        await databaseBuilder.commit();
+      });
+
+      describe('when entity is not deletable', async () => {
+        it('should return a 403 error', async () => {
+          // given
+          const localizedChallenge = domainBuilder.buildLocalizedChallenge({ id: 'localizedChallenge_1' });
+          await databaseBuilder.commit();
+
+          const server = await createServer();
+          const request = {
+            method: 'DELETE',
+            url: `/api/admin/entities/localized_challenges/${localizedChallenge.id}`,
+            headers: generateAuthorizationHeader(user),
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(403);
+          expect(response.result.message).to.equal('Schema \'localized_challenges\' is not deletable');
+        });
+      });
+
+      describe('when entity type does not exist', () => {
+        it('should return a 404 error', async () => {
+          // given
+          const server = await createServer();
+          const request = {
+            method: 'DELETE',
+            url: '/api/admin/entities/potatoes/123',
+            headers: generateAuthorizationHeader(user),
+          };
+
+          // when
+          const response = await server.inject(request);
+
+          // then
+          expect(response.statusCode).to.equal(404);
+          expect(response.result.message).to.equal('Entity with name \'potatoes\' not found in admin schemas list');
+        });
+      });
+
+      describe('when the entity is deletable', () => {
+        it('should delete the entity', async () => {
+          // given
+          const uuid = crypto.randomUUID();
+          const userToDelete = databaseBuilder.factory.buildUser({ name: 'Dupe Licat', access: 'readonly', trigram: 'ZOW', apiKey: uuid });
+
+          await databaseBuilder.commit();
+
+          const server = await createServer();
+
+          const request = {
+            method: 'DELETE',
+            url: `/api/admin/entities/users/${userToDelete.id}`,
+            headers: generateAuthorizationHeader(user),
+          };
+
+          const usersBeforeDelete = await knex.select('*').from('users');
+          expect(usersBeforeDelete.length).to.equal(2);
+
+          // when
+          const response = await server.inject(request);
+          const usersAfterDelete = await knex.select('*').from('users');
+
+          // then
+          expect(response.statusCode).to.equal(204);
+          expect(usersAfterDelete.length).to.equal(1);
+        });
+
+        describe('when the entity with the given id doesn\'t exist', () => {
+          it('should return a 404 error', async () => {
+            // given
+            const server = await createServer();
+            const request = {
+              method: 'DELETE',
+              url: '/api/admin/entities/users/15161',
+              headers: generateAuthorizationHeader(user),
+            };
+
+            // when
+            const response = await server.inject(request);
+
+            // then
+            expect(response.statusCode).to.equal(404);
+          });
+        });
+      });
+    });
+
+    describe('when user is not an admin', () => {
+      beforeEach(async function() {
+        user = databaseBuilder.factory.buildEditorUser();
+        await databaseBuilder.commit();
+      });
+
+      it('should return a 403', async () => {
+        // given
+        const server = await createServer();
+        const request = {
+          method: 'DELETE',
+          url: '/api/admin/entities/users/6545',
+          headers: generateAuthorizationHeader(user),
         };
 
         // when
