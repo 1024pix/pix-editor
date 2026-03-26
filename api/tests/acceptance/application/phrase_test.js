@@ -251,7 +251,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             illustrationAlt: 'Texte alternatif illustration 1',
             format: ChallengeForRelease.FORMATS.MOTS,
             autoReply: false,
-            locales: ['fr-FR'],
+            locales: ['fr-fr'],
             alternativeInstruction: 'Consigne alternative 1',
             focusable: false,
             responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
@@ -309,7 +309,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             illustrationAlt: 'Texte alternatif illustration 3000',
             format: ChallengeForRelease.FORMATS.MOTS,
             autoReply: false,
-            locales: ['fr-FR'],
+            locales: ['fr-fr'],
             alternativeInstruction: 'Consigne alternative 3000',
             focusable: false,
             responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
@@ -371,7 +371,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge1',
         id: 'recChallenge1',
-        locale: 'fr-FR',
+        locale: 'fr-fr',
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -383,7 +383,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge3000',
         id: 'recChallenge3000',
-        locale: 'fr-FR',
+        locale: 'fr-fr',
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({

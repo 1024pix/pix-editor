@@ -9,6 +9,7 @@ import * as areaTranslations from '../../infrastructure/translations/area.js';
 import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
+import { areLocalesEqual } from '../../infrastructure/utils/locale-utils.js';
 import { Challenge } from '../models/index.js';
 
 export async function exportTranslations(stream, filters, dependencies) {
@@ -123,10 +124,10 @@ function toTag(tagName) {
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
-  const challengeLocale = Challenge.getPrimaryLocale(challenge.locales);
-  const primaryLocalePreviewUrl = `Preview ${challengeLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview`;
+  const primaryLocale = Challenge.getPrimaryLocale(challenge.locales);
+  const primaryLocalePreviewUrl = `Preview ${primaryLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview`;
   const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
-    .filter(({ locale }) => locale !== challengeLocale)
+    .filter(({ locale }) => !areLocalesEqual(locale, primaryLocale))
     .map(({ locale }) => {
       return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
@@ -157,7 +158,7 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
 function translationAndTagsToCSVLine(locales) {
   return ({ translation: { key, locale: translationLocale, value }, tags, description }) => ({
     key,
-    ...Object.fromEntries(locales.map((locale) => [locale, locale === translationLocale ? value : ''])),
+    ...Object.fromEntries(locales.map((locale) => [locale, areLocalesEqual(locale, translationLocale) ? value : ''])),
     tags: tags.join(),
     description,
   });
