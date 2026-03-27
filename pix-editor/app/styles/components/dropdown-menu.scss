@@ -1,7 +1,8 @@
 @use 'pix-design-tokens/shadows' as *;
 
 .dropdown {
-  .dropdown-button[aria-expanded="true"],
+  .dropdown-button[aria-expanded='true'],
+  .dropdown-button[aria-expanded='true']:hover,
   .dropdown-button:hover {
     background: var(--pix-neutral-100);
   }

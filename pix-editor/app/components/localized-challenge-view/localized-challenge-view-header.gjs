@@ -9,6 +9,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import DropdownMenu from '../dropdown-menu';
 
 export default class LocalizedChallengeViewHeader extends Component {
   @service access;
@@ -94,18 +95,33 @@ export default class LocalizedChallengeViewHeader extends Component {
         </div>
         <span class="challenge-view-header__dark-separator"></span>
         <div class="challenge-view-header-second__actions">
-          <PixTooltip @id="preview-challenge-tooltip" @position="top" @isInline={{true}} @isLight={{true}}>
+          <PixTooltip
+            @id="preview-challenge-tooltip"
+            @position="top"
+            @isInline={{true}}
+            @isLight={{true}}
+            class="preview-menu"
+          >
             <:triggerElement>
-              <a
-                class="challenge-view-header-action__preview"
-                href="{{@challengeLocale.localizedPreviewUrl}}"
-                target="_blank"
-                aria-labelledby="preview-challenge-tooltip"
-              >
-                <PixIcon @name="eye" />
-              </a>
+              <DropdownMenu @ariaLabel="Ouvrir la liste des prévisualisations de l'épreuve" @iconName="eye">
+                <ul>
+                  <li class="preview-menu__item">
+                    <a href={{@challengeLocale.localizedPreviewUrl}} target="_blank">
+                      <PixIcon @name="eye" alt="" />
+                      Prévisualiser l'épreuve traduite
+                    </a>
+                  </li>
+                  <li class="preview-menu__item">
+                    <a href={{@challengeLocale.challenge.previewUrl}} target="_blank">
+                      <PixIcon @name="eye" alt="" />
+                      Prévisualiser l'épreuve source
+                    </a>
+                  </li>
+                </ul>
+              </DropdownMenu>
             </:triggerElement>
-            <:tooltip>Prévisualiser l'épreuve <span class="sr-only">{{this.localizedChallenge.id}}</span></:tooltip>
+            <:tooltip>Afficher la liste des previews
+              <span class="sr-only">{{@challengeLocale.challenge.id}}</span></:tooltip>
           </PixTooltip>
           <PixTooltip @id="copy-url-challenge-tooltip" @position="top" @isInline={{true}} @isLight={{true}}>
             <:triggerElement>

@@ -32,11 +32,7 @@ export default class ChallengesViewHeader extends Component {
 
   @action
   async copyChallengePreviewUrl(challenge) {
-    await navigator.clipboard.writeText(this.getChallengePreviewUrl(challenge));
-  }
-
-  getChallengePreviewUrl(challenge) {
-    return new URL(challenge.preview, window.location).href;
+    await navigator.clipboard.writeText(challenge.previewUrl);
   }
 
   buildStatusText(challenge) {
@@ -102,7 +98,7 @@ export default class ChallengesViewHeader extends Component {
             <:triggerElement>
               <a
                 class="challenge-view-header-action__preview"
-                href="{{this.getChallengePreviewUrl @challenge}}"
+                href="{{@challenge.previewUrl}}"
                 target="_blank"
                 aria-labelledby="preview-challenge-tooltip"
               >

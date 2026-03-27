@@ -315,11 +315,18 @@ module('Integration | Component | localized-challenge-view | localized-challenge
       );
 
       await click(screen.getByRole('button', { name: "Copier le lien de l'épreuve" }));
+      await click(screen.getByRole('button', { name: "Ouvrir la liste des prévisualisations de l'épreuve" }));
 
       // then
       assert.ok(
+        (await screen.findByRole('link', { name: "Prévisualiser l'épreuve source" }))
+          .getAttribute('href')
+          .endsWith('/previewURL'),
+        'href ends with /previewURL',
+      );
+      assert.ok(
         screen
-          .getByRole('link', { name: "Prévisualiser l'épreuve" })
+          .getByRole('link', { name: "Prévisualiser l'épreuve traduite" })
           .getAttribute('href')
           .endsWith('/previewURL?locale=en'),
         'href ends with /previewURL?locale=en',
