@@ -1,3 +1,4 @@
+import { areLocalesEqual } from '../../../infrastructure/utils/locale-utils.js';
 import { Challenge } from '../Challenge.js';
 
 export class ChallengeForRelease {
@@ -116,6 +117,6 @@ export class ChallengeForRelease {
   }
 
   hasLocale(locale) {
-    return this.locales.includes(locale);
+    return this.locales.some((challengeLocale) => areLocalesEqual(challengeLocale, locale));
   }
 }

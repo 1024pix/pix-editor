@@ -82,7 +82,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
   });
 
   describe('#extractFromReleaseObject', () => {
-    it('should return translations from release object', () => {
+    it('returns translations from release object', () => {
       // given
       const entity = {
         id: 'test',
@@ -115,6 +115,38 @@ describe('Unit | Infrastructure | Entity translations', () => {
           value: 'value2 en-us',
         },
       ]);
+    });
+
+    describe('when a list of locales is given', () => {
+      it('returns translations matching given locales', () => {
+        // given
+        const entity = {
+          id: 'test',
+          attribute_i18n: {
+            fr: 'value fr-fr',
+            en: 'value en-us',
+          },
+          attribute2_i18n: {
+            fr: 'value2 fr-fr',
+            en: 'value2 en-us',
+          },
+          otherField: 'foo',
+        };
+        const locales = ['fr', 'fr-FR'];
+
+        // when
+        const translations = translationsUtils.extractFromReleaseObject(entity, locales);
+
+        // then
+        expect(translations).to.deep.equal([
+          { key: 'entity.test.attribute', locale: 'fr', value: 'value fr-fr' },
+          {
+            key: 'entity.test.attribute2',
+            locale: 'fr',
+            value: 'value2 fr-fr',
+          },
+        ]);
+      });
     });
   });
 });

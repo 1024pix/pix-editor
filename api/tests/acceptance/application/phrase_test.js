@@ -181,6 +181,23 @@ describe('Acceptance | Controller | phrase-controller', () => {
             version: 1,
             level: 1,
           },
+          {
+            id: 'recSkill3',
+            name: '@acquis1',
+            hint_i18n: {
+              fr: 'Indice - fr 3',
+              en: 'Indice - en',
+            },
+            hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+            pixValue: 8,
+            competenceId: 'recCompetence0',
+            status: SkillForRelease.STATUSES.ACTIF,
+            tubeId: 'recTube0',
+            version: 1,
+            level: 3,
+          },
         ],
         challenges: [
           {
@@ -207,6 +224,35 @@ describe('Acceptance | Controller | phrase-controller', () => {
             autoReply: false,
             locales: ['fr'],
             alternativeInstruction: 'Consigne alternative',
+            focusable: false,
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+            shuffled: false,
+          },
+          {
+            id: 'recChallenge1',
+            instruction: 'Consigne du Challenge 1',
+            proposals: 'Propositions du Challenge 1',
+            type: ChallengeForRelease.TYPES.QCM,
+            solution: 'Bonnes réponses du Challenge 1',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher 1',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: ChallengeForRelease.STATUSES.VALIDE,
+            skillId: 'recSkill0',
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: null,
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration 1',
+            format: ChallengeForRelease.FORMATS.MOTS,
+            autoReply: false,
+            locales: ['fr-fr'],
+            alternativeInstruction: 'Consigne alternative 1',
             focusable: false,
             responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
             genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
@@ -241,6 +287,64 @@ describe('Acceptance | Controller | phrase-controller', () => {
             genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
             shuffled: true,
           },
+          {
+            id: 'recChallenge3000',
+            instruction: 'Consigne du Challenge 3000',
+            proposals: 'Propositions du Challenge 3000',
+            type: ChallengeForRelease.TYPES.QCM,
+            solution: 'Bonnes réponses du Challenge 3000',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher 3000',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: ChallengeForRelease.STATUSES.VALIDE,
+            skillId: 'recSkill3',
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: null,
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration 3000',
+            format: ChallengeForRelease.FORMATS.MOTS,
+            autoReply: false,
+            locales: ['fr-fr'],
+            alternativeInstruction: 'Consigne alternative 3000',
+            focusable: false,
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+            shuffled: false,
+          },
+          {
+            id: 'recChallenge4000',
+            instruction: 'Consigne du Challenge 4000',
+            proposals: 'Propositions du Challenge 4000',
+            type: ChallengeForRelease.TYPES.QCM,
+            solution: 'Bonnes réponses du Challenge 4000',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher 4000',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: ChallengeForRelease.STATUSES.VALIDE,
+            skillId: 'recSkill3',
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: null,
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration 4000',
+            format: ChallengeForRelease.FORMATS.MOTS,
+            autoReply: false,
+            locales: ['en'],
+            alternativeInstruction: 'Consigne alternative 4000',
+            focusable: false,
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+            shuffled: false,
+          },
         ],
       };
       databaseBuilder.factory.buildRelease({ content: releaseContent });
@@ -255,24 +359,43 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
-        id: 'localizedChallengeId',
-        locale: 'nl',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        challengeId: 'recChallenge0',
         id: 'recChallenge0',
         locale: 'fr',
       });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge1',
+        id: 'recChallenge1',
+        locale: 'fr-fr',
+      });
+
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge66',
         id: 'recChallenge66',
         locale: 'fr',
       });
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge3000',
+        id: 'recChallenge3000',
+        locale: 'fr-fr',
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge4000',
+        id: 'recChallenge4000',
+        locale: 'en',
+      });
+
       databaseBuilder.factory.buildTranslationsConfig({
         phraseProjectId: 'MY_PHRASE_PROJECT_ID',
         frameworkId: 'recFramework0',
-        uploadedLocales: ['fr'],
+        uploadedLocales: ['fr', 'fr-FR'],
       });
 
       await databaseBuilder.commit();
@@ -296,15 +419,15 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .reply(200, [
           {
             id: 'frLocaleId',
-            name: 'fr',
             code: 'fr',
-            default: true,
+          },
+          {
+            id: 'frFRLocaleId',
+            code: 'fr-FR',
           },
           {
             id: 'nlLocaleId',
-            name: 'nl',
             code: 'nl',
-            default: false,
           },
         ]);
 
@@ -319,14 +442,15 @@ describe('Acceptance | Controller | phrase-controller', () => {
             && matchFormDataParameter(parsedBody, 'update_translations', 'true')
             && matchFormDataParameter(parsedBody, 'skip_upload_tags', 'true')
             && matchFormDataParameter(parsedBody, 'locale_mapping[fr]', '2')
+            && matchFormDataParameter(parsedBody, 'locale_mapping[fr-FR]', '3')
             && matchFormDataParameter(parsedBody, 'format_options[key_index]', '1')
-            && matchFormDataParameter(parsedBody, 'format_options[tag_column]', '3')
-            && matchFormDataParameter(parsedBody, 'format_options[comment_index]', '4')
+            && matchFormDataParameter(parsedBody, 'format_options[tag_column]', '4')
+            && matchFormDataParameter(parsedBody, 'format_options[comment_index]', '5')
             && matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true')
           );
         })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(201, { id: 'uplaodId' });
+        .reply(201, { id: 'uploadId' });
 
       const server = await createServer();
       const postPhraseUploadOptions = {
@@ -348,6 +472,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       expect(headers).to.deep.equal([
         'key',
         'fr',
+        'fr-FR',
         'tags',
         'description',
       ]);
@@ -355,91 +480,161 @@ describe('Acceptance | Controller | phrase-controller', () => {
         [
           'area.recArea0.title',
           'Titre du Domaine - fr',
+          '',
           'domaine,Pix-1,Pix',
           '',
         ],
         [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.embedTitle',
           'Embed title',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.illustrationAlt',
           'Texte alternatif illustration',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.proposals',
           'Propositions du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solution',
           'Bonnes réponses du Challenge',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
           'challenge.recChallenge0.solutionToDisplay',
           'Bonnes réponses du Challenge à afficher',
+          '',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           'Preview FR: http://test.site/api/challenges/recChallenge0/preview\nPreview NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0',
         ],
         [
+          'challenge.recChallenge3000.alternativeInstruction',
+          '',
+          'Consigne alternative 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.embedTitle',
+          '',
+          'Embed title',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.illustrationAlt',
+          '',
+          'Texte alternatif illustration 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.instruction',
+          '',
+          'Consigne du Challenge 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.proposals',
+          '',
+          'Propositions du Challenge 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.solution',
+          '',
+          'Bonnes réponses du Challenge 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
+          'challenge.recChallenge3000.solutionToDisplay',
+          '',
+          'Bonnes réponses du Challenge à afficher 3000',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Preview FR-FR: http://test.site/api/challenges/recChallenge3000/preview\nPix Editor: http://test.site/challenge/recChallenge3000',
+        ],
+        [
           'competence.recCompetence0.description',
           'Description de la compétence - fr',
+          '',
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'competence.recCompetence0.name',
           'Nom de la Compétence - fr',
+          '',
           'competence,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'skill.recSkill0.hint',
           'Indice - fr',
+          '',
+          'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
+        [
+          'skill.recSkill3.hint',
+          'Indice - fr 3',
+          '',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'thematic.recThematic0.name',
           'Nom',
+          '',
           'thematique,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
+          '',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
         [
           'tube.recTube0.practicalTitle',
           'Titre pratique du Tube - fr',
+          '',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           '',
         ],
       ]);
 
       expect(spyScheduleDeleteUnmentionedKeysAfterUploadJob).toHaveBeenCalledWith({
-        uploadId: 'uplaodId',
+        uploadId: 'uploadId',
         projectId: 'MY_PHRASE_PROJECT_ID',
       });
     });

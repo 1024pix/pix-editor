@@ -9,6 +9,8 @@ import * as areaTranslations from '../../infrastructure/translations/area.js';
 import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
+import { areLocalesEqual } from '../../infrastructure/utils/locale-utils.js';
+import { Challenge } from '../models/index.js';
 
 export async function exportTranslations(stream, filters, dependencies) {
   const release = dependencies.release;
@@ -35,17 +37,32 @@ export async function exportTranslations(stream, filters, dependencies) {
   const tubeIds = skills.map((skill) => skill.tubeId);
   const tubes = release.content.tubes.filter((tube) => tubeIds.includes(tube.id));
 
-  const challenges = release.content.challenges.filter(
-    (challenge) => challenge.isValide && challenge.hasLocale(filters.locale) && skillIds.includes(challenge.skillId),
+  const validChallengesBySkillId = Map.groupBy(
+    release.content.challenges.filter((challenge) => challenge.isValide),
+    (challenge) => challenge.skillId,
   );
 
-  let translationsStreams = mergeStreams(
+  const challenges = skillIds.flatMap((skillId) => {
+    const skillValidChallenges = validChallengesBySkillId.get(skillId) ?? [];
+
+    for (const locale of filters.locales) {
+      const localeChallenges = skillValidChallenges.filter((challenge) => challenge.hasLocale(locale));
+      if (localeChallenges.length !== 0) {
+        return localeChallenges;
+      }
+    }
+
+    return [];
+  });
+
+  const translationsStreams = mergeStreams(
     createTranslationsStream(
       areas,
       extractMetadataFromArea,
       releaseContent,
       'domaine',
       areaTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       competences,
@@ -53,6 +70,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'competence',
       competenceTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       thematics,
@@ -60,6 +78,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'thematique',
       thematicTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       tubes,
@@ -67,6 +86,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'sujet',
       tubeTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       skills,
@@ -74,6 +94,7 @@ export async function exportTranslations(stream, filters, dependencies) {
       releaseContent,
       'acquis',
       skillTranslations.extractFromReleaseObject,
+      filters.locales,
     ),
     createTranslationsStream(
       challenges,
@@ -84,10 +105,7 @@ export async function exportTranslations(stream, filters, dependencies) {
     ),
   );
 
-  // english is still included for entities other than challenges
-  translationsStreams = translationsStreams.filter(({ translation }) => translation.locale === filters.locale);
-
-  const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine);
+  const csvLinesStream = translationsStreams.map(translationAndTagsToCSVLine(filters.locales));
 
   pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
     if (!error) return;
@@ -95,10 +113,10 @@ export async function exportTranslations(stream, filters, dependencies) {
   });
 }
 
-function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
+function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn, locales) {
   return Readable.from(entities)
     .map(extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag))
-    .flatMap(extractTranslationsFromObject(extractTranslationsFn));
+    .flatMap(extractTranslationsFromObject(extractTranslationsFn, locales));
 }
 
 function toTag(tagName) {
@@ -106,9 +124,10 @@ function toTag(tagName) {
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
-  const primaryLocalePreviewUrl = `Preview FR: ${baseUrl}/api/challenges/${challenge.id}/preview`;
+  const primaryLocale = Challenge.getPrimaryLocale(challenge.locales);
+  const primaryLocalePreviewUrl = `Preview ${primaryLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview`;
   const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
-    .filter(({ locale }) => locale !== 'fr')
+    .filter(({ locale }) => !areLocalesEqual(locale, primaryLocale))
     .map(({ locale }) => {
       return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
@@ -136,18 +155,18 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
   };
 }
 
-function translationAndTagsToCSVLine({ translation: { key, locale, value }, tags, description }) {
-  return {
+function translationAndTagsToCSVLine(locales) {
+  return ({ translation: { key, locale: translationLocale, value }, tags, description }) => ({
     key,
-    [locale]: value,
+    ...Object.fromEntries(locales.map((locale) => [locale, areLocalesEqual(locale, translationLocale) ? value : ''])),
     tags: tags.join(),
     description,
-  };
+  });
 }
 
-function extractTranslationsFromObject(extractFn) {
+function extractTranslationsFromObject(extractFn, locales) {
   return ({ description, tags, object }) => {
-    return extractFn(object).map((translation) => {
+    return extractFn(object, locales).map((translation) => {
       return { description, tags, translation };
     });
   };
