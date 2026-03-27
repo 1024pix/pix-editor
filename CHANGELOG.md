@@ -1,5 +1,14 @@
 
 
+## v4.15.0 (27/03/2026)
+
+
+### :rocket: Amélioration
+- [#1430](https://github.com/1024pix/pix-editor/pull/1430) [FEATURE] Transmettre les épreuves fr-FR à Phrase lorsque l'acquis ne possède pas d'épreuve fr (PIX-21848).
+- [#1429](https://github.com/1024pix/pix-editor/pull/1429) [FEATURE] Changement de wording dans le commentaire des clés Phrase (PIX-22089).
+- [#1426](https://github.com/1024pix/pix-editor/pull/1426) [FEATURE] Permettre de supprimer une entité dans le back-office (PIX-21040).
+- [#1425](https://github.com/1024pix/pix-editor/pull/1425) [FEATURE] Ajout de la table de configuration des traductions (PIX-21946).
+
 ## v4.14.0 (17/03/2026)
 
 
