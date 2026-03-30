@@ -27,14 +27,14 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
     apiKey: `token ${apiKey}`,
   });
 
-  for (const { phraseProjectId } of configs) {
+  for (const { phraseProjectId, uploadedLocales } of configs) {
     try {
       const localesApi = new phraseApi.LocalesApi(configuration);
 
       const phraseLocales = await localesApi.localesList({ projectId: phraseProjectId });
 
       for (const phraseLocale of phraseLocales) {
-        if (phraseLocale._default) continue;
+        if (uploadedLocales.includes(phraseLocale.name)) continue;
 
         const csvFile = await localesApi.localeDownload({
           projectId: phraseProjectId,
