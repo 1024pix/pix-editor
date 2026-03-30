@@ -128,5 +128,9 @@ async function validatePhraseWebhookRequest(request, h) {
     return h.response().code(400).takeover();
   }
 
+  if (translationConfig.uploadedLocales.includes(request.payload.translation.locale.name)) {
+    return h.response().code(204).takeover();
+  }
+
   return h.response(true);
 }
