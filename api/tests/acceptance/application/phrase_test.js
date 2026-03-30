@@ -420,14 +420,17 @@ describe('Acceptance | Controller | phrase-controller', () => {
           {
             id: 'frLocaleId',
             code: 'fr',
+            name: 'fr',
           },
           {
             id: 'frFRLocaleId',
-            code: 'fr-FR',
+            code: 'fr',
+            name: 'fr-FR',
           },
           {
             id: 'nlLocaleId',
             code: 'nl',
+            name: 'nl',
           },
         ]);
 
