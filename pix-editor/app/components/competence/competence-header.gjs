@@ -31,6 +31,18 @@ export default class CompetenceHeader extends Component {
       value: 'en',
     },
     {
+      label: 'Anglais (Ouganda)',
+      value: 'en-UG',
+    },
+    {
+      label: 'Anglais (Rwanda)',
+      value: 'en-RW',
+    },
+    {
+      label: 'Anglais (Tanzanie)',
+      value: 'en-TZ',
+    },
+    {
       label: 'Espagnol',
       value: 'es',
     },
