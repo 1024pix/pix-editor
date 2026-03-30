@@ -2,10 +2,12 @@ import { Readable } from 'node:stream';
 import { Configuration, LocalesApi } from 'phrase-js';
 
 import * as config from '../../config.js';
-import { logger } from '../../infrastructure/logger.js';
+import { child } from '../../infrastructure/logger.js';
 import { importTranslations } from './import-translations.js';
 import { parseTranslationsCsvStream } from '../services/parse-translations-csv-stream.js';
 import { translationsConfigRepository } from '../../infrastructure/repositories/index.js';
+
+const logger = child('uc:downloadTranslationFromPhrase', { event: 'downloadTranslationFromPhrase' });
 
 export async function downloadTranslationFromPhrase(phraseApi = { Configuration, LocalesApi }) {
   const { apiKey } = config.phrase;
@@ -34,7 +36,12 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
       const phraseLocales = await localesApi.localesList({ projectId: phraseProjectId });
 
       for (const phraseLocale of phraseLocales) {
-        if (uploadedLocales.includes(phraseLocale.name)) continue;
+        if (uploadedLocales.includes(phraseLocale.name)) {
+          logger.debug({ locale: { id: phraseLocale.id, name: phraseLocale.name } }, 'Skipping uploaded locale');
+          continue;
+        }
+
+        logger.info({ locale: { id: phraseLocale.id, name: phraseLocale.name } }, 'Downloading locale from Phrase');
 
         const csvFile = await localesApi.localeDownload({
           projectId: phraseProjectId,
