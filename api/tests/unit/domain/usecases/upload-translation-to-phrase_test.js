@@ -43,7 +43,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       }),
     ]);
 
-    localesListStub.mockResolvedValueOnce([{ id: 'frLocaleId', code: 'fr' }]);
+    localesListStub.mockResolvedValueOnce([{ id: 'frLocaleId', code: 'fr', name: 'fr' }]);
     uploadCreateStub.mockResolvedValueOnce({ id: 'upload-id' });
 
     exportTranslationsStub.mockImplementationOnce((stream) => stream.end());
@@ -114,8 +114,8 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     ]);
 
     localesListStub
-      .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr' }])
-      .mockResolvedValueOnce([{ id: 'frLocaleId-2', code: 'fr' }, { id: 'frFRLocaleId', code: 'fr-FR' }]);
+      .mockResolvedValueOnce([{ id: 'frLocaleId-1', code: 'fr', name: 'fr' }])
+      .mockResolvedValueOnce([{ id: 'frLocaleId-2', code: 'fr', name: 'fr' }, { id: 'frFRLocaleId', code: 'fr', name: 'fr-FR' }]);
 
     uploadCreateStub
       .mockResolvedValueOnce({ id: 'upload-id-1' })

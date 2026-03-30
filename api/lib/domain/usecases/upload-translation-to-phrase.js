@@ -39,14 +39,14 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
       const projectLocales = await localesApi.localesList({ projectId: phraseProjectId });
 
       for (const locale of locales) {
-        if (!projectLocales.some(({ code }) => code === locale)) {
+        if (!projectLocales.some(({ name }) => name === locale)) {
           logger.warn({ locale, phraseProjectId }, 'Locale not found for Phrase project');
           continue configsLoop;
         }
       }
 
       const [firstLocale] = locales;
-      const localeId = projectLocales.find(({ code }) => code === firstLocale).id;
+      const localeId = projectLocales.find(({ name }) => name === firstLocale).id;
 
       const stream = new PassThrough();
       await exportTranslations(

@@ -420,14 +420,17 @@ describe('Acceptance | Controller | phrase-controller', () => {
           {
             id: 'frLocaleId',
             code: 'fr',
+            name: 'fr',
           },
           {
             id: 'frFRLocaleId',
-            code: 'fr-FR',
+            code: 'fr',
+            name: 'fr-FR',
           },
           {
             id: 'nlLocaleId',
             code: 'nl',
+            name: 'nl',
           },
         ]);
 
@@ -665,13 +668,13 @@ describe('Acceptance | Controller | phrase-controller', () => {
         phraseProjectId: 'MY_AREA_1_PROJECT_ID',
         frameworkId: 'recFmk1',
         areaId: 'recnrCmBiPXGbgIyQ',
-        uploadedLocales: ['fr'],
+        uploadedLocales: ['fr', 'fr-FR'],
       });
       databaseBuilder.factory.buildTranslationsConfig({
         phraseProjectId: 'MY_AREA_2_PROJECT_ID',
         frameworkId: 'recFmk1',
         areaId: 'recDesCodesLaAreaDeux',
-        uploadedLocales: ['fr'],
+        uploadedLocales: ['fr', 'fr-FR'],
       });
 
       await databaseBuilder.commit();
@@ -681,33 +684,35 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(200, [
           {
-            id: 'frLocaleId',
+            id: 'frLocaleId1',
             name: 'fr',
             code: 'fr',
-            default: true,
           },
           {
-            id: 'enLocaleId',
+            id: 'frFrLocaleId2',
+            name: 'fr-FR',
+            code: 'fr',
+          },
+          {
+            id: 'enLocaleId1',
             name: 'en',
             code: 'en',
-            default: false,
           },
           {
-            id: 'nlLocaleId',
+            id: 'nlLocaleId1',
             name: 'nl',
             code: 'nl',
-            default: false,
           },
         ]);
 
       const phraseAPIAreaOneDownloadEn = nock('https://api.phrase.com')
-        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/enLocaleId/download')
+        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/enLocaleId1/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
 
       const phraseAPIAreaOneDownloadNl = nock('https://api.phrase.com')
-        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/nlLocaleId/download')
+        .get('/v2/projects/MY_AREA_1_PROJECT_ID/locales/nlLocaleId1/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(
@@ -721,33 +726,35 @@ describe('Acceptance | Controller | phrase-controller', () => {
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(200, [
           {
-            id: 'frLocaleId',
+            id: 'frLocaleId2',
             name: 'fr',
             code: 'fr',
-            default: true,
           },
           {
-            id: 'enLocaleId',
+            id: 'frFrLocaleId2',
+            name: 'fr-FR',
+            code: 'fr',
+          },
+          {
+            id: 'enLocaleId2',
             name: 'en',
             code: 'en',
-            default: false,
           },
           {
-            id: 'nlLocaleId',
+            id: 'nlLocaleId2',
             name: 'nl',
             code: 'nl',
-            default: false,
           },
         ]);
 
       const phraseAPIAreaTwoDownloadEn = nock('https://api.phrase.com')
-        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/enLocaleId/download')
+        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/enLocaleId2/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
 
       const phraseAPIAreaTwoDownloadNl = nock('https://api.phrase.com')
-        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/nlLocaleId/download')
+        .get('/v2/projects/MY_AREA_2_PROJECT_ID/locales/nlLocaleId2/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
         .reply(
