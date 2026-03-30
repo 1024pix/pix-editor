@@ -1,5 +1,18 @@
 
 
+## v4.16.0 (30/03/2026)
+
+
+### :rocket: Amélioration
+- [#1433](https://github.com/1024pix/pix-editor/pull/1433) [FEATURE] Phrase 🍓 : Se baser sur le nom des locales (PIX-22146).
+- [#1427](https://github.com/1024pix/pix-editor/pull/1427) [FEATURE] Ajouter un lien de prévisualisation de l'épreuve source depuis une épreuve traduite en V2 (PIX-21872).
+
+### :building_construction: Tech
+- [#1435](https://github.com/1024pix/pix-editor/pull/1435) [TECH] Ne pas importer les modifications de clef de traducitons source depuis phrase.
+- [#1434](https://github.com/1024pix/pix-editor/pull/1434) [TECH] Ajout de logs dans l’import Phrase.
+- [#1432](https://github.com/1024pix/pix-editor/pull/1432) [TECH] Ajout de nouvelle locales (PIX-21735).
+- [#1431](https://github.com/1024pix/pix-editor/pull/1431) [TECH] Suppression de l’ancienne var d’env Phrase et du script de migration.
+
 ## v4.15.0 (27/03/2026)
 
 
