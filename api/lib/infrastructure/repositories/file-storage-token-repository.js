@@ -1,5 +1,5 @@
-import axios from 'axios';
 import * as config from '../../config.js';
+import { ErrorWithStatusCode, UnauthorizedError } from '../errors.js';
 
 export async function create() {
   const payload = {
@@ -22,9 +22,16 @@ export async function create() {
       },
     },
   };
-  const response = await axios.post(config.storage.authUrl, payload);
+  const response = await fetch(config.storage.authUrl, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+  if (response.status === 401) throw new UnauthorizedError();
+  if (!response.ok) throw new Error('error while fetching file storage token', response.status);
+  const jsonResponse = await response.json();
+
   return {
-    value: response.headers['x-subject-token'],
-    expiresAt: response.data.token.expires_at,
+    value: response.headers.get('x-subject-token'),
+    expiresAt: jsonResponse.token.expires_at,
   };
 }

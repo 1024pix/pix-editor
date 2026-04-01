@@ -15,7 +15,7 @@ export async function register(server) {
             const token = await fileStorageTokenRepository.create();
             return h.response({ token: token.value });
           } catch (error) {
-            return Boom.boomify(error, { statusCode: error.response.status });
+            return Boom.boomify(error, { statusCode: error.statusCode });
           }
         },
       },
