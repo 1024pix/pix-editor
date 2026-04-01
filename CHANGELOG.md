@@ -1,5 +1,14 @@
 
 
+## v4.16.1 (01/04/2026)
+
+
+### :building_construction: Tech
+- [#1436](https://github.com/1024pix/pix-editor/pull/1436) [TECH] Fixer la version de axios.
+
+### :bug: Correction
+- [#1438](https://github.com/1024pix/pix-editor/pull/1438) [BUGFIX] Pièces jointes sans extension (PIX-22193).
+
 ## v4.16.0 (30/03/2026)
 
 
