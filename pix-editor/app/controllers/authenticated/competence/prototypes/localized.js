@@ -257,7 +257,7 @@ export default class LocalizedController extends Controller {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type ? file.type : getMimeType(file.name),
+      mimeType: getMimeType(file),
       file,
       type: 'illustration',
       alt,
@@ -287,7 +287,7 @@ export default class LocalizedController extends Controller {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type ? file.type : getMimeType(file.name),
+      mimeType: getMimeType(file),
       file,
       type: 'attachment',
     };

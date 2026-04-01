@@ -509,7 +509,7 @@ export default class ChallengeForm extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type ? file.type : getMimeType(file.name),
+      mimeType: getMimeType(file),
       file,
       type: 'illustration',
     };
@@ -523,7 +523,7 @@ export default class ChallengeForm extends Component {
     const attachmentData = {
       filename: file.name,
       size: file.size,
-      mimeType: file.type ? file.type : getMimeType(file.name),
+      mimeType: getMimeType(file),
       file,
       type: 'attachment',
     };
