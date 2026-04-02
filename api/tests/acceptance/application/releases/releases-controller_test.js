@@ -1064,10 +1064,6 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
-    beforeEach(function() {
-      vi.spyOn(axios, 'post').mockResolvedValue();
-    });
-
     afterEach(async function() {
       await knex('releases').delete();
     });
