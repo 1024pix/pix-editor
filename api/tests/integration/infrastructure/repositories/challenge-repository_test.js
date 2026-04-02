@@ -2858,4 +2858,76 @@ describe('Integration | Repository | challenge-repository', () => {
       expect(result).toStrictEqual(expectedChallenges);
     });
   });
+
+  describe('#listByThematicIds', () => {
+    it('returns domain challenges', async () => {
+      // given
+      const challengeId = 'challengeId';
+      const expectedChallenges = [
+        domainBuilder.buildChallenge({
+          id: challengeId,
+          files: [],
+          skillId: 'skillId1',
+          competenceId: 'competence1',
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeId,
+              challengeId,
+              locale: 'fr',
+            }),
+          ],
+        }),
+      ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: expectedChallenges[0].skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(expectedChallenges[0]);
+
+      for (const challenge of expectedChallenges) {
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.instruction`,
+          locale: 'fr',
+          value: challenge.translations.fr.instruction,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.alternativeInstruction`,
+          locale: 'fr',
+          value: challenge.translations.fr.alternativeInstruction,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.proposals`,
+          locale: 'fr',
+          value: challenge.translations.fr.proposals,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solution`,
+          locale: 'fr',
+          value: challenge.translations.fr.solution,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solutionToDisplay`,
+          locale: 'fr',
+          value: challenge.translations.fr.solutionToDisplay,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.embedTitle`,
+          locale: 'fr',
+          value: challenge.translations.fr.embedTitle,
+        });
+
+        databaseBuilder.factory.buildLocalizedChallenge(challenge.localizedChallenges[0]);
+      }
+      await databaseBuilder.commit();
+
+      // when
+      const result = await challengeRepository.listByThematicIds(['thematic1', 'thematic2']);
+
+      // then
+      expect(result).toStrictEqual(expectedChallenges);
+    });
+  });
 });

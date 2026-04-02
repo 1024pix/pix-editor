@@ -328,6 +328,16 @@ export async function listBySkillId(skillId) {
   return toDomainList(dtos, translations, localizedChallenges);
 }
 
+export async function listByThematicIds(thematicIds) {
+  const dtos = await selectChallenges().whereIn('tubes.thematicId', thematicIds).orderBy('id');
+
+  if (dtos.length === 0) return [];
+
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(dtos);
+
+  return toDomainList(dtos, translations, localizedChallenges);
+}
+
 export async function listActiveOrDraftByCompetenceId(competenceId) {
   const dtos = await selectChallenges()
     .where('thematics.competenceId', competenceId)
