@@ -2,6 +2,7 @@ import { describe, describe as context, expect, it, vi, beforeEach } from 'vites
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import { AttachmentForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Integration | Repository | attachment-repository', () => {
   const challengeId1 = 'challengeId1';
@@ -92,6 +93,101 @@ describe('Integration | Repository | attachment-repository', () => {
 
       // then
       expect(result).toStrictEqual(attachments.map(domainBuilder.buildAttachment));
+    });
+  });
+
+  describe('#streamForReplication', () => {
+    it('streams enriched attachments for replication', async () => {
+      // given
+      const attachments = [
+        {
+          id: 'attachmentId1',
+          type: 'illustration',
+          filename: 'filename_1',
+          url: 'http://1',
+          size: 1,
+          challengeId: challengeId1,
+          localizedChallengeId: challengeId1,
+        },
+        {
+          id: 'attachmentId1Nl',
+          type: 'illustration',
+          filename: 'filename_1NL',
+          url: 'http://1-nl',
+          size: 2,
+          challengeId: challengeId1,
+          localizedChallengeId: 'localizedChallengeId1Nl',
+        },
+        {
+          id: 'attachmentId2',
+          type: 'illustration',
+          filename: 'filename_2',
+          url: 'http://2',
+          size: 3,
+          challengeId: challengeId2,
+          localizedChallengeId: challengeId2,
+        },
+      ].map(domainBuilder.buildAttachmentDatasourceObject);
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId1,
+        challengeId: challengeId1,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId1Nl',
+        challengeId: challengeId1,
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId2,
+        challengeId: challengeId2,
+      });
+
+      attachments.forEach(databaseBuilder.factory.buildAttachment);
+
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId1}.illustrationAlt`, locale: 'fr', value: 'alt attachment 1' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId1}.illustrationAlt`, locale: 'nl', value: 'alt attachment 1 nl' });
+      databaseBuilder.factory.buildTranslation({ key: `challenge.${challengeId2}.illustrationAlt`, locale: 'fr', value: 'alt attachment 2' });
+
+      await databaseBuilder.commit();
+
+      // when
+      const stream = attachmentRepository.streamForReplication();
+      const result = [];
+      for await (const attachment of stream) {
+        result.push(attachment);
+      }
+
+      // then
+      expect(result).toStrictEqual([
+        new AttachmentForReplication({
+          alt: 'alt attachment 1',
+          challengeId: 'challengeId1',
+          filename: 'filename_1',
+          id: 'attachmentId1',
+          size: 1,
+          type: 'illustration',
+          url: 'http://1',
+        }),
+        new AttachmentForReplication({
+          alt: 'alt attachment 1 nl',
+          challengeId: 'localizedChallengeId1Nl',
+          filename: 'filename_1NL',
+          id: 'attachmentId1Nl',
+          size: 2,
+          type: 'illustration',
+          url: 'http://1-nl',
+        }),
+        new AttachmentForReplication({
+          alt: 'alt attachment 2',
+          challengeId: 'challengeId2',
+          filename: 'filename_2',
+          id: 'attachmentId2',
+          size: 3,
+          type: 'illustration',
+          url: 'http://2',
+        }),
+      ]);
     });
   });
 

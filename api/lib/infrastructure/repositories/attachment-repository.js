@@ -1,4 +1,5 @@
 import { Attachment } from '../../domain/models/index.js';
+import { AttachmentForReplication } from '../../domain/models/replication/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 import * as idGenerator from '../utils/id-generator.js';
 
@@ -13,6 +14,40 @@ export async function list() {
   const dtos = await knex.select('*').from('attachments').orderBy('id');
 
   return toDomainList(dtos);
+}
+
+/**
+ * @param {AbortSignal=} signal
+ */
+export async function* streamForReplication(signal) {
+  const stream = knex
+    .select(
+      'attachments.id',
+      'attachments.type',
+      'attachments.url',
+      'attachments.size',
+      'attachments.filename',
+      'attachments.localizedChallengeId as challengeId',
+      'illustration_alt_translations.value as alt',
+    )
+    .from('attachments')
+    .leftOuterJoin('localized_challenges', 'localized_challenges.id', 'attachments.localizedChallengeId')
+    .leftOuterJoin('translations as illustration_alt_translations', function() {
+      this.onVal('illustration_alt_translations.model', 'challenge')
+        .on('illustration_alt_translations.entityId', 'localized_challenges.challengeId')
+        .on('illustration_alt_translations.locale', 'localized_challenges.locale')
+        .on(knex.raw('?? like ?', ['illustration_alt_translations.key', '%.illustrationAlt'])); // FIXME
+    })
+    .orderBy('id')
+    .stream();
+
+  signal?.addEventListener('abort', () => {
+    stream.destroy();
+  });
+
+  for await (const dto of stream) {
+    yield toDomainForReplication(dto);
+  }
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
@@ -99,4 +134,8 @@ function toDomainList(dtos) {
 
 export function toDomain({ challengeId, ...dto }) {
   return new Attachment({ challengeId, airtableChallengeId: challengeId, ...dto });
+}
+
+function toDomainForReplication(dto) {
+  return new AttachmentForReplication(dto);
 }
