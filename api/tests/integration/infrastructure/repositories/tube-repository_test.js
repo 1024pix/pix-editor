@@ -3,6 +3,7 @@ import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import { Tube } from '../../../../lib/domain/models/index.js';
+import { TubeForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Integration | Repository | tube-repository', () => {
   describe('#list', () => {
@@ -102,6 +103,96 @@ describe('Integration | Repository | tube-repository', () => {
           thematicId: 'thematicId2',
           competenceId: 'competenceId2',
           skillIds: ['skill3', 'skill4'],
+        }),
+      ]);
+    });
+  });
+
+  describe('#list', () => {
+    it('should return the list of all tubes', async () => {
+      // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId1', competenceId: 'competenceId1' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId1', name: '@tube1', index: 1, thematicId: 'thematicId1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competenceId2', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematicId2', competenceId: 'competenceId2' });
+      databaseBuilder.factory.buildTube({ id: 'tubeId2', name: '@tube2', index: 2, thematicId: 'thematicId2' });
+
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'fr',
+        value: 'Description tube 1 fr',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'fr',
+        value: 'Titre tube 1 fr',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'en',
+        value: 'Description tube 1 en',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'en',
+        value: 'Titre tube 1 en',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalDescription',
+        locale: 'fr',
+        value: 'Description tube 2 fr',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalTitle',
+        locale: 'fr',
+        value: 'Titre tube 2 fr',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalDescription',
+        locale: 'en',
+        value: 'Description tube 2 en',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalTitle',
+        locale: 'en',
+        value: 'Titre tube 2 en',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const tubes = await tubeRepository.listForReplication();
+
+      // then
+      expect(tubes).toStrictEqual([
+        new TubeForReplication({
+          id: 'tubeId1',
+          name: '@tube1',
+          practicalTitle_i18n: {
+            fr: 'Titre tube 1 fr',
+            en: 'Titre tube 1 en',
+          },
+          practicalDescription_i18n: {
+            fr: 'Description tube 1 fr',
+            en: 'Description tube 1 en',
+          },
+          competenceId: 'competenceId1',
+        }),
+        new TubeForReplication({
+          id: 'tubeId2',
+          name: '@tube2',
+          practicalTitle_i18n: {
+            fr: 'Titre tube 2 fr',
+            en: 'Titre tube 2 en',
+          },
+          practicalDescription_i18n: {
+            fr: 'Description tube 2 fr',
+            en: 'Description tube 2 en',
+          },
+          competenceId: 'competenceId2',
         }),
       ]);
     });
