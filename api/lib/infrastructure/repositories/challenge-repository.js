@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge, Skill, Translation } from '../../domain/models/index.js';
+import { Challenge, Skill, Translation, Tube } from '../../domain/models/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor } from '../translations/challenge.js';
@@ -38,6 +38,59 @@ export async function list() {
   ]);
 
   return toDomainList(dtos, translations, localizedChallenges);
+}
+
+/**
+ * @param {AbortSignal=} signal
+ */
+export async function* streamForReplication(signal) {
+  const stream = selectChallenges(undefined, [
+    selectTableColumnsAsObject('prototypes', [
+      'id',
+      'accessibility1',
+      'accessibility2',
+    ], 'prototypeChallenge'),
+    selectTableColumnsAsObject('prototypes_primary', [
+      'requireGafamWebsiteAccess',
+      'isIncompatibleIpadCertif',
+      'deafAndHardOfHearing',
+      'isAwarenessChallenge',
+      'toRephrase',
+      'hasEmbedInternalValidation',
+      'noValidationNeeded',
+    ], 'prototypePrimaryLocalizedChallenge'),
+  ])
+    .leftOuterJoin('challenges as prototypes', function() {
+      this.onVal('tubes.name', '<>', Tube.WORKBENCH_NAME)
+        .onVal('challenges.genealogy', '<>', Challenge.GENEALOGIES.PROTOTYPE)
+        .on('prototypes.skillId', 'challenges.skillId')
+        .on('prototypes.version', 'challenges.version')
+        .onVal('prototypes.genealogy', Challenge.GENEALOGIES.PROTOTYPE);
+    })
+    .leftOuterJoin('localized_challenges as prototypes_primary', 'prototypes_primary.id', 'prototypes.id')
+    .orderBy('challenges.id')
+    .stream({});
+
+  signal?.addEventListener('abort', () => {
+    stream.destroy();
+  });
+
+  for await (const dto of stream) {
+    const [translations, localizedChallenges] = await Promise.all([translationRepository.listByEntity(model, dto.id), localizedChallengeRepository.listByChallengeIds({ challengeIds: [dto.id] })]);
+
+    yield toDomain(dto, translations, localizedChallenges);
+  }
+}
+
+function selectTableColumnsAsObject(table, columns, alias, knexConn = knex) {
+  return knexConn.raw(
+    `case when ?? is null then null else json_build_object(${columns.map(() => '?::text, ??').join(', ')}) end as ??`,
+    [
+      `${table}.id`,
+      ...columns.flatMap((column) => [column, `${table}.${column}`]),
+      alias,
+    ],
+  );
 }
 
 export async function getMany(ids) {
@@ -327,7 +380,7 @@ async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeId
   return Promise.all([translationRepository.listByEntities(model, challengeIds), localizedChallengeRepository.listByChallengeIds({ challengeIds })]);
 }
 
-function selectChallenges(knexConn = knex) {
+function selectChallenges(knexConn = knex, projection = []) {
   return knexConn
     .select(
       'challenges.*',
@@ -345,6 +398,7 @@ function selectChallenges(knexConn = knex) {
           .from('attachments')
           .where('attachments.challengeId', knexConn.ref('challenges.id')),
       ),
+      ...projection,
     )
     .from('challenges')
     .leftOuterJoin('skills', 'skills.id', 'challenges.skillId')
@@ -376,7 +430,7 @@ function toDomainList(dtos, translations, localizedChallenges) {
 function toDomain({ id, skillId, ...dto }, challengeTranslations, localizedChallenges = []) {
   const translationsByLocale = Object.groupBy(challengeTranslations, (translation) => translation.locale);
   const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
-    return Object.fromEntries([...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value])]);
+    return Object.fromEntries(localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]));
   });
 
   return new Challenge({
