@@ -5,4 +5,5 @@ export * from './CourseForReplication.js';
 export * from './FrameworkForReplication.js';
 export * from './SkillForReplication.js';
 export * from './ThematicForReplication.js';
+export * from './TranslationForReplication.js';
 export * from './TubeForReplication.js';
