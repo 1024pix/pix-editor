@@ -1,5 +1,11 @@
 
 
+## v4.17.0 (03/04/2026)
+
+
+### :rocket: Amélioration
+- [#1439](https://github.com/1024pix/pix-editor/pull/1439) [FEATURE] Ajout d’un endpoint de streaming pour la réplication (PIX-22200).
+
 ## v4.16.1 (01/04/2026)
 
 
