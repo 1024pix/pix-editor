@@ -1,5 +1,11 @@
 
 
+## v4.17.1 (03/04/2026)
+
+
+### :bug: Correction
+- [#1442](https://github.com/1024pix/pix-editor/pull/1442) [BUGFIX] Épreuves en double dans le stream de réplication.
+
 ## v4.17.0 (03/04/2026)
 
 
