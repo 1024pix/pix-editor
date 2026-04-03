@@ -60,12 +60,35 @@ export async function* streamForReplication(signal) {
       'noValidationNeeded',
     ], 'prototypePrimaryLocalizedChallenge'),
   ])
-    .leftOuterJoin('challenges as prototypes', function() {
+    .with(
+      'prototypes',
+      knex.select('*')
+        .from(
+          knex.select(
+            'id',
+            'skillId',
+            'version',
+            'accessibility1',
+            'accessibility2',
+            knex.raw('ROW_NUMBER() OVER (PARTITION BY ??, ?? ORDER BY ??) AS ??', [
+              'skillId',
+              'version',
+              'id',
+              'rank',
+            ]),
+          )
+            .from('challenges')
+            .where('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+            .whereNotNull('skillId')
+            .whereNotNull('version'),
+        )
+        .where('rank', 1),
+    )
+    .leftOuterJoin('prototypes', function() {
       this.onVal('tubes.name', '<>', Tube.WORKBENCH_NAME)
         .onVal('challenges.genealogy', '<>', Challenge.GENEALOGIES.PROTOTYPE)
         .on('prototypes.skillId', 'challenges.skillId')
-        .on('prototypes.version', 'challenges.version')
-        .onVal('prototypes.genealogy', Challenge.GENEALOGIES.PROTOTYPE);
+        .on('prototypes.version', 'challenges.version');
     })
     .leftOuterJoin('localized_challenges as prototypes_primary', 'prototypes_primary.id', 'prototypes.id')
     .orderBy('challenges.id')

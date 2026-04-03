@@ -36,7 +36,7 @@ export async function* streamForReplication(signal) {
       this.onVal('illustration_alt_translations.model', 'challenge')
         .on('illustration_alt_translations.entityId', 'localized_challenges.challengeId')
         .on('illustration_alt_translations.locale', 'localized_challenges.locale')
-        .on(knex.raw('?? like ?', ['illustration_alt_translations.key', '%.illustrationAlt'])); // FIXME
+        .on(knex.raw('?? like ?', ['illustration_alt_translations.key', '%.illustrationAlt']));
     })
     .orderBy('id')
     .stream();
