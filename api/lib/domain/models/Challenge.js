@@ -6,6 +6,7 @@ export class Challenge {
   #primaryLocales;
   #primaryStatus;
   #translations;
+  #prototypePrimaryLocalizedChallenge;
 
   /** @type {LocalizedChallenge[]} */
   localizedChallenges;
@@ -48,9 +49,11 @@ export class Challenge {
     updatedAt,
     validatedAt,
     version,
+    prototypeChallenge,
+    prototypePrimaryLocalizedChallenge,
   } = {}) {
-    this.accessibility1 = accessibility1;
-    this.accessibility2 = accessibility2;
+    this.accessibility1 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility1 : prototypeChallenge.accessibility1;
+    this.accessibility2 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility2 : prototypeChallenge.accessibility2;
     this.airtableId = airtableId;
     this.alternativeVersion = alternativeVersion;
     this.archivedAt = archivedAt;
@@ -88,6 +91,7 @@ export class Challenge {
     this.#primaryLocales = Challenge.defaultLocales(locales);
     this.#primaryStatus = status;
     this.#translations = translations;
+    this.#prototypePrimaryLocalizedChallenge = prototypePrimaryLocalizedChallenge;
 
     this.#translate(this.primaryLocale);
   }
@@ -316,8 +320,7 @@ export class Challenge {
     attachments,
   }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
-    const localizedChallengePrimary = this.primaryLocalizedChallenge;
-    const { clonedLocalizedChallenge, clonedAttachments } = localizedChallengePrimary.clone({
+    const { clonedLocalizedChallenge, clonedAttachments } = this.primaryLocalizedChallenge.clone({
       id,
       challengeId: id,
       status: LocalizedChallenge.STATUSES.PRIMARY,
@@ -381,6 +384,7 @@ export class Challenge {
       locales: this.#primaryLocales,
       status: this.#primaryStatus,
       translations: this.#translations,
+      prototypePrimaryLocalizedChallenge: this.#prototypePrimaryLocalizedChallenge,
     });
     challenge.#translate(locale);
     return challenge;
@@ -404,13 +408,23 @@ export class Challenge {
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = localizedChallenge.geography;
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
-    this.requireGafamWebsiteAccess = this.primaryLocalizedChallenge.requireGafamWebsiteAccess;
-    this.isIncompatibleIpadCertif = this.primaryLocalizedChallenge.isIncompatibleIpadCertif;
-    this.deafAndHardOfHearing = this.primaryLocalizedChallenge.deafAndHardOfHearing;
-    this.isAwarenessChallenge = this.primaryLocalizedChallenge.isAwarenessChallenge;
-    this.toRephrase = this.primaryLocalizedChallenge.toRephrase;
-    this.hasEmbedInternalValidation = this.primaryLocalizedChallenge.hasEmbedInternalValidation;
-    this.noValidationNeeded = this.primaryLocalizedChallenge.noValidationNeeded;
+    if (this.#prototypePrimaryLocalizedChallenge == null) {
+      this.requireGafamWebsiteAccess = this.primaryLocalizedChallenge.requireGafamWebsiteAccess;
+      this.isIncompatibleIpadCertif = this.primaryLocalizedChallenge.isIncompatibleIpadCertif;
+      this.deafAndHardOfHearing = this.primaryLocalizedChallenge.deafAndHardOfHearing;
+      this.isAwarenessChallenge = this.primaryLocalizedChallenge.isAwarenessChallenge;
+      this.toRephrase = this.primaryLocalizedChallenge.toRephrase;
+      this.hasEmbedInternalValidation = this.primaryLocalizedChallenge.hasEmbedInternalValidation;
+      this.noValidationNeeded = this.primaryLocalizedChallenge.noValidationNeeded;
+    } else {
+      this.requireGafamWebsiteAccess = this.#prototypePrimaryLocalizedChallenge.requireGafamWebsiteAccess;
+      this.isIncompatibleIpadCertif = this.#prototypePrimaryLocalizedChallenge.isIncompatibleIpadCertif;
+      this.deafAndHardOfHearing = this.#prototypePrimaryLocalizedChallenge.deafAndHardOfHearing;
+      this.isAwarenessChallenge = this.#prototypePrimaryLocalizedChallenge.isAwarenessChallenge;
+      this.toRephrase = this.#prototypePrimaryLocalizedChallenge.toRephrase;
+      this.hasEmbedInternalValidation = this.#prototypePrimaryLocalizedChallenge.hasEmbedInternalValidation;
+      this.noValidationNeeded = this.#prototypePrimaryLocalizedChallenge.noValidationNeeded;
+    }
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)

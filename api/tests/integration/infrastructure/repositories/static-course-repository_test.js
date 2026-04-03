@@ -4,12 +4,14 @@ import {
   findReadSummaries,
   get,
   getRead,
+  listForReplication,
 } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
 import {
   challengeRepository,
   localizedChallengeRepository,
   skillRepository,
 } from '../../../../lib/infrastructure/repositories/index.js';
+import { CourseForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Integration | Repository | static-course-repository', function() {
   context('#findReadSummaries', function() {
@@ -565,6 +567,50 @@ describe('Integration | Repository | static-course-repository', function() {
           tagIds: [456, 123],
         }),
       );
+    });
+  });
+
+  describe('#listForReplication', () => {
+    it('returns all courses for replication', async () => {
+      // given
+      databaseBuilder.factory.buildStaticCourse({
+        id: 'rec123',
+        name: 'Mon super test statique',
+        challengeIds: '',
+        isActive: true,
+      });
+      databaseBuilder.factory.buildStaticCourse({
+        id: 'rec789',
+        name: 'Mon énorme test statique',
+        challengeIds: '',
+        isActive: true,
+      });
+      databaseBuilder.factory.buildStaticCourse({
+        id: 'rec456',
+        name: 'Mon meilleur test statique',
+        challengeIds: '',
+        isActive: true,
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const courses = await listForReplication();
+
+      // then
+      expect(courses).toStrictEqual([
+        new CourseForReplication({
+          id: 'rec123',
+          name: 'Mon super test statique',
+        }),
+        new CourseForReplication({
+          id: 'rec456',
+          name: 'Mon meilleur test statique',
+        }),
+        new CourseForReplication({
+          id: 'rec789',
+          name: 'Mon énorme test statique',
+        }),
+      ]);
     });
   });
 });

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as translationRepository from './translation-repository.js';
 import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
+import { TubeForReplication } from '../../domain/models/replication/index.js';
 import * as idGenerator from '../utils/id-generator.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
@@ -12,6 +13,17 @@ export async function list({ transaction: knexConn } = {}) {
   const [dtos, translations] = await Promise.all([selectTubes(knexConn).orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model, { knexConn })]);
 
   return toDomainList(dtos, translations);
+}
+
+export async function listForReplication() {
+  const dtos = await knex
+    .select(`${TABLE_NAME}.id`, `${TABLE_NAME}.name`, `${TABLE_NAME}.thematicId`, 'thematics.competenceId')
+    .from(TABLE_NAME)
+    .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`)
+    .orderBy(`${TABLE_NAME}.id`);
+  const translations = await translationRepository.listByModel(model);
+
+  return toDomainListForReplication(dtos, translations);
 }
 
 export async function get(id) {
@@ -129,6 +141,18 @@ function toDomain({ id, thematicId, competenceId, skillIds = [], ...dto }, trans
     competenceAirtableId: competenceId,
     skillIds,
     skillAirtableIds: skillIds,
+    ...dto,
+    ...tubeTranslations.toDomain(translations),
+  });
+}
+
+function toDomainListForReplication(dtos, translations) {
+  const translationsByTubeId = Object.groupBy(translations, (translation) => translation.entityId);
+  return dtos.map((dto) => toDomainForReplication(dto, translationsByTubeId[dto.id]));
+}
+
+function toDomainForReplication(dto, translations = []) {
+  return new TubeForReplication({
     ...dto,
     ...tubeTranslations.toDomain(translations),
   });

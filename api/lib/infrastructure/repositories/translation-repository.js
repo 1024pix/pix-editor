@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Translation } from '../../domain/models/index.js';
 import { LocalizedEntity } from '../../domain/readmodels/index.js';
+import { TranslationForReplication } from '../../domain/models/replication/index.js';
 import { escapeLikeWildcards } from './sql-utils.js';
 
 const projection = [
@@ -56,6 +57,60 @@ export async function listByPattern(pattern, { transaction = knex } = {}) {
 export async function list() {
   const translationDtos = await knex.select(projection).from('translations').orderBy(['key', 'locale']);
   return translationDtos.map(_toDomain);
+}
+
+/**
+ * @param {AbortSignal=} signal
+ */
+export async function* streamForReplication(signal) {
+  const stream = knex.select(
+    knex.raw('?? || ? || ?? AS ??', [
+      'translations.key',
+      ':',
+      'translations.locale',
+      'id',
+    ]),
+    knex.raw('CASE WHEN ?? IS NULL THEN ?? ELSE REPLACE(??, ??, ??) END AS ??', [
+      'localized_challenges.id',
+      'translations.key',
+      'translations.key',
+      'translations.entityId',
+      'localized_challenges.id',
+      'key',
+    ]),
+    'translations.locale',
+    'translations.value',
+    'translations.model',
+    knex.raw('COALESCE(??, ??) AS ??', [
+      'localized_challenges.id',
+      'translations.entityId',
+      'entityId',
+    ]),
+    knex.raw('CASE WHEN ?? = ? AND ?? = ?? THEN NULL ELSE ?? END AS ??', [
+      'translations.model',
+      'challenge',
+      'localized_challenges.id',
+      'localized_challenges.challengeId',
+      'localized_challenges.challengeId',
+      'sourceEntityId',
+    ]),
+  )
+    .from('translations')
+    .leftOuterJoin('localized_challenges', function() {
+      this.onVal('translations.model', 'challenge')
+        .on('localized_challenges.challengeId', 'translations.entityId')
+        .on('localized_challenges.locale', 'translations.locale');
+    })
+    .orderBy(['translations.key', 'translations.locale'])
+    .stream();
+
+  signal?.addEventListener('abort', () => {
+    stream.destroy();
+  });
+
+  for await (const dto of stream) {
+    yield new TranslationForReplication(dto);
+  }
 }
 
 export async function searchLocalizedEntities({ model, fields, search, limit }) {

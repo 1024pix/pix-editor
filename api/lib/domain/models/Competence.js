@@ -33,4 +33,8 @@ export class Competence {
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;
   }
+
+  get belongsToPixFramework() {
+    return this.origin === 'Pix';
+  }
 }

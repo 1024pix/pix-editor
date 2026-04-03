@@ -7,6 +7,7 @@ import {
   StaticCourseTag as StaticCourseTag_Read,
 } from '../../domain/readmodels/index.js';
 import { StaticCourse } from '../../domain/models/index.js';
+import { CourseForReplication } from '../../domain/models/replication/index.js';
 import * as challengeRepository from './challenge-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import * as skillRepository from './skill-repository.js';
@@ -197,6 +198,11 @@ async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
       previewUrl: getPreviewUrl(localizedChallenge, baseUrl),
     });
   });
+}
+
+export async function listForReplication() {
+  const dtos = await knex.select('id', 'name').from('static_courses').orderBy('id');
+  return dtos.map((dto) => new CourseForReplication(dto));
 }
 
 function getPreviewUrl(localizedChallenge, baseUrl) {

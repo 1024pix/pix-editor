@@ -41,4 +41,22 @@ describe('Unit | Domain | Competence', () => {
       expect(competence).toHaveProperty('origin', originalCompetence.origin);
     });
   });
+
+  describe('#belongsToPixFramework', () => {
+    it.each([
+      ['Pix', true],
+      ['Pix+Edu', false],
+      ['PIX', false],
+      ['Droit', false],
+    ])('returns $1 when origin is $0', (origin, expected) => {
+      // given
+      const competence = domainBuilder.buildCompetence({ origin });
+
+      // when
+      const { belongsToPixFramework } = competence;
+
+      // then
+      expect(belongsToPixFramework).toBe(expected);
+    });
+  });
 });

@@ -69,6 +69,7 @@ export function buildChallenge(
         status: null,
       },
     ],
+    prototypePrimaryLocalizedChallenge,
   } = {},
   fieldsToOmit = [],
 ) {
@@ -110,6 +111,7 @@ export function buildChallenge(
     translations,
     skillId,
     localizedChallenges,
+    prototypePrimaryLocalizedChallenge,
   };
   return new Challenge(_.omit(data, fieldsToOmit));
 }

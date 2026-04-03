@@ -1239,13 +1239,327 @@ describe('Integration | Repository | challenge-repository', () => {
         }),
       ]);
     });
+  });
 
-    it('should return an empty array when no challenges found for provided skill id', async () => {
+  describe('#streamForReplication', () => {
+    it('streams all challenges', async () => {
+      // given
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+
+      const challengeA_data = {
+        id: 'challengeA_id',
+        localizedEsId: 'locES_challengeA_id',
+        skillId: 'skillId',
+        competenceId: 'competence1',
+        type: 'type challengeA',
+        t1StatusAirtable: 'Activé',
+        t1Status: true,
+        t2StatusAirtable: 'Désactivé',
+        t2Status: false,
+        t3StatusAirtable: 'Activé',
+        t3Status: true,
+        status: Challenge.STATUSES.PROPOSE,
+        embedUrl: 'embedUrl challengeA',
+        embedHeight: 987,
+        timer: 789,
+        format: Challenge.FORMATS.MOTS,
+        autoReply: false,
+        localesAirtable: ['Francophone'],
+        locales: ['fr'],
+        focusable: true,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
+        author: ['TRO'],
+        declinable: Challenge.DECLINABLES.FACILEMENT,
+        version: 2,
+        alternativeVersion: 3,
+        accessibility1: Challenge.ACCESSIBILITY1.KO,
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        spoil: Challenge.SPOILS.NON_SPOILABLE,
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        geography: 'FR',
+        files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
+        validatedAt: null,
+        archivedAt: null,
+        createdAt: '2025-10-23T10:17:00Z',
+        updatedAt: '2025-10-23T10:18:00Z',
+        madeObsoleteAt: null,
+        shuffled: false,
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
+      };
+      databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeA_data);
+
+      const primaryLoc_challengeA_data = {
+        embedUrl: 'embedUrl primaryloc challengeA',
+        fileIds: ['attachmentA'],
+        locale: 'fr',
+        status: null,
+        geography: 'FR',
+        urlsToConsult: ['http://primaryloc.challengeA'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      };
+      const esLoc_challengeA_data = {
+        embedUrl: 'embedUrl esLoc challengeA',
+        fileIds: ['attachmentB'],
+        locale: 'es',
+        status: LocalizedChallenge.STATUSES.PAUSE,
+        geography: 'ES',
+        urlsToConsult: ['http://esLoc.challengeA'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      };
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeA_id.instruction',
+        locale: 'fr',
+        value: 'instruction FR challengeA',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeA_id.instruction',
+        locale: 'es',
+        value: 'instruction ES challengeA',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeA_id.solution',
+        locale: 'fr',
+        value: 'solution FR challengeA',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeA_id',
+        challengeId: 'challengeA_id',
+        ...primaryLoc_challengeA_data,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'locES_challengeA_id',
+        challengeId: 'challengeA_id',
+        ...esLoc_challengeA_data,
+      });
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentA',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'challengeA_id',
+        }),
+      );
+      databaseBuilder.factory.buildAttachment(
+        domainBuilder.buildAttachmentDatasourceObject({
+          id: 'attachmentB',
+          challengeId: 'challengeA_id',
+          localizedChallengeId: 'locES_challengeA_id',
+        }),
+      );
+
+      const challengeB_data = {
+        id: 'challengeB_id',
+        skillId: 'skillId',
+        competenceId: 'competence1',
+        type: 'type challengeB',
+        t1StatusAirtable: 'Désactivé',
+        t1Status: false,
+        t2StatusAirtable: 'Désactivé',
+        t2Status: false,
+        t3StatusAirtable: 'Activé',
+        t3Status: true,
+        status: Challenge.STATUSES.PROPOSE,
+        embedUrl: 'embedUrl challengeB',
+        embedHeight: null,
+        timer: 145,
+        format: Challenge.FORMATS.MOTS,
+        autoReply: true,
+        localesAirtable: ['Francophone'],
+        locales: ['fr'],
+        focusable: false,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
+        author: ['QWE'],
+        declinable: Challenge.DECLINABLES.NON,
+        version: 2,
+        alternativeVersion: null,
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY2.OK,
+        spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
+        responsive: Challenge.RESPONSIVES.TABLETTE,
+        geography: 'FR',
+        files: [],
+        validatedAt: null,
+        archivedAt: null,
+        createdAt: '2025-10-23T10:19:00Z',
+        madeObsoleteAt: null,
+        updatedAt: '2025-10-23T10:20:00Z',
+        shuffled: false,
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
+      };
+      databaseBuilder.factory.buildChallenge(challengeB_data);
+
+      const primaryLoc_challengeB_data = {
+        embedUrl: 'embedUrl primaryloc challengeB',
+        fileIds: [],
+        locale: 'fr',
+        status: null,
+        geography: 'FR',
+        urlsToConsult: ['http://primaryloc.challengeB'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      };
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeB_id.instruction',
+        locale: 'fr',
+        value: 'instruction FR challengeB',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.challengeB_id.proposals',
+        locale: 'fr',
+        value: 'proposals FR challengeB',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeB_id',
+        challengeId: 'challengeB_id',
+        ...primaryLoc_challengeB_data,
+      });
+      await databaseBuilder.commit();
+
       // when
-      const challenges = await challengeRepository.listBySkillId('someSkillId');
+      const stream = challengeRepository.streamForReplication();
+      const challenges = [];
+      for await (const challenge of stream) {
+        challenges.push(challenge);
+      }
 
       // then
-      expect(challenges).toStrictEqual([]);
+      expect(challenges).toStrictEqual([
+        domainBuilder.buildChallenge({
+          accessibility1: challengeA_data.accessibility1,
+          accessibility2: challengeA_data.accessibility2,
+          alternativeVersion: challengeA_data.alternativeVersion,
+          archivedAt: challengeA_data.archivedAt,
+          author: challengeA_data.author,
+          autoReply: challengeA_data.autoReply,
+          competenceId: challengeA_data.competenceId,
+          contextualizedFields: challengeA_data.contextualizedFields,
+          createdAt: challengeA_data.createdAt,
+          declinable: challengeA_data.declinable,
+          embedHeight: challengeA_data.embedHeight,
+          files: challengeA_data.files,
+          focusable: challengeA_data.focusable,
+          format: challengeA_data.format,
+          genealogy: challengeA_data.genealogy,
+          geography: challengeA_data.geography,
+          id: challengeA_data.id,
+          isQualityOk: challengeA_data.isQualityOk,
+          locales: challengeA_data.locales,
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeA_data.localizedEsId,
+              challengeId: challengeA_data.id,
+              ...esLoc_challengeA_data,
+            }),
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeA_data.id,
+              challengeId: challengeA_data.id,
+              ...primaryLoc_challengeA_data,
+            }),
+          ],
+          madeObsoleteAt: challengeA_data.madeObsoleteAt,
+          pedagogy: challengeA_data.pedagogy,
+          responsive: challengeA_data.responsive,
+          shuffled: challengeA_data.shuffled,
+          skillId: challengeA_data.skillId,
+          spoil: challengeA_data.spoil,
+          status: challengeA_data.status,
+          t1Status: challengeA_data.t1Status,
+          t2Status: challengeA_data.t2Status,
+          t3Status: challengeA_data.t3Status,
+          timer: challengeA_data.timer,
+          translations: {
+            fr: {
+              instruction: 'instruction FR challengeA',
+              solution: 'solution FR challengeA',
+            },
+            es: { instruction: 'instruction ES challengeA' },
+          },
+          type: challengeA_data.type,
+          updatedAt: challengeA_data.updatedAt,
+          validatedAt: challengeA_data.validatedAt,
+          version: challengeA_data.version,
+        }),
+        domainBuilder.buildChallenge({
+          accessibility1: challengeA_data.accessibility1,
+          accessibility2: challengeA_data.accessibility2,
+          alternativeVersion: challengeB_data.alternativeVersion,
+          archivedAt: challengeB_data.archivedAt,
+          author: challengeB_data.author,
+          autoReply: challengeB_data.autoReply,
+          competenceId: challengeB_data.competenceId,
+          contextualizedFields: challengeB_data.contextualizedFields,
+          createdAt: challengeB_data.createdAt,
+          declinable: challengeB_data.declinable,
+          embedHeight: challengeB_data.embedHeight,
+          files: challengeB_data.files,
+          focusable: challengeB_data.focusable,
+          format: challengeB_data.format,
+          genealogy: challengeB_data.genealogy,
+          geography: challengeB_data.geography,
+          id: challengeB_data.id,
+          locales: challengeB_data.locales,
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeB_data.id,
+              challengeId: challengeB_data.id,
+              ...primaryLoc_challengeB_data,
+            }),
+          ],
+          madeObsoleteAt: challengeB_data.madeObsoleteAt,
+          pedagogy: challengeB_data.pedagogy,
+          prototypePrimaryLocalizedChallenge: {
+            requireGafamWebsiteAccess: primaryLoc_challengeA_data.requireGafamWebsiteAccess,
+            isIncompatibleIpadCertif: primaryLoc_challengeA_data.isIncompatibleIpadCertif,
+            deafAndHardOfHearing: primaryLoc_challengeA_data.deafAndHardOfHearing,
+            isAwarenessChallenge: primaryLoc_challengeA_data.isAwarenessChallenge,
+            toRephrase: primaryLoc_challengeA_data.toRephrase,
+            hasEmbedInternalValidation: primaryLoc_challengeA_data.hasEmbedInternalValidation,
+            noValidationNeeded: primaryLoc_challengeA_data.noValidationNeeded,
+          },
+          responsive: challengeB_data.responsive,
+          shuffled: challengeB_data.shuffled,
+          skillId: challengeB_data.skillId,
+          spoil: challengeB_data.spoil,
+          status: challengeB_data.status,
+          t1Status: challengeB_data.t1Status,
+          t2Status: challengeB_data.t2Status,
+          t3Status: challengeB_data.t3Status,
+          timer: challengeB_data.timer,
+          translations: {
+            fr: {
+              instruction: 'instruction FR challengeB',
+              proposals: 'proposals FR challengeB',
+            },
+          },
+          type: challengeB_data.type,
+          updatedAt: challengeB_data.updatedAt,
+          validatedAt: challengeB_data.validatedAt,
+          version: challengeB_data.version,
+        }),
+      ]);
     });
   });
 
@@ -2539,6 +2853,78 @@ describe('Integration | Repository | challenge-repository', () => {
 
       // when
       const result = await challengeRepository.listValidPrototypesBySkillIds(['skillId1', 'skillId2']);
+
+      // then
+      expect(result).toStrictEqual(expectedChallenges);
+    });
+  });
+
+  describe('#listByThematicIds', () => {
+    it('returns domain challenges', async () => {
+      // given
+      const challengeId = 'challengeId';
+      const expectedChallenges = [
+        domainBuilder.buildChallenge({
+          id: challengeId,
+          files: [],
+          skillId: 'skillId1',
+          competenceId: 'competence1',
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: challengeId,
+              challengeId,
+              locale: 'fr',
+            }),
+          ],
+        }),
+      ];
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: expectedChallenges[0].skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(expectedChallenges[0]);
+
+      for (const challenge of expectedChallenges) {
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.instruction`,
+          locale: 'fr',
+          value: challenge.translations.fr.instruction,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.alternativeInstruction`,
+          locale: 'fr',
+          value: challenge.translations.fr.alternativeInstruction,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.proposals`,
+          locale: 'fr',
+          value: challenge.translations.fr.proposals,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solution`,
+          locale: 'fr',
+          value: challenge.translations.fr.solution,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solutionToDisplay`,
+          locale: 'fr',
+          value: challenge.translations.fr.solutionToDisplay,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.embedTitle`,
+          locale: 'fr',
+          value: challenge.translations.fr.embedTitle,
+        });
+
+        databaseBuilder.factory.buildLocalizedChallenge(challenge.localizedChallenges[0]);
+      }
+      await databaseBuilder.commit();
+
+      // when
+      const result = await challengeRepository.listByThematicIds(['thematic1', 'thematic2']);
 
       // then
       expect(result).toStrictEqual(expectedChallenges);
