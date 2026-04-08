@@ -292,13 +292,12 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
     test('it should display action buttons', async function (assert) {
       // given
-      const clipboardStub = sinon.stub().resolves();
+      const clipboardStub = sinon.spy();
 
       Object.defineProperty(navigator, 'clipboard', {
         writable: true,
         value: { writeText: clipboardStub },
       });
-      clipboardStub.withArgs('http://localhost:4300/previewURL?locale=en');
 
       // when
       screen = await render(
@@ -314,7 +313,6 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         </template>,
       );
 
-      await click(screen.getByRole('button', { name: "Copier le lien de l'épreuve" }));
       await click(screen.getByRole('button', { name: "Ouvrir la liste des prévisualisations de l'épreuve" }));
 
       // then
@@ -331,10 +329,14 @@ module('Integration | Component | localized-challenge-view | localized-challenge
           .endsWith('/previewURL?locale=en'),
         'href ends with /previewURL?locale=en',
       );
-      assert
-        .dom(screen.getByRole('link', { name: "traduction de l'épreuve de version Proto" }))
-        .hasAttribute('href', '/api/challenges/challengeProtoValidee/translations/en');
-      assert.ok(clipboardStub.calledOnce);
+
+      await click(screen.getByRole('button', { name: "Ouvrir la liste des liens de prévisualisations d'épreuves" }));
+      await click(screen.getByRole('button', { name: "Copier le lien de l'épreuve traduite" }));
+      assert.ok(clipboardStub.lastCall.firstArg.endsWith('/previewURL?locale=en'));
+
+      await click(screen.getByRole('button', { name: "Ouvrir la liste des liens de prévisualisations d'épreuves" }));
+      await click(screen.getByRole('button', { name: "Copier le lien de l'épreuve source" }));
+      assert.ok(clipboardStub.lastCall.firstArg.endsWith('/previewURL'));
     });
 
     test('it should display readonly form', async function (assert) {

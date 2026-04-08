@@ -6,6 +6,7 @@ import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import { concat } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
@@ -35,6 +36,11 @@ export default class LocalizedChallengeViewHeader extends Component {
   @action
   async copyLocalizedChallengePreviewUrl() {
     await navigator.clipboard.writeText(this.args.challengeLocale.localizedPreviewUrl);
+  }
+
+  @action
+  async copyChallengePreviewUrl() {
+    await navigator.clipboard.writeText(this.args.challengeLocale.challenge.previewUrl);
   }
 
   get localizedChallenge() {
@@ -123,13 +129,30 @@ export default class LocalizedChallengeViewHeader extends Component {
             <:tooltip>Afficher la liste des previews
               <span class="sr-only">{{@challengeLocale.challenge.id}}</span></:tooltip>
           </PixTooltip>
-          <PixTooltip @id="copy-url-challenge-tooltip" @position="top" @isInline={{true}} @isLight={{true}}>
+          <PixTooltip
+            @id="copy-url-challenge-tooltip"
+            @position="top"
+            @isInline={{true}}
+            @isLight={{true}}
+            class="preview-menu"
+          >
             <:triggerElement>
-              <PixIconButton
-                aria-labelledby="copy-url-challenge-tooltip"
-                @iconName="copy"
-                @triggerAction={{this.copyLocalizedChallengePreviewUrl}}
-              />
+              <DropdownMenu @ariaLabel="Ouvrir la liste des liens de prévisualisations d'épreuves" @iconName="copy">
+                <ul>
+                  <li class="preview-menu__item">
+                    <button type="button" {{on "click" this.copyLocalizedChallengePreviewUrl}}>
+                      <PixIcon @name="copy" alt="" />
+                      Copier le lien de l'épreuve traduite
+                    </button>
+                  </li>
+                  <li class="preview-menu__item">
+                    <button type="button" {{on "click" this.copyChallengePreviewUrl}}>
+                      <PixIcon @name="copy" alt="" />
+                      Copier le lien de l'épreuve source
+                    </button>
+                  </li>
+                </ul>
+              </DropdownMenu>
             </:triggerElement>
             <:tooltip>Copier le lien de l'épreuve <span class="sr-only">{{this.localizedChallenge.id}}</span></:tooltip>
           </PixTooltip>
