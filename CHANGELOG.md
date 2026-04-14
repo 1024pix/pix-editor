@@ -1,5 +1,11 @@
 
 
+## v4.19.0 (14/04/2026)
+
+
+### :rocket: Amélioration
+- [#1444](https://github.com/1024pix/pix-editor/pull/1444) [FEATURE] Ajout d'une liste pour copier les URL des preview (PIX-22192).
+
 ## v4.17.1 (03/04/2026)
 
 
