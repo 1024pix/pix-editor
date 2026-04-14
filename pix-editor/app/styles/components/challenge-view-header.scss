@@ -27,6 +27,8 @@
         padding: var(--pix-spacing-2x) var(--pix-spacing-6x);
         border-radius: var(--pix-spacing-2x);
         white-space: nowrap;
+        font-size: 1rem;
+        font-weight: 400;
 
         &:hover {
           color: var(--pix-neutral-800);
