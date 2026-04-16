@@ -35,7 +35,4 @@ export default Factory.extend({
   noValidationNeeded: false,
   attachments: null,
   updatedAt: '2021-10-02T14:00:00.000Z',
-  contextualizedFields() {
-    return ['illustration', 'instruction'];
-  },
 });

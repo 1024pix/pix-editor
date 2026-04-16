@@ -282,21 +282,6 @@ export default class ChallengeForm extends Component {
             </PixSelect>
           </div>
         </div>
-        {{#if @challenge.isPrototype}}
-          <div class="field">
-            <PixMultiSelect
-              @placeholder="Champs contextualisés"
-              @onChange={{this.setContextualizedFields}}
-              @emptyMessage="Aucun champ sélectionné"
-              @values={{@challenge.contextualizedFields}}
-              @options={{this.options.contextualizedFields}}
-              @isDisabled={{not @edition}}
-            >
-              <:label>Champs contextualisés</:label>
-              <:default as |option|>{{option.label}}</:default>
-            </PixMultiSelect>
-          </div>
-        {{/if}}
       </div>
       {{#unless @edition}}
         <Input @id={{this.idFieldId}} @value={{@challenge.id}} @title="Id" @edition={{false}} />
@@ -353,16 +338,6 @@ export default class ChallengeForm extends Component {
     responsive: ['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
     spoil: ['Non Sp', 'Difficilement Sp', 'Facilement Sp'],
     locales: this.languageOptions,
-    contextualizedFields: [
-      { value: 'instruction', label: 'Consigne' },
-      { value: 'embed', label: 'Embed' },
-      { value: 'illustration', label: 'Illustration' },
-      { value: 'skillHint', label: 'Indice' },
-      { value: 'externalLink', label: 'Lien externe' },
-      { value: 'attachments', label: 'Pièces jointes' },
-      { value: 'proposals', label: 'Propositions' },
-      { value: 'solution', label: 'Réponse' },
-    ],
   };
 
   helpInstructions =
@@ -535,10 +510,5 @@ export default class ChallengeForm extends Component {
   @action
   setLocales(selectedOptions) {
     this.args.challenge.locales = selectedOptions.map((value) => value);
-  }
-
-  @action
-  setContextualizedFields(selectedOptions) {
-    this.args.challenge.contextualizedFields = selectedOptions.map((value) => value);
   }
 }
