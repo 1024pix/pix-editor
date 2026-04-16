@@ -179,7 +179,6 @@ export async function create(challenge) {
         spoil: challenge.spoil,
         responsive: challenge.responsive,
         shuffled: challenge.shuffled,
-        contextualizedFields: challenge.contextualizedFields,
         isQualityOk: challenge.isQualityOk,
       })
       .into('challenges');
@@ -244,7 +243,6 @@ export async function createBatch(challenges) {
           spoil: challenge.spoil,
           responsive: challenge.responsive,
           shuffled: challenge.shuffled,
-          contextualizedFields: challenge.contextualizedFields,
           isQualityOk: challenge.isQualityOk,
         })),
       )
@@ -292,7 +290,6 @@ export async function update(challenge, transaction = knex) {
       spoil: challenge.spoil,
       responsive: challenge.responsive,
       shuffled: challenge.shuffled,
-      contextualizedFields: challenge.contextualizedFields,
       archivedAt: challenge.archivedAt,
       madeObsoleteAt: challenge.madeObsoleteAt,
       validatedAt: challenge.validatedAt,

@@ -38,7 +38,6 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       spoil: 'Non Sp',
       responsive: 'Non',
       shuffled: false,
-      contextualizedFields: ['instruction', 'illustration'],
       createdAt: new Date('1986-07-14T00:00:00Z'),
       updatedAt: new Date('2021-10-04T00:00:00Z'),
       validatedAt: new Date('2023-02-02T14:17:30Z'),

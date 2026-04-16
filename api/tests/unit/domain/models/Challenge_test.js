@@ -703,7 +703,6 @@ describe('Unit | Domain | Challenge', () => {
         author: 'CHU',
         autoReply: 'oui c auto reply',
         competenceId: 'someCompetenceId',
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
         createdAt: new Date('2019-01-01'),
         declinable: Challenge.DECLINABLES.NON,
         embedHeight: 800,
@@ -752,7 +751,6 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.author).toEqual(challenge.author);
       expect(clonedChallenge.autoReply).toEqual(challenge.autoReply);
       expect(clonedChallenge.competenceId).toEqual(competenceId);
-      expect(clonedChallenge.contextualizedFields).toEqual(challenge.contextualizedFields);
       expect(clonedChallenge.createdAt).toBeNull;
       expect(clonedChallenge.declinable).toEqual(challenge.declinable);
       expect(clonedChallenge.embedHeight).toEqual(challenge.embedHeight);
