@@ -17,6 +17,10 @@ export default class ChallengeViewProduction extends Component {
     { value: 'autoReply', label: 'Embed-auto' },
   ];
 
+  get hasTimer() {
+    return !!this.args.challenge.timer;
+  }
+
   getChallengeStatusColor(challengeStatus) {
     if (challengeStatus === Challenge.STATUSES.PROPOSE) {
       return 'tertiary';
@@ -31,10 +35,6 @@ export default class ChallengeViewProduction extends Component {
       return 'error';
     }
     return 'secondary';
-  }
-
-  get hasTimer() {
-    return !!this.args.challenge.timer;
   }
 
   <template>
@@ -167,9 +167,6 @@ export default class ChallengeViewProduction extends Component {
         </fieldset>
       </div>
 
-      <PixInput @value={{@challenge.contextualizedFields}} readonly>
-        <:label>Champs contextualisés</:label>
-      </PixInput>
       <PixInput @value={{@challenge.id}} readonly>
         <:label>Id</:label>
       </PixInput>

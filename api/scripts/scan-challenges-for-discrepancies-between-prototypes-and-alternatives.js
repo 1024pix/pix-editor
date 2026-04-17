@@ -25,21 +25,10 @@ export class ScanChallengesForDiscrepanciesBetweenPrototypesAndAlternatives exte
       indexes.forEach((index) => alternatives.splice(index, 1));
       for (const alternative of alternativesForProto) {
         for (const commonField of Challenge.PROTO_FIELDS) {
-          if (commonField === 'contextualizedFields') {
-            if (
-              JSON.stringify(alternative[commonField]?.sort() ?? '')
-              !== JSON.stringify(prototype[commonField]?.sort() ?? '')
-            ) {
-              logger.error(
-                `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,
-              );
-            }
-          } else {
-            if (alternative[commonField] !== prototype[commonField]) {
-              logger.error(
-                `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,
-              );
-            }
+          if (alternative[commonField] !== prototype[commonField]) {
+            logger.error(
+              `Proto: ${prototype.id} | Alternative: ${alternative.id} : different value for field "${commonField}"`,
+            );
           }
         }
       }

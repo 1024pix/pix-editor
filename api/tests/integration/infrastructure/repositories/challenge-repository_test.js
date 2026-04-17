@@ -46,7 +46,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-22T17:56:00Z',
         madeObsoleteAt: null,
         shuffled: true,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
       };
       const primaryLoc_challengeA_data = {
@@ -128,7 +127,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: challengeA_data.createdAt,
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -230,7 +228,6 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
-          contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -335,7 +332,6 @@ describe('Integration | Repository | challenge-repository', () => {
           madeObsoleteAt: null,
           updatedAt: '2025-10-23T10:20:00Z',
           shuffled: false,
-          contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         };
 
         databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -383,7 +379,6 @@ describe('Integration | Repository | challenge-repository', () => {
             author: challengeA_data.author,
             autoReply: challengeA_data.autoReply,
             competenceId: challengeA_data.competenceId,
-            contextualizedFields: challengeA_data.contextualizedFields,
             createdAt: challengeA_data.createdAt,
             declinable: challengeA_data.declinable,
             embedHeight: challengeA_data.embedHeight,
@@ -438,7 +433,6 @@ describe('Integration | Repository | challenge-repository', () => {
             author: challengeB_data.author,
             autoReply: challengeB_data.autoReply,
             competenceId: challengeB_data.competenceId,
-            contextualizedFields: challengeB_data.contextualizedFields,
             createdAt: challengeB_data.createdAt,
             declinable: challengeB_data.declinable,
             embedHeight: challengeB_data.embedHeight,
@@ -524,7 +518,6 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
-          contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -605,7 +598,6 @@ describe('Integration | Repository | challenge-repository', () => {
             author: challengeA_data.author,
             autoReply: challengeA_data.autoReply,
             competenceId: challengeA_data.competenceId,
-            contextualizedFields: challengeA_data.contextualizedFields,
             createdAt: challengeA_data.createdAt,
             declinable: challengeA_data.declinable,
             embedHeight: challengeA_data.embedHeight,
@@ -699,7 +691,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -803,7 +794,6 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -846,7 +836,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: challengeA_data.createdAt,
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -901,7 +890,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
-          contextualizedFields: challengeB_data.contextualizedFields,
           createdAt: challengeB_data.createdAt,
           declinable: challengeB_data.declinable,
           embedHeight: challengeB_data.embedHeight,
@@ -995,7 +983,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1099,7 +1086,6 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -1142,7 +1128,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: challengeA_data.createdAt,
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -1197,7 +1182,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
-          contextualizedFields: challengeB_data.contextualizedFields,
           createdAt: challengeB_data.createdAt,
           declinable: challengeB_data.declinable,
           embedHeight: challengeB_data.embedHeight,
@@ -1289,7 +1273,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
       databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(challengeA_data);
@@ -1402,7 +1385,6 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
       databaseBuilder.factory.buildChallenge(challengeB_data);
 
@@ -1455,7 +1437,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: challengeA_data.createdAt,
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -1510,7 +1491,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
-          contextualizedFields: challengeB_data.contextualizedFields,
           createdAt: challengeB_data.createdAt,
           declinable: challengeB_data.declinable,
           embedHeight: challengeB_data.embedHeight,
@@ -1605,7 +1585,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1654,7 +1633,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildChallenge(challengeActiveA_data);
@@ -1752,7 +1730,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeActiveA_data.author,
           autoReply: challengeActiveA_data.autoReply,
           competenceId: challengeActiveA_data.competenceId,
-          contextualizedFields: challengeActiveA_data.contextualizedFields,
           createdAt: challengeActiveA_data.createdAt,
           declinable: challengeActiveA_data.declinable,
           embedHeight: challengeActiveA_data.embedHeight,
@@ -1800,7 +1777,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeDraftA_data.author,
           autoReply: challengeDraftA_data.autoReply,
           competenceId: challengeDraftA_data.competenceId,
-          contextualizedFields: challengeDraftA_data.contextualizedFields,
           createdAt: challengeDraftA_data.createdAt,
           declinable: challengeDraftA_data.declinable,
           embedHeight: challengeDraftA_data.embedHeight,
@@ -1901,7 +1877,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1950,7 +1925,6 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
 
       databaseBuilder.factory.buildChallenge(challengeProtoB_data);
@@ -2023,7 +1997,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeProtoA_data.author,
           autoReply: challengeProtoA_data.autoReply,
           competenceId: challengeProtoA_data.competenceId,
-          contextualizedFields: challengeProtoA_data.contextualizedFields,
           createdAt: challengeProtoA_data.createdAt,
           declinable: challengeProtoA_data.declinable,
           embedHeight: challengeProtoA_data.embedHeight,
@@ -2071,7 +2044,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeProtoB_data.author,
           autoReply: challengeProtoB_data.autoReply,
           competenceId: challengeProtoB_data.competenceId,
-          contextualizedFields: challengeProtoB_data.contextualizedFields,
           createdAt: challengeProtoB_data.createdAt,
           declinable: challengeProtoB_data.declinable,
           embedHeight: challengeProtoB_data.embedHeight,
@@ -2173,7 +2145,6 @@ describe('Integration | Repository | challenge-repository', () => {
         author: ['MOI'],
         autoReply: true,
         competenceId: 'Unused competenceId',
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         declinable: Challenge.DECLINABLES.FACILEMENT,
         embedHeight: 666,
         files: [],
@@ -2242,7 +2213,6 @@ describe('Integration | Repository | challenge-repository', () => {
         author: ['LUI'],
         autoReply: false,
         competenceId: 'Unused competenceId',
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         declinable: Challenge.DECLINABLES.NON,
         embedHeight: 777,
         files: [],
@@ -2302,7 +2272,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: 'competence1',
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -2340,7 +2309,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: 'competence1',
-          contextualizedFields: challengeB_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeB_data.declinable,
           embedHeight: challengeB_data.embedHeight,
@@ -2432,7 +2400,6 @@ describe('Integration | Repository | challenge-repository', () => {
           archivedAt: challengeA_data.archivedAt,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
-          contextualizedFields: challengeA_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeA_data.declinable,
           embedHeight: challengeA_data.embedHeight,
@@ -2465,7 +2432,6 @@ describe('Integration | Repository | challenge-repository', () => {
           archivedAt: challengeB_data.archivedAt,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
-          contextualizedFields: challengeB_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeB_data.declinable,
           embedHeight: challengeB_data.embedHeight,
@@ -2541,7 +2507,6 @@ describe('Integration | Repository | challenge-repository', () => {
         author: ['MOI'],
         autoReply: true,
         competenceId: 'Unused competenceId',
-        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         declinable: Challenge.DECLINABLES.FACILEMENT,
         embedHeight: 666,
         files: [],
@@ -2622,7 +2587,6 @@ describe('Integration | Repository | challenge-repository', () => {
           author: challengeToCreate_data.author,
           autoReply: challengeToCreate_data.autoReply,
           competenceId: 'competence1',
-          contextualizedFields: challengeToCreate_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeToCreate_data.declinable,
           embedHeight: challengeToCreate_data.embedHeight,
@@ -2661,7 +2625,6 @@ describe('Integration | Repository | challenge-repository', () => {
           archivedAt: challengeToCreate_data.archivedAt,
           author: challengeToCreate_data.author,
           autoReply: challengeToCreate_data.autoReply,
-          contextualizedFields: challengeToCreate_data.contextualizedFields,
           createdAt: expect.any(Date),
           declinable: challengeToCreate_data.declinable,
           embedHeight: challengeToCreate_data.embedHeight,

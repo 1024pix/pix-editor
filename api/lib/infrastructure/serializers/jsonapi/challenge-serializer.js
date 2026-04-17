@@ -44,7 +44,6 @@ const serializer = new Serializer('challenges', {
     'archivedAt',
     'madeObsoleteAt',
     'shuffled',
-    'contextualizedFields',
     'localizedChallenges',
     'illustrationAlt',
     'requireGafamWebsiteAccess',

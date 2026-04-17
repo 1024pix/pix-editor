@@ -37,7 +37,6 @@ const iterFor = {
   isAwarenessChallenge: cycle([true, false]),
   isIncompatibleIpadCertif: cycle([true, false]),
   requireGafamWebsiteAccess: cycle([true, false]),
-  contextualizedFields: cycle(Object.values(Challenge.CONTEXTUALIZED_FIELDS).filter(ignoreEmptyValues)),
   attachmentType: cycle(['attachment', 'illustration']),
 };
 
@@ -472,7 +471,6 @@ function generateBaseChallengeData(status, autoReply) {
     accessibility2: iterFor.accessibility2.next().value,
     author: ['DEV'],
     autoReply,
-    contextualizedFields: [iterFor.contextualizedFields.next().value, iterFor.contextualizedFields.next().value],
     declinable: iterFor.declinable.next().value,
     files: [],
     focusable: iterFor.focusable.next().value,

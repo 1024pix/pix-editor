@@ -48,7 +48,6 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
       requireGafamWebsiteAccess: true,
       toRephrase: false,
       isIncompatibleIpadCertif: true,
-      contextualizedFields: 'contextualizedFields',
       updatedAt: '2021-10-02T14:00:00.000Z',
     });
   });
@@ -91,7 +90,6 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
     assert.dom(screen.getByLabelText('Accès GAFAM requis')).isChecked();
     assert.dom(screen.getByLabelText('Épreuve à revoir')).isNotChecked();
     assert.dom(screen.getByLabelText('Incompatible iPad certif')).isChecked();
-    assert.dom(screen.getByLabelText('Champs contextualisés')).hasValue('contextualizedFields');
     assert.dom(screen.getByLabelText('Id')).hasValue('challengeProtoValidee');
   });
 

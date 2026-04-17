@@ -50,13 +50,6 @@ export default class ChallengeModel extends Model {
   @attr('date') archivedAt;
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
-  @attr({
-    defaultValue: function () {
-      return [];
-    },
-  })
-  contextualizedFields;
-
   @attr requireGafamWebsiteAccess;
   @attr isIncompatibleIpadCertif;
   @attr deafAndHardOfHearing;
@@ -96,16 +89,6 @@ export default class ChallengeModel extends Model {
       UNUSED_FRANCOPHONE: 'FRANCOPHONE',
       NONE: '',
     };
-  }
-
-  async getChallengeForLocale(locale) {
-    const canonicalLocale = Intl.getCanonicalLocales(locale).toString();
-
-    const challengeLocale = this.challengeLocales.find((challengeLocale) => {
-      return challengeLocale.locale === canonicalLocale;
-    });
-    await challengeLocale.belongsTo('localizedChallenge').reload();
-    return challengeLocale;
   }
 
   get illustration() {
@@ -288,6 +271,16 @@ export default class ChallengeModel extends Model {
 
   get previewUrl() {
     return new URL(this.preview, window.location).href;
+  }
+
+  async getChallengeForLocale(locale) {
+    const canonicalLocale = Intl.getCanonicalLocales(locale).toString();
+
+    const challengeLocale = this.challengeLocales.find((challengeLocale) => {
+      return challengeLocale.locale === canonicalLocale;
+    });
+    await challengeLocale.belongsTo('localizedChallenge').reload();
+    return challengeLocale;
   }
 
   archive() {

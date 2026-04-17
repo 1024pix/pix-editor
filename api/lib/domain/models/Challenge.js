@@ -20,7 +20,6 @@ export class Challenge {
     author,
     autoReply,
     competenceId,
-    contextualizedFields,
     createdAt,
     declinable,
     embedHeight,
@@ -60,7 +59,6 @@ export class Challenge {
     this.author = author;
     this.autoReply = autoReply;
     this.competenceId = competenceId;
-    this.contextualizedFields = contextualizedFields;
     this.createdAt = createdAt;
     this.declinable = declinable;
     this.embedHeight = embedHeight;
@@ -201,19 +199,6 @@ export class Challenge {
     };
   }
 
-  static get CONTEXTUALIZED_FIELDS() {
-    return {
-      INSTRUCTION: 'instruction',
-      PROPOSALS: 'proposals',
-      SOLUTION: 'solution',
-      ILLUSTRATION: 'illustration',
-      EMBED: 'embed',
-      ATTACHMENTS: 'attachments',
-      SKILL_HINT: 'skillHint',
-      EXTERNAL_LINK: 'externalLink',
-    };
-  }
-
   static get ID_PREFIX() {
     return 'challenge';
   }
@@ -223,7 +208,6 @@ export class Challenge {
       'accessibility1',
       'accessibility2',
       'autoReply',
-      'contextualizedFields',
       'deafAndHardOfHearing',
       'declinable',
       'focusable',
@@ -342,7 +326,6 @@ export class Challenge {
       author: this.author,
       autoReply: this.autoReply,
       competenceId: competenceId,
-      contextualizedFields: this.contextualizedFields,
       createdAt: null,
       declinable: this.declinable,
       embedHeight: this.embedHeight,

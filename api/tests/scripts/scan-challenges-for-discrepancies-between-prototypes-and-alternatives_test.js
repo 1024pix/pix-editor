@@ -11,7 +11,6 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       accessibility1: Challenge.ACCESSIBILITY1.OK,
       accessibility2: Challenge.ACCESSIBILITY2.OK,
       autoReply: true,
-      contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS, Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       deafAndHardOfHearing: true,
       declinable: Challenge.DECLINABLES.FACILEMENT,
       focusable: true,
@@ -114,7 +113,6 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
       accessibility1: Challenge.ACCESSIBILITY1.KO,
       accessibility2: Challenge.ACCESSIBILITY2.KO,
       autoReply: false,
-      contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
       declinable: Challenge.DECLINABLES.DIFFICILEMENT,
       focusable: false,
       pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
@@ -204,7 +202,7 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
     });
 
     // then
-    expect(loggerErrorStub).toHaveBeenCalledTimes(21);
+    expect(loggerErrorStub).toHaveBeenCalledTimes(20);
     expect(loggerErrorStub).toHaveBeenCalledWith(
       'Proto: PROTO | Alternative: DECLI2 : different value for field "accessibility1"',
     );
@@ -213,9 +211,6 @@ describe('Script | scan-challenges-for-discrepancies-between-prototypes-and-alte
     );
     expect(loggerErrorStub).toHaveBeenCalledWith(
       'Proto: PROTO | Alternative: DECLI2 : different value for field "autoReply"',
-    );
-    expect(loggerErrorStub).toHaveBeenCalledWith(
-      'Proto: PROTO | Alternative: DECLI2 : different value for field "contextualizedFields"',
     );
     expect(loggerErrorStub).toHaveBeenCalledWith(
       'Proto: PROTO | Alternative: DECLI2 : different value for field "deafAndHardOfHearing"',

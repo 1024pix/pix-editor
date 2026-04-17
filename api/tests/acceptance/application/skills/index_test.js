@@ -1827,7 +1827,6 @@ describe('Application | Route | Skills', () => {
           archivedAt: null,
           author: ['SPS'],
           autoReply: false,
-          contextualizedFields: ['instruction', 'illustration'],
           createdAt: expect.any(Date),
           declinable: 'facilement',
           embedHeight: 500,

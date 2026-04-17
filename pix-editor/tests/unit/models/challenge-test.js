@@ -55,7 +55,6 @@ module('Unit | Model | challenge', function (hooks) {
       archivedAt: new Date('2020-01-01'),
       madeObsoleteAt: new Date('2020-01-01'),
       shuffled: true,
-      contextualizedFields: ['oui', 'non'],
       status: 'validé',
       genealogy: 'Prototype 1',
       author: 'DEV',
@@ -110,7 +109,6 @@ module('Unit | Model | challenge', function (hooks) {
       archivedAt: new Date('2020-01-01'),
       madeObsoleteAt: new Date('2020-01-01'),
       shuffled: true,
-      contextualizedFields: ['oui', 'non'],
       genealogy: 'Décliné 1',
       version: 1,
       requireGafamWebsiteAccess: true,
@@ -172,11 +170,6 @@ module('Unit | Model | challenge', function (hooks) {
       assert.strictEqual(clonedChallenge.archivedAt, undefined, 'champ archivedAt');
       assert.strictEqual(clonedChallenge.madeObsoleteAt, undefined, 'champ madeObsoleteAt');
       assert.strictEqual(clonedChallenge.shuffled, prototype.shuffled, 'champ shuffled');
-      assert.deepEqual(
-        clonedChallenge.contextualizedFields,
-        prototype.contextualizedFields,
-        'champ contextualizedFields',
-      );
       assert.strictEqual(clonedChallenge.status, 'proposé', 'champ status');
       assert.strictEqual(clonedChallenge.genealogy, prototype.genealogy, 'champ genealogy');
       assert.deepEqual(clonedChallenge.author, ['NEW'], 'champ author');
@@ -260,11 +253,6 @@ module('Unit | Model | challenge', function (hooks) {
       assert.strictEqual(clonedChallenge.archivedAt, undefined, 'champ archivedAt');
       assert.strictEqual(clonedChallenge.madeObsoleteAt, undefined, 'champ madeObsoleteAt');
       assert.strictEqual(clonedChallenge.shuffled, alternative.shuffled, 'champ shuffled');
-      assert.deepEqual(
-        clonedChallenge.contextualizedFields,
-        alternative.contextualizedFields,
-        'champ contextualizedFields',
-      );
       assert.strictEqual(clonedChallenge.status, 'proposé', 'champ status');
       assert.strictEqual(clonedChallenge.genealogy, alternative.genealogy, 'champ genealogy');
       assert.deepEqual(clonedChallenge.author, ['NEW'], 'champ author');
