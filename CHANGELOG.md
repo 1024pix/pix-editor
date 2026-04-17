@@ -1,5 +1,11 @@
 
 
+## v4.20.0 (17/04/2026)
+
+
+### :rocket: Amélioration
+- [#1446](https://github.com/1024pix/pix-editor/pull/1446) [FEATURE]  Transformer les select de langue et de référentiel en select avec recherche (PIX-22244).
+
 ## v4.19.0 (14/04/2026)
 
 
