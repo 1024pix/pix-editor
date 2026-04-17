@@ -21,6 +21,9 @@ const iterFor = {
   deafAndHardOfHearing: cycle(
     Object.values(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES).filter(ignoreEmptyValues),
   ),
+  assessmentMaintenanceTags: cycle(
+    Object.values(Challenge.ASSESSMENT_MAINTENANCE_TAGS),
+  ),
   timer: cycle([
     30,
     120,
