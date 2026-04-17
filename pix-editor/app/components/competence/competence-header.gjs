@@ -1,7 +1,9 @@
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { LinkTo } from '@ember/routing';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceHeader extends Component {
   @service config;
@@ -76,6 +78,8 @@ export default class CompetenceHeader extends Component {
     },
   ];
 
+  @tracked languageOptionsResult = this.languageOptions;
+
   get liteClass() {
     return this.config.lite ? ' lite ' : '';
   }
@@ -97,6 +101,17 @@ export default class CompetenceHeader extends Component {
     return this.args.section === 'challenges' && this.args.view === 'production';
   }
 
+  @action
+  updateLanguageOptions(filter) {
+    if (!filter.trim()) {
+      this.languageOptionsResult = this.languageOptions;
+      return;
+    }
+    this.languageOptionsResult = this.languageOptions.filter(({ label }) =>
+      label.toLowerCase().includes(filter.trim().toLowerCase()),
+    );
+  }
+
   <template>
     <section class="ui main-title{{this.liteClass}}">
       <h1 class="ui left floated header">
@@ -111,9 +126,13 @@ export default class CompetenceHeader extends Component {
           <PixSelect
             @className="competence-header__language-filter"
             @onChange={{@selectLanguageToFilter}}
-            @options={{this.languageOptions}}
+            @options={{this.languageOptionsResult}}
             @value={{this.selectedLanguageToFilter}}
             @placeholder="Filtre par langue"
+            @isSearchable={{true}}
+            @onSearch={{this.updateLanguageOptions}}
+            @searchPlaceholder="Rechercher une langue"
+            @emptySearchMessage="Aucune langue correspondante"
           >
             <:default as |languageOption|>
               {{languageOption.label}}

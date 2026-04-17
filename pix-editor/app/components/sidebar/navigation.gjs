@@ -23,6 +23,7 @@ export default class SidebarNavigationComponent extends Component {
 
   @tracked newFramework;
   @tracked displayNewFrameworkPopIn;
+  @tracked frameworkOptionsResult = this.frameworkOptionList;
 
   get areas() {
     return this.currentData.getAreas();
@@ -103,17 +104,40 @@ export default class SidebarNavigationComponent extends Component {
     }
   }
 
+  @action
+  updateFrameworkOptionsResult(filter) {
+    if (!filter.trim()) {
+      this.frameworkOptionsResult = this.frameworkOptionList;
+      return;
+    }
+    this.frameworkOptionsResult = this.frameworkOptionList.filter(({ label }) =>
+      this.removeDiacritic(label).includes(this.removeDiacritic(filter)),
+    );
+  }
+
+  removeDiacritic(str) {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
   <template>
     {{#if @displayFrameworkList}}
       <PixSelect
         @id="select-framework"
         @value={{this.selectedFrameworkId}}
-        @options={{this.frameworkOptionList}}
+        @options={{this.frameworkOptionsResult}}
         @onChange={{this.setFramework}}
         @placeholder="Sélectionner un référentiel"
         @placement="bottom"
         class="select-framework"
         @hideDefaultOption={{true}}
+        @isSearchable={{true}}
+        @onSearch={{this.updateFrameworkOptionsResult}}
+        @searchPlaceholder="Rechercher un référentiel"
+        @emptySearchMessage="Aucun référentiel correspondant"
       >
         <:label>
           <span class="sr-only">Sélectionner un référentiel</span>

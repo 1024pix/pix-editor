@@ -3,7 +3,8 @@ import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import LocaleTag from './v2/locale-tag';
+import { tracked } from '@glimmer/tracking';
+import LocaleTag from './locale-tag';
 
 export default class CompetenceHeader extends Component {
   @service router;
@@ -75,6 +76,7 @@ export default class CompetenceHeader extends Component {
       value: 'quality',
     },
   ];
+  @tracked localeOptionsResult = this.localeOptions;
 
   get localeValue() {
     if (!this.args.locale) return 'source';
@@ -93,6 +95,17 @@ export default class CompetenceHeader extends Component {
   setLocale(locale) {
     if (locale === 'source') locale = undefined;
     this.router.transitionTo({ queryParams: { locale } });
+  }
+
+  @action
+  updateLocaleOptions(filter) {
+    if (!filter.trim()) {
+      this.localeOptionsResult = this.localeOptions;
+      return;
+    }
+    this.localeOptionsResult = this.localeOptions.filter(({ label }) =>
+      label.toLowerCase().includes(filter.trim().toLowerCase()),
+    );
   }
 
   @action
@@ -123,11 +136,15 @@ export default class CompetenceHeader extends Component {
       </h2>
       <div class="competence-header__spacer"></div>
       <PixSelect
-        @options={{this.localeOptions}}
+        @options={{this.localeOptionsResult}}
         @value={{this.localeValue}}
         @onChange={{this.setLocale}}
         @hideDefaultOption={{true}}
         @screenReaderOnly={{true}}
+        @isSearchable={{true}}
+        @onSearch={{this.updateLocaleOptions}}
+        @searchPlaceholder="Rechercher une locale"
+        @emptySearchMessage="Aucune locale correspondante"
       >
         <:label>Choix de la langue</:label>
       </PixSelect>

@@ -1,4 +1,4 @@
-import { clickByName, render } from '@1024pix/ember-testing-library';
+import { clickByName, fillByLabel, render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
 import SidebarNavigation from 'pixeditor/components/sidebar/navigation';
@@ -105,6 +105,26 @@ module('Integration | Component | sidebar/navigation', function (hooks) {
       frameworksList.forEach((framework) => {
         assert.ok(expectedFrameworks.includes(framework.textContent.trim()));
       });
+    });
+
+    test('it should filter framework list', async function (assert) {
+      //  when
+      const screen = await render(
+        <template>
+          <SidebarNavigation @displayFrameworkList={{displayFrameworkList}} @close={{closeAction}} />
+        </template>,
+      );
+
+      await screen.getByRole('button', { name: 'Sélectionner un référentiel' }).click();
+
+      await fillByLabel('Rechercher', '+');
+      const listOptions = await screen.findByRole('listbox');
+
+      const filteredOptions = within(listOptions).queryAllByRole('option');
+
+      //  then
+      assert.strictEqual(filteredOptions.length, 1);
+      assert.strictEqual(filteredOptions[0].innerText, 'Pix +');
     });
 
     test('it should display only a list of areas', async function (assert) {
