@@ -50,6 +50,7 @@ export async function* streamForReplication(signal) {
       'accessibility1',
       'accessibility2',
       'assessmentMaintenanceTags',
+      'translationMaintenanceTags',
     ], 'prototypeChallenge'),
     selectTableColumnsAsObject('prototypes_primary', [
       'requireGafamWebsiteAccess',
@@ -72,6 +73,7 @@ export async function* streamForReplication(signal) {
             'accessibility1',
             'accessibility2',
             'assessmentMaintenanceTags',
+            'translationMaintenanceTags',
             knex.raw('ROW_NUMBER() OVER (PARTITION BY ??, ?? ORDER BY ??) AS ??', [
               'skillId',
               'version',
@@ -183,6 +185,7 @@ export async function create(challenge) {
         shuffled: challenge.shuffled,
         isQualityOk: challenge.isQualityOk,
         assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
+        translationMaintenanceTags: challenge.translationMaintenanceTags,
       })
       .into('challenges');
 
@@ -248,6 +251,7 @@ export async function createBatch(challenges) {
           shuffled: challenge.shuffled,
           isQualityOk: challenge.isQualityOk,
           assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
+          translationMaintenanceTags: challenge.translationMaintenanceTags,
         })),
       )
       .into('challenges');
@@ -300,6 +304,7 @@ export async function update(challenge, transaction = knex) {
       updatedAt: transaction.fn.now(),
       isQualityOk: challenge.isQualityOk,
       assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
+      translationMaintenanceTags: challenge.translationMaintenanceTags,
     })
     .where('id', challenge.id);
 

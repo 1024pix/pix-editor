@@ -84,6 +84,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'no-validation-needed': true,
             'is-quality-ok': false,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {
@@ -230,6 +231,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'no-validation-needed': true,
             'is-quality-ok': false,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {

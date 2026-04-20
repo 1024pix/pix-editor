@@ -51,6 +51,7 @@ export class Challenge {
     prototypeChallenge,
     prototypePrimaryLocalizedChallenge,
     assessmentMaintenanceTags,
+    translationMaintenanceTags,
   } = {}) {
     this.accessibility1 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility1 : prototypeChallenge.accessibility1;
     this.accessibility2 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility2 : prototypeChallenge.accessibility2;
@@ -84,6 +85,7 @@ export class Challenge {
     this.validatedAt = validatedAt;
     this.version = version;
     this.assessmentMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? assessmentMaintenanceTags : prototypeChallenge.assessmentMaintenanceTags;
+    this.translationMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? translationMaintenanceTags : prototypeChallenge.translationMaintenanceTags;
 
     this.localizedChallenges = localizedChallenges;
 
@@ -116,6 +118,21 @@ export class Challenge {
       WEBSITE_TO_REDO: 'Site web ou blog à refaire entièrement',
       EMBED_TO_REDO: 'Embed non traduisible à refaire entièrement',
       MISC: 'Éléments sans équivalents',
+    };
+  }
+
+  static get TRANSLATION_MAINTENANCE_TAGS() {
+    return {
+      RULE: 'règle, législation ou connaissance',
+      INTERFACE: 'charte graphique ou interface',
+      SOFTWARE_EVOLUTION: 'évolution logicielle',
+      FIRSTNAMES: 'noms propres',
+      EXTERNAL_LINKS: 'liens externes',
+      SPOILABLE_INFO: 'e-rechinfo spoilable',
+      TOOL_QUESTION: 'question outil',
+      AMBIGUOUS_ANSWERS: 'réponses ambiguës',
+      KNOWN_EXPIRY_DATE: 'date de péremption connue',
+      NO_DECLI_INSTRUCTION: 'pas de mode d’emploi des déclinaisons ou pas d’antisèche',
     };
   }
 
@@ -371,6 +388,7 @@ export class Challenge {
       t2Status: this.t2Status,
       t3Status: this.t3Status,
       timer: this.timer,
+      translationMaintenanceTags: this.translationMaintenanceTags,
       type: this.type,
       updatedAt: null,
       validatedAt: null,

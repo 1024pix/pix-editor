@@ -24,6 +24,9 @@ const iterFor = {
   assessmentMaintenanceTags: cycle(
     Object.values(Challenge.ASSESSMENT_MAINTENANCE_TAGS),
   ),
+  translationMaintenanceTags: cycle(
+    Object.values(Challenge.TRANSLATION_MAINTENANCE_TAGS),
+  ),
   timer: cycle([
     30,
     120,

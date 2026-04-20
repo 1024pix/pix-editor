@@ -198,6 +198,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'no-validation-needed': true,
               'is-quality-ok': false,
               'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
             },
             relationships: {
               skill: {
@@ -308,6 +309,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'no-validation-needed': false,
               'is-quality-ok': true,
               'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
             },
             relationships: {
               skill: {
@@ -669,6 +671,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'no-validation-needed': true,
             'is-quality-ok': false,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {
@@ -1163,6 +1166,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'has-embed-internal-validation': true,
               'no-validation-needed': true,
               'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
             },
             relationships: {
               skill: {
@@ -1239,6 +1243,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'no-validation-needed': true,
             'is-quality-ok': false,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {
@@ -1387,6 +1392,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: null,
           version: challengeData.version,
           assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
         },
       ]);
       await expect(knex('localized_challenges').select()).resolves.toStrictEqual([
@@ -1780,6 +1786,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'no-validation-needed': true,
               'is-quality-ok': true,
               'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
             },
             relationships: {
               skill: {
@@ -1856,6 +1863,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'no-validation-needed': true,
             'is-quality-ok': true,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {
@@ -2016,6 +2024,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: new Date(newChallenge.validatedAt),
           version: newChallenge.version,
           assessmentMaintenanceTags: newChallenge.assessmentMaintenanceTags,
+          translationMaintenanceTags: newChallenge.translationMaintenanceTags,
         },
       ]);
 
@@ -2195,6 +2204,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'no-validation-needed': false,
               'is-quality-ok': false,
               'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
             },
             relationships: {
               skill: {
@@ -2271,6 +2281,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'no-validation-needed': false,
             'is-quality-ok': false,
             'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
           },
           relationships: {
             skill: {
@@ -2420,6 +2431,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           validatedAt: new Date(challenge.validatedAt),
           version: challenge.version,
           assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
+          translationMaintenanceTags: challenge.translationMaintenanceTags,
         },
       ]);
 

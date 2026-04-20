@@ -70,6 +70,7 @@ export function buildChallenge(
     ],
     prototypePrimaryLocalizedChallenge,
     assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+    translationMaintenanceTags = [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
   } = {},
   fieldsToOmit = [],
 ) {
@@ -112,6 +113,7 @@ export function buildChallenge(
     localizedChallenges,
     prototypePrimaryLocalizedChallenge,
     assessmentMaintenanceTags,
+    translationMaintenanceTags,
   };
   return new Challenge(_.omit(data, fieldsToOmit));
 }

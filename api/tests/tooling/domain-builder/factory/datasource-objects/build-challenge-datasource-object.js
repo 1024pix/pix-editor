@@ -36,6 +36,7 @@ export function buildChallengeDatasourceObject({
   shuffled = false,
   isQualityOk = false,
   assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+  translationMaintenanceTags = [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
 } = {}) {
   return {
     id,
@@ -75,5 +76,6 @@ export function buildChallengeDatasourceObject({
     shuffled,
     isQualityOk,
     assessmentMaintenanceTags,
+    translationMaintenanceTags,
   };
 }
