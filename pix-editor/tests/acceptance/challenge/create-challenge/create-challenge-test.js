@@ -1,4 +1,4 @@
-import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { clickByText, clickByName, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -9,6 +9,8 @@ import sinon from 'sinon';
 
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+
+import Challenge from 'pixeditor/models/challenge';
 
 module('Acceptance | Create-Challenge', function (hooks) {
   setupApplicationTest(hooks);
@@ -127,11 +129,23 @@ module('Acceptance | Create-Challenge', function (hooks) {
     await clickByText('Géographie');
     await click(await screen.findByRole('option', { name: 'Japon' }));
     await waitForSelectToBeClosed(screen);
+    await clickByName('Évaluation');
+    await screen.findByRole('menu');
+    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME);
+    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC);
+    await clickByName('Traduction');
+    const translationSelect = screen.getByTestId('translationSelect');
+    await within(translationSelect).findByRole('menu');
+    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES);
+    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS);
     await click(find('[data-test-save-challenge-button]'));
 
     // then
     const store = this.owner.lookup('service:store');
     const attachments = store.peekAll('attachment').slice();
+    const challenges = store.peekAll('challenge').slice();
+    const challenge = challenges.find((challenge) => challenge.id !== 'recChallenge1');
+
     assert.dom('[data-test-main-message]').hasText('Prototype enregistré');
     assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
@@ -150,5 +164,13 @@ module('Acceptance | Create-Challenge', function (hooks) {
     assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
     assert.true(screen.getByRole('checkbox', { name: "Validation par l'embed (Pix Junior)" }).checked);
     assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
+    assert.deepEqual(challenge.assessmentMaintenanceTags, [
+      Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME,
+      Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC,
+    ]);
+    assert.deepEqual(challenge.translationMaintenanceTags, [
+      Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES,
+      Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
+    ]);
   });
 });

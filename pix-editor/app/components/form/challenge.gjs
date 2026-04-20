@@ -17,6 +17,7 @@ import Input from 'pixeditor/components/field/input';
 import Quality from 'pixeditor/components/field/quality';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class ChallengeForm extends Component {
   <template>
@@ -252,6 +253,37 @@ export default class ChallengeForm extends Component {
         </div>
         <Quality @edition={{@edition}} @challenge={{@challenge}} />
       {{/if}}
+      {{#if @challenge.isPrototype}}
+        <label>Maintenance</label>
+        <div class="two fields">
+          <div class="field">
+            <PixMultiSelect
+              @placeholder="Choisir un ou plusieurs types de maintenance"
+              @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
+              @emptyMessage="Aucun type de maintenance sélectionné"
+              @values={{@challenge.assessmentMaintenanceTags}}
+              @options={{this.assessmentMaintenanceTagOptions}}
+              @isDisabled={{not @edition}}
+            >
+              <:label>Évaluation</:label>
+              <:default as |option|>{{option.label}}</:default>
+            </PixMultiSelect>
+          </div>
+          <div class="field" data-testid="translationSelect">
+            <PixMultiSelect
+              @placeholder="Choisir un ou plusieurs types de maintenance"
+              @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
+              @emptyMessage="Aucun type de maintenance sélectionné"
+              @values={{@challenge.translationMaintenanceTags}}
+              @options={{this.translationMaintenanceTagOptions}}
+              @isDisabled={{not @edition}}
+            >
+              <:label>Traduction</:label>
+              <:default as |option|>{{option.label}}</:default>
+            </PixMultiSelect>
+          </div>
+        </div>
+      {{/if}}
       <div class="field {{if @edition '' 'disabled'}}">
         <label>Internationalisation</label>
         <div class="two fields">
@@ -304,6 +336,8 @@ export default class ChallengeForm extends Component {
   @service store;
 
   languageOptions = [];
+  assessmentMaintenanceTagOptions = [];
+  translationMaintenanceTagOptions = [];
   options = {
     types: [
       { value: 'QCU', label: 'QCU' },
@@ -350,6 +384,18 @@ export default class ChallengeForm extends Component {
       value,
       label,
     }));
+    this.assessmentMaintenanceTagOptions = Object.entries(Challenge.ASSESSMENT_MAINTENANCE_TAGS).map(([_, value]) => {
+      return {
+        label: value,
+        value,
+      };
+    });
+    this.translationMaintenanceTagOptions = Object.entries(Challenge.TRANSLATION_MAINTENANCE_TAGS).map(([_, value]) => {
+      return {
+        label: value,
+        value,
+      };
+    });
   }
 
   get geographyOptionList() {
