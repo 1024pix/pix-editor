@@ -83,6 +83,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
             'is-quality-ok': false,
+            'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
           },
           relationships: {
             skill: {
@@ -228,6 +229,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
             'is-quality-ok': false,
+            'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
           },
           relationships: {
             skill: {

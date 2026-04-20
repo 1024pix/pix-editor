@@ -69,6 +69,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
       'validatedAt',
       'version',
       'isQualityOk',
+      'assessmentMaintenanceTags',
     ];
     const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 
@@ -153,6 +154,7 @@ describe('Unit | Domain | Usecases | update challenge', function() {
         'validatedAt',
         'version',
         'isQualityOk',
+        'assessmentMaintenanceTags',
       ];
       const expectedChallengeFOrRelease = _.omit(challengeUpdates, fieldToOmitForChallengeRelease);
 

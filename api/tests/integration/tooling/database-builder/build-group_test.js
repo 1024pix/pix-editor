@@ -44,6 +44,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       archivedAt: new Date('2023-03-03T10:47:05Z'),
       madeObsoleteAt: new Date('2023-04-04T10:47:05Z'),
       isQualityOk: false,
+      assessmentMaintenanceTags: ['Prénom ou nom propre dans un embed ou dans du HTML intégré à l’épreuve', 'Anglicismes à reformuler'],
     });
     expect(result.localizedChallenge).deep.equal({
       id: 'challenge1',

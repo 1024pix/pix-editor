@@ -58,6 +58,7 @@ const serializer = new Serializer('challenges', {
     'challengeLocales',
     'changelogEntries',
     'isQualityOk',
+    'assessmentMaintenanceTags',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'localizedChallenges') return 'localized-challenges';

@@ -69,6 +69,7 @@ export function buildChallenge(
       },
     ],
     prototypePrimaryLocalizedChallenge,
+    assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
   } = {},
   fieldsToOmit = [],
 ) {
@@ -110,6 +111,7 @@ export function buildChallenge(
     skillId,
     localizedChallenges,
     prototypePrimaryLocalizedChallenge,
+    assessmentMaintenanceTags,
   };
   return new Challenge(_.omit(data, fieldsToOmit));
 }

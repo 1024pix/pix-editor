@@ -31,6 +31,7 @@ export function buildChallenge({
   archivedAt,
   madeObsoleteAt,
   isQualityOk,
+  assessmentMaintenanceTags,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'challenges',
@@ -65,6 +66,7 @@ export function buildChallenge({
       archivedAt,
       madeObsoleteAt,
       isQualityOk,
+      assessmentMaintenanceTags,
     },
   });
 }

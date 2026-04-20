@@ -83,7 +83,7 @@ export class Challenge {
     this.updatedAt = updatedAt;
     this.validatedAt = validatedAt;
     this.version = version;
-    this.assessmentMaintenanceTags = assessmentMaintenanceTags;
+    this.assessmentMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? assessmentMaintenanceTags : prototypeChallenge.assessmentMaintenanceTags;
 
     this.localizedChallenges = localizedChallenges;
 
@@ -348,6 +348,7 @@ export class Challenge {
       accessibility2: this.accessibility2,
       alternativeVersion,
       archivedAt: null,
+      assessmentMaintenanceTags: this.assessmentMaintenanceTags,
       author: this.author,
       autoReply: this.autoReply,
       competenceId: competenceId,

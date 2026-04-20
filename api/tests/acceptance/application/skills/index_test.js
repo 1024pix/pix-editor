@@ -1634,6 +1634,7 @@ describe('Application | Route | Skills', () => {
       const validatedDomainChallengeProtoToClone = domainBuilder.buildChallengeDatasourceObject({
         id: protoId,
         airtableId: 'recChallengeValidated',
+        assessmentMaintenanceTags: ['Fichier simple à traduire'],
         status: 'validé',
         isQualityOk: true,
         locales: ['fr'],
@@ -1824,6 +1825,7 @@ describe('Application | Route | Skills', () => {
           accessibility1: 'OK',
           accessibility2: 'RAS',
           alternativeVersion: null,
+          assessmentMaintenanceTags: ['Fichier simple à traduire'],
           archivedAt: null,
           author: ['SPS'],
           autoReply: false,
