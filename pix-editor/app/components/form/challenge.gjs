@@ -254,35 +254,37 @@ export default class ChallengeForm extends Component {
         <Quality @edition={{@edition}} @challenge={{@challenge}} />
       {{/if}}
       {{#if @challenge.isPrototype}}
-        <label>Maintenance</label>
-        <div class="two fields">
-          <div class="field">
-            <PixMultiSelect
-              @isSearchable={{true}}
-              @placeholder="Choisir un ou plusieurs types de maintenance"
-              @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
-              @emptyMessage="Aucun type de maintenance sélectionné"
-              @values={{@challenge.assessmentMaintenanceTags}}
-              @options={{this.assessmentMaintenanceTagOptions}}
-              @isDisabled={{not @edition}}
-            >
-              <:label>Évaluation</:label>
-              <:default as |option|>{{option.label}}</:default>
-            </PixMultiSelect>
-          </div>
-          <div class="field" data-testid="translationSelect">
-            <PixMultiSelect
-              @isSearchable={{true}}
-              @placeholder="Choisir un ou plusieurs types de maintenance"
-              @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
-              @emptyMessage="Aucun type de maintenance sélectionné"
-              @values={{@challenge.translationMaintenanceTags}}
-              @options={{this.translationMaintenanceTagOptions}}
-              @isDisabled={{not @edition}}
-            >
-              <:label>Traduction</:label>
-              <:default as |option|>{{option.label}}</:default>
-            </PixMultiSelect>
+        <div class="field {{if @edition '' 'disabled'}}">
+          <label>Maintenance</label>
+          <div class="two fields">
+            <div class="field">
+              <PixMultiSelect
+                @isSearchable={{true}}
+                @placeholder="Choisir un ou plusieurs types de maintenance"
+                @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
+                @emptyMessage="Aucun type de maintenance sélectionné"
+                @values={{@challenge.assessmentMaintenanceTags}}
+                @options={{this.assessmentMaintenanceTagOptions}}
+                @isDisabled={{not @edition}}
+              >
+                <:label>Évaluation</:label>
+                <:default as |option|>{{option.label}}</:default>
+              </PixMultiSelect>
+            </div>
+            <div class="field" data-testid="translationSelect">
+              <PixMultiSelect
+                @isSearchable={{true}}
+                @placeholder="Choisir un ou plusieurs types de maintenance"
+                @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
+                @emptyMessage="Aucun type de maintenance sélectionné"
+                @values={{@challenge.translationMaintenanceTags}}
+                @options={{this.translationMaintenanceTagOptions}}
+                @isDisabled={{not @edition}}
+              >
+                <:label>Traduction</:label>
+                <:default as |option|>{{option.label}}</:default>
+              </PixMultiSelect>
+            </div>
           </div>
         </div>
       {{/if}}

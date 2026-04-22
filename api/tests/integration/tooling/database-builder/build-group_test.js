@@ -45,7 +45,7 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       madeObsoleteAt: new Date('2023-04-04T10:47:05Z'),
       isQualityOk: false,
       assessmentMaintenanceTags: ['Prénom ou nom propre dans un embed ou dans du HTML intégré à l’épreuve', 'Anglicismes à reformuler'],
-      translationMaintenanceTags: ['règle, législation ou connaissance', 'réponses ambiguës'],
+      translationMaintenanceTags: ['Règle, législation ou connaissance', 'Réponses ambiguës'],
     });
     expect(result.localizedChallenge).deep.equal({
       id: 'challenge1',

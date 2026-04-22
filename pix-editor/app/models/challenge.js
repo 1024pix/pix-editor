@@ -116,16 +116,16 @@ export default class ChallengeModel extends Model {
 
   static get TRANSLATION_MAINTENANCE_TAGS() {
     return {
-      RULE: 'règle, législation ou connaissance',
-      INTERFACE: 'charte graphique ou interface',
-      SOFTWARE_EVOLUTION: 'évolution logicielle',
-      FIRSTNAMES: 'noms propres',
-      EXTERNAL_LINKS: 'liens externes',
-      SPOILABLE_INFO: 'e-rechinfo spoilable',
-      TOOL_QUESTION: 'question outil',
-      AMBIGUOUS_ANSWERS: 'réponses ambiguës',
-      KNOWN_EXPIRY_DATE: 'date de péremption connue',
-      NO_DECLI_INSTRUCTION: 'pas de mode d’emploi des déclinaisons ou pas d’antisèche',
+      RULE: 'Règle, législation ou connaissance',
+      INTERFACE: 'Charte graphique ou interface',
+      SOFTWARE_EVOLUTION: 'Évolution logicielle',
+      FIRSTNAMES: 'Noms propres',
+      EXTERNAL_LINKS: 'Liens externes',
+      SPOILABLE_INFO: 'E-rechinfo spoilable',
+      TOOL_QUESTION: 'Question outil',
+      AMBIGUOUS_ANSWERS: 'Réponses ambiguës',
+      KNOWN_EXPIRY_DATE: 'Date de péremption connue',
+      NO_DECLI_INSTRUCTION: 'Pas de mode d’emploi des déclinaisons ou pas d’antisèche',
     };
   }
 
