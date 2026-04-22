@@ -13,6 +13,7 @@ import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTags } from './data/tags.js';
 import { buildTutorials } from './data/tutorials.js';
+import { buildModules } from './data/modules.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
@@ -63,6 +64,8 @@ export async function seed(knex) {
 
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
+
+  buildModules(databaseBuilder);
 
   return databaseBuilder.commit();
 }
