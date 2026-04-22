@@ -258,6 +258,7 @@ export default class ChallengeForm extends Component {
         <div class="two fields">
           <div class="field">
             <PixMultiSelect
+              @isSearchable={{true}}
               @placeholder="Choisir un ou plusieurs types de maintenance"
               @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
               @emptyMessage="Aucun type de maintenance sélectionné"
@@ -271,6 +272,7 @@ export default class ChallengeForm extends Component {
           </div>
           <div class="field" data-testid="translationSelect">
             <PixMultiSelect
+              @isSearchable={{true}}
               @placeholder="Choisir un ou plusieurs types de maintenance"
               @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
               @emptyMessage="Aucun type de maintenance sélectionné"
