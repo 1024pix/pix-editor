@@ -194,6 +194,8 @@ describe('Integration | Repository | release-repository', function() {
   });
 
   describe('#getCurrentContent', function() {
+    let modules;
+
     beforeEach(function() {
       const { areas, competences, thematics, tubeIds, skills, challenges } = _mockRichAirtableContent();
 
@@ -235,6 +237,16 @@ describe('Integration | Repository | release-repository', function() {
         status: Mission.status.INACTIVE,
       });
 
+      const firstModule = domainBuilder.buildModule();
+      const secondModule = domainBuilder.buildModule({
+        shortId: 'secondar',
+        title: 'Second Module',
+      });
+      modules = [firstModule, secondModule];
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+
       return databaseBuilder.commit();
     });
 
@@ -243,7 +255,8 @@ describe('Integration | Repository | release-repository', function() {
       const currentContentDTO = await getCurrentContent();
 
       // Then
-      const expectedReleaseContentDTO = _getRichCurrentContentDTO();
+      const data = { modules };
+      const expectedReleaseContentDTO = _getRichCurrentContentDTO(data);
       expect(currentContentDTO).to.deep.equal(expectedReleaseContentDTO);
     });
   });
@@ -1006,7 +1019,7 @@ function _mockRichAirtableContent() {
   };
 }
 
-function _getRichCurrentContentDTO() {
+function _getRichCurrentContentDTO({ modules } = { modules: [] }) {
   const expectedFrameworkDTOs = [
     {
       id: 'frameworkA',
@@ -1595,6 +1608,7 @@ function _getRichCurrentContentDTO() {
       },
     },
   ];
+  const expectedModulesDTOs = modules;
 
   return {
     frameworks: expectedFrameworkDTOs,
@@ -1607,5 +1621,6 @@ function _getRichCurrentContentDTO() {
     courses: expectedCourseDTOs,
     tutorials: expectedTutorialDTOs,
     missions: expectedMissionsDTOs,
+    modules: expectedModulesDTOs,
   };
 }
