@@ -15,6 +15,7 @@ export * from './build-framework-for-release.js';
 export * from './build-localized-challenge.js';
 export * from './build-mission.js';
 export * from './build-mission-summary.js';
+export * from './build-module.js';
 export * from './build-release.js';
 export * from './build-skill.js';
 export * from './build-skill-for-release.js';
