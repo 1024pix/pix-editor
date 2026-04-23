@@ -1,5 +1,14 @@
 
 
+## v4.21.0 (23/04/2026)
+
+
+### :rocket: Amélioration
+- [#1451](https://github.com/1024pix/pix-editor/pull/1451) [FEATURE] Créer les seeds pour les modules (PIX-22523).
+- [#1449](https://github.com/1024pix/pix-editor/pull/1449) [FEATURE] Créer la table de stockage pour les modules (PIX-22006).
+- [#1447](https://github.com/1024pix/pix-editor/pull/1447) [FEATURE] Add github action to upload SBOMs to Dependency-Track.
+- [#1448](https://github.com/1024pix/pix-editor/pull/1448) [FEATURE] Supprimer les champs contextualizés des épreuves (PIX-22423).
+
 ## v4.20.0 (17/04/2026)
 
 
