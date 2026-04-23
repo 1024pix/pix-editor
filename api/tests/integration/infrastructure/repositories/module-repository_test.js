@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { save } from '../../../../lib/infrastructure/repositories/module-repository.js';
+import { save, list } from '../../../../lib/infrastructure/repositories/module-repository.js';
 
 describe('Module Repository', () => {
   describe('save', () => {
@@ -35,6 +35,25 @@ describe('Module Repository', () => {
       // then
       const { details, ...moduleData } = moduleWithUpdate;
       await expect(knex.select().from('modules')).resolves.toStrictEqual([{ ...details, ...moduleData, updatedAt: expect.any(Date) }]);
+    });
+  });
+
+  describe('list', () => {
+    it('lists all modules', async () => {
+      // given
+      const firstModule = domainBuilder.buildModule({ slug: 'a' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      const modules = await list();
+
+      // then
+      expect(modules).toStrictEqual([firstModule, secondModule]);
     });
   });
 });
