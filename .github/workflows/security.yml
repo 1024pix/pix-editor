@@ -10,15 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: "package.json"
 
       - name: Install Cyclone DX
-        run: npm install @cyclonedx/cyclonedx-npm@4.2.0
+        run: npm install -g @cyclonedx/cyclonedx-npm@4.2.0
+
+      - name: Pix Editor Monorepo - Install dependencies
+        run: npm ci
 
       - name: Pix Editor Monorepo - Create SBOM
-        run: npm ci && npx @cyclonedx/cyclonedx-npm --output-file pix-editor-repo-sbom.json package.json && [ -e "pix-editor-repo-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        id: create_monorepo_sbom
+        continue-on-error: true
+        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-repo-sbom.json package.json
 
       - name: Pix Editor Monorepo - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+        if: ${{ steps.create_monorepo_sbom.outcome == 'success' }}
+        continue-on-error: true
         with:
           serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
           apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
@@ -29,10 +39,14 @@ jobs:
           autoCreate: true
 
       - name: Pix Editor front - Create SBOM
-        run: npm ci --prefix pix-editor/ && npx @cyclonedx/cyclonedx-npm --output-file pix-editor-front-sbom.json pix-editor/package.json && [ -e "pix-editor-front-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        id: create_front_sbom
+        continue-on-error: true
+        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-front-sbom.json pix-editor/package.json
 
       - name: Pix Editor front - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+        if: ${{ steps.create_front_sbom.outcome == 'success' }}
+        continue-on-error: true
         with:
           serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
           apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
@@ -43,10 +57,14 @@ jobs:
           autoCreate: true
 
       - name: Pix Editor API - Create SBOM
-        run: npm ci --prefix api/ && npx @cyclonedx/cyclonedx-npm --output-file pix-editor-api-sbom.json api/package.json && [ -e "pix-editor-api-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        id: create_api_sbom
+        continue-on-error: true
+        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-api-sbom.json api/package.json
 
       - name: Pix Editor API - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+        if: ${{ steps.create_api_sbom.outcome == 'success' }}
+        continue-on-error: true
         with:
           serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
           apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
@@ -56,11 +74,19 @@ jobs:
           bomFilename: "pix-editor-api-sbom.json"
           autoCreate: true
 
+      - name: Pix Editor Challenge-Parser - Install dependencies
+        working-directory: challenge-parser
+        run: npm ci
+
       - name: Pix Editor Challenge-Parser - Create SBOM
-        run: npm ci --prefix api/ && npx @cyclonedx/cyclonedx-npm --output-file pix-editor-challengeparser-sbom.json api/package.json && [ -e "pix-editor-challengeparser-sbom.json" ] && echo '[+] SBOM created' || echo '[!] Fail to create SBOM'
+        id: create_challenge_parser_sbom
+        continue-on-error: true
+        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-challengeparser-sbom.json challenge-parser/package.json
 
       - name: Pix Editor Challenge-Parser - Upload BOM to Dependency-Track
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+        if: ${{ steps.create_challenge_parser_sbom.outcome == 'success' }}
+        continue-on-error: true
         with:
           serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
           apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
