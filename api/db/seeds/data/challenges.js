@@ -21,6 +21,12 @@ const iterFor = {
   deafAndHardOfHearing: cycle(
     Object.values(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES).filter(ignoreEmptyValues),
   ),
+  assessmentMaintenanceTags: cycle(
+    Object.values(Challenge.ASSESSMENT_MAINTENANCE_TAGS),
+  ),
+  translationMaintenanceTags: cycle(
+    Object.values(Challenge.TRANSLATION_MAINTENANCE_TAGS),
+  ),
   timer: cycle([
     30,
     120,
@@ -142,6 +148,8 @@ export function buildChallenge({
     type,
     autoReply,
     isQualityOk,
+    assessmentMaintenanceTags: isProto ? [iterFor.assessmentMaintenanceTags.next().value] : null,
+    translationMaintenanceTags: isProto ? [iterFor.translationMaintenanceTags.next().value] : null,
   };
   databaseBuilder.factory.buildChallenge(challengeItem);
   addPrimaryLocalizedChallenge(challengeItem, databaseBuilder);

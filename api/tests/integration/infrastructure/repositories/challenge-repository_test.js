@@ -47,6 +47,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         shuffled: true,
         files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
       };
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
@@ -124,6 +126,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
@@ -161,6 +164,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeA',
@@ -228,6 +232,8 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -332,6 +338,8 @@ describe('Integration | Repository | challenge-repository', () => {
           madeObsoleteAt: null,
           updatedAt: '2025-10-23T10:20:00Z',
           shuffled: false,
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
         };
 
         databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -376,6 +384,7 @@ describe('Integration | Repository | challenge-repository', () => {
             accessibility2: challengeA_data.accessibility2,
             alternativeVersion: challengeA_data.alternativeVersion,
             archivedAt: challengeA_data.archivedAt,
+            assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
             author: challengeA_data.author,
             autoReply: challengeA_data.autoReply,
             competenceId: challengeA_data.competenceId,
@@ -413,6 +422,7 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeA_data.t2Status,
             t3Status: challengeA_data.t3Status,
             timer: challengeA_data.timer,
+            translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
             translations: {
               fr: {
                 instruction: 'instruction FR challengeA TotO',
@@ -430,6 +440,7 @@ describe('Integration | Repository | challenge-repository', () => {
             accessibility2: challengeB_data.accessibility2,
             alternativeVersion: challengeB_data.alternativeVersion,
             archivedAt: challengeB_data.archivedAt,
+            assessmentMaintenanceTags: challengeB_data.assessmentMaintenanceTags,
             author: challengeB_data.author,
             autoReply: challengeB_data.autoReply,
             competenceId: challengeB_data.competenceId,
@@ -461,6 +472,7 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeB_data.t2Status,
             t3Status: challengeB_data.t3Status,
             timer: challengeB_data.timer,
+            translationMaintenanceTags: challengeB_data.translationMaintenanceTags,
             translations: {
               fr: {
                 instruction: 'instruction FR challengeB',
@@ -477,7 +489,7 @@ describe('Integration | Repository | challenge-repository', () => {
     });
 
     describe('when search is not present in instruction or proposals', () => {
-      it('should find challenges from airtable where embed url contains search', async () => {
+      it('should find challenges where embed url contains search', async () => {
         // given
         const challengeA_data = {
           id: 'challengeA_id',
@@ -518,6 +530,8 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -595,6 +609,7 @@ describe('Integration | Repository | challenge-repository', () => {
             accessibility2: challengeA_data.accessibility2,
             alternativeVersion: challengeA_data.alternativeVersion,
             archivedAt: challengeA_data.archivedAt,
+            assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
             author: challengeA_data.author,
             autoReply: challengeA_data.autoReply,
             competenceId: challengeA_data.competenceId,
@@ -632,6 +647,7 @@ describe('Integration | Repository | challenge-repository', () => {
             t2Status: challengeA_data.t2Status,
             t3Status: challengeA_data.t3Status,
             timer: challengeA_data.timer,
+            translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
             translations: {
               fr: {
                 instruction: 'instruction FR challengeA',
@@ -691,6 +707,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EXTERNAL_LINKS],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -794,6 +812,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -833,6 +853,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
@@ -870,6 +891,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeA',
@@ -887,6 +909,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeB_data.accessibility2,
           alternativeVersion: challengeB_data.alternativeVersion,
           archivedAt: challengeB_data.archivedAt,
+          assessmentMaintenanceTags: challengeB_data.assessmentMaintenanceTags,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
@@ -918,6 +941,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
+          translationMaintenanceTags: challengeB_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeB',
@@ -983,6 +1007,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.LOCALIZED_URL],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1086,6 +1112,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.LOCALIZED_URL],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -1125,6 +1153,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
@@ -1162,6 +1191,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeA',
@@ -1179,6 +1209,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeB_data.accessibility2,
           alternativeVersion: challengeB_data.alternativeVersion,
           archivedAt: challengeB_data.archivedAt,
+          assessmentMaintenanceTags: challengeB_data.assessmentMaintenanceTags,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
@@ -1210,6 +1241,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
+          translationMaintenanceTags: challengeB_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeB',
@@ -1273,6 +1305,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.HARD_CONTEXTUALIZATION_EMBED],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
       };
       databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(challengeA_data);
@@ -1434,6 +1468,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: challengeA_data.competenceId,
@@ -1471,6 +1506,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeA',
@@ -1488,6 +1524,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeB_data.alternativeVersion,
           archivedAt: challengeB_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: challengeB_data.competenceId,
@@ -1528,6 +1565,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeB',
@@ -1585,6 +1623,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1633,6 +1673,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
       };
 
       databaseBuilder.factory.buildChallenge(challengeActiveA_data);
@@ -1727,6 +1769,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeActiveA_data.accessibility2,
           alternativeVersion: challengeActiveA_data.alternativeVersion,
           archivedAt: challengeActiveA_data.archivedAt,
+          assessmentMaintenanceTags: challengeActiveA_data.assessmentMaintenanceTags,
           author: challengeActiveA_data.author,
           autoReply: challengeActiveA_data.autoReply,
           competenceId: challengeActiveA_data.competenceId,
@@ -1758,6 +1801,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeActiveA_data.t2Status,
           t3Status: challengeActiveA_data.t3Status,
           timer: challengeActiveA_data.timer,
+          translationMaintenanceTags: challengeActiveA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeActiveA',
@@ -1774,6 +1818,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeDraftA_data.accessibility2,
           alternativeVersion: challengeDraftA_data.alternativeVersion,
           archivedAt: challengeDraftA_data.archivedAt,
+          assessmentMaintenanceTags: challengeDraftA_data.assessmentMaintenanceTags,
           author: challengeDraftA_data.author,
           autoReply: challengeDraftA_data.autoReply,
           competenceId: challengeDraftA_data.competenceId,
@@ -1810,6 +1855,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeDraftA_data.t2Status,
           t3Status: challengeDraftA_data.t3Status,
           timer: challengeDraftA_data.timer,
+          translationMaintenanceTags: challengeDraftA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeDraftA',
@@ -1877,6 +1923,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1925,6 +1973,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
       };
 
       databaseBuilder.factory.buildChallenge(challengeProtoB_data);
@@ -1995,6 +2045,7 @@ describe('Integration | Repository | challenge-repository', () => {
           alternativeVersion: challengeProtoA_data.alternativeVersion,
           archivedAt: challengeProtoA_data.archivedAt,
           author: challengeProtoA_data.author,
+          assessmentMaintenanceTags: challengeProtoA_data.assessmentMaintenanceTags,
           autoReply: challengeProtoA_data.autoReply,
           competenceId: challengeProtoA_data.competenceId,
           createdAt: challengeProtoA_data.createdAt,
@@ -2025,6 +2076,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeProtoA_data.t2Status,
           t3Status: challengeProtoA_data.t3Status,
           timer: challengeProtoA_data.timer,
+          translationMaintenanceTags: challengeProtoA_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeProtoA',
@@ -2041,6 +2093,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeProtoB_data.accessibility2,
           alternativeVersion: challengeProtoB_data.alternativeVersion,
           archivedAt: challengeProtoB_data.archivedAt,
+          assessmentMaintenanceTags: challengeProtoB_data.assessmentMaintenanceTags,
           author: challengeProtoB_data.author,
           autoReply: challengeProtoB_data.autoReply,
           competenceId: challengeProtoB_data.competenceId,
@@ -2072,6 +2125,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeProtoB_data.t2Status,
           t3Status: challengeProtoB_data.t3Status,
           timer: challengeProtoB_data.timer,
+          translationMaintenanceTags: challengeProtoB_data.translationMaintenanceTags,
           translations: {
             fr: {
               instruction: 'instruction FR challengeProtoB',
@@ -2096,7 +2150,7 @@ describe('Integration | Repository | challenge-repository', () => {
   });
 
   describe('#createBatch', () => {
-    it('should create several challenges in airtable and its localized challenges and translations in PG', async () => {
+    it('should create several challenges and its localized challenges and translations in PG', async () => {
       // given
       const primaryLocalizedChallenge_challengeA = domainBuilder.buildLocalizedChallenge({
         id: 'challengeA_id',
@@ -2138,6 +2192,8 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility2: Challenge.ACCESSIBILITY1.KO,
         alternativeVersion: 1,
         archivedAt: null,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
         createdAt: null,
         validatedAt: null,
         madeObsoleteAt: null,
@@ -2206,6 +2262,8 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility2: Challenge.ACCESSIBILITY1.OK,
         alternativeVersion: 3,
         archivedAt: null,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
         createdAt: null,
         validatedAt: null,
         madeObsoleteAt: null,
@@ -2269,6 +2327,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           competenceId: 'competence1',
@@ -2295,6 +2354,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           translations: challengeA.translations,
           type: challengeA_data.type,
           updatedAt: expect.any(Date),
@@ -2306,6 +2366,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeB_data.accessibility2,
           alternativeVersion: challengeB_data.alternativeVersion,
           archivedAt: challengeB_data.archivedAt,
+          assessmentMaintenanceTags: challengeB_data.assessmentMaintenanceTags,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           competenceId: 'competence1',
@@ -2331,6 +2392,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
+          translationMaintenanceTags: challengeB_data.translationMaintenanceTags,
           translations: challengeB.translations,
           type: challengeB_data.type,
           updatedAt: expect.any(Date),
@@ -2398,6 +2460,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeA_data.accessibility2,
           alternativeVersion: challengeA_data.alternativeVersion,
           archivedAt: challengeA_data.archivedAt,
+          assessmentMaintenanceTags: challengeA_data.assessmentMaintenanceTags,
           author: challengeA_data.author,
           autoReply: challengeA_data.autoReply,
           createdAt: expect.any(Date),
@@ -2420,6 +2483,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeA_data.t2Status,
           t3Status: challengeA_data.t3Status,
           timer: challengeA_data.timer,
+          translationMaintenanceTags: challengeA_data.translationMaintenanceTags,
           type: challengeA_data.type,
           updatedAt: expect.any(Date),
           validatedAt: challengeA_data.validatedAt,
@@ -2430,6 +2494,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeB_data.accessibility2,
           alternativeVersion: challengeB_data.alternativeVersion,
           archivedAt: challengeB_data.archivedAt,
+          assessmentMaintenanceTags: challengeB_data.assessmentMaintenanceTags,
           author: challengeB_data.author,
           autoReply: challengeB_data.autoReply,
           createdAt: expect.any(Date),
@@ -2452,6 +2517,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeB_data.t2Status,
           t3Status: challengeB_data.t3Status,
           timer: challengeB_data.timer,
+          translationMaintenanceTags: challengeB_data.translationMaintenanceTags,
           type: challengeB_data.type,
           updatedAt: expect.any(Date),
           validatedAt: challengeB_data.validatedAt,
@@ -2499,6 +2565,7 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY1.KO,
         alternativeVersion: 1,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME],
         archivedAt: null,
         createdAt: null,
         validatedAt: null,
@@ -2529,6 +2596,7 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         t3StatusAirtable: 'Activé',
         timer: 123,
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
         type: 'type challengeToCreate',
         version: 4,
       };
@@ -2584,6 +2652,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeToCreate_data.accessibility2,
           alternativeVersion: challengeToCreate_data.alternativeVersion,
           archivedAt: challengeToCreate_data.archivedAt,
+          assessmentMaintenanceTags: challengeToCreate_data.assessmentMaintenanceTags,
           author: challengeToCreate_data.author,
           autoReply: challengeToCreate_data.autoReply,
           competenceId: 'competence1',
@@ -2609,6 +2678,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeToCreate_data.t2Status,
           t3Status: challengeToCreate_data.t3Status,
           timer: challengeToCreate_data.timer,
+          translationMaintenanceTags: challengeToCreate_data.translationMaintenanceTags,
           translations: challengeToCreate.translations,
           type: challengeToCreate_data.type,
           updatedAt: expect.any(Date),
@@ -2623,6 +2693,7 @@ describe('Integration | Repository | challenge-repository', () => {
           accessibility2: challengeToCreate_data.accessibility2,
           alternativeVersion: challengeToCreate_data.alternativeVersion,
           archivedAt: challengeToCreate_data.archivedAt,
+          assessmentMaintenanceTags: challengeToCreate_data.assessmentMaintenanceTags,
           author: challengeToCreate_data.author,
           autoReply: challengeToCreate_data.autoReply,
           createdAt: expect.any(Date),
@@ -2645,6 +2716,7 @@ describe('Integration | Repository | challenge-repository', () => {
           t2Status: challengeToCreate_data.t2Status,
           t3Status: challengeToCreate_data.t3Status,
           timer: challengeToCreate_data.timer,
+          translationMaintenanceTags: challengeToCreate_data.translationMaintenanceTags,
           type: challengeToCreate_data.type,
           updatedAt: expect.any(Date),
           validatedAt: challengeToCreate_data.validatedAt,

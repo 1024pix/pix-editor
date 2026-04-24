@@ -35,6 +35,8 @@ export function buildChallengeDatasourceObject({
   madeObsoleteAt = '2023-04-04T10:47:05Z',
   shuffled = false,
   isQualityOk = false,
+  assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
+  translationMaintenanceTags = [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
 } = {}) {
   return {
     id,
@@ -73,5 +75,7 @@ export function buildChallengeDatasourceObject({
     madeObsoleteAt: typeof madeObsoleteAt === 'string' ? new Date(madeObsoleteAt) : madeObsoleteAt,
     shuffled,
     isQualityOk,
+    assessmentMaintenanceTags,
+    translationMaintenanceTags,
   };
 }

@@ -50,6 +50,8 @@ export class Challenge {
     version,
     prototypeChallenge,
     prototypePrimaryLocalizedChallenge,
+    assessmentMaintenanceTags,
+    translationMaintenanceTags,
   } = {}) {
     this.accessibility1 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility1 : prototypeChallenge.accessibility1;
     this.accessibility2 = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? accessibility2 : prototypeChallenge.accessibility2;
@@ -82,6 +84,8 @@ export class Challenge {
     this.updatedAt = updatedAt;
     this.validatedAt = validatedAt;
     this.version = version;
+    this.assessmentMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? assessmentMaintenanceTags : prototypeChallenge.assessmentMaintenanceTags;
+    this.translationMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? translationMaintenanceTags : prototypeChallenge.translationMaintenanceTags;
 
     this.localizedChallenges = localizedChallenges;
 
@@ -92,6 +96,44 @@ export class Challenge {
     this.#prototypePrimaryLocalizedChallenge = prototypePrimaryLocalizedChallenge;
 
     this.#translate(this.primaryLocale);
+  }
+
+  static get ASSESSMENT_MAINTENANCE_TAGS() {
+    return {
+      NAME: 'Prénom ou nom propre dans la consigne/propositions/réponse/indice',
+      EMBED_NAME: 'Prénom ou nom propre dans un embed ou dans du HTML intégré à l’épreuve',
+      SIMPLE_FILE: 'Fichier simple à traduire',
+      SIMPLE_ILLUSTRATION: 'Illustration simple à traduire',
+      ZUCCHINI: 'Courgette dans un fichier',
+      LOCALIZED_URL: 'URL avec équivalent dans une autre locale',
+      FRENCH_SERVICE: 'Service numérique français',
+      ILLUSTRATION_SCREENSHOT: 'Capture d\'écran dans une illustration',
+      STYLE_ADAPTATION: 'Adaptation de style de fichier dans la langue ciblé',
+      HEAVY_ILLUSTRATION: 'Illustration lourde à retravailler',
+      LITERARY_WORK: 'Œuvre littéraire',
+      FILE_TO_REDO: 'Fichier à refaire entièrement',
+      SPECIFIC_WEBSITE: 'Site ou page web spécifique',
+      HARD_CONTEXTUALIZATION_EMBED: 'Embed difficile à contextualiser',
+      ENGLISH_WORD: 'Anglicismes à reformuler',
+      WEBSITE_TO_REDO: 'Site web ou blog à refaire entièrement',
+      EMBED_TO_REDO: 'Embed non traduisible à refaire entièrement',
+      MISC: 'Éléments sans équivalents',
+    };
+  }
+
+  static get TRANSLATION_MAINTENANCE_TAGS() {
+    return {
+      RULE: 'Règle, législation ou connaissance',
+      INTERFACE: 'Charte graphique ou interface',
+      SOFTWARE_EVOLUTION: 'Évolution logicielle',
+      FIRSTNAMES: 'Noms propres',
+      EXTERNAL_LINKS: 'Liens externes',
+      SPOILABLE_INFO: 'E-rechinfo spoilable',
+      TOOL_QUESTION: 'Question outil',
+      AMBIGUOUS_ANSWERS: 'Réponses ambiguës',
+      KNOWN_EXPIRY_DATE: 'Date de péremption connue',
+      NO_DECLI_INSTRUCTION: 'Pas de mode d’emploi des déclinaisons ou pas d’antisèche',
+    };
   }
 
   static get STATUSES() {
@@ -323,6 +365,7 @@ export class Challenge {
       accessibility2: this.accessibility2,
       alternativeVersion,
       archivedAt: null,
+      assessmentMaintenanceTags: this.assessmentMaintenanceTags,
       author: this.author,
       autoReply: this.autoReply,
       competenceId: competenceId,
@@ -345,6 +388,7 @@ export class Challenge {
       t2Status: this.t2Status,
       t3Status: this.t3Status,
       timer: this.timer,
+      translationMaintenanceTags: this.translationMaintenanceTags,
       type: this.type,
       updatedAt: null,
       validatedAt: null,
