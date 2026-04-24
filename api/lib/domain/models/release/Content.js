@@ -3,11 +3,12 @@ import { ChallengeForRelease } from './ChallengeForRelease.js';
 import { CompetenceForRelease } from './CompetenceForRelease.js';
 import { CourseForRelease } from './CourseForRelease.js';
 import { FrameworkForRelease } from './FrameworkForRelease.js';
+import { MissionForRelease } from './MissionForRelease.js';
+import { ModuleForRelease } from './ModuleForRelease.js';
 import { SkillForRelease } from './SkillForRelease.js';
 import { ThematicForRelease } from './ThematicForRelease.js';
 import { TubeForRelease } from './TubeForRelease.js';
 import { TutorialForRelease } from './TutorialForRelease.js';
-import { MissionForRelease } from './MissionForRelease.js';
 
 export class Content {
   constructor({
@@ -21,6 +22,7 @@ export class Content {
     tubes,
     tutorials,
     missions,
+    modules,
   } = {}) {
     this.areas = areas;
     this.challenges = challenges;
@@ -32,6 +34,7 @@ export class Content {
     this.tubes = tubes;
     this.tutorials = tutorials;
     this.missions = missions;
+    this.modules = modules;
   }
 
   static buildForRelease({
@@ -45,19 +48,20 @@ export class Content {
     tubes,
     tutorials,
     missions,
+    modules,
   }) {
-    const content = new Content();
-    content.areas = areas ? areas.map((area) => new AreaForRelease(area)) : [];
-    content.challenges = challenges ? challenges.map((challenge) => new ChallengeForRelease(challenge)) : [];
-    content.competences = competences ? competences.map((competence) => new CompetenceForRelease(competence)) : [];
-    content.courses = courses ? courses.map((course) => new CourseForRelease(course)) : [];
-    content.frameworks = frameworks ? frameworks.map((framework) => new FrameworkForRelease(framework)) : [];
-    content.skills = skills ? skills.map((skill) => new SkillForRelease(skill)) : [];
-    content.thematics = thematics ? thematics.map((thematic) => new ThematicForRelease(thematic)) : [];
-    content.tubes = tubes ? tubes.map((tube) => new TubeForRelease(tube)) : [];
-    content.tutorials = tutorials ? tutorials.map((tutorial) => new TutorialForRelease(tutorial)) : [];
-    content.missions = missions ? missions.map((mission) => new MissionForRelease(mission)) : [];
-
-    return content;
+    return new Content({
+      areas: areas?.map((area) => new AreaForRelease(area)) ?? [],
+      challenges: challenges?.map((challenge) => new ChallengeForRelease(challenge)) ?? [],
+      competences: competences?.map((competence) => new CompetenceForRelease(competence)) ?? [],
+      courses: courses?.map((course) => new CourseForRelease(course)) ?? [],
+      frameworks: frameworks?.map((framework) => new FrameworkForRelease(framework)) ?? [],
+      skills: skills?.map((skill) => new SkillForRelease(skill)) ?? [],
+      thematics: thematics?.map((thematic) => new ThematicForRelease(thematic)) ?? [],
+      tubes: tubes?.map((tube) => new TubeForRelease(tube)) ?? [],
+      tutorials: tutorials?.map((tutorial) => new TutorialForRelease(tutorial)) ?? [],
+      missions: missions?.map((mission) => new MissionForRelease(mission)) ?? [],
+      modules: modules?.map((module) => new ModuleForRelease(module)) ?? [],
+    });
   }
 }

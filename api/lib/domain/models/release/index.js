@@ -4,6 +4,8 @@ export * from './CompetenceForRelease.js';
 export * from './Content.js';
 export * from './CourseForRelease.js';
 export * from './FrameworkForRelease.js';
+export * from './MissionForRelease.js';
+export * from './ModuleForRelease.js';
 export * from './Release.js';
 export * from './SkillForRelease.js';
 export * from './ThematicForRelease.js';

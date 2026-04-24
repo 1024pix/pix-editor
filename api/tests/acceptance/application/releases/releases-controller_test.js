@@ -12,6 +12,13 @@ import {
 } from '../../../../lib/domain/models/release/index.js';
 
 async function mockCurrentContent() {
+  const firstModule = domainBuilder.buildModule();
+  const secondModule = domainBuilder.buildModule({
+    shortId: 'secondar',
+    title: 'Second Module',
+  });
+  const modules = [firstModule, secondModule];
+
   const expectedCurrentContent = {
     frameworks: [
       {
@@ -276,6 +283,7 @@ async function mockCurrentContent() {
         },
       },
     ],
+    modules,
   };
 
   const attachments = [
@@ -473,6 +481,9 @@ async function mockCurrentContent() {
   });
 
   attachments.forEach(databaseBuilder.factory.buildAttachment);
+
+  databaseBuilder.factory.buildModule(firstModule);
+  databaseBuilder.factory.buildModule(secondModule);
 
   await databaseBuilder.commit();
 
@@ -725,6 +736,7 @@ async function mockContentForRelease() {
         documentationUrl: null,
       }),
     ],
+    modules: [{ ...domainBuilder.buildModuleForRelease(), title: 'Module 1' }, { ...domainBuilder.buildModuleForRelease({ shortId: 'tatatiti', title: 'Module 2' }) }],
   };
 
   const attachments = [
@@ -879,6 +891,8 @@ async function mockContentForRelease() {
 
   attachments.forEach(databaseBuilder.factory.buildAttachment);
 
+  expectedCurrentContent.modules.forEach(databaseBuilder.factory.buildModule);
+
   await databaseBuilder.commit();
   return expectedCurrentContent;
 }
@@ -934,6 +948,7 @@ describe('Acceptance | Controller | release-controller', () => {
             tubes: [],
             tutorials: [],
             missions: [],
+            modules: [],
           },
         });
         const expectedContent = {
@@ -947,6 +962,7 @@ describe('Acceptance | Controller | release-controller', () => {
           tubes: [],
           tutorials: [],
           missions: [],
+          modules: [],
         };
         await databaseBuilder.commit();
 
@@ -991,7 +1007,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
         // then
         expect(response.statusCode).to.equal(304);
-        expect(response.result).to.be.null;
+        expect(response.result).toBeNull();
       });
 
       it('should return the latest release if the release is newer than given if-modified-since date', async function() {
@@ -1008,6 +1024,7 @@ describe('Acceptance | Controller | release-controller', () => {
             tubes: [],
             tutorials: [],
             missions: [],
+            modules: [],
           },
           createdAt: new Date('2023-01-01T00:00:01Z'),
         });
@@ -1022,6 +1039,7 @@ describe('Acceptance | Controller | release-controller', () => {
           tubes: [],
           tutorials: [],
           missions: [],
+          modules: [],
         };
         await databaseBuilder.commit();
 
@@ -1168,6 +1186,8 @@ describe('Acceptance | Controller | release-controller', () => {
             thematics: [],
             tubes: [],
             tutorials: [],
+            missions: [],
+            modules: [],
           },
           createdAt: new Date('2021-01-01'),
         });
@@ -1188,6 +1208,7 @@ describe('Acceptance | Controller | release-controller', () => {
           tubes: [],
           tutorials: [],
           missions: [],
+          modules: [],
         };
 
         await databaseBuilder.commit();

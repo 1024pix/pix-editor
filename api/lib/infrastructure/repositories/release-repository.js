@@ -5,6 +5,7 @@ import {
   competenceRepository,
   frameworkRepository,
   missionRepository,
+  moduleRepository,
   skillRepository,
   thematicRepository,
   tubeRepository,
@@ -79,6 +80,7 @@ async function _getCurrentContent() {
     tutorials,
     courses,
     missions,
+    modules,
   ] = await Promise.all([
     challengeRepository.list(),
     areaRepository.list(),
@@ -91,6 +93,7 @@ async function _getCurrentContent() {
     tutorialRepository.list(),
     getStaticCourses(),
     missionRepository.list(),
+    moduleRepository.list(),
   ]);
   fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges.flatMap((challenge) => [challenge, ...challenge.alternativeLocales.map((locale) => challenge.translate(locale))]);
@@ -120,6 +123,7 @@ async function _getCurrentContent() {
     tutorials: filteredTutorials,
     courses,
     missions: transformedMissions,
+    modules,
   };
 }
 
