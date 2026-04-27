@@ -1,5 +1,11 @@
 
 
+## v4.23.0 (27/04/2026)
+
+
+### :rocket: Amélioration
+- [#1458](https://github.com/1024pix/pix-editor/pull/1458) [FEATURE] Ajouter les modules dans le endpoint de réplication (PIX-22540).
+
 ## v4.22.0 (27/04/2026)
 
 
