@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {
   AreaForReplication,
   FrameworkForReplication,
+  ModuleForReplication,
   SkillForReplication,
 } from '../../../lib/domain/models/replication/index.js';
 
@@ -34,9 +35,9 @@ describe('Acceptance | Controller | replication-data-controller', () => {
 
       // then
       const result = JSON.parse(response.result);
-      const resultWithoutTranslations = _.omit(result, 'translations');
+      const resultWithoutTranslations = _.omit(result, 'translations', 'modules');
       const expectedCurrentContentWithoutTranslations = JSON.parse(
-        JSON.stringify(_.omit(expectedCurrentContent, 'translations')),
+        JSON.stringify(_.omit(expectedCurrentContent, 'translations', 'modules')),
       );
       expect(resultWithoutTranslations).toMatchObject(expectedCurrentContentWithoutTranslations);
       expect(result.translations).toMatchObject(
@@ -319,6 +320,9 @@ async function mockCurrentContent() {
     },
   ];
 
+  const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', slug: 'cd' })];
+  expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
+
   expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
   expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
   expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
@@ -355,6 +359,8 @@ async function mockCurrentContent() {
     },
     false,
   );
+
+  modules.forEach(databaseBuilder.factory.buildModule);
 
   expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({

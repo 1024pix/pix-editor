@@ -5,6 +5,7 @@ import {
   competenceRepository,
   frameworkRepository,
   missionRepository,
+  moduleRepository,
   skillRepository,
   staticCourseRepository,
   thematicRepository,
@@ -72,6 +73,9 @@ export async function* streamLearningContentForReplication(signal) {
     skills,
     challenges: missionsChallenges,
   }));
+
+  const modules = await moduleRepository.listForReplication();
+  yield* wrapValuesWithType('modules')(modules);
 
   const translationsStream = translationRepository.streamForReplication(signal);
   const wrapTranslation = wrapValueWithType('translations');
