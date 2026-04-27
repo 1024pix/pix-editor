@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { save, list } from '../../../../lib/infrastructure/repositories/module-repository.js';
+import { list, listForReplication, save } from '../../../../lib/infrastructure/repositories/module-repository.js';
+import { ModuleForReplication } from '../../../../lib/domain/models/replication/index.js';
 
 describe('Module Repository', () => {
   describe('save', () => {
@@ -54,6 +55,26 @@ describe('Module Repository', () => {
 
       // then
       expect(modules).toStrictEqual([firstModule, secondModule]);
+    });
+  });
+
+  describe('listForReplication', () => {
+    it('lists all modules for replication', async () => {
+      // given
+      const firstModule = domainBuilder.buildModule({ slug: 'a' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+      await databaseBuilder.commit();
+
+      const expectedModules = [firstModule, secondModule].map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
+
+      // when
+      const modules = await listForReplication();
+
+      // then
+      expect(modules).toStrictEqual(expectedModules);
     });
   });
 });

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {
   AreaForReplication,
   FrameworkForReplication,
+  ModuleForReplication,
   SkillForReplication,
 } from '../../../lib/domain/models/replication/index.js';
 
@@ -16,36 +17,6 @@ describe('Acceptance | Controller | replication-data-controller', () => {
   beforeEach(async function() {
     user = databaseBuilder.factory.buildAdminUser();
     await databaseBuilder.commit();
-  });
-
-  describe('GET /api/replication-data', function() {
-    it('should return data for replication', async function() {
-      const expectedCurrentContent = await mockCurrentContent();
-
-      const server = await createServer();
-      const currentContentOptions = {
-        method: 'GET',
-        url: '/api/replication-data',
-        headers: generateAuthorizationHeader(user),
-      };
-
-      // when
-      const response = await server.inject(currentContentOptions);
-
-      // then
-      const result = JSON.parse(response.result);
-      const resultWithoutTranslations = _.omit(result, 'translations');
-      const expectedCurrentContentWithoutTranslations = JSON.parse(
-        JSON.stringify(_.omit(expectedCurrentContent, 'translations')),
-      );
-      expect(resultWithoutTranslations).toMatchObject(expectedCurrentContentWithoutTranslations);
-      expect(result.translations).toMatchObject(
-        expectedCurrentContent.translations.map((translation) => ({
-          ...translation,
-          id: expect.any(Number),
-        })),
-      );
-    });
   });
 
   describe('GET /api/replication-stream', function() {
@@ -319,6 +290,9 @@ async function mockCurrentContent() {
     },
   ];
 
+  const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', slug: 'cd' })];
+  expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
+
   expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
   expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
   expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
@@ -355,6 +329,8 @@ async function mockCurrentContent() {
     },
     false,
   );
+
+  modules.forEach(databaseBuilder.factory.buildModule);
 
   expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({

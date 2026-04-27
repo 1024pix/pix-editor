@@ -1,5 +1,6 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { Module } from '../../domain/models/index.js';
+import { ModuleForReplication } from '../../domain/models/replication/index.js';
 
 export async function save({ details, sections, glossary, ...module }, transaction = knex) {
   const moduleDTO = {
@@ -17,6 +18,25 @@ export async function list() {
   return modules.map(toDomain);
 }
 
+export async function listForReplication() {
+  const modules = await knex.select(
+    'id',
+    'shortId',
+    'slug',
+    'title',
+    'isBeta',
+    'visibility',
+    'level',
+    'duration',
+    'objectives',
+  ).from('modules').orderBy('slug', 'asc');
+  return modules.map(toDomainForReplication);
+}
+
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...module }) {
   return new Module({ ...module, details: { image, description, duration, level, objectives, tabletSupport } });
+}
+
+function toDomainForReplication(module) {
+  return new ModuleForReplication(module);
 }
