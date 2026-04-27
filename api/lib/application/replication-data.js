@@ -2,24 +2,11 @@ import { PassThrough, Writable } from 'node:stream';
 
 import { iterableToStream, stringifyMultiJsonStream } from 'json-stream-es';
 
-import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
-import { getLearningContentForReplication, streamLearningContentForReplication } from '../domain/usecases/index.js';
+import { streamLearningContentForReplication } from '../domain/usecases/index.js';
 import { logger, SCOPES } from '../infrastructure/logger.js';
 
 export async function register(server) {
   server.route([
-    {
-      method: 'GET',
-      path: '/api/replication-data',
-      config: {
-        handler: async function() {
-          return promiseStreamer({
-            promise: getLearningContentForReplication(),
-            loggingScope: SCOPES.REPLICATION,
-          });
-        },
-      },
-    },
     {
       method: 'GET',
       path: '/api/replication-stream',

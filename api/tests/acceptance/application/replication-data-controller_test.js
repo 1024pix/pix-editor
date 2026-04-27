@@ -19,36 +19,6 @@ describe('Acceptance | Controller | replication-data-controller', () => {
     await databaseBuilder.commit();
   });
 
-  describe('GET /api/replication-data', function() {
-    it('should return data for replication', async function() {
-      const expectedCurrentContent = await mockCurrentContent();
-
-      const server = await createServer();
-      const currentContentOptions = {
-        method: 'GET',
-        url: '/api/replication-data',
-        headers: generateAuthorizationHeader(user),
-      };
-
-      // when
-      const response = await server.inject(currentContentOptions);
-
-      // then
-      const result = JSON.parse(response.result);
-      const resultWithoutTranslations = _.omit(result, 'translations', 'modules');
-      const expectedCurrentContentWithoutTranslations = JSON.parse(
-        JSON.stringify(_.omit(expectedCurrentContent, 'translations', 'modules')),
-      );
-      expect(resultWithoutTranslations).toMatchObject(expectedCurrentContentWithoutTranslations);
-      expect(result.translations).toMatchObject(
-        expectedCurrentContent.translations.map((translation) => ({
-          ...translation,
-          id: expect.any(Number),
-        })),
-      );
-    });
-  });
-
   describe('GET /api/replication-stream', function() {
     it('streams data for replication', async function() {
       const expectedCurrentContent = await mockCurrentContent();
