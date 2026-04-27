@@ -1,5 +1,20 @@
 
 
+## v4.22.0 (27/04/2026)
+
+
+### :rocket: Amélioration
+- [#1450](https://github.com/1024pix/pix-editor/pull/1450) [FEATURE] Ajout de nouvelles propriétés au challenge (PIX-22422 ).
+- [#1453](https://github.com/1024pix/pix-editor/pull/1453) [FEATURE] Lister les modules stockés (PIX-22261).
+- [#1452](https://github.com/1024pix/pix-editor/pull/1452) [FEATURE] Script de migration des modules (PIX-22258).
+
+### :building_construction: Tech
+- [#1455](https://github.com/1024pix/pix-editor/pull/1455) [TECH] Amélioration de la DX avec jsconfig (PIX-22527).
+- [#1454](https://github.com/1024pix/pix-editor/pull/1454) [TECH] Ajouter les modules dans la release (PIX-22262).
+
+### :bug: Correction
+- [#1456](https://github.com/1024pix/pix-editor/pull/1456) [BUGFIX] Github action security qui échoue.
+
 ## v4.21.0 (23/04/2026)
 
 
