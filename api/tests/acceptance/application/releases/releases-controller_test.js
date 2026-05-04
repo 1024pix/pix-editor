@@ -1,8 +1,7 @@
-import { beforeEach, describe, describe as context, expect, it, vi, afterEach } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, afterEach } from 'vitest';
 import nock from 'nock';
 import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import axios from 'axios';
 import { Area, Attachment, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
 import {

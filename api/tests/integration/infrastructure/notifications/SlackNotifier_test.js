@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
 import nock from 'nock';
 

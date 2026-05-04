@@ -1,5 +1,5 @@
 import * as config from '../../config.js';
-import { ErrorWithStatusCode, UnauthorizedError } from '../errors.js';
+import { UnauthorizedError } from '../errors.js';
 
 export async function create() {
   const payload = {
