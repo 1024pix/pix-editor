@@ -56,6 +56,29 @@ describe('Module Repository', () => {
       // then
       expect(modules).toStrictEqual([firstModule, secondModule]);
     });
+
+    it('lists modules with pagination parameters', async () => {
+      // given
+      const firstModule = domainBuilder.buildModule({ slug: 'a' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
+      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', slug: 'c' });
+      const page = {
+        size: 2,
+        number: 1,
+      };
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+      databaseBuilder.factory.buildModule(thirdModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      const modules = await list({ page });
+
+      // then
+      expect(modules).toStrictEqual([firstModule, secondModule]);
+    });
   });
 
   describe('listForReplication', () => {

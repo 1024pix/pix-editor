@@ -13,8 +13,15 @@ export async function save({ details, sections, glossary, ...module }, transacti
   await transaction.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: transaction.fn.now() });
 }
 
-export async function list() {
-  const modules = await knex.select().from('modules').orderBy('slug', 'asc');
+export async function list({ page } = {}) {
+  const query = knex.select()
+    .from('modules')
+    .orderBy('slug', 'asc');
+  if (page) {
+    const offset = (page.number - 1) * page.size;
+    query.offset(offset).limit(page.size);
+  }
+  const modules = await query;
   return modules.map(toDomain);
 }
 
