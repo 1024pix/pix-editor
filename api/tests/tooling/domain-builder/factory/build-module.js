@@ -31,15 +31,8 @@ export function buildModule({
   slug = 'petit-escargot-pignouf',
   title = 'apprendre à être mou',
   isBeta = false,
-  visibility = 'public',
-  details = {
-    image: 'https://assets.pix.org/draft/escargots.jpg',
-    description: "<p>Ce module est dédié aux escargots</p><p>Il contient normalement l'intégralité de leurs secrets disponibles à date.</p>",
-    duration: 7,
-    level: 'novice',
-    objectives: ['Connaître les petits secrets des gastéropodes'],
-    tabletSupport: 'inconvenient',
-  },
+  visibility = Module.VISIBILITIES.PUBLIC,
+  details = {},
   sections = defaultSections,
   glossary = [
     {
@@ -50,6 +43,14 @@ export function buildModule({
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
+  const {
+    image = 'https=//assets.pix.org/draft/escargots.jpg',
+    description = "<p>Ce module est dédié aux escargots</p><p>Il contient normalement l'intégralité de leurs secrets disponibles à date.</p>",
+    duration = 7,
+    level = Module.LEVELS.NOVICE,
+    objectives = ['Connaître les petits secrets des gastéropodes'],
+    tabletSupport = 'inconvenient',
+  } = details;
   return new Module({
     id,
     shortId,
@@ -57,7 +58,7 @@ export function buildModule({
     title,
     isBeta,
     visibility,
-    details,
+    details: { image, description, duration, level, objectives, tabletSupport },
     sections,
     glossary,
     createdAt,

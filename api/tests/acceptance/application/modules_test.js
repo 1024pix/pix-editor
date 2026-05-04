@@ -1,0 +1,66 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { createServer } from '../../../server.js';
+import { Module } from '../../../lib/domain/models/index.js';
+
+describe('Acceptance | Route | modules', () => {
+  let editorUser;
+
+  beforeEach(async function() {
+    editorUser = databaseBuilder.factory.buildEditorUser();
+    await databaseBuilder.commit();
+  });
+
+  describe('GET /modules', () => {
+    let modules;
+
+    beforeEach(async () => {
+      modules = [
+        { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', slug: 'a', title: 'Module 1', isBeta: true, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.NOVICE } },
+        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', slug: 'b', title: 'Module 2', isBeta: false, visibility: Module.VISIBILITIES.PUBLIC, details: { level: Module.LEVELS.INDEPENDENT } },
+        { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', slug: 'c', title: 'Module 3', isBeta: false, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.EXPERT } },
+      ];
+
+      modules.forEach((module) => {
+        databaseBuilder.factory.buildModule(domainBuilder.buildModule(module));
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    it('responds with status 200 and modules data', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/module-summaries',
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+
+      expect(response.result).toEqual({
+        data: [
+          {
+            type: 'module-summaries',
+            id: modules[0].id,
+            attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+          },
+          {
+            type: 'module-summaries',
+            id: modules[1].id,
+            attributes: { title: modules[1].title, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
+          },
+          {
+            type: 'module-summaries',
+            id: modules[2].id,
+            attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
+          },
+        ],
+      });
+    });
+  });
+});

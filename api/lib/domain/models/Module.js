@@ -24,4 +24,20 @@ export class Module {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
+
+  static get LEVELS() {
+    return {
+      NOVICE: 'novice',
+      INDEPENDENT: 'independent',
+      ADVANDCED: 'advandced',
+      EXPERT: 'expert',
+    };
+  }
+
+  static get VISIBILITIES() {
+    return {
+      PUBLIC: 'public',
+      PRIVATE: 'private',
+    };
+  }
 }
