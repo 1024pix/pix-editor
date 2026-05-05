@@ -2,6 +2,11 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Module } from '../../domain/models/index.js';
 import { ModuleForReplication } from '../../domain/models/replication/index.js';
 
+export async function count() {
+  const { count } = await knex('modules').count().first();
+  return count;
+}
+
 export async function save({ details, sections, glossary, ...module }, transaction = knex) {
   const moduleDTO = {
     ...module,
