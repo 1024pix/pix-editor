@@ -62,5 +62,32 @@ describe('Acceptance | Route | modules', () => {
         ],
       });
     });
+
+    describe('when using pagination query params', () => {
+      it('responds with status 200 and modules data', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/module-summaries?page[size]=2&page[number]=2',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'module-summaries',
+              id: modules[2].id,
+              attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
+            },
+          ],
+        });
+      });
+    });
   });
 });
