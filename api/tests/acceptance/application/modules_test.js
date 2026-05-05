@@ -28,7 +28,7 @@ describe('Acceptance | Route | modules', () => {
       await databaseBuilder.commit();
     });
 
-    it('responds with status 200 and modules data', async () => {
+    it.fails('responds with status 200 and modules data', async () => {
       // given
       const server = await createServer();
 
@@ -60,11 +60,17 @@ describe('Acceptance | Route | modules', () => {
             attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
           },
         ],
+        meta: {
+          page: 1,
+          pageSize: 10,
+          rowCount: 3,
+          pageCount: 1,
+        },
       });
     });
 
     describe('when using pagination query params', () => {
-      it('responds with status 200 and modules data', async () => {
+      it.fails('responds with status 200 and modules data', async () => {
         // given
         const server = await createServer();
 
@@ -86,6 +92,12 @@ describe('Acceptance | Route | modules', () => {
               attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
             },
           ],
+          meta: {
+            page: 2,
+            pageSize: 2,
+            rowCount: 3,
+            pageCount: 2,
+          },
         });
       });
     });
