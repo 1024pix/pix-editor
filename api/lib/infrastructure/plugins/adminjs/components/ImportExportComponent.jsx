@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Box, Button, Loader, DropZone, H3 } from '@adminjs/design-system';
 import { useCurrentAdmin, useNotice } from 'adminjs';
 import { saveAs } from 'file-saver';
@@ -14,11 +13,12 @@ const ImportExportComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      const { data } = await axios.get(`/api/translations.csv?frameworkName=${frameworkName}`, {
+      const response = await fetch(`/api/translations.csv?frameworkName=${frameworkName}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      const data = await response.text();
       const blob = new Blob([data], { type: 'text/csv' });
       saveAs(blob, 'export-translations.csv');
       sendNotice({ message: 'Exported successfully', type: 'success' });
@@ -33,15 +33,13 @@ const ImportExportComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      await axios.post(
-        '/api/phrase/upload',
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await fetch('/api/phrase/upload', {
+        method: 'POST',
+        body: {},
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       sendNotice({ message: 'Upload request in progress', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
@@ -57,7 +55,9 @@ const ImportExportComponent = () => {
       const importData = new FormData();
       importData.append('file', file, file?.name);
 
-      await axios.patch('/api/translations.csv', importData, {
+      await fetch('/api/translations.csv', {
+        method: 'PATCH',
+        body: importData,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,15 +74,13 @@ const ImportExportComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      await axios.post(
-        '/api/phrase/download',
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await fetch('/api/phrase/download', {
+        method: 'POST',
+        body: {},
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       sendNotice({ message: 'Download request in progress', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
