@@ -28,7 +28,7 @@ describe('Acceptance | Route | modules', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('responds with status 200 and modules data', async () => {
+    it('responds with status 200 and modules data', async () => {
       // given
       const server = await createServer();
 
@@ -70,7 +70,7 @@ describe('Acceptance | Route | modules', () => {
     });
 
     describe('when using pagination query params', () => {
-      it.fails('responds with status 200 and modules data', async () => {
+      it('responds with status 200 and modules data', async () => {
         // given
         const server = await createServer();
 

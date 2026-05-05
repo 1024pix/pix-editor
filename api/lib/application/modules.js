@@ -1,8 +1,8 @@
 import Joi from 'joi';
 
-import { moduleRepository } from '../infrastructure/repositories/index.js';
 import { moduleSummarySerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
+import { listPaginatedModules } from '../domain/usecases/index.js';
 
 export function register(server) {
   server.route([
@@ -18,8 +18,8 @@ export function register(server) {
         },
         handler: async (request) => {
           const { page } = extractParameters(request.query, { page: { size: 10, number: 1 } });
-          const modules = await moduleRepository.list({ page });
-          return moduleSummarySerializer.serialize(modules);
+          const { modules, meta } = await listPaginatedModules({ page });
+          return moduleSummarySerializer.serialize(modules, meta);
         },
       },
     },
