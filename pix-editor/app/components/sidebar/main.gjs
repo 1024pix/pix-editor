@@ -38,6 +38,10 @@ export default class SidebarMain extends Component {
             Missions Pix 1D
           </LinkTo>
         {{/if}}
+        <LinkTo class="secondary-links--action" @route="authenticated.modules" {{on "click" @close}}>
+          <PixIcon @name="studyLesson" @ariaHidden={{true}} />
+          Modules
+        </LinkTo>
         {{#if this.mayAccessStaticCourses}}
           <LinkTo class="secondary-links--action" @route="authenticated.static-courses" {{on "click" @close}}>
             <PixIcon @name="assignment" @ariaHidden={{true}} />
