@@ -91,7 +91,6 @@ Router.map(function () {
         this.route('edit');
       });
     });
-    this.route('synchronize-translations');
     this.route('whitelisted-urls', function () {
       this.route('list', { path: '/' });
       this.route('new');

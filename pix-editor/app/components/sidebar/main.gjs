@@ -32,12 +32,6 @@ export default class SidebarMain extends Component {
       {{/if}}
       <Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}} />
       <div class="secondary-links">
-        {{#if this.maySynchronizeTranslations}}
-          <LinkTo @route="authenticated.synchronize-translations" {{on "click" @close}}>
-            <i class="sync icon"></i>
-            Récupérer les traductions
-          </LinkTo>
-        {{/if}}
         {{#if this.shouldShowMissionsLink}}
           <LinkTo @route="authenticated.missions" {{on "click" @close}}>
             <i class="graduation cap icon"></i>
@@ -130,10 +124,6 @@ export default class SidebarMain extends Component {
 
   get maySearch() {
     return this.access.isReadOnly();
-  }
-
-  get maySynchronizeTranslations() {
-    return this.access.isEditor();
   }
 
   get shouldShowMissionsLink() {
