@@ -14,10 +14,12 @@ module('Acceptance | Modules | List', function (hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
+    this.server.createList('module-summary', 36);
+
     return authenticateSession();
   });
 
-  test('should display modules page when accessing list', async function (assert) {
+  test('displays modules with pagination', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
@@ -25,5 +27,43 @@ module('Acceptance | Modules | List', function (hooks) {
     // then
     assert.strictEqual(currentURL(), '/modules');
     assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
+
+    assert.dom(await screen.findByText('1-10 sur 36 éléments')).exists();
+    assert.dom(await screen.findByText('Page 1 / 4')).exists();
+    assert.dom(await screen.findByText('Module 0')).exists();
+    assert.dom(await screen.findByText('Module 5')).exists();
+    assert.dom(await screen.findByText('Module 9')).exists();
+
+    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+    assert.dom(await screen.findByText('11-20 sur 36 éléments')).exists();
+    assert.dom(await screen.findByText('Page 2 / 4')).exists();
+    assert.dom(await screen.findByText('Module 10')).exists();
+    assert.dom(await screen.findByText('Module 15')).exists();
+    assert.dom(await screen.findByText('Module 19')).exists();
+
+    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+    assert.dom(await screen.findByText('21-30 sur 36 éléments')).exists();
+    assert.dom(await screen.findByText('Page 3 / 4')).exists();
+    assert.dom(await screen.findByText('Module 20')).exists();
+    assert.dom(await screen.findByText('Module 25')).exists();
+    assert.dom(await screen.findByText('Module 29')).exists();
+
+    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+    assert.dom(await screen.findByText('31-36 sur 36 éléments')).exists();
+    assert.dom(await screen.findByText('Page 4 / 4')).exists();
+    assert.dom(await screen.findByText('Module 30')).exists();
+    assert.dom(await screen.findByText('Module 35')).exists();
+
+    await screen.getByRole('button', { name: 'Aller à la page précédente' }).click();
+    assert.dom(await screen.findByText('Page 3 / 4')).exists();
+
+    await screen.getByRole('button', { name: "Nombre d'élément à afficher par page" }).click();
+    assert.dom(await screen.findByRole('option', { name: '50' })).exists();
+
+    await screen.getByRole('option', { name: '50' }).click();
+    assert.dom(await screen.findByText('Page 1 / 1')).exists();
+    assert.dom(await screen.findByText('36 éléments')).exists();
+    assert.dom(await screen.findByText('Module 0')).exists();
+    assert.dom(await screen.findByText('Module 35')).exists();
   });
 });
