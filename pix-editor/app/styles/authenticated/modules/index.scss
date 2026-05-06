@@ -1,0 +1,11 @@
+.modules-list {
+  &__status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pix-spacing-1x);
+  }
+
+  &__pagination {
+    margin-top: var(--pix-spacing-4x);
+  }
+}
