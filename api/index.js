@@ -13,7 +13,7 @@ import { validateEnvironmentVariables } from './lib/infrastructure/validate-envi
 
 validateEnvironmentVariables();
 
-let checkUrlsJobQueue, deleteUnmentionedKeysAfterUploadJobQueue, releaseJobQueue, uploadTranslationJobQueue;
+let checkUrlsJobQueue, deleteUnmentionedKeysAfterUploadJobQueue, exportExternalUrlListJobQueue, releaseJobQueue, uploadTranslationJobQueue;
 
 async function start() {
   try {
@@ -24,7 +24,7 @@ async function start() {
     uploadTranslationJobQueue = await createUploadTranslationJobQueue();
     deleteUnmentionedKeysAfterUploadJobQueue = await createDeleteUnmentionedKeysAfterUploadJobQueue();
     checkUrlsJobQueue = await createCheckUrlsJobQueue();
-    exportExternalUrlListJob.schedule();
+    exportExternalUrlListJobQueue = await exportExternalUrlListJob.schedule();
     cleanReleasesJob.schedule();
 
     logger.info('Server running at %s', server.info.uri);
@@ -42,6 +42,7 @@ async function exitOnSignal(signal) {
     await releaseJobQueue?.close();
     await uploadTranslationJobQueue?.close();
     await deleteUnmentionedKeysAfterUploadJobQueue?.close();
+    await exportExternalUrlListJobQueue?.close();
     await cleanReleasesJob.queue.close();
     process.exit(0);
   } catch (err) {
