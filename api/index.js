@@ -4,6 +4,7 @@ import { createServer } from './server.js';
 import { logger } from './lib/infrastructure/logger.js';
 import { queue as checkUrlQueue } from './lib/infrastructure/scheduled-jobs/check-urls-job.js';
 import { scheduleReleaseJobQueue } from './lib/infrastructure/scheduled-jobs/release-job.js';
+import { createUploadTranslationJobQueue, uploadTranslationJobOptions } from './lib/infrastructure/scheduled-jobs/upload-translation-job.js';
 import * as exportExternalUrlListJob from './lib/infrastructure/scheduled-jobs/export-external-url-list-job.js';
 import * as cleanReleasesJob from './lib/infrastructure/scheduled-jobs/release-table-cleaning-and-retention-job.js';
 import { disconnect } from './db/knex-database-connection.js';
@@ -11,7 +12,7 @@ import { validateEnvironmentVariables } from './lib/infrastructure/validate-envi
 
 validateEnvironmentVariables();
 
-let releaseJobQueue;
+let releaseJobQueue, uploadTranslationJobQueue;
 
 async function start() {
   try {
@@ -19,6 +20,7 @@ async function start() {
     await server.start();
 
     releaseJobQueue = scheduleReleaseJobQueue();
+    uploadTranslationJobQueue = await createUploadTranslationJobQueue();
     exportExternalUrlListJob.schedule();
     cleanReleasesJob.schedule();
 
@@ -35,6 +37,7 @@ async function exitOnSignal(signal) {
     await disconnect();
     await checkUrlQueue.close();
     await releaseJobQueue?.close();
+    await uploadTranslationJobQueue?.close();
     await cleanReleasesJob.queue.close();
     process.exit(0);
   } catch (err) {
