@@ -20,7 +20,7 @@ async function start() {
     const server = await createServer();
     await server.start();
 
-    releaseJobQueue = scheduleReleaseJobQueue();
+    releaseJobQueue = await scheduleReleaseJobQueue();
     uploadTranslationJobQueue = await createUploadTranslationJobQueue();
     deleteUnmentionedKeysAfterUploadJobQueue = await createDeleteUnmentionedKeysAfterUploadJobQueue();
     checkUrlsJobQueue = await createCheckUrlsJobQueue();

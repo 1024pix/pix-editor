@@ -28,7 +28,7 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function() {
-          const releaseJobQueue = createReleaseJobQueue();
+          const releaseJobQueue = await createReleaseJobQueue();
           const job = await releaseJobQueue.add({ slackNotification: true });
           const promise = async () => {
             const releaseId = await job.finished();

@@ -7,12 +7,11 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const cjsFile = __dirname + '/release-job-processor.cjs';
 const esmFile = __dirname + '/release-job-processor.js';
 
-export function createReleaseJobQueue() {
+export async function createReleaseJobQueue() {
   const queue = createQueue('create-release-queue');
   if (process.env.NODE_ENV === 'test') {
-    import(esmFile).then((module) => {
-      queue.process(module.default);
-    });
+    const module = await import(esmFile);
+    queue.process(module.default);
   } else {
     queue.process(cjsFile);
   }
@@ -30,7 +29,7 @@ const releaseJobOptions = {
   },
 };
 
-export function scheduleReleaseJobQueue() {
+export async function scheduleReleaseJobQueue() {
   const isScheduledReleaseEnabled = config.scheduledJobs.createReleaseTime && config.scheduledJobs.redisUrl;
 
   if (!isScheduledReleaseEnabled) {
@@ -38,7 +37,7 @@ export function scheduleReleaseJobQueue() {
     return;
   }
 
-  const queue = createReleaseJobQueue();
-  queue.add({}, releaseJobOptions);
+  const queue = await createReleaseJobQueue();
+  await queue.add({}, releaseJobOptions);
   return queue;
 }
