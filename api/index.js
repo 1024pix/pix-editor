@@ -2,7 +2,7 @@
 
 import { createServer } from './server.js';
 import { logger } from './lib/infrastructure/logger.js';
-import { queue as checkUrlQueue } from './lib/infrastructure/scheduled-jobs/check-urls-job.js';
+import { createCheckUrlsJobQueue } from './lib/infrastructure/scheduled-jobs/check-urls-job.js';
 import { scheduleReleaseJobQueue } from './lib/infrastructure/scheduled-jobs/release-job.js';
 import { createUploadTranslationJobQueue } from './lib/infrastructure/scheduled-jobs/upload-translation-job.js';
 import { createDeleteUnmentionedKeysAfterUploadJobQueue } from './lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
@@ -13,7 +13,7 @@ import { validateEnvironmentVariables } from './lib/infrastructure/validate-envi
 
 validateEnvironmentVariables();
 
-let deleteUnmentionedKeysAfterUploadJobQueue, releaseJobQueue, uploadTranslationJobQueue;
+let checkUrlsJobQueue, deleteUnmentionedKeysAfterUploadJobQueue, releaseJobQueue, uploadTranslationJobQueue;
 
 async function start() {
   try {
@@ -23,6 +23,7 @@ async function start() {
     releaseJobQueue = scheduleReleaseJobQueue();
     uploadTranslationJobQueue = await createUploadTranslationJobQueue();
     deleteUnmentionedKeysAfterUploadJobQueue = await createDeleteUnmentionedKeysAfterUploadJobQueue();
+    checkUrlsJobQueue = await createCheckUrlsJobQueue();
     exportExternalUrlListJob.schedule();
     cleanReleasesJob.schedule();
 
@@ -37,7 +38,7 @@ async function exitOnSignal(signal) {
   logger.info(`Received signal ${signal}. Closing DB connections and queues before exiting.`);
   try {
     await disconnect();
-    await checkUrlQueue.close();
+    await checkUrlsJobQueue?.close();
     await releaseJobQueue?.close();
     await uploadTranslationJobQueue?.close();
     await deleteUnmentionedKeysAfterUploadJobQueue?.close();

@@ -1,18 +1,21 @@
 import { createQueue } from './create-queue.js';
 import * as config from '../../config.js';
 import { fileURLToPath } from 'node:url';
+import Queue from 'bull';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-export const queue = createQueue('check-urls-queue');
 const cjsFile = __dirname + '/check-urls-job-processor.cjs';
 const esmFile = __dirname + '/check-urls-job-processor.js';
-if (process.env.NODE_ENV === 'test') {
-  import(esmFile).then((module) => {
+
+export async function createCheckUrlsJobQueue() {
+  const queue = createQueue('check-urls-queue');
+  if (process.env.NODE_ENV === 'test') {
+    const module = await import(esmFile);
     queue.process(module.default);
-  });
-} else {
-  queue.process(cjsFile);
+  } else {
+    queue.process(cjsFile);
+  }
+  return queue;
 }
 
 const checkUrlsJobOptions = {
@@ -22,6 +25,8 @@ const checkUrlsJobOptions = {
   removeOnFail: 1,
 };
 
-export function start() {
-  queue.add({}, checkUrlsJobOptions);
+export async function start() {
+  const queue = new Queue('check-urls-queue', config.scheduledJobs.redisUrl);
+  await queue.add({}, checkUrlsJobOptions);
+  await queue.close();
 }
