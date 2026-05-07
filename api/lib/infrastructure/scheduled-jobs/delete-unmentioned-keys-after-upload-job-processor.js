@@ -9,6 +9,6 @@ export default async function deleteUnmentionedKeysAfterUploadJobProcessor(job) 
   });
 
   if (status === RETRY) {
-    schedule(job.data);
+    await schedule(job.data);
   }
 }
