@@ -383,6 +383,29 @@ export default function routes() {
     return mission;
   });
 
+  this.get('/module-summaries', function (schema, request) {
+    const pagination = _getPaginationFromQueryParams(request.queryParams);
+
+    const allModuleSummaries = schema.moduleSummaries.all();
+
+    const start = (pagination.page - 1) * pagination.pageSize;
+    const end = start + pagination.pageSize;
+
+    const moduleSummariesPage = allModuleSummaries.slice(start, end);
+
+    const json = this.serialize(moduleSummariesPage);
+
+    const rowCount = allModuleSummaries.length;
+    json.meta = {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      rowCount,
+      pageCount: Math.ceil(rowCount / pagination.pageSize),
+    };
+
+    return json;
+  });
+
   this.get('/static-course-summaries', function (schema, request) {
     const queryParams = request.queryParams;
     const { 'filter[isActive]': isActiveFilter, 'filter[name]': nameFilter, 'filter[tagIds]': tagFilter } = queryParams;

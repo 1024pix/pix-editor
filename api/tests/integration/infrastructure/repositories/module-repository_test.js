@@ -57,15 +57,16 @@ describe('Module Repository', () => {
       expect(modules).toStrictEqual([firstModule, secondModule]);
     });
 
-    it('lists modules with pagination parameters', async () => {
+    it('lists modules with pagination and sort parameters', async () => {
       // given
-      const firstModule = domainBuilder.buildModule({ slug: 'a' });
-      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
-      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', slug: 'c' });
+      const firstModule = domainBuilder.buildModule({ shortId: 'first', slug: 'c', title: 'Module A', visibility: 'public' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b', title: 'Module B', visibility: 'private' });
+      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', slug: 'a', title: 'Module C', visibility: 'public' });
       const page = {
         size: 2,
         number: 1,
       };
+      const sort = [['visibility', 'desc'], ['title', 'asc']];
 
       databaseBuilder.factory.buildModule(firstModule);
       databaseBuilder.factory.buildModule(secondModule);
@@ -74,10 +75,10 @@ describe('Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const modules = await list({ page });
+      const modules = await list({ page, sort });
 
       // then
-      expect(modules).toStrictEqual([firstModule, secondModule]);
+      expect(modules).toStrictEqual([firstModule, thirdModule]);
     });
   });
 

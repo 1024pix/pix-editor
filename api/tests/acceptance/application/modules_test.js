@@ -46,13 +46,13 @@ describe('Acceptance | Route | modules', () => {
         data: [
           {
             type: 'module-summaries',
-            id: modules[0].id,
-            attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+            id: modules[1].id,
+            attributes: { title: modules[1].title, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
           },
           {
             type: 'module-summaries',
-            id: modules[1].id,
-            attributes: { title: modules[1].title, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
+            id: modules[0].id,
+            attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
           },
           {
             type: 'module-summaries',
@@ -69,7 +69,7 @@ describe('Acceptance | Route | modules', () => {
       });
     });
 
-    describe('when using pagination query params', () => {
+    describe('when using pagination and sort query params', () => {
       it('responds with status 200 and modules data', async () => {
         // given
         const server = await createServer();
@@ -77,7 +77,7 @@ describe('Acceptance | Route | modules', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/module-summaries?page[size]=2&page[number]=2',
+          url: '/api/module-summaries?page[size]=2&page[number]=2&sort=-title',
           headers: generateAuthorizationHeader(editorUser),
         });
 
@@ -88,8 +88,8 @@ describe('Acceptance | Route | modules', () => {
           data: [
             {
               type: 'module-summaries',
-              id: modules[2].id,
-              attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
+              id: modules[0].id,
+              attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
             },
           ],
           meta: {

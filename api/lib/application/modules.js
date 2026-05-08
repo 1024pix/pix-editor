@@ -14,11 +14,12 @@ export function register(server) {
           query: Joi.object({
             'page[size]': Joi.number().min(1).max(100).optional(),
             'page[number]': Joi.number().min(1).optional(),
+            sort: Joi.string().optional(),
           }),
         },
         handler: async (request) => {
-          const { page } = extractParameters(request.query, { page: { size: 10, number: 1 } });
-          const { modules, meta } = await listPaginatedModules({ page });
+          const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['title', 'asc']] });
+          const { modules, meta } = await listPaginatedModules({ page, sort });
           return moduleSummarySerializer.serialize(modules, meta);
         },
       },

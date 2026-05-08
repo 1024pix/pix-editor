@@ -28,11 +28,11 @@
 @use 'authenticated';
 @use 'authenticated/missions/new' as missions-new;
 @use 'authenticated/missions/details' as missions-details;
+@use 'authenticated/modules/index';
 @use 'authenticated/static-courses/list' as static-courses-list;
 @use 'authenticated/static-courses/static-course' as static-course-static-course;
 @use 'authenticated/whitelisted-urls/list' as whitelisted-urls-list;
 @use 'authenticated/whitelisted-urls/new' as whitelisted-urls-new;
-@use 'authenticated/synchronize-translations';
 @use 'components/admin';
 @use 'components/card';
 @use 'components/competence-header';

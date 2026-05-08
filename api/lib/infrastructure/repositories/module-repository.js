@@ -18,10 +18,15 @@ export async function save({ details, sections, glossary, ...module }, transacti
   await transaction.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: transaction.fn.now() });
 }
 
-export async function list({ page } = {}) {
-  const query = knex.select()
-    .from('modules')
-    .orderBy('slug', 'asc');
+export async function list({ page, sort = [['slug', 'asc']] } = {}) {
+  const query = knex.select().from('modules');
+  sort.forEach(([column, order]) => {
+    if (column === 'title') {
+      query.orderByRaw(`?? collate ?? ${order}`, [column, 'fr-x-icu']);
+    } else {
+      query.orderBy(column, order);
+    }
+  });
   if (page) {
     const offset = (page.number - 1) * page.size;
     query.offset(offset).limit(page.size);
