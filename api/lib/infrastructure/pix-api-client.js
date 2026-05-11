@@ -8,7 +8,10 @@ export async function request({ payload, url }) {
     return fetch(`${config.pixApi.baseUrl}${url}`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
     });
   });
 }
