@@ -1,8 +1,8 @@
 import Joi from 'joi';
 
-import { moduleSummarySerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import { moduleSerializer, moduleSummarySerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
-import { listPaginatedModules } from '../domain/usecases/index.js';
+import { createModule, listPaginatedModules } from '../domain/usecases/index.js';
 
 export function register(server) {
   server.route([
@@ -21,6 +21,33 @@ export function register(server) {
           const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['title', 'asc']] });
           const { modules, meta } = await listPaginatedModules({ page, sort });
           return moduleSummarySerializer.serialize(modules, meta);
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/modules',
+      config: {
+        validate: {
+          payload: Joi.object({
+            data: Joi.object({
+              type: Joi.string().valid('modules').required(),
+              attributes: Joi.object({
+                title: Joi.string().required(),
+                'is-beta': Joi.boolean().required(),
+                slug: Joi.string().required(),
+                visibility: Joi.string().required(),
+                details: Joi.object().required(),
+                sections: Joi.array().required(),
+                glossary: Joi.array().required(),
+              }).required(),
+            }).required(),
+          }).required(),
+        },
+        handler: async (request, h) => {
+          const module = await moduleSerializer.deserialize(request.payload);
+          const savedModule = await createModule(module);
+          return h.response(moduleSerializer.serialize(savedModule)).code(201);
         },
       },
     },

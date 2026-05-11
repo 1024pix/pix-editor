@@ -107,7 +107,7 @@ describe('Acceptance | Route | modules', () => {
   });
 
   describe('POST /modules', () => {
-    it.fails('responds with status 201 and modules data', async () => {
+    it('responds with status 201 and modules data', async () => {
       // given
       const module = domainBuilder.buildModule();
       const modulePayload = {
