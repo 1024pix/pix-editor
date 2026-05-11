@@ -4,16 +4,18 @@ import { logger } from '../logger.js';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-export const queue = createQueue('export-external-url-list-queue');
 const cjsFile = __dirname + '/export-external-url-list-job-processor.cjs';
 const esmFile = __dirname + '/export-external-url-list-job-processor.js';
-if (process.env.NODE_ENV === 'test') {
-  import(esmFile).then((module) => {
+
+export async function createExportExternalUrlListJobQueue() {
+  const queue = createQueue('export-external-url-list-queue');
+  if (process.env.NODE_ENV === 'test') {
+    const module = await import(esmFile);
     queue.process(module.default);
-  });
-} else {
-  queue.process(cjsFile);
+  } else {
+    queue.process(cjsFile);
+  }
+  return queue;
 }
 
 const externalUrlJobOptions = {
@@ -27,14 +29,16 @@ const externalUrlJobOptions = {
   },
 };
 
-export function schedule() {
+export async function schedule() {
   if (!_isScheduledExportEnabled()) {
     logger.info(
       'Scheduled export of external list is not enabled - check `EXPORT_EXTERNAL_URL_LIST_TIME` and `REDIS_URL` variables',
     );
     return;
   }
-  queue.add({}, externalUrlJobOptions);
+  const queue = await createExportExternalUrlListJobQueue();
+  await queue.add({}, externalUrlJobOptions);
+  return queue;
 }
 
 function _isScheduledExportEnabled() {

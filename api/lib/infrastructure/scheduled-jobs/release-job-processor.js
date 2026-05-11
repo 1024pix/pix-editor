@@ -21,7 +21,7 @@ export default async function releaseJobProcessor(job) {
     }
     logger.info(`Periodic release created with id ${releaseId}`);
     if (config.scheduledJobs.startCheckUrlJob) {
-      checkUrlsJob.start();
+      await checkUrlsJob.start();
     }
     await uploadTranslationJob.start();
     return releaseId;

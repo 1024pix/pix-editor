@@ -1,18 +1,22 @@
 import { createQueue } from './create-queue.js';
 import * as config from '../../config.js';
 import { fileURLToPath } from 'node:url';
+import Queue from 'bull';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-export const queue = createQueue('upload-translation-queue');
-
 const esmFile = __dirname + '/upload-translation-job-processor.js';
 const cjsFile = __dirname + '/upload-translation-job-processor.cjs';
-if (process.env.NODE_ENV === 'test') {
-  const module = await import(esmFile);
-  queue.process(module.default);
-} else {
-  queue.process(cjsFile);
+
+export async function createUploadTranslationJobQueue() {
+  const queue = createQueue('upload-translation-queue');
+  if (process.env.NODE_ENV === 'test') {
+    const module = await import(esmFile);
+    queue.process(module.default);
+  } else {
+    queue.process(cjsFile);
+  }
+  return queue;
 }
 
 const uploadTranslationJobOptions = {
@@ -23,6 +27,8 @@ const uploadTranslationJobOptions = {
   delay: 1000,
 };
 
-export function start() {
-  return queue.add({}, uploadTranslationJobOptions);
+export async function start() {
+  const queue = new Queue('upload-translation-queue', config.scheduledJobs.redisUrl);
+  await queue.add({}, uploadTranslationJobOptions);
+  await queue.close();
 }
