@@ -1,5 +1,12 @@
 
 
+## v4.25.0 (11/05/2026)
+
+
+### :building_construction: Tech
+- [#1437](https://github.com/1024pix/pix-editor/pull/1437) [TECH] Changer axios pour fetch (PIX-22191).
+- [#1461](https://github.com/1024pix/pix-editor/pull/1461) [TECH] Améliorer la résilience des jobs `bull` (PIX-22692).
+
 ## v4.24.0 (11/05/2026)
 
 
