@@ -1,3 +1,5 @@
+import { structuredPatch } from 'diff';
+
 export class Module {
   constructor({
     id,
@@ -25,6 +27,18 @@ export class Module {
     this.glossary = glossary;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  serializeToJSON() {
+    const { createdAt: _createdAt, updatedAt: _updatedAt, ...data } = this;
+    return JSON.stringify(data, null, 2);
+  }
+
+  /**
+   * @param {Module} otherModule
+   */
+  diffWith(otherModule) {
+    return structuredPatch('', '', this.serializeToJSON(), otherModule.serializeToJSON());
   }
 
   static get LEVELS() {

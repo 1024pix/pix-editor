@@ -1,8 +1,8 @@
 import Joi from 'joi';
 
-import { moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { modulesDiffSerializer, moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { getModuleById, listPaginatedModules } from '../../domain/usecases/index.js';
+import { getModuleById, getModulesDiff, listPaginatedModules } from '../../domain/usecases/index.js';
 import * as Types from '../types.js';
 
 export function register(server) {
@@ -41,6 +41,21 @@ export function register(server) {
           const { id } = request.params;
           const module = await getModuleById(id);
           return moduleSerializer.serialize(module);
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/modules-diff',
+      config: {
+        auth: false,
+        handler: async (request, h) => {
+          const { oldId, newId } = request.query;
+          const modulesDiff = await getModulesDiff({ oldId, newId });
+          return h
+            .response(modulesDiffSerializer.serialize(modulesDiff))
+            .code(200)
+            .header('Content-type', 'text/plain');
         },
       },
     },
