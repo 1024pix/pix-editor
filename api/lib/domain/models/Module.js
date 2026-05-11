@@ -25,6 +25,8 @@ export class Module {
     this.updatedAt = updatedAt;
   }
 
+  prepareForCreation() {}
+
   static get LEVELS() {
     return {
       NOVICE: 'novice',
