@@ -1,5 +1,14 @@
 
 
+## v4.25.1 (11/05/2026)
+
+
+### :rocket: Amélioration
+- [#1466](https://github.com/1024pix/pix-editor/pull/1466) [FEATURE] Ajouter le bouton de création d'un module (PIX-22709).
+
+### :bug: Correction
+- [#1468](https://github.com/1024pix/pix-editor/pull/1468) [BUGFIX] Ajoute le header `content-type` quand on patch la release.
+
 ## v4.25.0 (11/05/2026)
 
 
