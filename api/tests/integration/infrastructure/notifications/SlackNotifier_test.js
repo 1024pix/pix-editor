@@ -21,10 +21,10 @@ describe('Integration | Infrastructure | SlackNotifier', function() {
       // given
       const webhookUrl = 'https://webhook.url';
       const slackNotifier = new SlackNotifier(`${webhookUrl}/testurl`);
-      const blocks = Symbol();
+      const blocks = { some: 'blocks' };
 
       const sendScope = nock(webhookUrl)
-        .post('/testurl', JSON.stringify(blocks))
+        .post('/testurl', blocks)
         .reply(200, { 'Content-Type': 'application/json' });
 
       // when
