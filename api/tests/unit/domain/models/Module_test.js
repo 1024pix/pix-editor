@@ -16,6 +16,7 @@ describe('Unit | Domain | Module', () => {
       // then
       expect(module.id).toMatch(uuidRegExp);
       expect(module.shortId).toMatch(shortIdRegExp);
+      expect(module.shortId).toBe(module.id.slice(0, 8));
     });
   });
 });

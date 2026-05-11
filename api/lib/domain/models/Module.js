@@ -27,7 +27,7 @@ export class Module {
 
   prepareForCreation() {
     this.id = crypto.randomUUID();
-    this.shortId = generateShortId();
+    this.shortId = this.id.slice(0, 8);
   }
 
   static get LEVELS() {
@@ -45,10 +45,4 @@ export class Module {
       PRIVATE: 'private',
     };
   }
-}
-
-function generateShortId() {
-  const arr = new Uint8Array(4);
-  crypto.getRandomValues(arr);
-  return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
 }
