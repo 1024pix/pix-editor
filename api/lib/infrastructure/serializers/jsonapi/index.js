@@ -12,6 +12,7 @@ export * as localizedChallengeSerializer from './localized-challenge-serializer.
 export * as localizedFrameworkTubesSerializer from './localized-framework-tubes-serializer.js';
 export * as missionSerializer from './mission-serializer.js';
 export * as moduleSummarySerializer from './module-summary-serializer.js';
+export * as moduleSerializer from './module-serializer.js';
 export * as skillSerializer from './skill-serializer.js';
 export * as searchSerializer from './search-serializer.js';
 export * as staticCourseSerializer from './static-course-serializer.js';
