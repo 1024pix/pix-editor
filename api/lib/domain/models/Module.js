@@ -25,7 +25,10 @@ export class Module {
     this.updatedAt = updatedAt;
   }
 
-  prepareForCreation() {}
+  prepareForCreation() {
+    this.id = crypto.randomUUID();
+    this.shortId = generateShortId();
+  }
 
   static get LEVELS() {
     return {
@@ -42,4 +45,10 @@ export class Module {
       PRIVATE: 'private',
     };
   }
+}
+
+function generateShortId() {
+  const arr = new Uint8Array(4);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
 }
