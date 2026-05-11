@@ -19,6 +19,15 @@ module('Acceptance | Modules | List', function (hooks) {
     return authenticateSession();
   });
 
+  test('displays module creation button', async function (assert) {
+    // when
+    const screen = await visit('/');
+    await clickByName('Modules');
+
+    // then
+    assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
+  });
+
   test('displays modules with pagination', async function (assert) {
     // when
     const screen = await visit('/');

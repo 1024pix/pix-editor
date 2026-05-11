@@ -85,6 +85,7 @@ Router.map(function () {
     });
     this.route('modules', function () {
       this.route('index', { path: '/' });
+      this.route('new');
     });
     this.route('missions', function () {
       this.route('list', { path: '/' });
