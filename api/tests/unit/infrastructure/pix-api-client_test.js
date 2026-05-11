@@ -17,7 +17,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 
@@ -40,7 +40,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(401);
 
@@ -50,7 +50,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${newToken}`)
           .reply(200);
 
@@ -75,7 +75,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(401);
 
@@ -85,7 +85,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${newToken}`)
           .reply(401);
 
@@ -94,7 +94,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           await pixApiClient.request({ url: '/api/cache/model/id', payload });
           expect.fail('should raise an error');
         } catch (e) {
-          expect(e.response.status).to.equal(401);
+          expect(e.message).to.equal('something went wrong when reaching PixAPI Client');
         }
 
         // then
@@ -115,7 +115,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 
@@ -143,7 +143,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         vi.spyOn(cache, 'set');
 
         nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', payload)
+          .patch('/api/cache/model/id', JSON.stringify(payload))
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 

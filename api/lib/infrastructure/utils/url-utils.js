@@ -2,9 +2,7 @@ import showdown from 'showdown';
 import urlRegex from 'url-regex-safe';
 import _ from 'lodash';
 import { logger } from '../logger.js';
-import { CookieJar } from 'tough-cookie';
-import { wrapper } from 'axios-cookiejar-support';
-import axios from 'axios';
+import makeFetchCookie from 'fetch-cookie';
 
 const GENERIC_URL_REGEX_IN_TEXT = new RegExp(urlRegex({ strict: true, parens: true, returnString: true }), 'i');
 
@@ -94,12 +92,11 @@ export async function analyzeIdentifiedUrls(identifiedUrls) {
 }
 
 export async function checkUrl(url, config) {
-  const jar = new CookieJar();
-  const client = wrapper(axios.create({ jar }));
+  const fetchCookie = makeFetchCookie(fetch);
   try {
-    return await client.head(url, config);
+    return await fetchCookie(url, { method: 'HEAD', ...config });
   } catch {
-    return await client.get(url, config);
+    return await fetchCookie(url, { method: 'GET', ...config });
   }
 }
 

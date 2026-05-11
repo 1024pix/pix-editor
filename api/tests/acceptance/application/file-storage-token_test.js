@@ -54,7 +54,6 @@ describe('Acceptance | Controller | file-storage-token', () => {
 
         it('forward the status code', async function() {
           const response = await server.inject(options);
-
           expect(response.statusCode).to.equal(401);
         });
       });

@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
-import axios from 'axios';
+import nock from 'nock';
 
-describe('Unit | Infrastructure | SlackNotifier', function() {
+describe('Integration | Infrastructure | SlackNotifier', function() {
   describe('#constructor', function() {
     it('should throw an error when webhookUrl is not defined', function() {
       // when
@@ -17,18 +17,21 @@ describe('Unit | Infrastructure | SlackNotifier', function() {
   });
 
   describe('#send', function() {
-    it('should send slack notifications with given blocks', function() {
+    it('should send slack notifications with given blocks', async function() {
       // given
       const webhookUrl = 'https://webhook.url';
-      const slackNotifier = new SlackNotifier(webhookUrl);
+      const slackNotifier = new SlackNotifier(`${webhookUrl}/testurl`);
       const blocks = Symbol();
-      const stubAxiosPost = vi.spyOn(axios, 'post').mockResolvedValue();
+
+      const sendScope = nock(webhookUrl)
+        .post('/testurl', JSON.stringify(blocks))
+        .reply(200, { 'Content-Type': 'application/json' });
 
       // when
-      slackNotifier.send(blocks);
+      await slackNotifier.send(blocks);
 
       // then
-      expect(stubAxiosPost).toHaveBeenCalledWith(webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+      expect(sendScope.isDone()).to.be.true;
     });
   });
 });

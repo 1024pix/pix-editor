@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Icon, Text, Box } from '@adminjs/design-system';
+import { Icon, Text } from '@adminjs/design-system';
 import Loader from './Loader.jsx';
 import Card from './Card.jsx';
 import { useCurrentAdmin, useNotice } from 'adminjs';
@@ -15,11 +14,12 @@ const GetEmbedListComponent = () => {
     setFetching(true);
     try {
       const token = currentAdmin?.email;
-      const { data } = await axios.get('/api/embeds.csv', {
+      const response = await fetch('/api/embeds.csv', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      const data = await response.text();
       const blob = new Blob([data], { type: 'text/csv' });
       saveAs(blob, 'embeds-list.csv');
       sendNotice({ message: 'Exported successfully', type: 'success' });
