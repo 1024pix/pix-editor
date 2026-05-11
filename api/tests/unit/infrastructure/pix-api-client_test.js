@@ -8,7 +8,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
     context('when token is in cache', () => {
       it('should call the API', async () => {
         // given
-        const payload = 'payload';
+        const payload = { some: 'payload' };
         const token = 'token';
         vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
           if (spyKey === 'pix-api-token') {
@@ -17,7 +17,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 
@@ -30,7 +30,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
 
       it('should refresh the token when receiving a 401', async () => {
         // given
-        const payload = 'payload';
+        const payload = { some: 'payload' };
         const token = 'token';
         const newToken = 'myNewToken';
         vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
@@ -40,7 +40,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(401);
 
@@ -50,7 +50,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${newToken}`)
           .reply(200);
 
@@ -65,7 +65,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
 
       it('should not refresh the token forever and returns the error', async () => {
         // given
-        const payload = 'payload';
+        const payload = { some: 'payload' };
         const token = 'token';
         const newToken = 'myNewToken';
         vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
@@ -75,7 +75,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(401);
 
@@ -85,7 +85,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200, { access_token: newToken });
 
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${newToken}`)
           .reply(401);
 
@@ -106,7 +106,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
 
     context('when token is not in cache', () => {
       it('should authenticate', async () => {
-        const payload = 'payload';
+        const payload = { some: 'payload' };
         const token = 'token';
         vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
           if (spyKey === 'pix-api-token') {
@@ -115,7 +115,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 
@@ -133,7 +133,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
       });
 
       it('should store token in cache', async () => {
-        const payload = 'payload';
+        const payload = { some: 'payload' };
         const token = 'token';
         vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
           if (spyKey === 'pix-api-token') {
@@ -143,7 +143,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         vi.spyOn(cache, 'set');
 
         nock('https://api.test.pix.fr')
-          .patch('/api/cache/model/id', JSON.stringify(payload))
+          .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200);
 

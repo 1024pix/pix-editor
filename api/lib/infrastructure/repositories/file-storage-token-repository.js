@@ -25,6 +25,7 @@ export async function create() {
   const response = await fetch(config.storage.authUrl, {
     method: 'POST',
     body: JSON.stringify(payload),
+    headers: { 'content-type': 'application/json' },
   });
   if (response.status === 401) throw new UnauthorizedError();
   if (!response.ok) throw new Error('error while fetching file storage token', response.status);
