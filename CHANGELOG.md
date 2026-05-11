@@ -1,5 +1,23 @@
 
 
+## v4.24.0 (11/05/2026)
+
+
+### :rocket: Amélioration
+- [#1460](https://github.com/1024pix/pix-editor/pull/1460) [FEATURE] Créer la page de listing des modules (PIX-22640).
+- [#1459](https://github.com/1024pix/pix-editor/pull/1459) [FEATURE] Ajout endpoint de liste des modules (PIX-22639).
+
+### :arrow_up: Montée de version
+- [#1462](https://github.com/1024pix/pix-editor/pull/1462) [BUMP] Update dependency browser-tools to v2.4.2 (.circleci).
+- [#1445](https://github.com/1024pix/pix-editor/pull/1445) [BUMP] Update dependency axios to v1.15.2 [SECURITY].
+- [#1463](https://github.com/1024pix/pix-editor/pull/1463) [BUMP] Update Node.js to v24.15.0.
+- [#1418](https://github.com/1024pix/pix-editor/pull/1418) [BUMP] Lock file maintenance (pix-editor).
+- [#1441](https://github.com/1024pix/pix-editor/pull/1441) [BUMP] Update dependency lodash to v4.18.1 [SECURITY].
+- [#1440](https://github.com/1024pix/pix-editor/pull/1440) [BUMP] Update dependency lodash to v4.18.1 [SECURITY].
+- [#1428](https://github.com/1024pix/pix-editor/pull/1428) [BUMP] Update dependency jspdf to v4.2.1 [SECURITY].
+- [#1457](https://github.com/1024pix/pix-editor/pull/1457) [BUMP] Update dependency postcss to v8.5.10 [SECURITY].
+- [#1443](https://github.com/1024pix/pix-editor/pull/1443) [BUMP] Update dependency vite to v7.3.2 [SECURITY].
+
 ## v4.23.0 (27/04/2026)
 
 
