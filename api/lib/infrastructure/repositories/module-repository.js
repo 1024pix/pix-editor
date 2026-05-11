@@ -15,7 +15,9 @@ export async function save({ details, sections, glossary, ...module }, transacti
     glossary: JSON.stringify(glossary),
   };
 
-  await transaction.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: transaction.fn.now() });
+  const [savedModule] = await transaction.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: transaction.fn.now() }).returning('*');
+
+  return toDomain(savedModule);
 }
 
 export async function list({ page, sort = [['slug', 'asc']] } = {}) {

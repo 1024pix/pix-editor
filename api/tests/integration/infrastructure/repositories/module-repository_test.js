@@ -8,13 +8,21 @@ describe('Module Repository', () => {
     it('saves a module', async () => {
       // given
       const module = domainBuilder.buildModule();
+      module.createdAt = undefined;
+      module.updatedAt = undefined;
+      const expectedModule = domainBuilder.buildModule({
+        ...module,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
 
       // when
-      await save(module);
+      const savedModule = await save(module);
 
       // then
-      const { details, ...moduleData } = module;
-      await expect(knex.select().from('modules')).resolves.toStrictEqual([{ ...details, ...moduleData }]);
+      const { details: expectedDetails, ...expectedModuleData } = expectedModule;
+      await expect(knex.select().from('modules')).resolves.toStrictEqual([{ ...expectedModuleData, ...expectedDetails }]);
+      expect(savedModule).toStrictEqual(expectedModule);
     });
 
     it('updates a module', async () => {
@@ -24,18 +32,26 @@ describe('Module Repository', () => {
       await databaseBuilder.commit();
 
       const moduleWithUpdate = domainBuilder.buildModule({
-        id: module.id,
-        shortId: module.shortId,
+        ...module,
         title: 'apprendre à être mou ou molle',
-        details: { ...module.details, description: "<p>Ce module est dédié aux escargots, mâle et femelle</p><p>Il contient normalement l'intégralité de leurs secrets disponibles à date (août 2025).</p>" },
+        details: {
+          ...module.details,
+          description: "<p>Ce module est dédié aux escargots, mâle et femelle</p><p>Il contient normalement l'intégralité de leurs secrets disponibles à date (août 2025).</p>",
+        },
+      });
+
+      const expectedModule = domainBuilder.buildModule({
+        ...moduleWithUpdate,
+        updatedAt: expect.any(Date),
       });
 
       // when
-      await save(moduleWithUpdate);
+      const savedModule = await save(moduleWithUpdate);
 
       // then
-      const { details, ...moduleData } = moduleWithUpdate;
-      await expect(knex.select().from('modules')).resolves.toStrictEqual([{ ...details, ...moduleData, updatedAt: expect.any(Date) }]);
+      const { details: expectedDetails, ...expectedModuleData } = expectedModule;
+      await expect(knex.select().from('modules')).resolves.toStrictEqual([{ ...expectedModuleData, ...expectedDetails }]);
+      expect(savedModule).toStrictEqual(expectedModule);
     });
   });
 

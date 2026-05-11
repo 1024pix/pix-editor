@@ -25,6 +25,11 @@ export class Module {
     this.updatedAt = updatedAt;
   }
 
+  prepareForCreation() {
+    this.id = crypto.randomUUID();
+    this.shortId = this.id.slice(0, 8);
+  }
+
   static get LEVELS() {
     return {
       NOVICE: 'novice',
