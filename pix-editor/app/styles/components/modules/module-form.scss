@@ -1,0 +1,15 @@
+.module-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pix-spacing-6x);
+
+  &__data-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pix-spacing-2x);
+  }
+
+  &__monaco-editor {
+    height: 70vh;
+  }
+}
