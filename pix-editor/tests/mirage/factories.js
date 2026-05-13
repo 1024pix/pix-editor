@@ -9,6 +9,7 @@ import competence from './factories/competence';
 import framework from './factories/framework';
 import localizedChallenge from './factories/localized-challenge';
 import moduleSummary from './factories/module-summary';
+import module from './factories/module';
 import note from './factories/note';
 import searchResult from './factories/search-result';
 import skill from './factories/skill';
@@ -27,6 +28,7 @@ export default {
   competence,
   framework,
   localizedChallenge,
+  module,
   moduleSummary,
   note,
   searchResult,
