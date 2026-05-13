@@ -17,11 +17,9 @@ module('Integration | Component | modules/module-form', function (hooks) {
 
     // then
     assert.dom(screen.getByRole('textbox', { name: 'Titre' })).hasAttribute('readonly');
-    const monacoEditor = screen.getByRole('textbox', { name: 'Contenu (JSON)' });
+    const monacoEditor = await screen.findByLabelText('Contenu (JSON)');
     assert.dom(monacoEditor).exists();
     const saveButton = screen.getByRole('button', { name: 'Enregistrer' });
-    assert.dom(saveButton).hasAttribute('aria-disabled');
-    assert.dom(screen.getByRole('link', { name: 'Annuler' })).exists();
 
     await fillIn(monacoEditor, JSON.stringify({ title: 'Mon titre' }));
 

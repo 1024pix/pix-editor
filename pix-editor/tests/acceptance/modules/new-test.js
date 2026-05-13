@@ -29,7 +29,7 @@ module('Acceptance | Modules | New', function (hooks) {
     assert.strictEqual(currentURL(), '/modules/new');
     assert.dom(await screen.findByRole('heading', { name: "Création d'un module" })).exists();
 
-    const editor = await screen.findByRole('textbox', { name: 'Contenu (JSON)' });
+    const editor = await screen.findByLabelText('Contenu (JSON)');
 
     await fillIn(
       editor,
