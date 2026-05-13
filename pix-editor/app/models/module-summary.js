@@ -12,7 +12,7 @@ const levelForDisplay = {
   expert: 'Expert',
 };
 
-export default class ModulesSummary extends Model {
+export default class ModuleSummary extends Model {
   @attr title;
   @attr isBeta;
   @attr visibility;

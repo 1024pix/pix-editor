@@ -12,4 +12,11 @@
   &__monaco-editor {
     height: 70vh;
   }
+
+  &__actions {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--pix-spacing-4x);
+    justify-items: start;
+  }
 }
