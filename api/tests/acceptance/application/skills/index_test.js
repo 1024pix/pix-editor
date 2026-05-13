@@ -272,9 +272,10 @@ describe('Application | Route | Skills', () => {
 
         skills.forEach((skill) => {
           databaseBuilder.factory.buildSkill(skill);
-          skill.challengeIds.forEach((id) =>
-            databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id, skillId: skill.id })),
-          );
+          skill.challengeIds.forEach((id, index) => {
+            const genealogy = index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON;
+            return databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id, skillId: skill.id, genealogy }));
+          });
         });
 
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
@@ -505,20 +506,22 @@ describe('Application | Route | Skills', () => {
         });
         databaseBuilder.factory.buildSkill(skill1);
         databaseBuilder.factory.buildSkill(skill2);
-        skill1.challengeIds.forEach((challengeId) => {
+        skill1.challengeIds.forEach((challengeId, index) => {
           databaseBuilder.factory.buildChallenge(
             domainBuilder.buildChallengeDatasourceObject({
               id: challengeId,
               skillId: skill1.id,
+              genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
             }),
           );
         });
 
-        skill2.challengeIds.forEach((challengeId) => {
+        skill2.challengeIds.forEach((challengeId, index) => {
           databaseBuilder.factory.buildChallenge(
             domainBuilder.buildChallengeDatasourceObject({
               id: challengeId,
               skillId: skill2.id,
+              genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
             }),
           );
         });
@@ -737,9 +740,13 @@ describe('Application | Route | Skills', () => {
         skills.forEach((skill) => {
           databaseBuilder.factory.buildSkill(skill);
 
-          skill.challengeIds.forEach((id) =>
+          skill.challengeIds.forEach((id, index) =>
             databaseBuilder.factory.buildChallenge(
-              domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill.id }),
+              domainBuilder.buildChallengeDatasourceObject({
+                id,
+                skillId: skill.id,
+                genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
+              }),
             ),
           );
         });
@@ -935,11 +942,12 @@ describe('Application | Route | Skills', () => {
         );
       });
       databaseBuilder.factory.buildSkill(skill);
-      skill.challengeIds.forEach((challengeId) => {
+      skill.challengeIds.forEach((challengeId, index) => {
         databaseBuilder.factory.buildChallenge(
           domainBuilder.buildChallengeDatasourceObject({
             id: challengeId,
             skillId: skill.id,
+            genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
           }),
         );
       });
@@ -1392,11 +1400,12 @@ describe('Application | Route | Skills', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildSkill(skillDataObject);
-      skillDataObject.challengeIds.forEach((challengeId) => {
+      skillDataObject.challengeIds.forEach((challengeId, index) => {
         databaseBuilder.factory.buildChallenge(
           domainBuilder.buildChallengeDatasourceObject({
             id: challengeId,
             skillId: skillDataObject.id,
+            genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
           }),
         );
       });

@@ -582,10 +582,10 @@ describe('Integration | Repository | translation-repository', function() {
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(
-        domainBuilder.buildChallengeDatasourceObject({ id: 'challenge1', skillId: 'skill1' }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'challenge1', skillId: 'skill1', version: 1 }),
       );
       databaseBuilder.factory.buildChallenge(
-        domainBuilder.buildChallengeDatasourceObject({ id: 'challenge2', skillId: 'skill1' }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'challenge2', skillId: 'skill1', version: 2 }),
       );
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'challenge1', challengeId: 'challenge1', locale: 'fr' });
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'challenge1nl', challengeId: 'challenge1', locale: 'nl' });

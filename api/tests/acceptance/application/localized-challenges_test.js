@@ -185,10 +185,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
       databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(
-        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1' }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge0', skillId: 'skill1', version: 1 }),
       );
       databaseBuilder.factory.buildChallenge(
-        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', skillId: 'skill1' }),
+        domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', skillId: 'skill1', version: 2 }),
       );
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',

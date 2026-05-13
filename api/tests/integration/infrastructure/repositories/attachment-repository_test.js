@@ -16,10 +16,19 @@ describe('Integration | Repository | attachment-repository', () => {
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
     databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
     databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: challengeId1, skillId: 'skill1' }),
+      domainBuilder.buildChallengeDatasourceObject(
+        {
+          id: challengeId1,
+          skillId: 'skill1',
+          version: 1,
+        }),
     );
     databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: challengeId2, skillId: 'skill1' }),
+      domainBuilder.buildChallengeDatasourceObject({
+        id: challengeId2,
+        skillId: 'skill1',
+        version: 2,
+      }),
     );
     await databaseBuilder.commit();
   });

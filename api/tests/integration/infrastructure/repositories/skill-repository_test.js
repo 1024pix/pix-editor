@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
-import { Skill } from '../../../../lib/domain/models/index.js';
+import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | skill-repository', () => {
   describe('#list', () => {
@@ -188,9 +188,13 @@ describe('Integration | Repository | skill-repository', () => {
       );
 
       databaseBuilder.factory.buildSkill(skill1);
-      skill1.challengeIds.forEach((id) =>
+      skill1.challengeIds.forEach((id, index) =>
         databaseBuilder.factory.buildChallenge(
-          domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill1.id }),
+          domainBuilder.buildChallengeDatasourceObject({
+            id,
+            skillId: skill1.id,
+            genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
+          }),
         ),
       );
 
@@ -272,9 +276,12 @@ describe('Integration | Repository | skill-repository', () => {
       );
 
       databaseBuilder.factory.buildSkill(skill1);
-      skill1.challengeIds.forEach((id) =>
+      skill1.challengeIds.forEach((id, index) =>
         databaseBuilder.factory.buildChallenge(
-          domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill1.id }),
+          domainBuilder.buildChallengeDatasourceObject({
+            id, skillId: skill1.id,
+            genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
+          }),
         ),
       );
 
@@ -436,11 +443,12 @@ describe('Integration | Repository | skill-repository', () => {
         });
         skills.forEach(databaseBuilder.factory.buildSkill);
         skills.forEach((skill) =>
-          skill.challengeIds.forEach((challengeId) => {
+          skill.challengeIds.forEach((challengeId, index) => {
             databaseBuilder.factory.buildChallenge(
               domainBuilder.buildChallengeDatasourceObject({
                 id: challengeId,
                 skillId: skill.id,
+                genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
               }),
             );
           }),
@@ -543,8 +551,11 @@ describe('Integration | Repository | skill-repository', () => {
         skills.forEach((skill) => {
           databaseBuilder.factory.buildSkill(skill);
 
-          skill.challengeIds.forEach((id) =>
-            databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({ id, skillId: skill.id })),
+          skill.challengeIds.forEach((id, index) =>
+            databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({
+              id, skillId: skill.id,
+              genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
+            })),
           );
 
           databaseBuilder.factory.buildTranslation({
@@ -636,11 +647,12 @@ describe('Integration | Repository | skill-repository', () => {
           );
         });
         databaseBuilder.factory.buildSkill(skill);
-        skill.challengeIds.forEach((challengeId) => {
+        skill.challengeIds.forEach((challengeId, index) => {
           databaseBuilder.factory.buildChallenge(
             domainBuilder.buildChallengeDatasourceObject({
               id: challengeId,
               skillId: skill.id,
+              genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
             }),
           );
         });

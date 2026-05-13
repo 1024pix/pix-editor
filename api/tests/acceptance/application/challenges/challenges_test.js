@@ -31,12 +31,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const challenge1 = domainBuilder.buildChallengeDatasourceObject({
         id: '1',
         geography: 'XX',
+        version: 1,
         files: [],
         competenceId: 'competence1',
         isQualityOk: false,
       });
       const challenge2 = domainBuilder.buildChallengeDatasourceObject({
         id: '2',
+        version: 2,
         geography: 'XX',
         files: [],
         competenceId: 'competence1',
@@ -275,7 +277,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
               author: ['SPS'],
               declinable: Challenge.DECLINABLES.FACILEMENT,
-              version: 1,
+              version: 2,
               genealogy: Challenge.GENEALOGIES.PROTOTYPE,
               status: Challenge.STATUSES.VALIDE,
               preview: '/api/challenges/2/preview',

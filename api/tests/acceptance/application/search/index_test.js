@@ -10,6 +10,7 @@ describe('Application | Route | Search', () => {
   beforeEach(async function() {
     const challenge = domainBuilder.buildChallengeDatasourceObject({
       id: 'recId1',
+      version: 1,
       geography: 'XX',
       files: [],
       competenceId: 'competence1',
@@ -20,6 +21,8 @@ describe('Application | Route | Search', () => {
     });
     const decli = domainBuilder.buildChallengeDatasourceObject({
       id: 'recId2',
+      version: 1,
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
       geography: 'XX',
       files: [],
       competenceId: 'competence1',
@@ -28,9 +31,12 @@ describe('Application | Route | Search', () => {
       skillId: 'skillId1',
       embedUrl: 'https://embed-url.html',
     });
+
     const localizedChallenge = domainBuilder.buildChallengeDatasourceObject({
       id: 'localizedChallengeId',
       geography: 'XX',
+      genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      version: 1,
       files: [],
       competenceId: 'competence1',
       locales: ['nl'],
