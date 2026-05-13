@@ -16,10 +16,10 @@ describe('Integration | Repository | localized-challenge-repository', function()
     databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
     databaseBuilder.factory.buildSkill({ id: 'skill1', tubeId: 'tube1' });
     databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1' }),
+      domainBuilder.buildChallengeDatasourceObject({ id: challengeId, skillId: 'skill1', version: 1 }),
     );
     databaseBuilder.factory.buildChallenge(
-      domainBuilder.buildChallengeDatasourceObject({ id: otherChallengeId, skillId: 'skill1' }),
+      domainBuilder.buildChallengeDatasourceObject({ id: otherChallengeId, skillId: 'skill1', version: 2 }),
     );
     await databaseBuilder.commit();
   });
@@ -570,6 +570,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         domainBuilder.buildChallengeDatasourceObject({
           id: 'unlistedChallengeId',
           skillId: 'skill1',
+          version: 3,
         }),
       );
       databaseBuilder.factory.buildLocalizedChallenge({
