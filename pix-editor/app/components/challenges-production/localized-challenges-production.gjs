@@ -59,8 +59,48 @@ export default class LocalizedChallengesProduction extends Component {
       if (a.isPrototype) return -1;
       if (b.isPrototype) return 1;
       return a.alternativeVersion - b.alternativeVersion;
-    }
-  }
+    },
+
+    updatedAt: (a, b) => {
+      if (this.sortStatus.order === 'asc') {
+        return b.primaryUpdatedAt.getTime() - a.primaryUpdatedAt.getTime();
+      }
+      return a.primaryUpdatedAt.getTime() - b.primaryUpdatedAt.getTime();
+    },
+
+    author: (a, b) => {
+      if (a.primaryAuthor[0] === b.primaryAuthor[0]) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return b.primaryAuthor[0].localeCompare(a.primaryAuthor[0]);
+      }
+      return a.primaryAuthor[0].localeCompare(b.primaryAuthor[0]);
+    },
+
+    source: (a, b) => {
+      const orders = [
+        Challenge.STATUSES.VALIDE_QUALITE,
+        Challenge.STATUSES.VALIDE,
+        Challenge.STATUSES.PROPOSE,
+        Challenge.STATUSES.ARCHIVE,
+        Challenge.STATUSES.PERIME,
+      ];
+
+      const aOrder = orders.indexOf(a.primaryComputedStatus);
+      const bOrder = orders.indexOf(b.primaryComputedStatus);
+
+      if (aOrder === bOrder) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return bOrder - aOrder;
+      }
+      return aOrder - bOrder;
+    },
+  };
 
   get challengeLocales() {
     const excludeStatuses = [];
@@ -81,6 +121,26 @@ export default class LocalizedChallengesProduction extends Component {
 
   get isToRephrase() {
     return this.args.skill.productionPrototype.toRephrase;
+  }
+
+  get versionColumnSortOrder() {
+    if (this.sortStatus.column !== 'version') return null;
+    return this.sortStatus.order;
+  }
+
+  get updatedAtColumnSortOrder() {
+    if (this.sortStatus.column !== 'updatedAt') return null;
+    return this.sortStatus.order;
+  }
+
+  get authorColumnSortOrder() {
+    if (this.sortStatus.column !== 'author') return null;
+    return this.sortStatus.order;
+  }
+
+  get sourceColumnSortOrder() {
+    if (this.sortStatus.column !== 'source') return null;
+    return this.sortStatus.order;
   }
 
   get translationStatusColumnSortOrder() {
@@ -136,7 +196,14 @@ export default class LocalizedChallengesProduction extends Component {
           @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}
         >
           <:columns as |challengeLocale context|>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "version"}}
+              @sortOrder={{this.versionColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre décroissant des versions"
+              @ariaLabelSortDesc="Trier dans l'ordre croissant des versions"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Version
               </:header>
@@ -184,7 +251,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{/if}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "updatedAt"}}
+              @sortOrder={{this.updatedAtColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre du plus récent au moins récent"
+              @ariaLabelSortDesc="Trier dans l'ordre du moins récent au plus récent"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Dernière MAJ
               </:header>
@@ -192,7 +266,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{formatDate challengeLocale.primaryUpdatedAt "DD/MM/YYYY" allow-empty=true}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "author"}}
+              @sortOrder={{this.authorColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre anti-alphabétique des auteurs"
+              @ariaLabelSortDesc="Trier dans l'ordre alphabétique des auteurs"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Auteur
               </:header>
@@ -200,7 +281,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{challengeLocale.primaryAuthor}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "source"}}
+              @sortOrder={{this.sourceColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre du challenge le moins opérationnel au plus opérationnel"
+              @ariaLabelSortDesc="Trier dans l'ordre du challenge le plus opérationnel au moins opérationnel"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Source
               </:header>

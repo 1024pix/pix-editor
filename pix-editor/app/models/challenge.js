@@ -84,6 +84,7 @@ export default class ChallengeModel extends Model {
 
   static get STATUSES() {
     return {
+      VALIDE_QUALITE: 'validé qualité',
       VALIDE: 'validé',
       PROPOSE: 'proposé',
       ARCHIVE: 'archivé',
