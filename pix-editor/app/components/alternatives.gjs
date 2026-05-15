@@ -5,6 +5,7 @@ import { LinkTo } from '@ember/routing';
 import Alternatives0 from 'pixeditor/components/list/alternatives';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class Alternatives extends Component {
   <template>
@@ -52,7 +53,7 @@ export default class Alternatives extends Component {
   get alternatives() {
     return this.arePerimeDeclisDisplayed
       ? this.args.challenge.alternatives
-      : this.args.challenge.alternatives.filter((alternative) => alternative.status !== 'périmé');
+      : this.args.challenge.alternatives.filter((alternative) => alternative.status !== Challenge.STATUSES.PERIME);
   }
 
   get canCreateAlternative() {

@@ -165,7 +165,7 @@ export default class ChallengeModel extends Model {
   }
 
   get isValidated() {
-    return this.status === 'validé';
+    return this.status === ChallengeModel.STATUSES.VALIDE;
   }
 
   get skillName() {
@@ -173,31 +173,23 @@ export default class ChallengeModel extends Model {
   }
 
   get isDraft() {
-    return this.status === 'proposé';
+    return this.status === ChallengeModel.STATUSES.PROPOSE;
   }
 
   get isArchived() {
-    return this.status === 'archivé';
+    return this.status === ChallengeModel.STATUSES.ARCHIVE;
   }
 
   get isObsolete() {
-    return this.status === 'périmé';
+    return this.status === ChallengeModel.STATUSES.PERIME;
   }
 
   get statusCSS() {
-    const status = this.status;
-    switch (status) {
-      case 'validé':
-        return 'validated';
-      case 'proposé':
-        return 'suggested';
-      case 'archivé':
-        return 'archived';
-      case 'périmé':
-        return 'deleted';
-      default:
-        return '';
-    }
+    if (this.isValidated) return 'validated';
+    if (this.isDraft) return 'suggested';
+    if (this.isArchived) return 'archived';
+    if (this.isObsolete) return 'deleted';
+    return '';
   }
 
   get computedStatus() {
@@ -335,19 +327,19 @@ export default class ChallengeModel extends Model {
   }
 
   archive() {
-    this.status = 'archivé';
+    this.status = ChallengeModel.STATUSES.ARCHIVE;
     this.archivedAt = new Date();
     return this.save();
   }
 
   obsolete() {
-    this.status = 'périmé';
+    this.status = ChallengeModel.STATUSES.PERIME;
     this.madeObsoleteAt = new Date();
     return this.save();
   }
 
   validate() {
-    this.status = 'validé';
+    this.status = ChallengeModel.STATUSES.VALIDE;
     this.validatedAt = new Date();
     return this.save();
   }
@@ -370,7 +362,7 @@ export default class ChallengeModel extends Model {
     }
     const data = this._getJSON(ignoredFields);
     data.author = [this.config.author];
-    data.status = 'proposé';
+    data.status = ChallengeModel.STATUSES.PROPOSE;
     data.skill = await this.skill;
 
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
@@ -389,7 +381,7 @@ export default class ChallengeModel extends Model {
       'isQualityOk',
     ];
     const data = this._getJSON(ignoredFields);
-    data.status = 'proposé';
+    data.status = ChallengeModel.STATUSES.PROPOSE;
 
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
@@ -399,7 +391,7 @@ export default class ChallengeModel extends Model {
   async derive() {
     const alternative = await this.duplicate();
     alternative.version = this.version;
-    alternative.genealogy = 'Décliné 1';
+    alternative.genealogy = ChallengeModel.GENEALOGIES.DECLINAISON;
     return alternative;
   }
 

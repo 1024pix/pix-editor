@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class LocalizedController extends Controller {
   @service router;
@@ -160,7 +161,9 @@ export default class LocalizedController extends Controller {
   }
 
   @action async confirmApprove() {
-    this.localizedChallenge.status = this.localizedChallenge.isInProduction ? 'proposé' : 'validé';
+    this.localizedChallenge.status = this.localizedChallenge.isInProduction
+      ? Challenge.STATUSES.PROPOSE
+      : Challenge.STATUSES.VALIDE;
     try {
       await this._saveChallenge(this.localizedChallenge);
     } catch (error) {

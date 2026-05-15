@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import yaml from 'js-yaml';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class SingleController extends Controller {
   wasMaximized = false;
@@ -707,7 +708,7 @@ export default class SingleController extends Controller {
     }
     await Promise.all([skill.tutoMore, skill.tutoSolution]);
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
-    const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
+    const haveProposalPrototype = prototypesStatusOtherVersion.includes(Challenge.STATUSES.PROPOSE);
     if (haveProposalPrototype) {
       return skill.deactivate();
     }
@@ -721,10 +722,10 @@ export default class SingleController extends Controller {
     }
     await Promise.all([skill.tutoMore, skill.tutoSolution]);
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
-    if (prototypesStatusOtherVersion.includes('proposé')) {
+    if (prototypesStatusOtherVersion.includes(Challenge.STATUSES.PROPOSE)) {
       return skill.deactivate();
     }
-    if (prototypesStatusOtherVersion.includes('archivé')) {
+    if (prototypesStatusOtherVersion.includes(Challenge.STATUSES.ARCHIVE)) {
       return skill.archive();
     }
     return skill.obsolete();
