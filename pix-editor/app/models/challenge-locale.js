@@ -2,8 +2,8 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 
-const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
-const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';
+export const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
+export const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';
 
 export default class ChallengeLocaleModel extends Model {
   @attr locale;

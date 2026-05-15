@@ -12,6 +12,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
+import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import { PRIMARY_IN_LOCALE_STATUS, NOT_TRANSLATED_STATUS } from 'pixeditor/models/challenge-locale';
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 
@@ -20,6 +22,45 @@ export default class LocalizedChallengesProduction extends Component {
   @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
+  @tracked sortStatus = {
+    column: 'status',
+    order: 'desc',
+  };
+
+  sortFunctions = {
+    status: (a, b) => {
+      const orders = [
+        PRIMARY_IN_LOCALE_STATUS,
+        LocalizedChallenge.STATUSES.PLAY,
+        LocalizedChallenge.STATUSES.PAUSE,
+        NOT_TRANSLATED_STATUS,
+      ];
+
+      const aOrder = orders.indexOf(a.status);
+      const bOrder = orders.indexOf(b.status);
+
+      if (aOrder === bOrder) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return bOrder - aOrder;
+      }
+      return aOrder - bOrder;
+    },
+
+    version: (a, b) => {
+      if (this.sortStatus.order === 'asc') {
+        if (a.isPrototype) return 1;
+        if (b.isPrototype) return -1;
+        return b.alternativeVersion - a.alternativeVersion;
+      }
+
+      if (a.isPrototype) return -1;
+      if (b.isPrototype) return 1;
+      return a.alternativeVersion - b.alternativeVersion;
+    }
+  }
 
   get challengeLocales() {
     const excludeStatuses = [];
@@ -32,8 +73,19 @@ export default class LocalizedChallengesProduction extends Component {
     );
   }
 
+  get sortedChallengeLocales() {
+    if (!this.sortStatus.column) return this.challengeLocales;
+
+    return this.challengeLocales.toSorted(this.sortFunctions[this.sortStatus.column]);
+  }
+
   get isToRephrase() {
     return this.args.skill.productionPrototype.toRephrase;
+  }
+
+  get translationStatusColumnSortOrder() {
+    if (this.sortStatus.column !== 'status') return null;
+    return this.sortStatus.order;
   }
 
   @action
@@ -44,6 +96,24 @@ export default class LocalizedChallengesProduction extends Component {
   @action
   async copyChallengePreviewUrl(previewUrl) {
     await navigator.clipboard.writeText(previewUrl);
+  }
+
+  @action
+  sortBy(column) {
+    if (this.sortStatus.column !== column) {
+      this.sortStatus = { column: column, order: 'asc' };
+      return;
+    }
+
+    if (this.sortStatus.order === 'desc') {
+      this.sortStatus = {
+        column: null,
+        order: null,
+      };
+      return;
+    }
+
+    this.sortStatus = { column: column, order: 'desc' };
   }
 
   <template>
@@ -62,7 +132,7 @@ export default class LocalizedChallengesProduction extends Component {
       <div class="challenges-production-table">
         <PixTable
           @condensed={{true}}
-          @data={{this.challengeLocales}}
+          @data={{this.sortedChallengeLocales}}
           @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}
         >
           <:columns as |challengeLocale context|>
@@ -140,7 +210,14 @@ export default class LocalizedChallengesProduction extends Component {
                 </PixTag>
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "status"}}
+              @sortOrder={{this.translationStatusColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre de la traduction la moins opérationnelle à la plus opérationnelle"
+              @ariaLabelSortDesc="Trier dans l'ordre de la traduction la plus opérationnelle à la moins opérationnelle"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Traduction
               </:header>
