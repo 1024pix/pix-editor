@@ -3,8 +3,8 @@ const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
   reporter: 'dot',
-  launch_in_ci: ['Chrome'],
-  launch_in_dev: ['Chrome'],
+  launch_in_ci: ['Firefox'],
+  launch_in_dev: ['Firefox'],
   browser_start_timeout: 120,
   browser_args: {
     Chrome: {
@@ -20,6 +20,9 @@ const config = {
         '--remote-debugging-port=9222',
         '--window-size=1440,900',
       ].filter(Boolean),
+    },
+    Firefox: {
+      ci: ['--headless', '--remote-debugging-port=9222', '--window-size=1440,900'],
     },
   },
 };
