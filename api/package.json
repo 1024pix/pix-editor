@@ -54,6 +54,8 @@
     "@hapi/vision": "^7.0.0",
     "@octokit/rest": "^22.0.1",
     "adminjs": "7.8.17",
+    "axios": "^1.16.1",
+    "axios-cookiejar-support": "^7.0.0",
     "base-x": "^5.0.0",
     "blipp": "^4.0.2",
     "bull": "^4.10.4",
@@ -78,7 +80,7 @@
     "qs": "^6.10.1",
     "sequelize": "^6.29.0",
     "showdown": "^2.0.0",
-    "tough-cookie": "^6.0.0",
+    "tough-cookie": "^6.0.1",
     "url-regex-safe": "^4.0.0"
   },
   "devDependencies": {
