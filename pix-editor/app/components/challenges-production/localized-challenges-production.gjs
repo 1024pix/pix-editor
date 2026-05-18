@@ -13,7 +13,7 @@ import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
-import { PRIMARY_IN_LOCALE_STATUS, NOT_TRANSLATED_STATUS } from 'pixeditor/models/challenge-locale';
+import ChallengeLocale from 'pixeditor/models/challenge-locale';
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 
@@ -30,10 +30,10 @@ export default class LocalizedChallengesProduction extends Component {
   sortFunctions = {
     status: (a, b) => {
       const orders = [
-        PRIMARY_IN_LOCALE_STATUS,
+        ChallengeLocale.STATUSES.PRIMARY_IN_LOCALE_STATUS,
         LocalizedChallenge.STATUSES.PLAY,
         LocalizedChallenge.STATUSES.PAUSE,
-        NOT_TRANSLATED_STATUS,
+        ChallengeLocale.STATUSES.NOT_TRANSLATED_STATUS,
       ];
 
       const aOrder = orders.indexOf(a.status);
