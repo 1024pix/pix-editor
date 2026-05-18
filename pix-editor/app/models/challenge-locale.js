@@ -2,9 +2,6 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 
-const PRIMARY_IN_LOCALE_STATUS = 'PRIMARY_IN_LOCALE';
-const NOT_TRANSLATED_STATUS = 'NOT_TRANSLATED';
-
 export default class ChallengeLocaleModel extends Model {
   @attr locale;
 
@@ -56,8 +53,8 @@ export default class ChallengeLocaleModel extends Model {
   }
 
   get status() {
-    if (this.isPrimaryInLocale) return PRIMARY_IN_LOCALE_STATUS;
-    return this.localizedChallengeValue?.status ?? NOT_TRANSLATED_STATUS;
+    if (this.isPrimaryInLocale) return ChallengeLocaleModel.STATUSES.PRIMARY_IN_LOCALE_STATUS;
+    return this.localizedChallengeValue?.status ?? ChallengeLocaleModel.STATUSES.NOT_TRANSLATED_STATUS;
   }
 
   get primaryPreviewUrl() {
@@ -106,10 +103,10 @@ export default class ChallengeLocaleModel extends Model {
     if (this.status === LocalizedChallenge.STATUSES.PAUSE) {
       return 'yellow';
     }
-    if (this.status === PRIMARY_IN_LOCALE_STATUS) {
+    if (this.status === ChallengeLocaleModel.STATUSES.PRIMARY_IN_LOCALE_STATUS) {
       return 'grey';
     }
-    if (this.status === NOT_TRANSLATED_STATUS) {
+    if (this.status === ChallengeLocaleModel.STATUSES.NOT_TRANSLATED_STATUS) {
       return 'blue';
     }
     return 'orange';
@@ -122,12 +119,19 @@ export default class ChallengeLocaleModel extends Model {
     if (this.status === LocalizedChallenge.STATUSES.PAUSE) {
       return 'En pause';
     }
-    if (this.status === PRIMARY_IN_LOCALE_STATUS) {
+    if (this.status === ChallengeLocaleModel.STATUSES.PRIMARY_IN_LOCALE_STATUS) {
       return 'Source dans la langue';
     }
-    if (this.status === NOT_TRANSLATED_STATUS) {
+    if (this.status === ChallengeLocaleModel.STATUSES.NOT_TRANSLATED_STATUS) {
       return 'Pas traduit';
     }
     return 'absence de statut ❓';
+  }
+
+  static get STATUSES() {
+    return {
+      PRIMARY_IN_LOCALE_STATUS: 'PRIMARY_IN_LOCALE',
+      NOT_TRANSLATED_STATUS: 'NOT_TRANSLATED',
+    };
   }
 }

@@ -276,7 +276,7 @@ module('Integration | Component | challenges-production | localized-challenges-p
     test('should display all expected info for a given challenge', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
-      const prototype = validatedChallenges[1];
+      const prototype = validatedChallenges[2];
       assert.dom(prototype).includesText('Proto');
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('25/12/2019');
@@ -323,24 +323,24 @@ module('Integration | Component | challenges-production | localized-challenges-p
       });
     });
 
-    test('should display appropriate translation statuses for each challenge', async function (assert) {
+    test('should display appropriate translation statuses for each challenge, sorted by translation status', async function (assert) {
       // then
       const validatedChallenges = screen.queryAllByRole('row');
 
-      const prototype = validatedChallenges[1];
+      const primaryAlreadyNl = validatedChallenges[1];
+      assert.dom(primaryAlreadyNl).includesText('consigne challengeDecliNl');
+      assert.dom(primaryAlreadyNl).includesText('validé');
+      assert.dom(primaryAlreadyNl).includesText('Source dans la langue');
+
+      const prototype = validatedChallenges[2];
       assert.dom(prototype).includesText('Een super maxi lange instructie');
       assert.dom(prototype).includesText('validé');
       assert.dom(prototype).includesText('En prod');
 
-      const archivedAndPausedNl = validatedChallenges[2];
+      const archivedAndPausedNl = validatedChallenges[3];
       assert.dom(archivedAndPausedNl).includesText('consigne NL challengeDecliArchivee');
       assert.dom(archivedAndPausedNl).includesText('archivé');
       assert.dom(archivedAndPausedNl).includesText('En pause');
-
-      const primaryAlreadyNl = validatedChallenges[3];
-      assert.dom(primaryAlreadyNl).includesText('consigne challengeDecliNl');
-      assert.dom(primaryAlreadyNl).includesText('validé');
-      assert.dom(primaryAlreadyNl).includesText('Source dans la langue');
 
       const notTranslated = validatedChallenges[4];
       assert.dom(notTranslated).includesText('consigne challengeDecliProposee');
@@ -446,6 +446,43 @@ module('Integration | Component | challenges-production | localized-challenges-p
         assert.strictEqual(obsoleteChallenges.length, 1);
         assert.strictEqual(archivedChallenges.length, 1);
         assert.strictEqual(proposedChallenges.length, 1);
+      });
+    });
+
+    module('#sort', function () {
+      test('when resetting sort, it should display challenges sorted by version', async function (assert) {
+        screen = await render(
+          <template>
+            <LocalizedChallengesProduction
+              @skill={{skill}}
+              @challengeLocales={{challengeLocalesNl}}
+              @competence={{competence}}
+            />
+          </template>,
+        );
+
+        await click(screen.getByRole('button', { name: 'Rétablir le tri par défaut' }));
+
+        const challenges = screen.queryAllByRole('row');
+
+        const prototype = challenges[1];
+        assert.dom(prototype).includesText('Proto');
+        assert.dom(prototype).includesText('En prod');
+
+        const archivedAndPausedNl = challenges[2];
+        assert.dom(archivedAndPausedNl).includesText('consigne NL challengeDecliArchivee');
+        assert.dom(archivedAndPausedNl).includesText('archivé');
+        assert.dom(archivedAndPausedNl).includesText('En pause');
+
+        const primaryAlreadyNl = challenges[3];
+        assert.dom(primaryAlreadyNl).includesText('consigne challengeDecliNl');
+        assert.dom(primaryAlreadyNl).includesText('validé');
+        assert.dom(primaryAlreadyNl).includesText('Source dans la langue');
+
+        const notTranslated = challenges[4];
+        assert.dom(notTranslated).includesText('consigne challengeDecliProposee');
+        assert.dom(notTranslated).includesText('proposé');
+        assert.dom(notTranslated).includesText('Pas traduit');
       });
     });
   });

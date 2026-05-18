@@ -9,6 +9,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
+import Challenge from 'pixeditor/models/challenge';
 
 import PopInImage from '../pop-in/image';
 import PopInConfirm from '../pop-in/confirm';
@@ -269,7 +270,9 @@ export default class LocalizedChallenge extends Component {
   @action
   async updateStatusProduction() {
     this.displayConfirm = false;
-    this.args.localizedChallenge.status = this.args.localizedChallenge.isInProduction ? 'proposé' : 'validé';
+    this.args.localizedChallenge.status = this.args.localizedChallenge.isInProduction
+      ? Challenge.STATUSES.PROPOSE
+      : Challenge.STATUSES.VALIDE;
     try {
       this.loader.start('Enregistrement');
       await this.args.localizedChallenge.save();

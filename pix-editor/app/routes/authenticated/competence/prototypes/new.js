@@ -1,6 +1,7 @@
 import { service } from '@ember/service';
 
 import PrototypeRoute from './single';
+import Challenge from 'pixeditor/models/challenge';
 
 export default class NewRoute extends PrototypeRoute {
   templateName = 'authenticated/competence/prototypes/single';
@@ -15,11 +16,11 @@ export default class NewRoute extends PrototypeRoute {
     } else {
       const newChallenge = this.store.createRecord('challenge', {
         competence: [this.modelFor('authenticated.competence').id],
-        status: 'proposé',
+        status: Challenge.STATUSES.PROPOSE,
         t1Status: true,
         t2Status: true,
         t3Status: true,
-        genealogy: 'Prototype 1',
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
         author: [this.config.author],
         requireGafamWebsiteAccess: false,
         isIncompatibleIpadCertif: false,

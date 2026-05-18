@@ -58,7 +58,7 @@ export default class LocalizedChallengeModel extends Model {
   }
 
   get isStatusEditable() {
-    return ['validé', 'archivé'].includes(this.challenge.get('status'));
+    return [Challenge.STATUSES.VALIDE, Challenge.STATUSES.ARCHIVE].includes(this.challenge.get('status'));
   }
 
   get firstAttachmentBaseName() {

@@ -12,6 +12,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
+import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+import ChallengeLocale from 'pixeditor/models/challenge-locale';
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 
@@ -20,6 +22,85 @@ export default class LocalizedChallengesProduction extends Component {
   @service multipanelManager;
 
   @tracked shouldDisplayObsoleteChallenges = false;
+  @tracked sortStatus = {
+    column: 'status',
+    order: 'desc',
+  };
+
+  sortFunctions = {
+    status: (a, b) => {
+      const orders = [
+        ChallengeLocale.STATUSES.PRIMARY_IN_LOCALE_STATUS,
+        LocalizedChallenge.STATUSES.PLAY,
+        LocalizedChallenge.STATUSES.PAUSE,
+        ChallengeLocale.STATUSES.NOT_TRANSLATED_STATUS,
+      ];
+
+      const aOrder = orders.indexOf(a.status);
+      const bOrder = orders.indexOf(b.status);
+
+      if (aOrder === bOrder) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return bOrder - aOrder;
+      }
+      return aOrder - bOrder;
+    },
+
+    version: (a, b) => {
+      if (this.sortStatus.order === 'asc') {
+        if (a.isPrototype) return 1;
+        if (b.isPrototype) return -1;
+        return b.alternativeVersion - a.alternativeVersion;
+      }
+
+      if (a.isPrototype) return -1;
+      if (b.isPrototype) return 1;
+      return a.alternativeVersion - b.alternativeVersion;
+    },
+
+    updatedAt: (a, b) => {
+      if (this.sortStatus.order === 'asc') {
+        return b.primaryUpdatedAt.getTime() - a.primaryUpdatedAt.getTime();
+      }
+      return a.primaryUpdatedAt.getTime() - b.primaryUpdatedAt.getTime();
+    },
+
+    author: (a, b) => {
+      if (a.primaryAuthor[0] === b.primaryAuthor[0]) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return b.primaryAuthor[0].localeCompare(a.primaryAuthor[0]);
+      }
+      return a.primaryAuthor[0].localeCompare(b.primaryAuthor[0]);
+    },
+
+    source: (a, b) => {
+      const orders = [
+        Challenge.STATUSES.VALIDE_QUALITE,
+        Challenge.STATUSES.VALIDE,
+        Challenge.STATUSES.PROPOSE,
+        Challenge.STATUSES.ARCHIVE,
+        Challenge.STATUSES.PERIME,
+      ];
+
+      const aOrder = orders.indexOf(a.primaryComputedStatus);
+      const bOrder = orders.indexOf(b.primaryComputedStatus);
+
+      if (aOrder === bOrder) {
+        return this.sortFunctions.version(a, b);
+      }
+
+      if (this.sortStatus.order === 'asc') {
+        return bOrder - aOrder;
+      }
+      return aOrder - bOrder;
+    },
+  };
 
   get challengeLocales() {
     const excludeStatuses = [];
@@ -32,8 +113,39 @@ export default class LocalizedChallengesProduction extends Component {
     );
   }
 
+  get sortedChallengeLocales() {
+    if (!this.sortStatus.column) return this.challengeLocales;
+
+    return this.challengeLocales.toSorted(this.sortFunctions[this.sortStatus.column]);
+  }
+
   get isToRephrase() {
     return this.args.skill.productionPrototype.toRephrase;
+  }
+
+  get versionColumnSortOrder() {
+    if (this.sortStatus.column !== 'version') return null;
+    return this.sortStatus.order;
+  }
+
+  get updatedAtColumnSortOrder() {
+    if (this.sortStatus.column !== 'updatedAt') return null;
+    return this.sortStatus.order;
+  }
+
+  get authorColumnSortOrder() {
+    if (this.sortStatus.column !== 'author') return null;
+    return this.sortStatus.order;
+  }
+
+  get sourceColumnSortOrder() {
+    if (this.sortStatus.column !== 'source') return null;
+    return this.sortStatus.order;
+  }
+
+  get translationStatusColumnSortOrder() {
+    if (this.sortStatus.column !== 'status') return null;
+    return this.sortStatus.order;
   }
 
   @action
@@ -44,6 +156,24 @@ export default class LocalizedChallengesProduction extends Component {
   @action
   async copyChallengePreviewUrl(previewUrl) {
     await navigator.clipboard.writeText(previewUrl);
+  }
+
+  @action
+  sortBy(column) {
+    if (this.sortStatus.column !== column) {
+      this.sortStatus = { column: column, order: 'asc' };
+      return;
+    }
+
+    if (this.sortStatus.order === 'desc') {
+      this.sortStatus = {
+        column: null,
+        order: null,
+      };
+      return;
+    }
+
+    this.sortStatus = { column: column, order: 'desc' };
   }
 
   <template>
@@ -62,11 +192,18 @@ export default class LocalizedChallengesProduction extends Component {
       <div class="challenges-production-table">
         <PixTable
           @condensed={{true}}
-          @data={{this.challengeLocales}}
+          @data={{this.sortedChallengeLocales}}
           @caption={{concat "Tableau des épreuves de l'acquis " @skill.name}}
         >
           <:columns as |challengeLocale context|>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "version"}}
+              @sortOrder={{this.versionColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre décroissant des versions"
+              @ariaLabelSortDesc="Trier dans l'ordre croissant des versions"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Version
               </:header>
@@ -114,7 +251,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{/if}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "updatedAt"}}
+              @sortOrder={{this.updatedAtColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre du plus récent au moins récent"
+              @ariaLabelSortDesc="Trier dans l'ordre du moins récent au plus récent"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Dernière MAJ
               </:header>
@@ -122,7 +266,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{formatDate challengeLocale.primaryUpdatedAt "DD/MM/YYYY" allow-empty=true}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "author"}}
+              @sortOrder={{this.authorColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre anti-alphabétique des auteurs"
+              @ariaLabelSortDesc="Trier dans l'ordre alphabétique des auteurs"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Auteur
               </:header>
@@ -130,7 +281,14 @@ export default class LocalizedChallengesProduction extends Component {
                 {{challengeLocale.primaryAuthor}}
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "source"}}
+              @sortOrder={{this.sourceColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre du challenge le moins opérationnel au plus opérationnel"
+              @ariaLabelSortDesc="Trier dans l'ordre du challenge le plus opérationnel au moins opérationnel"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Source
               </:header>
@@ -140,7 +298,14 @@ export default class LocalizedChallengesProduction extends Component {
                 </PixTag>
               </:cell>
             </PixTableColumn>
-            <PixTableColumn @context={{context}}>
+            <PixTableColumn
+              @context={{context}}
+              @onSort={{fn this.sortBy "status"}}
+              @sortOrder={{this.translationStatusColumnSortOrder}}
+              @ariaLabelDefaultSort="Trier dans l'ordre de la traduction la moins opérationnelle à la plus opérationnelle"
+              @ariaLabelSortDesc="Trier dans l'ordre de la traduction la plus opérationnelle à la moins opérationnelle"
+              @ariaLabelSortAsc="Rétablir le tri par défaut"
+            >
               <:header>
                 Traduction
               </:header>
