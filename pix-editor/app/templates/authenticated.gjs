@@ -28,26 +28,6 @@ import Confirm from 'pixeditor/components/pop-in/confirm';
           </div>
         {{/if}}
         {{outlet}}
-        {{#if @controller.messages.length}}
-          <div class="messages">
-            {{#each @controller.messages as |message|}}
-              <div
-                data-test-main-message
-                class={{concat "ui floating message " (if message.positive "positive" "warning")}}
-                id={{message.id}}
-              >
-                <p>
-                  {{#if message.positive}}
-                    <i class="check icon"></i>
-                  {{else}}
-                    <i class="exclamation icon"></i>
-                  {{/if}}
-                  {{message.text}}
-                </p>
-              </div>
-            {{/each}}
-          </div>
-        {{/if}}
       </div>
     </div>
     <Logout

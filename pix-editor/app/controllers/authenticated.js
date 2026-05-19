@@ -20,7 +20,6 @@ export default class AuthenticatedController extends Controller {
 
   @service config;
   @service router;
-  @service notify;
   @service loader;
   @service confirm;
   @service store;
@@ -32,7 +31,6 @@ export default class AuthenticatedController extends Controller {
 
   constructor() {
     super(...arguments);
-    this.notify.setTarget(this);
     this.loader.setTarget(this);
     this.confirm.setTarget(this);
     this.checkApiVersionInterval = setInterval(() => {
@@ -62,22 +60,6 @@ export default class AuthenticatedController extends Controller {
 
   get shouldApplyV2Styles() {
     return this.versionManager.getV2() && this.router.currentRouteName.includes('v2');
-  }
-
-  showMessage(content, positive) {
-    const messages = this.messages;
-    const id = 'message_' + Date.now();
-    messages.push({ text: content, positive: positive ? true : false, id: id });
-    window.setTimeout(() => {
-      const nodeMessage = document.getElementById(id);
-      if (nodeMessage) {
-        nodeMessage.addEventListener('transitionend', () => {
-          messages.splice(0);
-        });
-        nodeMessage.style.transition = 'opacity .8s ease';
-        nodeMessage.style.opacity = '0';
-      }
-    }, 3000);
   }
 
   isLoading(message) {
