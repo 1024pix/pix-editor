@@ -11,7 +11,7 @@ import { pgBoss } from '../../config.js';
 import { logger } from '../logger.js';
 
 export default function exportExternalUrlsJobProcessor() {
-  if (!pgBoss.exportExternalUrlListJobEnabled) {
+  if (pgBoss.exportExternalUrlListJobEnabled) {
     logger.info('Export external url list job has been migrated to pgboss, skipping bull processor');
     return;
   }

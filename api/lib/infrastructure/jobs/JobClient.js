@@ -9,7 +9,7 @@ import { importNamedExportFromFile } from '../utils/import-named-exports-from-di
 import { child } from '../logger.js';
 import { MonitoredJobHandler } from './MonitoredJobHandler.js';
 
-const workerDirPath = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const workerDirPath = resolve(dirname(fileURLToPath(import.meta.url)), '../');
 const logger = child('worker', { event: 'worker' });
 
 export class JobClient {
@@ -35,8 +35,8 @@ export class JobClient {
     if (this.#isInitialized) return;
     this.#isTestOnly = isTestOnly;
 
-    const connectionString =
-      process.env.NODE_ENV === 'test' ? process.env.TEST_JOBS_DATABASE_URL : process.env.JOBS_DATABASE_URL;
+    const connectionString
+      = process.env.NODE_ENV === 'test' ? process.env.TEST_JOBS_DATABASE_URL : process.env.JOBS_DATABASE_URL;
 
     if (worker) {
       this.#pgBoss = pgBossFactory
@@ -82,7 +82,7 @@ export class JobClient {
   }
 
   async #registerJobs(jobGroups = []) {
-    const globPattern = `${workerDirPath}/application/**/*job-controller.js`;
+    const globPattern = `${workerDirPath}/scheduled-jobs/*job-controller.js`;
 
     logger.info(`Search for job handlers in ${globPattern}`);
     const jobFiles = await Array.fromAsync(glob(globPattern, { exclude: ['**/job-controller.js'] }));
@@ -151,7 +151,7 @@ export class JobClient {
     const { localConcurrency } = jobHandler;
 
     await this.#pgBoss.work(name, { localConcurrency, includeMetadata: true }, async ([job]) => {
-      const monitoredJobHandler = new MonitoredJobHandler({ jobHandler, logger });
+      const monitoredJobHandler = new MonitoredJobHandler({ handler: jobHandler, logger });
       return monitoredJobHandler.handle(name, job);
     });
   }
