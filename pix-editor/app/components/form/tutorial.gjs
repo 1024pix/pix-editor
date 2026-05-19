@@ -20,7 +20,7 @@ export default class TutorialForm extends Component {
   @tracked tagListOptions = [];
   @tracked currentQuery;
   @service config;
-  @service notify;
+  @service notifications;
   @service store;
 
   options = {
@@ -120,9 +120,9 @@ export default class TutorialForm extends Component {
         this.tagListOptions.push({ label: storedTag.title, value: storedTag.id });
       } catch (err) {
         if (err?.errors?.[0]?.status === '409') {
-          this.notify.error('Un tag avec ce nom là existe déjà');
+          this.notifications.sendError('Un tag avec ce nom là existe déjà');
         } else {
-          this.notify.error('Erreur lors de la création du tag');
+          this.notifications.sendError('Erreur lors de la création du tag');
           Sentry.captureException(err);
         }
       }

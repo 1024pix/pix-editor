@@ -64,6 +64,6 @@ module('Acceptance | Modules | New', function (hooks) {
 
     assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
     assert.dom(await screen.findByText('Nouveau module')).exists();
-    assert.dom(await screen.findByText('Le module Nouveau module a été enregistré.')).exists();
+    assert.dom(await screen.findByText('Le module "Nouveau module" a été enregistré.')).exists();
   });
 });

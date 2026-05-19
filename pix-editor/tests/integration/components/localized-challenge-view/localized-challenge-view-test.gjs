@@ -19,17 +19,17 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     edition,
     loader,
     save,
-    notifyMessageStub,
-    notifyErrorStub;
+    pixToastSendSuccess,
+    pixToastSendError;
 
   hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
     loader = this.owner.lookup('service:loader');
-    const notify = this.owner.lookup('service:notify');
     sinon.stub(loader, 'start');
     sinon.stub(loader, 'stop');
-    notifyMessageStub = sinon.stub(notify, 'message');
-    notifyErrorStub = sinon.stub(notify, 'error');
+    const notifications = this.owner.lookup('service:notifications');
+    pixToastSendSuccess = sinon.stub(notifications, 'sendSuccess');
+    pixToastSendError = sinon.stub(notifications, 'sendError');
     const attachment = store.createRecord('attachment', {
       id: 'attachmentId',
       type: 'attachment',
@@ -159,9 +159,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
         // then
         assert.strictEqual(localizedChallenge.status, LocalizedChallenge.STATUSES.PAUSE);
-        assert.ok(notifyMessageStub.calledOnce);
-        assert.ok(notifyMessageStub.calledWith('Statut modifié avec succès !'));
-        assert.notOk(notifyErrorStub.calledOnce);
+        assert.ok(pixToastSendSuccess.calledOnce);
+        assert.ok(pixToastSendSuccess.calledWith('Statut modifié avec succès !'));
+        assert.notOk(pixToastSendError.calledOnce);
         assert.ok(loader.start.calledOnce);
         assert.ok(loader.stop.calledOnce);
       });
@@ -187,9 +187,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
         // then
         assert.strictEqual(localizedChallenge.status, LocalizedChallenge.STATUSES.PAUSE);
-        assert.ok(notifyMessageStub.notCalled);
-        assert.ok(notifyErrorStub.calledOnce);
-        assert.ok(notifyErrorStub.calledWith("Erreur de la mise en pause de l'épreuve localisée"));
+        assert.ok(pixToastSendSuccess.notCalled);
+        assert.ok(pixToastSendError.calledOnce);
+        assert.ok(pixToastSendError.calledWith("Erreur de la mise en pause de l'épreuve localisée"));
         assert.ok(loader.start.calledOnce);
         assert.ok(loader.stop.calledOnce);
       });
@@ -224,9 +224,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
         // then
         assert.strictEqual(localizedChallenge.status, LocalizedChallenge.STATUSES.PLAY);
-        assert.ok(notifyMessageStub.calledOnce);
-        assert.ok(notifyMessageStub.calledWith('Statut modifié avec succès !'));
-        assert.notOk(notifyErrorStub.calledOnce);
+        assert.ok(pixToastSendSuccess.calledOnce);
+        assert.ok(pixToastSendSuccess.calledWith('Statut modifié avec succès !'));
+        assert.notOk(pixToastSendError.calledOnce);
         assert.ok(loader.start.calledOnce);
         assert.ok(loader.stop.calledOnce);
       });
@@ -251,9 +251,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
         await click(await screen.findByRole('button', { name: 'Oui' }));
 
         // then
-        assert.ok(notifyMessageStub.notCalled);
-        assert.ok(notifyErrorStub.calledOnce);
-        assert.ok(notifyErrorStub.calledWith("Erreur de la mise en prod de l'épreuve localisée"));
+        assert.ok(pixToastSendSuccess.notCalled);
+        assert.ok(pixToastSendError.calledOnce);
+        assert.ok(pixToastSendError.calledWith("Erreur de la mise en prod de l'épreuve localisée"));
         assert.ok(loader.start.calledOnce);
         assert.ok(loader.stop.calledOnce);
       });
@@ -283,9 +283,9 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
       // then
       assert.strictEqual(localizedChallenge.status, LocalizedChallenge.STATUSES.PAUSE);
-      assert.ok(notifyMessageStub.calledOnce);
-      assert.ok(notifyMessageStub.calledWith('Statut modifié avec succès !'));
-      assert.notOk(notifyErrorStub.calledOnce);
+      assert.ok(pixToastSendSuccess.calledOnce);
+      assert.ok(pixToastSendSuccess.calledWith('Statut modifié avec succès !'));
+      assert.notOk(pixToastSendError.calledOnce);
       assert.ok(loader.start.calledOnce);
       assert.ok(loader.stop.calledOnce);
     });

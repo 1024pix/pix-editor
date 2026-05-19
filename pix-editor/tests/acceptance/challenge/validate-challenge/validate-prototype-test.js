@@ -12,17 +12,16 @@ module('Acceptance | Validate-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let competence, tube, store, messageStub;
+  let competence, tube, store, pixToastSendSuccess;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
-    class NotifyServiceStub extends Service {
-      message() {}
-      setTarget() {}
+    class PixToastNotificationsStub extends Service {
+      sendSuccess() {}
     }
-    this.owner.register('service:notify', NotifyServiceStub);
-    const notifyServiceStub = this.owner.lookup('service:notify');
-    messageStub = sinon.stub(notifyServiceStub, 'message');
+    this.owner.register('service:notifications', PixToastNotificationsStub);
+    const notificationsStub = this.owner.lookup('service:notifications');
+    pixToastSendSuccess = sinon.stub(notificationsStub, 'sendSuccess');
 
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
@@ -120,10 +119,10 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       const alternative2 = await store.peekRecord('challenge', obsoleteAlternativeChallenge.id);
       const skill = await store.peekRecord('skill', suggestedSkill.id);
 
-      assert.ok(messageStub.calledThrice);
-      assert.deepEqual(messageStub.args[0], ["Activation de l'acquis name"]);
-      assert.deepEqual(messageStub.args[1], ['Alternative n°1 mise en production']);
-      assert.deepEqual(messageStub.args[2], ['Mise en production réussie']);
+      assert.ok(pixToastSendSuccess.calledThrice);
+      assert.deepEqual(pixToastSendSuccess.args[0], ["Activation de l'acquis name"]);
+      assert.deepEqual(pixToastSendSuccess.args[1], ['Alternative n°1 mise en production']);
+      assert.deepEqual(pixToastSendSuccess.args[2], ['Mise en production réussie']);
       assert.strictEqual(prototype.status, 'validé');
       assert.strictEqual(alternative1.status, 'validé');
       assert.strictEqual(alternative2.status, 'périmé');
@@ -154,10 +153,10 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       const alternative2 = await store.peekRecord('challenge', obsoleteAlternativeChallenge.id);
       const skill = await store.peekRecord('skill', suggestedSkill.id);
 
-      assert.ok(messageStub.calledThrice);
-      assert.deepEqual(messageStub.args[0], ["Activation de l'acquis name"]);
-      assert.deepEqual(messageStub.args[1], ['Mise en production des déclinaisons annulée']);
-      assert.deepEqual(messageStub.args[2], ['Mise en production réussie']);
+      assert.ok(pixToastSendSuccess.calledThrice);
+      assert.deepEqual(pixToastSendSuccess.args[0], ["Activation de l'acquis name"]);
+      assert.deepEqual(pixToastSendSuccess.args[1], ['Mise en production des déclinaisons annulée']);
+      assert.deepEqual(pixToastSendSuccess.args[2], ['Mise en production réussie']);
       assert.strictEqual(prototype.status, 'validé');
       assert.strictEqual(alternative1.status, 'proposé');
       assert.strictEqual(alternative2.status, 'périmé');
@@ -212,7 +211,7 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       // then
       const challenge = await store.peekRecord('challenge', proposalPrototype.id);
       const oldChallenge = await store.peekRecord('challenge', validatePrototype.id);
-      assert.ok(messageStub.calledWith('Mise en production réussie'));
+      assert.ok(pixToastSendSuccess.calledWith('Mise en production réussie'));
       assert.strictEqual(oldChallenge.status, 'archivé');
       assert.strictEqual(challenge.status, 'validé');
       assert.strictEqual(skill.status, 'actif');
@@ -278,9 +277,9 @@ module('Acceptance | Validate-Challenge', function (hooks) {
       const oldPrototype = await store.peekRecord('challenge', validatedPrototype.id);
       const oldSkill = await store.peekRecord('skill', actifSkill.id);
 
-      assert.ok(messageStub.calledTwice);
-      assert.deepEqual(messageStub.args[0], ["Activation de l'acquis name"]);
-      assert.deepEqual(messageStub.args[1], ['Mise en production réussie']);
+      assert.ok(pixToastSendSuccess.calledTwice);
+      assert.deepEqual(pixToastSendSuccess.args[0], ["Activation de l'acquis name"]);
+      assert.deepEqual(pixToastSendSuccess.args[1], ['Mise en production réussie']);
       assert.strictEqual(newPrototype.status, 'validé');
       assert.strictEqual(oldPrototype.status, 'archivé');
       assert.strictEqual(newSkill.status, 'actif');

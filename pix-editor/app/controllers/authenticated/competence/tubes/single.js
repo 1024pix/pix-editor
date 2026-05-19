@@ -24,7 +24,7 @@ export default class SingleController extends Controller {
 
   @service access;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
 
   get mayEdit() {
@@ -76,7 +76,7 @@ export default class SingleController extends Controller {
     if (!previousState) {
       this.send('minimize');
     }
-    this.notify.message('Modification annulée');
+    this.notifications.sendSuccess('Modification annulée');
   }
 
   @action
@@ -88,14 +88,14 @@ export default class SingleController extends Controller {
       .then(() => {
         this.edition = false;
         this.loader.stop();
-        this.notify.message('Tube mis à jour');
+        this.notifications.sendSuccess('Tube mis à jour');
         return tube.hasMany('rawSkills').reload();
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour du tube');
+        this.notifications.sendError('Erreur lors de la mise à jour du tube');
       });
   }
 
@@ -119,14 +119,14 @@ export default class SingleController extends Controller {
       .save()
       .then(() => {
         this.loader.stop();
-        this.notify.message('Tube mis à jour');
+        this.notifications.sendSuccess('Tube mis à jour');
         this.router.transitionTo('authenticated.competence.skills', newCompetence.id);
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour du tube');
+        this.notifications.sendError('Erreur lors de la mise à jour du tube');
       });
   }
 }

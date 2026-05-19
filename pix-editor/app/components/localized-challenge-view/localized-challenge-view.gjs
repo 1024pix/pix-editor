@@ -23,7 +23,7 @@ export default class LocalizedChallenge extends Component {
 
   @service countries;
   @service loader;
-  @service notify;
+  @service notifications;
   @service store;
   @service storage;
   @service filePath;
@@ -118,7 +118,7 @@ export default class LocalizedChallenge extends Component {
     await localizedChallenge.attachments;
     localizedChallenge.attachments.forEach((attachment) => attachment.rollbackAttributes());
     this.deletedFiles = [];
-    this.notify.message('Modification annulée');
+    this.notifications.sendSuccess('Modification annulée');
   }
 
   @action
@@ -229,11 +229,11 @@ export default class LocalizedChallenge extends Component {
       this.invalidUrlsToConsult = '';
       this.urlsToConsult = this.args.localizedChallenge.urlsToConsult?.join('\n');
       this.displayUrlsToConsultField = false;
-      this.notify.message('Épreuve mise à jour');
+      this.notifications.sendSuccess('Épreuve mise à jour');
     } catch (error) {
       console.error('oops', error);
       Sentry.captureException(error);
-      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
+      this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
     }
@@ -276,11 +276,11 @@ export default class LocalizedChallenge extends Component {
     try {
       this.loader.start('Enregistrement');
       await this.args.localizedChallenge.save();
-      this.notify.message('Statut modifié avec succès !');
+      this.notifications.sendSuccess('Statut modifié avec succès !');
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error(
+      this.notifications.sendError(
         this.args.localizedChallenge.isInProduction
           ? "Erreur de la mise en prod de l'épreuve localisée"
           : "Erreur de la mise en pause de l'épreuve localisée",

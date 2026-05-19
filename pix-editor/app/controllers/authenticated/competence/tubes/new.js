@@ -12,7 +12,7 @@ export default class NewController extends Tube {
 
   @service currentData;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service store;
 
@@ -27,12 +27,12 @@ export default class NewController extends Tube {
       this.loader.start();
       await this.tube.save();
       this.edition = false;
-      this.notify.message('Tube créé');
+      this.notifications.sendSuccess('Tube créé');
       this.router.transitionTo('authenticated.competence.tubes.single', await this.tube.competence, this.tube);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la création du tube');
+      this.notifications.sendError('Erreur lors de la création du tube');
     } finally {
       this.loader.stop();
     }
@@ -41,7 +41,7 @@ export default class NewController extends Tube {
   @action
   async cancelEdit() {
     this.edition = false;
-    this.notify.message('Création annulée');
+    this.notifications.sendSuccess('Création annulée');
     this.parentController.send('closeChildComponent');
     const theme = await this.tube.get('theme');
     theme.rollbackAttributes();

@@ -15,13 +15,13 @@ export default class NewController extends Skill {
 
   @service changelogEntry;
   @service loader;
-  @service notify;
+  @service notifications;
   @service store;
 
   @action
   cancelEdit() {
     this.edition = false;
-    this.notify.message('Création annulée');
+    this.notifications.sendSuccess('Création annulée');
     this.parentController.send('closeChildComponent');
     this.store.deleteRecord(this.skill);
   }
@@ -34,12 +34,12 @@ export default class NewController extends Skill {
       await this._handleSkillChangelog(this.skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction);
       this.edition = false;
       this.loader.stop();
-      this.notify.message('Acquis créé');
+      this.notifications.sendSuccess('Acquis créé');
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error("Erreur lors de la création de l'acquis");
+      this.notifications.sendError("Erreur lors de la création de l'acquis");
     }
   }
 }

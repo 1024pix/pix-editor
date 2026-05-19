@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/ember';
 export default class CompetenceThemesSingleController extends Controller {
   @service access;
   @service config;
-  @service notify;
+  @service notifications;
   @service loader;
 
   @tracked edition = false;
@@ -40,7 +40,7 @@ export default class CompetenceThemesSingleController extends Controller {
   cancelEdit() {
     this.edition = false;
     this.theme.rollbackAttributes();
-    this.notify.message('Modification annulée');
+    this.notifications.sendSuccess('Modification annulée');
   }
 
   @action
@@ -52,13 +52,13 @@ export default class CompetenceThemesSingleController extends Controller {
       .then(() => {
         this.edition = false;
         this.loader.stop();
-        this.notify.message('Thématique mis à jour');
+        this.notifications.sendSuccess('Thématique mis à jour');
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour de la thématique');
+        this.notifications.sendError('Erreur lors de la mise à jour de la thématique');
       });
   }
 }

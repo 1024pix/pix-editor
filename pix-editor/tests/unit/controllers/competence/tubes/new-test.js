@@ -8,23 +8,21 @@ module('Unit | Controller | competence/tubes/new', function (hooks) {
   setupTest(hooks);
 
   let controller,
-    notifyMessageStub,
-    notifyErrorStub,
+    pixToastSendSuccess,
+    pixToastSendError,
     loaderStartStub,
     loaderStopStub,
     deleteRecordStub,
     themeRollbackAttributesStub;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     loaderStartStub = sinon.stub();
     loaderStopStub = sinon.stub();
@@ -63,7 +61,7 @@ module('Unit | Controller | competence/tubes/new', function (hooks) {
     assert.ok(themeRollbackAttributesStub.calledOnce);
     assert.ok(deleteRecordStub.calledWith(controller.model));
     assert.notOk(controller.edition);
-    assert.ok(notifyMessageStub.calledWith('Création annulée'));
+    assert.ok(pixToastSendSuccess.calledWith('Création annulée'));
     assert.ok(parentControllerSendStub.calledWith('closeChildComponent'));
   });
 
@@ -85,7 +83,7 @@ module('Unit | Controller | competence/tubes/new', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Tube créé'));
+    assert.ok(pixToastSendSuccess.calledWith('Tube créé'));
     assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', competence, controller.model));
   });
 
@@ -103,6 +101,6 @@ module('Unit | Controller | competence/tubes/new', function (hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la création du tube'));
+    assert.ok(pixToastSendError.calledWith('Erreur lors de la création du tube'));
   });
 });

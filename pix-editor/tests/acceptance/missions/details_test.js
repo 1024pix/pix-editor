@@ -10,8 +10,6 @@ module('Acceptance | Missions | Details', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function () {
-    const notifications = this.owner.lookup('service:notifications');
-    notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('competence', {

@@ -11,8 +11,6 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function () {
-    const notifications = this.owner.lookup('service:notifications');
-    notifications.setDefaultClearDuration(50);
     this.server.create('static-course-summary', {
       id: 'courseA',
       name: 'Premier test statique',

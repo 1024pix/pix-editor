@@ -47,8 +47,6 @@ module.exports = function (environment) {
     sentry: { enabled: _isFeatureEnabled(process.env.SENTRY_ENABLED) },
 
     'ember-simple-auth': { routeAfterAuthentication: 'authenticated' },
-
-    'ember-cli-notifications': { autoClear: true },
   };
 
   if (environment === 'development') {
@@ -69,8 +67,6 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-
-    ENV['ember-cli-notifications'] = { autoClear: false };
   }
 
   return ENV;

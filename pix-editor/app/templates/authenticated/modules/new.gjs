@@ -5,7 +5,7 @@ import ModuleForm from 'pixeditor/components/modules/module-form';
 
 export default class NewModule extends Component {
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service store;
 
@@ -25,9 +25,9 @@ export default class NewModule extends Component {
       this.loader.start();
       await newModule.save();
       this.router.replaceWith('authenticated.modules');
-      this.notify.message(`Le module ${newModule.title} a été enregistré.`);
+      this.notifications.sendSuccess(`Le module "${newModule.title}" a été enregistré.`);
     } catch (err) {
-      this.notify.error('Erreur lors de l’enregistrement du module.');
+      this.notifications.sendError('Erreur lors de l’enregistrement du module.');
     } finally {
       this.loader.stop();
     }

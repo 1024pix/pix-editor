@@ -28,10 +28,10 @@ export default class CompetenceOverview extends Component {
   async fetchTranslations() {
     try {
       await this.phrase.download();
-      this.notifications.success('Téléchargement des traductions depuis Phrase effectué.');
+      this.notifications.sendSuccess('Téléchargement des traductions depuis Phrase effectué.');
       await this.refresh();
     } catch {
-      this.notifications.error('Erreur lors du téléchargement des traductions.');
+      this.notifications.sendError('Erreur lors du téléchargement des traductions.');
     }
   }
 

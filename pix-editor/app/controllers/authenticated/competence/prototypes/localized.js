@@ -9,7 +9,7 @@ import Challenge from 'pixeditor/models/challenge';
 export default class LocalizedController extends Controller {
   @service router;
   @service access;
-  @service notify;
+  @service notifications;
   @service loader;
   @service store;
   @service storage;
@@ -169,7 +169,7 @@ export default class LocalizedController extends Controller {
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
+      this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
       this.displayConfirm = false;
@@ -201,7 +201,7 @@ export default class LocalizedController extends Controller {
     if (!this.wasMaximized) {
       this.minimize();
     }
-    this.notify.message('Modification annulée');
+    this.notifications.sendSuccess('Modification annulée');
   }
 
   @action async save() {
@@ -215,12 +215,12 @@ export default class LocalizedController extends Controller {
       this.invalidUrlsToConsult = '';
       this.displayUrlsToConsultField = false;
       this.loader.stop();
-      this.notify.message('Épreuve mise à jour');
+      this.notifications.sendSuccess('Épreuve mise à jour');
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error("Erreur lors de la mise à jour de l'épreuve");
+      this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     }
   }
 

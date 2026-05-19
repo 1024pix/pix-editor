@@ -24,10 +24,10 @@ export default class EditStaticCourseController extends Controller {
   async editStaticCourse(formData) {
     try {
       await this.model.staticCourse.save({ adapterOptions: { ...formData, action: 'update' } });
-      this.notifications.success('Test statique modifié avec succès.');
+      this.notifications.sendSuccess('Test statique modifié avec succès.');
       this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.staticCourse.id);
     } catch (err) {
-      await this.notifications.error('Une erreur est survenue lors de la modification du test statique.');
+      this.notifications.sendError('Une erreur est survenue lors de la modification du test statique.');
       const knownErrors = err?.errors.map((error) => error.detail).join('\n');
       const finalErrors = knownErrors ?? JSON.stringify(err);
       throw new Error(finalErrors);

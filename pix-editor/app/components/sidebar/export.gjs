@@ -9,7 +9,7 @@ export default class SidebarExportComponent extends Component {
   </template>
 
   @service('file-saver') fileSaver;
-  @service notify;
+  @service notifications;
   @service loader;
 
   @action
@@ -21,10 +21,10 @@ export default class SidebarExportComponent extends Component {
       const csvContent = this._buildCSVContent(areas);
       const fileName = `Export_Sujets_${new Date().toLocaleString('fr-FR')}.csv`;
       this.fileSaver.saveAs(csvContent, fileName);
-      this.notify.message('Sujets exportés');
+      this.notifications.sendSuccess('Sujets exportés');
     } catch (e) {
       console.error(e);
-      this.notify.error("Erreur lors de l'exportation des sujets");
+      this.notifications.sendError("Erreur lors de l'exportation des sujets");
     } finally {
       this.loader.stop();
     }

@@ -6,18 +6,16 @@ import sinon from 'sinon';
 module('Unit | Controller | competence/tubes/single', function (hooks) {
   setupTest(hooks);
 
-  let controller, store, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
+  let controller, store, pixToastSendSuccess, pixToastSendError, loaderStartStub, loaderStopStub;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     loaderStartStub = sinon.stub();
     loaderStopStub = sinon.stub();
@@ -57,7 +55,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Tube mis à jour'));
+    assert.ok(pixToastSendSuccess.calledWith('Tube mis à jour'));
     assert.ok(reloadSkillsStub.calledOnce);
   });
 
@@ -76,7 +74,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour du tube'));
+    assert.ok(pixToastSendError.calledWith('Erreur lors de la mise à jour du tube'));
   });
 
   test('it should start edition', function (assert) {
@@ -113,7 +111,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       // then
       assert.notOk(controller.edition);
       assert.ok(rollbackAttributesStub.calledOnce);
-      assert.ok(notifyMessageStub.calledWith('Modification annulée'));
+      assert.ok(pixToastSendSuccess.calledWith('Modification annulée'));
     });
 
     test('it should send `minimize` if `wasMaximized` is `false`', function (assert) {
@@ -140,7 +138,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       // then
       assert.notOk(controller.edition);
       assert.ok(rollbackAttributesStub.calledOnce);
-      assert.ok(notifyMessageStub.calledWith('Modification annulée'));
+      assert.ok(pixToastSendSuccess.calledWith('Modification annulée'));
       assert.ok(parentControllerSendStub.calledWith('closeChildComponent'));
     });
   });
@@ -174,7 +172,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       assert.ok(loaderStartStub.calledOnce);
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyMessageStub.calledWith('Tube mis à jour'));
+      assert.ok(pixToastSendSuccess.calledWith('Tube mis à jour'));
       assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', newCompetence.id));
       assert.deepEqual(competence, newCompetence);
       assert.deepEqual(theme, newTheme);
@@ -193,7 +191,7 @@ module('Unit | Controller | competence/tubes/single', function (hooks) {
       assert.ok(loaderStartStub.calledOnce);
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour du tube'));
+      assert.ok(pixToastSendError.calledWith('Erreur lors de la mise à jour du tube'));
     });
   });
 });

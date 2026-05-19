@@ -119,7 +119,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     const popIn = await screen.findByTestId('display-illustration-pop-in');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
@@ -169,7 +169,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     const attachments = store.peekAll('attachment').slice();
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
@@ -206,7 +206,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.strictEqual(attachments.length, 0);
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
@@ -249,7 +249,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
       .find((attachment) => attachment.type === 'illustration');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');
@@ -293,7 +293,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
       .find((attachment) => attachment.type === 'illustration');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');

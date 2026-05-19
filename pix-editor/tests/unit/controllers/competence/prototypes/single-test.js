@@ -7,7 +7,7 @@ import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupIntlRenderingTest(hooks);
-  let controller, messageStub, startStub, stopStub, errorStub;
+  let controller, messageStub, startStub, stopStub, pixToastSendError;
 
   hooks.beforeEach(function () {
     // given
@@ -20,12 +20,11 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       stop = stopStub;
     }
     this.owner.register('service:loader', LoaderService);
-
-    errorStub = sinon.stub();
-    class NotifyService extends Service {
-      error = errorStub;
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendError = pixToastSendError;
     }
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     class ConfirmService extends Service {
       ask = sinon.stub().resolves();
@@ -256,7 +255,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller.setSkill();
 
         // then
-        assert.ok(errorStub.calledWith('Aucun acquis sélectionné'));
+        assert.ok(pixToastSendError.calledWith('Aucun acquis sélectionné'));
       });
 
       test('it should set a new skill for prototype and is alternative with proper version', async function (assert) {
@@ -401,7 +400,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       challenge.autoReply = true;
       challenge.embedURL = '';
       assert.notOk(controller._saveCheck(challenge));
-      assert.ok(errorStub.calledOnce);
+      assert.ok(pixToastSendError.calledOnce);
     });
 
     test('accept any solution on a QCROC', function (assert) {
@@ -410,7 +409,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 - 'hola
 `;
       assert.ok(controller._saveCheck(challenge));
-      assert.notOk(errorStub.calledOnce);
+      assert.notOk(pixToastSendError.calledOnce);
     });
 
     ['QROCM-ind', 'QROCM-dep'].forEach((type) => {
@@ -420,7 +419,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 - 'hola
 `;
         assert.notOk(controller._saveCheck(challenge));
-        assert.ok(errorStub.calledOnce);
+        assert.ok(pixToastSendError.calledOnce);
       });
     });
   });

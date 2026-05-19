@@ -1,5 +1,7 @@
-import NotificationContainer from 'ember-cli-notifications/components/notification-container';
+import PixToastContainer from '@1024pix/pix-ui/components/pix-toast-container';
+
 <template>
-  <NotificationContainer @position="bottom-right" />
   {{outlet}}
+
+  <PixToastContainer @closeButtonAriaLabel="Fermer la notification" />
 </template>

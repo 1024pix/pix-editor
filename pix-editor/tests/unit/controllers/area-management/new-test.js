@@ -5,16 +5,16 @@ import sinon from 'sinon';
 
 module('Unit | Controller | area-management/new', function (hooks) {
   setupTest(hooks);
-  let controller, transitionToRouteStub, area, framework, notifyMessageStub, notifyErrorStub;
+  let controller, transitionToRouteStub, area, framework, pixToastSendSuccess, pixToastSendError;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     controller = this.owner.lookup('controller:authenticated.area-management/new');
     transitionToRouteStub = sinon.stub();
@@ -37,7 +37,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
 
     // then
     assert.ok(deleteRecordStub.calledWith(area));
-    assert.ok(notifyMessageStub.calledWith('Création du domaine annulé'));
+    assert.ok(pixToastSendSuccess.calledWith('Création du domaine annulé'));
     assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
@@ -74,7 +74,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
       assert.ok(saveStub.calledOnce);
       assert.deepEqual(controller.area, expectedArea);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyMessageStub.calledWith('Domaine créé'));
+      assert.ok(pixToastSendSuccess.calledWith('Domaine créé'));
       assert.ok(transitionToRouteStub.calledWith('authenticated'));
     });
 
@@ -91,7 +91,7 @@ module('Unit | Controller | area-management/new', function (hooks) {
       assert.ok(loaderStartStub.calledOnce);
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyErrorStub.getCall(0).args, 'Erreur lors de la création du domaine');
+      assert.ok(pixToastSendError.getCall(0).args, 'Erreur lors de la création du domaine');
     });
   });
 });

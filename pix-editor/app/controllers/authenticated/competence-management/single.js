@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/ember';
 
 export default class CompetenceManagementSingleController extends Controller {
   @service access;
-  @service notify;
+  @service notifications;
   @service loader;
 
   @tracked edition = false;
@@ -29,7 +29,7 @@ export default class CompetenceManagementSingleController extends Controller {
     this.edition = false;
     const competence = this.model;
     competence.rollbackAttributes();
-    this.notify.message('Modification annulée');
+    this.notifications.sendSuccess('Modification annulée');
   }
 
   @action
@@ -41,13 +41,13 @@ export default class CompetenceManagementSingleController extends Controller {
       .then(() => {
         this.edition = false;
         this.loader.stop();
-        this.notify.message('Compétence mise à jour');
+        this.notifications.sendSuccess('Compétence mise à jour');
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour de la compétence');
+        this.notifications.sendError('Erreur lors de la mise à jour de la compétence');
       });
   }
 }

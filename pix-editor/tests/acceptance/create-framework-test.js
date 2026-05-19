@@ -25,7 +25,7 @@ module('Acceptance | Create-Framework', function (hooks) {
     const newFrameworkName = 'Nouveau titre';
 
     // when
-    await visit('/');
+    const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await clickByText('Créer un nouveau référentiel');
     await fillIn('[data-test-framework-name-input] input', newFrameworkName);
@@ -34,7 +34,7 @@ module('Acceptance | Create-Framework', function (hooks) {
     // then
     const frameworks = await store.findAll('framework');
     assert.ok(frameworks.find((framework) => framework.name === newFrameworkName));
-    assert.dom(find('[data-test-main-message]')).hasText('Référentiel créé');
+    assert.dom(screen.getByText('Référentiel créé')).exists();
     assert.strictEqual(currentURL(), '/');
   });
 });

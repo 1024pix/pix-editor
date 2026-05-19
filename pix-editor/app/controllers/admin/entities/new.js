@@ -24,11 +24,11 @@ export default class NewAdminEntityController extends Controller {
       newEntity.properties = data;
       await newEntity.save({ adapterOptions: { entityName: this.model.schema.entityName } });
 
-      this.notifications.success('Entité créée avec succès');
+      this.notifications.sendSuccess('Entité créée avec succès');
       this.router.transitionTo('admin.entities.list', this.model.schema.entityName);
     } catch (err) {
       Sentry.captureException(err);
-      this.notifications.error("Erreur lors de la création de l'entité");
+      this.notifications.sendError("Erreur lors de la création de l'entité");
     } finally {
       this.loader.stop();
     }

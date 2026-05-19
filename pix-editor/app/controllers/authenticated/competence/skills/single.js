@@ -24,7 +24,7 @@ export default class SingleController extends Controller {
   @service confirm;
   @service intl;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service storage;
   @service store;
@@ -100,7 +100,7 @@ export default class SingleController extends Controller {
     if (!this.wasMaximized) {
       this.minimize();
     }
-    this.notify.message(this.intl.t('common.modify.cancel'));
+    this.notifications.sendSuccess(this.intl.t('common.modify.cancel'));
   }
 
   @action
@@ -126,12 +126,12 @@ export default class SingleController extends Controller {
       await this._handleSkillChangelog(skill, changelog, this.changelogEntry.modifyAction);
       this.edition = false;
       this.loader.stop();
-      this.notify.message(this.intl.t('skill.changelog.update-status'));
+      this.notifications.sendSuccess(this.intl.t('skill.changelog.update-status'));
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error(this.intl.t('skill.changelog.update-error'));
+      this.notifications.sendError(this.intl.t('skill.changelog.update-error'));
     }
   }
 
@@ -157,12 +157,12 @@ export default class SingleController extends Controller {
 
       await this._handleSkillChangelog(newSkill, changelogValue, this.changelogEntry.moveAction);
 
-      this.notify.message('Acquis et épreuves associées dupliqués');
+      this.notifications.sendSuccess('Acquis et épreuves associées dupliqués');
       this.router.transitionTo('authenticated.competence.skills.single', competence, newSkill);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
-      this.notify.error("Erreur lors de la duplication de l'acquis");
+      this.notifications.sendError("Erreur lors de la duplication de l'acquis");
     } finally {
       this.loader.stop();
     }
@@ -176,7 +176,7 @@ export default class SingleController extends Controller {
   @action
   archiveSkill() {
     if (this.skill.productionPrototype) {
-      this.notify.error(this.intl.t('skill.archive.skill_with_live_challenges'));
+      this.notifications.sendError(this.intl.t('skill.archive.skill_with_live_challenges'));
       return;
     }
     this.isStatusActionMenuOpen = false;
@@ -191,7 +191,7 @@ export default class SingleController extends Controller {
             .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
             .then(() => {
               this.close();
-              this.notify.message(this.intl.t('skill.archive.success'));
+              this.notifications.sendSuccess(this.intl.t('skill.archive.success'));
             })
             .then(() => {
               const updateChallenges = challenges
@@ -207,9 +207,9 @@ export default class SingleController extends Controller {
                     )
                     .then(() => {
                       if (challenge.isPrototype) {
-                        this.notify.message(this.intl.t('skill.archive.challenge.prototype'));
+                        this.notifications.sendSuccess(this.intl.t('skill.archive.challenge.prototype'));
                       } else {
-                        this.notify.message(
+                        this.notifications.sendSuccess(
                           this.intl.t('skill.archive.challenge.prototype', { number: challenge.alternativeVersion }),
                         );
                       }
@@ -220,7 +220,7 @@ export default class SingleController extends Controller {
             .catch((error) => {
               console.error(error);
               Sentry.captureException(error);
-              this.notify.error(this.intl.t('skill.archive.error'));
+              this.notifications.sendError(this.intl.t('skill.archive.error'));
             })
             .finally(() => {
               this.loader.stop();
@@ -229,14 +229,14 @@ export default class SingleController extends Controller {
       })
       .catch((error) => {
         Sentry.captureException(error);
-        this.notify.message(this.intl.t('skill.archive.cancel'));
+        this.notifications.sendSuccess(this.intl.t('skill.archive.cancel'));
       });
   }
 
   @action
   obsoleteSkill() {
     if (this.skill.productionPrototype) {
-      this.notify.error(this.intl.t('skill.obsolete.skill_with_live_challenges'));
+      this.notifications.sendError(this.intl.t('skill.obsolete.skill_with_live_challenges'));
       return;
     }
     this.isStatusActionMenuOpen = false;
@@ -251,7 +251,7 @@ export default class SingleController extends Controller {
             .then(() => this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
-              this.notify.message(this.intl.t('skill.obsolete.success'));
+              this.notifications.sendSuccess(this.intl.t('skill.obsolete.success'));
             })
             .then(() => {
               const updateChallenges = challenges
@@ -267,10 +267,12 @@ export default class SingleController extends Controller {
                     )
                     .then(() => {
                       if (challenge.isPrototype) {
-                        this.notify.message(this.intl.t('skill.obsolete.challenge.prototype'));
+                        this.notifications.sendSuccess(this.intl.t('skill.obsolete.challenge.prototype'));
                       } else {
-                        this.notify.message(
-                          this.intl.t('skill.obsolete.challenge.prototype', { number: challenge.alternativeVersion }),
+                        this.notifications.sendSuccess(
+                          this.intl.t('skill.obsolete.challenge.prototype', {
+                            number: challenge.alternativeVersion,
+                          }),
                         );
                       }
                     });
@@ -280,7 +282,7 @@ export default class SingleController extends Controller {
             .catch((error) => {
               console.error(error);
               Sentry.captureException(error);
-              this.notify.error(this.intl.t('skill.obsolete.error'));
+              this.notifications.sendError(this.intl.t('skill.obsolete.error'));
             })
             .finally(() => {
               this.loader.stop();
@@ -289,7 +291,7 @@ export default class SingleController extends Controller {
       })
       .catch((error) => {
         Sentry.captureException(error);
-        this.notify.message(this.intl.t('skill.obsolete.cancel'));
+        this.notifications.sendSuccess(this.intl.t('skill.obsolete.cancel'));
       });
   }
 

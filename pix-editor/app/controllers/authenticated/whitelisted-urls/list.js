@@ -53,7 +53,7 @@ export default class WhitelistedUrlsController extends Controller {
       return;
     }
     await whitelistedUrl.destroyRecord().catch(() => {
-      this.notifications.error('Une erreur est survenue lors de la suppression de cette URL.');
+      this.notifications.sendError('Une erreur est survenue lors de la suppression de cette URL.');
     });
   }
 }

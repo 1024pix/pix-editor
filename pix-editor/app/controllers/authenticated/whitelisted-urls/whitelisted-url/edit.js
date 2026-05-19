@@ -15,10 +15,10 @@ export default class EditWhitelistedUrlController extends Controller {
         whitelistedUrl[property] = value;
       }
       await whitelistedUrl.save();
-      this.notifications.success('URL modifiée avec succès.');
+      this.notifications.sendSuccess('URL modifiée avec succès.');
       this.router.transitionTo('authenticated.whitelisted-urls.list');
     } catch (err) {
-      await this.notifications.error("Une erreur est survenue lors de la modification de l'URL.");
+      this.notifications.sendError("Une erreur est survenue lors de la modification de l'URL.");
       const knownErrors = err?.errors.map((error) => error.detail).join('\n');
       const finalErrors = knownErrors ?? JSON.stringify(err);
       throw new Error(finalErrors);
