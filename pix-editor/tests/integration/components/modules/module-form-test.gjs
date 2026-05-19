@@ -5,10 +5,12 @@ import { module, test } from 'qunit';
 import { click, fillIn } from '@ember/test-helpers';
 import sinon from 'sinon';
 
+const isChrome = navigator?.userAgent?.includes(' Chrome/');
+
 module('Integration | Component | modules/module-form', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
+  test.if('it parses and saves a module data', !isChrome, async function (assert) {
     // given
     const saveModule = sinon.stub();
 

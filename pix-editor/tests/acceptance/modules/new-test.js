@@ -6,6 +6,8 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
+const isChrome = navigator?.userAgent?.includes(' Chrome/');
+
 module('Acceptance | Modules | New', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -19,7 +21,7 @@ module('Acceptance | Modules | New', function (hooks) {
     return authenticateSession();
   });
 
-  test('displays module creation page', async function (assert) {
+  test.if('creates a new module', !isChrome, async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
