@@ -1,5 +1,5 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { currentURL, fillIn } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
@@ -28,5 +28,40 @@ module('Acceptance | Modules | New', function (hooks) {
     // then
     assert.strictEqual(currentURL(), '/modules/new');
     assert.dom(await screen.findByRole('heading', { name: "Création d'un module" })).exists();
+
+    const editor = await screen.findByLabelText('Contenu (JSON)');
+
+    await fillIn(
+      editor,
+      JSON.stringify({
+        title: 'Nouveau module',
+        isBeta: true,
+        slug: 'slug',
+        visibility: 'public',
+        details: {
+          level: 'novice',
+        },
+        sections: [
+          {
+            id: 'section1',
+          },
+          {
+            id: 'section2',
+          },
+        ],
+        glossary: [
+          {
+            word: 'pouet',
+            definition: 'sound',
+          },
+        ],
+      }),
+    );
+
+    await screen.getByRole('button', { name: 'Enregistrer' }).click();
+
+    assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
+    assert.dom(await screen.findByText('Nouveau module')).exists();
+    assert.dom(await screen.findByText('Le module Nouveau module a été enregistré.')).exists();
   });
 });

@@ -383,6 +383,13 @@ export default function routes() {
     return mission;
   });
 
+  this.post('modules', function (schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const module = schema.create('module', { id: crypto.randomUUID(), attributes });
+    schema.create('module-summary', { id: module.id, ...attributes });
+    return module;
+  });
+
   this.get('/module-summaries', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 

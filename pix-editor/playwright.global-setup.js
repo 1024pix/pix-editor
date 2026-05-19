@@ -19,7 +19,7 @@ export default async function globalSetup(config) {
 
       try {
         const page = await context.newPage();
-        await page.goto('/');
+        await page.goto('/', { timeout: 60000 });
         await page.getByRole('textbox', { name: 'Clé API' }).fill(user.apiKey);
         await page.getByRole('button', { name: 'Se connecter' }).click();
         await page.waitForURL('/');

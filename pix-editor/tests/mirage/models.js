@@ -18,6 +18,7 @@ import localizedChallenge from './models/localized-challenge';
 import localizedFrameworkTube from './models/localized-framework-tube';
 import missionSummary from './models/mission-summary';
 import mission from './models/mission';
+import module from './models/module';
 import moduleSummary from './models/module-summary';
 import note from './models/note';
 import searchResult from './models/search-result';
@@ -51,6 +52,7 @@ export default {
   localizedFrameworkTube,
   missionSummary,
   mission,
+  module,
   moduleSummary,
   note,
   searchResult,

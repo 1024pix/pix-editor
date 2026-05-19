@@ -61,7 +61,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/pix-editor
-      - browser-tools/install_chrome
+      - browser-tools/install_firefox
       - run: cat package*.json > cachekey
       - restore_cache:
           keys:

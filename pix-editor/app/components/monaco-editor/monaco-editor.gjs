@@ -18,6 +18,6 @@ export default class MonacoEditor extends Component {
   });
 
   <template>
-    <div {{this.setup}} style="width: 80vw; height: 80vh;"></div>
+    <div {{this.setup}} ...attributes></div>
   </template>
 }
