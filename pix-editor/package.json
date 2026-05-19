@@ -48,7 +48,7 @@
     "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
     "@playwright/test": "1.60.0",
-    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-babel": "^7.0.0",
     "@sentry/ember": "^10.31.0",
     "acorn": "^8.15.0",
     "babel-plugin-ember-template-compilation": "^4.0.0",
