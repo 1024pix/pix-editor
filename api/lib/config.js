@@ -91,6 +91,18 @@ export const scheduledJobs = {
   cleanReleasesTableTime: process.env.CLEAN_RELEASES_TABLE_TIME,
 };
 
+export const pgBoss = {
+  clientConnexionPoolMaxSize: _getNumber(process.env.PGBOSS_CLIENT_CONNECTION_POOL_MAX_SIZE, 2),
+  workerConnexionPoolMaxSize: _getNumber(process.env.PGBOSS_WORKER_CONNECTION_POOL_MAX_SIZE, 15),
+  localConcurrency: _getNumber(process.env.PGBOSS_LOCAL_CONCURRENCY, 1),
+  retentionSeconds: _getNumber(process.env.PGBOSS_RETENTION_SECONDS, 30 * 24 * 3600),
+  persistWarnings: isFeatureEnabled(process.env.PGBOSS_PERSIST_WARNINGS),
+  statesMonitoringJobCron: process.env.PGBOSS_STATES_MONITORING_JOB_CRON || '* * * * *',
+  exportExternalUrlListJobEnabled: process.env.PGBOSS_EXPORT_EXTERNAL_URL_LIST_JOB_ENABLED
+    ? isFeatureEnabled(process.env.PGBOSS_EXPORT_EXTERNAL_URL_LIST_JOB_ENABLED)
+    : true,
+};
+
 export const database = {
   url: process.env.DATABASE_URL,
   poolMinSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE, 0),
