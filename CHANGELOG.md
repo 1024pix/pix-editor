@@ -1,5 +1,11 @@
 
 
+## v4.27.0 (20/05/2026)
+
+
+### :arrow_up: Montée de version
+- [#1477](https://github.com/1024pix/pix-editor/pull/1477) [BUMP] Update dependency @rollup/plugin-babel to v7 (pix-editor).
+
 ## v4.26.0 (20/05/2026)
 
 
