@@ -166,6 +166,7 @@ jobs:
           working_directory: ~/pix-editor/api
           environment:
             DATABASE_URL: "postgres://circleci@localhost:5432/circleci"
+            JOBS_DATABASE_URL: "postgres://circleci@localhost:5432/circleci"
           background: true
           command: npm run db:reset && npm start
 
