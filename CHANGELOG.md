@@ -1,5 +1,23 @@
 
 
+## v4.26.0 (20/05/2026)
+
+
+### :rocket: Amélioration
+- [#1472](https://github.com/1024pix/pix-editor/pull/1472) [FEATURE] Permettre de trier les épreuves traduites d'un acquis en V2 (PIX-22520).
+- [#1471](https://github.com/1024pix/pix-editor/pull/1471) [FEATURE] Créer un nouveau module dans Pix Editor (PIX-22708).
+- [#1467](https://github.com/1024pix/pix-editor/pull/1467) [FEATURE] Ajout endpoint création de module (PIX-22707).
+
+### :building_construction: Tech
+- [#1469](https://github.com/1024pix/pix-editor/pull/1469) [TECH] Ajouter une contrainte d'unicité sur la version de prototype d'une même acquis (PIX-22245).
+
+### :arrow_up: Montée de version
+- [#1475](https://github.com/1024pix/pix-editor/pull/1475) [BUMP] Update dependency ember-eslint-parser to ^0.11.0 (pix-editor).
+- [#1474](https://github.com/1024pix/pix-editor/pull/1474) [BUMP] Update dependency @playwright/test to v1.60.0.
+- [#1470](https://github.com/1024pix/pix-editor/pull/1470) [BUMP] Update dependency @playwright/test to v1.59.1.
+- [#1464](https://github.com/1024pix/pix-editor/pull/1464) [BUMP] Update dependency ember-file-upload to v10 (pix-editor).
+- [#1465](https://github.com/1024pix/pix-editor/pull/1465) [BUMP] Update dependency @1024pix/pix-ui to ^60.10.1 (pix-editor).
+
 ## v4.25.1 (11/05/2026)
 
 
