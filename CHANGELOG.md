@@ -1,5 +1,11 @@
 
 
+## v4.27.1 (20/05/2026)
+
+
+### :building_construction: Tech
+- [#1476](https://github.com/1024pix/pix-editor/pull/1476) [TECH] Skip les tests Monaco editor sur Chrome (PIX-22781).
+
 ## v4.27.0 (20/05/2026)
 
 
