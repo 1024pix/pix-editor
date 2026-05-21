@@ -56,6 +56,7 @@ async function exitOnSignal(signal) {
     await deleteUnmentionedKeysAfterUploadJobQueue?.close();
     await exportExternalUrlListJobQueue?.close();
     await releaseTableCleaningAndRetentionJobQueue?.close();
+    await JobClient.instance.stop();
     process.exit(0);
   } catch (err) {
     logger.error(err);
