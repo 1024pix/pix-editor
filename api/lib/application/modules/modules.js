@@ -53,9 +53,9 @@ export function register(server) {
           const { oldId, newId } = request.query;
           const modulesDiff = await getModulesDiff({ oldId, newId });
           return h
-            .response(modulesDiffSerializer.serialize(modulesDiff))
+            .response(await modulesDiffSerializer.serialize(modulesDiff))
             .code(200)
-            .header('Content-type', 'text/plain');
+            .header('Content-type', 'text/html');
         },
       },
     },
