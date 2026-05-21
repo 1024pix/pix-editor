@@ -17,7 +17,7 @@ export default class SidebarNavigationComponent extends Component {
   @service access;
   @service currentData;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service store;
 
@@ -92,13 +92,13 @@ export default class SidebarNavigationComponent extends Component {
       this.loader.start();
       await this.newFramework.save();
       this.setFramework(this.newFramework.id);
-      this.notify.message('Référentiel créé');
+      this.notifications.sendSuccess('Référentiel créé');
       this.displayNewFrameworkPopIn = false;
       router.transitionTo('authenticated');
     } catch (error) {
       Sentry.captureException(error);
       console.error(error);
-      this.notify.error('Erreur lors de la création du Référentiel');
+      this.notifications.sendError('Erreur lors de la création du Référentiel');
     } finally {
       this.loader.stop();
     }

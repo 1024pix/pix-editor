@@ -58,17 +58,17 @@ module('Acceptance | competence-management/new', function (hooks) {
     const area = await store.peekRecord('area', 'recArea1');
     const newCompetence = area.competencesArray.find((competence) => competence.title === newCompetenceTitle);
     assert.ok(newCompetence);
-    assert.dom(findAll('[data-test-main-message]')[0]).hasText('Compétence créée');
+    assert.dom(screen.getByText('Compétence créée')).exists();
     assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 
   test('it should cancel creation', async function (assert) {
     // when
-    await visit('/competence-management/new/recArea1');
+    const screen = await visit('/competence-management/new/recArea1');
     await click(find('[data-test-cancel-button]'));
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Création de la compétence annulée');
+    assert.dom(screen.getByText('Création de la compétence annulée')).exists();
     assert.strictEqual(currentURL(), '/');
   });
 

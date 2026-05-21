@@ -162,7 +162,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(find('[data-test-confirm-log-approve]'));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
-      assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+      assert.dom(screen.getByText('Épreuve mise à jour')).exists();
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
       assert.dom(await find('[data-test-save-challenge-button]')).doesNotExist();
       assert.strictEqual((await screen.getByLabelText('Sourds et malentendants')).childNodes[3].textContent, 'RAS');
@@ -180,7 +180,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     });
 
     test('can modify common attributes but not the quality attributes when challenge is an alternative', async function (assert) {
-      await visit('/');
+      const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
@@ -213,7 +213,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(find('[data-test-confirm-log-approve]'));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge2');
-      assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+      assert.dom(screen.getByText('Épreuve mise à jour')).exists();
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
     });
   });
@@ -335,7 +335,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(find('[data-test-confirm-log-approve]'));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
-      assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+      assert.dom(screen.getByText('Épreuve mise à jour')).exists();
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
       assert.dom(await find('[data-test-save-challenge-button]')).doesNotExist();
       assert.deepEqual(challenge.geography, 'JP');
@@ -505,7 +505,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(find('[data-test-confirm-log-approve]'));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
-      assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+      assert.dom(screen.getByText('Épreuve mise à jour')).exists();
       assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
       assert.dom(await find('[data-test-save-challenge-button]')).doesNotExist();
       assert.deepEqual(challenge.geography, 'JP');

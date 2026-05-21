@@ -5,15 +5,15 @@ import sinon from 'sinon';
 
 module('Unit | Controller | competence-management/new', function (hooks) {
   setupTest(hooks);
-  let controller, transitionToRouteStub, area, competence, notifyMessageStub, notifyErrorStub;
+  let controller, transitionToRouteStub, area, competence, pixToastSendSuccess, pixToastSendError;
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
     controller = this.owner.lookup('controller:authenticated.competence-management/new');
     controller.edition = true;
     transitionToRouteStub = sinon.stub();
@@ -44,7 +44,7 @@ module('Unit | Controller | competence-management/new', function (hooks) {
     // then
     assert.notOk(controller.edition);
     assert.ok(deleteRecordStub.calledWith(competence));
-    assert.ok(notifyMessageStub.calledWith('Création de la compétence annulée'));
+    assert.ok(pixToastSendSuccess.calledWith('Création de la compétence annulée'));
     assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
@@ -80,7 +80,7 @@ module('Unit | Controller | competence-management/new', function (hooks) {
       assert.ok(saveStub.calledOnce);
       assert.deepEqual(controller.model.competence, expectedCompetence);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
+      assert.ok(pixToastSendSuccess.getCall(0).args, ['Compétence créée']);
       assert.ok(
         transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence.id, {
           queryParams: { view: 'workbench' },
@@ -102,7 +102,7 @@ module('Unit | Controller | competence-management/new', function (hooks) {
       assert.ok(controller.edition);
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
-      assert.ok(notifyErrorStub.calledWith('Erreur lors de la création de la compétence'));
+      assert.ok(pixToastSendError.calledWith('Erreur lors de la création de la compétence'));
     });
   });
 });

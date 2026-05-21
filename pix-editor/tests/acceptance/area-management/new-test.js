@@ -43,17 +43,17 @@ module('Acceptance | area-management/new', function (hooks) {
         .value()
         .find((area) => area.titleFrFr === newAreaTitle),
     );
-    assert.dom(find('[data-test-main-message]')).hasText('Domaine créé');
+    assert.dom(screen.getByText('Domaine créé')).exists();
     assert.strictEqual(currentURL(), '/');
   });
 
   test('it should cancel creation', async function (assert) {
     // when
-    await visit('/area-management/new/recFramework1');
+    const screen = await visit('/area-management/new/recFramework1');
     await click(find('[data-test-cancel-button]'));
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Création du domaine annulé');
+    assert.dom(screen.getByText('Création du domaine annulé')).exists();
     assert.strictEqual(currentURL(), '/');
   });
 });

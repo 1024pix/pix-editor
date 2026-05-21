@@ -14,17 +14,16 @@ module('Acceptance | Validate-quality-challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let competence, store, messageStub, prototype;
+  let competence, store, pixToastSendSuccess, prototype;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
-    class NotifyServiceStub extends Service {
-      message() {}
-      setTarget() {}
+    class PixToastNotificationsStub extends Service {
+      sendSuccess() {}
     }
-    this.owner.register('service:notify', NotifyServiceStub);
-    const notifyServiceStub = this.owner.lookup('service:notify');
-    messageStub = sinon.stub(notifyServiceStub, 'message');
+    this.owner.register('service:notifications', PixToastNotificationsStub);
+    const notificationsStub = this.owner.lookup('service:notifications');
+    pixToastSendSuccess = sinon.stub(notificationsStub, 'sendSuccess');
 
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC', access: 'editor' });
@@ -115,7 +114,7 @@ module('Acceptance | Validate-quality-challenge', function (hooks) {
     assert.ok(alternativeValide.isQualityOk);
     assert.notOk(alternativePerime.isQualityOk);
     assert.notOk(alternativePropose.isQualityOk);
-    assert.deepEqual(messageStub.args[0], ['Validation qualité confirmée']);
-    assert.ok(messageStub.calledOnce);
+    assert.deepEqual(pixToastSendSuccess.args[0], ['Validation qualité confirmée']);
+    assert.ok(pixToastSendSuccess.calledOnce);
   });
 });

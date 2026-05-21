@@ -31,7 +31,7 @@ export default class SingleController extends Controller {
   @service filePath;
   @service intl;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service storage;
   @service store;
@@ -826,7 +826,7 @@ export default class SingleController extends Controller {
   }
 
   _message(text) {
-    this.notify.message(text);
+    this.notifications.sendSuccess(text);
   }
 
   _loadingMessage(text) {
@@ -834,7 +834,7 @@ export default class SingleController extends Controller {
   }
 
   _errorMessage(text) {
-    this.notify.error(text);
+    this.notifications.sendError(text);
   }
 
   _error(text) {

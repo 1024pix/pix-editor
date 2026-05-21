@@ -39,14 +39,14 @@ module('Acceptance | competence-management/single', function (hooks) {
     const newCompetenceTitle = 'Nouveau titre';
 
     // when
-    await visit('/competence-management/recCompetence1.1');
+    const screen = await visit('/competence-management/recCompetence1.1');
     await click(find('[data-test-edit-button]'));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
     await click(find('[data-test-save-button]'));
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
-    assert.dom('[data-test-main-message]').hasText('Compétence mise à jour');
+    assert.dom(screen.getByText('Compétence mise à jour')).exists();
     assert.strictEqual(competence.title, 'Nouveau titre');
   });
 
@@ -55,14 +55,14 @@ module('Acceptance | competence-management/single', function (hooks) {
     const newCompetenceTitle = 'Nouveau titre';
 
     // when
-    await visit('/competence-management/recCompetence1.1');
+    const screen = await visit('/competence-management/recCompetence1.1');
     await click(find('[data-test-edit-button]'));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
     await click(find('[data-test-cancel-button]'));
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
-    assert.dom('[data-test-main-message]').hasText('Modification annulée');
+    assert.dom(screen.getByText('Modification annulée')).exists();
     assert.strictEqual(competence.title, 'Titre');
   });
 

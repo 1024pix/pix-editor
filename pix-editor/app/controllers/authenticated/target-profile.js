@@ -25,7 +25,7 @@ export default class TargetProfileController extends Controller {
 
   @service('file-saver') fileSaver;
   @service currentData;
-  @service notify;
+  @service notifications;
 
   get selectedTubeCount() {
     return this.areas.reduce((count, area) => {
@@ -247,11 +247,11 @@ export default class TargetProfileController extends Controller {
         const data = event.target.result;
         this._buildTargetProfileFromFile(JSON.parse(data));
         this._emptyOpenFile();
-        this.notify.message('Fichier chargé');
+        this.notifications.sendSuccess('Fichier chargé');
       };
       reader.readAsText(file);
     } catch (error) {
-      this.notify.error("Erreur lors de l'ouverture du fichier");
+      this.notifications.sendError("Erreur lors de l'ouverture du fichier");
       Sentry.captureException(error);
     }
   }

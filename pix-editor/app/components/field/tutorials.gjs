@@ -20,7 +20,7 @@ export default class Tutorials extends Component {
   @tracked isTutorialQueryOngoing = false;
 
   @service store;
-  @service notify;
+  @service notifications;
   @service loader;
 
   get searchLabel() {
@@ -101,18 +101,18 @@ export default class Tutorials extends Component {
       this.tutorial.level = this.tutorial.level || null;
     } catch {
       this.loader.stop();
-      this.notify.error('Lien du tutoriel non valide');
+      this.notifications.sendError('Lien du tutoriel non valide');
       return;
     }
     try {
       const { isNew } = this.tutorial;
       const tutorial = await this.tutorial.save();
-      this.notify.message('Tutoriel enregistré');
+      this.notifications.sendSuccess('Tutoriel enregistré');
       if (isNew) this.args.addTutorial(this.args.tutorials, tutorial);
       this.displayTutorialPopin = false;
     } catch (error) {
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la création du tutoriel');
+      this.notifications.sendError('Erreur lors de la création du tutoriel');
     } finally {
       this.loader.stop();
     }

@@ -5,18 +5,16 @@ import sinon from 'sinon';
 
 module('Unit | Controller | competence', function (hooks) {
   setupTest(hooks);
-  let controller, theme1, theme2, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
+  let controller, theme1, theme2, pixToastSendSuccess, pixToastSendError, loaderStartStub, loaderStopStub;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     loaderStartStub = sinon.stub();
     loaderStopStub = sinon.stub();
@@ -45,7 +43,7 @@ module('Unit | Controller | competence', function (hooks) {
     assert.ok(loaderStartStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(saveModelStub.calledTwice);
-    assert.ok(notifyMessageStub.calledWith('successMessage'));
+    assert.ok(pixToastSendSuccess.calledWith('successMessage'));
     assert.notOk(controller.displaySortingPopIn);
   });
 
@@ -60,7 +58,7 @@ module('Unit | Controller | competence', function (hooks) {
     // then
     assert.ok(loaderStartStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('errorMessage'));
+    assert.ok(pixToastSendError.calledWith('errorMessage'));
   });
 
   test('it should cancel sorting', function (assert) {

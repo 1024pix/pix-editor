@@ -9,21 +9,20 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | sidebar/export', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  let loaderStartStub, loaderStopStub, notifyMessageStub, notifyErrorStub;
+  let loaderStartStub, loaderStopStub, pixToastSendSuccess, pixToastSendError;
 
   hooks.beforeEach(function () {
     const loader = this.owner.lookup('service:loader');
-    class NotifyServiceStub extends Service {
-      message() {}
-      setTarget() {}
-      error() {}
+    class PixToastNotificationsStub extends Service {
+      sendSuccess() {}
+      sendError() {}
     }
-    this.owner.register('service:notify', NotifyServiceStub);
-    const notify = this.owner.lookup('service:notify');
+    this.owner.register('service:notifications', PixToastNotificationsStub);
+    const notifications = this.owner.lookup('service:notifications');
     loaderStartStub = sinon.stub(loader, 'start');
     loaderStopStub = sinon.stub(loader, 'stop');
-    notifyMessageStub = sinon.stub(notify, 'message');
-    notifyErrorStub = sinon.stub(notify, 'error');
+    pixToastSendSuccess = sinon.stub(notifications, 'sendSuccess');
+    pixToastSendError = sinon.stub(notifications, 'sendError');
 
     const productionSkill_1_1 = [
       { name: 'skill1_1', level: 1 },
@@ -120,7 +119,7 @@ module('Integration | Component | sidebar/export', function (hooks) {
     // then
     assert.ok(fileSaverServiceStub.saveAs.calledWith(expectedCsvContent));
     assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
-    assert.ok(notifyMessageStub.calledWith('Sujets exportés'));
+    assert.ok(pixToastSendSuccess.calledWith('Sujets exportés'));
     assert.ok(loaderStopStub.calledOnce);
   });
 
@@ -139,6 +138,6 @@ module('Integration | Component | sidebar/export', function (hooks) {
     // then
     assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith("Erreur lors de l'exportation des sujets"));
+    assert.ok(pixToastSendError.calledWith("Erreur lors de l'exportation des sujets"));
   });
 });

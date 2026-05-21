@@ -45,10 +45,10 @@ export default class AdminEntityListController extends Controller {
           this.modal.loading = true;
           const entityId = entity.id;
           await entity.destroyRecord();
-          this.notifications.success(`Entité '${entityId}' supprimée avec succès`);
+          this.notifications.sendSuccess(`Entité '${entityId}' supprimée avec succès`);
         } catch (err) {
           Sentry.captureException(err);
-          this.notifications.error("Erreur lors de la suppression de l'entité");
+          this.notifications.sendError("Erreur lors de la suppression de l'entité");
         } finally {
           this.modal.loading = false;
           this.closeModal();

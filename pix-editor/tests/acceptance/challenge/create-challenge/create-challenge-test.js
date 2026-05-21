@@ -146,7 +146,7 @@ module('Acceptance | Create-Challenge', function (hooks) {
     const challenges = store.peekAll('challenge').slice();
     const challenge = challenges.find((challenge) => challenge.id !== 'recChallenge1');
 
-    assert.dom('[data-test-main-message]').hasText('Prototype enregistré');
+    assert.dom(screen.getByText('Prototype enregistré')).exists();
     assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments[0].url, 'data_illustration:,');

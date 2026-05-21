@@ -23,7 +23,7 @@ export default class CompetenceController extends Controller {
   @service config;
   @service access;
   @service('file-saver') fileSaver;
-  @service notify;
+  @service notifications;
   @service loader;
 
   @controller('authenticated.competence.prototypes') prototypesController;
@@ -188,7 +188,7 @@ export default class CompetenceController extends Controller {
       }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${new Date().toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(contentCSV, fileName);
-    this.notify.message('acquis exportés');
+    this.notifications.sendSuccess('Acquis exportés');
     this.loader.stop();
   }
 
@@ -248,13 +248,13 @@ export default class CompetenceController extends Controller {
         await model.save();
       }
       this.loader.stop();
-      this.notify.message(successMessage);
+      this.notifications.sendSuccess(successMessage);
       this.displaySortingPopIn = false;
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error(errorMessage);
+      this.notifications.sendError(errorMessage);
     }
   }
 

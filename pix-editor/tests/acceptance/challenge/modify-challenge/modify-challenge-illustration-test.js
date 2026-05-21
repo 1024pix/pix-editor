@@ -97,7 +97,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isNew));
   });
@@ -144,7 +144,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     const attachments = store.peekAll('attachment').slice();
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
@@ -163,7 +163,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-illustration-button]'));
 
@@ -175,7 +175,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.strictEqual(attachments.length, 0);
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
@@ -192,7 +192,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
@@ -210,7 +210,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     );
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');
@@ -228,7 +228,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
 
     // when
-    await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-file-input-illustration] button.file-remove'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
@@ -247,7 +247,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     );
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isModified));
     assert.strictEqual(newIllustration.url, 'data:,');

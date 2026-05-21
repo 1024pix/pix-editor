@@ -95,7 +95,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
 
     // then
     const attachments = await store.peekAll('attachment');
-    assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
+    assert.dom(screen.getByText('Déclinaison numéro 1 enregistrée')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isNew));
   });
@@ -125,7 +125,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
 
     // then
     const clonedAttachment = await store.peekRecord('attachment', '2');
-    assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
+    assert.dom(screen.getByText('Déclinaison numéro 1 enregistrée')).exists();
     assert.ok(storageServiceStub.cloneFile.calledOnce);
     assert.deepEqual(storageServiceStub.cloneFile.args[0], ['data:1,']);
     assert.notOk(clonedAttachment.isNew);
@@ -152,7 +152,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     sinon.stub(storageServiceStub, 'cloneFile');
 
     // when
-    await visit('/competence/recCompetence1.1/prototypes/recChallenge2');
+    const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge2');
     await click(find('.alternatives'));
 
     await click(find('[data-test-new-alternative-action]'));
@@ -164,7 +164,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     await click(find('[data-test-confirm-log-approve]'));
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
+    assert.dom(screen.getByText('Déclinaison numéro 1 enregistrée')).exists();
     assert.strictEqual(storageServiceStub.cloneFile.callCount, 1);
   });
 });

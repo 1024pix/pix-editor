@@ -115,7 +115,7 @@ module('Acceptance | Create-Tutorial', function (hooks) {
 
     // then
     const tutorial = await store.peekAll('tutorial')[0];
-    assert.dom('[data-test-main-message]').hasText('Tutoriel enregistré');
+    assert.dom(screen.getByText('Tutoriel enregistré')).exists();
 
     assert.strictEqual(tutorial.title, 'Titre de mon tutoriel');
     assert.strictEqual(tutorial.duration, '12:30:00');

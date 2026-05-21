@@ -12,8 +12,6 @@ module('Acceptance | Static Courses | Activation', function (hooks) {
   let staticCourse, staticCourseSummary;
 
   hooks.beforeEach(function () {
-    const notifications = this.owner.lookup('service:notifications');
-    notifications.setDefaultClearDuration(50);
     staticCourseSummary = this.server.create('static-course-summary', {
       id: 'courseA',
       name: 'Premier test statique',

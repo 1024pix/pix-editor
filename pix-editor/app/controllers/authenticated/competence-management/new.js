@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/ember';
 
 export default class CompetenceManagementNewController extends Controller {
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service store;
 
@@ -18,7 +18,7 @@ export default class CompetenceManagementNewController extends Controller {
   @action
   cancelEdit() {
     this.edition = false;
-    this.notify.message('Création de la compétence annulée');
+    this.notifications.sendSuccess('Création de la compétence annulée');
     this.router.transitionTo('authenticated');
     this.store.deleteRecord(this.competence);
   }
@@ -29,14 +29,14 @@ export default class CompetenceManagementNewController extends Controller {
     try {
       this.loader.start();
       await this._createCompetence(area);
-      this.notify.message('Compétence créée');
+      this.notifications.sendSuccess('Compétence créée');
       this.edition = false;
       this.router.transitionTo('authenticated.competence.skills', this.competence.id, {
         queryParams: { view: 'workbench' },
       });
     } catch (error) {
       Sentry.captureException(error);
-      this.notify.error('Erreur lors de la création de la compétence');
+      this.notifications.sendError('Erreur lors de la création de la compétence');
     } finally {
       this.loader.stop();
     }

@@ -9,7 +9,7 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
 
   @service currentData;
   @service loader;
-  @service notify;
+  @service notifications;
   @service router;
   @service store;
 
@@ -23,20 +23,20 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
       await theme.save();
       this.edition = false;
       this.loader.stop();
-      this.notify.message('Thématique créé');
+      this.notifications.sendSuccess('Thématique créé');
       this.router.transitionTo('authenticated.competence.themes.single', competence, theme);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error('Erreur lors de la création de la thématique');
+      this.notifications.sendError('Erreur lors de la création de la thématique');
     }
   }
 
   @action
   cancelEdit() {
     this.edition = false;
-    this.notify.message('Création annulée');
+    this.notifications.sendSuccess('Création annulée');
     this.parentController.send('closeChildComponent');
     this.store.deleteRecord(this.theme);
   }

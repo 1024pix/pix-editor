@@ -29,7 +29,7 @@ export default class PopinChangelog extends Component {
     </PixModal>
   </template>
 
-  @service notify;
+  @service notifications;
 
   @tracked _value = null;
 
@@ -53,6 +53,6 @@ export default class PopinChangelog extends Component {
 
   @action
   onDeny() {
-    this.notify.message('Le message de changelog est obligatoire');
+    this.notifications.sendError('Le message de changelog est obligatoire');
   }
 }

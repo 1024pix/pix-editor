@@ -21,22 +21,19 @@ export default class MissionEditController extends Controller {
       this.model.mission.introductionMediaAlt = formData.introductionMediaAlt;
       this.model.mission.documentationUrl = formData.documentationUrl;
       await this.model.mission.save();
-      this.notifications.success('Mission mise à jour avec succès.');
+      this.notifications.sendSuccess('Mission mise à jour avec succès.');
       if (this.model.mission.hasWarnings()) {
-        this.notifications.warning(this.model.mission.warnings.join('<br>'), {
-          clearDuration: 5000,
-          htmlContent: true,
-        });
+        this.notifications.sendWarning(this.model.mission.warnings.join('<br>'));
       }
       this.router.transitionTo('authenticated.missions.mission');
     } catch (err) {
       this.model.mission.rollbackAttributes();
 
       if (err.errors?.[0]) {
-        await this.notifications.error(err.errors[0].detail);
+        this.notifications.sendError(err.errors[0].detail);
         return;
       }
-      await this.notifications.error('Une erreur est survenue lors de la mise à jour de la mission.');
+      this.notifications.sendError('Une erreur est survenue lors de la mise à jour de la mission.');
     }
   }
 

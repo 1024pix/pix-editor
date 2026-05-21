@@ -115,7 +115,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
@@ -151,7 +151,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     await click(saveButton);
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.dom(screen.getByRole('heading', { name: 'Pièces jointes' })).exists();
     assert.dom(screen.getByRole('heading', { name: 'Illustration' })).exists();
   });
@@ -196,7 +196,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     const attachments = store.peekAll('attachment').slice();
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
@@ -228,7 +228,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.dom(screen.getByText('Épreuve mise à jour')).exists();
     assert.strictEqual(attachments.length, 0);
     assert.ok(attachments.every((record) => !record.isDeleted));
   });
@@ -257,7 +257,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     const attachments = await store.peekAll('attachment');
 
     // then
-    assert.dom('[data-test-main-message]').hasText('Modification annulée');
+    assert.dom(screen.getByText('Modification annulée')).exists();
     assert.strictEqual(attachments.length, 1);
     assert.ok(attachments.every((record) => !record.isDeleted));
   });

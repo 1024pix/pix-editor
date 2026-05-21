@@ -5,18 +5,16 @@ import sinon from 'sinon';
 
 module('Unit | Controller | competence/themes/single', function (hooks) {
   setupTest(hooks);
-  let controller, notifyMessageStub, notifyErrorStub, rollbackAttributesStub, loaderStartStub, loaderStopStub;
+  let controller, pixToastSendSuccess, pixToastSendError, rollbackAttributesStub, loaderStartStub, loaderStopStub;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     loaderStartStub = sinon.stub();
     loaderStopStub = sinon.stub();
@@ -48,7 +46,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     // then
     assert.notOk(controller.edition);
     assert.ok(rollbackAttributesStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Modification annulée'));
+    assert.ok(pixToastSendSuccess.calledWith('Modification annulée'));
   });
 
   test('it should save modification', async function (assert) {
@@ -65,7 +63,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Thématique mis à jour'));
+    assert.ok(pixToastSendSuccess.calledWith('Thématique mis à jour'));
   });
 
   test('it should catch an error if save action failed', async function (assert) {
@@ -83,6 +81,6 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour de la thématique'));
+    assert.ok(pixToastSendError.calledWith('Erreur lors de la mise à jour de la thématique'));
   });
 });

@@ -5,18 +5,16 @@ import sinon from 'sinon';
 
 module('Unit | Controller | competence/themes/new', function (hooks) {
   setupTest(hooks);
-  let controller, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, deleteRecordStub;
+  let controller, pixToastSendSuccess, pixToastSendError, loaderStartStub, loaderStopStub, deleteRecordStub;
 
   hooks.beforeEach(function () {
-    notifyMessageStub = sinon.stub();
-    notifyErrorStub = sinon.stub();
-
-    class NotifyService extends Service {
-      message = notifyMessageStub;
-      error = notifyErrorStub;
+    pixToastSendSuccess = sinon.stub();
+    pixToastSendError = sinon.stub();
+    class PixToastNotificationsStub extends Service {
+      sendSuccess = pixToastSendSuccess;
+      sendError = pixToastSendError;
     }
-
-    this.owner.register('service:notify', NotifyService);
+    this.owner.register('service:notifications', PixToastNotificationsStub);
 
     loaderStartStub = sinon.stub();
     loaderStopStub = sinon.stub();
@@ -53,7 +51,7 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     // then
     assert.ok(deleteRecordStub.calledWith({ name: 'newTheme' }));
     assert.notOk(controller.edition);
-    assert.ok(notifyMessageStub.calledWith('Création annulée'));
+    assert.ok(pixToastSendSuccess.calledWith('Création annulée'));
     assert.ok(parentControllerSendStub.calledWith('closeChildComponent'));
   });
 
@@ -80,7 +78,7 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Thématique créé'));
+    assert.ok(pixToastSendSuccess.calledWith('Thématique créé'));
     assert.ok(transitionToRouteStub.calledOnce);
   });
 
@@ -105,6 +103,6 @@ module('Unit | Controller | competence/themes/new', function (hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la création de la thématique'));
+    assert.ok(pixToastSendError.calledWith('Erreur lors de la création de la thématique'));
   });
 });

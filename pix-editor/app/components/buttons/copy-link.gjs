@@ -4,15 +4,15 @@ import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 
 export default class CopyLink extends Component {
-  @service notify;
+  @service notifications;
 
   @action
   async copyLink() {
     try {
       await navigator.clipboard.writeText(this.args.link);
-      this.notify.message('Lien copié');
+      this.notifications.sendSuccess('Lien copié');
     } catch {
-      this.notify.error('Erreur lors de la copie');
+      this.notifications.sendError('Erreur lors de la copie');
     }
   }
 
