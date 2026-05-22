@@ -1,5 +1,14 @@
 
 
+## v4.28.0 (22/05/2026)
+
+
+### :rocket: Amélioration
+- [#1484](https://github.com/1024pix/pix-editor/pull/1484) [FEATURE] Migration du titre interne des modules (PIX-22861).
+- [#1483](https://github.com/1024pix/pix-editor/pull/1483) [FEATURE] Ajout de la colonne "titre interne" sur les modules (PIX-22860).
+- [#1482](https://github.com/1024pix/pix-editor/pull/1482) [FEATURE] Créer la table pour les brouillons des modules (PIX-22829).
+- [#1479](https://github.com/1024pix/pix-editor/pull/1479) [FEATURE] Utiliser PixToast dans Pix Editor ( 🍞 ).
+
 ## v4.27.1 (20/05/2026)
 
 
