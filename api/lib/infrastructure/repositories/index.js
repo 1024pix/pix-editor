@@ -4,6 +4,7 @@ export * as areaRepository from './area-repository.js';
 export * as attachmentRepository from './attachment-repository.js';
 export * as challengeRepository from './challenge-repository.js';
 export * as competenceRepository from './competence-repository.js';
+export * as draftModuleRepository from './draft-module-repository.js';
 export * as fileStorageTokenRepository from './file-storage-token-repository.js';
 export * as frameworkRepository from './framework-repository.js';
 export * as localizedChallengeRepository from './localized-challenge-repository.js';

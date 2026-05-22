@@ -3,6 +3,7 @@ export * from './build-attachment.js';
 export * from './build-challenge.js';
 export * from './build-changelog-entry.js';
 export * from './build-competence.js';
+export * from './build-draft-module.js';
 export * from './build-framework.js';
 export * from './build-group-from-framework-to-challenge.js';
 export * from './build-localized-challenge.js';
