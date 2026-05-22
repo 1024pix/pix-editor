@@ -1,3 +1,5 @@
+import { basename } from 'node:path';
+
 import { Octokit } from '@octokit/rest';
 
 import { Module } from '../lib/domain/models/index.js';
@@ -42,8 +44,12 @@ export class MigrateModules extends Script {
     await knex.transaction(async (transaction) => {
       for (const { path } of moduleFiles) {
         const { content } = await getFile(octokit, ref, path, { logger });
+        const internalTitle = basename(path, '.json');
 
-        const module = new Module(JSON.parse(content));
+        const module = new Module({
+          ...JSON.parse(content),
+          internalTitle,
+        });
         logger.info({ id: module.id, title: module.title }, 'Saving module');
         await moduleRepository.save(module, transaction);
       }
