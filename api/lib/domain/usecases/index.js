@@ -5,7 +5,7 @@ export * from './create-challenge.js';
 export * from './create-competence.js';
 export * from './create-framework.js';
 export * from './create-mission.js';
-export * from './create-module.js';
+export * from './create-draft-module.js';
 export * from './create-skill.js';
 export * from './create-tag.js';
 export * from './create-thematic.js';
