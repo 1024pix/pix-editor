@@ -10,6 +10,7 @@ export * from './build-content-for-release.js';
 export * from './build-course-for-release.js';
 export * from './build-course-postgres-data-object.js';
 export * from './build-domain-release.js';
+export * from './build-draft-module.js';
 export * from './build-framework.js';
 export * from './build-framework-for-release.js';
 export * from './build-localized-challenge.js';
