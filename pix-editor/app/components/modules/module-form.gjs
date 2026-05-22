@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { on } from '@ember/modifier';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
@@ -8,6 +9,7 @@ import PixLabel from '@1024pix/pix-ui/components/pix-label';
 import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
 
 export default class ModuleForm extends Component {
+  @tracked internalTitle;
   @tracked moduleData;
 
   @action
@@ -29,23 +31,27 @@ export default class ModuleForm extends Component {
     };
   }
 
-  get title() {
-    return this.moduleData?.title;
-  }
-
   get isSaveDisabled() {
-    return !this.moduleData;
+    return !this.internalTitle || !this.moduleData;
   }
 
-  @action
-  async saveModule() {
-    return this.args.saveModule(this.moduleData);
+  @action onInternalTitleChange(event) {
+    this.internalTitle = event.target.value;
+  }
+
+  @action async saveModule() {
+    return this.args.saveModule({ ...this.moduleData, internalTitle: this.internalTitle });
   }
 
   <template>
     <div class="module-form">
-      <PixInput @id="title" @value={{this.title}} readonly>
-        <:label>Titre</:label>
+      <PixInput
+        @id="internalTitle"
+        @value={{this.internalTitle}}
+        @requiredLabel="Champ obligatoire"
+        {{on "change" this.onInternalTitleChange}}
+      >
+        <:label>Titre interne</:label>
       </PixInput>
 
       <div class="module-form__data-field">

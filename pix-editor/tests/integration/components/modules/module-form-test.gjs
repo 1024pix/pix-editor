@@ -18,18 +18,26 @@ module('Integration | Component | modules/module-form', function (hooks) {
     const screen = await render(<template><ModuleForm @saveModule={{saveModule}} /></template>);
 
     // then
-    assert.dom(screen.getByRole('textbox', { name: 'Titre' })).hasAttribute('readonly');
+    const saveButton = screen.getByRole('button', { name: 'Enregistrer' });
+    assert.dom(saveButton).hasAttribute('aria-disabled');
+
+    const internalTitle = screen.getByRole('textbox', { name: /^Titre interne/ });
+    await fillIn(internalTitle, 'PALOURDE_MAGIQUE');
+
+    assert.dom(saveButton).hasAttribute('aria-disabled');
+
     const monacoEditor = await screen.findByLabelText('Contenu (JSON)');
     assert.dom(monacoEditor).exists();
-    const saveButton = screen.getByRole('button', { name: 'Enregistrer' });
 
-    await fillIn(monacoEditor, JSON.stringify({ title: 'Mon titre' }));
+    await fillIn(monacoEditor, JSON.stringify({ slug: 'limaçoooooooooooooooooooon' }));
 
     assert.dom(saveButton).doesNotHaveAttribute('aria-disabled');
-    assert.dom(screen.getByRole('textbox', { name: 'Titre' })).hasValue('Mon titre');
 
     await click(saveButton);
-    sinon.assert.calledWithExactly(saveModule, { title: 'Mon titre' });
+    sinon.assert.calledWithExactly(saveModule, {
+      internalTitle: 'PALOURDE_MAGIQUE',
+      slug: 'limaçoooooooooooooooooooon',
+    });
 
     // WORKAROUND: let some time for monaco-editor to dismount
     await new Promise((resolve) => setTimeout(resolve, 100));
