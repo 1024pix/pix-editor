@@ -3,6 +3,7 @@ import { databaseBuffer } from '../database-buffer.js';
 export function buildDraftModule({
   id,
   moduleId,
+  internalTitle,
   shortId,
   slug,
   title,
@@ -19,6 +20,7 @@ export function buildDraftModule({
     values: {
       id,
       moduleId,
+      internalTitle,
       shortId,
       slug,
       title,
