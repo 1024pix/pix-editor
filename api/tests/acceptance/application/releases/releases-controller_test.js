@@ -14,6 +14,7 @@ async function mockCurrentContent() {
   const firstModule = domainBuilder.buildModule();
   const secondModule = domainBuilder.buildModule({
     shortId: 'secondar',
+    internalTitle: 'secondar',
     title: 'Second Module',
   });
   const modules = [firstModule, secondModule];

@@ -29,6 +29,7 @@ export function buildModule({
   id = crypto.randomUUID(),
   shortId = 'escargou',
   slug = 'petit-escargot-pignouf',
+  internalTitle = 'NAT_escagot',
   title = 'apprendre à être mou',
   isBeta = false,
   visibility = Module.VISIBILITIES.PUBLIC,
@@ -54,6 +55,7 @@ export function buildModule({
   return new Module({
     id,
     shortId,
+    internalTitle,
     slug,
     title,
     isBeta,

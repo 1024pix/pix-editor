@@ -240,6 +240,7 @@ describe('Integration | Repository | release-repository', function() {
       const firstModule = domainBuilder.buildModule();
       const secondModule = domainBuilder.buildModule({
         shortId: 'secondar',
+        internalTitle: 'secondar',
         title: 'Second Module',
       });
       modules = [firstModule, secondModule];
