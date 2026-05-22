@@ -290,7 +290,7 @@ async function mockCurrentContent() {
     },
   ];
 
-  const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', slug: 'cd' })];
+  const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', internalTitle: 'modulecd', slug: 'cd' })];
   expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
 
   expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);

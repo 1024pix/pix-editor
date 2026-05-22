@@ -59,7 +59,7 @@ describe('Module Repository', () => {
     it('lists all modules', async () => {
       // given
       const firstModule = domainBuilder.buildModule({ slug: 'a' });
-      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b' });
 
       databaseBuilder.factory.buildModule(firstModule);
       databaseBuilder.factory.buildModule(secondModule);
@@ -75,9 +75,9 @@ describe('Module Repository', () => {
 
     it('lists modules with pagination and sort parameters', async () => {
       // given
-      const firstModule = domainBuilder.buildModule({ shortId: 'first', slug: 'c', title: 'Module A', visibility: 'public' });
-      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b', title: 'Module B', visibility: 'private' });
-      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', slug: 'a', title: 'Module C', visibility: 'public' });
+      const firstModule = domainBuilder.buildModule({ shortId: 'first', internalTitle: 'first', slug: 'c', title: 'Module A', visibility: 'public' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b', title: 'Module B', visibility: 'private' });
+      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', internalTitle: 'terzio', slug: 'a', title: 'Module C', visibility: 'public' });
       const page = {
         size: 2,
         number: 1,
@@ -102,7 +102,7 @@ describe('Module Repository', () => {
     it('lists all modules for replication', async () => {
       // given
       const firstModule = domainBuilder.buildModule({ slug: 'a' });
-      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b' });
 
       databaseBuilder.factory.buildModule(firstModule);
       databaseBuilder.factory.buildModule(secondModule);
@@ -122,7 +122,7 @@ describe('Module Repository', () => {
     it('returns number of modules', async () => {
       // given
       databaseBuilder.factory.buildModule(domainBuilder.buildModule());
-      databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar' }));
+      databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar' }));
       await databaseBuilder.commit();
 
       // when

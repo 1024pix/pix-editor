@@ -19,9 +19,9 @@ describe('Acceptance | Route | modules', () => {
 
     beforeEach(async () => {
       modules = [
-        { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', slug: 'a', title: 'Module 1', isBeta: true, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.NOVICE } },
-        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', slug: 'b', title: 'Module 2', isBeta: false, visibility: Module.VISIBILITIES.PUBLIC, details: { level: Module.LEVELS.INDEPENDENT } },
-        { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', slug: 'c', title: 'Module 3', isBeta: false, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.EXPERT } },
+        { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', internalTitle: 'MOD_a', slug: 'a', title: 'Module 1', isBeta: true, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.NOVICE } },
+        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', internalTitle: 'MOD_b', slug: 'b', title: 'Module 2', isBeta: false, visibility: Module.VISIBILITIES.PUBLIC, details: { level: Module.LEVELS.INDEPENDENT } },
+        { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', internalTitle: 'MOD_c', slug: 'c', title: 'Module 3', isBeta: false, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.EXPERT } },
       ];
 
       modules.forEach((module) => {
@@ -152,6 +152,7 @@ describe('Acceptance | Route | modules', () => {
         {
           id: expect.stringMatching(uuidRegExp),
           shortId: expect.stringMatching(shortIdRegExp),
+          internalTitle: null,
           slug: module.slug,
           title: module.title,
           isBeta: module.isBeta,

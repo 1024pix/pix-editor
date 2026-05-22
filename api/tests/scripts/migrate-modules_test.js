@@ -29,7 +29,7 @@ describe('Script | MigrateModules', () => {
       domainBuilder.buildModule({ shortId: 'deuxieme', title: 'deuxieme module' }),
       domainBuilder.buildModule({ shortId: 'premiera', title: 'premier module' }),
       domainBuilder.buildModule({ shortId: 'troisiem', title: 'troisieme module' }),
-    ];
+    ].map(({ internalTitle: _, ...module }) => module);
 
     modules.forEach((module) => {
       octokit.repos.getContent.mockResolvedValueOnce({ data: { type: 'file', encoding: 'utf8', content: JSON.stringify(module) } });

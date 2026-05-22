@@ -2,6 +2,7 @@ export class Module {
   constructor({
     id,
     shortId,
+    internalTitle,
     slug,
     title,
     isBeta,
@@ -14,6 +15,7 @@ export class Module {
   } = {}) {
     this.id = id;
     this.shortId = shortId;
+    this.internalTitle = internalTitle;
     this.slug = slug;
     this.title = title;
     this.isBeta = isBeta;
