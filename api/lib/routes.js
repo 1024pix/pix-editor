@@ -13,7 +13,8 @@ import * as heapdumpRoute from './application/heapdump.js';
 import * as localizedChallengesRoute from './application/localized-challenges.js';
 import * as localizedFrameworkTubesRoute from './application/localized-framework-tubes/index.js';
 import * as missionsRoute from './application/missions/index.js';
-import * as modulesRoute from './application/modules.js';
+import * as modulesRoute from './application/modules/modules.js';
+import * as draftModulesRoute from './application/modules/draft-modules.js';
 import * as notesRoute from './application/notes.js';
 import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
@@ -38,6 +39,7 @@ export const routes = [
   challengesRoute,
   changelogEntriesRoute,
   configRoute,
+  draftModulesRoute,
   embedsRoute,
   fileStorageTokenRoute,
   frameworksRoute,

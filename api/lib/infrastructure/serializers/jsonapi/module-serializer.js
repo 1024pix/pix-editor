@@ -1,19 +1,6 @@
 import Jsonapi from 'jsonapi-serializer';
 
-import { Module } from '../../../domain/models/index.js';
-
-const { Deserializer, Serializer } = Jsonapi;
-
-const deserializer = new Deserializer({
-  keyForAttribute: 'camelCase',
-  transform(moduleDto) {
-    return new Module(moduleDto);
-  },
-});
-
-export function deserialize(payload) {
-  return deserializer.deserialize(payload);
-}
+const { Serializer } = Jsonapi;
 
 const serializer = new Serializer('module', {
   attributes: [
