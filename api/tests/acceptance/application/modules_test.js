@@ -111,6 +111,7 @@ describe('Acceptance | Route | modules', () => {
       // given
       const module = domainBuilder.buildModule();
       const modulePayload = {
+        'internal-title': module.internalTitle,
         slug: module.slug,
         title: module.title,
         'is-beta': module.isBeta,
@@ -152,7 +153,7 @@ describe('Acceptance | Route | modules', () => {
         {
           id: expect.stringMatching(uuidRegExp),
           shortId: expect.stringMatching(shortIdRegExp),
-          internalTitle: null,
+          internalTitle: module.internalTitle,
           slug: module.slug,
           title: module.title,
           isBeta: module.isBeta,

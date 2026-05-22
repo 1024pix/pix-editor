@@ -17,6 +17,7 @@ export function deserialize(payload) {
 
 const serializer = new Serializer('module', {
   attributes: [
+    'internalTitle',
     'shortId',
     'slug',
     'title',

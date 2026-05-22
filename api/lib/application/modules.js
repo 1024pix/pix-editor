@@ -33,6 +33,7 @@ export function register(server) {
             data: Joi.object({
               type: Joi.string().valid('modules').required(),
               attributes: Joi.object({
+                'internal-title': Joi.string().required(),
                 title: Joi.string().required(),
                 'is-beta': Joi.boolean().required(),
                 slug: Joi.string().required(),
