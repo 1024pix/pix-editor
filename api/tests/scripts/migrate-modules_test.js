@@ -25,14 +25,15 @@ describe('Script | MigrateModules', () => {
     octokit.repos.getContent.mockResolvedValueOnce({ data: pixModuleFiles });
 
     modules = [
-      domainBuilder.buildModule({ shortId: 'derniera', title: 'dernier module' }),
-      domainBuilder.buildModule({ shortId: 'deuxieme', title: 'deuxieme module' }),
-      domainBuilder.buildModule({ shortId: 'premiera', title: 'premier module' }),
-      domainBuilder.buildModule({ shortId: 'troisiem', title: 'troisieme module' }),
-    ].map(({ internalTitle: _, ...module }) => module);
+      domainBuilder.buildModule({ shortId: 'derniera', internalTitle: 'dernier-module', title: 'dernier module' }),
+      domainBuilder.buildModule({ shortId: 'deuxieme', internalTitle: 'deuxieme-module', title: 'deuxieme module' }),
+      domainBuilder.buildModule({ shortId: 'premiera', internalTitle: 'premier-module', title: 'premier module' }),
+      domainBuilder.buildModule({ shortId: 'troisiem', internalTitle: 'troisieme-module', title: 'troisieme module' }),
+    ];
 
-    modules.forEach((module) => {
-      octokit.repos.getContent.mockResolvedValueOnce({ data: { type: 'file', encoding: 'utf8', content: JSON.stringify(module) } });
+    modules.forEach(({ internalTitle: _, ...module }) => {
+      const content = JSON.stringify(module);
+      octokit.repos.getContent.mockResolvedValueOnce({ data: { type: 'file', encoding: 'utf8', content } });
     });
   });
 
@@ -45,9 +46,10 @@ describe('Script | MigrateModules', () => {
       await script.handle({ options, logger }, { octokit });
 
       // then
-      await expect(knex.select('id', 'shortId', 'title').from('modules').orderBy('shortId')).resolves.toStrictEqual(modules.map((module) => ({
+      await expect(knex.select('id', 'shortId', 'internalTitle', 'title').from('modules').orderBy('shortId')).resolves.toStrictEqual(modules.map((module) => ({
         id: module.id,
         shortId: module.shortId,
+        internalTitle: module.internalTitle,
         title: module.title,
       })));
 
