@@ -12,13 +12,13 @@ module('Integration | Component | modules-list', function (hooks) {
     const store = this.owner.lookup('service:store');
     const moduleSummaries = [
       store.createRecord('module-summary', {
-        title: 'Super module 1',
+        internalTitle: 'MOD_super_1',
         isBeta: false,
         visibility: 'public',
         level: 'novice',
       }),
       store.createRecord('module-summary', {
-        title: 'Super module 2',
+        internalTitle: 'MOD_super_2',
         isBeta: true,
         visibility: 'private',
         level: 'advanced',
@@ -27,15 +27,15 @@ module('Integration | Component | modules-list', function (hooks) {
 
     const screen = await render(<template><ModulesList @modules={{moduleSummaries}} /></template>);
 
-    assert.dom(screen.queryByText('Super module 1')).exists();
-    assert.dom(screen.queryByText('Super module 2')).exists();
+    assert.dom(screen.queryByText('MOD_super_1')).exists();
+    assert.dom(screen.queryByText('MOD_super_2')).exists();
 
-    const firstRow = screen.getByText('Super module 1').closest('tr');
+    const firstRow = screen.getByText('MOD_super_1').closest('tr');
     assert.dom(queryByText(firstRow, 'Public')).exists();
     assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
     assert.dom(queryByText(firstRow, 'Novice')).exists();
 
-    const secondRow = screen.getByText('Super module 2').closest('tr');
+    const secondRow = screen.getByText('MOD_super_2').closest('tr');
     assert.dom(queryByText(secondRow, 'Privé')).exists();
     assert.dom(queryByText(secondRow, 'Beta')).exists();
     assert.dom(queryByText(secondRow, 'Avancé')).exists();

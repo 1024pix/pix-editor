@@ -5,7 +5,7 @@ const { Serializer } = Jsonapi;
 export function serialize(modules, meta) {
   const serializer = new Serializer('module-summary', {
     attributes: [
-      'title',
+      'internalTitle',
       'isBeta',
       'visibility',
       'level',

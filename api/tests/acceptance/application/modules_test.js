@@ -50,17 +50,17 @@ describe('Acceptance | Route | modules', () => {
           {
             type: 'module-summaries',
             id: modules[1].id,
-            attributes: { title: modules[1].title, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
+            attributes: { 'internal-title': modules[1].internalTitle, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
           },
           {
             type: 'module-summaries',
             id: modules[0].id,
-            attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+            attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
           },
           {
             type: 'module-summaries',
             id: modules[2].id,
-            attributes: { title: modules[2].title, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
+            attributes: { 'internal-title': modules[2].internalTitle, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
           },
         ],
         meta: {
@@ -92,7 +92,7 @@ describe('Acceptance | Route | modules', () => {
             {
               type: 'module-summaries',
               id: modules[0].id,
-              attributes: { title: modules[0].title, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+              attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
             },
           ],
           meta: {

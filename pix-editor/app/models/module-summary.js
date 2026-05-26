@@ -13,7 +13,7 @@ const levelForDisplay = {
 };
 
 export default class ModuleSummary extends Model {
-  @attr title;
+  @attr internalTitle;
   @attr isBeta;
   @attr visibility;
   @attr level;
