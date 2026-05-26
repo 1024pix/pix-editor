@@ -66,7 +66,7 @@ module('Acceptance | Modules | New', function (hooks) {
     await screen.getByRole('button', { name: 'Enregistrer' }).click();
 
     assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
-    assert.dom(await screen.findByText('NEW_MODULE')).exists();
+    assert.dom(await screen.queryByText('NEW_MODULE')).doesNotExist();
     assert.dom(await screen.findByText('Le module "NEW_MODULE" a été enregistré.')).exists();
   });
 });

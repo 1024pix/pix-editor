@@ -383,11 +383,9 @@ export default function routes() {
     return mission;
   });
 
-  this.post('modules', function (schema, request) {
+  this.post('/draft-modules', function (schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
-    const module = schema.create('module', { id: crypto.randomUUID(), attributes });
-    schema.create('module-summary', { id: module.id, ...attributes });
-    return module;
+    return schema.create('draft-module', { id: crypto.randomUUID(), ...attributes });
   });
 
   this.get('/module-summaries', function (schema, request) {

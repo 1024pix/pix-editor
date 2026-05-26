@@ -13,6 +13,7 @@ import competenceOverview from './models/competence-overview';
 import competence from './models/competence';
 import config from './models/config';
 import country from './models/country';
+import draftModule from './models/draft-module';
 import framework from './models/framework';
 import localizedChallenge from './models/localized-challenge';
 import localizedFrameworkTube from './models/localized-framework-tube';
@@ -47,6 +48,7 @@ export default {
   competence,
   config,
   country,
+  draftModule,
   framework,
   localizedChallenge,
   localizedFrameworkTube,
