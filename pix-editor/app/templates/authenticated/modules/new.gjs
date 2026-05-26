@@ -10,8 +10,9 @@ export default class NewModule extends Component {
   @service store;
 
   @action
-  async saveModule({ title, isBeta, slug, visibility, details, sections, glossary }) {
+  async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
     const newModule = this.store.createRecord('module', {
+      internalTitle,
       title,
       isBeta,
       slug,

@@ -44,6 +44,7 @@ describe('Unit | Serializer | JSONAPI | module-serializer', () => {
           type: 'modules',
           id: module.id,
           attributes: {
+            'internal-title': module.internalTitle,
             'short-id': module.shortId,
             slug: module.slug,
             title: module.title,

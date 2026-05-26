@@ -1,5 +1,6 @@
 {
   "id": "235c680e-cbd2-4c56-bef6-80d3ed4d417a",
+  "internalTitle": "DEMO_epreuves-components",
   "shortId": "0aefd71f",
   "slug": "demo-epreuves-components",
   "title": "Démonstration des composants Pix Épreuves",
@@ -10,9 +11,7 @@
     "description": "<p>Ce module est dédié à des tests internes à Pix.</p><p>Il contient normalement tous les composants Pix Épreuves.</p>",
     "duration": 2,
     "level": "novice",
-    "objectives": [
-      "<p>Non régression sur les composants Pix Épreuves.</p>"
-    ],
+    "objectives": ["<p>Non régression sur les composants Pix Épreuves.</p>"],
     "tabletSupport": "comfortable"
   },
   "sections": [
@@ -52,9 +51,7 @@
                       "body": [
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Bonjour,"
-                          ]
+                          "content": ["Bonjour,"]
                         },
                         {
                           "type": "paragraph",
@@ -70,21 +67,14 @@
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Cordialement,"
-                          ]
+                          "content": ["Cordialement,"]
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Service des impôts"
-                          ]
+                          "content": ["Service des impôts"]
                         }
                       ],
-                      "answers": [
-                        "from.name",
-                        "from.address"
-                      ],
+                      "answers": ["from.name", "from.address"],
                       "correctFeedback": "Le nom de l’expéditeur est orthographié ‘impost.g0uv’ au lieu de ‘impots.gouv’. Les erreurs dans les noms ou dans les adresses mail sont de bons indicateurs d’arnaques.",
                       "incorrectFeedback": "Observez bien l’orthographe du nom et de l’adresse d’expéditeur. Retentez votre chance !"
                     },
@@ -97,9 +87,7 @@
                       "body": [
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Bonjour,"
-                          ]
+                          "content": ["Bonjour,"]
                         },
                         {
                           "type": "paragraph",
@@ -115,20 +103,14 @@
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Merci,"
-                          ]
+                          "content": ["Merci,"]
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "EDF — Service Client"
-                          ]
+                          "content": ["EDF — Service Client"]
                         }
                       ],
-                      "answers": [
-                        "from.address"
-                      ],
+                      "answers": ["from.address"],
                       "correctFeedback": "La partie après l’arobase de l’adresse mail ‘yxztbnc85de.ru’ n’a aucun lien avec EDF ou la demande, et n’est même pas compréhensible. C’est un indicateur de hameçonnage.",
                       "incorrectFeedback": "Concentrez-vous sur l’adresse mail de l’expediteur. Retentez votre chance !"
                     },
@@ -141,9 +123,7 @@
                       "body": [
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Bonjour,"
-                          ]
+                          "content": ["Bonjour,"]
                         },
                         {
                           "type": "paragraph",
@@ -161,20 +141,14 @@
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Cordialement,"
-                          ]
+                          "content": ["Cordialement,"]
                         },
                         {
                           "type": "paragraph",
-                          "content": [
-                            "Service des infractions de l’ANTAI"
-                          ]
+                          "content": ["Service des infractions de l’ANTAI"]
                         }
                       ],
-                      "answers": [
-                        "from.address"
-                      ],
+                      "answers": ["from.address"],
                       "correctFeedback": "L’adresse de l’expéditeur ne correspond à aucun organisme officiel. Les incohérences dans les noms et les adresses mails sont de bons indicateurs d’arnaques.",
                       "incorrectFeedback": "Observez bien le nom et l’adresse de l’expéditeur. Retentez votre chance ! "
                     }
@@ -461,11 +435,7 @@
                   ],
                   "userMessage": "Avec quoi peut-on tartiner une crêpe pour qu’elle soit bonne ?",
                   "llmMessage": "On peut mettre du ",
-                  "wordsToAdd": [
-                    "beurre",
-                    "et",
-                    "du "
-                  ]
+                  "wordsToAdd": ["beurre", "et", "du "]
                 },
                 "title": "",
                 "functionalInstruction": ""
@@ -905,12 +875,7 @@
                 "instruction": "",
                 "tagName": "mdp-classement",
                 "props": {
-                  "passwords": [
-                    "r7&Kp9!qZ4#tV2",
-                    "MonCh@t!23",
-                    "Bonjour1",
-                    "1234567"
-                  ]
+                  "passwords": ["r7&Kp9!qZ4#tV2", "MonCh@t!23", "Bonjour1", "1234567"]
                 },
                 "title": "",
                 "functionalInstruction": ""
