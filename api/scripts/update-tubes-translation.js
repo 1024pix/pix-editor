@@ -64,7 +64,7 @@ export class UpdateTubesTranslationScript extends Script {
           const tubeIds = tubesFromPix.filter(({ name }) => name === tubeName);
 
           if (tubeIds.length !== 1) {
-            logger.error(`${tubeName} found ${tubeIds.length}`, { tubeIds });
+            logger.error(`Found ${tubeIds.length} tube(s) with name ${tubeName}`, { tubeIds: tubeIds.map(({ id }) => id) });
             continue;
           }
 
