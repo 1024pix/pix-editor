@@ -9,21 +9,23 @@ function getVisibilityColor(visibility) {
 <template>
   <PixTable @variant="modulix" @data={{@modules}} @caption="Liste des modules">
     <:columns as |module context|>
-      <PixTableColumn @context={{context}}>
-        <:header>
-          Statut
-        </:header>
-        <:cell>
-          <div class="modules-list__status">
-            <PixTag @color={{getVisibilityColor module.visibility}}>
-              {{module.visibilityForDisplay}}
-            </PixTag>
-            {{#if module.isBeta}}
-              <PixTag @color="yellow">Beta</PixTag>
-            {{/if}}
-          </div>
-        </:cell>
-      </PixTableColumn>
+      {{#if @showStatus}}
+        <PixTableColumn @context={{context}}>
+          <:header>
+            Statut
+          </:header>
+          <:cell>
+            <div class="modules-list__status">
+              <PixTag @color={{getVisibilityColor module.visibility}}>
+                {{module.visibilityForDisplay}}
+              </PixTag>
+              {{#if module.isBeta}}
+                <PixTag @color="yellow">Beta</PixTag>
+              {{/if}}
+            </div>
+          </:cell>
+        </PixTableColumn>
+      {{/if}}
       <PixTableColumn @context={{context}}>
         <:header>
           Titre interne

@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 
-export default class ModulesController extends Controller {
+export default class ModulesProductionController extends Controller {
   queryParams = ['pageNumber', 'pageSize'];
 
   @tracked pageNumber = 1;

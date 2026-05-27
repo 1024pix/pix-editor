@@ -1,0 +1,22 @@
+import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
+import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
+import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
+import ModuleList from 'pixeditor/components/modules/modules-list';
+
+<template>
+  <header class="page-header">
+    <h1 class="page-title">Modules</h1>
+    <div class="page-actions">
+      <CreateModuleButton />
+    </div>
+  </header>
+  <main class="page-body">
+    <section class="page-section">
+      <ModulesTabs />
+      <ModuleList @modules={{@model.draftModules}} />
+      <div class="modules-list__pagination">
+        <PixPagination @pagination={{@model.draftModules.meta}} />
+      </div>
+    </section>
+  </main>
+</template>

@@ -1,12 +1,11 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 import { currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
-
-module('Acceptance | Modules | List', function (hooks) {
+module('Acceptance | Modules | Production', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -23,6 +22,7 @@ module('Acceptance | Modules | List', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
+    await clickByName('En production');
 
     // then
     assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
@@ -32,9 +32,10 @@ module('Acceptance | Modules | List', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
+    await clickByName('En production');
 
     // then
-    assert.strictEqual(currentURL(), '/modules');
+    assert.strictEqual(currentURL(), '/modules/production');
     assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
 
     assert.dom(await screen.findByText('1-10 sur 36 éléments')).exists();
