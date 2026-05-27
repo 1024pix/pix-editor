@@ -40,6 +40,47 @@ describe('Script | UpdateTubesTranslationScript', () => {
   describe('#handle', () => {
     const testCsvFile = `${currentDirectory}files/update-tubes-translation-ok.csv`;
 
+    describe('when dryRun is true', () => {
+      it('should not update any tube translations', async () => {
+        // given
+        const { thematic } = databaseBuilder.factory.buildChallengeInGroup({});
+        const tubeToUpdate = databaseBuilder.factory.buildTube({ id: 1, name: '@tube_un', thematicId: thematic.id });
+        databaseBuilder.factory.buildTranslation({
+          key: `tube.${tubeToUpdate.id}.practicalTitle`,
+          locale: 'fr',
+          value: 'mon titre',
+        });
+
+        databaseBuilder.factory.buildTranslation({
+          key: `tube.${tubeToUpdate.id}.practicalDescription`,
+          locale: 'fr',
+          value: 'ma description',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const { options: scriptMeta } = script.metaInfo;
+        const fileData = await scriptMeta.file.coerce(testCsvFile);
+
+        const options = {
+          file: fileData,
+          dryRun: true,
+        };
+
+        await script.handle({ options, logger });
+
+        // then
+        const { value: frTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale: 'fr' }).first();
+        expect(frTitleTranslation).equal('mon titre');
+
+        const { value: frDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale: 'fr' }).first();
+        expect(frDescriptionTranslation).equal('ma description');
+
+        expect(logger.info).toHaveBeenCalledWith('Dry run is enabled, stopping before updating 1 tube(s)');
+      });
+    });
+
     it('update only given tubes translation', async () => {
       // given
       const { thematic } = databaseBuilder.factory.buildChallengeInGroup({});

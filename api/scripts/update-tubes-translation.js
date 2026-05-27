@@ -75,7 +75,7 @@ export class UpdateTubesTranslationScript extends Script {
         }
 
         if (options.dryRun) {
-          logger.info('Dry run, stopping');
+          logger.info(`Dry run is enabled, stopping before updating ${updatedTubesCount} tube(s)`);
           await trx.rollback();
           return;
         }
