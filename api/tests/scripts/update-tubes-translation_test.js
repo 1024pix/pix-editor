@@ -81,6 +81,13 @@ describe('Script | UpdateTubesTranslationScript', () => {
       });
     });
 
+    describe('when csv file missing required column on coerce', () => {
+      it('should throw an error', async () => {
+        const { options: scriptMeta } = script.metaInfo;
+        await expect(scriptMeta.file.coerce(`${currentDirectory}files/update-tubes-translation-missing-column-ko.csv`)).rejects.toThrow('MISSING_REQUIRED_FIELD_NAMES');
+      });
+    });
+
     it('update only given tubes translation', async () => {
       // given
       const { thematic } = databaseBuilder.factory.buildChallengeInGroup({});
