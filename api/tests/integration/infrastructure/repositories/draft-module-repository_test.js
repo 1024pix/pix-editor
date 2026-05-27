@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { save } from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
+import { save, list, count } from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
 
-describe('Module Repository', () => {
+describe('Draft Module Repository', () => {
   describe('save', () => {
     it('saves a draft module having a NULL moduleId ', async () => {
       // given
@@ -56,6 +56,64 @@ describe('Module Repository', () => {
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
       expect({ ...savedDraftModule }).toStrictEqual(expectedDraftModule);
+    });
+  });
+
+  describe('list', () => {
+    it('lists all draft modules', async () => {
+      // given
+      const firstDraftModule = domainBuilder.buildDraftModule({ slug: 'a' });
+      const secondDraftModule = domainBuilder.buildDraftModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b' });
+
+      databaseBuilder.factory.buildDraftModule(firstDraftModule);
+      databaseBuilder.factory.buildDraftModule(secondDraftModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      const draftModules = await list();
+
+      // then
+      expect(draftModules).toStrictEqual([firstDraftModule, secondDraftModule]);
+    });
+
+    it('lists draft modules with pagination and sort parameters', async () => {
+      // given
+      const firstDraftModule = domainBuilder.buildDraftModule({ shortId: 'first', internalTitle: 'first', slug: 'c', title: 'DraftModule A', visibility: 'public' });
+      const secondDraftModule = domainBuilder.buildDraftModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b', title: 'DraftModule B', visibility: 'private' });
+      const thirdDraftModule = domainBuilder.buildDraftModule({ shortId: 'terzio', internalTitle: 'terzio', slug: 'a', title: 'DraftModule C', visibility: 'public' });
+      const page = {
+        size: 2,
+        number: 1,
+      };
+      const sort = [['visibility', 'desc'], ['title', 'asc']];
+
+      databaseBuilder.factory.buildDraftModule(firstDraftModule);
+      databaseBuilder.factory.buildDraftModule(secondDraftModule);
+      databaseBuilder.factory.buildDraftModule(thirdDraftModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      const draftModules = await list({ page, sort });
+
+      // then
+      expect(draftModules).toStrictEqual([firstDraftModule, thirdDraftModule]);
+    });
+  });
+
+  describe('count', () => {
+    it('returns number of draft-modules', async () => {
+      // given
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule());
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ shortId: 'secondar', internalTitle: 'secondar' }));
+      await databaseBuilder.commit();
+
+      // when
+      const result = await count();
+
+      // then
+      expect(result).toBe(2);
     });
   });
 });

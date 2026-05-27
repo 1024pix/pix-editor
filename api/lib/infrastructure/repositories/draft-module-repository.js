@@ -14,6 +14,28 @@ export async function save({ details, sections, glossary, ...module }, transacti
   return toDomain(savedDraftModule);
 }
 
+export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
+  const query = knex.select().from('draft-modules');
+  sort.forEach(([column, order]) => {
+    if (['internalTitle', 'title'].includes(column)) {
+      query.orderByRaw(`?? collate ?? ${order}`, [column, 'fr-x-icu']);
+    } else {
+      query.orderBy(column, order);
+    }
+  });
+  if (page) {
+    const offset = (page.number - 1) * page.size;
+    query.offset(offset).limit(page.size);
+  }
+  const draftModules = await query;
+  return draftModules.map(toDomain);
+}
+
+export async function count() {
+  const { count } = await knex('draft-modules').count().first();
+  return count;
+}
+
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...draftModule }) {
   return new DraftModule({ ...draftModule, details: { image, description, duration, level, objectives, tabletSupport } });
 }
