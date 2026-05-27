@@ -92,7 +92,7 @@ export default class ChallengeModel extends Model {
     };
   }
 
-  static get ASSESSMENT_MAINTENANCE_TAGS() {
+  static get TRANSLATION_MAINTENANCE_TAGS() {
     return {
       NAME: 'Prénom ou nom propre dans la consigne/propositions/réponse/indice',
       EMBED_NAME: 'Prénom ou nom propre dans un embed ou dans du HTML intégré à l’épreuve',
@@ -115,7 +115,7 @@ export default class ChallengeModel extends Model {
     };
   }
 
-  static get TRANSLATION_MAINTENANCE_TAGS() {
+  static get ASSESSMENT_MAINTENANCE_TAGS() {
     return {
       RULE: 'Règle, législation ou connaissance',
       INTERFACE: 'Charte graphique ou interface',

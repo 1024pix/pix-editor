@@ -219,13 +219,13 @@ module('Integration | Component | challenge-form', function (hooks) {
         await clickByName('Évaluation');
         await screen.findByRole('menu');
 
-        await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME);
-        await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC);
+        await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.RULE);
+        await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS);
 
         // Then
         assert.ok(this.challengeData.assessmentMaintenanceTags, [
-          Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME,
-          Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC,
+          Challenge.ASSESSMENT_MAINTENANCE_TAGS.RULE,
+          Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
         ]);
       });
 
@@ -252,13 +252,13 @@ module('Integration | Component | challenge-form', function (hooks) {
         await clickByName('Traduction');
         await screen.findByRole('menu');
 
-        await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE);
-        await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS);
+        await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME);
+        await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.MISC);
 
         // Then
         assert.ok(this.challengeData.translationMaintenanceTags, [
-          Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE,
-          Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
+          Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME,
+          Challenge.TRANSLATION_MAINTENANCE_TAGS.MISC,
         ]);
       });
     });
