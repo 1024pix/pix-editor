@@ -69,8 +69,8 @@ export function buildChallenge(
       },
     ],
     prototypePrimaryLocalizedChallenge,
-    assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME, Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
-    translationMaintenanceTags = [Challenge.TRANSLATION_MAINTENANCE_TAGS.RULE, Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
+    assessmentMaintenanceTags = [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+    translationMaintenanceTags = [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
   } = {},
   fieldsToOmit = [],
 ) {

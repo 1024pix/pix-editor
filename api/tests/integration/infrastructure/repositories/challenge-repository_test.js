@@ -47,8 +47,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         shuffled: true,
         files: [{ fileId: 'attachmentA', localizedChallengeId: 'challengeA_id' }, { fileId: 'attachmentB', localizedChallengeId: 'locES_challengeA_id' }],
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
       };
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
@@ -232,8 +232,8 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
-          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -338,8 +338,8 @@ describe('Integration | Repository | challenge-repository', () => {
           madeObsoleteAt: null,
           updatedAt: '2025-10-23T10:20:00Z',
           shuffled: false,
-          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
         };
 
         databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -530,8 +530,8 @@ describe('Integration | Repository | challenge-repository', () => {
           updatedAt: '2025-10-23T10:18:00Z',
           madeObsoleteAt: null,
           shuffled: false,
-          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME],
-          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+          assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+          translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
         };
 
         databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -707,8 +707,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -812,8 +812,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.ENGLISH_WORD],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -1007,8 +1007,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.LOCALIZED_URL],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.LOCALIZED_URL],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1112,8 +1112,8 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: '2025-10-23T10:20:00Z',
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.LOCALIZED_URL],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.LOCALIZED_URL],
       };
 
       databaseBuilder.factory.buildChallenge(challengeB_data);
@@ -1305,8 +1305,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.HARD_CONTEXTUALIZATION_EMBED],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.HARD_CONTEXTUALIZATION_EMBED],
       };
       databaseBuilder.factory.buildSkill({ id: challengeA_data.skillId, tubeId: 'tube1' });
       databaseBuilder.factory.buildChallenge(challengeA_data);
@@ -1623,8 +1623,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1673,8 +1673,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
       };
 
       databaseBuilder.factory.buildChallenge(challengeActiveA_data);
@@ -1923,8 +1923,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:18:00Z',
         madeObsoleteAt: null,
         shuffled: true,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1973,8 +1973,8 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: '2025-10-23T10:20:00Z',
         madeObsoleteAt: null,
         shuffled: false,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FILE_TO_REDO],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
       };
 
       databaseBuilder.factory.buildChallenge(challengeProtoB_data);
@@ -2192,8 +2192,8 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility2: Challenge.ACCESSIBILITY1.KO,
         alternativeVersion: 1,
         archivedAt: null,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME],
         createdAt: null,
         validatedAt: null,
         madeObsoleteAt: null,
@@ -2262,8 +2262,8 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility2: Challenge.ACCESSIBILITY1.OK,
         alternativeVersion: 3,
         archivedAt: null,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME],
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME],
         createdAt: null,
         validatedAt: null,
         madeObsoleteAt: null,
@@ -2565,7 +2565,7 @@ describe('Integration | Repository | challenge-repository', () => {
         accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: Challenge.ACCESSIBILITY1.KO,
         alternativeVersion: 1,
-        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EMBED_NAME],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE],
         archivedAt: null,
         createdAt: null,
         validatedAt: null,
@@ -2596,7 +2596,7 @@ describe('Integration | Repository | challenge-repository', () => {
         t3Status: true,
         t3StatusAirtable: 'Activé',
         timer: 123,
-        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.INTERFACE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
         type: 'type challengeToCreate',
         version: 4,
       };
