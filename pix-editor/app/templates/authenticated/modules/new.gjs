@@ -11,7 +11,7 @@ export default class NewModule extends Component {
 
   @action
   async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
-    const newModule = this.store.createRecord('module', {
+    const newModule = this.store.createRecord('draft-module', {
       internalTitle,
       title,
       isBeta,

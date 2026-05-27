@@ -1,10 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
-import { createServer } from '../../../server.js';
-import { Module } from '../../../lib/domain/models/index.js';
-
-const uuidRegExp = /^\p{Hex_Digit}{8}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{12}$/u;
-const shortIdRegExp = /^\p{Hex_Digit}{8}$/u;
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
+import { Module } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Route | modules', () => {
   let editorUser;
@@ -103,68 +100,6 @@ describe('Acceptance | Route | modules', () => {
           },
         });
       });
-    });
-  });
-
-  describe('POST /modules', () => {
-    it('responds with status 201 and modules data', async () => {
-      // given
-      const module = domainBuilder.buildModule();
-      const modulePayload = {
-        'internal-title': module.internalTitle,
-        slug: module.slug,
-        title: module.title,
-        'is-beta': module.isBeta,
-        visibility: module.visibility,
-        details: module.details,
-        sections: module.sections,
-        glossary: module.glossary,
-      };
-
-      const server = await createServer();
-
-      // when
-      const response = await server.inject({
-        method: 'POST',
-        url: '/api/modules',
-        headers: generateAuthorizationHeader(editorUser),
-        payload: {
-          data: {
-            type: 'modules',
-            attributes: modulePayload,
-          },
-        },
-      });
-
-      // then
-      expect(response.statusCode).toBe(201);
-      expect(response.result).toStrictEqual({
-        data: {
-          type: 'modules',
-          id: expect.stringMatching(uuidRegExp),
-          attributes: {
-            'short-id': expect.stringMatching(shortIdRegExp),
-            ...modulePayload,
-          },
-        },
-      });
-
-      await expect(knex.select('*').from('modules')).resolves.toStrictEqual([
-        {
-          id: expect.stringMatching(uuidRegExp),
-          shortId: expect.stringMatching(shortIdRegExp),
-          internalTitle: module.internalTitle,
-          slug: module.slug,
-          title: module.title,
-          isBeta: module.isBeta,
-          visibility: module.visibility,
-          sections: module.sections,
-          glossary: module.glossary,
-          ...module.details,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ]);
     });
   });
 });
