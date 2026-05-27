@@ -5,4 +5,9 @@ export class DraftModule extends Module {
     super({ ...attrs });
     this.moduleId = moduleId;
   }
+
+  prepareForCreation() {
+    this.id = crypto.randomUUID();
+    this.shortId = this.id.slice(0, 8);
+  }
 }
