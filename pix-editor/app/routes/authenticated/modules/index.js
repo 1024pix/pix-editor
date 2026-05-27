@@ -11,7 +11,7 @@ export default class ModulesRoute extends Route {
 
   async model(params) {
     const modules = await this.store.query(
-      'module-summary',
+      'module',
       {
         page: {
           number: params.pageNumber,

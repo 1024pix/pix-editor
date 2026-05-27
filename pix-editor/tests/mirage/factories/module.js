@@ -5,6 +5,10 @@ export default Factory.extend({
     return crypto.randomUUID();
   },
 
+  internalTitle(i) {
+    return `MOD_${i}`;
+  },
+
   title(i) {
     return `Module ${i}`;
   },

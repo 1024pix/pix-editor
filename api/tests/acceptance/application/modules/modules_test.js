@@ -16,13 +16,13 @@ describe('Acceptance | Route | modules', () => {
 
     beforeEach(async () => {
       modules = [
-        { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', internalTitle: 'MOD_a', slug: 'a', title: 'Module 1', isBeta: true, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.NOVICE } },
-        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', internalTitle: 'MOD_b', slug: 'b', title: 'Module 2', isBeta: false, visibility: Module.VISIBILITIES.PUBLIC, details: { level: Module.LEVELS.INDEPENDENT } },
-        { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', internalTitle: 'MOD_c', slug: 'c', title: 'Module 3', isBeta: false, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.EXPERT } },
-      ];
+        { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', internalTitle: 'MOD_a', slug: 'a', isBeta: true, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.NOVICE } },
+        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', internalTitle: 'MOD_b', slug: 'b', isBeta: false, visibility: Module.VISIBILITIES.PUBLIC, details: { level: Module.LEVELS.INDEPENDENT } },
+        { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', internalTitle: 'MOD_c', slug: 'c', isBeta: false, visibility: Module.VISIBILITIES.PRIVATE, details: { level: Module.LEVELS.EXPERT } },
+      ].map(domainBuilder.buildModule);
 
       modules.forEach((module) => {
-        databaseBuilder.factory.buildModule(domainBuilder.buildModule(module));
+        databaseBuilder.factory.buildModule(module);
       });
 
       await databaseBuilder.commit();
@@ -35,29 +35,29 @@ describe('Acceptance | Route | modules', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: '/api/module-summaries',
+        url: '/api/modules',
         headers: generateAuthorizationHeader(editorUser),
       });
 
       // then
       expect(response.statusCode).toBe(200);
 
-      expect(response.result).toEqual({
+      expect(response.result).toStrictEqual({
         data: [
           {
-            type: 'module-summaries',
+            type: 'modules',
             id: modules[1].id,
-            attributes: { 'internal-title': modules[1].internalTitle, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, level: modules[1].details.level },
+            attributes: { 'internal-title': modules[1].internalTitle, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, details: modules[1].details },
           },
           {
-            type: 'module-summaries',
+            type: 'modules',
             id: modules[0].id,
-            attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+            attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, details: modules[0].details },
           },
           {
-            type: 'module-summaries',
+            type: 'modules',
             id: modules[2].id,
-            attributes: { 'internal-title': modules[2].internalTitle, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, level: modules[2].details.level },
+            attributes: { 'internal-title': modules[2].internalTitle, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, details: modules[2].details },
           },
         ],
         meta: {
@@ -77,19 +77,19 @@ describe('Acceptance | Route | modules', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/module-summaries?page[size]=2&page[number]=2&sort=-title',
+          url: '/api/modules?page[size]=2&page[number]=2&sort=-internalTitle',
           headers: generateAuthorizationHeader(editorUser),
         });
 
         // then
         expect(response.statusCode).toBe(200);
 
-        expect(response.result).toEqual({
+        expect(response.result).toStrictEqual({
           data: [
             {
-              type: 'module-summaries',
+              type: 'modules',
               id: modules[0].id,
-              attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, level: modules[0].details.level },
+              attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, details: modules[0].details },
             },
           ],
           meta: {
