@@ -18,7 +18,7 @@ export function register(server) {
           }),
         },
         handler: async (request) => {
-          const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['title', 'asc']] });
+          const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['internalTitle', 'asc']] });
           const { modules, meta } = await listPaginatedModules({ page, sort });
           return moduleSummarySerializer.serialize(modules, meta);
         },

@@ -5,8 +5,8 @@ export default Factory.extend({
     return crypto.randomUUID();
   },
 
-  title(i) {
-    return `Module ${i}`;
+  internalTitle(i) {
+    return `MOD_${i}`;
   },
 
   isBeta: false,

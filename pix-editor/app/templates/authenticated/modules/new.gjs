@@ -26,7 +26,7 @@ export default class NewModule extends Component {
       this.loader.start();
       await newModule.save();
       this.router.replaceWith('authenticated.modules');
-      this.notifications.sendSuccess(`Le module "${newModule.title}" a été enregistré.`);
+      this.notifications.sendSuccess(`Le module "${newModule.internalTitle}" a été enregistré.`);
     } catch (err) {
       this.notifications.sendError('Erreur lors de l’enregistrement du module.');
     } finally {

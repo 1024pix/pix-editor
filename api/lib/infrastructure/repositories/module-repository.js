@@ -20,10 +20,10 @@ export async function save({ details, sections, glossary, ...module }, transacti
   return toDomain(savedModule);
 }
 
-export async function list({ page, sort = [['slug', 'asc']] } = {}) {
+export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
   const query = knex.select().from('modules');
   sort.forEach(([column, order]) => {
-    if (column === 'title') {
+    if (['internalTitle', 'title'].includes(column)) {
       query.orderByRaw(`?? collate ?? ${order}`, [column, 'fr-x-icu']);
     } else {
       query.orderBy(column, order);

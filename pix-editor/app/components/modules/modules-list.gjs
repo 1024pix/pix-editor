@@ -26,10 +26,10 @@ function getVisibilityColor(visibility) {
       </PixTableColumn>
       <PixTableColumn @context={{context}}>
         <:header>
-          Titre
+          Titre interne
         </:header>
         <:cell>
-          {{module.title}}
+          {{module.internalTitle}}
         </:cell>
       </PixTableColumn>
       <PixTableColumn @context={{context}}>
