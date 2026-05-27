@@ -19,7 +19,7 @@ class TubeTranslationsDTO {
   }
 }
 
-function getTubeIdsFromPixFramework(knexConn = knex) {
+export function getTubeIdsFromPixFramework(knexConn = knex) {
   return knexConn
     .select('tubes.id', 'tubes.name')
     .from('tubes')
@@ -70,7 +70,6 @@ export class UpdateTubesTranslationScript extends Script {
 
           const tubeId = tubeIds[0].id;
           const translations = [{ key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: practicalTitle }, { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: practicalDescription }];
-          logger.log(translations);
           await translationRepository.save({ translations, transaction: trx });
           updatedTubesCount++;
         }
@@ -80,7 +79,6 @@ export class UpdateTubesTranslationScript extends Script {
           await trx.rollback();
           return;
         }
-
         await trx.commit();
         logger.info(`Successfully updated translations for ${updatedTubesCount} tube(s)`);
       } catch (error) {

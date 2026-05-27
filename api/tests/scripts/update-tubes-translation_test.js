@@ -2,7 +2,7 @@ import * as url from 'node:url';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { databaseBuilder, knex } from '../test-helper.js';
-import { UpdateTubesTranslationScript } from '../../scripts/update-tubes-translation.js';
+import { UpdateTubesTranslationScript, getTubeIdsFromPixFramework } from '../../scripts/update-tubes-translation.js';
 
 const currentDirectory = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -16,6 +16,21 @@ describe('Script | UpdateTubesTranslationScript', () => {
       info: vi.fn(),
       error: vi.fn(),
     };
+  });
+
+  describe('#getTubeIdsFromPixFramework', () => {
+    it('return tubes from Pix Framework', async() => {
+      databaseBuilder.factory.buildChallengeInGroup({ framework: { name: 'POUET' } });
+      const { thematic, tube } = databaseBuilder.factory.buildChallengeInGroup({});
+      databaseBuilder.factory.buildTube({ id: 12, name: '@tube_un', thematicId: thematic.id });
+      databaseBuilder.factory.buildTube({ id: 13, name: '@tube_un', thematicId: thematic.id });
+
+      await databaseBuilder.commit();
+
+      const tubes = await getTubeIdsFromPixFramework();
+      expect(tubes).lengthOf(3);
+      expect(tubes).deep.members([{ id: tube.id, name: tube.name }, { id: '12', name: '@tube_un' }, { id: '13', name: '@tube_un' }]);
+    });
   });
 
   describe('#handle', () => {
