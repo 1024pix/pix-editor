@@ -15,20 +15,22 @@ export function deserialize(payload) {
   return deserializer.deserialize(payload);
 }
 
-const serializer = new Serializer('draft-module', {
-  attributes: [
-    'shortId',
-    'slug',
-    'title',
-    'internalTitle',
-    'isBeta',
-    'visibility',
-    'details',
-    'sections',
-    'glossary',
-  ],
-});
+const defaultAttributes = [
+  'shortId',
+  'slug',
+  'title',
+  'internalTitle',
+  'isBeta',
+  'visibility',
+  'details',
+  'sections',
+  'glossary',
+];
 
-export function serialize(module) {
-  return serializer.serialize(module);
+export function serialize(modules, { meta, attributes = defaultAttributes } = {}) {
+  const serializer = new Serializer('draft-module', {
+    attributes,
+    meta,
+  });
+  return serializer.serialize(modules);
 }
