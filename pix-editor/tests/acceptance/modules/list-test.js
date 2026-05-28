@@ -14,7 +14,7 @@ module('Acceptance | Modules | List', function (hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.createList('module-summary', 36);
+    this.server.createList('module', 36);
 
     return authenticateSession();
   });

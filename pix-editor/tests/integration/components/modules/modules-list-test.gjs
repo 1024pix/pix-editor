@@ -11,17 +11,21 @@ module('Integration | Component | modules-list', function (hooks) {
   test('it renders', async function (assert) {
     const store = this.owner.lookup('service:store');
     const moduleSummaries = [
-      store.createRecord('module-summary', {
+      store.createRecord('module', {
         internalTitle: 'MOD_super_1',
         isBeta: false,
         visibility: 'public',
-        level: 'novice',
+        details: {
+          level: 'novice',
+        },
       }),
-      store.createRecord('module-summary', {
+      store.createRecord('module', {
         internalTitle: 'MOD_super_2',
         isBeta: true,
         visibility: 'private',
-        level: 'advanced',
+        details: {
+          level: 'advanced',
+        },
       }),
     ];
 

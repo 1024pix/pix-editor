@@ -388,19 +388,19 @@ export default function routes() {
     return schema.create('draft-module', { id: crypto.randomUUID(), ...attributes });
   });
 
-  this.get('/module-summaries', function (schema, request) {
+  this.get('/modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 
-    const allModuleSummaries = schema.moduleSummaries.all();
+    const allModules = schema.modules.all();
 
     const start = (pagination.page - 1) * pagination.pageSize;
     const end = start + pagination.pageSize;
 
-    const moduleSummariesPage = allModuleSummaries.slice(start, end);
+    const modulesPage = allModules.slice(start, end);
 
-    const json = this.serialize(moduleSummariesPage);
+    const json = this.serialize(modulesPage);
 
-    const rowCount = allModuleSummaries.length;
+    const rowCount = allModules.length;
     json.meta = {
       page: pagination.page,
       pageSize: pagination.pageSize,
