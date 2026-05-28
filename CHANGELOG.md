@@ -1,5 +1,17 @@
 
 
+## v4.29.0 (28/05/2026)
+
+
+### :rocket: Amélioration
+- [#1490](https://github.com/1024pix/pix-editor/pull/1490) [FEATURE] Créer la route d’API de listing des drafts (PIX-22832).
+- [#1488](https://github.com/1024pix/pix-editor/pull/1488) [FEATURE] Créer un module brouillon quand on créer un nouveau module (PIX-22834).
+- [#1487](https://github.com/1024pix/pix-editor/pull/1487) [FEATURE] Liste des modules : afficher le titre interne (PIX-22864).
+- [#1485](https://github.com/1024pix/pix-editor/pull/1485) [FEATURE] Création de module : saisie du titre interne (PIX-22862).
+
+### :arrow_up: Montée de version
+- [#1486](https://github.com/1024pix/pix-editor/pull/1486) [BUMP] Update dependency qs to v6.15.2 [SECURITY].
+
 ## v4.28.0 (22/05/2026)
 
 
