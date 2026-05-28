@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { writeFile } from 'node:fs/promises';
 
 export async function validateUrlsFromRelease({
   releaseRepository,
@@ -87,7 +88,7 @@ function keepAndFormatKOUrls(analyzedLines) {
 
 async function checkAndUploadKOUrlsFromChallenges(
   release,
-  { urlRepository, localizedChallengeRepository, UrlUtils },
+  { localizedChallengeRepository, UrlUtils },
   whitelistedUrls,
 ) {
   const operativeChallenges = release.operativeChallenges;
@@ -96,17 +97,23 @@ async function checkAndUploadKOUrlsFromChallenges(
   const finalUrlList = urlList.filter(
     ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
-  const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlRepository.updateChallenges(formattedKOChallengeUrls);
+  console.log('ok cool', finalUrlList.length);
+  await saveUrlListOnTempFile(finalUrlList.map(({ url }) => url), 'challenges');
+  // const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
+  // const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
+  // await urlRepository.updateChallenges(formattedKOChallengeUrls);
 }
 
-async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
+async function checkAndUploadKOUrlsFromTutorials(release, { UrlUtils }, whitelistedUrls) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
   const finalUrlList = urlList.filter(
     ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
-  const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlRepository.updateTutorials(formattedKOTutorialUrls);
+  // const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
+  // const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
+  // await urlRepository.updateTutorials(formattedKOTutorialUrls);
+}
+
+async function saveUrlListOnTempFile(urlList, name) {
+  await writeFile(`/tmp/external_urls_in_${name}.json`, JSON.stringify(urlList, null, 2));
 }
