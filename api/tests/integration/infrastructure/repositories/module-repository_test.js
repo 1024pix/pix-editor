@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { list, listForReplication, save, count } from '../../../../lib/infrastructure/repositories/module-repository.js';
+import { catchErr, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { list, listForReplication, save, count, getById } from '../../../../lib/infrastructure/repositories/module-repository.js';
 import { ModuleForReplication } from '../../../../lib/domain/models/replication/index.js';
+import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 
 describe('Module Repository', () => {
   describe('save', () => {
@@ -130,6 +131,33 @@ describe('Module Repository', () => {
 
       // then
       expect(result).toBe(2);
+    });
+  });
+
+  describe('getById', () => {
+    it('returns a module by its id', async () => {
+      // given
+      const expectedModule = domainBuilder.buildModule();
+      const { id } = databaseBuilder.factory.buildModule(expectedModule);
+      databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar' }));
+      await databaseBuilder.commit();
+
+      // when
+      const module = await getById({ id });
+
+      // then
+      expect(module).toStrictEqual(expectedModule);
+    });
+
+    it('throw a not Found error if module is not found', async () => {
+      // given
+      const inexistingModuleId = crypto.randomUUID();
+
+      // when
+      const error = await catchErr(getById)({ id: inexistingModuleId });
+
+      // then
+      expect(error).toBeInstanceOf(NotFoundError);
     });
   });
 });
