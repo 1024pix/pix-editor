@@ -7,19 +7,9 @@ export default class ModulesRoute extends Route {
     pageSize: { refreshModel: true },
   };
 
-  @service store;
+  @service router;
 
-  async model(params) {
-    const modules = await this.store.query(
-      'module',
-      {
-        page: {
-          number: params.pageNumber,
-          size: params.pageSize,
-        },
-      },
-      { reload: true },
-    );
-    return { modules };
+  redirect() {
+    this.router.transitionTo('authenticated.modules.workbench');
   }
 }

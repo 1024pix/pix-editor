@@ -388,6 +388,29 @@ export default function routes() {
     return schema.create('draft-module', { id: crypto.randomUUID(), ...attributes });
   });
 
+  this.get('/draft-modules', function (schema, request) {
+    const pagination = _getPaginationFromQueryParams(request.queryParams);
+
+    const allDraftModules = schema.draftModules.all();
+
+    const start = (pagination.page - 1) * pagination.pageSize;
+    const end = start + pagination.pageSize;
+
+    const draftModulesPage = allDraftModules.slice(start, end);
+
+    const json = this.serialize(draftModulesPage);
+
+    const rowCount = allDraftModules.length;
+    json.meta = {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      rowCount,
+      pageCount: Math.ceil(rowCount / pagination.pageSize),
+    };
+
+    return json;
+  });
+
   this.get('/modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 
