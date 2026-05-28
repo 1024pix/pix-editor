@@ -11,12 +11,10 @@ import ModuleList from 'pixeditor/components/modules/modules-list';
     </div>
   </header>
   <main class="page-body">
-    <section class="page-section">
+    <section class="page-section modules-list">
       <ModulesTabs />
       <ModuleList @modules={{@model.modules}} @showStatus={{true}} />
-      <div class="modules-list__pagination">
-        <PixPagination @pagination={{@model.modules.meta}} />
-      </div>
+      <PixPagination @pagination={{@model.modules.meta}} />
     </section>
   </main>
 </template>
