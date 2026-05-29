@@ -1,6 +1,7 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { Module } from '../../domain/models/index.js';
 import { ModuleForReplication } from '../../domain/models/replication/index.js';
+import { NotFoundError } from '../errors.js';
 
 export async function count() {
   const { count } = await knex('modules').count().first();
@@ -52,6 +53,16 @@ export async function listForReplication() {
   return modules.map(toDomainForReplication);
 }
 
+export async function getById({ id }) {
+  const module = await knex('modules').where({ id }).first();
+
+  if (!module) {
+    throw new NotFoundError('Module not found');
+  }
+
+  return toDomain(module);
+}
+
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...module }) {
   return new Module({ ...module, details: { image, description, duration, level, objectives, tabletSupport } });
 }
@@ -59,3 +70,4 @@ function toDomain({ image, description, duration, level, objectives, tabletSuppo
 function toDomainForReplication(module) {
   return new ModuleForReplication(module);
 }
+
