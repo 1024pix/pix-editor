@@ -2,7 +2,8 @@ import Joi from 'joi';
 
 import { moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { listPaginatedModules } from '../../domain/usecases/index.js';
+import { getModuleById, listPaginatedModules } from '../../domain/usecases/index.js';
+import * as Types from '../types.js';
 
 export function register(server) {
   server.route([
@@ -28,6 +29,18 @@ export function register(server) {
               'visibility',
             ], meta,
           });
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/modules/{id}',
+      config: {
+        validate: { params: Joi.object({ id: Types.moduleId().required() }) },
+        handler: async (request) => {
+          const { id } = request.params;
+          const module = await getModuleById(id);
+          return moduleSerializer.serialize(module);
         },
       },
     },

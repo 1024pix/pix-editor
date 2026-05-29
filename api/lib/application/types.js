@@ -46,6 +46,10 @@ export function localizedChallengeId() {
   return Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?$/);
 }
 
+export function moduleId() {
+  return Joi.string().pattern(/^\p{Hex_Digit}{8}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{12}$/u);
+}
+
 export function skillId() {
   return Joi.string().pattern(/^(rec|skill)[a-zA-Z0-9]+$/);
 }

@@ -102,4 +102,65 @@ describe('Acceptance | Route | modules', () => {
       });
     });
   });
+
+  describe('GET /modules/:id', () => {
+    let module;
+
+    beforeEach(async () => {
+      module = domainBuilder.buildModule();
+      databaseBuilder.factory.buildModule(module);
+      await databaseBuilder.commit();
+    });
+
+    it('responds with status 200 and modules data', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/modules/${module.id}`,
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'modules',
+          id: module.id,
+          attributes: {
+            'short-id': module.shortId,
+            'internal-title': module.internalTitle,
+            'is-beta': module.isBeta,
+            visibility: module.visibility,
+            details: module.details,
+            slug: module.slug,
+            title: module.title,
+            sections: module.sections,
+            glossary: module.glossary,
+          },
+        },
+      });
+    });
+
+    describe('when module does not exist', () => {
+      it('responds with status 404', async () => {
+        // given
+        const server = await createServer();
+        const notFoundId = crypto.randomUUID();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: `/api/modules/${notFoundId}`,
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+      });
+    });
+  });
 });
