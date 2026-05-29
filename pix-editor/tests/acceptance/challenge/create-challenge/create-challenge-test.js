@@ -131,13 +131,14 @@ module('Acceptance | Create-Challenge', function (hooks) {
     await waitForSelectToBeClosed(screen);
     await clickByName('Évaluation');
     await screen.findByRole('menu');
-    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME);
-    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC);
+    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES);
+    await clickByName(Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS);
     await clickByName('Traduction');
     const translationSelect = screen.getByTestId('translationSelect');
     await within(translationSelect).findByRole('menu');
-    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES);
-    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS);
+    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME);
+    await clickByName(Challenge.TRANSLATION_MAINTENANCE_TAGS.MISC);
+
     await click(find('[data-test-save-challenge-button]'));
 
     // then
@@ -164,13 +165,13 @@ module('Acceptance | Create-Challenge', function (hooks) {
     assert.true(screen.getByRole('checkbox', { name: 'Sans validation (Pix Junior)' }).checked);
     assert.true(screen.getByRole('checkbox', { name: "Validation par l'embed (Pix Junior)" }).checked);
     assert.strictEqual((await screen.getByLabelText('Responsive')).childNodes[3].textContent, 'Non');
-    assert.deepEqual(challenge.assessmentMaintenanceTags, [
-      Challenge.ASSESSMENT_MAINTENANCE_TAGS.NAME,
-      Challenge.ASSESSMENT_MAINTENANCE_TAGS.MISC,
-    ]);
     assert.deepEqual(challenge.translationMaintenanceTags, [
-      Challenge.TRANSLATION_MAINTENANCE_TAGS.FIRSTNAMES,
-      Challenge.TRANSLATION_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
+      Challenge.TRANSLATION_MAINTENANCE_TAGS.NAME,
+      Challenge.TRANSLATION_MAINTENANCE_TAGS.MISC,
+    ]);
+    assert.deepEqual(challenge.assessmentMaintenanceTags, [
+      Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES,
+      Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
     ]);
   });
 });
