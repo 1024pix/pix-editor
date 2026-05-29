@@ -1,12 +1,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-export default class ModulesRoute extends Route {
-  queryParams = {
-    pageNumber: { refreshModel: true },
-    pageSize: { refreshModel: true },
-  };
-
+export default class ModulesIndexRoute extends Route {
   @service router;
 
   redirect() {

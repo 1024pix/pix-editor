@@ -42,4 +42,33 @@ module('Integration | Component | modules/module-form', function (hooks) {
     // WORKAROUND: let some time for monaco-editor to dismount
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
+
+  module('when a module is given in argument', function () {
+    test.if('it uses module’s data as default value', !isChrome, async function (assert) {
+      // given
+      const moduleWoInternalTitle = {
+        id: 'dadfd2d3-0430-47ce-ae0f-455459f12d3b',
+        shortId: 'dadfd2d3',
+        slug: 'escargot-de-bourgogne',
+        details: { level: 1000 },
+        sections: [],
+      };
+      const module = {
+        ...moduleWoInternalTitle,
+        internalTitle: 'MOL_escargot-bourgogne',
+      };
+
+      // when
+      const screen = await render(<template><ModuleForm @module={{module}} /></template>);
+
+      // then
+      assert.dom(screen.getByRole('textbox', { name: /^Titre interne/ })).hasValue(module.internalTitle);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      assert
+        .dom(await screen.findByLabelText('Contenu (JSON)'))
+        .hasValue(JSON.stringify(moduleWoInternalTitle, null, 2));
+    });
+  });
 });
