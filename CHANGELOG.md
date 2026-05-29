@@ -1,5 +1,17 @@
 
 
+## v4.30.0 (29/05/2026)
+
+
+### :rocket: Amélioration
+- [#1495](https://github.com/1024pix/pix-editor/pull/1495) [FEATURE] Ajout du endpoint GET /api/modules/:id (PIX-22929).
+- [#1489](https://github.com/1024pix/pix-editor/pull/1489) [FEATURE] Inverser les champs "évaluation" et "traduction" (PIX-22838).
+- [#1493](https://github.com/1024pix/pix-editor/pull/1493) [FEATURE] Créer l’onglet "Atelier" pour lister les drafts de module (PIX-22831).
+- [#1491](https://github.com/1024pix/pix-editor/pull/1491) [FEATURE] Ajouter un script pour modifier en masse les titre et description "Pratiques" des sujets (PIX-22809).
+
+### :building_construction: Tech
+- [#1492](https://github.com/1024pix/pix-editor/pull/1492) [TECH] Suppression du ModuleSummary au profit du Module.
+
 ## v4.29.0 (28/05/2026)
 
 
