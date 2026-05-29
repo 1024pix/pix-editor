@@ -7,7 +7,7 @@ Built with **Hapi.js** on Node.js, **PostgreSQL** as the database (via Knex for 
 ## Architecture
 
 Follows a clean layered pattern:
-- **`lib/application/`** — route handlers and Joi validation (27 route modules)
+- **`lib/application/`** — route handlers and Joi validation
 - **`lib/domain/`** — use cases, models, domain services
 - **`lib/infrastructure/`** — repositories (data access), JSON:API serializers, plugins
 
@@ -23,12 +23,12 @@ Other entities: `LocalizedChallenge` (locale variants), `Tutorial`, `Tag`, `Modu
 
 | Group | Paths |
 |---|---|
-| Framework content | `/api/areas`, `/competences`, `/skills`, `/challenges`, `/tubes`, `/thematics` |
+| Framework content | `/api/areas`, `/api/competences`, `/api/skills`, `/api/challenges`, `/api/tubes`, `/api/thematics` |
 | Modules | `/api/modules`, `/api/draft-modules`, `/api/module-summaries` |
 | Missions | `/api/missions` |
 | Localization | `/api/translations.csv`, `/api/localized-challenges` |
 | Releases | `/api/releases`, `/api/current-content`, `/api/replication-data` |
-| Admin | `/api/admin` (AdminJS panel) |
+| Admin | `/api/admin` |
 | Misc | `/api/search`, `/api/attachments`, `/api/healthcheck` |
 
 ## Authentication
@@ -38,13 +38,13 @@ Custom Hapi auth scheme with token-based API keys. Most routes require a write-a
 ## Background Jobs (Bull/Redis)
 
 - `release-job` — creates versioned content snapshots
-- `upload-translation-job` — syncs with Phrase.io translation service
-- `check-urls-job` — validates external URLs
+- `upload-translation-job` — syncs translations to the Phrase.com translation service
+- `check-urls-job` — validates the availability of external URLs
 - `export-external-url-list-job` — exports to Google Sheets
-- `release-table-cleaning-and-retention-job` — DB maintenance
+
+- `release-table-cleaning-and-retention-job` — deletion of old versioned snapshots
 
 ## Notable Integrations
 
-- **Phrase.io** — external translation management (import/export CSV, webhook)
-- **GitHub** (`@octokit/rest`) — likely for release automation
+- **Phrase.** — external translation management (import/export CSV, webhook)
 - **Slack** — webhook notifications

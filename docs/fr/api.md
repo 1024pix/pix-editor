@@ -7,7 +7,7 @@ Construit avec **Hapi.js** sur Node.js, **PostgreSQL** comme base de données (v
 ## Architecture
 
 Suit une architecture en couches :
-- **`lib/application/`** — gestionnaires de routes et validation Joi (27 modules de routes)
+- **`lib/application/`** — gestionnaires de routes et validation Joi
 - **`lib/domain/`** — cas d'usage, modèles, services métier
 - **`lib/infrastructure/`** — dépôts (accès aux données), sérialiseurs JSON:API, plugins
 
@@ -15,7 +15,7 @@ Suit une architecture en couches :
 
 Le modèle de contenu central représente le référentiel pédagogique Pix :
 
-**Hiérarchie du référentiel** : Framework → Domaine → Compétence → Thématique → Sujet → Acquis → Épreuve
+**Hiérarchie du référentiel** : Référentiel → Domaine → Compétence → Thématique → Sujet → Acquis → Épreuve
 
 Autres entités : `LocalizedChallenge` (variantes par langue), `Tutorial`, `Tag`, `Module`/`DraftModule`, `Mission`, `Attachment`, `Release`, `Note`, `Translation`.
 
@@ -23,12 +23,12 @@ Autres entités : `LocalizedChallenge` (variantes par langue), `Tutorial`, `Tag`
 
 | Groupe | Chemins |
 |---|---|
-| Contenu du référentiel | `/api/areas`, `/competences`, `/skills`, `/challenges`, `/tubes`, `/thematics` |
+| Contenu du référentiel | `/api/areas`, `/api/competences`, `/api/skills`, `/api/challenges`, `/api/tubes`, `/api/thematics` |
 | Modules | `/api/modules`, `/api/draft-modules`, `/api/module-summaries` |
 | Missions | `/api/missions` |
 | Localisation | `/api/translations.csv`, `/api/localized-challenges` |
 | Releases | `/api/releases`, `/api/current-content`, `/api/replication-data` |
-| Administration | `/api/admin` (panneau AdminJS) |
+| Administration | `/api/admin` |
 | Divers | `/api/search`, `/api/attachments`, `/api/healthcheck` |
 
 ## Authentification
@@ -38,13 +38,13 @@ Schéma d'authentification Hapi personnalisé avec des clés API. La plupart des
 ## Tâches en arrière-plan (Bull/Redis)
 
 - `release-job` — crée des instantanés versionnés du contenu
-- `upload-translation-job` — synchronise avec le service de traduction Phrase.io
-- `check-urls-job` — valide les URLs externes
+- `upload-translation-job` — synchronise les traductions vers le service de traduction Phrase.com
+- `check-urls-job` — valide la disponibilité des URLs externes
 - `export-external-url-list-job` — exporte vers Google Sheets
-- `release-table-cleaning-and-retention-job` — maintenance de la base de données
+
+- `release-table-cleaning-and-retention-job` — suppression des anciens instantanés versionnés 
 
 ## Intégrations notables
 
-- **Phrase.io** — gestion des traductions externes (import/export CSV, webhook)
-- **GitHub** (`@octokit/rest`) — probablement pour l'automatisation des releases
+- **Phrase.** — gestion des traductions externes (import/export CSV, webhook)
 - **Slack** — notifications via webhook
