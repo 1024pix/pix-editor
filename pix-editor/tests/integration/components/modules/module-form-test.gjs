@@ -64,11 +64,12 @@ module('Integration | Component | modules/module-form', function (hooks) {
       // then
       assert.dom(screen.getByRole('textbox', { name: /^Titre interne/ })).hasValue(module.internalTitle);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       assert
         .dom(await screen.findByLabelText('Contenu (JSON)'))
         .hasValue(JSON.stringify(moduleWoInternalTitle, null, 2));
+
+      // WORKAROUND: let some time for monaco-editor to dismount
+      await new Promise((resolve) => setTimeout(resolve, 100));
     });
   });
 });

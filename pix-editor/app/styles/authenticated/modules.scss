@@ -8,4 +8,9 @@
     flex-wrap: wrap;
     gap: var(--pix-spacing-1x);
   }
+
+  &__actions {
+    display: flex;
+    flex-direction: row-reverse;
+  }
 }

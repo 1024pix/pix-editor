@@ -434,6 +434,8 @@ export default function routes() {
     return json;
   });
 
+  this.get('modules/:id');
+
   this.get('/static-course-summaries', function (schema, request) {
     const queryParams = request.queryParams;
     const { 'filter[isActive]': isActiveFilter, 'filter[name]': nameFilter, 'filter[tagIds]': tagFilter } = queryParams;

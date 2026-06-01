@@ -13,7 +13,7 @@ import ModuleList from 'pixeditor/components/modules/modules-list';
   <main class="page-body">
     <section class="page-section modules-list">
       <ModulesTabs />
-      <ModuleList @modules={{@model.modules}} @showStatus={{true}} />
+      <ModuleList @modules={{@model.modules}} @showStatus={{true}} @goToDetailPage={{this.goToDetailPage}} />
       <PixPagination @pagination={{@model.modules.meta}} />
     </section>
   </main>
