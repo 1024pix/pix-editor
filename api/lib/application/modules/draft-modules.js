@@ -1,8 +1,9 @@
 import Joi from 'joi';
 
 import { draftModuleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import { createDraftModule, listPaginatedDraftModules } from '../../domain/usecases/index.js';
+import { createDraftModule, getDraftModuleById, listPaginatedDraftModules } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import * as Types from '../types.js';
 
 export function register(server) {
   server.route([
@@ -21,6 +22,18 @@ export function register(server) {
           const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['internalTitle', 'asc']] });
           const { draftModules, meta } = await listPaginatedDraftModules({ page, sort });
           return draftModuleSerializer.serialize(draftModules, { attributes: ['internalTitle', 'details'], meta });
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/draft-modules/{id}',
+      config: {
+        validate: { params: Joi.object({ id: Types.moduleId().required() }) },
+        handler: async (request) => {
+          const { id } = request.params;
+          const draftModule = await getDraftModuleById(id);
+          return draftModuleSerializer.serialize(draftModule);
         },
       },
     },

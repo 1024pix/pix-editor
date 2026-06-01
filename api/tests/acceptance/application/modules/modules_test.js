@@ -112,7 +112,7 @@ describe('Acceptance | Route | modules', () => {
       await databaseBuilder.commit();
     });
 
-    it('responds with status 200 and modules data', async () => {
+    it('responds with status 200 and module’s data', async () => {
       // given
       const server = await createServer();
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { save, list, count } from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
+import { catchErr, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { save, list, count, getById } from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
+import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 
 describe('Draft Module Repository', () => {
   describe('save', () => {
@@ -114,6 +115,35 @@ describe('Draft Module Repository', () => {
 
       // then
       expect(result).toBe(2);
+    });
+  });
+
+  describe('getById', () => {
+    it('returns a draft module by its id', async () => {
+      // given
+      const module = domainBuilder.buildModule();
+      databaseBuilder.factory.buildModule(module);
+      const expectedDraftModule = domainBuilder.buildDraftModule({ id: module.id, shortId: module.shortId, moduleId: module.id });
+      databaseBuilder.factory.buildDraftModule(expectedDraftModule);
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ shortId: 'secondar', internalTitle: 'secondar' }));
+      await databaseBuilder.commit();
+
+      // when
+      const draftModule = await getById({ id: expectedDraftModule.id });
+
+      // then
+      expect(draftModule).toStrictEqual(expectedDraftModule);
+    });
+
+    it('throw a not Found error if draft module is not found', async () => {
+      // given
+      const inexistingDraftModuleId = crypto.randomUUID();
+
+      // when
+      const error = await catchErr(getById)({ id: inexistingDraftModuleId });
+
+      // then
+      expect(error).toBeInstanceOf(NotFoundError);
     });
   });
 });
