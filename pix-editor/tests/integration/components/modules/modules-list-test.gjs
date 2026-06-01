@@ -1,3 +1,4 @@
+import Service from '@ember/service';
 import { render } from '@1024pix/ember-testing-library';
 import { getByRole, getByText, queryByRole, queryByText } from '@testing-library/dom';
 import { module, test } from 'qunit';
@@ -48,13 +49,13 @@ module('Integration | Component | modules-list', function (hooks) {
         assert.dom(getByText(firstRow, 'Public')).exists();
         assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
         assert.dom(getByText(firstRow, 'Novice')).exists();
-        assert.dom(getByRole(firstRow, 'button', { name: 'Voir le détail' })).exists();
+        assert.dom(getByText(firstRow, 'Voir le détail')).exists();
 
         const secondRow = screen.getByText('MOD_super_2').closest('tr');
         assert.dom(getByText(secondRow, 'Privé')).exists();
         assert.dom(getByText(secondRow, 'Beta')).exists();
         assert.dom(getByText(secondRow, 'Avancé')).exists();
-        assert.dom(getByRole(secondRow, 'button', { name: 'Voir le détail' })).exists();
+        assert.dom(getByText(secondRow, 'Voir le détail')).exists();
       });
     });
 
@@ -115,10 +116,10 @@ module('Integration | Component | modules-list', function (hooks) {
       assert.dom(screen.getByText('MOD_super_2')).exists();
 
       const firstRow = screen.getByText('MOD_super_1').closest('tr');
-      assert.dom(queryByRole(firstRow, 'button', { name: 'Voir le détail' })).doesNotExist();
+      assert.dom(getByText(firstRow, 'Voir le détail')).exists();
 
       const secondRow = screen.getByText('MOD_super_2').closest('tr');
-      assert.dom(queryByRole(secondRow, 'button', { name: 'Voir le détail' })).doesNotExist();
+      assert.dom(getByText(secondRow, 'Voir le détail')).exists();
     });
   });
 });

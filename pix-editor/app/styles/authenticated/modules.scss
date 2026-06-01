@@ -12,5 +12,9 @@
   &__actions {
     display: flex;
     flex-direction: row-reverse;
+
+    a:hover {
+      color: var(--pix-neutral-0);
+    }
   }
 }

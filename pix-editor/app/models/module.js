@@ -33,4 +33,9 @@ export default class Module extends Model {
   get mayShowProductionDetails() {
     return true;
   }
+
+  get mayShowDraftDetails() {
+    // FIXME must return true if module has an existing draft
+    return false;
+  }
 }
