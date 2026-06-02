@@ -10,22 +10,28 @@
 
 .form-error {
   width: 100%;
+  margin-bottom: 16px;
   color: colors.$pix-error-70;
   font-weight: bold;
-  margin-bottom: 16px;
 }
 
 .pix-button-link-with-icon {
   &:hover{
     color: colors.$pix-neutral-90;
   }
+
   > svg {
     margin-right: 8px;
   }
 }
 
+a.pix-button--primary {
+  color: var(--pix-neutral-0);
+}
+
 .disabled-link-with-icon {
   pointer-events: none;
+
   > svg {
     color: colors.$pix-neutral-30;
   }

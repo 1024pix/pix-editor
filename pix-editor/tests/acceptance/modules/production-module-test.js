@@ -30,6 +30,10 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     // then
     assert.strictEqual(currentURL(), `/modules/production/${id}`);
 
+    await clickByName('Retour');
+
+    assert.strictEqual(currentURL(), `/modules/production`);
+
     // WORKAROUND: let some time for monaco-editor to dismount
     await new Promise((resolve) => setTimeout(resolve, 100));
   });

@@ -22,12 +22,17 @@ module('Acceptance | Modules | Workbench Module', function (hooks) {
 
   test('displays module details page on click', async function (assert) {
     // when
-    await visit('/');
+    const screen = await visit('/');
     await clickByName('Modules');
     await clickByName('Voir le détail');
 
     // then
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+    assert.dom(screen.getByRole('heading', { name: 'Détail du draft de module' })).exists();
+
+    await clickByName('Retour');
+
+    assert.strictEqual(currentURL(), `/modules/workbench`);
 
     // WORKAROUND: let some time for monaco-editor to dismount
     await new Promise((resolve) => setTimeout(resolve, 100));
