@@ -12,6 +12,29 @@ export default class ModuleForm extends Component {
   @tracked internalTitle;
   @tracked moduleData;
 
+  constructor(...args) {
+    super(...args);
+
+    this.monacoOptions = {
+      ariaLabel: 'Contenu (JSON)',
+      ariaRequired: true,
+      automaticLayout: true,
+      domReadOnly: this.args.readonly,
+      language: 'json',
+      readOnly: this.args.readonly,
+      theme: 'vs-light',
+    };
+
+    if (!this.args.module) return;
+
+    const { id, internalTitle, shortId, slug, title, isBeta, visibility, details, sections, glossary } =
+      this.args.module;
+
+    this.internalTitle = internalTitle;
+    this.moduleData = { id, shortId, slug, title, isBeta, visibility, details, sections, glossary };
+    this.monacoOptions.value = JSON.stringify(this.moduleData, null, 2);
+  }
+
   @action
   onChange(moduleJson) {
     try {
@@ -19,16 +42,6 @@ export default class ModuleForm extends Component {
     } catch {
       this.moduleData = undefined;
     }
-  }
-
-  get monacoOptions() {
-    return {
-      ariaLabel: 'Contenu (JSON)',
-      ariaRequired: true,
-      automaticLayout: true,
-      language: 'json',
-      theme: 'vs-light',
-    };
   }
 
   get isSaveDisabled() {
@@ -50,6 +63,7 @@ export default class ModuleForm extends Component {
         @value={{this.internalTitle}}
         @requiredLabel="Champ obligatoire"
         {{on "change" this.onInternalTitleChange}}
+        readonly={{@readonly}}
       >
         <:label>Titre interne</:label>
       </PixInput>
@@ -61,14 +75,16 @@ export default class ModuleForm extends Component {
         <MonacoEditor @options={{this.monacoOptions}} class="module-form__monaco-editor" @onChange={{this.onChange}} />
       </div>
 
-      <div class="module-form__actions">
-        <PixButton @triggerAction={{this.saveModule}} @isDisabled={{this.isSaveDisabled}}>
-          Enregistrer
-        </PixButton>
-        <PixButtonLink @route="authenticated.modules" @variant="secondary">
-          Annuler
-        </PixButtonLink>
-      </div>
+      {{#unless @readonly}}
+        <div class="module-form__actions">
+          <PixButton @triggerAction={{this.saveModule}} @isDisabled={{this.isSaveDisabled}}>
+            Enregistrer
+          </PixButton>
+          <PixButtonLink @route="authenticated.modules" @variant="secondary">
+            Annuler
+          </PixButtonLink>
+        </div>
+      {{/unless}}
     </div>
   </template>
 }

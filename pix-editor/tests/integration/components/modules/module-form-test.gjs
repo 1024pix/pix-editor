@@ -10,6 +10,11 @@ const isChrome = navigator?.userAgent?.includes(' Chrome/');
 module('Integration | Component | modules/module-form', function (hooks) {
   setupIntlRenderingTest(hooks);
 
+  hooks.afterEach(async function () {
+    // WORKAROUND: let some time for monaco-editor to dismount
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  });
+
   test.if('it parses and saves a module data', !isChrome, async function (assert) {
     // given
     const saveModule = sinon.stub();
@@ -38,8 +43,55 @@ module('Integration | Component | modules/module-form', function (hooks) {
       internalTitle: 'PALOURDE_MAGIQUE',
       slug: 'limaçoooooooooooooooooooon',
     });
+  });
 
-    // WORKAROUND: let some time for monaco-editor to dismount
-    await new Promise((resolve) => setTimeout(resolve, 100));
+  module('when a module is given in argument', function () {
+    test.if('it uses module’s data as default value', !isChrome, async function (assert) {
+      // given
+      const moduleWoInternalTitle = {
+        id: 'dadfd2d3-0430-47ce-ae0f-455459f12d3b',
+        shortId: 'dadfd2d3',
+        slug: 'escargot-de-bourgogne',
+        details: { level: 1000 },
+        sections: [],
+      };
+      const module = {
+        ...moduleWoInternalTitle,
+        internalTitle: 'MOL_escargot-bourgogne',
+      };
+
+      // when
+      const screen = await render(<template><ModuleForm @module={{module}} /></template>);
+
+      // then
+      assert.dom(screen.getByRole('textbox', { name: /^Titre interne/ })).hasValue(module.internalTitle);
+
+      assert
+        .dom(await screen.findByLabelText('Contenu (JSON)'))
+        .hasValue(JSON.stringify(moduleWoInternalTitle, null, 2));
+    });
+  });
+
+  module('when module-form is readonly', function () {
+    test('it should not display actions buttons', async function (assert) {
+      const moduleWoInternalTitle = {
+        id: 'dadfd2d4-0430-47ce-ae0f-455459f12d3b',
+        shortId: 'dadfd2d4',
+        slug: 'escargot-du loiret',
+        details: { level: 1001 },
+        sections: [],
+      };
+      const module = {
+        ...moduleWoInternalTitle,
+        internalTitle: 'MOL_escargot-loiret',
+      };
+
+      // when
+      const screen = await render(<template><ModuleForm @module={{module}} @readonly={{true}} /></template>);
+
+      // then
+      assert.dom(await screen.queryByRole('button', { name: 'Enregistrer' })).doesNotExist();
+      assert.dom(await screen.queryByRole('button', { name: 'Annuler' })).doesNotExist();
+    });
   });
 });

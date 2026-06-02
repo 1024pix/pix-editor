@@ -29,4 +29,8 @@ export default class Module extends Model {
   get levelForDisplay() {
     return levelForDisplay[this.details.level] ?? this.details.level;
   }
+
+  get mayShowProductionDetails() {
+    return true;
+  }
 }
