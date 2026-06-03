@@ -1,5 +1,22 @@
 
 
+## v4.31.0 (03/06/2026)
+
+
+### :rocket: Amélioration
+- [#1500](https://github.com/1024pix/pix-editor/pull/1500) [FEATURE] Page de détail d’un draft de module (PIX-22924).
+- [#1497](https://github.com/1024pix/pix-editor/pull/1497) [FEATURE] Page de détails d'un module en PROD (PIX-22930).
+
+### :building_construction: Tech
+- [#1478](https://github.com/1024pix/pix-editor/pull/1478) [TECH] Utiliser pgboss pour gérer le job d'export de la liste des urls externes.
+
+### :arrow_up: Montée de version
+- [#1499](https://github.com/1024pix/pix-editor/pull/1499) [BUMP] Update dependency vitest to v4.1.0 [SECURITY].
+- [#1498](https://github.com/1024pix/pix-editor/pull/1498) [BUMP] Update dependency vitest to v4.1.0 [SECURITY].
+
+### :coffee: Autre
+- [#1496](https://github.com/1024pix/pix-editor/pull/1496) [DOC] mise en conformité la doc avec les retour du label DGPA.
+
 ## v4.30.0 (29/05/2026)
 
 
