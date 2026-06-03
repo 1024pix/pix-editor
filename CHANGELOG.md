@@ -1,5 +1,11 @@
 
 
+## v4.31.1 (03/06/2026)
+
+
+### :bug: Correction
+- [#1503](https://github.com/1024pix/pix-editor/pull/1503) [BUGFIX] Chargement du module/draft sur les pages de détails.
+
 ## v4.31.0 (03/06/2026)
 
 
