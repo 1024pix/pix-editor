@@ -45,5 +45,9 @@ module('Acceptance | Modules | Production Module', function (hooks) {
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
+
+    await clickByName('Retour');
+
+    assert.strictEqual(currentURL(), `/modules/workbench`);
   });
 });

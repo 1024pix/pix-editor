@@ -1,5 +1,5 @@
+import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 
 <template>
   <header class="page-header">
@@ -10,7 +10,7 @@ import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
     <section class="page-section module-form">
       <ModuleForm @module={{@model.module}} @readonly={{true}} />
       <div class="page-actions">
-        <PixButtonLink @route="authenticated.modules.production">Retour</PixButtonLink>
+        <ModuleBackButton @fromRoute={{@model.fromRoute}} />
       </div>
     </section>
   </main>
