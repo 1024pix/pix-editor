@@ -30,11 +30,11 @@ module('Acceptance | Modules | Workbench Module', function (hooks) {
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
     assert.dom(screen.getByRole('heading', { name: 'Détail du draft de module' })).exists();
 
+    // WORKAROUND: let some time for monaco-editor to settle
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     await clickByName('Retour');
 
     assert.strictEqual(currentURL(), `/modules/workbench`);
-
-    // WORKAROUND: let some time for monaco-editor to dismount
-    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 });
