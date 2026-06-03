@@ -25,12 +25,23 @@ const defaultAttributes = [
   'details',
   'sections',
   'glossary',
+  'module',
 ];
 
-export function serialize(modules, { meta, attributes = defaultAttributes } = {}) {
+export function serialize(draftModules, { meta, attributes = defaultAttributes } = {}) {
   const serializer = new Serializer('draft-module', {
     attributes,
     meta,
+    transform({ moduleId, ...draftModule }) {
+      return {
+        ...draftModule,
+        module: moduleId ? { id: moduleId } : null,
+      };
+    },
+    module: {
+      ref: 'id',
+      included: false,
+    },
   });
-  return serializer.serialize(modules);
+  return serializer.serialize(draftModules);
 }
