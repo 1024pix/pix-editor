@@ -1,41 +1,11 @@
-import Model, { attr } from '@ember-data/model';
+import BaseModule from './base-module';
 
-const visibilityForDisplay = {
-  public: 'Public',
-  private: 'Privé',
-};
-
-const levelForDisplay = {
-  novice: 'Novice',
-  independent: 'Indépendant',
-  advanced: 'Avancé',
-  expert: 'Expert',
-};
-
-export default class Module extends Model {
-  @attr internalTitle;
-  @attr title;
-  @attr isBeta;
-  @attr slug;
-  @attr visibility;
-  @attr details;
-  @attr sections;
-  @attr glossary;
-
-  get visibilityForDisplay() {
-    return visibilityForDisplay[this.visibility] ?? this.visibility;
+export default class Module extends BaseModule {
+  get isDraft() {
+    return false;
   }
 
-  get levelForDisplay() {
-    return levelForDisplay[this.details.level] ?? this.details.level;
-  }
-
-  get mayShowProductionDetails() {
-    return true;
-  }
-
-  get mayShowDraftDetails() {
-    // FIXME must return true if module has an existing draft
+  get isEditionDraft() {
     return false;
   }
 }

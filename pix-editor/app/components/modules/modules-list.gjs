@@ -55,23 +55,30 @@ export default class Product extends Component {
             {{module.levelForDisplay}}
           </:cell>
         </PixTableColumn>
-        <PixTableColumn @context={{context}}>
+        <PixTableColumn @context={{context}} class="modules-list__actions">
           <:header>
             Actions
           </:header>
           <:cell>
-            <div class="modules-list__actions">
-              {{#if module.mayShowProductionDetails}}
-                <PixButtonLink @route="authenticated.modules.production-module" @model={{module.id}}>
-                  Voir le détail
-                </PixButtonLink>
-              {{/if}}
-              {{#if module.mayShowDraftDetails}}
-                <PixButtonLink @route="authenticated.modules.draft-module" @model={{module.id}}>
-                  Voir le détail
-                </PixButtonLink>
-              {{/if}}
-            </div>
+            <PixButtonLink
+              @route={{if
+                module.isDraft
+                "authenticated.modules.draft-module"
+                "authenticated.modules.production-module"
+              }}
+              @model={{module.id}}
+            >
+              Voir le détail
+            </PixButtonLink>
+            {{#if module.isEditionDraft}}
+              <PixButtonLink
+                @route="authenticated.modules.production-module"
+                @model={{module.moduleId}}
+                @variant="secondary"
+              >
+                Voir le détail du module en prod
+              </PixButtonLink>
+            {{/if}}
           </:cell>
         </PixTableColumn>
       </:columns>

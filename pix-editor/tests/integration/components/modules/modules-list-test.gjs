@@ -84,8 +84,12 @@ module('Integration | Component | modules-list', function (hooks) {
 
     hooks.beforeEach(function () {
       const store = this.owner.lookup('service:store');
+
+      const module = store.createRecord('module', { id: 'moduleId' });
+
       draftModules = [
         store.createRecord('draft-module', {
+          module,
           internalTitle: 'MOD_super_1',
           isBeta: false,
           visibility: 'public',
@@ -117,9 +121,11 @@ module('Integration | Component | modules-list', function (hooks) {
 
       const firstRow = screen.getByText('MOD_super_1').closest('tr');
       assert.dom(getByText(firstRow, 'Voir le détail')).exists();
+      assert.dom(getByText(firstRow, 'Voir le détail du module en prod')).exists();
 
       const secondRow = screen.getByText('MOD_super_2').closest('tr');
       assert.dom(getByText(secondRow, 'Voir le détail')).exists();
+      assert.dom(queryByText(secondRow, 'Voir le détail du module en prod')).doesNotExist();
     });
   });
 });
