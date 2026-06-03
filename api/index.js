@@ -10,10 +10,17 @@ import * as exportExternalUrlListJob from './lib/infrastructure/scheduled-jobs/e
 import * as cleanReleasesJob from './lib/infrastructure/scheduled-jobs/release-table-cleaning-and-retention-job.js';
 import { disconnect } from './db/knex-database-connection.js';
 import { validateEnvironmentVariables } from './lib/infrastructure/validate-environement-variables.js';
+import { JobClient } from './lib/infrastructure/jobs/JobClient.js';
+import { JobGroup } from './lib/application/jobs/job-controller.js';
 
 validateEnvironmentVariables();
 
-let checkUrlsJobQueue, deleteUnmentionedKeysAfterUploadJobQueue, exportExternalUrlListJobQueue, releaseJobQueue, releaseTableCleaningAndRetentionJobQueue, uploadTranslationJobQueue;
+let checkUrlsJobQueue,
+  deleteUnmentionedKeysAfterUploadJobQueue,
+  exportExternalUrlListJobQueue,
+  releaseJobQueue,
+  releaseTableCleaningAndRetentionJobQueue,
+  uploadTranslationJobQueue;
 
 async function start() {
   try {
@@ -26,6 +33,11 @@ async function start() {
     checkUrlsJobQueue = await createCheckUrlsJobQueue();
     exportExternalUrlListJobQueue = await exportExternalUrlListJob.schedule();
     releaseTableCleaningAndRetentionJobQueue = await cleanReleasesJob.schedule();
+
+    await JobClient.instance.initialize({
+      worker: true,
+      jobGroups: [JobGroup.DEFAULT],
+    });
 
     logger.info('Server running at %s', server.info.uri);
   } catch (err) {
@@ -44,6 +56,7 @@ async function exitOnSignal(signal) {
     await deleteUnmentionedKeysAfterUploadJobQueue?.close();
     await exportExternalUrlListJobQueue?.close();
     await releaseTableCleaningAndRetentionJobQueue?.close();
+    await JobClient.instance.stop();
     process.exit(0);
   } catch (err) {
     logger.error(err);

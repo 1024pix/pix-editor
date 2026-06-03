@@ -85,6 +85,7 @@
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-syntax-import-assertions": "^7.22.5",
     "@stylistic/eslint-plugin": "^5.5.0",
+    "dayjs": "^1.11.20",
     "eslint": "^9.9.0",
     "eslint-plugin-mocha": "^11.2.0",
     "flush-write-stream": "^2.0.0",
@@ -94,6 +95,7 @@
     "nodemon": "^3.0.0",
     "papaparse": "^5.5.2",
     "parse-multipart-data": "^1.5.0",
+    "pg-boss": "^12.18.2",
     "split2": "^4.1.0",
     "vitest": "^4.0.7",
     "yargs": "^18.0.0"
