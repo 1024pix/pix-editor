@@ -184,7 +184,7 @@ export default class TutorialForm extends Component {
         @options={{this.tutorialLanguageOptions}}
         @onChange={{this.setTutorialLanguage}}
         @requiredLabel="Champ obligatoire"
-        @value={{@tutorial.normalizedLanguage}}
+        @value={{@tutorial.language}}
         @hideDefaultOption={{true}}
       >
         <:label>Langue</:label>

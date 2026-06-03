@@ -188,9 +188,9 @@ export default class Tutorials extends Component {
                   <div>Source :
                     {{tutorial.source}}
                     <div class="ui right floated favorite">
-                      <span class="flag" aria-label={{tutorial.language}}>{{flagForLanguage
-                          tutorial.normalizedLanguage
-                        }}</span>
+                      <span class="flag" aria-label={{tutorial.language}}>
+                        {{flagForLanguage tutorial.language}}
+                      </span>
                       {{#if tutorial.crush}}
                         <PixIcon @name="favorite" @plainIcon={{true}} />
                       {{/if}}
