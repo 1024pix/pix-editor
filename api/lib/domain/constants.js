@@ -6,6 +6,7 @@ export const LOCALE = {
   ENGLISH_UGANDAN: 'en-UG',
   FRENCH_BELGIUM: 'fr-BE',
   FRENCH_FRANCE: 'fr-fr',
+  FRENCH_FRANCE_CANONICAL: 'fr-FR',
   FRENCH_SPOKEN: 'fr',
   GERMAN_AUSTRIA: 'de-AT',
   GERMAN_SPOKEN: 'de',
@@ -36,4 +37,6 @@ export const TUTORIAL_LOCALE_TO_LANGUAGE_MAP = Object.freeze({
   [LOCALE.ENGLISH_SPOKEN]: 'Anglais',
   [LOCALE.FRENCH_SPOKEN]: 'Français',
   [LOCALE.DUTCH_SPOKEN]: 'Néerlandais',
+  [LOCALE.FRENCH_FRANCE_CANONICAL]: 'Franco Français',
+  [LOCALE.FRENCH_BELGIUM]: 'Franco Belge',
 });
