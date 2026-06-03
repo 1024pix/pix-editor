@@ -1,5 +1,6 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { DraftModule } from '../../domain/models/index.js';
+import { NotFoundError } from '../errors.js';
 
 export async function save({ details, sections, glossary, ...module }, transaction = knex) {
   const draftModuleDTO = {
@@ -34,6 +35,16 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
 export async function count() {
   const { count } = await knex('draft-modules').count().first();
   return count;
+}
+
+export async function getById({ id }) {
+  const draftModule = await knex('draft-modules').where({ id }).first();
+
+  if (!draftModule) {
+    throw new NotFoundError('Draft module not found');
+  }
+
+  return toDomain(draftModule);
 }
 
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...draftModule }) {

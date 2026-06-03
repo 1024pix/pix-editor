@@ -5,7 +5,7 @@ import { service } from '@ember/service';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 
 function getVisibilityColor(visibility) {
   return { public: 'green', private: 'grey' }[visibility];
@@ -55,20 +55,25 @@ export default class Product extends Component {
             {{module.levelForDisplay}}
           </:cell>
         </PixTableColumn>
-        {{#if module.mayShowProductionDetails}}
-          <PixTableColumn @context={{context}}>
-            <:header>
-              Actions
-            </:header>
-            <:cell>
-              <div class="modules-list__actions">
-                <PixButton @triggerAction={{fn this.goToDetailPage module.id}}>
+        <PixTableColumn @context={{context}}>
+          <:header>
+            Actions
+          </:header>
+          <:cell>
+            <div class="modules-list__actions">
+              {{#if module.mayShowProductionDetails}}
+                <PixButtonLink @route="authenticated.modules.production-module" @model={{module.id}}>
                   Voir le détail
-                </PixButton>
-              </div>
-            </:cell>
-          </PixTableColumn>
-        {{/if}}
+                </PixButtonLink>
+              {{/if}}
+              {{#if module.mayShowDraftDetails}}
+                <PixButtonLink @route="authenticated.modules.draft-module" @model={{module.id}}>
+                  Voir le détail
+                </PixButtonLink>
+              {{/if}}
+            </div>
+          </:cell>
+        </PixTableColumn>
       </:columns>
     </PixTable>
   </template>

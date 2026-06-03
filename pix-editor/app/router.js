@@ -89,6 +89,7 @@ Router.map(function () {
       this.route('production');
       this.route('workbench');
       this.route('production-module', { path: '/production/:module_id' });
+      this.route('draft-module', { path: '/workbench/:draft_module_id' });
     });
     this.route('missions', function () {
       this.route('list', { path: '/' });

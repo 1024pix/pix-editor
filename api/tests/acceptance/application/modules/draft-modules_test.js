@@ -168,4 +168,65 @@ describe('Acceptance | Route | draft-modules', () => {
       });
     });
   });
+
+  describe('GET /draft-modules/:id', () => {
+    let draftModule;
+
+    beforeEach(async () => {
+      draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule(draftModule);
+      await databaseBuilder.commit();
+    });
+
+    it('responds with status 200 and draft module’s data', async () => {
+      // given
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/draft-modules/${draftModule.id}`,
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'draft-modules',
+          id: draftModule.id,
+          attributes: {
+            'short-id': draftModule.shortId,
+            'internal-title': draftModule.internalTitle,
+            'is-beta': draftModule.isBeta,
+            visibility: draftModule.visibility,
+            details: draftModule.details,
+            slug: draftModule.slug,
+            title: draftModule.title,
+            sections: draftModule.sections,
+            glossary: draftModule.glossary,
+          },
+        },
+      });
+    });
+
+    describe('when module does not exist', () => {
+      it('responds with status 404', async () => {
+        // given
+        const server = await createServer();
+        const notFoundId = crypto.randomUUID();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: `/api/modules/${notFoundId}`,
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(404);
+      });
+    });
+  });
 });

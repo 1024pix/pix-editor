@@ -411,6 +411,8 @@ export default function routes() {
     return json;
   });
 
+  this.get('/draft-modules/:id');
+
   this.get('/modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 
