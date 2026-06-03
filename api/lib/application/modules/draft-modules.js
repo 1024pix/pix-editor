@@ -21,7 +21,13 @@ export function register(server) {
         handler: async (request) => {
           const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['internalTitle', 'asc']] });
           const { draftModules, meta } = await listPaginatedDraftModules({ page, sort });
-          return draftModuleSerializer.serialize(draftModules, { attributes: ['internalTitle', 'details'], meta });
+          return draftModuleSerializer.serialize(draftModules, {
+            attributes: [
+              'internalTitle',
+              'details',
+              'module',
+            ], meta,
+          });
         },
       },
     },
