@@ -8,9 +8,15 @@
     flex-wrap: wrap;
     gap: var(--pix-spacing-1x);
   }
+}
 
-  &__actions {
-    display: flex;
-    flex-direction: row-reverse;
-  }
+th.modules-list__actions {
+  display: flex;
+  justify-content: center;
+}
+
+td.modules-list__actions {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--pix-spacing-2x);
 }
