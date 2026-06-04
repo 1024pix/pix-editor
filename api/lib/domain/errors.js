@@ -97,3 +97,9 @@ export class InvalidLocalizedFrameworkTubesError extends DomainError {
     super(message);
   }
 }
+
+export class DraftModuleDiffError extends DomainError {
+  constructor(message) {
+    super(message);
+  }
+}
