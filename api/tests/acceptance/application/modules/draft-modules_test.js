@@ -228,6 +228,7 @@ describe('Acceptance | Route | draft-modules', () => {
                 type: 'modules',
               },
             },
+            diff: { links: { related: `/api/draft-modules/${draftModule.id}/diff` } },
           },
         },
       });

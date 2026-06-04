@@ -26,6 +26,7 @@ const defaultAttributes = [
   'sections',
   'glossary',
   'module',
+  'diff',
 ];
 
 export function serialize(draftModules, { meta, attributes = defaultAttributes } = {}) {
@@ -33,14 +34,25 @@ export function serialize(draftModules, { meta, attributes = defaultAttributes }
     attributes,
     meta,
     transform({ moduleId, ...draftModule }) {
-      return {
+      const data = {
         ...draftModule,
         module: moduleId ? { id: moduleId } : null,
       };
+      if (moduleId) data.diff = {};
+      return data;
     },
     module: {
       ref: 'id',
       included: false,
+    },
+    diff: {
+      ref: 'id',
+      ignoreRelationshipData: true,
+      relationshipLinks: {
+        related({ id }) {
+          return `/api/draft-modules/${id}/diff`;
+        },
+      },
     },
   });
   return serializer.serialize(draftModules);
