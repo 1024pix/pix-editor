@@ -27,6 +27,33 @@ export class Module {
     this.updatedAt = updatedAt;
   }
 
+  serializeToJSON() {
+    const {
+      id,
+      shortId,
+      internalTitle,
+      slug,
+      title,
+      isBeta,
+      visibility,
+      details,
+      sections,
+      glossary,
+    } = this;
+    return JSON.stringify({
+      id,
+      shortId,
+      internalTitle,
+      slug,
+      title,
+      isBeta,
+      visibility,
+      details,
+      sections,
+      glossary,
+    }, null, 2);
+  }
+
   static get LEVELS() {
     return {
       NOVICE: 'novice',
