@@ -251,4 +251,91 @@ describe('Acceptance | Route | draft-modules', () => {
       });
     });
   });
+
+  describe('GET /draft-modules/:id/diff', () => {
+    it('responds with status 200 and draft module’s data', async () => {
+      // given
+      const module = domainBuilder.buildModule();
+      databaseBuilder.factory.buildModule(module);
+      const { id: draftModuleId } = databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({
+        id: module.id,
+        moduleId: module.id,
+        details: { level: Module.LEVELS.EXPERT },
+        glossary: [
+          ...module.glossary,
+          {
+            word: 'antennes',
+            description: 'La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat.',
+          },
+        ],
+      }));
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/draft-modules/${draftModuleId}/diff`,
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'draft-module-diffs',
+          id: draftModuleId,
+          attributes: { 'html-diff': expect.any(String) },
+        },
+      });
+      expect(response.result.data.attributes['html-diff']).toMatchInlineSnapshot(`
+        "<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1;font-weight:bold">@@ -9,9 +9,9 @@</span></span>
+        <span class="line"><span style="color:#24292E">   "details": {</span></span>
+        <span class="line"><span style="color:#24292E">     "image": "https=//assets.pix.org/draft/escargots.jpg",</span></span>
+        <span class="line"><span style="color:#24292E">     "description": "&#x3C;p>Ce module est dédié aux escargots&#x3C;/p>&#x3C;p>Il contient normalement l'intégralité de leurs secrets disponibles à date.&#x3C;/p>",</span></span>
+        <span class="line"><span style="color:#24292E">     "duration": 7,</span></span>
+        <span class="line"><span style="color:#B31D28">-    "level": "novice",</span></span>
+        <span class="line"><span style="color:#22863A">+    "level": "expert",</span></span>
+        <span class="line"><span style="color:#24292E">     "objectives": [</span></span>
+        <span class="line"><span style="color:#24292E">       "Connaître les petits secrets des gastéropodes"</span></span>
+        <span class="line"><span style="color:#24292E">     ],</span></span>
+        <span class="line"><span style="color:#24292E">     "tabletSupport": "inconvenient"</span></span>
+        <span class="line"><span style="color:#6F42C1;font-weight:bold">@@ -43,7 +43,11 @@</span></span>
+        <span class="line"><span style="color:#24292E">   "glossary": [</span></span>
+        <span class="line"><span style="color:#24292E">     {</span></span>
+        <span class="line"><span style="color:#24292E">       "word": "coquille",</span></span>
+        <span class="line"><span style="color:#24292E">       "description": "Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l'escargot toute sa force et sa vitalité."</span></span>
+        <span class="line"><span style="color:#22863A">+    },</span></span>
+        <span class="line"><span style="color:#22863A">+    {</span></span>
+        <span class="line"><span style="color:#22863A">+      "word": "antennes",</span></span>
+        <span class="line"><span style="color:#22863A">+      "description": "La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat."</span></span>
+        <span class="line"><span style="color:#24292E">     }</span></span>
+        <span class="line"><span style="color:#24292E">   ]</span></span>
+        <span class="line"><span style="color:#24292E"> }</span></span>
+        <span class="line"><span style="color:#24292E">\\ No newline at end of file</span></span>
+        <span class="line"></span></code></pre>"
+      `);
+    });
+
+    describe('when draft is a creation draft', () => {
+      it('responds with status 400', async () => {
+        // given
+        const { id: draftModuleId } = databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule());
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: `/api/draft-modules/${draftModuleId}/diff`,
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+      });
+    });
+  });
 });

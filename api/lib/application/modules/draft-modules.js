@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
-import { draftModuleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import { createDraftModule, getDraftModuleById, listPaginatedDraftModules } from '../../domain/usecases/index.js';
+import { draftModuleDiffSerializer, draftModuleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { createDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import * as Types from '../types.js';
 
@@ -40,6 +40,18 @@ export function register(server) {
           const { id } = request.params;
           const draftModule = await getDraftModuleById(id);
           return draftModuleSerializer.serialize(draftModule);
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/draft-modules/{id}/diff',
+      config: {
+        validate: { params: Joi.object({ id: Types.moduleId().required() }) },
+        handler: async (request) => {
+          const { id: draftModuleId } = request.params;
+          const draftModuleDiff = await getDraftModuleDiff({ draftModuleId });
+          return draftModuleDiffSerializer.serialize(draftModuleDiff);
         },
       },
     },
