@@ -8,7 +8,6 @@ const CHUNK_SIZE = 1000;
 
 /**
  * @class DatabaseBuilder
- * @property {Factory} factory
  */
 export class DatabaseBuilder {
   #beforeEmptyDatabase;
@@ -24,6 +23,9 @@ export class DatabaseBuilder {
 
   constructor({ knex, emptyFirst = true, databaseBuffer = defaultDatabaseBuffer, beforeEmptyDatabase }) {
     this.knex = knex;
+    /**
+     *  @property {(typeof factory)} factory
+     */
     this.factory = factory;
     this.#databaseBuffer = databaseBuffer;
     this.#emptyFirst = emptyFirst;

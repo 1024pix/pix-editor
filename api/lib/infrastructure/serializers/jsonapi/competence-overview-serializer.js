@@ -9,9 +9,10 @@ const serializer = new Serializer('competence-overview', {
     'thematicOverviews',
     'tubesCount',
     'skillsCount',
+    'primaryLocales',
   ],
 });
 
-export function serialize(config) {
-  return serializer.serialize(config);
+export function serialize(competenceOverview) {
+  return serializer.serialize(competenceOverview);
 }

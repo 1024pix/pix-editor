@@ -1,16 +1,17 @@
 import { Challenge } from '../models/index.js';
 
 export class CompetenceOverview {
-  constructor({ id, airtableId, name, thematicOverviews }) {
+  constructor({ id, airtableId, name, thematicOverviews, primaryLocales }) {
     this.id = id;
     this.airtableId = airtableId;
     this.name = name;
     this.thematicOverviews = thematicOverviews;
     this.tubesCount = sumBy(thematicOverviews, ({ tubesCount }) => tubesCount);
     this.skillsCount = sumBy(thematicOverviews, ({ skillsCount }) => skillsCount);
+    this.primaryLocales = primaryLocales;
   }
 
-  static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale, localizedFrameworkTubes }) {
+  static buildForChallengesProduction({ competence, thematics, tubes, skills, challenges, locale, localizedFrameworkTubes, primaryLocales }) {
     let id = `${competence.id}:challenges-production`;
     if (locale) id += `:${locale}`;
     return new CompetenceOverview({
@@ -30,10 +31,11 @@ export class CompetenceOverview {
           }),
         )
         .filter((thematicOverview) => !thematicOverview.isEmpty),
+      primaryLocales,
     });
   }
 
-  static buildForChallengesWorkbench({ competence, thematics, tubes, skills, challenges }) {
+  static buildForChallengesWorkbench({ competence, thematics, tubes, skills, challenges, primaryLocales }) {
     const id = `${competence.id}:challenges-workbench`;
     const skillsWithoutWorkbench = skills.filter(({ name }) => name !== '@workbench');
     return new CompetenceOverview({
@@ -51,6 +53,7 @@ export class CompetenceOverview {
           }),
         )
         .filter((thematicOverview) => !thematicOverview.isEmpty),
+      primaryLocales,
     });
   }
 }
