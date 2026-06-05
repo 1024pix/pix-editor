@@ -217,7 +217,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       expect(response.statusCode).to.equal(400);
       expect(response.result).to.deep.equal({
         error: 'Bad Request',
-        message: 'Invalid request params input',
+        message: 'Invalid request payload input',
         statusCode: 400,
       });
     });
