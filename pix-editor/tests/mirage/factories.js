@@ -6,6 +6,7 @@ import area from './factories/area';
 import attachment from './factories/attachment';
 import challenge from './factories/challenge';
 import competence from './factories/competence';
+import competenceOverview from './factories/competence-overview';
 import draftModule from './factories/draft-module';
 import framework from './factories/framework';
 import localizedChallenge from './factories/localized-challenge';
@@ -26,6 +27,7 @@ export default {
   attachment,
   challenge,
   competence,
+  competenceOverview,
   draftModule,
   framework,
   localizedChallenge,
