@@ -28,7 +28,7 @@ export function register(server) {
                 filename: Joi.string(),
                 size: Joi.number(),
                 url: Joi.string(),
-                'mime-type': Joi.string(),
+                'mime-type': Joi.string().allow(null),
                 type: Joi.string(),
               },
               relationships: {
@@ -81,7 +81,7 @@ export function register(server) {
                 filename: Joi.string(),
                 size: Joi.number(),
                 url: Joi.string(),
-                'mime-type': Joi.string(),
+                'mime-type': Joi.string().allow(null),
                 type: Joi.string(),
               },
               relationships: {
