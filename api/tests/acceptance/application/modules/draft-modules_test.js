@@ -54,6 +54,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'short-id': expect.stringMatching(shortIdRegExp),
             ...draftModulePayload,
           },
+          relationships: { module: { data: null } },
         },
       });
 
@@ -81,9 +82,10 @@ describe('Acceptance | Route | draft-modules', () => {
     let draftModules;
 
     beforeEach(async () => {
+      const { id: moduleId } = databaseBuilder.factory.buildModule(domainBuilder.buildModule());
       draftModules = [
         { id: '79cc8f8d-d948-4ce5-bd35-1250b61d6011', shortId: 'abcd1234', internalTitle: 'MOD_a', slug: 'a', details: { level: Module.LEVELS.NOVICE }, visibility: Module.VISIBILITIES.PRIVATE },
-        { id: '6e7f16ae-4d96-4a71-b646-d6c86029e05e', shortId: 'abcd5678', internalTitle: 'MOD_b', slug: 'b', details: { level: Module.LEVELS.INDEPENDENT }, visibility: Module.VISIBILITIES.PUBLIC },
+        { id: moduleId, moduleId, shortId: 'abcd5678', internalTitle: 'MOD_b', slug: 'b', details: { level: Module.LEVELS.INDEPENDENT }, visibility: Module.VISIBILITIES.PUBLIC },
         { id: 'f995ce82-1373-4758-b839-7a844893ef07', shortId: 'abcd9012', internalTitle: 'MOD_c', slug: 'c', details: { level: Module.LEVELS.EXPERT }, visibility: Module.VISIBILITIES.PRIVATE },
       ].map(domainBuilder.buildDraftModule);
 
@@ -114,16 +116,26 @@ describe('Acceptance | Route | draft-modules', () => {
             type: 'draft-modules',
             id: draftModules[1].id,
             attributes: { 'internal-title': draftModules[1].internalTitle, details: draftModules[1].details },
+            relationships: {
+              module: {
+                data: {
+                  id: draftModules[1].moduleId,
+                  type: 'modules',
+                },
+              },
+            },
           },
           {
             type: 'draft-modules',
             id: draftModules[0].id,
             attributes: { 'internal-title': draftModules[0].internalTitle, details: draftModules[0].details },
+            relationships: { module: { data: null } },
           },
           {
             type: 'draft-modules',
             id: draftModules[2].id,
             attributes: { 'internal-title': draftModules[2].internalTitle, details: draftModules[2].details },
+            relationships: { module: { data: null } },
           },
         ],
         meta: {
@@ -156,6 +168,7 @@ describe('Acceptance | Route | draft-modules', () => {
               type: 'draft-modules',
               id: draftModules[0].id,
               attributes: { 'internal-title': draftModules[0].internalTitle, details: draftModules[0].details },
+              relationships: { module: { data: null } },
             },
           ],
           meta: {
@@ -173,7 +186,8 @@ describe('Acceptance | Route | draft-modules', () => {
     let draftModule;
 
     beforeEach(async () => {
-      draftModule = domainBuilder.buildDraftModule();
+      const { id: moduleId } = databaseBuilder.factory.buildModule(domainBuilder.buildModule());
+      draftModule = domainBuilder.buildDraftModule({ id: moduleId, moduleId });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
     });
@@ -206,6 +220,14 @@ describe('Acceptance | Route | draft-modules', () => {
             title: draftModule.title,
             sections: draftModule.sections,
             glossary: draftModule.glossary,
+          },
+          relationships: {
+            module: {
+              data: {
+                id: draftModule.moduleId,
+                type: 'modules',
+              },
+            },
           },
         },
       });

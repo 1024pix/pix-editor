@@ -15,7 +15,8 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     id = crypto.randomUUID();
-    this.server.create('module', { id, internalTitle: 'MON_BEAU_MODULE' });
+    const module = this.server.create('module', { id, internalTitle: 'MON_BEAU_MODULE' });
+    this.server.create('draft-module', { id, module, internalTitle: 'MON_BEAU_MODULE' });
 
     return authenticateSession();
   });
@@ -36,5 +37,17 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     await clickByName('Retour');
 
     assert.strictEqual(currentURL(), `/modules/production`);
+
+    await clickByName('Atelier');
+    await clickByName('Voir le détail du module en prod');
+
+    assert.strictEqual(currentURL(), `/modules/production/${id}`);
+
+    // WORKAROUND: let some time for monaco-editor to settle
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    await clickByName('Retour');
+
+    assert.strictEqual(currentURL(), `/modules/workbench`);
   });
 });

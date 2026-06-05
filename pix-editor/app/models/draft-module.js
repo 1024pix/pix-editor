@@ -1,12 +1,23 @@
-import Module from './module';
+import { belongsTo } from '@ember-data/model';
 
-export default class DraftModule extends Module {
-  get mayShowProductionDetails() {
-    // FIXME must return true if draft belongs to an existing module
-    return false;
+import BaseModule from './base-module';
+
+export default class DraftModule extends BaseModule {
+  @belongsTo('module', { inverse: null, async: true }) module;
+
+  get isDraft() {
+    return true;
   }
 
-  get mayShowDraftDetails() {
-    return true;
+  get moduleId() {
+    return this.belongsTo('module').id();
+  }
+
+  get belongsToModule() {
+    return !!this.moduleId;
+  }
+
+  get isEditionDraft() {
+    return this.belongsToModule;
   }
 }
