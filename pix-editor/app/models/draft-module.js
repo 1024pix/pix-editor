@@ -4,6 +4,7 @@ import BaseModule from './base-module';
 
 export default class DraftModule extends BaseModule {
   @belongsTo('module', { inverse: null, async: true }) module;
+  @belongsTo('draft-module-diff', { inverse: null, async: true }) diff;
 
   get isDraft() {
     return true;

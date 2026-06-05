@@ -58,15 +58,18 @@ export default class ModuleForm extends Component {
 
   <template>
     <div class="module-form">
-      <PixInput
-        @id="internalTitle"
-        @value={{this.internalTitle}}
-        @requiredLabel="Champ obligatoire"
-        {{on "change" this.onInternalTitleChange}}
-        readonly={{@readonly}}
-      >
-        <:label>Titre interne</:label>
-      </PixInput>
+      {{#if @readonly}}
+        <h2 class="module-internal-title">{{this.internalTitle}}</h2>
+      {{else}}
+        <PixInput
+          @id="internalTitle"
+          @value={{this.internalTitle}}
+          @requiredLabel="Champ obligatoire"
+          {{on "change" this.onInternalTitleChange}}
+        >
+          <:label>Titre interne</:label>
+        </PixInput>
+      {{/if}}
 
       <div class="module-form__data-field">
         <PixLabel @requiredLabel="Champ obligatoire">
