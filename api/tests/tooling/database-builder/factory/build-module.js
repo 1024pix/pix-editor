@@ -14,21 +14,31 @@ export function buildModule({
   createdAt,
   updatedAt,
 } = {}) {
-  return databaseBuffer.pushInsertable({
+  const values = {
+    id,
+    shortId,
+    internalTitle,
+    slug,
+    title,
+    isBeta,
+    visibility,
+    ...details,
+    sections,
+    glossary,
+    createdAt,
+    updatedAt,
+  };
+
+  const valuesForDb = {
+    ...values,
+    sections: JSON.stringify(values.sections),
+    glossary: JSON.stringify(values.glossary),
+  };
+
+  databaseBuffer.pushInsertable({
     tableName: 'modules',
-    values: {
-      id,
-      shortId,
-      internalTitle,
-      slug,
-      title,
-      isBeta,
-      visibility,
-      ...details,
-      sections: JSON.stringify(sections),
-      glossary: JSON.stringify(glossary),
-      createdAt,
-      updatedAt,
-    },
+    values: valuesForDb,
   });
+
+  return values;
 }
