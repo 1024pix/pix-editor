@@ -56,7 +56,7 @@ export function buildAttachment({ challengeId, localizedChallengeId, type, datab
   });
   const attachmentData = iterForData.next().value;
   return databaseBuilder.factory.buildAttachment({
-    id: `attachment${localizedChallengeId.split('challenge')[1]}`,
+    id: `attachment${localizedChallengeId.split('challenge')[1]}`.replaceAll('-', ''),
     filename: attachmentData.filename,
     mimeType: attachmentData.mimeType,
     size: attachmentData.size,

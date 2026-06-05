@@ -8,12 +8,14 @@ import { routes } from './lib/routes.js';
 import { plugins } from './lib/infrastructure/plugins/index.js';
 import * as security from './lib/infrastructure/security.js';
 import * as monitoringTools from './lib/infrastructure/monitoring-tools.js';
+import { handleFailAction } from './lib/infrastructure/validation.js';
 
 monitoringTools.installHapiHook();
 
 export async function createServer() {
   const server = new Hapi.server({
     routes: {
+      validate: { failAction: handleFailAction },
       cors: {
         origin: ['*'],
         additionalHeaders: ['X-Requested-With'],
