@@ -1,5 +1,19 @@
 
 
+## v4.32.0 (05/06/2026)
+
+
+### :rocket: Amélioration
+- [#1505](https://github.com/1024pix/pix-editor/pull/1505) [FEATURE] Ajout endpoint /api/draft-modules/:id/diff (PIX-23022).
+- [#1502](https://github.com/1024pix/pix-editor/pull/1502) [FEATURE] Bouton "Voir le détail du module en PROD" (PIX-23003).
+- [#1504](https://github.com/1024pix/pix-editor/pull/1504) [FEATURE]  Ajouter de nouvelles locales aux tutoriels (PIX-22999).
+
+### :building_construction: Tech
+- [#1473](https://github.com/1024pix/pix-editor/pull/1473) [TECH] Ajouter une config npmrc pour ignorer des scripts (PIX-22758).
+
+### :bug: Correction
+- [#1507](https://github.com/1024pix/pix-editor/pull/1507) [BUGFIX] Le schéma Joi de création/modification de pièces-jointes n'est pas assez permissif (PIX-23034).
+
 ## v4.31.1 (03/06/2026)
 
 
