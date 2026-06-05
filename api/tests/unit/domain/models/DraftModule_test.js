@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DraftModule } from '../../../../lib/domain/models/index.js';
+import { domainBuilder } from '../../../test-helper.js';
 
 const uuidRegExp = /^\p{Hex_Digit}{8}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{12}$/u;
 const shortIdRegExp = /^\p{Hex_Digit}{8}$/u;
@@ -17,6 +18,36 @@ describe('Unit | Domain | DraftModule', () => {
       expect(draftModule.id).toMatch(uuidRegExp);
       expect(draftModule.shortId).toMatch(shortIdRegExp);
       expect(draftModule.shortId).toBe(draftModule.id.slice(0, 8));
+    });
+  });
+
+  describe('#serializeToJSON', () => {
+    it('serializes module fields to JSON discarding irrelevant fields', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule({ moduleId: 'pouet' });
+      const serializedFields = [
+        'id',
+        'shortId',
+        'internalTitle',
+        'slug',
+        'title',
+        'isBeta',
+        'visibility',
+        'details',
+        'sections',
+        'glossary',
+      ];
+      const expectedJSON = JSON.stringify(
+        Object.fromEntries(Object.entries(draftModule).filter(([field]) => serializedFields.includes(field))),
+        null,
+        2,
+      );
+
+      // when
+      const json = draftModule.serializeToJSON();
+
+      // then
+      expect(json).toStrictEqual(expectedJSON);
     });
   });
 });

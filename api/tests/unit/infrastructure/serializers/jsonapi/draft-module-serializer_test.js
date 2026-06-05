@@ -31,6 +31,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
                 id: draftModule.moduleId,
               },
             },
+            diff: { links: { related: `/api/draft-modules/${draftModule.moduleId}/diff` } },
           },
         },
       };
