@@ -1,3 +1,5 @@
+import { transformLocalesToUniqLangArray } from './utils.js';
+
 export async function buildCompetencesFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const competenceItems = [];
   const allAreas = learningContentData.flatMap((framework) => framework.areas);
@@ -31,17 +33,18 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
     description: competenceDescription,
   };
   databaseBuilder.factory.buildCompetence(competenceItem);
-  locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation({
-      locale,
-      key: `competence.${competenceItem.id}.name`,
-      value: `${competenceItem.name} ${locale}`,
+  transformLocalesToUniqLangArray(locales)
+    .forEach((locale) => {
+      databaseBuilder.factory.buildTranslation({
+        locale,
+        key: `competence.${competenceItem.id}.name`,
+        value: `${competenceItem.name} ${locale}`,
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale,
+        key: `competence.${competenceItem.id}.description`,
+        value: `${competenceItem.description} ${locale}`,
+      });
     });
-    databaseBuilder.factory.buildTranslation({
-      locale,
-      key: `competence.${competenceItem.id}.description`,
-      value: `${competenceItem.description} ${locale}`,
-    });
-  });
   return competenceItem;
 }

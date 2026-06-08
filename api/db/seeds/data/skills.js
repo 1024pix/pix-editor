@@ -1,5 +1,6 @@
 import { cycle } from './utils.js';
 import { Skill } from '../../../lib/domain/models/index.js';
+import { transformLocalesToUniqLangArray } from './utils.js';
 
 const ignoreEmptyValues = (val) => Boolean(val);
 
@@ -133,12 +134,13 @@ export function buildSkill({
     learningMoreTutorialIds: learningMoreTutorialItems?.map(({ id }) => id),
   };
   databaseBuilder.factory.buildSkill(skillItem);
-  locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation({
-      locale,
-      key: `skill.${skillItem.id}.hint`,
-      value: `${skillItem.hint} ${locale}`,
+  transformLocalesToUniqLangArray(locales)
+    .forEach((locale) => {
+      databaseBuilder.factory.buildTranslation({
+        locale,
+        key: `skill.${skillItem.id}.hint`,
+        value: `${skillItem.hint} ${locale}`,
+      });
     });
-  });
   return skillItem;
 }

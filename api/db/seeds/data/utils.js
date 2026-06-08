@@ -4,3 +4,10 @@ export function* cycle(arr) {
     yield* arr;
   }
 }
+
+export function transformLocalesToUniqLangArray(locales) {
+  const langs = locales.map((locale) => {
+    return locale.split('-')[0];
+  });
+  return [...new Set(langs)];
+}
