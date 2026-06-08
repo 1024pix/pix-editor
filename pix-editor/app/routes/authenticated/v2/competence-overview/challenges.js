@@ -8,10 +8,11 @@ export default class ChallengesRoute extends Route {
 
   beforeModel(transition) {
     const locale = transition.to.queryParams.locale;
+
     if (locale) {
       this.router.transitionTo(
         'authenticated.v2.competence-overview.localized-challenges',
-        transition.to.params.skill_id,
+        transition.to.parent.params.skill_id,
       );
     }
   }

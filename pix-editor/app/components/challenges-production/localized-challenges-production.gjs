@@ -209,7 +209,7 @@ export default class LocalizedChallengesProduction extends Component {
               </:header>
               <:cell>
                 <LinkTo
-                  @route="authenticated.v2.competence-overview.localized-challenge"
+                  @route="authenticated.v2.competence-overview.localized-challenges.localized-challenge"
                   @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}
                 >
                   {{#if challengeLocale.isPrototype}}
@@ -227,7 +227,7 @@ export default class LocalizedChallengesProduction extends Component {
               <:cell>
                 {{#if challengeLocale.isPrimaryInLocale}}
                   <LinkTo
-                    @route="authenticated.v2.competence-overview.challenge"
+                    @route="authenticated.v2.competence-overview.challenges.challenge"
                     @models={{array @overview @skill.id challengeLocale.challenge.id}}
                     @query={{hash locale=undefined}}
                   >
@@ -237,7 +237,7 @@ export default class LocalizedChallengesProduction extends Component {
                   </LinkTo>
                 {{else if challengeLocale.localizedChallengeValue}}
                   <LinkTo
-                    @route="authenticated.v2.competence-overview.localized-challenge"
+                    @route="authenticated.v2.competence-overview.localized-challenges.localized-challenge"
                     @models={{array @overview @skill.id challengeLocale.localizedChallengeId}}
                   >
                     <div class="challenges-production-table__consigne">

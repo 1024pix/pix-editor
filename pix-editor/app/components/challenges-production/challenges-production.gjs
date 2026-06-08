@@ -85,7 +85,10 @@ export default class ChallengesProduction extends Component {
                 Version
               </:header>
               <:cell>
-                <LinkTo @route="authenticated.v2.competence-overview.challenge" @models={{array @overview @skill.id challenge.id}}>
+                <LinkTo
+                  @route="authenticated.v2.competence-overview.challenges.challenge"
+                  @models={{array @overview @skill.id challenge.id}}
+                >
                   {{#if challenge.isPrototype}}
                     Proto
                   {{else}}
@@ -99,7 +102,10 @@ export default class ChallengesProduction extends Component {
                 Consigne
               </:header>
               <:cell>
-                <LinkTo @route="authenticated.v2.competence-overview.challenge" @models={{array @overview @skill.id challenge.id}}>
+                <LinkTo
+                  @route="authenticated.v2.competence-overview.challenges.challenge"
+                  @models={{array @overview @skill.id challenge.id}}
+                >
                   <div class="challenges-production-table__consigne">
                     {{challenge.instruction}}
                   </div>

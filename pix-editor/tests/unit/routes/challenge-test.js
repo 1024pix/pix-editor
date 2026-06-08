@@ -88,7 +88,7 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.v2.competence-overview.challenge',
+              'authenticated.v2.competence-overview.challenges.challenge',
               competenceId,
               'challenges-production',
               skillId,
@@ -109,7 +109,7 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.v2.competence-overview.challenge',
+              'authenticated.v2.competence-overview.challenges.challenge',
               competenceId,
               'challenges-production',
               skillId,
@@ -130,7 +130,7 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.v2.competence-overview.localized-challenge',
+              'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
               competenceId,
               'challenges-production',
               skillId,
@@ -152,7 +152,7 @@ module('Unit | Route | challenge', function (hooks) {
             // then
             sinon.assert.calledOnceWithExactly(
               route.router.transitionTo,
-              'authenticated.v2.competence-overview.localized-challenge',
+              'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
               competenceId,
               'challenges-production',
               skillId,

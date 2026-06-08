@@ -5,11 +5,12 @@ import { service } from '@ember/service';
 export default class CompetenceOverviewTemplate extends Component {
   @service router;
 
-  get displayRouteOverview() {    return [
+  get displayRouteOverview() {
+    return [
       'authenticated.v2.competence-overview.index',
-      'authenticated.v2.competence-overview.localized-challenges',
+      'authenticated.v2.competence-overview.localized-challenges.index',
       'authenticated.v2.competence-overview.loading',
-      'authenticated.v2.competence-overview.challenges'
+      'authenticated.v2.competence-overview.challenges.index',
     ].includes(this.router.currentRouteName);
   }
 
@@ -23,4 +24,3 @@ export default class CompetenceOverviewTemplate extends Component {
     {{outlet}}
   </template>
 }
-

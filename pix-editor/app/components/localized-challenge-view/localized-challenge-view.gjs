@@ -104,7 +104,7 @@ export default class LocalizedChallenge extends Component {
 
   @action
   async cancelEdit() {
-    this.args.cancelEdit()
+    this.args.cancelEdit();
     const localizedChallenge = this.args.localizedChallenge;
     localizedChallenge.rollbackAttributes();
     this.urlsToConsult = localizedChallenge.urlsToConsult?.join('\n') ?? '';

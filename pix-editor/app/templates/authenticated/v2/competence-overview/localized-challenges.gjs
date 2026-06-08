@@ -8,4 +8,5 @@ import LocalizedChallengesProduction from 'pixeditor/components/challenges-produ
     @locale={{@controller.model.locale}}
     @canExpand={{true}}
   />
+  {{outlet}}
 </template>

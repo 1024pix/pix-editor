@@ -30,7 +30,7 @@ export default class ChallengeRoute extends Route {
       if (this.versionManager.isV2 && prototype?.get('isValidated')) {
         if (localizedChallenge.isPrimaryChallenge) {
           return this.router.transitionTo(
-            'authenticated.v2.competence-overview.challenge',
+            'authenticated.v2.competence-overview.challenges.challenge',
             competence.get('id'),
             'challenges-production',
             skill.get('id'),
@@ -39,7 +39,7 @@ export default class ChallengeRoute extends Route {
         }
 
         return this.router.transitionTo(
-          'authenticated.v2.competence-overview.localized-challenge',
+          'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
           competence.get('id'),
           'challenges-production',
           skill.get('id'),
