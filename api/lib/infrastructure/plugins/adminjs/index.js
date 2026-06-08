@@ -1,5 +1,7 @@
 import { AdminJS, ComponentLoader } from 'adminjs';
 import AdminJSSequelize from '@adminjs/sequelize';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { User, Release, Translations, LocalizedChallenge } from './models.js';
 import { checkUserIsAuthenticatedViaBasicAndAdmin } from '../../../application/security-pre-handlers.js';
 
@@ -7,11 +9,13 @@ AdminJS.registerAdapter(AdminJSSequelize);
 
 export { default as plugin } from '@adminjs/hapi';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const componentLoader = new ComponentLoader();
 const Components = {
-  ImportExportComponent: componentLoader.add('ImportExportComponent', './components/ImportExportComponent.jsx'),
-  GetEmbedList: componentLoader.add('GetEmbedList', './components/GetEmbedList.jsx'),
-  Dashboard: componentLoader.add('Dashboard', './components/Dashboard.jsx'),
+  ImportExportComponent: componentLoader.add('ImportExportComponent', join(__dirname, './components/ImportExportComponent.jsx')),
+  GetEmbedList: componentLoader.add('GetEmbedList', join(__dirname, './components/GetEmbedList.jsx')),
+  Dashboard: componentLoader.add('Dashboard', join(__dirname, './components/Dashboard.jsx')),
 };
 
 const readOnlyOptions = {
