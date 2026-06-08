@@ -9,7 +9,7 @@ export default class ChallengeRoute extends Route {
     // TODO quand on aura la page de détails d'une épreuve traduite, transition vers le détail
     const locale = transition.to.queryParams.locale;
     if (locale) {
-      const overview = transition.to.params.overview;
+      const { overview } = this.paramsFor('authenticated.v2.competence-overview');
       const skillId = transition.to.params.skill_id;
       this.router.transitionTo('authenticated.v2.competence-overview.localized-challenges', overview, skillId);
     }
@@ -17,7 +17,8 @@ export default class ChallengeRoute extends Route {
 
   async model(params) {
     const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
-    const { challenge_id, overview, skill_id } = params;
+    const { overview } = this.paramsFor('authenticated.v2.competence-overview');
+    const { challenge_id, skill_id } = params;
     const skill = await this.store.findRecord('skill', skill_id, { backgroundReload: false });
     const challenges = await skill.hasMany('challengesProduction').load();
     const challenge = await this.store.findRecord('challenge', challenge_id);
