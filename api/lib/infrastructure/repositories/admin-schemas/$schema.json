@@ -57,7 +57,12 @@
             "type": "string"
           },
           "readonly": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false
           },
           "sortable": {
             "type": "boolean",

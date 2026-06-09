@@ -31,12 +31,14 @@
     {
       "key": "areaId",
       "label": "Identifiant domaine",
-      "type": "string"
+      "type": "string",
+      "optional": true
     },
     {
       "key": "uploadedLocales",
       "label": "Locales exportées",
-      "type": "string"
+      "type": "string",
+      "pattern": "^\\[(\".+\",? ?)+\\]$"
     }
   ]
 }

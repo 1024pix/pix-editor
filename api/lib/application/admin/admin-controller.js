@@ -25,7 +25,8 @@ export async function save(request, h) {
     const value = entityPayload[field.key];
 
     const isEmpty = value === undefined || value === null || value.toString().trim() === '';
-    if (isEmpty) {
+    const isFieldRequired = !field.optional;
+    if (isFieldRequired && isEmpty) {
       return Boom.badRequest(`Missing value for "${field.key}" in payload`);
     }
 

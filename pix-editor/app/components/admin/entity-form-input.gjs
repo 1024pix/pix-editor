@@ -28,6 +28,10 @@ export default class AdminEntityFormInput extends Component {
     return this.args.error !== null ? 'error' : undefined;
   }
 
+  get requiredLabel() {
+    return this.args.optional ? null : 'Champ obligatoire';
+  }
+
   @action
   onInputChange(inputEvent) {
     const newValue = this.isNumber ? Number(inputEvent.target.value) : inputEvent.target.value;
@@ -38,7 +42,7 @@ export default class AdminEntityFormInput extends Component {
     {{#if this.isString}}
       <PixInput
         @id="{{@key}}"
-        @requiredLabel="Champ obligatoire"
+        @requiredLabel={{this.requiredLabel}}
         @value={{@value}}
         @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
@@ -53,7 +57,7 @@ export default class AdminEntityFormInput extends Component {
     {{else if this.isPassword}}
       <PixInputPassword
         @id="{{@key}}"
-        @requiredLabel="Champ obligatoire"
+        @requiredLabel={{this.requiredLabel}}
         @value={{@value}}
         @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
@@ -67,7 +71,7 @@ export default class AdminEntityFormInput extends Component {
     {{else if this.isNumber}}
       <PixInput
         @id="{{@key}}"
-        @requiredLabel="Champ obligatoire"
+        @requiredLabel={{this.requiredLabel}}
         @value={{@value}}
         @errorMessage={{@error}}
         @validationStatus={{this.validationStatus}}
@@ -85,7 +89,7 @@ export default class AdminEntityFormInput extends Component {
         @options={{@options}}
         @value={{@value}}
         @onChange={{@onChange}}
-        @requiredLabel="Champ obligatoire"
+        @requiredLabel={{this.requiredLabel}}
         @hideDefaultOption={{true}}
         @errorMessage={{@error}}
       >

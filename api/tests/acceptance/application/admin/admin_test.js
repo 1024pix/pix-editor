@@ -444,7 +444,67 @@ describe('Acceptance | Controller | admin', () => {
         });
       });
 
-      describe('when payload is missing properties', () => {
+      describe('when payload is missing optional properties', () => {
+        it('should create a new entity', async () => {
+          // given
+          const framework = databaseBuilder.factory.buildFramework({
+            id: 'frameworkTest1',
+            name: 'Patate',
+          });
+          await databaseBuilder.commit();
+
+          const server = await createServer();
+          const request = {
+            method: 'POST',
+            url: '/api/admin/entities/translations_config',
+            headers: generateAuthorizationHeader(user),
+            payload: {
+              data: {
+                type: 'admin-entities',
+                attributes: {
+                  properties: {
+                    phraseProjectId: 'patate123',
+                    frameworkId: framework.id,
+                    // areaId => optional property,
+                    uploadedLocales: '["fr-fr"]',
+                  },
+                },
+              },
+            },
+          };
+
+          // when
+          const response = await server.inject(request);
+          const translationsConfig = await knex.select('*').from('translations_config');
+
+          // then
+          expect(response.statusCode).to.equal(201);
+          expect(response.result).toStrictEqual({
+            data: {
+              id: expect.stringMatching(/^translations_config:\d+$/),
+              type: 'admin-entities',
+              attributes: {
+                properties: {
+                  id: expect.any(Number),
+                  phraseProjectId: 'patate123',
+                  frameworkId: framework.id,
+                  areaId: null,
+                  uploadedLocales: ['fr-fr'],
+                },
+              },
+            },
+          });
+          expect(translationsConfig.at(-1)).toStrictEqual({
+            id: expect.any(Number),
+            phraseProjectId: 'patate123',
+            frameworkId: framework.id,
+            areaId: null,
+            uploadedLocales: ['fr-fr'],
+          });
+        });
+      });
+
+      describe('when payload is missing required properties', () => {
         it('should return a 400 error', async () => {
           // given
           const uuid = crypto.randomUUID();
