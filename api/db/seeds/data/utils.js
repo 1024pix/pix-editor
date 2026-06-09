@@ -4,3 +4,10 @@ export function* cycle(arr) {
     yield* arr;
   }
 }
+
+export function ensureMainLocaleExists(locales) {
+  if (!locales.includes('fr')) {
+    locales.push('fr');
+  }
+  return locales;
+}

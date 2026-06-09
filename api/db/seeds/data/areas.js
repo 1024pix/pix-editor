@@ -1,3 +1,5 @@
+import { ensureMainLocaleExists } from './utils.js';
+
 export function buildAreasFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const areaItems = [];
   for (let i = 0; i < learningContentConfig.cntFrameworks; ++i) {
@@ -32,13 +34,14 @@ export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBu
   };
   databaseBuilder.factory.buildArea(area);
 
-  locales.forEach((locale) => {
-    databaseBuilder.factory.buildTranslation({
-      locale,
-      key: `area.${id}.title`,
-      value: `${title} ${locale}`,
+  ensureMainLocaleExists(locales)
+    .forEach((locale) => {
+      databaseBuilder.factory.buildTranslation({
+        locale,
+        key: `area.${id}.title`,
+        value: `${title} ${locale}`,
+      });
     });
-  });
 
   return area;
 }
