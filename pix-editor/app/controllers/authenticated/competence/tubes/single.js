@@ -92,6 +92,7 @@ export default class SingleController extends Controller {
         return tube.hasMany('rawSkills').reload();
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-console */
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
@@ -123,6 +124,7 @@ export default class SingleController extends Controller {
         this.router.transitionTo('authenticated.competence.skills', newCompetence.id);
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-console */
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();

@@ -11,8 +11,8 @@ import * as Sentry from '@sentry/ember';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
 import Challenge from 'pixeditor/models/challenge';
 
-import PopInImage from '../pop-in/image';
 import PopInConfirm from '../pop-in/confirm';
+import PopInImage from '../pop-in/image';
 import Files from '../v2/field/files';
 import Illustration from '../v2/field/illustration';
 import FieldToggleFieldComponent from '../v2/field/toggle-field';
@@ -227,6 +227,7 @@ export default class LocalizedChallenge extends Component {
       this.displayUrlsToConsultField = false;
       this.notifications.sendSuccess('Épreuve mise à jour');
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error('oops', error);
       Sentry.captureException(error);
       this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
@@ -274,6 +275,7 @@ export default class LocalizedChallenge extends Component {
       await this.args.localizedChallenge.save();
       this.notifications.sendSuccess('Statut modifié avec succès !');
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.notifications.sendError(

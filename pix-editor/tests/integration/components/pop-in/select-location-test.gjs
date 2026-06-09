@@ -2,10 +2,10 @@ import { render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
 import PopinSelectLocation from 'pixeditor/components/pop-in/select-location';
+import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in-select-location / form-select-location', function (hooks) {

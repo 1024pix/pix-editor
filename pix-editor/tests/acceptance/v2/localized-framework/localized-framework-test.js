@@ -1,10 +1,9 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, fillIn } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
 
 module('Acceptance | v2 | Localized-framework', function (hooks) {
   setupApplicationTest(hooks);
@@ -186,7 +185,7 @@ module('Acceptance | v2 | Localized-framework', function (hooks) {
       this.server.create('localized-framework-tube', { id: 'lft-1', maxLevel: 2, tubeId: 'recTube1', locale: 'nl' });
     });
     test('it should redirect to overview', async function (assert) {
-      const screen = await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
+      await visit('/v2/competences/competence1-1/localized-framework?locale=nl');
 
       assert.strictEqual(currentURL(), '/v2/competences/competence1-1/challenges-production?locale=nl');
     });

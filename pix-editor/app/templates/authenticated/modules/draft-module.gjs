@@ -1,5 +1,5 @@
-import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
+import ModuleForm from 'pixeditor/components/modules/module-form';
 
 <template>
   <header class="page-header">

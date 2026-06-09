@@ -1,17 +1,17 @@
-import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
-import { on } from '@ember/modifier';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import t from 'ember-intl/helpers/t';
-import formatDate from 'ember-intl/helpers/format-date';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
-import Challenge from 'pixeditor/components/form/challenge';
-import CopyLink from 'pixeditor/components/buttons/copy-link';
+import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
+import formatDate from 'ember-intl/helpers/format-date';
+import t from 'ember-intl/helpers/t';
+import CopyLink from 'pixeditor/components/buttons/copy-link';
+import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
+import Challenge from 'pixeditor/components/form/challenge';
 import ChallengeLog from 'pixeditor/components/pop-in/challenge-log';
-import Image from 'pixeditor/components/pop-in/image';
 import Changelog from 'pixeditor/components/pop-in/changelog';
 import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
+import Image from 'pixeditor/components/pop-in/image';
 import SelectLocation from 'pixeditor/components/pop-in/select-location';
+import scrollTop from 'pixeditor/modifiers/scroll-top';
 
 <template>
   <ChallengeHeader

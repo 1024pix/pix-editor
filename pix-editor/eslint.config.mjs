@@ -1,19 +1,22 @@
-import babelParser from '@babel/eslint-parser/experimental-worker';
-import emberParser from 'ember-eslint-parser';
+import pixRecommendedConfig from '@1024pix/eslint-plugin/config';
+import babelParser from '@babel/eslint-parser';
 import emberRecommendedConfig from 'eslint-plugin-ember/configs/recommended';
 import emberGjsRecommendedConfig from 'eslint-plugin-ember/configs/recommended-gjs';
-import n from 'eslint-plugin-n';
+import { parser as emberParser } from 'eslint-plugin-ember/recommended';
+import nRecommendedConfig from 'eslint-plugin-n';
+import prettierRecommendedConfig from 'eslint-plugin-prettier/recommended';
 import qunitRecommendedConfig from 'eslint-plugin-qunit/configs/recommended';
 import globals from 'globals';
-import prettierRecommendedConfig from 'eslint-plugin-prettier/recommended';
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
 const compiledOutputFiles = ['dist/*', 'tmp/*'];
-const dependenciesFiles = ['bower_components/*', 'node_modules/*', 'external/*'];
-const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache'];
+const dependenciesFiles = ['node_modules/*'];
+const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache', 'external/*'];
 const emberTryFiles = ['.node_modules.ember-try/*', 'bower.json.ember-try', 'package.json.ember-try'];
 
 const nodeFiles = [
+  'vite.config.mjs',
+  'babel.config.cjs',
   '.template-lintrc.js',
   'ember-cli-build.js',
   'testem.js',
@@ -27,6 +30,7 @@ const nodeFiles = [
 ];
 
 export default [
+  ...pixRecommendedConfig,
   ...emberRecommendedConfig,
   ...emberGjsRecommendedConfig,
   qunitRecommendedConfig,
@@ -42,9 +46,14 @@ export default [
       sourceType: 'module',
 
       parserOptions: {
+        ecmaVersion: 2018,
+        sourceType: 'module',
         requireConfigFile: false,
-
-        babelOptions: { plugins: [['@babel/plugin-proposal-decorators', { version: 'legacy' }]] },
+        babelOptions: {
+          configFile: false,
+          babelrc: false,
+          plugins: [['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }]],
+        },
       },
     },
 
@@ -65,7 +74,17 @@ export default [
     },
   },
   {
-    ...n.configs['flat/recommended'],
+    files: ['tests/**/*.js', 'tests/**/*.gjs'],
+
+    languageOptions: {
+      globals: {
+        ...globals.embertest,
+        server: false,
+      },
+    },
+  },
+  {
+    ...nRecommendedConfig.configs['flat/recommended'],
     files: nodeFiles,
 
     languageOptions: {
@@ -73,6 +92,14 @@ export default [
 
       ecmaVersion: 5,
       sourceType: 'script',
+    },
+    rules: {
+      'n/no-extraneous-import': [
+        'error',
+        {
+          allowModules: ['eslint-plugin-i18n-json'],
+        },
+      ],
     },
   },
 ];

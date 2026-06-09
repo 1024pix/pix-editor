@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 
 export default class NewModule extends Component {
@@ -27,7 +27,7 @@ export default class NewModule extends Component {
       await newModule.save();
       this.router.replaceWith('authenticated.modules.workbench');
       this.notifications.sendSuccess(`Le module "${newModule.internalTitle}" a été enregistré.`);
-    } catch (err) {
+    } catch {
       this.notifications.sendError('Erreur lors de l’enregistrement du module.');
     } finally {
       this.loader.stop();

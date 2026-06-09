@@ -1,6 +1,6 @@
+import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class ChallengeRoute extends Route {
   @service router;
@@ -20,7 +20,7 @@ export default class ChallengeRoute extends Route {
 
   async model(params) {
     const { localized_challenge_id } = params;
-    const { challengeLocales, skill, competence, overview, locale } = this.modelFor(
+    const { challengeLocales, skill, competence, overview } = this.modelFor(
       'authenticated.v2.competence-overview.localized-challenges',
     );
 
@@ -68,14 +68,4 @@ async function rollBack(localizedChallenge) {
   const attachments = await localizedChallenge.attachments;
   attachments.forEach((attachment) => attachment.rollbackAttributes());
   localizedChallenge.rollbackAttributes();
-}
-
-function byAlternativeVersion(challengeA, challengeB) {
-  if (challengeA.isPrototype) {
-    return -1;
-  }
-  if (challengeB.isPrototype) {
-    return 1;
-  }
-  return challengeA.alternativeVersion - challengeB.alternativeVersion;
 }

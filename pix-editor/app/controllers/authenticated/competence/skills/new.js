@@ -36,6 +36,7 @@ export default class NewController extends Skill {
       this.loader.stop();
       this.notifications.sendSuccess('Acquis créé');
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();

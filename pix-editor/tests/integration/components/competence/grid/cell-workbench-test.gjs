@@ -1,8 +1,9 @@
 import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import CellWorkbench from 'pixeditor/components/competence/grid/cell-workbench';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-workbench', function (hooks) {
   setupIntlRenderingTest(hooks);

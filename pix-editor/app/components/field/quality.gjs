@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
-import { concat, fn } from '@ember/helper';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import { concat, fn } from '@ember/helper';
+import Component from '@glimmer/component';
 import not from 'ember-truth-helpers/helpers/not';
 import Checkbox from 'pixeditor/components/field/checkbox';
 

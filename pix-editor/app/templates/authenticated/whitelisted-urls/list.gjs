@@ -1,7 +1,7 @@
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import not from 'ember-truth-helpers/helpers/not';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import not from 'ember-truth-helpers/helpers/not';
 import List from 'pixeditor/components/whitelisted-urls/list';
 <template>
   <header class="page-header">

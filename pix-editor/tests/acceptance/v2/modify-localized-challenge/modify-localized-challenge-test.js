@@ -1,14 +1,13 @@
 import { clickByText, fillByLabel, visit, within } from '@1024pix/ember-testing-library';
-import { click, currentURL } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { click } from '@ember/test-helpers';
+import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallengeModel from 'pixeditor/models/localized-challenge';
-import { module, test } from 'qunit';
-
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
-import { selectFiles } from 'ember-file-upload/test-support';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Acceptance | v2 | Modify-Localized-Challenge', function (hooks) {

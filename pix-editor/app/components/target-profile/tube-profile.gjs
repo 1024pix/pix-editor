@@ -1,5 +1,5 @@
-import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 <template>
   <div {{on "click" (fn @clickAction @tube)}} ...attributes>
     <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>

@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import Component from '@glimmer/component';
 
 export default class PopInConfirm extends Component {
   <template>

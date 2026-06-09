@@ -1,7 +1,8 @@
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Skills from 'pixeditor/components/list/skills';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | list/skill', function (hooks) {
   setupIntlRenderingTest(hooks);

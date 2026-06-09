@@ -1,8 +1,8 @@
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import or from 'ember-truth-helpers/helpers/or';
-import { on } from '@ember/modifier';
 import fileQueue from 'ember-file-upload/helpers/file-queue';
+import or from 'ember-truth-helpers/helpers/or';
 
 export default class Illustration extends Component {
   <template>

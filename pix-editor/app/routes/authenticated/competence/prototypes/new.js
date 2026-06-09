@@ -1,7 +1,7 @@
 import { service } from '@ember/service';
+import Challenge from 'pixeditor/models/challenge';
 
 import PrototypeRoute from './single';
-import Challenge from 'pixeditor/models/challenge';
 
 export default class NewRoute extends PrototypeRoute {
   templateName = 'authenticated/competence/prototypes/single';

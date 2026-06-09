@@ -1,7 +1,7 @@
+import { Input } from '@ember/component';
+import { concat } from '@ember/helper';
 import { guidFor } from '@ember/object/internals';
 import Component from '@glimmer/component';
-import { concat } from '@ember/helper';
-import { Input } from '@ember/component';
 
 export default class Checkbox extends Component {
   <template>

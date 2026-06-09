@@ -1,9 +1,9 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import { on } from '@ember/modifier';
-import { fn } from '@ember/helper';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 import t from 'ember-intl/helpers/t';
 
 export default class PopinTubeLevel extends Component {

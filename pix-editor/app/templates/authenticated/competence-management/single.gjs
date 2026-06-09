@@ -1,6 +1,6 @@
+import { on } from '@ember/modifier';
 import Input from 'pixeditor/components/field/input';
 import Textarea from 'pixeditor/components/field/textarea';
-import { on } from '@ember/modifier';
 <template>
   <div class="main-left competence-management">
     <div class="ui main-title">

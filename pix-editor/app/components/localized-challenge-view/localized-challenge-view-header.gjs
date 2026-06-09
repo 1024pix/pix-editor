@@ -4,12 +4,13 @@ import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import { concat } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+
 import DropdownMenu from '../dropdown-menu';
 
 export default class LocalizedChallengeViewHeader extends Component {

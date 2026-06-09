@@ -1,7 +1,8 @@
 import { render } from '@1024pix/ember-testing-library';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Alternatives from 'pixeditor/components/list/alternatives';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | list/alternatives', function (hooks) {
   setupIntlRenderingTest(hooks);

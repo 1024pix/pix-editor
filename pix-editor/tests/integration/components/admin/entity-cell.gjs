@@ -1,7 +1,7 @@
 import { clickByName, render } from '@1024pix/ember-testing-library';
+import AdminEntityCell from 'pixeditor/components/admin/entity-cell';
 import { module, test } from 'qunit';
 
-import AdminEntityCell from 'pixeditor/components/admin/entity-cell';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | admin | entity-cell', function (hooks) {

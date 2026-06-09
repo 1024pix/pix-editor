@@ -1,5 +1,5 @@
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
 <template>
   <PixModal @title="Déconnexion" @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}}>
     <:content>

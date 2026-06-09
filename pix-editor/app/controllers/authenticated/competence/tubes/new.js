@@ -30,6 +30,7 @@ export default class NewController extends Tube {
       this.notifications.sendSuccess('Tube créé');
       this.router.transitionTo('authenticated.competence.tubes.single', await this.tube.competence, this.tube);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.notifications.sendError('Erreur lors de la création du tube');

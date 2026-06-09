@@ -4,6 +4,7 @@ import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+
 import LocaleTag from '../v2/locale-tag';
 
 export default class ChallengesProductionHeader extends Component {

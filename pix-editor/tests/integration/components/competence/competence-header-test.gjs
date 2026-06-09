@@ -1,4 +1,4 @@
-import { render, fillByLabel, within } from '@1024pix/ember-testing-library';
+import { fillByLabel, render, within } from '@1024pix/ember-testing-library';
 import CompetenceHeader from 'pixeditor/components/competence/competence-header';
 import { module, test } from 'qunit';
 

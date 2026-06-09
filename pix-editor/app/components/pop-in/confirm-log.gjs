@@ -1,11 +1,11 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { Textarea } from '@ember/component';
+import { fn } from '@ember/helper';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import Checkbox from 'pixeditor/components/field/checkbox';
-import { Textarea } from '@ember/component';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 import t from 'ember-intl/helpers/t';
-import { fn } from '@ember/helper';
+import Checkbox from 'pixeditor/components/field/checkbox';
 
 export default class PopInConfirmLog extends Component {
   <template>

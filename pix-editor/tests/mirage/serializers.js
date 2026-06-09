@@ -3,8 +3,8 @@
 import application from './serializers/application';
 import challenge from './serializers/challenge';
 import missionSummary from './serializers/mission-summary';
-import staticCourseSummary from './serializers/static-course-summary';
 import staticCourse from './serializers/static-course';
+import staticCourseSummary from './serializers/static-course-summary';
 
 export default {
   application,

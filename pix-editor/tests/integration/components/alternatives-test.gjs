@@ -1,9 +1,8 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
+import Alternatives from 'pixeditor/components/alternatives';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-
-import Alternatives from 'pixeditor/components/alternatives';
 
 import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 

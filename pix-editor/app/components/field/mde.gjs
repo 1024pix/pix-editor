@@ -1,11 +1,10 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { concat } from '@ember/helper';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { concat } from '@ember/helper';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import { on } from '@ember/modifier';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
 import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor';
 

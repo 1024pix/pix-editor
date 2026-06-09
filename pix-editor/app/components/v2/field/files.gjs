@@ -2,13 +2,13 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { concat, fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import fileQueue from 'ember-file-upload/helpers/file-queue';
 import { or } from 'ember-truth-helpers';
-import { on } from '@ember/modifier';
 
 export default class Files extends Component {
   inputUploadId = `add-file-input-${guidFor(this)}`;

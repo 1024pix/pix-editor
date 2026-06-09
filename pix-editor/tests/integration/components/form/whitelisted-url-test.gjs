@@ -1,8 +1,8 @@
 import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
+import FormWhitelistedUrl from 'pixeditor/components/form/whitelisted-url';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-import FormWhitelistedUrl from 'pixeditor/components/form/whitelisted-url';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

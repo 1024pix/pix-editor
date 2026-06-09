@@ -1,8 +1,9 @@
 import { click, render } from '@ember/test-helpers';
+import CompetenceActions from 'pixeditor/components/competence/competence-actions';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import CompetenceActions from 'pixeditor/components/competence/competence-actions';
 
 module('Integration | Component | competence/competence-actions', function (hooks) {
   setupIntlRenderingTest(hooks);

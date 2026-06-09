@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class LocalizedChallengeController extends Controller {
   @tracked edition = false;

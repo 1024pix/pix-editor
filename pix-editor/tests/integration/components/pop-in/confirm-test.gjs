@@ -1,7 +1,8 @@
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Confirm from 'pixeditor/components/pop-in/confirm';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | popin-confirm', function (hooks) {
   setupIntlRenderingTest(hooks);

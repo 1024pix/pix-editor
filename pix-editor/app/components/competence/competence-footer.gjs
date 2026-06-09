@@ -1,8 +1,8 @@
+import { concat, fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { concat, fn } from '@ember/helper';
 import eq from 'ember-truth-helpers/helpers/eq';
-import { on } from '@ember/modifier';
 
 export default class CompetenceFooter extends Component {
   <template>

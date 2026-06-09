@@ -1,8 +1,9 @@
 import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Tube from 'pixeditor/components/form/tube';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | tube-form', function (hooks) {
   setupIntlRenderingTest(hooks);

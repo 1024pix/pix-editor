@@ -128,6 +128,7 @@ export default class SingleController extends Controller {
       this.loader.stop();
       this.notifications.sendSuccess(this.intl.t('skill.changelog.update-status'));
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
@@ -160,6 +161,7 @@ export default class SingleController extends Controller {
       this.notifications.sendSuccess('Acquis et épreuves associées dupliqués');
       this.router.transitionTo('authenticated.competence.skills.single', competence, newSkill);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.notifications.sendError("Erreur lors de la duplication de l'acquis");
@@ -218,6 +220,7 @@ export default class SingleController extends Controller {
               return Promise.all(updateChallenges);
             })
             .catch((error) => {
+              /* eslint-disable-next-line no-console */
               console.error(error);
               Sentry.captureException(error);
               this.notifications.sendError(this.intl.t('skill.archive.error'));
@@ -280,6 +283,7 @@ export default class SingleController extends Controller {
               return Promise.all(updateChallenges);
             })
             .catch((error) => {
+              /* eslint-disable-next-line no-console */
               console.error(error);
               Sentry.captureException(error);
               this.notifications.sendError(this.intl.t('skill.obsolete.error'));

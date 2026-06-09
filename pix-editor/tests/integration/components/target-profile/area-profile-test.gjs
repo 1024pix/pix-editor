@@ -1,8 +1,9 @@
 import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import AreaProfile from 'pixeditor/components/target-profile/area-profile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | target-profile/area-profile', function (hooks) {
   setupIntlRenderingTest(hooks);

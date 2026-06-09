@@ -97,6 +97,7 @@ export default class SidebarNavigationComponent extends Component {
       router.transitionTo('authenticated');
     } catch (error) {
       Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
       console.error(error);
       this.notifications.sendError('Erreur lors de la création du Référentiel');
     } finally {

@@ -1,10 +1,10 @@
-import Component from '@glimmer/component';
-import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import { inject as service } from '@ember/service';
+import PixTable from '@1024pix/pix-ui/components/pix-table';
+import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import { fn } from '@ember/helper';
+import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 
 import AdminEntityCell from './entity-cell';
 

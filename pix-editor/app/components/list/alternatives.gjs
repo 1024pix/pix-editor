@@ -1,8 +1,9 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import SortedList from './sorted';
 import EmberTable from 'ember-table/components/ember-table/component';
 import convertLanguageAsFlag from 'pixeditor/helpers/convert-language-as-flag';
+
+import SortedList from './sorted';
 
 export default class AlternativesList extends SortedList {
   <template>

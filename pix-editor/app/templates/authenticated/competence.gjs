@@ -1,10 +1,9 @@
-import CompetenceHeader from 'pixeditor/components/competence/competence-header';
 import CompetenceActions from 'pixeditor/components/competence/competence-actions';
-import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
-import Workbench from 'pixeditor/components/list/workbench';
 import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
+import CompetenceGrid from 'pixeditor/components/competence/competence-grid';
+import CompetenceHeader from 'pixeditor/components/competence/competence-header';
+import Workbench from 'pixeditor/components/list/workbench';
 import MainRightSlot from 'pixeditor/components/main-right-slot';
-
 import Sorting from 'pixeditor/components/pop-in/sorting';
 
 <template>

@@ -1,4 +1,4 @@
-import { render, clickByName } from '@1024pix/ember-testing-library';
+import { clickByName, render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { click, settled } from '@ember/test-helpers';

@@ -12,8 +12,9 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import Challenge from 'pixeditor/models/challenge';
-import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 import ChallengeLocale from 'pixeditor/models/challenge-locale';
+import LocalizedChallenge from 'pixeditor/models/localized-challenge';
+
 import DropdownMenu from '../dropdown-menu';
 import ChallengesProductionHeader from './challenges-production-header';
 

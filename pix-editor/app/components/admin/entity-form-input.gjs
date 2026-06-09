@@ -1,11 +1,9 @@
-import Component from '@glimmer/component';
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixInputPassword from '@1024pix/pix-ui/components/pix-input-password';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
-import { eq } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 
 export default class AdminEntityFormInput extends Component {
   get isString() {

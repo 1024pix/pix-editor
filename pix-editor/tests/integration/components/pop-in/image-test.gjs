@@ -1,7 +1,8 @@
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Image from 'pixeditor/components/pop-in/image';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | popin-image', function (hooks) {
   setupIntlRenderingTest(hooks);

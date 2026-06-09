@@ -1,6 +1,6 @@
-import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
-import Component from '@glimmer/component';
 import { service } from '@ember/service';
+import Component from '@glimmer/component';
+import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
 
 export default class CompetenceOverviewTemplate extends Component {
   @service router;

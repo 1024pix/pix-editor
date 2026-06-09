@@ -1,9 +1,9 @@
 import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
-import { module, test } from 'qunit';
 import { click } from '@ember/test-helpers';
+import AdminEntityFormInput from 'pixeditor/components/admin/entity-form-input';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import AdminEntityFormInput from 'pixeditor/components/admin/entity-form-input';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | admin | entity-form-input', function (hooks) {
@@ -11,7 +11,7 @@ module('Integration | Component | admin | entity-form-input', function (hooks) {
 
   let screen;
 
-  module('when field\'s type is "enum"', function (hooks) {
+  module('when field\'s type is "enum"', function () {
     const field = {
       type: 'enum',
       key: 'flavour',

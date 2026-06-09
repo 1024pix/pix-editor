@@ -1,13 +1,13 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import { concat, hash } from '@ember/helper';
+import { hash } from '@ember/helper';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
+import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { eq } from 'ember-truth-helpers';
-import { htmlSafe } from '@ember/template';
 
 import CompetenceOverviewSkill from './competence-overview-skill';
 

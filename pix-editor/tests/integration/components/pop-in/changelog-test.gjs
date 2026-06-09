@@ -1,8 +1,9 @@
 import { click, render } from '@ember/test-helpers';
+import Changelog from 'pixeditor/components/pop-in/changelog';
 import { module, test } from 'qunit';
 import Sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Changelog from 'pixeditor/components/pop-in/changelog';
 
 module('Integration | Component | popin-changelog', function (hooks) {
   setupIntlRenderingTest(hooks);

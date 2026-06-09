@@ -1,5 +1,5 @@
-import ChallengesProductionHeader from 'pixeditor/components/challenges-production/challenges-production-header';
 import { hash } from '@ember/helper';
+import ChallengesProductionHeader from 'pixeditor/components/challenges-production/challenges-production-header';
 import Loader from 'pixeditor/components/loader';
 
 <template>

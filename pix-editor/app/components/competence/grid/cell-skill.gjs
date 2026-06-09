@@ -1,8 +1,8 @@
-import Component from '@glimmer/component';
+import { concat } from '@ember/helper';
 import { LinkTo } from '@ember/routing';
+import Component from '@glimmer/component';
 import and from 'ember-truth-helpers/helpers/and';
 import or from 'ember-truth-helpers/helpers/or';
-import { concat } from '@ember/helper';
 
 export default class CompetenceGridCellSkillComponent extends Component {
   <template>

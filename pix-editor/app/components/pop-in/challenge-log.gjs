@@ -1,11 +1,11 @@
-import { action } from '@ember/object';
-import { service } from '@ember/service';
-import { on } from '@ember/modifier';
-import { concat } from '@ember/helper';
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { concat } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { eq } from 'ember-truth-helpers';
 import FormNote from 'pixeditor/components/form/note';
 import ListNotes from 'pixeditor/components/list/notes';

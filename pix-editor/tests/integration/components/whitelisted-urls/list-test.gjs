@@ -1,7 +1,7 @@
 import { clickByName, clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
+import WhitelistedUrlsList from 'pixeditor/components/whitelisted-urls/list';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-import WhitelistedUrlsList from 'pixeditor/components/whitelisted-urls/list';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

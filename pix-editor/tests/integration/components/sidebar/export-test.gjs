@@ -1,8 +1,8 @@
-import { render, clickByText } from '@1024pix/ember-testing-library';
-import { module, test } from 'qunit';
-import sinon from 'sinon';
+import { clickByText, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import SidebarExport from 'pixeditor/components/sidebar/export';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

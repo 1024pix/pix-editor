@@ -1,7 +1,8 @@
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import Notes from 'pixeditor/components/list/notes';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | note-list', function (hooks) {
   setupIntlRenderingTest(hooks);

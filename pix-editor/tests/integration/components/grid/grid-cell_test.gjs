@@ -1,52 +1,46 @@
 import Service from '@ember/service';
+import { render } from '@ember/test-helpers';
+import GridCell from 'pixeditor/components/competence/grid/grid-cell';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-import { render } from '@ember/test-helpers';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import GridCell from 'pixeditor/components/competence/grid/grid-cell';
 
 module('Integration | Component | competence/grid/grid-cell', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  let section, view;
-  module('#draftSkill', function (hooks) {
-    hooks.beforeEach(function () {
-      this.section = 'skills';
-      this.view = 'draft';
-    });
-
+  module('#draftSkill', function () {
     test('it should render a proper cell type if there is a skill', async function (assert) {
-      const self = this;
-
       // given
+      const section = 'skills';
+      const viewMode = 'draft';
       const store = this.owner.lookup('service:store');
-      this.skill = store.createRecord('skill', {
+      const skill = store.createRecord('skill', {
         id: 'skillId',
         status: 'En construction',
       });
 
       // when
-      await render(
-        <template><GridCell @section={{self.section}} @view={{self.view}} @skill={{self.skill}} /></template>,
-      );
+      await render(<template><GridCell @section={{section}} @view={{viewMode}} @skill={{skill}} /></template>);
 
       // then
       assert.dom('.skill-cell').exists();
     });
     test('it should render no cell if there is no skill', async function (assert) {
-      const self = this;
+      const section = 'skills';
+      const viewMode = 'draft';
 
       // when
-      await render(<template><GridCell @section={{self.section}} @view={{self.view}} /></template>);
+      await render(<template><GridCell @section={{section}} @view={{viewMode}} /></template>);
 
       // then
       assert.dom('.skill-cell__empty').exists();
     });
 
     test('it should render `add-skill` if user may edit skill', async function (assert) {
-      const self = this;
-
       // given
+      const section = 'skills';
+      const viewMode = 'draft';
       class AccessService extends Service {
         constructor() {
           super(...arguments);
@@ -57,7 +51,7 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
       this.owner.register('service:access', AccessService);
 
       // when
-      await render(<template><GridCell @section={{self.section}} @view={{self.view}} /></template>);
+      await render(<template><GridCell @section={{section}} @view={{viewMode}} /></template>);
 
       // then
       assert.dom('.add-skill').exists();

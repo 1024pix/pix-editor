@@ -1,16 +1,16 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import not from 'ember-truth-helpers/helpers/not';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import Card from 'pixeditor/components/card';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import formatDate from 'ember-intl/helpers/format-date';
-import { fn } from '@ember/helper';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
-import eq from 'ember-truth-helpers/helpers/eq';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
+import formatDate from 'ember-intl/helpers/format-date';
+import eq from 'ember-truth-helpers/helpers/eq';
+import not from 'ember-truth-helpers/helpers/not';
+import Card from 'pixeditor/components/card';
 <template>
   <header class="page-header">
     <h1 class="page-title">{{@controller.model.staticCourse.name}}</h1>
