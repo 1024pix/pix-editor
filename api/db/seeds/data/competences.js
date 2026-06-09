@@ -1,4 +1,4 @@
-import { transformLocalesToUniqLangArray } from './utils.js';
+import { ensureMainLocaleExists } from './utils.js';
 
 export async function buildCompetencesFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const competenceItems = [];
@@ -33,7 +33,7 @@ export function buildCompetence({ indexCompetence, areaItem, databaseBuilder, lo
     description: competenceDescription,
   };
   databaseBuilder.factory.buildCompetence(competenceItem);
-  transformLocalesToUniqLangArray(locales)
+  ensureMainLocaleExists(locales)
     .forEach((locale) => {
       databaseBuilder.factory.buildTranslation({
         locale,

@@ -1,4 +1,4 @@
-import { transformLocalesToUniqLangArray } from './utils.js';
+import { ensureMainLocaleExists } from './utils.js';
 
 export function buildAreasFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const areaItems = [];
@@ -34,7 +34,7 @@ export function buildArea({ indexFramework, indexArea, frameworkItem, databaseBu
   };
   databaseBuilder.factory.buildArea(area);
 
-  transformLocalesToUniqLangArray(locales)
+  ensureMainLocaleExists(locales)
     .forEach((locale) => {
       databaseBuilder.factory.buildTranslation({
         locale,

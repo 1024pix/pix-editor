@@ -5,9 +5,9 @@ export function* cycle(arr) {
   }
 }
 
-export function transformLocalesToUniqLangArray(locales) {
-  const langs = locales.map((locale) => {
-    return locale.split('-')[0];
-  });
-  return [...new Set(langs)];
+export function ensureMainLocaleExists(locales) {
+  if (!locales.includes('fr')) {
+    locales.push('fr');
+  }
+  return locales;
 }

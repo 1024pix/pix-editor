@@ -1,5 +1,3 @@
-import { transformLocalesToUniqLangArray } from './utils.js';
-
 const TUBE_NAMES_POOL = [
   'noix',
   'amande',
@@ -113,18 +111,17 @@ export function buildTube({ indexTube, suffix = '', thematicItem, databaseBuilde
     practicalTitle: tubePracticalTitle,
   };
   databaseBuilder.factory.buildTube(tubeItem);
-  transformLocalesToUniqLangArray(locales)
-    .forEach((locale) => {
-      databaseBuilder.factory.buildTranslation({
-        locale,
-        key: `tube.${tubeItem.id}.practicalTitle`,
-        value: `${tubeItem.practicalTitle} ${locale}`,
-      });
-      databaseBuilder.factory.buildTranslation({
-        locale,
-        key: `tube.${tubeItem.id}.practicalDescription`,
-        value: `${tubeItem.practicalDescription} ${locale}`,
-      });
+  locales.forEach((locale) => {
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `tube.${tubeItem.id}.practicalTitle`,
+      value: `${tubeItem.practicalTitle} ${locale}`,
     });
+    databaseBuilder.factory.buildTranslation({
+      locale,
+      key: `tube.${tubeItem.id}.practicalDescription`,
+      value: `${tubeItem.practicalDescription} ${locale}`,
+    });
+  });
   return tubeItem;
 }
