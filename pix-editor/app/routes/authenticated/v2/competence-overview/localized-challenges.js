@@ -10,12 +10,14 @@ export default class LocalizedChallengesRoute extends Route {
   beforeModel(transition) {
     const locale = transition.to.queryParams.locale;
     if (!locale) {
-      this.router.transitionTo('authenticated.v2.competence-overview.challenges', transition.to.params.skill_id);
+      this.router.transitionTo('authenticated.v2.competence-overview.challenges', transition.to.parent.params.skill_id);
     }
   }
 
   async model(params) {
     const { locale, competence } = this.modelFor('authenticated.v2');
+    const { competenceOverview } = this.modelFor('authenticated.v2.competence-overview');
+
     const { overview } = this.paramsFor('authenticated.v2.competence-overview');
     const { skill_id } = params;
     const skill = await this.store.findRecord('skill', skill_id);
@@ -23,7 +25,11 @@ export default class LocalizedChallengesRoute extends Route {
 
     const challengeLocales = await Promise.all(
       challenges
-        .filter((challenge) => challenge.locales.includes(locale) || challenge.locales.includes('fr'))
+        .filter(
+          (challenge) =>
+            challenge.locales.includes(locale) ||
+            competenceOverview.primaryLocales.some((locale) => challenge.locales.includes(locale)),
+        )
         .sort(byAlternativeVersion)
         .map((challenge) => challenge.getChallengeForLocale(locale)),
     );

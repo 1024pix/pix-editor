@@ -21,6 +21,8 @@ describe('Acceptance | Route | competence-overviews', () => {
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
 
+      databaseBuilder.factory.buildTranslationsConfig({ id: 1, phraseProjectId: 'fraiseId', frameworkId: 'recFmk1', uploadedLocales: ['fr'] });
+
       databaseBuilder.factory.buildTranslation({
         key: 'competence.recCompetence1.name',
         locale: 'fr',
@@ -327,6 +329,7 @@ describe('Acceptance | Route | competence-overviews', () => {
             attributes: {
               'airtable-id': 'recCompetence1',
               name: '2.2 Mon super titre',
+              'primary-locales': ['fr'],
               'tubes-count': 4,
               'skills-count': 5,
               'thematic-overviews': [
@@ -490,6 +493,7 @@ describe('Acceptance | Route | competence-overviews', () => {
             attributes: {
               'airtable-id': 'recCompetence1',
               name: '2.2 Mon super titre',
+              'primary-locales': ['fr'],
               'tubes-count': 2,
               'skills-count': 2,
               'thematic-overviews': [
@@ -560,6 +564,8 @@ describe('Acceptance | Route | competence-overviews', () => {
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
+
+      databaseBuilder.factory.buildTranslationsConfig({ id: 1, phraseProjectId: 'fraiseId', frameworkId: 'recFmk1', uploadedLocales: ['fr'] });
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.recCompetence1.name',
@@ -873,6 +879,7 @@ describe('Acceptance | Route | competence-overviews', () => {
           attributes: {
             'airtable-id': 'recCompetence1',
             name: '2.2 Mon super titre',
+            'primary-locales': ['fr'],
             'tubes-count': 3,
             'skills-count': 5,
             'thematic-overviews': [

@@ -8,38 +8,35 @@ export default class ChallengeRoute extends Route {
 
   beforeModel(transition) {
     const locale = transition.to.queryParams.locale;
+
     if (!locale) {
       const { competence_id: competenceId } = this.paramsFor('authenticated.v2');
-      const overview = transition.to.params.overview;
-      const skillId = transition.to.params.skill_id;
+      const { skill_id: skillId } = this.paramsFor('authenticated.v2.competence-overview.localized-challenges');
+      const { overview } = this.paramsFor('authenticated.v2.competence-overview');
+
       this.router.transitionTo('authenticated.v2.competence-overview.challenges', competenceId, overview, skillId);
     }
   }
 
   async model(params) {
-    const { locale, competence_id } = this.paramsFor('authenticated.v2');
-    const { overview, skill_id, localized_challenge_id } = params;
-    const competence = await this.store.findRecord('competence', competence_id);
-    const skill = await this.store.findRecord('skill', skill_id, { backgroundReload: false });
-    const challenges = await skill.hasMany('challengesProduction').load();
-
-    const challengeLocales = await Promise.all(
-      challenges
-        .filter((challenge) => challenge.locales.includes(locale) || challenge.locales.includes('fr'))
-        .sort(byAlternativeVersion)
-        .map((challenge) => challenge.getChallengeForLocale(locale)),
+    const { localized_challenge_id } = params;
+    const { challengeLocales, skill, competence, overview, locale } = this.modelFor(
+      'authenticated.v2.competence-overview.localized-challenges',
     );
+
     const challengeLocale = challengeLocales.find(
       (challengeLocale) => challengeLocale?.localizedChallengeValue?.id === localized_challenge_id,
     );
+
     if (!challengeLocale) {
       return this.router.transitionTo(
         'authenticated.v2.competence-overview.challenges',
-        competence_id,
+        competence.id,
         overview,
-        skill_id,
+        skill.id,
       );
     }
+
     const localizedChallenge = challengeLocale.localizedChallengeValue;
     await challengeLocale.challenge.attachments;
     await localizedChallenge.attachments;
@@ -48,11 +45,17 @@ export default class ChallengeRoute extends Route {
 
   @action
   async willTransition(transition) {
-    const edition = this.controllerFor('authenticated.v2.localized-challenge').edition;
+    const edition = this.controllerFor(
+      'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
+    ).edition;
     if (edition && !transition.to.find((route) => route.name === this.routeName)) {
       if (confirm("Êtes vous sur de vouloir quitter l'edition de l'épreuve?")) {
-        this.controllerFor('authenticated.v2.localized-challenge').cancelEdit();
-        const { localizedChallenge } = this.controllerFor('authenticated.v2.localized-challenge').model;
+        this.controllerFor(
+          'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
+        ).cancelEdit();
+        const { localizedChallenge } = this.controllerFor(
+          'authenticated.v2.competence-overview.localized-challenges.localized-challenge',
+        ).model;
         await rollBack(localizedChallenge);
       } else {
         transition.abort();

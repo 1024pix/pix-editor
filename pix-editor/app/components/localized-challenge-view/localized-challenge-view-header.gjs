@@ -20,6 +20,7 @@ export default class LocalizedChallengeViewHeader extends Component {
   @action
   closePanel() {
     this.multipanelManager.onDetailsClosed();
+
     this.router.transitionTo(
       'authenticated.v2.competence-overview.localized-challenges',
       this.args.competence.id,

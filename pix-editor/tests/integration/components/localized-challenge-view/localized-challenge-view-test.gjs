@@ -104,8 +104,8 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     let mayChangeLocalizedChallengeStatusStub, mayEditLocalizedStub;
     hooks.beforeEach(function () {
       edition = false;
-      mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
       save = sinon.stub();
+      mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
       mayEditLocalizedStub = sinon.stub().returns(true);
 
       class AccessService extends Service {
@@ -423,6 +423,11 @@ module('Integration | Component | localized-challenge-view | localized-challenge
     module('when primary challenge has an embed URL', function () {
       test('it should warn when embedUrl is invalid', async function (assert) {
         // given
+        class AccessService extends Service {
+          mayChangeLocalizedChallengeStatus = () => true;
+          mayEditLocalized = true;
+        }
+        this.owner.register('service:access', AccessService);
         challenge.embedURL = 'https://mon-embed-url.fr';
 
         // when
@@ -438,6 +443,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
             />
           </template>,
         );
+
         await fillByLabel('Embed URL', 'un embed url raté');
 
         // then
@@ -446,6 +452,11 @@ module('Integration | Component | localized-challenge-view | localized-challenge
 
       test('it should not warn when embedUrl is valid', async function (assert) {
         // given
+        class AccessService extends Service {
+          mayChangeLocalizedChallengeStatus = () => true;
+          mayEditLocalized = true;
+        }
+        this.owner.register('service:access', AccessService);
         challenge.embedURL = 'https://mon-embed-url.fr';
 
         // when
@@ -461,6 +472,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
             />
           </template>,
         );
+
         await fillByLabel('Embed URL', 'https://mon-autre-embed-url.fr');
 
         // then

@@ -7,4 +7,5 @@ import ChallengesProduction from 'pixeditor/components/challenges-production/cha
     @competenceId={{@controller.model.competenceId}}
     @canExpand={{true}}
   />
+  {{outlet}}
 </template>

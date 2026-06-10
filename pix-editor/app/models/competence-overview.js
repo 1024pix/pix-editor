@@ -4,6 +4,7 @@ export default class CompetenceOverviewModel extends Model {
   @attr() airtableId;
   @attr() name;
   @attr() thematicOverviews;
+  @attr() primaryLocales;
   @attr('number') tubesCount;
   @attr('number') skillsCount;
 

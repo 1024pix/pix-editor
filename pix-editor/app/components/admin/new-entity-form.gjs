@@ -15,7 +15,11 @@ export default class NewAdminEntityForm extends Component {
 
   get emptyFields() {
     return Object.entries(this.newEntity)
-      .filter(([_key, value]) => value === undefined || value.toString().trim() === '')
+      .filter(([key, value]) => {
+        const isFieldEmpty = value === undefined || value.toString().trim() === '';
+        const isFieldRequired = !this.args.entityFields.find((field) => field.key === key).optional;
+        return isFieldRequired && isFieldEmpty;
+      })
       .map(([key]) => key);
   }
 
@@ -82,6 +86,7 @@ export default class NewAdminEntityForm extends Component {
             @label={{field.label}}
             @options={{field.options}}
             @value={{field.value}}
+            @optional={{field.optional}}
             @error={{field.error}}
             @onChange={{field.onChange}}
           />

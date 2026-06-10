@@ -30,6 +30,7 @@ module('Acceptance | competences | challenge-production', function (hooks) {
     this.server.create('competence-overview', {
       id: 'competence1:challenges-production',
       name: '1.1 ma compétence',
+      primaryLocales: ['fr-BE'],
       airtableId: 'recCompetence1',
       thematicOverviews: [
         {
@@ -65,6 +66,7 @@ module('Acceptance | competences | challenge-production', function (hooks) {
       id: 'competence1:challenges-production:nl',
       name: '1.1 ma compétence',
       airtableId: 'recCompetence1',
+      primaryLocales: ['fr-BE'],
       thematicOverviews: [
         {
           id: 'thematic1',
@@ -106,7 +108,15 @@ module('Acceptance | competences | challenge-production', function (hooks) {
       genealogy: Challenge.GENEALOGIES.PROTOTYPE,
       status: Challenge.STATUSES.VALIDE,
       instruction: 'Coucou maman',
-      locales: ['fr'],
+      locales: ['fr-BE'],
+    });
+
+    this.server.create('challenge', {
+      id: 'challengeIdProtoEn',
+      genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      status: Challenge.STATUSES.VALIDE,
+      instruction: 'Hello mum',
+      locales: ['en'],
     });
 
     const attachment = this.server.create('attachment', {
@@ -196,10 +206,13 @@ module('Acceptance | competences | challenge-production', function (hooks) {
   test('should display a localized challenge production list', async function (assert) {
     // when
     const screen = await visit('/v2/competences/recCompetence1/challenges-production?locale=nl');
+
     await clickByText('@tube1');
 
     // then
+    assert.dom(screen.queryByText('Hello mum')).doesNotExist();
     assert.dom(screen.getByText('hallo mama'));
+
     assert.strictEqual(
       currentURL(),
       `/v2/competences/recCompetence1/challenges-production/skills/${skillId}/localized-challenges?locale=nl`,

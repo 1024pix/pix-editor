@@ -309,7 +309,6 @@ module('Acceptance | v2 | Modify-Localized-Challenge', function (hooks) {
 
         await selectFiles(screen.getByLabelText('Choisir une image'), file1);
         await selectFiles(screen.getByLabelText('Ajouter un fichier...'), file2);
-
         await click(await screen.findByRole('button', { name: "Fermer l'épreuve" }));
 
         // then

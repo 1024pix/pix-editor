@@ -17,12 +17,12 @@ Router.map(function () {
   this.route('authenticated', { path: '' }, function () {
     this.route('v2', { path: '/v2/competences/:competence_id' }, function () {
       this.route('competence-overview', { path: '/:overview' }, function () {
-        this.route('challenges', { path: '/skills/:skill_id/challenges' });
-        this.route('localized-challenges', { path: '/skills/:skill_id/localized-challenges' });
-      });
-      this.route('challenge', { path: '/:overview/skills/:skill_id/challenges/:challenge_id' });
-      this.route('localized-challenge', {
-        path: '/:overview/skills/:skill_id/localized-challenges/:localized_challenge_id',
+        this.route('challenges', { path: '/skills/:skill_id/challenges' }, function () {
+          this.route('challenge', { path: '/:challenge_id' });
+        });
+        this.route('localized-challenges', { path: '/skills/:skill_id/localized-challenges' }, function () {
+          this.route('localized-challenge', { path: '/:localized_challenge_id' });
+        });
       });
       this.route('localized-framework');
     });

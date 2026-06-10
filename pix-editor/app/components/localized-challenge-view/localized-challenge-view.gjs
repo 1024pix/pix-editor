@@ -43,12 +43,8 @@ export default class LocalizedChallenge extends Component {
 
   deletedFiles = [];
 
-  get edition() {
-    return this.args.edition;
-  }
-
   get readonly() {
-    return !this.edition;
+    return !this.args.edition;
   }
 
   get primaryChallenge() {
@@ -76,7 +72,7 @@ export default class LocalizedChallenge extends Component {
   }
 
   get shouldDisplayInputEmbedURL() {
-    return !!this.args.localizedChallenge.embedURL || this.edition;
+    return !!this.args.localizedChallenge.embedURL || this.args.edition;
   }
 
   get shouldDisplayAttachment() {
@@ -383,7 +379,7 @@ export default class LocalizedChallenge extends Component {
     <div class="challenge-view">
       <div class="challenge-view-editable-fields">
         <FieldToggleFieldComponent
-          @edition={{this.edition}}
+          @edition={{@edition}}
           @model={{@localizedChallenge}}
           @modelField="urlsToConsult"
           @hideTextButton="Supprimer les URLs externes nécessaires à la résolution de l'épreuve"
@@ -437,7 +433,7 @@ export default class LocalizedChallenge extends Component {
           <Illustration
             @title="Illustration"
             @value={{@localizedChallenge.illustration}}
-            @edition={{this.edition}}
+            @edition={{@edition}}
             @addIllustration={{this.addIllustration}}
             @removeIllustration={{this.removeIllustration}}
             @display={{this.displayPopInIllustration}}
@@ -448,7 +444,7 @@ export default class LocalizedChallenge extends Component {
             @title="Pièces jointes"
             @value={{@localizedChallenge.piecesJointes}}
             @attachmentBaseName={{@localizedChallenge.firstAttachmentBaseName}}
-            @edition={{this.edition}}
+            @edition={{@edition}}
             @removeAttachment={{this.removeAttachment}}
             @addAttachment={{this.addAttachment}}
             @updateBasename={{this.updateBasename}}
