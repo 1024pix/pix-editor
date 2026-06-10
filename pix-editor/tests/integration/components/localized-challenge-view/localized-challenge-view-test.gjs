@@ -1,12 +1,13 @@
 import { fillByLabel, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
+import { click } from '@ember/test-helpers';
 import LocalizedChallengeView from 'pixeditor/components/localized-challenge-view/localized-challenge-view';
 import Challenge from 'pixeditor/models/challenge';
 import LocalizedChallenge from 'pixeditor/models/localized-challenge';
 import { module, test } from 'qunit';
-import { click, find } from '@ember/test-helpers';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | localized-challenge-view | localized-challenge-view', function (hooks) {
   setupIntlRenderingTest(hooks);
@@ -68,7 +69,7 @@ module('Integration | Component | localized-challenge-view | localized-challenge
   });
 
   module('when user is not allowed to edit a challenge', function (hooks) {
-    let mayChangeLocalizedChallengeStatusStub, mayEditLocalizedStub;
+    let mayChangeLocalizedChallengeStatusStub;
     hooks.beforeEach(function () {
       mayChangeLocalizedChallengeStatusStub = sinon.stub().returns(true);
 

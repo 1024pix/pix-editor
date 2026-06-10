@@ -1,8 +1,7 @@
-import Service from '@ember/service';
 import { render } from '@1024pix/ember-testing-library';
-import { getByRole, getByText, queryByRole, queryByText } from '@testing-library/dom';
-import { module, test } from 'qunit';
+import { getByText, queryByText } from '@testing-library/dom';
 import ModulesList from 'pixeditor/components/modules/modules-list';
+import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
@@ -110,7 +109,7 @@ module('Integration | Component | modules-list', function (hooks) {
 
     test('these don’t have a show detail button', async function (assert) {
       // given
-      const store = this.owner.lookup('service:store');
+      this.owner.lookup('service:store');
 
       // when
       const screen = await render(<template><ModulesList @modules={{draftModules}} /></template>);

@@ -1,7 +1,7 @@
 import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click, find, triggerEvent } from '@ember/test-helpers';
-import { module, test } from 'qunit';
 import FormMission from 'pixeditor/components/form/mission';
+import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 

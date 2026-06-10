@@ -167,6 +167,7 @@ export default class LocalizedController extends Controller {
     try {
       await this._saveChallenge(this.localizedChallenge);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
@@ -217,6 +218,7 @@ export default class LocalizedController extends Controller {
       this.loader.stop();
       this.notifications.sendSuccess('Épreuve mise à jour');
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();

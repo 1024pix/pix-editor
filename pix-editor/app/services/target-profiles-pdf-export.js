@@ -7,10 +7,9 @@ import 'pixeditor/vendor/Roboto-condensedLight.js';
 
 import Service from '@ember/service';
 import { Canvg, presets } from 'canvg';
-import { isEmpty } from 'lodash';
 import jsPDF from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
-
+import { isEmpty } from 'lodash';
 import {
   area1bg,
   area2bg,

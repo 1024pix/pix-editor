@@ -1,6 +1,6 @@
 import { on } from '@ember/modifier';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
 import Theme from 'pixeditor/components/form/theme';
+import scrollTop from 'pixeditor/modifiers/scroll-top';
 <template>
   <div class="tube-header">
     <div class="ui menu">

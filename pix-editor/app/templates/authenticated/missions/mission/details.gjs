@@ -1,10 +1,10 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import not from 'ember-truth-helpers/helpers/not';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import Card from 'pixeditor/components/card';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
 import formatDate from 'ember-intl/helpers/format-date';
+import not from 'ember-truth-helpers/helpers/not';
+import Card from 'pixeditor/components/card';
 <template>
   <header class="page-header">
     <h1 class="page-title">Détails d'une mission</h1>

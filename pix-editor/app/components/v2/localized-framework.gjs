@@ -1,10 +1,11 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import { concat } from '@ember/helper';
 import { action } from '@ember/object';
-import Component from '@glimmer/component';
-import { concat, fn } from '@ember/helper';
-import { tracked } from '@glimmer/tracking';
 import { trackedArray } from '@ember/reactive/collections';
 import { service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+
 import LocalizedFrameworkTube from './field/localized-framework-tube';
 
 export default class LocalizedFramework extends Component {

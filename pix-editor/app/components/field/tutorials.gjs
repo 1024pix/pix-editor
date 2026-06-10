@@ -48,6 +48,7 @@ export default class Tutorials extends Component {
       await Promise.all(tagsLoad);
       this.tutorialList = [...tutorials];
     } catch (err) {
+      /* eslint-disable-next-line no-console */
       console.error(err);
     } finally {
       this.isTutorialQueryOngoing = false;

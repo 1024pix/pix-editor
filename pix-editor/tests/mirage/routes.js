@@ -602,6 +602,6 @@ function _applyPagination(data, { page, pageSize }) {
   return slice(data, start, end);
 }
 
-function newId(prefix = RECORD_ID_PREFIX) {
+function newId(prefix) {
   return `${prefix}${window.crypto.randomUUID()}`;
 }

@@ -1,10 +1,8 @@
 import { click, currentURL, find, findAll, visit, waitUntil } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
-import { runTask } from 'ember-lifeline';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
 
 const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';

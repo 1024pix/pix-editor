@@ -34,6 +34,7 @@ export default class AuthenticatedController extends Controller {
     this.loader.setTarget(this);
     this.confirm.setTarget(this);
     this.checkApiVersionInterval = setInterval(() => {
+      /* eslint-disable-next-line no-console */
       this.checkApiVersion().catch(console.error);
     }, 60000);
   }

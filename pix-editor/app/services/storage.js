@@ -91,6 +91,7 @@ export default class StorageService extends Service {
         headers: { Authorization: `Bearer ${this.session.data.authenticated.apiKey}` },
       });
       if (!response.ok) {
+        /* eslint-disable-next-line no-console */
         console.error('could not get storage token');
         return false;
       }
@@ -98,6 +99,7 @@ export default class StorageService extends Service {
       config.storageToken = json.token;
       return config.storageToken;
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       return false;

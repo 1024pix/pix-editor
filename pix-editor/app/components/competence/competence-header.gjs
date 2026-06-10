@@ -1,6 +1,6 @@
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
-import { LinkTo } from '@ember/routing';
 import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';

@@ -55,6 +55,7 @@ export default class CompetenceThemesSingleController extends Controller {
         this.notifications.sendSuccess('Thématique mis à jour');
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-console */
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();

@@ -1,9 +1,9 @@
 import { render } from '@1024pix/ember-testing-library';
+import { fillIn } from '@ember/test-helpers';
 import LocalizedFramework from 'pixeditor/components/v2/localized-framework';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { fillIn } from '@ember/test-helpers';
 
 module('Integration | Component | v2/localized-framework', function (hooks) {
   setupIntlRenderingTest(hooks);

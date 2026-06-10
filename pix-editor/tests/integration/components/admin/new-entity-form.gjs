@@ -1,9 +1,9 @@
-import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
-import { module, test } from 'qunit';
+import { fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
+import NewAdminEntityForm from 'pixeditor/components/admin/new-entity-form';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-import NewAdminEntityForm from 'pixeditor/components/admin/new-entity-form';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | admin | new-entity-form', function (hooks) {
@@ -11,7 +11,7 @@ module('Integration | Component | admin | new-entity-form', function (hooks) {
 
   let screen;
 
-  module('when submitting the form', function (hooks) {
+  module('when submitting the form', function () {
     const entityFields = [
       {
         key: 'country',
@@ -44,7 +44,7 @@ module('Integration | Component | admin | new-entity-form', function (hooks) {
       assert.deepEqual(onSubmit.getCalls()[0].firstArg, { country, dish });
     });
 
-    module("when a field pattern isn't matched", function (hooks) {
+    module("when a field pattern isn't matched", function () {
       test('it should display an error and not call @onSubmit until form', async function (assert) {
         // given
         const onSubmit = sinon.stub();

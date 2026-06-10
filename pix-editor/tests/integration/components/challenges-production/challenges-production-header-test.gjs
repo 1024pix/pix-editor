@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
-import { click } from '@ember/test-helpers';
 import Service from '@ember/service';
+import { click } from '@ember/test-helpers';
 import ChallengesProductionHeader from 'pixeditor/components/challenges-production/challenges-production-header';
 import { module, test } from 'qunit';
 import sinon from 'sinon';

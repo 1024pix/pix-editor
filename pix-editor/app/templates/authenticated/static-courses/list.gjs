@@ -1,17 +1,17 @@
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import not from 'ember-truth-helpers/helpers/not';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import { on } from '@ember/modifier';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
-import { fn } from '@ember/helper';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import formatDate from 'ember-intl/helpers/format-date';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import PixInput from '@1024pix/pix-ui/components/pix-input';
+import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
+import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
+import formatDate from 'ember-intl/helpers/format-date';
+import not from 'ember-truth-helpers/helpers/not';
 <template>
   <header class="page-header">
     <h1 class="page-title">Tests Statiques</h1>

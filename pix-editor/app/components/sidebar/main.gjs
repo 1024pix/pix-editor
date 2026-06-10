@@ -1,15 +1,16 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import ENV from 'pixeditor/config/environment';
-import FrameworkModel from '../../models/framework';
-import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
-import Search from 'pixeditor/components/sidebar/search';
-import Navigation from 'pixeditor/components/sidebar/navigation';
-import { LinkTo } from '@ember/routing';
-import { on } from '@ember/modifier';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import Export from 'pixeditor/components/sidebar/export';
+import Navigation from 'pixeditor/components/sidebar/navigation';
+import Search from 'pixeditor/components/sidebar/search';
+import ENV from 'pixeditor/config/environment';
+
+import FrameworkModel from '../../models/framework';
 
 export default class SidebarMain extends Component {
   <template>

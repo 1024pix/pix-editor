@@ -1,7 +1,8 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import SortedList from './sorted';
 import EmberTable from 'ember-table/components/ember-table/component';
+
+import SortedList from './sorted';
 
 export default class PrototypesList extends SortedList {
   <template>

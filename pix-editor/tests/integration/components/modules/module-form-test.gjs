@@ -1,9 +1,10 @@
-import ModuleForm from 'pixeditor/components/modules/module-form';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@1024pix/ember-testing-library';
-import { module, test } from 'qunit';
 import { click, fillIn } from '@ember/test-helpers';
+import ModuleForm from 'pixeditor/components/modules/module-form';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 const isChrome = navigator?.userAgent?.includes(' Chrome/');
 

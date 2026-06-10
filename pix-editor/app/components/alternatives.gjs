@@ -1,10 +1,10 @@
+import { Input } from '@ember/component';
+import { on } from '@ember/modifier';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { LinkTo } from '@ember/routing';
 import Alternatives0 from 'pixeditor/components/list/alternatives';
-import { Input } from '@ember/component';
-import { on } from '@ember/modifier';
 import Challenge from 'pixeditor/models/challenge';
 
 export default class Alternatives extends Component {

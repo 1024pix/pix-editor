@@ -1,15 +1,15 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixInput from '@1024pix/pix-ui/components/pix-input';
+import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import { A } from '@ember/array';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { on } from '@ember/modifier';
 import Card from 'pixeditor/components/card';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class StaticCourseForm extends Component {
   <template>

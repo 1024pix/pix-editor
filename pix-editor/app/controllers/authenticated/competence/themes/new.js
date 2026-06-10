@@ -26,6 +26,7 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
       this.notifications.sendSuccess('Thématique créé');
       this.router.transitionTo('authenticated.competence.themes.single', competence, theme);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();

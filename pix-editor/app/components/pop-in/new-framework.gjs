@@ -1,9 +1,9 @@
-import { action } from '@ember/object';
-import Component from '@glimmer/component';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import { on } from '@ember/modifier';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import Input from 'pixeditor/components/field/input';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class PopInNewFrameworkComponent extends Component {
   <template>

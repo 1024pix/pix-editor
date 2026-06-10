@@ -1,11 +1,11 @@
+import { Input } from '@ember/component';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import or from 'ember-truth-helpers/helpers/or';
-import { on } from '@ember/modifier';
-import { fn } from '@ember/helper';
 import fileQueue from 'ember-file-upload/helpers/file-queue';
-import { Input } from '@ember/component';
+import or from 'ember-truth-helpers/helpers/or';
 
 export default class Files extends Component {
   <template>

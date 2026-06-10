@@ -1,8 +1,8 @@
 import { concat } from '@ember/helper';
-import Main from 'pixeditor/components/sidebar/main';
 import { on } from '@ember/modifier';
-import Logout from 'pixeditor/components/pop-in/logout';
 import Confirm from 'pixeditor/components/pop-in/confirm';
+import Logout from 'pixeditor/components/pop-in/logout';
+import Main from 'pixeditor/components/sidebar/main';
 
 <template>
   <div class="ui container fluid application">

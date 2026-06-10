@@ -1,9 +1,9 @@
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import and from 'ember-truth-helpers/helpers/and';
-import { LinkTo } from '@ember/routing';
-import { on } from '@ember/modifier';
-import { fn } from '@ember/helper';
 import eq from 'ember-truth-helpers/helpers/eq';
 import CompetenceGridTube from 'pixeditor/components/competence/competence-grid-tube';
 

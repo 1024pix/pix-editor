@@ -1,7 +1,7 @@
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { on } from '@ember/modifier';
 
 export default class SidebarExportComponent extends Component {
   <template>
@@ -23,6 +23,7 @@ export default class SidebarExportComponent extends Component {
       this.fileSaver.saveAs(csvContent, fileName);
       this.notifications.sendSuccess('Sujets exportés');
     } catch (e) {
+      /* eslint-disable-next-line no-console */
       console.error(e);
       this.notifications.sendError("Erreur lors de l'exportation des sujets");
     } finally {

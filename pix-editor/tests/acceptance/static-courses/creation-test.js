@@ -1,10 +1,9 @@
 import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
 
 module('Acceptance | Static Courses | Creation', function (hooks) {
   setupApplicationTest(hooks);

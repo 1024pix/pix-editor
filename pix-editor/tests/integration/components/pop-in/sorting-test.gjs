@@ -1,10 +1,11 @@
 import EmberObject from '@ember/object';
 import { click, findAll, render } from '@ember/test-helpers';
 import { drag } from 'ember-sortable/test-support';
+import Sorting from 'pixeditor/components/pop-in/sorting';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import Sorting from 'pixeditor/components/pop-in/sorting';
 
 module('Integration | Component | pop-in/sorting', function (hooks) {
   setupIntlRenderingTest(hooks);

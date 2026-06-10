@@ -1,4 +1,4 @@
-import { hasMany, belongsTo, Model } from 'miragejs';
+import { belongsTo, Model } from 'miragejs';
 
 export default Model.extend({
   challenge: belongsTo('challenge'),

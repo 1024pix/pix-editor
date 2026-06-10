@@ -46,6 +46,7 @@ export default class NewController extends Alternative {
         this.challenge.id,
       );
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.error(error);
       Sentry.captureException(error);
       this._errorMessage('Erreur lors de la création');

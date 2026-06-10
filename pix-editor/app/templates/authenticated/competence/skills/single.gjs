@@ -1,14 +1,14 @@
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import { array, concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
-import { array, concat } from '@ember/helper';
-import or from 'ember-truth-helpers/helpers/or';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import t from 'ember-intl/helpers/t';
-import scrollTop from 'pixeditor/modifiers/scroll-top';
+import or from 'ember-truth-helpers/helpers/or';
 import Skill from 'pixeditor/components/form/skill';
-import SelectLocation from 'pixeditor/components/pop-in/select-location';
 import Changelog from 'pixeditor/components/pop-in/changelog';
 import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
+import SelectLocation from 'pixeditor/components/pop-in/select-location';
+import scrollTop from 'pixeditor/modifiers/scroll-top';
 <template>
   <div class="skill-header {{@controller.skill.statusCSS}}">
     <div class="ui menu">

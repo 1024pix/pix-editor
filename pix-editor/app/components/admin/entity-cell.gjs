@@ -1,8 +1,7 @@
-import Component from '@glimmer/component';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import { fn } from '@ember/helper';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class AdminEntityCell extends Component {

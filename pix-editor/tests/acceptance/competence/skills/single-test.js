@@ -1,12 +1,11 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL, fillIn, find } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-import sinon from 'sinon';
-
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 module('Acceptance | skill | single', function (hooks) {
   setupApplicationTest(hooks);

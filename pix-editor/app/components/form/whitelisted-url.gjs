@@ -1,14 +1,14 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixInput from '@1024pix/pix-ui/components/pix-input';
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import { A } from '@ember/array';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { on } from '@ember/modifier';
 import Card from 'pixeditor/components/card';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class WhitelistedUrlForm extends Component {
   <template>

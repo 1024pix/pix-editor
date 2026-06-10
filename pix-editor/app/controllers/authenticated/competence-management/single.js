@@ -44,6 +44,7 @@ export default class CompetenceManagementSingleController extends Controller {
         this.notifications.sendSuccess('Compétence mise à jour');
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-console */
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();

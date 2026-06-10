@@ -1,11 +1,10 @@
 import { render } from '@1024pix/ember-testing-library';
+import Service from '@ember/service';
+import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
 import { module, test } from 'qunit';
 
-import CompetenceOverview from 'pixeditor/components/competence-overview/competence-overview';
+import { ADMIN, EDITOR, READ_ONLY, READ_PIX_ONLY, REPLICATOR } from '../../../../app/services/access.js';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import sinon from 'sinon';
-import Service from '@ember/service';
-import { READ_PIX_ONLY, READ_ONLY, REPLICATOR, EDITOR, ADMIN } from '../../../../app/services/access.js';
 
 module('Integration | Component | competence-overview | competence-overview', function (hooks) {
   setupIntlRenderingTest(hooks);
@@ -80,7 +79,7 @@ module('Integration | Component | competence-overview | competence-overview', fu
     ['READ_ONLY', READ_ONLY],
     ['REPLICATOR', REPLICATOR],
   ].forEach(([roleName, role]) => {
-    module(`when user has role ${roleName}`, function (hooks) {
+    module(`when user has role ${roleName}`, function () {
       test(`it should hide localizedFrameworkTubes button`, async function (assert) {
         class Config extends Service {
           accessLevel = role;

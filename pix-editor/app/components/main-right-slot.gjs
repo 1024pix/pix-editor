@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
-import { tracked } from '@glimmer/tracking';
 
 export default class MainRightSlot extends Component {
   <template>

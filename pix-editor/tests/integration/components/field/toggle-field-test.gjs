@@ -1,10 +1,11 @@
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { click, find, render } from '@ember/test-helpers';
+import ToggleField from 'pixeditor/components/field/toggle-field';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import ToggleField from 'pixeditor/components/field/toggle-field';
 
 module('Integration | Component | field/toggle-field', function (hooks) {
   setupIntlRenderingTest(hooks);

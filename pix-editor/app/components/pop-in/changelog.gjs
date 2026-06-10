@@ -1,10 +1,10 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { Textarea } from '@ember/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import { Textarea } from '@ember/component';
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 
 export default class PopinChangelog extends Component {
   <template>

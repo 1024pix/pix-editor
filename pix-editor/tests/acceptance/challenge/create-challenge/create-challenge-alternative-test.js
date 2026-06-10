@@ -1,13 +1,12 @@
 import { visit } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find, findAll } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-
-import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 
 module('Acceptance | Controller | Create alternative challenge', function (hooks) {
   setupApplicationTest(hooks);

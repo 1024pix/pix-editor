@@ -4,6 +4,7 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+
 import LocaleTag from './locale-tag';
 
 export default class CompetenceHeader extends Component {

@@ -268,6 +268,7 @@ export default class SingleController extends Controller {
         this._message(this.intl.t('prototype.changelog.update-status'));
       })
       .catch((error) => {
+        /* eslint-disable-next-line no-console */
         console.error(error);
         Sentry.captureException(error);
         this._errorMessage(this.intl.t('prototype.changelog.update-error'));
@@ -315,6 +316,7 @@ export default class SingleController extends Controller {
           this.parentController.send('selectView', 'production', true);
           this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
+          /* eslint-disable-next-line no-console */
           console.error(error);
           Sentry.captureException(error);
           this._errorMessage('Erreur lors de la mise en production');
@@ -349,6 +351,7 @@ export default class SingleController extends Controller {
         this.router.refresh('authenticated.competence.prototypes');
         this._message('Validation qualité confirmée');
       } catch (err) {
+        /* eslint-disable-next-line no-console */
         console.error(err);
         Sentry.captureException(err);
       }
@@ -374,6 +377,7 @@ export default class SingleController extends Controller {
           this.send('close');
           this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
+          /* eslint-disable-next-line no-console */
           console.error(error);
           Sentry.captureException(error);
           this._errorMessage("Erreur lors de l'archivage");
@@ -615,6 +619,7 @@ export default class SingleController extends Controller {
       });
       return Promise.all(alternativesPublication);
     } catch (e) {
+      /* eslint-disable-next-line no-console */
       console.error(e);
       this._message('Mise en production des déclinaisons annulée');
     }

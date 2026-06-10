@@ -1,5 +1,5 @@
-import Input from 'pixeditor/components/field/input';
 import { on } from '@ember/modifier';
+import Input from 'pixeditor/components/field/input';
 <template>
   <div class="main-left area-management">
     <div class="ui main-title">

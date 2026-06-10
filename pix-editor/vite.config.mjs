@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
-import { extensions, classicEmberSupport, ember } from '@embroider/vite';
+import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
-import { NodePackageImporter } from 'sass-embedded';
 import url from 'postcss-url';
+import { NodePackageImporter } from 'sass-embedded';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [

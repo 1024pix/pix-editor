@@ -32,9 +32,7 @@ module('Integration | Component | popin-challenge-log', function (hooks) {
   test('it renders', async function (assert) {
     // when
     await render(
-      <template>
-        <PopinChallengeLog @close={{this.closeAction}} @challenge={{challenge}} @showModal={{true}} />
-      </template>,
+      <template><PopinChallengeLog @close={{closeAction}} @challenge={{challenge}} @showModal={{true}} /></template>,
     );
 
     // then

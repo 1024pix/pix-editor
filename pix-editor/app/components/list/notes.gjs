@@ -1,6 +1,6 @@
-import { action } from '@ember/object';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import { action } from '@ember/object';
 
 import SortedList from './sorted';
 

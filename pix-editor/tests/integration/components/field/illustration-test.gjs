@@ -1,9 +1,10 @@
 import { render } from '@ember/test-helpers';
-import { module, test } from 'qunit';
 import { selectFiles } from 'ember-file-upload/test-support';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import sinon from 'sinon';
 import Illustration from 'pixeditor/components/field/illustration';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | form-illustration', function (hooks) {
   setupIntlRenderingTest(hooks);

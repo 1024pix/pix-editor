@@ -1,16 +1,14 @@
-import { clickByText, clickByName, visit, within } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, find } from '@ember/test-helpers';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-import sinon from 'sinon';
-
+import Challenge from 'pixeditor/models/challenge';
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
-
-import Challenge from 'pixeditor/models/challenge';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 module('Acceptance | Create-Challenge', function (hooks) {
   setupApplicationTest(hooks);

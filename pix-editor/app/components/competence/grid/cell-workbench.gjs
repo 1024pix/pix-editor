@@ -1,5 +1,5 @@
-import { LinkTo } from '@ember/routing';
 import { array } from '@ember/helper';
+import { LinkTo } from '@ember/routing';
 <template>
   <td class="skill-cell workbench">
     <LinkTo

@@ -1,9 +1,8 @@
 import { visit } from '@1024pix/ember-testing-library';
-import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { module, test } from 'qunit';
-
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
+import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
+import { module, test } from 'qunit';
 
 module('Acceptance | Navigate through frameworks', function (hooks) {
   setupApplicationTest(hooks);

@@ -34,6 +34,7 @@ export default class AreaManagementNewController extends Controller {
       this.router.transitionTo('authenticated');
     } catch (error) {
       Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
       console.log(error);
       this.notifications.sendError('Erreur lors de la création du domaine');
     } finally {
