@@ -1,5 +1,20 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: number
+ *   url?: string
+ *   relatedSkillNames?: string
+ *   comment?: string
+ *   checkType?: 'exact_match' | 'starts_with'
+ *   createdBy?: number
+ *   latestUpdatedBy?: number
+ *   deletedBy?: number
+ *   deletedAt?: string | number | Date
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} whitelistedUrlToBuild
+ */
 export function buildWhitelistedUrl({
   id = databaseBuffer.nextId++,
   createdBy = null,

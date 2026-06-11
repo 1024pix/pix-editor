@@ -1,5 +1,11 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: number
+ *   label: string
+ * }} staticCourseTagToBuild
+ */
 export function buildStaticCourseTag({ id = databaseBuffer.nextId++, label } = {}) {
   const values = { id, label };
 
@@ -9,6 +15,12 @@ export function buildStaticCourseTag({ id = databaseBuffer.nextId++, label } = {
   });
 }
 
+/**
+ * @param {{
+ *   staticCourseTagIds: number[]
+ *   staticCourseId: number
+ * }} courseTagsInfo
+ */
 export function linkTagsTo({ staticCourseTagIds, staticCourseId } = {}) {
   for (const staticCourseTagId of staticCourseTagIds) {
     databaseBuffer.pushInsertable({

@@ -2,7 +2,7 @@ import { Challenge, Translation } from '../../domain/models/index.js';
 
 export const prefix = 'challenge.';
 
-export const fields = [
+export const fields = /** @type {const} */ ([
   'instruction',
   'alternativeInstruction',
   'proposals',
@@ -10,7 +10,7 @@ export const fields = [
   'solutionToDisplay',
   'embedTitle',
   'illustrationAlt',
-];
+]);
 
 export function extractFromChallenge(challenge) {
   const locale = Challenge.getPrimaryLocale(challenge.locales);

@@ -1,5 +1,16 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: number
+ *   name: string
+ *   trigram?: string
+ *   access: 'admin' | 'editor' | 'replicator' | 'readonly' | 'readpixonly'
+ *   apiKey?: string
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} userToBuild
+ */
 export function buildUser({
   id = databaseBuffer.nextId++,
   name,
