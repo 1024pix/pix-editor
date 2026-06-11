@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 
-describe('Unit | Domain | DraftModule', () => {
+describe('Unit | Domain | Module', () => {
   describe('#serializeToJSON', () => {
     it('serializes module fields to JSON discarding irrelevant fields', () => {
       // given

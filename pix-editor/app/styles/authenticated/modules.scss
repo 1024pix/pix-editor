@@ -1,3 +1,5 @@
+@use 'pix-design-tokens/typography';
+
 .modules-list {
   display: flex;
   flex-direction: column;
@@ -19,4 +21,24 @@ td.modules-list__actions {
   display: flex;
   flex-direction: row-reverse;
   gap: var(--pix-spacing-2x);
+}
+
+.module-internal-title {
+  @extend %pix-title-xs;
+}
+
+.draft-module-diff {
+  pre.shiki {
+    height: 70vh;
+    margin: 0;
+    padding: var(--pix-spacing-4x);
+    overflow: scroll;
+
+    span {
+      @extend %pix-monospace;
+
+      font-size: 14px;
+      line-height: 14px;
+    }
+  }
 }

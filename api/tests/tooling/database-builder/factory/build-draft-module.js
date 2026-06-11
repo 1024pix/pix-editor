@@ -15,22 +15,30 @@ export function buildDraftModule({
   createdAt,
   updatedAt,
 } = {}) {
+  const values = {
+    id,
+    moduleId,
+    internalTitle,
+    shortId,
+    slug,
+    title,
+    isBeta,
+    visibility,
+    ...details,
+    sections,
+    glossary,
+    createdAt,
+    updatedAt,
+  };
+
+  const valuesForDb = {
+    ...values,
+    sections: JSON.stringify(values.sections),
+    glossary: JSON.stringify(values.glossary),
+  };
+
   return databaseBuffer.pushInsertable({
     tableName: 'draft-modules',
-    values: {
-      id,
-      moduleId,
-      internalTitle,
-      shortId,
-      slug,
-      title,
-      isBeta,
-      visibility,
-      ...details,
-      sections: JSON.stringify(sections),
-      glossary: JSON.stringify(glossary),
-      createdAt,
-      updatedAt,
-    },
+    values: valuesForDb,
   });
 }

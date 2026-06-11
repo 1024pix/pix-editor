@@ -6,7 +6,14 @@ export default class DraftModuleRoute extends Route {
 
   async model(params, { from }) {
     const draftModule = await this.store.findRecord('draft-module', params.draft_module_id, { reload: true });
+
+    let draftModuleDiff;
+    if (draftModule.isEditionDraft) {
+      draftModuleDiff = await draftModule.diff;
+    }
+
     const fromRoute = from?.name ?? 'authenticated.modules.workbench';
-    return { draftModule, fromRoute };
+
+    return { draftModule, draftModuleDiff, fromRoute };
   }
 }

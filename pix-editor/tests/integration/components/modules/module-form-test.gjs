@@ -91,6 +91,9 @@ module('Integration | Component | modules/module-form', function (hooks) {
       const screen = await render(<template><ModuleForm @module={{module}} @readonly={{true}} /></template>);
 
       // then
+      assert.dom(await screen.queryByRole('textbox', { name: /^Titre interne/ })).doesNotExist();
+      assert.dom(screen.getByRole('heading', { name: 'MOL_escargot-loiret' })).exists();
+
       assert.dom(await screen.queryByRole('button', { name: 'Enregistrer' })).doesNotExist();
       assert.dom(await screen.queryByRole('button', { name: 'Annuler' })).doesNotExist();
     });
