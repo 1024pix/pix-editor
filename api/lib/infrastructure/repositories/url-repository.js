@@ -16,15 +16,6 @@ async function getAuthClient(credentials) {
   return googleAuth.getClient();
 }
 
-async function clearSpreadsheetValues({ spreadsheetId, auth, range }) {
-  const res = await sheets.spreadsheets.values.clear({
-    spreadsheetId,
-    auth,
-    range,
-  });
-  return res;
-}
-
 async function setSpreadsheetValues({ spreadsheetId, auth, range, valueInputOption, resource }) {
   const res = await sheets.spreadsheets.values.append({
     spreadsheetId,
@@ -34,26 +25,6 @@ async function setSpreadsheetValues({ spreadsheetId, auth, range, valueInputOpti
     resource,
   });
   return res;
-}
-
-async function sendDataToGoogleSheet(dataToUpload, sheetName) {
-  try {
-    const auth = await getAuthClient(config.googleAuthCredentials);
-    await clearSpreadsheetValues({
-      spreadsheetId: config.checkUrlsJobs.spreadsheetId,
-      auth,
-      range: `${sheetName}!A2:Z9999`,
-    });
-    await setSpreadsheetValues({
-      spreadsheetId: config.checkUrlsJobs.spreadsheetId,
-      auth,
-      range: `${sheetName}!A:Z`,
-      valueInputOption: 'RAW',
-      resource: { values: dataToUpload },
-    });
-  } catch (error) {
-    logger.error(error.message);
-  }
 }
 
 async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
@@ -114,51 +85,20 @@ async function clearOlderSheets(spreadsheetId) {
   }
 }
 
-export function updateChallenges(dataToUpload) {
-  return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.challengesSheetName);
+export async function updateChallenges(challengeUrls) {
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('challenge_external_urls').truncate();
+  return knexConn.batchInsert('challenge_external_urls', challengeUrls, 500);
 }
 
-export async function updateTutorials(dataToUpload) {
-  const finalDataToUpload = await keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload);
-  return sendDataToGoogleSheet(finalDataToUpload, config.checkUrlsJobs.tutorialsSheetName);
+export async function updateTutorials(tutorialUrls) {
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('tutorial_external_urls').truncate();
+  return knexConn.batchInsert('tutorial_external_urls', tutorialUrls, 500);
 }
 
 export async function exportExternalUrls(dataToUpload) {
   const sheetName = new Date().toLocaleDateString('fr-FR');
   await clearOlderSheets(config.exportExternalUrlsJob.spreadsheetId);
   return addSheetToGoogleSheet(dataToUpload, sheetName, config.exportExternalUrlsJob.spreadsheetId);
-}
-
-const TUTORIAL_KO_URLS_TABLE_NAME = 'tutorial_ko_urls';
-const CONTINUOUS_FAILURE_MINIMUM_COUNT = 2;
-async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
-  const finalDataToUpload = [];
-  await DomainTransaction.execute(async () => {
-    const trx = DomainTransaction.getConnection();
-    const tutorialKoUrlsInDB = await trx(TUTORIAL_KO_URLS_TABLE_NAME);
-
-    const tutorialKoUrlsToInsertInDB = [];
-    for (const itemToUpload of dataToUpload) {
-      const [
-        , , currentTutorialId,
-        currentUrl,
-      ] = itemToUpload;
-      let currentContinuousKoCount
-        = tutorialKoUrlsInDB.find(({ tutorialId, url }) => url === currentUrl && tutorialId === currentTutorialId)
-          ?.continuousKoCount ?? 0;
-      ++currentContinuousKoCount;
-      tutorialKoUrlsToInsertInDB.push({
-        url: currentUrl,
-        tutorialId: currentTutorialId,
-        continuousKoCount: currentContinuousKoCount,
-      });
-      if (currentContinuousKoCount >= CONTINUOUS_FAILURE_MINIMUM_COUNT) {
-        finalDataToUpload.push(itemToUpload);
-      }
-    }
-
-    await trx(TUTORIAL_KO_URLS_TABLE_NAME).del();
-    await trx.batchInsert(TUTORIAL_KO_URLS_TABLE_NAME, tutorialKoUrlsToInsertInDB);
-  });
-  return finalDataToUpload;
 }

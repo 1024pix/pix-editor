@@ -1,5 +1,5 @@
 import './job-process.js';
-import { validateUrlsFromRelease } from '../../domain/usecases/index.js';
+import { saveUrlsFromRelease } from '../../domain/usecases/index.js';
 import {
   localizedChallengeRepository,
   releaseRepository,
@@ -8,8 +8,8 @@ import {
 } from '../repositories/index.js';
 import * as UrlUtils from '../utils/url-utils.js';
 
-export default function checkUrlsJobProcessor() {
-  return validateUrlsFromRelease({
+export default function saveExternalUrlsJobProcessor() {
+  return saveUrlsFromRelease({
     releaseRepository,
     urlRepository,
     localizedChallengeRepository,

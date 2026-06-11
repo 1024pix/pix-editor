@@ -1,6 +1,6 @@
 import './job-process.js';
 import { SlackNotifier } from '../notifications/SlackNotifier.js';
-import * as checkUrlsJob from './check-urls-job.js';
+import * as saveExternalUrlsJob from './save-external-urls-job.js';
 import * as uploadTranslationJob from './upload-translation-job.js';
 import * as config from '../../config.js';
 import { downloadTranslationFromPhrase } from '../../domain/usecases/index.js';
@@ -20,8 +20,8 @@ export default async function releaseJobProcessor(job) {
       );
     }
     logger.info(`Periodic release created with id ${releaseId}`);
-    if (config.scheduledJobs.startCheckUrlJob) {
-      await checkUrlsJob.start();
+    if (config.scheduledJobs.startSaveExternalUrlsJob) {
+      await saveExternalUrlsJob.start();
     }
     await uploadTranslationJob.start();
     return releaseId;

@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import { knex } from '../../../db/knex-database-connection.js';
 
-export async function validateUrlsFromRelease({
+export async function saveUrlsFromRelease({
   releaseRepository,
   urlRepository,
   localizedChallengeRepository,
@@ -11,12 +12,15 @@ export async function validateUrlsFromRelease({
   const whitelistedUrls = await whitelistedUrlRepository.list();
   const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
 
-  await checkAndUploadKOUrlsFromChallenges(
-    release,
-    { urlRepository, localizedChallengeRepository, UrlUtils },
-    activeWhitelistedUrls,
-  );
-  await checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, activeWhitelistedUrls);
+  return knex.transaction(async (transaction) => {
+    await saveChallengeUrls(
+      release,
+      activeWhitelistedUrls,
+      transaction,
+      { urlRepository, localizedChallengeRepository, UrlUtils },
+    );
+    await saveTutorialUrls(release, activeWhitelistedUrls, transaction, { urlRepository, UrlUtils });
+  });
 }
 
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
@@ -30,19 +34,15 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
-      .map((url) => {
-        return {
-          id: [
-            release.findOriginForChallenge(challenge) ?? '',
-            release.findCompetenceNameForChallenge(challenge) ?? '',
-            release.findSkillNameForChallenge(challenge) ?? '',
-            challenge.id,
-            challenge.status,
-            challenge.locales[0],
-          ].join(';'),
-          url,
-        };
-      });
+      .map((url) => ({
+        framework_name: release.findOriginForChallenge(challenge) ?? '',
+        competence_name: release.findCompetenceNameForChallenge(challenge) ?? '',
+        skill_name: release.findSkillNameForChallenge(challenge) ?? '',
+        challenge_id: challenge.id,
+        challenge_status: challenge.status,
+        locale: challenge.locales[0],
+        url,
+      }));
     return _.uniqBy(urls, 'url');
   });
 }
@@ -54,41 +54,23 @@ function findUrlsFromTutorials(release, UrlUtils) {
   );
   return release.content.tutorials
     .filter((tutorial) => accessibleTutorialIds.has(tutorial.id))
-    .map((tutorial) => {
+    .flatMap((tutorial) => {
       const skills = notObsoleteSkills.filter((skill) => skill.tutorialIds.includes(tutorial.id) || skill.learningMoreTutorialIds.includes(tutorial.id));
-      const competenceIds = new Set(skills.flatMap((skill) => skill.competenceId));
-      const competences = release.content.competences.filter((competence) => competenceIds.has(competence.id));
-      return {
-        id: [
-          competences.map((competence) => competence.name_i18n.fr).join(' '),
-          skills.map((skill) => skill.name).join(' '),
-          tutorial.id,
-        ].join(';'),
+
+      return skills.map((skill) => ({
+        skill_name: skill.name,
+        competence_name: release.content.competences.find((competence) => competence.id === skill.competenceId).name_i18n.fr,
+        tutorial_id: tutorial.id,
         url: UrlUtils.findUrlsInText(tutorial.link)[0],
-      };
+      }));
     });
 }
 
-function keepAndFormatKOUrls(analyzedLines) {
-  return analyzedLines
-    .filter((line) => {
-      return line.status === 'KO';
-    })
-    .map((line) => {
-      return [
-        ...line.id.split(';'),
-        line.url,
-        line.status,
-        line.error,
-        line.comments,
-      ];
-    });
-}
-
-async function checkAndUploadKOUrlsFromChallenges(
+export async function saveChallengeUrls(
   release,
-  { urlRepository, localizedChallengeRepository, UrlUtils },
   whitelistedUrls,
+  transaction,
+  { urlRepository, localizedChallengeRepository, UrlUtils },
 ) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
@@ -96,17 +78,13 @@ async function checkAndUploadKOUrlsFromChallenges(
   const finalUrlList = urlList.filter(
     ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
-  const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlRepository.updateChallenges(formattedKOChallengeUrls);
+  await urlRepository.updateChallenges(finalUrlList, transaction);
 }
 
-async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
+export async function saveTutorialUrls(release, whitelistedUrls, transaction, { urlRepository, UrlUtils }) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
   const finalUrlList = urlList.filter(
     ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
-  const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlRepository.updateTutorials(formattedKOTutorialUrls);
+  await urlRepository.updateTutorials(finalUrlList, transaction);
 }

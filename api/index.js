@@ -2,7 +2,7 @@
 
 import { createServer } from './server.js';
 import { logger } from './lib/infrastructure/logger.js';
-import { createCheckUrlsJobQueue } from './lib/infrastructure/scheduled-jobs/check-urls-job.js';
+import { createSaveExternalUrlsJobQueue } from './lib/infrastructure/scheduled-jobs/save-external-urls-job.js';
 import { scheduleReleaseJobQueue } from './lib/infrastructure/scheduled-jobs/release-job.js';
 import { createUploadTranslationJobQueue } from './lib/infrastructure/scheduled-jobs/upload-translation-job.js';
 import { createDeleteUnmentionedKeysAfterUploadJobQueue } from './lib/infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
@@ -15,7 +15,7 @@ import { JobGroup } from './lib/application/jobs/job-controller.js';
 
 validateEnvironmentVariables();
 
-let checkUrlsJobQueue,
+let saveExternalUrlsJobQueue,
   deleteUnmentionedKeysAfterUploadJobQueue,
   exportExternalUrlListJobQueue,
   releaseJobQueue,
@@ -30,7 +30,7 @@ async function start() {
     releaseJobQueue = await scheduleReleaseJobQueue();
     uploadTranslationJobQueue = await createUploadTranslationJobQueue();
     deleteUnmentionedKeysAfterUploadJobQueue = await createDeleteUnmentionedKeysAfterUploadJobQueue();
-    checkUrlsJobQueue = await createCheckUrlsJobQueue();
+    saveExternalUrlsJobQueue = await createSaveExternalUrlsJobQueue();
     exportExternalUrlListJobQueue = await exportExternalUrlListJob.schedule();
     releaseTableCleaningAndRetentionJobQueue = await cleanReleasesJob.schedule();
 
@@ -50,7 +50,7 @@ async function exitOnSignal(signal) {
   logger.info(`Received signal ${signal}. Closing DB connections and queues before exiting.`);
   try {
     await disconnect();
-    await checkUrlsJobQueue?.close();
+    await saveExternalUrlsJobQueue?.close();
     await releaseJobQueue?.close();
     await uploadTranslationJobQueue?.close();
     await deleteUnmentionedKeysAfterUploadJobQueue?.close();
