@@ -1,5 +1,23 @@
 
 
+## v4.33.0 (12/06/2026)
+
+
+### :rocket: Amélioration
+- [#1511](https://github.com/1024pix/pix-editor/pull/1511) [FEATURE] Afficher la comparaison du JSON pour un module DRAFT d’un module de PROD (PIX-23024).
+- [#1506](https://github.com/1024pix/pix-editor/pull/1506) [FEATURE] Afficher les épreuves primaires des langues sources du référentiel dans la liste des épreuves traduites en V2 (PIX-22959).
+
+### :building_construction: Tech
+- [#1516](https://github.com/1024pix/pix-editor/pull/1516) [TECH] Autoriser l'absence de `phraseProjectId` dans l'entité `translations_config` (PIX-23112).
+- [#1512](https://github.com/1024pix/pix-editor/pull/1512) [TECH] Supprime l'action automerge.
+- [#1514](https://github.com/1024pix/pix-editor/pull/1514) [TECH] Déclenche l'action check node pour les merge queues.
+- [#1510](https://github.com/1024pix/pix-editor/pull/1510) [TECH] Configurer le lint sur PixEditor (PIX-23097).
+- [#1509](https://github.com/1024pix/pix-editor/pull/1509) [TECH] Corriger la gestion des traductions dans les seeds (PIX-23049).
+- [#1508](https://github.com/1024pix/pix-editor/pull/1508) [TECH] Pouvoir lancer adminjs dans la window(s).
+
+### :arrow_up: Montée de version
+- [#1513](https://github.com/1024pix/pix-editor/pull/1513) [BUMP] Update dependency joi to v18.2.1 [SECURITY].
+
 ## v4.32.0 (05/06/2026)
 
 
