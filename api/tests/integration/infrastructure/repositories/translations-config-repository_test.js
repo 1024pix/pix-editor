@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { getByCompetenceId, getByPhraseProjectId, list } from '../../../../lib/infrastructure/repositories/translations-config-repository.js';
+import {
+  getByCompetenceId,
+  getByPhraseProjectId,
+  listWithPhraseProjectId,
+} from '../../../../lib/infrastructure/repositories/translations-config-repository.js';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 
 describe('Integration | Infrastructure | Repositories | TranslationsConfig', () => {
@@ -47,14 +51,19 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
       frameworkId: 'frameworkPixEdu',
       uploadedLocales: ['fr', 'fr-FR'],
     });
+    databaseBuilder.factory.buildTranslationsConfig({
+      phraseProjectId: null,
+      frameworkId: 'frameworkPixEdu',
+      uploadedLocales: ['fr', 'fr-FR'],
+    });
 
     await databaseBuilder.commit();
   });
 
-  describe('#list', () => {
-    it('lists all translations configs', async () => {
+  describe('#listWithPhraseProjectId', () => {
+    it('lists all translations configs with phraseProjectId', async () => {
       // when
-      const translationsConfigs = await list();
+      const translationsConfigs = await listWithPhraseProjectId();
 
       // then
       expect(translationsConfigs).toStrictEqual([

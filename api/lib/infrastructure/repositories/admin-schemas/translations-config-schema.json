@@ -21,7 +21,8 @@
     {
       "key": "phraseProjectId",
       "label": "Identifiant projet Phrase",
-      "type": "string"
+      "type": "string",
+      "optional": true
     },
     {
       "key": "frameworkId",

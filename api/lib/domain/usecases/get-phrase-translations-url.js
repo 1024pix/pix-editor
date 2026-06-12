@@ -9,7 +9,7 @@ export async function getPhraseTranslationsURL(
 ) {
   try {
     const area = await areaRepository.getByChallengeId(challengeId);
-    const configs = await translationsConfigRepository.list();
+    const configs = await translationsConfigRepository.listWithPhraseProjectId();
 
     const configuration = new phrase.Configuration({
       apiKey: `token ${config.phrase.apiKey}`,

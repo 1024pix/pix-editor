@@ -14,7 +14,7 @@ describe('Unit | Domain | Usecases | download-translation-from-phrase', () => {
         return localesListStub();
       }
     };
-    vi.spyOn(translationsConfigRepository, 'list').mockResolvedValueOnce([domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_ONE_PROJECT', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] }), domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_TWO_PROJECT', frameworkId: 'framework1', areaId: 'area2', uploadedLocales: ['fr'] })]);
+    vi.spyOn(translationsConfigRepository, 'listWithPhraseProjectId').mockResolvedValueOnce([domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_ONE_PROJECT', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] }), domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_TWO_PROJECT', frameworkId: 'framework1', areaId: 'area2', uploadedLocales: ['fr'] })]);
 
     // when
     await downloadTranslationFromPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub });
@@ -27,7 +27,7 @@ describe('Unit | Domain | Usecases | download-translation-from-phrase', () => {
     it('should not download from Phrase', async () => {
       // given
       vi.spyOn(config.phrase, 'apiKey', 'get').mockReturnValue(undefined);
-      vi.spyOn(translationsConfigRepository, 'list').mockResolvedValueOnce([domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_ONE_PROJECT', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] }), domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_TWO_PROJECT', frameworkId: 'framework1', areaId: 'area2', uploadedLocales: ['fr'] })]);
+      vi.spyOn(translationsConfigRepository, 'listWithPhraseProjectId').mockResolvedValueOnce([domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_ONE_PROJECT', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] }), domainBuilder.buildTranslationsConfig({ phraseProjectId: 'PHRASE_AREA_TWO_PROJECT', frameworkId: 'framework1', areaId: 'area2', uploadedLocales: ['fr'] })]);
       const ConfigurationStub = vi.fn();
 
       // when
