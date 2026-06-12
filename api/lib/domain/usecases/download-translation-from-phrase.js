@@ -17,7 +17,7 @@ export async function downloadTranslationFromPhrase(phraseApi = { Configuration,
     return;
   }
 
-  const configs = await translationsConfigRepository.list();
+  const configs = await translationsConfigRepository.listWithPhraseProjectId();
 
   if (!configs.length) {
     logger.warn('No translations config defined, skipping upload translations');

@@ -26,7 +26,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
       }),
     };
 
-    listTranslationsConfigStub = vi.spyOn(translationsConfigRepository, 'list');
+    listTranslationsConfigStub = vi.spyOn(translationsConfigRepository, 'listWithPhraseProjectId');
     getLatestReleaseStub = vi.spyOn(releaseRepository, 'getLatestRelease').mockResolvedValue(release);
     exportTranslationsStub = vi.spyOn(exportTranslationsUsecase, 'exportTranslations');
     scheduleDeleteUnmentionedStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule');
@@ -219,7 +219,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
   });
 
   describe('when no translations configs are defined', () => {
-    it('oes not upload to Phrase', async () => {
+    it('does not upload to Phrase', async () => {
       // given
       const ConfigurationStub = vi.fn();
 

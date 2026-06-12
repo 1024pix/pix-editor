@@ -18,7 +18,7 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
     return;
   }
 
-  const configs = await translationsConfigRepository.list();
+  const configs = await translationsConfigRepository.listWithPhraseProjectId();
 
   if (!configs.length) {
     logger.warn('No translations config defined, skipping upload translations');
