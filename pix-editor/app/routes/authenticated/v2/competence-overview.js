@@ -9,7 +9,15 @@ export default class CompetenceOverviewRoute extends Route {
   async model(params) {
     const overview = params.overview;
     const { competence, locale } = this.modelFor('authenticated.v2');
+    let localizedFrameworkTubes;
+    const themes = await competence.rawThemes;
 
+    await Promise.all(themes.map((theme) => theme.rawTubes));
+    if (locale) {
+      localizedFrameworkTubes = await this.store.query('localized-framework-tube', {
+        filter: { competenceId: competence.id, locale },
+      });
+    }
     let id = `${competence.pixId}:${overview}`;
     if (locale) id += `:${locale}`;
     const competenceOverview = await this.store.findRecord('competence-overview', id);
@@ -17,6 +25,7 @@ export default class CompetenceOverviewRoute extends Route {
     return {
       competenceOverview,
       locale,
+      localizedFrameworkTubes,
     };
   }
 }
