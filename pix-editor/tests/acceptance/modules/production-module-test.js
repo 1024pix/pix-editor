@@ -21,33 +21,34 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     return authenticateSession();
   });
 
-  test('displays module details page on click', async function (assert) {
-    // when
-    await visit('/');
-    await clickByName('Modules');
-    await clickByName('En production');
-    await clickByName('Voir le détail');
+  module('when user clicks on "Voir le détail"', function () {
+    test('displays module details page', async function (assert) {
+      // when
+      await visit('/');
+      await clickByName('Modules');
+      await clickByName('En production');
+      await clickByName('Voir le détail');
 
-    // then
-    assert.strictEqual(currentURL(), `/modules/production/${id}`);
+      // then
+      assert.strictEqual(currentURL(), `/modules/production/${id}`);
 
-    // WORKAROUND: let some time for monaco-editor to settle
-    await new Promise((resolve) => setTimeout(resolve, 100));
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+  });
 
-    await clickByName('Retour');
+  module('when user clicks on "Voir le détail du module en prod"', function () {
+    test('displays module details page', async function (assert) {
+      // when
+      await visit('/');
+      await clickByName('Modules');
+      await clickByName('Voir le détail du module en prod');
 
-    assert.strictEqual(currentURL(), `/modules/production`);
+      // then
+      assert.strictEqual(currentURL(), `/modules/production/${id}`);
 
-    await clickByName('Atelier');
-    await clickByName('Voir le détail du module en prod');
-
-    assert.strictEqual(currentURL(), `/modules/production/${id}`);
-
-    // WORKAROUND: let some time for monaco-editor to settle
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    await clickByName('Retour');
-
-    assert.strictEqual(currentURL(), `/modules/workbench`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
   });
 });

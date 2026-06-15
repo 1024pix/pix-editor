@@ -17,7 +17,7 @@ import ModuleForm from 'pixeditor/components/modules/module-form';
         <ModuleForm @module={{@model.draftModule}} @readonly={{true}} />
       {{/if}}
       <div class="page-actions">
-        <ModuleBackButton @fromRoute={{@model.fromRoute}} />
+        <ModuleBackButton />
       </div>
     </section>
   </main>

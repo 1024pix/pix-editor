@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 export default class DraftModuleRoute extends Route {
   @service store;
 
-  async model(params, { from }) {
+  async model(params) {
     const draftModule = await this.store.findRecord('draft-module', params.draft_module_id, { reload: true });
 
     let draftModuleDiff;
@@ -12,8 +12,6 @@ export default class DraftModuleRoute extends Route {
       draftModuleDiff = await draftModule.diff;
     }
 
-    const fromRoute = from?.name ?? 'authenticated.modules.workbench';
-
-    return { draftModule, draftModuleDiff, fromRoute };
+    return { draftModule, draftModuleDiff };
   }
 }
