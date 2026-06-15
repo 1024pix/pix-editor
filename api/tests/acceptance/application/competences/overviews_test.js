@@ -12,82 +12,526 @@ describe('Acceptance | Route | competence-overviews', () => {
   });
 
   describe('GET /competences/:id/overviews/challenges-production', () => {
-    let competenceId;
+    describe('when translateConfig locales is `[fr]`', () => {
+      let competenceId;
 
-    beforeEach(async function() {
-      competenceId = 'recCompetence1';
+      beforeEach(async function() {
+        competenceId = 'recCompetence1';
 
-      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
-      databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
 
-      databaseBuilder.factory.buildTranslationsConfig({ id: 1, phraseProjectId: 'fraiseId', frameworkId: 'recFmk1', uploadedLocales: ['fr'] });
+        databaseBuilder.factory.buildTranslationsConfig({
+          id: 1,
+          phraseProjectId: 'fraiseId',
+          frameworkId: 'recFmk1',
+          uploadedLocales: ['fr'],
+        });
 
-      databaseBuilder.factory.buildTranslation({
-        key: 'competence.recCompetence1.name',
-        locale: 'fr',
-        value: 'Mon super titre',
+        databaseBuilder.factory.buildTranslation({
+          key: 'competence.recCompetence1.name',
+          locale: 'fr',
+          value: 'Mon super titre',
+        });
+
+        databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
+        databaseBuilder.factory.buildThematic({ id: 'recThematic2', index: 1, competenceId });
+        databaseBuilder.factory.buildThematic({ id: 'recThematic3', index: 3, competenceId });
+        databaseBuilder.factory.buildThematic({ id: 'recThematic4', index: 4, competenceId });
+
+        databaseBuilder.factory.buildTranslation({
+          key: 'thematic.recThematic1.name',
+          locale: 'fr',
+          value: 'Thématique 1',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'thematic.recThematic2.name',
+          locale: 'fr',
+          value: 'Thématique 2',
+        });
+
+        const tubes = [
+          {
+            id: 'recTube1',
+            name: '@tube1',
+            index: 2,
+            thematicId: 'recThematic1',
+          },
+          {
+            id: 'recTube2',
+            name: '@tube2',
+            index: 1,
+            thematicId: 'recThematic1',
+          },
+          {
+            id: 'recTube3',
+            name: '@tube3',
+            index: 3,
+            thematicId: 'recThematic1',
+          },
+          {
+            id: 'recTube4',
+            name: '@tube4',
+            index: 1,
+            thematicId: 'recThematic2',
+          },
+          {
+            id: 'recTube5',
+            name: '@tube5',
+            index: 2,
+            thematicId: 'recThematic2',
+          },
+          {
+            id: 'recTube6',
+            name: '@tube6',
+            index: 1,
+            thematicId: 'recThematic4',
+          },
+        ];
+
+        tubes.forEach(databaseBuilder.factory.buildTube);
+
+        const skills = [
+          {
+            id: 'recSkill1',
+            name: '@tube14',
+            level: 4,
+            status: Skill.STATUSES.ACTIF,
+            tubeId: 'recTube1',
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+          },
+          {
+            id: 'recSkill2',
+            name: '@tube13',
+            level: 3,
+            status: Skill.STATUSES.ACTIF,
+            tubeId: 'recTube1',
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+          },
+          {
+            id: 'recSkill3',
+            name: '@tube27',
+            level: 7,
+            status: Skill.STATUSES.ACTIF,
+            tubeId: 'recTube2',
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+          },
+          {
+            id: 'recSkill4',
+            name: '@tube41',
+            level: 1,
+            status: Skill.STATUSES.ACTIF,
+            tubeId: 'recTube4',
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+          },
+          {
+            id: 'recSkill5',
+            name: '@tube56',
+            level: 6,
+            status: Skill.STATUSES.ACTIF,
+            tubeId: 'recTube5',
+            tutorialIds: [],
+            learningMoreTutorialIds: [],
+          },
+        ].map(domainBuilder.buildSkillDatasourceObject);
+
+        skills.forEach(databaseBuilder.factory.buildSkill);
+
+        const localizedFrameworkTubes = [
+          { tubeId: 'recTube1', maxLevel: 3, locale: 'en' },
+          { tubeId: 'recTube2', maxLevel: 8, locale: 'en' },
+          { tubeId: 'recTube3', maxLevel: 8, locale: 'en' },
+          { tubeId: 'recTube4', maxLevel: 8, locale: 'en' },
+          { tubeId: 'recTube6', maxLevel: 8, locale: 'en' },
+        ];
+        localizedFrameworkTubes.forEach(databaseBuilder.factory.buildLocalizedFrameworkTubes);
+
+        const challenges = [
+          {
+            id: 'recChallenge1',
+            skillId: 'recSkill1',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.FACILEMENT,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            files: [],
+            isQualityOk: true,
+          },
+          {
+            id: 'recChallenge11',
+            skillId: 'recSkill1',
+            genealogy: Challenge.GENEALOGIES.DECLINAISON,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            locales: [LOCALE.FRENCH_FRANCE],
+            files: [],
+          },
+          {
+            id: 'recChallenge2',
+            skillId: 'recSkill2',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.NON,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            files: [],
+            isQualityOk: true,
+          },
+          {
+            id: 'recChallenge3',
+            skillId: 'recSkill3',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.FACILEMENT,
+            version: 2,
+            status: Challenge.STATUSES.VALIDE,
+            files: [],
+            isQualityOk: true,
+          },
+          {
+            id: 'recChallenge31',
+            skillId: 'recSkill3',
+            genealogy: Challenge.GENEALOGIES.DECLINAISON,
+            version: 2,
+            status: Challenge.STATUSES.PROPOSE,
+            files: [],
+          },
+          {
+            id: 'recChallenge4',
+            skillId: 'recSkill4',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.DIFFICILEMENT,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            files: [],
+            isQualityOk: false,
+          },
+          {
+            id: 'recChallenge5',
+            skillId: 'recSkill5',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.NON,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            files: [],
+          },
+        ].map(domainBuilder.buildChallengeDatasourceObject);
+
+        challenges.forEach(databaseBuilder.factory.buildChallenge);
+
+        const englishChallenges = [
+          {
+            id: 'recChallenge12',
+            skillId: 'recSkill2',
+            genealogy: Challenge.GENEALOGIES.DECLINAISON,
+            version: 1,
+            status: Challenge.STATUSES.VALIDE,
+            locales: [LOCALE.ENGLISH_SPOKEN],
+            files: [],
+          },
+          {
+            id: 'recChallenge13',
+            skillId: 'recSkill2',
+            genealogy: Challenge.GENEALOGIES.DECLINAISON,
+            version: 1,
+            status: Challenge.STATUSES.PROPOSE,
+            locales: [LOCALE.ENGLISH_SPOKEN],
+            files: [],
+          },
+        ].map(domainBuilder.buildChallengeDatasourceObject);
+
+        englishChallenges.forEach(databaseBuilder.factory.buildChallenge);
+
+        const noiseChallenges = [
+          {
+            id: 'recChallenge21',
+            skillId: 'recSkill2',
+            genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+            declinable: Challenge.DECLINABLES.NON,
+            version: 2,
+            status: Challenge.STATUSES.PROPOSE,
+            files: [],
+          },
+        ].map(domainBuilder.buildChallengeDatasourceObject);
+
+        noiseChallenges.forEach(databaseBuilder.factory.buildChallenge);
+
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge1',
+          challengeId: 'recChallenge1',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge11',
+          challengeId: 'recChallenge11',
+          locale: LOCALE.FRENCH_FRANCE,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge2',
+          challengeId: 'recChallenge2',
+          locale: LOCALE.FRENCH_SPOKEN,
+          toRephrase: true,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge3',
+          challengeId: 'recChallenge3',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge31',
+          challengeId: 'recChallenge31',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge4',
+          challengeId: 'recChallenge4',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge5',
+          challengeId: 'recChallenge5',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge21',
+          challengeId: 'recChallenge21',
+          locale: LOCALE.FRENCH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge12',
+          challengeId: 'recChallenge12',
+          locale: LOCALE.ENGLISH_SPOKEN,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge13',
+          challengeId: 'recChallenge13',
+          locale: LOCALE.ENGLISH_SPOKEN,
+        });
+        await databaseBuilder.commit();
       });
 
-      databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematic2', index: 1, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematic3', index: 3, competenceId });
-      databaseBuilder.factory.buildThematic({ id: 'recThematic4', index: 4, competenceId });
+      describe('without language filter', () => {
+        it('should respond status 200 and overview of competence’s production challenges that are primary', async () => {
+          // given
+          const server = await createServer();
 
-      databaseBuilder.factory.buildTranslation({
-        key: 'thematic.recThematic1.name',
-        locale: 'fr',
-        value: 'Thématique 1',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'thematic.recThematic2.name',
-        locale: 'fr',
-        value: 'Thématique 2',
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: `/api/competences/${competenceId}/overviews/challenges-production`,
+            headers: generateAuthorizationHeader(user),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+
+          expect(response.result).toEqual({
+            data: {
+              type: 'competence-overviews',
+              id: `${competenceId}:challenges-production`,
+              attributes: {
+                'airtable-id': 'recCompetence1',
+                name: '2.2 Mon super titre',
+                'primary-locales': ['fr'],
+                'tubes-count': 4,
+                'skills-count': 5,
+                'thematic-overviews': [
+                  {
+                    airtableId: 'recThematic2',
+                    name: 'Thématique 2',
+                    tubeOverviews: [
+                      {
+                        airtableId: 'recTube4',
+                        name: '@tube4',
+                        skillOverviews: [
+                          {
+                            id: 'recSkill4',
+                            airtableId: 'recSkill4',
+                            name: '@tube41',
+                            prototypeId: 'recChallenge4',
+                            validatedChallengesCount: 1,
+                            proposedChallengesCount: 0,
+                            isPrototypeDeclinable: true,
+                            isPrototypeToRephrase: false,
+                          },
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                        ],
+                      },
+                      {
+                        airtableId: 'recTube5',
+                        name: '@tube5',
+                        skillOverviews: [
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          {
+                            id: 'recSkill5',
+                            airtableId: 'recSkill5',
+                            name: '@tube56',
+                            prototypeId: 'recChallenge5',
+                            validatedChallengesCount: 1,
+                            proposedChallengesCount: 0,
+                            isPrototypeDeclinable: false,
+                            isPrototypeToRephrase: false,
+                          },
+                          null,
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    airtableId: 'recThematic1',
+                    name: 'Thématique 1',
+                    tubeOverviews: [
+                      {
+                        airtableId: 'recTube2',
+                        name: '@tube2',
+                        skillOverviews: [
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          {
+                            id: 'recSkill3',
+                            airtableId: 'recSkill3',
+                            name: '@tube27',
+                            prototypeId: 'recChallenge3',
+                            validatedChallengesCount: 1,
+                            proposedChallengesCount: 1,
+                            isPrototypeDeclinable: true,
+                            isPrototypeToRephrase: false,
+                          },
+                        ],
+                      },
+                      {
+                        airtableId: 'recTube1',
+                        name: '@tube1',
+                        skillOverviews: [
+                          null,
+                          null,
+                          {
+                            id: 'recSkill2',
+                            airtableId: 'recSkill2',
+                            name: '@tube13',
+                            prototypeId: 'recChallenge2',
+                            validatedChallengesCount: 2,
+                            proposedChallengesCount: 1,
+                            isPrototypeDeclinable: false,
+                            isPrototypeToRephrase: true,
+                          },
+                          {
+                            id: 'recSkill1',
+                            airtableId: 'recSkill1',
+                            name: '@tube14',
+                            prototypeId: 'recChallenge1',
+                            validatedChallengesCount: 2,
+                            proposedChallengesCount: 0,
+                            isPrototypeDeclinable: true,
+                            isPrototypeToRephrase: false,
+                          },
+                          null,
+                          null,
+                          null,
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          });
+        });
       });
 
-      const tubes = [
-        {
+      describe('with language filter set to english', () => {
+        beforeEach(async () => {
+          databaseBuilder.factory.buildLocalizedChallenge({
+            id: 'recChallenge3_en',
+            challengeId: 'recChallenge3',
+            status: LocalizedChallenge.STATUSES.PLAY,
+            locale: LOCALE.ENGLISH_SPOKEN,
+          });
+          databaseBuilder.factory.buildLocalizedChallenge({
+            id: 'recChallenge31_en',
+            challengeId: 'recChallenge31',
+            status: LocalizedChallenge.STATUSES.PAUSE,
+            locale: LOCALE.ENGLISH_SPOKEN,
+          });
+          databaseBuilder.factory.buildLocalizedChallenge({
+            id: 'recChallenge2_en',
+            challengeId: 'recChallenge2',
+            status: LocalizedChallenge.STATUSES.PAUSE,
+            locale: LOCALE.ENGLISH_SPOKEN,
+          });
+          await databaseBuilder.commit();
+        });
+
+        it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
+          // given
+          const server = await createServer();
+
+          // when
+          const response = await server.inject({
+            method: 'GET',
+            url: `/api/competences/${competenceId}/overviews/challenges-production?locale=en`,
+            headers: generateAuthorizationHeader(user),
+          });
+
+          // then
+          expect(response.statusCode).toBe(200);
+        });
+      });
+    });
+
+    describe('when translateConfig locales is `[fr-FR]`', () => {
+      const competenceId = 'competence1';
+
+      beforeEach(async () => {
+        databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+        databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+        databaseBuilder.factory.buildCompetence({ id: competenceId, index: '2.2', areaId: 'area1' });
+
+        databaseBuilder.factory.buildTranslationsConfig({
+          id: 1,
+          phraseProjectId: 'fraiseId',
+          frameworkId: 'recFmk1',
+          uploadedLocales: ['fr-FR'],
+        });
+
+        databaseBuilder.factory.buildTranslation({
+          key: 'competence.competence1.name',
+          locale: 'fr',
+          value: 'Mon super titre',
+        });
+
+        databaseBuilder.factory.buildThematic({ id: 'recThematic1', index: 2, competenceId });
+
+        databaseBuilder.factory.buildTranslation({
+          key: 'thematic.recThematic1.name',
+          locale: 'fr',
+          value: 'Thématique 1',
+        });
+
+        databaseBuilder.factory.buildTube({
           id: 'recTube1',
           name: '@tube1',
           index: 2,
           thematicId: 'recThematic1',
-        },
-        {
-          id: 'recTube2',
-          name: '@tube2',
-          index: 1,
-          thematicId: 'recThematic1',
-        },
-        {
-          id: 'recTube3',
-          name: '@tube3',
-          index: 3,
-          thematicId: 'recThematic1',
-        },
-        {
-          id: 'recTube4',
-          name: '@tube4',
-          index: 1,
-          thematicId: 'recThematic2',
-        },
-        {
-          id: 'recTube5',
-          name: '@tube5',
-          index: 2,
-          thematicId: 'recThematic2',
-        },
-        {
-          id: 'recTube6',
-          name: '@tube6',
-          index: 1,
-          thematicId: 'recThematic4',
-        },
-      ];
+        });
 
-      tubes.forEach(databaseBuilder.factory.buildTube);
-
-      const skills = [
-        {
+        databaseBuilder.factory.buildSkill({
           id: 'recSkill1',
           name: '@tube14',
           level: 4,
@@ -95,58 +539,11 @@ describe('Acceptance | Route | competence-overviews', () => {
           tubeId: 'recTube1',
           tutorialIds: [],
           learningMoreTutorialIds: [],
-        },
-        {
-          id: 'recSkill2',
-          name: '@tube13',
-          level: 3,
-          status: Skill.STATUSES.ACTIF,
-          tubeId: 'recTube1',
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-        },
-        {
-          id: 'recSkill3',
-          name: '@tube27',
-          level: 7,
-          status: Skill.STATUSES.ACTIF,
-          tubeId: 'recTube2',
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-        },
-        {
-          id: 'recSkill4',
-          name: '@tube41',
-          level: 1,
-          status: Skill.STATUSES.ACTIF,
-          tubeId: 'recTube4',
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-        },
-        {
-          id: 'recSkill5',
-          name: '@tube56',
-          level: 6,
-          status: Skill.STATUSES.ACTIF,
-          tubeId: 'recTube5',
-          tutorialIds: [],
-          learningMoreTutorialIds: [],
-        },
-      ].map(domainBuilder.buildSkillDatasourceObject);
+        });
 
-      skills.forEach(databaseBuilder.factory.buildSkill);
+        databaseBuilder.factory.buildLocalizedFrameworkTubes({ tubeId: 'recTube1', maxLevel: 3, locale: 'en' });
 
-      const localizedFrameworkTubes = [
-        { tubeId: 'recTube1', maxLevel: 3, locale: 'en' },
-        { tubeId: 'recTube2', maxLevel: 8, locale: 'en' },
-        { tubeId: 'recTube3', maxLevel: 8, locale: 'en' },
-        { tubeId: 'recTube4', maxLevel: 8, locale: 'en' },
-        { tubeId: 'recTube6', maxLevel: 8, locale: 'en' },
-      ];
-      localizedFrameworkTubes.forEach(databaseBuilder.factory.buildLocalizedFrameworkTubes);
-
-      const challenges = [
-        {
+        databaseBuilder.factory.buildChallenge({
           id: 'recChallenge1',
           skillId: 'recSkill1',
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
@@ -155,160 +552,24 @@ describe('Acceptance | Route | competence-overviews', () => {
           status: Challenge.STATUSES.VALIDE,
           files: [],
           isQualityOk: true,
-        },
-        {
-          id: 'recChallenge11',
-          skillId: 'recSkill1',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          version: 1,
-          status: Challenge.STATUSES.VALIDE,
-          locales: [LOCALE.FRENCH_FRANCE],
-          files: [],
-        },
-        {
-          id: 'recChallenge2',
-          skillId: 'recSkill2',
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          declinable: Challenge.DECLINABLES.NON,
-          version: 1,
-          status: Challenge.STATUSES.VALIDE,
-          files: [],
-          isQualityOk: true,
-        },
-        {
-          id: 'recChallenge3',
-          skillId: 'recSkill3',
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          declinable: Challenge.DECLINABLES.FACILEMENT,
-          version: 2,
-          status: Challenge.STATUSES.VALIDE,
-          files: [],
-          isQualityOk: true,
-        },
-        {
-          id: 'recChallenge31',
-          skillId: 'recSkill3',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          version: 2,
-          status: Challenge.STATUSES.PROPOSE,
-          files: [],
-        },
-        {
-          id: 'recChallenge4',
-          skillId: 'recSkill4',
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          declinable: Challenge.DECLINABLES.DIFFICILEMENT,
-          version: 1,
-          status: Challenge.STATUSES.VALIDE,
-          files: [],
-          isQualityOk: false,
-        },
-        {
-          id: 'recChallenge5',
-          skillId: 'recSkill5',
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          declinable: Challenge.DECLINABLES.NON,
-          version: 1,
-          status: Challenge.STATUSES.VALIDE,
-          files: [],
-        },
-      ].map(domainBuilder.buildChallengeDatasourceObject);
+          locales: ['fr-fr'],
+        });
 
-      challenges.forEach(databaseBuilder.factory.buildChallenge);
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'recChallenge1',
+          challengeId: 'recChallenge1',
+          locale: 'fr-fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeEn',
+          challengeId: 'recChallenge1',
+          locale: 'en',
+        });
 
-      const englishChallenges = [
-        {
-          id: 'recChallenge12',
-          skillId: 'recSkill2',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          version: 1,
-          status: Challenge.STATUSES.VALIDE,
-          locales: [LOCALE.ENGLISH_SPOKEN],
-          files: [],
-        },
-        {
-          id: 'recChallenge13',
-          skillId: 'recSkill2',
-          genealogy: Challenge.GENEALOGIES.DECLINAISON,
-          version: 1,
-          status: Challenge.STATUSES.PROPOSE,
-          locales: [LOCALE.ENGLISH_SPOKEN],
-          files: [],
-        },
-      ].map(domainBuilder.buildChallengeDatasourceObject);
+        await databaseBuilder.commit();
+      });
 
-      englishChallenges.forEach(databaseBuilder.factory.buildChallenge);
-
-      const noiseChallenges = [
-        {
-          id: 'recChallenge21',
-          skillId: 'recSkill2',
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          declinable: Challenge.DECLINABLES.NON,
-          version: 2,
-          status: Challenge.STATUSES.PROPOSE,
-          files: [],
-        },
-      ].map(domainBuilder.buildChallengeDatasourceObject);
-
-      noiseChallenges.forEach(databaseBuilder.factory.buildChallenge);
-
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge1',
-        challengeId: 'recChallenge1',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge11',
-        challengeId: 'recChallenge11',
-        locale: LOCALE.FRENCH_FRANCE,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge2',
-        challengeId: 'recChallenge2',
-        locale: LOCALE.FRENCH_SPOKEN,
-        toRephrase: true,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge3',
-        challengeId: 'recChallenge3',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge31',
-        challengeId: 'recChallenge31',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge4',
-        challengeId: 'recChallenge4',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge5',
-        challengeId: 'recChallenge5',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge21',
-        challengeId: 'recChallenge21',
-        locale: LOCALE.FRENCH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge12',
-        challengeId: 'recChallenge12',
-        locale: LOCALE.ENGLISH_SPOKEN,
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallenge13',
-        challengeId: 'recChallenge13',
-        locale: LOCALE.ENGLISH_SPOKEN,
-      });
-      await databaseBuilder.commit();
-    });
-
-    describe('without language filter', () => {
-      it('should respond status 200 and overview of competence’s production challenges that are primary', async () => {
+      it('should respond status 200 and return competence with non canonical primary locales', async () => {
         // given
         const server = await createServer();
 
@@ -327,219 +588,35 @@ describe('Acceptance | Route | competence-overviews', () => {
             type: 'competence-overviews',
             id: `${competenceId}:challenges-production`,
             attributes: {
-              'airtable-id': 'recCompetence1',
+              'airtable-id': 'competence1',
               name: '2.2 Mon super titre',
-              'primary-locales': ['fr'],
-              'tubes-count': 4,
-              'skills-count': 5,
+              'primary-locales': ['fr-fr'],
+              'tubes-count': 1,
+              'skills-count': 1,
               'thematic-overviews': [
-                {
-                  airtableId: 'recThematic2',
-                  name: 'Thématique 2',
-                  tubeOverviews: [
-                    {
-                      airtableId: 'recTube4',
-                      name: '@tube4',
-                      skillOverviews: [
-                        {
-                          id: 'recSkill4',
-                          airtableId: 'recSkill4',
-                          name: '@tube41',
-                          prototypeId: 'recChallenge4',
-                          validatedChallengesCount: 1,
-                          proposedChallengesCount: 0,
-                          isPrototypeDeclinable: true,
-                          isPrototypeToRephrase: false,
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                      ],
-                    },
-                    {
-                      airtableId: 'recTube5',
-                      name: '@tube5',
-                      skillOverviews: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                          id: 'recSkill5',
-                          airtableId: 'recSkill5',
-                          name: '@tube56',
-                          prototypeId: 'recChallenge5',
-                          validatedChallengesCount: 1,
-                          proposedChallengesCount: 0,
-                          isPrototypeDeclinable: false,
-                          isPrototypeToRephrase: false,
-                        },
-                        null,
-                      ],
-                    },
-                  ],
-                },
                 {
                   airtableId: 'recThematic1',
                   name: 'Thématique 1',
                   tubeOverviews: [
-                    {
-                      airtableId: 'recTube2',
-                      name: '@tube2',
-                      skillOverviews: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                          id: 'recSkill3',
-                          airtableId: 'recSkill3',
-                          name: '@tube27',
-                          prototypeId: 'recChallenge3',
-                          validatedChallengesCount: 1,
-                          proposedChallengesCount: 1,
-                          isPrototypeDeclinable: true,
-                          isPrototypeToRephrase: false,
-                        },
-                      ],
-                    },
                     {
                       airtableId: 'recTube1',
                       name: '@tube1',
                       skillOverviews: [
                         null,
                         null,
+                        null,
                         {
-                          id: 'recSkill2',
-                          airtableId: 'recSkill2',
-                          name: '@tube13',
-                          prototypeId: 'recChallenge2',
-                          validatedChallengesCount: 2,
-                          proposedChallengesCount: 1,
-                          isPrototypeDeclinable: false,
-                          isPrototypeToRephrase: true,
-                        },
-                        {
-                          id: 'recSkill1',
                           airtableId: 'recSkill1',
+                          archivedChallengesCount: undefined,
+                          id: 'recSkill1',
+                          isPrototypeDeclinable: true,
+                          isPrototypeToRephrase: false,
                           name: '@tube14',
-                          prototypeId: 'recChallenge1',
-                          validatedChallengesCount: 2,
+                          obsoleteChallengesCount: undefined,
                           proposedChallengesCount: 0,
-                          isPrototypeDeclinable: true,
-                          isPrototypeToRephrase: false,
-                        },
-                        null,
-                        null,
-                        null,
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        });
-      });
-    });
-
-    describe('with language filter set to english', () => {
-      beforeEach(async () => {
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'recChallenge3_en',
-          challengeId: 'recChallenge3',
-          status: LocalizedChallenge.STATUSES.PLAY,
-          locale: LOCALE.ENGLISH_SPOKEN,
-        });
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'recChallenge31_en',
-          challengeId: 'recChallenge31',
-          status: LocalizedChallenge.STATUSES.PAUSE,
-          locale: LOCALE.ENGLISH_SPOKEN,
-        });
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'recChallenge2_en',
-          challengeId: 'recChallenge2',
-          status: LocalizedChallenge.STATUSES.PAUSE,
-          locale: LOCALE.ENGLISH_SPOKEN,
-        });
-        await databaseBuilder.commit();
-      });
-
-      it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
-        // given
-        const server = await createServer();
-
-        // when
-        const response = await server.inject({
-          method: 'GET',
-          url: `/api/competences/${competenceId}/overviews/challenges-production?locale=en`,
-          headers: generateAuthorizationHeader(user),
-        });
-
-        // then
-        expect(response.statusCode).toBe(200);
-
-        expect(response.result).toEqual({
-          data: {
-            type: 'competence-overviews',
-            id: `${competenceId}:challenges-production:en`,
-            attributes: {
-              'airtable-id': 'recCompetence1',
-              name: '2.2 Mon super titre',
-              'primary-locales': ['fr'],
-              'tubes-count': 2,
-              'skills-count': 2,
-              'thematic-overviews': [
-                {
-                  airtableId: 'recThematic1',
-                  name: 'Thématique 1',
-                  tubeOverviews: [
-                    {
-                      airtableId: 'recTube2',
-                      name: '@tube2',
-                      skillOverviews: [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {
-                          id: 'recSkill3',
-                          airtableId: 'recSkill3',
-                          name: '@tube27',
-                          prototypeId: 'recChallenge3',
+                          prototypeId: 'recChallenge1',
                           validatedChallengesCount: 1,
-                          proposedChallengesCount: 1,
-                          isPrototypeDeclinable: true,
-                          isPrototypeToRephrase: false,
                         },
-                      ],
-                    },
-                    {
-                      airtableId: 'recTube1',
-                      name: '@tube1',
-                      skillOverviews: [
-                        null,
-                        null,
-                        {
-                          id: 'recSkill2',
-                          airtableId: 'recSkill2',
-                          name: '@tube13',
-                          prototypeId: 'recChallenge2',
-                          validatedChallengesCount: 1,
-                          proposedChallengesCount: 2,
-                          isPrototypeDeclinable: false,
-                          isPrototypeToRephrase: true,
-                        },
-                        null,
                         null,
                         null,
                         null,
