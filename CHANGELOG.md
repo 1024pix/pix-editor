@@ -1,5 +1,17 @@
 
 
+## v4.34.0 (15/06/2026)
+
+
+### :building_construction: Tech
+- [#1517](https://github.com/1024pix/pix-editor/pull/1517) [TECH] Rendre l'autocomplétion plus intelligente dans les tests.
+
+### :bug: Correction
+- [#1520](https://github.com/1024pix/pix-editor/pull/1520) [BUGFIX] La liste des épreuves traduites (V2) ne s'affiche pas lorsque la `primaryLocale` est `fr-FR` (PIX-23168).
+
+### :arrow_up: Montée de version
+- [#1515](https://github.com/1024pix/pix-editor/pull/1515) [BUMP] Update dependency @hapi/inert to v7.1.1 [SECURITY].
+
 ## v4.33.0 (12/06/2026)
 
 
