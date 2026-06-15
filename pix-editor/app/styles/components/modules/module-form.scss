@@ -20,3 +20,25 @@
     justify-items: start;
   }
 }
+
+.module-form-notification {
+  .pix-notification-alert__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .pix-button--secondary {
+      color: var(--pix-info-700);
+      border: 2px solid var(--pix-info-700);
+
+      &:hover {
+        background-color: var(--pix-info-100);
+      }
+
+      &:focus {
+        background-color: var(--pix-info-100);
+      }
+    }
+  }
+}

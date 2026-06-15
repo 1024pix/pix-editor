@@ -9,10 +9,7 @@ import ModuleForm from 'pixeditor/components/modules/module-form';
   <main class="page-body">
     <section class="page-section module-form">
       {{#if @model.draftModule.isEditionDraft}}
-        <DraftModuleDiff
-          @internalTitle={{@model.draftModule.internalTitle}}
-          @htmlDiff={{@model.draftModuleDiff.htmlDiff}}
-        />
+        <DraftModuleDiff @draftModule={{@model.draftModule}} @htmlDiff={{@model.draftModuleDiff.htmlDiff}} />
       {{else}}
         <ModuleForm @module={{@model.draftModule}} @readonly={{true}} />
       {{/if}}
