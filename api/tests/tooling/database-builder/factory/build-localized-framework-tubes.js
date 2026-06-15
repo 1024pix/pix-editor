@@ -1,9 +1,17 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: number
+ *   tubeId: string
+ *   maxLevel?: number
+ *   locale?: string
+ * }} localizedFrameworkTubeToBuild
+ */
 export function buildLocalizedFrameworkTubes(
   {
     id = databaseBuffer.nextId++,
-    tubeId = '',
+    tubeId,
     maxLevel = 5,
     locale = 'bz',
   } = {},

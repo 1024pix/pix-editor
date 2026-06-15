@@ -22,10 +22,9 @@ export class DatabaseBuilder {
   #dirtyTables = new Set();
 
   constructor({ knex, emptyFirst = true, databaseBuffer = defaultDatabaseBuffer, beforeEmptyDatabase }) {
+    /** @property {typeof knex} knex */
     this.knex = knex;
-    /**
-     *  @property {(typeof factory)} factory
-     */
+    /** @property {typeof factory} factory */
     this.factory = factory;
     this.#databaseBuffer = databaseBuffer;
     this.#emptyFirst = emptyFirst;

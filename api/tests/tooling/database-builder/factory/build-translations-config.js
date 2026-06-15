@@ -1,5 +1,14 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: number
+ *   phraseProjectId: string
+ *   frameworkId: string
+ *   areaId?: string
+ *   uploadedLocales: string[]
+ * }} translationsConfigToBuild
+ */
 export function buildTranslationsConfig({
   id = databaseBuffer.getNextId(),
   phraseProjectId,

@@ -1,5 +1,25 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id: string
+ *   status?: string
+ *   hintStatus?: string
+ *   description?: string
+ *   descriptionStatus?: string
+ *   level?: number
+ *   internationalisation?: string
+ *   version?: number
+ *   tubeId?: string
+ *   tutorialIds?: string[]
+ *   learningMoreTutorialIds?: string[]
+ *   activatedAt?: string | number | Date
+ *   archivedAt?: string | number | Date
+ *   obsoletedAt?: string | number | Date
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} skillToBuild
+ */
 export function buildSkill({
   id,
   status,

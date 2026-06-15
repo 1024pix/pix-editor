@@ -10,6 +10,21 @@ import { buildChallenge } from './build-challenge.js';
 import { buildLocalizedChallenge } from './build-localized-challenge.js';
 import { buildTranslation } from './build-translation.js';
 
+/**
+ * @typedef {import('../../../../lib/infrastructure/translations/challenge.js').fields} TranslatedChallengeFieldList
+ * @typedef {TranslatedChallengeFieldList[number]} TranslatedChallengeField
+ */
+
+/**
+ * @param {{
+ *   challenge?: Parameters<typeof buildChallengeDatasourceObject>[0]
+ *   localizedChallenge?: Omit<Parameters<typeof buildLocalizedChallenge>[0], 'id' | 'challengeId'>
+ *   challengeTranslations?: Partial<Record<TranslatedChallengeField, string>>
+ *   skill?: Omit<Parameters<typeof buildSkillDatasourceObject>[0], 'id'>
+ *   framework?: Parameters<typeof buildFramework>[0]
+ *   tube?: Parameters<typeof buildTube>[0]
+ * }} groupToBuild
+ */
 export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework, tube }) {
   const randomId = generateRandomId();
 

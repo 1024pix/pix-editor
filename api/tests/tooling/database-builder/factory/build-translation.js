@@ -1,5 +1,12 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   key: string
+ *   locale: string
+ *   value: string
+ * }} translationToBuild
+ */
 export function buildTranslation({ key, locale, value } = {}) {
   const translation = databaseBuffer.pushInsertable({
     tableName: 'translations',

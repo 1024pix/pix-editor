@@ -1,5 +1,26 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id?: string
+ *   challengeId?: string
+ *   locale?: string
+ *   embedUrl?: string
+ *   status?: string
+ *   geography?: string
+ *   urlsToConsult?: string[]
+ *   requireGafamWebsiteAccess?: boolean
+ *   isIncompatibleIpadCertif?: boolean
+ *   isAwarenessChallenge?: boolean
+ *   toRephrase?: boolean
+ *   deafAndHardOfHearing?: string
+ *   hasEmbedInternalValidation?: boolean
+ *   noValidationNeeded?: boolean
+ *   validatedAt?: string | number | Date
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} localizedChallengeToBuild
+ */
 export function buildLocalizedChallenge({
   id = 'i18nChallenge123',
   challengeId = 'challenge123',

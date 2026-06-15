@@ -12,6 +12,9 @@ import { handleFailAction } from './lib/infrastructure/validation.js';
 
 monitoringTools.installHapiHook();
 
+/**
+ * @returns {Promise<Hapi.Server}
+ */
 export async function createServer() {
   const server = new Hapi.server({
     routes: {

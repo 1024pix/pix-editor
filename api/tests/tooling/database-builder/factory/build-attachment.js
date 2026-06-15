@@ -1,5 +1,19 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id: string
+ *   text: string
+ *   size: number
+ *   type: string
+ *   mimeType?: string
+ *   filename: string
+ *   challengeId?: string
+ *   localizedChallengeId: string
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} attachmentToBuild
+ */
 export function buildAttachment({
   id,
   url,

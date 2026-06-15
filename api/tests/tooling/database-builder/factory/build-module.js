@@ -1,5 +1,29 @@
 import { databaseBuffer } from '../database-buffer.js';
 
+/**
+ * @param {{
+ *   id: string
+ *   moduleId?: string
+ *   shortId: string
+ *   slug: string
+ *   title: string
+ *   internalTitle: string
+ *   isBeta?: boolean
+ *   visibility: string
+ *   details: {
+ *     image: string
+ *     duration: number
+ *     description: string
+ *     objectives: string[]
+ *     tabletSupport: string
+ *     level: string
+ *   },
+ *   sections: object
+ *   glossary?: object
+ *   createdAt?: string | number | Date
+ *   updatedAt?: string | number | Date
+ * }} moduleToBuild
+ */
 export function buildModule({
   id,
   shortId,
