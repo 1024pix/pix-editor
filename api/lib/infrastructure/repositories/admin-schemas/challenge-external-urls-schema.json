@@ -1,0 +1,51 @@
+{
+  "$schema": "./$schema.json",
+  "id": "instruction-external-urls-schema",
+  "label": "URL externes des épreuves",
+  "entityName": "challenge_external_urls",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "primaryKey": "id",
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "number"
+    },
+    {
+      "key": "framework_name",
+      "label": "Référentiel",
+      "type": "string"
+    },
+    {
+      "key": "competence_name",
+      "label": "Compétence",
+      "type": "string"
+    },
+    {
+      "key": "skill_name",
+      "label": "Acquis",
+      "type": "string"
+    },
+    {
+      "key": "challenge_id",
+      "label": "ID du challenge",
+      "type": "string"
+    },
+    {
+      "key": "challenge_status",
+      "label": "Statut du challenge",
+      "type": "string"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "string"
+    }
+  ]
+}
