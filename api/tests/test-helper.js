@@ -2,6 +2,7 @@ import * as infraErrors from '../lib/infrastructure/errors.js';
 import { DatabaseBuilder } from './tooling/database-builder/database-builder.js';
 import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
+import * as config from '../lib/config.js';
 
 export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/utils/stream-to-promise.js';
 import { createTempFile, removeTempFile } from './tooling/temporary-file.js';
@@ -66,6 +67,10 @@ export function catchErr(promiseFn, ctx) {
 
 export function generateAuthorizationHeader(user) {
   return { authorization: `Bearer ${user.apiKey}` };
+}
+
+export function generateBrokenLinksMonitorAuthorizationHeader() {
+  return { authorization: `Bearer ${config.urlBrokenLinksMonitor.authSecret}` };
 }
 
 export { domainBuilder } from './tooling/domain-builder/domain-builder.js';

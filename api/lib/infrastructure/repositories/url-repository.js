@@ -97,6 +97,16 @@ export async function updateTutorials(tutorialUrls) {
   return knexConn.batchInsert('tutorial_external_urls', tutorialUrls, 500);
 }
 
+export async function get() {
+  const knexConn = DomainTransaction.getConnection();
+  const challengeExternalUrlsDto = await knexConn('challenge_external_urls').orderBy('id');
+  const tutorialExternalUrlsDto = await knexConn('tutorial_external_urls').orderBy('id');
+  return {
+    challengeExternalUrls: challengeExternalUrlsDto,
+    tutorialExternalUrls: tutorialExternalUrlsDto,
+  };
+}
+
 export async function exportExternalUrls(dataToUpload) {
   const sheetName = new Date().toLocaleDateString('fr-FR');
   await clearOlderSheets(config.exportExternalUrlsJob.spreadsheetId);

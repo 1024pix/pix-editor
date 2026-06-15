@@ -1,0 +1,75 @@
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder } from '../../../test-helper.js';
+import { urlRepository } from '../../../../lib/infrastructure/repositories/index.js';
+
+describe('Integration | Repository | url-repository', () => {
+  describe('get', () => {
+    it('should return the list externale challenge and tutorial urls', async () => {
+      // given
+      databaseBuilder.factory.buildChallengeExternalUrl({
+        framework_name: 'Pix',
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        challenge_id: 'challenge1',
+        challenge_status: 'validé',
+        locale: 'nl',
+        url: 'https://ui.pix.org',
+      });
+      databaseBuilder.factory.buildChallengeExternalUrl({
+        framework_name: 'Pix',
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        challenge_id: 'challenge2',
+        challenge_status: 'validé',
+        locale: 'fr',
+        url: 'https://ui.pix.fr',
+      });
+      databaseBuilder.factory.buildTutorialExternalUrl({
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        tutorial_id: 'tutorial1',
+        url: 'http://commant-pix-ui-fonctionne.org',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const urls = await urlRepository.get();
+
+      // then
+      expect(urls).toStrictEqual({
+        challengeExternalUrls: [
+          {
+            id: expect.any(Number),
+            framework_name: 'Pix',
+            competence_name: 'Nom de competence',
+            skill_name: '@patateDouce',
+            challenge_id: 'challenge1',
+            challenge_status: 'validé',
+            locale: 'nl',
+            url: 'https://ui.pix.org',
+          },
+          {
+            id: expect.any(Number),
+            framework_name: 'Pix',
+            competence_name: 'Nom de competence',
+            skill_name: '@patateDouce',
+            challenge_id: 'challenge2',
+            challenge_status: 'validé',
+            locale: 'fr',
+            url: 'https://ui.pix.fr',
+          },
+        ],
+        tutorialExternalUrls: [
+          {
+            id: expect.any(Number),
+            competence_name: 'Nom de competence',
+            skill_name: '@patateDouce',
+            tutorial_id: 'tutorial1',
+            url: 'http://commant-pix-ui-fonctionne.org',
+          },
+        ],
+      });
+    });
+  });
+});
