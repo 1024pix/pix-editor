@@ -11,6 +11,12 @@ const serializer = new Serializer('competence-overview', {
     'skillsCount',
     'primaryLocales',
   ],
+  transform(competenceOverview) {
+    return {
+      ...competenceOverview,
+      primaryLocales: competenceOverview.primaryLocales.map((locale) => locale === 'fr-FR' ? locale.toLowerCase() : locale),
+    };
+  },
 });
 
 export function serialize(competenceOverview) {
