@@ -1,5 +1,5 @@
 import { knex } from '../../../db/knex-database-connection.js';
-import { Module } from '../../domain/models/index.js';
+import { Module, ModuleForConsultation } from '../../domain/models/index.js';
 import { ModuleForReplication } from '../../domain/models/replication/index.js';
 import { NotFoundError } from '../errors.js';
 
@@ -54,20 +54,28 @@ export async function listForReplication() {
 }
 
 export async function getById({ id }) {
-  const module = await knex('modules').where({ id }).first();
+  const module = await knex
+    .select('modules.*', 'draft-modules.id as draftModuleId')
+    .from('modules')
+    .leftOuterJoin('draft-modules', 'draft-modules.moduleId', 'modules.id')
+    .where('modules.id', id)
+    .first();
 
   if (!module) {
     throw new NotFoundError('Module not found');
   }
 
-  return toDomain(module);
+  return toDomainForConsultation(module);
 }
 
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...module }) {
   return new Module({ ...module, details: { image, description, duration, level, objectives, tabletSupport } });
 }
 
+function toDomainForConsultation({ image, description, duration, level, objectives, tabletSupport, ...module }) {
+  return new ModuleForConsultation({ ...module, details: { image, description, duration, level, objectives, tabletSupport } });
+}
+
 function toDomainForReplication(module) {
   return new ModuleForReplication(module);
 }
-

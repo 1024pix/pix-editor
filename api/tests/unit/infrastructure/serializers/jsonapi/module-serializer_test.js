@@ -7,7 +7,7 @@ describe('Unit | Serializer | JSONAPI | module-serializer', () => {
   describe('#serialize', () => {
     it('serializes a Module model to a module payload', () => {
       // given
-      const module = domainBuilder.buildModule();
+      const module = domainBuilder.buildModuleForConsultation({ draftModuleId: 'pouet' });
       const expectedPayload = {
         data: {
           type: 'modules',
@@ -22,6 +22,14 @@ describe('Unit | Serializer | JSONAPI | module-serializer', () => {
             details: module.details,
             sections: module.sections,
             glossary: module.glossary,
+          },
+          relationships: {
+            'draft-module': {
+              data: {
+                id: module.draftModuleId,
+                type: 'draft-modules',
+              },
+            },
           },
         },
       };
