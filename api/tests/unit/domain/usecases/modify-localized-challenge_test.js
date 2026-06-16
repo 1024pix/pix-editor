@@ -16,10 +16,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
 
       await modifyLocalizedChallenge({ localizedChallenge }, { localizedChallengeRepository });
 
-      expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
-        localizedChallenge: originalLocalizedChallenge,
-        transaction: expect.anything(),
-      });
+      expect(localizedChallengeRepository.update).toHaveBeenCalledWith({ localizedChallenge: originalLocalizedChallenge });
       expect(updateSpy).to.toHaveBeenCalledWith(localizedChallenge);
     });
     describe('when user is admin', () => {
@@ -39,10 +36,7 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
 
         await modifyLocalizedChallenge({ isAdmin: true, localizedChallenge }, { localizedChallengeRepository });
 
-        expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
-          localizedChallenge: originalLocalizedChallenge,
-          transaction: expect.anything(),
-        });
+        expect(localizedChallengeRepository.update).toHaveBeenCalledWith({ localizedChallenge: originalLocalizedChallenge });
       });
     });
     describe('when user is not admin', () => {
@@ -94,14 +88,8 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
           { localizedChallengeRepository },
         );
 
-        expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
-          localizedChallenge: originalLocalizedChallenge,
-          transaction: expect.anything(),
-        });
-        expect(localizedChallengeRepository.get).toHaveBeenCalledWith({
-          id: 'localized-challenge-id',
-          transaction: expect.anything(),
-        });
+        expect(localizedChallengeRepository.update).toHaveBeenCalledWith({ localizedChallenge: originalLocalizedChallenge });
+        expect(localizedChallengeRepository.get).toHaveBeenCalledWith({ id: 'localized-challenge-id' });
       });
     });
   });
