@@ -11,17 +11,17 @@ import { on } from '@ember/modifier';
       </div>
       <div class="ui right menu">
         {{#if @maximized}}
-          <button class="ui icon button item" {{on "click" @minimize}} type="button"><i
-              class="window minimize icon"
-            ></i></button>
+          <button {{on "click" @minimize}} class="ui icon button item" type="button" title="Minimiser la fenêtre">
+            <i class="window minimize icon"></i>
+          </button>
         {{else}}
-          <button class="ui icon button item" {{on "click" @maximize}} type="button"><i
-              class="window maximize outline icon"
-            ></i></button>
+          <button {{on "click" @maximize}} class="ui icon button item" type="button" title="Maximiser la fenêtre">
+            <i class="window maximize outline icon"></i>
+          </button>
         {{/if}}
-        <button class="ui icon button item" {{on "click" @close}} type="button"><i
-            class="icon window close"
-          ></i></button>
+        <button {{on "click" @close}} class="ui icon button item" type="button" title="Fermer la fenêtre">
+          <i class="icon window close"></i>
+        </button>
       </div>
     </div>
   </div>
