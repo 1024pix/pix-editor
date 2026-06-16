@@ -1,6 +1,6 @@
+import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
-import { render } from '@ember/test-helpers';
 import CompetenceGridThematic from 'pixeditor/components/competence/competence-grid-thematic';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -180,7 +180,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       this.section = 'skills';
 
       // when
-      await render(
+      const screen = await render(
         <template>
           <CompetenceGridThematic
             @section={{self.section}}
@@ -191,9 +191,10 @@ module('Integration | Component | competence/competence-grid-thematic', function
           />
         </template>,
       );
+
       // then
-      assert.dom('[data-test-add-tube]').exists();
-      assert.dom('[data-test-sort-tube]').exists();
+      assert.dom(screen.getByRole('button', { name: 'Nouveau sujet' })).exists();
+      assert.dom(screen.getByRole('button', { name: 'Trier les sujets' })).exists();
     });
   });
 
@@ -253,7 +254,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       this.section = 'skills';
 
       // when
-      await render(
+      const screen = await render(
         <template>
           <CompetenceGridThematic
             @section={{self.section}}
@@ -266,7 +267,7 @@ module('Integration | Component | competence/competence-grid-thematic', function
       // then
       assert.dom('[data-test-theme-cell] a').hasText('Thematic');
       assert.dom('[data-test-empty-row]').exists();
-      assert.dom('[data-test-add-tube]').exists();
+      assert.dom(screen.getByRole('button', { name: 'Nouveau sujet' })).exists();
     });
   });
 });
