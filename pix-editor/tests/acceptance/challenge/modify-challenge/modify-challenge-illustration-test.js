@@ -133,7 +133,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
 
     // replace illustrationA with illustrationB
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-delete-illustration-button]'));
+    await click(screen.getByRole('button', { name: "Supprimer l'image" }));
     await selectFiles('[data-test-file-input-illustration] input', illustrationB);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
@@ -164,7 +164,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-delete-illustration-button]'));
+    await click(screen.getByRole('button', { name: "Supprimer l'image" }));
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));

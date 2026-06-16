@@ -1,6 +1,6 @@
 import { clickByText, visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, find, findAll } from '@ember/test-helpers';
+import { click, findAll } from '@ember/test-helpers';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { runTask } from 'ember-lifeline';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -158,7 +158,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
 
     // replace illustrationA with illustrationB
     await clickByText('Modifier');
-    await click(find('[data-test-delete-illustration-button]'));
+    await click(screen.getByRole('button', { name: "Supprimer l'image" }));
     await selectFiles('[data-test-file-input-illustration] input', illustrationB);
     await runTask(this, async () => {}, 400);
     saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
@@ -195,7 +195,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function (hooks) 
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await clickByText('Version nl');
     await clickByText('Modifier');
-    await click(find('[data-test-delete-illustration-button]'));
+    await click(screen.getByRole('button', { name: "Supprimer l'image" }));
 
     await runTask(this, async () => {}, 200);
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });

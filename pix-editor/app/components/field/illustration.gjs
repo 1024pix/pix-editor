@@ -19,10 +19,9 @@ export default class Illustration extends Component {
           octets)
         {{/if}}
         {{#if @edition}}
-          <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i
-              class="remove icon"
-              data-test-delete-illustration-button
-            ></i></button>
+          <button class="ui button file-remove" type="button" title="Supprimer l'image" {{on "click" this.remove}}>
+            <i class="remove icon"></i>
+          </button>
         {{/if}}
       {{/if}}
       {{#if @edition}}
