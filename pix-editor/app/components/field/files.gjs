@@ -15,17 +15,19 @@ export default class Files extends Component {
       {{/if}}
       {{#if @value.length}}
         {{#each @value as |file|}}
-          <a href={{file.url}} download={{file.filename}} target="_blank" referrerpolicy="strict-origin"><i
-              class="file icon"
-            ></i>
-            {{file.filename}}</a>
+          <a href={{file.url}} download={{file.filename}} target="_blank" referrerpolicy="strict-origin">
+            <i class="file icon"></i>
+            {{file.filename}}
+          </a>
           {{#if @edition}}
             <button
               {{on "click" (fn this.remove file)}}
               class="ui button file-remove"
-              data-test-delete-attachment-button
               type="button"
-            ><i class="remove icon"></i></button>
+              title="Supprimer le fichier"
+            >
+              <i class="remove icon"></i>
+            </button>
           {{/if}}
         {{/each}}
       {{/if}}
