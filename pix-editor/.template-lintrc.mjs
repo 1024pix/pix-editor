@@ -7,6 +7,7 @@ export default {
     'style-concatenation': false,
     'no-potential-path-strings': false,
     'link-rel-noopener': false,
+    'no-whitespace-within-word': false,
   },
   overrides: [
     {

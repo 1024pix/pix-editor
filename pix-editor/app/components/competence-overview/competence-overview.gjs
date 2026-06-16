@@ -25,12 +25,10 @@ export default class CompetenceOverview extends Component {
   }
 
   get canDisplayGrid() {
-    return (
-      (this.args.locale &&
-        (this.args.localizedFrameworkTubes?.length !== 0 ||
-          this.args.competenceOverview.thematicOverviews.length !== 0)) ||
-      !this.args.locale
-    );
+    if (!this.args.locale) return true;
+    const areThereLocalizedFrameworkTubes = this.args.localizedFrameworkTubes?.length !== 0;
+    const areThereThematicOverviews = this.args.competenceOverview.thematicOverviews.length !== 0;
+    return areThereLocalizedFrameworkTubes || areThereThematicOverviews;
   }
 
   @action
@@ -133,8 +131,17 @@ export default class CompetenceOverview extends Component {
           {{/each}}
         </div>
       {{else}}
-        <p>Vérifiez qu'un cadre de traduction a bien été créé, ou qu'il y a bien au moins une épreuve de type validé
-          qualité sur cette compétence</p>
+        <p>
+          Si vous voyez ce message :
+        </p>
+        <ul>
+          <li>
+            Vérifiez qu'un cadre de traduction a bien été créé,
+          </li>
+          <li>
+            Ou qu'il y a bien au moins une épreuve de type validé qualité sur cette compétence
+          </li>
+        </ul>
       {{/if}}
       <div class="competence-overview-footer">
         {{#if @locale}}
