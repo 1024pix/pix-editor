@@ -4,6 +4,7 @@ import Joi from 'joi';
 import { csvFileParser } from '../lib/application/scripts/parsers.js';
 import { knex } from '../db/knex-database-connection.js';
 import { translationRepository } from '../lib/infrastructure/repositories/index.js';
+import { DomainTransaction } from '../lib/domain/DomainTransaction.js';
 
 export const csvSchemas = [
   { name: 'Thèmes/acquis', schema: Joi.string().required() },
@@ -56,7 +57,8 @@ export class UpdateTubesTranslationScript extends Script {
     logger.info({ dryRun: options.dryRun, ids: options.id }, 'Script options');
     const tubesFromPix = await getTubeIdsFromPixFramework();
 
-    await knex.transaction(async (trx) => {
+    return DomainTransaction.execute(async () => {
+      const knexConn = DomainTransaction.getConnection();
       try {
         let updatedTubesCount = 0;
         for (const row of options.file) {
@@ -70,20 +72,20 @@ export class UpdateTubesTranslationScript extends Script {
 
           const tubeId = tubeIds[0].id;
           const translations = [{ key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: practicalTitle }, { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: practicalDescription }];
-          await translationRepository.save({ translations, transaction: trx });
+          await translationRepository.save({ translations });
           updatedTubesCount++;
         }
 
         if (options.dryRun) {
           logger.info(`Dry run is enabled, stopping before updating ${updatedTubesCount} tube(s)`);
-          await trx.rollback();
+          await knexConn.rollback();
           return;
         }
-        await trx.commit();
+        await knexConn.commit();
         logger.info(`Successfully updated translations for ${updatedTubesCount} tube(s)`);
       } catch (error) {
         logger.error('unhandled error found', { error });
-        await trx.rollback();
+        await knexConn.rollback();
       }
     });
   }
