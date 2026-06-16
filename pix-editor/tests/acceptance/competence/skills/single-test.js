@@ -1,5 +1,5 @@
 import { clickByText, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find } from '@ember/test-helpers';
+import { click, currentURL, fillIn } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { waitForSelectToBeClosed } from 'pixeditor/tests/helpers/wait-for-select-to-be-closed';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
@@ -83,8 +83,10 @@ module('Acceptance | skill | single', function (hooks) {
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(true);
 
-    await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
-    await click(find('.icon.window.close'));
+    const screen = await visit(
+      `/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`,
+    );
+    await click(screen.getByRole('button', { name: 'Fermer la fenêtre' }));
 
     assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
