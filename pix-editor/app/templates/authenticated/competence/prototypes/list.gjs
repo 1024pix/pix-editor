@@ -6,9 +6,8 @@ import Prototypes from 'pixeditor/components/list/prototypes';
   <div class="main-title {{if @controller.config.lite 'lite' ''}}">
     <h1 class="ui header">
       <div class="ui right floated menu">
-        <button class="ui button icon item" {{on "click" @controller.close}} type="button"><i
-            class="icon window close"
-          ></i>
+        <button class="ui button icon item" type="button" {{on "click" @controller.close}}>
+          <i class="icon window close"></i>
         </button>
       </div>
       Prototypes de
@@ -36,12 +35,7 @@ import Prototypes from 'pixeditor/components/list/prototypes';
   </div>
   <div class="ui borderless bottom attached labelled icon menu">
     {{#if @controller.mayCreatePrototype}}
-      <button
-        data-test-new-prototype-action
-        class="ui button right item"
-        {{on "click" @controller.newVersion}}
-        type="button"
-      >
+      <button class="ui button right item" {{on "click" @controller.newVersion}} type="button">
         <i class="plus square outline icon"></i>
         Nouvelle version
       </button>

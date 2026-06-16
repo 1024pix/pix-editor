@@ -1,4 +1,5 @@
-import { click, currentURL, find, findAll, visit, waitUntil } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, find, findAll, waitUntil } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -19,7 +20,7 @@ module('Acceptance | competence/prototypes/list', function () {
   module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
-
+    let screen;
     hooks.beforeEach(async function () {
       // given
       this.server.create('config', 'default');
@@ -103,7 +104,7 @@ module('Acceptance | competence/prototypes/list', function () {
       await authenticateSession();
 
       // when
-      await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}?view=workbench`);
+      screen = await visit(`/competence/${competenceId1}/prototypes/list/${tubeId1}/${skillId1}?view=workbench`);
     });
 
     test('it should display a list of prototype of `skill1`', function (assert) {
@@ -147,7 +148,7 @@ module('Acceptance | competence/prototypes/list', function () {
 
       // when
       await click(findAll('[data-test-skill-tab]')[1]);
-      await click(find('[data-test-new-prototype-action]'));
+      await click(screen.getByRole('button', { name: 'Nouvelle version' }));
 
       // then
       assert.strictEqual(currentURL().indexOf(expectedResult), 0);
