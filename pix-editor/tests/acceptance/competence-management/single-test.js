@@ -73,7 +73,7 @@ module('Acceptance | competence-management/single', function (hooks) {
     // when
     const screen = await visit('/competence-management/recCompetence1.1');
     await click(find('[data-test-edit-button]'));
-    await click(find('.bars.icon'));
+    await click(screen.getByRole('button', { name: 'Afficher/cacher la barre latérale' }));
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Code Titre' }));
 
