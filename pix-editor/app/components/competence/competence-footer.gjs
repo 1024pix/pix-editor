@@ -9,6 +9,7 @@ export default class CompetenceFooter extends Component {
     <div class="ui borderless bottom attached labelled icon menu{{this.skillClass}}">
       {{#if this.displayWorkbenchViews}}
         <button
+          title="Grille d'atelier des épreuves"
           class={{concat "ui button item" (if (eq @view "workbench") " active" "")}}
           {{on "click" (fn @selectView "workbench")}}
           type="button"
@@ -16,6 +17,7 @@ export default class CompetenceFooter extends Component {
           <i class="grid layout icon"></i>
         </button>
         <button
+          title="Atelier d'atelier des épreuves"
           class={{concat "ui button item" (if (eq @view "workbench-list") " active" "")}}
           {{on "click" (fn @selectView "workbench-list")}}
           type="button"

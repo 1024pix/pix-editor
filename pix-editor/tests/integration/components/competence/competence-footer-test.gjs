@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import CompetenceFooter from 'pixeditor/components/competence/competence-footer';
 import { module, test } from 'qunit';
 
@@ -11,15 +11,15 @@ module('Integration | Component | competence/competence-footer', function (hooks
     const self = this;
 
     // given
-    this.section = 'skills';
+    this.section = 'challenges';
     this.competence = {};
-    this.view = 'production';
+    this.view = 'workbench';
     this.mayCreateTube = true;
     this.externalAction = () => {};
 
     // when
 
-    await render(
+    const screen = await render(
       <template>
         <CompetenceFooter
           @competence={{self.competence}}
@@ -34,7 +34,8 @@ module('Integration | Component | competence/competence-footer', function (hooks
     );
 
     // then
-
     assert.dom('.ui.borderless.bottom').exists();
+    assert.dom(screen.getByRole('button', { name: "Grille d'atelier des épreuves" })).exists();
+    assert.dom(screen.getByRole('button', { name: "Atelier d'atelier des épreuves" })).exists();
   });
 });
