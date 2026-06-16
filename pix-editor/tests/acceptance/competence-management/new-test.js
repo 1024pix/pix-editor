@@ -1,5 +1,5 @@
-import { clickByName, clickByText, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find } from '@ember/test-helpers';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -50,8 +50,8 @@ module('Acceptance | competence-management/new', function (hooks) {
     await clickByText('Pix+');
     await click(screen.getByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Ajouter une compétence' }));
-    await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-save-button]'));
+    await fillByLabel('Titre :', newCompetenceTitle);
+    await click(screen.getByRole('button', { name: 'Enregistrer' }));
 
     // then
     const area = await store.peekRecord('area', 'recArea1');
@@ -64,7 +64,7 @@ module('Acceptance | competence-management/new', function (hooks) {
   test('it should cancel creation', async function (assert) {
     // when
     const screen = await visit('/competence-management/new/recArea1');
-    await click(find('[data-test-cancel-button]'));
+    await click(screen.getByRole('button', { name: 'Annuler' }));
 
     // then
     assert.dom(screen.getByText('Création de la compétence annulée')).exists();
