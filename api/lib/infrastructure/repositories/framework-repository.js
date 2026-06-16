@@ -1,11 +1,12 @@
 import { Framework } from '../../domain/models/index.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import * as idGenerator from '../utils/id-generator.js';
 
 const TABLE_NAME = 'frameworks';
 
 export async function list() {
-  const dtos = await selectFrameworks().orderBy('createdAt');
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await selectFrameworks(knexConn).orderBy('createdAt');
 
   return dtos.map(toDomain);
 }
@@ -14,30 +15,31 @@ export async function list() {
  * @param {Framework} framework
  */
 export async function create(framework) {
+  const knexConn = DomainTransaction.getConnection();
   const id = idGenerator.generateNewId('framework');
 
-  await knex
+  await knexConn
     .insert({
       id,
       name: framework.name,
     })
     .into(TABLE_NAME);
 
-  const dto = await selectFrameworks().where('id', id).first();
+  const dto = await selectFrameworks(knexConn).where('id', id).first();
 
   return toDomain(dto);
 }
 
-function selectFrameworks() {
-  return knex
+function selectFrameworks(knexConn) {
+  return knexConn
     .select(
       '*',
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "areaIds"',
-        knex
-          .select(knex.raw('json_agg(?? order by ??)', ['areas.id', 'areas.code']))
+        knexConn
+          .select(knexConn.raw('json_agg(?? order by ??)', ['areas.id', 'areas.code']))
           .from('areas')
-          .where('areas.frameworkId', '=', knex.ref(`${TABLE_NAME}.id`)),
+          .where('areas.frameworkId', '=', knexConn.ref(`${TABLE_NAME}.id`)),
       ),
     )
     .from(TABLE_NAME);

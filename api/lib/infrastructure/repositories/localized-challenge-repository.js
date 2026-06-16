@@ -1,4 +1,4 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
@@ -17,13 +17,13 @@ function _generateId() {
 export async function create({
   localizedChallenges = [],
   generateId = _generateId,
-  transaction: knexConnection = knex,
 }) {
   if (localizedChallenges.length === 0) {
     return;
   }
+  const knexConn = DomainTransaction.getConnection();
   const dataToInsert = adaptModelsForDB(localizedChallenges, generateId);
-  await knexConnection('localized_challenges').insert(dataToInsert).onConflict().ignore();
+  await knexConn('localized_challenges').insert(dataToInsert).onConflict().ignore();
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {
@@ -39,23 +39,23 @@ export async function getByChallengeIdAndLocale({ challengeId, locale }) {
   return toDomain(dto);
 }
 
-export async function listByChallengeIds({ challengeIds, transaction: knexConnection = knex }) {
-  const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection)
+export async function listByChallengeIds({ challengeIds }) {
+  const dtos = await _queryLocalizedChallengeWithAttachment()
     .whereIn('localized_challenges.challengeId', challengeIds)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
   return dtos.map(toDomain);
 }
 
-export async function get({ id, transaction: knexConnection = knex }) {
-  const dto = await _queryLocalizedChallengeWithAttachment(knexConnection).where('localized_challenges.id', id).first();
+export async function get({ id }) {
+  const dto = await _queryLocalizedChallengeWithAttachment().where('localized_challenges.id', id).first();
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
   return toDomain(dto);
 }
 
-export async function getMany({ ids, transaction: knexConnection = knex }) {
-  const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection)
+export async function getMany({ ids }) {
+  const dtos = await _queryLocalizedChallengeWithAttachment()
     .whereIn('localized_challenges.id', ids)
     .orderBy(['localized_challenges.challengeId', 'localized_challenges.locale']);
 
@@ -63,6 +63,7 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
 }
 
 export async function filter(params = {}) {
+  const knexConn = DomainTransaction.getConnection();
   const localizedEntities = await translationRepository.searchLocalizedEntities({
     model: 'challenge',
     fields: ['instruction', 'proposals'],
@@ -70,7 +71,7 @@ export async function filter(params = {}) {
     limit: params.page?.limit,
   });
 
-  let query = knex.select().from('localized_challenges')
+  let query = knexConn.select().from('localized_challenges')
     .whereIn(['challengeId', 'locale'], localizedEntities.map(({ entityId, locale }) => [entityId, locale]))
     .orWhereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`)
     .orderBy('id');
@@ -84,17 +85,18 @@ export async function filter(params = {}) {
   return dtos.map(toDomain);
 }
 
-export async function update({ localizedChallenge, transaction: knexConnection = knex }) {
+export async function update({ localizedChallenge }) {
+  const knexConn = DomainTransaction.getConnection();
   const localizedChallengeForDB = adaptModelForDB(localizedChallenge);
   delete localizedChallengeForDB.id;
-  const [dto] = await knexConnection('localized_challenges')
+  const [dto] = await knexConn('localized_challenges')
     .where('id', localizedChallenge.id)
     .update(localizedChallengeForDB)
     .returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  const [primaryEmbedUrl] = await knexConnection('localized_challenges')
+  const [primaryEmbedUrl] = await knexConn('localized_challenges')
     .where({ id: dto.challengeId })
     .pluck('embedUrl');
 
@@ -133,18 +135,19 @@ function adaptModelForDB(localizedChallenge, generateId) {
   };
 }
 
-function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
-  return knexConnection
+function _queryLocalizedChallengeWithAttachment() {
+  const knexConn = DomainTransaction.getConnection();
+  return knexConn
     .select(
       'localized_challenges.*',
       'primaryLocalizedChallenge.embedUrl as primaryEmbedUrl',
-      knex.raw(
+      knexConn.raw(
         'coalesce((??), \'[]\') as "fileIds"',
-        knex
-          .select(knex.raw('json_agg(??)', 'attachments.id'))
+        knexConn
+          .select(knexConn.raw('json_agg(??)', 'attachments.id'))
           .from('attachments')
-          .where('attachments.challengeId', knex.ref('localized_challenges.challengeId')) // necessary to use index on (challengeId, localizedChallengeId)
-          .where('attachments.localizedChallengeId', knex.ref('localized_challenges.id')),
+          .where('attachments.challengeId', knexConn.ref('localized_challenges.challengeId')) // necessary to use index on (challengeId, localizedChallengeId)
+          .where('attachments.localizedChallengeId', knexConn.ref('localized_challenges.id')),
       ),
     )
     .from('localized_challenges')

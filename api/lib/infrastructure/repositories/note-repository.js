@@ -1,15 +1,17 @@
 import { Note } from '../../domain/models/Note.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import * as idGenerator from '../utils/id-generator.js';
 
 export async function listByChallengeId(challengeId) {
-  const dtos = await knex.select('*').from('notes').where('challengeId', challengeId).orderBy('createdAt', 'asc');
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('*').from('notes').where('challengeId', challengeId).orderBy('createdAt', 'asc');
 
   return dtos.map(toDomain);
 }
 
 export async function create(note) {
-  const [dto] = await knex.insert({
+  const knexConn = DomainTransaction.getConnection();
+  const [dto] = await knexConn.insert({
     id: idGenerator.generateNewId('note'),
     status: note.status,
     text: note.text,
@@ -21,12 +23,13 @@ export async function create(note) {
 }
 
 export async function update(noteId, note) {
-  const [dto] = await knex('notes').update({
+  const knexConn = DomainTransaction.getConnection();
+  const [dto] = await knexConn('notes').update({
     status: note.status,
     text: note.text,
     author: note.author,
     challengeId: note.challengeId,
-    updatedAt: knex.fn.now(),
+    updatedAt: knexConn.fn.now(),
   }).where('id', noteId).returning('*');
 
   return toDomain(dto);

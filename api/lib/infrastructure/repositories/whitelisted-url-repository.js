@@ -1,8 +1,8 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { WhitelistedUrl } from '../../domain/models/index.js';
 
-function buildBaseReadQuery() {
-  return knex('whitelisted_urls').select([
+function buildBaseReadQuery(knexConn) {
+  return knexConn('whitelisted_urls').select([
     'id',
     'createdBy',
     'latestUpdatedBy',
@@ -18,26 +18,29 @@ function buildBaseReadQuery() {
 }
 
 export async function list() {
-  const whitelistedUrlDtos = await buildBaseReadQuery().orderBy('url');
+  const knexConn = DomainTransaction.getConnection();
+  const whitelistedUrlDtos = await buildBaseReadQuery(knexConn).orderBy('url');
 
   return toDomainList(whitelistedUrlDtos);
 }
 
 export async function find(id) {
-  const whitelistedUrlDto = await buildBaseReadQuery().where({ id }).first();
+  const knexConn = DomainTransaction.getConnection();
+  const whitelistedUrlDto = await buildBaseReadQuery(knexConn).where({ id }).first();
 
   if (!whitelistedUrlDto) return null;
   return toDomain(whitelistedUrlDto);
 }
 
 export async function save(whitelistedUrl) {
+  const knexConn = DomainTransaction.getConnection();
   const dataToSave = adaptModelToDB(whitelistedUrl);
   let id;
   if (whitelistedUrl.id) {
     id = whitelistedUrl.id;
-    await knex('whitelisted_urls').update(dataToSave).where({ id });
+    await knexConn('whitelisted_urls').update(dataToSave).where({ id });
   } else {
-    const dataInserted = await knex('whitelisted_urls').insert(dataToSave, ['id']);
+    const dataInserted = await knexConn('whitelisted_urls').insert(dataToSave, ['id']);
     id = dataInserted[0].id;
   }
   return id;

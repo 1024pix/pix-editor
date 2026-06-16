@@ -4,19 +4,20 @@ import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 import { TubeForReplication } from '../../domain/models/replication/index.js';
 import * as idGenerator from '../utils/id-generator.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 const model = 'tube';
 const TABLE_NAME = 'tubes';
 
-export async function list({ transaction: knexConn } = {}) {
-  const [dtos, translations] = await Promise.all([selectTubes(knexConn).orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model, { knexConn })]);
+export async function list() {
+  const [dtos, translations] = await Promise.all([selectTubes().orderBy(`${TABLE_NAME}.id`), translationRepository.listByModel(model)]);
 
   return toDomainList(dtos, translations);
 }
 
 export async function listForReplication() {
-  const dtos = await knex
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn
     .select(`${TABLE_NAME}.id`, `${TABLE_NAME}.name`, `${TABLE_NAME}.thematicId`, 'thematics.competenceId')
     .from(TABLE_NAME)
     .join('thematics', 'thematics.id', `${TABLE_NAME}.thematicId`)
@@ -34,15 +35,14 @@ export async function get(id) {
   return toDomain(dto, translations);
 }
 
-export async function listByCompetenceId(competenceId, { transaction: knexConn } = {}) {
-  const dtos = await selectTubes(knexConn).where('thematics.competenceId', competenceId).orderBy('tubes.id');
+export async function listByCompetenceId(competenceId) {
+  const dtos = await selectTubes().where('thematics.competenceId', competenceId).orderBy('tubes.id');
 
   if (dtos.length === 0) return [];
 
   const translations = await translationRepository.listByEntities(
     model,
     dtos.map(({ id }) => id),
-    { knexConn },
   );
 
   return toDomainList(dtos, translations);
@@ -59,12 +59,13 @@ export async function getMany(ids) {
 }
 
 export async function create(tube) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     tube.id = idGenerator.generateNewId('tube');
     const translations = tubeTranslations.extractFromDomainObject(tube);
 
+    const knexConn = DomainTransaction.getConnection();
     await Promise.all([
-      transaction
+      knexConn
         .insert({
           id: tube.id,
           name: tube.name,
@@ -72,40 +73,41 @@ export async function create(tube) {
           thematicId: tube.thematicAirtableId,
         })
         .into(TABLE_NAME),
-      translationRepository.save({ translations, transaction }),
+      translationRepository.save({ translations }),
     ]);
 
-    const dto = await selectTubes(transaction).where('tubes.id', tube.id).first();
+    const dto = await selectTubes().where('tubes.id', tube.id).first();
 
     return toDomain(dto, translations);
   });
 }
 
 export async function update(tube) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     const translations = tubeTranslations.extractFromDomainObject(tube);
 
-    await transaction(TABLE_NAME)
+    const knexConn = DomainTransaction.getConnection();
+    await knexConn(TABLE_NAME)
       .update({
         name: tube.name,
         index: tube.index,
         thematicId: tube.thematicAirtableId,
       })
       .where('id', tube.id);
-    const dto = await selectTubes(transaction).where('tubes.id', tube.id).first();
+    const dto = await selectTubes().where('tubes.id', tube.id).first();
 
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${tubeTranslations.prefix}${tube.id}.`,
       locales: ['fr', 'en'],
-      transaction,
     });
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
     return toDomain(dto, translations);
   });
 }
 
-function selectTubes(knexConn = knex) {
+function selectTubes() {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn
     .select(
       `${TABLE_NAME}.*`,

@@ -1,4 +1,4 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { fetchPage } from '../utils/knex-utils.js';
 import {
   ChallengeSummary as ChallengeSummary_Read,
@@ -15,14 +15,15 @@ import _ from 'lodash';
 import { escapeLikeWildcards } from './sql-utils.js';
 
 export async function findReadSummaries({ filter, page }) {
-  const query = knex('static_courses')
+  const knexConn = DomainTransaction.getConnection();
+  const query = knexConn('static_courses')
     .select({
       id: 'static_courses.id',
       name: 'static_courses.name',
       createdAt: 'static_courses.createdAt',
       challengeIds: 'static_courses.challengeIds',
       isActive: 'static_courses.isActive',
-      tags: knex.raw(`
+      tags: knexConn.raw(`
         json_agg(
           json_build_object('id', "static_course_tags"."id", 'label', "static_course_tags"."label")
           ORDER BY "static_course_tags"."label" ASC
@@ -42,7 +43,7 @@ export async function findReadSummaries({ filter, page }) {
   if (filter.tagIds?.length) {
     query.whereIn(
       'static_courses.id',
-      knex.select('staticCourseId').from('static_courses_tags_link').whereIn('staticCourseTagId', filter.tagIds),
+      knexConn.select('staticCourseId').from('static_courses_tags_link').whereIn('staticCourseTagId', filter.tagIds),
     );
   }
 
@@ -66,7 +67,8 @@ export async function findReadSummaries({ filter, page }) {
 }
 
 export async function getRead(id, { baseUrl }) {
-  const staticCourse = await knex('static_courses')
+  const knexConn = DomainTransaction.getConnection();
+  const staticCourse = await knexConn('static_courses')
     .select({
       id: 'static_courses.id',
       name: 'static_courses.name',
@@ -76,7 +78,7 @@ export async function getRead(id, { baseUrl }) {
       deactivationReason: 'static_courses.deactivationReason',
       challengeIds: 'static_courses.challengeIds',
       isActive: 'static_courses.isActive',
-      tags: knex.raw(`
+      tags: knexConn.raw(`
         json_agg(
           json_build_object('id', "static_course_tags"."id", 'label', "static_course_tags"."label")
           ORDER BY "static_course_tags"."label" ASC
@@ -109,7 +111,8 @@ export async function getRead(id, { baseUrl }) {
 }
 
 export async function get(id) {
-  const staticCourse = await knex('static_courses')
+  const knexConn = DomainTransaction.getConnection();
+  const staticCourse = await knexConn('static_courses')
     .select({
       id: 'static_courses.id',
       name: 'static_courses.name',
@@ -119,7 +122,7 @@ export async function get(id) {
       deactivationReason: 'static_courses.deactivationReason',
       challengeIds: 'static_courses.challengeIds',
       isActive: 'static_courses.isActive',
-      tags: knex.raw(`
+      tags: knexConn.raw(`
         json_agg(
           json_build_object('id', "static_course_tags"."id")
           ORDER BY "static_course_tags"."label" ASC
@@ -159,11 +162,12 @@ export async function save(staticCourseForCreation) {
     createdAt: staticCourseDTO.createdAt,
     updatedAt: staticCourseDTO.updatedAt,
   };
-  await knex.transaction(async (trx) => {
-    await trx('static_courses').insert(serializedStaticCourseForDB).onConflict('id').merge();
-    await trx('static_courses_tags_link').del().where('staticCourseId', serializedStaticCourseForDB.id);
+  await DomainTransaction.execute(async () => {
+    const knexConn = DomainTransaction.getConnection();
+    await knexConn('static_courses').insert(serializedStaticCourseForDB).onConflict('id').merge();
+    await knexConn('static_courses_tags_link').del().where('staticCourseId', serializedStaticCourseForDB.id);
     if (staticCourseDTO.tagIds.length > 0) {
-      await trx('static_courses_tags_link').insert(
+      await knexConn('static_courses_tags_link').insert(
         staticCourseDTO.tagIds.map((staticCourseDtoTagId) => ({
           staticCourseTagId: staticCourseDtoTagId,
           staticCourseId: serializedStaticCourseForDB.id,
@@ -201,7 +205,8 @@ async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
 }
 
 export async function listForReplication() {
-  const dtos = await knex.select('id', 'name').from('static_courses').orderBy('id');
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('id', 'name').from('static_courses').orderBy('id');
   return dtos.map((dto) => new CourseForReplication(dto));
 }
 

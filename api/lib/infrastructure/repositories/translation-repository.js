@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { Translation } from '../../domain/models/index.js';
 import { LocalizedEntity } from '../../domain/readmodels/index.js';
 import { TranslationForReplication } from '../../domain/models/replication/index.js';
@@ -12,26 +12,30 @@ const projection = [
   'value',
 ];
 
-export async function save({ translations, transaction: knexConnection = knex }) {
+export async function save({ translations }) {
   if (translations.length === 0) return [];
 
-  await knexConnection('translations').insert(translations).onConflict(['key', 'locale']).merge();
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('translations').insert(translations).onConflict(['key', 'locale']).merge();
 }
 
 /**
  * @deprecated use one of {@link listByModel}, {@link listByEntity} or {@link listByEntities}
  */
-export async function listByPrefix(prefix, { transaction = knex } = {}) {
-  const translationDtos = await transaction.select(projection).from('translations').whereLike('key', `${prefix}%`);
+export async function listByPrefix(prefix) {
+  const knexConn = DomainTransaction.getConnection();
+  const translationDtos = await knexConn.select(projection).from('translations').whereLike('key', `${prefix}%`);
   return translationDtos.map(_toDomain);
 }
 
-export async function listByModel(model, { knexConn = knex } = {}) {
+export async function listByModel(model) {
+  const knexConn = DomainTransaction.getConnection();
   const translationDtos = await knexConn.select(projection).from('translations').where('model', model);
   return translationDtos.map(_toDomain);
 }
 
-export async function listByEntity(model, entityId, { knexConn = knex } = {}) {
+export async function listByEntity(model, entityId) {
+  const knexConn = DomainTransaction.getConnection();
   const translationDtos = await knexConn
     .select(projection)
     .from('translations')
@@ -40,7 +44,8 @@ export async function listByEntity(model, entityId, { knexConn = knex } = {}) {
   return translationDtos.map(_toDomain);
 }
 
-export async function listByEntities(model, entityIds, { knexConn = knex } = {}) {
+export async function listByEntities(model, entityIds) {
+  const knexConn = DomainTransaction.getConnection();
   const translationDtos = await knexConn
     .select(projection)
     .from('translations')
@@ -49,13 +54,15 @@ export async function listByEntities(model, entityIds, { knexConn = knex } = {})
   return translationDtos.map(_toDomain);
 }
 
-export async function listByPattern(pattern, { transaction = knex } = {}) {
-  const translationDtos = await transaction.select(projection).from('translations').whereLike('key', `${pattern}`);
+export async function listByPattern(pattern) {
+  const knexConn = DomainTransaction.getConnection();
+  const translationDtos = await knexConn.select(projection).from('translations').whereLike('key', `${pattern}`);
   return translationDtos.map(_toDomain);
 }
 
 export async function list() {
-  const translationDtos = await knex.select(projection).from('translations').orderBy(['key', 'locale']);
+  const knexConn = DomainTransaction.getConnection();
+  const translationDtos = await knexConn.select(projection).from('translations').orderBy(['key', 'locale']);
   return translationDtos.map(_toDomain);
 }
 
@@ -63,14 +70,15 @@ export async function list() {
  * @param {AbortSignal=} signal
  */
 export async function* streamForReplication(signal) {
-  const stream = knex.select(
-    knex.raw('?? || ? || ?? AS ??', [
+  const knexConn = DomainTransaction.getConnection();
+  const stream = knexConn.select(
+    knexConn.raw('?? || ? || ?? AS ??', [
       'translations.key',
       ':',
       'translations.locale',
       'id',
     ]),
-    knex.raw('CASE WHEN ?? IS NULL THEN ?? ELSE REPLACE(??, ??, ??) END AS ??', [
+    knexConn.raw('CASE WHEN ?? IS NULL THEN ?? ELSE REPLACE(??, ??, ??) END AS ??', [
       'localized_challenges.id',
       'translations.key',
       'translations.key',
@@ -81,12 +89,12 @@ export async function* streamForReplication(signal) {
     'translations.locale',
     'translations.value',
     'translations.model',
-    knex.raw('COALESCE(??, ??) AS ??', [
+    knexConn.raw('COALESCE(??, ??) AS ??', [
       'localized_challenges.id',
       'translations.entityId',
       'entityId',
     ]),
-    knex.raw('CASE WHEN ?? = ? AND ?? = ?? THEN NULL ELSE ?? END AS ??', [
+    knexConn.raw('CASE WHEN ?? = ? AND ?? = ?? THEN NULL ELSE ?? END AS ??', [
       'translations.model',
       'challenge',
       'localized_challenges.id',
@@ -114,7 +122,8 @@ export async function* streamForReplication(signal) {
 }
 
 export async function searchLocalizedEntities({ model, fields, search, limit }) {
-  const query = knex('translations')
+  const knexConn = DomainTransaction.getConnection();
+  const query = knexConn('translations')
     .select('model', 'entityId', 'locale')
     .distinct()
     .whereILike('value', `%${escapeLikeWildcards(search)}%`)
@@ -136,6 +145,7 @@ function _toDomain(dto) {
   return new Translation(dto);
 }
 
-export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction: knexConnection = knex }) {
-  await knexConnection('translations').delete().whereLike('key', `${prefix}%`).whereIn('locale', locales);
+export async function deleteByKeyPrefixAndLocales({ prefix, locales }) {
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('translations').delete().whereLike('key', `${prefix}%`).whereIn('locale', locales);
 }

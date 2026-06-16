@@ -2,7 +2,7 @@ import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 const model = 'competence';
 const TABLE_NAME = 'competences';
@@ -28,43 +28,44 @@ export async function get(id) {
 }
 
 export async function create(competence) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     competence.id = idGenerator.generateNewId('competence');
     const translations = competenceTranslations.extractFromDomainObject(competence);
 
+    const knexConn = DomainTransaction.getConnection();
     await Promise.all([
-      transaction
+      knexConn
         .insert({
           id: competence.id,
           index: competence.index,
           areaId: competence.areaAirtableId,
         })
         .into(TABLE_NAME),
-      translationRepository.save({ translations, transaction }),
+      translationRepository.save({ translations }),
     ]);
 
-    const dto = await _selectCompetences(transaction).where('competences.id', competence.id).first();
+    const dto = await _selectCompetences().where('competences.id', competence.id).first();
 
     return toDomain(dto, translations);
   });
 }
 
 export async function update(competence) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     const translations = competenceTranslations.extractFromDomainObject(competence);
 
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${competenceTranslations.prefix}${competence.id}.`,
       locales: ['fr', 'en'],
-      transaction,
     });
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
     return competence;
   });
 }
 
-export function _selectCompetences(knexConn = knex) {
+export function _selectCompetences() {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn
     .select(
       'competences.*',

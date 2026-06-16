@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { Challenge, Skill, Translation, Tube } from '../../domain/models/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
@@ -44,7 +44,8 @@ export async function list() {
  * @param {AbortSignal=} signal
  */
 export async function* streamForReplication(signal) {
-  const stream = selectChallenges(undefined, [
+  const knexConn = DomainTransaction.getConnection();
+  const stream = selectChallenges([
     selectTableColumnsAsObject('prototypes', [
       'id',
       'accessibility1',
@@ -64,9 +65,9 @@ export async function* streamForReplication(signal) {
   ])
     .with(
       'prototypes',
-      knex.select('*')
+      knexConn.select('*')
         .from(
-          knex.select(
+          knexConn.select(
             'id',
             'skillId',
             'version',
@@ -74,7 +75,7 @@ export async function* streamForReplication(signal) {
             'accessibility2',
             'assessmentMaintenanceTags',
             'translationMaintenanceTags',
-            knex.raw('ROW_NUMBER() OVER (PARTITION BY ??, ?? ORDER BY ??) AS ??', [
+            knexConn.raw('ROW_NUMBER() OVER (PARTITION BY ??, ?? ORDER BY ??) AS ??', [
               'skillId',
               'version',
               'id',
@@ -109,7 +110,8 @@ export async function* streamForReplication(signal) {
   }
 }
 
-function selectTableColumnsAsObject(table, columns, alias, knexConn = knex) {
+function selectTableColumnsAsObject(table, columns, alias) {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn.raw(
     `case when ?? is null then null else json_build_object(${columns.map(() => '?::text, ??').join(', ')}) end as ??`,
     [
@@ -128,6 +130,7 @@ export async function getMany(ids) {
 }
 
 export async function filter(params = {}) {
+  const knexConn = DomainTransaction.getConnection();
   const localizedEntities = await translationRepository.searchLocalizedEntities({
     model,
     fields: ['instruction', 'proposals'],
@@ -139,7 +142,7 @@ export async function filter(params = {}) {
     .whereIn('challenges.id', localizedEntities.map(({ entityId }) => entityId))
     .orWhereIn(
       'challenges.id',
-      knex
+      knexConn
         .select('challengeId')
         .from('localized_challenges')
         .whereILike('embedUrl', `%${escapeLikeWildcards(params.filter.search)}%`),
@@ -155,9 +158,10 @@ export async function filter(params = {}) {
 }
 
 export async function create(challenge) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
+    const knexConn = DomainTransaction.getConnection();
     challenge.id = generateNewId(Challenge.ID_PREFIX);
-    await transaction
+    await knexConn
       .insert({
         id: challenge.id,
         type: challenge.type,
@@ -190,21 +194,22 @@ export async function create(challenge) {
       .into('challenges');
 
     const primaryLocalizedChallenge = { ...challenge.localizedChallenges[0], id: challenge.id, challengeId: challenge.id };
-    await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge], transaction });
+    await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge] });
 
     const translations = extractTranslationsFromChallenge(challenge);
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
-    const dto = await selectChallenges(transaction).where('challenges.id', challenge.id).first();
+    const dto = await selectChallenges().where('challenges.id', challenge.id).first();
 
     return toDomain(dto, translations, [primaryLocalizedChallenge]);
   });
 }
 
 export async function createBatch(challenges) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     if (!challenges || challenges.length === 0) return [];
 
+    const knexConn = DomainTransaction.getConnection();
     const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
     const allTranslations = challenges.flatMap((challenge) => {
       const translationModels = [];
@@ -222,7 +227,7 @@ export async function createBatch(challenges) {
       return translationModels;
     });
 
-    await transaction
+    await knexConn
       .insert(
         challenges.map((challenge) => ({
           id: challenge.id,
@@ -256,10 +261,10 @@ export async function createBatch(challenges) {
       )
       .into('challenges');
 
-    await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
-    await translationRepository.save({ translations: allTranslations, transaction });
+    await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges });
+    await translationRepository.save({ translations: allTranslations });
 
-    const dtos = await selectChallenges(transaction)
+    const dtos = await selectChallenges()
       .whereIn(
         'challenges.id',
         challenges.map(({ id }) => id),
@@ -272,8 +277,9 @@ export async function createBatch(challenges) {
 
 // TODO : faire une méthode update au niveau du modèle challenge, comme ça ça update le primary localized challenge en cascade
 // là c'est un peu moche mais on utilise le update de LocalizedChallenge avec un "faux" localizedChallenge de support
-export async function update(challenge, transaction = knex) {
-  await transaction('challenges')
+export async function update(challenge) {
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('challenges')
     .update({
       type: challenge.type,
       t1Status: challenge.t1Status,
@@ -301,17 +307,14 @@ export async function update(challenge, transaction = knex) {
       archivedAt: challenge.archivedAt,
       madeObsoleteAt: challenge.madeObsoleteAt,
       validatedAt: challenge.validatedAt,
-      updatedAt: transaction.fn.now(),
+      updatedAt: knexConn.fn.now(),
       isQualityOk: challenge.isQualityOk,
       assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
       translationMaintenanceTags: challenge.translationMaintenanceTags,
     })
     .where('id', challenge.id);
 
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
-    challengeIds: [challenge.id],
-    transaction,
-  });
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id] });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
   const oldPrimaryLocale = primaryLocalizedChallenge.locale;
@@ -330,20 +333,16 @@ export async function update(challenge, transaction = knex) {
   };
   primaryLocalizedChallenge.update(updateLocalizedChallengePOJO);
 
-  await localizedChallengeRepository.update({
-    localizedChallenge: primaryLocalizedChallenge,
-    transaction,
-  });
+  await localizedChallengeRepository.update({ localizedChallenge: primaryLocalizedChallenge });
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.deleteByKeyPrefixAndLocales({
     prefix: prefixFor(challenge),
     locales: [oldPrimaryLocale],
-    transaction,
   });
-  await translationRepository.save({ translations, transaction });
+  await translationRepository.save({ translations });
 
-  const dto = await selectChallenges(transaction).where('challenges.id', challenge.id).first();
+  const dto = await selectChallenges().where('challenges.id', challenge.id).first();
 
   return toDomain(dto, translations, localizedChallenges);
 }
@@ -420,7 +419,8 @@ async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeId
   return Promise.all([translationRepository.listByEntities(model, challengeIds), localizedChallengeRepository.listByChallengeIds({ challengeIds })]);
 }
 
-function selectChallenges(knexConn = knex, projection = []) {
+function selectChallenges(projection = []) {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn
     .select(
       'challenges.*',

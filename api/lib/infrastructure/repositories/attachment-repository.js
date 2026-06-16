@@ -1,17 +1,19 @@
 import { Attachment } from '../../domain/models/index.js';
 import { AttachmentForReplication } from '../../domain/models/replication/index.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import * as idGenerator from '../utils/id-generator.js';
 
 export async function get(id) {
-  const dto = await knex.select('*').from('attachments').where('id', id).first();
+  const knexConn = DomainTransaction.getConnection();
+  const dto = await knexConn.select('*').from('attachments').where('id', id).first();
 
   if (!dto) return null;
   return toDomain(dto);
 }
 
 export async function list() {
-  const dtos = await knex.select('*').from('attachments').orderBy('id');
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('*').from('attachments').orderBy('id');
 
   return toDomainList(dtos);
 }
@@ -20,7 +22,8 @@ export async function list() {
  * @param {AbortSignal=} signal
  */
 export async function* streamForReplication(signal) {
-  const stream = knex
+  const knexConn = DomainTransaction.getConnection();
+  const stream = knexConn
     .select(
       'attachments.id',
       'attachments.type',
@@ -36,7 +39,7 @@ export async function* streamForReplication(signal) {
       this.onVal('illustration_alt_translations.model', 'challenge')
         .on('illustration_alt_translations.entityId', 'localized_challenges.challengeId')
         .on('illustration_alt_translations.locale', 'localized_challenges.locale')
-        .on(knex.raw('?? like ?', ['illustration_alt_translations.key', '%.illustrationAlt']));
+        .on(knexConn.raw('?? like ?', ['illustration_alt_translations.key', '%.illustrationAlt']));
     })
     .orderBy('id')
     .stream();
@@ -51,7 +54,8 @@ export async function* streamForReplication(signal) {
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const dtos = await knex
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn
     .select('*')
     .from('attachments')
     .whereIn('localizedChallengeId', localizedChallengeIds)
@@ -61,15 +65,17 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
 }
 
 export async function listByLocalizedChallengeId(localizedChallengeId) {
-  const dtos = await knex.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId);
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('*').from('attachments').where('localizedChallengeId', localizedChallengeId);
 
   return toDomainList(dtos);
 }
 
-export async function createBatch(attachments, transaction = knex) {
+export async function createBatch(attachments) {
   if (!attachments || attachments.length === 0) return [];
 
-  const dtos = await transaction
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn
     .insert(
       attachments.map((attachment) => ({
         id: idGenerator.generateNewId('attachment'),
@@ -90,9 +96,10 @@ export async function createBatch(attachments, transaction = knex) {
 }
 
 export async function create(attachment) {
+  const knexConn = DomainTransaction.getConnection();
   const id = idGenerator.generateNewId('attachment');
 
-  const [dto] = await knex
+  const [dto] = await knexConn
     .insert({
       id,
       url: attachment.url,
@@ -110,10 +117,11 @@ export async function create(attachment) {
 }
 
 export async function update(attachment) {
-  const [dto] = await knex('attachments')
+  const knexConn = DomainTransaction.getConnection();
+  const [dto] = await knexConn('attachments')
     .update({
       filename: attachment.filename,
-      updatedAt: knex.fn.now(),
+      updatedAt: knexConn.fn.now(),
     })
     .where('id', attachment.id)
     .returning('*');
@@ -122,7 +130,8 @@ export async function update(attachment) {
 }
 
 export async function remove(attachmentId) {
-  await knex.delete().from('attachments').where('id', attachmentId);
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn.delete().from('attachments').where('id', attachmentId);
 }
 
 /**
