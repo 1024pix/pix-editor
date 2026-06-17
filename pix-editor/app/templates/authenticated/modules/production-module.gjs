@@ -1,5 +1,6 @@
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
+import ModuleNotification from 'pixeditor/components/modules/module-notification';
 
 <template>
   <header class="page-header">
@@ -8,9 +9,10 @@ import ModuleForm from 'pixeditor/components/modules/module-form';
   </header>
   <main class="page-body">
     <section class="page-section module-form">
+      <ModuleNotification @module={{@model.module}} />
       <ModuleForm @module={{@model.module}} @readonly={{true}} />
       <div class="page-actions">
-        <ModuleBackButton @fromRoute={{@model.fromRoute}} />
+        <ModuleBackButton />
       </div>
     </section>
   </main>

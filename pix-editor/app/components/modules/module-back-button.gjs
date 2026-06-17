@@ -1,5 +1,9 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+
+function back() {
+  return window.history.back();
+}
 
 <template>
-  <PixButtonLink @route={{@fromRoute}}>Retour</PixButtonLink>
+  <PixButton @triggerAction={{back}}>Retour</PixButton>
 </template>

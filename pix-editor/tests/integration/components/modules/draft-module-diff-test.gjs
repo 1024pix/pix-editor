@@ -7,11 +7,13 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 module('Integration | Component | modules/draft-module-diff', function (hooks) {
   setupIntlRenderingTest(hooks);
 
-  module('when module-form is readonly', function () {
-    test('it should not display actions buttons', async function (assert) {
-      // given
-      const internalTitle = 'MOD_test-diff';
-      const htmlDiff = `
+  test('it displays module internal title and diff', async function (assert) {
+    // given
+    const internalTitle = 'MOD_test-diff';
+    const draftModule = {
+      internalTitle,
+    };
+    const htmlDiff = `
         <pre class="shiki">
           <code>
             <span>première ligne de diff</span>
@@ -20,15 +22,14 @@ module('Integration | Component | modules/draft-module-diff', function (hooks) {
         </pre>
       `;
 
-      // when
-      const screen = await render(
-        <template><DraftModuleDiff @internalTitle={{internalTitle}} @htmlDiff={{htmlDiff}} /></template>,
-      );
+    // when
+    const screen = await render(
+      <template><DraftModuleDiff @draftModule={{draftModule}} @htmlDiff={{htmlDiff}} /></template>,
+    );
 
-      // then
-      assert.dom(screen.getByRole('heading', { name: internalTitle })).exists();
-      assert.dom(screen.getByText('première ligne de diff')).exists();
-      assert.dom(screen.getByText('deuxième ligne de diff')).exists();
-    });
+    // then
+    assert.dom(screen.getByRole('heading', { name: internalTitle })).exists();
+    assert.dom(screen.getByText('première ligne de diff')).exists();
+    assert.dom(screen.getByText('deuxième ligne de diff')).exists();
   });
 });

@@ -137,9 +137,11 @@ describe('Module Repository', () => {
   describe('getById', () => {
     it('returns a module by its id', async () => {
       // given
-      const expectedModule = domainBuilder.buildModule();
-      const { id } = databaseBuilder.factory.buildModule(expectedModule);
-      databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar' }));
+      const id = crypto.randomUUID();
+      const expectedModule = domainBuilder.buildModuleForConsultation({ id, draftModuleId: id });
+      databaseBuilder.factory.buildModule(expectedModule);
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ id, moduleId: id }));
+      databaseBuilder.factory.buildModule(domainBuilder.buildModuleForConsultation({ shortId: 'secondar', internalTitle: 'secondar' }));
       await databaseBuilder.commit();
 
       // when

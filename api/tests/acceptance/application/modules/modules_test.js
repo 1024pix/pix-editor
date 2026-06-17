@@ -104,11 +104,13 @@ describe('Acceptance | Route | modules', () => {
   });
 
   describe('GET /modules/:id', () => {
-    let module;
+    let module, draftModule;
 
     beforeEach(async () => {
       module = domainBuilder.buildModule();
       databaseBuilder.factory.buildModule(module);
+      draftModule = domainBuilder.buildDraftModule({ id: module.id, moduleId: module.id });
+      databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
     });
 
@@ -140,6 +142,14 @@ describe('Acceptance | Route | modules', () => {
             title: module.title,
             sections: module.sections,
             glossary: module.glossary,
+          },
+          relationships: {
+            'draft-module': {
+              data: {
+                id: draftModule.id,
+                type: 'draft-modules',
+              },
+            },
           },
         },
       });
