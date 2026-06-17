@@ -1,5 +1,5 @@
-import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -24,10 +24,10 @@ module('Acceptance | Modules | Production Module', function (hooks) {
   module('when user clicks on "Voir le détail"', function () {
     test('displays module details page', async function (assert) {
       // when
-      await visit('/');
-      await clickByName('Modules');
-      await clickByName('En production');
-      await clickByName('Voir le détail');
+      const screen = await visit('/');
+      await click(await screen.getByRole('link', { name: 'Modules' }));
+      await click(await screen.getByRole('link', { name: 'En production' }));
+      await click(await screen.getByRole('link', { name: 'Voir le détail' }));
 
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
@@ -40,9 +40,9 @@ module('Acceptance | Modules | Production Module', function (hooks) {
   module('when user clicks on "Voir le détail du module en prod"', function () {
     test('displays module details page', async function (assert) {
       // when
-      await visit('/');
-      await clickByName('Modules');
-      await clickByName('Voir le détail du module en prod');
+      const screen = await visit('/');
+      await click(await screen.getByRole('link', { name: 'Modules' }));
+      await click(await screen.getByRole('link', { name: 'Voir le détail du module en prod' }));
 
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
