@@ -19,6 +19,7 @@ export default class CompetenceOverviewTemplate extends Component {
       <CompetenceOverview
         @competenceOverview={{@controller.model.competenceOverview}}
         @locale={{@controller.model.locale}}
+        @localizedFrameworkTubes={{@controller.model.localizedFrameworkTubes}}
       />
     {{/if}}
     {{outlet}}

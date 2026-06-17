@@ -24,6 +24,13 @@ export default class CompetenceOverview extends Component {
     return this.access.mayEditLocalized;
   }
 
+  get canDisplayGrid() {
+    if (!this.args.locale) return true;
+    const areThereLocalizedFrameworkTubes = this.args.localizedFrameworkTubes?.length !== 0;
+    const areThereThematicOverviews = this.args.competenceOverview.thematicOverviews.length !== 0;
+    return areThereLocalizedFrameworkTubes || areThereThematicOverviews;
+  }
+
   @action
   async fetchTranslations() {
     try {
@@ -74,7 +81,9 @@ export default class CompetenceOverview extends Component {
                 class="competence-overview-actions__fetch"
                 @route="authenticated.v2.localized-framework"
                 @variant="secondary"
-              >Cadre de traduction</PixButtonLink>
+              >
+                Cadre de traduction
+              </PixButtonLink>
             {{/if}}
             <PixButton
               class="competence-overview-actions__fetch"
@@ -99,27 +108,41 @@ export default class CompetenceOverview extends Component {
           </PixButton>
         </div>
       </div>
-      <div class="competence-overview-grid">
-        {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
-          <div class="thematic" style={{this.thematicStyle thematicOverview}}>
-            <h3>{{thematicOverview.name}}</h3>
-            {{#each thematicOverview.tubeOverviews as |tubeOverview|}}
-              <div class="tube">
-                <h4>{{tubeOverview.name}}</h4>
-                {{#each tubeOverview.skillOverviews as |skillOverview|}}
-                  <CompetenceOverviewSkill
-                    @skillOverview={{skillOverview}}
-                    @locale={{@locale}}
-                    class="skill"
-                    @onSkillClicked={{this.updateSelectedSkillId}}
-                    @isActive={{eq skillOverview.id this.selectedSkillId}}
-                  />
-                {{/each}}
-              </div>
-            {{/each}}
-          </div>
-        {{/each}}
-      </div>
+      {{#if this.canDisplayGrid}}
+        <div class="competence-overview-grid">
+          {{#each @competenceOverview.thematicOverviews as |thematicOverview|}}
+            <div class="thematic" style={{this.thematicStyle thematicOverview}}>
+              <h3>{{thematicOverview.name}}</h3>
+              {{#each thematicOverview.tubeOverviews as |tubeOverview|}}
+                <div class="tube">
+                  <h4>{{tubeOverview.name}}</h4>
+                  {{#each tubeOverview.skillOverviews as |skillOverview|}}
+                    <CompetenceOverviewSkill
+                      @skillOverview={{skillOverview}}
+                      @locale={{@locale}}
+                      class="skill"
+                      @onSkillClicked={{this.updateSelectedSkillId}}
+                      @isActive={{eq skillOverview.id this.selectedSkillId}}
+                    />
+                  {{/each}}
+                </div>
+              {{/each}}
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p>
+          Si vous voyez ce message :
+        </p>
+        <ul>
+          <li>
+            Vérifiez qu'un cadre de traduction a bien été créé,
+          </li>
+          <li>
+            Ou qu'il y a bien au moins une épreuve de type validé qualité sur cette compétence
+          </li>
+        </ul>
+      {{/if}}
       <div class="competence-overview-footer">
         {{#if @locale}}
           <ul class="competence-overview-legend">
