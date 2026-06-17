@@ -73,6 +73,14 @@ export function register(server) {
                 sections: Joi.array().required(),
                 glossary: Joi.array().required(),
               }).required(),
+              relationships: Joi.object({
+                module: Joi.object({
+                  data: Joi.object({
+                    id: Types.moduleId().required(),
+                    type: Joi.string().valid('modules').required(),
+                  }).optional(),
+                }).optional(),
+              }).optional(),
             }).required(),
           }).required(),
         },
