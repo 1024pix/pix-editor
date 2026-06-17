@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/draft-module-serializer.js';
+import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/draft-module-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
 import { Module } from '../../../../../lib/domain/models/Module.js';
 
@@ -92,6 +92,78 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
           rowCount: 666,
           pageCount: 333,
         },
+      });
+    });
+  });
+
+  describe('#deserialize', () => {
+    it('deserializes payload to DraftModule model', async () => {
+      // given
+      const expectedDraftModule = domainBuilder.buildDraftModule();
+      expectedDraftModule.createdAt = undefined;
+      expectedDraftModule.updatedAt = undefined;
+      const payload = {
+        data: {
+          type: 'draft-modules',
+          id: expectedDraftModule.id,
+          attributes: {
+            'internal-title': expectedDraftModule.internalTitle,
+            'short-id': expectedDraftModule.shortId,
+            slug: expectedDraftModule.slug,
+            title: expectedDraftModule.title,
+            'is-beta': expectedDraftModule.isBeta,
+            visibility: expectedDraftModule.visibility,
+            details: expectedDraftModule.details,
+            sections: expectedDraftModule.sections,
+            glossary: expectedDraftModule.glossary,
+          },
+        },
+      };
+
+      // when
+      const draftModule = await deserialize(payload);
+
+      // then
+      expect(draftModule).toStrictEqual(expectedDraftModule);
+    });
+
+    describe('when payload has a module relationship', () => {
+      it('deserializes payload to DraftModule model', async () => {
+        // given
+        const expectedDraftModule = domainBuilder.buildDraftModule({ moduleId: crypto.randomUUID() });
+        expectedDraftModule.createdAt = undefined;
+        expectedDraftModule.updatedAt = undefined;
+        const payload = {
+          data: {
+            type: 'draft-modules',
+            id: expectedDraftModule.id,
+            attributes: {
+              'internal-title': expectedDraftModule.internalTitle,
+              'short-id': expectedDraftModule.shortId,
+              slug: expectedDraftModule.slug,
+              title: expectedDraftModule.title,
+              'is-beta': expectedDraftModule.isBeta,
+              visibility: expectedDraftModule.visibility,
+              details: expectedDraftModule.details,
+              sections: expectedDraftModule.sections,
+              glossary: expectedDraftModule.glossary,
+            },
+            relationships: {
+              module: {
+                data: {
+                  type: 'modules',
+                  id: expectedDraftModule.moduleId,
+                },
+              },
+            },
+          },
+        };
+
+        // when
+        const draftModule = await deserialize(payload);
+
+        // then
+        expect(draftModule).toStrictEqual(expectedDraftModule);
       });
     });
   });
