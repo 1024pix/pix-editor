@@ -78,7 +78,7 @@ describe('Acceptance | Route | draft-modules', () => {
     });
 
     describe('when creating a draft for a production module', () => {
-      it.fails('responds with status 201 and draft modules data', async () => {
+      it('responds with status 201 and draft modules data', async () => {
         // given
         const module = domainBuilder.buildModule({
           sections: [],

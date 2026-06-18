@@ -1,10 +1,14 @@
-import { draftModuleRepository } from '../../infrastructure/repositories/index.js';
+import { draftModuleRepository, moduleRepository } from '../../infrastructure/repositories/index.js';
 
 /**
  *
- * @param {import('../models/index.js').Module} module
+ * @param {import('../models/index.js').DraftModule} draftModule
  */
-export async function createDraftModule(module, dependencies = { draftModuleRepository }) {
-  module.prepareForCreation();
-  return dependencies.draftModuleRepository.save(module);
+export async function createDraftModule(draftModule, dependencies = { draftModuleRepository, moduleRepository }) {
+  const module = draftModule.moduleId
+    ? await dependencies.moduleRepository.getById({ id: draftModule.moduleId })
+    : undefined;
+
+  draftModule.prepareForCreation(module);
+  return dependencies.draftModuleRepository.save(draftModule);
 }
