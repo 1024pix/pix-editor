@@ -87,7 +87,7 @@ export const scheduledJobs = {
   createReleaseTime: process.env.CREATE_RELEASE_TIME,
   exportExternalUrlListTime: process.env.EXPORT_EXTERNAL_URL_LIST_TIME,
   attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
-  startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB),
+  startSaveExternalUrlsJob: isFeatureEnabled(process.env.START_SAVE_EXTERNAL_URLS_JOB ?? process.env.START_CHECK_URL_JOB),
   cleanReleasesTableTime: process.env.CLEAN_RELEASES_TABLE_TIME,
 };
 
@@ -127,6 +127,8 @@ export const checkUrlsJobs = {
 };
 
 export const exportExternalUrlsJob = { spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID };
+
+export const urlBrokenLinksMonitor = { authSecret: process.env.URL_BROKEN_LINKS_MONITOR_AUTH_API_KEY };
 
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
@@ -185,4 +187,6 @@ if (process.env.NODE_ENV === 'test') {
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.webhookSecret = 'le secret de phrase';
+
+  urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
 }

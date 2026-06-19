@@ -3,6 +3,7 @@ import { releaseRepository } from '../../../../lib/infrastructure/repositories/i
 import { Release } from '../../../../lib/domain/models/release/Release.js';
 import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
 import * as uploadTranslationToPhraseJob from '../../../../lib/infrastructure/scheduled-jobs/upload-translation-job.js';
+import * as saveExternalUrlsJob from '../../../../lib/infrastructure/scheduled-jobs/save-external-urls-job.js';
 import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
 import * as downloadTranslationFromPhraseUseCase from '../../../../lib/domain/usecases/download-translation-from-phrase.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
@@ -111,6 +112,30 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
         // then
         expect(uploadTranslationToPhraseStub).toHaveBeenCalledOnce();
+      });
+
+      it('should start the save external urls job when is finished if enabled', async () => {
+        // given
+        vi.spyOn(config.scheduledJobs, 'startSaveExternalUrlsJob', 'get').mockReturnValue(true);
+        const saveExternalUrlsJobStub = vi.spyOn(saveExternalUrlsJob, 'start').mockResolvedValue();
+
+        // when
+        await releaseJobProcessor({ data: {} });
+
+        // then
+        expect(saveExternalUrlsJobStub).toHaveBeenCalledOnce();
+      });
+
+      it('should not start the save external urls job when is finished if disabled', async () => {
+        // given
+        vi.spyOn(config.scheduledJobs, 'startSaveExternalUrlsJob', 'get').mockReturnValue(false);
+        const saveExternalUrlsJobStub = vi.spyOn(saveExternalUrlsJob, 'start').mockResolvedValue();
+
+        // when
+        await releaseJobProcessor({ data: {} });
+
+        // then
+        expect(saveExternalUrlsJobStub).not.toHaveBeenCalled();
       });
     });
 

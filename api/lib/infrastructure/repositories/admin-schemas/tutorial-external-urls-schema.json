@@ -1,0 +1,41 @@
+{
+  "$schema": "./$schema.json",
+  "id": "tutorial-external-urls-schema",
+  "label": "URL externes des tutoriels",
+  "entityName": "tutorial_external_urls",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "primaryKey": "id",
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "number"
+    },
+    {
+      "key": "competence_name",
+      "label": "Compétence",
+      "type": "string"
+    },
+    {
+      "key": "skill_name",
+      "label": "Acquis",
+      "type": "string"
+    },
+    {
+      "key": "tutorial_id",
+      "label": "ID du tutoriel",
+      "type": "string"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "string"
+    }
+  ]
+}

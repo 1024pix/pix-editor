@@ -1,5 +1,7 @@
 import { userRepository } from '../infrastructure/repositories/index.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError, replyWithAuthenticationError } from './security-utils.js';
+import * as config from '../config.js';
+import { logger } from '../infrastructure/logger.js';
 
 export async function checkUserIsAuthenticatedViaBearer(request, h) {
   if (!request.headers.authorization) {
@@ -38,4 +40,22 @@ export function checkUserHasWriteAccess(request, h) {
 
 export function checkUserHasAdminAccess(request, h) {
   return hasAuthenticatedUserAccess(request, ['admin']) ? h.response(true) : replyForbiddenError(h);
+}
+
+export function checkUserIsUrlBrokenLinksMonitor(request, h) {
+  if (!request.headers.authorization) {
+    return replyWithAuthenticationError(h);
+  }
+
+  if (!config.urlBrokenLinksMonitor.authSecret) {
+    logger.error('Pas de secret');
+    return replyWithAuthenticationError(h);
+  }
+
+  const apiKey = request.headers.authorization.replace('Bearer ', '');
+  if (config.urlBrokenLinksMonitor.authSecret !== apiKey) {
+    return replyWithAuthenticationError(h);
+  }
+
+  return h.response(true);
 }

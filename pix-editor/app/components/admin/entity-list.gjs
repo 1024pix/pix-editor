@@ -18,7 +18,7 @@ export default class AdminEntityList extends Component {
   get columns() {
     return this.args.schema.fields.map((field) => {
       const column = {
-        columnType: this.getColumnType(field),
+        type: this.getColumnType(field),
         field,
       };
 
