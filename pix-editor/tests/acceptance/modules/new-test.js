@@ -27,7 +27,7 @@ module('Acceptance | Modules | New', function (hooks) {
     await screen.getByRole('link', { name: 'Créer un module' }).click();
 
     // then
-    assert.strictEqual(currentURL(), '/modules/new');
+    assert.strictEqual(currentURL(), '/modules/workbench/new');
     assert.dom(await screen.findByRole('heading', { name: "Création d'un module" })).exists();
 
     await fillIn(await screen.findByRole('textbox', { name: /^Titre interne/ }), 'NEW_MODULE');
