@@ -1,7 +1,7 @@
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 const TABLE_NAME = 'skills';
 const TUTORIALS_RELATION_TABLE_NAME = 'skills-tutorials';
@@ -118,7 +118,8 @@ export async function search(params) {
   return toDomainList(dtos, translations);
 }
 
-export function selectSkills(knexConn = knex) {
+export function selectSkills() {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn
     .select(
       'skills.*',
@@ -162,8 +163,9 @@ export function selectSkills(knexConn = knex) {
 }
 
 export async function create(skill) {
-  return knex.transaction(async (transaction) => {
-    await transaction
+  return DomainTransaction.execute(async () => {
+    const knexConn = DomainTransaction.getConnection();
+    await knexConn
       .insert({
         id: skill.id,
         status: skill.status,
@@ -178,7 +180,7 @@ export async function create(skill) {
       .into(TABLE_NAME);
 
     const translations = skillTranslations.extractFromDomainObject(skill);
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
     const skillTutorials = [
       ...(skill.tutorialAirtableIds?.map((tutorialId) => ({
@@ -193,18 +195,19 @@ export async function create(skill) {
       })) ?? []),
     ];
     if (skillTutorials.length > 0) {
-      await transaction.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME);
+      await knexConn.insert(skillTutorials).into(TUTORIALS_RELATION_TABLE_NAME);
     }
 
-    const dto = await selectSkills(transaction).where('skills.id', skill.id).first();
+    const dto = await selectSkills().where('skills.id', skill.id).first();
 
     return toDomain(dto, translations);
   });
 }
 
 export async function update(skill) {
-  return knex.transaction(async (transaction) => {
-    await transaction(TABLE_NAME)
+  return DomainTransaction.execute(async () => {
+    const knexConn = DomainTransaction.getConnection();
+    await knexConn(TABLE_NAME)
       .update({
         status: skill.status,
         hintStatus: skill.hintStatus,
@@ -216,7 +219,7 @@ export async function update(skill) {
         activatedAt: skill.activatedAt,
         archivedAt: skill.archivedAt,
         obsoletedAt: skill.obsoletedAt,
-        updatedAt: transaction.fn.now(),
+        updatedAt: knexConn.fn.now(),
       })
       .where('id', skill.id);
 
@@ -224,9 +227,8 @@ export async function update(skill) {
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${skillTranslations.prefix}${skill.id}.`,
       locales: ['fr', 'en'],
-      transaction,
     });
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
     const skillTutorials = [
       ...skill.tutorialAirtableIds.map((tutorialId) => ({
@@ -240,7 +242,7 @@ export async function update(skill) {
         type: TUTORIAL_RELATION_TYPES.LEARNING_MORE,
       })),
     ];
-    await transaction
+    await knexConn
       .delete()
       .from(TUTORIALS_RELATION_TABLE_NAME)
       .where('skillId', skill.id)
@@ -249,7 +251,7 @@ export async function update(skill) {
         skillTutorials.map(({ tutorialId, type }) => [tutorialId, type]),
       );
     if (skillTutorials.length > 0) {
-      await transaction
+      await knexConn
         .insert(skillTutorials)
         .into(TUTORIALS_RELATION_TABLE_NAME)
         .onConflict([
@@ -257,10 +259,10 @@ export async function update(skill) {
           'tutorialId',
           'type',
         ])
-        .merge({ updatedAt: transaction.fn.now() });
+        .merge({ updatedAt: knexConn.fn.now() });
     }
 
-    const dto = await selectSkills(transaction).where('skills.id', skill.id).first();
+    const dto = await selectSkills().where('skills.id', skill.id).first();
 
     return toDomain(dto, translations);
   });

@@ -25,33 +25,37 @@ import {
 } from '../transformers/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 export function getCurrentContent() {
   return _getCurrentContent();
 }
 
 export async function create(getCurrentContent = _getCurrentContent) {
+  const knexConn = DomainTransaction.getConnection();
   const content = await getCurrentContent();
-  const release = await knex('releases').insert({ content }, ['id']);
+  const release = await knexConn('releases').insert({ content }, ['id']);
 
   return release[0].id;
 }
 
 export async function getLatestRelease() {
-  const release = await knex('releases').select('id', 'content', 'createdAt').orderBy('createdAt', 'desc').limit(1);
+  const knexConn = DomainTransaction.getConnection();
+  const release = await knexConn('releases').select('id', 'content', 'createdAt').orderBy('createdAt', 'desc').limit(1);
 
   return _toDomain(release[0]);
 }
 
 export async function getLatestReleaseDate() {
-  const [createdAt] = await knex('releases').pluck('createdAt').orderBy('createdAt', 'desc').limit(1);
+  const knexConn = DomainTransaction.getConnection();
+  const [createdAt] = await knexConn('releases').pluck('createdAt').orderBy('createdAt', 'desc').limit(1);
 
   return createdAt;
 }
 
 export async function getRelease(id) {
-  const release = await knex('releases').select('id', 'content', 'createdAt').where('id', id);
+  const knexConn = DomainTransaction.getConnection();
+  const release = await knexConn('releases').select('id', 'content', 'createdAt').where('id', id);
 
   return _toDomain(release[0]);
 }
@@ -128,7 +132,8 @@ async function _getCurrentContent() {
 }
 
 async function getStaticCourses() {
-  const staticCoursesDTO = await knex('static_courses')
+  const knexConn = DomainTransaction.getConnection();
+  const staticCoursesDTO = await knexConn('static_courses')
     .select([
       'id',
       'name',

@@ -1,4 +1,4 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { fetchPage } from '../utils/knex-utils.js';
 
 /**
@@ -13,7 +13,8 @@ import { fetchPage } from '../utils/knex-utils.js';
  * @returns {Promise<{ entities: object[], meta: object }>}
  */
 export async function listByEntityName(entityName, fields, pagination, sort) {
-  const getEntitiesQuery = knex(entityName).select(fields).orderBy(sort.field, sort.direction);
+  const knexConn = DomainTransaction.getConnection();
+  const getEntitiesQuery = knexConn(entityName).select(fields).orderBy(sort.field, sort.direction);
   const { results: entities, pagination: meta } = await fetchPage(getEntitiesQuery, pagination);
 
   return { entities, meta };
@@ -25,7 +26,8 @@ export async function listByEntityName(entityName, fields, pagination, sort) {
  * @returns {Promise<object>}
  */
 export async function save(entityName, entityToSave) {
-  const [record] = await knex(entityName).insert(entityToSave, ['*']);
+  const knexConn = DomainTransaction.getConnection();
+  const [record] = await knexConn(entityName).insert(entityToSave, ['*']);
   return record;
 }
 
@@ -36,7 +38,8 @@ export async function save(entityName, entityToSave) {
  * @returns {Promise<object | undefined>}
  */
 export async function get(entityName, primaryKeyColumn, id) {
-  const record = await knex(entityName).where(primaryKeyColumn, id).first();
+  const knexConn = DomainTransaction.getConnection();
+  const record = await knexConn(entityName).where(primaryKeyColumn, id).first();
   return record;
 }
 
@@ -47,5 +50,6 @@ export async function get(entityName, primaryKeyColumn, id) {
  * @returns {Promise<void>}
  */
 export async function destroy(entityName, primaryKeyColumn, id) {
-  await knex(entityName).where(primaryKeyColumn, id).del();
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn(entityName).where(primaryKeyColumn, id).del();
 }

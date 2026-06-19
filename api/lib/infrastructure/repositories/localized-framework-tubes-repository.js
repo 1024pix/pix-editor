@@ -1,8 +1,9 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { LocalizedFrameworkTubes } from '../../domain/models/index.js';
 
 export async function filter({ competenceId, locale }) {
-  const localizedFrameworkTubesDtos = await knex
+  const knexConn = DomainTransaction.getConnection();
+  const localizedFrameworkTubesDtos = await knexConn
     .select('localized_framework_tubes.*')
     .from('thematics')
     .join('tubes', 'tubes.thematicId', 'thematics.id')
@@ -13,7 +14,8 @@ export async function filter({ competenceId, locale }) {
   return toDomainList(localizedFrameworkTubesDtos);
 }
 
-export async function save(localizedFrameworkTubes, { transaction: knexConn = knex, onConflict = 'merge' } = {}) {
+export async function save(localizedFrameworkTubes, { onConflict = 'merge' } = {}) {
+  const knexConn = DomainTransaction.getConnection();
   let query = knexConn('localized_framework_tubes')
     .insert(localizedFrameworkTubes.map((localizedFrameworkTube) => ({
       id: localizedFrameworkTube.id,

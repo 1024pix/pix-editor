@@ -1,7 +1,7 @@
 import * as google from '@googleapis/sheets';
 import { logger } from '../logger.js';
 import * as config from '../../config.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 const sheets = google.sheets('v4');
 
@@ -133,7 +133,8 @@ const TUTORIAL_KO_URLS_TABLE_NAME = 'tutorial_ko_urls';
 const CONTINUOUS_FAILURE_MINIMUM_COUNT = 2;
 async function keepUrlsThatFailedAtLeastTwiceInARow(dataToUpload) {
   const finalDataToUpload = [];
-  await knex.transaction(async (trx) => {
+  await DomainTransaction.execute(async () => {
+    const trx = DomainTransaction.getConnection();
     const tutorialKoUrlsInDB = await trx(TUTORIAL_KO_URLS_TABLE_NAME);
 
     const tutorialKoUrlsToInsertInDB = [];

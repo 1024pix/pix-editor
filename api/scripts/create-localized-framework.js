@@ -2,7 +2,7 @@ import { areaRepository, localizedFrameworksTubesRepository, tubeRepository } fr
 import { Script } from '../lib/application/scripts/script.js';
 import { ScriptRunner } from '../lib/application/scripts/script-runner.js';
 import { LocalizedFrameworkTubes } from '../lib/domain/models/LocalizedFrameworkTubes.js';
-import { knex } from '../db/knex-database-connection.js';
+import { DomainTransaction } from '../lib/domain/DomainTransaction.js';
 
 export class CreateLocalizedFrameworks extends Script {
   constructor() {
@@ -33,13 +33,15 @@ export class CreateLocalizedFrameworks extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun, locales: options.locales, frameworkIds: options.frameworkIds }, 'Script options');
 
-    await knex.transaction(async (transaction) => {
+    return DomainTransaction.execute(async () => {
+      const knexConn = DomainTransaction.getConnection();
+
       let tubes;
       if (options.frameworkIds) {
-        const frameworksTubes = await Promise.all(options.frameworkIds.map((frameworkId) => loadFrameworkTubes(frameworkId, transaction)));
+        const frameworksTubes = await Promise.all(options.frameworkIds.map((frameworkId) => loadFrameworkTubes(frameworkId)));
         tubes = frameworksTubes.flat();
       } else {
-        tubes = await tubeRepository.list({ transaction });
+        tubes = await tubeRepository.list();
       }
 
       const tubesWithoutWorkbench = tubes.filter((tube) => !tube.isWorkbench);
@@ -53,22 +55,22 @@ export class CreateLocalizedFrameworks extends Script {
       for (const locale of options.locales) {
         const localizedFrameworkTubes = tubesWithoutWorkbench.map((tube) => new LocalizedFrameworkTubes({ tubeId: tube.id, locale, maxLevel: 8 }));
 
-        await localizedFrameworksTubesRepository.save(localizedFrameworkTubes, { transaction, onConflict: 'ignore' });
+        await localizedFrameworksTubesRepository.save(localizedFrameworkTubes, { onConflict: 'ignore' });
 
         logger.info({ locale, count: localizedFrameworkTubes.length }, 'Localized framework tubes were created for locale');
       }
 
       if (options.dryRun) {
         logger.info('Dry run, will rollback modifications');
-        await transaction.rollback();
+        await knexConn.rollback();
       }
     });
   }
 }
 
-async function loadFrameworkTubes(frameworkId, transaction) {
-  const areas = await areaRepository.listByFrameworkId(frameworkId, { transaction });
-  const areasTubes = await Promise.all(areas.flatMap((area) => area.competenceIds.map((competenceId) => tubeRepository.listByCompetenceId(competenceId, { transaction }))));
+async function loadFrameworkTubes(frameworkId) {
+  const areas = await areaRepository.listByFrameworkId(frameworkId);
+  const areasTubes = await Promise.all(areas.flatMap((area) => area.competenceIds.map((competenceId) => tubeRepository.listByCompetenceId(competenceId))));
   return areasTubes.flat();
 }
 

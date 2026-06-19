@@ -4,7 +4,7 @@ import * as translationRepository from './translation-repository.js';
 import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 import * as idGenerator from '../utils/id-generator.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 const model = 'thematic';
 const TABLE_NAME = 'thematics';
@@ -45,48 +45,50 @@ export async function listByCompetenceId(competenceId) {
 }
 
 export async function create(thematic) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     thematic.id = idGenerator.generateNewId('thematic');
     const translations = thematicTranslations.extractFromDomainObject(thematic);
 
+    const knexConn = DomainTransaction.getConnection();
     await Promise.all([
-      transaction
+      knexConn
         .insert({
           id: thematic.id,
           index: thematic.index,
           competenceId: thematic.competenceAirtableId,
         })
         .into(TABLE_NAME),
-      translationRepository.save({ translations, transaction }),
+      translationRepository.save({ translations }),
     ]);
 
-    const dto = await selectThematics(transaction).where('id', thematic.id).first();
+    const dto = await selectThematics().where('id', thematic.id).first();
 
     return toDomain(dto, translations);
   });
 }
 
 export async function update(thematic) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     const translations = thematicTranslations.extractFromDomainObject(thematic);
 
-    await transaction(TABLE_NAME)
-      .update({ index: thematic.index, updatedAt: transaction.fn.now() })
+    const knexConn = DomainTransaction.getConnection();
+    await knexConn(TABLE_NAME)
+      .update({ index: thematic.index, updatedAt: knexConn.fn.now() })
       .where('id', thematic.id);
-    const dto = await selectThematics(transaction).where('id', thematic.id).first();
+    const dto = await selectThematics().where('id', thematic.id).first();
 
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: `${thematicTranslations.prefix}${thematic.id}.`,
       locales: ['fr', 'en'],
-      transaction,
     });
-    await translationRepository.save({ translations, transaction });
+    await translationRepository.save({ translations });
 
     return toDomain(dto, translations);
   });
 }
 
-function selectThematics(knexConn = knex) {
+function selectThematics() {
+  const knexConn = DomainTransaction.getConnection();
   return knexConn
     .select(
       '*',

@@ -1,19 +1,19 @@
 import fp from 'lodash/fp.js';
 
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../DomainTransaction.js';
 import { localizedChallengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
 import { LocalizedChallenge } from '../models/index.js';
 
 export async function importTranslations(translations, dependencies = { translationRepository, localizedChallengeRepository }) {
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     if (translations.length === 0) return;
 
-    await dependencies.translationRepository.save({ translations, transaction });
+    await dependencies.translationRepository.save({ translations });
 
     const localizedChallenges = extractLocalizedChallengesFromTranslations(translations);
     if (localizedChallenges.length === 0) return;
 
-    await dependencies.localizedChallengeRepository.create({ localizedChallenges, transaction });
+    await dependencies.localizedChallengeRepository.create({ localizedChallenges });
   });
 }
 

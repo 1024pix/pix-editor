@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { fetchPage } from '../utils/knex-utils.js';
 import { Mission } from '../../domain/models/index.js';
 import * as missionTranslations from '../translations/mission.js';
@@ -9,7 +9,8 @@ import * as translationRepository from './translation-repository.js';
 const model = 'mission';
 
 export async function getById(id) {
-  const [mission, translations] = await Promise.all([knex('missions').select('*').where({ id }).first(), translationRepository.listByEntity(model, id)]);
+  const knexConn = DomainTransaction.getConnection();
+  const [mission, translations] = await Promise.all([knexConn('missions').select('*').where({ id }).first(), translationRepository.listByEntity(model, id)]);
 
   if (!mission) {
     throw new NotFoundError('Mission introuvable');
@@ -19,7 +20,8 @@ export async function getById(id) {
 }
 
 export async function findAllMissions({ filter, page }) {
-  const query = knex('missions').select('*').orderBy('createdAt', 'desc');
+  const knexConn = DomainTransaction.getConnection();
+  const query = knexConn('missions').select('*').orderBy('createdAt', 'desc');
   if (filter?.statuses) {
     query.whereIn(
       'status',
@@ -39,13 +41,15 @@ export async function findAllMissions({ filter, page }) {
 }
 
 export async function list() {
-  const [missions, translations] = await Promise.all([knex('missions').select('*').orderBy('id'), translationRepository.listByModel(model)]);
+  const knexConn = DomainTransaction.getConnection();
+  const [missions, translations] = await Promise.all([knexConn('missions').select('*').orderBy('id'), translationRepository.listByModel(model)]);
 
   return _toDomainList(missions, translations);
 }
 
 export async function save(mission) {
-  const [insertedMission] = await knex('missions')
+  const knexConn = DomainTransaction.getConnection();
+  const [insertedMission] = await knexConn('missions')
     .insert({
       id: mission.id,
       cardImageUrl: mission.cardImageUrl,

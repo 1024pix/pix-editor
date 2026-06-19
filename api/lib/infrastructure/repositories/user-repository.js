@@ -1,9 +1,10 @@
 import { User } from '../../domain/models/index.js';
-import { knex } from '../../../db/knex-database-connection.js';
 import { UserNotFoundError } from '../../domain/errors.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 
 export async function findByApiKey(apiKey) {
-  const user = await knex('users').where('apiKey', apiKey).first();
+  const knexConn = DomainTransaction.getConnection();
+  const user = await knexConn('users').where('apiKey', apiKey).first();
   if (!user) {
     throw new UserNotFoundError();
   }

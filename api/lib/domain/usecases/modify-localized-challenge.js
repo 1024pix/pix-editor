@@ -1,23 +1,17 @@
 import { localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../DomainTransaction.js';
 import { ForbiddenError } from '../errors.js';
 
 export async function modifyLocalizedChallenge(
   { isAdmin, localizedChallenge },
   dependencies = { localizedChallengeRepository },
 ) {
-  return knex.transaction(async (transaction) => {
-    const originalLocalizedChallenge = await dependencies.localizedChallengeRepository.get({
-      id: localizedChallenge.id,
-      transaction,
-    });
+  return DomainTransaction.execute(async () => {
+    const originalLocalizedChallenge = await dependencies.localizedChallengeRepository.get({ id: localizedChallenge.id });
     if (!isAdmin && localizedChallenge.status !== originalLocalizedChallenge.status) {
       throw new ForbiddenError();
     }
     originalLocalizedChallenge.update(localizedChallenge);
-    return dependencies.localizedChallengeRepository.update({
-      localizedChallenge: originalLocalizedChallenge,
-      transaction,
-    });
+    return dependencies.localizedChallengeRepository.update({ localizedChallenge: originalLocalizedChallenge });
   });
 }

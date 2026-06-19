@@ -1,15 +1,17 @@
 import { ChangelogEntry } from '../../domain/models/ChangelogEntry.js';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import * as idGenerator from '../utils/id-generator.js';
 
 export async function listByElementId(elementId) {
-  const dtos = await knex.select('*').from('changelog_entries').where('elementId', elementId).orderBy('createdAt', 'asc');
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('*').from('changelog_entries').where('elementId', elementId).orderBy('createdAt', 'asc');
 
   return dtos.map(toDomain);
 }
 
 export async function create(changelogEntry) {
-  const [dto] = await knex.insert({
+  const knexConn = DomainTransaction.getConnection();
+  const [dto] = await knexConn.insert({
     id: idGenerator.generateNewId('changelog'),
     text: changelogEntry.text,
     author: changelogEntry.author,

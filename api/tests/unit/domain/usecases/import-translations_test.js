@@ -36,7 +36,7 @@ describe('Unit | Domain | Use Cases | import-translations', () => {
 
       // then
       expect(localizedChallengeRepository.create).not.toHaveBeenCalled();
-      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations, transaction: expect.any(Function) });
+      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations });
     });
   });
 
@@ -64,9 +64,8 @@ describe('Unit | Domain | Use Cases | import-translations', () => {
           domainBuilder.buildLocalizedChallenge({ challengeId: 'challenge789', locale: 'es', id: null, embedUrl: null, status: LocalizedChallenge.STATUSES.PAUSE, urlsToConsult: null }),
           domainBuilder.buildLocalizedChallenge({ challengeId: 'challenge321', locale: 'nl', id: null, embedUrl: null, status: LocalizedChallenge.STATUSES.PAUSE, urlsToConsult: null }),
         ],
-        transaction: expect.any(Function),
       });
-      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations, transaction: expect.any(Function) });
+      expect(translationRepository.save).toHaveBeenCalledExactlyOnceWith({ translations });
     });
   });
 });

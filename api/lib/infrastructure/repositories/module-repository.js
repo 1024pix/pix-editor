@@ -1,14 +1,16 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { Module, ModuleForConsultation } from '../../domain/models/index.js';
 import { ModuleForReplication } from '../../domain/models/replication/index.js';
 import { NotFoundError } from '../errors.js';
 
 export async function count() {
-  const { count } = await knex('modules').count().first();
+  const knexConn = DomainTransaction.getConnection();
+  const { count } = await knexConn('modules').count().first();
   return count;
 }
 
-export async function save({ details, sections, glossary, ...module }, transaction = knex) {
+export async function save({ details, sections, glossary, ...module }) {
+  const knexConn = DomainTransaction.getConnection();
   const moduleDTO = {
     ...module,
     ...details,
@@ -16,13 +18,14 @@ export async function save({ details, sections, glossary, ...module }, transacti
     glossary: JSON.stringify(glossary),
   };
 
-  const [savedModule] = await transaction.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: transaction.fn.now() }).returning('*');
+  const [savedModule] = await knexConn.insert(moduleDTO).into('modules').onConflict('id').merge({ ...moduleDTO, updatedAt: knexConn.fn.now() }).returning('*');
 
   return toDomain(savedModule);
 }
 
 export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
-  const query = knex.select().from('modules');
+  const knexConn = DomainTransaction.getConnection();
+  const query = knexConn.select().from('modules');
   sort.forEach(([column, order]) => {
     if (['internalTitle', 'title'].includes(column)) {
       query.orderByRaw(`?? collate ?? ${order}`, [column, 'fr-x-icu']);
@@ -39,7 +42,8 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
 }
 
 export async function listForReplication() {
-  const modules = await knex.select(
+  const knexConn = DomainTransaction.getConnection();
+  const modules = await knexConn.select(
     'id',
     'shortId',
     'slug',
@@ -54,9 +58,9 @@ export async function listForReplication() {
 }
 
 export async function getById({ id }) {
-  const module = await knex
-    .select('modules.*', 'draft-modules.id as draftModuleId')
-    .from('modules')
+  const knexConn = DomainTransaction.getConnection();
+
+  const module = await knexConn('modules').select('modules.*', 'draft-modules.id as draftModuleId')
     .leftOuterJoin('draft-modules', 'draft-modules.moduleId', 'modules.id')
     .where('modules.id', id)
     .first();

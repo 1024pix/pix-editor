@@ -1,8 +1,8 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { WhitelistedUrl } from '../../domain/readmodels/WhitelistedUrl.js';
 
-function buildBaseReadQuery() {
-  return knex('whitelisted_urls')
+function buildBaseReadQuery(knexConn) {
+  return knexConn('whitelisted_urls')
     .select({
       id: 'whitelisted_urls.id',
       createdAt: 'whitelisted_urls.createdAt',
@@ -20,13 +20,15 @@ function buildBaseReadQuery() {
 }
 
 export async function list() {
-  const whitelistedUrlDtos = await buildBaseReadQuery().orderBy('url');
+  const knexConn = DomainTransaction.getConnection();
+  const whitelistedUrlDtos = await buildBaseReadQuery(knexConn).orderBy('url');
 
   return toDomainList(whitelistedUrlDtos);
 }
 
 export async function find(id) {
-  const whitelistedUrlDto = await buildBaseReadQuery().where('whitelisted_urls.id', id).first();
+  const knexConn = DomainTransaction.getConnection();
+  const whitelistedUrlDto = await buildBaseReadQuery(knexConn).where('whitelisted_urls.id', id).first();
 
   if (!whitelistedUrlDto) return null;
   return toDomain(whitelistedUrlDto);

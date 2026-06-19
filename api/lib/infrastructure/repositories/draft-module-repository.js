@@ -1,8 +1,9 @@
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { DraftModule } from '../../domain/models/index.js';
 import { NotFoundError } from '../errors.js';
 
-export async function save({ details, sections, glossary, ...module }, transaction = knex) {
+export async function save({ details, sections, glossary, ...module }) {
+  const knexConn = DomainTransaction.getConnection();
   const draftModuleDTO = {
     ...module,
     ...details,
@@ -10,13 +11,14 @@ export async function save({ details, sections, glossary, ...module }, transacti
     glossary: JSON.stringify(glossary),
   };
 
-  const [savedDraftModule] = await transaction.insert(draftModuleDTO).into('draft-modules').onConflict('id').merge({ ...draftModuleDTO, updatedAt: transaction.fn.now() }).returning('*');
+  const [savedDraftModule] = await knexConn.insert(draftModuleDTO).into('draft-modules').onConflict('id').merge({ ...draftModuleDTO, updatedAt: knexConn.fn.now() }).returning('*');
 
   return toDomain(savedDraftModule);
 }
 
 export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
-  const query = knex.select().from('draft-modules');
+  const knexConn = DomainTransaction.getConnection();
+  const query = knexConn.select().from('draft-modules');
   sort.forEach(([column, order]) => {
     if (['internalTitle', 'title'].includes(column)) {
       query.orderByRaw(`?? collate ?? ${order}`, [column, 'fr-x-icu']);
@@ -33,12 +35,14 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
 }
 
 export async function count() {
-  const { count } = await knex('draft-modules').count().first();
+  const knexConn = DomainTransaction.getConnection();
+  const { count } = await knexConn('draft-modules').count().first();
   return count;
 }
 
 export async function getById({ id }) {
-  const draftModule = await knex('draft-modules').where({ id }).first();
+  const knexConn = DomainTransaction.getConnection();
+  const draftModule = await knexConn('draft-modules').where({ id }).first();
 
   if (!draftModule) {
     throw new NotFoundError('Draft module not found');
