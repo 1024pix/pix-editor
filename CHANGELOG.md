@@ -1,5 +1,23 @@
 
 
+## v4.35.0 (19/06/2026)
+
+
+### :rocket: Amélioration
+- [#1524](https://github.com/1024pix/pix-editor/pull/1524) [FEATURE] Créer une route pour répertorier les liens externes (PIX-22763).
+- [#1521](https://github.com/1024pix/pix-editor/pull/1521) [FEATURE] Donner l'information de la présence d'un draft sur la page de détails d'un module (PIX-22927).
+- [#1518](https://github.com/1024pix/pix-editor/pull/1518) [FEATURE] Ajout d'un message quand il n'y a pas de cadre de traduction. (PIX-23156).
+
+### :building_construction: Tech
+- [#1519](https://github.com/1024pix/pix-editor/pull/1519) [TECH] Instancier les transaction via la couche Domaine (PIX-23186).
+- [#1522](https://github.com/1024pix/pix-editor/pull/1522) [TECH] Ajouter des titres aux boutons qui en manquent.
+
+### :bug: Correction
+- [#1528](https://github.com/1024pix/pix-editor/pull/1528) [BUGFIX] Corriger la duplication de challenge (PIX-23246).
+
+### :arrow_up: Montée de version
+- [#1525](https://github.com/1024pix/pix-editor/pull/1525) [BUMP] Update dependency vite to v7.3.5 [SECURITY].
+
 ## v4.34.0 (15/06/2026)
 
 
