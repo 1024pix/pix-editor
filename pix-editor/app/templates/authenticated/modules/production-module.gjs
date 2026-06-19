@@ -1,3 +1,4 @@
+import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
@@ -5,7 +6,9 @@ import ModuleNotification from 'pixeditor/components/modules/module-notification
 <template>
   <header class="page-header">
     <h1 class="page-title">Détail du module</h1>
-
+    <div class="page-actions">
+      <CreateModuleButton @module={{@model.module}} />
+    </div>
   </header>
   <main class="page-body">
     <section class="page-section module-form">
