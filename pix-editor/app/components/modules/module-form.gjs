@@ -1,6 +1,7 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixLabel from '@1024pix/pix-ui/components/pix-label';
+import PixNotificationAlert from '@1024pix/pix-ui/components/pix-notification-alert';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -59,8 +60,23 @@ export default class ModuleForm extends Component {
     window.history.back();
   }
 
+  get isIdsChangedWarningDisplayed() {
+    if (!this.moduleData || !this.args.module) return false;
+    return this.moduleData.id !== this.args.module.id || this.moduleData.shortId !== this.args.module.shortId;
+  }
+
   <template>
     <div class="module-form">
+      {{#if this.isIdsChangedWarningDisplayed}}
+        <PixNotificationAlert @type="warning">
+          Les champs
+          <code>id</code>
+          et
+          <code>shortId</code>
+          ne peuvent pas être modifiés.
+        </PixNotificationAlert>
+      {{/if}}
+
       {{#if @readonly}}
         <h2 class="module-internal-title">{{this.internalTitle}}</h2>
       {{else}}
