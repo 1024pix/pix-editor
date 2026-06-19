@@ -13,6 +13,7 @@ const levelForDisplay = {
 };
 
 export default class BaseModule extends Model {
+  @attr shortId;
   @attr internalTitle;
   @attr title;
   @attr isBeta;
