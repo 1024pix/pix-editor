@@ -1,5 +1,5 @@
-import { visit } from '@1024pix/ember-testing-library';
-import { click, currentURL, fillIn, find } from '@ember/test-helpers';
+import { fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -39,9 +39,9 @@ module('Acceptance | competence-management/single', function (hooks) {
 
     // when
     const screen = await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
-    await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-save-button]'));
+    await click(await screen.findByRole('button', { name: 'Modifier' }));
+    await fillByLabel('Titre :', newCompetenceTitle);
+    await click(screen.getByRole('button', { name: 'Enregistrer' }));
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
@@ -55,9 +55,9 @@ module('Acceptance | competence-management/single', function (hooks) {
 
     // when
     const screen = await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
-    await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-cancel-button]'));
+    await click(await screen.findByRole('button', { name: 'Modifier' }));
+    await fillByLabel('Titre :', newCompetenceTitle);
+    await click(screen.getByRole('button', { name: 'Annuler' }));
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
@@ -72,8 +72,8 @@ module('Acceptance | competence-management/single', function (hooks) {
 
     // when
     const screen = await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
-    await click(find('.bars.icon'));
+    await click(await screen.findByRole('button', { name: 'Modifier' }));
+    await click(screen.getByRole('button', { name: 'Afficher/cacher la barre latérale' }));
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Code Titre' }));
 

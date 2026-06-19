@@ -134,7 +134,7 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
 
     // replace attachmentA with attachmentB
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-delete-attachment-button]'));
+    await click(screen.getByRole('button', { name: 'Supprimer le fichier' }));
     await selectFiles('[data-test-file-input-attachment] input', attachmentB);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
@@ -163,7 +163,7 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
     // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-delete-attachment-button]'));
+    await click(screen.getByRole('button', { name: 'Supprimer le fichier' }));
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
@@ -190,7 +190,7 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
     // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-delete-attachment-button]'));
+    await click(screen.getByRole('button', { name: 'Supprimer le fichier' }));
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-cancel-challenge-button]'));

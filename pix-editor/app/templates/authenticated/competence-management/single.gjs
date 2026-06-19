@@ -14,7 +14,6 @@ import Textarea from 'pixeditor/components/field/textarea';
       <div class="competence-management__data">
         <form action class="ui form">
           <Input
-            data-test-competence-title-input
             @value={{@controller.competence.title}}
             @edition={{@controller.edition}}
             @label="Titre"
@@ -48,22 +47,17 @@ import Textarea from 'pixeditor/components/field/textarea';
       </div>
       <div class="ui vertical compact labeled icon menu competence-management__menu">
         {{#if @controller.mayEdit}}
-          <button data-test-edit-button class="ui button item" {{on "click" @controller.edit}} type="button">
+          <button class="ui button item" type="button" {{on "click" @controller.edit}}>
             <i class="edit icon"></i>
             Modifier
           </button>
         {{/if}}
         {{#if @controller.edition}}
-          <button
-            data-test-save-button
-            class="ui button item important-action"
-            {{on "click" @controller.save}}
-            type="button"
-          >
+          <button class="ui button item important-action" type="button" {{on "click" @controller.save}}>
             <i class="save icon"></i>
             Enregistrer
           </button>
-          <button data-test-cancel-button class="ui button item" {{on "click" @controller.cancelEdit}} type="button">
+          <button class="ui button item" type="button" {{on "click" @controller.cancelEdit}}>
             <i class="ban icon"></i>
             Annuler
           </button>

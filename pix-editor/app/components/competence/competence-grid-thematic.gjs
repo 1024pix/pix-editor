@@ -14,13 +14,7 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
         <td data-test-theme-cell class="theme-cell create-tube">
           <LinkTo @route="authenticated.competence.themes.single" @model={{@thematic}}>{{this.name}}</LinkTo>
           <div class="ui mini basic icon buttons tube-management">
-            <button
-              data-test-add-tube
-              class="ui icon button"
-              {{on "click" (fn @newTube @thematic)}}
-              title="Nouveau tube"
-              type="button"
-            >
+            <button class="ui icon button" title="Nouveau sujet" type="button" {{on "click" (fn @newTube @thematic)}}>
               <i class="plus square outline icon"></i>
             </button>
           </div>
@@ -48,20 +42,18 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
               {{#if this.mayCreateTube}}
                 <div class="ui mini basic icon buttons tube-management">
                   <button
-                    data-test-add-tube
                     class="ui icon button"
-                    {{on "click" (fn @newTube @thematic)}}
-                    title="Nouveau tube"
+                    title="Nouveau sujet"
                     type="button"
+                    {{on "click" (fn @newTube @thematic)}}
                   >
                     <i class="plus square outline icon"></i>
                   </button>
                   <button
-                    data-test-sort-tube
                     class="ui icon button"
-                    {{on "click" (fn @displaySortTubesPopIn @thematic.tubes)}}
-                    title="Trier les Tubes"
+                    title="Trier les sujets"
                     type="button"
+                    {{on "click" (fn @displaySortTubesPopIn @thematic.tubes)}}
                   >
                     <i class="exchange icon rotate-90"></i>
                   </button>

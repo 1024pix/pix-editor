@@ -52,7 +52,7 @@ export default class CompetenceThemesSingleController extends Controller {
       .then(() => {
         this.edition = false;
         this.loader.stop();
-        this.notifications.sendSuccess('Thématique mis à jour');
+        this.notifications.sendSuccess('Thématique mise à jour');
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */

@@ -10,9 +10,14 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     <div class="ui menu">
       <div class="ui left menu">
         {{#if (and @controller.mayMove (not @controller.creation) (not @controller.edition))}}
-          <button class="ui button icon item" {{on "click" @controller.selectCompetence}} type="button"><i
-              class="icon random"
-            ></i></button>
+          <button
+            class="ui button icon item"
+            type="button"
+            title="Déplacer le sujet"
+            {{on "click" @controller.selectCompetence}}
+          >
+            <i class="icon random"></i>
+          </button>
         {{/if}}
       </div>
       <div class="item header {{if @controller.creation 'creation'}}">
@@ -24,17 +29,27 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
       </div>
       <div class="ui right menu">
         {{#if @controller.maximized}}
-          <button class="ui button icon item" {{on "click" @controller.minimize}} type="button"><i
-              class="window minimize icon"
-            ></i></button>
+          <button
+            class="ui button icon item"
+            type="button"
+            title="Minimiser la fenêtre"
+            {{on "click" @controller.minimize}}
+          >
+            <i class="window minimize icon"></i>
+          </button>
         {{else}}
-          <button class="ui button icon item" {{on "click" @controller.maximize}} type="button"><i
-              class="window maximize outline icon"
-            ></i></button>
+          <button
+            class="ui button icon item"
+            type="button"
+            title="Maximiser la fenêtre"
+            {{on "click" @controller.maximize}}
+          >
+            <i class="window maximize outline icon"></i>
+          </button>
         {{/if}}
-        <button class="ui button icon item" {{on "click" @controller.close}} type="button"><i
-            class="icon window close"
-          ></i></button>
+        <button class="ui button icon item" type="button" title="Fermer la fenêtre" {{on "click" @controller.close}}>
+          <i class="icon window close"></i>
+        </button>
       </div>
     </div>
   </div>

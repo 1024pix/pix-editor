@@ -63,7 +63,7 @@ module('Unit | Controller | competence/themes/single', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(pixToastSendSuccess.calledWith('Thématique mis à jour'));
+    assert.ok(pixToastSendSuccess.calledWith('Thématique mise à jour'));
   });
 
   test('it should catch an error if save action failed', async function (assert) {
