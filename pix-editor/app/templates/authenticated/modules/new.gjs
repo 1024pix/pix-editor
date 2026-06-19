@@ -11,6 +11,8 @@ export default class NewModule extends Component {
 
   @action
   async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
+    const { module } = this.args.model;
+
     const newModule = this.store.createRecord('draft-module', {
       internalTitle,
       title,
@@ -20,15 +22,25 @@ export default class NewModule extends Component {
       details,
       sections,
       glossary,
+      module,
     });
 
     try {
       this.loader.start();
       await newModule.save();
-      this.router.replaceWith('authenticated.modules.workbench');
-      this.notifications.sendSuccess(`Le module "${newModule.internalTitle}" a été enregistré.`);
+      if (module) {
+        this.router.replaceWith('authenticated.modules.draft-module', newModule.id);
+        this.notifications.sendSuccess(`Le draft "${newModule.internalTitle}" a été enregistré.`);
+      } else {
+        this.router.replaceWith('authenticated.modules.workbench');
+        this.notifications.sendSuccess(`Le module "${newModule.internalTitle}" a été enregistré.`);
+      }
     } catch {
-      this.notifications.sendError('Erreur lors de l’enregistrement du module.');
+      if (module) {
+        this.notifications.sendError('Erreur lors de l’enregistrement du draft.');
+      } else {
+        this.notifications.sendError('Erreur lors de l’enregistrement du module.');
+      }
     } finally {
       this.loader.stop();
     }
@@ -36,11 +48,17 @@ export default class NewModule extends Component {
 
   <template>
     <header class="page-header">
-      <h1 class="page-title">Création d'un module</h1>
+      <h1 class="page-title">
+        {{#if @model.module}}
+          Création d’un draft
+        {{else}}
+          Création d’un module
+        {{/if}}
+      </h1>
     </header>
     <main class="page-body">
       <section class="page-section module-form">
-        <ModuleForm @saveModule={{this.saveModule}} />
+        <ModuleForm @module={{@model.module}} @saveModule={{this.saveModule}} />
       </section>
     </main>
   </template>

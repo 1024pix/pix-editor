@@ -1,5 +1,4 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixLabel from '@1024pix/pix-ui/components/pix-label';
 import { on } from '@ember/modifier';
@@ -56,6 +55,10 @@ export default class ModuleForm extends Component {
     return this.args.saveModule({ ...this.moduleData, internalTitle: this.internalTitle });
   }
 
+  back() {
+    window.history.back();
+  }
+
   <template>
     <div class="module-form">
       {{#if @readonly}}
@@ -83,9 +86,9 @@ export default class ModuleForm extends Component {
           <PixButton @triggerAction={{this.saveModule}} @isDisabled={{this.isSaveDisabled}}>
             Enregistrer
           </PixButton>
-          <PixButtonLink @route="authenticated.modules" @variant="secondary">
+          <PixButton @triggerAction={{this.back}} @variant="secondary">
             Annuler
-          </PixButtonLink>
+          </PixButton>
         </div>
       {{/unless}}
     </div>
