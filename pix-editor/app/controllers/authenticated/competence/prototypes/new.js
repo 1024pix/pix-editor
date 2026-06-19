@@ -32,9 +32,9 @@ export default class NewController extends Prototype {
       await this._handleIllustration(this.challenge);
       await this._handlePiecesJointes(this.challenge);
       // create challenge without patching Pix API cache
+      await this._setVersion(this.challenge);
       await this._saveChallenge(this.challenge);
       await this._saveFiles(this.challenge);
-      await this._setVersion(this.challenge);
       // update challenge's version and patch Pix API cache
       await this._saveChallenge(this.challenge);
       this.edition = false;
