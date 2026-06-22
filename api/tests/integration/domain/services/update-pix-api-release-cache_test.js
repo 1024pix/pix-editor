@@ -102,7 +102,6 @@ describe('Integration | Service | update pix api release cache', function() {
               t3Status: true,
               timer: 1234,
               type: 'QCM',
-              shuffled: false,
               alternativeVersion: 2,
               accessibility1: 'OK',
               accessibility2: 'RAS',
@@ -123,7 +122,7 @@ describe('Integration | Service | update pix api release cache', function() {
           );
 
           // then
-          expect(pixApiCacheScope.isDone()).to.be.true;
+          expect(pixApiCacheScope.isDone()).toBe(true);
         });
       });
 
@@ -226,7 +225,7 @@ describe('Integration | Service | update pix api release cache', function() {
           );
 
           // then
-          expect(pixApiCacheScope.isDone()).to.be.true;
+          expect(pixApiCacheScope.isDone()).toBe(true);
         });
       });
     });
@@ -345,7 +344,7 @@ describe('Integration | Service | update pix api release cache', function() {
           );
 
           // then
-          expect(pixApiCacheScope.isDone()).to.be.true;
+          expect(pixApiCacheScope.isDone()).toBe(true);
         });
       });
 
@@ -448,7 +447,7 @@ describe('Integration | Service | update pix api release cache', function() {
           );
 
           // then
-          expect(pixApiCacheScope.isDone()).to.be.true;
+          expect(pixApiCacheScope.isDone()).toBe(true);
         });
       });
     });
@@ -530,7 +529,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onFrameworkCreated(framework);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -597,7 +596,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onAreaCreated(area);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -669,7 +668,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onCompetenceCreated(competence);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -741,7 +740,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onCompetenceUpdated(competence);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -806,7 +805,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onThematicCreated(thematic);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -871,7 +870,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onThematicUpdated(thematic);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -942,7 +941,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onTutorialCreated(tutorial);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -1013,7 +1012,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onTutorialUpdated(tutorial);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -1066,7 +1065,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onTubeCreated(tube);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -1148,7 +1147,7 @@ describe('Integration | Service | update pix api release cache', function() {
         await updatePixApiReleaseCache.onTubeUpdated(tube);
 
         // then
-        expect(pixApiCacheScope.isDone()).to.be.true;
+        expect(pixApiCacheScope.isDone()).toBe(true);
       });
     });
 
@@ -1159,6 +1158,58 @@ describe('Integration | Service | update pix api release cache', function() {
 
         // when
         await updatePixApiReleaseCache.onTubeUpdated(domainBuilder.buildTube());
+
+        // then
+        expect(notifyStub).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('#onDraftModuleCreated', function() {
+    describe('when patching Pix API is enabled', function() {
+      beforeEach(function() {
+        baseUrl.mockReturnValue('https://some-api-base-url.fr');
+      });
+
+      it.fails('should patch the module', async function() {
+        // given
+        const draftModule = domainBuilder.buildDraftModule();
+
+        const pixApiToken = 'secret';
+        nock('https://some-api-base-url.fr')
+          .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+          .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+          .reply(200, { access_token: pixApiToken });
+        const pixApiCacheScope = nock('https://some-api-base-url.fr')
+          .patch(`/api/cache/modules/${draftModule.id}`, {
+            id: draftModule.id,
+            shortId: draftModule.shortId,
+            slug: draftModule.slug,
+            title: draftModule.title,
+            isBeta: draftModule.isBeta,
+            visibility: draftModule.visibility,
+            details: draftModule.details,
+            sections: draftModule.sections,
+            glossary: draftModule.glossary,
+          })
+          .matchHeader('Authorization', `Bearer ${pixApiToken}`)
+          .reply(200);
+
+        // when
+        await updatePixApiReleaseCache.onDraftModuleCreated(draftModule);
+
+        // then
+        expect(pixApiCacheScope.isDone()).toBe(true);
+      });
+    });
+
+    describe('when patching Pix API is disabled', function() {
+      it.fails('should not patch anything', async function() {
+        // given
+        baseUrl.mockReturnValue(undefined);
+
+        // when
+        await updatePixApiReleaseCache.onDraftModuleCreated(domainBuilder.buildDraftModule());
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();
