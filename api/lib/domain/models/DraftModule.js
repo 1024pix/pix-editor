@@ -6,8 +6,11 @@ export class DraftModule extends Module {
     this.moduleId = moduleId;
   }
 
-  prepareForCreation() {
-    this.id = crypto.randomUUID();
-    this.shortId = this.id.slice(0, 8);
+  /**
+   * @param {import('./Module.js').Module} module
+   */
+  prepareForCreation(module) {
+    this.id = module?.id ?? crypto.randomUUID();
+    this.shortId = module?.shortId ?? this.id.slice(0, 8);
   }
 }

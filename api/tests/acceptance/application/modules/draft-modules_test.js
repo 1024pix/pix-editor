@@ -76,6 +76,110 @@ describe('Acceptance | Route | draft-modules', () => {
         },
       ]);
     });
+
+    describe('when creating a draft for a production module', () => {
+      it('responds with status 201 and draft modules data', async () => {
+        // given
+        const module = domainBuilder.buildModule({
+          sections: [],
+          glossary: [],
+        });
+        databaseBuilder.factory.buildModule(module);
+        await databaseBuilder.commit();
+
+        const draftModule = domainBuilder.buildDraftModule({
+          id: module.id,
+          shortId: module.shortId,
+          moduleId: module.id,
+          slug: module.slug + '_update',
+          title: module.title + ' update',
+          internalTitle: module.internalTitle + '_update',
+          isBeta: true,
+          visibility: Module.VISIBILITIES.PRIVATE,
+          details: {
+            image: module.details.image + '_update',
+            description: module.details.description + ' update',
+            duration: module.details.duration + 1,
+            level: Module.LEVELS.ADVANDCED,
+            objectives: [...module.details.objectives, 'update'],
+            tabletSupport: module.details.tabletSupport + '_update',
+          },
+        });
+        const draftModulePayload = {
+          slug: draftModule.slug,
+          title: draftModule.title,
+          'internal-title': draftModule.internalTitle,
+          'is-beta': draftModule.isBeta,
+          visibility: draftModule.visibility,
+          details: draftModule.details,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+        };
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/draft-modules',
+          headers: generateAuthorizationHeader(editorUser),
+          payload: {
+            data: {
+              type: 'draft-modules',
+              attributes: draftModulePayload,
+              relationships: {
+                module: {
+                  data: {
+                    id: draftModule.moduleId,
+                    type: 'modules',
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // then
+        expect(response.statusCode).toBe(201);
+        expect(response.result).toStrictEqual({
+          data: {
+            type: 'draft-modules',
+            id: draftModule.id,
+            attributes: {
+              'short-id': draftModule.shortId,
+              ...draftModulePayload,
+            },
+            relationships: {
+              module: {
+                data: {
+                  id: module.id,
+                  type: 'modules',
+                },
+              },
+              diff: { links: { related: `/api/draft-modules/${draftModule.id}/diff` } },
+            },
+          },
+        });
+
+        await expect(knex.select('*').from('draft-modules')).resolves.toStrictEqual([
+          {
+            id: draftModule.id,
+            shortId: draftModule.shortId,
+            moduleId: draftModule.moduleId,
+            internalTitle: draftModule.internalTitle,
+            slug: draftModule.slug,
+            title: draftModule.title,
+            isBeta: draftModule.isBeta,
+            visibility: draftModule.visibility,
+            sections: draftModule.sections,
+            glossary: draftModule.glossary,
+            ...draftModule.details,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          },
+        ]);
+      });
+    });
   });
 
   describe('GET /draft-modules', () => {

@@ -5,7 +5,7 @@ import { setupApplicationTest } from 'pixeditor/tests/setup-application-renderin
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { module, test } from 'qunit';
 
-module('Acceptance | Modules | Workbench Module', function (hooks) {
+module('Acceptance | Modules | Draft Module', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let id;

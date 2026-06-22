@@ -19,6 +19,21 @@ describe('Unit | Domain | DraftModule', () => {
       expect(draftModule.shortId).toMatch(shortIdRegExp);
       expect(draftModule.shortId).toBe(draftModule.id.slice(0, 8));
     });
+
+    describe('when a module is given', () => {
+      it('uses module’s id and shortId', () => {
+        // given
+        const module = domainBuilder.buildModule();
+        const draftModule = new DraftModule();
+
+        // when
+        draftModule.prepareForCreation(module);
+
+        // then
+        expect(draftModule.id).toBe(module.id);
+        expect(draftModule.shortId).toBe(module.shortId);
+      });
+    });
   });
 
   describe('#serializeToJSON', () => {

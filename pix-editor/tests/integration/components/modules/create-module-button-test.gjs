@@ -1,0 +1,63 @@
+import { render } from '@1024pix/ember-testing-library';
+import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+
+module('Integration | Components | modules/create-module-button', function (hooks) {
+  setupIntlRenderingTest(hooks);
+
+  module('when module has a draft', function () {
+    test('it displays nothing', async function (assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const module = store.createRecord('module', {
+        id: 'moduleId',
+        draftModule: store.createRecord('draft-module', {
+          id: 'moduleId',
+        }),
+      });
+
+      // when
+      const screen = await render(<template><CreateModuleButton @module={{module}} /></template>);
+
+      // then
+      assert.dom(screen.queryByRole('link')).doesNotExist();
+    });
+  });
+
+  module('when module does not have a draft', function () {
+    test('it displays draft creation button', async function (assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const module = store.createRecord('module', {
+        id: 'moduleId',
+      });
+
+      // when
+      const screen = await render(<template><CreateModuleButton @module={{module}} /></template>);
+
+      // then
+      assert.dom(screen.getByRole('link', { name: 'Créer un draft' })).exists();
+      assert
+        .dom(screen.getByRole('link', { name: 'Créer un draft' }))
+        .hasAttribute('href', /\/modules\/workbench\/new\?moduleId=moduleId$/);
+    });
+  });
+
+  module('when no module', function () {
+    test('it displays module creation button', async function (assert) {
+      // given
+      const module = undefined;
+
+      // when
+      const screen = await render(<template><CreateModuleButton @module={{module}} /></template>);
+
+      // then
+      assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
+      assert
+        .dom(screen.getByRole('link', { name: 'Créer un module' }))
+        .hasAttribute('href', /\/modules\/workbench\/new$/);
+    });
+  });
+});

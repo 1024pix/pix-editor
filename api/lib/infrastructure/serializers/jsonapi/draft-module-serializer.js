@@ -6,8 +6,13 @@ const { Deserializer, Serializer } = Jsonapi;
 
 const deserializer = new Deserializer({
   keyForAttribute: 'camelCase',
-  transform(draftModuleDto) {
-    return new DraftModule(draftModuleDto);
+  modules: {
+    valueForRelationship(module) {
+      return module.id;
+    },
+  },
+  transform({ module: moduleId = null, ...draftModuleDto }) {
+    return new DraftModule({ ...draftModuleDto, moduleId });
   },
 });
 

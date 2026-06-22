@@ -29,7 +29,7 @@ td.modules-list__actions {
 
 .draft-module-diff {
   pre.shiki {
-    height: 70vh;
+    max-height: 70vh;
     margin: 0;
     padding: var(--pix-spacing-4x);
     overflow: scroll;

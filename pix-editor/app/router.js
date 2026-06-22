@@ -85,7 +85,7 @@ Router.map(function () {
     });
     this.route('modules', function () {
       this.route('index', { path: '/' });
-      this.route('new');
+      this.route('new', { path: '/workbench/new' });
       this.route('production');
       this.route('workbench');
       this.route('production-module', { path: '/production/:module_id' });
