@@ -384,8 +384,15 @@ export default function routes() {
   });
 
   this.post('/draft-modules', function (schema, request) {
-    const attributes = JSON.parse(request.requestBody).data.attributes;
-    return schema.create('draft-module', { id: crypto.randomUUID(), ...attributes });
+    const body = JSON.parse(request.requestBody);
+    const attributes = body.data.attributes;
+
+    const moduleId = body.data.relationships?.module?.data?.id;
+    if (moduleId) {
+      attributes.module = schema.modules.find(moduleId);
+    }
+
+    return schema.create('draft-module', { id: moduleId ?? crypto.randomUUID(), ...attributes });
   });
 
   this.get('/draft-modules', function (schema, request) {
