@@ -19,7 +19,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     updatePixApiReleaseCache = { onDraftModuleCreated: vi.fn().mockResolvedValueOnce() };
   });
 
-  it.fails('prepares draft module for creation and saves it', async () => {
+  it('prepares draft module for creation and saves it', async () => {
     // when
     const result = createDraftModule(draftModule, { draftModuleRepository, updatePixApiReleaseCache });
 
@@ -32,7 +32,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
   });
 
   describe('when draft module has a moduleId', () => {
-    it.fails('prepares for creation using module', async () => {
+    it('prepares for creation using module', async () => {
       // given
       const module = Symbol('module');
       const moduleRepository = { getById: vi.fn().mockResolvedValueOnce(module) };

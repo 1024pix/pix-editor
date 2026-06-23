@@ -1171,7 +1171,7 @@ describe('Integration | Service | update pix api release cache', function() {
         baseUrl.mockReturnValue('https://some-api-base-url.fr');
       });
 
-      it.fails('should patch the module', async function() {
+      it('should patch the module', async function() {
         // given
         const draftModule = domainBuilder.buildDraftModule();
 
@@ -1204,7 +1204,7 @@ describe('Integration | Service | update pix api release cache', function() {
     });
 
     describe('when patching Pix API is disabled', function() {
-      it.fails('should not patch anything', async function() {
+      it('should not patch anything', async function() {
         // given
         baseUrl.mockReturnValue(undefined);
 
