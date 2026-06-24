@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+
+import * as config from '../../../../lib/config.js';
 import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Module } from '../../../../lib/domain/models/index.js';
@@ -54,6 +56,8 @@ describe('Acceptance | Route | draft-modules', () => {
           attributes: {
             'short-id': expect.stringMatching(shortIdRegExp),
             ...draftModulePayload,
+            url: expect.stringMatching(new RegExp(`^${config.pixApp.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/.{8}/${draftModule.slug}$`)),
+            'preview-url': expect.stringMatching(new RegExp(`^${config.pixApp.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/preview/.{8}/${draftModule.slug}$`)),
           },
           relationships: { module: { data: null } },
         },
@@ -149,6 +153,8 @@ describe('Acceptance | Route | draft-modules', () => {
             attributes: {
               'short-id': draftModule.shortId,
               ...draftModulePayload,
+              url: `${config.pixApp.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
             },
             relationships: {
               module: {
@@ -325,6 +331,8 @@ describe('Acceptance | Route | draft-modules', () => {
             title: draftModule.title,
             sections: draftModule.sections,
             glossary: draftModule.glossary,
+            url: `${config.pixApp.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+            'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
           },
           relationships: {
             module: {

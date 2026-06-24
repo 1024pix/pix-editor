@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+
+import * as config from '../../../../../lib/config.js';
 import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/draft-module-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
 import { Module } from '../../../../../lib/domain/models/Module.js';
@@ -23,6 +25,8 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
             details: draftModule.details,
             sections: draftModule.sections,
             glossary: draftModule.glossary,
+            url: `${config.pixApp.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+            'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
           },
           relationships: {
             module: {
