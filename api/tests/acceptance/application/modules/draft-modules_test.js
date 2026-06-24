@@ -226,7 +226,11 @@ describe('Acceptance | Route | draft-modules', () => {
           {
             type: 'draft-modules',
             id: draftModules[1].id,
-            attributes: { 'internal-title': draftModules[1].internalTitle, details: draftModules[1].details },
+            attributes: {
+              'internal-title': draftModules[1].internalTitle,
+              details: draftModules[1].details,
+              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
+            },
             relationships: {
               module: {
                 data: {
@@ -239,13 +243,21 @@ describe('Acceptance | Route | draft-modules', () => {
           {
             type: 'draft-modules',
             id: draftModules[0].id,
-            attributes: { 'internal-title': draftModules[0].internalTitle, details: draftModules[0].details },
+            attributes: {
+              'internal-title': draftModules[0].internalTitle,
+              details: draftModules[0].details,
+              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+            },
             relationships: { module: { data: null } },
           },
           {
             type: 'draft-modules',
             id: draftModules[2].id,
-            attributes: { 'internal-title': draftModules[2].internalTitle, details: draftModules[2].details },
+            attributes: {
+              'internal-title': draftModules[2].internalTitle,
+              details: draftModules[2].details,
+              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[2].shortId}/${draftModules[2].slug}`,
+            },
             relationships: { module: { data: null } },
           },
         ],
@@ -278,7 +290,11 @@ describe('Acceptance | Route | draft-modules', () => {
             {
               type: 'draft-modules',
               id: draftModules[0].id,
-              attributes: { 'internal-title': draftModules[0].internalTitle, details: draftModules[0].details },
+              attributes: {
+                'internal-title': draftModules[0].internalTitle,
+                details: draftModules[0].details,
+                'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+              },
               relationships: { module: { data: null } },
             },
           ],

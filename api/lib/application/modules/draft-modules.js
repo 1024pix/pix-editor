@@ -26,6 +26,7 @@ export function register(server) {
               'internalTitle',
               'details',
               'module',
+              'previewUrl',
             ], meta,
           });
         },
