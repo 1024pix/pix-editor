@@ -15,12 +15,14 @@ import {
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import { child } from '../../infrastructure/logger.js';
+import { ModuleForRelease } from '../models/release/ModuleForRelease.js';
 
 /**
  * @typedef {import('../../../lib/domain/models').Area} Area
  * @typedef {import('../../../lib/domain/models').Attachment} Attachment
  * @typedef {import('../../../lib/domain/models').Competence} Competence
  * @typedef {import('../../../lib/domain/models').Framework} Framework
+ * @typedef {import('../../../lib/domain/models').DraftModule} DraftModule
  * @typedef {import('../../../lib/domain/models').Thematic} Thematic
  * @typedef {import('../../../lib/domain/models').Tube} Tube
  * @typedef {import('../../../lib/domain/models').Tutorial} Tutorial
@@ -231,6 +233,23 @@ export async function onTubeUpdated(tube) {
       model: 'tubes',
       updatedRecord: tubeTransformer.transformTube(tube, challenges),
       pixApiClient,
+    });
+  } catch (err) {
+    logger.error(err);
+  }
+}
+
+/**
+ * @param {DraftModule} draftModule
+ */
+export async function onDraftModuleCreated(draftModule) {
+  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
+
+  try {
+    await updatedRecordNotifier.notify({
+      pixApiClient,
+      model: 'modules',
+      updatedRecord: new ModuleForRelease(draftModule),
     });
   } catch (err) {
     logger.error(err);
