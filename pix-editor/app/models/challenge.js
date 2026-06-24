@@ -21,7 +21,7 @@ export default class ChallengeModel extends Model {
   @attr('number') version;
   @attr genealogy;
   @attr status;
-  @attr({ readOnly: true }) preview;
+  @attr preview;
   @attr('number') timer;
   @attr embedURL;
   @attr embedTitle;

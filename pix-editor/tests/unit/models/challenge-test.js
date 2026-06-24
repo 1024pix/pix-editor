@@ -33,7 +33,6 @@ module('Unit | Model | challenge', function (hooks) {
       t3Status: 'proto t3Status',
       pedagogy: 'proto pedagogy',
       declinable: 'proto declinable',
-      preview: 'proto preview',
       timer: 123,
       embedURL: 'proto embedURL',
       embedTitle: 'proto embedTitle',
@@ -88,7 +87,6 @@ module('Unit | Model | challenge', function (hooks) {
       t3Status: 'alternative t3Status',
       pedagogy: 'alternative pedagogy',
       declinable: 'alternative declinable',
-      preview: 'alternative preview',
       timer: 123,
       embedURL: 'alternative embedURL',
       embedTitle: 'alternative embedTitle',
@@ -148,7 +146,6 @@ module('Unit | Model | challenge', function (hooks) {
       assert.strictEqual(clonedChallenge.t3Status, prototype.t3Status, 'champ t3Status');
       assert.strictEqual(clonedChallenge.pedagogy, prototype.pedagogy, 'champ pedagogy');
       assert.strictEqual(clonedChallenge.declinable, prototype.declinable, 'champ declinable');
-      assert.strictEqual(clonedChallenge.preview, prototype.preview, 'champ preview');
       assert.strictEqual(clonedChallenge.timer, prototype.timer, 'champ timer');
       assert.strictEqual(clonedChallenge.embedURL, prototype.embedURL, 'champ embedURL');
       assert.strictEqual(clonedChallenge.embedTitle, prototype.embedTitle, 'champ embedTitle');
@@ -231,7 +228,6 @@ module('Unit | Model | challenge', function (hooks) {
       assert.strictEqual(clonedChallenge.t3Status, alternative.t3Status, 'champ t3Status');
       assert.strictEqual(clonedChallenge.pedagogy, alternative.pedagogy, 'champ pedagogy');
       assert.strictEqual(clonedChallenge.declinable, alternative.declinable, 'champ declinable');
-      assert.strictEqual(clonedChallenge.preview, alternative.preview, 'champ preview');
       assert.strictEqual(clonedChallenge.timer, alternative.timer, 'champ timer');
       assert.strictEqual(clonedChallenge.embedURL, alternative.embedURL, 'champ embedURL');
       assert.strictEqual(clonedChallenge.embedTitle, alternative.embedTitle, 'champ embedTitle');
