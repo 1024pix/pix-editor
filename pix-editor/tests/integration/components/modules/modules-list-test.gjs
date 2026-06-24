@@ -1,5 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
-import { getByText, queryByText } from '@testing-library/dom';
+import { getByRole, getByText, queryByRole, queryByText } from '@testing-library/dom';
 import ModulesList from 'pixeditor/components/modules/modules-list';
 import { module, test } from 'qunit';
 
@@ -88,6 +88,7 @@ module('Integration | Component | modules-list', function (hooks) {
 
       draftModules = [
         store.createRecord('draft-module', {
+          id: 'super-1',
           module,
           internalTitle: 'MOD_super_1',
           isBeta: false,
@@ -95,14 +96,17 @@ module('Integration | Component | modules-list', function (hooks) {
           details: {
             level: 'novice',
           },
+          previewUrl: 'https://graou.asso/modules/preview/super-1',
         }),
         store.createRecord('draft-module', {
+          id: 'super-2',
           internalTitle: 'MOD_super_2',
           isBeta: true,
           visibility: 'private',
           details: {
             level: 'advanced',
           },
+          previewUrl: 'https://graou.asso/modules/preview/super-2',
         }),
       ];
     });
@@ -119,12 +123,28 @@ module('Integration | Component | modules-list', function (hooks) {
       assert.dom(screen.getByText('MOD_super_2')).exists();
 
       const firstRow = screen.getByText('MOD_super_1').closest('tr');
-      assert.dom(getByText(firstRow, 'Voir le détail')).exists();
-      assert.dom(getByText(firstRow, 'Voir le détail du module en prod')).exists();
+      assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail' })).exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: 'Voir le détail' }))
+        .hasAttribute('href', `/modules/workbench/super-1`);
+      assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail du module en prod' })).exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: 'Voir le détail du module en prod' }))
+        .hasAttribute('href', '/modules/production/moduleId');
+      assert.dom(getByRole(firstRow, 'link', { name: 'Prévisualiser' })).exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: 'Prévisualiser' }))
+        .hasAttribute('href', 'https://graou.asso/modules/preview/super-1');
 
       const secondRow = screen.getByText('MOD_super_2').closest('tr');
-      assert.dom(getByText(secondRow, 'Voir le détail')).exists();
-      assert.dom(queryByText(secondRow, 'Voir le détail du module en prod')).doesNotExist();
+      assert.dom(getByRole(secondRow, 'link', { name: 'Voir le détail' })).exists();
+      assert
+        .dom(getByRole(secondRow, 'link', { name: 'Voir le détail' }))
+        .hasAttribute('href', `/modules/workbench/super-2`);
+      assert.dom(queryByRole(secondRow, 'link', { name: 'Voir le détail du module en prod' })).doesNotExist();
+      assert
+        .dom(getByRole(secondRow, 'link', { name: 'Prévisualiser' }))
+        .hasAttribute('href', 'https://graou.asso/modules/preview/super-2');
     });
   });
 });
