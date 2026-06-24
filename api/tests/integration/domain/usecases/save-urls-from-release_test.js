@@ -54,7 +54,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         competenceId: 'competence2',
         name: '@mySkill23',
         tutorialIds: [],
-        learningMoreTutorialIds: ['tutorial2'],
+        learningMoreTutorialIds: ['tutorial2', 'tutorial7'],
       });
       const tutorials = [
         domainBuilder.buildTutorialForRelease({ id: 'tutorial1', link: 'https://tuto1.net/' }),
@@ -62,17 +62,28 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         domainBuilder.buildTutorialForRelease({ id: 'tutorial3', link: 'https://tuto3.net/' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial4', link: 'https://tuto4.net/' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial5', link: 'https://tuto5.net/' }),
+        domainBuilder.buildTutorialForRelease({ id: 'tutorial6', link: 'https://drive.google.fr/drive/folders/totalement_inventé' }),
+        domainBuilder.buildTutorialForRelease({ id: 'tutorial7', link: 'https://tuto3.net/', title: 'Le même lien que tutorial3' }),
       ];
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
         id: 'challenge1',
         instruction:
           'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
         proposals: 'proposals [link](https://example.net/)',
-        solution: 'solution [link](https://solution_example.net/)',
+        solution: 'solution https://solution_example.net',
         skillId: 'skill1',
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['fr'],
       });
+      const pixChallenge2Skill1 = domainBuilder.buildChallengeForRelease({
+        id: 'challenge1bis',
+        instruction:
+          'instructions [link](https://solution_example.net)',
+        skillId: 'skill1',
+        status: ChallengeForRelease.STATUSES.ARCHIVE,
+        locales: ['fr'],
+      });
+
       const challenge2NoSkill = domainBuilder.buildChallengeForRelease({
         id: 'challenge2',
         instruction: 'instructions',
@@ -121,6 +132,14 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         status: ChallengeForRelease.STATUSES.PERIME,
         locales: ['nl'],
       });
+      const wonderlandChallenge8Skill23 = domainBuilder.buildChallengeForRelease({
+        id: 'challenge8',
+        instruction:
+          'instructions [link](https://solution_example.net) further instructions',
+        skillId: 'skill23',
+        status: ChallengeForRelease.STATUSES.VALIDE,
+        locales: ['fr'],
+      });
       const latestRelease = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [
           pixCompetence,
@@ -135,12 +154,14 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         ],
         challengesFromRelease: [
           pixChallenge1Skill1,
+          pixChallenge2Skill1,
           challenge2NoSkill,
           pixChallenge3Skill2,
           pixChallenge4Skill2,
           wonderlandChallenge5Skill23,
           wonderlandChallenge6Skill23,
           wonderlandChallenge7Skill23,
+          wonderlandChallenge8Skill23,
         ],
         tutorialsFromRelease: tutorials,
       });
@@ -150,12 +171,14 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
           id: 'challenge1',
           urlsToConsult: ['http://google.com', 'https://zouzou.fr'],
         }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge1bis', urlsToConsult: [] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: null }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge5', urlsToConsult: ['http://alice.hole'] }),
         domainBuilder.buildLocalizedChallenge({ id: 'challenge6', urlsToConsult: [] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge7', urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge7', urlsToConsult: ['https://fr.wikipedia.org/wiki/Écriture_collaborative'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge8', urlsToConsult: [] }),
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
 
@@ -182,6 +205,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
       // given
       databaseBuilder.factory.buildChallengeExternalUrl();
       databaseBuilder.factory.buildTutorialExternalUrl();
+      const domainNamesToExclude = ['google.fr', 'wikipedia.org'];
 
       await databaseBuilder.commit();
 
@@ -192,61 +216,61 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         localizedChallengeRepository,
         whitelistedUrlRepository,
         UrlUtils,
+        domainNamesToExclude,
       });
 
       // then
       const challengeUrls = await knex('challenge_external_urls');
       const tutorialUrls = await knex('tutorial_external_urls');
 
-      expect(challengeUrls).toHaveLength(10);
       expect(challengeUrls).toStrictEqual([
         {
           id: expect.any(Number),
+          challenge_status: 'validé',
           framework_name: 'Pix',
           competence_name: 'competence 1.1',
           skill_name: '@mySkill1',
           challenge_id: 'challenge1',
-          challenge_status: 'validé',
           locale: 'fr',
           url: 'https://example.net/',
         },
         {
           id: expect.any(Number),
+          challenge_status: 'validé',
           framework_name: 'Pix',
           competence_name: 'competence 1.1',
           skill_name: '@mySkill1',
           challenge_id: 'challenge1',
-          challenge_status: 'validé',
           locale: 'fr',
           url: 'https://other_example.net/',
         },
         {
           id: expect.any(Number),
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          challenge_id: 'challenge1',
-          challenge_status: 'validé',
+          challenge_status: 'validé, archivé',
+          framework_name: 'Pix, wonderland',
+          competence_name: 'competence 1.1, competence 4.5',
+          skill_name: '@mySkill1, @mySkill23',
+          challenge_id: 'challenge1, challenge1bis, challenge8',
           locale: 'fr',
-          url: 'https://solution_example.net/',
+          url: 'https://solution_example.net',
         },
         {
           id: expect.any(Number),
+          challenge_status: 'validé',
           framework_name: 'Pix',
           competence_name: 'competence 1.1',
           skill_name: '@mySkill1',
           challenge_id: 'challenge1',
-          challenge_status: 'validé',
           locale: 'fr',
           url: 'http://google.com',
         },
         {
           id: expect.any(Number),
+          challenge_status: 'validé',
           framework_name: 'Pix',
           competence_name: 'competence 1.1',
           skill_name: '@mySkill1',
           challenge_id: 'challenge1',
-          challenge_status: 'validé',
           locale: 'fr',
           url: 'https://zouzou.fr',
         },
@@ -301,7 +325,6 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
           url: 'http://alice.hole',
         },
       ]);
-      expect(tutorialUrls).toHaveLength(3);
       expect(tutorialUrls).toStrictEqual([
         {
           id: expect.any(Number),
@@ -319,9 +342,9 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         },
         {
           id: expect.any(Number),
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          tutorial_id: 'tutorial3',
+          competence_name: 'competence 1.1, competence 4.5',
+          skill_name: '@mySkill1, @mySkill23',
+          tutorial_id: 'tutorial3, tutorial7',
           url: 'https://tuto3.net/',
         },
       ]);
