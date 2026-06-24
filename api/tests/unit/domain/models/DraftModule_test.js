@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import * as config from '../../../../lib/config.js';
 import { DraftModule } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
@@ -63,6 +65,34 @@ describe('Unit | Domain | DraftModule', () => {
 
       // then
       expect(json).toStrictEqual(expectedJSON);
+    });
+  });
+
+  describe('#url', () => {
+    it('returns URL to run draft module', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule({ shortId: 'abcd1234', slug: 'poueeeeeeet' });
+      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
+
+      // when
+      const { url } = draftModule;
+
+      // then
+      expect(url).toBe('https://enorme.fr/modules/abcd1234/poueeeeeeet');
+    });
+  });
+
+  describe('#previewUrl', () => {
+    it('returns URL to run draft module', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule({ shortId: 'abcd1234', slug: 'poueeeeeeet' });
+      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
+
+      // when
+      const { previewUrl } = draftModule;
+
+      // then
+      expect(previewUrl).toBe('https://enorme.fr/modules/preview/abcd1234/poueeeeeeet');
     });
   });
 });
