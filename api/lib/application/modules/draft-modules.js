@@ -78,7 +78,7 @@ export function register(server) {
                   data: Joi.object({
                     id: Types.moduleId().required(),
                     type: Joi.string().valid('modules').required(),
-                  }).optional(),
+                  }).empty(null).optional(),
                 }).optional(),
               }).optional(),
             }).required(),

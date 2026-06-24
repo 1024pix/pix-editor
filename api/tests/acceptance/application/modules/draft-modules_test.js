@@ -40,6 +40,7 @@ describe('Acceptance | Route | draft-modules', () => {
           data: {
             type: 'draft-modules',
             attributes: draftModulePayload,
+            relationships: { module: { data: null } },
           },
         },
       });
