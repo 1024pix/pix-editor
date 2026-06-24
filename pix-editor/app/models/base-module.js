@@ -22,6 +22,8 @@ export default class BaseModule extends Model {
   @attr details;
   @attr sections;
   @attr glossary;
+  @attr url;
+  @attr previewUrl;
 
   get visibilityForDisplay() {
     return visibilityForDisplay[this.visibility] ?? this.visibility;
