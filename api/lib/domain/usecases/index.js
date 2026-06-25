@@ -21,6 +21,7 @@ export * from './get-competence-challenges-production-overview.js';
 export * from './get-competence-challenges-workbench-overview.js';
 export * from './get-draft-module-by-id.js';
 export * from './get-draft-module-diff.js';
+export * from './get-external-links.js';
 export * from './get-module-by-id.js';
 export * from './get-phrase-translations-url.js';
 export * from './get-skill-challenges-production.js';
