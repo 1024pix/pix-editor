@@ -84,7 +84,7 @@ describe('Acceptance | Controller | external-urls', () => {
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.includes('text/html');
-      expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><ul><li><a href="https://peche.pix.org">Épreuve | Acquis: @saumon5, ChallengeId: myChallengeId</a></li><li><a href="https://saumon.pix.org">Épreuve | Acquis: @saumon4, ChallengeId: myChallengeId2</a></li><li><a href="https://peche-pro.pix.org">Épreuve | Acquis: @saumon8, ChallengeId: myChallengeId3</a></li></ul></body></html>');
+      expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><a href="https://peche.pix.org">c myChallengeId</a><a href="https://saumon.pix.org">c myChallengeId2</a><a href="https://peche-pro.pix.org">c myChallengeId3</a></body><style>a{display:block;}</style></html>');
     });
   });
 });

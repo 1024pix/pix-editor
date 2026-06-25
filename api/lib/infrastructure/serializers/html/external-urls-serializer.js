@@ -1,11 +1,11 @@
 
 export function serialize({ challengeExternalUrls, tutorialExternalUrls }) {
-  const challengeUrls = challengeExternalUrls.map(({ skill_name, challenge_id, url }) => {
-    return `<li><a href="${url}">Épreuve | Acquis: ${skill_name}, ChallengeId: ${challenge_id}</a></li>`;
+  const challengeUrls = challengeExternalUrls.map(({ challenge_id, url }) => {
+    return `<a href="${url}">c ${challenge_id}</a>`;
   }).join('');
-  const tutorialUrls = tutorialExternalUrls.map(({ skill_name, tutorial_id, url }) => {
-    return `<li><a href="${url}">Tutoriel | Acquis: ${skill_name}, TutorialId: ${tutorial_id}</a></li>`;
+  const tutorialUrls = tutorialExternalUrls.map(({ tutorial_id, url }) => {
+    return `<a href="${url}">t ${tutorial_id}</a>`;
   }).join('');
 
-  return `<!DOCTYPE html><html><body><ul>${challengeUrls}${tutorialUrls}</ul></body></html>`;
+  return `<!DOCTYPE html><html><body>${challengeUrls}${tutorialUrls}</body><style>a{display:block;}</style></html>`;
 }
