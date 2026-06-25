@@ -25,7 +25,7 @@
     "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
+    "preinstall": "git config core.hooksPath .githooks || true",
     "start": "node --env-file-if-exists=.env index.js",
     "dev": "nodemon --env-file-if-exists=.env --ext js,cjs,json,jsx --signal SIGTERM index.js",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
