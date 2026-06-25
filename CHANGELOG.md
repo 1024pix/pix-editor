@@ -1,5 +1,14 @@
 
 
+## v4.37.0 (25/06/2026)
+
+
+### :rocket: Amélioration
+- [#1532](https://github.com/1024pix/pix-editor/pull/1532) [FEATURE] Amélioration de la moulinette (PIX-23298).
+
+### :building_construction: Tech
+- [#1533](https://github.com/1024pix/pix-editor/pull/1533) [TECH] Utiliser npmrc plutot que check-engine pour valider la version de Node.js (PIX-XXXX).
+
 ## v4.36.0 (25/06/2026)
 
 
