@@ -28,7 +28,10 @@ export async function create() {
     headers: { 'content-type': 'application/json' },
   });
   if (response.status === 401) throw new UnauthorizedError();
-  if (!response.ok) throw new Error('error while fetching file storage token', response.status);
+  if (!response.ok) {
+    logger.error('error while fetching file storage token', { status: response.status, content: await response.text().catch() });
+    throw new Error(`error while fetching file storage token with status ${response.status}`);
+  }
   const jsonResponse = await response.json();
 
   return {

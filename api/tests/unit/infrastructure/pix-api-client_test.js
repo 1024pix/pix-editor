@@ -2,6 +2,7 @@ import { describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import * as pixApiClient from '../../../lib/infrastructure/pix-api-client.js';
 import { cache } from '../../../lib/infrastructure/cache.js';
+import { logger } from '../../../lib/infrastructure/logger.js';
 
 describe('Unit | Infrastructure | PIX API Client', () => {
   describe('#request', () => {
@@ -73,6 +74,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
             return token;
           }
         });
+        const loggerSpy = vi.spyOn(logger, 'error');
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -87,17 +89,18 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const secondRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
           .matchHeader('Authorization', `Bearer ${newToken}`)
-          .reply(401);
+          .reply(401, 'Non');
 
         try {
           // when
           await pixApiClient.request({ url: '/api/cache/model/id', payload });
           expect.fail('should raise an error');
         } catch (e) {
-          expect(e.message).to.equal('something went wrong when reaching PixAPI Client');
+          expect(e.message).to.equal('something went wrong when reaching PixAPI Client, with status 401');
         }
 
         // then
+        expect(loggerSpy).toHaveBeenCalledWith('something went wrong when reaching PixAPI Client', { status: 401, content: 'Non' });
         expect(firstRequestInterceptor.isDone()).to.be.true;
         expect(authInterceptor.isDone()).to.be.true;
         expect(secondRequestInterceptor.isDone()).to.be.true;
