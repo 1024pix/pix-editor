@@ -30,7 +30,10 @@ async function _callAPIWithRetry(fn, renewToken = false) {
   const token = await _getToken(renewToken);
   const response = await fn(token);
   if (response.status === 401 && !renewToken) return _callAPIWithRetry(fn, true);
-  if (!response.ok) throw new Error('something went wrong when reaching PixAPI Client', response.status);
+  if (!response.ok) {
+    logger.error('something went wrong when reaching PixAPI Client', { status: response.status, content: await response.text().catch() });
+    throw new Error(`something went wrong when reaching PixAPI Client, with status ${response.status}`);
+  }
 }
 
 async function _authenticate() {
@@ -45,7 +48,10 @@ async function _authenticate() {
     body: data,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   });
-  if (!response.ok) throw new Error('fetching token to pix API failed', response.status);
+  if (!response.ok) {
+    logger.error('Error when fetching token to pix API', { status: response.status, content: await response.text().catch() });
+    throw new Error(`fetching token to pix API failed with status ${response.status}`);
+  };
 
   const jsonResponse = await response.json();
 

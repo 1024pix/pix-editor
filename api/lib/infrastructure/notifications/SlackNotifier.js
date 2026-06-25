@@ -17,7 +17,10 @@ export class SlackNotifier {
         body: JSON.stringify(blocks),
         headers: { 'content-type': 'application/json' },
       });
-      if (!response.ok) throw new Error('error while sending notification to Slack', response.status);
+      if (!response.ok) {
+        logger.error('error while sending notification to Slack', { status: response.status, content: await response.text().catch() });
+        throw new Error(`error while sending notification to Slack with status ${response.status}`);
+      };
     } catch (err) {
       logger.error({ err }, 'error while sending notification to slack');
     }

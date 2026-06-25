@@ -26,7 +26,7 @@ import { buildTranslation } from './build-translation.js';
  * }} groupToBuild
  */
 export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework, tube }) {
-  const randomId = generateRandomId();
+  const randomId = idGenerator.next().value;
 
   const chalengeDTO = buildChallengeDatasourceObject({
     id: `challenge${randomId}`,
@@ -89,6 +89,10 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   };
 }
 
-function generateRandomId() {
-  return (Math.random() * 100).toFixed();
-}
+const idGenerator = (function* () {
+  let i = 1;
+  while (true) {
+    yield i.toString().padStart(5, '0');
+    i++;
+  }
+})();
