@@ -18,8 +18,10 @@ import { databaseBuffer } from '../database-buffer.js';
  *     tabletSupport: string
  *     level: string
  *   },
- *   sections: object
- *   glossary?: object
+ *   sections: object[]
+ *   glossary?: object[]
+ *   hasBeenValidated?: boolean
+ *   validationErrors?: string[]
  *   createdAt?: string | number | Date
  *   updatedAt?: string | number | Date
  * }} draftModuleToBuild
@@ -36,6 +38,8 @@ export function buildDraftModule({
   details,
   sections,
   glossary,
+  hasBeenValidated,
+  validationErrors,
   createdAt,
   updatedAt,
 } = {}) {
@@ -51,6 +55,8 @@ export function buildDraftModule({
     ...details,
     sections,
     glossary,
+    hasBeenValidated,
+    validationErrors,
     createdAt,
     updatedAt,
   };

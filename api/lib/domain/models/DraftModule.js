@@ -1,9 +1,11 @@
 import { Module } from './Module.js';
 
 export class DraftModule extends Module {
-  constructor({ moduleId, ...attrs } = {}) {
+  constructor({ moduleId, hasBeenValidated, validationErrors, ...attrs } = {}) {
     super(attrs);
     this.moduleId = moduleId;
+    this.hasBeenValidated = hasBeenValidated;
+    this.validationErrors = validationErrors;
   }
 
   /**

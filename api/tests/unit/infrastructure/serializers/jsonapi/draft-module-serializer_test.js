@@ -97,11 +97,19 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
   });
 
   describe('#deserialize', () => {
+    const readOnlyFields = [
+      'hasBeenValidated',
+      'validationErrors',
+      'createdAt',
+      'updatedAt',
+    ];
+
     it('deserializes payload to DraftModule model', async () => {
       // given
       const expectedDraftModule = domainBuilder.buildDraftModule();
-      expectedDraftModule.createdAt = undefined;
-      expectedDraftModule.updatedAt = undefined;
+      readOnlyFields.forEach((field) => {
+        expectedDraftModule[field] = undefined;
+      });
       const payload = {
         data: {
           type: 'draft-modules',
@@ -131,8 +139,9 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
       it('deserializes payload to DraftModule model', async () => {
         // given
         const expectedDraftModule = domainBuilder.buildDraftModule({ moduleId: crypto.randomUUID() });
-        expectedDraftModule.createdAt = undefined;
-        expectedDraftModule.updatedAt = undefined;
+        readOnlyFields.forEach((field) => {
+          expectedDraftModule[field] = undefined;
+        });
         const payload = {
           data: {
             type: 'draft-modules',
