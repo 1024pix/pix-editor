@@ -20,7 +20,7 @@
     "lint:scss": "stylelint app/styles/*.scss",
     "lint:scss:fix": "npm run lint:scss -- --fix",
     "lint:js": "eslint . --cache",
-    "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
+    "preinstall": "git config core.hooksPath .githooks || true",
     "lint:js:fix": "eslint . --fix",
     "start": "vite",
     "test": "npm-run-all lint test:*",
