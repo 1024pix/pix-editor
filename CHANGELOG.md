@@ -1,5 +1,19 @@
 
 
+## v4.36.0 (25/06/2026)
+
+
+### :rocket: Amélioration
+- [#1530](https://github.com/1024pix/pix-editor/pull/1530) [FEATURE] À la création d'un draft-module, patcher la release de recette (PIX-22784).
+- [#1529](https://github.com/1024pix/pix-editor/pull/1529) [FEATURE] Créer un draft à partir d’un module en production (PIX-22928).
+
+### :bug: Correction
+- [#1534](https://github.com/1024pix/pix-editor/pull/1534) [BUGFIX] Réparer les logs d'erreur des requêtes `fetch` (PIX-23326).
+
+### :arrow_up: Montée de version
+- [#1526](https://github.com/1024pix/pix-editor/pull/1526) [BUMP] Update dependency form-data to v4.0.6 [SECURITY].
+- [#1527](https://github.com/1024pix/pix-editor/pull/1527) [BUMP] Update dependency js-yaml to v4.2.0 [SECURITY].
+
 ## v4.35.0 (19/06/2026)
 
 
