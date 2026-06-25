@@ -39,7 +39,7 @@ describe('Unit | Serializer | HTML | external-urls-serializer', () => {
         ],
       };
 
-      const expectedHtml = '<!DOCTYPE html><html><body><ul><li><a href="https://ui.pix.org">Épreuve | Acquis: @patateDouce, ChallengeId: challenge1</a></li><li><a href="https://ui.pix.fr">Épreuve | Acquis: @patateDouce, ChallengeId: challenge2</a></li><li><a href="http://commant-pix-ui-fonctionne.org">Tutoriel | Acquis: @patateDouce, TutorialId: tutorial1</a></li></ul></body></html>';
+      const expectedHtml = '<!DOCTYPE html><html><body><a href="https://ui.pix.org">c challenge1</a><a href="https://ui.pix.fr">c challenge2</a><a href="http://commant-pix-ui-fonctionne.org">t tutorial1</a></body><style>a{display:block;}</style></html>';
 
       // when
       const serializedExternalUrls = serialize(externalUrls);

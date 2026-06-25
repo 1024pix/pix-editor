@@ -1,12 +1,21 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 
+const DOMAIN_NAMES_TO_EXCLUDE = [
+  'wikipedia.org',
+  'google.com',
+  'google.fr',
+  'pix.fr',
+  'pix.org',
+];
+
 export async function saveUrlsFromRelease({
   releaseRepository,
   urlRepository,
   localizedChallengeRepository,
   whitelistedUrlRepository,
   UrlUtils,
+  domainNamesToExclude = DOMAIN_NAMES_TO_EXCLUDE,
 }) {
   const release = await releaseRepository.getLatestRelease();
   const whitelistedUrls = await whitelistedUrlRepository.list();
@@ -16,15 +25,16 @@ export async function saveUrlsFromRelease({
     await saveChallengeUrls(
       release,
       activeWhitelistedUrls,
+      domainNamesToExclude,
       transaction,
       { urlRepository, localizedChallengeRepository, UrlUtils },
     );
-    await saveTutorialUrls(release, activeWhitelistedUrls, transaction, { urlRepository, UrlUtils });
+    await saveTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, transaction, { urlRepository, UrlUtils });
   });
 }
 
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
-  return challenges.flatMap((challenge) => {
+  const challengeUrlsLocation = challenges.flatMap((challenge) => {
     const functions = [
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.proposals),
@@ -32,7 +42,7 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
       (challenge) => UrlUtils.findUrlsInText(challenge.solutionToDisplay),
       (challenge) => localizedChallengesById[challenge.id].urlsToConsult ?? [],
     ];
-    const urls = functions
+    return functions
       .flatMap((fun) => fun(challenge))
       .map((url) => ({
         framework_name: release.findOriginForChallenge(challenge) ?? '',
@@ -43,8 +53,22 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
         locale: challenge.locales[0],
         url,
       }));
-    return _.uniqBy(urls, 'url');
   });
+
+  const urlsLocationByUrl = _.groupBy(challengeUrlsLocation, 'url');
+  return Object
+    .entries(urlsLocationByUrl)
+    .map(([url, values]) => {
+      return {
+        framework_name: deduplicateByField(values, 'framework_name').join(', '),
+        competence_name: deduplicateByField(values, 'competence_name').join(', '),
+        skill_name: deduplicateByField(values, 'skill_name').join(', '),
+        challenge_id: deduplicateByField(values, 'challenge_id').join(', '),
+        locale: deduplicateByField(values, 'locale').join(', '),
+        challenge_status: deduplicateByField(values, 'challenge_status').join(', '),
+        url,
+      };
+    });
 }
 
 function findUrlsFromTutorials(release, UrlUtils) {
@@ -52,7 +76,7 @@ function findUrlsFromTutorials(release, UrlUtils) {
   const accessibleTutorialIds = new Set(
     notObsoleteSkills.flatMap((skill) => [...skill.tutorialIds, ...skill.learningMoreTutorialIds]),
   );
-  return release.content.tutorials
+  const urlsLocation = release.content.tutorials
     .filter((tutorial) => accessibleTutorialIds.has(tutorial.id))
     .flatMap((tutorial) => {
       const skills = notObsoleteSkills.filter((skill) => skill.tutorialIds.includes(tutorial.id) || skill.learningMoreTutorialIds.includes(tutorial.id));
@@ -64,27 +88,53 @@ function findUrlsFromTutorials(release, UrlUtils) {
         url: UrlUtils.findUrlsInText(tutorial.link)[0],
       }));
     });
+
+  const urlsLocationByUrl = _.groupBy(urlsLocation, 'url');
+  return Object
+    .entries(urlsLocationByUrl)
+    .map(([url, values]) => {
+      return {
+        competence_name: deduplicateByField(values, 'competence_name').join(', '),
+        skill_name: deduplicateByField(values, 'skill_name').join(', '),
+        tutorial_id: deduplicateByField(values, 'tutorial_id').join(', '),
+        url,
+      };
+    });
+}
+
+function deduplicateByField(objects, fieldName) {
+  return [...new Set(objects.map((object) => object[fieldName]))];
 }
 
 export async function saveChallengeUrls(
   release,
   whitelistedUrls,
+  domainNamesToExclude,
   transaction,
   { urlRepository, localizedChallengeRepository, UrlUtils },
 ) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
-  const finalUrlList = urlList.filter(
-    ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
-  );
+  const finalUrlList = urlList
+    .filter(byWhitelistedUrls(whitelistedUrls))
+    .filter(byDomainName(domainNamesToExclude));
   await urlRepository.updateChallenges(finalUrlList, transaction);
 }
 
-export async function saveTutorialUrls(release, whitelistedUrls, transaction, { urlRepository, UrlUtils }) {
+export async function saveTutorialUrls(release, whitelistedUrls, domainNamesToExclude, transaction, { urlRepository, UrlUtils }) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
-  const finalUrlList = urlList.filter(
-    ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
-  );
+  const finalUrlList = urlList
+    .filter(byWhitelistedUrls(whitelistedUrls))
+    .filter(byDomainName(domainNamesToExclude));
   await urlRepository.updateTutorials(finalUrlList, transaction);
+}
+
+function byWhitelistedUrls(whitelistedUrls) {
+  return ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url));
+}
+
+function byDomainName(domainNamesToExclude) {
+  const regexList = domainNamesToExclude.map((domainName) => new RegExp(`(https://)?.*.${domainName}`, 'gi'));
+  return ({ url }) => !regexList.some((regex) => regex.test(url));
 }
