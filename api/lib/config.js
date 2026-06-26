@@ -62,8 +62,8 @@ export let pixApi = {
 };
 
 export let pixApp = {
-  baseUrlFr: process.env.PIX_APP_BASEURL_FR ?? process.env.PIX_APP_BASEURL,
-  baseUrlOrg: process.env.PIX_APP_BASEURL_ORG ?? process.env.PIX_APP_BASEURL,
+  baseUrlFr: process.env.PIX_APP_BASEURL_FR,
+  baseUrlOrg: process.env.PIX_APP_BASEURL_ORG,
 };
 
 export const lcms = { baseUrl: process.env.PIX_EDITOR_BASE_URL };
