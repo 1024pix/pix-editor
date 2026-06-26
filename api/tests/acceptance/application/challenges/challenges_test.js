@@ -979,7 +979,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // then
       expect(response.statusCode).to.equal(302);
       expect(response.headers.location).to.equal(
-        `https://app.test.pix.org/challenges/${localizedChallengeId}/preview?lang=${locale}`,
+        `https://app.recette.test.pix.org/challenges/${localizedChallengeId}/preview?lang=${locale}`,
       );
 
       apiTokenScope.done();

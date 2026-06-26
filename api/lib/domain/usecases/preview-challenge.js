@@ -5,11 +5,11 @@ export async function previewChallenge(
   { challengeId, locale },
   { challengeRepository = repositories.challengeRepository, refreshCache },
 ) {
-  if (!locale) return new URL(`challenges/${challengeId}/preview`, config.pixApp.baseUrlFr).href;
+  if (!locale) return new URL(`challenges/${challengeId}/preview`, config.pixApp.recette.baseUrlFr).href;
   const challenge = await challengeRepository.get(challengeId);
   const translatedChallenge = challenge.translate(locale);
   await refreshCache({ challenge: translatedChallenge });
-  const url = new URL(`challenges/${translatedChallenge.id}/preview`, config.pixApp.baseUrlOrg);
+  const url = new URL(`challenges/${translatedChallenge.id}/preview`, config.pixApp.recette.baseUrlOrg);
   url.searchParams.set('lang', locale);
   return url.href;
 }

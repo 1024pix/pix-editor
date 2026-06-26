@@ -18,10 +18,10 @@ export class DraftModule extends Module {
   }
 
   get url() {
-    return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.baseUrlFr).href;
+    return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
 
   get previewUrl() {
-    return new URL(`/modules/preview/${this.shortId}/${this.slug}`, config.pixApp.baseUrlFr).href;
+    return new URL(`/modules/preview/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
 }
