@@ -49,17 +49,35 @@ describe('Acceptance | Route | modules', () => {
           {
             type: 'modules',
             id: modules[1].id,
-            attributes: { 'internal-title': modules[1].internalTitle, 'is-beta': modules[1].isBeta, visibility: modules[1].visibility, details: modules[1].details },
+            attributes: {
+              'internal-title': modules[1].internalTitle,
+              'is-beta': modules[1].isBeta,
+              visibility: modules[1].visibility,
+              details: modules[1].details,
+              url: `${config.pixApp.production.baseUrlFr}/modules/${modules[1].shortId}/${modules[1].slug}`,
+            },
           },
           {
             type: 'modules',
             id: modules[0].id,
-            attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, details: modules[0].details },
+            attributes: {
+              'internal-title': modules[0].internalTitle,
+              'is-beta': modules[0].isBeta,
+              visibility: modules[0].visibility,
+              details: modules[0].details,
+              url: `${config.pixApp.production.baseUrlFr}/modules/${modules[0].shortId}/${modules[0].slug}`,
+            },
           },
           {
             type: 'modules',
             id: modules[2].id,
-            attributes: { 'internal-title': modules[2].internalTitle, 'is-beta': modules[2].isBeta, visibility: modules[2].visibility, details: modules[2].details },
+            attributes: {
+              'internal-title': modules[2].internalTitle,
+              'is-beta': modules[2].isBeta,
+              visibility: modules[2].visibility,
+              details: modules[2].details,
+              url: `${config.pixApp.production.baseUrlFr}/modules/${modules[2].shortId}/${modules[2].slug}`,
+            },
           },
         ],
         meta: {
@@ -91,7 +109,13 @@ describe('Acceptance | Route | modules', () => {
             {
               type: 'modules',
               id: modules[0].id,
-              attributes: { 'internal-title': modules[0].internalTitle, 'is-beta': modules[0].isBeta, visibility: modules[0].visibility, details: modules[0].details },
+              attributes: {
+                'internal-title': modules[0].internalTitle,
+                'is-beta': modules[0].isBeta,
+                visibility: modules[0].visibility,
+                details: modules[0].details,
+                url: `${config.pixApp.production.baseUrlFr}/modules/${modules[0].shortId}/${modules[0].slug}`,
+              },
             },
           ],
           meta: {

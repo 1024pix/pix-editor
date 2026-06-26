@@ -27,6 +27,7 @@ export function register(server) {
               'details',
               'isBeta',
               'visibility',
+              'url',
             ], meta,
           });
         },
