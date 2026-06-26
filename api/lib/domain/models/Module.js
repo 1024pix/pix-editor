@@ -1,3 +1,5 @@
+import * as config from '../../config.js';
+
 export class Module {
   constructor({
     id,
@@ -25,6 +27,14 @@ export class Module {
     this.glossary = glossary;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  get url() {
+    return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.production.baseUrlFr).href;
+  }
+
+  get previewUrl() {
+    return new URL(`/modules/preview/${this.shortId}/${this.slug}`, config.pixApp.production.baseUrlFr).href;
   }
 
   serializeToJSON() {
