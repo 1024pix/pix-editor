@@ -62,8 +62,19 @@ export let pixApi = {
 };
 
 export let pixApp = {
+  /** @deprecated */
   baseUrlFr: process.env.PIX_APP_BASEURL_FR,
+  /** @deprecated */
   baseUrlOrg: process.env.PIX_APP_BASEURL_ORG,
+
+  recette: {
+    baseUrlFr: process.env.PIX_APP_RECETTE_BASEURL_FR ?? process.env.PIX_APP_BASEURL_FR,
+    baseUrlOrg: process.env.PIX_APP_RECETTE_BASEURL_ORG ?? process.env.PIX_APP_BASEURL_ORG,
+  },
+  production: {
+    baseUrlFr: process.env.PIX_APP_PRODUCTION_BASEURL_FR,
+    baseUrlOrg: process.env.PIX_APP_PRODUCTION_BASEURL_ORG,
+  },
 };
 
 export const lcms = { baseUrl: process.env.PIX_EDITOR_BASE_URL };
@@ -166,6 +177,15 @@ if (process.env.NODE_ENV === 'test') {
   pixApp = {
     baseUrlFr: 'https://app.test.pix.fr',
     baseUrlOrg: 'https://app.test.pix.org',
+
+    recette: {
+      baseUrlFr: 'https://app.recette.test.pix.fr',
+      baseUrlOrg: 'https://app.recette.test.pix.org',
+    },
+    production: {
+      baseUrlFr: 'https://app.test.pix.fr',
+      baseUrlOrg: 'https://app.test.pix.org',
+    },
   };
 
   lcms.baseUrl = 'http://test.site';
