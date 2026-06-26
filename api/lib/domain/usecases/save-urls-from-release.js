@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { knex } from '../../../db/knex-database-connection.js';
+import { DomainTransaction } from '../DomainTransaction.js';
 
 const DOMAIN_NAMES_TO_EXCLUDE = [
   'wikipedia.org',
@@ -21,15 +21,14 @@ export async function saveUrlsFromRelease({
   const whitelistedUrls = await whitelistedUrlRepository.list();
   const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
 
-  return knex.transaction(async (transaction) => {
+  return DomainTransaction.execute(async () => {
     await saveChallengeUrls(
       release,
       activeWhitelistedUrls,
       domainNamesToExclude,
-      transaction,
       { urlRepository, localizedChallengeRepository, UrlUtils },
     );
-    await saveTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, transaction, { urlRepository, UrlUtils });
+    await saveTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils });
   });
 }
 
@@ -110,7 +109,6 @@ export async function saveChallengeUrls(
   release,
   whitelistedUrls,
   domainNamesToExclude,
-  transaction,
   { urlRepository, localizedChallengeRepository, UrlUtils },
 ) {
   const operativeChallenges = release.operativeChallenges;
@@ -119,15 +117,15 @@ export async function saveChallengeUrls(
   const finalUrlList = urlList
     .filter(byWhitelistedUrls(whitelistedUrls))
     .filter(byDomainName(domainNamesToExclude));
-  await urlRepository.updateChallenges(finalUrlList, transaction);
+  await urlRepository.updateChallenges(finalUrlList);
 }
 
-export async function saveTutorialUrls(release, whitelistedUrls, domainNamesToExclude, transaction, { urlRepository, UrlUtils }) {
+export async function saveTutorialUrls(release, whitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils }) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
   const finalUrlList = urlList
     .filter(byWhitelistedUrls(whitelistedUrls))
     .filter(byDomainName(domainNamesToExclude));
-  await urlRepository.updateTutorials(finalUrlList, transaction);
+  await urlRepository.updateTutorials(finalUrlList);
 }
 
 function byWhitelistedUrls(whitelistedUrls) {
