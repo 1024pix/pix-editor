@@ -62,6 +62,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
         'visibility',
         'isBeta',
         'module',
+        'previewUrl',
       ];
 
       // when
@@ -73,7 +74,13 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
           {
             type: 'draft-modules',
             id: draftModules[0].id,
-            attributes: { 'internal-title': draftModules[0].internalTitle, 'is-beta': draftModules[0].isBeta, visibility: draftModules[0].visibility, details: draftModules[0].details },
+            attributes: {
+              'internal-title': draftModules[0].internalTitle,
+              'is-beta': draftModules[0].isBeta,
+              visibility: draftModules[0].visibility,
+              details: draftModules[0].details,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+            },
             relationships: {
               module: {
                 data: {
@@ -86,7 +93,13 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
           {
             type: 'draft-modules',
             id: draftModules[1].id,
-            attributes: { 'internal-title': draftModules[1].internalTitle, 'is-beta': draftModules[1].isBeta, visibility: draftModules[1].visibility, details: draftModules[1].details },
+            attributes: {
+              'internal-title': draftModules[1].internalTitle,
+              'is-beta': draftModules[1].isBeta,
+              visibility: draftModules[1].visibility,
+              details: draftModules[1].details,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
+            },
             relationships: { module: { data: null } },
           },
         ],

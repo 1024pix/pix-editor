@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+
+import * as config from '../../../../lib/config.js';
 import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Module } from '../../../../lib/domain/models/index.js';
@@ -142,6 +144,8 @@ describe('Acceptance | Route | modules', () => {
             title: module.title,
             sections: module.sections,
             glossary: module.glossary,
+            url: `${config.pixApp.production.baseUrlFr}/modules/${module.shortId}/${module.slug}`,
+            'preview-url': `${config.pixApp.production.baseUrlFr}/modules/preview/${module.shortId}/${module.slug}`,
           },
           relationships: {
             'draft-module': {

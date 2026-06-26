@@ -13,15 +13,19 @@ const defaultAttributes = [
   'sections',
   'glossary',
   'draftModule',
+  'url',
+  'previewUrl',
 ];
 
 export function serialize(module, { attributes = defaultAttributes, meta } = {}) {
   const serializer = new Serializer('module', {
     attributes,
     meta,
-    transform({ draftModuleId, ...module }) {
+    transform({ draftModuleId, url, previewUrl, ...module }) {
       return {
         ...module,
+        url,
+        previewUrl,
         draftModule: draftModuleId ? { id: draftModuleId } : null,
       };
     },
