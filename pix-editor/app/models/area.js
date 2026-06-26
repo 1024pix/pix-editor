@@ -1,7 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class AreaModel extends Model {
-  @attr({ readOnly: true }) name;
+  @attr name;
   @attr pixId;
   @attr titleFrFr;
   @attr titleEnUs;

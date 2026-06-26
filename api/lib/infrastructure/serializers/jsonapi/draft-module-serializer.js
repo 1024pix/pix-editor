@@ -32,15 +32,19 @@ const defaultAttributes = [
   'glossary',
   'module',
   'diff',
+  'url',
+  'previewUrl',
 ];
 
 export function serialize(draftModules, { meta, attributes = defaultAttributes } = {}) {
   const serializer = new Serializer('draft-module', {
     attributes,
     meta,
-    transform({ moduleId, ...draftModule }) {
+    transform({ moduleId, url, previewUrl, ...draftModule }) {
       const data = {
         ...draftModule,
+        url,
+        previewUrl,
         module: moduleId ? { id: moduleId } : null,
       };
       if (moduleId) data.diff = {};

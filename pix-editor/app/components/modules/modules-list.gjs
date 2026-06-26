@@ -69,6 +69,11 @@ export default class Product extends Component {
             >
               Voir le détail
             </PixButtonLink>
+            {{#if module.isDraft}}
+              <PixButtonLink @href={{module.previewUrl}} target="_blank" @variant="secondary">
+                Prévisualiser
+              </PixButtonLink>
+            {{/if}}
             {{#if module.isEditionDraft}}
               <PixButtonLink
                 @route="authenticated.modules.production-module"
