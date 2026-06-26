@@ -24,7 +24,7 @@ describe('Draft Module Repository', () => {
       const module = domainBuilder.buildModule();
       databaseBuilder.factory.buildModule(module);
 
-      const expectedDraftModule = { ...module, moduleId: module.id, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
+      const expectedDraftModule = domainBuilder.buildDraftModule({ ...module, moduleId: module.id, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
 
       await databaseBuilder.commit();
 
@@ -34,7 +34,7 @@ describe('Draft Module Repository', () => {
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
-      expect({ ...savedDraftModule }).toStrictEqual(expectedDraftModule);
+      expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
 
     it('overrides draft module when it already exists', async () => {
@@ -46,7 +46,12 @@ describe('Draft Module Repository', () => {
         ...module,
         title: 'updated',
       };
-      const expectedDraftModule = { ...updatedModule, moduleId: module.id, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
+      const expectedDraftModule = domainBuilder.buildDraftModule({
+        ...updatedModule,
+        moduleId: module.id,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
 
       await databaseBuilder.commit();
 
@@ -56,7 +61,7 @@ describe('Draft Module Repository', () => {
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
-      expect({ ...savedDraftModule }).toStrictEqual(expectedDraftModule);
+      expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
   });
 
