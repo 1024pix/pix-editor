@@ -15,20 +15,24 @@ module('Integration | Component | modules-list', function (hooks) {
       const store = this.owner.lookup('service:store');
       modules = [
         store.createRecord('module', {
+          id: 'super-1',
           internalTitle: 'MOD_super_1',
           isBeta: false,
           visibility: 'public',
           details: {
             level: 'novice',
           },
+          url: 'https://graou.prod.asso/modules/super-1',
         }),
         store.createRecord('module', {
+          id: 'super-2',
           internalTitle: 'MOD_super_2',
           isBeta: true,
           visibility: 'private',
           details: {
             level: 'advanced',
           },
+          url: 'https://graou.prod.asso/modules/super-2',
         }),
       ];
     });
@@ -48,13 +52,28 @@ module('Integration | Component | modules-list', function (hooks) {
         assert.dom(getByText(firstRow, 'Public')).exists();
         assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
         assert.dom(getByText(firstRow, 'Novice')).exists();
-        assert.dom(getByText(firstRow, 'Voir le détail')).exists();
+
+        assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail' })).exists();
+        assert
+          .dom(getByRole(firstRow, 'link', { name: 'Voir le détail' }))
+          .hasAttribute('href', `/modules/production/super-1`);
+        assert.dom(getByRole(firstRow, 'link', { name: 'Jouer le module' })).exists();
+        assert
+          .dom(getByRole(firstRow, 'link', { name: 'Jouer le module' }))
+          .hasAttribute('href', 'https://graou.prod.asso/modules/super-1');
 
         const secondRow = screen.getByText('MOD_super_2').closest('tr');
         assert.dom(getByText(secondRow, 'Privé')).exists();
         assert.dom(getByText(secondRow, 'Beta')).exists();
         assert.dom(getByText(secondRow, 'Avancé')).exists();
-        assert.dom(getByText(secondRow, 'Voir le détail')).exists();
+        assert.dom(getByRole(secondRow, 'link', { name: 'Voir le détail' })).exists();
+        assert
+          .dom(getByRole(secondRow, 'link', { name: 'Voir le détail' }))
+          .hasAttribute('href', `/modules/production/super-2`);
+        assert.dom(getByRole(secondRow, 'link', { name: 'Jouer le module' })).exists();
+        assert
+          .dom(getByRole(secondRow, 'link', { name: 'Jouer le module' }))
+          .hasAttribute('href', 'https://graou.prod.asso/modules/super-2');
       });
     });
 
