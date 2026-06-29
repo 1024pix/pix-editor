@@ -242,7 +242,7 @@ export async function onTubeUpdated(tube) {
 /**
  * @param {DraftModule} draftModule
  */
-export async function onDraftModuleCreated(draftModule) {
+export async function onDraftModuleCreatedOrUpdated(draftModule) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
 
   try {

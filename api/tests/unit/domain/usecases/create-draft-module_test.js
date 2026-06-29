@@ -16,7 +16,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     });
     prepareForCreation = vi.spyOn(draftModule, 'prepareForCreation');
 
-    updatePixApiReleaseCache = { onDraftModuleCreated: vi.fn().mockResolvedValueOnce() };
+    updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn().mockResolvedValueOnce() };
   });
 
   it('prepares draft module for creation and saves it', async () => {
@@ -28,7 +28,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
 
     expect(prepareForCreation).toHaveBeenCalledExactlyOnceWith(undefined);
     expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(draftModule);
-    expect(updatePixApiReleaseCache.onDraftModuleCreated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
+    expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
   });
 
   describe('when draft module has a moduleId', () => {
@@ -49,7 +49,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
       expect(moduleRepository.getById).toHaveBeenCalledExactlyOnceWith({ id: moduleId });
       expect(prepareForCreation).toHaveBeenCalledExactlyOnceWith(module);
       expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(draftModule);
-      expect(updatePixApiReleaseCache.onDraftModuleCreated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
+      expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
     });
   });
 });
