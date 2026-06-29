@@ -472,4 +472,77 @@ describe('Acceptance | Route | draft-modules', () => {
       });
     });
   });
+
+  describe('PATCH /draft-modules/:id', () => {
+    it.fails('responds with status 200 and draft modules data', async () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule(draftModule);
+      await databaseBuilder.commit();
+
+      const draftModulePayload = {
+        slug: 'kebab-royal',
+        title: draftModule.title,
+        'internal-title': draftModule.internalTitle,
+        'is-beta': draftModule.isBeta,
+        visibility: draftModule.visibility,
+        details: draftModule.details,
+        sections: draftModule.sections,
+        glossary: draftModule.glossary,
+      };
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/draft-modules/${draftModule.id}`,
+        headers: generateAuthorizationHeader(editorUser),
+        payload: {
+          data: {
+            type: 'draft-modules',
+            id: draftModule.id,
+            attributes: draftModulePayload,
+            relationships: { module: { data: null } },
+          },
+        },
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'draft-modules',
+          id: draftModule.id,
+          attributes: {
+            'short-id': draftModule.shortId,
+            ...draftModulePayload,
+            url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/kebab-royal`,
+            'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/kebab-royal`,
+          },
+          relationships: { module: { data: null } },
+        },
+      });
+
+      await expect(knex.select('*').from('draft-modules')).resolves.toStrictEqual([
+        {
+          id: draftModule.id,
+          shortId: draftModule.shortId,
+          moduleId: null,
+          internalTitle: draftModule.internalTitle,
+          slug: 'kebab-royal',
+          title: draftModule.title,
+          isBeta: draftModule.isBeta,
+          visibility: draftModule.visibility,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+          hasBeenValidated: draftModule.hasBeenValidated,
+          validationErrors: draftModule.validationErrors,
+          ...draftModule.details,
+          createdAt: draftModule.createdAt,
+          updatedAt: expect.any(Date),
+        },
+      ]);
+    });
+  });
 });
