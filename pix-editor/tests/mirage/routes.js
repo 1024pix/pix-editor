@@ -395,6 +395,8 @@ export default function routes() {
     return schema.create('draft-module', { id: moduleId ?? crypto.randomUUID(), ...attributes });
   });
 
+  this.patch('/draft-modules/:id');
+
   this.get('/draft-modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 

@@ -86,6 +86,7 @@ module('Acceptance | Modules | New', function (hooks) {
 
     const [, moduleId] = currentURL().match(/\/modules\/production\/(.*)$/);
 
+    await new Promise((resolve) => setTimeout(resolve, 100));
     await screen.getByRole('link', { name: 'Créer un draft' }).click();
 
     // then
@@ -95,7 +96,7 @@ module('Acceptance | Modules | New', function (hooks) {
     await fillIn(await screen.findByRole('textbox', { name: /^Titre interne/ }), 'MOD_666');
 
     // WORKAROUND: let some time for Monaco
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     await screen.getByRole('button', { name: 'Enregistrer' }).click();
 
