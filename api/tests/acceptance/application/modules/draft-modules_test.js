@@ -474,7 +474,7 @@ describe('Acceptance | Route | draft-modules', () => {
   });
 
   describe('PATCH /draft-modules/:id', () => {
-    it.fails('responds with status 200 and draft modules data', async () => {
+    it('responds with status 200 and draft modules data', async () => {
       // given
       const draftModule = domainBuilder.buildDraftModule();
       databaseBuilder.factory.buildDraftModule(draftModule);
