@@ -17,6 +17,20 @@ export class DraftModule extends Module {
     this.shortId = module?.shortId ?? this.id.slice(0, 8);
   }
 
+  /**
+   * @param {DraftModule} module
+   */
+  update(module) {
+    this.internalTitle = module.internalTitle;
+    this.slug = module.slug;
+    this.title = module.title;
+    this.isBeta = module.isBeta;
+    this.visibility = module.visibility;
+    this.details = module.details;
+    this.sections = module.sections;
+    this.glossary = module.glossary;
+  }
+
   get url() {
     return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
