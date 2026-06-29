@@ -1,3 +1,4 @@
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
@@ -9,6 +10,14 @@ import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons'
     <h1 class="page-title">Détail du draft de module</h1>
     <div class="page-actions">
       <PlayModuleButtons @module={{@model.draftModule}} />
+      <PixButtonLink
+        @route="authenticated.modules.edit-draft-module"
+        @model={{@model.draftModule.id}}
+        class="pix-button-link-with-icon white-font"
+        @iconBefore="edit"
+      >
+        Modifier
+      </PixButtonLink>
     </div>
   </header>
   <main class="page-body">
