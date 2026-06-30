@@ -328,6 +328,24 @@ export class Challenge {
     return this.#translations;
   }
 
+  get dataOnSwitchGenealogy() {
+    return {
+      id: this.id,
+      genealogy: this.genealogy,
+      alternativeVersion: this.alternativeVersion,
+    };
+  }
+
+  switchToPrototype() {
+    this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
+    this.alternativeVersion = null;
+  }
+
+  switchToAlternative({ alternativeVersion }) {
+    this.genealogy = Challenge.GENEALOGIES.DECLINAISON;
+    this.alternativeVersion = alternativeVersion;
+  }
+
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }

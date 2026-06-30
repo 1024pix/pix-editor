@@ -308,6 +308,68 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#switchToPrototype', () => {
+    it('should update genealogy and remove alternativeVersion', function() {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, alternativeVersion: 15, author: ['TOTO'] });
+
+      // when
+      challenge.switchToPrototype();
+
+      // then
+      expect({
+        genealogy: challenge.genealogy,
+        alternativeVersion: challenge.alternativeVersion,
+        version: challenge.version,
+        author: challenge.author,
+      }).toEqual({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
+        version: 1,
+        author: ['TOTO'],
+      });
+    });
+  });
+  describe('#switchToAlternative', () => {
+    it('should update genealogy and remove alternativeVersion', function() {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, alternativeVersion: null, author: ['TOTO'] });
+
+      // when
+      challenge.switchToAlternative({ alternativeVersion: 5 });
+
+      // then
+      expect({
+        genealogy: challenge.genealogy,
+        alternativeVersion: challenge.alternativeVersion,
+        version: challenge.version,
+        author: challenge.author,
+      }).toEqual({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        alternativeVersion: 5,
+        version: 1,
+        author: ['TOTO'],
+      });
+    });
+  });
+
+  describe('#get dataOnSwitchGenealogy', () => {
+    it('should return POJO id, genealogy and alternativeVersion', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, alternativeVersion: null, author: ['TOTO'] });
+
+      // when
+      const expectedPojo = challenge.dataOnSwitchGenealogy;
+
+      // then
+      expect({
+        id: challenge.id,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
+      }).toEqual(expectedPojo);
+    });
+  });
+
   describe('#translate', () => {
     it('should throw an Error when trying to translate from an already translated Challenge', () => {
       // given
