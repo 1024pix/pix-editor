@@ -3034,4 +3034,23 @@ describe('Integration | Repository | challenge-repository', () => {
       });
     });
   });
+
+  describe('#getPrototypeByAlternativeId', () => {
+    it('should retrieve prototype challenge given alternativeChallengeId', async () => {
+      const { challenge: prototypeChallenge } = databaseBuilder.factory.buildChallengeInGroup({ challenge: { id: 'protoId', genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 10 }, localizedChallenge: { locale: 'fr' } });
+
+      const alternativeChallenge = databaseBuilder.factory.buildChallenge({ id: 'challengeIdDécli', skillId: prototypeChallenge.skillId, genealogy: Challenge.GENEALOGIES.DECLINAISON, alternativeVersion: 56, version: 10 });
+      databaseBuilder.factory.buildLocalizedChallenge({ id: 'localizeChallengeId', challengeId: alternativeChallenge.id, locale: 'fr' });
+      await databaseBuilder.commit();
+
+      const challenge = await challengeRepository.getPrototypeByAlternativeId(alternativeChallenge.skillId, alternativeChallenge.version);
+
+      expect(challenge).instanceOf(Challenge);
+      expect({ id: challenge.id, alternativeVersion: challenge.alternativeVersion, genealogy: challenge.genealogy }).toStrictEqual({
+        id: prototypeChallenge.id,
+        alternativeVersion: prototypeChallenge.alternativeVersion,
+        genealogy: prototypeChallenge.genealogy,
+      });
+    });
+  });
 });
