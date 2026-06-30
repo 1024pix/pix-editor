@@ -409,6 +409,16 @@ export async function listValidPrototypesBySkillIds(skillIds) {
   return toDomainList(dtos, translations, localizedChallenges);
 }
 
+export async function updateByChallengeId({ id, ...dataToUpdate }) {
+  const knexConn = DomainTransaction.getConnection();
+
+  return knexConn('challenges').update(dataToUpdate).where('id', id);
+}
+
+export async function getPrototypeByAlternativeId(alternativeId) {
+
+}
+
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
   return loadTranslationsAndLocalizedChallengesForChallengeIds(challengeDtos.map(({ id }) => id));
 }
