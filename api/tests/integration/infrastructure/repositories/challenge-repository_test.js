@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, test } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
@@ -2963,6 +2963,75 @@ describe('Integration | Repository | challenge-repository', () => {
 
       // then
       expect(result).toStrictEqual(expectedChallenges);
+    });
+  });
+
+  describe('#updateByChallengeId', async () => {
+    let challengeProtype;
+    beforeEach(async () => {
+      const { challenge } = databaseBuilder.factory.buildChallengeInGroup({ challenge: { genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 10 }, localizedChallenge: { locale: 'fr-FR' } });
+      challengeProtype = challenge;
+
+      await databaseBuilder.commit();
+    });
+
+    it('should update only given params', async () => {
+      await challengeRepository.updateByChallengeId({ id: challengeProtype.id, version: 77, alternativeVersion: 666, author: ['BZH'] });
+
+      const updatedChallengePrototype = await knex('challenges').where('id', challengeProtype.id).first();
+
+      expect(updatedChallengePrototype).toEqual({
+        alternativeVersion: 666,
+        version: 10,
+        author: ['BZH'],
+        // validate other field has not change
+        accessibility1: 'OK',
+        accessibility2: 'RAS',
+        archivedAt: expect.any(Date),
+        assessmentMaintenanceTags: ['Réponses ambiguës', 'Liens externes'],
+        autoReply: false,
+        createdAt: expect.any(Date),
+        declinable: 'facilement',
+        embedHeight: 500,
+        focusable: false,
+        format: 'mots',
+        genealogy: 'Prototype 1',
+        id: 'challenge00001',
+        isQualityOk: false,
+        locales: [],
+        madeObsoleteAt: expect.any(Date),
+        pedagogy: 'q-situation',
+        responsive: 'Non',
+        shuffled: false,
+        skillId: 'skill00001',
+        spoil: 'Non Sp',
+        status: 'validé',
+        t1Status: true,
+        t2Status: false,
+        t3Status: true,
+        timer: 1234,
+        translationMaintenanceTags: ['Prénom ou nom propre dans un embed ou dans du HTML intégré à l’épreuve', 'Anglicismes à reformuler'],
+        type: 'QCM',
+        updatedAt: expect.any(Date),
+        validatedAt: expect.any(Date),
+        version: 77,
+      });
+    });
+
+    it('should not update others challenge', async () => {
+      const otherChallenge = databaseBuilder.factory.buildChallenge({ id: 'otherChallengeId', skillId: challengeProtype.skillId, version: 18, alternativeVersion: 34, author: ['CORSE'] });
+
+      await databaseBuilder.commit();
+
+      await challengeRepository.updateByChallengeId({ id: challengeProtype.id, version: 77, alternativeVersion: 666, author: ['BZH'] });
+
+      const updatedChallengePrototype = await knex('challenges').select('version', 'alternativeVersion', 'author').where('id', otherChallenge.id).first();
+
+      expect(updatedChallengePrototype).toEqual({
+        author: ['CORSE'],
+        alternativeVersion: 34,
+        version: 18,
+      });
     });
   });
 });
