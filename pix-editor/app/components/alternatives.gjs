@@ -1,5 +1,6 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { Input } from '@ember/component';
-import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -9,37 +10,48 @@ import Challenge from 'pixeditor/models/challenge';
 
 export default class Alternatives extends Component {
   <template>
-    <div class="main-title {{if this.config.lite 'lite' ''}}">
-      <h1 class="ui header">
-        <div class="ui right floated menu">
+    <div class="alternatives__title {{if this.config.lite 'alternatives__title--lite'}}">
+      <h1 class="alternatives__heading">
+        Déclinaisons de
+        {{@challenge.skillName}}
+        <div class="alternatives__actions">
           <LinkTo
             @route="authenticated.competence.prototypes.single"
             @model={{@challenge}}
-            class="ui button icon item"
-          ><i class="icon window close"></i></LinkTo>
+            class="alternatives__close"
+            aria-label="Fermer"
+          ><PixIcon @name="close" @ariaHidden={{true}} /></LinkTo>
         </div>
-        Déclinaisons de
-        {{@challenge.skillName}}
       </h1>
     </div>
     {{#unless @rightMaximized}}
-      <div class="ui attached segment competence {{@size}}">
+      <div class="alternatives__body {{@size}}">
         <Alternatives0 @list={{this.alternatives}} />
       </div>
-      <div class="ui borderless bottom attached labelled icon menu">
-        <div class="item competence-info">
+      <div class="alternatives__footer">
+        <div class="alternatives__info">
           <div>
             <Input id="hide-perime" @type="checkbox" @checked={{this.arePerimeDeclisDisplayed}} />
             <label for="hide-perime">Afficher les déclinaisons périmées</label>
           </div>
-          <div>En production : <span class="production">{{@challenge.productionAlternatives.length}}</span></div>
-          <div>Brouillons : <span class="workbench">{{@challenge.draftAlternatives.length}}</span></div>
+          <div>En production :
+            <span
+              class="alternatives__count alternatives__count--production"
+            >{{@challenge.productionAlternatives.length}}</span></div>
+          <div>Brouillons :
+            <span
+              class="alternatives__count alternatives__count--workbench"
+            >{{@challenge.draftAlternatives.length}}</span></div>
         </div>
         {{#if this.canCreateAlternative}}
-          <button class="ui button right item" {{on "click" @newAlternative}} type="button">
-            <i class="plus square outline icon" data-test-new-alternative-action></i>
+          <PixButton
+            class="alternatives__create"
+            @iconBefore="add"
+            @triggerAction={{@newAlternative}}
+            data-test-new-alternative-action
+          >
             Nouvelle déclinaison
-          </button>
+          </PixButton>
         {{/if}}
       </div>
     {{/unless}}
