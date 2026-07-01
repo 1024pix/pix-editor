@@ -1,0 +1,91 @@
+@use '../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.statistics-i18n {
+  &__heading {
+    display: flex;
+    align-items: center;
+    margin: calc(2rem - 0.14285714em) 0 1rem;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: bold;
+    font-size: 1.28571429em;
+    line-height: 1.28571429em;
+  }
+
+  &__heading-content {
+    margin-left: 0.5rem;
+  }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem -0.5rem;
+  }
+
+  &__column {
+    box-sizing: border-box;
+    padding: 0.5rem;
+  }
+
+  &__grid--four > &__column {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  &__grid--two > &__column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  &__wide-column {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
+  &__card {
+    box-sizing: border-box;
+    padding: 1em;
+    color: rgba(0, 0, 0, 0.87);
+    text-align: center;
+    background-color: #fffaf3;
+    border: 1px solid #b58105;
+    border-top: 2px solid #b58105;
+    border-radius: 0.28571429rem;
+  }
+
+  &__card-value {
+    font-weight: bold;
+    font-size: 1.28571429em;
+    line-height: 1.2em;
+  }
+
+  &__card-label {
+    margin-top: 0.14285714rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 1.2em;
+  }
+
+  &__table {
+    display: grid;
+    align-items: center;
+    padding: 1em;
+  }
+
+  &__table--five {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  &__table--two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__cell {
+    padding: 7px 0.5em;
+    text-align: center;
+  }
+}

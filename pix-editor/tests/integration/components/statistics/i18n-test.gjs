@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import I18n from 'pixeditor/components/statistics/i18n';
 import { module, test } from 'qunit';
 
@@ -13,8 +13,10 @@ module('Integration | Component | statistics/i18n', function (hooks) {
     this.areas = [];
     this.competenceCodes = [];
 
-    await render(<template><I18n @areas={{self.areas}} @competenceCodes={{self.competenceCodes}} /></template>);
+    const screen = await render(
+      <template><I18n @areas={{self.areas}} @competenceCodes={{self.competenceCodes}} /></template>,
+    );
 
-    assert.dom('.ui.header').exists();
+    assert.dom(screen.getByRole('heading', { name: 'Internationalisation' })).exists();
   });
 });
