@@ -76,3 +76,4 @@
 @use 'authenticated/competence/tubes/single' as tubes-single;
 @use 'authenticated/competence/prototypes/localized' as prototypes-localized;
 @use 'components/statistics/i18n' as statistics-i18n;
+@use 'authenticated/target-profile' as target-profile-view;

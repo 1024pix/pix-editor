@@ -1,3 +1,4 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
@@ -7,79 +8,120 @@ import TubeLevel from 'pixeditor/components/pop-in/tube-level';
 import AreaProfile from 'pixeditor/components/target-profile/area-profile';
 import PdfExport from 'pixeditor/components/target-profile/pdf-export';
 <template>
-  <div class="main-left">
-    <div class="main-title">
-      <h1 class="ui header">{{if
+  <div class="main-left target-profile-view">
+    <div class="target-profile-view__title">
+      <h1 class="target-profile-view__heading">{{if
           @controller.isThematicResultMode
           "Générateur de résultat thématique"
           "Générateur de profil cible"
         }}
-        <div class="target-profile-filter {{if @controller.isThematicResultMode 'active'}}">
+        <div
+          class="target-profile-view__filter
+            {{if @controller.isThematicResultMode 'target-profile-view__filter--active'}}"
+        >
           Résultat thématique
-          <div class="ui toggle checkbox">
+          <div class="target-profile-view__toggle">
             <Input
               id="thematicResult"
               @type="checkbox"
               @checked={{@controller.isThematicResultMode}}
               {{on "change" @controller.toggleThematicResult}}
-              class="toggle"
+              class="target-profile-view__toggle-input"
             />
-            <label class="checkbox-label" for="thematicResult"></label>
+            <label class="target-profile-view__toggle-label" for="thematicResult"></label>
           </div>
         </div>
         {{#unless @controller.isThematicResultMode}}
-          <div class="target-profile-filter {{if @controller.showTubeDetails 'active'}}">
+          <div
+            class="target-profile-view__filter {{if @controller.showTubeDetails 'target-profile-view__filter--active'}}"
+          >
             Détails des sujets
-            <div class="ui toggle checkbox">
-              <Input id="tubeDetails" @type="checkbox" @checked={{@controller.showTubeDetails}} class="toggle" />
-              <label class="checkbox-label" for="tubeDetails"></label>
+            <div class="target-profile-view__toggle">
+              <Input
+                id="tubeDetails"
+                @type="checkbox"
+                @checked={{@controller.showTubeDetails}}
+                class="target-profile-view__toggle-input"
+              />
+              <label class="target-profile-view__toggle-label" for="tubeDetails"></label>
             </div>
           </div>
-          <div class="target-profile-filter {{if @controller.filter 'active'}}">
+          <div class="target-profile-view__filter {{if @controller.filter 'target-profile-view__filter--active'}}">
             Filtrer les sujets sélectionnés
-            <div class="ui toggle checkbox">
-              <Input id="filter" @type="checkbox" @checked={{@controller.filter}} class="toggle" />
-              <label class="checkbox-label" for="filter"></label>
+            <div class="target-profile-view__toggle">
+              <Input
+                id="filter"
+                @type="checkbox"
+                @checked={{@controller.filter}}
+                class="target-profile-view__toggle-input"
+              />
+              <label class="target-profile-view__toggle-label" for="filter"></label>
             </div>
           </div>
         {{/unless}}
       </h1>
     </div>
-    <div class="ui top attached borderless labelled icon menu">
-      {{#unless @controller.isThematicResultMode}}
-        <button class="ui button first left" {{on "click" @controller.load}} type="button">
-          <i class="folder open icon"></i>Ouvrir
-        </button>
-        <button class="ui button left" {{on "click" @controller.getSaveTitle}} type="button">
-          <i class="save icon"></i>Enregistrer
-        </button>
-      {{/unless}}
-      <div class="right menu">
+    <div class="target-profile-view__menu">
+      <div class="target-profile-view__menu-group">
         {{#unless @controller.isThematicResultMode}}
-          <button class="ui button" {{on "click" @controller.showThresholdCalculation}} type="button">
-            <i class="calculator icon"></i>Paliers indicatifs
-          </button>
+          <PixButton
+            class="target-profile-view__menu-button"
+            @variant="secondary"
+            @iconBefore="upload"
+            @triggerAction={{@controller.load}}
+          >
+            Ouvrir
+          </PixButton>
+          <PixButton
+            class="target-profile-view__menu-button"
+            @variant="secondary"
+            @iconBefore="inboxIn"
+            @triggerAction={{@controller.getSaveTitle}}
+          >
+            Enregistrer
+          </PixButton>
         {{/unless}}
-        <button class="ui button" {{on "click" @controller.getGenerateTitleOrThematicResultTitle}} type="button">
-          <i class="download icon"></i>Identifiants
-        </button>
+      </div>
+      <div class="target-profile-view__menu-group target-profile-view__menu-group--right">
         {{#unless @controller.isThematicResultMode}}
-          <button class="ui button" {{on "click" @controller.getProfileId}} type="button">
-            <i class="code icon"></i>CSV
-          </button>
+          <PixButton
+            class="target-profile-view__menu-button"
+            @variant="secondary"
+            @iconBefore="percent"
+            @triggerAction={{@controller.showThresholdCalculation}}
+          >
+            Paliers indicatifs
+          </PixButton>
+        {{/unless}}
+        <PixButton
+          class="target-profile-view__menu-button"
+          @variant="secondary"
+          @iconBefore="download"
+          @triggerAction={{@controller.getGenerateTitleOrThematicResultTitle}}
+        >
+          Identifiants
+        </PixButton>
+        {{#unless @controller.isThematicResultMode}}
+          <PixButton
+            class="target-profile-view__menu-button"
+            @variant="secondary"
+            @iconBefore="codeNumber"
+            @triggerAction={{@controller.getProfileId}}
+          >
+            CSV
+          </PixButton>
           <PdfExport @model={{@controller.areas}} />
         {{/unless}}
-
       </div>
     </div>
-    <h2 class="ui top attached padded grid target-profile-title">
-      <div class="row">
+    <h2 class="target-profile-view__summary">
+      <div class="target-profile-view__summary-row">
         {{#if @controller.isThematicResultMode}}
-          <div class="eleven wide center aligned column"></div>
-          <div class="four wide right aligned column">{{@controller.selectedThematicResultTubeCount}}
+          <div class="target-profile-view__summary-spacer"></div>
+          <div class="target-profile-view__summary-count">{{@controller.selectedThematicResultTubeCount}}
             /{{@controller.selectedTubeCount}}</div>
         {{else}}
-          <div class="three wide column">
+          <div class="target-profile-view__summary-framework">
             <PixMultiSelect
               @options={{@controller.frameworkOptionList}}
               @values={{@controller.selectedFrameworkIds}}
@@ -87,17 +129,19 @@ import PdfExport from 'pixeditor/components/target-profile/pdf-export';
               @placeholder="Aucun référentiel sélectionné"
             >
               <:label>
-                <span class="text-white">Référentiel</span>
+                <span class="target-profile-view__framework-label">Référentiel</span>
               </:label>
               <:default as |frameworkOption|>{{frameworkOption.label}}</:default>
             </PixMultiSelect>
           </div>
-          <div class="six wide center aligned column"></div>
-          <div class="four wide right aligned column">{{@controller.selectedTubeCount}}/{{@controller.tubeCount}}</div>
+          <div class="target-profile-view__summary-spacer"></div>
+          <div
+            class="target-profile-view__summary-count"
+          >{{@controller.selectedTubeCount}}/{{@controller.tubeCount}}</div>
         {{/if}}
       </div>
     </h2>
-    <div class="ui attached target-profile">
+    <div class="target-profile-view__body target-profile">
       {{#each @controller.areas as |area|}}
         <AreaProfile
           @area={{area}}
