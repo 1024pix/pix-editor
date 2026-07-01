@@ -3043,7 +3043,7 @@ describe('Integration | Repository | challenge-repository', () => {
       databaseBuilder.factory.buildLocalizedChallenge({ id: 'localizeChallengeId', challengeId: alternativeChallenge.id, locale: 'fr' });
       await databaseBuilder.commit();
 
-      const challenge = await challengeRepository.getPrototypeByAlternativeId(alternativeChallenge.skillId, alternativeChallenge.version);
+      const challenge = await challengeRepository.getPrototypeBySkillId(alternativeChallenge.skillId, alternativeChallenge.version);
 
       expect(challenge).instanceOf(Challenge);
       expect({ id: challenge.id, alternativeVersion: challenge.alternativeVersion, genealogy: challenge.genealogy }).toStrictEqual({

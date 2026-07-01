@@ -329,21 +329,20 @@ export class Challenge {
   }
 
   get dataOnSwitchGenealogy() {
+    if (this.genealogy === Challenge.GENEALOGIES.PROTOTYPE) {
+      return {
+        id: this.id,
+        genealogy: this.genealogy,
+        alternativeVersion: this.alternativeVersion,
+        accessibility1: this.accessibility1,
+        accessibility2: this.accessibility2,
+      };
+    }
     return {
       id: this.id,
       genealogy: this.genealogy,
       alternativeVersion: this.alternativeVersion,
     };
-  }
-
-  switchToPrototype() {
-    this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
-    this.alternativeVersion = null;
-  }
-
-  switchToAlternative({ alternativeVersion }) {
-    this.genealogy = Challenge.GENEALOGIES.DECLINAISON;
-    this.alternativeVersion = alternativeVersion;
   }
 
   static getPrimaryLocale(locales) {
@@ -353,6 +352,18 @@ export class Challenge {
   static defaultLocales(locales) {
     if (locales == undefined || locales.length === 0) return ['fr'];
     return [...locales].sort();
+  }
+
+  switchToPrototype({ accessibility1, accessibility2 }) {
+    this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
+    this.alternativeVersion = null;
+    this.accessibility1 = accessibility1;
+    this.accessibility2 = accessibility2;
+  }
+
+  switchToAlternative({ alternativeVersion }) {
+    this.genealogy = Challenge.GENEALOGIES.DECLINAISON;
+    this.alternativeVersion = alternativeVersion;
   }
 
   cloneChallengeAndAttachments({
