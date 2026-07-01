@@ -415,7 +415,7 @@ export async function updateByChallengeId({ id, ...dataToUpdate }) {
   return knexConn('challenges').update(dataToUpdate).where('id', id);
 }
 
-export async function getPrototypeByAlternativeId(skillId, version) {
+export async function getPrototypeBySkillId(skillId, version) {
   const knexConn = DomainTransaction.getConnection();
 
   const { id: prototypeId } = await knexConn('challenges')
