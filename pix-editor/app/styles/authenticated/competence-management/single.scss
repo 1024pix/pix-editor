@@ -1,0 +1,98 @@
+@use '../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.competence-management-view {
+  // Reproduces the shared `.main-left` layout from _global.scss
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  border-left: 10px solid #dfe1e4;
+
+  // Reproduces `.main-title` (blue header bar)
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #3498db;
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  // Reproduces `h1.ui.header` inside `.main-title`
+  &__heading {
+    margin: 0;
+    padding: 6px 0;
+    color: #fff;
+    font-weight: normal;
+    font-size: 20px;
+  }
+
+  // Reproduces `.challenge` (details row)
+  &__details {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  // Reproduces `.challenge-data`
+  &__data {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    overflow: scroll;
+  }
+
+  // Reproduces `.ui.form` spacing inside `.challenge-data`
+  &__form {
+    margin-bottom: 20px;
+  }
+
+  // Reproduces `.ui.raised.segment`
+  &__segment {
+    position: relative;
+    margin: 1rem 0;
+    padding: 1em;
+    background-color: #fff;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: 0.28571429rem;
+    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+  }
+
+  &__flag {
+    margin-bottom: 0.5rem;
+  }
+
+  // Reproduces `%challenge-menu`
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    border: none;
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: none;
+  }
+
+  // Reproduces `.ui.button.item` menu buttons
+  &__action {
+    color: #000;
+    font-weight: normal;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    // Reproduces `.important-action`
+    &--important,
+    &--important:hover {
+      color: #d02181;
+    }
+  }
+}
