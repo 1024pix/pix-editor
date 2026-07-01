@@ -6,6 +6,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
+import PlayModuleButton from './play-module-button';
+
 function getVisibilityColor(visibility) {
   return { public: 'green', private: 'grey' }[visibility];
 }
@@ -56,7 +58,7 @@ export default class Product extends Component {
         </PixTableColumn>
         <PixTableColumn @context={{context}} class="modules-list__actions">
           <:header>
-            Actions
+            <span class="sr-only">Actions</span>
           </:header>
           <:cell>
             <PixButtonLink
@@ -69,11 +71,7 @@ export default class Product extends Component {
             >
               Voir le détail
             </PixButtonLink>
-            {{#if module.isDraft}}
-              <PixButtonLink @href={{module.previewUrl}} target="_blank" @variant="secondary">
-                Prévisualiser
-              </PixButtonLink>
-            {{/if}}
+            <PlayModuleButton @module={{module}} @isPreview={{module.isDraft}} />
             {{#if module.isEditionDraft}}
               <PixButtonLink
                 @route="authenticated.modules.production-module"

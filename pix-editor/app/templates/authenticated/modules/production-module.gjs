@@ -2,11 +2,13 @@ import CreateModuleButton from 'pixeditor/components/modules/create-module-butto
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
+import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
 
 <template>
   <header class="page-header">
     <h1 class="page-title">Détail du module</h1>
     <div class="page-actions">
+      <PlayModuleButtons @module={{@model.module}} />
       <CreateModuleButton @module={{@model.module}} />
     </div>
   </header>

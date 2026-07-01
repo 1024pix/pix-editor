@@ -6,7 +6,7 @@ import * as config from '../../../../lib/config.js';
 describe('Unit | Domain | Usecases | preview-challenge', function() {
   it('should return a preview url for challengeId and locale', async () => {
     // given
-    vi.spyOn(config.pixApp, 'baseUrlOrg', 'get').mockReturnValue('https://preview.url.org');
+    vi.spyOn(config.pixApp.recette, 'baseUrlOrg', 'get').mockReturnValue('https://preview.url.org');
     const locale = 'fr';
     const challengeId = 'challenge-id';
     const localizedChallengeId = 'localizedChallengeId';
@@ -36,7 +36,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
   describe('when no locale is specified', () => {
     it('should redirect to a preview on given challengeId without updating cache', async () => {
       // given
-      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://preview.url.fr');
+      vi.spyOn(config.pixApp.recette, 'baseUrlFr', 'get').mockReturnValue('https://preview.url.fr');
       const challengeId = 'challenge-id';
 
       // when

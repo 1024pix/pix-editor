@@ -56,8 +56,8 @@ describe('Acceptance | Route | draft-modules', () => {
           attributes: {
             'short-id': expect.stringMatching(shortIdRegExp),
             ...draftModulePayload,
-            url: expect.stringMatching(new RegExp(`^${config.pixApp.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/.{8}/${draftModule.slug}$`)),
-            'preview-url': expect.stringMatching(new RegExp(`^${config.pixApp.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/preview/.{8}/${draftModule.slug}$`)),
+            url: expect.stringMatching(new RegExp(`^${config.pixApp.recette.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/.{8}/${draftModule.slug}$`)),
+            'preview-url': expect.stringMatching(new RegExp(`^${config.pixApp.recette.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/preview/.{8}/${draftModule.slug}$`)),
           },
           relationships: { module: { data: null } },
         },
@@ -155,8 +155,8 @@ describe('Acceptance | Route | draft-modules', () => {
             attributes: {
               'short-id': draftModule.shortId,
               ...draftModulePayload,
-              url: `${config.pixApp.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
-              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+              url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
             },
             relationships: {
               module: {
@@ -233,7 +233,7 @@ describe('Acceptance | Route | draft-modules', () => {
             attributes: {
               'internal-title': draftModules[1].internalTitle,
               details: draftModules[1].details,
-              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
             },
             relationships: {
               module: {
@@ -250,7 +250,7 @@ describe('Acceptance | Route | draft-modules', () => {
             attributes: {
               'internal-title': draftModules[0].internalTitle,
               details: draftModules[0].details,
-              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
             },
             relationships: { module: { data: null } },
           },
@@ -260,7 +260,7 @@ describe('Acceptance | Route | draft-modules', () => {
             attributes: {
               'internal-title': draftModules[2].internalTitle,
               details: draftModules[2].details,
-              'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[2].shortId}/${draftModules[2].slug}`,
+              'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[2].shortId}/${draftModules[2].slug}`,
             },
             relationships: { module: { data: null } },
           },
@@ -297,7 +297,7 @@ describe('Acceptance | Route | draft-modules', () => {
               attributes: {
                 'internal-title': draftModules[0].internalTitle,
                 details: draftModules[0].details,
-                'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+                'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
               },
               relationships: { module: { data: null } },
             },
@@ -351,8 +351,8 @@ describe('Acceptance | Route | draft-modules', () => {
             title: draftModule.title,
             sections: draftModule.sections,
             glossary: draftModule.glossary,
-            url: `${config.pixApp.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
-            'preview-url': `${config.pixApp.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+            url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+            'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
           },
           relationships: {
             module: {

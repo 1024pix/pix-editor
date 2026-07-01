@@ -72,7 +72,7 @@ describe('Unit | Domain | DraftModule', () => {
     it('returns URL to run draft module', () => {
       // given
       const draftModule = domainBuilder.buildDraftModule({ shortId: 'abcd1234', slug: 'poueeeeeeet' });
-      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
+      vi.spyOn(config.pixApp.recette, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
 
       // when
       const { url } = draftModule;
@@ -86,7 +86,7 @@ describe('Unit | Domain | DraftModule', () => {
     it('returns URL to run draft module', () => {
       // given
       const draftModule = domainBuilder.buildDraftModule({ shortId: 'abcd1234', slug: 'poueeeeeeet' });
-      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
+      vi.spyOn(config.pixApp.recette, 'baseUrlFr', 'get').mockReturnValue('https://enorme.fr');
 
       // when
       const { previewUrl } = draftModule;

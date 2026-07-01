@@ -2,13 +2,13 @@ import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
-import ModulePreviewButtons from 'pixeditor/components/modules/module-preview-buttons';
+import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
 
 <template>
   <header class="page-header">
     <h1 class="page-title">Détail du draft de module</h1>
     <div class="page-actions">
-      <ModulePreviewButtons @module={{@model.draftModule}} />
+      <PlayModuleButtons @module={{@model.draftModule}} />
     </div>
   </header>
   <main class="page-body">
