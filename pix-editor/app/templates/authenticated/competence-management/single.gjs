@@ -1,18 +1,18 @@
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import Input from 'pixeditor/components/field/input';
 import Textarea from 'pixeditor/components/field/textarea';
 <template>
-  <div class="main-left competence-management">
-    <div class="ui main-title">
+  <div class="competence-management-view">
+    <div class="competence-management-view__title">
       {{#if @controller.creation}}
-        <h1 class="ui left floated header">Nouvelle compétence {{@controller.competence.code}}</h1>
+        <h1 class="competence-management-view__heading">Nouvelle compétence {{@controller.competence.code}}</h1>
       {{else}}
-        <h1 class="ui left floated header">{{@controller.competence.name}}</h1>
+        <h1 class="competence-management-view__heading">{{@controller.competence.name}}</h1>
       {{/if}}
     </div>
-    <div class="competence-management__details">
-      <div class="competence-management__data">
-        <form action class="ui form">
+    <div class="competence-management-view__details">
+      <div class="competence-management-view__data">
+        <form action class="competence-management-view__form">
           <Input
             @value={{@controller.competence.title}}
             @edition={{@controller.edition}}
@@ -25,8 +25,8 @@ import Textarea from 'pixeditor/components/field/textarea';
             @edition={{@controller.edition}}
             @id="competence-description-fr"
           />
-          <div class="ui raised segment">
-            <i class="flag gb uk"></i>
+          <div class="competence-management-view__segment">
+            <i class="flag gb uk competence-management-view__flag"></i>
             <Input
               @value={{@controller.competence.titleEn}}
               @edition={{@controller.edition}}
@@ -45,22 +45,27 @@ import Textarea from 'pixeditor/components/field/textarea';
           {{/unless}}
         </form>
       </div>
-      <div class="ui vertical compact labeled icon menu competence-management__menu">
+      <div class="competence-management-view__menu">
         {{#if @controller.mayEdit}}
-          <button class="ui button item" type="button" {{on "click" @controller.edit}}>
-            <i class="edit icon"></i>
+          <PixButton class="competence-management-view__action" @iconBefore="edit" @triggerAction={{@controller.edit}}>
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.edition}}
-          <button class="ui button item important-action" type="button" {{on "click" @controller.save}}>
-            <i class="save icon"></i>
+          <PixButton
+            class="competence-management-view__action competence-management-view__action--important"
+            @iconBefore="save"
+            @triggerAction={{@controller.save}}
+          >
             Enregistrer
-          </button>
-          <button class="ui button item" type="button" {{on "click" @controller.cancelEdit}}>
-            <i class="ban icon"></i>
+          </PixButton>
+          <PixButton
+            class="competence-management-view__action"
+            @iconBefore="block"
+            @triggerAction={{@controller.cancelEdit}}
+          >
             Annuler
-          </button>
+          </PixButton>
         {{/if}}
       </div>
     </div>
