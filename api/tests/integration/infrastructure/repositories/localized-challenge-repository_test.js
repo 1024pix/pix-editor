@@ -1187,4 +1187,57 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
     });
   });
+
+  describe('#updateByLocalizedChallengeId', async () => {
+    it('should update only given params', async function() {
+      // given
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId',
+        challengeId,
+        embedUrl: 'my-url.html',
+        locale: 'bz',
+        geography: 'BZ',
+        status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
+        validatedAt: null,
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      await localizedChallengeRepository.updateByLocalizedChallengeId({
+        id: localizedChallenge.id,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        isAwarenessChallenge: false,
+      });
+
+      // then
+      const updatedLocalizedChallenge = await knex('localized_challenges').where('id', localizedChallenge.id).first();
+
+      expect(updatedLocalizedChallenge).toEqual({
+        id: 'localizedChallengeId',
+        challengeId: 'challengeId',
+        embedUrl: 'my-url.html',
+        locale: 'bz',
+        geography: 'BZ',
+        status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: true,
+        urlsToConsult: null,
+        validatedAt: null,
+      });
+    });
+  });
 });
