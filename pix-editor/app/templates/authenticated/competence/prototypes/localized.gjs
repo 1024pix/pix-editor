@@ -1,3 +1,6 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import CopyLink from 'pixeditor/components/buttons/copy-link';
@@ -22,12 +25,12 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
       ></i>
       {{@controller.challengeTitle}}
       <div
-        class="ui circular label {{@controller.localizedChallenge.statusCSS}}"
+        class="localized-prototype-view__status localized-prototype-view__status--{{@controller.localizedChallenge.statusCSS}}"
       >{{@controller.localizedChallenge.statusText}}</div>
     </:default>
   </ChallengeHeader>
-  <div class="challenge">
-    <div class="challenge-data {{@controller.elementClass}}" {{scrollTop false}}>
+  <div class="localized-prototype-view">
+    <div class="localized-prototype-view__data {{@controller.elementClass}}" {{scrollTop false}}>
       <LocalizedChallenge
         @localizedChallenge={{@controller.localizedChallenge}}
         @edition={{@controller.edition}}
@@ -48,39 +51,66 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @invalidUrlsToConsult={{@controller.invalidUrlsToConsult}}
       />
     </div>
-    <div class="ui vertical compact labeled icon menu challenge-menu">
+    <div class="localized-prototype-view__menu">
       {{#if @controller.edition}}
-        <button class="ui button item important-action" {{on "click" @controller.save}} type="button">
-          <i class="save icon"></i>
+        <PixButton
+          class="localized-prototype-view__action localized-prototype-view__action--important"
+          @variant="tertiary"
+          @iconBefore="save"
+          @triggerAction={{@controller.save}}
+        >
           Enregistrer
-        </button>
-        <button class="ui button item" {{on "click" @controller.cancelEdit}} type="button">
-          <i class="ban icon"></i>
+        </PixButton>
+        <PixButton
+          class="localized-prototype-view__action"
+          @variant="tertiary"
+          @iconBefore="block"
+          @triggerAction={{@controller.cancelEdit}}
+        >
           Annuler
-        </button>
+        </PixButton>
       {{else}}
-        <a class="ui button item" href={{@controller.previewUrl}} target="_blank">
-          <i class="eye icon"></i>
+        <PixButtonLink
+          class="localized-prototype-view__action"
+          @variant="tertiary"
+          @href={{@controller.previewUrl}}
+          target="_blank"
+          @iconBefore="eye"
+        >
           Prévisualiser
-        </a>
+        </PixButtonLink>
         <CopyLink @link={{@controller.previewUrl}} />
-        <LinkTo @route={{@controller.challengeRoute}} @models={{@controller.challengeModels}} class="ui button item">
-          <i class="globe icon"></i>
+        <LinkTo
+          class="localized-prototype-view__action"
+          @route={{@controller.challengeRoute}}
+          @models={{@controller.challengeModels}}
+        >
+          <PixIcon @name="globe" @ariaHidden={{true}} />
           Version originale
         </LinkTo>
-        <a class="ui button item" href={{@controller.translationsUrl}} target="_blank" referrerpolicy="strict-origin">
-          <i class="language icon"></i>
+        <PixButtonLink
+          class="localized-prototype-view__action"
+          @variant="tertiary"
+          @href={{@controller.translationsUrl}}
+          target="_blank"
+          referrerpolicy="strict-origin"
+          @iconBefore="language"
+        >
           Traductions
-        </a>
+        </PixButtonLink>
         {{#if @controller.mayEdit}}
-          <button class="ui button item" {{on "click" @controller.edit}} type="button">
-            <i class="edit icon"></i>
+          <PixButton
+            class="localized-prototype-view__action"
+            @variant="tertiary"
+            @iconBefore="edit"
+            @triggerAction={{@controller.edit}}
+          >
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.mayChangeStatus}}
-          <button class="ui button item" {{on "click" @controller.editStatus}} type="button">
-            <i class="{{@controller.changeStatusButtonIcon}} icon"></i>
+          <button class="localized-prototype-view__action" {{on "click" @controller.editStatus}} type="button">
+            <i class="{{@controller.changeStatusButtonIcon}} icon localized-prototype-view__action-icon"></i>
             {{@controller.changeStatusButtonText}}
           </button>
         {{/if}}
