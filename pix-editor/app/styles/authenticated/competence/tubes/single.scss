@@ -1,0 +1,96 @@
+@use '../../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.tube-view {
+  &__header {
+    border-top: 1px solid rgba(34, 36, 38, 0.15);
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  &__menu-bar {
+    display: flex;
+    align-items: stretch;
+    color: inherit;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  &__menu-left,
+  &__menu-right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__menu-right {
+    margin-left: auto;
+  }
+
+  &__title {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    color: inherit;
+    font-weight: normal;
+    font-size: 20px;
+
+    &--creation {
+      font-style: italic;
+    }
+  }
+
+  &__icon-action {
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  &__data {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    overflow: scroll;
+  }
+
+  &__actions-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 0;
+    overflow-y: auto;
+    border: none;
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: none;
+  }
+
+  &__action {
+    justify-content: flex-start;
+    text-align: left;
+
+    &--important {
+      color: #d02181;
+
+      &:hover,
+      &:focus {
+        color: #d02181;
+      }
+    }
+  }
+}

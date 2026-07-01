@@ -1,82 +1,93 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { concat } from '@ember/helper';
-import { on } from '@ember/modifier';
 import and from 'ember-truth-helpers/helpers/and';
 import not from 'ember-truth-helpers/helpers/not';
 import Tube from 'pixeditor/components/form/tube';
 import SelectLocation from 'pixeditor/components/pop-in/select-location';
 import scrollTop from 'pixeditor/modifiers/scroll-top';
 <template>
-  <div class="tube-header">
-    <div class="ui menu">
-      <div class="ui left menu">
+  <div class="tube-view__header">
+    <div class="tube-view__menu-bar">
+      <div class="tube-view__menu-left">
         {{#if (and @controller.mayMove (not @controller.creation) (not @controller.edition))}}
-          <button
-            class="ui button icon item"
+          <PixIconButton
+            class="tube-view__icon-action"
             type="button"
-            title="Déplacer le sujet"
-            {{on "click" @controller.selectCompetence}}
-          >
-            <i class="icon random"></i>
-          </button>
+            @iconName="conversionPath"
+            @ariaLabel="Déplacer le sujet"
+            @triggerAction={{@controller.selectCompetence}}
+          />
         {{/if}}
       </div>
-      <div class="item header {{if @controller.creation 'creation'}}">
+      <div class="tube-view__title {{if @controller.creation 'tube-view__title--creation'}}">
         {{#if @controller.creation}}
           Nouveau tube de la thématique "{{@controller.tube.theme.name}}"
         {{else}}
           {{@controller.tube.name}}
         {{/if}}
       </div>
-      <div class="ui right menu">
+      <div class="tube-view__menu-right">
         {{#if @controller.maximized}}
-          <button
-            class="ui button icon item"
+          <PixIconButton
+            class="tube-view__icon-action"
             type="button"
-            title="Minimiser la fenêtre"
-            {{on "click" @controller.minimize}}
-          >
-            <i class="window minimize icon"></i>
-          </button>
+            @iconName="minus"
+            @ariaLabel="Minimiser la fenêtre"
+            @triggerAction={{@controller.minimize}}
+          />
         {{else}}
-          <button
-            class="ui button icon item"
+          <PixIconButton
+            class="tube-view__icon-action"
             type="button"
-            title="Maximiser la fenêtre"
-            {{on "click" @controller.maximize}}
-          >
-            <i class="window maximize outline icon"></i>
-          </button>
+            @iconName="openInFull"
+            @ariaLabel="Maximiser la fenêtre"
+            @triggerAction={{@controller.maximize}}
+          />
         {{/if}}
-        <button class="ui button icon item" type="button" title="Fermer la fenêtre" {{on "click" @controller.close}}>
-          <i class="icon window close"></i>
-        </button>
+        <PixIconButton
+          class="tube-view__icon-action"
+          type="button"
+          @iconName="close"
+          @ariaLabel="Fermer la fenêtre"
+          @triggerAction={{@controller.close}}
+        />
       </div>
     </div>
   </div>
-  <div class="tube-details">
-    <div class="tube-data" {{scrollTop @controller.edition}}>
+  <div class="tube-view__details">
+    <div class="tube-view__data" {{scrollTop @controller.edition}}>
       <Tube @tube={{@controller.tube}} @edition={{@controller.edition}} @creation={{@controller.creation}} />
     </div>
-    <div class="ui vertical compact labeled icon menu tube-menu">
+    <div class="tube-view__actions-menu">
       {{#if @controller.edition}}
-        <button
-          class="ui button item important-action {{if @controller.disableSaveButton ' disabled'}}"
-          {{on "click" @controller.save}}
-          type="button"
+        <PixButton
+          class="tube-view__action tube-view__action--important"
+          @variant="secondary"
+          @iconBefore="check"
+          @isDisabled={{@controller.disableSaveButton}}
+          @triggerAction={{@controller.save}}
         >
-          <i class="save icon"></i>
           Enregistrer
-        </button>
-        <button class="ui button item" {{on "click" @controller.cancelEdit}} type="button">
-          <i class="ban icon"></i>
+        </PixButton>
+        <PixButton
+          class="tube-view__action"
+          @variant="secondary"
+          @iconBefore="cancel"
+          @triggerAction={{@controller.cancelEdit}}
+        >
           Annuler
-        </button>
+        </PixButton>
       {{else}}
         {{#if @controller.mayEdit}}
-          <button class="ui button item" {{on "click" @controller.edit}} type="button">
-            <i class="edit icon"></i>
+          <PixButton
+            class="tube-view__action"
+            @variant="secondary"
+            @iconBefore="edit"
+            @triggerAction={{@controller.edit}}
+          >
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
       {{/if}}
     </div>
