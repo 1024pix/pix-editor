@@ -1,0 +1,224 @@
+@use '../../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.skill-view {
+  &__header {
+    border-top: 1px solid rgba(34, 36, 38, 0.15);
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+
+    &--validated,
+    &--suggested,
+    &--archived,
+    &--deleted {
+      color: #2f2f2f;
+      background: global.$skill-background-color;
+    }
+
+    &--prevalidated,
+    &--validated_no_test,
+    &--to-be-submitted,
+    &--need-work {
+      background-color: global.$challenge-background-color;
+    }
+  }
+
+  &__menu-bar {
+    display: flex;
+    align-items: stretch;
+    color: inherit;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  &__menu-left,
+  &__menu-right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__menu-right {
+    margin-left: auto;
+  }
+
+  &__title {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    color: inherit;
+    font-weight: normal;
+    font-size: 20px;
+  }
+
+  &__action-button {
+    color: #000;
+  }
+
+  &__version-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 8px;
+    color: #000;
+
+    &:hover,
+    &:focus {
+      color: #000;
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__status-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5em;
+    min-height: 1.5em;
+    padding: 0.4em 0.6em;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    background-color: #1b1c1d;
+    border-radius: 500rem;
+
+    &--validated,
+    &--prevalidated,
+    &--validated_no_test {
+      color: #2f2f2f;
+      background: global.$validated-background-color;
+    }
+
+    &--suggested {
+      color: #2f2f2f;
+      background: global.$suggested-background-color;
+    }
+
+    &--archived {
+      background: global.$archived-background-color;
+    }
+
+    &--deleted {
+      background: global.$deleted-background-color;
+    }
+  }
+
+  &__status-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__status-menu {
+    position: absolute;
+    top: 45px;
+    z-index: 1000000;
+    background: white;
+    border: solid lightgray 1px;
+    border-radius: 5px;
+  }
+
+  &__status-menu-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding: 0.7em 1.4em;
+    color: #000;
+    font-size: 16px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &--archive {
+      color: global.$archived-color;
+      background-color: global.$archived-background-color;
+
+      &:hover,
+      &:focus {
+        background-color: global.$archived-background-color;
+      }
+    }
+
+    &--delete {
+      color: global.$deleted-color;
+      background-color: global.$deleted-background-color;
+
+      &:hover,
+      &:focus {
+        background-color: global.$deleted-background-color;
+      }
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  &__data {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    overflow: scroll;
+  }
+
+  &__side-menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    overflow-y: auto;
+    border: none;
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: none;
+  }
+
+  &__side-menu-item {
+    justify-content: flex-start;
+    padding: 0.85em 1.14em;
+    color: #000;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &--important {
+      color: #d02181;
+
+      &:hover,
+      &:focus {
+        color: #d02181;
+      }
+    }
+  }
+
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip-path: inset(50%);
+  }
+}
