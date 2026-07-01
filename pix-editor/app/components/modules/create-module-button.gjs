@@ -1,5 +1,4 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import Component from '@glimmer/component';
 
 export default class CreateModuleButton extends Component {
@@ -21,8 +20,8 @@ export default class CreateModuleButton extends Component {
         @route="authenticated.modules.new"
         @query={{this.query}}
         class="pix-button-link-with-icon white-font"
+        @iconBefore="add"
       >
-        <PixIcon @name="add" @ariaHidden={{true}} />
         {{#if @module}}
           Créer un draft
         {{else}}

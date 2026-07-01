@@ -1,10 +1,10 @@
 import { render } from '@1024pix/ember-testing-library';
-import ModulePreviewButtons from 'pixeditor/components/modules/module-preview-buttons';
+import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
 import { module, test } from 'qunit';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Components | modules/module-preview-buttons', function (hooks) {
+module('Integration | Components | modules/play-module-buttons', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   module('when module is draft', function () {
@@ -18,14 +18,12 @@ module('Integration | Components | modules/module-preview-buttons', function (ho
       });
 
       // when
-      const screen = await render(<template><ModulePreviewButtons @module={{draftModule}} /></template>);
+      const screen = await render(<template><PlayModuleButtons @module={{draftModule}} /></template>);
 
       // then
-      assert.dom(screen.getByRole('link', { name: 'Jouer le draft' })).exists();
       assert
         .dom(screen.getByRole('link', { name: 'Jouer le draft' }))
         .hasAttribute('href', 'https://kapoue.org/module/play');
-      assert.dom(screen.getByRole('link', { name: 'Prévisualiser' })).exists();
       assert
         .dom(screen.getByRole('link', { name: 'Prévisualiser' }))
         .hasAttribute('href', 'https://kapoue.org/module/preview');
@@ -43,7 +41,7 @@ module('Integration | Components | modules/module-preview-buttons', function (ho
       });
 
       // when
-      const screen = await render(<template><ModulePreviewButtons @module={{module}} /></template>);
+      const screen = await render(<template><PlayModuleButtons @module={{module}} /></template>);
 
       // then
       assert.dom(screen.getByRole('link', { name: 'Jouer le module' })).exists();
