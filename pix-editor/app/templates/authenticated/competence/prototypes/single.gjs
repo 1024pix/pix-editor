@@ -1,3 +1,5 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
@@ -23,21 +25,24 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
   >
     <:actions>
       {{#if @controller.mayAccessLog}}
-        <button class="ui button icon item" {{on "click" @controller.challengeLog}} type="button"><i
-            class="icon window chat"
-          ></i></button>
+        <PixIconButton
+          class="prototype-view__action"
+          @iconName="chat"
+          @ariaLabel="Journal"
+          @triggerAction={{@controller.challengeLog}}
+        />
       {{/if}}
       {{#unless @controller.edition}}
         {{#if @controller.mayHaveDifferentChallengeVersions}}
-          <button
-            class="ui button icon item"
-            {{on "click" @controller.showVersions}}
-            type="button"
+          <PixButton
+            class="prototype-view__action prototype-view__action--text"
+            @iconBefore="copy"
+            @triggerAction={{@controller.showVersions}}
             title="Afficher les différentes versions d'épreuves"
-          ><i class="clone icon"></i>&nbsp;v{{@controller.challenge.version}}</button>
+          >v{{@controller.challenge.version}}</PixButton>
         {{/if}}
         {{#if @controller.shouldDisplayStatusActionsMenu}}
-          <div class="challenge-status-actions" id={{@controller.challengeStatusActionsId}}>
+          <div class="prototype-view__status-actions" id={{@controller.challengeStatusActionsId}}>
             <PixIconButton
               @ariaLabel={{@controller.challengeStatusActionsLabel}}
               @iconName="bolt"
@@ -46,28 +51,44 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
               {{on "focusout" @controller.hideStatusActionMenu}}
             />
             {{#if @controller.isStatusActionMenuOpen}}
-              <div class="challenge-status-actions__menu">
+              <div class="prototype-view__status-menu">
                 {{#if @controller.mayValidate}}
-                  <button class="ui button validate item" {{on "click" @controller.validate}} type="button">
-                    <i class="checkmark icon"></i>
+                  <button
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--validate"
+                    {{on "click" @controller.validate}}
+                    type="button"
+                  >
+                    <PixIcon @name="check" @ariaHidden={{true}} />
                     {{t "common.validate"}}
                   </button>
                 {{/if}}
                 {{#if @controller.mayValidateQuality}}
-                  <button class="ui button validate item" {{on "click" @controller.validateQuality}} type="button">
-                    <i class="checkmark icon"></i>
+                  <button
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--validate"
+                    {{on "click" @controller.validateQuality}}
+                    type="button"
+                  >
+                    <PixIcon @name="check" @ariaHidden={{true}} />
                     Valider qualité
                   </button>
                 {{/if}}
                 {{#if @controller.mayArchive}}
-                  <button class="ui button archive item" {{on "click" @controller.archive}} type="button">
-                    <i class="archive icon"></i>
+                  <button
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--archive"
+                    {{on "click" @controller.archive}}
+                    type="button"
+                  >
+                    <PixIcon @name="inventory" @ariaHidden={{true}} />
                     {{t "competence.prototypes.archive"}}
                   </button>
                 {{/if}}
                 {{#if @controller.mayObsolete}}
-                  <button class="ui button archive item" {{on "click" @controller.obsolete}} type="button">
-                    <i class="trash alternate icon"></i>
+                  <button
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--archive"
+                    {{on "click" @controller.obsolete}}
+                    type="button"
+                  >
+                    <PixIcon @name="delete" @ariaHidden={{true}} />
                     {{t "competence.prototypes.obsolete"}}
                   </button>
                 {{/if}}
@@ -76,31 +97,34 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           </div>
         {{/if}}
         {{#if @controller.mayMove}}
-          <button
+          <PixIconButton
+            class="prototype-view__action"
             title="Déplacer l'épreuve"
-            class="ui icon button item"
-            {{on "click" @controller.movePrototype}}
-            type="button"
-          ><i class="icon random"></i></button>
+            @iconName="conversionPath"
+            @ariaLabel="Déplacer l'épreuve"
+            @triggerAction={{@controller.movePrototype}}
+          />
         {{/if}}
       {{/unless}}
     </:actions>
     <:default>
-      <div class={{if @controller.creation " creation" ""}}>
+      <div class={{if @controller.creation "prototype-view__title--creation" ""}}>
         {{@controller.challengeTitle}}
       </div>
-      <div class="ui circular label {{@controller.challenge.statusCSS}}">{{@controller.challenge.computedStatus}}</div>
+      <div
+        class="prototype-view__status-label prototype-view__status-label--{{@controller.challenge.statusCSS}}"
+      >{{@controller.challenge.computedStatus}}</div>
       {{#unless @controller.challenge.isNew}}
         <time
-          class="ui colored label"
+          class="prototype-view__updated-label"
           title="Dernière modification"
           datetime="{{@controller.lastUpdatedAtISO}}"
         >{{formatDate @controller.challenge.updatedAt}}</time>
       {{/unless}}
     </:default>
   </ChallengeHeader>
-  <div class="challenge" data-testid="panel-{{@controller.elementClass}}">
-    <div class="challenge-data {{@controller.elementClass}}" {{scrollTop @controller.edition}}>
+  <div class="prototype-view" data-testid="panel-{{@controller.elementClass}}">
+    <div class="prototype-view__data {{@controller.elementClass}}" {{scrollTop @controller.edition}}>
       <Challenge
         @challenge={{@controller.challenge}}
         @countries={{@controller.countryList}}
@@ -121,29 +145,29 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @checkEmbedURL={{@controller.checkEmbedURL}}
       />
     </div>
-    <div class="ui vertical compact labeled icon menu challenge-menu">
+    <div class="prototype-view__menu">
       {{#if @controller.edition}}
         <button
           data-test-save-challenge-button
-          class="ui button item important-action"
+          class="prototype-view__menu-item prototype-view__menu-item--important"
           {{on "click" @controller.save}}
           type="button"
         >
-          <i class="save icon"></i>
+          <PixIcon @name="check" @ariaHidden={{true}} />
           Enregistrer
         </button>
         <button
           data-test-cancel-challenge-button
-          class="ui button item"
+          class="prototype-view__menu-item"
           {{on "click" @controller.cancelEdit}}
           type="button"
         >
-          <i class="ban icon"></i>
+          <PixIcon @name="close" @ariaHidden={{true}} />
           Annuler
         </button>
       {{else}}
-        <a class="ui button item" href={{@controller.challenge.previewUrl}} target="_blank">
-          <i class="eye icon"></i>
+        <a class="prototype-view__menu-item" href={{@controller.challenge.previewUrl}} target="_blank">
+          <PixIcon @name="eye" @ariaHidden={{true}} />
           Prévisualiser
         </a>
         <CopyLink @link={{@controller.challenge.previewUrl}} />
@@ -151,9 +175,9 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           <LinkTo
             @route={{@controller.localizedChallengeLinkRoute}}
             @models={{@controller.getLocalizedChallengeLinkModels localizedChallenge}}
-            class="ui button item"
+            class="prototype-view__menu-item"
           >
-            <i class="globe icon"></i>
+            <PixIcon @name="globe" @ariaHidden={{true}} />
             Version
             {{localizedChallenge.locale}}
           </LinkTo>
@@ -161,23 +185,27 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{#if @controller.mayEdit}}
           <button
             data-test-modify-challenge-button={{@controller.challenge.id}}
-            class="ui button item"
+            class="prototype-view__menu-item"
             {{on "click" @controller.edit}}
             type="button"
           >
-            <i class="edit icon"></i>
+            <PixIcon @name="edit" @ariaHidden={{true}} />
             Modifier
           </button>
         {{/if}}
         {{#if @controller.mayDuplicate}}
-          <button class="ui button item" {{on "click" @controller.duplicate}} type="button">
-            <i class="copy icon"></i>
+          <button class="prototype-view__menu-item" {{on "click" @controller.duplicate}} type="button">
+            <PixIcon @name="copy" @ariaHidden={{true}} />
             Dupliquer
           </button>
         {{/if}}
         {{#if @controller.mayAccessAlternatives}}
-          <button class="ui button item alternatives" {{on "click" @controller.showAlternatives}} type="button">
-            <i class="cubes icon"></i>
+          <button
+            class="prototype-view__menu-item prototype-view__menu-item--alternatives"
+            {{on "click" @controller.showAlternatives}}
+            type="button"
+          >
+            <PixIcon @name="extension" @ariaHidden={{true}} />
             Déclinaisons &gt;&gt;
           </button>
         {{/if}}

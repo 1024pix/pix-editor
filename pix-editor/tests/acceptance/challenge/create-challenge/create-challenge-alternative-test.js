@@ -84,7 +84,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
-    await click(find('.alternatives'));
+    await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
     await click(find('[data-test-new-alternative-action]'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
@@ -116,7 +116,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     await click(await screen.findByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Code Title' }));
     await click(findAll('[data-test-skill-cell-link]')[0]);
-    await click(find('.alternatives'));
+    await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
     await click(find('[data-test-new-alternative-action]'));
     await click(find('[data-test-save-challenge-button]'));
 
@@ -152,7 +152,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
 
     // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge2');
-    await click(find('.alternatives'));
+    await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
 
     await click(find('[data-test-new-alternative-action]'));
     await click(find('[data-test-save-challenge-button]'));

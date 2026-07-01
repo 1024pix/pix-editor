@@ -1,0 +1,231 @@
+@use '../../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.prototype-view {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: row;
+  overflow: hidden;
+
+  &__title--creation {
+    font-style: italic;
+  }
+
+  // Circular status badge shown in the header default slot.
+  &__status-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2em;
+    min-height: 2em;
+    margin: 0 0.25em;
+    padding: 0.5em;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    font-size: 0.9em;
+    line-height: 1;
+    text-align: center;
+    background-color: #e8e8e8;
+    border-radius: 500rem;
+
+    &--validated {
+      color: #2f2f2f;
+      background: global.$validated-background-color;
+    }
+
+    &--suggested {
+      color: #2f2f2f;
+      background: global.$suggested-background-color;
+    }
+
+    &--archived {
+      color: #fff;
+      background: global.$archived-background-color;
+    }
+
+    &--deleted {
+      color: #fff;
+      background: global.$deleted-background-color;
+    }
+  }
+
+  // "Last modification" date pill.
+  &__updated-label {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 0.25em;
+    padding: 0.5em 0.8em;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    font-size: 0.85em;
+    line-height: 1;
+    background-color: #e8e8e8;
+    border-radius: 0.28571429rem;
+  }
+
+  // Header action buttons (log, versions, move).
+  &__action {
+    color: #fff;
+
+    &--text {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  // Status actions dropdown (bolt menu).
+  &__status-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__status-menu {
+    position: absolute;
+    top: 45px;
+    z-index: 1000000;
+    background: white;
+    border: solid lightgray 1px;
+    border-radius: 5px;
+  }
+
+  &__status-menu-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0.7em 1.4em;
+    color: #000;
+    font-weight: normal;
+    font-size: 16px;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    svg {
+      margin-right: 10px;
+    }
+
+    &--validate {
+      color: global.$production-color;
+      background-color: global.$production-background-color;
+    }
+
+    &--archive {
+      color: global.$archived-color;
+      background-color: global.$archived-background-color;
+    }
+  }
+
+  // Right-hand vertical action menu.
+  &__data {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    overflow: scroll;
+
+    .ui.form {
+      margin-bottom: 20px;
+
+      .label-input {
+        min-width: 70px;
+        padding: 9px 5px;
+        text-align: left;
+      }
+
+      .disabled.field {
+        opacity: 1;
+        pointer-events: auto;
+
+        > label {
+          opacity: 1;
+        }
+      }
+
+      .field.disabled {
+        textarea,
+        input[type='text'],
+        .selection {
+          background-color: #f9f9f9;
+        }
+      }
+
+      .field.textArea.maximized {
+        position: fixed;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin: 0;
+        padding: 10px;
+        background-color: #fff;
+        inset: 0;
+
+        label {
+          margin-top: 5px;
+        }
+
+        textarea {
+          display: block;
+          flex-grow: 1;
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    overflow-y: auto;
+    border: none;
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: none;
+  }
+
+  &__menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.85em 1.14em;
+    color: #000;
+    font-weight: normal;
+    font-size: 1em;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    svg {
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+
+    &--important {
+      color: #d02181;
+
+      &:hover,
+      &:focus {
+        color: #d02181;
+      }
+    }
+
+    &--alternatives {
+      color: #2185d0;
+    }
+  }
+}
