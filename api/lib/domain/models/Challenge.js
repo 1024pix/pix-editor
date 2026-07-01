@@ -331,11 +331,14 @@ export class Challenge {
   get dataOnSwitchGenealogy() {
     if (this.genealogy === Challenge.GENEALOGIES.PROTOTYPE) {
       return {
-        id: this.id,
-        genealogy: this.genealogy,
-        alternativeVersion: this.alternativeVersion,
-        accessibility1: this.accessibility1,
-        accessibility2: this.accessibility2,
+        challenge: {
+          id: this.id,
+          genealogy: this.genealogy,
+          alternativeVersion: this.alternativeVersion,
+          accessibility1: this.accessibility1,
+          accessibility2: this.accessibility2,
+        },
+        localizedChallenge: this.primaryLocalizedChallenge.dataOnSwitchGenealogy,
       };
     }
     return {
@@ -354,11 +357,30 @@ export class Challenge {
     return [...locales].sort();
   }
 
-  switchToPrototype({ accessibility1, accessibility2 }) {
+  switchToPrototype({
+    accessibility1,
+    accessibility2,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
+  }) {
     this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
     this.alternativeVersion = null;
     this.accessibility1 = accessibility1;
     this.accessibility2 = accessibility2;
+    this.primaryLocalizedChallenge.switchToPrototype({
+      requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif,
+      deafAndHardOfHearing,
+      isAwarenessChallenge,
+      toRephrase,
+      hasEmbedInternalValidation,
+      noValidationNeeded,
+    });
   }
 
   switchToAlternative({ alternativeVersion }) {
