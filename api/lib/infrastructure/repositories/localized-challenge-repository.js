@@ -107,6 +107,12 @@ export async function update({ localizedChallenge }) {
   });
 }
 
+export async function updateByLocalizedChallengeId({ id, ...dataToUpdate }) {
+  const knexConn = DomainTransaction.getConnection();
+
+  return knexConn('localized_challenges').update(dataToUpdate).where('id', id);
+}
+
 function toDomain(dto) {
   return new LocalizedChallenge(dto);
 }
