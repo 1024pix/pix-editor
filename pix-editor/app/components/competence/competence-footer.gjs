@@ -1,50 +1,59 @@
-import { concat, fn } from '@ember/helper';
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import { fn } from '@ember/helper';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import eq from 'ember-truth-helpers/helpers/eq';
 
 export default class CompetenceFooter extends Component {
   <template>
-    <div class="ui borderless bottom attached labelled icon menu{{this.skillClass}}">
+    <div class="competence-footer {{if (eq @section 'skills') 'competence-footer--skill-mode'}}">
       {{#if this.displayWorkbenchViews}}
-        <button
+        <PixIconButton
+          class="competence-footer__view {{if (eq @view 'workbench') 'competence-footer__view--active'}}"
           title="Grille d'atelier des épreuves"
-          class={{concat "ui button item" (if (eq @view "workbench") " active" "")}}
-          {{on "click" (fn @selectView "workbench")}}
-          type="button"
-        >
-          <i class="grid layout icon"></i>
-        </button>
-        <button
+          @iconName="displaySettings"
+          @ariaLabel="Grille d'atelier des épreuves"
+          @triggerAction={{fn @selectView "workbench"}}
+        />
+        <PixIconButton
+          class="competence-footer__view {{if (eq @view 'workbench-list') 'competence-footer__view--active'}}"
           title="Atelier d'atelier des épreuves"
-          class={{concat "ui button item" (if (eq @view "workbench-list") " active" "")}}
-          {{on "click" (fn @selectView "workbench-list")}}
-          type="button"
-        >
-          <i class="align justify icon"></i>
-        </button>
+          @iconName="menu"
+          @ariaLabel="Atelier d'atelier des épreuves"
+          @triggerAction={{fn @selectView "workbench-list"}}
+        />
       {{/if}}
       {{#if this.mayCreateTheme}}
-        <button class="ui button left item" {{on "click" @newTheme}} type="button">
-          <i class="plus square outline icon"></i>
+        <PixButton
+          class="competence-footer__action competence-footer__action--left"
+          @iconBefore="add"
+          @triggerAction={{@newTheme}}
+        >
           Nouvelle Thématique
-        </button>
+        </PixButton>
 
-        <button class="ui button left item" {{on "click" @displaySortThemesPopIn}} type="button">
-          <i class="exchange icon rotate-90"></i>
+        <PixButton
+          class="competence-footer__action competence-footer__action--left"
+          @iconBefore="sort"
+          @triggerAction={{@displaySortThemesPopIn}}
+        >
           Trier les Thématiques
-        </button>
+        </PixButton>
       {{/if}}
-      <div class="item competence-info">
-        <div class="competence-info">Tubes : {{this.tubesCount}}</div>
-        <div class="competence-info">Acquix : {{this.skillsCount}}</div>
+      <div class="competence-footer__info">
+        <div class="competence-footer__count">Tubes : {{this.tubesCount}}</div>
+        <div class="competence-footer__count">Acquix : {{this.skillsCount}}</div>
       </div>
       {{#if this.mayCreatePrototype}}
-        <button class="ui button right item" {{on "click" @newPrototype}} type="button">
-          <i class="plus square outline icon" data-test-create-new-challenge></i>
+        <PixButton
+          class="competence-footer__action competence-footer__action--right"
+          @iconBefore="add"
+          @triggerAction={{@newPrototype}}
+          data-test-create-new-challenge
+        >
           Nouveau prototype
-        </button>
+        </PixButton>
       {{/if}}
     </div>
   </template>

@@ -34,7 +34,7 @@ module('Integration | Component | competence/competence-footer', function (hooks
     );
 
     // then
-    assert.dom('.ui.borderless.bottom').exists();
+    assert.dom(screen.getByText(/Tubes :/)).exists();
     assert.dom(screen.getByRole('button', { name: "Grille d'atelier des épreuves" })).exists();
     assert.dom(screen.getByRole('button', { name: "Atelier d'atelier des épreuves" })).exists();
   });
