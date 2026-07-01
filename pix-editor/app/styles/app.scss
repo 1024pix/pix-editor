@@ -78,3 +78,4 @@
 @use 'components/statistics/i18n' as statistics-i18n;
 @use 'authenticated/target-profile' as target-profile-view;
 @use 'authenticated/competence-management/single' as competence-management-single;
+@use 'components/competence/competence-footer';

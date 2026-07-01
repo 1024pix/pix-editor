@@ -1,0 +1,54 @@
+@use '../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.competence-footer {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  background-color: #f9fafb;
+  border-top: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0;
+
+  &__view {
+    color: #000;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &--active {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__action {
+    color: #000;
+    font-weight: normal;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &--left {
+      margin-right: auto;
+    }
+
+    &--right {
+      margin-left: auto;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 10px;
+  }
+}
