@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import Component from '@glimmer/component';
 
 const NEUTRAL = 0;
@@ -6,122 +7,122 @@ const AFRICA = 2;
 const UNESCO = 3;
 export default class StatisticsI18nComponent extends Component {
   <template>
-    <h2 class="ui header">
-      <i class="globe icon"></i>
-      <div class="content">
+    <h2 class="statistics-i18n__heading">
+      <PixIcon @name="language" @ariaHidden={{true}} />
+      <div class="statistics-i18n__heading-content">
         Internationalisation
       </div>
     </h2>
-    <div class="ui four column padded grid">
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+    <div class="statistics-i18n__grid statistics-i18n__grid--four">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nWorldSkills}}
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Acquis Monde
             </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nEuropeanSkills}}
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Acquis Europe
             </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nFrenchSkills}}
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Acquis France
             </div>
           </div>
         </div>
       </div>
-      <div class="column"></div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column"></div>
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nNeutralTotal.validated}}
             ({{this.i18nNeutralTotal.suggested}})
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Neutres
             </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nOccidentTotal.validated}}
             ({{this.i18nOccidentTotal.suggested}})
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Occident
             </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nAfricaTotal.validated}}
             ({{this.i18nAfricaTotal.suggested}})
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Afrique
             </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment center aligned">
-          <div class="ui header">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card">
+          <div class="statistics-i18n__card-value">
             {{this.i18nUnescoTotal.validated}}
             ({{this.i18nUnescoTotal.suggested}})
-            <div class="sub header">
+            <div class="statistics-i18n__card-label">
               Pays UNESCO
             </div>
           </div>
         </div>
       </div>
-      <div class="four columns">
-        <div class="ui yellow segment five column grid center aligned statistics-table">
-          <div class="column">
+      <div class="statistics-i18n__wide-column">
+        <div class="statistics-i18n__card statistics-i18n__table statistics-i18n__table--five">
+          <div class="statistics-i18n__cell">
             Compétence
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Neutres
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Pays Occident
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Pays Afrique
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Pays UNESCO
           </div>
           {{#each this.i18nData as |item|}}
-            <div class="column">
+            <div class="statistics-i18n__cell">
               {{item.name}}
             </div>
-            <div class="column">
+            <div class="statistics-i18n__cell">
               {{item.neutralValidated}}
               ({{item.neutralSuggested}})
             </div>
-            <div class="column">
+            <div class="statistics-i18n__cell">
               {{item.occidentValidated}}
               ({{item.occidentSuggested}})
             </div>
-            <div class="column">
+            <div class="statistics-i18n__cell">
               {{item.africaValidated}}
               ({{item.africaSuggested}})
             </div>
-            <div class="column">
+            <div class="statistics-i18n__cell">
               {{item.unescoValidated}}
               ({{item.unescoSuggested}})
             </div>
@@ -129,46 +130,46 @@ export default class StatisticsI18nComponent extends Component {
         </div>
       </div>
     </div>
-    <div class="ui two column padded grid">
-      <div class="column">
-        <div class="ui yellow segment two column grid center aligned statistics-table">
-          <div class="column">
+    <div class="statistics-i18n__grid statistics-i18n__grid--two">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card statistics-i18n__table statistics-i18n__table--two">
+          <div class="statistics-i18n__cell">
             Pays Occident
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Épreuves
           </div>
           {{#each this.i18nOccidentCountries as |country|}}
-            <div class="column">{{country.name}}</div>
-            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+            <div class="statistics-i18n__cell">{{country.name}}</div>
+            <div class="statistics-i18n__cell">{{country.validated}} ({{country.suggested}})</div>
           {{/each}}
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment two column grid center aligned statistics-table">
-          <div class="column">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card statistics-i18n__table statistics-i18n__table--two">
+          <div class="statistics-i18n__cell">
             Pays Afrique
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Épreuves
           </div>
           {{#each this.i18nAfricanCountries as |country|}}
-            <div class="column">{{country.name}}</div>
-            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+            <div class="statistics-i18n__cell">{{country.name}}</div>
+            <div class="statistics-i18n__cell">{{country.validated}} ({{country.suggested}})</div>
           {{/each}}
         </div>
       </div>
-      <div class="column">
-        <div class="ui yellow segment two column grid center aligned statistics-table">
-          <div class="column">
+      <div class="statistics-i18n__column">
+        <div class="statistics-i18n__card statistics-i18n__table statistics-i18n__table--two">
+          <div class="statistics-i18n__cell">
             Pays UNESCO
           </div>
-          <div class="column">
+          <div class="statistics-i18n__cell">
             Épreuves
           </div>
           {{#each this.i18nUnescoCountries as |country|}}
-            <div class="column">{{country.name}}</div>
-            <div class="column">{{country.validated}} ({{country.suggested}})</div>
+            <div class="statistics-i18n__cell">{{country.name}}</div>
+            <div class="statistics-i18n__cell">{{country.validated}} ({{country.suggested}})</div>
           {{/each}}
         </div>
       </div>
