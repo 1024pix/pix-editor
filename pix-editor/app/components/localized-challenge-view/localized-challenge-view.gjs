@@ -7,7 +7,6 @@ import { guidFor } from '@ember/object/internals';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -229,7 +228,6 @@ export default class LocalizedChallenge extends Component {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error('oops', error);
-      Sentry.captureException(error);
       this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
@@ -277,7 +275,7 @@ export default class LocalizedChallenge extends Component {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this.notifications.sendError(
         this.args.localizedChallenge.isInProduction
           ? "Erreur de la mise en prod de l'épreuve localisée"

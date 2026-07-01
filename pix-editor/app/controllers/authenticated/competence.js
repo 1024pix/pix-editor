@@ -2,7 +2,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 export default class CompetenceController extends Controller {
   queryParams = [{ leftMaximized: { scope: 'controller' } }];
@@ -253,7 +252,7 @@ export default class CompetenceController extends Controller {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this.loader.stop();
       this.notifications.sendError(errorMessage);
     }

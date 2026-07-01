@@ -2,7 +2,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -169,7 +168,7 @@ export default class LocalizedController extends Controller {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     } finally {
       this.loader.stop();
@@ -220,7 +219,7 @@ export default class LocalizedController extends Controller {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this.loader.stop();
       this.notifications.sendError("Erreur lors de la mise à jour de l'épreuve");
     }

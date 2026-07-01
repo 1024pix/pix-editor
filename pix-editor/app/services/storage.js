@@ -1,5 +1,4 @@
 import Service, { service } from '@ember/service';
-import * as Sentry from '@sentry/ember';
 
 export default class StorageService extends Service {
   @service config;
@@ -101,7 +100,6 @@ export default class StorageService extends Service {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
       return false;
     }
   }

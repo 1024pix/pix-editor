@@ -1,7 +1,6 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 import Prototype from './single';
 
@@ -48,7 +47,7 @@ export default class NewController extends Prototype {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this._errorMessage('Erreur lors de la création');
     } finally {
       this.loader.stop();

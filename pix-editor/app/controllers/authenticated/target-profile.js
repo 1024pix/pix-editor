@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 export default class TargetProfileController extends Controller {
   @tracked selectedTubeSkills = [];
@@ -251,8 +250,9 @@ export default class TargetProfileController extends Controller {
       };
       reader.readAsText(file);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
       this.notifications.sendError("Erreur lors de l'ouverture du fichier");
-      Sentry.captureException(error);
     }
   }
 

@@ -2,7 +2,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
   wasMaximized = false;
@@ -130,7 +129,6 @@ export default class SingleController extends Controller {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
       this.loader.stop();
       this.notifications.sendError(this.intl.t('skill.changelog.update-error'));
     }
@@ -163,7 +161,6 @@ export default class SingleController extends Controller {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
       this.notifications.sendError("Erreur lors de la duplication de l'acquis");
     } finally {
       this.loader.stop();
@@ -222,7 +219,6 @@ export default class SingleController extends Controller {
             .catch((error) => {
               /* eslint-disable-next-line no-console */
               console.error(error);
-              Sentry.captureException(error);
               this.notifications.sendError(this.intl.t('skill.archive.error'));
             })
             .finally(() => {
@@ -231,7 +227,8 @@ export default class SingleController extends Controller {
         });
       })
       .catch((error) => {
-        Sentry.captureException(error);
+        /* eslint-disable-next-line no-console */
+        console.error(error);
         this.notifications.sendSuccess(this.intl.t('skill.archive.cancel'));
       });
   }
@@ -285,7 +282,6 @@ export default class SingleController extends Controller {
             .catch((error) => {
               /* eslint-disable-next-line no-console */
               console.error(error);
-              Sentry.captureException(error);
               this.notifications.sendError(this.intl.t('skill.obsolete.error'));
             })
             .finally(() => {
@@ -294,7 +290,8 @@ export default class SingleController extends Controller {
         });
       })
       .catch((error) => {
-        Sentry.captureException(error);
+        /* eslint-disable-next-line no-console */
+        console.error(error);
         this.notifications.sendSuccess(this.intl.t('skill.obsolete.cancel'));
       });
   }

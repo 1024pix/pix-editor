@@ -8,7 +8,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 import { eq } from 'ember-truth-helpers';
 
 function formattedOptionList(list) {
@@ -123,7 +122,6 @@ export default class TutorialForm extends Component {
           this.notifications.sendError('Un tag avec ce nom là existe déjà');
         } else {
           this.notifications.sendError('Erreur lors de la création du tag');
-          Sentry.captureException(err);
         }
       }
     } else {
