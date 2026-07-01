@@ -80,6 +80,36 @@ export class LocalizedChallenge {
     return url.href;
   }
 
+  get dataOnSwitchGenealogy() {
+    return {
+      requireGafamWebsiteAccess: this.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: this.isIncompatibleIpadCertif,
+      deafAndHardOfHearing: this.deafAndHardOfHearing,
+      isAwarenessChallenge: this.isAwarenessChallenge,
+      toRephrase: this.toRephrase,
+      hasEmbedInternalValidation: this.hasEmbedInternalValidation,
+      noValidationNeeded: this.noValidationNeeded,
+    };
+  }
+
+  switchToPrototype({
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
+  }) {
+    this.requireGafamWebsiteAccess = requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = deafAndHardOfHearing;
+    this.isAwarenessChallenge = isAwarenessChallenge;
+    this.toRephrase = toRephrase;
+    this.hasEmbedInternalValidation = hasEmbedInternalValidation;
+    this.noValidationNeeded = noValidationNeeded;
+  }
+
   static buildPrimary({
     challengeId,
     locale,

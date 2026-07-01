@@ -418,23 +418,23 @@ export async function updateByChallengeId({ id, ...dataToUpdate }) {
 export async function getPrototypeBySkillId(skillId, version) {
   const knexConn = DomainTransaction.getConnection();
 
-  const { id: prototypeId } = await knexConn('challenges')
+  const prototype = await knexConn('challenges')
     .select('id')
     .where('skillId', skillId)
     .andWhere('version', version)
     .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
     .first();
 
-  if (!prototypeId) throw new NotFoundError('Épreuve introuvable');
+  if (!prototype?.id) throw new NotFoundError('Épreuve introuvable');
 
   const [
     dto,
     localizedChallenges,
     translations,
   ] = await Promise.all([
-    selectChallenges().where('challenges.id', prototypeId).first(),
-    localizedChallengeRepository.listByChallengeIds({ challengeIds: [prototypeId] }),
-    translationRepository.listByEntity(model, prototypeId),
+    selectChallenges().where('challenges.id', prototype.id).first(),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds: [prototype.id] }),
+    translationRepository.listByEntity(model, prototype.id),
   ]);
 
   return toDomain(dto, translations, localizedChallenges);
