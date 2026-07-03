@@ -40,15 +40,25 @@ export async function count() {
   return count;
 }
 
-export async function getById({ id }) {
+export async function getById({ id, forUpdate = false }) {
   const knexConn = DomainTransaction.getConnection();
-  const draftModule = await knexConn('draft-modules').where({ id }).first();
+
+  let query = knexConn.select('*').from('draft-modules').where({ id }).first();
+  if (forUpdate) query = query.forUpdate();
+
+  const draftModule = await query;
 
   if (!draftModule) {
     throw new NotFoundError('Draft module not found');
   }
 
   return toDomain(draftModule);
+}
+
+export async function remove({ id }) {
+  const knexConn = DomainTransaction.getConnection();
+
+  await knexConn.delete().from('draft-modules').where('id', id);
 }
 
 function toDomain({ image, description, duration, level, objectives, tabletSupport, ...draftModule }) {

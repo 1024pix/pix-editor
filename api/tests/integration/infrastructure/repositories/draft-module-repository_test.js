@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { catchErr, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { save, list, count, getById } from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
+import * as draftModuleRepository from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
 import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 
 describe('Draft Module Repository', () => {
@@ -11,7 +11,7 @@ describe('Draft Module Repository', () => {
       const expectedDraftModule = { ...draftModule, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
 
       // when
-      const savedDraftModule = await save({ ...draftModule });
+      const savedDraftModule = await draftModuleRepository.save({ ...draftModule });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
@@ -29,7 +29,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const savedDraftModule = await save({ ...module, moduleId: module.id });
+      const savedDraftModule = await draftModuleRepository.save({ ...module, moduleId: module.id });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
@@ -56,7 +56,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const savedDraftModule = await save({ ...updatedModule, moduleId: module.id });
+      const savedDraftModule = await draftModuleRepository.save({ ...updatedModule, moduleId: module.id });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
@@ -77,7 +77,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const draftModules = await list();
+      const draftModules = await draftModuleRepository.list();
 
       // then
       expect(draftModules).toStrictEqual([firstDraftModule, secondDraftModule]);
@@ -101,7 +101,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const draftModules = await list({ page, sort });
+      const draftModules = await draftModuleRepository.list({ page, sort });
 
       // then
       expect(draftModules).toStrictEqual([firstDraftModule, thirdDraftModule]);
@@ -116,7 +116,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const result = await count();
+      const result = await draftModuleRepository.count();
 
       // then
       expect(result).toBe(2);
@@ -134,7 +134,7 @@ describe('Draft Module Repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const draftModule = await getById({ id: expectedDraftModule.id });
+      const draftModule = await draftModuleRepository.getById({ id: expectedDraftModule.id });
 
       // then
       expect(draftModule).toStrictEqual(expectedDraftModule);
@@ -145,10 +145,25 @@ describe('Draft Module Repository', () => {
       const inexistingDraftModuleId = crypto.randomUUID();
 
       // when
-      const error = await catchErr(getById)({ id: inexistingDraftModuleId });
+      const error = await catchErr(draftModuleRepository.getById)({ id: inexistingDraftModuleId });
 
       // then
       expect(error).toBeInstanceOf(NotFoundError);
+    });
+  });
+
+  describe('remove', () => {
+    it('removes draft module by id', async () => {
+      // given
+      const { id } = databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ shortId: 'modtest1', internalTitle: 'MOD_test1', slug: 'test1' }));
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ shortId: 'modtest2', internalTitle: 'MOD_test2', slug: 'test2' }));
+      await databaseBuilder.commit();
+
+      // when
+      await draftModuleRepository.remove({ id });
+
+      // then
+      expect(knex.pluck('shortId').from('draft-modules')).resolves.toStrictEqual(['modtest2']);
     });
   });
 });
