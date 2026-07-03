@@ -31,6 +31,8 @@ export class DraftModule extends Module {
     this.glossary = module.glossary;
   }
 
+  publish() {}
+
   get url() {
     return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
