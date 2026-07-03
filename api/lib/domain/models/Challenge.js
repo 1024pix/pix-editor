@@ -288,6 +288,10 @@ export class Challenge {
     return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
   }
 
+  get isAlternative() {
+    return this.genealogy === Challenge.GENEALOGIES.DECLINAISON;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }

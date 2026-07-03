@@ -133,6 +133,19 @@ export async function register(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/challenges/{challengeId}/switch-genealogy',
+      config: {
+        validate: { params: Joi.object({ challengeId: challengeIdType }) },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function(request, h) {
+          const challenge = await challengeSerializer.deserialize(request.payload);
+          const updatedChallenge = await updateChallenge(challenge);
+          return h.response(challengeSerializer.serialize(updatedChallenge));
+        },
+      },
+    },
   ]);
 }
 

@@ -1,4 +1,4 @@
-import { userRepository } from '../infrastructure/repositories/index.js';
+import { challengeRepository, userRepository } from '../infrastructure/repositories/index.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError, replyWithAuthenticationError } from './security-utils.js';
 import * as config from '../config.js';
 import { logger } from '../infrastructure/logger.js';
