@@ -90,6 +90,7 @@ Router.map(function () {
       this.route('workbench');
       this.route('production-module', { path: '/production/:module_id' });
       this.route('draft-module', { path: '/workbench/:draft_module_id' });
+      this.route('edit-draft-module', { path: '/workbench/:draft_module_id/edit' });
     });
     this.route('missions', function () {
       this.route('list', { path: '/' });

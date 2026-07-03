@@ -33,4 +33,28 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
+
+  module('when user clicks on "Modifier"', function () {
+    test('displays draft module edition page', async function (assert) {
+      // when
+      const screen = await visit(`/modules/workbench/${id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await clickByName('Modifier');
+
+      // then
+      assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
+      assert.dom(screen.getByRole('heading', { name: 'Édition du draft de module' })).exists();
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // when
+      await clickByName('Enregistrer');
+
+      // then
+      assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+  });
 });

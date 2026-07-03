@@ -38,6 +38,50 @@ describe('Unit | Domain | DraftModule', () => {
     });
   });
 
+  describe('#update', () => {
+    it('udpates updatable draft module’s fields', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule({
+        id: '704a89a6-983b-4e04-bfef-6a54f925c44e',
+        shortId: '704a89a6',
+        createdAt: new Date('2026-06-29T14:04:01Z'),
+        updatedAt: new Date('2026-06-29T14:04:01Z'),
+      });
+      const updates = domainBuilder.buildDraftModule({
+        id: 'updated id',
+        moduleId: 'updated moduleId',
+        shortId: 'updated shortId',
+        details: 'updated details',
+        glossary: 'updated glossary',
+        internalTitle: 'updated internalTitle',
+        isBeta: 'updated isBeta',
+        sections: 'updated sections',
+        slug: 'updated slug',
+        title: 'updated title',
+        visibility: 'updated visibility',
+      });
+
+      // when
+      draftModule.update(updates);
+
+      // then
+      expect(draftModule).toStrictEqual(domainBuilder.buildDraftModule({
+        id: '704a89a6-983b-4e04-bfef-6a54f925c44e',
+        shortId: '704a89a6',
+        createdAt: new Date('2026-06-29T14:04:01Z'),
+        updatedAt: new Date('2026-06-29T14:04:01Z'),
+        details: 'updated details',
+        glossary: 'updated glossary',
+        internalTitle: 'updated internalTitle',
+        isBeta: 'updated isBeta',
+        sections: 'updated sections',
+        slug: 'updated slug',
+        title: 'updated title',
+        visibility: 'updated visibility',
+      }));
+    });
+  });
+
   describe('#serializeToJSON', () => {
     it('serializes module fields to JSON discarding irrelevant fields', () => {
       // given

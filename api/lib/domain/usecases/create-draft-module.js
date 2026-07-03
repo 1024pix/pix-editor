@@ -13,7 +13,7 @@ export async function createDraftModule(draftModule, dependencies = { draftModul
   draftModule.prepareForCreation(module);
   const savedDraftModule = await dependencies.draftModuleRepository.save(draftModule);
 
-  await dependencies.updatePixApiReleaseCache.onDraftModuleCreated(savedDraftModule);
+  await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(savedDraftModule);
 
   return savedDraftModule;
 }

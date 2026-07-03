@@ -1165,7 +1165,7 @@ describe('Integration | Service | update pix api release cache', function() {
     });
   });
 
-  describe('#onDraftModuleCreated', function() {
+  describe('#onDraftModuleCreatedOrUpdated', function() {
     describe('when patching Pix API is enabled', function() {
       beforeEach(function() {
         baseUrl.mockReturnValue('https://some-api-base-url.fr');
@@ -1196,7 +1196,7 @@ describe('Integration | Service | update pix api release cache', function() {
           .reply(200);
 
         // when
-        await updatePixApiReleaseCache.onDraftModuleCreated(draftModule);
+        await updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(draftModule);
 
         // then
         expect(pixApiCacheScope.isDone()).toBe(true);
@@ -1209,7 +1209,7 @@ describe('Integration | Service | update pix api release cache', function() {
         baseUrl.mockReturnValue(undefined);
 
         // when
-        await updatePixApiReleaseCache.onDraftModuleCreated(domainBuilder.buildDraftModule());
+        await updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(domainBuilder.buildDraftModule());
 
         // then
         expect(notifyStub).not.toHaveBeenCalled();

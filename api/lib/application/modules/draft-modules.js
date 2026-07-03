@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 import { draftModuleDiffSerializer, draftModuleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import { createDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules } from '../../domain/usecases/index.js';
+import { createDraftModule, updateDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import * as Types from '../types.js';
 
@@ -89,6 +89,44 @@ export function register(server) {
           const module = await draftModuleSerializer.deserialize(request.payload);
           const savedModule = await createDraftModule(module);
           return h.response(draftModuleSerializer.serialize(savedModule)).code(201);
+        },
+      },
+    },
+    {
+      method: 'PATCH',
+      path: '/api/draft-modules/{id}',
+      config: {
+        validate: {
+          params: Joi.object({ id: Types.moduleId().required() }).required(),
+          payload: Joi.object({
+            data: Joi.object({
+              id: Types.moduleId().required(),
+              type: Joi.string().valid('draft-modules').required(),
+              attributes: Joi.object({
+                'internal-title': Joi.string().required(),
+                title: Joi.string().required(),
+                'is-beta': Joi.boolean().required(),
+                slug: Joi.string().required(),
+                visibility: Joi.string().required(),
+                details: Joi.object().required(),
+                sections: Joi.array().required(),
+                glossary: Joi.array().required(),
+              }).required(),
+              relationships: Joi.object({
+                module: Joi.object({
+                  data: Joi.object({
+                    id: Types.moduleId().required(),
+                    type: Joi.string().valid('modules').required(),
+                  }).empty(null).optional(),
+                }).optional(),
+              }).optional(),
+            }).required(),
+          }).required(),
+        },
+        handler: async (request, h) => {
+          const draftModule = await draftModuleSerializer.deserialize(request.payload);
+          const updatedModule = await updateDraftModule(draftModule);
+          return h.response(draftModuleSerializer.serialize(updatedModule)).code(200);
         },
       },
     },
