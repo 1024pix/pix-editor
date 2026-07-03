@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import * as config from '../../../../lib/config.js';
-import { DraftModule } from '../../../../lib/domain/models/index.js';
+import { DraftModule, Module } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
 const uuidRegExp = /^\p{Hex_Digit}{8}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{4}-\p{Hex_Digit}{12}$/u;
@@ -79,6 +79,31 @@ describe('Unit | Domain | DraftModule', () => {
         title: 'updated title',
         visibility: 'updated visibility',
       }));
+    });
+  });
+
+  describe('#publish', () => {
+    it('creates a published module from draft module', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule();
+      const expectedModule = new Module({
+        id: draftModule.id,
+        details: draftModule.details,
+        glossary: draftModule.glossary,
+        internalTitle: draftModule.internalTitle,
+        isBeta: draftModule.isBeta,
+        sections: draftModule.sections,
+        shortId: draftModule.shortId,
+        slug: draftModule.slug,
+        title: draftModule.title,
+        visibility: draftModule.visibility,
+      });
+
+      // when
+      const publishedModule = draftModule.publish();
+
+      // then
+      expect(publishedModule).toStrictEqual(expectedModule);
     });
   });
 
