@@ -224,6 +224,34 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isAlternative', () => {
+    it('should return true when challenge is isAlternative', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.DECLINAISON });
+
+      // when
+      const isAlternative = challenge.isAlternative;
+
+      // then
+      expect(isAlternative).to.be.true;
+    });
+
+    it.each(
+      Object.keys(Challenge.GENEALOGIES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.DECLINAISON,
+      ),
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ status: Challenge.STATUSES[statusKey] });
+
+      // when
+      const isAlternative = challenge.isAlternative;
+
+      // then
+      expect(isAlternative).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given

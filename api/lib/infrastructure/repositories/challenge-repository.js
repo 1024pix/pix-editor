@@ -20,9 +20,7 @@ export async function get(id) {
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
     translationRepository.listByEntity(model, id),
   ]);
-
   if (!dto) throw new NotFoundError('Épreuve introuvable');
-
   return toDomain(dto, translations, localizedChallenges);
 }
 

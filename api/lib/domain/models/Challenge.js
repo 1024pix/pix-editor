@@ -288,6 +288,10 @@ export class Challenge {
     return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
   }
 
+  get isAlternative() {
+    return this.genealogy === Challenge.GENEALOGIES.DECLINAISON;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -479,7 +483,6 @@ export class Challenge {
     this.illustrationAlt = this.#translations[this.locale]?.illustrationAlt ?? null;
 
     const localizedChallenge = findCorrespondingLocalizedChallenge(this.localizedChallenges, this.locale);
-
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);
     this.validatedAt = this.#translateValidatedAt(localizedChallenge);
