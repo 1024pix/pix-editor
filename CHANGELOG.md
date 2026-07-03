@@ -1,5 +1,17 @@
 
 
+## v4.38.0 (03/07/2026)
+
+
+### :rocket: Amélioration
+- [#1538](https://github.com/1024pix/pix-editor/pull/1538) [FEATURE] Permettre de modifier un module déjà en Draft (PIX-23284) .
+- [#1537](https://github.com/1024pix/pix-editor/pull/1537) [FEATURE] Afficher les boutons pour jouer/prévisualiser un module de prod (PIX-23297).
+- [#1535](https://github.com/1024pix/pix-editor/pull/1535) [FEATURE] Ajouter les colonnes hasBeenValidated et validationErros dans la table draft-modules (PIX-23254).
+- [#1531](https://github.com/1024pix/pix-editor/pull/1531) [FEATURE] Boutons de prévisualisation du draft de module (PIX-22783).
+
+### :bug: Correction
+- [#1536](https://github.com/1024pix/pix-editor/pull/1536) [BUGFIX] Réparer le job de sauvegarde des URL externes (PIX-23354).
+
 ## v4.37.0 (25/06/2026)
 
 
