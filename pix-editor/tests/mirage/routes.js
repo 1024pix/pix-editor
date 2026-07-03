@@ -397,6 +397,11 @@ export default function routes() {
 
   this.patch('/draft-modules/:id');
 
+  this.post('/draft-modules/:id/publish', function (schema, request) {
+    const draftModule = schema.draftModules.find(request.params.id);
+    return schema.create('module', { ...draftModule.attrs });
+  });
+
   this.get('/draft-modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 

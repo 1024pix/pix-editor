@@ -1,5 +1,5 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -53,6 +53,25 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+  });
+
+  module('when user clicks "Publier"', function () {
+    test('publishes module and navigates to module’s details page', async function (assert) {
+      // given
+      const screen = await visit(`/modules/workbench/${id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // when
+      await click(screen.getByRole('button', { name: 'Publier le module "MON_BEAU_MODULE"' }));
+
+      // then
+      assert.dom(await screen.findByText('Le module "MON_BEAU_MODULE" a été publié.')).exists();
+      assert.strictEqual(currentURL(), `/modules/production/${id}`);
+
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
     });
