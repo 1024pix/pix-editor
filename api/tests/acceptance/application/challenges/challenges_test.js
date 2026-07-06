@@ -2492,4 +2492,401 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
   });
+
+  describe('PATCH /challenge/:id/switch-genealogy', () => {
+    let user;
+    let challengeDecliId;
+    let challengeProtoId;
+    let locale;
+    let challengeDecli;
+    let challengeProto;
+    let localizedChallengeProto;
+    let localizedChallengeDecli;
+    let DecliToBecomeProto;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+      challengeDecliId = 'recChallengeId';
+      challengeProtoId = 'prototypeId';
+      locale = 'fr';
+      challengeDecli = {
+        ...domainBuilder.buildChallengeDatasourceObject({
+          id: challengeDecliId,
+          locales: [locale],
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          accessibility1: Challenge.ACCESSIBILITY1.KO,
+          accessibility2: Challenge.ACCESSIBILITY2.KO,
+        }),
+      };
+      challengeProto = {
+        ...domainBuilder.buildChallengeDatasourceObject({
+          id: challengeProtoId,
+          locales: [locale],
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          accessibility1: Challenge.ACCESSIBILITY1.KO,
+          accessibility2: Challenge.ACCESSIBILITY2.KO,
+        }),
+      };
+
+      databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
+      databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
+      databaseBuilder.factory.buildThematic({ id: 'thematic1', competenceId: 'competence1' });
+      databaseBuilder.factory.buildTube({ id: 'tube1', name: '@tube', thematicId: 'thematic1' });
+      databaseBuilder.factory.buildSkill({ id: challengeProto.skillId, tubeId: 'tube1' });
+      databaseBuilder.factory.buildChallenge(challengeDecli);
+      databaseBuilder.factory.buildChallenge(challengeProto);
+
+      localizedChallengeDecli = databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeDecliId,
+        challengeId: challengeDecliId,
+        locale,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      localizedChallengeProto = databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeProtoId,
+        challengeId: challengeProtoId,
+        locale,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.instruction`,
+        locale,
+        value: "Ancienne valeur de l'instruction",
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.alternativeInstruction`,
+        locale,
+        value: 'challengeProto.alternativeInstruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.solution`,
+        locale,
+        value: 'challengeProto.solution',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.solutionToDisplay`,
+        locale,
+        value: 'challengeProto.solutionToDisplay',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.proposals`,
+        locale,
+        value: 'challengeProto.proposals',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeProtoId}.embedTitle`,
+        locale,
+        value: 'challengeProto.embedTitle',
+      });
+
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.instruction`,
+        locale,
+        value: "Ancienne valeur de l'instruction",
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.alternativeInstruction`,
+        locale,
+        value: 'challengeDecli.alternativeInstruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.solution`,
+        locale,
+        value: 'challengeDecli.solution',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.solutionToDisplay`,
+        locale,
+        value: 'challengeDecli.solutionToDisplay',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.proposals`,
+        locale,
+        value: 'challengeDecli.proposals',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeDecliId}.embedTitle`,
+        locale,
+        value: 'challengeDecli.embedTitle',
+      });
+      await databaseBuilder.commit();
+
+      DecliToBecomeProto = {
+        ...challengeDecli,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY2.OK,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallengeDecli, localizedChallengeProto],
+      };
+    });
+
+    it('should NOT authorize connection if it is NOT decli', async () => {
+      // Given
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/challenges/${challengeProtoId}/switch-genealogy`,
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'challenges',
+            id: DecliToBecomeProto.id,
+            attributes: {
+              'airtable-id': DecliToBecomeProto.airtableId,
+              instruction: DecliToBecomeProto.instruction,
+              'alternative-instruction': DecliToBecomeProto.alternativeInstruction,
+              type: DecliToBecomeProto.type,
+              format: DecliToBecomeProto.format,
+              proposals: DecliToBecomeProto.proposals,
+              solution: DecliToBecomeProto.solution,
+              'solution-to-display': DecliToBecomeProto.solutionToDisplay,
+              't1-status': DecliToBecomeProto.t1Status,
+              't2-status': DecliToBecomeProto.t2Status,
+              't3-status': DecliToBecomeProto.t3Status,
+              pedagogy: DecliToBecomeProto.pedagogy,
+              author: DecliToBecomeProto.author,
+              declinable: DecliToBecomeProto.declinable,
+              version: DecliToBecomeProto.version,
+              genealogy: DecliToBecomeProto.genealogy,
+              status: DecliToBecomeProto.status,
+              preview: DecliToBecomeProto.preview,
+              timer: DecliToBecomeProto.timer,
+              'embed-url': DecliToBecomeProto.embedUrl,
+              'embed-title': DecliToBecomeProto.embedTitle,
+              'embed-height': DecliToBecomeProto.embedHeight,
+              'alternative-version': DecliToBecomeProto.alternativeVersion,
+              accessibility1: DecliToBecomeProto.accessibility1,
+              accessibility2: DecliToBecomeProto.accessibility2,
+              spoil: DecliToBecomeProto.spoil,
+              responsive: DecliToBecomeProto.responsive,
+              locales: DecliToBecomeProto.locales,
+              geography: DecliToBecomeProto.geography,
+              'urls-to-consult': ['pouet.com'],
+              'auto-reply': DecliToBecomeProto.autoReply,
+              focusable: DecliToBecomeProto.focusable,
+              'updated-at': new Date('2021-10-04'),
+              'validated-at': new Date('2023-02-02T14:17:30Z'),
+              'archived-at': new Date('2023-03-03T10:47:05Z'),
+              'made-obsolete-at': new Date('2023-04-04T10:47:05Z'),
+              shuffled: false,
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
+              'has-embed-internal-validation': true,
+              'no-validation-needed': true,
+              'is-quality-ok': true,
+              'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
+            },
+            relationships: {
+              skill: {
+                data: {
+                  type: 'skills',
+                  id: challengeDecli.skills[0],
+                },
+              },
+              attachments: {
+                data: challengeDecli.files.map(({ fileId }) => {
+                  return {
+                    type: 'attachments',
+                    id: fileId,
+                  };
+                }),
+              },
+            },
+          },
+        },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('should switch an alternative challenge and its corresponding prototype', async () => {
+      // Given
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/challenges/${challengeDecliId}/switch-genealogy`,
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'challenges',
+            id: DecliToBecomeProto.id,
+            attributes: {
+              'airtable-id': DecliToBecomeProto.airtableId,
+              instruction: DecliToBecomeProto.instruction,
+              'alternative-instruction': DecliToBecomeProto.alternativeInstruction,
+              type: DecliToBecomeProto.type,
+              format: DecliToBecomeProto.format,
+              proposals: DecliToBecomeProto.proposals,
+              solution: DecliToBecomeProto.solution,
+              'solution-to-display': DecliToBecomeProto.solutionToDisplay,
+              't1-status': DecliToBecomeProto.t1Status,
+              't2-status': DecliToBecomeProto.t2Status,
+              't3-status': DecliToBecomeProto.t3Status,
+              pedagogy: DecliToBecomeProto.pedagogy,
+              author: DecliToBecomeProto.author,
+              declinable: DecliToBecomeProto.declinable,
+              version: DecliToBecomeProto.version,
+              genealogy: DecliToBecomeProto.genealogy,
+              status: DecliToBecomeProto.status,
+              preview: DecliToBecomeProto.preview,
+              timer: DecliToBecomeProto.timer,
+              'embed-url': DecliToBecomeProto.embedUrl,
+              'embed-title': DecliToBecomeProto.embedTitle,
+              'embed-height': DecliToBecomeProto.embedHeight,
+              'alternative-version': DecliToBecomeProto.alternativeVersion,
+              accessibility1: DecliToBecomeProto.accessibility1,
+              accessibility2: DecliToBecomeProto.accessibility2,
+              spoil: DecliToBecomeProto.spoil,
+              responsive: DecliToBecomeProto.responsive,
+              locales: DecliToBecomeProto.locales,
+              geography: DecliToBecomeProto.geography,
+              'urls-to-consult': ['pouet.com'],
+              'auto-reply': DecliToBecomeProto.autoReply,
+              focusable: DecliToBecomeProto.focusable,
+              'updated-at': new Date('2021-10-04'),
+              'validated-at': new Date('2023-02-02T14:17:30Z'),
+              'archived-at': new Date('2023-03-03T10:47:05Z'),
+              'made-obsolete-at': new Date('2023-04-04T10:47:05Z'),
+              shuffled: false,
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
+              'has-embed-internal-validation': true,
+              'no-validation-needed': true,
+              'is-quality-ok': true,
+              'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
+            },
+            relationships: {
+              skill: {
+                data: {
+                  type: 'skills',
+                  id: challengeDecli.skills[0],
+                },
+              },
+              attachments: {
+                data: challengeDecli.files.map(({ fileId }) => {
+                  return {
+                    type: 'attachments',
+                    id: fileId,
+                  };
+                }),
+              },
+            },
+          },
+        },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+
+      // await expect(knex('challenges').select().where(challengeDecliId, id)).resolves.toStrictEqual([
+      //   {
+      //     accessibility1: DecliToBecomeProto.accessibility1,
+      //     accessibility2: DecliToBecomeProto.accessibility2,
+      //     alternativeVersion: DecliToBecomeProto.alternativeVersion,
+      //     archivedAt: new Date(DecliToBecomeProto.archivedAt),
+      //     author: DecliToBecomeProto.author,
+      //     autoReply: DecliToBecomeProto.autoReply,
+      //     createdAt: new Date(DecliToBecomeProto.createdAt),
+      //     declinable: DecliToBecomeProto.declinable,
+      //     embedHeight: DecliToBecomeProto.embedHeight,
+      //     focusable: DecliToBecomeProto.focusable,
+      //     format: DecliToBecomeProto.format,
+      //     genealogy: DecliToBecomeProto.genealogy,
+      //     id: DecliToBecomeProto.id,
+      //     isQualityOk: DecliToBecomeProto.isQualityOk,
+      //     locales: DecliToBecomeProto.locales,
+      //     madeObsoleteAt: new Date(DecliToBecomeProto.madeObsoleteAt),
+      //     pedagogy: DecliToBecomeProto.pedagogy,
+      //     responsive: DecliToBecomeProto.responsive,
+      //     shuffled: DecliToBecomeProto.shuffled,
+      //     skillId: DecliToBecomeProto.skillId,
+      //     spoil: DecliToBecomeProto.spoil,
+      //     status: DecliToBecomeProto.status,
+      //     t1Status: DecliToBecomeProto.t1Status,
+      //     t2Status: DecliToBecomeProto.t2Status,
+      //     t3Status: DecliToBecomeProto.t3Status,
+      //     timer: DecliToBecomeProto.timer,
+      //     type: DecliToBecomeProto.type,
+      //     updatedAt: expect.any(Date),
+      //     validatedAt: new Date(DecliToBecomeProto.validatedAt),
+      //     version: DecliToBecomeProto.version,
+      //     assessmentMaintenanceTags: DecliToBecomeProto.assessmentMaintenanceTags,
+      //     translationMaintenanceTags: DecliToBecomeProto.translationMaintenanceTags,
+      //   },
+      // ]);
+
+      // await expect(knex('localized_challenges').select().where('id', challengeId).first()).resolves.to.deep.include({
+      //   embedUrl: challenge.embedUrl,
+      //   urlsToConsult: ['pouet.com'],
+      //   geography: 'NL',
+      //   requireGafamWebsiteAccess: false,
+      //   isIncompatibleIpadCertif: false,
+      //   deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+      //   isAwarenessChallenge: false,
+      //   toRephrase: false,
+      //   hasEmbedInternalValidation: true,
+      //   noValidationNeeded: true,
+      // });
+
+      // await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
+      //   {
+      //     key: 'challenge.recChallengeId.alternativeInstruction',
+      //     locale: 'fr',
+      //     value: challenge.alternativeInstruction,
+      //   },
+      //   {
+      //     key: 'challenge.recChallengeId.embedTitle',
+      //     locale: 'fr',
+      //     value: challenge.embedTitle,
+      //   },
+      //   {
+      //     key: 'challenge.recChallengeId.instruction',
+      //     locale: 'fr',
+      //     value: challenge.instruction,
+      //   },
+      //   {
+      //     key: 'challenge.recChallengeId.proposals',
+      //     locale: 'fr',
+      //     value: challenge.proposals,
+      //   },
+      //   {
+      //     key: 'challenge.recChallengeId.solution',
+      //     locale: 'fr',
+      //     value: challenge.solution,
+      //   },
+      //   {
+      //     key: 'challenge.recChallengeId.solutionToDisplay',
+      //     locale: 'fr',
+      //     value: challenge.solutionToDisplay,
+      //   },
+      // ]);
+    });
+  });
 });
