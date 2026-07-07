@@ -41,6 +41,7 @@ export function buildModule({
       description: 'Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l\'escargot toute sa force et sa vitalité.',
     },
   ],
+  version = null,
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
@@ -63,6 +64,7 @@ export function buildModule({
     details: { image, description, duration, level, objectives, tabletSupport },
     sections,
     glossary,
+    version,
     createdAt,
     updatedAt,
   });

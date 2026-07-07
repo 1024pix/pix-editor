@@ -42,6 +42,7 @@ export function buildModuleForConsultation({
     },
   ],
   draftModuleId = null,
+  version = null,
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
@@ -65,6 +66,7 @@ export function buildModuleForConsultation({
     sections,
     glossary,
     draftModuleId,
+    version,
     createdAt,
     updatedAt,
   });
