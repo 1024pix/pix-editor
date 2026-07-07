@@ -2514,6 +2514,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: challengeDecliId,
           locales: [locale],
           genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          alternativeVersion: 3,
           accessibility1: Challenge.ACCESSIBILITY1.KO,
           accessibility2: Challenge.ACCESSIBILITY2.KO,
         }),
@@ -2523,8 +2524,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: challengeProtoId,
           locales: [locale],
           genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          accessibility1: Challenge.ACCESSIBILITY1.KO,
-          accessibility2: Challenge.ACCESSIBILITY2.KO,
+          alternativeVersion: null,
+          accessibility1: Challenge.ACCESSIBILITY1.OK,
+          accessibility2: Challenge.ACCESSIBILITY2.RAS,
         }),
       };
 
@@ -2553,13 +2555,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: challengeProtoId,
         challengeId: challengeProtoId,
         locale,
-        requireGafamWebsiteAccess: true,
-        isIncompatibleIpadCertif: true,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
-        isAwarenessChallenge: true,
-        toRephrase: true,
-        hasEmbedInternalValidation: false,
-        noValidationNeeded: false,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeProtoId}.instruction`,
@@ -2805,88 +2807,65 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // Then
       expect(response.statusCode).to.equal(200);
 
-      // await expect(knex('challenges').select().where(challengeDecliId, id)).resolves.toStrictEqual([
-      //   {
-      //     accessibility1: DecliToBecomeProto.accessibility1,
-      //     accessibility2: DecliToBecomeProto.accessibility2,
-      //     alternativeVersion: DecliToBecomeProto.alternativeVersion,
-      //     archivedAt: new Date(DecliToBecomeProto.archivedAt),
-      //     author: DecliToBecomeProto.author,
-      //     autoReply: DecliToBecomeProto.autoReply,
-      //     createdAt: new Date(DecliToBecomeProto.createdAt),
-      //     declinable: DecliToBecomeProto.declinable,
-      //     embedHeight: DecliToBecomeProto.embedHeight,
-      //     focusable: DecliToBecomeProto.focusable,
-      //     format: DecliToBecomeProto.format,
-      //     genealogy: DecliToBecomeProto.genealogy,
-      //     id: DecliToBecomeProto.id,
-      //     isQualityOk: DecliToBecomeProto.isQualityOk,
-      //     locales: DecliToBecomeProto.locales,
-      //     madeObsoleteAt: new Date(DecliToBecomeProto.madeObsoleteAt),
-      //     pedagogy: DecliToBecomeProto.pedagogy,
-      //     responsive: DecliToBecomeProto.responsive,
-      //     shuffled: DecliToBecomeProto.shuffled,
-      //     skillId: DecliToBecomeProto.skillId,
-      //     spoil: DecliToBecomeProto.spoil,
-      //     status: DecliToBecomeProto.status,
-      //     t1Status: DecliToBecomeProto.t1Status,
-      //     t2Status: DecliToBecomeProto.t2Status,
-      //     t3Status: DecliToBecomeProto.t3Status,
-      //     timer: DecliToBecomeProto.timer,
-      //     type: DecliToBecomeProto.type,
-      //     updatedAt: expect.any(Date),
-      //     validatedAt: new Date(DecliToBecomeProto.validatedAt),
-      //     version: DecliToBecomeProto.version,
-      //     assessmentMaintenanceTags: DecliToBecomeProto.assessmentMaintenanceTags,
-      //     translationMaintenanceTags: DecliToBecomeProto.translationMaintenanceTags,
-      //   },
-      // ]);
+      const challengesAfterSwitch = await knex('challenges')
+        .select('id', 'genealogy', 'alternativeVersion', 'accessibility1', 'accessibility2')
+        .orderBy('id');
+      expect(challengesAfterSwitch).to.deep.equal([
+        {
+          id: challengeProtoId,
+          genealogy: Challenge.GENEALOGIES.DECLINAISON,
+          alternativeVersion: challengeDecli.alternativeVersion,
+          accessibility1: Challenge.ACCESSIBILITY1.OK,
+          accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        },
+        {
+          id: challengeDecliId,
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          alternativeVersion: null,
+          accessibility1: Challenge.ACCESSIBILITY1.OK,
+          accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        },
+      ]);
 
-      // await expect(knex('localized_challenges').select().where('id', challengeId).first()).resolves.to.deep.include({
-      //   embedUrl: challenge.embedUrl,
-      //   urlsToConsult: ['pouet.com'],
-      //   geography: 'NL',
-      //   requireGafamWebsiteAccess: false,
-      //   isIncompatibleIpadCertif: false,
-      //   deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-      //   isAwarenessChallenge: false,
-      //   toRephrase: false,
-      //   hasEmbedInternalValidation: true,
-      //   noValidationNeeded: true,
-      // });
+      const localizedChallengesAfterSwitch = await knex('localized_challenges')
+        .select(
+          'id',
+          'challengeId',
+          'requireGafamWebsiteAccess',
+          'isIncompatibleIpadCertif',
+          'deafAndHardOfHearing',
+          'isAwarenessChallenge',
+          'toRephrase',
+          'hasEmbedInternalValidation',
+          'noValidationNeeded',
+        )
+        .orderBy('id');
+      const expectedPrototypeI18nSettings = {
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      };
+      expect(localizedChallengesAfterSwitch).to.deep.equal([{ id: challengeProtoId, challengeId: challengeProtoId, ...expectedPrototypeI18nSettings }, { id: challengeDecliId, challengeId: challengeDecliId, ...expectedPrototypeI18nSettings }]);
 
-      // await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
-      //   {
-      //     key: 'challenge.recChallengeId.alternativeInstruction',
-      //     locale: 'fr',
-      //     value: challenge.alternativeInstruction,
-      //   },
-      //   {
-      //     key: 'challenge.recChallengeId.embedTitle',
-      //     locale: 'fr',
-      //     value: challenge.embedTitle,
-      //   },
-      //   {
-      //     key: 'challenge.recChallengeId.instruction',
-      //     locale: 'fr',
-      //     value: challenge.instruction,
-      //   },
-      //   {
-      //     key: 'challenge.recChallengeId.proposals',
-      //     locale: 'fr',
-      //     value: challenge.proposals,
-      //   },
-      //   {
-      //     key: 'challenge.recChallengeId.solution',
-      //     locale: 'fr',
-      //     value: challenge.solution,
-      //   },
-      //   {
-      //     key: 'challenge.recChallengeId.solutionToDisplay',
-      //     locale: 'fr',
-      //     value: challenge.solutionToDisplay,
-      //   },
-      // ]);
+      const translationsAfterSwitch = await knex('translations').orderBy('key').select('key', 'locale', 'value');
+      expect(translationsAfterSwitch).to.deep.equal([
+        { key: `challenge.${challengeProtoId}.alternativeInstruction`, locale: 'fr', value: 'challengeProto.alternativeInstruction' },
+        { key: `challenge.${challengeProtoId}.embedTitle`, locale: 'fr', value: 'challengeProto.embedTitle' },
+        { key: `challenge.${challengeProtoId}.instruction`, locale: 'fr', value: "Ancienne valeur de l'instruction" },
+        { key: `challenge.${challengeProtoId}.proposals`, locale: 'fr', value: 'challengeProto.proposals' },
+        { key: `challenge.${challengeProtoId}.solution`, locale: 'fr', value: 'challengeProto.solution' },
+        { key: `challenge.${challengeProtoId}.solutionToDisplay`, locale: 'fr', value: 'challengeProto.solutionToDisplay' },
+        { key: `challenge.${challengeDecliId}.alternativeInstruction`, locale: 'fr', value: 'challengeDecli.alternativeInstruction' },
+        { key: `challenge.${challengeDecliId}.embedTitle`, locale: 'fr', value: 'challengeDecli.embedTitle' },
+        { key: `challenge.${challengeDecliId}.instruction`, locale: 'fr', value: "Ancienne valeur de l'instruction" },
+        { key: `challenge.${challengeDecliId}.proposals`, locale: 'fr', value: 'challengeDecli.proposals' },
+        { key: `challenge.${challengeDecliId}.solution`, locale: 'fr', value: 'challengeDecli.solution' },
+        { key: `challenge.${challengeDecliId}.solutionToDisplay`, locale: 'fr', value: 'challengeDecli.solutionToDisplay' },
+      ]);
     });
   });
 });

@@ -10,6 +10,7 @@ import {
   createChallenge,
   getPhraseTranslationsURL,
   previewChallenge,
+  switchGenealogy,
   updateChallenge,
 } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
@@ -140,8 +141,9 @@ export async function register(server) {
         validate: { params: Joi.object({ challengeId: challengeIdType }) },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }, { method: securityPreHandlers.checkChallengeIsAlternative }],
         handler: async function(request, h) {
-          const challenge = await challengeSerializer.deserialize(request.payload);
-          const updatedChallenge = await updateChallenge(challenge);
+          const { challengeId } = request.params;
+          await switchGenealogy({ alternativeChallengeId: challengeId });
+          const updatedChallenge = await challengeRepository.get(challengeId);
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },
