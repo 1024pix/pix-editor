@@ -6,12 +6,12 @@ import demoLLM from './modules/demo-llm.json' with { type: 'json' };
 import { domainBuilder } from '../../../tests/test-helper.js';
 
 export function buildModules(databaseBuilder) {
-  const moduleBacASable = databaseBuilder.factory.buildModule(bacASable);
-  databaseBuilder.factory.buildModule(demoCombinix1);
-  databaseBuilder.factory.buildModule(demoCombinix2);
-  databaseBuilder.factory.buildModule(demoEpreuvesComponents);
-  databaseBuilder.factory.buildModule(demoLLM);
+  const moduleBacASable = databaseBuilder.factory.buildModule({ ...bacASable, version: '1.0' });
+  databaseBuilder.factory.buildModule({ ...demoCombinix1, version: '2.0' });
+  databaseBuilder.factory.buildModule({ ...demoCombinix2, version: '1.0' });
+  databaseBuilder.factory.buildModule({ ...demoEpreuvesComponents, version: '3.0' });
+  databaseBuilder.factory.buildModule({ ...demoLLM, version: '1.0' });
 
-  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ title: 'Draft module' }) });
-  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ ...moduleBacASable, moduleId: moduleBacASable.id, title: '[DRAFT] Bac a sable' }) });
+  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ title: 'Draft module', version: '0.1' }) });
+  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ ...moduleBacASable, moduleId: moduleBacASable.id, title: '[DRAFT] Bac a sable', version: '1.1' }) });
 }
