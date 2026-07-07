@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { switchGenealogy } from '../../../../lib/domain/usecases/index.js';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
