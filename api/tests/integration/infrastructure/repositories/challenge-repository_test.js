@@ -2982,7 +2982,6 @@ describe('Integration | Repository | challenge-repository', () => {
 
       expect(updatedChallengePrototype).toEqual({
         alternativeVersion: 666,
-        version: 10,
         author: ['BZH'],
         // validate other field has not change
         accessibility1: 'OK',
