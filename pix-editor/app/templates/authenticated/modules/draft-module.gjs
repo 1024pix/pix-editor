@@ -4,6 +4,7 @@ import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
+import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
 
 <template>
   <header class="page-header">
@@ -18,6 +19,7 @@ import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons'
       >
         Modifier
       </PixButtonLink>
+      <PublishModuleButton @draftModule={{@model.draftModule}} />
     </div>
   </header>
   <main class="page-body">

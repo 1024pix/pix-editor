@@ -31,6 +31,21 @@ export class DraftModule extends Module {
     this.glossary = module.glossary;
   }
 
+  publish() {
+    return new Module({
+      id: this.id,
+      details: this.details,
+      glossary: this.glossary,
+      internalTitle: this.internalTitle,
+      isBeta: this.isBeta,
+      sections: this.sections,
+      shortId: this.shortId,
+      slug: this.slug,
+      title: this.title,
+      visibility: this.visibility,
+    });
+  }
+
   get url() {
     return new URL(`/modules/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }

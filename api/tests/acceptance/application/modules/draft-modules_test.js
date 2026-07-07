@@ -545,4 +545,64 @@ describe('Acceptance | Route | draft-modules', () => {
       ]);
     });
   });
+
+  describe('POST /draft-modules/:id/publish', () => {
+    it('responds with status 200 and published module’s data', async () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule(draftModule);
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: `/api/draft-modules/${draftModule.id}/publish`,
+        headers: generateAuthorizationHeader(editorUser),
+      });
+
+      // then
+      expect(response.statusCode).toBe(200);
+
+      expect(response.result).toEqual({
+        data: {
+          type: 'modules',
+          id: draftModule.id,
+          attributes: {
+            'short-id': draftModule.shortId,
+            'internal-title': draftModule.internalTitle,
+            'is-beta': draftModule.isBeta,
+            visibility: draftModule.visibility,
+            details: draftModule.details,
+            slug: draftModule.slug,
+            title: draftModule.title,
+            sections: draftModule.sections,
+            glossary: draftModule.glossary,
+            url: `${config.pixApp.production.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
+            'preview-url': `${config.pixApp.production.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+          },
+          relationships: { 'draft-module': { data: null } },
+        },
+      });
+
+      await expect(knex.select('*').from('modules')).resolves.toStrictEqual([
+        {
+          id: draftModule.id,
+          shortId: draftModule.shortId,
+          internalTitle: draftModule.internalTitle,
+          slug: draftModule.slug,
+          title: draftModule.title,
+          isBeta: draftModule.isBeta,
+          visibility: draftModule.visibility,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+          ...draftModule.details,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ]);
+      await expect(knex.select('*').from('draft-modules')).resolves.toStrictEqual([]);
+    });
+  });
 });

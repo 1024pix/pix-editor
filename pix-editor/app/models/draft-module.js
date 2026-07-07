@@ -21,4 +21,14 @@ export default class DraftModule extends BaseModule {
   get isEditionDraft() {
     return this.belongsToModule;
   }
+
+  async publish() {
+    const module = await this.store.queryRecord(
+      'module',
+      { draftModuleId: this.id },
+      { adapterOptions: { publish: true } },
+    );
+    this.store.unloadRecord(this);
+    return module;
+  }
 }
