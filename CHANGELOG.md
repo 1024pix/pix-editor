@@ -1,5 +1,12 @@
 
 
+## v4.39.0 (08/07/2026)
+
+
+### :rocket: Amélioration
+- [#1542](https://github.com/1024pix/pix-editor/pull/1542) [FEATURE] Ajouter la colonne version sur les modules et drafts (PIX-23334).
+- [#1541](https://github.com/1024pix/pix-editor/pull/1541) [FEATURE] Publier un module (PIX-23425).
+
 ## v4.38.0 (03/07/2026)
 
 
