@@ -19,7 +19,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('POST /draft-modules', () => {
     it('responds with status 201 and draft modules data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '0.1' });
       const draftModulePayload = {
         slug: draftModule.slug,
         title: draftModule.title,
@@ -91,6 +91,7 @@ describe('Acceptance | Route | draft-modules', () => {
         const module = domainBuilder.buildModule({
           sections: [],
           glossary: [],
+          version: '4.0',
         });
         databaseBuilder.factory.buildModule(module);
         await databaseBuilder.commit();
@@ -104,6 +105,7 @@ describe('Acceptance | Route | draft-modules', () => {
           internalTitle: module.internalTitle + '_update',
           isBeta: true,
           visibility: Module.VISIBILITIES.PRIVATE,
+          version: '4.1',
           details: {
             image: module.details.image + '_update',
             description: module.details.description + ' update',

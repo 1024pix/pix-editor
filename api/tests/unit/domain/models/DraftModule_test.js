@@ -20,12 +20,13 @@ describe('Unit | Domain | DraftModule', () => {
       expect(draftModule.id).toMatch(uuidRegExp);
       expect(draftModule.shortId).toMatch(shortIdRegExp);
       expect(draftModule.shortId).toBe(draftModule.id.slice(0, 8));
+      expect(draftModule.version).toBe('0.1');
     });
 
     describe('when a module is given', () => {
       it('uses module’s id and shortId', () => {
         // given
-        const module = domainBuilder.buildModule();
+        const module = domainBuilder.buildModule({ version: '2.0' });
         const draftModule = new DraftModule();
 
         // when
@@ -34,6 +35,7 @@ describe('Unit | Domain | DraftModule', () => {
         // then
         expect(draftModule.id).toBe(module.id);
         expect(draftModule.shortId).toBe(module.shortId);
+        expect(draftModule.version).toBe('2.1');
       });
     });
   });
