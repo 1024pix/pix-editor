@@ -49,6 +49,7 @@ export class MigrateModules extends Script {
         const module = new Module({
           ...JSON.parse(content),
           internalTitle,
+          version: '1.0',
         });
         logger.info({ id: module.id, title: module.title }, 'Saving module');
         await moduleRepository.save(module, transaction);

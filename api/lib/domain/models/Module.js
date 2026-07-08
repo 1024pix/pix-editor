@@ -12,6 +12,7 @@ export class Module {
     details,
     sections,
     glossary,
+    version,
     createdAt,
     updatedAt,
   } = {}) {
@@ -25,6 +26,7 @@ export class Module {
     this.details = details;
     this.sections = sections;
     this.glossary = glossary;
+    this.version = version;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

@@ -46,11 +46,12 @@ describe('Script | MigrateModules', () => {
       await script.handle({ options, logger }, { octokit });
 
       // then
-      await expect(knex.select('id', 'shortId', 'internalTitle', 'title').from('modules').orderBy('shortId')).resolves.toStrictEqual(modules.map((module) => ({
+      await expect(knex.select('id', 'shortId', 'internalTitle', 'title', 'version').from('modules').orderBy('shortId')).resolves.toStrictEqual(modules.map((module) => ({
         id: module.id,
         shortId: module.shortId,
         internalTitle: module.internalTitle,
         title: module.title,
+        version: '1.0',
       })));
 
       expect(octokit.repos.getContent).toHaveBeenCalledTimes(5);

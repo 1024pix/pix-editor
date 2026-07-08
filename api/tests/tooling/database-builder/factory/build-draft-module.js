@@ -20,6 +20,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   },
  *   sections: object[]
  *   glossary?: object[]
+ *   version?: string
  *   hasBeenValidated?: boolean
  *   validationErrors?: string[]
  *   createdAt?: string | number | Date
@@ -38,6 +39,7 @@ export function buildDraftModule({
   details,
   sections,
   glossary,
+  version,
   hasBeenValidated,
   validationErrors,
   createdAt,
@@ -55,6 +57,7 @@ export function buildDraftModule({
     ...details,
     sections,
     glossary,
+    version,
     hasBeenValidated,
     validationErrors,
     createdAt,

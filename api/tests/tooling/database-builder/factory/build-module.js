@@ -20,6 +20,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   },
  *   sections: object
  *   glossary?: object
+ *   version?: string
  *   createdAt?: string | number | Date
  *   updatedAt?: string | number | Date
  * }} moduleToBuild
@@ -35,6 +36,7 @@ export function buildModule({
   details,
   sections,
   glossary,
+  version,
   createdAt,
   updatedAt,
 } = {}) {
@@ -49,6 +51,7 @@ export function buildModule({
     ...details,
     sections,
     glossary,
+    version,
     createdAt,
     updatedAt,
   };

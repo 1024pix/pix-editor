@@ -115,6 +115,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
 
   describe('#deserialize', () => {
     const readOnlyFields = [
+      'version',
       'hasBeenValidated',
       'validationErrors',
       'createdAt',
