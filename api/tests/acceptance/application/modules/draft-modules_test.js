@@ -19,7 +19,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('POST /draft-modules', () => {
     it('responds with status 201 and draft modules data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '0.1' });
       const draftModulePayload = {
         slug: draftModule.slug,
         title: draftModule.title,
@@ -91,6 +91,7 @@ describe('Acceptance | Route | draft-modules', () => {
         const module = domainBuilder.buildModule({
           sections: [],
           glossary: [],
+          version: '4.0',
         });
         databaseBuilder.factory.buildModule(module);
         await databaseBuilder.commit();
@@ -104,6 +105,7 @@ describe('Acceptance | Route | draft-modules', () => {
           internalTitle: module.internalTitle + '_update',
           isBeta: true,
           visibility: Module.VISIBILITIES.PRIVATE,
+          version: '4.1',
           details: {
             image: module.details.image + '_update',
             description: module.details.description + ' update',
@@ -478,7 +480,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('PATCH /draft-modules/:id', () => {
     it('responds with status 200 and draft modules data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '6.4' });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
 
@@ -538,7 +540,7 @@ describe('Acceptance | Route | draft-modules', () => {
           visibility: draftModule.visibility,
           sections: draftModule.sections,
           glossary: draftModule.glossary,
-          version: draftModule.version,
+          version: '6.5',
           hasBeenValidated: draftModule.hasBeenValidated,
           validationErrors: draftModule.validationErrors,
           ...draftModule.details,
@@ -552,7 +554,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('POST /draft-modules/:id/publish', () => {
     it('responds with status 200 and published module’s data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '47.3' });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
 
@@ -600,7 +602,7 @@ describe('Acceptance | Route | draft-modules', () => {
           visibility: draftModule.visibility,
           sections: draftModule.sections,
           glossary: draftModule.glossary,
-          version: draftModule.version,
+          version: '48.0',
           ...draftModule.details,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),

@@ -15,6 +15,7 @@ export class DraftModule extends Module {
   prepareForCreation(module) {
     this.id = module?.id ?? crypto.randomUUID();
     this.shortId = module?.shortId ?? this.id.slice(0, 8);
+    this.version = incrementMinorVersion(module?.version) ?? '0.1';
   }
 
   /**
@@ -29,6 +30,7 @@ export class DraftModule extends Module {
     this.details = module.details;
     this.sections = module.sections;
     this.glossary = module.glossary;
+    this.version = incrementMinorVersion(this.version);
   }
 
   publish() {
@@ -43,6 +45,7 @@ export class DraftModule extends Module {
       slug: this.slug,
       title: this.title,
       visibility: this.visibility,
+      version: incrementMajorVersion(this.version),
     });
   }
 
@@ -53,4 +56,12 @@ export class DraftModule extends Module {
   get previewUrl() {
     return new URL(`/modules/preview/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
+}
+
+function incrementMinorVersion(version) {
+  return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
+}
+
+function incrementMajorVersion(version) {
+  return version?.replace(/^(\d+)\.\d+$/, (_, majorVersion) => `${parseInt(majorVersion) + 1}.0`);
 }

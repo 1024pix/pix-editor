@@ -20,12 +20,13 @@ describe('Unit | Domain | DraftModule', () => {
       expect(draftModule.id).toMatch(uuidRegExp);
       expect(draftModule.shortId).toMatch(shortIdRegExp);
       expect(draftModule.shortId).toBe(draftModule.id.slice(0, 8));
+      expect(draftModule.version).toBe('0.1');
     });
 
     describe('when a module is given', () => {
       it('uses module’s id and shortId', () => {
         // given
-        const module = domainBuilder.buildModule();
+        const module = domainBuilder.buildModule({ version: '2.0' });
         const draftModule = new DraftModule();
 
         // when
@@ -34,6 +35,7 @@ describe('Unit | Domain | DraftModule', () => {
         // then
         expect(draftModule.id).toBe(module.id);
         expect(draftModule.shortId).toBe(module.shortId);
+        expect(draftModule.version).toBe('2.1');
       });
     });
   });
@@ -44,6 +46,7 @@ describe('Unit | Domain | DraftModule', () => {
       const draftModule = domainBuilder.buildDraftModule({
         id: '704a89a6-983b-4e04-bfef-6a54f925c44e',
         shortId: '704a89a6',
+        version: '10.11',
         createdAt: new Date('2026-06-29T14:04:01Z'),
         updatedAt: new Date('2026-06-29T14:04:01Z'),
       });
@@ -78,6 +81,7 @@ describe('Unit | Domain | DraftModule', () => {
         slug: 'updated slug',
         title: 'updated title',
         visibility: 'updated visibility',
+        version: '10.12',
       }));
     });
   });
@@ -85,7 +89,7 @@ describe('Unit | Domain | DraftModule', () => {
   describe('#publish', () => {
     it('creates a published module from draft module', () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '0.341' });
       const expectedModule = new Module({
         id: draftModule.id,
         details: draftModule.details,
@@ -97,6 +101,7 @@ describe('Unit | Domain | DraftModule', () => {
         slug: draftModule.slug,
         title: draftModule.title,
         visibility: draftModule.visibility,
+        version: '1.0',
       });
 
       // when
