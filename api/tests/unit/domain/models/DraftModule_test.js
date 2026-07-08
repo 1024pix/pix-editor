@@ -46,6 +46,7 @@ describe('Unit | Domain | DraftModule', () => {
       const draftModule = domainBuilder.buildDraftModule({
         id: '704a89a6-983b-4e04-bfef-6a54f925c44e',
         shortId: '704a89a6',
+        version: '10.11',
         createdAt: new Date('2026-06-29T14:04:01Z'),
         updatedAt: new Date('2026-06-29T14:04:01Z'),
       });
@@ -80,6 +81,7 @@ describe('Unit | Domain | DraftModule', () => {
         slug: 'updated slug',
         title: 'updated title',
         visibility: 'updated visibility',
+        version: '10.12',
       }));
     });
   });

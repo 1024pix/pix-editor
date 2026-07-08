@@ -30,6 +30,7 @@ export class DraftModule extends Module {
     this.details = module.details;
     this.sections = module.sections;
     this.glossary = module.glossary;
+    this.version = incrementMinorVersion(this.version);
   }
 
   publish() {

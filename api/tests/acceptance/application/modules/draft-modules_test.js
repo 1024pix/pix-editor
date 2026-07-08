@@ -480,7 +480,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('PATCH /draft-modules/:id', () => {
     it('responds with status 200 and draft modules data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '6.4' });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
 
@@ -540,7 +540,7 @@ describe('Acceptance | Route | draft-modules', () => {
           visibility: draftModule.visibility,
           sections: draftModule.sections,
           glossary: draftModule.glossary,
-          version: draftModule.version,
+          version: '6.5',
           hasBeenValidated: draftModule.hasBeenValidated,
           validationErrors: draftModule.validationErrors,
           ...draftModule.details,
