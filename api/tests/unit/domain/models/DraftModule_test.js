@@ -89,7 +89,7 @@ describe('Unit | Domain | DraftModule', () => {
   describe('#publish', () => {
     it('creates a published module from draft module', () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '0.341' });
       const expectedModule = new Module({
         id: draftModule.id,
         details: draftModule.details,
@@ -101,6 +101,7 @@ describe('Unit | Domain | DraftModule', () => {
         slug: draftModule.slug,
         title: draftModule.title,
         visibility: draftModule.visibility,
+        version: '1.0',
       });
 
       // when

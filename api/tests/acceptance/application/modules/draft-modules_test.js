@@ -554,7 +554,7 @@ describe('Acceptance | Route | draft-modules', () => {
   describe('POST /draft-modules/:id/publish', () => {
     it('responds with status 200 and published module’s data', async () => {
       // given
-      const draftModule = domainBuilder.buildDraftModule();
+      const draftModule = domainBuilder.buildDraftModule({ version: '47.3' });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
 
@@ -602,7 +602,7 @@ describe('Acceptance | Route | draft-modules', () => {
           visibility: draftModule.visibility,
           sections: draftModule.sections,
           glossary: draftModule.glossary,
-          version: draftModule.version,
+          version: '48.0',
           ...draftModule.details,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
