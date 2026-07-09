@@ -1,6 +1,5 @@
 import globals from 'globals';
 import mocha from 'eslint-plugin-mocha';
-import babelParser from '@babel/eslint-parser';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default [
@@ -42,13 +41,8 @@ export default [
     files: ['**/*.js', '**/*.cjs'],
     languageOptions: {
       globals: { ...globals.node },
-      parser: babelParser,
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        requireConfigFile: false,
-        babelOptions: { parserOpts: { plugins: ['importAssertions'] } },
-      },
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
     rules: {
       'no-unused-vars': [
