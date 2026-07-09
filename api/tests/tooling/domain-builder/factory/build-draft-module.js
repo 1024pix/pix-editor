@@ -5,9 +5,10 @@ export function buildDraftModule({
   moduleId = null,
   hasBeenValidated = false,
   validationErrors = null,
+  version = '0.1',
   ...moduleAttributes
 } = {}) {
-  const module = buildModule(moduleAttributes);
+  const module = buildModule({ ...moduleAttributes, version });
   return new DraftModule({
     ...module,
     moduleId,

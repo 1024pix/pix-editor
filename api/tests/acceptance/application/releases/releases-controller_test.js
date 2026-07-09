@@ -891,8 +891,8 @@ async function mockContentForRelease() {
 
   attachments.forEach(databaseBuilder.factory.buildAttachment);
 
-  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[0], internalTitle: 'module-1' });
-  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[1], internalTitle: 'module-2' });
+  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[0], internalTitle: 'module-1', version: '1.0' });
+  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[1], internalTitle: 'module-2', version: '2.0' });
 
   await databaseBuilder.commit();
   return expectedCurrentContent;
