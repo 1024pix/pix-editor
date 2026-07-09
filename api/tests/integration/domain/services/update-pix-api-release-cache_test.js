@@ -1191,6 +1191,7 @@ describe('Integration | Service | update pix api release cache', function() {
             details: draftModule.details,
             sections: draftModule.sections,
             glossary: draftModule.glossary,
+            version: draftModule.version,
           })
           .matchHeader('Authorization', `Bearer ${pixApiToken}`)
           .reply(200);
