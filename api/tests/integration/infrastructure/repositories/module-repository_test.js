@@ -138,17 +138,18 @@ describe('Module Repository', () => {
     it('returns a module by its id', async () => {
       // given
       const id = crypto.randomUUID();
-      const expectedModule = domainBuilder.buildModuleForConsultation({ id, draftModuleId: id });
-      databaseBuilder.factory.buildModule(expectedModule);
+      const expectedModule = domainBuilder.buildModule({ id });
+      const expectedModuleForConsultation = domainBuilder.buildModuleForConsultation({ ...expectedModule, draftModuleId: id });
+      databaseBuilder.factory.buildModule(expectedModuleForConsultation);
       databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ id, moduleId: id }));
-      databaseBuilder.factory.buildModule(domainBuilder.buildModuleForConsultation({ shortId: 'secondar', internalTitle: 'secondar' }));
+      databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar' }));
       await databaseBuilder.commit();
 
       // when
       const module = await getById({ id });
 
       // then
-      expect(module).toStrictEqual(expectedModule);
+      expect(module).toStrictEqual(expectedModuleForConsultation);
     });
 
     it('throw a not Found error if module is not found', async () => {
