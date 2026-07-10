@@ -1,5 +1,5 @@
 import { visit, within } from '@1024pix/ember-testing-library';
-import { click } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -8,6 +8,7 @@ import { module, test } from 'qunit';
 module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  let competence, prototype, alternative;
 
   hooks.beforeEach(function () {
     this.server.create('config', {
@@ -18,19 +19,19 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
     });
     this.server.create('user', { trigram: 'ABC' });
 
-    const prototype = this.server.create('challenge', {
+    prototype = this.server.create('challenge', {
       id: 'challenge1',
       version: 1,
       status: 'validé',
       genealogy: 'Prototype 1',
     });
-    this.server.create('challenge', {
+    alternative = this.server.create('challenge', {
       id: 'challenge1-1',
       status: 'validé',
       genealogy: 'Décliné 1',
       version: 1,
       alternativeVersion: 1,
-      instruction: 'Ma consigne',
+      instruction: 'Ma consigne déclinée',
       alternativeInstruction: 'Ma consigne alternative',
       type: 'QCU',
       autoReply: false,
@@ -55,7 +56,7 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
 
     const tube = this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     const thematic = this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    const competence = this.server.create('competence', {
+    competence = this.server.create('competence', {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
       rawThemeIds: ['recTheme1'],
@@ -110,12 +111,12 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
 
     await click(screen.getByRole('link', { name: '@sujet1 2' }));
     await click(screen.getByRole('button', { name: 'Déclinaisons >>' }));
-    await click(screen.getByRole('cell', { name: 'Ma consigne' }));
+    await click(screen.getByRole('cell', { name: 'Ma consigne déclinée' }));
 
     // then
     const alternativePanel = within(screen.getByTestId('panel-alternative-challenge'));
 
-    assert.dom(alternativePanel.getByText('Ma consigne')).exists();
+    assert.dom(alternativePanel.getByText('Ma consigne déclinée')).exists();
     assert.dom(screen.getByText('Ma consigne alternative')).exists();
     assert.dom(screen.getByText('Mes propositions')).exists();
 
@@ -130,5 +131,21 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
     assert.strictEqual(alternativePanel.getByLabelText('Langue(s)').textContent.trim(), 'Francophone');
     assert.strictEqual(alternativePanel.getByLabelText('Géographie').textContent.trim(), 'Brésil');
     assert.dom(alternativePanel.getByLabelText('Id')).hasValue('challenge1-1');
+  });
+
+  test('it should be switchable with the prototype', async function (assert) {
+    // given
+    const screen = await visit(
+      `/competence/${competence.id}/prototypes/${prototype.id}/alternatives/${alternative.id}`,
+    );
+
+    // when
+    await click(screen.getByRole('button', { name: 'Inverser avec le prototype' }));
+    await click(await screen.findByRole('button', { name: 'Oui' }));
+
+    // then
+    assert.dom(await screen.findByText('Inversion effectuée')).exists();
+    assert.ok(currentURL().startsWith(`/competence/${competence.id}/prototypes/${alternative.id}`));
+    assert.dom(await screen.findByText('Ma consigne déclinée')).exists();
   });
 });

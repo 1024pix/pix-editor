@@ -1,6 +1,8 @@
 import slice from 'lodash/slice';
 import { Response } from 'miragejs';
 
+import Challenge from '../../app/models/challenge';
+
 /* eslint-disable ember/no-get */
 export default function routes() {
   this.namespace = 'api';
@@ -311,6 +313,31 @@ export default function routes() {
     });
 
     return challenge;
+  });
+
+  this.patch('/challenges/:id/switch-genealogy', (schema, request) => {
+    const alternative = schema.challenges.find(request.params.id);
+    const prototype = schema.challenges.all().models.find((ch) => {
+      return (
+        ch.skillId === alternative.skillId &&
+        ch.version === alternative.version &&
+        ch.genealogy === Challenge.GENEALOGIES.PROTOTYPE
+      );
+    });
+
+    prototype.update({
+      alternativeVersion: alternative.alternativeVersion,
+      genealogy: 'Décliné 1',
+    });
+
+    alternative.update({
+      alternativeVersion: null,
+      genealogy: 'Prototype 1',
+      accessibility1: prototype.accessibility1,
+      accessibility2: prototype.accessibility2,
+    });
+
+    return alternative;
   });
 
   // TODO extraire le contenu des configs liées aux missions dans un fichier dédié

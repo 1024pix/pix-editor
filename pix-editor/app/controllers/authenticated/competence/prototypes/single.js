@@ -113,6 +113,10 @@ export default class SingleController extends Controller {
     return this.access.mayMove(this.challenge);
   }
 
+  get maySwitchGenealogy() {
+    return this.access.maySwitchGenealogy(this.challenge);
+  }
+
   get mayAccessAlternatives() {
     return this.challenge.isPrototype && !this.challenge.isWorkbench;
   }
@@ -453,6 +457,40 @@ export default class SingleController extends Controller {
   @action
   closeMovePrototype() {
     this.displaySelectLocation = false;
+  }
+
+  @action
+  async switchGenealogy() {
+    try {
+      await this.confirm.ask(
+        'Inversion prototype / déclinaison',
+        'Êtes-vous sûr de vouloir inverser cette déclinaison avec le prototype ?',
+      );
+    } catch {
+      this._message('Inversion abandonnée');
+      return;
+    }
+    this.loader.start();
+    try {
+      const challenge = this.challenge;
+      const relatedPrototype = challenge.relatedPrototype;
+      await challenge.switchGenealogy();
+      if (relatedPrototype) {
+        await relatedPrototype.reload();
+      }
+      await this.overviewController.send('refreshModel');
+      this._message('Inversion effectuée');
+      this.router.transitionTo(
+        'authenticated.competence.prototypes.single',
+        this.currentData.getCompetence(),
+        challenge,
+      );
+    } catch (error) {
+      Sentry.captureException(error);
+      this._errorMessage("Erreur lors de l'inversion");
+    } finally {
+      this.loader.stop();
+    }
   }
 
   @action

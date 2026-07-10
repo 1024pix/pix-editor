@@ -181,6 +181,20 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
             Déclinaisons &gt;&gt;
           </button>
         {{/if}}
+        {{#if @controller.maySwitchGenealogy}}
+          <button
+            class="ui button item switch-genealogy"
+            {{on "click" @controller.switchGenealogy}}
+            type="button"
+            title="Inverser cette déclinaison avec le prototype"
+          >
+            <i class="exchange icon"></i>
+            <span>
+              Inverser avec
+              <br />le prototype
+            </span>
+          </button>
+        {{/if}}
       {{/if}}
     </div>
   </div>
