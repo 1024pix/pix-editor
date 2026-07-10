@@ -1,0 +1,11 @@
+name: pr title check
+
+on:
+  pull_request:
+    types: [opened, edited, ready_for_review, reopened]
+
+jobs:
+  lint-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 1024pix/pix-actions/check-pr-title@main
