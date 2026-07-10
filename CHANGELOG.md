@@ -1,5 +1,20 @@
 
 
+## v4.40.0 (10/07/2026)
+
+
+### :rocket: Amélioration
+- [#1544](https://github.com/1024pix/pix-editor/pull/1544) [FEATURE] Incrémenter le numéro de version du module et du draft (PIX-23340).
+
+### :building_construction: Tech
+- [#1548](https://github.com/1024pix/pix-editor/pull/1548) [TECH] Release et patch de release : ajout du numéro de version (PIX-23341).
+- [#1545](https://github.com/1024pix/pix-editor/pull/1545) [TECH] Rendre les colonnes version des modules et drafts obligatoires (PIX-23339).
+
+### :arrow_up: Montée de version
+- [#1547](https://github.com/1024pix/pix-editor/pull/1547) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.40 (pix-editor).
+- [#1546](https://github.com/1024pix/pix-editor/pull/1546) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.35 (pix-editor).
+- [#1405](https://github.com/1024pix/pix-editor/pull/1405) [BUMP] Update dependency eslint to v10 (api).
+
 ## v4.39.0 (08/07/2026)
 
 
