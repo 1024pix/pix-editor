@@ -255,6 +255,18 @@ img.clickable {
       color: #2185d0;
     }
   }
+
+  .switch-genealogy {
+    display: flex;
+    flex-direction: row !important;
+    gap: 0.25rem;
+    align-items: center;
+
+    i {
+      width: 16px !important;
+      margin-bottom: 0;
+    }
+  }
 }
 
 .ui.menu.challenge-menu {

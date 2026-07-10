@@ -290,4 +290,55 @@ module('Unit | Service | access', function (hooks) {
       assert.notOk(accessResult);
     });
   });
+
+  module('maySwitchGenealogy', function () {
+    test('it should return `false` when challenge is not an alternative', function (assert) {
+      // given
+      _stubAccessLevel(REPLICATOR, this.owner);
+      const prototypeChallenge = EmberObject.create({
+        id: 'rec123656',
+        isAlternative: false,
+      });
+
+      // when
+      const accessResult = accessService.maySwitchGenealogy(prototypeChallenge);
+
+      // then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `false` when user level is lower than `REPLICATOR` level', function (assert) {
+      // given
+      const READ_ONLY = 1;
+      _stubAccessLevel(READ_ONLY, this.owner);
+      const alternativeChallenge = EmberObject.create({
+        id: 'rec123656',
+        isAlternative: true,
+      });
+
+      // when
+      const accessResult = accessService.maySwitchGenealogy(alternativeChallenge);
+
+      // then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `true` when challenge is an alternative and user level is `REPLICATOR` or above', function (assert) {
+      // given
+      const alternativeChallenge = EmberObject.create({
+        id: 'rec123656',
+        isAlternative: true,
+      });
+
+      // when
+      _stubAccessLevel(REPLICATOR, this.owner);
+      const accessResultAsReplicator = accessService.maySwitchGenealogy(alternativeChallenge);
+      _stubAccessLevel(ADMIN, this.owner);
+      const accessResultAsAdmin = accessService.maySwitchGenealogy(alternativeChallenge);
+
+      // then
+      assert.ok(accessResultAsReplicator);
+      assert.ok(accessResultAsAdmin);
+    });
+  });
 });
