@@ -736,7 +736,7 @@ async function mockContentForRelease() {
         documentationUrl: null,
       }),
     ],
-    modules: [domainBuilder.buildModuleForRelease({ title: 'Module 1' }), domainBuilder.buildModuleForRelease({ shortId: 'tatatiti', title: 'Module 2' })],
+    modules: [domainBuilder.buildModuleForRelease({ title: 'Module 1' }), domainBuilder.buildModuleForRelease({ shortId: 'tatatiti', title: 'Module 2', version: '2.0' })],
   };
 
   const attachments = [
@@ -891,8 +891,8 @@ async function mockContentForRelease() {
 
   attachments.forEach(databaseBuilder.factory.buildAttachment);
 
-  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[0], internalTitle: 'module-1', version: '1.0' });
-  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[1], internalTitle: 'module-2', version: '2.0' });
+  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[0], internalTitle: 'module-1' });
+  databaseBuilder.factory.buildModule({ ...expectedCurrentContent.modules[1], internalTitle: 'module-2' });
 
   await databaseBuilder.commit();
   return expectedCurrentContent;

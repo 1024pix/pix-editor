@@ -9,6 +9,7 @@ export class ModuleForRelease {
     details,
     sections,
     glossary,
+    version,
   } = {}) {
     this.id = id;
     this.shortId = shortId;
@@ -19,5 +20,6 @@ export class ModuleForRelease {
     this.details = details;
     this.sections = sections;
     this.glossary = glossary;
+    this.version = version;
   }
 }
