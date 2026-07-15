@@ -43,17 +43,18 @@ describe('Script | UpdateTubesTranslationScript', () => {
     describe('when dryRun is true', () => {
       it('should not update any tube translations', async () => {
         // given
+        const locale = 'fr';
         const { thematic } = databaseBuilder.factory.buildChallengeInGroup({});
         const tubeToUpdate = databaseBuilder.factory.buildTube({ id: 1, name: '@tube_un', thematicId: thematic.id });
         databaseBuilder.factory.buildTranslation({
           key: `tube.${tubeToUpdate.id}.practicalTitle`,
-          locale: 'fr',
+          locale,
           value: 'mon titre',
         });
 
         databaseBuilder.factory.buildTranslation({
           key: `tube.${tubeToUpdate.id}.practicalDescription`,
-          locale: 'fr',
+          locale,
           value: 'ma description',
         });
 
@@ -65,16 +66,17 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
         const options = {
           file: fileData,
+          locale,
           dryRun: true,
         };
 
         await script.handle({ options, logger });
 
         // then
-        const { value: frTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale: 'fr' }).first();
+        const { value: frTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale }).first();
         expect(frTitleTranslation).equal('mon titre');
 
-        const { value: frDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale: 'fr' }).first();
+        const { value: frDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale }).first();
         expect(frDescriptionTranslation).equal('ma description');
 
         expect(logger.info).toHaveBeenCalledWith('Dry run is enabled, stopping before updating 1 tube(s)');
@@ -88,8 +90,9 @@ describe('Script | UpdateTubesTranslationScript', () => {
       });
     });
 
-    it('update only given tubes translation', async () => {
+    it('update only given tubes translation in the specified locale', async () => {
       // given
+      const locale = 'fr-BE';
       const { thematic } = databaseBuilder.factory.buildChallengeInGroup({});
       const tubeToUpdate = databaseBuilder.factory.buildTube({ id: 1, name: '@tube_un', thematicId: thematic.id });
       databaseBuilder.factory.buildTranslation({
@@ -99,7 +102,7 @@ describe('Script | UpdateTubesTranslationScript', () => {
       });
       databaseBuilder.factory.buildTranslation({
         key: `tube.${tubeToUpdate.id}.practicalTitle`,
-        locale: 'en',
+        locale,
         value: 'my title',
       });
 
@@ -110,7 +113,7 @@ describe('Script | UpdateTubesTranslationScript', () => {
       });
       databaseBuilder.factory.buildTranslation({
         key: `tube.${tubeToUpdate.id}.practicalDescription`,
-        locale: 'en',
+        locale,
         value: 'my description',
       });
 
@@ -122,6 +125,7 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
       const options = {
         file: fileData,
+        locale,
         dryRun: false,
       };
 
@@ -129,16 +133,16 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
       // then
       const { value: frTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale: 'fr' }).first();
-      expect(frTitleTranslation).equal('mon_nouveau_titre');
+      expect(frTitleTranslation).equal('mon titre');
 
       const { value: frDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale: 'fr' }).first();
-      expect(frDescriptionTranslation).equal('ma_nouvelle_description');
+      expect(frDescriptionTranslation).equal('ma description');
 
-      const { value: enTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale: 'en' }).first();
-      expect(enTitleTranslation).equal('my title');
+      const { value: enTitleTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalTitle`, locale }).first();
+      expect(enTitleTranslation).equal('mon_nouveau_titre');
 
-      const { value: enDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale: 'en' }).first();
-      expect(enDescriptionTranslation).equal('my description');
+      const { value: enDescriptionTranslation } = await knex('translations').select('value').where({ key: `tube.${tubeToUpdate.id}.practicalDescription`, locale }).first();
+      expect(enDescriptionTranslation).equal('ma_nouvelle_description');
 
       expect(logger.info).toHaveBeenCalledWith('Successfully updated translations for 1 tube(s)');
     });
@@ -177,6 +181,7 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
       const options = {
         file: fileData,
+        locale: 'fr',
         dryRun: false,
       };
 
@@ -206,6 +211,7 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
       const options = {
         file: fileData,
+        locale: 'fr',
         dryRun: false,
       };
 
@@ -214,6 +220,24 @@ describe('Script | UpdateTubesTranslationScript', () => {
 
       // then
       expect(logger.error).toHaveBeenCalledWith('Found 0 tube(s) with name @tube_un', { tubeIds: [] });
+    });
+
+    it('should stop the script if the given locale is invalid', async () => {
+      // given
+      const { options: scriptMeta } = script.metaInfo;
+      const fileData = await scriptMeta.file.coerce(testCsvFile);
+
+      const options = {
+        file: fileData,
+        locale: 'les tubes français stp',
+        dryRun: false,
+      };
+
+      // when
+      await script.handle({ options, logger });
+
+      // then
+      expect(logger.error).toHaveBeenCalledWith('The specified locale option is invalid. Exiting the script.', { locale: options.locale, acceptedLocales: expect.any(Array) });
     });
   });
 });

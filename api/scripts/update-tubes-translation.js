@@ -5,6 +5,7 @@ import { csvFileParser } from '../lib/application/scripts/parsers.js';
 import { knex } from '../db/knex-database-connection.js';
 import { translationRepository } from '../lib/infrastructure/repositories/index.js';
 import { DomainTransaction } from '../lib/domain/DomainTransaction.js';
+import { LOCALE } from '../lib/domain/constants.js';
 
 export const csvSchemas = [
   { name: 'Thèmes/acquis', schema: Joi.string().required() },
@@ -49,12 +50,23 @@ export class UpdateTubesTranslationScript extends Script {
           demandOption: true,
           coerce: csvFileParser(csvSchemas),
         },
+        locale: {
+          type: 'string',
+          describe: 'Locale dans laquelle les descriptions de sujets seront modifiées',
+          demandOption: true,
+        },
       },
     });
   }
 
   async handle({ options, logger }) {
-    logger.info({ dryRun: options.dryRun, ids: options.id }, 'Script options');
+    logger.info({ dryRun: options.dryRun, ids: options.id, locale: options.locale }, 'Script options');
+    const acceptedLocales = Object.values(LOCALE);
+    if (!acceptedLocales.includes(options.locale)) {
+      logger.error('The specified locale option is invalid. Exiting the script.', { locale: options.locale, acceptedLocales });
+      return;
+    }
+
     const tubesFromPix = await getTubeIdsFromPixFramework();
 
     return DomainTransaction.execute(async () => {
@@ -71,7 +83,7 @@ export class UpdateTubesTranslationScript extends Script {
           }
 
           const tubeId = tubeIds[0].id;
-          const translations = [{ key: `tube.${tubeId}.practicalTitle`, locale: 'fr', value: practicalTitle }, { key: `tube.${tubeId}.practicalDescription`, locale: 'fr', value: practicalDescription }];
+          const translations = [{ key: `tube.${tubeId}.practicalTitle`, locale: options.locale, value: practicalTitle }, { key: `tube.${tubeId}.practicalDescription`, locale: options.locale, value: practicalDescription }];
           await translationRepository.save({ translations });
           updatedTubesCount++;
         }
