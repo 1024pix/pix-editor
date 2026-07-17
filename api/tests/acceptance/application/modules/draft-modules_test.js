@@ -193,6 +193,15 @@ describe('Acceptance | Route | draft-modules', () => {
             updatedAt: expect.any(Date),
           },
         ]);
+
+        await expect(knex.select('*').from('draft-module-versions')).resolves.toStrictEqual([
+          {
+            id: expect.any(Number),
+            draftModuleId: draftModule.id,
+            version: draftModule.version,
+            structuredDiff: expect.any(Object),
+          },
+        ]);
       });
     });
   });
