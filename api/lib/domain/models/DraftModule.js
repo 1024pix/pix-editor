@@ -19,18 +19,21 @@ export class DraftModule extends Module {
   }
 
   /**
-   * @param {DraftModule} module
+   * @param {DraftModule} draftModule
    */
-  update(module) {
-    this.internalTitle = module.internalTitle;
-    this.slug = module.slug;
-    this.title = module.title;
-    this.isBeta = module.isBeta;
-    this.visibility = module.visibility;
-    this.details = module.details;
-    this.sections = module.sections;
-    this.glossary = module.glossary;
-    this.version = incrementMinorVersion(this.version);
+  update(draftModule) {
+    return new DraftModule({
+      ...this,
+      internalTitle: draftModule.internalTitle,
+      slug: draftModule.slug,
+      title: draftModule.title,
+      isBeta: draftModule.isBeta,
+      visibility: draftModule.visibility,
+      details: draftModule.details,
+      sections: draftModule.sections,
+      glossary: draftModule.glossary,
+      version: incrementMinorVersion(this.version),
+    });
   }
 
   publish() {

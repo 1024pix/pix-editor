@@ -11,18 +11,18 @@ import * as updatePixApiReleaseCache from '../services/update-pix-api-release-ca
 export async function updateDraftModule(draftModule, dependencies = { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch }) {
   return DomainTransaction.execute(async () => {
     const existingDraftModule = await dependencies.draftModuleRepository.getById({ id: draftModule.id });
-    existingDraftModule.update(draftModule);
+    const updatedDraftModule = existingDraftModule.update(draftModule);
 
-    const updatedDraftModule = await dependencies.draftModuleRepository.save(existingDraftModule);
+    const savedDraftModule = await dependencies.draftModuleRepository.save(updatedDraftModule);
 
-    const structuredDiff = dependencies.structuredPatch('', '', existingDraftModule.serializeToJSON(), updatedDraftModule.serializeToJSON());
+    const structuredDiff = dependencies.structuredPatch('', '', existingDraftModule.serializeToJSON(), savedDraftModule.serializeToJSON());
     await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
-      draftModuleId: updatedDraftModule.id,
-      version: updatedDraftModule.version,
+      draftModuleId: savedDraftModule.id,
+      version: savedDraftModule.version,
       structuredDiff,
     }));
 
-    await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(updatedDraftModule);
-    return updatedDraftModule;
+    await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(savedDraftModule);
+    return savedDraftModule;
   });
 }

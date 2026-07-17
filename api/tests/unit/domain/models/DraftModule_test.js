@@ -65,10 +65,10 @@ describe('Unit | Domain | DraftModule', () => {
       });
 
       // when
-      draftModule.update(updates);
+      const updatedDraftModule = draftModule.update(updates);
 
       // then
-      expect(draftModule).toStrictEqual(domainBuilder.buildDraftModule({
+      expect(updatedDraftModule).toStrictEqual(domainBuilder.buildDraftModule({
         id: '704a89a6-983b-4e04-bfef-6a54f925c44e',
         shortId: '704a89a6',
         createdAt: new Date('2026-06-29T14:04:01Z'),
@@ -83,6 +83,7 @@ describe('Unit | Domain | DraftModule', () => {
         visibility: 'updated visibility',
         version: '10.12',
       }));
+      expect(updatedDraftModule).not.toBe(draftModule);
     });
   });
 

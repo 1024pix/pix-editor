@@ -5,6 +5,7 @@ import { DraftModuleVersion } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Use Cases | update-draft-module', () => {
   const draftModuleId = Symbol('draftModuleId');
+  const updatedDraftModule = Symbol('updatedDraftModule');
   const structuredDiff = Symbol('structuredDiff');
   const existingDraftModuleJSON = Symbol('existingDraftModuleJSON');
   const savedDraftModuleJSON = Symbol('savedDraftModuleJSON');
@@ -26,7 +27,7 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
       save: vi.fn().mockResolvedValueOnce(savedDraftModule),
     };
 
-    update = vi.spyOn(existingDraftModule, 'update');
+    update = vi.spyOn(existingDraftModule, 'update').mockReturnValueOnce(updatedDraftModule);
 
     updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn().mockResolvedValueOnce() };
 
@@ -45,7 +46,7 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
     await expect(result).toBe(savedDraftModule);
 
     expect(update).toHaveBeenCalledExactlyOnceWith(draftModule);
-    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(existingDraftModule);
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
     expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
     expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', existingDraftModuleJSON, savedDraftModuleJSON);
     expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
