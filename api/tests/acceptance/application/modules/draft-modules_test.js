@@ -609,6 +609,23 @@ describe('Acceptance | Route | draft-modules', () => {
         },
       ]);
       await expect(knex.select('*').from('draft-modules')).resolves.toStrictEqual([]);
+      await expect(knex.select('*').from('module-versions')).resolves.toStrictEqual([
+        {
+          id: expect.any(Number),
+          moduleId: draftModule.id,
+          shortId: draftModule.shortId,
+          internalTitle: draftModule.internalTitle,
+          slug: draftModule.slug,
+          title: draftModule.title,
+          isBeta: draftModule.isBeta,
+          visibility: draftModule.visibility,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+          version: '48.0',
+          ...draftModule.details,
+          createdAt: expect.any(Date),
+        },
+      ]);
     });
   });
 });

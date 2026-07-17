@@ -11,6 +11,7 @@ export * from './LocalizedFrameworkTubes.js';
 export * from './Mission.js';
 export * from './Module.js';
 export * from './ModuleForConsultation.js';
+export * from './ModuleVersion.js';
 export * from './Note.js';
 export * from './Skill.js';
 export * from './StaticCourse.js';

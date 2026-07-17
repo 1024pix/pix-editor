@@ -11,6 +11,7 @@ export * as localizedChallengeRepository from './localized-challenge-repository.
 export * as localizedFrameworksTubesRepository from './localized-framework-tubes-repository.js';
 export * as missionRepository from './mission-repository.js';
 export * as moduleRepository from './module-repository.js';
+export * as moduleVersionRepository from './module-version-repository.js';
 export * as releaseRepository from './release-repository.js';
 export * as skillRepository from './skill-repository.js';
 export * as staticCourseRepository from './static-course-repository.js';
