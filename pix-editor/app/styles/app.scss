@@ -81,3 +81,4 @@
 @use 'authenticated/static-courses/loading' as static-courses-loading;
 @use 'templates/authenticated/v2/loading' as v2-loading;
 @use 'authenticated/competence/skills/list' as competence-skills-list;
+@use 'templates/authenticated/competence/prototypes/list' as prototypes-list;
