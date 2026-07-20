@@ -1,44 +1,43 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import eq from 'ember-truth-helpers/helpers/eq';
 import Prototypes from 'pixeditor/components/list/prototypes';
 <template>
-  <div class="main-title {{if @controller.config.lite 'lite' ''}}">
-    <h1 class="ui header">
-      <div class="ui right floated menu">
-        <button class="ui button icon item" type="button" {{on "click" @controller.close}}>
-          <i class="icon window close"></i>
-        </button>
-      </div>
+  <div class="prototypes-list__title {{if @controller.config.lite 'prototypes-list__title--lite'}}">
+    <h1 class="prototypes-list__heading">
       Prototypes de
       {{@controller.model.skill.name}}
       (v.{{@controller.selectedSkill.version}})
+      <div class="prototypes-list__actions">
+        <button type="button" class="prototypes-list__close" aria-label="Fermer" {{on "click" @controller.close}}>
+          <PixIcon @name="close" @ariaHidden={{true}} />
+        </button>
+      </div>
     </h1>
   </div>
-  <div class="ui top attached borderless labelled icon menu">
-    <div class="ui top attached tabular menu">
-      {{#each @controller.model.skills as |skill|}}
-        <div
-          data-test-skill-tab
-          class="item skill-tab {{if (eq @controller.selectedSkill.id skill.id) 'active' ''}}"
-          {{on "click" (fn @controller.setSelectedSkill skill)}}
-        >
-          {{skill.name}}
-          v.{{skill.version}}
-          <span class="skill-tab__status {{skill.statusCSS}}" title={{skill.status}}></span>
-        </div>
-      {{/each}}
-    </div>
+  <div class="prototypes-list__tabs">
+    {{#each @controller.model.skills as |skill|}}
+      <div
+        data-test-skill-tab
+        class="prototypes-list__skill-tab {{if (eq @controller.selectedSkill.id skill.id) 'active' ''}}"
+        {{on "click" (fn @controller.setSelectedSkill skill)}}
+      >
+        {{skill.name}}
+        v.{{skill.version}}
+        <span class="prototypes-list__skill-tab__status {{skill.statusCSS}}" title={{skill.status}}></span>
+      </div>
+    {{/each}}
   </div>
-  <div data-test-prototype-list class="ui attached segment competence {{@controller.size}}">
+  <div data-test-prototype-list class="prototypes-list__content {{@controller.size}}">
     <Prototypes @list={{@controller.selectedSkill.sortedPrototypes}} />
   </div>
-  <div class="ui borderless bottom attached labelled icon menu">
+  <div class="prototypes-list__footer">
     {{#if @controller.mayCreatePrototype}}
-      <button class="ui button right item" {{on "click" @controller.newVersion}} type="button">
-        <i class="plus square outline icon"></i>
+      <PixButton class="prototypes-list__create" @iconBefore="add" @triggerAction={{@controller.newVersion}}>
         Nouvelle version
-      </button>
+      </PixButton>
     {{/if}}
   </div>
   {{outlet}}
