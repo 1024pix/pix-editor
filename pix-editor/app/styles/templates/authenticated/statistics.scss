@@ -1,0 +1,47 @@
+@use '../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.statistics {
+  &__container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #3498db;
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  &__heading {
+    margin: 0;
+    padding: 6px 0;
+    color: #fff;
+    font-weight: normal;
+    font-size: 20px;
+  }
+
+  &__grid-wrapper {
+    flex: 1;
+    padding: 0;
+    border: none;
+  }
+
+  &__grid {
+    display: grid;
+    flex: 1;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  &__column {
+    flex: 1;
+  }
+}
