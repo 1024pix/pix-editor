@@ -1,43 +1,51 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import Theme from 'pixeditor/components/form/theme';
 import scrollTop from 'pixeditor/modifiers/scroll-top';
 <template>
-  <div class="tube-header">
-    <div class="ui menu">
-      <div class="item header {{if @controller.creation 'creation'}}">
+  <div class="theme-view__header">
+    <div class="theme-view__menu-bar">
+      <div class="theme-view__title {{if @controller.creation 'theme-view__title--creation'}}">
         {{#if @controller.creation}}
           Nouveau theme
         {{else}}
           {{@controller.theme.name}}
         {{/if}}
       </div>
-      <div class="ui right menu">
-        <button class="ui button icon item" type="button" title="Fermer la fenêtre" {{on "click" @controller.close}}>
-          <i class="icon window close"></i>
+      <div class="theme-view__menu-right">
+        <button
+          type="button"
+          class="theme-view__icon-action"
+          aria-label="Fermer la fenêtre"
+          {{on "click" @controller.close}}
+        >
+          <PixIcon @name="close" @ariaHidden={{true}} />
         </button>
       </div>
     </div>
   </div>
-  <div class="tube-details">
-    <div class="tube-data" {{scrollTop @controller.edition}}>
+  <div class="theme-view__details">
+    <div class="theme-view__data" {{scrollTop @controller.edition}}>
       <Theme @theme={{@controller.theme}} @edition={{@controller.edition}} />
     </div>
-    <div class="ui vertical compact labeled icon menu tube-menu">
+    <div class="theme-view__actions-menu">
       {{#if @controller.edition}}
-        <button class="ui button item important-action" type="button" {{on "click" @controller.save}}>
-          <i class="save icon"></i>
+        <PixButton
+          class="theme-view__action theme-view__action--important"
+          @iconBefore="save"
+          @triggerAction={{@controller.save}}
+        >
           Enregistrer
-        </button>
-        <button class="ui button item" type="button" {{on "click" @controller.cancelEdit}}>
-          <i class="ban icon"></i>
+        </PixButton>
+        <PixButton class="theme-view__action" @iconBefore="block" @triggerAction={{@controller.cancelEdit}}>
           Annuler
-        </button>
+        </PixButton>
       {{else}}
         {{#if @controller.mayEdit}}
-          <button class="ui button item" type="button" {{on "click" @controller.edit}}>
-            <i class="edit icon"></i>
+          <PixButton class="theme-view__action" @iconBefore="edit" @triggerAction={{@controller.edit}}>
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
       {{/if}}
     </div>
