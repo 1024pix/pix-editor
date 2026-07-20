@@ -77,3 +77,4 @@
 @use 'authenticated/target-profile' as target-profile-view;
 @use 'authenticated/competence-management/single' as competence-management-single;
 @use 'components/competence/competence-footer';
+@use 'templates/authenticated/statistics' as statistics-view;
