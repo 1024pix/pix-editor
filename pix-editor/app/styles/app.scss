@@ -80,3 +80,4 @@
 @use 'templates/authenticated/statistics' as statistics-view;
 @use 'authenticated/static-courses/loading' as static-courses-loading;
 @use 'templates/authenticated/v2/loading' as v2-loading;
+@use 'authenticated/competence/skills/list' as competence-skills-list;
