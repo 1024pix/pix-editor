@@ -1,0 +1,71 @@
+@use '../../../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.archive {
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #3498db;
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+
+    &--lite {
+      background-color: #7c0e6a;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 6px 0;
+    color: #fff;
+    font-weight: normal;
+    font-size: 20px;
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 8px 0;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__segment {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  &__info-menu {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f9fafb;
+    border-top: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}
