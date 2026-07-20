@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 export default class CompetenceManagementSingleController extends Controller {
   @service access;
@@ -46,7 +45,6 @@ export default class CompetenceManagementSingleController extends Controller {
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error(error);
-        Sentry.captureException(error);
         this.loader.stop();
         this.notifications.sendError('Erreur lors de la mise à jour de la compétence');
       });

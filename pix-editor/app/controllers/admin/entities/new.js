@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
-import * as Sentry from '@sentry/ember';
 
 export default class NewAdminEntityController extends Controller {
   @service loader;
@@ -26,8 +25,9 @@ export default class NewAdminEntityController extends Controller {
 
       this.notifications.sendSuccess('Entité créée avec succès');
       this.router.transitionTo('admin.entities.list', this.model.schema.entityName);
-    } catch (err) {
-      Sentry.captureException(err);
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
       this.notifications.sendError("Erreur lors de la création de l'entité");
     } finally {
       this.loader.stop();

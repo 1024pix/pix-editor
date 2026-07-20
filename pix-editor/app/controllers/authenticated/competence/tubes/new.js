@@ -1,6 +1,5 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import * as Sentry from '@sentry/ember';
 
 import Tube from './single';
 
@@ -32,7 +31,6 @@ export default class NewController extends Tube {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
       this.notifications.sendError('Erreur lors de la création du tube');
     } finally {
       this.loader.stop();

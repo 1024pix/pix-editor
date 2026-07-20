@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import * as Sentry from '@sentry/ember';
 
 export default class CompetenceManagementNewController extends Controller {
   @service loader;
@@ -35,7 +34,8 @@ export default class CompetenceManagementNewController extends Controller {
         queryParams: { view: 'workbench' },
       });
     } catch (error) {
-      Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
+      console.error(error);
       this.notifications.sendError('Erreur lors de la création de la compétence');
     } finally {
       this.loader.stop();

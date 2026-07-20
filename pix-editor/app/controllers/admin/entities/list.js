@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 export default class AdminEntityListController extends Controller {
   @service notifications;
@@ -46,8 +45,9 @@ export default class AdminEntityListController extends Controller {
           const entityId = entity.id;
           await entity.destroyRecord();
           this.notifications.sendSuccess(`Entité '${entityId}' supprimée avec succès`);
-        } catch (err) {
-          Sentry.captureException(err);
+        } catch (error) {
+          /* eslint-disable-next-line no-console */
+          console.log(error);
           this.notifications.sendError("Erreur lors de la suppression de l'entité");
         } finally {
           this.modal.loading = false;

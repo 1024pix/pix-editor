@@ -2,7 +2,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 import yaml from 'js-yaml';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -270,7 +269,6 @@ export default class SingleController extends Controller {
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error(error);
-        Sentry.captureException(error);
         this._errorMessage(this.intl.t('prototype.changelog.update-error'));
       })
       .finally(() => {
@@ -318,7 +316,6 @@ export default class SingleController extends Controller {
         } catch (error) {
           /* eslint-disable-next-line no-console */
           console.error(error);
-          Sentry.captureException(error);
           this._errorMessage('Erreur lors de la mise en production');
         } finally {
           this.loader.stop();
@@ -353,7 +350,6 @@ export default class SingleController extends Controller {
       } catch (err) {
         /* eslint-disable-next-line no-console */
         console.error(err);
-        Sentry.captureException(err);
       }
     } catch {
       this._message('Validation qualité abandonnée');
@@ -379,14 +375,14 @@ export default class SingleController extends Controller {
         } catch (error) {
           /* eslint-disable-next-line no-console */
           console.error(error);
-          Sentry.captureException(error);
           this._errorMessage("Erreur lors de l'archivage");
         } finally {
           this.loader.stop();
         }
       });
     } catch (error) {
-      Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
+      console.error(error);
       this._message('Archivage abandonné');
     }
   }
@@ -410,14 +406,16 @@ export default class SingleController extends Controller {
           this.send('close');
           this.router.refresh('authenticated.competence.prototypes');
         } catch (error) {
-          Sentry.captureException(error);
+          /* eslint-disable-next-line no-console */
+          console.error(error);
           this._errorMessage(this.intl.t('challenge.obsolete.error'));
         } finally {
           this.loader.stop();
         }
       });
     } catch (error) {
-      Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
+      console.error(error);
       this._message(this.intl.t('challenge.obsolete.cancel'));
     }
   }
@@ -471,7 +469,8 @@ export default class SingleController extends Controller {
         await this._handleChangelog(prototype, changelog);
         await this.overviewController.send('refreshModel');
       } catch (error) {
-        Sentry.captureException(error);
+        /* eslint-disable-next-line no-console */
+        console.error(error);
         this._message(this.intl.t('challenge.move.error'));
       } finally {
         this.loader.stop();

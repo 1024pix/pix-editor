@@ -7,7 +7,6 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 
 import PopInNewFrameworkComponent from '../pop-in/new-framework';
 
@@ -96,7 +95,6 @@ export default class SidebarNavigationComponent extends Component {
       this.displayNewFrameworkPopIn = false;
       router.transitionTo('authenticated');
     } catch (error) {
-      Sentry.captureException(error);
       /* eslint-disable-next-line no-console */
       console.error(error);
       this.notifications.sendError('Erreur lors de la création du Référentiel');

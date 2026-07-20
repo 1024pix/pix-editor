@@ -1,6 +1,5 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import * as Sentry from '@sentry/ember';
 
 import Skill from './single';
 
@@ -38,7 +37,7 @@ export default class NewController extends Skill {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.error(error);
-      Sentry.captureException(error);
+
       this.loader.stop();
       this.notifications.sendError("Erreur lors de la création de l'acquis");
     }

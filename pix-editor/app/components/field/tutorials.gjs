@@ -6,7 +6,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import * as Sentry from '@sentry/ember';
 import { not } from 'ember-truth-helpers';
 import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 
@@ -112,7 +111,8 @@ export default class Tutorials extends Component {
       if (isNew) this.args.addTutorial(this.args.tutorials, tutorial);
       this.displayTutorialPopin = false;
     } catch (error) {
-      Sentry.captureException(error);
+      /* eslint-disable-next-line no-console */
+      console.error(error);
       this.notifications.sendError('Erreur lors de la création du tutoriel');
     } finally {
       this.loader.stop();
