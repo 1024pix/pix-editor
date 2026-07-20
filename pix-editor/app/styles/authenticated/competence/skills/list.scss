@@ -1,0 +1,48 @@
+@use '../../../global';
+
+// stylelint-disable color-no-hex, color-named
+
+.competence-skills-list {
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #3498db;
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  &__heading {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 6px 0;
+    color: #fff;
+    font-weight: normal;
+    font-size: 20px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: 10px;
+  }
+
+  &__body {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 12px;
+    background-color: #f9fafb;
+    border-top: 1px solid rgba(34, 36, 38, 0.15);
+  }
+}

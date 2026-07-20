@@ -1,26 +1,24 @@
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import Skills from 'pixeditor/components/list/skills';
 <template>
-  <div class="main-title skill-header">
-    <h1 class="ui header">
-      <div class="ui right floated menu">
-        <button class="ui button icon item" {{on "click" @controller.close}} type="button"><i
-            class="icon window close"
-          ></i></button>
-      </div>
+  <div class="competence-skills-list__title">
+    <h1 class="competence-skills-list__heading">
       Versions de
       {{@controller.firstSkill.name}}
+      <div class="competence-skills-list__actions">
+        <PixIconButton @iconName="close" @ariaLabel="Fermer" @triggerAction={{@controller.close}} />
+      </div>
     </h1>
   </div>
-  <div class="ui attached segment competence">
+  <div class="competence-skills-list__body">
     <Skills @list={{@controller.model.sortedSkills}} />
   </div>
-  <div class="ui borderless bottom attached labelled icon menu">
+  <div class="competence-skills-list__footer">
     {{#if @controller.mayCreateSkill}}
-      <button class="ui button right item" {{on "click" @controller.newSkillVersion}} type="button">
-        <i class="plus square outline icon"></i>
+      <PixButton @iconBefore="add" @triggerAction={{@controller.newSkillVersion}}>
         Nouvelle Version
-      </button>
+      </PixButton>
     {{/if}}
   </div>
 </template>
