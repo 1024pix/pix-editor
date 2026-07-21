@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -5,7 +6,7 @@ import Component from '@glimmer/component';
 
 export default class SidebarExportComponent extends Component {
   <template>
-    <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
+    <p {{on "click" this.shareAreas}}><PixIcon @name="share" @ariaHidden={{true}} /> Exporter les sujets</p>
   </template>
 
   @service('file-saver') fileSaver;

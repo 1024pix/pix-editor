@@ -1,4 +1,5 @@
 import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
@@ -168,7 +169,7 @@ export default class SidebarNavigationComponent extends Component {
                 class="area-link"
                 {{on "click" @close}}
               >
-                <i class="plus square icon"></i>Ajouter une compétence
+                <PixIcon @name="add" @ariaHidden={{true}} />Ajouter une compétence
               </LinkTo>
             {{/if}}
           </:content>
@@ -181,7 +182,7 @@ export default class SidebarNavigationComponent extends Component {
           class="area-link"
           {{on "click" @close}}
         >
-          <i class="plus square icon"></i>Ajouter un domaine
+          <PixIcon @name="add" @ariaHidden={{true}} />Ajouter un domaine
         </LinkTo>
       {{/if}}
     </div>
