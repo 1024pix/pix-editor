@@ -1,5 +1,19 @@
 
 
+## v4.41.0 (21/07/2026)
+
+
+### :rocket: Amélioration
+- [#1552](https://github.com/1024pix/pix-editor/pull/1552) [FEATURE] Ajouter une option locale pour lancer le script de modification des descriptions de sujets (PIX-23557).
+- [#1554](https://github.com/1024pix/pix-editor/pull/1554) [FEATURE] Archiver une version du module lors de sa publication (PIX-23593).
+
+### :building_construction: Tech
+- [#1539](https://github.com/1024pix/pix-editor/pull/1539) [TECH] Suppression de Sentry dans PixEditor .
+- [#1550](https://github.com/1024pix/pix-editor/pull/1550) [TECH] Ajout d’un workflow Github pour vérifier les titres de PR sur PixEditor (PIX-23535).
+
+### :arrow_up: Montée de version
+- [#1551](https://github.com/1024pix/pix-editor/pull/1551) [BUMP] Update dependency morgan to v1.11.0 [SECURITY].
+
 ## v4.40.0 (10/07/2026)
 
 
