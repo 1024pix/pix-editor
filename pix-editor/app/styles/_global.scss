@@ -63,16 +63,6 @@ a, p, span, li {
 
 }
 
-.ui.menu.main-menu {
-  border-right: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0;
-
-  .ui.icon.button {
-    color: #fff;
-  }
-
-}
-
 .hidden {
   display: none !important;
 }
@@ -273,16 +263,6 @@ a, p, span, li {
   height: 100%;
   background: url("/assets/images/elephant_main.png") center center no-repeat;
   background-size: contain;
-}
-
-footer.ui.attached.header {
-  color: white;
-  background: rgba(52, 152, 219) !important;
-
-  p {
-    position: relative;
-    left: -198px;
-  }
 }
 
 .ui.button {

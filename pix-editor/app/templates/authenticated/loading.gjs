@@ -1,6 +1,6 @@
 import Loader from 'pixeditor/components/loader';
 <template>
-  <div class="ui page dimmer inverted active">
+  <div class="loading-page">
     <Loader />
   </div>
 </template>
