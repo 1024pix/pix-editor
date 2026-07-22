@@ -1,8 +1,7 @@
-import { challengeRepository, userRepository } from '../infrastructure/repositories/index.js';
+import { userRepository } from '../infrastructure/repositories/index.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError, replyWithAuthenticationError } from './security-utils.js';
 import * as config from '../config.js';
 import { logger } from '../infrastructure/logger.js';
-import { NotFoundError } from '../domain/errors.js';
 
 export async function checkUserIsAuthenticatedViaBearer(request, h) {
   if (!request.headers.authorization) {
@@ -59,14 +58,4 @@ export function checkUserIsUrlBrokenLinksMonitor(request, h) {
   }
 
   return h.response(true);
-}
-
-export async function checkChallengeIsAlternative(request, h) {
-  try {
-    const challenge = await challengeRepository.get(request.params.challengeId);
-
-    return challenge.isAlternative ? h.response(true) : replyForbiddenError(h);
-  } catch {
-    return new NotFoundError();
-  }
 }

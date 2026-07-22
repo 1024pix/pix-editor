@@ -1,7 +1,8 @@
 import { beforeEach, describe as context, describe, expect, it, vi } from 'vitest';
 import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
-import { domainBuilder } from '../../../test-helper.js';
+import { catchErr, domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
+import { ForbiddenError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | Challenge', () => {
   const fields = [
@@ -403,6 +404,46 @@ describe('Unit | Domain | Challenge', () => {
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
       });
+    });
+
+    it('should throw a ForbiddenError when challenge is not an alternative', async function() {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        version: 1,
+        alternativeVersion: 15,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+      });
+
+      // when
+      const err = await catchErr(challenge.switchToPrototype, challenge)({
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      });
+
+      // then
+      expect(err).toBeInstanceOf(ForbiddenError);
     });
   });
 
