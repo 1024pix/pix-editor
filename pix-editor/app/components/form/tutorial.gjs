@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
@@ -259,7 +260,7 @@ export default class TutorialForm extends Component {
             <div class="search-title">
               {{#if (eq option.value "create")}}
                 {{option.label}}
-                <i class="add icon"></i>
+                <PixIcon @name="add" @ariaHidden={{true}} />
               {{else}}
                 {{option.label}}
               {{/if}}

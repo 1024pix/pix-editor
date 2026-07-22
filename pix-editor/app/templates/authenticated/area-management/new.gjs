@@ -7,7 +7,7 @@ import Input from 'pixeditor/components/field/input';
     </div>
     <div class="area-management__details">
       <div class="area-management__data">
-        <form action class="ui form">
+        <form action class="form">
           <Input
             data-test-area-title-input
             @value={{@controller.area.titleFrFr}}
@@ -15,7 +15,7 @@ import Input from 'pixeditor/components/field/input';
             @label="Titre"
             @id="area-title-fr"
           />
-          <div class="ui raised segment">
+          <div class="segment segment--raised">
             <i class="flag gb uk"></i>
             <Input @value={{@controller.area.titleEnUs}} @edition={{true}} @label="Titre (en)" @id="area-title-en" />
           </div>

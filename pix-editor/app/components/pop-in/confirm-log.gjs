@@ -14,7 +14,7 @@ export default class PopInConfirmLog extends Component {
         <p>
           {{@content}}
         </p>
-        <form class="ui form">
+        <form class="form">
           <Checkbox
             class="checkbox-layout"
             @label="Je veux ajouter une note de changelog"

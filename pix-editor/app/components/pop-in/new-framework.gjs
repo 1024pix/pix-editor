@@ -10,7 +10,7 @@ export default class PopInNewFrameworkComponent extends Component {
     <PixModal @title="Créer un référentiel" @onCloseButtonClick={{@close}} @showModal={{@showModal}}>
       <:content>
         {{#if @framework}}
-          <form action class="ui form" {{on "submit" this.saveOnSubmit}}>
+          <form action class="form" {{on "submit" this.saveOnSubmit}}>
             <Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom" />
           </form>
         {{/if}}

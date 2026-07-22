@@ -20,7 +20,7 @@ import Challenge from 'pixeditor/models/challenge';
 
 export default class ChallengeForm extends Component {
   <template>
-    <form action class="ui form challenge-form">
+    <form action class="form challenge-form">
       <Mde
         @title="Consigne"
         @value={{@challenge.instruction}}
@@ -106,7 +106,7 @@ export default class ChallengeForm extends Component {
       {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
         <div id="toleranceField" data-test-tolerence-fields class="field {{if @edition '' 'disabled'}}">
           <label>Tolérance</label>
-          <div class="three fields">
+          <div class="fields">
             <div class="field">
               <Checkbox
                 @label="T1 (espaces/casse/accents)"
@@ -164,7 +164,7 @@ export default class ChallengeForm extends Component {
         />
       </ToggleField>
       {{#if @invalidUrlsToConsult}}
-        <p class="ui red message" data-test-invalid-urls-to-consult>
+        <p class="message message--red" data-test-invalid-urls-to-consult>
           URLs invalides :
           {{@invalidUrlsToConsult}}
         </p>
@@ -205,7 +205,7 @@ export default class ChallengeForm extends Component {
         @change={{@checkEmbedURL}}
       />
       {{#if @invalidEmbedURL}}
-        <p class="ui red message" data-test-invalid-embed-url>
+        <p class="message message--red" data-test-invalid-embed-url>
           URL invalide :
           {{@invalidEmbedURL}}
         </p>
@@ -255,7 +255,7 @@ export default class ChallengeForm extends Component {
       {{#if @challenge.isPrototype}}
         <div class="field {{if @edition '' 'disabled'}}">
           <label>Maintenance</label>
-          <div class="two fields">
+          <div class="fields">
             <div class="field">
               <PixMultiSelect
                 @isSearchable={{true}}
@@ -289,7 +289,7 @@ export default class ChallengeForm extends Component {
       {{/if}}
       <div class="field {{if @edition '' 'disabled'}}">
         <label>Internationalisation</label>
-        <div class="two fields">
+        <div class="fields">
           <div class="field">
             <PixMultiSelect
               @placeholder="Choisir une ou plusieurs langues"

@@ -405,7 +405,7 @@ export default class LocalizedChallenge extends Component {
           >{{this.urlsToConsult}}</textarea>
         </FieldToggleFieldComponent>
         {{#if this.invalidUrlsToConsult}}
-          <p class="ui red message">
+          <p class="message message--red">
             URLs invalides :
             {{this.invalidUrlsToConsult}}
           </p>

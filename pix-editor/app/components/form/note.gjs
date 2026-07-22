@@ -1,6 +1,6 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { Textarea } from '@ember/component';
-import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -44,8 +44,8 @@ export default class NoteForm extends Component {
   }
 
   <template>
-    <div class="ui content">
-      <form class="ui form">
+    <div class="note-form">
+      <form class="form">
         <div class="field">
           <PixSelect
             @placeholder="Choisir un statut"
@@ -62,27 +62,27 @@ export default class NoteForm extends Component {
         </div>
         <div class="field {{if @edition '' 'disabled'}}">
           <label for="note">Texte</label>
-          <div class="ui input">
+          <div class="input">
             <Textarea id="note" @value={{@entry.text}} rows="4" readonly={{not @edition}} />
           </div>
         </div>
       </form>
-    </div>
-    <div class="actions">
-      <button class="ui right button" {{on "click" @close}} type="button">
-        Retour
-      </button>
-      {{#if @edition}}
-        <button class="ui green right button" {{on "click" @save}} type="button">
-          Enregistrer
-        </button>
-      {{else}}
-        {{#if @mayEdit}}
-          <button class="ui green right button" {{on "click" @edit}} type="button">
-            Modifier
-          </button>
+      <div class="note-form__actions">
+        <PixButton @variant="secondary" @triggerAction={{@close}}>
+          Retour
+        </PixButton>
+        {{#if @edition}}
+          <PixButton @variant="success" @triggerAction={{@save}}>
+            Enregistrer
+          </PixButton>
+        {{else}}
+          {{#if @mayEdit}}
+            <PixButton @variant="success" @triggerAction={{@edit}}>
+              Modifier
+            </PixButton>
+          {{/if}}
         {{/if}}
-      {{/if}}
+      </div>
     </div>
   </template>
 }
