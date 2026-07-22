@@ -298,6 +298,23 @@ module('Unit | Service | access', function (hooks) {
       const prototypeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: false,
+        isValidated: true,
+      });
+
+      // when
+      const accessResult = accessService.maySwitchGenealogy(prototypeChallenge);
+
+      // then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `false` when challenge is not validated', function (assert) {
+      // given
+      _stubAccessLevel(REPLICATOR, this.owner);
+      const prototypeChallenge = EmberObject.create({
+        id: 'rec123656',
+        isAlternative: true,
+        isValidated: false,
       });
 
       // when
@@ -314,6 +331,7 @@ module('Unit | Service | access', function (hooks) {
       const alternativeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: true,
+        isValidated: true,
       });
 
       // when
@@ -328,6 +346,7 @@ module('Unit | Service | access', function (hooks) {
       const alternativeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: true,
+        isValidated: true,
       });
 
       // when

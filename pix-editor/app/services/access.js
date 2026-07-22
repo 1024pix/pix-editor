@@ -158,7 +158,7 @@ export default class AccessService extends Service {
   }
 
   maySwitchGenealogy(challenge) {
-    return this.isReplicator() && challenge.isAlternative;
+    return this.isReplicator() && challenge.isValidated && challenge.isAlternative;
   }
 
   mayAccessAdministration() {
