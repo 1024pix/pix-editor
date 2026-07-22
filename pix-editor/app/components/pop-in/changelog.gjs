@@ -12,10 +12,10 @@ export default class PopinChangelog extends Component {
       <:content>
         <div class="content">
           <div class="description">
-            <form class="ui form">
+            <form class="form">
               <div class="field">
                 <label>Texte</label>
-                <div class="ui input" for="textarea_changelog">
+                <div class="input" for="textarea_changelog">
                   <Textarea id="textarea_changelog" @value={{this.value}} rows="4" />
                 </div>
               </div>

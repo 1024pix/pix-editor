@@ -1,11 +1,11 @@
 import Input from 'pixeditor/components/field/input';
 import Textarea from 'pixeditor/components/field/textarea';
 <template>
-  <form action class="ui form">
+  <form action class="form">
     {{#if @edition}}
       <Input data-test-name-field @value={{@tube.name}} @edition={{@edition}} @label="Nom" @id="tube-name" />
     {{/if}}
-    <div class="ui raised segment">
+    <div class="segment segment--raised">
       <Input
         data-test-practical-title-fr-field
         @value={{@tube.practicalTitleFr}}
@@ -21,7 +21,7 @@ import Textarea from 'pixeditor/components/field/textarea';
         @id="tube-description-fr"
       />
     </div>
-    <div class="ui raised segment">
+    <div class="segment segment--raised">
       <Input
         data-test-practical-title-en-field
         @value={{@tube.practicalTitleEn}}

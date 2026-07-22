@@ -15,7 +15,7 @@ export default class LocalizedChallengeForm extends Component {
   }
 
   <template>
-    <form action="" class="ui form">
+    <form action="" class="form">
       <Illustration
         @title="Illustration"
         @value={{@localizedChallenge.illustration}}
@@ -51,12 +51,12 @@ export default class LocalizedChallengeForm extends Component {
         @change={{@checkEmbedURL}}
       />
       {{#if @shouldDisplayPrimaryEmbedUrl}}
-        <div class="ui blue message">
+        <div class="message message--blue">
           <p data-testid="default-embed-url">Embed URL auto-générée : {{@localizedChallenge.defaultEmbedURL}}</p>
         </div>
       {{/if}}
       {{#if @invalidEmbedURL}}
-        <p class="ui red message" data-test-invalid-embed-url>
+        <p class="message message--red" data-test-invalid-embed-url>
           URL invalide :
           {{@invalidEmbedURL}}
         </p>
@@ -94,7 +94,7 @@ export default class LocalizedChallengeForm extends Component {
         />
       </FieldToggleFieldComponent>
       {{#if @invalidUrlsToConsult}}
-        <p class="ui red message" data-test-invalid-urls-to-consult>
+        <p class="message message--red" data-test-invalid-urls-to-consult>
           URLs invalides :
           {{@invalidUrlsToConsult}}
         </p>

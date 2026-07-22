@@ -73,7 +73,7 @@ export default class SkillForm extends Component {
   }
 
   <template>
-    <form action="" class="ui form">
+    <form action="" class="form">
       <Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} @id="skill-description" />
       <PixSelect
         @id="select-description-status"

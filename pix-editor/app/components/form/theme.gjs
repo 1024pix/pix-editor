@@ -1,6 +1,6 @@
 import Input from 'pixeditor/components/field/input';
 <template>
-  <form action class="ui form">
+  <form action class="form">
     <Input
       data-test-theme-name-field
       @value={{@theme.name}}
