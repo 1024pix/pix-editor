@@ -1,80 +1,41 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import Component from '@glimmer/component';
 
 export default class StatisticsProductionComponent extends Component {
   <template>
-    <h2 class="ui header">
-      <i class="rocket icon"></i>
-      <div class="content">
-        En production
-      </div>
+    <h2 class="statistics-production__heading">
+      <PixIcon @name="bolt" @ariaHidden={{true}} />
+      <span>En production</span>
     </h2>
-    <div class="ui three column padded grid">
-      <div class="column">
-        <div class="ui blue segment center aligned">
-          <div class="ui header">
-            {{this.productionTubeTotal}}
-            <div class="sub header">
-              Tubes
-            </div>
-          </div>
-        </div>
+    <div class="statistics-production__tiles">
+      <div class="statistics-production__tile">
+        <span class="statistics-production__tile-value">{{this.productionTubeTotal}}</span>
+        <span class="statistics-production__tile-label">Tubes</span>
       </div>
-      <div class="column">
-        <div class="ui blue segment center aligned">
-          <div class="ui header">
-            {{this.productionSkillTotal}}
-            <div class="sub header">
-              Acquis
-            </div>
-          </div>
-        </div>
+      <div class="statistics-production__tile">
+        <span class="statistics-production__tile-value">{{this.productionSkillTotal}}</span>
+        <span class="statistics-production__tile-label">Acquis</span>
       </div>
-      <div class="column">
-        <div class="ui blue segment center aligned">
-          <div class="ui header">
-            {{this.productionChallengeTotal}}
-            <div class="sub header">
-              Épreuves
-            </div>
-          </div>
-        </div>
+      <div class="statistics-production__tile">
+        <span class="statistics-production__tile-value">{{this.productionChallengeTotal}}</span>
+        <span class="statistics-production__tile-label">Épreuves</span>
       </div>
-      <div class="three columns">
-        <div class="ui blue segment five column grid center aligned statistics-table">
-          <div class="column">
-            Compétence
-          </div>
-          <div class="column">
-            Tubes
-          </div>
-          <div class="column">
-            Acquis
-          </div>
-          <div class="column">
-            Épreuves
-          </div>
-          <div class="teal column">
-            Part
-          </div>
-          {{#each this.productionData as |item|}}
-            <div class="column">
-              {{item.name}}
-            </div>
-            <div class="column">
-              {{item.tubes}}
-            </div>
-            <div class="column">
-              {{item.skills}}
-            </div>
-            <div class="column">
-              {{item.challenges}}
-            </div>
-            <div class="teal column">
-              {{item.rate}}&nbsp;%
-            </div>
-          {{/each}}
-        </div>
+    </div>
+    <div class="statistics-production__table">
+      <div class="statistics-production__cell statistics-production__cell--head">Compétence</div>
+      <div class="statistics-production__cell statistics-production__cell--head">Tubes</div>
+      <div class="statistics-production__cell statistics-production__cell--head">Acquis</div>
+      <div class="statistics-production__cell statistics-production__cell--head">Épreuves</div>
+      <div class="statistics-production__cell statistics-production__cell--head statistics-production__cell--part">
+        Part
       </div>
+      {{#each this.productionData as |item|}}
+        <div class="statistics-production__cell">{{item.name}}</div>
+        <div class="statistics-production__cell">{{item.tubes}}</div>
+        <div class="statistics-production__cell">{{item.skills}}</div>
+        <div class="statistics-production__cell">{{item.challenges}}</div>
+        <div class="statistics-production__cell statistics-production__cell--part">{{item.rate}}&nbsp;%</div>
+      {{/each}}
     </div>
   </template>
 
