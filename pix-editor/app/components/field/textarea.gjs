@@ -38,13 +38,13 @@ export default class FieldTextarea extends Component {
         {{#if @edition}}
           <button
             {{on "click" this.toggleMaximized}}
-            class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}}
+            class={{concat "field-textarea__button" (if this.maximized " field-textarea__button--active" "")}}
             type="button"
           >
-            <i class={{concat (if this.maximized "compress " "expand ") "icon"}}></i>
+            <PixIcon @name={{if this.maximized "minus" "openInFull"}} @ariaHidden={{true}} />
           </button>
           {{#if @helpContent}}
-            <div class="ui compact icon right floated button basic">
+            <div class="field-textarea__help">
               <PixTooltip @id="info-tooltip" @position="left" @isInline={{true}}>
                 <:triggerElement>
                   <PixIcon aria-describedby="info-tooltip" @name="help" />

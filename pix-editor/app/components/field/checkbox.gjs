@@ -5,7 +5,7 @@ import Component from '@glimmer/component';
 
 export default class Checkbox extends Component {
   <template>
-    <div class="{{concat 'ui checkbox' (if @toggle ' toggle' '')}}" ...attributes>
+    <div class="{{concat 'checkbox' (if @toggle ' checkbox--toggle' '')}}" ...attributes>
       <Input id={{this.elementId}} @type="checkbox" @checked={{@checked}} disabled={{@disabled}} />
       <label for={{this.elementId}}>
         {{@label}}

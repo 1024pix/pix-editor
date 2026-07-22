@@ -16,7 +16,7 @@ export default class Mde extends Component {
         <span>
           {{#if @edition}}
             {{#if @helpContent}}
-              <div class="ui compact icon right floated button basic">
+              <div class="field-textarea__help">
                 <PixTooltip @id="info-tooltip" @position="left" @isInline={{true}}>
                   <:triggerElement>
                     <PixIcon aria-describedby="info-tooltip" @name="help" />

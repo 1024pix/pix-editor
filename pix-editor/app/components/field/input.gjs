@@ -9,7 +9,7 @@ export default class Input extends Component {
   <template>
     <div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
       <p id="title-{{@id}}">{{@title}}</p>
-      <div class="ui input">
+      <div class="input">
         {{#if @label}}
           <label class="label-input" for={{@id}}>{{@label}} : </label>
         {{/if}}
