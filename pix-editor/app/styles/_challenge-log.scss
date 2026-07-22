@@ -58,13 +58,9 @@
     }
   }
 
-  .ui.menu.note-menu {
+  .note-menu {
+    display: flex;
     justify-content: center;
-
-    .item {
-      color: #2185d0;
-    }
-
   }
 
   .form {

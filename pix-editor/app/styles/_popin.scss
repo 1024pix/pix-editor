@@ -17,3 +17,18 @@
     z-index: 100;
   }
 }
+
+.threshold-grid {
+  display: flex;
+  justify-content: center;
+}
+
+.threshold-table {
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.5em 0.7em;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+  }
+}

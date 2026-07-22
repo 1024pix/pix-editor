@@ -41,11 +41,11 @@ export default class TutorialPopIn extends Component {
         <PixButton
           @type="submit"
           data-test-save-tutorial-button
+          @iconAfter="save"
           @isDisabled={{this.hasEmptyMandatoryField}}
           form="tutorial-form"
         >
           Enregistrer
-          <i class="save icon"></i>
         </PixButton>
       </:footer>
     </PixModal>

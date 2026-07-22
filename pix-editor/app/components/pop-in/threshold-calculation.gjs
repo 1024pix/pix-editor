@@ -8,8 +8,8 @@ export default class PopinThresholdCalculation extends Component {
   <template>
     <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
       <:content>
-        <div class="ui column centered grid">
-          <table class="ui very basic collapsing celled table">
+        <div class="threshold-grid">
+          <table class="threshold-table">
             <thead>
               <tr>
                 <th colspan="2"></th>

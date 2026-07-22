@@ -187,7 +187,7 @@ export default class PopinChallengeLog extends Component {
               @show={{this.showOwnNote}}
               @caption={{concat "Mes notes sur l’épreuve de " @challenge.skillName}}
             />
-            <div class="ui text menu note-menu">
+            <div class="note-menu">
               <PixButton @triggerAction={{this.addNote}} @variant="tertiary" @size="small" @iconBefore="add">
                 Nouvelle note
               </PixButton>

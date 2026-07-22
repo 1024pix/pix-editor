@@ -1,4 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -46,7 +47,10 @@ export default class PopInSortingComponent extends Component {
           <ul {{sortableGroup onChange=this.reorderItems}}>
             {{#each this.models as |model|}}
               <li {{sortableItem model=model}} {{sortableHandle}}>
-                <i class="ellipsis vertical icon"></i><span>{{model.name}}</span><i class="ellipsis vertical icon"></i>
+                <PixIcon @name="moreVert" @ariaHidden={{true}} /><span>{{model.name}}</span><PixIcon
+                  @name="moreVert"
+                  @ariaHidden={{true}}
+                />
               </li>
             {{/each}}
           </ul>
@@ -57,13 +61,12 @@ export default class PopInSortingComponent extends Component {
           data-test-sorting-pop-in-deny
           @backgroundColor="transparent-light"
           @isBorderVisible={{true}}
+          @iconBefore="close"
           @triggerAction={{this.onDeny}}
         >
-          <i class="remove icon"></i>
           {{t "common.cancel"}}
         </PixButton>
-        <PixButton data-test-sorting-pop-in-approve @triggerAction={{this.onApprove}}>
-          <i class="checkmark icon"></i>
+        <PixButton data-test-sorting-pop-in-approve @iconBefore="check" @triggerAction={{this.onApprove}}>
           Ok
         </PixButton>
       </:footer>
