@@ -19,9 +19,13 @@ export default class PopInNewFrameworkComponent extends Component {
         <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@close}}>
           Annuler
         </PixButton>
-        <PixButton data-test-save-action @triggerAction={{@save}} @isDisabled={{this.hasEmptyMandatoryField}}>
+        <PixButton
+          data-test-save-action
+          @iconAfter="save"
+          @triggerAction={{@save}}
+          @isDisabled={{this.hasEmptyMandatoryField}}
+        >
           Enregistrer
-          <i class="save icon"></i>
         </PixButton>
       </:footer>
     </PixModal>
