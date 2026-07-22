@@ -170,10 +170,10 @@ export default class CellQuality extends Component {
               </PixTooltip>
             {{/unless}}
             {{#if this.classTutorial}}
-              <i class="lab icon {{this.classTutorial}}"></i>
+              <PixIcon @name="book" class={{this.classTutorial}} @ariaHidden={{true}} />
             {{/if}}
             {{#if @skill.productionPrototype.timer}}
-              <i class="time icon"></i>
+              <PixIcon @name="time" @ariaHidden={{true}} />
             {{/if}}
           </div>
         </div>

@@ -93,75 +93,6 @@ a, p, span, li {
     z-index: 3;
   }
 
-  .ui[class*="top attached"].menu {
-    margin: 0;
-    border-radius: 0;
-
-    &.tabular {
-      padding-left: 5px;
-      border-bottom-width: 0;
-
-      .item {
-        margin-top: 0.4em;
-        padding-top: 0.528571em;
-        color: #777;
-        cursor: pointer;
-
-        &.active {
-          background-color: #F9FAFB;
-
-          &.production,
-          &.workbench {
-            color: #dbbd17;
-          }
-        }
-      }
-    }
-  }
-
-  .menu.skill-mode .ui[class*="top attached"].menu.tabular .item.active {
-    &.production,
-    &.workbench {
-      color: #448;
-
-    }
-  }
-
-  .ui[class*="bottom attached"].menu {
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .ui.attached {
-
-    &.menu:not(.tabular) {
-      background-color: #F9FAFB;
-      border: none;
-      border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-    }
-
-    .ui.button.item.left.first {
-      margin-right: 0 !important;
-    }
-
-    + .ui.attached.menu:not(.top) {
-      display: flex;
-      border-top: 1px solid rgba(34, 36, 38, 0.15);
-
-      .item.competence-info {
-        flex: 1;
-        flex-direction: row;
-        justify-content: space-evenly;
-      }
-    }
-
-    &.segment {
-      margin: 0;
-      padding: 0;
-      border: none;
-    }
-  }
-
   .main-left,
   .main-right {
     display: flex;
@@ -191,8 +122,17 @@ a, p, span, li {
   background-color: #3498db;
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
-  &.lite {
+  &.lite,
+  &--lite {
     background-color: #7C0E6A;
+  }
+
+  &__heading {
+    margin: 0;
+    padding: 6px 0;
+    color: #fff;
+    font-weight: normal;
+    font-size: 20px;
   }
 
   h1.ui.header {

@@ -25,7 +25,7 @@ import Sorting from 'pixeditor/components/pop-in/sorting';
         @selectView={{@controller.selectView}}
         @shareSkills={{@controller.exportSkills}}
       />
-      <div class="ui attached segment competence {{@controller.size}}">
+      <div class="competence {{@controller.size}}">
         {{#if @controller.displayGrid}}
           <CompetenceGrid
             @competence={{@controller.competence}}

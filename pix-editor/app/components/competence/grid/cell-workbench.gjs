@@ -12,26 +12,26 @@ import { LinkTo } from '@ember/routing';
         {{#if @skillOverview.proposedChallengesCount}}
           <span
             data-test-draft-prototype-count
-            class="draft-prototype ui tiny label"
+            class="grid-count draft-prototype"
             title="Proposé"
           >{{@skillOverview.proposedChallengesCount}}</span>
         {{/if}}
         {{#if @skillOverview.validatedChallengesCount}}
           <span
             data-test-validated-prototype-count
-            class="validated-prototype ui tiny label"
+            class="grid-count validated-prototype"
             title="Validé"
           >{{@skillOverview.validatedChallengesCount}}</span>
         {{/if}}
         {{#if @skillOverview.archivedChallengesCount}}
           <span
             data-test-archived-prototype-count
-            class="archived-prototype ui tiny label"
+            class="grid-count archived-prototype"
             title="Archivé"
           >{{@skillOverview.archivedChallengesCount}}</span>
         {{/if}}
         {{#if @skillOverview.obsoleteChallengesCount}}
-          <span data-test-obsolete-prototype-count class="obsolete-prototype ui tiny label" title="Périmé">
+          <span data-test-obsolete-prototype-count class="grid-count obsolete-prototype" title="Périmé">
             {{@skillOverview.obsoleteChallengesCount}}</span>
         {{/if}}
       </div>

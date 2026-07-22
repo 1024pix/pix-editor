@@ -4,7 +4,7 @@ import CompetenceGridThematic from 'pixeditor/components/competence/competence-g
 export default class CompetenceCompetenceGridComponent extends Component {
   <template>
     <div class="competence-grid">
-      <table class="ui celled table definition tubes">
+      <table class="tubes-grid">
         <tbody>
           {{#each this.thematicOverviewsOrThematics as |thematicOverviewOrThematic|}}
             <CompetenceGridThematic

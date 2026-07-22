@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
@@ -13,9 +14,14 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
       <tr>
         <td data-test-theme-cell class="theme-cell create-tube">
           <LinkTo @route="authenticated.competence.themes.single" @model={{@thematic}}>{{this.name}}</LinkTo>
-          <div class="ui mini basic icon buttons tube-management">
-            <button class="ui icon button" title="Nouveau sujet" type="button" {{on "click" (fn @newTube @thematic)}}>
-              <i class="plus square outline icon"></i>
+          <div class="tube-management">
+            <button
+              class="tube-management__button"
+              title="Nouveau sujet"
+              type="button"
+              {{on "click" (fn @newTube @thematic)}}
+            >
+              <PixIcon @name="add" @ariaHidden={{true}} />
             </button>
           </div>
         </td>
@@ -40,22 +46,22 @@ export default class CompetenceCompetenceGridThematicComponent extends Component
                 {{this.name}}
               {{/if}}
               {{#if this.mayCreateTube}}
-                <div class="ui mini basic icon buttons tube-management">
+                <div class="tube-management">
                   <button
-                    class="ui icon button"
+                    class="tube-management__button"
                     title="Nouveau sujet"
                     type="button"
                     {{on "click" (fn @newTube @thematic)}}
                   >
-                    <i class="plus square outline icon"></i>
+                    <PixIcon @name="add" @ariaHidden={{true}} />
                   </button>
                   <button
-                    class="ui icon button"
+                    class="tube-management__button"
                     title="Trier les sujets"
                     type="button"
                     {{on "click" (fn @displaySortTubesPopIn @thematic.tubes)}}
                   >
-                    <i class="exchange icon rotate-90"></i>
+                    <PixIcon @name="sort" @ariaHidden={{true}} />
                   </button>
                 </div>
               {{/if}}

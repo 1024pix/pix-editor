@@ -81,7 +81,7 @@ export default class CompetenceHeader extends Component {
   @tracked languageOptionsResult = this.languageOptions;
 
   get liteClass() {
-    return this.config.lite ? ' lite ' : '';
+    return this.config.lite ? ' main-title--lite' : '';
   }
 
   get selectedSection() {
@@ -113,8 +113,8 @@ export default class CompetenceHeader extends Component {
   }
 
   <template>
-    <section class="ui main-title{{this.liteClass}}">
-      <h1 class="ui left floated header">
+    <section class="main-title{{this.liteClass}}">
+      <h1 class="main-title__heading">
         <LinkTo
           @route="authenticated.competence-management.single"
           @model={{@competence}}
