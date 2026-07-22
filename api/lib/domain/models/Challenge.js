@@ -376,6 +376,9 @@ export class Challenge {
     if (!this.isAlternative) {
       throw new ForbiddenError('Challenge to switch to prototype is not an alternative');
     }
+    if (!this.isValide) {
+      throw new ForbiddenError('Challenge must be validated to be switched');
+    }
     this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
     this.alternativeVersion = null;
     this.accessibility1 = accessibility1;

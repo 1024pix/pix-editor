@@ -445,6 +445,47 @@ describe('Unit | Domain | Challenge', () => {
       // then
       expect(err).toBeInstanceOf(ForbiddenError);
     });
+
+    it('should throw a ForbiddenError when challenge is not validated', async function() {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        version: 1,
+        alternativeVersion: 15,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+
+      // when
+      const err = await catchErr(challenge.switchToPrototype, challenge)({
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      });
+
+      // then
+      expect(err).toBeInstanceOf(ForbiddenError);
+    });
   });
 
   describe('#switchToAlternative', () => {
