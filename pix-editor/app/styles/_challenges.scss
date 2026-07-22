@@ -264,6 +264,12 @@ img.clickable {
   vertical-align: top;
 }
 
+.translation-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px;
+}
+
 .form .field > label.file-upload {
   margin-top: 5px;
 }

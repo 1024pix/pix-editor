@@ -1,10 +1,14 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 <template>
   <div {{on "click" (fn @clickAction @tube)}} ...attributes>
     <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>
-      <i class="square icon {{if @selectedSkillLevel 'active check' 'outline'}}">
-      </i>
+      <PixIcon
+        @name={{if @selectedSkillLevel "checkCircle" "stopCircle"}}
+        class="tube-profile__check {{if @selectedSkillLevel 'active' ''}}"
+        @ariaHidden={{true}}
+      />
       {{#if @showTubeDetails}}
         <div class="max-skill-level"><p>{{if @selectedSkillLevel @selectedSkillLevel ""}}</p></div>
       {{/if}}

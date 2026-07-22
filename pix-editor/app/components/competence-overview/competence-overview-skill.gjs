@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
@@ -51,7 +52,7 @@ export default class CompetenceOverviewSkill extends Component {
             {{/unless}}
             {{#if @locale}}
               {{#if @skillOverview.isPrototypeToRephrase}}
-                <span title="L'épreuve doit être revue"><i class="exclamation icon"></i></span>
+                <span title="L'épreuve doit être revue"><PixIcon @name="warning" @ariaHidden={{true}} /></span>
               {{/if}}
             {{/if}}
           </span>

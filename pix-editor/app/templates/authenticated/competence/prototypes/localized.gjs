@@ -3,12 +3,13 @@ import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
+import { eq } from 'ember-truth-helpers';
 import CopyLink from 'pixeditor/components/buttons/copy-link';
 import ChallengeHeader from 'pixeditor/components/competence/prototypes/challenge-header';
 import LocalizedChallenge from 'pixeditor/components/form/localized-challenge';
 import Confirm from 'pixeditor/components/pop-in/confirm';
 import Image from 'pixeditor/components/pop-in/image';
-import convertLanguageAsFlag from 'pixeditor/helpers/convert-language-as-flag';
+import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 import scrollTop from 'pixeditor/modifiers/scroll-top';
 <template>
   <ChallengeHeader
@@ -19,10 +20,10 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     @close={{@controller.close}}
   >
     <:default>
-      <i
-        class="{{convertLanguageAsFlag @controller.localizedChallenge.locale}} flag"
+      <span
+        class="flag {{if (eq @controller.localizedChallenge.locale 'fr-fr') 'flag--fr-fr' ''}}"
         title={{@controller.localizedChallenge.locale}}
-      ></i>
+      >{{flagForLanguage @controller.localizedChallenge.locale}}</span>
       {{@controller.challengeTitle}}
       <div
         class="localized-prototype-view__status localized-prototype-view__status--{{@controller.localizedChallenge.statusCSS}}"
@@ -110,7 +111,11 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{/if}}
         {{#if @controller.mayChangeStatus}}
           <button class="localized-prototype-view__action" {{on "click" @controller.editStatus}} type="button">
-            <i class="{{@controller.changeStatusButtonIcon}} icon localized-prototype-view__action-icon"></i>
+            <PixIcon
+              @name={{@controller.changeStatusButtonIcon}}
+              class="localized-prototype-view__action-icon"
+              @ariaHidden={{true}}
+            />
             {{@controller.changeStatusButtonText}}
           </button>
         {{/if}}

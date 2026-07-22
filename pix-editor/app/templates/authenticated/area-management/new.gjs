@@ -16,7 +16,7 @@ import Input from 'pixeditor/components/field/input';
             @id="area-title-fr"
           />
           <div class="segment segment--raised">
-            <i class="flag gb uk"></i>
+            <span class="flag">🇬🇧</span>
             <Input @value={{@controller.area.titleEnUs}} @edition={{true}} @label="Titre (en)" @id="area-title-en" />
           </div>
         </form>
