@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -19,8 +20,8 @@ export default class Illustration extends Component {
           octets)
         {{/if}}
         {{#if @edition}}
-          <button class="ui button file-remove" type="button" title="Supprimer l'image" {{on "click" this.remove}}>
-            <i class="remove icon"></i>
+          <button class="file-remove" type="button" title="Supprimer l'image" {{on "click" this.remove}}>
+            <PixIcon @name="close" @ariaHidden={{true}} />
           </button>
         {{/if}}
       {{/if}}

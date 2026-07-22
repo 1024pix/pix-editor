@@ -8,14 +8,14 @@ import Component from '@glimmer/component';
 export default class FieldToggleFieldComponent extends Component {
   <template>
     {{#if @edition}}
-      <div class="ui text menu note-menu toggle-field-v1">
+      <div class="toggle-field-v1">
         <button
           data-test-toggle-field-button
-          class="ui button item"
+          class="toggle-field-v1__button"
           {{on "click" this.toggleFieldDisplay}}
           type="button"
         >
-          <i class="{{this.buttonIcon}} icon"></i>
+          <PixIcon @name={{this.buttonIcon}} @ariaHidden={{true}} />
           {{this.buttonTitle}}
           {{#if @textToolTip}}
             <PixTooltip @position="bottom" @isLight={{false}} @isWide={{true}}>
@@ -40,7 +40,7 @@ export default class FieldToggleFieldComponent extends Component {
   }
 
   get buttonIcon() {
-    return this.shouldDisplayField ? 'minus' : 'plus';
+    return this.shouldDisplayField ? 'minus' : 'add';
   }
 
   get buttonTitle() {

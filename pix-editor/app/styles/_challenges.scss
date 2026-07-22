@@ -47,11 +47,7 @@
     box-shadow: none;
   }
 
-  .ui.cards > .card {
-    .header .ui.button > .icon {
-      margin-right: 0;
-    }
-
+  .cards > .card {
     > .content,
     > .content > .header {
       font-size: 14px;
@@ -264,11 +260,7 @@ img.clickable {
   outline: none;
 }
 
-.file-remove {
-  cursor: pointer;
-}
-
-.file-remove i {
+.file-remove .pix-icon {
   vertical-align: top;
 }
 

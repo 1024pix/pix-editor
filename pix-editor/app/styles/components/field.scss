@@ -1,1 +1,87 @@
-// `.field-title` styling now lives in `components/form.scss` (`.form .field-title`).
+// Field element styles previously provided by Semantic UI primitives.
+// `.field-title` / `.field` spacing now live in `components/form.scss`.
+// stylelint-disable color-no-hex, color-named
+
+.checkbox {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  input {
+    margin: 0;
+  }
+}
+
+.file-remove {
+  color: rgba(0, 0, 0, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.field-textarea__button,
+.field-textarea__help {
+  float: right;
+  margin-left: 4px;
+}
+
+.field-textarea__button {
+  padding: 6px 8px;
+  color: rgba(0, 0, 0, 0.6);
+  background: transparent;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429em;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &--active {
+    color: #fff;
+    background: #2185d0;
+    border-color: #2185d0;
+  }
+}
+
+.inline-loader {
+  width: 28px;
+  height: 28px;
+  margin: 1rem auto;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #767676;
+  border-radius: 50%;
+  animation: inline-loader-spin 0.6s linear infinite;
+}
+
+@keyframes inline-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+
+  > .card {
+    display: flex;
+    flex-direction: column;
+    width: 290px;
+
+    > .content {
+      flex-grow: 1;
+      padding: 1em;
+
+      > .header {
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      > .description {
+        margin-top: 0.5em;
+      }
+    }
+  }
+}

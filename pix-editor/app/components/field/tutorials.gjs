@@ -150,21 +150,16 @@ export default class Tutorials extends Component {
     </div>
     <div class="field" id="tutorials-field">
       {{#if @tutorials.isPending}}
-        <div class="ui active centered inline loader"></div>
+        <div class="inline-loader"></div>
       {{else}}
-        <div class="ui cards">
+        <div class="cards">
           {{#each @tutorials as |tutorial|}}
             <div class="card">
               <div class="content">
                 <div class="header">
                   {{tutorial.title}}
                   <span>
-                    <a
-                      class="ui right floated button tutorial-link"
-                      href={{tutorial.link}}
-                      target="_blank"
-                      referrerpolicy="strict-origin"
-                    >
+                    <a class="tutorial-link" href={{tutorial.link}} target="_blank" referrerpolicy="strict-origin">
                       <PixIcon @name="openNew" />
                     </a>
                     {{#if @edition}}
@@ -172,13 +167,13 @@ export default class Tutorials extends Component {
                         @ariaLabel="Modifier le tutoriel"
                         @iconName="edit"
                         @triggerAction={{fn this.editTutorial tutorial}}
-                        class="ui right floated"
+                        class="tutorial-action"
                       />
                       <PixIconButton
                         @ariaLabel="Supprimer le tutoriel"
                         @iconName="close"
                         @triggerAction={{fn @removeTutorial @tutorials tutorial}}
-                        class="ui right floated"
+                        class="tutorial-action"
                       />
                     {{/if}}
                   </span>
@@ -188,7 +183,7 @@ export default class Tutorials extends Component {
                   <div>Durée : {{tutorial.duration}}</div>
                   <div>Source :
                     {{tutorial.source}}
-                    <div class="ui right floated favorite">
+                    <div class="favorite">
                       <span class="flag" aria-label={{tutorial.language}}>
                         {{flagForLanguage tutorial.language}}
                       </span>

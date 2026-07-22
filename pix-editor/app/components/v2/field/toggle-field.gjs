@@ -13,7 +13,7 @@ export default class FieldToggleFieldComponent extends Component {
   }
 
   get buttonIcon() {
-    return this.shouldDisplayField ? 'minus' : 'plus';
+    return this.shouldDisplayField ? 'minus' : 'add';
   }
 
   get buttonTitle() {
@@ -34,7 +34,7 @@ export default class FieldToggleFieldComponent extends Component {
     {{#if @edition}}
       <div class="toggle-field">
         <button type="button" class="toggle-field--button" {{on "click" this.toggleFieldDisplay}}>
-          <i class="{{this.buttonIcon}} icon"></i>
+          <PixIcon @name={{this.buttonIcon}} @ariaHidden={{true}} />
           {{this.buttonTitle}}
         </button>
         {{#if @textToolTip}}

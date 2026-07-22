@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { Input } from '@ember/component';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
@@ -16,17 +17,12 @@ export default class Files extends Component {
       {{#if @value.length}}
         {{#each @value as |file|}}
           <a href={{file.url}} download={{file.filename}} target="_blank" referrerpolicy="strict-origin">
-            <i class="file icon"></i>
+            <PixIcon @name="download" @ariaHidden={{true}} />
             {{file.filename}}
           </a>
           {{#if @edition}}
-            <button
-              {{on "click" (fn this.remove file)}}
-              class="ui button file-remove"
-              type="button"
-              title="Supprimer le fichier"
-            >
-              <i class="remove icon"></i>
+            <button {{on "click" (fn this.remove file)}} class="file-remove" type="button" title="Supprimer le fichier">
+              <PixIcon @name="close" @ariaHidden={{true}} />
             </button>
           {{/if}}
         {{/each}}
@@ -39,7 +35,7 @@ export default class Files extends Component {
           </label>
         {{/let}}
         {{#if @value.length}}
-          <div class="ui input">
+          <div class="input">
             <label class="label-input" for="name">Nom :</label>
             <Input id="name" @value={{@baseName}} />
           </div>
