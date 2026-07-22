@@ -1,9 +1,10 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import Input from 'pixeditor/components/field/input';
 <template>
   <div class="main-left area-management">
-    <div class="ui main-title">
-      <h1 class="ui left floated header">Nouveau domaine du pix + {{@controller.framework.name}}</h1>
+    <div class="main-title">
+      <h1 class="main-title__heading">Nouveau domaine du pix + {{@controller.framework.name}}</h1>
     </div>
     <div class="area-management__details">
       <div class="area-management__data">
@@ -21,18 +22,23 @@ import Input from 'pixeditor/components/field/input';
           </div>
         </form>
       </div>
-      <div class="ui vertical compact labeled icon menu area-management__menu">
+      <div class="area-management__menu">
         <button
           data-test-save-button
-          class="ui button item important-action"
+          class="area-management__menu-button area-management__menu-button--important"
           {{on "click" @controller.save}}
           type="button"
         >
-          <i class="save icon"></i>
+          <PixIcon @name="save" @ariaHidden={{true}} />
           Enregistrer
         </button>
-        <button data-test-cancel-button class="ui button item" {{on "click" @controller.cancelEdit}} type="button">
-          <i class="ban icon"></i>
+        <button
+          data-test-cancel-button
+          class="area-management__menu-button"
+          {{on "click" @controller.cancelEdit}}
+          type="button"
+        >
+          <PixIcon @name="block" @ariaHidden={{true}} />
           Annuler
         </button>
       </div>

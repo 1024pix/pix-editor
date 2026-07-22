@@ -53,7 +53,7 @@ export default class LoginForm extends Component {
           ><:label>Clé API</:label></PixInput>
 
           {{#if this.isErrorMessagePresent}}
-            <div class="ui negative message" id="login-form-error-message">
+            <div class="message message--red" id="login-form-error-message">
               <p>{{this.errorMessage}}</p>
             </div>
           {{/if}}
