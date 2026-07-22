@@ -4,11 +4,11 @@ import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 
 export default class ThemeProfile extends Component {
   <template>
-    <div data-test-theme-profile class="row theme-profile">
-      <div class="three wide column theme-name">
+    <div data-test-theme-profile class="theme-profile">
+      <div class="theme-profile__name theme-name">
         <p>{{@theme.name}}</p>
       </div>
-      <div class="thirteen wide column">
+      <div class="theme-profile__tubes">
         {{#each this.filteredTubes as |tube|}}
           {{#if @isThematicResultMode}}
             <TubeProfile

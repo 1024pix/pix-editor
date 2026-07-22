@@ -26,7 +26,7 @@ import Textarea from 'pixeditor/components/field/textarea';
             @id="competence-description-fr"
           />
           <div class="competence-management-view__segment">
-            <i class="flag gb uk competence-management-view__flag"></i>
+            <span class="flag competence-management-view__flag">🇬🇧</span>
             <Input
               @value={{@controller.competence.titleEn}}
               @edition={{@controller.edition}}

@@ -13,7 +13,7 @@
       color: rgba(255, 255, 255, 0.9);
     }
 
-    .ui.toggle.checkbox {
+    .checkbox {
       margin-left: 10px;
     }
   }
@@ -36,14 +36,22 @@
     display: none;
   }
 
-  .ui.grid {
-    margin: 0;
-  }
-
   .competence-profile {
+    display: flex;
+    align-items: center;
     margin-bottom: 0;
     color: white;
     background-color: #004;
+
+    &__code {
+      width: 60px;
+      padding: 0 10px;
+      text-align: right;
+    }
+
+    &__title-wrapper {
+      flex: 1;
+    }
 
     &.area-profile-1 {
       background: #F1A141;
@@ -66,46 +74,44 @@
     }
 
     .competence-info {
-      .ui.basic.button {
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: 50%;
-        box-shadow: none;
+      padding: 0 10px;
 
-        i {
-          color: white;
-        }
-
-        &:hover {
-          i {
-            color: black;
-          }
-        }
+      .pix-icon {
+        color: white;
       }
-
-
     }
+  }
 
-
+  .competence-profile__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 15px;
+    background: #f3f3f3;
   }
 
   .theme-profile {
-    padding: 0 !important;
+    display: flex;
+    padding: 0;
     background: #F3F3F3;
 
     &:not(:nth-last-child(2)) {
       border-bottom: #d4d4d4 solid 1px;
     }
 
+    &__name {
+      width: 23%;
+    }
+
+    &__tubes {
+      flex: 1;
+      padding: 0;
+    }
+
     .theme-name {
-      display: flex !important;
+      display: flex;
       align-items: center;
       font-weight: bold;
       font-size: 1.1em;
-
-    }
-
-    .twelve.wide.column {
-      padding: 0;
     }
 
     .tube-profile {
@@ -122,10 +128,10 @@
         width: 35%;
 
 
-        .icon {
+        .tube-profile__check {
           position: relative;
           margin: 0 10px;
-          font-size: 1.8rem !important;
+          font-size: 1.8rem;
           transform: translateY(0.2rem);
 
           &.active {
@@ -174,7 +180,7 @@
       }
 
       &.thematicResult {
-        .icon.active {
+        .tube-profile__check.active {
           color: #3f7bc4;
         }
 

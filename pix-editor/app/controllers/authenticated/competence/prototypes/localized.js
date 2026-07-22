@@ -101,7 +101,7 @@ export default class LocalizedController extends Controller {
   }
 
   get changeStatusButtonIcon() {
-    return this.localizedChallenge.isInProduction ? 'pause' : 'play';
+    return this.localizedChallenge.isInProduction ? 'pauseCircle' : 'playCircle';
   }
 
   get confirmTitle() {

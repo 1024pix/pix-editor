@@ -1,4 +1,4 @@
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -7,9 +7,9 @@ import PdfEntries from 'pixeditor/components/pop-in/pdf-entries';
 
 export default class TargetProfilePdfExportComponent extends Component {
   <template>
-    <button class="ui button" {{on "click" this.exportPdf}} type="button">
-      <i class="pdf file icon"></i>PDF
-    </button>
+    <PixButton @variant="secondary" @size="small" @iconBefore="download" @triggerAction={{this.exportPdf}}>
+      PDF
+    </PixButton>
     <PdfEntries
       @validateAction={{this.generatePDF}}
       @close={{this.closeTitleInput}}

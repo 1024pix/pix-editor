@@ -362,7 +362,7 @@ export default class LocalizedChallengesProduction extends Component {
                 </DropdownMenu>
                 {{#if challengeLocale.translationsUrl}}
                   <a
-                    class="ui button item"
+                    class="translation-link"
                     href={{challengeLocale.translationsUrl}}
                     target="_blank"
                     referrerpolicy="strict-origin"

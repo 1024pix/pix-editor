@@ -14,19 +14,19 @@ export default class CompetenceProfile extends Component {
   }
 
   <template>
-    <div class="ui grid">
+    <div class="competence-profile-grid">
       <h2
         data-test-competence-profile
         id="competence-profile-anchor-{{@competence.id}}"
-        class="row competence-profile area-profile-{{@areaCode}}"
+        class="competence-profile area-profile-{{@areaCode}}"
       >
-        <div class="column competence-code right aligned">
+        <div class="competence-profile__code">
           {{@competence.code}}
         </div>
-        <div class="fourteen wide column">
+        <div class="competence-profile__title-wrapper">
           <div class="competence-title">{{@competence.title}}</div>
         </div>
-        <div class="column center competence-info">
+        <div class="competence-info">
           <PixTooltip @id="info-tooltip" @position="left" @isWide={{true}} @isLight={{true}}>
             <:triggerElement>
               <PixIcon aria-describedby="info-tooltip" @name="info" />
@@ -49,16 +49,14 @@ export default class CompetenceProfile extends Component {
           @theme={{theme}}
         />
       {{/each}}
-      <div class="row">
-        <div class="fifteen wide column"></div>
+      <div class="competence-profile__footer">
         {{#if @isThematicResultMode}}
-          <div class="column selected-tube-count">{{@competence.selectedThematicResultTubeCount}}
+          <div class="selected-tube-count">{{@competence.selectedThematicResultTubeCount}}
             /{{@competence.selectedProductionTubeCount}}</div>
         {{else}}
-          <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}
+          <div class="selected-tube-count">{{@competence.selectedProductionTubeCount}}
             /{{@competence.productionTubeCount}}</div>
         {{/if}}
-
       </div>
     </div>
   </template>
