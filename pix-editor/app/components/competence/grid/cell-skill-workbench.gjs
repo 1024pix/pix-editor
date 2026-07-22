@@ -17,19 +17,19 @@ export default class CompetenceGridCellSkillWorkbenchComponent extends Component
           {{#if this.hasDraftSkill}}
             <span
               data-test-draft-count
-              class="workbench-status draft-skill ui tiny label"
+              class="grid-count workbench-status draft-skill"
               title="En construction"
             >{{this.draftCount}}</span>
           {{/if}}
 
           {{#if this.hasActiveSkill}}
-            <span data-test-active-count class="workbench-status active-skill ui tiny label" title="Validé">1</span>
+            <span data-test-active-count class="grid-count workbench-status active-skill" title="Validé">1</span>
           {{/if}}
 
           {{#if this.hasArchivedSkill}}
             <span
               data-test-archived-count
-              class="workbench-status archive-skill ui tiny label"
+              class="grid-count workbench-status archive-skill"
               title="Archivé"
             >{{this.archivedCount}}</span>
           {{/if}}
@@ -37,7 +37,7 @@ export default class CompetenceGridCellSkillWorkbenchComponent extends Component
           {{#if this.hasObsoleteSkill}}
             <span
               data-test-obsolete-count
-              class="workbench-status obsolete-skill ui tiny label"
+              class="grid-count workbench-status obsolete-skill"
               title="Périmé"
             >{{this.obsoleteCount}}</span>
           {{/if}}

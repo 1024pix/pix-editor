@@ -1,0 +1,111 @@
+@use '../../global';
+// stylelint-disable color-no-hex, color-named
+.competence-actions {
+  display: flex;
+  align-items: stretch;
+  background-color: #f9fafb;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+
+  &__tabs {
+    display: flex;
+    padding-left: 5px;
+  }
+
+  &__tab {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.4em;
+    padding: 0.75em 0.928571em 0.5em;
+    color: #777;
+    cursor: pointer;
+
+    .pix-icon {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .pix-tooltip__trigger-element {
+      display: flex;
+    }
+
+    &--active {
+      background-color: #f9fafb;
+
+      &.competence-actions__tab--production,
+      &.competence-actions__tab--workbench {
+        color: #dbbd17;
+      }
+    }
+  }
+
+  &__button {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    padding: 0 0.928571em;
+    color: #000;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &--right {
+      margin-left: auto;
+    }
+  }
+
+  &--skill-mode {
+    .competence-actions__tab--active {
+      &.competence-actions__tab--production,
+      &.competence-actions__tab--workbench {
+        color: #448;
+      }
+    }
+  }
+}
+
+#language-filter-info {
+  max-width: 470px;
+}
+
+.legend-table {
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+  }
+
+  td {
+    padding: 5px;
+    border: 1px solid rgba(34, 36, 38, 0.1);
+  }
+
+  &__color {
+    width: 80px;
+  }
+
+  &--skill .legend-table__color {
+    &--warning {
+      background: var(--pix-primary-100) !important;
+    }
+
+    &--danger {
+      background: var(--pix-primary-300);
+    }
+  }
+
+  &--challenge .legend-table__color {
+    &--warning {
+      background: var(--pix-error-100) !important;
+    }
+
+    &--danger {
+      background: var(--pix-error-500);
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { concat } from '@ember/helper';
 import { LinkTo } from '@ember/routing';
 import Component from '@glimmer/component';
@@ -13,11 +14,11 @@ export default class CompetenceGridCellSkillComponent extends Component {
         </div>
         <div class="help">
           {{#if (and @languageFilter this.hasNoClueByLanguage)}}
-            <i class="idea icon empty" title="Indice manquant"></i>
+            <PixIcon @name="lightBulb" class="idea empty" title="Indice manquant" />
           {{else if @languageFilter}}
-            <i class="idea icon validated" title="Indice présent"></i>
+            <PixIcon @name="lightBulb" class="idea validated" title="Indice présent" />
           {{else if (or @skill.clue @skill.clueNA)}}
-            <i class={{concat "idea icon " @skill.clueCSS}} title="Indice {{@skill.clueStatus}}"></i>
+            <PixIcon @name="lightBulb" class={{concat "idea " @skill.clueCSS}} title="Indice {{@skill.clueStatus}}" />
           {{/if}}
           <span class="tuto-count">
             <span title="Nombre de tutoriels pour réussir la prochaine fois">{{this.tutoSolutionCountByLanguage}}</span>

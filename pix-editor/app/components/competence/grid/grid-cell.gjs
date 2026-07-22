@@ -1,3 +1,4 @@
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { array, concat } from '@ember/helper';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
@@ -29,7 +30,7 @@ export default class GridCell extends Component {
           class="add-skill"
           aria-label="{{concat 'ajouter un acquis de niveau ' this.skillLevel ' pour le sujet ' @tube.name}}"
         >
-          <i class="icon plus circle"></i>
+          <PixIcon @name="add" @ariaHidden={{true}} />
         </LinkTo>
       </td>
     {{else if (eq this.cellType "quality")}}

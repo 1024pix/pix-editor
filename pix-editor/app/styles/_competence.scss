@@ -29,7 +29,7 @@
     max-height: 30%;
   }
 
-  .table {
+  .tubes-grid {
     box-sizing: border-box;
     margin: 0;
     border: none;
@@ -43,10 +43,19 @@
   overflow: scroll;
 }
 
-.ui.table.tubes.definition {
+.tubes-grid {
+  width: 100%;
   margin-top: -1px;
   font-size: 15px;
+  background: var(--pix-neutral-0);
+  border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 0;
+  border-collapse: collapse;
+
+  td,
+  th {
+    border: 1px solid rgba(34, 36, 38, 0.1);
+  }
 
   td {
     box-sizing: border-box;
@@ -196,7 +205,7 @@
           }
         }
 
-        .idea.icon {
+        .idea {
           text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
 
           &.validated,
@@ -308,11 +317,11 @@
       width: 100%;
       text-align: center;
 
-      &:not(:hover) i {
+      &:not(:hover) .pix-icon {
         visibility: hidden;
       }
 
-      &:hover i {
+      &:hover .pix-icon {
         visibility: visible;
       }
     }
@@ -362,42 +371,33 @@
   display: flex;
 }
 
-#language-filter-info {
-  max-width: 470px;
+.tube-management__button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  color: rgba(0, 0, 0, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
 
-  .table {
-    width: 330px;
-
-    &.skillSection {
-      .color {
-        width: 80px;
-
-        &.warning {
-          background: var(--pix-primary-100) !important;
-        }
-
-        &.danger {
-          background: var(--pix-primary-300);
-        }
-      }
-    }
-
-    &.challengeSection {
-      width: 380px;
-
-      .color {
-        width: 80px;
-
-        &.warning {
-          background: var(--pix-error-100) !important;
-        }
-
-        &.danger {
-          background: var(--pix-error-500);
-        }
-      }
-    }
+  &:hover,
+  &:focus {
+    color: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.05);
   }
+}
+
+.grid-count {
+  display: inline-block;
+  margin: 0 1px;
+  padding: 0.3em 0.5em;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  border-radius: 0.28em;
 }
 
 #quality-tooltip {
@@ -420,21 +420,3 @@
   }
 }
 
-.ui.icon.menu .item > .icon:not(.dropdown) {
-  margin-right: .5em;
-}
-
-.ui.icon.menu .item.production {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  .pix-icon {
-    width: 1.3rem;
-    height: 1.3rem;
-  }
-
-  .pix-tooltip__trigger-element {
-    display: flex;
-  }
-}

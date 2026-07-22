@@ -10,16 +10,17 @@ export default class CompetenceActions extends Component {
   @service config;
 
   get skillClass() {
-    return this.args.section === 'skills' ? 'skill-mode ' : '';
+    return this.args.section === 'skills' ? 'competence-actions--skill-mode ' : '';
   }
 
   <template>
-    <div class="ui top attached borderless labelled icon menu {{this.skillClass}}">
+    <div class="competence-actions {{this.skillClass}}">
       {{#unless this.config.lite}}
         {{#if (eq @section "skills")}}
-          <div class="ui top attached tabular menu">
+          <div class="competence-actions__tabs">
             <div
-              class="item production {{if (eq @view 'production') 'active' ''}}"
+              class="competence-actions__tab competence-actions__tab--production
+                {{if (eq @view 'production') 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "production")}}
             >
               En production
@@ -29,7 +30,7 @@ export default class CompetenceActions extends Component {
                     <PixIcon aria-describedby="language-filter-info" @name="info" />
                   </:triggerElement>
                   <:tooltip>
-                    <table class="ui table skillSection">
+                    <table class="legend-table legend-table--skill">
                       <thead>
                         <tr>
                           <th colspan="2"> Pour la langue sélectionnée</th>
@@ -37,11 +38,11 @@ export default class CompetenceActions extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td class="color warning"></td>
+                          <td class="legend-table__color legend-table__color--warning"></td>
                           <td>L'acquis possède un des deux types de tutoriel</td>
                         </tr>
                         <tr>
-                          <td class="color danger"></td>
+                          <td class="legend-table__color legend-table__color--danger"></td>
                           <td>L'acquis ne possède pas de tutoriel</td>
                         </tr>
                       </tbody>
@@ -51,25 +52,32 @@ export default class CompetenceActions extends Component {
               {{/if}}
             </div>
             <div
-              class="item workbench {{if (eq @view 'workbench') 'active' ''}}"
+              class="competence-actions__tab competence-actions__tab--workbench
+                {{if (eq @view 'workbench') 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "workbench")}}
             >Atelier</div>
             <div
               data-test-select-draft-view
-              class="item proposal {{if (eq @view 'draft') 'active' ''}}"
+              class="competence-actions__tab competence-actions__tab--proposal
+                {{if (eq @view 'draft') 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "draft")}}
             >En construction</div>
           </div>
           {{#if (eq @view "production")}}
-            <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
-              <i class="share square icon"></i>
+            <button
+              class="competence-actions__button competence-actions__button--left"
+              type="button"
+              {{on "click" @shareSkills}}
+            >
+              <PixIcon @name="share" @ariaHidden={{true}} />
               Exporter
             </button>
           {{/if}}
         {{else if (eq @section "challenges")}}
-          <div class="ui top attached tabular menu">
+          <div class="competence-actions__tabs">
             <div
-              class="item production {{if (eq @view 'production') 'active' ''}}"
+              class="competence-actions__tab competence-actions__tab--production
+                {{if (eq @view 'production') 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "production")}}
             >
               En production
@@ -85,7 +93,7 @@ export default class CompetenceActions extends Component {
                     <PixIcon aria-describedby="language-filter-info" @name="info" />
                   </:triggerElement>
                   <:tooltip>
-                    <table class="ui table challengeSection">
+                    <table class="legend-table legend-table--challenge">
                       <thead>
                         <tr>
                           <th colspan="2"> Pour la langue sélectionnée</th>
@@ -93,11 +101,11 @@ export default class CompetenceActions extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td class="color warning"></td>
+                          <td class="legend-table__color legend-table__color--warning"></td>
                           <td>L'acquis ne possède que des épreuves en cours de construction</td>
                         </tr>
                         <tr>
-                          <td class="color danger"></td>
+                          <td class="legend-table__color legend-table__color--danger"></td>
                           <td>L'acquis ne possède aucune épreuve</td>
                         </tr>
                       </tbody>
@@ -107,14 +115,19 @@ export default class CompetenceActions extends Component {
               {{/if}}
             </div>
             <div
-              class="item workbench {{if (or (eq @view 'workbench') (eq @view 'workbench-list')) 'active' ''}}"
+              class="competence-actions__tab competence-actions__tab--workbench
+                {{if (or (eq @view 'workbench') (eq @view 'workbench-list')) 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "workbench")}}
             >Atelier</div>
           </div>
         {{/if}}
       {{/unless}}
-      <button class="ui button right item" {{on "click" (fn @refresh true)}} type="button">
-        <i class="sync alternate icon"></i>
+      <button
+        class="competence-actions__button competence-actions__button--right"
+        {{on "click" (fn @refresh true)}}
+        type="button"
+      >
+        <PixIcon @name="refresh" @ariaHidden={{true}} />
         Actualiser
       </button>
     </div>

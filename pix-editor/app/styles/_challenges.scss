@@ -102,58 +102,39 @@ img.clickable {
     font-style: italic;
   }
 
-  .ui.menu .ui.dropdown {
-    i {
-      font-size: 14px;
-    }
+  &__menu {
+    display: flex;
+    align-items: center;
+    color: inherit;
+    background: transparent;
   }
 
-  .ui.menu {
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+    color: inherit;
+    font-weight: normal;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  &__action {
+    padding: 10px;
     color: inherit;
     background: transparent;
     border: none;
-    border-radius: 0;
-    box-shadow: none;
+    cursor: pointer;
 
-    .circular {
-      &.validated {
-        color: #2f2f2f !important;
-        background: global.$validated-background-color !important;
-      }
-
-      &.suggested {
-        color: #2f2f2f !important;
-        background: global.$suggested-background-color !important;
-      }
-
-      &.archived {
-        background: global.$archived-background-color !important;
-      }
-
-      &.deleted {
-        background: global.$deleted-background-color !important;
-      }
-    }
-
-    .item {
-      color: inherit;
-
-      &.header {
-        flex: 1;
-        justify-content: center;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-weight: normal;
-        font-size: 20px;
-      }
-    }
-
-    > .item:first-child {
-      border-radius: 0;
-    }
-
-    .item::before {
-      display: none;
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.03);
     }
   }
 
