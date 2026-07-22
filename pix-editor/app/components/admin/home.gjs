@@ -2,7 +2,6 @@ import PixAppLayout from '@1024pix/pix-ui/components/pix-app-layout';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixNavigation from '@1024pix/pix-ui/components/pix-navigation';
 import PixNavigationButton from '@1024pix/pix-ui/components/pix-navigation-button';
-import { concat } from '@ember/helper';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -27,8 +26,8 @@ export default class AdminHome extends Component {
   }
 
   <template>
-    <div class={{concat "ui page dimmer inverted" (if this.loadingMessage " active" "")}}>
-      <div class="ui text loader">{{this.loadingMessage}}</div>
+    <div class="application__loader {{if this.loadingMessage 'application__loader--active' ''}}">
+      <div class="application__loader-text">{{this.loadingMessage}}</div>
     </div>
     <PixAppLayout @variant="admin" class="admin">
       <:navigation>

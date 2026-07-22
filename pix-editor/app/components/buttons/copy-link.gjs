@@ -1,4 +1,4 @@
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -17,9 +17,8 @@ export default class CopyLink extends Component {
   }
 
   <template>
-    <button class="ui button item" {{on "click" this.copyLink}} type="button">
-      <i class="linkify icon"></i>
+    <PixButton @variant="tertiary" @size="small" @iconBefore="link" @triggerAction={{this.copyLink}}>
       Copier le lien
-    </button>
+    </PixButton>
   </template>
 }

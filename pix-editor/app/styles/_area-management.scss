@@ -1,5 +1,6 @@
 @use 'challenges' as *;
 
+// stylelint-disable color-no-hex, color-named
 .area-management {
   &__details {
     @extend .challenge;
@@ -10,6 +11,28 @@
   }
 
   &__menu {
-    @extend %challenge-menu;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+  }
+
+  &__menu-button {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 10px;
+    color: #000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &--important {
+      color: #d02181;
+    }
   }
 }
