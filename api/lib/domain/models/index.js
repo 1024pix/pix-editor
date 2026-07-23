@@ -5,6 +5,7 @@ export * from './ChangelogEntry.js';
 export * from './Competence.js';
 export * from './DraftModule.js';
 export * from './DraftModuleDiff.js';
+export * from './DraftModuleVersion.js';
 export * from './Framework.js';
 export * from './LocalizedChallenge.js';
 export * from './LocalizedFrameworkTubes.js';
