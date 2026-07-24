@@ -81,6 +81,22 @@
       height: 12px;
       margin-left: 0.5em;
       border-radius: 50%;
+
+      &.validated {
+        background: global.$production-background-color;
+      }
+
+      &.suggested {
+        background: global.$suggested-background-color;
+      }
+
+      &.archived {
+        background: global.$archived-background-color;
+      }
+
+      &.deleted {
+        background: global.$deleted-background-color;
+      }
     }
   }
 

@@ -37,6 +37,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           <PixButton
             class="prototype-view__action prototype-view__action--text"
             @iconBefore="copy"
+            @variant="secondary"
             @triggerAction={{@controller.showVersions}}
             title="Afficher les différentes versions d'épreuves"
           >v{{@controller.challenge.version}}</PixButton>
