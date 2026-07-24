@@ -1,5 +1,11 @@
 
 
+## v4.43.0 (24/07/2026)
+
+
+### :rocket: Amélioration
+- [#1555](https://github.com/1024pix/pix-editor/pull/1555) [FEATURE] Archiver les versions d’un draft lors de son enregistrement (PIX-23596).
+
 ## v4.41.0 (21/07/2026)
 
 
