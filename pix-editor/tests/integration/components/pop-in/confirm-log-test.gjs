@@ -45,7 +45,7 @@ module('Integration | Component | popin-confirm-log', function (hooks) {
 
   test('it saves with changelog', async function (assert) {
     // when
-    await click('[data-test-confirm-log-check] input');
+    await click('[data-test-confirm-log-check]');
     await click('[data-test-confirm-log-approve]');
 
     // then

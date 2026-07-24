@@ -57,7 +57,6 @@ export default class CompetenceActions extends Component {
               {{on "click" (fn @selectView "workbench")}}
             >Atelier</div>
             <div
-              data-test-select-draft-view
               class="competence-actions__tab competence-actions__tab--proposal
                 {{if (eq @view 'draft') 'competence-actions__tab--active' ''}}"
               {{on "click" (fn @selectView "draft")}}

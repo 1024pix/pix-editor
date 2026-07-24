@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import Production from 'pixeditor/components/statistics/production';
 import { module, test } from 'qunit';
 
@@ -13,8 +13,10 @@ module('Integration | Component | statistics/production', function (hooks) {
     this.areas = [];
     this.competenceCodes = [];
 
-    await render(<template><Production @areas={{self.areas}} @competenceCodes={{self.competenceCodes}} /></template>);
+    const screen = await render(
+      <template><Production @areas={{self.areas}} @competenceCodes={{self.competenceCodes}} /></template>,
+    );
 
-    assert.dom('.ui.header').exists();
+    assert.dom(screen.getByRole('heading', { name: 'En production' })).exists();
   });
 });
