@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateJwtAuthorizationHeader } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib/domain/models/index.js';
 import _ from 'lodash';
@@ -12,13 +12,6 @@ import {
 } from '../../../lib/domain/models/replication/index.js';
 
 describe('Acceptance | Controller | replication-data-controller', () => {
-  let user;
-
-  beforeEach(async function() {
-    user = databaseBuilder.factory.buildAdminUser();
-    await databaseBuilder.commit();
-  });
-
   describe('GET /api/replication-stream', function() {
     describe('when user is not authenticated', function() {
       it('should return a 401 unauthorized error', async function() {
@@ -43,13 +36,14 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const currentContentOptions = {
         method: 'GET',
         url: '/api/replication-stream',
-        headers: generateAuthorizationHeader(user),
+        headers: generateJwtAuthorizationHeader(),
       };
 
       // when
       const response = await server.inject(currentContentOptions);
 
       // then
+      expect(response.statusCode).toStrictEqual(200);
       const result = Object.fromEntries(
         Object.entries(
           Object.groupBy(
