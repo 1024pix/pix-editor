@@ -107,7 +107,8 @@
 
     &:hover,
     &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
+      background-color: rgb(var(--pix-neutral-100));
+      color: rgb(var(--pix-neutral-900));
     }
 
     svg {
@@ -120,8 +121,13 @@
     }
 
     &--archive {
-      color: global.$archived-color;
+      color: var(--pix-neutral-0);
       background-color: global.$archived-background-color;
+    }
+
+    &--delete {
+      color: var(--pix-neutral-0);
+      background-color: global.$deleted-background-color;
     }
   }
 

@@ -66,6 +66,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  async showVersions() {
+    this.router.transitionTo('authenticated.competence.skills.list', this.skill.tube.id, this.skill.level);
+  }
+
+  @action
   maximize() {
     this.parentController.maximizeLeft(true);
   }

@@ -1,28 +1,43 @@
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { concat } from '@ember/helper';
-import { on } from '@ember/modifier';
+
 <template>
-  <div class={{concat "challenge-header " @class}} data-testid="challenge-header">
+  <div class="challenge-header">
     <div class="challenge-header__menu">
       <div class="challenge-header__left">
         {{yield to="actions"}}
       </div>
       <div class="challenge-header__title">
-        {{yield}}
+        <div>
+          {{yield}}
+        </div>
+        <span class={{concat "bullet_status " @class}}></span>
       </div>
       <div class="challenge-header__right">
         {{#if @maximized}}
-          <button {{on "click" @minimize}} class="challenge-header__action" type="button" title="Minimiser la fenêtre">
-            <PixIcon @name="minus" @ariaHidden={{true}} />
-          </button>
+          <PixIconButton
+            @ariaLabel="Minimiser la fenêtre"
+            title="Minimiser la fenêtre"
+            @iconName="minus"
+            @triggerAction={{@minimize}}
+            @size="small"
+          />
         {{else}}
-          <button {{on "click" @maximize}} class="challenge-header__action" type="button" title="Maximiser la fenêtre">
-            <PixIcon @name="openInFull" @ariaHidden={{true}} />
-          </button>
+          <PixIconButton
+            @ariaLabel="Maximiser la fenêtre"
+            title="Maximiser la fenêtre"
+            @iconName="openInFull"
+            @triggerAction={{@maximize}}
+            @size="small"
+          />
         {{/if}}
-        <button {{on "click" @close}} class="challenge-header__action" type="button" title="Fermer la fenêtre">
-          <PixIcon @name="close" @ariaHidden={{true}} />
-        </button>
+        <PixIconButton
+          @ariaLabel="Fermer la fenêtre"
+          title="Fermer la fenêtre"
+          @iconName="close"
+          @triggerAction={{@close}}
+          @size="small"
+        />
       </div>
     </div>
   </div>

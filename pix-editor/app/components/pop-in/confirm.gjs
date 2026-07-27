@@ -9,7 +9,7 @@ export default class PopInConfirm extends Component {
         {{@content}}
       </:content>
       <:footer>
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@onDeny}}>
+        <PixButton @variant="secondary" @triggerAction={{@onDeny}}>
           Annuler
         </PixButton>
         <PixButton @triggerAction={{@onApprove}} data-testid="popin-confirm-button">Oui</PixButton>

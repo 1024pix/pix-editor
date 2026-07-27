@@ -51,10 +51,6 @@
     }
 
   }
-
-  .ui.button {
-    color: black !important;
-  }
 }
 
 .skill-status-actions {
@@ -74,10 +70,6 @@
 
 .skill-data {
   @extend .challenge-data;
-}
-
-.ui.menu.skill-menu {
-  @extend %challenge-menu;
 }
 
 .skill-details {

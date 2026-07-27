@@ -19,10 +19,6 @@
   @extend .challenge-data;
 }
 
-.ui.menu.tube-menu {
-  @extend %challenge-menu;
-}
-
 .tube-details {
   @extend .challenge;
 }

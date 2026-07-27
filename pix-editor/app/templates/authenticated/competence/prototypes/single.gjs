@@ -1,4 +1,3 @@
-import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { on } from '@ember/modifier';
@@ -17,7 +16,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
 
 <template>
   <ChallengeHeader
-    @class={{@controller.challenge.statusCSS}}
+    @class="challenge"
     @maximized={{@controller.maximized}}
     @minimize={{@controller.minimize}}
     @maximize={{@controller.maximize}}
@@ -29,18 +28,19 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           class="prototype-view__action"
           @iconName="chat"
           @ariaLabel="Journal"
+          title="Journal"
           @triggerAction={{@controller.challengeLog}}
         />
       {{/if}}
       {{#unless @controller.edition}}
         {{#if @controller.mayHaveDifferentChallengeVersions}}
-          <PixButton
-            class="prototype-view__action prototype-view__action--text"
-            @iconBefore="copy"
-            @variant="secondary"
-            @triggerAction={{@controller.showVersions}}
+          <PixIconButton
+            class="prototype-view__action"
+            @iconName="copy"
+            @ariaLabel="Afficher les différentes versions d'épreuves"
             title="Afficher les différentes versions d'épreuves"
-          >v{{@controller.challenge.version}}</PixButton>
+            @triggerAction={{@controller.showVersions}}
+          />
         {{/if}}
         {{#if @controller.shouldDisplayStatusActionsMenu}}
           <div class="prototype-view__status-actions" id={{@controller.challengeStatusActionsId}}>
@@ -85,7 +85,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
                 {{/if}}
                 {{#if @controller.mayObsolete}}
                   <button
-                    class="prototype-view__status-menu-item prototype-view__status-menu-item--archive"
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--delete"
                     {{on "click" @controller.obsolete}}
                     type="button"
                   >
@@ -111,6 +111,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     <:default>
       <div class={{if @controller.creation "prototype-view__title--creation" ""}}>
         {{@controller.challengeTitle}}
+        (v{{@controller.challenge.version}})
       </div>
       <div
         class="prototype-view__status-label prototype-view__status-label--{{@controller.challenge.statusCSS}}"

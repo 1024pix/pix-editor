@@ -3,26 +3,6 @@
 // stylelint-disable color-no-hex, color-named
 
 .skill-view {
-  &__header {
-    border-top: 1px solid rgba(34, 36, 38, 0.15);
-    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-
-    &--validated,
-    &--suggested,
-    &--archived,
-    &--deleted {
-      color: #2f2f2f;
-      background: global.$skill-background-color;
-    }
-
-    &--prevalidated,
-    &--validated_no_test,
-    &--to-be-submitted,
-    &--need-work {
-      background-color: global.$challenge-background-color;
-    }
-  }
-
   &__menu-bar {
     display: flex;
     align-items: stretch;
@@ -33,43 +13,8 @@
     box-shadow: none;
   }
 
-  &__menu-left,
-  &__menu-right {
-    display: flex;
-    align-items: center;
-  }
-
-  &__menu-right {
-    margin-left: auto;
-  }
-
-  &__title {
-    display: flex;
-    flex: 1;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    color: inherit;
-    font-weight: normal;
-    font-size: 20px;
-  }
-
   &__action-button {
     color: #000;
-  }
-
-  &__version-link {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 8px;
-    color: #000;
-
-    &:hover,
-    &:focus {
-      color: #000;
-      background-color: rgba(0, 0, 0, 0.03);
-    }
   }
 
   &__status-label {
@@ -139,27 +84,18 @@
 
     &:hover,
     &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
+      background-color: rgb(var(--pix-neutral-100));
+      color: var(--pix-neutral-900);
     }
 
     &--archive {
-      color: global.$archived-color;
+      color: var(--pix-neutral-0);
       background-color: global.$archived-background-color;
-
-      &:hover,
-      &:focus {
-        background-color: global.$archived-background-color;
-      }
     }
 
     &--delete {
-      color: global.$deleted-color;
+      color: var(--pix-neutral-0);
       background-color: global.$deleted-background-color;
-
-      &:hover,
-      &:focus {
-        background-color: global.$deleted-background-color;
-      }
     }
   }
 
@@ -209,16 +145,5 @@
         color: #d02181;
       }
     }
-  }
-
-  &__sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    clip-path: inset(50%);
   }
 }

@@ -1,8 +1,6 @@
 @use '../global';
 // stylelint-disable color-no-hex, color-named
 
-// Reproduces the Semantic UI `.ui.form` primitives (field spacing, labels,
-// grouped fields) now that the templates use plain BEM classes.
 .form {
   .field {
     margin: 0 0 1em;
