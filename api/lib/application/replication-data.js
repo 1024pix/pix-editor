@@ -11,7 +11,6 @@ export async function register(server) {
       method: 'GET',
       path: '/api/replication-stream',
       config: {
-        auth: false,
         handler: function(request, h) {
           const stream = new PassThrough({ highWaterMark: 2 ** 10 });
           const controller = new AbortController();

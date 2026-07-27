@@ -20,6 +20,22 @@ describe('Acceptance | Controller | replication-data-controller', () => {
   });
 
   describe('GET /api/replication-stream', function() {
+    describe('when user is not authenticated', function() {
+      it('should return a 401 unauthorized error', async function() {
+        const server = await createServer();
+        const currentContentOptions = {
+          method: 'GET',
+          url: '/api/replication-stream',
+        };
+
+        // when
+        const response = await server.inject(currentContentOptions);
+
+        // then
+        expect(response.statusCode).toStrictEqual(401);
+      });
+    });
+
     it('streams data for replication', async function() {
       const expectedCurrentContent = await mockCurrentContent();
 
