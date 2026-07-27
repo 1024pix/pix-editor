@@ -4,4 +4,4 @@ postdeploy: npm run postdeploy
 # see https://github.com/1024pix/pix/pull/796
 # and https://github.com/npm/npm/issues/4603
 # for more information
-web: cd api && /app/bin/start_with_oauth2_proxy.sh exec node index.js
+web: cd api && echo "$OAUTH2_PROXY_HPASSWD_CONTENT" > "$OAUTH2_PROXY_HPASSWD_FILE" && /app/bin/start_with_oauth2_proxy.sh exec node index.js
