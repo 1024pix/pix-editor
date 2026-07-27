@@ -1,6 +1,6 @@
 import { beforeEach, describe, describe as context, expect, it, afterEach } from 'vitest';
 import nock from 'nock';
-import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, generateJwtAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { Area, Attachment, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
@@ -901,12 +901,6 @@ async function mockContentForRelease() {
 describe('Acceptance | Controller | release-controller', () => {
   describe('GET /current-content - Returns release from current Airtable data', () => {
     context('nominal case', () => {
-      let user;
-      beforeEach(async function() {
-        user = databaseBuilder.factory.buildAdminUser();
-        await databaseBuilder.commit();
-      });
-
       it('should return current learning content', async () => {
         // Given
         const expectedCurrentContent = await mockCurrentContent();
@@ -915,7 +909,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const currentContentOptions = {
           method: 'GET',
           url: '/api/current-content',
-          headers: generateAuthorizationHeader(user),
+          headers: generateJwtAuthorizationHeader(),
         };
 
         // When
@@ -928,12 +922,6 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('GET /releases/latest - Returns latest release', () => {
-    let user;
-
-    beforeEach(async function() {
-      user = databaseBuilder.factory.buildAdminUser();
-    });
-
     context('nominal case', () => {
       it('should return latest release of learning content', async () => {
         // Given
@@ -973,7 +961,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject({
           method: 'GET',
           url: '/api/releases/latest',
-          headers: generateAuthorizationHeader(user),
+          headers: generateJwtAuthorizationHeader(),
         });
 
         // Then
@@ -998,7 +986,7 @@ describe('Acceptance | Controller | release-controller', () => {
         await databaseBuilder.commit();
 
         // when
-        const headers = generateAuthorizationHeader(user);
+        const headers = generateJwtAuthorizationHeader();
         headers['If-Modified-Since'] = latestReleaseDate.toUTCString();
         const response = await server.inject({
           method: 'GET',
@@ -1047,7 +1035,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const server = await createServer();
 
         // When
-        const headers = generateAuthorizationHeader(user);
+        const headers = generateJwtAuthorizationHeader();
         headers['If-Modified-Since'] = new Date('2023-01-01T00:00:00Z').toUTCString();
         const response = await server.inject({
           method: 'GET',
@@ -1072,7 +1060,6 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       it('should create the release', async () => {
         // Given
-        const user = databaseBuilder.factory.buildAdminUser();
         databaseBuilder.factory.buildMission({
           id: 1,
           name: 'Ma première mission',
@@ -1132,7 +1119,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/releases',
-          headers: generateAuthorizationHeader(user),
+          headers: generateJwtAuthorizationHeader(),
         });
 
         // Then
@@ -1143,9 +1130,9 @@ describe('Acceptance | Controller | release-controller', () => {
     });
 
     context('error case', async () => {
-      it('should return a 403 when user is not allowed to create release', async () => {
+      it('should return a 401 when requester is not allowed to create release', async () => {
         // given
-        const user = databaseBuilder.factory.buildReadonlyUser();
+        const user = databaseBuilder.factory.buildAdminUser();
         const server = await createServer();
         await databaseBuilder.commit();
 
@@ -1157,17 +1144,12 @@ describe('Acceptance | Controller | release-controller', () => {
         });
 
         // Then
-        expect(response.statusCode).to.equal(403);
+        expect(response.statusCode).to.equal(401);
       });
     });
   });
 
   describe('GET /releases/:id - Returns given release', () => {
-    let user;
-    beforeEach(async function() {
-      user = databaseBuilder.factory.buildAdminUser();
-    });
-
     context('nominal case', () => {
       it('should return release specified by id', async () => {
         // Given
@@ -1216,7 +1198,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject({
           method: 'GET',
           url: '/api/releases/42',
-          headers: generateAuthorizationHeader(user),
+          headers: generateJwtAuthorizationHeader(),
         });
 
         // Then
@@ -1238,7 +1220,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject({
           method: 'GET',
           url: '/api/releases/42',
-          headers: generateAuthorizationHeader(user),
+          headers: generateJwtAuthorizationHeader(),
         });
 
         // Then
