@@ -5,10 +5,9 @@
 .competence-footer {
   display: flex;
   align-items: center;
-  margin: 0;
+  padding: 8px;
   background-color: #f9fafb;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0;
 
   &__view {
     color: #000;
@@ -24,23 +23,9 @@
     }
   }
 
-  &__action {
-    color: #000;
-    font-weight: normal;
-    background-color: transparent;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-
-    &--left {
-      margin-right: auto;
-    }
-
-    &--right {
-      margin-left: auto;
-    }
+  &__actions {
+    display: flex;
+    gap: 12px;
   }
 
   &__info {

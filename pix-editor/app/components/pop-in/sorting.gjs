@@ -59,8 +59,7 @@ export default class PopInSortingComponent extends Component {
       <:footer>
         <PixButton
           data-test-sorting-pop-in-deny
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
+          @variant="secondary"
           @iconBefore="close"
           @triggerAction={{this.onDeny}}
         >

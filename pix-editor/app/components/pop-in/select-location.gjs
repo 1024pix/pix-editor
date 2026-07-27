@@ -49,7 +49,7 @@ export default class PopinSelectLocation extends Component {
         {{/if}}
       </:content>
       <:footer>
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
+        <PixButton @iconBefore="close" @variant="secondary" @triggerAction={{this.closeModal}}>
           {{t "common.cancel"}}
         </PixButton>
         <PixButton
