@@ -36,6 +36,13 @@ export let port = parseInt(process.env.PORT, 10) || 3002;
 
 export const environment = process.env.NODE_ENV || 'development';
 
+export const authentication = {
+  jwt: {
+    secret: process.env.JWT_AUTH_SECRET,
+    expirationMs: _getNumber(process.env.JWT_AUTH_EXPIRATION_MS, 60_000),
+  },
+};
+
 export const hapi = {
   options: {},
   enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
@@ -201,4 +208,6 @@ if (process.env.NODE_ENV === 'test') {
   phrase.webhookSecret = 'le secret de phrase';
 
   urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
+
+  authentication.jwt.secret = 'MY_JWT_SECRET';
 }

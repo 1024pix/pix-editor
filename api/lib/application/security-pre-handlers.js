@@ -2,6 +2,8 @@ import { userRepository } from '../infrastructure/repositories/index.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError, replyWithAuthenticationError } from './security-utils.js';
 import * as config from '../config.js';
 import { logger } from '../infrastructure/logger.js';
+import jsonwebtoken from 'jsonwebtoken';
+import { authentication } from '../config.js';
 
 export async function checkUserIsAuthenticatedViaBearer(request, h) {
   if (!request.headers.authorization) {
@@ -25,6 +27,19 @@ export async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
     return { email: username };
   } catch {
     return false;
+  }
+}
+
+export async function checkAppIsAuthenticatedViaJWT(request, h) {
+  if (!request.headers.authorization) {
+    return replyWithAuthenticationError(h);
+  }
+  const jwtToken = request.headers.authorization.replace('Bearer ', '');
+  try {
+    const token = jsonwebtoken.verify(jwtToken, authentication.jwt.secret);
+    return h.authenticated({ credentials: { client: token.client } });
+  } catch {
+    return replyWithAuthenticationError(h);
   }
 }
 

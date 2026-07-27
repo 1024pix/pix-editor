@@ -3,6 +3,7 @@ import { DatabaseBuilder } from './tooling/database-builder/database-builder.js'
 import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
 import * as config from '../lib/config.js';
+import jsonwebtoken from 'jsonwebtoken';
 
 export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/utils/stream-to-promise.js';
 import { createTempFile, removeTempFile } from './tooling/temporary-file.js';
@@ -71,6 +72,15 @@ export function generateAuthorizationHeader(user) {
 
 export function generateBrokenLinksMonitorAuthorizationHeader() {
   return { authorization: `Bearer ${config.urlBrokenLinksMonitor.authSecret}` };
+}
+
+export function generateJwtAuthorizationHeader() {
+  const accessToken = jsonwebtoken.sign(
+    { client: 'test' },
+    config.authentication.jwt.secret,
+    { expiresIn: config.authentication.jwt.expirationMs },
+  );
+  return { authorization: `Bearer ${accessToken}` };
 }
 
 export { domainBuilder } from './tooling/domain-builder/domain-builder.js';

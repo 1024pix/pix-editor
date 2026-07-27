@@ -69,6 +69,7 @@
     "js-crypto-random": "^1.0.4",
     "json-stream-es": "^1.2.1",
     "jsonapi-serializer": "^3.6.9",
+    "jsonwebtoken": "^9.0.3",
     "knex": "^3.0.0",
     "lodash": "^4.17.21",
     "micromatch": "^4.0.8",
@@ -88,6 +89,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.5.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "dayjs": "^1.11.20",
     "eslint": "^10.0.0",
     "eslint-plugin-mocha": "^11.2.0",

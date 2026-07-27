@@ -31,8 +31,10 @@ export async function createServer() {
 
   server.ext('onPreResponse', catchDomainAndInfrastructureErrors);
 
-  server.auth.scheme('api-token', security.scheme);
+  server.auth.scheme('api-token', security.schemes.apiToken);
+  server.auth.scheme('jwt-token', security.schemes.jwtToken)
   server.auth.strategy('default', 'api-token');
+  server.auth.strategy('jwt-app', 'jwt-token');
   server.auth.default('default');
 
   const configuration = [].concat(plugins, routes);

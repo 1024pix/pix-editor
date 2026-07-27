@@ -11,6 +11,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/replication-stream',
       config: {
+        auth: 'jwt-app',
         handler: function(request, h) {
           const stream = new PassThrough({ highWaterMark: 2 ** 10 });
           const controller = new AbortController();
