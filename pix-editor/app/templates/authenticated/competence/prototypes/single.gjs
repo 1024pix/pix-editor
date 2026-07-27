@@ -1,3 +1,5 @@
+import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { on } from '@ember/modifier';
@@ -149,30 +151,29 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     </div>
     <div class="prototype-view__menu">
       {{#if @controller.edition}}
-        <button
-          data-test-save-challenge-button
-          class="prototype-view__menu-item prototype-view__menu-item--important"
-          {{on "click" @controller.save}}
-          type="button"
-        >
-          <PixIcon @name="check" @ariaHidden={{true}} />
+        <PixButton data-test-save-challenge-button @triggerAction={{@controller.save}} @iconBefore="check">
           Enregistrer
-        </button>
-        <button
-          data-test-cancel-challenge-button
-          class="prototype-view__menu-item"
-          {{on "click" @controller.cancelEdit}}
-          type="button"
+        </PixButton>
+
+        <PixButton
+          data-test-save-challenge-button
+          @variant="secondary"
+          @triggerAction={{@controller.cancelEdit}}
+          @iconBefore="close"
         >
-          <PixIcon @name="close" @ariaHidden={{true}} />
           Annuler
-        </button>
+        </PixButton>
       {{else}}
-        <a class="prototype-view__menu-item" href={{@controller.challenge.previewUrl}} target="_blank">
-          <PixIcon @name="eye" @ariaHidden={{true}} />
+        <PixButtonLink
+          class="prototype-view__menu-item"
+          @variant="secondary"
+          href={{@controller.challenge.previewUrl}}
+          target="_blank"
+          @iconBefore="eye"
+        >
           Prévisualiser
-        </a>
-        <CopyLink @link={{@controller.challenge.previewUrl}} />
+        </PixButtonLink>
+        <CopyLink @link={{@controller.challenge.previewUrl}} class="prototype-view__menu-item" />
         {{#each @controller.challenge.otherLocalizedChallenges as |localizedChallenge|}}
           <LinkTo
             @route={{@controller.localizedChallengeLinkRoute}}
@@ -185,31 +186,36 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           </LinkTo>
         {{/each}}
         {{#if @controller.mayEdit}}
-          <button
+          <PixButton
             data-test-modify-challenge-button={{@controller.challenge.id}}
             class="prototype-view__menu-item"
-            {{on "click" @controller.edit}}
-            type="button"
+            @variant="secondary"
+            @triggerAction={{@controller.edit}}
+            @iconBefore="edit"
           >
-            <PixIcon @name="edit" @ariaHidden={{true}} />
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.mayDuplicate}}
-          <button class="prototype-view__menu-item" {{on "click" @controller.duplicate}} type="button">
-            <PixIcon @name="copy" @ariaHidden={{true}} />
+          <PixButton
+            class="prototype-view__menu-item"
+            data-test-modify-challenge-button={{@controller.challenge.id}}
+            @variant="secondary"
+            @triggerAction={{@controller.duplicate}}
+            @iconBefore="copy"
+          >
             Dupliquer
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.mayAccessAlternatives}}
-          <button
-            class="prototype-view__menu-item prototype-view__menu-item--alternatives"
-            {{on "click" @controller.showAlternatives}}
-            type="button"
+          <PixButton
+            class="prototype-view__menu-item"
+            @variant="secondary"
+            @triggerAction={{@controller.showAlternatives}}
+            @iconBefore="copy"
           >
-            <PixIcon @name="extension" @ariaHidden={{true}} />
             Déclinaisons &gt;&gt;
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.maySwitchGenealogy}}
           <button
