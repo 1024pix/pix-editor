@@ -586,6 +586,21 @@ export default class SingleController extends Controller {
     this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
   }
 
+  @action
+  setIllustrationAlt(value) {
+    this.challenge.illustrationAlt = value;
+  }
+
+  @action
+  setSolutions(value) {
+    this.challenge.solution = value;
+  }
+
+  @action
+  setSolutionToDisplay(value) {
+    this.challenge.solutionToDisplay = value;
+  }
+
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
       this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');

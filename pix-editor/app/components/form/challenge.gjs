@@ -105,6 +105,7 @@ export default class ChallengeForm extends Component {
         @value={{@challenge.solution}}
         @edition={{@edition}}
         @helpContent={{this.helpAnswers}}
+        @change={{@setSolutions}}
         data-test-answers-field
         @id={{this.solutionsFieldId}}
       />
@@ -156,6 +157,7 @@ export default class ChallengeForm extends Component {
           @title="Bonne réponse à afficher"
           @value={{@challenge.solutionToDisplay}}
           @edition={{@edition}}
+          @change={{@setSolutionToDisplay}}
           data-test-solution-to-display-field
           @id={{this.solutionToDisplayFieldId}}
         />
@@ -201,6 +203,7 @@ export default class ChallengeForm extends Component {
       {{#if @challenge.illustration}}
         <Textarea
           @value={{@challenge.illustrationAlt}}
+          @change={{@setIllustrationAlt}}
           @title="Texte alternatif"
           @edition={{@edition}}
           @id={{this.illustrationAltFieldId}}

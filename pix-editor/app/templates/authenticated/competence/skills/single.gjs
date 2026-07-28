@@ -90,7 +90,8 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     <div class="skill-view__data" {{scrollTop @controller.edition}}>
       <Skill @skill={{@controller.skill}} @edition={{@controller.edition}} />
     </div>
-    <div class="skill-view__side-menu">
+
+    <div class="lateral-menu">
       {{#if @controller.edition}}
         <PixButton @iconBefore="check" @triggerAction={{@controller.save}}>
           Enregistrer
@@ -102,7 +103,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
       {{else}}
         {{#if @controller.skill.productionPrototype}}
           <PixButtonLink
-            class="skill-view__side-menu-item"
+            class="lateral-menu__item"
             @variant="tertiary"
             @iconBefore="eye"
             @href={{@controller.previewPrototypeUrl}}
@@ -113,7 +114,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{/if}}
         {{#if @controller.mayEdit}}
           <PixButton
-            class="skill-view__side-menu-item"
+            class="lateral-menu__item"
             @variant="tertiary"
             @iconBefore="edit"
             @triggerAction={{@controller.edit}}
@@ -123,7 +124,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{/if}}
         {{#unless @controller.skill.isLive}}
           <PixButton
-            class="skill-view__side-menu-item"
+            class="lateral-menu__item"
             @variant="tertiary"
             @iconBefore="inventory"
             @triggerAction={{@controller.displayChallenges}}

@@ -145,11 +145,14 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @setDisplayUrlsToConsultField={{@controller.setDisplayUrlsToConsultField}}
         @urlsToConsult={{@controller.urlsToConsult}}
         @setUrlsToConsult={{@controller.setUrlsToConsult}}
+        @setSolutions={{@controller.setSolutions}}
+        @setSolutionToDisplay={{@controller.setSolutionToDisplay}}
+        @setIllustrationAlt={{@controller.setIllustrationAlt}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
         @checkEmbedURL={{@controller.checkEmbedURL}}
       />
     </div>
-    <div class="prototype-view__menu">
+    <div class="lateral-menu">
       {{#if @controller.edition}}
         <PixButton data-test-save-challenge-button @triggerAction={{@controller.save}} @iconBefore="check">
           Enregistrer
@@ -165,7 +168,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         </PixButton>
       {{else}}
         <PixButtonLink
-          class="prototype-view__menu-item"
+          class="lateral-menu__item"
           @variant="secondary"
           href={{@controller.challenge.previewUrl}}
           target="_blank"
@@ -173,12 +176,12 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         >
           Prévisualiser
         </PixButtonLink>
-        <CopyLink @link={{@controller.challenge.previewUrl}} class="prototype-view__menu-item" />
+        <CopyLink @link={{@controller.challenge.previewUrl}} class="lateral-menu__item" />
         {{#each @controller.challenge.otherLocalizedChallenges as |localizedChallenge|}}
           <LinkTo
             @route={{@controller.localizedChallengeLinkRoute}}
             @models={{@controller.getLocalizedChallengeLinkModels localizedChallenge}}
-            class="prototype-view__menu-item"
+            class="lateral-menu__item"
           >
             <PixIcon @name="globe" @ariaHidden={{true}} />
             Version
@@ -188,7 +191,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{#if @controller.mayEdit}}
           <PixButton
             data-test-modify-challenge-button={{@controller.challenge.id}}
-            class="prototype-view__menu-item"
+            class="lateral-menu__item"
             @variant="secondary"
             @triggerAction={{@controller.edit}}
             @iconBefore="edit"
@@ -198,7 +201,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{/if}}
         {{#if @controller.mayDuplicate}}
           <PixButton
-            class="prototype-view__menu-item"
+            class="lateral-menu__item"
             data-test-modify-challenge-button={{@controller.challenge.id}}
             @variant="secondary"
             @triggerAction={{@controller.duplicate}}
@@ -209,7 +212,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{/if}}
         {{#if @controller.mayAccessAlternatives}}
           <PixButton
-            class="prototype-view__menu-item"
+            class="lateral-menu__item"
             @variant="secondary"
             @triggerAction={{@controller.showAlternatives}}
             @iconBefore="copy"

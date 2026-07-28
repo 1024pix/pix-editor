@@ -22,6 +22,8 @@ import Textarea from 'pixeditor/components/field/textarea';
           <Textarea
             @title="Description :"
             @value={{@controller.competence.description}}
+            @change={{@controller.setDescription}}
+            @hideActionBar={{true}}
             @edition={{@controller.edition}}
             @id="competence-description-fr"
           />
@@ -35,7 +37,9 @@ import Textarea from 'pixeditor/components/field/textarea';
             />
             <Textarea
               @title="Description (en) :"
+              @hideActionBar={{true}}
               @value={{@controller.competence.descriptionEn}}
+              @change={{@controller.setDescriptionEn}}
               @edition={{@controller.edition}}
               @id="competence-description-en"
             />
@@ -45,25 +49,22 @@ import Textarea from 'pixeditor/components/field/textarea';
           {{/unless}}
         </form>
       </div>
-      <div class="competence-management-view__menu">
+      <div class="lateral-menu">
         {{#if @controller.mayEdit}}
-          <PixButton class="competence-management-view__action" @iconBefore="edit" @triggerAction={{@controller.edit}}>
+          <PixButton
+            class="lateral-menu__item"
+            @variant="secondary"
+            @iconBefore="edit"
+            @triggerAction={{@controller.edit}}
+          >
             Modifier
           </PixButton>
         {{/if}}
         {{#if @controller.edition}}
-          <PixButton
-            class="competence-management-view__action competence-management-view__action--important"
-            @iconBefore="save"
-            @triggerAction={{@controller.save}}
-          >
+          <PixButton @iconBefore="check" @triggerAction={{@controller.save}}>
             Enregistrer
           </PixButton>
-          <PixButton
-            class="competence-management-view__action"
-            @iconBefore="block"
-            @triggerAction={{@controller.cancelEdit}}
-          >
+          <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@controller.cancelEdit}}>
             Annuler
           </PixButton>
         {{/if}}

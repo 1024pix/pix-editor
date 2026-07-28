@@ -57,7 +57,13 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
   </div>
   <div class="tube-view__details">
     <div class="tube-view__data" {{scrollTop @controller.edition}}>
-      <Tube @tube={{@controller.tube}} @edition={{@controller.edition}} @creation={{@controller.creation}} />
+      <Tube
+        @tube={{@controller.tube}}
+        @edition={{@controller.edition}}
+        @creation={{@controller.creation}}
+        @setPracticalDescriptionFr={{@controller.setPracticalDescriptionFr}}
+        @setPracticalDescriptionEn={{@controller.setPracticalDescriptionEn}}
+      />
     </div>
     <div class="tube-view__actions-menu">
       {{#if @controller.edition}}

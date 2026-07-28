@@ -28,6 +28,7 @@ export default class LocalizedChallengeForm extends Component {
       {{#if @localizedChallenge.illustration}}
         <Textarea
           @value={{@localizedChallenge.illustration.alt}}
+          @change={{@setIllustrationAlt}}
           @title="Texte alternatif"
           @edition={{false}}
           @id="challenge-illustration-alt"

@@ -5,6 +5,13 @@
   .field {
     margin: 0 0 1em;
 
+    &__textarea-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
     > label {
       display: block;
       margin-bottom: 0.28571429em;

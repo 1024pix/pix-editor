@@ -64,31 +64,4 @@
   &__flag {
     margin-bottom: 0.5rem;
   }
-
-  // Reproduces `%challenge-menu`
-  &__menu {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
-    border: none;
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-    box-shadow: none;
-  }
-
-  &__action {
-    color: #000;
-    font-weight: normal;
-    background-color: transparent;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-
-    // Reproduces `.important-action`
-    &--important,
-    &--important:hover {
-      color: #d02181;
-    }
-  }
 }
