@@ -2,21 +2,16 @@
 // stylelint-disable color-no-hex, color-named
 
 .form {
-  .field {
-    margin: 0 0 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
+  .field {
     &__textarea-actions {
       display: flex;
       gap: 12px;
       align-items: center;
       justify-content: flex-end;
-    }
-
-    > label {
-      display: block;
-      margin-bottom: 0.28571429em;
-      color: rgba(0, 0, 0, 0.87);
-      font-weight: 700;
     }
   }
 
@@ -27,25 +22,8 @@
 
   .fields {
     display: flex;
+    flex-direction: column;
     gap: 1em;
-
-    > .field {
-      flex: 1;
-    }
-  }
-
-  .input {
-    display: inline-flex;
-    width: 100%;
-
-    input,
-    textarea {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 0.67857143em 1em;
-      border: 1px solid rgba(34, 36, 38, 0.15);
-      border-radius: 0.28571429em;
-    }
   }
 }
 

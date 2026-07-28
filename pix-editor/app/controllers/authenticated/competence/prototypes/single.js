@@ -907,10 +907,11 @@ export default class SingleController extends Controller {
   }
 
   @action
-  checkEmbedURL() {
-    this.invalidEmbedURL = '';
-    let embedURL = this.challenge.embedURL;
-    embedURL = embedURL.trim();
+  setEmbedURL(value) {
+    this.challenge.embedURL = value.trim();
+
+    const embedURL = this.challenge.embedURL;
+
     try {
       new URL(embedURL);
       return true;
@@ -918,6 +919,21 @@ export default class SingleController extends Controller {
       this.challenge.embedURL = null;
       this.invalidEmbedURL = embedURL;
     }
+  }
+
+  @action
+  setEmbedHeight(value) {
+    this.challenge.embedHeight = value.trim();
+  }
+
+  @action
+  setEmbedTitle(value) {
+    this.challenge.embedTitle = value.trim();
+  }
+
+  @action
+  setEmbedTimer(value) {
+    this.challenge.embedTimer = value.trim();
   }
 
   @action

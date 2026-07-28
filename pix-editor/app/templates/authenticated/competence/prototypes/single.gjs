@@ -149,7 +149,10 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @setSolutionToDisplay={{@controller.setSolutionToDisplay}}
         @setIllustrationAlt={{@controller.setIllustrationAlt}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
-        @checkEmbedURL={{@controller.checkEmbedURL}}
+        @setEmbedURL={{@controller.setEmbedURL}}
+        @setEmbedHeight={{@controller.setEmbedHeight}}
+        @setEmbedTitle={{@controller.setEmbedTitle}}
+        @setEmbedTimer={{@controller.setEmbedTimer}}
       />
     </div>
     <div class="lateral-menu">

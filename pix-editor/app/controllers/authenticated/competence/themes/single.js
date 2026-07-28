@@ -36,6 +36,16 @@ export default class CompetenceThemesSingleController extends Controller {
   }
 
   @action
+  setNameFr(value) {
+    this.model.name = value;
+  }
+
+  @action
+  setNameEnUs(value) {
+    this.model.nameEnUs = value;
+  }
+
+  @action
   cancelEdit() {
     this.edition = false;
     this.theme.rollbackAttributes();

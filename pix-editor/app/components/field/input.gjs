@@ -1,4 +1,4 @@
-import { Input as Input0 } from '@ember/component';
+import PixInput from '@1024pix/pix-ui/components/pix-input';
 import { concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -8,24 +8,19 @@ import not from 'ember-truth-helpers/helpers/not';
 export default class Input extends Component {
   <template>
     <div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
-      <p id="title-{{@id}}">{{@title}}</p>
-      <div class="input">
-        {{#if @label}}
-          <label class="label-input" for={{@id}}>{{@label}} : </label>
-        {{/if}}
-        <Input0
-          id={{@id}}
-          @value={{@value}}
-          aria-labelledby={{this.ariaLabeledBy}}
-          placeholder={{@placeholder}}
-          readonly={{not @edition}}
-          {{on "change" this.change}}
-        />
-      </div>
+      <PixInput
+        @inlineLabel={{true}}
+        @screenReaderOnly={{@screenReaderOnly}}
+        @value={{@value}}
+        @isFullWidth={{true}}
+        placeholder={{@placeholder}}
+        readonly={{not @edition}}
+        {{on "change" this.change}}
+      >
+        <:label>{{@label}} :</:label>
+      </PixInput>
     </div>
   </template>
-
-  ariaLabeledBy = this.args.title && !this.args.label ? `title-${this.args.id}` : false;
 
   @action
   change(evt) {

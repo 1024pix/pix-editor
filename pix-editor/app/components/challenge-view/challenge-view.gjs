@@ -105,7 +105,7 @@ export default class ChallengeViewProduction extends Component {
         <:label>Timer</:label>
       </PixCheckbox>
       {{#if this.hasTimer}}
-        <PixInput class="sr-only-label" @value={{@challenge.timer}} readonly>
+        <PixInput @screenReaderOnly={{true}} @value={{@challenge.timer}} readonly>
           <:label>Durée du timer</:label>
         </PixInput>
       {{/if}}

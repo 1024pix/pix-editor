@@ -11,20 +11,15 @@ export default class PopInNewFrameworkComponent extends Component {
       <:content>
         {{#if @framework}}
           <form action class="form" {{on "submit" this.saveOnSubmit}}>
-            <Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom" />
+            <Input @value={{@framework.name}} @edition={{true}} @title="Nom" @change={{this.setFrameWorkName}} />
           </form>
         {{/if}}
       </:content>
       <:footer>
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@close}}>
+        <PixButton @variant="secondary" @triggerAction={{@close}}>
           Annuler
         </PixButton>
-        <PixButton
-          data-test-save-action
-          @iconAfter="save"
-          @triggerAction={{@save}}
-          @isDisabled={{this.hasEmptyMandatoryField}}
-        >
+        <PixButton @iconAfter="save" @triggerAction={{@save}} @isDisabled={{this.hasEmptyMandatoryField}}>
           Enregistrer
         </PixButton>
       </:footer>
@@ -38,6 +33,11 @@ export default class PopInNewFrameworkComponent extends Component {
 
   _fieldIsEmpty(field) {
     return field === undefined || field.trim() === '';
+  }
+
+  @action
+  setFrameWorkName(value) {
+    this.args.framework.name = value;
   }
 
   @action

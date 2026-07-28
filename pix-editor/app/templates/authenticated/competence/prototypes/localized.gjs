@@ -40,7 +40,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @showIllustration={{@controller.showIllustration}}
         @addAttachment={{@controller.addAttachment}}
         @removeAttachment={{@controller.removeAttachment}}
-        @checkEmbedURL={{@controller.checkEmbedURL}}
+        @setEmbedURL={{@controller.setEmbedURL}}
         @shouldDisplayPrimaryEmbedUrl={{@controller.shouldDisplayPrimaryEmbedUrl}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
         @countryList={{@controller.countryList}}

@@ -3,18 +3,17 @@ import Textarea from 'pixeditor/components/field/textarea';
 <template>
   <form action class="form">
     {{#if @edition}}
-      <Input data-test-name-field @value={{@tube.name}} @edition={{@edition}} @label="Nom" @id="tube-name" />
+      <Input @value={{@tube.name}} @edition={{@edition}} @change={{@setName}} @label="Nom" @id="tube-name" />
     {{/if}}
     <div class="segment segment--raised">
       <Input
-        data-test-practical-title-fr-field
         @value={{@tube.practicalTitleFr}}
+        @change={{@setPracticalTitleFr}}
         @edition={{@edition}}
         @label="Titre pratique (fr)"
         @id="tube-title-fr"
       />
       <Textarea
-        data-test-practical-description-fr-field
         @title="Description pratique (fr) :"
         @value={{@tube.practicalDescriptionFr}}
         @change={{@setPracticalDescriptionFr}}
@@ -24,14 +23,13 @@ import Textarea from 'pixeditor/components/field/textarea';
     </div>
     <div class="segment segment--raised">
       <Input
-        data-test-practical-title-en-field
         @value={{@tube.practicalTitleEn}}
+        @change={{@setPracticalTitleEn}}
         @edition={{@edition}}
         @label="Titre pratique (en)"
         @id="tube-title-en"
       />
       <Textarea
-        data-test-practical-description-en-field
         @title="Description pratique (en) :"
         @value={{@tube.practicalDescriptionEn}}
         @change={{@setPracticalDescriptionEn}}
@@ -40,7 +38,7 @@ import Textarea from 'pixeditor/components/field/textarea';
       />
     </div>
     {{#unless @edition}}
-      <Input data-test-pix-id-field @value={{@tube.pixId}} @title="Id" @edition={{false}} />
+      <Input @value={{@tube.pixId}} @label="Id" @edition={{false}} />
     {{/unless}}
   </form>
 </template>
