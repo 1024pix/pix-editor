@@ -38,17 +38,20 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
       phraseProjectId: 'phrasePix1',
       frameworkId: 'frameworkPix',
       areaId: 'area1',
+      weblateComponent: 'weblateComponent1',
       uploadedLocales: ['fr'],
     });
     databaseBuilder.factory.buildTranslationsConfig({
       phraseProjectId: 'phrasePix2',
       frameworkId: 'frameworkPix',
       areaId: 'area2',
+      weblateComponent: 'weblateComponent2',
       uploadedLocales: ['fr'],
     });
     databaseBuilder.factory.buildTranslationsConfig({
       phraseProjectId: 'phrasePixEdu',
       frameworkId: 'frameworkPixEdu',
+      weblateComponent: 'weblateComponentEdu',
       uploadedLocales: ['fr', 'fr-FR'],
     });
     databaseBuilder.factory.buildTranslationsConfig({
@@ -72,6 +75,7 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
           phraseProjectId: 'phrasePix1',
           frameworkId: 'frameworkPix',
           areaId: 'area1',
+          weblateComponent: 'weblateComponent1',
           uploadedLocales: ['fr'],
         }),
         domainBuilder.buildTranslationsConfig({
@@ -79,6 +83,7 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
           phraseProjectId: 'phrasePix2',
           frameworkId: 'frameworkPix',
           areaId: 'area2',
+          weblateComponent: 'weblateComponent2',
           uploadedLocales: ['fr'],
         }),
         domainBuilder.buildTranslationsConfig({
@@ -86,6 +91,7 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
           phraseProjectId: 'phrasePixEdu',
           frameworkId: 'frameworkPixEdu',
           areaId: null,
+          weblateComponent: 'weblateComponentEdu',
           uploadedLocales: ['fr', 'fr-FR'],
         }),
       ]);
@@ -107,6 +113,7 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
           phraseProjectId: 'phrasePix2',
           frameworkId: 'frameworkPix',
           areaId: 'area2',
+          weblateComponent: 'weblateComponent2',
           uploadedLocales: ['fr'],
         }),
       );
@@ -138,6 +145,7 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
           phraseProjectId: 'phrasePix1',
           frameworkId: 'frameworkPix',
           areaId: 'area1',
+          weblateComponent: 'weblateComponent1',
           uploadedLocales: ['fr'],
         }),
       );

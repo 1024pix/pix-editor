@@ -6,6 +6,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   phraseProjectId: string
  *   frameworkId: string
  *   areaId?: string
+ *   weblateComponent?: string
  *   uploadedLocales: string[]
  * }} translationsConfigToBuild
  */
@@ -14,6 +15,7 @@ export function buildTranslationsConfig({
   phraseProjectId,
   frameworkId,
   areaId,
+  weblateComponent,
   uploadedLocales,
 } = {}) {
   return databaseBuffer.pushInsertable({
@@ -23,6 +25,7 @@ export function buildTranslationsConfig({
       phraseProjectId,
       frameworkId,
       areaId,
+      weblateComponent,
       uploadedLocales: JSON.stringify(uploadedLocales),
     },
   });

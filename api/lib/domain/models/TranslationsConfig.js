@@ -1,9 +1,10 @@
 export class TranslationsConfig {
-  constructor({ id, phraseProjectId, frameworkId, areaId, uploadedLocales }) {
+  constructor({ id, phraseProjectId, frameworkId, areaId, weblateComponent, uploadedLocales }) {
     this.id = id;
     this.phraseProjectId = phraseProjectId;
     this.frameworkId = frameworkId;
     this.areaId = areaId;
+    this.weblateComponent = weblateComponent;
     this.uploadedLocales = uploadedLocales;
   }
 }
