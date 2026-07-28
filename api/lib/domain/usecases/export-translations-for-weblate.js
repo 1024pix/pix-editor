@@ -163,7 +163,7 @@ function extractTranslationsFromObject(extractFn, locales) {
 }
 
 function extractMetadataFromChallenge(baseUrl, localizedChallenges, challenge, _releaseContent) {
-  return { description: toDescription(localizedChallenges, challenge, baseUrl) };
+  return { developer_comments: toDescription(localizedChallenges, challenge, baseUrl) };
 }
 
 /*
