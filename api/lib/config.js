@@ -145,6 +145,7 @@ export const phrase = {
 };
 
 export const weblate = {
+  apiBaseUrl: process.env.WEBLATE_API_BASE_URL,
   apiToken: process.env.WEBLATE_API_TOKEN,
   project: process.env.WEBLATE_PROJECT,
 };
@@ -208,6 +209,7 @@ if (process.env.NODE_ENV === 'test') {
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.webhookSecret = 'le secret de phrase';
 
+  weblate.apiBaseUrl = 'https://test.weblate.pix.digital';
   weblate.apiToken = 'TEST_WEBLATE_TOKEN';
   weblate.project = 'test-pix-editor';
 
