@@ -4,6 +4,7 @@ import {
   getByCompetenceId,
   getByPhraseProjectId,
   listWithPhraseProjectId,
+  listWithWeblateComponent,
 } from '../../../../lib/infrastructure/repositories/translations-config-repository.js';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 
@@ -51,12 +52,13 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
     databaseBuilder.factory.buildTranslationsConfig({
       phraseProjectId: 'phrasePixEdu',
       frameworkId: 'frameworkPixEdu',
-      weblateComponent: 'weblateComponentEdu',
+      weblateComponent: null,
       uploadedLocales: ['fr', 'fr-FR'],
     });
     databaseBuilder.factory.buildTranslationsConfig({
       phraseProjectId: null,
       frameworkId: 'frameworkPixEdu',
+      weblateComponent: 'weblateComponentEdu',
       uploadedLocales: ['fr', 'fr-FR'],
     });
 
@@ -89,6 +91,41 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
         domainBuilder.buildTranslationsConfig({
           id: expect.any(Number),
           phraseProjectId: 'phrasePixEdu',
+          frameworkId: 'frameworkPixEdu',
+          areaId: null,
+          weblateComponent: null,
+          uploadedLocales: ['fr', 'fr-FR'],
+        }),
+      ]);
+    });
+  });
+
+  describe('#listWithWeblateComponent', () => {
+    it('lists all translations configs with weblateComponent', async () => {
+      // when
+      const translationsConfigs = await listWithWeblateComponent();
+
+      // then
+      expect(translationsConfigs).toStrictEqual([
+        domainBuilder.buildTranslationsConfig({
+          id: expect.any(Number),
+          phraseProjectId: 'phrasePix1',
+          frameworkId: 'frameworkPix',
+          areaId: 'area1',
+          weblateComponent: 'weblateComponent1',
+          uploadedLocales: ['fr'],
+        }),
+        domainBuilder.buildTranslationsConfig({
+          id: expect.any(Number),
+          phraseProjectId: 'phrasePix2',
+          frameworkId: 'frameworkPix',
+          areaId: 'area2',
+          weblateComponent: 'weblateComponent2',
+          uploadedLocales: ['fr'],
+        }),
+        domainBuilder.buildTranslationsConfig({
+          id: expect.any(Number),
+          phraseProjectId: null,
           frameworkId: 'frameworkPixEdu',
           areaId: null,
           weblateComponent: 'weblateComponentEdu',

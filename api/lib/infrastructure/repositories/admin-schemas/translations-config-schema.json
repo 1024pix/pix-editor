@@ -36,6 +36,12 @@
       "optional": true
     },
     {
+      "key": "weblateComponent",
+      "label": "Slug composant Weblate",
+      "type": "string",
+      "optional": true
+    },
+    {
       "key": "uploadedLocales",
       "label": "Locales exportées",
       "type": "string",
