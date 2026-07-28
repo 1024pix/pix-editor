@@ -116,6 +116,8 @@
   &__side-menu {
     display: flex;
     flex-direction: column;
+    padding: 4px;
+    gap: 8px;
     margin-top: 0;
     overflow-y: auto;
     border: none;

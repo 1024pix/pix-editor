@@ -8,7 +8,7 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding: 10px;
-    background-color: #3498db;
+    background-color: var(--pix-orga-500);
     border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
     &--lite {
@@ -72,7 +72,7 @@
     &.active {
       color: #000;
       background-color: #f9fafb;
-      border-bottom: 2px solid #3498db;
+      border-bottom: 2px solid var(--pix-orga-500);
     }
 
     &__status {

@@ -57,12 +57,12 @@
       text-align: start;
 
       &:hover {
-        background: #3B8DCC;
+        background: var(--pix-orga-300);
       }
     }
 
     &__content {
-      background: #3B8DCC;
+      background: var(--pix-orga-300);
       padding: 0;
     }
   }
@@ -73,7 +73,7 @@
     color: white;
 
     &:hover {
-      background: #3683BE;
+      background: var(--pix-orga-700);
     }
   }
 }

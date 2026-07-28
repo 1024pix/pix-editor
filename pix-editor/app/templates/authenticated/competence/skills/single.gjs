@@ -92,21 +92,11 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     </div>
     <div class="skill-view__side-menu">
       {{#if @controller.edition}}
-        <PixButton
-          class="skill-view__side-menu-item skill-view__side-menu-item--important"
-          @variant="tertiary"
-          @iconBefore="check"
-          @triggerAction={{@controller.save}}
-        >
+        <PixButton @iconBefore="check" @triggerAction={{@controller.save}}>
           Enregistrer
-          <span class="skill-view__sr-only">l'acquis {{@controller.skill.name}}</span>
+          <span class="sr-only"> l'acquis {{@controller.skill.name}}</span>
         </PixButton>
-        <PixButton
-          class="skill-view__side-menu-item"
-          @variant="tertiary"
-          @iconBefore="close"
-          @triggerAction={{@controller.cancelEdit}}
-        >
+        <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@controller.cancelEdit}}>
           Annuler
         </PixButton>
       {{else}}

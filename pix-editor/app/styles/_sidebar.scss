@@ -11,7 +11,7 @@
   width: 350px;
   height: 100%;
   overflow: hidden auto;
-  background-color: #3498db;
+  background-color: var(--pix-orga-500);
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.5s, visibility 0.5s;
 
