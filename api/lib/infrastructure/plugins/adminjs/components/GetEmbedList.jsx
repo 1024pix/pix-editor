@@ -16,7 +16,7 @@ const GetEmbedListComponent = () => {
       const token = currentAdmin?.email;
       const response = await fetch('/api/embeds.csv', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          ['x-api-key']: token,
         },
       });
       const data = await response.text();

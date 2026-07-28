@@ -13,7 +13,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
     const headers = {};
     const apiKey = this.session.data.authenticated.apiKey;
     if (apiKey) {
-      headers['Authorization'] = `Bearer ${apiKey}`;
+      headers['x-api-key'] = apiKey;
     }
     return headers;
   }

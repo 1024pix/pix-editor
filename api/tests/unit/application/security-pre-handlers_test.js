@@ -4,20 +4,19 @@ import {
   checkUserHasAdminAccess,
   checkUserHasWriteAccess,
   checkUserIsAuthenticatedViaBasicAndAdmin,
-  checkUserIsAuthenticatedViaBearer,
+  checkUserIsAuthenticatedViaHeader,
 } from '../../../lib/application/security-pre-handlers.js';
 import { userRepository } from '../../../lib/infrastructure/repositories/index.js';
 import { User } from '../../../lib/domain/models/User.js';
 import { UserNotFoundError } from '../../../lib/domain/errors.js';
 
 describe('Unit | Application | SecurityPreHandlers', () => {
-  describe('#checkUserIsAuthenticatedViaBearer', () => {
+  describe('#checkUserIsAuthenticatedViaHeader', () => {
     context('Successful case', () => {
       it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
         // given
         const apiKey = 'valid.api.key';
-        const authorizationHeader = `Bearer ${apiKey}`;
-        const request = { headers: { authorization: authorizationHeader } };
+        const request = { headers: { 'x-api-key': apiKey } };
         const authenticatedUser = new User({
           id: '1',
           name: 'AuthenticatedUser',
@@ -30,7 +29,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         });
 
         // when
-        const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
+        const response = await checkUserIsAuthenticatedViaHeader(request, hFake);
 
         // then
         expect(response.authenticated).to.deep.equal({ credentials: { user: authenticatedUser } });
@@ -42,7 +41,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         // given
         const request = { headers: {} };
         // when
-        const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
+        const response = await checkUserIsAuthenticatedViaHeader(request, hFake);
 
         // then
         expect(response.statusCode).to.equal(401);
@@ -52,15 +51,14 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       it('should disallow access to resource when api key is wrong', async () => {
         // given
         const apiKey = 'wrong.api.key';
-        const authorizationHeader = `Bearer ${apiKey}`;
-        const request = { headers: { authorization: authorizationHeader } };
+        const request = { headers: { 'x-api-key': apiKey } };
 
         vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
           if (spyApiKey === apiKey) throw new UserNotFoundError();
         });
 
         // when
-        const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
+        const response = await checkUserIsAuthenticatedViaHeader(request, hFake);
 
         // then
         expect(response.statusCode).to.equal(401);

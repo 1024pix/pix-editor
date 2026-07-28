@@ -15,7 +15,7 @@ const ImportExportComponent = () => {
       const token = currentAdmin?.email;
       const response = await fetch(`/api/translations.csv?frameworkName=${frameworkName}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          ['x-api-key']: token,
         },
       });
       const data = await response.text();
@@ -37,7 +37,7 @@ const ImportExportComponent = () => {
         method: 'POST',
         body: {},
         headers: {
-          Authorization: `Bearer ${token}`,
+          ['x-api-key']: token,
         },
       });
       sendNotice({ message: 'Upload request in progress', type: 'success' });
@@ -59,7 +59,7 @@ const ImportExportComponent = () => {
         method: 'PATCH',
         body: importData,
         headers: {
-          Authorization: `Bearer ${token}`,
+          ['x-api-key']: token,
         },
       });
       sendNotice({ message: 'Imported successfully', type: 'success' });
@@ -78,7 +78,7 @@ const ImportExportComponent = () => {
         method: 'POST',
         body: {},
         headers: {
-          Authorization: `Bearer ${token}`,
+          ['x-api-key']: token,
         },
       });
       sendNotice({ message: 'Download request in progress', type: 'success' });

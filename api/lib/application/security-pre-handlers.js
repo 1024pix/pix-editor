@@ -3,11 +3,11 @@ import { hasAuthenticatedUserAccess, replyForbiddenError, replyWithAuthenticatio
 import * as config from '../config.js';
 import { logger } from '../infrastructure/logger.js';
 
-export async function checkUserIsAuthenticatedViaBearer(request, h) {
-  if (!request.headers.authorization) {
+export async function checkUserIsAuthenticatedViaHeader(request, h) {
+  if (!request.headers['x-api-key']) {
     return replyWithAuthenticationError(h);
   }
-  const apiKey = request.headers.authorization.replace('Bearer ', '');
+  const apiKey = request.headers['x-api-key'];
   try {
     const user = await userRepository.findByApiKey(apiKey);
     return h.authenticated({ credentials: { user } });
@@ -43,7 +43,7 @@ export function checkUserHasAdminAccess(request, h) {
 }
 
 export function checkUserIsUrlBrokenLinksMonitor(request, h) {
-  if (!request.headers.authorization) {
+  if (!request.headers['x-api-key']) {
     return replyWithAuthenticationError(h);
   }
 
@@ -52,7 +52,7 @@ export function checkUserIsUrlBrokenLinksMonitor(request, h) {
     return replyWithAuthenticationError(h);
   }
 
-  const apiKey = request.headers.authorization.replace('Bearer ', '');
+  const apiKey = request.headers['x-api-key'];
   if (config.urlBrokenLinksMonitor.authSecret !== apiKey) {
     return replyWithAuthenticationError(h);
   }
