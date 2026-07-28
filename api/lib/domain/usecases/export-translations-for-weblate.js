@@ -150,7 +150,7 @@ function translationToCSVLine(locale) {
     context: key,
     source: areLocalesEqual(locale, translationLocale) ? value : '',
     target: areLocalesEqual(locale, translationLocale) ? value : '',
-    description,
+    developer_comments: description,
   });
 }
 
@@ -163,7 +163,7 @@ function extractTranslationsFromObject(extractFn, locales) {
 }
 
 function extractMetadataFromChallenge(baseUrl, localizedChallenges, challenge, _releaseContent) {
-  return { developer_comments: toDescription(localizedChallenges, challenge, baseUrl) };
+  return { description: toDescription(localizedChallenges, challenge, baseUrl) };
 }
 
 /*

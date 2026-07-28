@@ -34,11 +34,14 @@ export async function uploadTranslationsToWeblate(dependencies = { exportTransla
       formData.set('file', csvFile);
       formData.set('method', 'replace');
       formData.set('conflicts', 'replace-translated');
-      await dependencies.fetch(new URL(`/api/${config.weblate.project}/${weblateComponent}/${locale}/files/`, config.weblate.apiBaseUrl), {
+      const response = await dependencies.fetch(new URL(`/api/translations/${config.weblate.project}/${weblateComponent}/${locale}/file/`, config.weblate.apiBaseUrl), {
         method: 'POST',
         headers: { Authorization: `token ${config.weblate.apiToken}` },
         body: formData,
       });
+      if (!response.ok) {
+        logger.error(await response.json());
+      }
     }
   }
 }
