@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, describe as context, expect, it } from 'vitest';
 import { catchErr, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as draftModuleRepository from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
 import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 
-describe('Draft Module Repository', () => {
+describe('Integration | Repository | draft-module-repository', () => {
   describe('save', () => {
     it('saves a draft module having a NULL moduleId ', async () => {
       // given
@@ -149,6 +149,81 @@ describe('Draft Module Repository', () => {
 
       // then
       expect(error).toBeInstanceOf(NotFoundError);
+    });
+  });
+
+  describe('updateValidationStatus', () => {
+    it('should update an existing draft module with validation status', async () => {
+      // given
+      const module = domainBuilder.buildDraftModule();
+      const { id } = databaseBuilder.factory.buildDraftModule(module);
+      const hasBeenValidated = false;
+      const validationErrors = [
+        `\nError: "id" must be a valid GUID.
+      Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`,
+        `\nError: "grains[5].id" must be a valid GUID.
+      Valeur concernée à rechercher : "b7ea7630-824"\n`,
+      ];
+
+      await databaseBuilder.commit();
+
+      // when
+      await draftModuleRepository.updateValidationStatus({ id, hasBeenValidated, validationErrors });
+
+      // then
+      const draftModule = await draftModuleRepository.getById({ id });
+      expect(draftModule.hasBeenValidated).toEqual(hasBeenValidated);
+      expect(draftModule.validationErrors).to.deep.equal(validationErrors);
+    });
+
+    context('when an existing draft module already has validation errors', function() {
+      it('should update the corresponding fields correctly', async () => {
+        const hasBeenValidated = false;
+        const validationErrors = [
+          `\nError: "id" must be a valid GUID.
+      Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`,
+          `\nError: "grains[5].id" must be a valid GUID.
+      Valeur concernée à rechercher : "b7ea7630-824"\n`,
+        ];
+
+        const module = domainBuilder.buildDraftModule({ hasBeenValidated, validationErrors });
+        const { id } = databaseBuilder.factory.buildDraftModule(module);
+
+        await databaseBuilder.commit();
+
+        // when
+        await draftModuleRepository.updateValidationStatus({ id, hasBeenValidated: true, validationErrors: [] });
+
+        // then
+        const draftModule = await draftModuleRepository.getById({ id });
+        expect(draftModule.hasBeenValidated).to.be.true;
+        expect(draftModule.validationErrors).to.deep.equal([]);
+      });
+    });
+
+    context('when draft module to update does not exist', function() {
+      it('should thro', async () => {
+        const hasBeenValidated = false;
+        const validationErrors = [
+          `\nError: "id" must be a valid GUID.
+      Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`,
+          `\nError: "grains[5].id" must be a valid GUID.
+      Valeur concernée à rechercher : "b7ea7630-824"\n`,
+        ];
+
+        const module = domainBuilder.buildDraftModule({ hasBeenValidated, validationErrors });
+        const { id } = databaseBuilder.factory.buildDraftModule(module);
+
+        await databaseBuilder.commit();
+
+        // when
+        await draftModuleRepository.updateValidationStatus({ id, hasBeenValidated: true, validationErrors: [] });
+
+        // then
+        const draftModule = await draftModuleRepository.getById({ id });
+        expect(draftModule.hasBeenValidated).to.be.true;
+        expect(draftModule.validationErrors).to.deep.equal([]);
+      });
     });
   });
 
