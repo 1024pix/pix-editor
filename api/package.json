@@ -83,6 +83,7 @@
     "sequelize": "^6.29.0",
     "shiki": "^4.1.0",
     "showdown": "^2.0.0",
+    "standardwebhooks": "^1.0.0",
     "tough-cookie": "^6.0.0",
     "url-regex-safe": "^4.0.0"
   },

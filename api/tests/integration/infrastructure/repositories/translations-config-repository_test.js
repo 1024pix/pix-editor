@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   getByCompetenceId,
   getByPhraseProjectId,
+  getByWeblateComponent,
   listWithPhraseProjectId,
   listWithWeblateComponent,
 } from '../../../../lib/infrastructure/repositories/translations-config-repository.js';
@@ -221,6 +222,41 @@ describe('Integration | Infrastructure | Repositories | TranslationsConfig', () 
 
         // when
         const translationsConfig = await getByCompetenceId('randomCompetenceId1');
+
+        // then
+        expect(translationsConfig).toBeUndefined();
+      });
+    });
+  });
+
+  describe('#getByWeblateComponent', () => {
+    it('gets translations config by Phrase project ID', async () => {
+      // given
+      const weblateComponent = 'weblateComponentEdu';
+
+      // when
+      const translationsConfig = await getByWeblateComponent(weblateComponent);
+
+      // then
+      expect(translationsConfig).toStrictEqual(
+        domainBuilder.buildTranslationsConfig({
+          id: expect.any(Number),
+          phraseProjectId: null,
+          frameworkId: 'frameworkPixEdu',
+          areaId: null,
+          weblateComponent: 'weblateComponentEdu',
+          uploadedLocales: ['fr', 'fr-FR'],
+        }),
+      );
+    });
+
+    describe('when weblateComponent is unknown', () => {
+      it('returns undefined', async () => {
+        // given
+        const weblateComponent = 'unknown';
+
+        // when
+        const translationsConfig = await getByWeblateComponent(weblateComponent);
 
         // then
         expect(translationsConfig).toBeUndefined();

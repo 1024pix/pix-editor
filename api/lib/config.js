@@ -148,6 +148,7 @@ export const weblate = {
   apiBaseUrl: process.env.WEBLATE_API_BASE_URL,
   apiToken: process.env.WEBLATE_API_TOKEN,
   project: process.env.WEBLATE_PROJECT,
+  webhookSecret: process.env.WEBLATE_WEBHOOK_SECRET,
 };
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
@@ -212,6 +213,7 @@ if (process.env.NODE_ENV === 'test') {
   weblate.apiBaseUrl = 'https://test.weblate.pix.digital';
   weblate.apiToken = 'TEST_WEBLATE_TOKEN';
   weblate.project = 'test-pix-editor';
+  weblate.webhookSecret = 'c2VjcmV0IGRlIHRlc3QgZGUgd2VibGF0ZQo=';
 
   urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
   urlBrokenLinksMonitor.pageSize = 2;

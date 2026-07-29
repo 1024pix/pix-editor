@@ -30,6 +30,16 @@ export async function getByPhraseProjectId(phraseProjectId) {
 }
 
 /**
+ * @param {string} weblateComponent
+ */
+export async function getByWeblateComponent(weblateComponent) {
+  const knexConn = DomainTransaction.getConnection();
+  const dto = await knexConn.select('*').from('translations_config').where('weblateComponent', weblateComponent).first();
+  if (dto == null) return undefined;
+  return toDomain(dto);
+}
+
+/**
  * @param {string} competenceId
  */
 export async function getByCompetenceId(competenceId) {
