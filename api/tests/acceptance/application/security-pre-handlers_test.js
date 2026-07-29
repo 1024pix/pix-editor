@@ -36,12 +36,46 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
       expect(response.statusCode).to.equal(401);
       expect(response.result).to.deep.equal(jsonApiError);
     });
-    it('should allow access resource on valid header', async () => {
+
+    it('should allow access resource on valid X-API-Key header', async () => {
       // given
       const options = {
         method: 'GET',
         url: '/api/config',
         headers: { 'x-api-key': user.apiKey },
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('should allow access resource on valid Authorization header', async () => {
+      // given
+      const options = {
+        method: 'GET',
+        url: '/api/config',
+        headers: { Authorization: `Bearer ${user.apiKey}` },
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('should allow access resource on valid X-API-Key header but invalid Authorization header', async () => {
+      // given
+      const options = {
+        method: 'GET',
+        url: '/api/config',
+        headers: {
+          'x-api-key': user.apiKey,
+          Authorization: 'Bearer chocolat',
+        },
       };
 
       // when

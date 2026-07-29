@@ -13,10 +13,32 @@ import { UserNotFoundError } from '../../../lib/domain/errors.js';
 describe('Unit | Application | SecurityPreHandlers', () => {
   describe('#checkUserIsAuthenticatedViaHeader', () => {
     context('Successful case', () => {
-      it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
+      it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the x-api-key header with a valid api key', async () => {
         // given
         const apiKey = 'valid.api.key';
         const request = { headers: { 'x-api-key': apiKey } };
+        const authenticatedUser = new User({
+          id: '1',
+          name: 'AuthenticatedUser',
+          trigram: 'ABC',
+          apiKey,
+          access: 'admin',
+        });
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) return authenticatedUser;
+        });
+
+        // when
+        const response = await checkUserIsAuthenticatedViaHeader(request, hFake);
+
+        // then
+        expect(response.authenticated).to.deep.equal({ credentials: { user: authenticatedUser } });
+      });
+
+      it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
+        // given
+        const apiKey = 'valid.api.key';
+        const request = { headers: { authorization: `Bearer ${apiKey}` } };
         const authenticatedUser = new User({
           id: '1',
           name: 'AuthenticatedUser',

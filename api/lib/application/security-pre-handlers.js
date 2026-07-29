@@ -4,10 +4,10 @@ import * as config from '../config.js';
 import { logger } from '../infrastructure/logger.js';
 
 export async function checkUserIsAuthenticatedViaHeader(request, h) {
-  if (!request.headers['x-api-key']) {
+  if (!request.headers['x-api-key'] && !request.headers.authorization) {
     return replyWithAuthenticationError(h);
   }
-  const apiKey = request.headers['x-api-key'];
+  const apiKey = request.headers['x-api-key'] ?? request.headers.authorization.replace('Bearer ', '');
   try {
     const user = await userRepository.findByApiKey(apiKey);
     return h.authenticated({ credentials: { user } });
