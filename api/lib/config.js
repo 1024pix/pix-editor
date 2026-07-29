@@ -145,7 +145,6 @@ export const phrase = {
 };
 
 export const weblate = {
-  isEnabled: isFeatureEnabled(process.env.WEBLATE_IS_ENABLED),
   apiBaseUrl: process.env.WEBLATE_API_BASE_URL,
   apiToken: process.env.WEBLATE_API_TOKEN,
   project: process.env.WEBLATE_PROJECT,
