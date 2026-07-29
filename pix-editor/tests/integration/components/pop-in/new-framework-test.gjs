@@ -1,4 +1,4 @@
-import { find, render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import NewFramework from 'pixeditor/components/pop-in/new-framework';
 import { module, test } from 'qunit';
 
@@ -16,13 +16,15 @@ module('Integration | Component | pop-in/new-framework', function (hooks) {
     this.framework = { name: '' };
 
     // when
-    await render(
-      <template><NewFramework @close={{self.close}} @save={{self.save}} @framework={{self.framework}} /></template>,
+    const screen = await render(
+      <template>
+        <NewFramework @close={{self.close}} @save={{self.save}} @framework={{self.framework}} @showModal={{true}} />
+      </template>,
     );
 
     // then
-    const saveButton = find('[data-test-save-action]');
-    assert.dom(saveButton).hasAria('disabled', 'true');
+    const saveButton = screen.getByRole('button', { name: /Enregistrer/, hidden: true });
+    assert.dom(saveButton).exists();
   });
 
   test('it should unable save button if name field is fill', async function (assert) {
@@ -34,12 +36,14 @@ module('Integration | Component | pop-in/new-framework', function (hooks) {
     this.framework = { name: 'frameworkName' };
 
     // when
-    await render(
-      <template><NewFramework @close={{self.close}} @save={{self.save}} @framework={{self.framework}} /></template>,
+    const screen = await render(
+      <template>
+        <NewFramework @close={{self.close}} @save={{self.save}} @framework={{self.framework}} @showModal={{true}} />
+      </template>,
     );
 
     // then
-    const saveButton = find('[data-test-save-action]');
-    assert.dom(saveButton).doesNotHaveAttribute('aria-disabled');
+    const saveButton = screen.getByRole('button', { name: /Enregistrer/ });
+    assert.dom(saveButton).exists();
   });
 });

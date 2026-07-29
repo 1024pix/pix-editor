@@ -19,7 +19,7 @@ export default class PopInNewFrameworkComponent extends Component {
         <PixButton @variant="secondary" @triggerAction={{@close}}>
           Annuler
         </PixButton>
-        <PixButton @iconAfter="save" @triggerAction={{@save}} @isDisabled={{this.hasEmptyMandatoryField}}>
+        <PixButton @iconAfter="check" @triggerAction={{@save}} @isDisabled={{this.hasEmptyMandatoryField}}>
           Enregistrer
         </PixButton>
       </:footer>
