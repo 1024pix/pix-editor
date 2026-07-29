@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { extname } from 'node:path';
 
 export async function listDuplicatedAttachments({ lcmsApiKey }) {
-  const res = await fetch('https://lcms.pix.fr/api/releases/latest', { headers: { Authorization: `Bearer ${lcmsApiKey}` } });
+  const res = await fetch('https://lcms.pix.fr/api/releases/latest', { headers: { ['x-api-key']: lcmsApiKey } });
   if (!res.ok) {
     throw new Error(res.statusText);
   }

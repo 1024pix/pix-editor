@@ -1,14 +1,18 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createServer } from '../../../server.js';
+import { databaseBuilder } from '../../test-helper.js';
 
 describe('Acceptance | Application | SecurityPreHandlers', () => {
   let server;
+  let user;
 
   beforeEach(async () => {
     server = await createServer();
+    user = await databaseBuilder.factory.buildAdminUser();
+    await databaseBuilder.commit();
   });
 
-  describe('#checkUserIsAuthenticatedViaBearer', () => {
+  describe('#checkUserIsAuthenticatedViaHeader', () => {
     it('should disallow access resource with well formed JSON API error', async () => {
       // given
       const options = {
@@ -31,6 +35,54 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
       };
       expect(response.statusCode).to.equal(401);
       expect(response.result).to.deep.equal(jsonApiError);
+    });
+
+    it('should allow access resource on valid X-API-Key header', async () => {
+      // given
+      const options = {
+        method: 'GET',
+        url: '/api/config',
+        headers: { 'x-api-key': user.apiKey },
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('should allow access resource on valid Authorization header', async () => {
+      // given
+      const options = {
+        method: 'GET',
+        url: '/api/config',
+        headers: { Authorization: `Bearer ${user.apiKey}` },
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('should allow access resource on valid X-API-Key header but invalid Authorization header', async () => {
+      // given
+      const options = {
+        method: 'GET',
+        url: '/api/config',
+        headers: {
+          'x-api-key': user.apiKey,
+          Authorization: 'Bearer chocolat',
+        },
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
     });
   });
 });

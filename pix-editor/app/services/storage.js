@@ -87,7 +87,7 @@ export default class StorageService extends Service {
       }
       const response = await fetchFn('/api/file-storage-token', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${this.session.data.authenticated.apiKey}` },
+        headers: { ['x-api-key']: this.session.data.authenticated.apiKey },
       });
       if (!response.ok) {
         /* eslint-disable-next-line no-console */

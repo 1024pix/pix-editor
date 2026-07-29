@@ -332,7 +332,7 @@ module('Unit | Service | storage', function (hooks) {
         '/api/file-storage-token',
         {
           method: 'POST',
-          headers: { Authorization: 'Bearer someApiKey' },
+          headers: { ['x-api-key']: 'someApiKey' },
         },
       ]);
       assert.strictEqual(fetchedToken, token);
@@ -371,7 +371,7 @@ module('Unit | Service | storage', function (hooks) {
         '/api/file-storage-token',
         {
           method: 'POST',
-          headers: { Authorization: 'Bearer someApiKey' },
+          headers: { ['x-api-key']: 'someApiKey' },
         },
       ]);
       assert.strictEqual(fetchedToken, token);
