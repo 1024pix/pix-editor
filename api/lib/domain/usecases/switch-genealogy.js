@@ -19,14 +19,9 @@ export async function switchGenealogy({ alternativeChallengeId, dependencies = {
     noValidationNeeded: localizedPrototypeChallenge.noValidationNeeded,
   });
 
-  const pojoAlternativeToPrototypeToUpdate = alternativeChallenge.dataOnSwitchGenealogy;
-  const pojoPrototypeToAlternativeToUpdate = prototypeChallenge.dataOnSwitchGenealogy;
-
-  pojoAlternativeToPrototypeToUpdate.localizedChallenge.id = alternativeChallenge.primaryLocalizedChallenge.id;
-
   return DomainTransaction.execute(async () => {
-    await dependencies.challengeRepository.updateByChallengeId(pojoPrototypeToAlternativeToUpdate);
-    await dependencies.challengeRepository.updateByChallengeId(pojoAlternativeToPrototypeToUpdate.challenge);
-    await dependencies.localizedChallengeRepository.updateByLocalizedChallengeId(pojoAlternativeToPrototypeToUpdate.localizedChallenge);
+    await dependencies.challengeRepository.updateByChallengeId(prototypeChallenge.dataOnSwitchGenealogy);
+    await dependencies.challengeRepository.updateByChallengeId(alternativeChallenge.dataOnSwitchGenealogy);
+    await dependencies.localizedChallengeRepository.updateByLocalizedChallengeId(alternativeChallenge.primaryLocalizedChallenge.dataOnSwitchGenealogy);
   });
 }

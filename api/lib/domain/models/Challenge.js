@@ -335,20 +335,20 @@ export class Challenge {
   get dataOnSwitchGenealogy() {
     if (this.genealogy === Challenge.GENEALOGIES.PROTOTYPE) {
       return {
-        challenge: {
-          id: this.id,
-          genealogy: this.genealogy,
-          alternativeVersion: this.alternativeVersion,
-          accessibility1: this.accessibility1,
-          accessibility2: this.accessibility2,
-        },
-        localizedChallenge: this.primaryLocalizedChallenge.dataOnSwitchGenealogy,
+        id: this.id,
+        genealogy: this.genealogy,
+        alternativeVersion: this.alternativeVersion,
+        accessibility1: this.accessibility1,
+        accessibility2: this.accessibility2,
+        updatedAt: new Date(),
       };
     }
+
     return {
       id: this.id,
       genealogy: this.genealogy,
       alternativeVersion: this.alternativeVersion,
+      updatedAt: new Date(),
     };
   }
 

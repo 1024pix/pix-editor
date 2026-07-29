@@ -430,7 +430,7 @@ describe('Unit | Domain | Challenge', () => {
   });
 
   describe('#get dataOnSwitchGenealogy', () => {
-    it('should return POJO id, genealogy and alternativeVersion', () => {
+    it('should return data to update for prototype', () => {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         locale: 'fr',
@@ -458,22 +458,47 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       expect({
-        challenge: {
-          id: challenge.id,
-          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-          alternativeVersion: null,
-          accessibility1: challenge.accessibility1,
-          accessibility2: challenge.accessibility2,
-        },
-        localizedChallenge: {
-          requireGafamWebsiteAccess: false,
-          isIncompatibleIpadCertif: false,
-          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
-          isAwarenessChallenge: false,
-          toRephrase: false,
-          hasEmbedInternalValidation: false,
-          noValidationNeeded: false,
-        },
+        id: challenge.id,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
+        accessibility1: challenge.accessibility1,
+        accessibility2: challenge.accessibility2,
+        updatedAt: expect.any(Date),
+      }).toEqual(expectedPojo);
+    });
+
+    it('should return data to update for declinaison', () => {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        version: 1,
+        alternativeVersion: 18,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+      });
+
+      // when
+      const expectedPojo = challenge.dataOnSwitchGenealogy;
+
+      // then
+      expect({
+        id: challenge.id,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        alternativeVersion: 18,
+        updatedAt: expect.any(Date),
       }).toEqual(expectedPojo);
     });
   });

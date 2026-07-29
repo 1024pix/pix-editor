@@ -82,6 +82,7 @@ export class LocalizedChallenge {
 
   get dataOnSwitchGenealogy() {
     return {
+      id: this.id,
       requireGafamWebsiteAccess: this.requireGafamWebsiteAccess,
       isIncompatibleIpadCertif: this.isIncompatibleIpadCertif,
       deafAndHardOfHearing: this.deafAndHardOfHearing,
@@ -108,6 +109,10 @@ export class LocalizedChallenge {
     this.toRephrase = toRephrase;
     this.hasEmbedInternalValidation = hasEmbedInternalValidation;
     this.noValidationNeeded = noValidationNeeded;
+  }
+
+  updateId(id) {
+    this.id = id;
   }
 
   static buildPrimary({
