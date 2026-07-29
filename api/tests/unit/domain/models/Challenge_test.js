@@ -224,6 +224,34 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isAlternative', () => {
+    it('should return true when challenge is isAlternative', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.DECLINAISON });
+
+      // when
+      const isAlternative = challenge.isAlternative;
+
+      // then
+      expect(isAlternative).to.be.true;
+    });
+
+    it.each(
+      Object.keys(Challenge.GENEALOGIES).filter(
+        (statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.DECLINAISON,
+      ),
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge = domainBuilder.buildChallenge({ status: Challenge.STATUSES[statusKey] });
+
+      // when
+      const isAlternative = challenge.isAlternative;
+
+      // then
+      expect(isAlternative).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given
@@ -305,6 +333,173 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       expect(embedUrl).toBe('mon.site.fr');
+    });
+  });
+
+  describe('#switchToPrototype', () => {
+    it('should update genealogy and remove alternativeVersion', function() {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        version: 1,
+        alternativeVersion: 15,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+      });
+
+      // when
+      challenge.switchToPrototype({
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      });
+
+      // then
+      expect({
+        genealogy: challenge.genealogy,
+        alternativeVersion: challenge.alternativeVersion,
+        version: challenge.version,
+        author: challenge.author,
+        accessibility1: challenge.accessibility1,
+        accessibility2: challenge.accessibility2,
+        requireGafamWebsiteAccess: challenge.primaryLocalizedChallenge.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challenge.primaryLocalizedChallenge.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challenge.primaryLocalizedChallenge.deafAndHardOfHearing,
+        isAwarenessChallenge: challenge.primaryLocalizedChallenge.isAwarenessChallenge,
+        toRephrase: challenge.primaryLocalizedChallenge.toRephrase,
+        hasEmbedInternalValidation: challenge.primaryLocalizedChallenge.hasEmbedInternalValidation,
+        noValidationNeeded: challenge.primaryLocalizedChallenge.noValidationNeeded,
+      }).toEqual({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
+        version: 1,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        hasEmbedInternalValidation: true,
+        noValidationNeeded: true,
+      });
+    });
+  });
+
+  describe('#switchToAlternative', () => {
+    it('should update genealogy and remove alternativeVersion', function() {
+      // given
+      const challenge = domainBuilder.buildChallenge({ genealogy: Challenge.GENEALOGIES.PROTOTYPE, version: 1, alternativeVersion: null, author: ['TOTO'] });
+
+      // when
+      challenge.switchToAlternative({ alternativeVersion: 5 });
+
+      // then
+      expect({
+        genealogy: challenge.genealogy,
+        alternativeVersion: challenge.alternativeVersion,
+        version: challenge.version,
+        author: challenge.author,
+      }).toEqual({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        alternativeVersion: 5,
+        version: 1,
+        author: ['TOTO'],
+      });
+    });
+  });
+
+  describe('#get dataOnSwitchGenealogy', () => {
+    it('should return data to update for prototype', () => {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        version: 1,
+        alternativeVersion: null,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+      });
+
+      // when
+      const expectedPojo = challenge.dataOnSwitchGenealogy;
+
+      // then
+      expect({
+        id: challenge.id,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        alternativeVersion: null,
+        accessibility1: challenge.accessibility1,
+        accessibility2: challenge.accessibility2,
+        updatedAt: expect.any(Date),
+      }).toEqual(expectedPojo);
+    });
+
+    it('should return data to update for declinaison', () => {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        locale: 'fr',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        hasEmbedInternalValidation: false,
+        noValidationNeeded: false,
+      });
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        version: 1,
+        alternativeVersion: 18,
+        author: ['TOTO'],
+        accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        locales: ['fr'],
+        localizedChallenges: [localizedChallenge],
+      });
+
+      // when
+      const expectedPojo = challenge.dataOnSwitchGenealogy;
+
+      // then
+      expect({
+        id: challenge.id,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+        alternativeVersion: 18,
+        updatedAt: expect.any(Date),
+      }).toEqual(expectedPojo);
     });
   });
 

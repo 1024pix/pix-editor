@@ -409,6 +409,37 @@ export async function listValidPrototypesBySkillIds(skillIds) {
   return toDomainList(dtos, translations, localizedChallenges);
 }
 
+export async function updateByChallengeId({ id, ...dataToUpdate }) {
+  const knexConn = DomainTransaction.getConnection();
+
+  return knexConn('challenges').update(dataToUpdate).where('id', id);
+}
+
+export async function getPrototypeBySkillId(skillId, version) {
+  const knexConn = DomainTransaction.getConnection();
+
+  const prototype = await knexConn('challenges')
+    .select('id')
+    .where('skillId', skillId)
+    .andWhere('version', version)
+    .andWhere('genealogy', Challenge.GENEALOGIES.PROTOTYPE)
+    .first();
+
+  if (!prototype?.id) throw new NotFoundError('Épreuve introuvable');
+
+  const [
+    dto,
+    localizedChallenges,
+    translations,
+  ] = await Promise.all([
+    selectChallenges().where('challenges.id', prototype.id).first(),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds: [prototype.id] }),
+    translationRepository.listByEntity(model, prototype.id),
+  ]);
+
+  return toDomain(dto, translations, localizedChallenges);
+}
+
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
   return loadTranslationsAndLocalizedChallengesForChallengeIds(challengeDtos.map(({ id }) => id));
 }
