@@ -352,11 +352,23 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
-  toggleThematicResult(e) {
-    if (e.target.checked) {
+  toggleThematicResult() {
+    this.isThematicResultMode = !this.isThematicResultMode;
+
+    if (this.isThematicResultMode) {
       this.filter = true;
       this.showTubeDetails = true;
     }
+  }
+
+  @action
+  toggleFilter() {
+    this.filter = !this.filter;
+  }
+
+  @action
+  toggleTubeDetails() {
+    this.showTubeDetails = !this.showTubeDetails;
   }
 
   @action

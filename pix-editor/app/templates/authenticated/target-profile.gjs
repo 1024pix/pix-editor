@@ -1,4 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
@@ -19,43 +20,44 @@ import PdfExport from 'pixeditor/components/target-profile/pdf-export';
           class="target-profile-view__filter
             {{if @controller.isThematicResultMode 'target-profile-view__filter--active'}}"
         >
-          Résultat thématique
           <div class="target-profile-view__toggle">
-            <Input
-              id="thematicResult"
+            <PixCheckbox
+              @id="thematicResult"
               @type="checkbox"
               @checked={{@controller.isThematicResultMode}}
               {{on "change" @controller.toggleThematicResult}}
-              class="target-profile-view__toggle-input"
-            />
-            <label class="target-profile-view__toggle-label" for="thematicResult"></label>
+            >
+              <:label>
+                Résultat thématique
+              </:label>
+            </PixCheckbox>
           </div>
         </div>
         {{#unless @controller.isThematicResultMode}}
           <div
             class="target-profile-view__filter {{if @controller.showTubeDetails 'target-profile-view__filter--active'}}"
           >
-            Détails des sujets
             <div class="target-profile-view__toggle">
-              <Input
-                id="tubeDetails"
+              <PixCheckbox
+                @id="tubeDetails"
                 @type="checkbox"
                 @checked={{@controller.showTubeDetails}}
-                class="target-profile-view__toggle-input"
-              />
-              <label class="target-profile-view__toggle-label" for="tubeDetails"></label>
+                {{on "change" @controller.toggleTubeDetails}}
+              >
+                <:label>Détails des sujets</:label>
+              </PixCheckbox>
             </div>
           </div>
           <div class="target-profile-view__filter {{if @controller.filter 'target-profile-view__filter--active'}}">
-            Filtrer les sujets sélectionnés
             <div class="target-profile-view__toggle">
-              <Input
-                id="filter"
+              <PixCheckbox
+                @id="filter"
                 @type="checkbox"
                 @checked={{@controller.filter}}
-                class="target-profile-view__toggle-input"
-              />
-              <label class="target-profile-view__toggle-label" for="filter"></label>
+                {{on "change" @controller.toggleFilter}}
+              >
+                <:label>Filtrer les sujets sélectionnés</:label>
+              </PixCheckbox>
             </div>
           </div>
         {{/unless}}
